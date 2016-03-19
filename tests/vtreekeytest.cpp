@@ -1,13 +1,13 @@
 /******************************************************************************
  *
- *  vtreekeytest.cpp -	
+ *  vtreekeytest.cpp -
  *
  * $Id$
  *
  * Copyright 2009-2013 CrossWire Bible Society (http://www.crosswire.org)
- *	CrossWire Bible Society
- *	P. O. Box 2528
- *	Tempe, AZ  85280-2528
+ *    CrossWire Bible Society
+ *    P. O. Box 2528
+ *    Tempe, AZ  85280-2528
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -36,59 +36,59 @@ using std::endl;
 
 int main(int argc, char **argv) {
 
-	SWMgr mgr;
-	SWModule *mod = mgr.getModule("KJVgb");
+    SWMgr mgr;
+    SWModule *mod = mgr.getModule("KJVgb");
 
-	VerseKey *key1 = (VerseKey *)mod->createKey();
+    VerseKey *key1 = (VerseKey *)mod->createKey();
 
-	key1->setTestament(2);
-	key1->setBook(4);
-	key1->setChapter(2);
-	key1->setVerse(3);
+    key1->setTestament(2);
+    key1->setBook(4);
+    key1->setChapter(2);
+    key1->setVerse(3);
 
-	cout << "\n" << key1->getText() << ":\n\n";
+    cout << "\n" << key1->getText() << ":\n\n";
 
-	ListKey keys;
-	keys << *key1;
+    ListKey keys;
+    keys << *key1;
 
-	cout << "\n" << keys.getRangeText() << ":\n\n";
+    cout << "\n" << keys.getRangeText() << ":\n\n";
 
-	ListKey keys2 = keys;
+    ListKey keys2 = keys;
 
-	cout << "\n" << keys2.getRangeText() << ":\n\n";
+    cout << "\n" << keys2.getRangeText() << ":\n\n";
 
-	keys = key1->parseVerseList("Lk.4.5");
+    keys = key1->parseVerseList("Lk.4.5");
 
-	cout << "\n" << key1->getText() << ":\n\n";
+    cout << "\n" << key1->getText() << ":\n\n";
 
-	key1->setText("jn.6.7");
+    key1->setText("jn.6.7");
 
-	cout << "\n" << key1->getText() << ":\n\n";
-	
-
-	mod->setKey("lk.2.3");
-
-	cout << "\n" << mod->getKeyText() << ":\n" << endl;
-	cout << mod->getRawEntry() << endl;
+    cout << "\n" << key1->getText() << ":\n\n";
 
 
-	cout << "\nListkey persist key iteration test\n\n";
-	keys = key1->parseVerseList("mat1", 0, true);
+    mod->setKey("lk.2.3");
 
-	for (keys = TOP; !keys.popError(); keys++) {
-		cout << "\n" << keys.getText() << ":\n" << endl;
-	}
+    cout << "\n" << mod->getKeyText() << ":\n" << endl;
+    cout << mod->getRawEntry() << endl;
 
 
-	keys.setPersist(true);
+    cout << "\nListkey persist key iteration test\n\n";
+    keys = key1->parseVerseList("mat1", 0, true);
 
-	mod->setKey(keys);
+    for (keys = TOP; !keys.popError(); keys++) {
+        cout << "\n" << keys.getText() << ":\n" << endl;
+    }
 
-	for ((*mod) = TOP; !mod->popError(); (*mod)++) {
-		cout << "\n" << mod->getKeyText() << ":\n" << endl;
-	}
 
-	delete key1;
+    keys.setPersist(true);
 
-	return 0;
+    mod->setKey(keys);
+
+    for ((*mod) = TOP; !mod->popError(); (*mod)++) {
+        cout << "\n" << mod->getKeyText() << ":\n" << endl;
+    }
+
+    delete key1;
+
+    return 0;
 }

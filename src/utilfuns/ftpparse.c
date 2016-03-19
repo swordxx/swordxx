@@ -16,7 +16,7 @@ NetPresenz (Mac).
 NetWare.
 MSDOS.
 
-Definitely not covered: 
+Definitely not covered:
 Long VMS filenames, with information split across two lines.
 NCSA Telnet FTP server. Has LIST = NLST (and bad NLST for directories).
 */
@@ -206,7 +206,7 @@ int ftpparse(struct ftpparse *fp,char *buf,int len)
         }
       }
       return 0;
-    
+
     /* UNIX-style listing, without inum and without blocks */
     /* "-rw-r--r--   1 root     other        531 Jan 29 03:26 README" */
     /* "dr-xr-xr-x   2 root     other        512 Apr  8  1994 etc" */

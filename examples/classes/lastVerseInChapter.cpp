@@ -1,17 +1,17 @@
 /******************************************************************************
  *
- *  lastVerseInChapter.cpp -	This example demonstrates how to navigate
- *				verses using VerseKey.  It uselessly iterates
- *				every chapter of the KJV, finds the last verse
- *				and prints out the sole verse in the KJV which
- *				ends in a ',' -- just for fun.
+ *  lastVerseInChapter.cpp -    This example demonstrates how to navigate
+ *                verses using VerseKey.  It uselessly iterates
+ *                every chapter of the KJV, finds the last verse
+ *                and prints out the sole verse in the KJV which
+ *                ends in a ',' -- just for fun.
  *
  * $Id$
  *
  * Copyright 2011-2013 CrossWire Bible Society (http://www.crosswire.org)
- *	CrossWire Bible Society
- *	P. O. Box 2528
- *	Tempe, AZ  85280-2528
+ *    CrossWire Bible Society
+ *    P. O. Box 2528
+ *    Tempe, AZ  85280-2528
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -36,21 +36,21 @@ using namespace std;
 
 int main(int argc, char **argv) {
 
-	SWMgr library;
+    SWMgr library;
 
-	SWModule *book = library.getModule("KJV");
+    SWModule *book = library.getModule("KJV");
 
-	VerseKey *vk = (VerseKey *) book->getKey();
-	for (;!vk->popError();vk->setChapter(vk->getChapter()+1)) {
-		vk->setVerse(vk->getVerseMax());
-		SWBuf text = book->stripText();
-		text = text.trim();
-		if (text.endsWith(",")) {
-			cout << vk->getText() << ":\n\n";
-			cout << text << endl;
-		}
-	}
+    VerseKey *vk = (VerseKey *) book->getKey();
+    for (;!vk->popError();vk->setChapter(vk->getChapter()+1)) {
+        vk->setVerse(vk->getVerseMax());
+        SWBuf text = book->stripText();
+        text = text.trim();
+        if (text.endsWith(",")) {
+            cout << vk->getText() << ":\n\n";
+            cout << text << endl;
+        }
+    }
 
-	return 0;
+    return 0;
 }
 

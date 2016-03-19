@@ -1,13 +1,13 @@
 /******************************************************************************
  *
- *  addld.cpp -	Utility to build/modify an LD module by adding a single entry
+ *  addld.cpp -    Utility to build/modify an LD module by adding a single entry
  *
  * $Id$
  *
  * Copyright 2000-2013 CrossWire Bible Society (http://www.crosswire.org)
- *	CrossWire Bible Society
- *	P. O. Box 2528
- *	Tempe, AZ  85280-2528
+ *    CrossWire Bible Society
+ *    P. O. Box 2528
+ *    Tempe, AZ  85280-2528
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -21,7 +21,7 @@
  */
 
 #ifdef _MSC_VER
-	#pragma warning( disable: 4251 )
+    #pragma warning( disable: 4251 )
 #endif
 
 #include <ctype.h>
@@ -51,19 +51,19 @@ using swordxx::RawLD;
 
 
 int main(int argc, char **argv) {
-  
+
   const char * helptext ="addld 1.0 Lexicon & Dictionary module creation tool for the SWORD Project\nUse -a to add a new LD entry from standard input or a file, -d to delete an\nentry, -l to link two LD entries, -c to create a new module.\n  usage:\n   %s -a <filename> <key> [</path/to/file/with/entry>]\n   %s -d <filename> <key>\n   %s -l <filename> <first key (already assigned)> <second key>\n   %s -c <filename>\nTo use 4-byte LD instead of 2-byte, insert a 4 immediately after the '-'.\nTo use zLD instead of 2-byte, insert a z immediately after the '-'.\n";
   long entrysize;
-  
+
   bool fourbyte = false;
   bool compress = false;
   char mode;
-  
+
   if (argc < 3) {
     fprintf(stderr, helptext, argv[0], argv[0], argv[0], argv[0]);
     exit(-1);
   }
-  
+
   if (argv[1][1] == '4') {
     fourbyte = false;
     mode = argv[1][2];
@@ -75,122 +75,122 @@ int main(int argc, char **argv) {
   else {
     mode = argv[1][1];
   }
-  
-  if ((mode == 'a') && (argc == 4 || argc == 5)) {	
-    
+
+  if ((mode == 'a') && (argc == 4 || argc == 5)) {
+
     // Do some initialization stuff
     if (fourbyte) {
       char buffer[1048576];  //this is the max size of any entry
-      RawLD4 mod(argv[2]);	// open our datapath with our RawText driver.
+      RawLD4 mod(argv[2]);    // open our datapath with our RawText driver.
       SWKey* key = mod.createKey();
       key->setPersist(true);      // the magical setting
-      
+
       // Set our VerseKey
       *key = argv[3];
-	 mod.setKey(*key);
+     mod.setKey(*key);
       FILE *infile;
       // case: add from text file
       //Open our data file and read its contents into the buffer
       if (argc == 5) infile = fopen(argv[4], "r");
       // case: add from stdin
       else infile = stdin;
-      
+
       entrysize = fread(buffer, sizeof(char), sizeof(buffer), infile);
-      mod.setEntry(buffer, entrysize);	// save text to module at current position
+      mod.setEntry(buffer, entrysize);    // save text to module at current position
     }
     else if (compress) {
       char buffer[1048576];  //this is the max size of any entry
-      zLD mod(argv[2], 0, 0, 200, new ZipCompress());	// open our datapath with our RawText driver.
+      zLD mod(argv[2], 0, 0, 200, new ZipCompress());    // open our datapath with our RawText driver.
       SWKey* key = mod.createKey();
       key->setPersist(true);      // the magical setting
-      
+
       // Set our VerseKey
       *key = argv[3];
-	 mod.setKey(*key);
+     mod.setKey(*key);
       FILE *infile;
       // case: add from text file
       //Open our data file and read its contents into the buffer
       if (argc == 5) infile = fopen(argv[4], "r");
       // case: add from stdin
       else infile = stdin;
-      
+
       entrysize = fread(buffer, sizeof(char), sizeof(buffer), infile);
-      mod.setEntry(buffer, entrysize);	// save text to module at current position
+      mod.setEntry(buffer, entrysize);    // save text to module at current position
     }
     else {
       char buffer[65536];  //this is the max size of any entry
-      RawLD mod(argv[2]);	// open our datapath with our RawText driver.
+      RawLD mod(argv[2]);    // open our datapath with our RawText driver.
       SWKey* key = mod.createKey();
       key->setPersist(true);      // the magical setting
-      
+
       // Set our VerseKey
       *key = argv[3];
-	 mod.setKey(*key);
+     mod.setKey(*key);
       FILE *infile;
       // case: add from text file
       //Open our data file and read its contents into the buffer
       if (argc == 5) infile = fopen(argv[4], "r");
       // case: add from stdin
       else infile = stdin;
-      
+
       entrysize = fread(buffer, sizeof(char), sizeof(buffer), infile);
-      mod.setEntry(buffer, entrysize);	// save text to module at current position
+      mod.setEntry(buffer, entrysize);    // save text to module at current position
     }
-    
+
   }
   // Link 2 verses
   else if ((mode == 'l') && argc == 5) {
     // Do some initialization stuff
     if (fourbyte) {
-      RawLD4 mod(argv[2]);	// open our datapath with our RawText driver.
+      RawLD4 mod(argv[2]);    // open our datapath with our RawText driver.
       SWKey* key = mod.createKey();
       key->setPersist(true);      // the magical setting
-      
+
       *key = argv[3];
-	 mod.setKey(*key);
+     mod.setKey(*key);
       SWKey tmpkey = argv[4];
       mod << &(tmpkey);
     }
     else if (compress) {
-      zLD mod(argv[2]);	// open our datapath with our RawText driver.
+      zLD mod(argv[2]);    // open our datapath with our RawText driver.
       SWKey* key = mod.createKey();
       key->setPersist(true);      // the magical setting
-      
+
       *key = argv[3];
-	 mod.setKey(*key);
-      
+     mod.setKey(*key);
+
       SWKey tmpkey = argv[4];
       mod << &(tmpkey);
     }
     else {
-      RawLD mod(argv[2]);	// open our datapath with our RawText driver.
+      RawLD mod(argv[2]);    // open our datapath with our RawText driver.
       SWKey* key = mod.createKey();
       key->setPersist(true);      // the magical setting
-      
+
       *key = argv[3];
-	 mod.setKey(*key);
-      
+     mod.setKey(*key);
+
       SWKey tmpkey = argv[4];
       mod << &(tmpkey);
     }
   }
   else if ((mode == 'd') && argc == 4) {
     if (fourbyte) {
-      RawLD4 mod(argv[2]);	// open our datapath with our RawText driver.
-	 mod.setKey(argv[3]);
+      RawLD4 mod(argv[2]);    // open our datapath with our RawText driver.
+     mod.setKey(argv[3]);
       mod.deleteEntry();
     }
     if (compress) {
-      zLD mod(argv[2]);	// open our datapath with our RawText driver.
-	 mod.setKey(argv[3]);
+      zLD mod(argv[2]);    // open our datapath with our RawText driver.
+     mod.setKey(argv[3]);
       mod.deleteEntry();
     }
     else {
-      RawLD mod(argv[2]);	// open our datapath with our RawText driver.
+      RawLD mod(argv[2]);    // open our datapath with our RawText driver.
       mod.setKey(argv[3]);
       mod.deleteEntry();
     }
-    
+
   }
   // Make a new module
   else if ((mode == 'c') && argc == 3) {
@@ -198,24 +198,24 @@ int main(int argc, char **argv) {
     // datapath location passed to us from the user.
     if (fourbyte) {
       if (RawLD4::createModule(argv[2])) {
-	fprintf(stderr, "error: %s: couldn't create module at path: %s \n", argv[0], argv[2]);
-	exit(-2);
+    fprintf(stderr, "error: %s: couldn't create module at path: %s \n", argv[0], argv[2]);
+    exit(-2);
       }
     }
     if (compress) {
       if (zLD::createModule(argv[2])) {
-	fprintf(stderr, "error: %s: couldn't create module at path: %s \n", argv[0], argv[2]);
-	exit(-2);
+    fprintf(stderr, "error: %s: couldn't create module at path: %s \n", argv[0], argv[2]);
+    exit(-2);
       }
     }
     else {
       if (RawLD::createModule(argv[2])) {
-	fprintf(stderr, "error: %s: couldn't create module at path: %s \n", argv[0], argv[2]);
-	exit(-2);
+    fprintf(stderr, "error: %s: couldn't create module at path: %s \n", argv[0], argv[2]);
+    exit(-2);
       }
     }
-  }   
-  
+  }
+
   // Bad arguments, print usage
   else {
     fprintf(stderr, helptext, argv[0], argv[0], argv[0], argv[0]);

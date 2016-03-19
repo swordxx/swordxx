@@ -1,13 +1,13 @@
 /******************************************************************************
  *
- *   icutest.cpp -	
+ *   icutest.cpp -
  *
  * $Id$
  *
  * Copyright 2001-2013 CrossWire Bible Society (http://www.crosswire.org)
- *	CrossWire Bible Society
- *	P. O. Box 2528
- *	Tempe, AZ  85280-2528
+ *    CrossWire Bible Society
+ *    P. O. Box 2528
+ *    Tempe, AZ  85280-2528
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -38,18 +38,18 @@ int main() {
   UConverter *conv;
   UErrorCode status = U_ZERO_ERROR;
   int32_t uBufSize = 0, uLength = 0;
-  
+
   const char * samplestring = "If this compiles and runs without errors, apparently ICU is working.";
 
   uLength = strlen(samplestring);
-  conv = ucnv_open("utf-8", &status);		
+  conv = ucnv_open("utf-8", &status);
   uBufSize = (uLength/ucnv_getMinCharSize(conv));
   uBuf = new UChar[uBufSize];
-  
+
   target = uBuf;
-  
-  ucnv_toUChars(conv, target, uLength, 
-		samplestring, uLength, &status);
+
+  ucnv_toUChars(conv, target, uLength,
+        samplestring, uLength, &status);
 
   cout << samplestring << endl;
 

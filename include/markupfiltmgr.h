@@ -1,13 +1,13 @@
 /******************************************************************************
  *
- *  markupfiltmgr.h -	definition of class SWMarkupMgr, subclass of
- *			used to transcode all module text to a requested
- *			markup
+ *  markupfiltmgr.h -    definition of class SWMarkupMgr, subclass of
+ *            used to transcode all module text to a requested
+ *            markup
  *
  * Copyright 2001-2013 CrossWire Bible Society (http://www.crosswire.org)
- *	CrossWire Bible Society
- *	P. O. Box 2528
- *	Tempe, AZ  85280-2528
+ *    CrossWire Bible Society
+ *    P. O. Box 2528
+ *    Tempe, AZ  85280-2528
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -39,37 +39,37 @@ protected:
         SWFilter* fromosis;
         SWFilter* fromtei;
 
-				/**
-	 			* current markup value
-	 			*/
+                /**
+                 * current markup value
+                 */
         char markup;
 
         void CreateFilters(char markup);
 public:
-	/** Constructor of SWMarkupMgr.
-	 *
-	 * @param encoding The desired encoding.
-	 * @param markup The desired markup format.
-	 */
+    /** Constructor of SWMarkupMgr.
+     *
+     * @param encoding The desired encoding.
+     * @param markup The desired markup format.
+     */
         MarkupFilterMgr(char markup = FMT_THML, char encoding = ENC_UTF8);
 
-	/**
-	 * The destructor of SWMarkupMgr.
-	 */
+    /**
+     * The destructor of SWMarkupMgr.
+     */
         ~MarkupFilterMgr();
 
-	/** Markup sets/gets the markup after initialization
-	 * 
-	 * @param m The new markup or FMT_UNKNOWN if you just want to get the current markup.
-	 * @return The current (possibly changed) markup format.
-	 */
+    /** Markup sets/gets the markup after initialization
+     *
+     * @param m The new markup or FMT_UNKNOWN if you just want to get the current markup.
+     * @return The current (possibly changed) markup format.
+     */
         char Markup(char m = FMT_UNKNOWN);
 
-	/**
-	 * Adds the render filters which are defined in "section" to the SWModule object "module".
-	 * @param module To this module the render filter(s) are added
-	 * @param section We use this section to get a list of filters we should apply to the module
-	 */	
+    /**
+     * Adds the render filters which are defined in "section" to the SWModule object "module".
+     * @param module To this module the render filter(s) are added
+     * @param section We use this section to get a list of filters we should apply to the module
+     */
         virtual void AddRenderFilters(SWModule *module, ConfigEntMap &section);
 };
 

@@ -1,13 +1,13 @@
 /******************************************************************************
  *
- *  complzss.cpp -	
+ *  complzss.cpp -
  *
  * $Id$
  *
  * Copyright 1999-2013 CrossWire Bible Society (http://www.crosswire.org)
- *	CrossWire Bible Society
- *	P. O. Box 2528
- *	Tempe, AZ  85280-2528
+ *    CrossWire Bible Society
+ *    P. O. Box 2528
+ *    Tempe, AZ  85280-2528
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -41,90 +41,90 @@
 using namespace swordxx;
 
 class FileCompress: public LZSSCompress {
-	int ifd;
-	int ofd;
-	int ufd;
-	int zfd;
+    int ifd;
+    int ofd;
+    int ufd;
+    int zfd;
 public:
-	FileCompress(char *);
-	~FileCompress();
-	unsigned long GetChars(char *, unsigned long len);
-	unsigned long SendChars(char *, unsigned long len);
-	void Encode();
-	void Decode();
+    FileCompress(char *);
+    ~FileCompress();
+    unsigned long GetChars(char *, unsigned long len);
+    unsigned long SendChars(char *, unsigned long len);
+    void Encode();
+    void Decode();
 };
 
 
-FileCompress::FileCompress(char *fname) 
+FileCompress::FileCompress(char *fname)
 {
-	char buf[256];
+    char buf[256];
 
-	ufd  = FileMgr::createPathAndFile(fname);
+    ufd  = FileMgr::createPathAndFile(fname);
 
-	sprintf(buf, "%s.lzs", fname);
-	zfd = FileMgr::createPathAndFile(buf);
-}
-
-	
-FileCompress::~FileCompress() 
-{
-	close(ufd);
-	close(zfd);
+    sprintf(buf, "%s.lzs", fname);
+    zfd = FileMgr::createPathAndFile(buf);
 }
 
 
-unsigned long FileCompress::GetChars(char *buf, unsigned long len) 
+FileCompress::~FileCompress()
 {
-	return read(ifd, buf, len);
+    close(ufd);
+    close(zfd);
 }
 
 
-unsigned long FileCompress::SendChars(char *buf, unsigned long len) 
+unsigned long FileCompress::GetChars(char *buf, unsigned long len)
 {
-	return write(ofd, buf, len);
+    return read(ifd, buf, len);
 }
 
 
-void FileCompress::Encode() 
+unsigned long FileCompress::SendChars(char *buf, unsigned long len)
 {
-	ifd = ufd;
-	ofd = zfd;
-
-	LZSSCompress::Encode();
+    return write(ofd, buf, len);
 }
 
 
-void FileCompress::Decode() 
+void FileCompress::Encode()
 {
-	ifd = zfd;
-	ofd = ufd;
+    ifd = ufd;
+    ofd = zfd;
 
-	LZSSCompress::Decode();
+    LZSSCompress::Encode();
+}
+
+
+void FileCompress::Decode()
+{
+    ifd = zfd;
+    ofd = ufd;
+
+    LZSSCompress::Decode();
 }
 
 
 int main(int argc, char **argv)
 {
-	int decomp = 0;
-	SWCompress *fobj;
-	
-	if (argc != 2) {
-		fprintf(stderr, "usage: %s <filename|filename.lzs>\n", argv[0]);
-		exit(1);
-	}
+    int decomp = 0;
+    SWCompress *fobj;
 
-	if (strlen(argv[1]) > 4) {
-		if (!strcmp(&argv[1][strlen(argv[1])-4], ".lzs")) {
-			argv[1][strlen(argv[1])-4] = 0;
-			decomp = 1;
-		}
-	}
-			
-	fobj = new FileCompress(argv[1]);
-	
-	if (decomp)
-		fobj->Decode();
-	else fobj->Encode();
+    if (argc != 2) {
+        fprintf(stderr, "usage: %s <filename|filename.lzs>\n", argv[0]);
+        exit(1);
+    }
 
-	delete fobj;
+    if (strlen(argv[1]) > 4) {
+        if (!strcmp(&argv[1][strlen(argv[1])-4], ".lzs")) {
+            argv[1][strlen(argv[1])-4] = 0;
+            decomp = 1;
+        }
+    }
+
+    fobj = new FileCompress(argv[1]);
+
+    if (decomp)
+        fobj->Decode();
+    else fobj->Encode();
+
+    delete fobj;
 }

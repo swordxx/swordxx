@@ -1,13 +1,13 @@
 /******************************************************************************
  *
- *  swaptest.cpp -	
+ *  swaptest.cpp -
  *
  * $Id$
  *
  * Copyright 2001-2013 CrossWire Bible Society (http://www.crosswire.org)
- *	CrossWire Bible Society
- *	P. O. Box 2528
- *	Tempe, AZ  85280-2528
+ *    CrossWire Bible Society
+ *    P. O. Box 2528
+ *    Tempe, AZ  85280-2528
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -24,8 +24,8 @@
 #include <stdio.h>
 
 int main(int argc, char **argv) {
-	printf("0x%.4x 0x%.4x\n", 255, swordtoarch16(255));
-	printf("0x%.8x 0x%.8x\n", 255, swordtoarch32(255));
-//	printf("0x%.16x 0x%.16llx\n", 255, __swap64(255));
-	return 0;
+    printf("0x%.4x 0x%.4x\n", 255, swordtoarch16(255));
+    printf("0x%.8x 0x%.8x\n", 255, swordtoarch32(255));
+//    printf("0x%.16x 0x%.16llx\n", 255, __swap64(255));
+    return 0;
 }

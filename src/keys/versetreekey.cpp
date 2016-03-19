@@ -1,14 +1,14 @@
 /******************************************************************************
  *
- *  versetreekey.cpp -	code for class 'VerseTreeKey'- versekey using treekey
- *			for data retrieval
- * 
+ *  versetreekey.cpp -    code for class 'VerseTreeKey'- versekey using treekey
+ *            for data retrieval
+ *
  * $Id$
  *
  * Copyright 2006-2013 CrossWire Bible Society (http://www.crosswire.org)
- *	CrossWire Bible Society
- *	P. O. Box 2528
- *	Tempe, AZ  85280-2528
+ *    CrossWire Bible Society
+ *    P. O. Box 2528
+ *    Tempe, AZ  85280-2528
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -34,262 +34,262 @@ SWClass VerseTreeKey::classdef(classes);
 /******************************************************************************
  * VerseTreeKey Constructor - initializes instance of VerseTreeKey
  *
- * ENT:	ikey - base key (will take various forms of 'BOOK CH:VS'.  See
- *		VerseTreeKey::parse for more detailed information)
+ * ENT:    ikey - base key (will take various forms of 'BOOK CH:VS'.  See
+ *        VerseTreeKey::parse for more detailed information)
  */
 
 VerseTreeKey::VerseTreeKey(TreeKey *treeKey, const SWKey *ikey) : VerseKey(ikey)
 {
-	init(treeKey);
-	if (ikey)
-		parse();
+    init(treeKey);
+    if (ikey)
+        parse();
 }
 
 
 /******************************************************************************
  * VerseTreeKey Constructor - initializes instance of VerseTreeKey
  *
- * ENT:	ikey - text key (will take various forms of 'BOOK CH:VS'.  See
- *		VerseTreeKey::parse for more detailed information)
+ * ENT:    ikey - text key (will take various forms of 'BOOK CH:VS'.  See
+ *        VerseTreeKey::parse for more detailed information)
  */
 
 VerseTreeKey::VerseTreeKey(TreeKey *treeKey, const char *ikey) : VerseKey(ikey)
 {
-	init(treeKey);
-	if (ikey)
-		parse();
+    init(treeKey);
+    if (ikey)
+        parse();
 }
 
 
 VerseTreeKey::VerseTreeKey(VerseTreeKey const &k) : VerseKey(k)
 {
-	init(k.treeKey);
+    init(k.treeKey);
 }
 
 
 VerseTreeKey::VerseTreeKey(TreeKey *treeKey, const char *min, const char *max) : VerseKey(min, max)
 {
-	init(treeKey);
+    init(treeKey);
 }
 
 
 void VerseTreeKey::init(TreeKey *treeKey)
 {
-	myclass = &classdef;
-	this->treeKey = (TreeKey *)treeKey->clone();
-	this->treeKey->setPositionChangeListener(this);
-	internalPosChange = false;
+    myclass = &classdef;
+    this->treeKey = (TreeKey *)treeKey->clone();
+    this->treeKey->setPositionChangeListener(this);
+    internalPosChange = false;
 }
 
 
 SWKey *VerseTreeKey::clone() const
 {
-	return new VerseTreeKey(*this);
+    return new VerseTreeKey(*this);
 }
 
 
 int VerseTreeKey::getBookFromAbbrev(const char *iabbr) const
 {
-	int bookno = VerseKey::getBookFromAbbrev(iabbr);
-	if (bookno < 0) {
+    int bookno = VerseKey::getBookFromAbbrev(iabbr);
+    if (bookno < 0) {
 /*
-		vector<struct sbook>::iterator it = find(books, iabbr);
-		if (it == books.end()) {
-			TreeKey *tkey = this->treeKey;
-			int saveError = tkey->popError();
-			long bookmark = tkey->getOffset();
-			SWBuf segment;
-			internalPosChange = true;
-			do {
-				segment = (SWBuf)tkey->getLocalName();
-			} while (tkey->parent());
-			segment << 1;
-			if (saveError) {
-				error = saveError;
-			}
-			tkey->setOffset(bookmark);
-		}
-		books.push_back(sbook(iabbr));
+        vector<struct sbook>::iterator it = find(books, iabbr);
+        if (it == books.end()) {
+            TreeKey *tkey = this->treeKey;
+            int saveError = tkey->popError();
+            long bookmark = tkey->getOffset();
+            SWBuf segment;
+            internalPosChange = true;
+            do {
+                segment = (SWBuf)tkey->getLocalName();
+            } while (tkey->parent());
+            segment << 1;
+            if (saveError) {
+                error = saveError;
+            }
+            tkey->setOffset(bookmark);
+        }
+        books.push_back(sbook(iabbr));
 */
-	}
-	return bookno;
+    }
+    return bookno;
 }
 
 /******************************************************************************
  * VerseTreeKey Destructor - cleans up instance of VerseTreeKey
  *
- * ENT:	ikey - text key
+ * ENT:    ikey - text key
  */
 
 VerseTreeKey::~VerseTreeKey() {
-	delete treeKey;
+    delete treeKey;
 }
 
 
 void VerseTreeKey::decrement(int steps) {
-	int treeError = 0;
-	if (!error) lastGoodOffset = getTreeKey()->getOffset();
-	do {
-		treeKey->decrement();
-		treeError = treeKey->popError();
-	// iterate until 3 levels and no versekey parse errors
-	} while (!treeError && ((treeKey->getLevel() < 3) || error));
-	if (error && !treeError) {
-		int saveError = error;
-		increment();
-		error = saveError;
-	}
-	if (treeError) {
-		treeKey->setOffset(lastGoodOffset);
-		error = treeError;
-	}
-	if (_compare(getUpperBound()) > 0) {
-		positionFrom(getUpperBound());
-		error = KEYERR_OUTOFBOUNDS;
-	}
-	if (_compare(getLowerBound()) < 0) {
-		positionFrom(getLowerBound());
-		error = KEYERR_OUTOFBOUNDS;
-	}
+    int treeError = 0;
+    if (!error) lastGoodOffset = getTreeKey()->getOffset();
+    do {
+        treeKey->decrement();
+        treeError = treeKey->popError();
+    // iterate until 3 levels and no versekey parse errors
+    } while (!treeError && ((treeKey->getLevel() < 3) || error));
+    if (error && !treeError) {
+        int saveError = error;
+        increment();
+        error = saveError;
+    }
+    if (treeError) {
+        treeKey->setOffset(lastGoodOffset);
+        error = treeError;
+    }
+    if (_compare(getUpperBound()) > 0) {
+        positionFrom(getUpperBound());
+        error = KEYERR_OUTOFBOUNDS;
+    }
+    if (_compare(getLowerBound()) < 0) {
+        positionFrom(getLowerBound());
+        error = KEYERR_OUTOFBOUNDS;
+    }
 }
 
 
 void VerseTreeKey::increment(int steps) {
-	int treeError = 0;
-	if (!error) lastGoodOffset = getTreeKey()->getOffset();
-	do {
-		treeKey->increment();
-		treeError = treeKey->popError();
-	// iterate until 3 levels and no versekey parse errors
-	} while (!treeError && ((treeKey->getLevel() < 3) || error));
-	if (error && !treeError) {
-		int saveError = error;
-		decrement();
-		error = saveError;
-	}
-	if (treeError) {
-		treeKey->setOffset(lastGoodOffset);
-		error = treeError;
-	}
-	// bounds
-	if (_compare(getUpperBound()) > 0) {
-		positionFrom(getUpperBound());
-		error = KEYERR_OUTOFBOUNDS;
-	}
-	if (_compare(getLowerBound()) < 0) {
-		positionFrom(getLowerBound());
-		error = KEYERR_OUTOFBOUNDS;
-	}
+    int treeError = 0;
+    if (!error) lastGoodOffset = getTreeKey()->getOffset();
+    do {
+        treeKey->increment();
+        treeError = treeKey->popError();
+    // iterate until 3 levels and no versekey parse errors
+    } while (!treeError && ((treeKey->getLevel() < 3) || error));
+    if (error && !treeError) {
+        int saveError = error;
+        decrement();
+        error = saveError;
+    }
+    if (treeError) {
+        treeKey->setOffset(lastGoodOffset);
+        error = treeError;
+    }
+    // bounds
+    if (_compare(getUpperBound()) > 0) {
+        positionFrom(getUpperBound());
+        error = KEYERR_OUTOFBOUNDS;
+    }
+    if (_compare(getLowerBound()) < 0) {
+        positionFrom(getLowerBound());
+        error = KEYERR_OUTOFBOUNDS;
+    }
 }
 
 
 void VerseTreeKey::positionChanged() {
-	if (!internalPosChange) {
-		TreeKey *tkey = this->TreeKey::PositionChangeListener::getTreeKey();
-		int saveError = tkey->popError();
-		long bookmark = tkey->getOffset();
-		SWBuf seg[4];
-		internalPosChange = true;
-		int legs = 0;
-		do {
-			seg[legs] = tkey->getLocalName();
-			legs++;
-		} while (tkey->parent() && (legs < 4));
+    if (!internalPosChange) {
+        TreeKey *tkey = this->TreeKey::PositionChangeListener::getTreeKey();
+        int saveError = tkey->popError();
+        long bookmark = tkey->getOffset();
+        SWBuf seg[4];
+        internalPosChange = true;
+        int legs = 0;
+        do {
+            seg[legs] = tkey->getLocalName();
+            legs++;
+        } while (tkey->parent() && (legs < 4));
 
-		legs--;
+        legs--;
 
-		if ((legs < 2) && (!seg[0].length() || seg[0] == "/")) {		//"[ Module Heading ]";
-			testament = 0;
-			book      = 0;
-			chapter   = 0;
-			setVerse(0);
-		}
-		else if ((legs < 2)
-			&& ((!strncmp(seg[0].c_str(), "[ Testament ", 12)) &&		//"[ Testament n Heading ]";
-			    (isdigit(seg[0][12])) &&
-			    (!strcmp(seg[0].c_str()+13, " Heading ]")))) {
-			testament = (seg[0][12]-48);
-			book      = 0;
-			chapter   = 0;
-			setVerse(0);
-		}	//path = "[ Module Heading ]";
-		else {
-			setBookName(seg[--legs]);
-			chapter = (legs > 0) ? atoi(seg[--legs]) : 0;
-			setVerse((legs > 0) ? atoi(seg[--legs]) : 0);
-		}
+        if ((legs < 2) && (!seg[0].length() || seg[0] == "/")) {        //"[ Module Heading ]";
+            testament = 0;
+            book      = 0;
+            chapter   = 0;
+            setVerse(0);
+        }
+        else if ((legs < 2)
+            && ((!strncmp(seg[0].c_str(), "[ Testament ", 12)) &&        //"[ Testament n Heading ]";
+                (isdigit(seg[0][12])) &&
+                (!strcmp(seg[0].c_str()+13, " Heading ]")))) {
+            testament = (seg[0][12]-48);
+            book      = 0;
+            chapter   = 0;
+            setVerse(0);
+        }    //path = "[ Module Heading ]";
+        else {
+            setBookName(seg[--legs]);
+            chapter = (legs > 0) ? atoi(seg[--legs]) : 0;
+            setVerse((legs > 0) ? atoi(seg[--legs]) : 0);
+        }
 
-//		setText(path);
-		if (saveError) {
-			error = saveError;
-		}
-		tkey->setOffset(bookmark);
-		tkey->setError(saveError);
-		internalPosChange = false;
-	}
+//        setText(path);
+        if (saveError) {
+            error = saveError;
+        }
+        tkey->setOffset(bookmark);
+        tkey->setError(saveError);
+        internalPosChange = false;
+    }
 }
 
 
 void VerseTreeKey::syncVerseToTree() {
-	internalPosChange = true;
-	SWBuf path;
-	if (!getTestament()) path = "/"; // "[ Module Heading ]";
-	else if (!getBook()) path.setFormatted("/[ Testament %d Heading ]", getTestament());
-	else path.setFormatted("/%s/%d/%d", getOSISBookName(), getChapter(), getVerse());
-	if (getSuffix()) path += getSuffix();
-	long bookmark = treeKey->getOffset();
-	treeKey->setText(path);
+    internalPosChange = true;
+    SWBuf path;
+    if (!getTestament()) path = "/"; // "[ Module Heading ]";
+    else if (!getBook()) path.setFormatted("/[ Testament %d Heading ]", getTestament());
+    else path.setFormatted("/%s/%d/%d", getOSISBookName(), getChapter(), getVerse());
+    if (getSuffix()) path += getSuffix();
+    long bookmark = treeKey->getOffset();
+    treeKey->setText(path);
 
-	// if our module has jacked inconsistencies, then let's put our tree back to where it was
-	if (treeKey->popError()) {
-		treeKey->setOffset(bookmark);
-	}
+    // if our module has jacked inconsistencies, then let's put our tree back to where it was
+    if (treeKey->popError()) {
+        treeKey->setOffset(bookmark);
+    }
 
-	internalPosChange = false;
+    internalPosChange = false;
 }
 
 
 TreeKey *VerseTreeKey::getTreeKey() {
-	syncVerseToTree();
-	return treeKey;
+    syncVerseToTree();
+    return treeKey;
 }
 
 // can autonormalize yet (ever?)
 void VerseTreeKey::Normalize(char autocheck) {
-	error = 0;
+    error = 0;
 }
 
 long VerseTreeKey::NewIndex() const {
-	return treeKey->getOffset();
+    return treeKey->getOffset();
 }
 
 
 void VerseTreeKey::setPosition(SW_POSITION p) {
 
-	if (isBoundSet()) {
-		return VerseKey::setPosition(p);
-	}
+    if (isBoundSet()) {
+        return VerseKey::setPosition(p);
+    }
 
-	switch (p) {
-	case POS_TOP:
-		popError();
-		treeKey->setPosition(p);
-		increment();
-		decrement();
-		popError();
-		break;
-	case POS_BOTTOM:
-		popError();
-		treeKey->setPosition(p);
-		decrement();
-		increment();
-		popError();
-		break;
-	case POS_MAXVERSE:
-	case POS_MAXCHAPTER:
-		VerseKey::setPosition(p);
-		break;
-	}
+    switch (p) {
+    case POS_TOP:
+        popError();
+        treeKey->setPosition(p);
+        increment();
+        decrement();
+        popError();
+        break;
+    case POS_BOTTOM:
+        popError();
+        treeKey->setPosition(p);
+        decrement();
+        increment();
+        popError();
+        break;
+    case POS_MAXVERSE:
+    case POS_MAXCHAPTER:
+        VerseKey::setPosition(p);
+        break;
+    }
 }
 
 
@@ -297,7 +297,7 @@ void VerseTreeKey::setPosition(SW_POSITION p) {
  * VerseTreeKey::copyFrom - Equates this VerseTreeKey to another VerseTreeKey
 
 void VerseTreeKey::copyFrom(const VerseTreeKey &ikey) {
-	VerseKey::copyFrom(ikey);
+    VerseKey::copyFrom(ikey);
 }
  */
 

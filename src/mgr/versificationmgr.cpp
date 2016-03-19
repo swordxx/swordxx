@@ -1,14 +1,14 @@
 /******************************************************************************
  *
- *  versificationmgr.cpp -	implementation of class VersificationMgr used
- *				for managing versification systems
+ *  versificationmgr.cpp -    implementation of class VersificationMgr used
+ *                for managing versification systems
  *
  * $Id$
  *
  * Copyright 2008-2013 CrossWire Bible Society (http://www.crosswire.org)
- *	CrossWire Bible Society
- *	P. O. Box 2528
- *	Tempe, AZ  85280-2528
+ *    CrossWire Bible Society
+ *    P. O. Box 2528
+ *    Tempe, AZ  85280-2528
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -25,26 +25,26 @@
 #include <vector>
 #include <map>
 #include <treekey.h>
-#include <canon.h>		// KJV internal versification system
+#include <canon.h>        // KJV internal versification system
 #include <swlog.h>
 #include <algorithm>
 
-#include <canon_null.h>		// null v11n system
+#include <canon_null.h>        // null v11n system
 
-#include <canon_leningrad.h>	// Leningrad Codex (WLC) v11n system
-#include <canon_mt.h>		// Masoretic Text (MT) v11n system
-#include <canon_kjva.h>		// KJV + Apocrypha v11n system
-#include <canon_nrsv.h>		// NRSV v11n system
-#include <canon_nrsva.h>	// NRSV + Apocrypha v11n system
-#include <canon_synodal.h>	// Russian Synodal v11n system
-#include <canon_synodalprot.h>	// Russian Synodal v11n system
-#include <canon_vulg.h>		// Vulgate v11n system
-#include <canon_german.h>	// German v11n system
-#include <canon_luther.h>	// Luther v11n system
-#include <canon_catholic.h>	// Catholic v11n system (10 chapter Esther)
-#include <canon_catholic2.h>	// Catholic2 v11n system (16 chapter Esther)
-#include <canon_lxx.h>		// General LXX v11n system (includes GNT, as used in Orthodox Bibles)
-#include <canon_orthodox.h>	// Orthodox v11n system as used in Orthodox Bibles
+#include <canon_leningrad.h>    // Leningrad Codex (WLC) v11n system
+#include <canon_mt.h>        // Masoretic Text (MT) v11n system
+#include <canon_kjva.h>        // KJV + Apocrypha v11n system
+#include <canon_nrsv.h>        // NRSV v11n system
+#include <canon_nrsva.h>    // NRSV + Apocrypha v11n system
+#include <canon_synodal.h>    // Russian Synodal v11n system
+#include <canon_synodalprot.h>    // Russian Synodal v11n system
+#include <canon_vulg.h>        // Vulgate v11n system
+#include <canon_german.h>    // German v11n system
+#include <canon_luther.h>    // Luther v11n system
+#include <canon_catholic.h>    // Catholic v11n system (10 chapter Esther)
+#include <canon_catholic2.h>    // Catholic2 v11n system (16 chapter Esther)
+#include <canon_lxx.h>        // General LXX v11n system (includes GNT, as used in Orthodox Bibles)
+#include <canon_orthodox.h>    // Orthodox v11n system as used in Orthodox Bibles
 
 using std::vector;
 using std::map;
@@ -56,300 +56,300 @@ namespace swordxx {
 
 
 VersificationMgr *VersificationMgr::getSystemVersificationMgr() {
-	if (!systemVersificationMgr) {
-		systemVersificationMgr = new VersificationMgr();
-		systemVersificationMgr->registerVersificationSystem("KJV", otbooks, ntbooks, vm);
-		systemVersificationMgr->registerVersificationSystem("Leningrad", otbooks_leningrad, ntbooks_null, vm_leningrad);
-		systemVersificationMgr->registerVersificationSystem("MT", otbooks_mt, ntbooks_null, vm_mt);
-		systemVersificationMgr->registerVersificationSystem("KJVA", otbooks_kjva, ntbooks, vm_kjva);
-		systemVersificationMgr->registerVersificationSystem("NRSV", otbooks, ntbooks, vm_nrsv, mappings_nrsv);
-		systemVersificationMgr->registerVersificationSystem("NRSVA", otbooks_nrsva, ntbooks, vm_nrsva);
-		systemVersificationMgr->registerVersificationSystem("Synodal", otbooks_synodal, ntbooks_synodal, vm_synodal, mappings_synodal);
-		systemVersificationMgr->registerVersificationSystem("SynodalProt", otbooks_synodalProt, ntbooks_synodal, vm_synodalProt);
-		systemVersificationMgr->registerVersificationSystem("Vulg", otbooks_vulg, ntbooks_vulg, vm_vulg, mappings_vulg);
-		systemVersificationMgr->registerVersificationSystem("German", otbooks_german, ntbooks, vm_german);
-		systemVersificationMgr->registerVersificationSystem("Luther", otbooks_luther, ntbooks_luther, vm_luther);
-		systemVersificationMgr->registerVersificationSystem("Catholic", otbooks_catholic, ntbooks, vm_catholic);
-		systemVersificationMgr->registerVersificationSystem("Catholic2", otbooks_catholic2, ntbooks, vm_catholic2);
-		systemVersificationMgr->registerVersificationSystem("LXX", otbooks_lxx, ntbooks, vm_lxx);
-		systemVersificationMgr->registerVersificationSystem("Orthodox", otbooks_orthodox, ntbooks, vm_orthodox);
-	}
-	return systemVersificationMgr;
+    if (!systemVersificationMgr) {
+        systemVersificationMgr = new VersificationMgr();
+        systemVersificationMgr->registerVersificationSystem("KJV", otbooks, ntbooks, vm);
+        systemVersificationMgr->registerVersificationSystem("Leningrad", otbooks_leningrad, ntbooks_null, vm_leningrad);
+        systemVersificationMgr->registerVersificationSystem("MT", otbooks_mt, ntbooks_null, vm_mt);
+        systemVersificationMgr->registerVersificationSystem("KJVA", otbooks_kjva, ntbooks, vm_kjva);
+        systemVersificationMgr->registerVersificationSystem("NRSV", otbooks, ntbooks, vm_nrsv, mappings_nrsv);
+        systemVersificationMgr->registerVersificationSystem("NRSVA", otbooks_nrsva, ntbooks, vm_nrsva);
+        systemVersificationMgr->registerVersificationSystem("Synodal", otbooks_synodal, ntbooks_synodal, vm_synodal, mappings_synodal);
+        systemVersificationMgr->registerVersificationSystem("SynodalProt", otbooks_synodalProt, ntbooks_synodal, vm_synodalProt);
+        systemVersificationMgr->registerVersificationSystem("Vulg", otbooks_vulg, ntbooks_vulg, vm_vulg, mappings_vulg);
+        systemVersificationMgr->registerVersificationSystem("German", otbooks_german, ntbooks, vm_german);
+        systemVersificationMgr->registerVersificationSystem("Luther", otbooks_luther, ntbooks_luther, vm_luther);
+        systemVersificationMgr->registerVersificationSystem("Catholic", otbooks_catholic, ntbooks, vm_catholic);
+        systemVersificationMgr->registerVersificationSystem("Catholic2", otbooks_catholic2, ntbooks, vm_catholic2);
+        systemVersificationMgr->registerVersificationSystem("LXX", otbooks_lxx, ntbooks, vm_lxx);
+        systemVersificationMgr->registerVersificationSystem("Orthodox", otbooks_orthodox, ntbooks, vm_orthodox);
+    }
+    return systemVersificationMgr;
 }
 
 
 class VersificationMgr::System::Private {
 public:
-	/** Array[chapmax] of maximum verses in chapters */
-	vector<Book> books;
-	map<SWBuf, int> osisLookup;
-	/** General mapping rule is that first verse of every chapter corresponds first
-		verse of another chapter in default intermediate canon(kjva), so mapping data
-		contains expections. Intermediate canon could not contain corresponding data.
-		
-		pointers on uchar[7]: 1 value - book id 1-based, ot+nt, 2-4 map to, 5-7 map
-		from (chap,verse from, verse to if greater then "verse from")
-		
-		TODO what if book name in one v11n differs from cannon
-			special section in mapping for book transformation
-	*/
-	typedef vector<const unsigned char*> mapping;
-	vector<mapping> mappings;
-	vector<const char*> mappingsExtraBooks;
+    /** Array[chapmax] of maximum verses in chapters */
+    vector<Book> books;
+    map<SWBuf, int> osisLookup;
+    /** General mapping rule is that first verse of every chapter corresponds first
+        verse of another chapter in default intermediate canon(kjva), so mapping data
+        contains expections. Intermediate canon could not contain corresponding data.
 
-	Private() {
-	}
-	Private(const VersificationMgr::System::Private &other) {
-		books = other.books;
-		osisLookup = other.osisLookup;
-	}
-	VersificationMgr::System::Private &operator =(const VersificationMgr::System::Private &other) {
-		books = other.books;
-		osisLookup = other.osisLookup;
-		return *this;
-	}
+        pointers on uchar[7]: 1 value - book id 1-based, ot+nt, 2-4 map to, 5-7 map
+        from (chap,verse from, verse to if greater then "verse from")
+
+        TODO what if book name in one v11n differs from cannon
+            special section in mapping for book transformation
+    */
+    typedef vector<const unsigned char*> mapping;
+    vector<mapping> mappings;
+    vector<const char*> mappingsExtraBooks;
+
+    Private() {
+    }
+    Private(const VersificationMgr::System::Private &other) {
+        books = other.books;
+        osisLookup = other.osisLookup;
+    }
+    VersificationMgr::System::Private &operator =(const VersificationMgr::System::Private &other) {
+        books = other.books;
+        osisLookup = other.osisLookup;
+        return *this;
+    }
 };
 
 
 class VersificationMgr::Book::Private {
 friend struct BookOffsetLess;
 public:
-	/** Array[chapmax] of maximum verses in chapters */
-	vector<int> verseMax;
-	vector<long> offsetPrecomputed;
+    /** Array[chapmax] of maximum verses in chapters */
+    vector<int> verseMax;
+    vector<long> offsetPrecomputed;
 
-	Private() {
-		verseMax.clear();
-	}
-	Private(const VersificationMgr::Book::Private &other) {
-		verseMax.clear();
-		verseMax = other.verseMax;
-		offsetPrecomputed = other.offsetPrecomputed;
-	}
-	VersificationMgr::Book::Private &operator =(const VersificationMgr::Book::Private &other) {
-		verseMax.clear();
+    Private() {
+        verseMax.clear();
+    }
+    Private(const VersificationMgr::Book::Private &other) {
+        verseMax.clear();
+        verseMax = other.verseMax;
+        offsetPrecomputed = other.offsetPrecomputed;
+    }
+    VersificationMgr::Book::Private &operator =(const VersificationMgr::Book::Private &other) {
+        verseMax.clear();
                 int s = other.verseMax.size();
                 if (s) verseMax = other.verseMax;
-		offsetPrecomputed = other.offsetPrecomputed;
-		return *this;
-	}
+        offsetPrecomputed = other.offsetPrecomputed;
+        return *this;
+    }
 };
 
 
 struct BookOffsetLess {
-	bool operator() (const VersificationMgr::Book &o1, const VersificationMgr::Book &o2) const { return o1.p->offsetPrecomputed[0] < o2.p->offsetPrecomputed[0]; }
-	bool operator() (const long &o1, const VersificationMgr::Book &o2) const { return o1 < o2.p->offsetPrecomputed[0]; }
-	bool operator() (const VersificationMgr::Book &o1, const long &o2) const { return o1.p->offsetPrecomputed[0] < o2; }
-	bool operator() (const long &o1, const long &o2) const { return o1 < o2; }
+    bool operator() (const VersificationMgr::Book &o1, const VersificationMgr::Book &o2) const { return o1.p->offsetPrecomputed[0] < o2.p->offsetPrecomputed[0]; }
+    bool operator() (const long &o1, const VersificationMgr::Book &o2) const { return o1 < o2.p->offsetPrecomputed[0]; }
+    bool operator() (const VersificationMgr::Book &o1, const long &o2) const { return o1.p->offsetPrecomputed[0] < o2; }
+    bool operator() (const long &o1, const long &o2) const { return o1 < o2; }
 };
 
 
 void VersificationMgr::Book::init() {
-	p = new Private();
+    p = new Private();
 }
 
 
 void VersificationMgr::System::init() {
-	p = new Private();
-	BMAX[0] = 0;
-	BMAX[1] = 0;
-	ntStartOffset = 0;
+    p = new Private();
+    BMAX[0] = 0;
+    BMAX[1] = 0;
+    ntStartOffset = 0;
 }
 
 
 VersificationMgr::System::System(const System &other) {
-	init();
-	name = other.name;
-	BMAX[0] = other.BMAX[0];
-	BMAX[1] = other.BMAX[1];
-	(*p) = *(other.p);
-	ntStartOffset = other.ntStartOffset;
+    init();
+    name = other.name;
+    BMAX[0] = other.BMAX[0];
+    BMAX[1] = other.BMAX[1];
+    (*p) = *(other.p);
+    ntStartOffset = other.ntStartOffset;
 }
 
 
 VersificationMgr::System &VersificationMgr::System::operator =(const System &other) {
-	name = other.name;
-	BMAX[0] = other.BMAX[0];
-	BMAX[1] = other.BMAX[1];
-	(*p) = *(other.p);
-	ntStartOffset = other.ntStartOffset;
-	return *this;
+    name = other.name;
+    BMAX[0] = other.BMAX[0];
+    BMAX[1] = other.BMAX[1];
+    (*p) = *(other.p);
+    ntStartOffset = other.ntStartOffset;
+    return *this;
 }
 
 
 VersificationMgr::System::~System() {
-	delete p;
+    delete p;
 }
 
 
 const VersificationMgr::Book *VersificationMgr::System::getBook(int number) const {
-	return (number < (signed int)p->books.size()) ? &(p->books[number]) : 0;
+    return (number < (signed int)p->books.size()) ? &(p->books[number]) : 0;
 }
 
 
 int VersificationMgr::System::getBookNumberByOSISName(const char *bookName) const {
-	map<SWBuf, int>::const_iterator it = p->osisLookup.find(bookName);
-	return (it != p->osisLookup.end()) ? it->second : -1;
+    map<SWBuf, int>::const_iterator it = p->osisLookup.find(bookName);
+    return (it != p->osisLookup.end()) ? it->second : -1;
 }
 
 
 void VersificationMgr::System::loadFromSBook(const sbook *ot, const sbook *nt, int *chMax, const unsigned char *mappings) {
-	int chap = 0;
-	int book = 0;
-	long offset = 0;	// module heading
-	offset++;			// testament heading
-	while (ot->chapmax) {
-		p->books.push_back(Book(ot->name, ot->osis, ot->prefAbbrev, ot->chapmax));
-		offset++;		// book heading
-		Book &b = p->books[p->books.size()-1];
-		p->osisLookup[b.getOSISName()] = p->books.size();
-		for (int i = 0; i < ot->chapmax; i++) {
-			b.p->verseMax.push_back(chMax[chap]);
-			offset++;		// chapter heading
-			b.p->offsetPrecomputed.push_back(offset);
-			offset += chMax[chap++];
-		}
-		ot++;
-		book++;
-	}
-	BMAX[0] = book;
-	book = 0;
-	ntStartOffset = offset;
-	offset++;			// testament heading
-	while (nt->chapmax) {
-		p->books.push_back(Book(nt->name, nt->osis, nt->prefAbbrev, nt->chapmax));
-		offset++;		// book heading
-		Book &b = p->books[p->books.size()-1];
-		p->osisLookup[b.getOSISName()] = p->books.size();
-		for (int i = 0; i < nt->chapmax; i++) {
-			b.p->verseMax.push_back(chMax[chap]);
-			offset++;		// chapter heading
-			b.p->offsetPrecomputed.push_back(offset);
-			offset += chMax[chap++];
-		}
-		nt++;
-		book++;
-	}
-	BMAX[1] = book;
+    int chap = 0;
+    int book = 0;
+    long offset = 0;    // module heading
+    offset++;            // testament heading
+    while (ot->chapmax) {
+        p->books.push_back(Book(ot->name, ot->osis, ot->prefAbbrev, ot->chapmax));
+        offset++;        // book heading
+        Book &b = p->books[p->books.size()-1];
+        p->osisLookup[b.getOSISName()] = p->books.size();
+        for (int i = 0; i < ot->chapmax; i++) {
+            b.p->verseMax.push_back(chMax[chap]);
+            offset++;        // chapter heading
+            b.p->offsetPrecomputed.push_back(offset);
+            offset += chMax[chap++];
+        }
+        ot++;
+        book++;
+    }
+    BMAX[0] = book;
+    book = 0;
+    ntStartOffset = offset;
+    offset++;            // testament heading
+    while (nt->chapmax) {
+        p->books.push_back(Book(nt->name, nt->osis, nt->prefAbbrev, nt->chapmax));
+        offset++;        // book heading
+        Book &b = p->books[p->books.size()-1];
+        p->osisLookup[b.getOSISName()] = p->books.size();
+        for (int i = 0; i < nt->chapmax; i++) {
+            b.p->verseMax.push_back(chMax[chap]);
+            offset++;        // chapter heading
+            b.p->offsetPrecomputed.push_back(offset);
+            offset += chMax[chap++];
+        }
+        nt++;
+        book++;
+    }
+    BMAX[1] = book;
 
-	// TODO: build offset speed array
+    // TODO: build offset speed array
 
-	// parse mappings
-	if (mappings != NULL) {
-		const unsigned char *m=mappings;
-		for (; *m != 0; m += strlen((const char*)m)+1) {
-			p->mappingsExtraBooks.push_back((const char*)m);
-		}
-		p->mappings.resize(p->books.size()+p->mappingsExtraBooks.size());
+    // parse mappings
+    if (mappings != NULL) {
+        const unsigned char *m=mappings;
+        for (; *m != 0; m += strlen((const char*)m)+1) {
+            p->mappingsExtraBooks.push_back((const char*)m);
+        }
+        p->mappings.resize(p->books.size()+p->mappingsExtraBooks.size());
 
-		for (++m; *m != 0; m += 7) {
-			p->mappings[m[0]-1].push_back(m);
-			if (*m > p->books.size()) {
-				p->mappings[m[7]-1].push_back(m);
-				m += 1;
-			}
-		}
-	}
+        for (++m; *m != 0; m += 7) {
+            p->mappings[m[0]-1].push_back(m);
+            if (*m > p->books.size()) {
+                p->mappings[m[7]-1].push_back(m);
+                m += 1;
+            }
+        }
+    }
 }
 
 
 VersificationMgr::Book::Book(const Book &other) {
-	longName = other.longName;
-	osisName = other.osisName;
-	prefAbbrev = other.prefAbbrev;
-	chapMax = other.chapMax;
-	init();
-	(*p) = *(other.p);
+    longName = other.longName;
+    osisName = other.osisName;
+    prefAbbrev = other.prefAbbrev;
+    chapMax = other.chapMax;
+    init();
+    (*p) = *(other.p);
 }
 
 
 VersificationMgr::Book& VersificationMgr::Book::operator =(const Book &other) {
-	longName = other.longName;
-	osisName = other.osisName;
-	prefAbbrev = other.prefAbbrev;
-	chapMax = other.chapMax;
-	init();
-	(*p) = *(other.p);
-	return *this;
+    longName = other.longName;
+    osisName = other.osisName;
+    prefAbbrev = other.prefAbbrev;
+    chapMax = other.chapMax;
+    init();
+    (*p) = *(other.p);
+    return *this;
 }
 
 
 VersificationMgr::Book::~Book() {
-	delete p;
+    delete p;
 }
 
 
 int VersificationMgr::Book::getVerseMax(int chapter) const {
-	chapter--;
-	return (p && (chapter < (signed int)p->verseMax.size()) && (chapter > -1)) ? p->verseMax[chapter] : -1;
+    chapter--;
+    return (p && (chapter < (signed int)p->verseMax.size()) && (chapter > -1)) ? p->verseMax[chapter] : -1;
 }
 
 
 int VersificationMgr::System::getBookCount() const {
-	return (p ? p->books.size() : 0);
+    return (p ? p->books.size() : 0);
 }
 
 
 long VersificationMgr::System::getOffsetFromVerse(int book, int chapter, int verse) const {
-	long  offset = -1;
-	chapter--;
+    long  offset = -1;
+    chapter--;
 
-	const Book *b = getBook(book);
+    const Book *b = getBook(book);
 
-	if (!b)                                        return -1;	// assert we have a valid book
-	if ((chapter > -1) && (chapter >= (signed int)b->p->offsetPrecomputed.size())) return -1;	// assert we have a valid chapter
+    if (!b)                                        return -1;    // assert we have a valid book
+    if ((chapter > -1) && (chapter >= (signed int)b->p->offsetPrecomputed.size())) return -1;    // assert we have a valid chapter
 
-	offset = b->p->offsetPrecomputed[(chapter > -1)?chapter:0];
-	if (chapter < 0) offset--;
+    offset = b->p->offsetPrecomputed[(chapter > -1)?chapter:0];
+    if (chapter < 0) offset--;
 
 /* old code
  *
-	offset = offsets[testament-1][0][book];
-	offset = offsets[testament-1][1][(int)offset + chapter];
-	if (!(offset|verse)) // if we have a testament but nothing else.
-		offset = 1;
+    offset = offsets[testament-1][0][book];
+    offset = offsets[testament-1][1][(int)offset + chapter];
+    if (!(offset|verse)) // if we have a testament but nothing else.
+        offset = 1;
 
 */
 
-	return (offset + verse);
+    return (offset + verse);
 }
 
 
 char VersificationMgr::System::getVerseFromOffset(long offset, int *book, int *chapter, int *verse) const {
 
-	if (offset < 1) {	// just handle the module heading corner case up front (and error case)
-		(*book) = -1;
-		(*chapter) = 0;
-		(*verse) = 0;
-		return offset;	// < 0 = error
-	}
+    if (offset < 1) {    // just handle the module heading corner case up front (and error case)
+        (*book) = -1;
+        (*chapter) = 0;
+        (*verse) = 0;
+        return offset;    // < 0 = error
+    }
 
-	// binary search for book
-	vector<Book>::iterator b = lower_bound(p->books.begin(), p->books.end(), offset, BookOffsetLess());
-	if (b == p->books.end()) b--;
-	(*book)    = distance(p->books.begin(), b)+1;
-	if (offset < (*(b->p->offsetPrecomputed.begin()))-((((!(*book)) || (*book)==BMAX[0]+1))?2:1)) { // -1 for chapter headings
-		(*book)--;
-		if (b != p->books.begin()) {
-			b--;	
-		}
-	}
-	vector<long>::iterator c = lower_bound(b->p->offsetPrecomputed.begin(), b->p->offsetPrecomputed.end(), offset);
+    // binary search for book
+    vector<Book>::iterator b = lower_bound(p->books.begin(), p->books.end(), offset, BookOffsetLess());
+    if (b == p->books.end()) b--;
+    (*book)    = distance(p->books.begin(), b)+1;
+    if (offset < (*(b->p->offsetPrecomputed.begin()))-((((!(*book)) || (*book)==BMAX[0]+1))?2:1)) { // -1 for chapter headings
+        (*book)--;
+        if (b != p->books.begin()) {
+            b--;
+        }
+    }
+    vector<long>::iterator c = lower_bound(b->p->offsetPrecomputed.begin(), b->p->offsetPrecomputed.end(), offset);
 
-	// if we're a book heading, we are lessthan chapter precomputes, but greater book.  This catches corner case.
-	if (c == b->p->offsetPrecomputed.end()) {
-		c--;
-	}
-	if ((offset < *c) && (c == b->p->offsetPrecomputed.begin())) {
-		(*chapter) = (offset - *c)+1;	// should be 0 or -1 (for testament heading)
-		(*verse) = 0;
-	}
-	else {
-		if (offset < *c) c--;
-		(*chapter) = distance(b->p->offsetPrecomputed.begin(), c)+1;
-		(*verse)   = (offset - *c);
-	}
-	return ((*chapter > 0) && (*verse > b->getVerseMax(*chapter))) ? KEYERR_OUTOFBOUNDS : 0;
+    // if we're a book heading, we are lessthan chapter precomputes, but greater book.  This catches corner case.
+    if (c == b->p->offsetPrecomputed.end()) {
+        c--;
+    }
+    if ((offset < *c) && (c == b->p->offsetPrecomputed.begin())) {
+        (*chapter) = (offset - *c)+1;    // should be 0 or -1 (for testament heading)
+        (*verse) = 0;
+    }
+    else {
+        if (offset < *c) c--;
+        (*chapter) = distance(b->p->offsetPrecomputed.begin(), c)+1;
+        (*verse)   = (offset - *c);
+    }
+    return ((*chapter > 0) && (*verse > b->getVerseMax(*chapter))) ? KEYERR_OUTOFBOUNDS : 0;
 }
 
 
@@ -359,54 +359,54 @@ char VersificationMgr::System::getVerseFromOffset(long offset, int *book, int *c
 
 class VersificationMgr::Private {
 public:
-	Private() {
-	}
-	Private(const VersificationMgr::Private &other) {
-		systems = other.systems;
-	}
-	VersificationMgr::Private &operator =(const VersificationMgr::Private &other) {
-		systems = other.systems;
-		return *this;
-	}
-	map<SWBuf, System> systems;
+    Private() {
+    }
+    Private(const VersificationMgr::Private &other) {
+        systems = other.systems;
+    }
+    VersificationMgr::Private &operator =(const VersificationMgr::Private &other) {
+        systems = other.systems;
+        return *this;
+    }
+    map<SWBuf, System> systems;
 };
 // ---------------- statics -----------------
 VersificationMgr *VersificationMgr::systemVersificationMgr = 0;
 
 class __staticsystemVersificationMgr {
 public:
-	__staticsystemVersificationMgr() { }
-	~__staticsystemVersificationMgr() { delete VersificationMgr::systemVersificationMgr; }
+    __staticsystemVersificationMgr() { }
+    ~__staticsystemVersificationMgr() { delete VersificationMgr::systemVersificationMgr; }
 } _staticsystemVersificationMgr;
 
 
 void VersificationMgr::init() {
-	p = new Private();
+    p = new Private();
 }
 
 
 VersificationMgr::~VersificationMgr() {
-	delete p;
+    delete p;
 }
 
 
 void VersificationMgr::setSystemVersificationMgr(VersificationMgr *newVersificationMgr) {
-	if (systemVersificationMgr)
-		delete systemVersificationMgr;
-	systemVersificationMgr = newVersificationMgr;
+    if (systemVersificationMgr)
+        delete systemVersificationMgr;
+    systemVersificationMgr = newVersificationMgr;
 }
 
 
 const VersificationMgr::System *VersificationMgr::getVersificationSystem(const char *name) const {
-	map<SWBuf, System>::const_iterator it = p->systems.find(name);
-	return (it != p->systems.end()) ? &(it->second) : 0;
+    map<SWBuf, System>::const_iterator it = p->systems.find(name);
+    return (it != p->systems.end()) ? &(it->second) : 0;
 }
 
 
 void VersificationMgr::registerVersificationSystem(const char *name, const sbook *ot, const sbook *nt, int *chMax, const unsigned char *mappings) {
-	p->systems[name] = name;
-	System &s = p->systems[name];
-	s.loadFromSBook(ot, nt, chMax, mappings);
+    p->systems[name] = name;
+    System &s = p->systems[name];
+    s.loadFromSBook(ot, nt, chMax, mappings);
 }
 
 
@@ -415,144 +415,144 @@ void VersificationMgr::registerVersificationSystem(const char *name, const TreeK
 
 
 const StringList VersificationMgr::getVersificationSystems() const {
-	StringList retVal;
-	for (map<SWBuf, System>::const_iterator it = p->systems.begin(); it != p->systems.end(); it++) {
-		retVal.push_back(it->first);
-	}
-	return retVal;
+    StringList retVal;
+    for (map<SWBuf, System>::const_iterator it = p->systems.begin(); it != p->systems.end(); it++) {
+        retVal.push_back(it->first);
+    }
+    return retVal;
 }
 
 void VersificationMgr::System::translateVerse(const System *dstSys, const char **book, int *chapter, int *verse, int *verse_end) const {
-	SWLog::getSystemLog()->logDebug("translate verse from %s to %s: %s.%i.%i-%i\n",getName(), dstSys->getName(), *book, *chapter, *verse, *verse_end);
+    SWLog::getSystemLog()->logDebug("translate verse from %s to %s: %s.%i.%i-%i\n",getName(), dstSys->getName(), *book, *chapter, *verse, *verse_end);
 
-	if (!strcmp(getName(),"KJVA") || !strcmp(getName(),"KJV")) {
-		if (!strcmp(dstSys->getName(),"KJVA") || !strcmp(dstSys->getName(),"KJV"))
-			return;
-		// reversed mapping
-		SWLog::getSystemLog()->logDebug("Perform reversed mapping.\n");
-		int b = dstSys->getBookNumberByOSISName(*book)-1;
+    if (!strcmp(getName(),"KJVA") || !strcmp(getName(),"KJV")) {
+        if (!strcmp(dstSys->getName(),"KJVA") || !strcmp(dstSys->getName(),"KJV"))
+            return;
+        // reversed mapping
+        SWLog::getSystemLog()->logDebug("Perform reversed mapping.\n");
+        int b = dstSys->getBookNumberByOSISName(*book)-1;
 
-		SWLog::getSystemLog()->logDebug("\tgetBookNumberByOSISName %i %s.\n", b, *book);
+        SWLog::getSystemLog()->logDebug("\tgetBookNumberByOSISName %i %s.\n", b, *book);
 
-		if (b < 0) {
-			SWLog::getSystemLog()->logDebug("\tmappingsExtraBooks.size() %i.\n", dstSys->p->mappingsExtraBooks.size());
-			for (int i=0; i<(int)dstSys->p->mappingsExtraBooks.size(); ++i) {
-				SWLog::getSystemLog()->logDebug("\t%s %s.\n", *book, dstSys->p->mappingsExtraBooks[i]);
-				if (!strcmp(*book, dstSys->p->mappingsExtraBooks[i])) {
-					b = p->books.size()+i-2;
-					break;
-				}
-			}
-		}
+        if (b < 0) {
+            SWLog::getSystemLog()->logDebug("\tmappingsExtraBooks.size() %i.\n", dstSys->p->mappingsExtraBooks.size());
+            for (int i=0; i<(int)dstSys->p->mappingsExtraBooks.size(); ++i) {
+                SWLog::getSystemLog()->logDebug("\t%s %s.\n", *book, dstSys->p->mappingsExtraBooks[i]);
+                if (!strcmp(*book, dstSys->p->mappingsExtraBooks[i])) {
+                    b = p->books.size()+i-2;
+                    break;
+                }
+            }
+        }
 
-		SWLog::getSystemLog()->logDebug("\tb %i.\n", b);
+        SWLog::getSystemLog()->logDebug("\tb %i.\n", b);
 
-		if (b >= (int)dstSys->p->mappings.size() || b < 0) {
-			SWLog::getSystemLog()->logDebug("no modification");
-			return;
-		}
-		
-		const unsigned char *a = NULL;
-		
-		// reversed mapping should use forward search for item
-		for (unsigned int i=0; i<dstSys->p->mappings[b].size(); ++i) {
-			const unsigned char *m = dstSys->p->mappings[b][i];
-			if (m[4] == *chapter && m[5] <= *verse) {
-				SWLog::getSystemLog()->logDebug("found mapping %i %i %i %i %i %i\n",m[1],m[2],m[3],m[4],m[5],m[6]);
-				if (m[5] == *verse || (m[6] >= *verse && m[5] <= *verse)) {
-					// inside of any mapping range
-					*chapter = m[1];
-					*verse = m[2];
-					*verse_end = m[3];
-					if (*m >= dstSys->p->books.size()) {
-						SWLog::getSystemLog()->logWarning("map to extra books, possible bug source\n");
-						*book = dstSys->getBook(m[7]-1)->getOSISName();
-					}
-					return;
-				}
-				// destination mapping can have duplicate items, use the last (by using <=)
-				if (a == NULL || (a[5]>a[6]?a[5]:a[6]) <= (m[5]>m[6]?m[5]:m[6]))
-					a = m;
-			}
-		}
-		if (a != NULL) {
-			SWLog::getSystemLog()->logDebug("set appropriate: %i %i %i %i %i %i\n",a[1],a[2],a[3],a[4],a[5],a[6]);
-			(*chapter) = a[1];
-			// shift verse
-			const int d = (a[3]>a[2]?a[3]:a[2])-(a[6]>a[5]?a[6]:a[5]);
-			if (*verse < *verse_end)
-				*verse_end += d;
-			else
-				*verse_end = (*verse) + d;
-			*verse += d;
-			if (*a > dstSys->p->books.size()) {
-				SWLog::getSystemLog()->logDebug("appropriate: %i %i %i %i %i %i %i %i\n",a[0],a[1],a[2],a[3],a[4],a[5],a[6],a[7]);
-				SWLog::getSystemLog()->logDebug("book: %s\n", dstSys->getBook(a[7]-1)->getOSISName());
-				*book = dstSys->getBook(a[7]-1)->getOSISName();
-			}
-			return;
-		}
-		SWLog::getSystemLog()->logDebug("There is no mapping.\n");
-	}
-	else if (strcmp(dstSys->getName(),"KJVA") && strcmp(dstSys->getName(),"KJV")) {
-		const System *kjva = getSystemVersificationMgr()->getVersificationSystem("KJVA");
-		const int src_verse = *verse;
-		
-		translateVerse(kjva, book, chapter, verse, verse_end);
-		
-		int interm_verse = *verse, interm_range = *verse_end, interm_chapter = *chapter;
-		const char *interm_book = *book;
-		
-		kjva->translateVerse(dstSys, book, chapter, verse, verse_end);
-		
-		// contraction->expansion fix
-		if (verse < verse_end && !(interm_verse < interm_range)) {
-			kjva->translateVerse(this, &interm_book, &interm_chapter, &interm_verse, &interm_range);
-			if (interm_verse < interm_range) {
-				*verse += src_verse - interm_verse;
-				if (*verse > *verse_end)
-					*verse = *verse_end;
-				else
-					*verse_end = *verse;
-			}
-		}
-	}
-	else {
-		SWLog::getSystemLog()->logDebug("Perform forward mapping.\n");
-		const int b = getBookNumberByOSISName(*book)-1;
-		if (b >= (int)p->mappings.size())
-			return;
-		// forward mapping should use reversed search for item
-		for (int i=p->mappings[b].size()-1; i>=0; --i) {
-			const unsigned char *m = p->mappings[b][i];
-			if (m[1] < *chapter) {
-				SWLog::getSystemLog()->logWarning("There is no mapping for this chapter.\n");
-				return;
-			}
-			if (m[1] == *chapter && m[2] <= *verse) {
-				SWLog::getSystemLog()->logDebug("found mapping %i %i %i %i %i %i\n",m[1],m[2],m[3],m[4],m[5],m[6]);
-				if (m[2] == *verse || (m[3] >= *verse && m[2] <= *verse)) {
-					*chapter = m[4];
-					*verse = m[5];
-					*verse_end = m[6];
-				}
-				else {
-					*chapter = m[4];
-					// shift verse
-					const int d = (m[6]>m[5]?m[6]:m[5])-(m[3]>m[2]?m[3]:m[2]);
-					if (*verse < *verse_end)
-						*verse_end += d;
-					else
-						*verse_end = (*verse) + d;
-					*verse += d;
-				}
-				if (*m > p->books.size())
-					*book = p->mappingsExtraBooks[m[0]-p->books.size()-1];
-				return;
-			}
-		}
-		SWLog::getSystemLog()->logDebug("No mapping.\n");
-	}
+        if (b >= (int)dstSys->p->mappings.size() || b < 0) {
+            SWLog::getSystemLog()->logDebug("no modification");
+            return;
+        }
+
+        const unsigned char *a = NULL;
+
+        // reversed mapping should use forward search for item
+        for (unsigned int i=0; i<dstSys->p->mappings[b].size(); ++i) {
+            const unsigned char *m = dstSys->p->mappings[b][i];
+            if (m[4] == *chapter && m[5] <= *verse) {
+                SWLog::getSystemLog()->logDebug("found mapping %i %i %i %i %i %i\n",m[1],m[2],m[3],m[4],m[5],m[6]);
+                if (m[5] == *verse || (m[6] >= *verse && m[5] <= *verse)) {
+                    // inside of any mapping range
+                    *chapter = m[1];
+                    *verse = m[2];
+                    *verse_end = m[3];
+                    if (*m >= dstSys->p->books.size()) {
+                        SWLog::getSystemLog()->logWarning("map to extra books, possible bug source\n");
+                        *book = dstSys->getBook(m[7]-1)->getOSISName();
+                    }
+                    return;
+                }
+                // destination mapping can have duplicate items, use the last (by using <=)
+                if (a == NULL || (a[5]>a[6]?a[5]:a[6]) <= (m[5]>m[6]?m[5]:m[6]))
+                    a = m;
+            }
+        }
+        if (a != NULL) {
+            SWLog::getSystemLog()->logDebug("set appropriate: %i %i %i %i %i %i\n",a[1],a[2],a[3],a[4],a[5],a[6]);
+            (*chapter) = a[1];
+            // shift verse
+            const int d = (a[3]>a[2]?a[3]:a[2])-(a[6]>a[5]?a[6]:a[5]);
+            if (*verse < *verse_end)
+                *verse_end += d;
+            else
+                *verse_end = (*verse) + d;
+            *verse += d;
+            if (*a > dstSys->p->books.size()) {
+                SWLog::getSystemLog()->logDebug("appropriate: %i %i %i %i %i %i %i %i\n",a[0],a[1],a[2],a[3],a[4],a[5],a[6],a[7]);
+                SWLog::getSystemLog()->logDebug("book: %s\n", dstSys->getBook(a[7]-1)->getOSISName());
+                *book = dstSys->getBook(a[7]-1)->getOSISName();
+            }
+            return;
+        }
+        SWLog::getSystemLog()->logDebug("There is no mapping.\n");
+    }
+    else if (strcmp(dstSys->getName(),"KJVA") && strcmp(dstSys->getName(),"KJV")) {
+        const System *kjva = getSystemVersificationMgr()->getVersificationSystem("KJVA");
+        const int src_verse = *verse;
+
+        translateVerse(kjva, book, chapter, verse, verse_end);
+
+        int interm_verse = *verse, interm_range = *verse_end, interm_chapter = *chapter;
+        const char *interm_book = *book;
+
+        kjva->translateVerse(dstSys, book, chapter, verse, verse_end);
+
+        // contraction->expansion fix
+        if (verse < verse_end && !(interm_verse < interm_range)) {
+            kjva->translateVerse(this, &interm_book, &interm_chapter, &interm_verse, &interm_range);
+            if (interm_verse < interm_range) {
+                *verse += src_verse - interm_verse;
+                if (*verse > *verse_end)
+                    *verse = *verse_end;
+                else
+                    *verse_end = *verse;
+            }
+        }
+    }
+    else {
+        SWLog::getSystemLog()->logDebug("Perform forward mapping.\n");
+        const int b = getBookNumberByOSISName(*book)-1;
+        if (b >= (int)p->mappings.size())
+            return;
+        // forward mapping should use reversed search for item
+        for (int i=p->mappings[b].size()-1; i>=0; --i) {
+            const unsigned char *m = p->mappings[b][i];
+            if (m[1] < *chapter) {
+                SWLog::getSystemLog()->logWarning("There is no mapping for this chapter.\n");
+                return;
+            }
+            if (m[1] == *chapter && m[2] <= *verse) {
+                SWLog::getSystemLog()->logDebug("found mapping %i %i %i %i %i %i\n",m[1],m[2],m[3],m[4],m[5],m[6]);
+                if (m[2] == *verse || (m[3] >= *verse && m[2] <= *verse)) {
+                    *chapter = m[4];
+                    *verse = m[5];
+                    *verse_end = m[6];
+                }
+                else {
+                    *chapter = m[4];
+                    // shift verse
+                    const int d = (m[6]>m[5]?m[6]:m[5])-(m[3]>m[2]?m[3]:m[2]);
+                    if (*verse < *verse_end)
+                        *verse_end += d;
+                    else
+                        *verse_end = (*verse) + d;
+                    *verse += d;
+                }
+                if (*m > p->books.size())
+                    *book = p->mappingsExtraBooks[m[0]-p->books.size()-1];
+                return;
+            }
+        }
+        SWLog::getSystemLog()->logDebug("No mapping.\n");
+    }
 }
 
 } /* namespace swordxx */

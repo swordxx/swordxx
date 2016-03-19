@@ -6,9 +6,9 @@
 # $Id$
 #
 # Copyright 1998-2009 CrossWire Bible Society (http://www.crosswire.org)
-#	CrossWire Bible Society
-#	P. O. Box 2528
-#	Tempe, AZ  85280-2528
+#    CrossWire Bible Society
+#    P. O. Box 2528
+#    Tempe, AZ  85280-2528
 #
 # This program is free software; you can redistribute it and/or modify it
 # under the terms of the GNU General Public License as published by the
@@ -23,18 +23,18 @@
 TESTSUITE=`for i in *.good; do basename $i .good; done`
 
 for i in $TESTSUITE; do
-	echo -n "$i: "
-	./runtest.sh $i -q
-	if [ $? -ne 0 ]; then
-		echo FAILED
-		echo ""
-		echo To see problems, try running:
-		echo ./runtest.sh $i
-		echo ""
-		exit 1
-	else
-		echo PASSED.
-	fi
+    echo -n "$i: "
+    ./runtest.sh $i -q
+    if [ $? -ne 0 ]; then
+        echo FAILED
+        echo ""
+        echo To see problems, try running:
+        echo ./runtest.sh $i
+        echo ""
+        exit 1
+    else
+        echo PASSED.
+    fi
 done
 echo "ALL PASSED!"
 exit 0

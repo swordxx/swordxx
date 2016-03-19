@@ -2,14 +2,14 @@
 
 #******************************************************************************
 #
-#  mkvsmod.pl -	
+#  mkvsmod.pl -
 #
 # $Id$
 #
 # Copyright 2001-2009 CrossWire Bible Society (http://www.crosswire.org)
-#	CrossWire Bible Society
-#	P. O. Box 2528
-#	Tempe, AZ  85280-2528
+#    CrossWire Bible Society
+#    P. O. Box 2528
+#    Tempe, AZ  85280-2528
 #
 # This program is free software; you can redistribute it and/or modify it
 # under the terms of the GNU General Public License as published by the
@@ -25,7 +25,7 @@ open (INF, $ARGV[0]);
 
 `addvs -c ./`;
 while (<INF>) {
-    
+
     $line = $_;
     $line =~ s/[\r\n]//g;
     $line =~ /(.+\d+:\d+:?) +(.*)/;

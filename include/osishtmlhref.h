@@ -1,13 +1,13 @@
 /******************************************************************************
  *
- *  osishtmlhref.h -	Implementation of OSISHTMLHREF
+ *  osishtmlhref.h -    Implementation of OSISHTMLHREF
  *
  * $Id$
  *
  * Copyright 2003-2013 CrossWire Bible Society (http://www.crosswire.org)
- *	CrossWire Bible Society
- *	P. O. Box 2528
- *	Tempe, AZ  85280-2528
+ *    CrossWire Bible Society
+ *    P. O. Box 2528
+ *    Tempe, AZ  85280-2528
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -31,37 +31,37 @@ namespace swordxx {
  */
 class SWDLLEXPORT OSISHTMLHREF : public SWBasicFilter {
 private:
-	bool morphFirst;
-	bool renderNoteNumbers;
+    bool morphFirst;
+    bool renderNoteNumbers;
 protected:
-	// used by derived classes so we have it in the header
-	class TagStacks;
-	class SWDLLEXPORT MyUserData : public BasicFilterUserData {
-	public:
-		bool osisQToTick;
-		bool inBold;	// TODO: obsolete. left for binary compat for 1.6.x
-		bool inXRefNote;
-		bool BiblicalText;
-		int suspendLevel;
-		SWBuf wordsOfChristStart;
-		SWBuf wordsOfChristEnd;
-                TagStacks *tagStacks;	// TODO: modified to wrap all TagStacks necessary for this filter until 1.7.x
-//                TagStack *hiStack;	// TODO: commented out for binary compat for 1.6.x	 wrapped in tagStacks until 1.7.x
-		SWBuf lastTransChange;
-		SWBuf w;
-		SWBuf fn;
-		SWBuf version;
-		MyUserData(const SWModule *module, const SWKey *key);
-		~MyUserData();
-	};
-	virtual BasicFilterUserData *createUserData(const SWModule *module, const SWKey *key) {
-		return new MyUserData(module, key);
-	}
-	virtual bool handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData);
+    // used by derived classes so we have it in the header
+    class TagStacks;
+    class SWDLLEXPORT MyUserData : public BasicFilterUserData {
+    public:
+        bool osisQToTick;
+        bool inBold;    // TODO: obsolete. left for binary compat for 1.6.x
+        bool inXRefNote;
+        bool BiblicalText;
+        int suspendLevel;
+        SWBuf wordsOfChristStart;
+        SWBuf wordsOfChristEnd;
+                TagStacks *tagStacks;    // TODO: modified to wrap all TagStacks necessary for this filter until 1.7.x
+//                TagStack *hiStack;    // TODO: commented out for binary compat for 1.6.x     wrapped in tagStacks until 1.7.x
+        SWBuf lastTransChange;
+        SWBuf w;
+        SWBuf fn;
+        SWBuf version;
+        MyUserData(const SWModule *module, const SWKey *key);
+        ~MyUserData();
+    };
+    virtual BasicFilterUserData *createUserData(const SWModule *module, const SWKey *key) {
+        return new MyUserData(module, key);
+    }
+    virtual bool handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData);
 public:
-	OSISHTMLHREF();
-	void setMorphFirst(bool val = true) { morphFirst = val; }
-	void setRenderNoteNumbers(bool val = true) { renderNoteNumbers = val; }
+    OSISHTMLHREF();
+    void setMorphFirst(bool val = true) { morphFirst = val; }
+    void setRenderNoteNumbers(bool val = true) { renderNoteNumbers = val; }
 };
 
 } /* namespace swordxx */

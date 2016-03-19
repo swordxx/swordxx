@@ -1,13 +1,13 @@
 /******************************************************************************
  *
- *  swgenbook.h -	Implementation of SWGenBook
+ *  swgenbook.h -    Implementation of SWGenBook
  *
  * $Id$
  *
  * Copyright 2002-2013 CrossWire Bible Society (http://www.crosswire.org)
- *	CrossWire Bible Society
- *	P. O. Box 2528
- *	Tempe, AZ  85280-2528
+ *    CrossWire Bible Society
+ *    P. O. Box 2528
+ *    Tempe, AZ  85280-2528
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -36,25 +36,25 @@ namespace swordxx {
 class SWDLLEXPORT SWGenBook : public SWModule {
 
 protected:
-	mutable char *entkeytxt;
-	mutable TreeKey *tmpTreeKey;
-	TreeKey &getTreeKey(const SWKey *k = 0) const;
+    mutable char *entkeytxt;
+    mutable TreeKey *tmpTreeKey;
+    TreeKey &getTreeKey(const SWKey *k = 0) const;
 
 public:
-	/** Initializes data for instance of SWGenBook
-	*/
-	SWGenBook(const char *imodname = 0, const char *imoddesc = 0,
-			SWDisplay * idisp = 0, SWTextEncoding encoding = ENC_UNKNOWN,
-			SWTextDirection dir = DIRECTION_LTR,
-			SWTextMarkup markup = FMT_UNKNOWN, const char* ilang = 0);
+    /** Initializes data for instance of SWGenBook
+    */
+    SWGenBook(const char *imodname = 0, const char *imoddesc = 0,
+            SWDisplay * idisp = 0, SWTextEncoding encoding = ENC_UNKNOWN,
+            SWTextDirection dir = DIRECTION_LTR,
+            SWTextMarkup markup = FMT_UNKNOWN, const char* ilang = 0);
 
-	virtual ~SWGenBook();
-	virtual SWKey *createKey() const = 0;
+    virtual ~SWGenBook();
+    virtual SWKey *createKey() const = 0;
 
 
-	// OPERATORS -----------------------------------------------------------------
-	
-	SWMODULE_OPERATORS
+    // OPERATORS -----------------------------------------------------------------
+
+    SWMODULE_OPERATORS
 
 };
 

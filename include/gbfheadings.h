@@ -1,13 +1,13 @@
 /***************************************************************************
  *
- *  gbfheadings.h -	Implementation of GBFHeadings
+ *  gbfheadings.h -    Implementation of GBFHeadings
  *
  * $Id$
  *
  * Copyright 2001-2013 CrossWire Bible Society (http://www.crosswire.org)
- *	CrossWire Bible Society
- *	P. O. Box 2528
- *	Tempe, AZ  85280-2528
+ *    CrossWire Bible Society
+ *    P. O. Box 2528
+ *    Tempe, AZ  85280-2528
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -31,9 +31,9 @@ namespace swordxx {
   */
 class SWDLLEXPORT GBFHeadings : public SWOptionFilter {
 public:
-	GBFHeadings();
-	virtual ~GBFHeadings();
-	virtual char processText(SWBuf &text, const SWKey *key = 0, const SWModule *module = 0);
+    GBFHeadings();
+    virtual ~GBFHeadings();
+    virtual char processText(SWBuf &text, const SWKey *key = 0, const SWModule *module = 0);
 };
 
 } /* namespace swordxx */

@@ -1,14 +1,14 @@
 /******************************************************************************
  *
- *  bz2comprs.cpp -	Bzip2Compress, a driver class that provides bzip2
- *			compression (Burrows–Wheeler with Huffman coding)
- *				
+ *  bz2comprs.cpp -    Bzip2Compress, a driver class that provides bzip2
+ *            compression (Burrows–Wheeler with Huffman coding)
+ *
  * $Id$
  *
  * Copyright 2000-2014 CrossWire Bible Society (http://www.crosswire.org)
- *	CrossWire Bible Society
- *	P. O. Box 2528
- *	Tempe, AZ  85280-2528
+ *    CrossWire Bible Society
+ *    P. O. Box 2528
+ *    Tempe, AZ  85280-2528
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -36,7 +36,7 @@ namespace swordxx {
  */
 
 Bzip2Compress::Bzip2Compress() : SWCompress() {
-	level = 9;
+    level = 9;
 }
 
 
@@ -50,103 +50,103 @@ Bzip2Compress::~Bzip2Compress() {
 
 /******************************************************************************
  * Bzip2Compress::Encode - This function "encodes" the input stream into the
- *			output stream.
- *			The GetChars() and SendChars() functions are
- *			used to separate this method from the actual
- *			i/o.
- * 		NOTE:	must set zlen for parent class to know length of
- * 			compressed buffer.
+ *            output stream.
+ *            The GetChars() and SendChars() functions are
+ *            used to separate this method from the actual
+ *            i/o.
+ *         NOTE:    must set zlen for parent class to know length of
+ *             compressed buffer.
  */
 
 void Bzip2Compress::Encode(void)
 {
-	direct = 0;	// set direction needed by parent [Get|Send]Chars()
+    direct = 0;    // set direction needed by parent [Get|Send]Chars()
 
-	// get buffer
-	char chunk[1024];
-	char *buf = (char *)calloc(1, 1024);
-	char *chunkbuf = buf;
-	unsigned long chunklen;
-	unsigned long len = 0;
-	while((chunklen = GetChars(chunk, 1023))) {
-		memcpy(chunkbuf, chunk, chunklen);
-		len += chunklen;
-		if (chunklen < 1023)
-			break;
-		else	buf = (char *)realloc(buf, len + 1024);
-		chunkbuf = buf+len;
-	}
+    // get buffer
+    char chunk[1024];
+    char *buf = (char *)calloc(1, 1024);
+    char *chunkbuf = buf;
+    unsigned long chunklen;
+    unsigned long len = 0;
+    while((chunklen = GetChars(chunk, 1023))) {
+        memcpy(chunkbuf, chunk, chunklen);
+        len += chunklen;
+        if (chunklen < 1023)
+            break;
+        else    buf = (char *)realloc(buf, len + 1024);
+        chunkbuf = buf+len;
+    }
 
 
-	zlen = (long) (len*1.01)+600;
-	char *zbuf = new char[zlen+1];
-	if (len)
-	{
-		//printf("Doing compress\n");
-		if (BZ2_bzBuffToBuffCompress(zbuf, (unsigned int*)&zlen, buf, len, level, 0, 0) != BZ_OK)
-		{
-			printf("ERROR in compression\n");
-		}
-		else {
-			SendChars(zbuf, zlen);
-		}
-	}
-	else
-	{
-		fprintf(stderr, "ERROR: no buffer to compress\n");
-	}
-	delete [] zbuf;
-	free (buf);
+    zlen = (long) (len*1.01)+600;
+    char *zbuf = new char[zlen+1];
+    if (len)
+    {
+        //printf("Doing compress\n");
+        if (BZ2_bzBuffToBuffCompress(zbuf, (unsigned int*)&zlen, buf, len, level, 0, 0) != BZ_OK)
+        {
+            printf("ERROR in compression\n");
+        }
+        else {
+            SendChars(zbuf, zlen);
+        }
+    }
+    else
+    {
+        fprintf(stderr, "ERROR: no buffer to compress\n");
+    }
+    delete [] zbuf;
+    free (buf);
 }
 
 
 /******************************************************************************
  * Bzip2Compress::Decode - This function "decodes" the input stream into the
- *			output stream.
- *			The GetChars() and SendChars() functions are
- *			used to separate this method from the actual
- *			i/o.
+ *            output stream.
+ *            The GetChars() and SendChars() functions are
+ *            used to separate this method from the actual
+ *            i/o.
  */
 
 void Bzip2Compress::Decode(void)
 {
-	direct = 1;	// set direction needed by parent [Get|Send]Chars()
+    direct = 1;    // set direction needed by parent [Get|Send]Chars()
 
-	// get buffer
-	char chunk[1024];
-	char *zbuf = (char *)calloc(1, 1024);
-	char *chunkbuf = zbuf;
-	int chunklen;
-	unsigned long zlen = 0;
-	while((chunklen = GetChars(chunk, 1023))) {
-		memcpy(chunkbuf, chunk, chunklen);
-		zlen += chunklen;
-		if (chunklen < 1023)
-			break;
-		else	zbuf = (char *)realloc(zbuf, zlen + 1024);
-		chunkbuf = zbuf + zlen;
-	}
+    // get buffer
+    char chunk[1024];
+    char *zbuf = (char *)calloc(1, 1024);
+    char *chunkbuf = zbuf;
+    int chunklen;
+    unsigned long zlen = 0;
+    while((chunklen = GetChars(chunk, 1023))) {
+        memcpy(chunkbuf, chunk, chunklen);
+        zlen += chunklen;
+        if (chunklen < 1023)
+            break;
+        else    zbuf = (char *)realloc(zbuf, zlen + 1024);
+        chunkbuf = zbuf + zlen;
+    }
 
-	//printf("Decoding complength{%ld} uncomp{%ld}\n", zlen, blen);
-	if (zlen) {
-		unsigned int blen = zlen*20;	// trust compression is less than 1000%
-		char *buf = new char[blen]; 
-		//printf("Doing decompress {%s}\n", zbuf);
-		slen = 0;
-		switch (BZ2_bzBuffToBuffDecompress(buf, &blen, zbuf, zlen, 0, 0)){
-			case BZ_OK: SendChars(buf, blen); slen = blen; break;
-			case BZ_MEM_ERROR: fprintf(stderr, "ERROR: not enough memory during decompression.\n"); break;
-			case BZ_OUTBUFF_FULL: fprintf(stderr, "ERROR: not enough room in the out buffer during decompression.\n"); break;
-			case BZ_DATA_ERROR: fprintf(stderr, "ERROR: corrupt data during decompression.\n"); break;
-			default: fprintf(stderr, "ERROR: an unknown error occured during decompression.\n"); break;
-		}
-		delete [] buf;
-	}
-	else {
-		fprintf(stderr, "ERROR: no buffer to decompress!\n");
-	}
-	//printf("Finished decoding\n");
-	free (zbuf);
+    //printf("Decoding complength{%ld} uncomp{%ld}\n", zlen, blen);
+    if (zlen) {
+        unsigned int blen = zlen*20;    // trust compression is less than 1000%
+        char *buf = new char[blen];
+        //printf("Doing decompress {%s}\n", zbuf);
+        slen = 0;
+        switch (BZ2_bzBuffToBuffDecompress(buf, &blen, zbuf, zlen, 0, 0)){
+            case BZ_OK: SendChars(buf, blen); slen = blen; break;
+            case BZ_MEM_ERROR: fprintf(stderr, "ERROR: not enough memory during decompression.\n"); break;
+            case BZ_OUTBUFF_FULL: fprintf(stderr, "ERROR: not enough room in the out buffer during decompression.\n"); break;
+            case BZ_DATA_ERROR: fprintf(stderr, "ERROR: corrupt data during decompression.\n"); break;
+            default: fprintf(stderr, "ERROR: an unknown error occured during decompression.\n"); break;
+        }
+        delete [] buf;
+    }
+    else {
+        fprintf(stderr, "ERROR: no buffer to decompress!\n");
+    }
+    //printf("Finished decoding\n");
+    free (zbuf);
 }
 
 } /* namespace swordxx */

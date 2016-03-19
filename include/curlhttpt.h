@@ -1,13 +1,13 @@
 /******************************************************************************
  *
- *  curlhttpt.h  -	code for CURL impl of HTTP Transport
+ *  curlhttpt.h  -    code for CURL impl of HTTP Transport
  *
  * $Id$
  *
  * Copyright 2009-2013 CrossWire Bible Society (http://www.crosswire.org)
- *	CrossWire Bible Society
- *	P. O. Box 2528
- *	Tempe, AZ  85280-2528
+ *    CrossWire Bible Society
+ *    P. O. Box 2528
+ *    Tempe, AZ  85280-2528
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -32,14 +32,14 @@ class CURL;
 
 
 class SWDLLEXPORT CURLHTTPTransport : public RemoteTransport {
-	CURL *session;
+    CURL *session;
 
 public:
-	CURLHTTPTransport(const char *host, StatusReporter *statusReporter = 0);
-	~CURLHTTPTransport();
+    CURLHTTPTransport(const char *host, StatusReporter *statusReporter = 0);
+    ~CURLHTTPTransport();
 
-	virtual std::vector<struct DirEntry> getDirList(const char *dirURL);
-	virtual char getURL(const char *destPath, const char *sourceURL, SWBuf *destBuf = 0);
+    virtual std::vector<struct DirEntry> getDirList(const char *dirURL);
+    virtual char getURL(const char *destPath, const char *sourceURL, SWBuf *destBuf = 0);
 };
 
 

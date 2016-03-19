@@ -2,15 +2,15 @@
 
 #******************************************************************************
 #
-#  cipherkeygen.pl -	generates a cipher key of the format
-#			\d{4}[a-zA-Z]{4}\d{4}[a-zA-Z]{4}
+#  cipherkeygen.pl -    generates a cipher key of the format
+#            \d{4}[a-zA-Z]{4}\d{4}[a-zA-Z]{4}
 #
 # $Id$
 #
 # Copyright 2001-2013 CrossWire Bible Society (http://www.crosswire.org)
-#	CrossWire Bible Society
-#	P. O. Box 2528
-#	Tempe, AZ  85280-2528
+#    CrossWire Bible Society
+#    P. O. Box 2528
+#    Tempe, AZ  85280-2528
 #
 # This program is free software; you can redistribute it and/or modify it
 # under the terms of the GNU General Public License as published by the
@@ -30,7 +30,7 @@ $key = int(rand() * 10) . int(rand() * 10) . int(rand() * 10) . int(rand() * 10)
 foreach $c (unpack ("cccccccccccccccc", $key)) {
     $c = chr($c);
     if (rand() < 0.5) {
-	$c = lc($c);
+    $c = lc($c);
     }
     print $c;
 }

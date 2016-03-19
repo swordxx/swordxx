@@ -1,13 +1,13 @@
 /******************************************************************************
  *
- *  thmlgbf.h -	Implementation of ThMLGBF
+ *  thmlgbf.h -    Implementation of ThMLGBF
  *
  * $Id$
  *
  * Copyright 1999-2013 CrossWire Bible Society (http://www.crosswire.org)
- *	CrossWire Bible Society
- *	P. O. Box 2528
- *	Tempe, AZ  85280-2528
+ *    CrossWire Bible Society
+ *    P. O. Box 2528
+ *    Tempe, AZ  85280-2528
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -31,9 +31,9 @@ namespace swordxx {
  */
 class SWDLLEXPORT ThMLGBF : public SWFilter {
 protected:
-	virtual char processText(SWBuf &text, const SWKey *key = 0, const SWModule *module = 0);
+    virtual char processText(SWBuf &text, const SWKey *key = 0, const SWModule *module = 0);
 public:
-	ThMLGBF();
+    ThMLGBF();
 };
 
 } /* namespace swordxx */

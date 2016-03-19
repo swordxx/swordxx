@@ -1,13 +1,13 @@
 /******************************************************************************
  *
- *  gbfhtmlhref.h -	Implementation of GBFHTMLHREF
+ *  gbfhtmlhref.h -    Implementation of GBFHTMLHREF
  *
  * $Id$
  *
  * Copyright 2001-2013 CrossWire Bible Society (http://www.crosswire.org)
- *	CrossWire Bible Society
- *	P. O. Box 2528
- *	Tempe, AZ  85280-2528
+ *    CrossWire Bible Society
+ *    P. O. Box 2528
+ *    Tempe, AZ  85280-2528
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -30,21 +30,21 @@ namespace swordxx {
 /** this filter converts GBF  text to HTML text with hrefs
  */
 class SWDLLEXPORT GBFHTMLHREF : public SWBasicFilter {
-	bool renderNoteNumbers;
+    bool renderNoteNumbers;
 protected:
-	class MyUserData : public BasicFilterUserData {
-	public:
-		MyUserData(const SWModule *module, const SWKey *key);
-		bool hasFootnotePreTag;
-		SWBuf version;
-	};
-	virtual BasicFilterUserData *createUserData(const SWModule *module, const SWKey *key) {
-		return new MyUserData(module, key);
-	}
-	virtual bool handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData);
+    class MyUserData : public BasicFilterUserData {
+    public:
+        MyUserData(const SWModule *module, const SWKey *key);
+        bool hasFootnotePreTag;
+        SWBuf version;
+    };
+    virtual BasicFilterUserData *createUserData(const SWModule *module, const SWKey *key) {
+        return new MyUserData(module, key);
+    }
+    virtual bool handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData);
 public:
-	GBFHTMLHREF();
-	void setRenderNoteNumbers(bool val = true) { renderNoteNumbers = val; }
+    GBFHTMLHREF();
+    void setRenderNoteNumbers(bool val = true) { renderNoteNumbers = val; }
 };
 
 } /* namespace swordxx */

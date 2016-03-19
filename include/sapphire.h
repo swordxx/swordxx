@@ -1,13 +1,13 @@
 /******************************************************************************
  *
- *  sapphire.h -	the Saphire II stream cipher class
+ *  sapphire.h -    the Saphire II stream cipher class
  *
  * $Id$
- * 
+ *
  * Copyright 1999-2013 CrossWire Bible Society (http://www.crosswire.org)
- *	CrossWire Bible Society
- *	P. O. Box 2528
- *	Tempe, AZ  85280-2528
+ *    CrossWire Bible Society
+ *    P. O. Box 2528
+ *    Tempe, AZ  85280-2528
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -36,46 +36,46 @@
  * unsigned char is assumed to be 8 bits.  If it is not, the
  * results of assignments need to be reduced to 8 bits with
  * & 0xFF or % 0x100, whichever is faster.
- */  
-  
+ */
+
 #ifndef NULL
 #define NULL 0
-#endif	/*  */
+#endif    /*  */
 
 #include <defs.h>
 
 namespace swordxx {
 
-  class sapphire 
+  class sapphire
 {
-  
+
     // These variables comprise the state of the state machine.
-  unsigned char cards[256];	// A permutation of 0-255.
-  unsigned char rotor,		// Index that rotates smoothly
-    ratchet,			// Index that moves erratically
-    avalanche,			// Index heavily data dependent
-    last_plain,			// Last plain text byte
-    last_cipher;		// Last cipher text byte
-  
+  unsigned char cards[256];    // A permutation of 0-255.
+  unsigned char rotor,        // Index that rotates smoothly
+    ratchet,            // Index that moves erratically
+    avalanche,            // Index heavily data dependent
+    last_plain,            // Last plain text byte
+    last_cipher;        // Last cipher text byte
+
     // This function is used by initialize(), which is called by the
     // constructor.
   unsigned char keyrand (int limit, unsigned char *user_key,
-			  unsigned char keysize, unsigned char *rsum,
+              unsigned char keysize, unsigned char *rsum,
 unsigned *keypos); public:sapphire (unsigned char
-				      *key = NULL,	// Calls initialize if a real
-				      unsigned char keysize = 0);	// key is provided.  If none
+                      *key = NULL,    // Calls initialize if a real
+                      unsigned char keysize = 0);    // key is provided.  If none
   // is provided, call initialize
   // before encrypt or decrypt.
-  ~sapphire ();			// Destroy cipher state information.
-  void initialize (unsigned char *key,	// User key is used to set
-		   unsigned char keysize);	// up state information.
-  void hash_init (void);	// Set up default hash.
-  unsigned char encrypt (unsigned char b = 0);	// Encrypt byte
+  ~sapphire ();            // Destroy cipher state information.
+  void initialize (unsigned char *key,    // User key is used to set
+           unsigned char keysize);    // up state information.
+  void hash_init (void);    // Set up default hash.
+  unsigned char encrypt (unsigned char b = 0);    // Encrypt byte
   // or get a random byte.
-  unsigned char decrypt (unsigned char b);	// Decrypt byte.
-  void hash_final (unsigned char *hash,	// Copy hash value to hash
-		   unsigned char hashlength = 20);	// Hash length (16-32)
-  void burn (void);		// Destroy cipher state information.
+  unsigned char decrypt (unsigned char b);    // Decrypt byte.
+  void hash_final (unsigned char *hash,    // Copy hash value to hash
+           unsigned char hashlength = 20);    // Hash length (16-32)
+  void burn (void);        // Destroy cipher state information.
 };
 
 

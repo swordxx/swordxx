@@ -1,13 +1,13 @@
 /***************************************************************************
  *
- *  teiplain.cpp -	TEI to Plaintext filter
+ *  teiplain.cpp -    TEI to Plaintext filter
  *
  * $Id$
  *
  * Copyright 2006-2013 CrossWire Bible Society (http://www.crosswire.org)
- *	CrossWire Bible Society
- *	P. O. Box 2528
- *	Tempe, AZ  85280-2528
+ *    CrossWire Bible Society
+ *    P. O. Box 2528
+ *    Tempe, AZ  85280-2528
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -27,95 +27,95 @@
 namespace swordxx {
 
 TEIPlain::TEIPlain() {
-	setTokenStart("<");
-	setTokenEnd(">");
+    setTokenStart("<");
+    setTokenEnd(">");
 
-	setEscapeStart("&");
-	setEscapeEnd(";");
+    setEscapeStart("&");
+    setEscapeEnd(";");
 
-	setEscapeStringCaseSensitive(true);
+    setEscapeStringCaseSensitive(true);
 
-	addEscapeStringSubstitute("amp", "&");
-	addEscapeStringSubstitute("apos", "'");
-	addEscapeStringSubstitute("lt", "<");
-	addEscapeStringSubstitute("gt", ">");
-	addEscapeStringSubstitute("quot", "\"");
+    addEscapeStringSubstitute("amp", "&");
+    addEscapeStringSubstitute("apos", "'");
+    addEscapeStringSubstitute("lt", "<");
+    addEscapeStringSubstitute("gt", ">");
+    addEscapeStringSubstitute("quot", "\"");
 
-	setTokenCaseSensitive(true);
+    setTokenCaseSensitive(true);
 }
 
 
 bool TEIPlain::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData) {
   // manually process if it wasn't a simple substitution
-	if (!substituteToken(buf, token)) {
-		//MyUserData *u = (MyUserData *)userData;
-		XMLTag tag(token);
+    if (!substituteToken(buf, token)) {
+        //MyUserData *u = (MyUserData *)userData;
+        XMLTag tag(token);
 
-		// <p> paragraph tag
-		if (!strcmp(tag.getName(), "p")) {
-			if ((!tag.isEndTag()) && (!tag.isEmpty())) {	// non-empty start tag
-				buf += "\n";
-			}
-			else if (tag.isEndTag()) {	// end tag
-				buf += "\n";
-				userData->supressAdjacentWhitespace = true;
-			}
-			else {					// empty paragraph break marker
-				buf += "\n\n";
-				userData->supressAdjacentWhitespace = true;
-			}
-		}
+        // <p> paragraph tag
+        if (!strcmp(tag.getName(), "p")) {
+            if ((!tag.isEndTag()) && (!tag.isEmpty())) {    // non-empty start tag
+                buf += "\n";
+            }
+            else if (tag.isEndTag()) {    // end tag
+                buf += "\n";
+                userData->supressAdjacentWhitespace = true;
+            }
+            else {                    // empty paragraph break marker
+                buf += "\n\n";
+                userData->supressAdjacentWhitespace = true;
+            }
+        }
 
-		// <entryFree>
-		else if (!strcmp(tag.getName(), "entryFree")) {
-			SWBuf n = tag.getAttribute("n");
-			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
-			        if (n != "") {
-					buf += n;
-					buf += ". ";
-				}
-			}
-		}
+        // <entryFree>
+        else if (!strcmp(tag.getName(), "entryFree")) {
+            SWBuf n = tag.getAttribute("n");
+            if ((!tag.isEndTag()) && (!tag.isEmpty())) {
+                    if (n != "") {
+                    buf += n;
+                    buf += ". ";
+                }
+            }
+        }
 
-		// <sense>
-		else if (!strcmp(tag.getName(), "sense")) {
-			SWBuf n = tag.getAttribute("n");
-			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
-			        if (n != "") {
-					buf += n;
-					buf += ". ";
-				}
-			}
-			else if (tag.isEndTag()) {
-			                buf += "\n";
-			}
-		}
+        // <sense>
+        else if (!strcmp(tag.getName(), "sense")) {
+            SWBuf n = tag.getAttribute("n");
+            if ((!tag.isEndTag()) && (!tag.isEmpty())) {
+                    if (n != "") {
+                    buf += n;
+                    buf += ". ";
+                }
+            }
+            else if (tag.isEndTag()) {
+                            buf += "\n";
+            }
+        }
 
-		// <div>
-		else if (!strcmp(tag.getName(), "div")) {
+        // <div>
+        else if (!strcmp(tag.getName(), "div")) {
 
-			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
-				buf.append("\n\n\n");
-			}
-			else if (tag.isEndTag()) {
-			}
-		}
+            if ((!tag.isEndTag()) && (!tag.isEmpty())) {
+                buf.append("\n\n\n");
+            }
+            else if (tag.isEndTag()) {
+            }
+        }
 
-		// <etym>
-		else if (!strcmp(tag.getName(), "etym")) {
-			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
-				buf += "[";
-			}
-			else if (tag.isEndTag()) {
-			        buf += "]";
-			}
-		}
+        // <etym>
+        else if (!strcmp(tag.getName(), "etym")) {
+            if ((!tag.isEndTag()) && (!tag.isEmpty())) {
+                buf += "[";
+            }
+            else if (tag.isEndTag()) {
+                    buf += "]";
+            }
+        }
 
-		else {
-			return false;  // we still didn't handle token
-		}
-	}
-	return true;
+        else {
+            return false;  // we still didn't handle token
+        }
+    }
+    return true;
 }
 
 

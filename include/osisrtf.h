@@ -1,13 +1,13 @@
 /******************************************************************************
  *
- *  osisrtf.h -	Implementation of OSISRTF
+ *  osisrtf.h -    Implementation of OSISRTF
  *
  * $Id$
  *
  * Copyright 2003-2013 CrossWire Bible Society (http://www.crosswire.org)
- *	CrossWire Bible Society
- *	P. O. Box 2528
- *	Tempe, AZ  85280-2528
+ *    CrossWire Bible Society
+ *    P. O. Box 2528
+ *    Tempe, AZ  85280-2528
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -33,11 +33,11 @@ class SWDLLEXPORT OSISRTF : public SWBasicFilter {
 private:
 
 protected:
-	virtual BasicFilterUserData *createUserData(const SWModule *module, const SWKey *key);
-	virtual bool handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData);
-	virtual char processText(SWBuf &text, const SWKey *key = 0, const SWModule *module = 0);
+    virtual BasicFilterUserData *createUserData(const SWModule *module, const SWKey *key);
+    virtual bool handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData);
+    virtual char processText(SWBuf &text, const SWKey *key = 0, const SWModule *module = 0);
 public:
-	OSISRTF();
+    OSISRTF();
 };
 
 } /* namespace swordxx */

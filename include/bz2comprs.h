@@ -1,14 +1,14 @@
 /******************************************************************************
  *
- *  bz2comprs.h -	Bzip2Compress, a driver class that provides bzip2
- *			compression (Burrows–Wheeler with Huffman coding)
+ *  bz2comprs.h -    Bzip2Compress, a driver class that provides bzip2
+ *            compression (Burrows–Wheeler with Huffman coding)
  *
  * $Id$
  *
  * Copyright 2000-2014 CrossWire Bible Society (http://www.crosswire.org)
- *	CrossWire Bible Society
- *	P. O. Box 2528
- *	Tempe, AZ  85280-2528
+ *    CrossWire Bible Society
+ *    P. O. Box 2528
+ *    Tempe, AZ  85280-2528
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -34,11 +34,11 @@ class SWDLLEXPORT Bzip2Compress : public SWCompress {
 
 protected:
 public:
-	Bzip2Compress();
-	virtual ~Bzip2Compress();
+    Bzip2Compress();
+    virtual ~Bzip2Compress();
 
-	virtual void Encode(void);
-	virtual void Decode(void);
+    virtual void Encode(void);
+    virtual void Decode(void);
 };
 
 } /* namespace swordxx */

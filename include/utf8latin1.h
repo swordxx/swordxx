@@ -1,13 +1,13 @@
 /******************************************************************************
  *
- *  utf8latin1.h -	 Implementation of UTF8Latin1
+ *  utf8latin1.h -     Implementation of UTF8Latin1
  *
  * $Id$
  *
  * Copyright 2001-2013 CrossWire Bible Society (http://www.crosswire.org)
- *	CrossWire Bible Society
- *	P. O. Box 2528
- *	Tempe, AZ  85280-2528
+ *    CrossWire Bible Society
+ *    P. O. Box 2528
+ *    Tempe, AZ  85280-2528
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -30,10 +30,10 @@ namespace swordxx {
 /** This filter converts UTF-8 encoded text to Latin-1
  */
 class SWDLLEXPORT UTF8Latin1 : public SWFilter {
-	char replacementChar;
+    char replacementChar;
 public:
-	UTF8Latin1(char rchar = '?');
-	virtual char processText(SWBuf &text, const SWKey *key = 0, const SWModule *module = 0);
+    UTF8Latin1(char rchar = '?');
+    virtual char processText(SWBuf &text, const SWKey *key = 0, const SWModule *module = 0);
 };
 
 } /* namespace swordxx */

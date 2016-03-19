@@ -1,14 +1,14 @@
 /******************************************************************************
  *
- *  swfiltermgr.cpp -	Implementation of SWFilterMgr, used as an interface
- *			to manage filters on a module
+ *  swfiltermgr.cpp -    Implementation of SWFilterMgr, used as an interface
+ *            to manage filters on a module
  *
  * $Id$
  *
  * Copyright 2001-2013 CrossWire Bible Society (http://www.crosswire.org)
- *	CrossWire Bible Society
- *	P. O. Box 2528
- *	Tempe, AZ  85280-2528
+ *    CrossWire Bible Society
+ *    P. O. Box 2528
+ *    Tempe, AZ  85280-2528
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -36,12 +36,12 @@ SWFilterMgr::~SWFilterMgr() {
 
 
 void SWFilterMgr::setParentMgr(SWMgr *parentMgr) {
-	this->parentMgr = parentMgr;
+    this->parentMgr = parentMgr;
 }
 
 
 SWMgr *SWFilterMgr::getParentMgr() {
-	return parentMgr;
+    return parentMgr;
 }
 
 

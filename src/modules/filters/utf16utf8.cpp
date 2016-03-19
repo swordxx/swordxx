@@ -1,13 +1,13 @@
 /******************************************************************************
  *
- * utf16utf8.cpp -	SWFilter descendant to convert UTF-16 to UTF-8
+ * utf16utf8.cpp -    SWFilter descendant to convert UTF-16 to UTF-8
  *
  * $Id$
  *
  * Copyright 2001-2013 CrossWire Bible Society (http://www.crosswire.org)
- *	CrossWire Bible Society
- *	P. O. Box 2528
- *	Tempe, AZ  85280-2528
+ *    CrossWire Bible Society
+ *    P. O. Box 2528
+ *    Tempe, AZ  85280-2528
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -46,8 +46,8 @@ char UTF16UTF8::processText(SWBuf &text, const SWKey *key, const SWModule *modul
         from++;
   }
 
-	SWBuf orig = text;
-	from = (unsigned short*)orig.c_str();
+    SWBuf orig = text;
+    from = (unsigned short*)orig.c_str();
 
 
   // -------------------------------
@@ -62,8 +62,8 @@ char UTF16UTF8::processText(SWBuf &text, const SWKey *key, const SWModule *modul
       uchar = *from;
       schar = *(from+1);
       if (uchar < 0xDC00 || uchar > 0xDFFF) {
-	//error, do nothing
-	continue;
+    //error, do nothing
+    continue;
       }
       uchar &= 0x03ff;
       schar &= 0x03ff;
@@ -76,12 +76,12 @@ char UTF16UTF8::processText(SWBuf &text, const SWKey *key, const SWModule *modul
       //error, do nothing
       continue;
     }
-    
-    if (uchar < 0x80) { 
+
+    if (uchar < 0x80) {
       text += uchar;
     }
-    else if (uchar < 0x800) { 
-      text += 0xc0 | (uchar >> 6); 
+    else if (uchar < 0x800) {
+      text += 0xc0 | (uchar >> 6);
       text += 0x80 | (uchar & 0x3f);
     }
     else if (uchar < 0x10000) {
@@ -96,7 +96,7 @@ char UTF16UTF8::processText(SWBuf &text, const SWKey *key, const SWModule *modul
       text += 0x80 | (uchar & 0x3F);
     }
   }
-  
+
   return 0;
 }
 

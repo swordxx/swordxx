@@ -1,13 +1,13 @@
 /******************************************************************************
  *
- *  rawldidxtest.cpp -	
+ *  rawldidxtest.cpp -
  *
  * $Id$
  *
  * Copyright 2002-2013 CrossWire Bible Society (http://www.crosswire.org)
- *	CrossWire Bible Society
- *	P. O. Box 2528
- *	Tempe, AZ  85280-2528
+ *    CrossWire Bible Society
+ *    P. O. Box 2528
+ *    Tempe, AZ  85280-2528
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -35,35 +35,35 @@ using namespace swordxx;
 
 int main(int argc, char **argv)
 {
-	if (argc != 2) {
-		fprintf(stderr, "usage: %s <lex path>\n\n", *argv);
-		exit(-1);
-	}
-	
-	RawStr mod(argv[1]);
+    if (argc != 2) {
+        fprintf(stderr, "usage: %s <lex path>\n\n", *argv);
+        exit(-1);
+    }
+
+    RawStr mod(argv[1]);
      char buf[127];
 
-	sprintf(buf, "%s.idx", argv[1]);
-	FileDesc *idxfd = FileMgr::getSystemFileMgr()->open(buf, FileMgr::RDONLY, true);
-	long maxoff = idxfd->seek(0, SEEK_END) - 6;
-	FileMgr::getSystemFileMgr()->close(idxfd);
+    sprintf(buf, "%s.idx", argv[1]);
+    FileDesc *idxfd = FileMgr::getSystemFileMgr()->open(buf, FileMgr::RDONLY, true);
+    long maxoff = idxfd->seek(0, SEEK_END) - 6;
+    FileMgr::getSystemFileMgr()->close(idxfd);
 
-	SWBuf last = "";
-	bool first = true;
-	char *trybuf = 0;
-	for (long index = 0; index < maxoff; index+=6) {
-		mod.getIDXBuf(index, &trybuf);
-		if (!first) {
-			if (strcmp(trybuf, last.c_str()) < 0) {
-				printf("entry %ld(offset: %ld) (%s) is less than previous entry (%s)\n\n", index/6, index, trybuf, last.c_str());
-				exit(-3);
-			}
-		}
-		else first = false;
-		last = trybuf;
-	}
-	if (trybuf)
-		delete [] trybuf;
+    SWBuf last = "";
+    bool first = true;
+    char *trybuf = 0;
+    for (long index = 0; index < maxoff; index+=6) {
+        mod.getIDXBuf(index, &trybuf);
+        if (!first) {
+            if (strcmp(trybuf, last.c_str()) < 0) {
+                printf("entry %ld(offset: %ld) (%s) is less than previous entry (%s)\n\n", index/6, index, trybuf, last.c_str());
+                exit(-3);
+            }
+        }
+        else first = false;
+        last = trybuf;
+    }
+    if (trybuf)
+        delete [] trybuf;
 
-	return 0;
+    return 0;
 }

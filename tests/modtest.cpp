@@ -1,13 +1,13 @@
 /******************************************************************************
  *
- *  modtest.cpp -	
+ *  modtest.cpp -
  *
  * $Id$
  *
  * Copyright 1999-2013 CrossWire Bible Society (http://www.crosswire.org)
- *	CrossWire Bible Society
- *	P. O. Box 2528
- *	Tempe, AZ  85280-2528
+ *    CrossWire Bible Society
+ *    P. O. Box 2528
+ *    Tempe, AZ  85280-2528
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -27,15 +27,15 @@
 using namespace swordxx;
 
 int main(int argc, char **argv) {
-	SWMgr mymgr;
-	ModMap::iterator it;
-	SWModule *module = mymgr.Modules["KJV"];
-	VerseKey parser;
-	ListKey lk = parser.parseVerseList("mal4:6-rev", parser, true);
-	lk.setPersist(true);
-	module->setKey(lk);
+    SWMgr mymgr;
+    ModMap::iterator it;
+    SWModule *module = mymgr.Modules["KJV"];
+    VerseKey parser;
+    ListKey lk = parser.parseVerseList("mal4:6-rev", parser, true);
+    lk.setPersist(true);
+    module->setKey(lk);
 
-	(*module) = TOP;
-	std::cout << module->getKeyText() << "\n";
-	return 0;
+    (*module) = TOP;
+    std::cout << module->getKeyText() << "\n";
+    return 0;
 }

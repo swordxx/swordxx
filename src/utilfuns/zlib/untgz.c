@@ -43,37 +43,37 @@
 
 /* Values used in typeflag field.  */
 
-#define REGTYPE	 '0'		/* regular file */
-#define AREGTYPE '\0'		/* regular file */
-#define LNKTYPE  '1'		/* link */
-#define SYMTYPE  '2'		/* reserved */
-#define CHRTYPE  '3'		/* character special */
-#define BLKTYPE  '4'		/* block special */
-#define DIRTYPE  '5'		/* directory */
-#define FIFOTYPE '6'		/* FIFO special */
-#define CONTTYPE '7'		/* reserved */
+#define REGTYPE     '0'        /* regular file */
+#define AREGTYPE '\0'        /* regular file */
+#define LNKTYPE  '1'        /* link */
+#define SYMTYPE  '2'        /* reserved */
+#define CHRTYPE  '3'        /* character special */
+#define BLKTYPE  '4'        /* block special */
+#define DIRTYPE  '5'        /* directory */
+#define FIFOTYPE '6'        /* FIFO special */
+#define CONTTYPE '7'        /* reserved */
 
 #define BLOCKSIZE 512
 
 struct tar_header
-{				/* byte offset */
-  char name[100];		/*   0 */
-  char mode[8];			/* 100 */
-  char uid[8];			/* 108 */
-  char gid[8];			/* 116 */
-  char size[12];		/* 124 */
-  char mtime[12];		/* 136 */
-  char chksum[8];		/* 148 */
-  char typeflag;		/* 156 */
-  char linkname[100];		/* 157 */
-  char magic[6];		/* 257 */
-  char version[2];		/* 263 */
-  char uname[32];		/* 265 */
-  char gname[32];		/* 297 */
-  char devmajor[8];		/* 329 */
-  char devminor[8];		/* 337 */
-  char prefix[155];		/* 345 */
-				/* 500 */
+{                /* byte offset */
+  char name[100];        /*   0 */
+  char mode[8];            /* 100 */
+  char uid[8];            /* 108 */
+  char gid[8];            /* 116 */
+  char size[12];        /* 124 */
+  char mtime[12];        /* 136 */
+  char chksum[8];        /* 148 */
+  char typeflag;        /* 156 */
+  char linkname[100];        /* 157 */
+  char magic[6];        /* 257 */
+  char version[2];        /* 263 */
+  char uname[32];        /* 265 */
+  char gname[32];        /* 297 */
+  char devmajor[8];        /* 329 */
+  char devminor[8];        /* 337 */
+  char prefix[155];        /* 345 */
+                /* 500 */
 };
 
 union tar_buffer {
@@ -128,14 +128,14 @@ int getoct(char *p,int width)
 {
   int result = 0;
   char c;
-  
+
   while (width --)
     {
       c = *p++;
       if (c == ' ')
-	continue;
+    continue;
       if (c == 0)
-	break;
+    break;
       result = result * 8 + (c - '0');
     }
   return result;
@@ -148,8 +148,8 @@ char *strtime (time_t *t)
 
   local = localtime(t);
   sprintf(result,"%2d/%02d/%4d %02d:%02d:%02d",
-	  local->tm_mday, local->tm_mon+1, local->tm_year+1900,
-	  local->tm_hour, local->tm_min,   local->tm_sec);
+      local->tm_mday, local->tm_mon+1, local->tm_year+1900,
+      local->tm_hour, local->tm_min,   local->tm_sec);
   return result;
 }
 
@@ -163,30 +163,30 @@ int ExprMatch(char *string,char *expr)
   while (1)
     {
       if (ISSPECIAL(*expr))
-	{
-	  if (*expr == '/')
-	    {
-	      if (*string != '\\' && *string != '/')
-		return 0;
-	      string ++; expr++;
-	    }
-	  else if (*expr == '*')
-	    {
-	      if (*expr ++ == 0)
-		return 1;
-	      while (*++string != *expr)
-		if (*string == 0)
-		  return 0;
-	    }
-	}
+    {
+      if (*expr == '/')
+        {
+          if (*string != '\\' && *string != '/')
+        return 0;
+          string ++; expr++;
+        }
+      else if (*expr == '*')
+        {
+          if (*expr ++ == 0)
+        return 1;
+          while (*++string != *expr)
+        if (*string == 0)
+          return 0;
+        }
+    }
       else
-	{
-	  if (*string != *expr)
-	    return 0;
-	  if (*expr++ == 0)
-	    return 1;
-	  string++;
-	}
+    {
+      if (*string != *expr)
+        return 0;
+      if (*expr++ == 0)
+        return 1;
+      string++;
+    }
     }
 }
 
@@ -202,7 +202,7 @@ int makedir (char *newdir)
   char *buffer = strdup(newdir);
   char *p;
   int  len = strlen(buffer);
-  
+
   if (len <= 0) {
     free(buffer);
     return 0;
@@ -220,19 +220,19 @@ int makedir (char *newdir)
   while (1)
     {
       char hold;
-      
+
       while(*p && *p != '\\' && *p != '/')
-	p++;
+    p++;
       hold = *p;
       *p = 0;
       if ((mkdir(buffer, 0775) == -1) && (errno == ENOENT))
-	{
-	  fprintf(stderr,"%s: couldn't create directory %s\n",prog,buffer);
-	  free(buffer);
-	  return 0;
-	}
+    {
+      fprintf(stderr,"%s: couldn't create directory %s\n",prog,buffer);
+      free(buffer);
+      return 0;
+    }
       if (hold == 0)
-	break;
+    break;
       *p++ = hold;
     }
   free(buffer);
@@ -241,12 +241,12 @@ int makedir (char *newdir)
 
 int matchname (int arg,int argc,char **argv,char *fname)
 {
-  if (arg == argc)		/* no arguments given (untgz tgzarchive) */
+  if (arg == argc)        /* no arguments given (untgz tgzarchive) */
     return 1;
 
   while (arg < argc)
     if (ExprMatch(fname,argv[arg++]))
-	 return 1;
+     return 1;
 
   return 0; /* ignore this for the moment being */
 }
@@ -255,135 +255,135 @@ int matchname (int arg,int argc,char **argv,char *fname)
 /* Tar file list or extract */
 
 int untar (gzFile in, const char *dest) {
-	union  tar_buffer buffer;
-	int    len;
-	int    err;
-	int    getheader = 1;
-	int    remaining = 0;
-	FILE   *outfile = NULL;
-	char   fname[BLOCKSIZE];
-	time_t tartime;
-  
-	while (1) {
-		len = gzread(in, &buffer, BLOCKSIZE);
-		if (len < 0)
-			error (gzerror(in, &err));
-		/*
-		* Always expect complete blocks to process
-		* the tar information.
-		*/
-		if (len != BLOCKSIZE)
-			error("gzread: incomplete block read");
-	 
-		/*
-		* If we have to get a tar header
-		*/
-		if (getheader == 1) {
-			/*
-			* if we met the end of the tar
-			* or the end-of-tar block,
-			* we are done
-			*/
-			if ((len == 0)  || (buffer.header.name[0]== 0)) break;
+    union  tar_buffer buffer;
+    int    len;
+    int    err;
+    int    getheader = 1;
+    int    remaining = 0;
+    FILE   *outfile = NULL;
+    char   fname[BLOCKSIZE];
+    time_t tartime;
 
-			tartime = (time_t)getoct(buffer.header.mtime,12);
-			strcpy(fname, dest);
-			if ((fname[strlen(fname)-1] != '/') && (fname[strlen(fname)-1] != '\\'))
-					strcat(fname, "/");
-			strcat(fname, buffer.header.name);
-	  
-			switch (buffer.header.typeflag) {
-			case DIRTYPE:
-				makedir(fname);
-				break;
-			case REGTYPE:
-			case AREGTYPE:
-				remaining = getoct(buffer.header.size,12);
-				if (remaining) {
-					outfile = fopen(fname,"wb");
-					if (outfile == NULL) {
-						// try creating directory
-						char *p = strrchr(fname, '/');
-						if (p != NULL) {
-							*p = '\0';
-							makedir(fname);
-							*p = '/';
-							outfile = fopen(fname,"wb");
-						}
-					}
+    while (1) {
+        len = gzread(in, &buffer, BLOCKSIZE);
+        if (len < 0)
+            error (gzerror(in, &err));
+        /*
+        * Always expect complete blocks to process
+        * the tar information.
+        */
+        if (len != BLOCKSIZE)
+            error("gzread: incomplete block read");
+
+        /*
+        * If we have to get a tar header
+        */
+        if (getheader == 1) {
+            /*
+            * if we met the end of the tar
+            * or the end-of-tar block,
+            * we are done
+            */
+            if ((len == 0)  || (buffer.header.name[0]== 0)) break;
+
+            tartime = (time_t)getoct(buffer.header.mtime,12);
+            strcpy(fname, dest);
+            if ((fname[strlen(fname)-1] != '/') && (fname[strlen(fname)-1] != '\\'))
+                    strcat(fname, "/");
+            strcat(fname, buffer.header.name);
+
+            switch (buffer.header.typeflag) {
+            case DIRTYPE:
+                makedir(fname);
+                break;
+            case REGTYPE:
+            case AREGTYPE:
+                remaining = getoct(buffer.header.size,12);
+                if (remaining) {
+                    outfile = fopen(fname,"wb");
+                    if (outfile == NULL) {
+                        // try creating directory
+                        char *p = strrchr(fname, '/');
+                        if (p != NULL) {
+                            *p = '\0';
+                            makedir(fname);
+                            *p = '/';
+                            outfile = fopen(fname,"wb");
+                        }
+                    }
 /*
-					fprintf(stderr,
-						"%s %s\n",
-						(outfile) ? "Extracting" : "Couldn't create",
-						fname);
+                    fprintf(stderr,
+                        "%s %s\n",
+                        (outfile) ? "Extracting" : "Couldn't create",
+                        fname);
 */
-				}
-				else
-					outfile = NULL;
-				/*
-				* could have no contents
-				*/
-				getheader = (remaining) ? 0 : 1;
-				break;
-			default:
-				break;
-			}
-		}
-		else	{
-			unsigned int bytes = (remaining > BLOCKSIZE) ? BLOCKSIZE : remaining;
+                }
+                else
+                    outfile = NULL;
+                /*
+                * could have no contents
+                */
+                getheader = (remaining) ? 0 : 1;
+                break;
+            default:
+                break;
+            }
+        }
+        else    {
+            unsigned int bytes = (remaining > BLOCKSIZE) ? BLOCKSIZE : remaining;
 
-			if (outfile != NULL) {
-				if (fwrite(&buffer,sizeof(char),bytes,outfile) != bytes) {
-					fprintf(stderr,"%s : error writing %s skipping...\n",prog,fname);
-					fclose(outfile);
-					unlink(fname);
-				}
-			}
-			remaining -= bytes;
-			if (remaining == 0) {
-				getheader = 1;
-				if (outfile != NULL) {
+            if (outfile != NULL) {
+                if (fwrite(&buffer,sizeof(char),bytes,outfile) != bytes) {
+                    fprintf(stderr,"%s : error writing %s skipping...\n",prog,fname);
+                    fclose(outfile);
+                    unlink(fname);
+                }
+            }
+            remaining -= bytes;
+            if (remaining == 0) {
+                getheader = 1;
+                if (outfile != NULL) {
 #ifdef WIN32
-					HANDLE hFile;
-					FILETIME ftm,ftLocal;
-					SYSTEMTIME st;
-					struct tm localt;
- 
-					fclose(outfile);
+                    HANDLE hFile;
+                    FILETIME ftm,ftLocal;
+                    SYSTEMTIME st;
+                    struct tm localt;
 
-					localt = *localtime(&tartime);
+                    fclose(outfile);
 
-					hFile = CreateFile(fname, GENERIC_READ | GENERIC_WRITE,
-					0, NULL, OPEN_EXISTING, 0, NULL);
-		  
-					st.wYear = (WORD)localt.tm_year+1900;
-					st.wMonth = (WORD)localt.tm_mon;
-					st.wDayOfWeek = (WORD)localt.tm_wday;
-					st.wDay = (WORD)localt.tm_mday;
-					st.wHour = (WORD)localt.tm_hour;
-					st.wMinute = (WORD)localt.tm_min;
-					st.wSecond = (WORD)localt.tm_sec;
-					st.wMilliseconds = 0;
-					SystemTimeToFileTime(&st,&ftLocal);
-					LocalFileTimeToFileTime(&ftLocal,&ftm);
-					SetFileTime(hFile,&ftm,NULL,&ftm);
-					CloseHandle(hFile);
+                    localt = *localtime(&tartime);
 
-					outfile = NULL;
+                    hFile = CreateFile(fname, GENERIC_READ | GENERIC_WRITE,
+                    0, NULL, OPEN_EXISTING, 0, NULL);
+
+                    st.wYear = (WORD)localt.tm_year+1900;
+                    st.wMonth = (WORD)localt.tm_mon;
+                    st.wDayOfWeek = (WORD)localt.tm_wday;
+                    st.wDay = (WORD)localt.tm_mday;
+                    st.wHour = (WORD)localt.tm_hour;
+                    st.wMinute = (WORD)localt.tm_min;
+                    st.wSecond = (WORD)localt.tm_sec;
+                    st.wMilliseconds = 0;
+                    SystemTimeToFileTime(&st,&ftLocal);
+                    LocalFileTimeToFileTime(&ftLocal,&ftm);
+                    SetFileTime(hFile,&ftm,NULL,&ftm);
+                    CloseHandle(hFile);
+
+                    outfile = NULL;
 #else
-					struct utimbuf settime;
+                    struct utimbuf settime;
 
-					settime.actime = settime.modtime = tartime;
+                    settime.actime = settime.modtime = tartime;
 
-					fclose(outfile);
-					outfile = NULL;
-					utime(fname,&settime);
+                    fclose(outfile);
+                    outfile = NULL;
+                    utime(fname,&settime);
 #endif
-				}
-			}
-		}
-	}
-	return 0;
+                }
+            }
+        }
+    }
+    return 0;
 }
 
 
@@ -392,12 +392,12 @@ int untar (gzFile in, const char *dest) {
 void help(int exitval)
 {
   fprintf(stderr,
-	  "untgz v 0.1\n"
-	  " an sample application of zlib 1.0.4\n\n"
-		"Usage : untgz TGZfile            to extract all files\n"
-		"        untgz TGZfile fname ...  to extract selected files\n"
-		"        untgz -l TGZfile         to list archive contents\n"
-		"        untgz -h                 to display this help\n\n");
+      "untgz v 0.1\n"
+      " an sample application of zlib 1.0.4\n\n"
+        "Usage : untgz TGZfile            to extract all files\n"
+        "        untgz TGZfile fname ...  to extract selected files\n"
+        "        untgz -l TGZfile         to list archive contents\n"
+        "        untgz -h                 to display this help\n\n");
   exit(exitval);
 }
 
@@ -409,13 +409,13 @@ void error(const char *msg)
 
 
 int untargz(int fd, const char *dest) {
-	gzFile	f;
+    gzFile    f;
 
-	f = gzdopen(fd, "rb");
-	if (f == NULL) {
-		fprintf(stderr,"%s: Couldn't gzopen file\n",	prog);
-		return 1;
-	}
+    f = gzdopen(fd, "rb");
+    if (f == NULL) {
+        fprintf(stderr,"%s: Couldn't gzopen file\n",    prog);
+        return 1;
+    }
 
-	return untar(f, dest);
+    return untar(f, dest);
 }

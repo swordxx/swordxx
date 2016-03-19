@@ -1,13 +1,13 @@
 /******************************************************************************
  *
- *  teilatex.h -	Implementation of TEILaTeX
+ *  teilatex.h -    Implementation of TEILaTeX
  *
  * $Id$
  *
  * Copyright 2012-2014 CrossWire Bible Society (http://www.crosswire.org)
- *	CrossWire Bible Society
- *	P. O. Box 2528
- *	Tempe, AZ  85280-2528
+ *    CrossWire Bible Society
+ *    P. O. Box 2528
+ *    Tempe, AZ  85280-2528
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -31,26 +31,26 @@ namespace swordxx {
  */
 class SWDLLEXPORT TEILaTeX : public SWBasicFilter {
 private:
-	bool renderNoteNumbers;
+    bool renderNoteNumbers;
 
 protected:
-	class MyUserData : public BasicFilterUserData {
-	public:
-		bool BiblicalText;
-		SWBuf lastHi;
-		bool firstCell; // for tables, indicates whether a cell is the first one in a row
-		int consecutiveNewlines;
-		
-		SWBuf version;
-		MyUserData(const SWModule *module, const SWKey *key);
-	};
-	virtual BasicFilterUserData *createUserData(const SWModule *module, const SWKey *key) {
-		return new MyUserData(module, key);
-	}
-	virtual bool handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData);
+    class MyUserData : public BasicFilterUserData {
+    public:
+        bool BiblicalText;
+        SWBuf lastHi;
+        bool firstCell; // for tables, indicates whether a cell is the first one in a row
+        int consecutiveNewlines;
+
+        SWBuf version;
+        MyUserData(const SWModule *module, const SWKey *key);
+    };
+    virtual BasicFilterUserData *createUserData(const SWModule *module, const SWKey *key) {
+        return new MyUserData(module, key);
+    }
+    virtual bool handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData);
 public:
-	TEILaTeX();
-	void setRenderNoteNumbers(bool val = true) { renderNoteNumbers = val; }
+    TEILaTeX();
+    void setRenderNoteNumbers(bool val = true) { renderNoteNumbers = val; }
 };
 
 } /* namespace swordxx */

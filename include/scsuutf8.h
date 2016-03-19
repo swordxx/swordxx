@@ -5,9 +5,9 @@
  * $Id$
  *
  * Copyright 2001-2013 CrossWire Bible Society (http://www.crosswire.org)
- *	CrossWire Bible Society
- *	P. O. Box 2528
- *	Tempe, AZ  85280-2528
+ *    CrossWire Bible Society
+ *    P. O. Box 2528
+ *    Tempe, AZ  85280-2528
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -38,26 +38,26 @@ namespace swordxx {
 class SWDLLEXPORT SCSUUTF8 : public SWFilter {
 private:
 #ifdef _ICU_
-	UConverter* scsuConv;
-	UConverter* utf8Conv;
-	UErrorCode err;
+    UConverter* scsuConv;
+    UConverter* utf8Conv;
+    UErrorCode err;
 #else
-	// without ICU, we'll attempt to use Roman Czyborra's SCSU decoder code
-	unsigned char active;
-	bool mode;
-	unsigned long c, d;
+    // without ICU, we'll attempt to use Roman Czyborra's SCSU decoder code
+    unsigned char active;
+    bool mode;
+    unsigned long c, d;
 
-	static unsigned short start[8];
-	static unsigned short slide[8];
-	static unsigned short win[256];
+    static unsigned short start[8];
+    static unsigned short slide[8];
+    static unsigned short win[256];
 
-	int UTF8Output(unsigned long, SWBuf* utf8Buf);
+    int UTF8Output(unsigned long, SWBuf* utf8Buf);
 #endif
-  
+
 public:
-	SCSUUTF8();
-	~SCSUUTF8();
-	virtual char processText(SWBuf &text, const SWKey *key = 0, const SWModule *module = 0);
+    SCSUUTF8();
+    ~SCSUUTF8();
+    virtual char processText(SWBuf &text, const SWKey *key = 0, const SWModule *module = 0);
 };
 
 } /* namespace swordxx */

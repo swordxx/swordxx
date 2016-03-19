@@ -2,14 +2,14 @@
 
 #******************************************************************************
 #
-#  linkvers.pl -	
+#  linkvers.pl -
 #
 # $Id$
 #
 # Copyright 2001-2009 CrossWire Bible Society (http://www.crosswire.org)
-#	CrossWire Bible Society
-#	P. O. Box 2528
-#	Tempe, AZ  85280-2528
+#    CrossWire Bible Society
+#    P. O. Box 2528
+#    Tempe, AZ  85280-2528
 #
 # This program is free software; you can redistribute it and/or modify it
 # under the terms of the GNU General Public License as published by the
@@ -37,25 +37,25 @@ while (<INF>) {
     $vref = $1;
 
     if ($vref =~ /\-/) {
-	$vref =~ /(.*:)(\d+)\-(\d+)/;
-	$ch = $1;
-	$fv = $2;
-	$lv = $3;
-	if ($fv + 1 == $lv) {
-	    $sv = $lv;
-	}
-	else {
-	    $sv = $fv + 1;
-	    $sv .= "-" . $lv;
-	}
-	$first = $ch . $fv;
-	$last = $ch . $sv;
+    $vref =~ /(.*:)(\d+)\-(\d+)/;
+    $ch = $1;
+    $fv = $2;
+    $lv = $3;
+    if ($fv + 1 == $lv) {
+        $sv = $lv;
+    }
+    else {
+        $sv = $fv + 1;
+        $sv .= "-" . $lv;
+    }
+    $first = $ch . $fv;
+    $last = $ch . $sv;
 
-	if ($check ne "") {
-	    print "$first\t\t$last\n";
-	} else {
-	    `addvs -l ./ \"$first\" \"$last\"`;
-	}
+    if ($check ne "") {
+        print "$first\t\t$last\n";
+    } else {
+        `addvs -l ./ \"$first\" \"$last\"`;
+    }
     }
 }
 close(INF);

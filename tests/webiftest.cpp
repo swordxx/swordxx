@@ -1,13 +1,13 @@
 /******************************************************************************
  *
- *  webiftest.cpp -	
+ *  webiftest.cpp -
  *
  * $Id$
  *
  * Copyright 2003-2013 CrossWire Bible Society (http://www.crosswire.org)
- *	CrossWire Bible Society
- *	P. O. Box 2528
- *	Tempe, AZ  85280-2528
+ *    CrossWire Bible Society
+ *    P. O. Box 2528
+ *    Tempe, AZ  85280-2528
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -44,33 +44,33 @@ using namespace std;
 
 int main(int argc, char **argv) {
 
-	const char* modName = (argc >= 2) ? argv[1] : "KJV";
-	const char* keyName = (argc == 3) ? argv[2] : "John 1:1";
+    const char* modName = (argc >= 2) ? argv[1] : "KJV";
+    const char* keyName = (argc == 3) ? argv[2] : "John 1:1";
 
-	SWMgr mgr(0, 0, true, new MarkupFilterMgr(FMT_WEBIF, ENC_UTF8));
-	mgr.setGlobalOption("Strong's Numbers", "on");
-	mgr.setGlobalOption("Morphological Tags", "on");
+    SWMgr mgr(0, 0, true, new MarkupFilterMgr(FMT_WEBIF, ENC_UTF8));
+    mgr.setGlobalOption("Strong's Numbers", "on");
+    mgr.setGlobalOption("Morphological Tags", "on");
 
-	SWModule *module = mgr.Modules[modName];
-	if (!module) {
-		module = mgr.Modules.begin()->second;
-	}
-	module->setKey(keyName);
-	std::cout << module->renderText() << std::endl<< std::endl<< std::endl;
+    SWModule *module = mgr.Modules[modName];
+    if (!module) {
+        module = mgr.Modules.begin()->second;
+    }
+    module->setKey(keyName);
+    std::cout << module->renderText() << std::endl<< std::endl<< std::endl;
 
-	//------------------------
+    //------------------------
 
-	SWMgr mgr2(0, 0, true, new MarkupFilterMgr(FMT_HTMLHREF, ENC_UTF8));
-	mgr2.setGlobalOption("Strong's Numbers", "on");
-	mgr2.setGlobalOption("Morphological Tags", "on");
-	module = mgr2.Modules[modName];
-	if (!module) {
-		module = mgr2.Modules.begin()->second;
-	}
+    SWMgr mgr2(0, 0, true, new MarkupFilterMgr(FMT_HTMLHREF, ENC_UTF8));
+    mgr2.setGlobalOption("Strong's Numbers", "on");
+    mgr2.setGlobalOption("Morphological Tags", "on");
+    module = mgr2.Modules[modName];
+    if (!module) {
+        module = mgr2.Modules.begin()->second;
+    }
 
-	module->setKey(keyName);
-	std::cout << module->renderText() << std::endl;
+    module->setKey(keyName);
+    std::cout << module->renderText() << std::endl;
 
-	return 0;
+    return 0;
 }
 

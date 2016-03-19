@@ -1,13 +1,13 @@
 /******************************************************************************
  *
- *  vs2osisref.cpp -	Utility to translate a verse reference to an osisRef
+ *  vs2osisref.cpp -    Utility to translate a verse reference to an osisRef
  *
  * $Id$
  *
  * Copyright 2000-2013 CrossWire Bible Society (http://www.crosswire.org)
- *	CrossWire Bible Society
- *	P. O. Box 2528
- *	Tempe, AZ  85280-2528
+ *    CrossWire Bible Society
+ *    P. O. Box 2528
+ *    Tempe, AZ  85280-2528
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -21,7 +21,7 @@
  */
 
 #ifdef _MSC_VER
-	#pragma warning( disable: 4251 )
+    #pragma warning( disable: 4251 )
 #endif
 
 #include <iostream>
@@ -38,21 +38,21 @@ using std::cout;
 int main(int argc, char **argv)
 {
         if (argc < 2) {
-        	cerr << argv[0] << " - parse verse reference to OSISRef markup\n";
-	        cerr << "usage: "<< argv[0] << " <verse ref> [verse context] [locale]\n";
-        	cerr << "\n\n";
-	        exit(-1);
+            cerr << argv[0] << " - parse verse reference to OSISRef markup\n";
+            cerr << "usage: "<< argv[0] << " <verse ref> [verse context] [locale]\n";
+            cerr << "\n\n";
+            exit(-1);
         }
 
 
-	if (argc > 3) {
-		LocaleMgr::getSystemLocaleMgr()->setDefaultLocaleName(argv[3]);
-	}
+    if (argc > 3) {
+        LocaleMgr::getSystemLocaleMgr()->setDefaultLocaleName(argv[3]);
+    }
 
         VerseKey verseKey = (argc > 2) ? argv[2] : "Gen 1:1";
 
         std::cout << VerseKey::convertToOSIS(argv[1], &verseKey) << "\n";
 
-	return 0;
+    return 0;
 }
 

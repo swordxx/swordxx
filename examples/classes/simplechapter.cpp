@@ -1,13 +1,13 @@
 /******************************************************************************
  *
- *  simplechapter.cpp -	
+ *  simplechapter.cpp -
  *
  * $Id$
  *
  * Copyright 2013-2014 CrossWire Bible Society (http://www.crosswire.org)
- *	CrossWire Bible Society
- *	P. O. Box 2528
- *	Tempe, AZ  85280-2528
+ *    CrossWire Bible Society
+ *    P. O. Box 2528
+ *    Tempe, AZ  85280-2528
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -32,26 +32,26 @@ using namespace std;
 
 int main(int argc, char **argv) {
 
-	SWMgr library;
-	SWModule *kjv = library.getModule((argc > 1)?argv[1]:"KJV");
+    SWMgr library;
+    SWModule *kjv = library.getModule((argc > 1)?argv[1]:"KJV");
 
-	kjv->setKey(argc > 2 ? argv[2] : "Jn.3.16");
+    kjv->setKey(argc > 2 ? argv[2] : "Jn.3.16");
 
-	VerseKey *key = (VerseKey *)kjv->getKey();
+    VerseKey *key = (VerseKey *)kjv->getKey();
 
-	int curVerse = key->getVerse();
-	int curChapter = key->getChapter();
-	int curBook = key->getBook();
+    int curVerse = key->getVerse();
+    int curChapter = key->getChapter();
+    int curBook = key->getBook();
 
-	for (key->setVerse(1);
-				(key->getBook()    == curBook)    &&
-				(key->getChapter() == curChapter) &&
-				!kjv->popError();
-				(*kjv)++) {
-		if (key->getVerse() == curVerse) cout << "* ";
-		cout << key->getVerse() << " " << kjv->stripText() << "\n";
-	}
+    for (key->setVerse(1);
+                (key->getBook()    == curBook)    &&
+                (key->getChapter() == curChapter) &&
+                !kjv->popError();
+                (*kjv)++) {
+        if (key->getVerse() == curVerse) cout << "* ";
+        cout << key->getVerse() << " " << kjv->stripText() << "\n";
+    }
 
-	return 0;
+    return 0;
 }
 

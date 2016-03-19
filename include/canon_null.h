@@ -1,13 +1,13 @@
 /******************************************************************************
  *
- *  canon_null.h -	Versification data for the null system
+ *  canon_null.h -    Versification data for the null system
  *
  * $Id$
  *
  * Copyright 2009-2013 CrossWire Bible Society (http://www.crosswire.org)
- *	CrossWire Bible Society
- *	P. O. Box 2528
- *	Tempe, AZ  85280-2528
+ *    CrossWire Bible Society
+ *    P. O. Box 2528
+ *    Tempe, AZ  85280-2528
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -31,7 +31,7 @@ namespace swordxx {
 
 /******************************************************************************
  * [on]tbooks_null - initialize static instance for all canonical
- *		 text names and chapmax
+ *         text names and chapmax
  */
 struct sbook otbooks_null[] = {
   {"", "", "", 0}

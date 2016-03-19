@@ -1,15 +1,15 @@
 /******************************************************************************
  *
- *  swcacher.h -	definition of class SWCacher used to provide an
- *			interface for objects that cache and want a standard
- *			interface for cleaning up.
+ *  swcacher.h -    definition of class SWCacher used to provide an
+ *            interface for objects that cache and want a standard
+ *            interface for cleaning up.
  *
  * $Id$
  *
  * Copyright 2002-2013 CrossWire Bible Society (http://www.crosswire.org)
- *	CrossWire Bible Society
- *	P. O. Box 2528
- *	Tempe, AZ  85280-2528
+ *    CrossWire Bible Society
+ *    P. O. Box 2528
+ *    Tempe, AZ  85280-2528
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -30,15 +30,15 @@
 namespace swordxx {
 
 /** used to provide an interface for objects that cache and want
- *	a standard interface for cleaning up.
+ *    a standard interface for cleaning up.
  */
 class SWDLLEXPORT  SWCacher {
 public:
-	SWCacher();
-	virtual ~SWCacher();
-	virtual void flush();
-	virtual long resourceConsumption();
-	virtual long lastAccess();
+    SWCacher();
+    virtual ~SWCacher();
+    virtual void flush();
+    virtual long resourceConsumption();
+    virtual long lastAccess();
 };
 
 } /* namespace swordxx */

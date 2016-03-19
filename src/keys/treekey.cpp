@@ -1,14 +1,14 @@
 /******************************************************************************
  *
- *  treekey.cpp -	code for class 'versekey'- a standard Biblical
- *			verse key
+ *  treekey.cpp -    code for class 'versekey'- a standard Biblical
+ *            verse key
  *
  * $Id$
  *
  * Copyright 2002-2013 CrossWire Bible Society (http://www.crosswire.org)
- *	CrossWire Bible Society
- *	P. O. Box 2528
- *	Tempe, AZ  85280-2528
+ *    CrossWire Bible Society
+ *    P. O. Box 2528
+ *    Tempe, AZ  85280-2528
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -32,67 +32,67 @@ static const char *classes[] = {"TreeKey", "SWKey", "SWObject", 0};
 SWClass TreeKey::classdef(classes);
 
 void TreeKey::init() {
-	myclass = &classdef;
-	unsnappedKeyText = "";
-	posChangeListener = 0;
+    myclass = &classdef;
+    unsnappedKeyText = "";
+    posChangeListener = 0;
 }
 
 
 void TreeKey::assureKeyPath(const char *keyBuffer) {
 
-	if (!keyBuffer) {
-		keyBuffer = unsnappedKeyText;
-		//assert we have something to do before setting root
-		if (!*keyBuffer)
-			return;
-	}
+    if (!keyBuffer) {
+        keyBuffer = unsnappedKeyText;
+        //assert we have something to do before setting root
+        if (!*keyBuffer)
+            return;
+    }
 
-	char *keybuf = 0;
-	stdstr(&keybuf, keyBuffer);
+    char *keybuf = 0;
+    stdstr(&keybuf, keyBuffer);
 
-	root();
+    root();
 
-	// TODO: change to NOT use strtok. strtok is dangerous.
-	SWBuf tok = strtok(keybuf, "/");
-	tok.trim();
-	while (tok.size()) {
-		bool foundkey = false;
-		if (hasChildren()) {
-			firstChild();
-			if (tok == getLocalName()) {
-				foundkey = true;
-			}
-			else {
-				while (nextSibling()) {
-					if (getLocalName()) {
-						if (tok == getLocalName()) {
-							foundkey = true;
-							break;
-						}
-					}
-				}
-			}
-			if (!foundkey) {
-				append();
-				setLocalName(tok);
-				save();	    
-			}
-		}
-		else {
-			appendChild();
-			setLocalName(tok);
-			save();
-		}
+    // TODO: change to NOT use strtok. strtok is dangerous.
+    SWBuf tok = strtok(keybuf, "/");
+    tok.trim();
+    while (tok.size()) {
+        bool foundkey = false;
+        if (hasChildren()) {
+            firstChild();
+            if (tok == getLocalName()) {
+                foundkey = true;
+            }
+            else {
+                while (nextSibling()) {
+                    if (getLocalName()) {
+                        if (tok == getLocalName()) {
+                            foundkey = true;
+                            break;
+                        }
+                    }
+                }
+            }
+            if (!foundkey) {
+                append();
+                setLocalName(tok);
+                save();
+            }
+        }
+        else {
+            appendChild();
+            setLocalName(tok);
+            save();
+        }
 
 #ifdef DEBUG
 //      std::cout << getLocalName() << " : " << tok << std::endl;
 #endif
 
-		tok = strtok(0, "/");
-		tok.trim();
+        tok = strtok(0, "/");
+        tok.trim();
 
-	}
-	delete [] keybuf;
+    }
+    delete [] keybuf;
 }
 
 

@@ -1,13 +1,13 @@
 /******************************************************************************
  *
- *  remotetrans.h -	code for Remote Transport
+ *  remotetrans.h -    code for Remote Transport
  *
  * $Id$
  *
  * Copyright 2004-2013 CrossWire Bible Society (http://www.crosswire.org)
- *	CrossWire Bible Society
- *	P. O. Box 2528
- *	Tempe, AZ  85280-2528
+ *    CrossWire Bible Society
+ *    P. O. Box 2528
+ *    Tempe, AZ  85280-2528
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -35,9 +35,9 @@ namespace swordxx {
 */
 class SWDLLEXPORT StatusReporter {
 public:
-	virtual ~StatusReporter() {};
-	/** Messages before stages of a batch download */
-	virtual void preStatus(long totalBytes, long completedBytes, const char *message);
+    virtual ~StatusReporter() {};
+    /** Messages before stages of a batch download */
+    virtual void preStatus(long totalBytes, long completedBytes, const char *message);
 
     /** frequently called throughout a download, to report status */
     virtual void update(unsigned long totalBytes, unsigned long completedBytes) {};
@@ -50,31 +50,31 @@ public:
 class SWDLLEXPORT RemoteTransport {
 
 protected:
-	StatusReporter *statusReporter;
-	bool passive;
+    StatusReporter *statusReporter;
+    bool passive;
     std::atomic<bool> term;
-	SWBuf host;
-	SWBuf u;
-	SWBuf p;
+    SWBuf host;
+    SWBuf u;
+    SWBuf p;
 
 public:
-	RemoteTransport(const char *host, StatusReporter *statusReporter = 0);
-	virtual ~RemoteTransport();
+    RemoteTransport(const char *host, StatusReporter *statusReporter = 0);
+    virtual ~RemoteTransport();
 
-	/***********
-	 * override this method in your real impl
-	 *
-	 * if destBuf then write to buffer instead of file
-	 */
-	virtual char getURL(const char *destPath, const char *sourceURL, SWBuf *destBuf = 0);
+    /***********
+     * override this method in your real impl
+     *
+     * if destBuf then write to buffer instead of file
+     */
+    virtual char getURL(const char *destPath, const char *sourceURL, SWBuf *destBuf = 0);
 
 
-	int copyDirectory(const char *urlPrefix, const char *dir, const char *dest, const char *suffix);
+    int copyDirectory(const char *urlPrefix, const char *dir, const char *dest, const char *suffix);
 
-	virtual std::vector<struct DirEntry> getDirList(const char *dirURL);
-	void setPassive(bool passive) { this->passive = passive; }
-	void setUser(const char *user) { u = user; }
-	void setPasswd(const char *passwd) { p = passwd; }
+    virtual std::vector<struct DirEntry> getDirList(const char *dirURL);
+    void setPassive(bool passive) { this->passive = passive; }
+    void setUser(const char *user) { u = user; }
+    void setPasswd(const char *passwd) { p = passwd; }
     void terminate() { term.store(true, std::memory_order_release); }
 };
 

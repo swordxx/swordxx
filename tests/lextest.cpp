@@ -1,13 +1,13 @@
 /******************************************************************************
  *
- *  lextest.cpp -	
+ *  lextest.cpp -
  *
  * $Id$
  *
  * Copyright 2002-2013 CrossWire Bible Society (http://www.crosswire.org)
- *	CrossWire Bible Society
- *	P. O. Box 2528
- *	Tempe, AZ  85280-2528
+ *    CrossWire Bible Society
+ *    P. O. Box 2528
+ *    Tempe, AZ  85280-2528
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -28,26 +28,26 @@ using std::endl;
 
 int main(int argc, char **argv)
 {
-	RawLD::createModule("tmp/lextest");
-	RawLD lex("tmp/lextest");
+    RawLD::createModule("tmp/lextest");
+    RawLD lex("tmp/lextest");
 
-	lex.setKey("b");
-	lex << "entry for b";
+    lex.setKey("b");
+    lex << "entry for b";
 
-	lex.setKey("a");
-	lex << "entry for a";
+    lex.setKey("a");
+    lex << "entry for a";
 
-	lex = TOP;
-	cout << lex.getKeyText() << endl;
-	lex++;
-	cout << lex.getKeyText() << endl;
+    lex = TOP;
+    cout << lex.getKeyText() << endl;
+    lex++;
+    cout << lex.getKeyText() << endl;
 
-	lex.setKey("a");
-	lex.deleteEntry();
+    lex.setKey("a");
+    lex.deleteEntry();
 
-//	lex.setKey("a");
-//	lex << "y";
+//    lex.setKey("a");
+//    lex << "y";
 
-	lex = BOTTOM;
-	return 0;
+    lex = BOTTOM;
+    return 0;
 }

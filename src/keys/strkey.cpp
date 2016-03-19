@@ -1,15 +1,15 @@
 /******************************************************************************
  *
- *  strkey.cpp -	code for class 'StrKey'- a standard string key class
- *			(used for modules that index on single strings (eg.
- *			cities, names, words, etc.)
+ *  strkey.cpp -    code for class 'StrKey'- a standard string key class
+ *            (used for modules that index on single strings (eg.
+ *            cities, names, words, etc.)
  *
  * $Id$
  *
  * Copyright 1997-2013 CrossWire Bible Society (http://www.crosswire.org)
- *	CrossWire Bible Society
- *	P. O. Box 2528
- *	Tempe, AZ  85280-2528
+ *    CrossWire Bible Society
+ *    P. O. Box 2528
+ *    Tempe, AZ  85280-2528
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -35,24 +35,24 @@ SWClass StrKey::classdef(classes);
 /******************************************************************************
  * StrKey Constructor - initializes instance of StrKey
  *
- * ENT:	ikey - text key (word, city, name, etc.)
+ * ENT:    ikey - text key (word, city, name, etc.)
  */
 
 StrKey::StrKey(const char *ikey) : SWKey(ikey)
 {
-	init();
+    init();
 }
 
 
 void StrKey::init() {
-	myclass = &classdef;
+    myclass = &classdef;
 }
 
 
 /******************************************************************************
  * StrKey Destructor - cleans up instance of StrKey
  *
- * ENT:	ikey - text key
+ * ENT:    ikey - text key
  */
 
 StrKey::~StrKey() {

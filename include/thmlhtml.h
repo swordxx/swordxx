@@ -1,13 +1,13 @@
 /******************************************************************************
  *
- *  thmlhtml.h -	Implementation of ThMLHTML
+ *  thmlhtml.h -    Implementation of ThMLHTML
  *
  * $Id$
  *
  * Copyright 1999-2013 CrossWire Bible Society (http://www.crosswire.org)
- *	CrossWire Bible Society
- *	P. O. Box 2528
- *	Tempe, AZ  85280-2528
+ *    CrossWire Bible Society
+ *    P. O. Box 2528
+ *    Tempe, AZ  85280-2528
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -31,17 +31,17 @@ namespace swordxx {
  */
 class SWDLLEXPORT ThMLHTML : public SWBasicFilter {
 protected:
-	class MyUserData : public BasicFilterUserData {
-	public:
-		MyUserData(const SWModule *module, const SWKey *key) : BasicFilterUserData(module, key) {}
-		bool SecHead;
-	};
-	virtual BasicFilterUserData *createUserData(const SWModule *module, const SWKey *key) {
-		return new MyUserData(module, key);
-	}
-	virtual bool handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData);
+    class MyUserData : public BasicFilterUserData {
+    public:
+        MyUserData(const SWModule *module, const SWKey *key) : BasicFilterUserData(module, key) {}
+        bool SecHead;
+    };
+    virtual BasicFilterUserData *createUserData(const SWModule *module, const SWKey *key) {
+        return new MyUserData(module, key);
+    }
+    virtual bool handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData);
 public:
-	ThMLHTML();
+    ThMLHTML();
 };
 
 } /* namespace swordxx */

@@ -1,13 +1,13 @@
 /******************************************************************************
  *
- *  keycast.cpp -	
+ *  keycast.cpp -
  *
  * $Id$
  *
  * Copyright 2000-2013 CrossWire Bible Society (http://www.crosswire.org)
- *	CrossWire Bible Society
- *	P. O. Box 2528
- *	Tempe, AZ  85280-2528
+ *    CrossWire Bible Society
+ *    P. O. Box 2528
+ *    Tempe, AZ  85280-2528
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -28,7 +28,7 @@ int main (int argc, char* argv[]) {
         SWMgr mgr;
 
 //the commented out code works
-/* 
+/*
         StringList globalOptions = mgr.getGlobalOptions();
         for (StringList::iterator it = globalOptions.begin(); it != globalOptions.end(); it++) {
                 std::cout << *it << std::endl;
@@ -41,10 +41,10 @@ int main (int argc, char* argv[]) {
 */
 
 //crashes
-	StringList values = mgr.getGlobalOptionValues("Footnotes");
+    StringList values = mgr.getGlobalOptionValues("Footnotes");
         for (StringList::iterator it2 = values.begin(); it2 != values.end(); it2++) {
               std::cout << "\t"<< *it2 << std::endl;
-        }    
+        }
 };
 
 

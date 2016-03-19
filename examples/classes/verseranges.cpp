@@ -1,14 +1,14 @@
 /******************************************************************************
  *
- *  verseranges.cpp -	This example demonstrates how to work with contiguous
- *			verse ranges using VerseKey
+ *  verseranges.cpp -    This example demonstrates how to work with contiguous
+ *            verse ranges using VerseKey
  *
  * $Id$
  *
  * Copyright 2011-2013 CrossWire Bible Society (http://www.crosswire.org)
- *	CrossWire Bible Society
- *	P. O. Box 2528
- *	Tempe, AZ  85280-2528
+ *    CrossWire Bible Society
+ *    P. O. Box 2528
+ *    Tempe, AZ  85280-2528
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -34,94 +34,94 @@ using namespace std;
 
 int main(int argc, char **argv) {
 
-	cout << "\n";
+    cout << "\n";
 
-	const char *modName = "KJVA";
-	SWMgr manager;
-	SWModule *bible = manager.getModule(modName);
-	if (!bible) {
-		cout << modName << " not installed for example.  Please install.\n\n";
-		exit(-1);
-	}
+    const char *modName = "KJVA";
+    SWMgr manager;
+    SWModule *bible = manager.getModule(modName);
+    if (!bible) {
+        cout << modName << " not installed for example.  Please install.\n\n";
+        exit(-1);
+    }
 
-	VerseKey *vk = (VerseKey *)bible->createKey();
+    VerseKey *vk = (VerseKey *)bible->createKey();
 
-	// let's set verse ranges for a variety of different contiguous regions
+    // let's set verse ranges for a variety of different contiguous regions
 
-	// set a verse range for the whole Bible
-	vk->setLowerBound(*vk);	// vk initially points to TOP, so we don't need to set position first
-	vk->setPosition(BOTTOM);
-	vk->setUpperBound(*vk);
-	cout << vk->getRangeText() << "\n";
-
-
-	vk->clearBounds();
+    // set a verse range for the whole Bible
+    vk->setLowerBound(*vk);    // vk initially points to TOP, so we don't need to set position first
+    vk->setPosition(BOTTOM);
+    vk->setUpperBound(*vk);
+    cout << vk->getRangeText() << "\n";
 
 
-	// Old Testament
-	vk->setPosition(TOP);
-	vk->setLowerBound(*vk);
-
-	vk->setTestament(2);
-	(*vk)--;
-
-	vk->setUpperBound(*vk);
-	cout << vk->getRangeText() << "\n";
+    vk->clearBounds();
 
 
-	vk->clearBounds();
+    // Old Testament
+    vk->setPosition(TOP);
+    vk->setLowerBound(*vk);
+
+    vk->setTestament(2);
+    (*vk)--;
+
+    vk->setUpperBound(*vk);
+    cout << vk->getRangeText() << "\n";
 
 
-	// New Testament
-	vk->setPosition(TOP);
-	vk->setTestament(2);
-	vk->setLowerBound(*vk);
-	vk->setPosition(BOTTOM);
-	vk->setUpperBound(*vk);
-	cout << vk->getRangeText() << "\n";
+    vk->clearBounds();
 
 
-	vk->clearBounds();
+    // New Testament
+    vk->setPosition(TOP);
+    vk->setTestament(2);
+    vk->setLowerBound(*vk);
+    vk->setPosition(BOTTOM);
+    vk->setUpperBound(*vk);
+    cout << vk->getRangeText() << "\n";
 
 
-	// Current Book
-	vk->setText("John 3:16");
-	vk->setChapter(1); vk->setVerse(1);
-	vk->setLowerBound(*vk);
-	vk->setChapter(vk->getChapterMax()); vk->setVerse(vk->getVerseMax());
-	vk->setUpperBound(*vk);
-	cout << vk->getRangeText() << "\n";
+    vk->clearBounds();
 
 
-	// -------------------------
-	// Shorter syntax using the parser and based on book names, and requires intimate knowledge of VersificationMgr
-	// You're probably better off using the above code, but this is here for completeness
-	//
-	const VersificationMgr::System *refSys = VersificationMgr::getSystemVersificationMgr()->getVersificationSystem(vk->getVersificationSystem());
+    // Current Book
+    vk->setText("John 3:16");
+    vk->setChapter(1); vk->setVerse(1);
+    vk->setLowerBound(*vk);
+    vk->setChapter(vk->getChapterMax()); vk->setVerse(vk->getVerseMax());
+    vk->setUpperBound(*vk);
+    cout << vk->getRangeText() << "\n";
 
 
-	// whole Bible
-	VerseKey vkBible(refSys->getBook(0)->getOSISName(), refSys->getBook(refSys->getBookCount()-1)->getOSISName(), refSys->getName());
-	cout << vkBible.getRangeText() << "\n";
-
-	// OT
-	VerseKey vkOT(refSys->getBook(0)->getOSISName(), refSys->getBook(refSys->getBMAX()[0]-1)->getOSISName(), refSys->getName());
-	cout << vkOT.getRangeText() << "\n";
-
-	// NT
-	VerseKey vkNT(refSys->getBook(refSys->getBMAX()[0])->getOSISName(), refSys->getBook(refSys->getBookCount()-1)->getOSISName(), refSys->getName());
-	cout << vkNT.getRangeText() << "\n";
-
-	// Current Book
-	vk->setText("John 3:16");
-	VerseKey vkCurrentBook(vk->getBookName(), vk->getBookName(), refSys->getName());
-	cout << vkCurrentBook.getRangeText() << "\n";
+    // -------------------------
+    // Shorter syntax using the parser and based on book names, and requires intimate knowledge of VersificationMgr
+    // You're probably better off using the above code, but this is here for completeness
+    //
+    const VersificationMgr::System *refSys = VersificationMgr::getSystemVersificationMgr()->getVersificationSystem(vk->getVersificationSystem());
 
 
-	delete vk;
+    // whole Bible
+    VerseKey vkBible(refSys->getBook(0)->getOSISName(), refSys->getBook(refSys->getBookCount()-1)->getOSISName(), refSys->getName());
+    cout << vkBible.getRangeText() << "\n";
 
-	cout << endl;
+    // OT
+    VerseKey vkOT(refSys->getBook(0)->getOSISName(), refSys->getBook(refSys->getBMAX()[0]-1)->getOSISName(), refSys->getName());
+    cout << vkOT.getRangeText() << "\n";
 
-	return 0;
+    // NT
+    VerseKey vkNT(refSys->getBook(refSys->getBMAX()[0])->getOSISName(), refSys->getBook(refSys->getBookCount()-1)->getOSISName(), refSys->getName());
+    cout << vkNT.getRangeText() << "\n";
+
+    // Current Book
+    vk->setText("John 3:16");
+    VerseKey vkCurrentBook(vk->getBookName(), vk->getBookName(), refSys->getName());
+    cout << vkCurrentBook.getRangeText() << "\n";
+
+
+    delete vk;
+
+    cout << endl;
+
+    return 0;
 }
 

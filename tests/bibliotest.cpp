@@ -1,13 +1,13 @@
 /******************************************************************************
  *
- *  bibliotest.cpp -	
+ *  bibliotest.cpp -
  *
  * $Id$
  *
  * Copyright 2013 CrossWire Bible Society (http://www.crosswire.org)
- *	CrossWire Bible Society
- *	P. O. Box 2528
- *	Tempe, AZ  85280-2528
+ *    CrossWire Bible Society
+ *    P. O. Box 2528
+ *    Tempe, AZ  85280-2528
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -27,15 +27,15 @@
 using namespace swordxx;
 
 int main(int argc, char **argv) {
-	SWMgr mymgr;
-	ModMap::iterator it;
-	if ( argc > 1 ) {
-		SWModule *module = mymgr.Modules[argv[1]];
-		std::cout << module->getBibliography() << "\n";
-		return 0;
-	}
-	else {
-		std::cout << "Usage: bibliography <ModuleName>"<< "\n";
-		return 1;
-	}
+    SWMgr mymgr;
+    ModMap::iterator it;
+    if ( argc > 1 ) {
+        SWModule *module = mymgr.Modules[argv[1]];
+        std::cout << module->getBibliography() << "\n";
+        return 0;
+    }
+    else {
+        std::cout << "Usage: bibliography <ModuleName>"<< "\n";
+        return 1;
+    }
 }

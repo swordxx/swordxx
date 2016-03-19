@@ -1,16 +1,16 @@
 /******************************************************************************
  *
- *  rawverse.h -	code for class 'RawVerse'- a module that reads raw text
- *			files:  ot and nt using indexs ??.bks ??.cps ??.vss
- *			and provides lookup and parsing functions based on
- *			class VerseKey
+ *  rawverse.h -    code for class 'RawVerse'- a module that reads raw text
+ *            files:  ot and nt using indexs ??.bks ??.cps ??.vss
+ *            and provides lookup and parsing functions based on
+ *            class VerseKey
  *
  * $Id$
  *
  * Copyright 1997-2013 CrossWire Bible Society (http://www.crosswire.org)
- *	CrossWire Bible Society
- *	P. O. Box 2528
- *	Tempe, AZ  85280-2528
+ *    CrossWire Bible Society
+ *    P. O. Box 2528
+ *    Tempe, AZ  85280-2528
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -37,22 +37,22 @@ class SWBuf;
 class SWDLLEXPORT RawVerse {
 
 
-	static int instance;		// number of instantiated RawVerse objects or derivitives
+    static int instance;        // number of instantiated RawVerse objects or derivitives
 protected:
-	FileDesc *idxfp[2];
-	FileDesc *textfp[2];
+    FileDesc *idxfp[2];
+    FileDesc *textfp[2];
 
-	char *path;
-	void doSetText(char testmt, long idxoff, const char *buf, long len = -1);
-	void doLinkEntry(char testmt, long destidxoff, long srcidxoff);
+    char *path;
+    void doSetText(char testmt, long idxoff, const char *buf, long len = -1);
+    void doLinkEntry(char testmt, long destidxoff, long srcidxoff);
 
 public:
-	static const char nl;
-	RawVerse(const char *ipath, int fileMode = -1);
-	virtual ~RawVerse();
-	void findOffset(char testmt, long idxoff, long *start,	unsigned short *end) const;
-	void readText(char testmt, long start, unsigned short size, SWBuf &buf) const;
-	static char createModule(const char *path, const char *v11n = "KJV");
+    static const char nl;
+    RawVerse(const char *ipath, int fileMode = -1);
+    virtual ~RawVerse();
+    void findOffset(char testmt, long idxoff, long *start,    unsigned short *end) const;
+    void readText(char testmt, long start, unsigned short size, SWBuf &buf) const;
+    static char createModule(const char *path, const char *v11n = "KJV");
 };
 
 } /* namespace swordxx */

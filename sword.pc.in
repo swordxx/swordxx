@@ -10,5 +10,5 @@ Version: @VERSION@
 @SHAREDLIB_TRUE@Libs: -L${libdir} -lsword
 @SHAREDLIB_FALSE@Libs: -L${libdir} -lsword @LIBS@
 Libs.private: -L${libdir} -lsword @LIBS@
-Cflags: -I${includedir}/sword 
+Cflags: -I${includedir}/sword
 

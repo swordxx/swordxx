@@ -1,13 +1,13 @@
 /******************************************************************************
  *
- *  osisxhtml.h -	Render filter for classed XHTML of an OSIS module
+ *  osisxhtml.h -    Render filter for classed XHTML of an OSIS module
  *
  * $Id$
  *
  * Copyright 2011-2013 CrossWire Bible Society (http://www.crosswire.org)
- *	CrossWire Bible Society
- *	P. O. Box 2528
- *	Tempe, AZ  85280-2528
+ *    CrossWire Bible Society
+ *    P. O. Box 2528
+ *    Tempe, AZ  85280-2528
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -31,45 +31,45 @@ namespace swordxx {
  */
 class SWDLLEXPORT OSISXHTML : public SWBasicFilter {
 private:
-	bool morphFirst;
-	bool renderNoteNumbers;
+    bool morphFirst;
+    bool renderNoteNumbers;
 protected:
 
-	class TagStack;
-	virtual BasicFilterUserData *createUserData(const SWModule *module, const SWKey *key);
-	virtual bool handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData);
+    class TagStack;
+    virtual BasicFilterUserData *createUserData(const SWModule *module, const SWKey *key);
+    virtual bool handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData);
 
 
-	// used by derived classes so we have it in the header
-	class MyUserData : public BasicFilterUserData {
-	public:
-		bool osisQToTick;
-		bool inXRefNote;
-		bool BiblicalText;
-		int suspendLevel;
-		SWBuf wordsOfChristStart;
-		SWBuf wordsOfChristEnd;
-		SWBuf interModuleLinkStart;
-		SWBuf interModuleLinkEnd;
-		TagStack *quoteStack;
-		TagStack *hiStack;
-		TagStack *titleStack;
-		TagStack *lineStack;
-		int consecutiveNewlines;
-		SWBuf lastTransChange;
-		SWBuf w;
-		SWBuf fn;
-		SWBuf version;
+    // used by derived classes so we have it in the header
+    class MyUserData : public BasicFilterUserData {
+    public:
+        bool osisQToTick;
+        bool inXRefNote;
+        bool BiblicalText;
+        int suspendLevel;
+        SWBuf wordsOfChristStart;
+        SWBuf wordsOfChristEnd;
+        SWBuf interModuleLinkStart;
+        SWBuf interModuleLinkEnd;
+        TagStack *quoteStack;
+        TagStack *hiStack;
+        TagStack *titleStack;
+        TagStack *lineStack;
+        int consecutiveNewlines;
+        SWBuf lastTransChange;
+        SWBuf w;
+        SWBuf fn;
+        SWBuf version;
 
-		MyUserData(const SWModule *module, const SWKey *key);
-		~MyUserData();
-		void outputNewline(SWBuf &buf);
-	};
+        MyUserData(const SWModule *module, const SWKey *key);
+        ~MyUserData();
+        void outputNewline(SWBuf &buf);
+    };
 public:
-	OSISXHTML();
-	void setMorphFirst(bool val = true) { morphFirst = val; }
-	void setRenderNoteNumbers(bool val = true) { renderNoteNumbers = val; }
-	virtual const char *getHeader() const;
+    OSISXHTML();
+    void setMorphFirst(bool val = true) { morphFirst = val; }
+    void setRenderNoteNumbers(bool val = true) { renderNoteNumbers = val; }
+    virtual const char *getHeader() const;
 };
 
 } /* namespace swordxx */

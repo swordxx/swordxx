@@ -1,13 +1,13 @@
 /******************************************************************************
  *
- *  osisosis.h -	Implementation of OSISOSIS
+ *  osisosis.h -    Implementation of OSISOSIS
  *
  * $Id$
  *
  * Copyright 2004-2013 CrossWire Bible Society (http://www.crosswire.org)
- *	CrossWire Bible Society
- *	P. O. Box 2528
- *	Tempe, AZ  85280-2528
+ *    CrossWire Bible Society
+ *    P. O. Box 2528
+ *    Tempe, AZ  85280-2528
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -33,23 +33,23 @@ namespace swordxx {
 class SWDLLEXPORT OSISOSIS : public SWBasicFilter {
 private:
 protected:
-	class MyUserData : public BasicFilterUserData {
-	public:
-		bool osisQToTick;
-		bool inBold;
-		SWBuf lastTransChange;
-		SWBuf w;
-		SWBuf fn;
-		XMLTag startTag;
-		MyUserData(const SWModule *module, const SWKey *key);
-	};
-	virtual BasicFilterUserData *createUserData(const SWModule *module, const SWKey *key) {
-		return new MyUserData(module, key);
-	}
-	virtual char processText(SWBuf &text, const SWKey *key, const SWModule *module);
-	virtual bool handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData);
+    class MyUserData : public BasicFilterUserData {
+    public:
+        bool osisQToTick;
+        bool inBold;
+        SWBuf lastTransChange;
+        SWBuf w;
+        SWBuf fn;
+        XMLTag startTag;
+        MyUserData(const SWModule *module, const SWKey *key);
+    };
+    virtual BasicFilterUserData *createUserData(const SWModule *module, const SWKey *key) {
+        return new MyUserData(module, key);
+    }
+    virtual char processText(SWBuf &text, const SWKey *key, const SWModule *module);
+    virtual bool handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData);
 public:
-	OSISOSIS();
+    OSISOSIS();
 };
 
 } /* namespace swordxx */

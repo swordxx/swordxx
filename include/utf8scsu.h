@@ -1,13 +1,13 @@
 /******************************************************************************
  *
- *  utf8scsu.h -	Implementation of UTF8SCSU
+ *  utf8scsu.h -    Implementation of UTF8SCSU
  *
  * $Id$
  *
  * Copyright 2001-2014 CrossWire Bible Society (http://www.crosswire.org)
- *	CrossWire Bible Society
- *	P. O. Box 2528
- *	Tempe, AZ  85280-2528
+ *    CrossWire Bible Society
+ *    P. O. Box 2528
+ *    Tempe, AZ  85280-2528
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -35,13 +35,13 @@ namespace swordxx {
  */
 class SWDLLEXPORT UTF8SCSU : public SWFilter {
 private:
-	UConverter* scsuConv;
-	UConverter* utf8Conv;
-	UErrorCode err;
+    UConverter* scsuConv;
+    UConverter* utf8Conv;
+    UErrorCode err;
 public:
-	UTF8SCSU();
-	~UTF8SCSU();
-	virtual char processText(SWBuf &text, const SWKey *key = 0, const SWModule *module = 0);
+    UTF8SCSU();
+    ~UTF8SCSU();
+    virtual char processText(SWBuf &text, const SWKey *key = 0, const SWModule *module = 0);
 };
 
 } /* namespace swordxx */

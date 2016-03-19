@@ -1,13 +1,13 @@
 /******************************************************************************
  *
- *  ciphertest.cpp -	
+ *  ciphertest.cpp -
  *
  * $Id$
  *
  * Copyright 2005-2013 CrossWire Bible Society (http://www.crosswire.org)
- *	CrossWire Bible Society
- *	P. O. Box 2528
- *	Tempe, AZ  85280-2528
+ *    CrossWire Bible Society
+ *    P. O. Box 2528
+ *    Tempe, AZ  85280-2528
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -28,27 +28,27 @@
 using namespace swordxx;
 
 int main(int argc, char **argv) {
-	
-	if (argc != 3) {
-		std::cerr << "usage: " << *argv << " <key> <0-encipher|1-decipher>\n";
-		return -1;
-	}
 
-	
-	long encipher = atoi(argv[2]);
+    if (argc != 3) {
+        std::cerr << "usage: " << *argv << " <key> <0-encipher|1-decipher>\n";
+        return -1;
+    }
 
-	SWFilter *filter = new CipherFilter(argv[1]);
 
-	SWBuf text;
-	char buf[4096];
-	std::cin >> buf;
-	text = buf;
+    long encipher = atoi(argv[2]);
 
-	filter->processText(text, (SWKey *)encipher);
+    SWFilter *filter = new CipherFilter(argv[1]);
 
-	std::cout << text;
-	
+    SWBuf text;
+    char buf[4096];
+    std::cin >> buf;
+    text = buf;
 
-	
-	return 0;
+    filter->processText(text, (SWKey *)encipher);
+
+    std::cout << text;
+
+
+
+    return 0;
 }

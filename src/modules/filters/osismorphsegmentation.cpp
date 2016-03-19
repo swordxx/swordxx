@@ -1,15 +1,15 @@
 /******************************************************************************
  *
- *  osismorphsegmentation.cpp -	SWFilter descendant to toggle splitting of
- *				morphemes (for morpheme segmented Hebrew in
- *				the WLC)
+ *  osismorphsegmentation.cpp -    SWFilter descendant to toggle splitting of
+ *                morphemes (for morpheme segmented Hebrew in
+ *                the WLC)
  *
  * $Id$
  *
  * Copyright 2006-2013 CrossWire Bible Society (http://www.crosswire.org)
- *	CrossWire Bible Society
- *	P. O. Box 2528
- *	Tempe, AZ  85280-2528
+ *    CrossWire Bible Society
+ *    P. O. Box 2528
+ *    Tempe, AZ  85280-2528
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -33,14 +33,14 @@ namespace swordxx {
 
 namespace {
 
-	static const char oName[] = "Morpheme Segmentation";
-	static const char oTip[]  = "Toggles Morpheme Segmentation On and Off, when present";
+    static const char oName[] = "Morpheme Segmentation";
+    static const char oTip[]  = "Toggles Morpheme Segmentation On and Off, when present";
 
-	static const StringList *oValues() {
-		static const SWBuf choices[3] = {"Off", "On", ""};
-		static const StringList oVals(&choices[0], &choices[2]);
-		return &oVals;
-	}
+    static const StringList *oValues() {
+        static const SWBuf choices[3] = {"Off", "On", ""};
+        static const StringList oVals(&choices[0], &choices[2]);
+        return &oVals;
+    }
 }
 
 
@@ -52,81 +52,81 @@ OSISMorphSegmentation::~OSISMorphSegmentation() {}
 
 
 char OSISMorphSegmentation::processText(SWBuf &text, const SWKey * /*key*/, const SWModule *module) {
-	SWBuf token;
-	bool intoken    = false;
-	bool hide       = false;
+    SWBuf token;
+    bool intoken    = false;
+    bool hide       = false;
 
-	SWBuf orig( text );
-	const char *from = orig.c_str();
+    SWBuf orig( text );
+    const char *from = orig.c_str();
 
-	XMLTag tag;
-	SWBuf tagText = "";
-	unsigned int morphemeNum = 0;
-	bool inMorpheme = false;
-	SWBuf buf;
+    XMLTag tag;
+    SWBuf tagText = "";
+    unsigned int morphemeNum = 0;
+    bool inMorpheme = false;
+    SWBuf buf;
 
-	for (text = ""; *from; ++from) {
-		if (*from == '<') {
-			intoken = true;
-			token = "";
-			continue;
-		}
+    for (text = ""; *from; ++from) {
+        if (*from == '<') {
+            intoken = true;
+            token = "";
+            continue;
+        }
 
-		if (*from == '>') { // process tokens
-			intoken = false;
+        if (*from == '>') { // process tokens
+            intoken = false;
 
-			if (!strncmp(token.c_str(), "seg ", 4) || !strncmp(token.c_str(), "/seg", 4)) {
-				tag = token;
+            if (!strncmp(token.c_str(), "seg ", 4) || !strncmp(token.c_str(), "/seg", 4)) {
+                tag = token;
 
-				if (!tag.isEndTag() && tag.getAttribute("type") &&
-					(  !strcmp("morph", tag.getAttribute("type"))
-					|| !strcmp("x-morph", tag.getAttribute("type")))) {  //<seg type="morph"> start tag
-					hide = !option; //only hide if option is Off
-					tagText = "";
-					inMorpheme = true;
-				}
+                if (!tag.isEndTag() && tag.getAttribute("type") &&
+                    (  !strcmp("morph", tag.getAttribute("type"))
+                    || !strcmp("x-morph", tag.getAttribute("type")))) {  //<seg type="morph"> start tag
+                    hide = !option; //only hide if option is Off
+                    tagText = "";
+                    inMorpheme = true;
+                }
 
-				if (tag.isEndTag() && inMorpheme) {
-						buf.setFormatted("%.3d", morphemeNum++);
-						module->getEntryAttributes()["Morpheme"][buf]["body"] = tagText;
-						inMorpheme = false;
-				}
-				if (hide) { //hides start and end tags as long as hide is set
+                if (tag.isEndTag() && inMorpheme) {
+                        buf.setFormatted("%.3d", morphemeNum++);
+                        module->getEntryAttributes()["Morpheme"][buf]["body"] = tagText;
+                        inMorpheme = false;
+                }
+                if (hide) { //hides start and end tags as long as hide is set
 
-					if (tag.isEndTag()) { //</seg>
-						hide = false;
-					}
+                    if (tag.isEndTag()) { //</seg>
+                        hide = false;
+                    }
 
-					continue; //leave out the current token
-				}
-			} //end of seg tag handling
+                    continue; //leave out the current token
+                }
+            } //end of seg tag handling
 
-			text.append('<');
-			text.append(token);
-			text.append('>');
+            text.append('<');
+            text.append(token);
+            text.append('>');
 
-			if (inMorpheme) {
-				tagText.append('<');
-				tagText.append(token);
-				tagText.append('>');
-			}
+            if (inMorpheme) {
+                tagText.append('<');
+                tagText.append(token);
+                tagText.append('>');
+            }
 
-			hide = false;
+            hide = false;
 
-			continue;
-		} //end of intoken part
+            continue;
+        } //end of intoken part
 
-		if (intoken) { //copy token
-			token.append(*from);
-		}
-		else { //copy text which is not inside of a tag
-			text.append(*from);
-			if (inMorpheme) {
-				tagText.append(*from);
-			}
-		}
-	}
-	return 0;
+        if (intoken) { //copy token
+            token.append(*from);
+        }
+        else { //copy text which is not inside of a tag
+            text.append(*from);
+            if (inMorpheme) {
+                tagText.append(*from);
+            }
+        }
+    }
+    return 0;
 }
 
 } /* namespace swordxx */

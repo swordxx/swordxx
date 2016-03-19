@@ -1,15 +1,15 @@
 /******************************************************************************
  *
- *  rawfiles.cpp -	code for class 'RawFiles'- a module that produces HTML
- *			HREFs pointing to actual text desired.  Uses standard
- *			files:	ot and nt using indexs ??.bks ??.cps ??.vss
+ *  rawfiles.cpp -    code for class 'RawFiles'- a module that produces HTML
+ *            HREFs pointing to actual text desired.  Uses standard
+ *            files:    ot and nt using indexs ??.bks ??.cps ??.vss
  *
  * $Id$
  *
  * Copyright 1998-2013 CrossWire Bible Society (http://www.crosswire.org)
- *	CrossWire Bible Society
- *	P. O. Box 2528
- *	Tempe, AZ  85280-2528
+ *    CrossWire Bible Society
+ *    P. O. Box 2528
+ *    Tempe, AZ  85280-2528
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -38,9 +38,9 @@ namespace swordxx {
  /******************************************************************************
  * RawFiles Constructor - Initializes data for instance of RawFiles
  *
- * ENT:	iname - Internal name for module
- *	idesc - Name to display to user for module
- *	idisp	 - Display object to use for displaying
+ * ENT:    iname - Internal name for module
+ *    idesc - Name to display to user for module
+ *    idisp     - Display object to use for displaying
  */
 
 RawFiles::RawFiles(const char *ipath, const char *iname, const char *idesc, SWDisplay *idisp, SWTextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char* ilang) : RawVerse(ipath, FileMgr::RDWR), SWCom(iname, idesc, idisp, enc, dir, mark, ilang)
@@ -61,169 +61,169 @@ RawFiles::~RawFiles()
 * @return yes or no
 */
 bool RawFiles::isWritable() const {
-	return ((idxfp[0]->getFd() > 0) && ((idxfp[0]->mode & FileMgr::RDWR) == FileMgr::RDWR));
+    return ((idxfp[0]->getFd() > 0) && ((idxfp[0]->mode & FileMgr::RDWR) == FileMgr::RDWR));
 }
 
 
 /******************************************************************************
- * RawFiles::getRawEntry	- Retrieve the unprocessed entry contents at
- *					the current key position of this module
+ * RawFiles::getRawEntry    - Retrieve the unprocessed entry contents at
+ *                    the current key position of this module
  *
  * RET: entry contents
  */
 
 SWBuf &RawFiles::getRawEntryBuf() const {
-	FileDesc *datafile;
-	long  start = 0;
-	unsigned short size = 0;
-	VerseKey *key = &getVerseKey();
+    FileDesc *datafile;
+    long  start = 0;
+    unsigned short size = 0;
+    VerseKey *key = &getVerseKey();
 
-	findOffset(key->getTestament(), key->getTestamentIndex(), &start, &size);
+    findOffset(key->getTestament(), key->getTestamentIndex(), &start, &size);
 
-	entryBuf = "";
-	if (size) {
-		SWBuf tmpbuf = path;
-		tmpbuf += '/';
-		readText(key->getTestament(), start, size, entryBuf);
-		tmpbuf += entryBuf;
-		entryBuf = "";
-		datafile = FileMgr::getSystemFileMgr()->open(tmpbuf.c_str(), FileMgr::RDONLY);
-		if (datafile->getFd() > 0) {
-			size = datafile->seek(0, SEEK_END);
-			char *tmpBuf = new char [ size + 1 ];
-			memset(tmpBuf, 0, size + 1);
-			datafile->seek(0, SEEK_SET);
-			datafile->read(tmpBuf, size);
-			entryBuf = tmpBuf;
-			delete [] tmpBuf;
-//			preptext(entrybuf);
-		}
-		FileMgr::getSystemFileMgr()->close(datafile);
-	}
-	return entryBuf;
+    entryBuf = "";
+    if (size) {
+        SWBuf tmpbuf = path;
+        tmpbuf += '/';
+        readText(key->getTestament(), start, size, entryBuf);
+        tmpbuf += entryBuf;
+        entryBuf = "";
+        datafile = FileMgr::getSystemFileMgr()->open(tmpbuf.c_str(), FileMgr::RDONLY);
+        if (datafile->getFd() > 0) {
+            size = datafile->seek(0, SEEK_END);
+            char *tmpBuf = new char [ size + 1 ];
+            memset(tmpBuf, 0, size + 1);
+            datafile->seek(0, SEEK_SET);
+            datafile->read(tmpBuf, size);
+            entryBuf = tmpBuf;
+            delete [] tmpBuf;
+//            preptext(entrybuf);
+        }
+        FileMgr::getSystemFileMgr()->close(datafile);
+    }
+    return entryBuf;
 }
 
 
 /******************************************************************************
  * RawFiles::setEntry(char *)- Update the module's current key entry with
- *				provided text
+ *                provided text
  */
 
 void RawFiles::setEntry(const char *inbuf, long len) {
-	FileDesc *datafile;
-	long  start;
-	unsigned short size;
-	VerseKey *key = &getVerseKey();
+    FileDesc *datafile;
+    long  start;
+    unsigned short size;
+    VerseKey *key = &getVerseKey();
 
-	len = (len<0)?strlen(inbuf):len;
+    len = (len<0)?strlen(inbuf):len;
 
-	findOffset(key->getTestament(), key->getTestamentIndex(), &start, &size);
+    findOffset(key->getTestament(), key->getTestamentIndex(), &start, &size);
 
-	if (size) {
-		SWBuf tmpbuf;
-		entryBuf = path;
-		entryBuf += '/';
-		readText(key->getTestament(), start, size, tmpbuf);
-		entryBuf += tmpbuf;
-	}
-	else {
-		SWBuf tmpbuf;
-		entryBuf = path;
-		entryBuf += '/';
-		tmpbuf = getNextFilename();
-		doSetText(key->getTestament(), key->getTestamentIndex(), tmpbuf);
-		entryBuf += tmpbuf;
-	}
-	datafile = FileMgr::getSystemFileMgr()->open(entryBuf, FileMgr::CREAT|FileMgr::WRONLY|FileMgr::TRUNC);
-	if (datafile->getFd() > 0) {
-		datafile->write(inbuf, len);
-	}
-	FileMgr::getSystemFileMgr()->close(datafile);
+    if (size) {
+        SWBuf tmpbuf;
+        entryBuf = path;
+        entryBuf += '/';
+        readText(key->getTestament(), start, size, tmpbuf);
+        entryBuf += tmpbuf;
+    }
+    else {
+        SWBuf tmpbuf;
+        entryBuf = path;
+        entryBuf += '/';
+        tmpbuf = getNextFilename();
+        doSetText(key->getTestament(), key->getTestamentIndex(), tmpbuf);
+        entryBuf += tmpbuf;
+    }
+    datafile = FileMgr::getSystemFileMgr()->open(entryBuf, FileMgr::CREAT|FileMgr::WRONLY|FileMgr::TRUNC);
+    if (datafile->getFd() > 0) {
+        datafile->write(inbuf, len);
+    }
+    FileMgr::getSystemFileMgr()->close(datafile);
 }
 
 
 /******************************************************************************
  * RawFiles::linkEntry(SWKey *)- Link the modules current key entry with
- *				another module entry
+ *                another module entry
  *
  * RET: *this
  */
 
 void RawFiles::linkEntry(const SWKey *inkey) {
 
-	long  start;
-	unsigned short size;
-	const VerseKey *key = &getVerseKey();
+    long  start;
+    unsigned short size;
+    const VerseKey *key = &getVerseKey();
 
-	findOffset(key->getTestament(), key->getTestamentIndex(), &start, &size);
+    findOffset(key->getTestament(), key->getTestamentIndex(), &start, &size);
 
-	if (size) {
-		SWBuf tmpbuf;
-		readText(key->getTestament(), start, size + 2, tmpbuf);
+    if (size) {
+        SWBuf tmpbuf;
+        readText(key->getTestament(), start, size + 2, tmpbuf);
 
-		key = &getVerseKey(inkey);
-		doSetText(key->getTestament(), key->getTestamentIndex(), tmpbuf.c_str());
-	}
+        key = &getVerseKey(inkey);
+        doSetText(key->getTestament(), key->getTestamentIndex(), tmpbuf.c_str());
+    }
 }
 
 
 /******************************************************************************
- * RawFiles::deleteEntry	- deletes this entry
+ * RawFiles::deleteEntry    - deletes this entry
  *
  * RET: *this
  */
 
 void RawFiles::deleteEntry() {
-	VerseKey *key = &getVerseKey();
-	doSetText(key->getTestament(), key->getTestamentIndex(), "");
+    VerseKey *key = &getVerseKey();
+    doSetText(key->getTestament(), key->getTestamentIndex(), "");
 }
 
 
 /******************************************************************************
  * RawFiles::getNextfilename - generates a valid filename in which to store
- *				an entry
+ *                an entry
  *
  * RET: filename
  */
 
 const char *RawFiles::getNextFilename() {
-	static SWBuf incfile;
-	uint32_t number = 0;
-	FileDesc *datafile;
+    static SWBuf incfile;
+    uint32_t number = 0;
+    FileDesc *datafile;
 
-	incfile.setFormatted("%s/incfile", path);
-	datafile = FileMgr::getSystemFileMgr()->open(incfile, FileMgr::RDONLY);
-	if (datafile->getFd() != -1) {
-		if (datafile->read(&number, 4) != 4) number = 0;
-		number = swordtoarch32(number);
-	}
-	number++;
-	FileMgr::getSystemFileMgr()->close(datafile);
-	
-	datafile = FileMgr::getSystemFileMgr()->open(incfile, FileMgr::CREAT|FileMgr::WRONLY|FileMgr::TRUNC);
-	incfile.setFormatted("%.7d", number-1);
+    incfile.setFormatted("%s/incfile", path);
+    datafile = FileMgr::getSystemFileMgr()->open(incfile, FileMgr::RDONLY);
+    if (datafile->getFd() != -1) {
+        if (datafile->read(&number, 4) != 4) number = 0;
+        number = swordtoarch32(number);
+    }
+    number++;
+    FileMgr::getSystemFileMgr()->close(datafile);
 
-	number = archtosword32(number);
-	datafile->write(&number, 4);
+    datafile = FileMgr::getSystemFileMgr()->open(incfile, FileMgr::CREAT|FileMgr::WRONLY|FileMgr::TRUNC);
+    incfile.setFormatted("%.7d", number-1);
 
-	FileMgr::getSystemFileMgr()->close(datafile);
-	return incfile;
+    number = archtosword32(number);
+    datafile->write(&number, 4);
+
+    FileMgr::getSystemFileMgr()->close(datafile);
+    return incfile;
 }
 
 
 char RawFiles::createModule(const char *path) {
-	char *incfile = new char [ strlen (path) + 16 ];
+    char *incfile = new char [ strlen (path) + 16 ];
 
-	uint32_t zero = 0;
-	zero = archtosword32(zero);
+    uint32_t zero = 0;
+    zero = archtosword32(zero);
 
-	FileDesc *datafile;
+    FileDesc *datafile;
 
-	sprintf(incfile, "%s/incfile", path);
-	datafile = FileMgr::getSystemFileMgr()->open(incfile, FileMgr::CREAT|FileMgr::WRONLY|FileMgr::TRUNC);
-	delete [] incfile;
-	datafile->write(&zero, 4);
-	FileMgr::getSystemFileMgr()->close(datafile);
+    sprintf(incfile, "%s/incfile", path);
+    datafile = FileMgr::getSystemFileMgr()->open(incfile, FileMgr::CREAT|FileMgr::WRONLY|FileMgr::TRUNC);
+    delete [] incfile;
+    datafile->write(&zero, 4);
+    FileMgr::getSystemFileMgr()->close(datafile);
 
     return RawVerse::createModule (path);
 }

@@ -1,13 +1,13 @@
 /******************************************************************************
  *
- *  canon_catholic2.h -	Versification data for the Catholic2 system
+ *  canon_catholic2.h -    Versification data for the Catholic2 system
  *
  * $Id$
  *
  * Copyright 2010-2013 CrossWire Bible Society (http://www.crosswire.org)
- *	CrossWire Bible Society
- *	P. O. Box 2528
- *	Tempe, AZ  85280-2528
+ *    CrossWire Bible Society
+ *    P. O. Box 2528
+ *    Tempe, AZ  85280-2528
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -32,7 +32,7 @@ namespace swordxx {
 
 /******************************************************************************
  * [on]tbooks_catholic - initialize static instance for all canonical
- *		 text names and chapmax
+ *         text names and chapmax
  */
 struct sbook otbooks_catholic2[] = {
   {"Genesis", "Gen", "Gen", 50},
@@ -85,7 +85,7 @@ struct sbook otbooks_catholic2[] = {
 };
 
 /******************************************************************************
- *	Maximum verses per chapter
+ *    Maximum verses per chapter
  */
 
 int vm_catholic2[] = {
@@ -163,7 +163,7 @@ int vm_catholic2[] = {
   23, 20, 20, 19, 14, 25,
   // Esther
   22, 23, 15, 17, 14, 14, 10, 17, 32, 13,
-  12, 6, 18, 19, 19, 24, 
+  12, 6, 18, 19, 19, 24,
   // I Maccabees
   64, 70, 60, 61, 68, 63, 50, 32, 73, 89,
   74, 54, 53, 49, 41, 24,

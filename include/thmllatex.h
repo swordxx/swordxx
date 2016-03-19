@@ -1,13 +1,13 @@
 /******************************************************************************
  *
- *  thmllatex.h -	Implementation of ThMLLaTeX
+ *  thmllatex.h -    Implementation of ThMLLaTeX
  *
  * $Id$
  *
  * Copyright 2011-2014 CrossWire Bible Society (http://www.crosswire.org)
- *	CrossWire Bible Society
- *	P. O. Box 2528
- *	Tempe, AZ  85280-2528
+ *    CrossWire Bible Society
+ *    P. O. Box 2528
+ *    Tempe, AZ  85280-2528
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -31,28 +31,28 @@ namespace swordxx {
 /** this filter converts ThML text to LaTeX
  */
 class SWDLLEXPORT ThMLLaTeX : public SWBasicFilter {
-	SWBuf imgPrefix;
-	bool renderNoteNumbers;
+    SWBuf imgPrefix;
+    bool renderNoteNumbers;
 protected:
-	class MyUserData : public BasicFilterUserData {
-	public:
-		MyUserData(const SWModule *module, const SWKey *key);//: BasicFilterUserData(module, key) {}
-		bool inscriptRef;
-		bool SecHead;
-		bool BiblicalText;
-		SWBuf version;
-		XMLTag startTag;
-	};
-	virtual BasicFilterUserData *createUserData(const SWModule *module, const SWKey *key) {
-		return new MyUserData(module, key);
-	}
-	virtual bool handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData);
+    class MyUserData : public BasicFilterUserData {
+    public:
+        MyUserData(const SWModule *module, const SWKey *key);//: BasicFilterUserData(module, key) {}
+        bool inscriptRef;
+        bool SecHead;
+        bool BiblicalText;
+        SWBuf version;
+        XMLTag startTag;
+    };
+    virtual BasicFilterUserData *createUserData(const SWModule *module, const SWKey *key) {
+        return new MyUserData(module, key);
+    }
+    virtual bool handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData);
 public:
-	ThMLLaTeX();
-	virtual const char *getImagePrefix() { return imgPrefix.c_str(); }
-	virtual void setImagePrefix(const char *newImgPrefix) { imgPrefix = newImgPrefix; }
-	virtual const char *getHeader() const;
-	void setRenderNoteNumbers(bool val = true) { renderNoteNumbers = val; }
+    ThMLLaTeX();
+    virtual const char *getImagePrefix() { return imgPrefix.c_str(); }
+    virtual void setImagePrefix(const char *newImgPrefix) { imgPrefix = newImgPrefix; }
+    virtual const char *getHeader() const;
+    void setRenderNoteNumbers(bool val = true) { renderNoteNumbers = val; }
 };
 
 } /* namespace swordxx */

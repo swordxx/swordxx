@@ -1,15 +1,15 @@
 /******************************************************************************
  *
- *  hrefcom.h -	code for class 'HREFCom'- a module that produces HTML HREFs
- *	       	pointing to actual text desired.  Uses standard
- *		files:	ot and nt using indexs ??.bks ??.cps ??.vss
+ *  hrefcom.h -    code for class 'HREFCom'- a module that produces HTML HREFs
+ *               pointing to actual text desired.  Uses standard
+ *        files:    ot and nt using indexs ??.bks ??.cps ??.vss
  *
  * $Id$
  *
  * Copyright 1998-2013 CrossWire Bible Society (http://www.crosswire.org)
- *	CrossWire Bible Society
- *	P. O. Box 2528
- *	Tempe, AZ  85280-2528
+ *    CrossWire Bible Society
+ *    P. O. Box 2528
+ *    Tempe, AZ  85280-2528
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -33,19 +33,19 @@
 namespace swordxx {
 
 class SWDLLEXPORT HREFCom:public RawVerse, public SWCom {
-	char *prefix;
+    char *prefix;
 
 public:
 
 
-	HREFCom(const char *ipath, const char *prefix, const char *iname = 0,
-			const char *idesc = 0, SWDisplay * idisp = 0);
-	virtual ~HREFCom();
-	virtual SWBuf &getRawEntryBuf() const;
+    HREFCom(const char *ipath, const char *prefix, const char *iname = 0,
+            const char *idesc = 0, SWDisplay * idisp = 0);
+    virtual ~HREFCom();
+    virtual SWBuf &getRawEntryBuf() const;
 
-	// OPERATORS -----------------------------------------------------------------
-	
-	SWMODULE_OPERATORS
+    // OPERATORS -----------------------------------------------------------------
+
+    SWMODULE_OPERATORS
 
 };
 

@@ -1,13 +1,13 @@
 /******************************************************************************
  *
- *  teiplain.h -	Implementation of TEIPlain
+ *  teiplain.h -    Implementation of TEIPlain
  *
  * $Id$
  *
  * Copyright 2006-2013 CrossWire Bible Society (http://www.crosswire.org)
- *	CrossWire Bible Society
- *	P. O. Box 2528
- *	Tempe, AZ  85280-2528
+ *    CrossWire Bible Society
+ *    P. O. Box 2528
+ *    Tempe, AZ  85280-2528
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -33,18 +33,18 @@ namespace swordxx {
 class SWDLLEXPORT TEIPlain : public SWBasicFilter {
 public:
 protected:
-	class MyUserData : public BasicFilterUserData {
-	public:
-		SWBuf w;
-		XMLTag tag;
-		MyUserData(const SWModule *module, const SWKey *key) : BasicFilterUserData(module, key) {}
-	};
-	virtual BasicFilterUserData *createUserData(const SWModule *module, const SWKey *key) {
-		return new MyUserData(module, key);
-	}
-	virtual bool handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData);
+    class MyUserData : public BasicFilterUserData {
+    public:
+        SWBuf w;
+        XMLTag tag;
+        MyUserData(const SWModule *module, const SWKey *key) : BasicFilterUserData(module, key) {}
+    };
+    virtual BasicFilterUserData *createUserData(const SWModule *module, const SWKey *key) {
+        return new MyUserData(module, key);
+    }
+    virtual bool handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData);
 public:
-	TEIPlain();
+    TEIPlain();
 };
 
 } /* namespace swordxx */

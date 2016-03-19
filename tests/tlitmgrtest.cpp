@@ -1,13 +1,13 @@
 /******************************************************************************
  *
- *  tlitmgrtest.cpp -	
+ *  tlitmgrtest.cpp -
  *
  * $Id$
  *
  * Copyright 2002-2013 CrossWire Bible Society (http://www.crosswire.org)
- *	CrossWire Bible Society
- *	P. O. Box 2528
- *	Tempe, AZ  85280-2528
+ *    CrossWire Bible Society
+ *    P. O. Box 2528
+ *    Tempe, AZ  85280-2528
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -162,8 +162,8 @@
             parser.parse(entry->stringArg, (UTransDirection) entry->intArg,
                          parseError, status);
         } else {
-		{
-			// At this point entry type must be either RULES_FORWARD or
+        {
+            // At this point entry type must be either RULES_FORWARD or
             // RULES_REVERSE.  We process the rule data into a
             // TransliteratorRuleData object, and possibly also into an
             // ::id header and/or footer.  Then we modify the registry with
@@ -196,7 +196,7 @@
             // available IDs.  That's acceptable since we should never
             // really get here except under installation, configuration,
             // or unrecoverable run time memory failures.
-			remove(ID);
+            remove(ID);
             break;
         }
 
@@ -220,7 +220,7 @@
                 // No idBlock, data != 0 -- this is an
                 // ordinary RBT_DATA
                 entry->entryType = Entry::RBT_DATA;
-				return new RuleBasedTransliterator(ID, entry->u.data);
+                return new RuleBasedTransliterator(ID, entry->u.data);
             }
         } else {
             if (entry->u.data == 0) {
@@ -287,8 +287,8 @@ static const char SW_RESDATA[] = "/usr/local/lib/sword/";
 using namespace std;
 
 struct SWTransData {
-	UnicodeString resource;
-	UTransDirection dir;
+    UnicodeString resource;
+    UTransDirection dir;
 };
 
 typedef map <const UnicodeString, SWTransData> SWTransMap;
@@ -298,185 +298,185 @@ typedef pair<UnicodeString, SWTransData> SWTransPair;
 SWTransMap *sw_tmap;
 
 Transliterator * instantiateTrans(const UnicodeString& ID, const UnicodeString& resource,
-		UTransDirection dir, UParseError &parseError, UErrorCode &status );
+        UTransDirection dir, UParseError &parseError, UErrorCode &status );
 
-Transliterator *SWTransFactory(const UnicodeString &ID, 
-	Transliterator::Token context)
+Transliterator *SWTransFactory(const UnicodeString &ID,
+    Transliterator::Token context)
 {
-	std::cout << "running factory for " << ID << std::endl;
-	SWTransMap::iterator swelement;
-	if ((swelement = sw_tmap->find(ID)) != sw_tmap->end())
-	{
-		std::cout << "found element in map" << std::endl;
-		SWTransData swstuff = (*swelement).second;
-		UParseError parseError;
-		UErrorCode status;
-		std::cout << "unregistering " << ID << std::endl;
-		Transliterator::unregister(ID);
-		std::cout << "resource is " << swstuff.resource << std::endl;
-		Transliterator *trans = instantiateTrans(ID, swstuff.resource, swstuff.dir, parseError, status);
-		return trans;
-	}
-	return NULL;
+    std::cout << "running factory for " << ID << std::endl;
+    SWTransMap::iterator swelement;
+    if ((swelement = sw_tmap->find(ID)) != sw_tmap->end())
+    {
+        std::cout << "found element in map" << std::endl;
+        SWTransData swstuff = (*swelement).second;
+        UParseError parseError;
+        UErrorCode status;
+        std::cout << "unregistering " << ID << std::endl;
+        Transliterator::unregister(ID);
+        std::cout << "resource is " << swstuff.resource << std::endl;
+        Transliterator *trans = instantiateTrans(ID, swstuff.resource, swstuff.dir, parseError, status);
+        return trans;
+    }
+    return NULL;
 }
 
 void  instantiateTransFactory(const UnicodeString& ID, const UnicodeString& resource,
-		UTransDirection dir, UParseError &parseError, UErrorCode &status )
+        UTransDirection dir, UParseError &parseError, UErrorCode &status )
 {
-		std::cout << "making factory for ID " << ID << std::endl;
-		Transliterator::Token context;
-		SWTransData swstuff; 
-		swstuff.resource = resource;
-		swstuff.dir = dir;
-		SWTransPair swpair;
-		swpair.first = ID;
-		swpair.second = swstuff;
-		sw_tmap->insert(swpair);
-		Transliterator::registerFactory(ID, &SWTransFactory, context);
+        std::cout << "making factory for ID " << ID << std::endl;
+        Transliterator::Token context;
+        SWTransData swstuff;
+        swstuff.resource = resource;
+        swstuff.dir = dir;
+        SWTransPair swpair;
+        swpair.first = ID;
+        swpair.second = swstuff;
+        sw_tmap->insert(swpair);
+        Transliterator::registerFactory(ID, &SWTransFactory, context);
 }
 
 void  registerTrans(const UnicodeString& ID, const UnicodeString& resource,
-		UTransDirection dir, UErrorCode &status )
+        UTransDirection dir, UErrorCode &status )
 {
-		std::cout << "registering ID locally " << ID << std::endl;
-		SWTransData swstuff; 
-		swstuff.resource = resource;
-		swstuff.dir = dir;
-		SWTransPair swpair;
-		swpair.first = ID;
-		swpair.second = swstuff;
-		sw_tmap->insert(swpair);
+        std::cout << "registering ID locally " << ID << std::endl;
+        SWTransData swstuff;
+        swstuff.resource = resource;
+        swstuff.dir = dir;
+        SWTransPair swpair;
+        swpair.first = ID;
+        swpair.second = swstuff;
+        sw_tmap->insert(swpair);
 }
 
 bool checkTrans(const UnicodeString& ID, UErrorCode &status )
 {
-		Transliterator *trans = Transliterator::createInstance(ID, UTRANS_FORWARD, status);
-		if (!U_FAILURE(status))
-		{
-			// already have it, clean up and return true
-			std::cout << "already have it " << ID << std::endl;
-			delete trans;
-			return true;
-		}
-		status = U_ZERO_ERROR;
-	
-	SWTransMap::iterator swelement;
-	if ((swelement = sw_tmap->find(ID)) != sw_tmap->end())
-	{
-		std::cout << "found element in map" << std::endl;
-		SWTransData swstuff = (*swelement).second;
-		UParseError parseError;
-		//UErrorCode status;
-		//std::cout << "unregistering " << ID << std::endl;
-		//Transliterator::unregister(ID);
-		std::cout << "resource is " << swstuff.resource << std::endl;
-		
-		// Get the rules
-		//std::cout << "importing: " << ID << ", " << resource << std::endl;
-		SWCharString ch(swstuff.resource);
-		UResourceBundle *bundle = ures_openDirect(SW_RESDATA, ch, &status);
-		const UnicodeString rules = ures_getUnicodeStringByKey(bundle, RB_RULE, &status);
-		ures_close(bundle);
-		//parser.parse(rules, isReverse ? UTRANS_REVERSE : UTRANS_FORWARD,
-		//        parseError, status);
-		if (U_FAILURE(status)) {
-			std::cout << "Failed to get rules" << std::endl;
-			std::cout << "status " << u_errorName(status) << std::endl;
-			return false;
-		}
+        Transliterator *trans = Transliterator::createInstance(ID, UTRANS_FORWARD, status);
+        if (!U_FAILURE(status))
+        {
+            // already have it, clean up and return true
+            std::cout << "already have it " << ID << std::endl;
+            delete trans;
+            return true;
+        }
+        status = U_ZERO_ERROR;
 
-		
-		Transliterator *trans = Transliterator::createFromRules(ID, rules, swstuff.dir,
-			parseError,status);
-		if (U_FAILURE(status)) {
-			std::cout << "Failed to create transliterator" << std::endl;
-			std::cout << "status " << u_errorName(status) << std::endl;
-			std::cout << "Parse error: line " << parseError.line << std::endl;
-			std::cout << "Parse error: offset " << parseError.offset << std::endl;
-			std::cout << "Parse error: preContext " << *parseError.preContext << std::endl;
-			std::cout << "Parse error: postContext " << *parseError.postContext << std::endl;
-			std::cout << "rules were" << std::endl;
-			std::cout << rules << std::endl;
-			return false;
-		}
+    SWTransMap::iterator swelement;
+    if ((swelement = sw_tmap->find(ID)) != sw_tmap->end())
+    {
+        std::cout << "found element in map" << std::endl;
+        SWTransData swstuff = (*swelement).second;
+        UParseError parseError;
+        //UErrorCode status;
+        //std::cout << "unregistering " << ID << std::endl;
+        //Transliterator::unregister(ID);
+        std::cout << "resource is " << swstuff.resource << std::endl;
 
-		Transliterator::registerInstance(trans);
-		return true;
-		
-		//Transliterator *trans = instantiateTrans(ID, swstuff.resource, swstuff.dir, parseError, status);
-		//return trans;
-	}
-	else
-	{
-		return false;
-	}
+        // Get the rules
+        //std::cout << "importing: " << ID << ", " << resource << std::endl;
+        SWCharString ch(swstuff.resource);
+        UResourceBundle *bundle = ures_openDirect(SW_RESDATA, ch, &status);
+        const UnicodeString rules = ures_getUnicodeStringByKey(bundle, RB_RULE, &status);
+        ures_close(bundle);
+        //parser.parse(rules, isReverse ? UTRANS_REVERSE : UTRANS_FORWARD,
+        //        parseError, status);
+        if (U_FAILURE(status)) {
+            std::cout << "Failed to get rules" << std::endl;
+            std::cout << "status " << u_errorName(status) << std::endl;
+            return false;
+        }
+
+
+        Transliterator *trans = Transliterator::createFromRules(ID, rules, swstuff.dir,
+            parseError,status);
+        if (U_FAILURE(status)) {
+            std::cout << "Failed to create transliterator" << std::endl;
+            std::cout << "status " << u_errorName(status) << std::endl;
+            std::cout << "Parse error: line " << parseError.line << std::endl;
+            std::cout << "Parse error: offset " << parseError.offset << std::endl;
+            std::cout << "Parse error: preContext " << *parseError.preContext << std::endl;
+            std::cout << "Parse error: postContext " << *parseError.postContext << std::endl;
+            std::cout << "rules were" << std::endl;
+            std::cout << rules << std::endl;
+            return false;
+        }
+
+        Transliterator::registerInstance(trans);
+        return true;
+
+        //Transliterator *trans = instantiateTrans(ID, swstuff.resource, swstuff.dir, parseError, status);
+        //return trans;
+    }
+    else
+    {
+        return false;
+    }
 }
 
-Transliterator * createTrans(const UnicodeString& preID, const UnicodeString& ID, 
-	const UnicodeString& postID, UTransDirection dir, UErrorCode &status )
+Transliterator * createTrans(const UnicodeString& preID, const UnicodeString& ID,
+    const UnicodeString& postID, UTransDirection dir, UErrorCode &status )
 {
-	// extract id to check from ID xxx;id;xxx
-	if (checkTrans(ID, status)) {
-		UnicodeString fullID = preID;
-		fullID += ID;
-		fullID += postID;
-		Transliterator *trans = Transliterator::createInstance(fullID,UTRANS_FORWARD,status);
-		if (U_FAILURE(status)) {
-			delete trans;
-			return NULL;
-		}
-		else {
-			return trans;
-		}
-	}
-	else {
-		return NULL;
-	}
+    // extract id to check from ID xxx;id;xxx
+    if (checkTrans(ID, status)) {
+        UnicodeString fullID = preID;
+        fullID += ID;
+        fullID += postID;
+        Transliterator *trans = Transliterator::createInstance(fullID,UTRANS_FORWARD,status);
+        if (U_FAILURE(status)) {
+            delete trans;
+            return NULL;
+        }
+        else {
+            return trans;
+        }
+    }
+    else {
+        return NULL;
+    }
 }
 
 Transliterator * instantiateTrans(const UnicodeString& ID, const UnicodeString& resource,
-		UTransDirection dir, UParseError &parseError, UErrorCode &status )
+        UTransDirection dir, UParseError &parseError, UErrorCode &status )
 {
-	//TransliterationRuleData *ruleData;
-	//TransliteratorParser parser;
+    //TransliterationRuleData *ruleData;
+    //TransliteratorParser parser;
 
-	//entry->entryType is 'direction' from translit_index
-	//UBool isReverse = (entry->entryType == Entry::RULES_REVERSE);
-	//entry->stringArg is the 'resource'
-	//CharString ch(entry->stringArg);
-	std::cout << "importing: " << ID << ", " << resource << std::endl;
-	SWCharString ch(resource);
-	UResourceBundle *bundle = ures_openDirect(SW_RESDATA, ch, &status);
-	const UnicodeString rules = ures_getUnicodeStringByKey(bundle, RB_RULE, &status);
-	ures_close(bundle);
-	//parser.parse(rules, isReverse ? UTRANS_REVERSE : UTRANS_FORWARD,
+    //entry->entryType is 'direction' from translit_index
+    //UBool isReverse = (entry->entryType == Entry::RULES_REVERSE);
+    //entry->stringArg is the 'resource'
+    //CharString ch(entry->stringArg);
+    std::cout << "importing: " << ID << ", " << resource << std::endl;
+    SWCharString ch(resource);
+    UResourceBundle *bundle = ures_openDirect(SW_RESDATA, ch, &status);
+    const UnicodeString rules = ures_getUnicodeStringByKey(bundle, RB_RULE, &status);
+    ures_close(bundle);
+    //parser.parse(rules, isReverse ? UTRANS_REVERSE : UTRANS_FORWARD,
     //        parseError, status);
-	if (U_FAILURE(status)) {
-		std::cout << "Failed to get rules" << std::endl;
-		return NULL;
-	}
+    if (U_FAILURE(status)) {
+        std::cout << "Failed to get rules" << std::endl;
+        return NULL;
+    }
     //ruleData = parser.orphanData();
     //entry->stringArg = parser.idBlock;
     //entry->intArg = parser.idSplitPoint;
     //entry->compoundFilter = parser.orphanCompoundFilter();
 
     //entry->entryType = Entry::RBT_DATA;
-	//return new RuleBasedTransliterator(ID, ruleData);
-	Transliterator *trans = Transliterator::createFromRules(ID, rules, dir, parseError, status);
-	if (U_FAILURE(status)) {
-		std::cout << "Failed to create transliterator" << std::endl;
-		std::cout << "status " << u_errorName(status) << std::endl;
-		std::cout << "Parse error: line " << parseError.line << std::endl;
-		std::cout << "Parse error: offset " << parseError.offset << std::endl;
-		std::cout << "Parse error: preContext " << *parseError.preContext << std::endl;
-		std::cout << "Parse error: postContext " << *parseError.postContext << std::endl;
-		std::cout << "rules were" << std::endl;
-		std::cout << rules << std::endl;
-		return NULL;
-	}
+    //return new RuleBasedTransliterator(ID, ruleData);
+    Transliterator *trans = Transliterator::createFromRules(ID, rules, dir, parseError, status);
+    if (U_FAILURE(status)) {
+        std::cout << "Failed to create transliterator" << std::endl;
+        std::cout << "status " << u_errorName(status) << std::endl;
+        std::cout << "Parse error: line " << parseError.line << std::endl;
+        std::cout << "Parse error: offset " << parseError.offset << std::endl;
+        std::cout << "Parse error: preContext " << *parseError.preContext << std::endl;
+        std::cout << "Parse error: postContext " << *parseError.postContext << std::endl;
+        std::cout << "rules were" << std::endl;
+        std::cout << rules << std::endl;
+        return NULL;
+    }
 
-	Transliterator::registerInstance(trans);
-	return trans;
+    Transliterator::registerInstance(trans);
+    return trans;
 }
 
 void initiateSwordTransliterators(UErrorCode &status)
@@ -486,12 +486,12 @@ void initiateSwordTransliterators(UErrorCode &status)
     UResourceBundle *bundle, *transIDs, *colBund;
     bundle = ures_openDirect(SW_RESDATA, translit_swordindex, &status);
     if (U_FAILURE(status)) {
-		std::cout << "no resource index to load" << std::endl;
-		return;
-	}
+        std::cout << "no resource index to load" << std::endl;
+        return;
+    }
 
     transIDs = ures_getByKey(bundle, RB_RULE_BASED_IDS, 0, &status);
-	UParseError parseError;
+    UParseError parseError;
 
     int32_t row, maxRows;
     if (U_SUCCESS(status)) {
@@ -517,8 +517,8 @@ void initiateSwordTransliterators(UErrorCode &status)
                                  0x0046 /*F*/) ?
                                 UTRANS_FORWARD : UTRANS_REVERSE;
                             //registry->put(id, resString, dir, visible);
-			    std::cout << "instantiating " << resString << std::endl;
-			    instantiateTrans(id, resString, dir, parseError, status);
+                std::cout << "instantiating " << resString << std::endl;
+                instantiateTrans(id, resString, dir, parseError, status);
                         }
                         break;
                     case 0x61: // 'a'
@@ -527,17 +527,17 @@ void initiateSwordTransliterators(UErrorCode &status)
                         break;
                     }
                 }
-		else std::cout << "Failed to get resString" << std:: endl;
+        else std::cout << "Failed to get resString" << std:: endl;
             }
-	    else std::cout << "Failed to get row" << std:: endl;
+        else std::cout << "Failed to get row" << std:: endl;
 
             ures_close(colBund);
         }
     }
-	else
-	{
-		std::cout << "no resource index to load" << std::endl;
-	}
+    else
+    {
+        std::cout << "no resource index to load" << std::endl;
+    }
 
     ures_close(transIDs);
     ures_close(bundle);
@@ -552,13 +552,13 @@ void initiateSwordTransliteratorsByFactory(UErrorCode &status)
     UResourceBundle *bundle, *transIDs, *colBund;
     bundle = ures_openDirect(SW_RESDATA, translit_swordindexf, &status);
     if (U_FAILURE(status)) {
-		std::cout << "no resource index to load" << std::endl;
-		std::cout << "status " << u_errorName(status) << std::endl;
-		return;
-	}
+        std::cout << "no resource index to load" << std::endl;
+        std::cout << "status " << u_errorName(status) << std::endl;
+        return;
+    }
 
     transIDs = ures_getByKey(bundle, RB_RULE_BASED_IDS, 0, &status);
-	UParseError parseError;
+    UParseError parseError;
 
     int32_t row, maxRows;
     if (U_SUCCESS(status)) {
@@ -570,7 +570,7 @@ void initiateSwordTransliteratorsByFactory(UErrorCode &status)
                 UnicodeString id = ures_getUnicodeStringByIndex(colBund, 0, &status);
                 UChar type = ures_getUnicodeStringByIndex(colBund, 1, &status).charAt(0);
                 UnicodeString resString = ures_getUnicodeStringByIndex(colBund, 2, &status);
-				std::cout << "ok so far" << std::endl;
+                std::cout << "ok so far" << std::endl;
 
                 if (U_SUCCESS(status)) {
                     switch (type) {
@@ -585,9 +585,9 @@ void initiateSwordTransliteratorsByFactory(UErrorCode &status)
                                  0x0046 /*F*/) ?
                                 UTRANS_FORWARD : UTRANS_REVERSE;
                             //registry->put(id, resString, dir, visible);
-			    std::cout << "instantiating " << resString << " ..." << std::endl;
-			    instantiateTransFactory(id, resString, dir, parseError, status);
-				std::cout << "done." << std::endl;
+                std::cout << "instantiating " << resString << " ..." << std::endl;
+                instantiateTransFactory(id, resString, dir, parseError, status);
+                std::cout << "done." << std::endl;
                         }
                         break;
                     case 0x61: // 'a'
@@ -596,18 +596,18 @@ void initiateSwordTransliteratorsByFactory(UErrorCode &status)
                         break;
                     }
                 }
-		else std::cout << "Failed to get resString" << std:: endl;
+        else std::cout << "Failed to get resString" << std:: endl;
             }
-	    else std::cout << "Failed to get row" << std:: endl;
+        else std::cout << "Failed to get row" << std:: endl;
 
             ures_close(colBund);
         }
     }
-	else
-	{
-		std::cout << "no resource index to load" << std::endl;
-		std::cout << "status " << u_errorName(status) << std::endl;
-	}
+    else
+    {
+        std::cout << "no resource index to load" << std::endl;
+        std::cout << "status " << u_errorName(status) << std::endl;
+    }
 
     ures_close(transIDs);
     ures_close(bundle);
@@ -621,13 +621,13 @@ void initiateSwordTransliteratorsToMap(UErrorCode &status)
     UResourceBundle *bundle, *transIDs, *colBund;
     bundle = ures_openDirect(SW_RESDATA, translit_swordindexf, &status);
     if (U_FAILURE(status)) {
-		std::cout << "no resource index to load" << std::endl;
-		std::cout << "status " << u_errorName(status) << std::endl;
-		return;
-	}
+        std::cout << "no resource index to load" << std::endl;
+        std::cout << "status " << u_errorName(status) << std::endl;
+        return;
+    }
 
     transIDs = ures_getByKey(bundle, RB_RULE_BASED_IDS, 0, &status);
-	//UParseError parseError;
+    //UParseError parseError;
 
     int32_t row, maxRows;
     if (U_SUCCESS(status)) {
@@ -639,7 +639,7 @@ void initiateSwordTransliteratorsToMap(UErrorCode &status)
                 UnicodeString id = ures_getUnicodeStringByIndex(colBund, 0, &status);
                 UChar type = ures_getUnicodeStringByIndex(colBund, 1, &status).charAt(0);
                 UnicodeString resString = ures_getUnicodeStringByIndex(colBund, 2, &status);
-				std::cout << "ok so far" << std::endl;
+                std::cout << "ok so far" << std::endl;
 
                 if (U_SUCCESS(status)) {
                     switch (type) {
@@ -654,9 +654,9 @@ void initiateSwordTransliteratorsToMap(UErrorCode &status)
                                  0x0046 /*F*/) ?
                                 UTRANS_FORWARD : UTRANS_REVERSE;
                             //registry->put(id, resString, dir, visible);
-			    std::cout << "instantiating " << resString << " ..." << std::endl;
-			    registerTrans(id, resString, dir, status);
-				std::cout << "done." << std::endl;
+                std::cout << "instantiating " << resString << " ..." << std::endl;
+                registerTrans(id, resString, dir, status);
+                std::cout << "done." << std::endl;
                         }
                         break;
                     case 0x61: // 'a'
@@ -665,18 +665,18 @@ void initiateSwordTransliteratorsToMap(UErrorCode &status)
                         break;
                     }
                 }
-		else std::cout << "Failed to get resString" << std:: endl;
+        else std::cout << "Failed to get resString" << std:: endl;
             }
-	    else std::cout << "Failed to get row" << std:: endl;
+        else std::cout << "Failed to get row" << std:: endl;
 
             ures_close(colBund);
         }
     }
-	else
-	{
-		std::cout << "no resource index to load" << std::endl;
-		std::cout << "status " << u_errorName(status) << std::endl;
-	}
+    else
+    {
+        std::cout << "no resource index to load" << std::endl;
+        std::cout << "status " << u_errorName(status) << std::endl;
+    }
 
     ures_close(transIDs);
     ures_close(bundle);
@@ -688,49 +688,49 @@ void initiateSwordTransliteratorsToMap(UErrorCode &status)
 
 int main()
 {
-	sw_tmap = new SWTransMap();
-	UErrorCode status = U_ZERO_ERROR;
-	std::cout << "Available before: " << Transliterator::countAvailableIDs() << std::endl;
-	//initiateSwordTransliterators(status);
-	//initiateSwordTransliteratorsByFactory(status);
-	initiateSwordTransliteratorsToMap(status);
-	int32_t cids = Transliterator::countAvailableIDs();
-	std::cout << "Available after: " << cids << std::endl;
+    sw_tmap = new SWTransMap();
+    UErrorCode status = U_ZERO_ERROR;
+    std::cout << "Available before: " << Transliterator::countAvailableIDs() << std::endl;
+    //initiateSwordTransliterators(status);
+    //initiateSwordTransliteratorsByFactory(status);
+    initiateSwordTransliteratorsToMap(status);
+    int32_t cids = Transliterator::countAvailableIDs();
+    std::cout << "Available after: " << cids << std::endl;
 
-	//for ( int32_t i=0;i<cids;i++) {
-	//	std::cout << i << ": " << Transliterator::getAvailableID(i) << std::endl;
-	//}
+    //for ( int32_t i=0;i<cids;i++) {
+    //    std::cout << i << ": " << Transliterator::getAvailableID(i) << std::endl;
+    //}
 
-	//Transliterator *trans = Transliterator::createInstance("NFD;Latin-Gothic;NFC", UTRANS_FORWARD,status);
-	Transliterator *trans = createTrans("NFD;", "Latin-Gothic", ";NFC", UTRANS_FORWARD,status);
+    //Transliterator *trans = Transliterator::createInstance("NFD;Latin-Gothic;NFC", UTRANS_FORWARD,status);
+    Transliterator *trans = createTrans("NFD;", "Latin-Gothic", ";NFC", UTRANS_FORWARD,status);
     if (U_FAILURE(status)) {
-	std::cout << "Failed to get Latin-Gothic" << std::endl;
-	status = U_ZERO_ERROR;
-	}
-	else
-	{
-	std::cout << "Got Latin-Gothic :)" << std::endl;
-	delete trans;
-	}
-	
-	std::cout << "Available after gothic: " << Transliterator::countAvailableIDs() << std::endl;
+    std::cout << "Failed to get Latin-Gothic" << std::endl;
+    status = U_ZERO_ERROR;
+    }
+    else
+    {
+    std::cout << "Got Latin-Gothic :)" << std::endl;
+    delete trans;
+    }
 
-	//trans = Transliterator::createInstance("NFD;BGreek-Greek;NFC", UTRANS_FORWARD, status);
-	trans = createTrans("NFD;", "BGreek-Greek", ";NFC", UTRANS_FORWARD, status);
+    std::cout << "Available after gothic: " << Transliterator::countAvailableIDs() << std::endl;
+
+    //trans = Transliterator::createInstance("NFD;BGreek-Greek;NFC", UTRANS_FORWARD, status);
+    trans = createTrans("NFD;", "BGreek-Greek", ";NFC", UTRANS_FORWARD, status);
     if (U_FAILURE(status)) {
-	std::cout << "Failed to get BGreek-Greek" << std::endl;
-	status = U_ZERO_ERROR;
-	}
-	else
-	{
-	std::cout << "Got BGreek-Greek :)" << std::endl;
-	delete trans;
-	}
-	std::cout << "Available after greek: " << Transliterator::countAvailableIDs() << std::endl;
+    std::cout << "Failed to get BGreek-Greek" << std::endl;
+    status = U_ZERO_ERROR;
+    }
+    else
+    {
+    std::cout << "Got BGreek-Greek :)" << std::endl;
+    delete trans;
+    }
+    std::cout << "Available after greek: " << Transliterator::countAvailableIDs() << std::endl;
 
-	delete sw_tmap;
+    delete sw_tmap;
 
-	return 1;
+    return 1;
 }
 
 //gcc -I../source/i18n -I../source/common  swtest.cpp -L../source/i18n -licui18n -L../source/common -licuuc

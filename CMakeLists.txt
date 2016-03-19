@@ -3,7 +3,7 @@
 #
 # NOTES: Defaults to build type of Shared
 #        Forces out-of-source tree build
-#        
+#
 #
 # This file started on 18 January 2010 by Gregory Hellings
 # It is ceded to The SWORD Library developers and CrossWire under the terms
@@ -49,7 +49,7 @@ ENDIF()
 
 # Make sure it's an out-of-stream build
 IF(${CMAKE_CURRENT_BINARY_DIR} STREQUAL ${CMAKE_CURRENT_SOURCE_DIR})
-	MESSAGE(FATAL_ERROR "Please invoke CMake from a different directory than the source.")
+    MESSAGE(FATAL_ERROR "Please invoke CMake from a different directory than the source.")
 ENDIF(${CMAKE_CURRENT_BINARY_DIR} STREQUAL ${CMAKE_CURRENT_SOURCE_DIR})
 
 
@@ -110,21 +110,21 @@ INCLUDE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/muxsources.cmake)
 # I want to do this manually, there might be reason in the future
 IF(LIBSWORD_LIBRARY_TYPE MATCHES ".*Shared.*" OR NOT LIBSWORD_LIBRARY_TYPE)
     ADD_LIBRARY(sword SHARED ${sword_SOURCES})
-	MESSAGE(STATUS "Building Shared library.")
-	SET(BUILDING_SHARED 1)
-	SET(SWORD_LINK_NAME sword)
+    MESSAGE(STATUS "Building Shared library.")
+    SET(BUILDING_SHARED 1)
+    SET(SWORD_LINK_NAME sword)
 ENDIF(LIBSWORD_LIBRARY_TYPE MATCHES ".*Shared.*" OR NOT LIBSWORD_LIBRARY_TYPE)
 
 IF(LIBSWORD_LIBRARY_TYPE MATCHES ".*Static.*" OR NOT LIBSWORD_LIBRARY_TYPE)
     ADD_LIBRARY(sword_static STATIC ${sword_SOURCES})
-	SET_TARGET_PROPERTIES(sword_static PROPERTIES COMPILE_FLAGS "-fPIC")
-	SET(BUILDING_STATIC 1)
-	# Defaults to linking against the shared if it is also being built
-	IF(NOT BUILDING_SHARED)
-		SET(SWORD_LINK_NAME sword_static)
-	ENDIF(NOT BUILDING_SHARED)
+    SET_TARGET_PROPERTIES(sword_static PROPERTIES COMPILE_FLAGS "-fPIC")
+    SET(BUILDING_STATIC 1)
+    # Defaults to linking against the shared if it is also being built
+    IF(NOT BUILDING_SHARED)
+        SET(SWORD_LINK_NAME sword_static)
+    ENDIF(NOT BUILDING_SHARED)
     SET_TARGET_PROPERTIES(sword_static PROPERTIES OUTPUT_NAME "sword")
-	MESSAGE(STATUS "Building Static library.")
+    MESSAGE(STATUS "Building Static library.")
 ENDIF(LIBSWORD_LIBRARY_TYPE MATCHES ".*Static.*" OR NOT LIBSWORD_LIBRARY_TYPE)
 
 ################################################################################################
@@ -163,48 +163,48 @@ INCLUDE_DIRECTORIES(${XZ_INCLUDE_DIR})
 SET(SWORD_LINK_LIBRARIES ${SWORD_LINK_LIBRARIES} ${XZ_LIBRARY})
 
 FIND_PROGRAM(CURL_CONFIG curl-config
-	DOC "The curl-config executable path, used to determine SFTP support.")
+    DOC "The curl-config executable path, used to determine SFTP support.")
 # If we can find the config script, we will run it and attempt to parse out the
 # availability of SFTP support. Otherwise, we will assume the library was built
 # without it.
 IF(CURL_CONFIG)
-	EXECUTE_PROCESS(
-		COMMAND ${CURL_CONFIG} --protocols
-		COMMAND grep SFTP
-		COMMAND wc -l
-		OUTPUT_VARIABLE CURL_CONFIG_OUTPUT
-		OUTPUT_STRIP_TRAILING_WHITESPACE)
-	IF(CURL_CONFIG_OUTPUT STREQUAL "1")
-		ADD_DEFINITIONS(-DCURLSFTPAVAILABLE)
-		MESSAGE(STATUS "cURL SFTP Support: Yes")
-	ELSE(CURL_CONFIG_OUTPUT STREQUAL "1")
-		MESSAGE(STATUS "cURL SFTP Support: No")
-	ENDIF(CURL_CONFIG_OUTPUT STREQUAL "1")
+    EXECUTE_PROCESS(
+        COMMAND ${CURL_CONFIG} --protocols
+        COMMAND grep SFTP
+        COMMAND wc -l
+        OUTPUT_VARIABLE CURL_CONFIG_OUTPUT
+        OUTPUT_STRIP_TRAILING_WHITESPACE)
+    IF(CURL_CONFIG_OUTPUT STREQUAL "1")
+        ADD_DEFINITIONS(-DCURLSFTPAVAILABLE)
+        MESSAGE(STATUS "cURL SFTP Support: Yes")
+    ELSE(CURL_CONFIG_OUTPUT STREQUAL "1")
+        MESSAGE(STATUS "cURL SFTP Support: No")
+    ENDIF(CURL_CONFIG_OUTPUT STREQUAL "1")
 ENDIF(CURL_CONFIG)
 INCLUDE_DIRECTORIES(${CURL_INCLUDE_DIRS})
 SET(SWORD_LINK_LIBRARIES ${SWORD_LINK_LIBRARIES} ${CURL_LIBRARY})
 
 IF(WITH_CLUCENE)
-	INCLUDE_DIRECTORIES(${CLUCENE_INCLUDE_DIR})
-	SET(SWORD_LINK_LIBRARIES ${SWORD_LINK_LIBRARIES} ${CLUCENE_LIBRARY})
-	LINK_DIRECTORIES(${CLUCENE_LIBRARY_DIR})
-	ADD_DEFINITIONS(-DUSELUCENE)
-	IF(CLUCENE2)
-		ADD_DEFINITIONS(-DCLUCENE2)
-	ENDIF(CLUCENE2)
+    INCLUDE_DIRECTORIES(${CLUCENE_INCLUDE_DIR})
+    SET(SWORD_LINK_LIBRARIES ${SWORD_LINK_LIBRARIES} ${CLUCENE_LIBRARY})
+    LINK_DIRECTORIES(${CLUCENE_LIBRARY_DIR})
+    ADD_DEFINITIONS(-DUSELUCENE)
+    IF(CLUCENE2)
+        ADD_DEFINITIONS(-DCLUCENE2)
+    ENDIF(CLUCENE2)
 ENDIF(WITH_CLUCENE)
 IF(WITH_ICU)
-	INCLUDE_DIRECTORIES(${ICU_INCLUDE_DIRS})
-	ADD_DEFINITIONS(${ICU_DEFINITIONS})
-	SET(SWORD_LINK_LIBRARIES ${SWORD_LINK_LIBRARIES} ${ICU_LIBRARIES} ${ICU_I18N_LIBRARIES})
+    INCLUDE_DIRECTORIES(${ICU_INCLUDE_DIRS})
+    ADD_DEFINITIONS(${ICU_DEFINITIONS})
+    SET(SWORD_LINK_LIBRARIES ${SWORD_LINK_LIBRARIES} ${ICU_LIBRARIES} ${ICU_I18N_LIBRARIES})
 ENDIF(WITH_ICU)
 
 IF(BUILDING_SHARED)
-	TARGET_LINK_LIBRARIES(sword ${SWORD_LINK_LIBRARIES})
+    TARGET_LINK_LIBRARIES(sword ${SWORD_LINK_LIBRARIES})
 ENDIF(BUILDING_SHARED)
 
 IF(BUILDING_STATIC)
-	TARGET_LINK_LIBRARIES(sword_static ${SWORD_LINK_LIBRARIES})
+    TARGET_LINK_LIBRARIES(sword_static ${SWORD_LINK_LIBRARIES})
 ENDIF(BUILDING_STATIC)
 
 MESSAGE(STATUS "Setting link libraries to ${SWORD_LINK_LIBRARIES}")
@@ -212,33 +212,33 @@ MESSAGE(STATUS "Setting link libraries to ${SWORD_LINK_LIBRARIES}")
 
 ##############################################################################################
 # Installing the library, headers, utilies, etc
-# 
+#
 
 INCLUDE("${CMAKE_CURRENT_SOURCE_DIR}/cmake/install.cmake")
 
 ##############################################################################################
 # Utilities are hawt
-# 
+#
 
 IF(NOT (DEFINED SWORD_BUILD_UTILS))
   SET(SWORD_BUILD_UTILS TRUE)
 ENDIF()
 IF(NOT SWORD_BUILD_UTILS)
-	ADD_SUBDIRECTORY("${CMAKE_CURRENT_SOURCE_DIR}/utilities")
+    ADD_SUBDIRECTORY("${CMAKE_CURRENT_SOURCE_DIR}/utilities")
 ENDIF()
 
 ##############################################################################################
 # Demos are also hawt
-# 
+#
 
 IF(SWORD_BUILD_EXAMPLES)
-	ADD_SUBDIRECTORY("${CMAKE_CURRENT_SOURCE_DIR}/examples/cmdline")
-	ADD_SUBDIRECTORY("${CMAKE_CURRENT_SOURCE_DIR}/examples/tasks")
+    ADD_SUBDIRECTORY("${CMAKE_CURRENT_SOURCE_DIR}/examples/cmdline")
+    ADD_SUBDIRECTORY("${CMAKE_CURRENT_SOURCE_DIR}/examples/tasks")
 ENDIF()
 
 ##############################################################################################
 # Tests, however, are not
 
 IF(SWORD_BUILD_TESTS)
-	ADD_SUBDIRECTORY("${CMAKE_CURRENT_SOURCE_DIR}/tests")
+    ADD_SUBDIRECTORY("${CMAKE_CURRENT_SOURCE_DIR}/tests")
 ENDIF()

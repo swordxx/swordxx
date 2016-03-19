@@ -1,13 +1,13 @@
 /******************************************************************************
  *
- *  mod2vpl.cpp -	Utility to export a module in VPL format
+ *  mod2vpl.cpp -    Utility to export a module in VPL format
  *
  * $Id$
  *
  * Copyright 2000-2013 CrossWire Bible Society (http://www.crosswire.org)
- *	CrossWire Bible Society
- *	P. O. Box 2528
- *	Tempe, AZ  85280-2528
+ *    CrossWire Bible Society
+ *    P. O. Box 2528
+ *    Tempe, AZ  85280-2528
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -21,7 +21,7 @@
  */
 
 #ifdef _MSC_VER
-	#pragma warning( disable: 4251 )
+    #pragma warning( disable: 4251 )
 #endif
 
 #include <swmgr.h>
@@ -39,72 +39,72 @@ using swordxx::SW_POSITION;
 using swordxx::ModMap;
 
 void cleanbuf(char *buf) {
-	char *from = buf;
-	char *to = buf;
+    char *from = buf;
+    char *to = buf;
 
-	while (*from) {
-		if ((*from != 10) && (*from != 13)) {
-			*to++ = *from++;
-		}
-		else {
-			from++;
-		}
-	}
-	*to = 0;
+    while (*from) {
+        if ((*from != 10) && (*from != 13)) {
+            *to++ = *from++;
+        }
+        else {
+            from++;
+        }
+    }
+    *to = 0;
 }
 
 int main(int argc, char **argv) {
-	char *buffer = 0;
+    char *buffer = 0;
 
-	if (argc < 2) {
-		fprintf(stderr, "usage: %s <Mod Name> [0|1 - prepend verse reference to each line]\n", argv[0]);
-		exit(-1);
-	}
+    if (argc < 2) {
+        fprintf(stderr, "usage: %s <Mod Name> [0|1 - prepend verse reference to each line]\n", argv[0]);
+        exit(-1);
+    }
 
-	SWMgr mgr;
+    SWMgr mgr;
 
-	ModMap::iterator it = mgr.Modules.find(argv[1]);
-	if (it == mgr.Modules.end()) {
-		fprintf(stderr, "error: %s: couldn't find module: %s \n", argv[0], argv[1]);
-		exit(-2);
-	}
+    ModMap::iterator it = mgr.Modules.find(argv[1]);
+    if (it == mgr.Modules.end()) {
+        fprintf(stderr, "error: %s: couldn't find module: %s \n", argv[0], argv[1]);
+        exit(-2);
+    }
 
-	bool vref = false;
-	if (argc > 2)
-		vref = (argv[2][0] == '0') ? false : true;
+    bool vref = false;
+    if (argc > 2)
+        vref = (argv[2][0] == '0') ? false : true;
 
 
-	SWModule *mod = it->second;
+    SWModule *mod = it->second;
 
-	SWKey *key = (*mod);
-	VerseKey *vkey = 0;
-	try {
-		vkey = dynamic_cast<VerseKey *>(key);
-	}
-	catch (...) {}
+    SWKey *key = (*mod);
+    VerseKey *vkey = 0;
+    try {
+        vkey = dynamic_cast<VerseKey *>(key);
+    }
+    catch (...) {}
 
-	if (!vkey) {
-		fprintf(stderr, "error: %s: %s module is not keyed to verses \n", argv[0], argv[1]);
-		exit(-3);
-	}
+    if (!vkey) {
+        fprintf(stderr, "error: %s: %s module is not keyed to verses \n", argv[0], argv[1]);
+        exit(-3);
+    }
 
-	vkey->setIntros(true);	// turn on mod/testmnt/book/chap headings
+    vkey->setIntros(true);    // turn on mod/testmnt/book/chap headings
 
-	(*mod) = TOP;
+    (*mod) = TOP;
 
-	while (!mod->popError()) {
-		buffer = new char [ mod->renderText().length() + 1 ];
-		strcpy(buffer, mod->renderText());
-		cleanbuf(buffer);
-		if (vref) {
-			if ((strlen(buffer) > 0) && (vref)) {
-				std::cout << (const char *)(*vkey) << " ";
-				std::cout << buffer << std::endl;
-			}
-		}
-		else std::cout << buffer << std::endl;
+    while (!mod->popError()) {
+        buffer = new char [ mod->renderText().length() + 1 ];
+        strcpy(buffer, mod->renderText());
+        cleanbuf(buffer);
+        if (vref) {
+            if ((strlen(buffer) > 0) && (vref)) {
+                std::cout << (const char *)(*vkey) << " ";
+                std::cout << buffer << std::endl;
+            }
+        }
+        else std::cout << buffer << std::endl;
 
-		delete [] buffer;
-		(*mod)++;
-	}
+        delete [] buffer;
+        (*mod)++;
+    }
 }

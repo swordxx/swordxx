@@ -1,14 +1,14 @@
 /******************************************************************************
  *
- *  utf8nfc.cpp -	SWFilter descendant to perform NFC (canonical
- *			composition normalization) on UTF-8 text
+ *  utf8nfc.cpp -    SWFilter descendant to perform NFC (canonical
+ *            composition normalization) on UTF-8 text
  *
  * $Id$
  *
  * Copyright 2001-2013 CrossWire Bible Society (http://www.crosswire.org)
- *	CrossWire Bible Society
- *	P. O. Box 2528
- *	Tempe, AZ  85280-2528
+ *    CrossWire Bible Society
+ *    P. O. Box 2528
+ *    Tempe, AZ  85280-2528
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -42,22 +42,22 @@ UTF8NFC::~UTF8NFC() {
 
 char UTF8NFC::processText(SWBuf &text, const SWKey *key, const SWModule *module)
 {
-	if ((unsigned long)key < 2)	// hack, we're en(1)/de(0)ciphering
-		return -1;
-        
-	err = U_ZERO_ERROR;
-	UnicodeString source(text.getRawData(), text.length(), conv, err);
-	UnicodeString target;
+    if ((unsigned long)key < 2)    // hack, we're en(1)/de(0)ciphering
+        return -1;
 
-	err = U_ZERO_ERROR;
-	Normalizer::normalize(source, UNORM_NFC, 0, target, err);
+    err = U_ZERO_ERROR;
+    UnicodeString source(text.getRawData(), text.length(), conv, err);
+    UnicodeString target;
 
-	err = U_ZERO_ERROR;
-	text.setSize(text.size()*2); // potentially, it can grow to 2x the original size
-	int32_t len = target.extract(text.getRawData(), text.size(), conv, err);
-	text.setSize(len);
+    err = U_ZERO_ERROR;
+    Normalizer::normalize(source, UNORM_NFC, 0, target, err);
 
-	return 0;
+    err = U_ZERO_ERROR;
+    text.setSize(text.size()*2); // potentially, it can grow to 2x the original size
+    int32_t len = target.extract(text.getRawData(), text.size(), conv, err);
+    text.setSize(len);
+
+    return 0;
 }
 
 } /* namespace swordxx */

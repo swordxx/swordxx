@@ -1,8 +1,8 @@
 /******************************************************************************
  *
- *  outplain.cpp -	This example shows how to output the plain text
- *			entries from a SWORD module. This small program
- *			outputs a SWORD module in 'imp' format, e.g.:
+ *  outplain.cpp -    This example shows how to output the plain text
+ *            entries from a SWORD module. This small program
+ *            outputs a SWORD module in 'imp' format, e.g.:
  *
  * $$$Gen.1.1
  * In the beginning God created
@@ -23,9 +23,9 @@
  * $Id$
  *
  * Copyright 2008-2013 CrossWire Bible Society (http://www.crosswire.org)
- *	CrossWire Bible Society
- *	P. O. Box 2528
- *	Tempe, AZ  85280-2528
+ *    CrossWire Bible Society
+ *    P. O. Box 2528
+ *    Tempe, AZ  85280-2528
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -52,22 +52,22 @@ using namespace std;
 
 int main(int argc, char **argv) {
 
-	SWMgr manager(new MarkupFilterMgr(swordxx::FMT_HTMLHREF, swordxx::ENC_UTF16));
+    SWMgr manager(new MarkupFilterMgr(swordxx::FMT_HTMLHREF, swordxx::ENC_UTF16));
 
-	const char *bookName = (argc > 1) ? argv[1] : "WLC";
-	SWModule *b = manager.getModule(bookName);
-	if (!b) return -1;
-	SWModule &book = *b;
-	book.setProcessEntryAttributes(false);
-	VerseKey *vk = SWDYNAMIC_CAST(VerseKey, book.getKey());
-	for (book = TOP; !book.popError() && !book.getRawEntryBuf().size(); book++);
-	if (!book.getRawEntryBuf().size()) return -2; 	// empty module
-	for (;!book.popError(); book++) {
-		cout << "$$$";
-		if (vk) cout << vk->getOSISRef();
-		else    cout << book.getKeyText();
-		cout << "\n" << book.stripText() << "\n\n";
-	}
+    const char *bookName = (argc > 1) ? argv[1] : "WLC";
+    SWModule *b = manager.getModule(bookName);
+    if (!b) return -1;
+    SWModule &book = *b;
+    book.setProcessEntryAttributes(false);
+    VerseKey *vk = SWDYNAMIC_CAST(VerseKey, book.getKey());
+    for (book = TOP; !book.popError() && !book.getRawEntryBuf().size(); book++);
+    if (!book.getRawEntryBuf().size()) return -2;     // empty module
+    for (;!book.popError(); book++) {
+        cout << "$$$";
+        if (vk) cout << vk->getOSISRef();
+        else    cout << book.getKeyText();
+        cout << "\n" << book.stripText() << "\n\n";
+    }
 
-	return 0;
+    return 0;
 }

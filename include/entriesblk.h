@@ -1,13 +1,13 @@
 /******************************************************************************
  *
- *  entriesblk.h -	Implementation of EntriesBlock
+ *  entriesblk.h -    Implementation of EntriesBlock
  *
  * $Id$
  *
  * Copyright 2001-2013 CrossWire Bible Society (http://www.crosswire.org)
- *	CrossWire Bible Society
- *	P. O. Box 2528
- *	Tempe, AZ  85280-2528
+ *    CrossWire Bible Society
+ *    P. O. Box 2528
+ *    Tempe, AZ  85280-2528
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -29,26 +29,26 @@
 namespace swordxx {
 
 class SWDLLEXPORT EntriesBlock {
-	static const int METAHEADERSIZE;
-	static const int METAENTRYSIZE;
+    static const int METAHEADERSIZE;
+    static const int METAENTRYSIZE;
 
 private:
-	char *block;
-	void setCount(int count);
-	void getMetaEntry(int index, unsigned long *offset, unsigned long *size);
-	void setMetaEntry(int index, unsigned long offset, unsigned long size);
+    char *block;
+    void setCount(int count);
+    void getMetaEntry(int index, unsigned long *offset, unsigned long *size);
+    void setMetaEntry(int index, unsigned long offset, unsigned long size);
 
 public:
-	EntriesBlock(const char *iBlock, unsigned long size);
-	EntriesBlock();
-	~EntriesBlock();
+    EntriesBlock(const char *iBlock, unsigned long size);
+    EntriesBlock();
+    ~EntriesBlock();
 
-	int getCount();
-	int addEntry(const char *entry);
-	const char *getEntry(int entryIndex);
-	unsigned long getEntrySize(int entryIndex);
-	void removeEntry(int entryIndex);
-	const char *getRawData(unsigned long *size);
+    int getCount();
+    int addEntry(const char *entry);
+    const char *getEntry(int entryIndex);
+    unsigned long getEntrySize(int entryIndex);
+    void removeEntry(int entryIndex);
+    const char *getRawData(unsigned long *size);
 };
 
 

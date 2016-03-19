@@ -1,13 +1,13 @@
 /******************************************************************************
  *
- *  gbfwebif.h -	Implementation of GBFWEBIF
+ *  gbfwebif.h -    Implementation of GBFWEBIF
  *
  * $Id$
  *
  * Copyright 2003-2013 CrossWire Bible Society (http://www.crosswire.org)
- *	CrossWire Bible Society
- *	P. O. Box 2528
- *	Tempe, AZ  85280-2528
+ *    CrossWire Bible Society
+ *    P. O. Box 2528
+ *    Tempe, AZ  85280-2528
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -30,13 +30,13 @@ namespace swordxx {
 /** this filter converts GBF text to classed XHTML for web interfaces
  */
 class SWDLLEXPORT GBFWEBIF : public GBFXHTML {
-	const SWBuf baseURL;
-	const SWBuf passageStudyURL;
+    const SWBuf baseURL;
+    const SWBuf passageStudyURL;
 
 protected:
-	virtual bool handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData);
+    virtual bool handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData);
 public:
-	GBFWEBIF();
+    GBFWEBIF();
 };
 
 } /* namespace swordxx */

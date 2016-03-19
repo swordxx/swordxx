@@ -1,13 +1,13 @@
 /******************************************************************************
  *
- *  canon_catholic.h -	Versification data for the Catholic system
+ *  canon_catholic.h -    Versification data for the Catholic system
  *
  * $Id$
  *
  * Copyright 2010-2013 CrossWire Bible Society (http://www.crosswire.org)
- *	CrossWire Bible Society
- *	P. O. Box 2528
- *	Tempe, AZ  85280-2528
+ *    CrossWire Bible Society
+ *    P. O. Box 2528
+ *    Tempe, AZ  85280-2528
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -30,7 +30,7 @@ namespace swordxx {
 
 /******************************************************************************
  * [on]tbooks_catholic - initialize static instance for all canonical
- *		 text names and chapmax
+ *         text names and chapmax
  */
 struct sbook otbooks_catholic[] = {
   {"Genesis", "Gen", "Gen", 50},
@@ -83,7 +83,7 @@ struct sbook otbooks_catholic[] = {
 };
 
 /******************************************************************************
- *	Maximum verses per chapter
+ *    Maximum verses per chapter
  */
 
 int vm_catholic[] = {

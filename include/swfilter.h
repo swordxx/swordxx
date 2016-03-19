@@ -1,14 +1,14 @@
 /******************************************************************************
  *
- *  swfilter.h -	definition of class SWFilter used to filter text between
- *		       	different formats
+ *  swfilter.h -    definition of class SWFilter used to filter text between
+ *                   different formats
  *
  * $Id$
  *
  * Copyright 1997-2013 CrossWire Bible Society (http://www.crosswire.org)
- *	CrossWire Bible Society
- *	P. O. Box 2528
- *	Tempe, AZ  85280-2528
+ *    CrossWire Bible Society
+ *    P. O. Box 2528
+ *    Tempe, AZ  85280-2528
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -41,23 +41,23 @@ class SWModule;
 */
 class SWDLLEXPORT  SWFilter {
 public:
-	virtual ~SWFilter() {}
+    virtual ~SWFilter() {}
 
-	/** This method processes and appropriately modifies the text given it
-	 *	for a particular filter task
-	 *
-	 * @param text The text to be filtered/converted
-	 * @param key Current key That was used.
-	 * @param module Current module.
-	 * @return 0
-	 */
-	virtual char processText(SWBuf &text, const SWKey *key = 0, const SWModule *module = 0) = 0;
+    /** This method processes and appropriately modifies the text given it
+     *    for a particular filter task
+     *
+     * @param text The text to be filtered/converted
+     * @param key Current key That was used.
+     * @param module Current module.
+     * @return 0
+     */
+    virtual char processText(SWBuf &text, const SWKey *key = 0, const SWModule *module = 0) = 0;
 
-	/** This method can supply a header associated with the processing done with this filter.
-	 *	A typical example is a suggested CSS style block for classed containers.
-	 */
-	virtual const char *getHeader() const { return ""; }
+    /** This method can supply a header associated with the processing done with this filter.
+     *    A typical example is a suggested CSS style block for classed containers.
+     */
+    virtual const char *getHeader() const { return ""; }
 };
 
-	} /* namespace swordxx */
+    } /* namespace swordxx */
 #endif

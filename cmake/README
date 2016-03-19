@@ -14,7 +14,7 @@ Bash or other command-line tool, probably Unix/Linux environment
     * Check that there are no error messages and that CMake ends with the messages "Configuring done", "Generating done", and "Build files have been written to: <object directory>"
     * From here on out, just execute something like
       * make
-      * sudo make install 
+      * sudo make install
 
 GUI users
 
@@ -27,11 +27,11 @@ For those of you using the GUI interfaces with, for example, Windows or OS X or 
     * Click "Configure"
           o If prompted to create the build directory, say "Yes"
           o Select the "generator" for this project... for this, select the system you wish to use to actually do the compile. Some examples are different versions of Microsoft Visual Studio, Unix Makefiles, MSYS Makefiles, Cygwin Makefiles, Xcode projects, Eclipse projects and more.
-          o You will probably want to leave "Use default native compilers" unless you are a power user and know what compiler you would like to use. You could use special options here if you need to select special cross-compilers or similar. 
+          o You will probably want to leave "Use default native compilers" unless you are a power user and know what compiler you would like to use. You could use special options here if you need to select special cross-compilers or similar.
     * After configure is completed, if there were errors, you will have a chance to correct them. If certain libraries were not located or you wish to use other values, you can select the Advanced View or check Show Advanced and manually edit any of the cached values.
     * If you are happy with the results and there are no errors or after you have corrected any errors, click Configure a second time.
     * Click Generate
-    * Navigate to the directory where you specified to build the binaries and invoke your build system through its native mechanics - open the project file, execute the Makefiles, etc. 
+    * Navigate to the directory where you specified to build the binaries and invoke your build system through its native mechanics - open the project file, execute the Makefiles, etc.
 
 How can I customize my options?
 
@@ -49,11 +49,11 @@ General, interesting options
     * CMAKE_INSTALL_PREFIX - The location on disk where the files will be installed. If left unset this will default to /opt/local on OS X, C:\Program Files (x86)\libsword\ under Microsoft Visual Studio and /usr/local for anything else. Executables will be installed in the bin/ subdirectory, libraries under lib/ and headers under include/sword. A package config file will be installed in lib/pkgconfig. There is currently no support for installing the different components to other locations, although one could be supplied without much extra effort if it is useful.
     * SWORD_BUILD_UTILS - If this has the value "NO" then utilities will not be built. If this has any other value or is left unspecified, the Utilities will be built and installed.
     * SWORD_BUILD_EXAMPLES - If this is given the value "YES" then the examples/cmdline demos will be built. If this has any other value or is left blank, then demos will not be built.
-    * SWORD_BUILD_TESTS - If this is given the value "YES" then the SWORD tests will be run. They are still run using the same system as before (or as closely as it could be replicated). If this has any other value or is left unspecified, tests will not be run. The exception to that is the simple buildtest.cpp in the root of the sword/ folder which will always be built when the library is built. 
+    * SWORD_BUILD_TESTS - If this is given the value "YES" then the SWORD tests will be run. They are still run using the same system as before (or as closely as it could be replicated). If this has any other value or is left unspecified, tests will not be run. The exception to that is the simple buildtest.cpp in the root of the sword/ folder which will always be built when the library is built.
 
 Optional dependencies
 
-    * SWORD_NO_CLUCENE - If this is set to "Yes" then CLucene will be ignored if found. If this is set to any other value or has no value, then the library will be built against CLucene if it can be located and ignored if it cannot be located. 
+    * SWORD_NO_CLUCENE - If this is set to "Yes" then CLucene will be ignored if found. If this is set to any other value or has no value, then the library will be built against CLucene if it can be located and ignored if it cannot be located.
 
 Developer or Packager specific options
 
@@ -74,4 +74,4 @@ After calls to FIND(<library>), the system then has to react to which files were
 
 Since utilities, tests and examples are all optional compilations, they have their own CMakeLists.txt files located in their own directories. These are invoked with a call to ADD_SUBDIRECTORY([path to directory]). Additional CMakeLists.txt files could also be created for things like the bindings and other self-contained paths.
 
-After build, install is handled in the sword/cmake/install.cmake file. 
+After build, install is handled in the sword/cmake/install.cmake file.

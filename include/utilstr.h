@@ -1,13 +1,13 @@
 /******************************************************************************
  *
- *  utilstr.h -	prototypes for string utility functions
+ *  utilstr.h -    prototypes for string utility functions
  *
  * $Id$
  *
  * Copyright 1997-2013 CrossWire Bible Society (http://www.crosswire.org)
- *	CrossWire Bible Society
- *	P. O. Box 2528
- *	Tempe, AZ  85280-2528
+ *    CrossWire Bible Society
+ *    P. O. Box 2528
+ *    Tempe, AZ  85280-2528
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -47,12 +47,12 @@ extern const unsigned char SW_toupper_array[256];
 
 /******************************************************************************
  * getUniCharFromUTF8 - retrieves the next Unicode codepoint from a UTF8 string
- * 					and increments buf to start of next codepoint
+ *                     and increments buf to start of next codepoint
  *
- * ENT:	buf - address of a utf8 buffer
+ * ENT:    buf - address of a utf8 buffer
  *
- * RET:	buf - incremented past last byte used in computing the current codepoint
- * 		unicode codepoint value (0 with buf incremented is invalid UTF8 byte
+ * RET:    buf - incremented past last byte used in computing the current codepoint
+ *         unicode codepoint value (0 with buf incremented is invalid UTF8 byte
  */
 
 uint32_t getUniCharFromUTF8(const unsigned char **buf);
@@ -60,12 +60,12 @@ uint32_t getUniCharFromUTF8(const unsigned char **buf);
 
 /******************************************************************************
  * getUTF8FromUniChar - retrieves us UTF8 string from a
- * 					Unicode codepoint
+ *                     Unicode codepoint
  *
- * ENT:	uchar - unicode codepoint value
+ * ENT:    uchar - unicode codepoint value
  *
- * RET:	buf - a UTF8 string which consists of the proper UTF8 sequence of
- * 				bytes for the given Unicode codepoint
+ * RET:    buf - a UTF8 string which consists of the proper UTF8 sequence of
+ *                 bytes for the given Unicode codepoint
  */
 
 SWBuf getUTF8FromUniChar(uint32_t uchar);
@@ -73,28 +73,28 @@ SWBuf getUTF8FromUniChar(uint32_t uchar);
 
 /******************************************************************************
  * assureValidUTF8 - iterates the supplied UTF-8 buffer and checks for validity
- * 					replacing invalid bytes if necessary and returning a
- *					verified UTF8 buffer, leaving the original input
- *					unchanged.
+ *                     replacing invalid bytes if necessary and returning a
+ *                    verified UTF8 buffer, leaving the original input
+ *                    unchanged.
  *
- * ENT:	buf - a utf8 buffer
+ * ENT:    buf - a utf8 buffer
  *
- * RET:	input buffer validated and any problems fixed by substituting a
- * 		replacement character for bytes not valid.
+ * RET:    input buffer validated and any problems fixed by substituting a
+ *         replacement character for bytes not valid.
  */
 SWBuf assureValidUTF8(const char *buf);
 
 /****
  * This can be called to convert a UTF8 stream to an SWBuf which manages
- *	a wchar_t[]
- *	access buffer with (wchar_t *)SWBuf::getRawData();
- * 
+ *    a wchar_t[]
+ *    access buffer with (wchar_t *)SWBuf::getRawData();
+ *
  */
 SWBuf utf8ToWChar(const char *buf);
 
 /****
  * This can be called to convert a wchar_t[] to a UTF-8 SWBuf
- * 
+ *
  */
 SWBuf wcharToUTF8(const wchar_t *buf);
 

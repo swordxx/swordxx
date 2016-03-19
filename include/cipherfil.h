@@ -1,13 +1,13 @@
 /***************************************************************************
  *
- *  cipherfil.h -	
+ *  cipherfil.h -
  *
  * $Id$
  *
  * Copyright 1999-2013 CrossWire Bible Society (http://www.crosswire.org)
- *	CrossWire Bible Society
- *	P. O. Box 2528
- *	Tempe, AZ  85280-2528
+ *    CrossWire Bible Society
+ *    P. O. Box 2528
+ *    Tempe, AZ  85280-2528
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -30,12 +30,12 @@ namespace swordxx {
 class SWCipher;
 
 class SWDLLEXPORT CipherFilter:public SWFilter {
-	SWCipher *cipher;
+    SWCipher *cipher;
 public:
-	CipherFilter(const char *key);
-	virtual ~CipherFilter();
-	virtual char processText(SWBuf &text, const SWKey *key = 0, const SWModule * = 0);
-	virtual SWCipher *getCipher();
+    CipherFilter(const char *key);
+    virtual ~CipherFilter();
+    virtual char processText(SWBuf &text, const SWKey *key = 0, const SWModule * = 0);
+    virtual SWCipher *getCipher();
 };
 
 } /* namespace swordxx */

@@ -1,14 +1,14 @@
 /******************************************************************************
  *
- *  swobject.h -	definition for SWObject used as lowest base class for
- *			many SWORD objects
+ *  swobject.h -    definition for SWObject used as lowest base class for
+ *            many SWORD objects
  *
  * $Id$
  *
  * Copyright 2001-2013 CrossWire Bible Society (http://www.crosswire.org)
- *	CrossWire Bible Society
- *	P. O. Box 2528
- *	Tempe, AZ  85280-2528
+ *    CrossWire Bible Society
+ *    P. O. Box 2528
+ *    Tempe, AZ  85280-2528
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -34,14 +34,14 @@ namespace swordxx {
 */
 class SWDLLEXPORT SWClass {
 private:
-	const char **descends;
+    const char **descends;
 
 public:
-	SWClass(const char **descends) {
-		this->descends = descends;
-	}
+    SWClass(const char **descends) {
+        this->descends = descends;
+    }
 
-	bool isAssignableFrom(const char *className) const;
+    bool isAssignableFrom(const char *className) const;
 };
 
 /** Base class for major Sword classes.
@@ -51,15 +51,15 @@ public:
 */
 class SWDLLEXPORT SWObject {
 protected:
-	SWClass * myclass;
-     
+    SWClass * myclass;
+
 public:
-	/** Use this to get the class definition and inheritance order.
-	* @return The class definition of this object
-	*/
-	const SWClass *getClass () const {
-		return myclass;
-	}
+    /** Use this to get the class definition and inheritance order.
+    * @return The class definition of this object
+    */
+    const SWClass *getClass () const {
+        return myclass;
+    }
 };
 
 } /* namespace swordxx */

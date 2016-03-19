@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- *  osismorphsegmentation.h -	Implementation of OSISMorphSegmentation
+ *  osismorphsegmentation.h -    Implementation of OSISMorphSegmentation
  *
  * $Id$
  *
@@ -34,10 +34,10 @@ namespace swordxx {
 class SWDLLEXPORT OSISMorphSegmentation : public SWOptionFilter {
 
 public:
-	OSISMorphSegmentation();
-	virtual ~OSISMorphSegmentation();
+    OSISMorphSegmentation();
+    virtual ~OSISMorphSegmentation();
 
-	virtual char processText(SWBuf &text, const SWKey *key = 0, const SWModule *module = 0);
+    virtual char processText(SWBuf &text, const SWKey *key = 0, const SWModule *module = 0);
 };
 
 } /* namespace swordxx */

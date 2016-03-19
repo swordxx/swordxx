@@ -1,14 +1,14 @@
 /******************************************************************************
  *
- *  verserangeparse.cpp -	This example shows
- *				how to parse a verse reference
+ *  verserangeparse.cpp -    This example shows
+ *                how to parse a verse reference
  *
  * $Id$
  *
  * Copyright 2006-2013 CrossWire Bible Society (http://www.crosswire.org)
- *	CrossWire Bible Society
- *	P. O. Box 2528
- *	Tempe, AZ  85280-2528
+ *    CrossWire Bible Society
+ *    P. O. Box 2528
+ *    Tempe, AZ  85280-2528
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -40,35 +40,35 @@ using std::endl;
 
 int main(int argc, char **argv)
 {
-	const char *range = (argc > 1) ? argv[1] : "Mat 2:10,12-15";
+    const char *range = (argc > 1) ? argv[1] : "Mat 2:10,12-15";
 
-	VerseKey parser;
-	ListKey result;
+    VerseKey parser;
+    ListKey result;
 
-	result = parser.parseVerseList(range, parser, true);
+    result = parser.parseVerseList(range, parser, true);
 
-	// let's iterate the key and display
-	for (result = TOP; !result.popError(); result++) {
-		cout << result << "\n";
-	}
-	cout << endl;
+    // let's iterate the key and display
+    for (result = TOP; !result.popError(); result++) {
+        cout << result << "\n";
+    }
+    cout << endl;
 
-	// Now let's output a module with the entries from the result
-	
-	// we'll initialize our library of books
-	SWMgr library(new MarkupFilterMgr(FMT_PLAIN));	// render plain without fancy markup
+    // Now let's output a module with the entries from the result
 
-	// Let's get a book;
-	SWModule *book = library.getModule("KJV");
+    // we'll initialize our library of books
+    SWMgr library(new MarkupFilterMgr(FMT_PLAIN));    // render plain without fancy markup
 
-	// couldn't find our test module
-	if (!book) return -1;
+    // Let's get a book;
+    SWModule *book = library.getModule("KJV");
 
-	// now let's iterate the book and display
-	for (result = TOP; !result.popError(); result++) {
-		book->setKey(result);
-		cout << "*** " << book->getKeyText() << ": " << book->renderText() << "\n";
-	}
+    // couldn't find our test module
+    if (!book) return -1;
 
-	return 0;
+    // now let's iterate the book and display
+    for (result = TOP; !result.popError(); result++) {
+        book->setKey(result);
+        cout << "*** " << book->getKeyText() << ": " << book->renderText() << "\n";
+    }
+
+    return 0;
 }

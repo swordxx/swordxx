@@ -1,13 +1,13 @@
 /******************************************************************************
  *
- *  treekeyidx.h -	code for class 'TreeKeyIdx'
+ *  treekeyidx.h -    code for class 'TreeKeyIdx'
  *
  * $Id$
  *
  * Copyright 2002-2013 CrossWire Bible Society (http://www.crosswire.org)
- *	CrossWire Bible Society
- *	P. O. Box 2528
- *	Tempe, AZ  85280-2528
+ *    CrossWire Bible Society
+ *    P. O. Box 2528
+ *    Tempe, AZ  85280-2528
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -36,90 +36,90 @@ class FileDesc;
  * The TreeKey implementation used for all tree-based modules in Sword, such as GenBooks.
  */
 class SWDLLEXPORT TreeKeyIdx : public TreeKey {
-		
-	class TreeNode {
-	public:
-		TreeNode();
-		~TreeNode();
-		void clear();
-		int32_t offset;
-		int32_t parent;
-		int32_t next;
-		int32_t firstChild;
-		char *name;
-		uint16_t dsize;
-		char *userData;
-	} currentNode;
 
-	static SWClass classdef;
+    class TreeNode {
+    public:
+        TreeNode();
+        ~TreeNode();
+        void clear();
+        int32_t offset;
+        int32_t parent;
+        int32_t next;
+        int32_t firstChild;
+        char *name;
+        uint16_t dsize;
+        char *userData;
+    } currentNode;
 
-	char *path;
+    static SWClass classdef;
 
-	FileDesc *idxfd;
-	FileDesc *datfd;
+    char *path;
 
-	void init();
+    FileDesc *idxfd;
+    FileDesc *datfd;
 
-	void getTreeNodeFromDatOffset(long ioffset, TreeNode *buf) const;
-	char getTreeNodeFromIdxOffset(long ioffset, TreeNode *node) const;
-	void saveTreeNode(TreeNode *node);
-	void saveTreeNodeOffsets(TreeNode *node);
+    void init();
+
+    void getTreeNodeFromDatOffset(long ioffset, TreeNode *buf) const;
+    char getTreeNodeFromIdxOffset(long ioffset, TreeNode *node) const;
+    void saveTreeNode(TreeNode *node);
+    void saveTreeNodeOffsets(TreeNode *node);
 
 
 public:
-	TreeKeyIdx(const TreeKeyIdx &ikey);
-	TreeKeyIdx(const char *idxPath, int fileMode = -1);
-	virtual ~TreeKeyIdx();
+    TreeKeyIdx(const TreeKeyIdx &ikey);
+    TreeKeyIdx(const char *idxPath, int fileMode = -1);
+    virtual ~TreeKeyIdx();
 
-	virtual SWKey *clone() const;
+    virtual SWKey *clone() const;
 
-	virtual const char *getLocalName();
-	virtual const char *setLocalName(const char *);
+    virtual const char *getLocalName();
+    virtual const char *setLocalName(const char *);
 
-	virtual const char *getUserData(int *size = 0) const;
-	virtual void setUserData(const char *userData, int size = 0);
+    virtual const char *getUserData(int *size = 0) const;
+    virtual void setUserData(const char *userData, int size = 0);
 
-	virtual void root();
-	virtual bool parent();
+    virtual void root();
+    virtual bool parent();
 
-	virtual bool firstChild();
-	virtual bool nextSibling();
-	virtual bool previousSibling();
+    virtual bool firstChild();
+    virtual bool nextSibling();
+    virtual bool previousSibling();
 
-	virtual bool hasChildren();
+    virtual bool hasChildren();
 
-	virtual void append();
-	virtual void appendChild();
-	virtual void insertBefore();
+    virtual void append();
+    virtual void appendChild();
+    virtual void insertBefore();
 
-	virtual void remove();
-	virtual void save();
+    virtual void remove();
+    virtual void save();
 
-	virtual void copyFrom(const TreeKeyIdx &ikey);
-	virtual void copyFrom(const SWKey &ikey);
+    virtual void copyFrom(const TreeKeyIdx &ikey);
+    virtual void copyFrom(const SWKey &ikey);
 
-	void setOffset(unsigned long offset);
-	unsigned long getOffset() const;
+    void setOffset(unsigned long offset);
+    unsigned long getOffset() const;
 
-	virtual int getLevel();
-
-
-	// OPERATORS ------------------------------------------------------------
+    virtual int getLevel();
 
 
-	virtual SWKey &operator = (const TreeKeyIdx &ikey) { copyFrom(ikey); return *this; }
-	SWKEY_OPERATORS
+    // OPERATORS ------------------------------------------------------------
 
-	virtual void setText(const char *ikey);
-	virtual void setPosition(SW_POSITION p);
-	virtual const char *getText() const;
-	virtual int _compare (const TreeKeyIdx & ikey);
-	virtual int compare(const SWKey &ikey);
-	virtual void decrement(int steps = 1);
-	virtual void increment(int steps = 1);
-	virtual bool isTraversable() const { return true; }
 
-	static signed char create(const char *path);
+    virtual SWKey &operator = (const TreeKeyIdx &ikey) { copyFrom(ikey); return *this; }
+    SWKEY_OPERATORS
+
+    virtual void setText(const char *ikey);
+    virtual void setPosition(SW_POSITION p);
+    virtual const char *getText() const;
+    virtual int _compare (const TreeKeyIdx & ikey);
+    virtual int compare(const SWKey &ikey);
+    virtual void decrement(int steps = 1);
+    virtual void increment(int steps = 1);
+    virtual bool isTraversable() const { return true; }
+
+    static signed char create(const char *path);
 };
 
 } /* namespace swordxx */

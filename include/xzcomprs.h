@@ -1,14 +1,14 @@
 /******************************************************************************
  *
- *  xzcomprs.h -	XzCompress, a driver class that provides xz (LZMA2)
- *			compression
+ *  xzcomprs.h -    XzCompress, a driver class that provides xz (LZMA2)
+ *            compression
  *
  * $Id$
  *
  * Copyright 2000-2014 CrossWire Bible Society (http://www.crosswire.org)
- *	CrossWire Bible Society
- *	P. O. Box 2528
- *	Tempe, AZ  85280-2528
+ *    CrossWire Bible Society
+ *    P. O. Box 2528
+ *    Tempe, AZ  85280-2528
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -35,14 +35,14 @@ class SWDLLEXPORT XzCompress : public SWCompress {
 
 protected:
 public:
-	XzCompress();
-	virtual ~XzCompress();
+    XzCompress();
+    virtual ~XzCompress();
 
-	virtual void Encode(void);
-	virtual void Decode(void);
-	virtual void setLevel(int l);
+    virtual void Encode(void);
+    virtual void Decode(void);
+    virtual void setLevel(int l);
 private:
-	uint64_t memlimit; // memory usage limit during decompression
+    uint64_t memlimit; // memory usage limit during decompression
 };
 
 } /* namespace swordxx */

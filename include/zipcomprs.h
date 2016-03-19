@@ -1,14 +1,14 @@
 /******************************************************************************
  *
- *  zipcomprs.h -	definition of Class ZipCompress used for data
- *			compression
+ *  zipcomprs.h -    definition of Class ZipCompress used for data
+ *            compression
  *
  * $Id$
  *
  * Copyright 2000-2013 CrossWire Bible Society (http://www.crosswire.org)
- *	CrossWire Bible Society
- *	P. O. Box 2528
- *	Tempe, AZ  85280-2528
+ *    CrossWire Bible Society
+ *    P. O. Box 2528
+ *    Tempe, AZ  85280-2528
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -34,11 +34,11 @@ class SWDLLEXPORT ZipCompress : public SWCompress {
 
 protected:
 public:
-	ZipCompress();
-	virtual ~ZipCompress();
+    ZipCompress();
+    virtual ~ZipCompress();
 
-	virtual void Encode(void);
-	virtual void Decode(void);
+    virtual void Encode(void);
+    virtual void Decode(void);
 };
 
 } /* namespace swordxx */

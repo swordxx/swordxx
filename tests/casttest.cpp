@@ -1,13 +1,13 @@
 /******************************************************************************
  *
- *  casttest.cpp -	
+ *  casttest.cpp -
  *
  * $Id$
  *
  * Copyright 1999-2013 CrossWire Bible Society (http://www.crosswire.org)
- *	CrossWire Bible Society
- *	P. O. Box 2528
- *	Tempe, AZ  85280-2528
+ *    CrossWire Bible Society
+ *    P. O. Box 2528
+ *    Tempe, AZ  85280-2528
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -27,24 +27,24 @@
 using namespace swordxx;
 
 int main(int argc, char **argv) {
-//	VerseKey x("jas");
-	TreeKeyIdx x("jas");
-//	ListKey x("jas");
-	SWKey *y = &x;
-	TreeKeyIdx *v = &x;
-//	VerseKey *v = &x;
-//	ListKey *v = &x;
+//    VerseKey x("jas");
+    TreeKeyIdx x("jas");
+//    ListKey x("jas");
+    SWKey *y = &x;
+    TreeKeyIdx *v = &x;
+//    VerseKey *v = &x;
+//    ListKey *v = &x;
 
-//	v = SWDYNAMIC_CAST(VerseKey, y);
-	v = SWDYNAMIC_CAST(TreeKeyIdx, y);
-//	v = SWDYNAMIC_CAST(ListKey, y);
-	std::cout << std::endl;
-	if (v)
-		std::cout << (const char *)(*v);
-	else
-		std::cout << "cast failed\n";
+//    v = SWDYNAMIC_CAST(VerseKey, y);
+    v = SWDYNAMIC_CAST(TreeKeyIdx, y);
+//    v = SWDYNAMIC_CAST(ListKey, y);
+    std::cout << std::endl;
+    if (v)
+        std::cout << (const char *)(*v);
+    else
+        std::cout << "cast failed\n";
 
-	std::cout << std::endl;
-	std::cout << std::endl;
-	return 0;
+    std::cout << std::endl;
+    std::cout << std::endl;
+    return 0;
 }

@@ -1,13 +1,13 @@
 /******************************************************************************
  *
- *  versekey_test.cpp -	
+ *  versekey_test.cpp -
  *
  * $Id$
  *
  * Copyright 2004-2013 CrossWire Bible Society (http://www.crosswire.org)
- *	CrossWire Bible Society
- *	P. O. Box 2528
- *	Tempe, AZ  85280-2528
+ *    CrossWire Bible Society
+ *    P. O. Box 2528
+ *    Tempe, AZ  85280-2528
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -50,252 +50,252 @@ CPPUNIT_TEST( testIncrement );
 CPPUNIT_TEST_SUITE_END();
 
 protected:
-	SWBuf parseKey(const char* keyValue, const char* locale) {
-		swordxx::VerseKey vk;
-		vk.setLocale(locale);
-		vk.setText(keyValue);
-				
-		SWBuf ret( vk.getText() );
-		//std::cout << ret.c_str();
-		return ret;
-	};
+    SWBuf parseKey(const char* keyValue, const char* locale) {
+        swordxx::VerseKey vk;
+        vk.setLocale(locale);
+        vk.setText(keyValue);
 
-	SWBuf parseRangeKey(const char* keyValue, const char* locale) {
-		const char* oldLocale = LocaleMgr::getSystemLocaleMgr()->getDefaultLocaleName();
-		LocaleMgr::getSystemLocaleMgr()->setDefaultLocaleName(locale);
+        SWBuf ret( vk.getText() );
+        //std::cout << ret.c_str();
+        return ret;
+    };
 
-		SWBuf ret;
-		
-		VerseKey DefaultVSKey;
-        	DefaultVSKey = "jas3:1";
+    SWBuf parseRangeKey(const char* keyValue, const char* locale) {
+        const char* oldLocale = LocaleMgr::getSystemLocaleMgr()->getDefaultLocaleName();
+        LocaleMgr::getSystemLocaleMgr()->setDefaultLocaleName(locale);
 
-        	ListKey verses = DefaultVSKey.ParseVerseList(keyValue, DefaultVSKey, true);
+        SWBuf ret;
 
-		for (int i = 0; i < verses.Count(); i++) {
-			VerseKey *element = dynamic_cast<VerseKey *>(verses.GetElement(i));
-			if (element) {
-				if (ret.length()) {
-					ret.append(" ");
-				}
-				
-				ret.appendFormatted( "%s - %s;", (const char*)element->LowerBound(), (const char*)element->UpperBound() );
-			}
-			else {
-				if (ret.length()) {
-					ret.append(" ");
-				}
-				
-				ret.appendFormatted("%s;", (const char *)*verses.GetElement(i));
-			}
-		}
-		
-// 		cout << ret.c_str() << endl;
-		LocaleMgr::getSystemLocaleMgr()->setDefaultLocaleName(oldLocale);
-		return ret;
-	};
-		
+        VerseKey DefaultVSKey;
+            DefaultVSKey = "jas3:1";
+
+            ListKey verses = DefaultVSKey.ParseVerseList(keyValue, DefaultVSKey, true);
+
+        for (int i = 0; i < verses.Count(); i++) {
+            VerseKey *element = dynamic_cast<VerseKey *>(verses.GetElement(i));
+            if (element) {
+                if (ret.length()) {
+                    ret.append(" ");
+                }
+
+                ret.appendFormatted( "%s - %s;", (const char*)element->LowerBound(), (const char*)element->UpperBound() );
+            }
+            else {
+                if (ret.length()) {
+                    ret.append(" ");
+                }
+
+                ret.appendFormatted("%s;", (const char *)*verses.GetElement(i));
+            }
+        }
+
+//         cout << ret.c_str() << endl;
+        LocaleMgr::getSystemLocaleMgr()->setDefaultLocaleName(oldLocale);
+        return ret;
+    };
+
 public:
-	void setUp() {
-/*		m_vk1 = new swordxx::VerseKey();
-		m_vk2 = new swordxx::VerseKey();
-		m_vk3 = new swordxx::VerseKey();
-		
-		setLocaleToAll("en");*/
-	}	
-	void tearDown()  {
-/*		delete m_vk1;
-		delete m_vk2;
-		delete m_vk3;*/
-	}
-	
-	void testSingleKeyParsing() {
-		//testing with I John 2:3 and locale en
-		CPPUNIT_ASSERT( parseKey("1jn.2.3", "en") 		== "I John 2:3");
-		CPPUNIT_ASSERT( parseKey("1 jn.2.3", "en") 		== "I John 2:3");
-		CPPUNIT_ASSERT( parseKey("Ijn.2.3", "en") 		== "I John 2:3");
-		CPPUNIT_ASSERT( parseKey("I jn.2.3", "en") 		== "I John 2:3");
-		CPPUNIT_ASSERT( parseKey( "1jn 2.3", "en") 		== "I John 2:3");
-		CPPUNIT_ASSERT( parseKey( "1 jn 2.3", "en") 	== "I John 2:3");
-		CPPUNIT_ASSERT( parseKey( "Ijn 2.3", "en") 		== "I John 2:3");
-		CPPUNIT_ASSERT( parseKey( "I jn 2.3", "en") 		== "I John 2:3");
-		CPPUNIT_ASSERT( parseKey( "1jn.2:3", "en") 	== "I John 2:3");
-		CPPUNIT_ASSERT( parseKey( "1 jn.2:3", "en") 	== "I John 2:3");
-		CPPUNIT_ASSERT( parseKey( "Ijn.2:3", "en") 		== "I John 2:3");
-		CPPUNIT_ASSERT( parseKey( "I jn.2:3", "en") 	== "I John 2:3");
-		CPPUNIT_ASSERT( parseKey( "1jn 2:3", "en") 	== "I John 2:3");
-		CPPUNIT_ASSERT( parseKey( "1 jn 2:3", "en") 	== "I John 2:3");
-		CPPUNIT_ASSERT( parseKey( "Ijn 2:3", "en") 		== "I John 2:3");
-		
-		CPPUNIT_ASSERT( parseKey("1.jn.2.3", "en") 		== "I John 2:3");
-		CPPUNIT_ASSERT( parseKey("1. jn.2.3", "en") 	== "I John 2:3");
-		CPPUNIT_ASSERT( parseKey("I.jn.2.3", "en") 		== "I John 2:3");
-		CPPUNIT_ASSERT( parseKey("I. jn.2.3", "en") 		== "I John 2:3");
-		CPPUNIT_ASSERT( parseKey("1.jn 2.3", "en") 		== "I John 2:3");
-		CPPUNIT_ASSERT( parseKey("1. jn 2.3", "en")		== "I John 2:3");
-		CPPUNIT_ASSERT( parseKey("I.jn 2.3", "en") 		== "I John 2:3");
-		CPPUNIT_ASSERT( parseKey("I. jn 2.3", "en") 		== "I John 2:3");
-		CPPUNIT_ASSERT( parseKey("1.jn.2:3", "en") 	== "I John 2:3");
-		CPPUNIT_ASSERT( parseKey("1. jn.2:3", "en") 	== "I John 2:3");
-		CPPUNIT_ASSERT( parseKey("I.jn.2:3", "en") 		== "I John 2:3");
-		CPPUNIT_ASSERT( parseKey("I. jn.2:3", "en") 	== "I John 2:3");
-		CPPUNIT_ASSERT( parseKey("1.jn 2:3", "en") 	== "I John 2:3");
-		CPPUNIT_ASSERT( parseKey("1. jn 2:3", "en") 	== "I John 2:3");
-		CPPUNIT_ASSERT( parseKey("I.jn 2:3", "en") 		== "I John 2:3");
-		CPPUNIT_ASSERT( parseKey("I. jn 2:3", "en") 	== "I John 2:3");
-		
-	
-		//testing the same with german locale
-		CPPUNIT_ASSERT( parseKey("1jn.2.3", "de") 		== "1. Johannes 2:3");
-		CPPUNIT_ASSERT( parseKey("1 jn.2.3", "de") 		== "1. Johannes 2:3");
-		CPPUNIT_ASSERT( parseKey("Ijn.2.3", "de") 		== "1. Johannes 2:3");
-		CPPUNIT_ASSERT( parseKey("I jn.2.3", "de") 		== "1. Johannes 2:3");
-		CPPUNIT_ASSERT( parseKey( "1jn 2.3", "de") 		== "1. Johannes 2:3");
-		CPPUNIT_ASSERT( parseKey( "1 jn 2.3", "de") 	== "1. Johannes 2:3");
-		CPPUNIT_ASSERT( parseKey( "Ijn 2.3", "de") 		== "1. Johannes 2:3");
-		CPPUNIT_ASSERT( parseKey( "I jn 2.3", "de") 		== "1. Johannes 2:3");
-		CPPUNIT_ASSERT( parseKey( "1jn.2:3", "de") 	== "1. Johannes 2:3");
-		CPPUNIT_ASSERT( parseKey( "1 jn.2:3", "de") 	== "1. Johannes 2:3");
-		CPPUNIT_ASSERT( parseKey( "Ijn.2:3", "de") 		== "1. Johannes 2:3");
-		CPPUNIT_ASSERT( parseKey( "I jn.2:3", "de") 	== "1. Johannes 2:3");
-		CPPUNIT_ASSERT( parseKey( "1jn 2:3", "de") 	== "1. Johannes 2:3");
-		CPPUNIT_ASSERT( parseKey( "1 jn 2:3", "de") 	== "1. Johannes 2:3");
-		CPPUNIT_ASSERT( parseKey( "Ijn 2:3", "de") 		== "1. Johannes 2:3");
-		
-		CPPUNIT_ASSERT( parseKey("1.jn.2.3", "de") 		== "1. Johannes 2:3");
-		CPPUNIT_ASSERT( parseKey("1. jn.2.3", "de") 	== "1. Johannes 2:3");
-		CPPUNIT_ASSERT( parseKey("I.jn.2.3", "de") 		== "1. Johannes 2:3");
-		CPPUNIT_ASSERT( parseKey("I. jn.2.3", "de") 		== "1. Johannes 2:3");
-		CPPUNIT_ASSERT( parseKey("1.jn 2.3", "de") 		== "1. Johannes 2:3");
-		CPPUNIT_ASSERT( parseKey("1. jn 2.3", "de")		== "1. Johannes 2:3");
-		CPPUNIT_ASSERT( parseKey("I.jn 2.3", "de") 		== "1. Johannes 2:3");
-		CPPUNIT_ASSERT( parseKey("I. jn 2.3", "de") 		== "1. Johannes 2:3");
-		CPPUNIT_ASSERT( parseKey("1.jn.2:3", "de") 	== "1. Johannes 2:3");
-		CPPUNIT_ASSERT( parseKey("1. jn.2:3", "de") 	== "1. Johannes 2:3");
-		CPPUNIT_ASSERT( parseKey("I.jn.2:3", "de") 		== "1. Johannes 2:3");
-		CPPUNIT_ASSERT( parseKey("I. jn.2:3", "de") 	== "1. Johannes 2:3");
-		CPPUNIT_ASSERT( parseKey("1.jn 2:3", "de") 	== "1. Johannes 2:3");
-		CPPUNIT_ASSERT( parseKey("1. jn 2:3", "de") 	== "1. Johannes 2:3");
-		CPPUNIT_ASSERT( parseKey("I.jn 2:3", "de") 		== "1. Johannes 2:3");
-		CPPUNIT_ASSERT( parseKey("I. jn 2:3", "de") 	== "1. Johannes 2:3");	
-	}
+    void setUp() {
+/*        m_vk1 = new swordxx::VerseKey();
+        m_vk2 = new swordxx::VerseKey();
+        m_vk3 = new swordxx::VerseKey();
 
-	void testRangeKeyParsing() {
-		//some range tests with the english locale
-		CPPUNIT_ASSERT( parseRangeKey("I. jn 1:1 - 3:10", "en") 	== "I John 1:1 - I John 3:10;");
-		CPPUNIT_ASSERT( parseRangeKey("1Jn 1:1 - 3:10", "en") 		== "I John 1:1 - I John 3:10;");
-		CPPUNIT_ASSERT( parseRangeKey("1Jn 1:1 -3:10", "en") 		== "I John 1:1 - I John 3:10;");
-		CPPUNIT_ASSERT( parseRangeKey("1Jn 1:1- 3:10", "en") 		== "I John 1:1 - I John 3:10;");
-		CPPUNIT_ASSERT( parseRangeKey("1Jn 1- 3:10", "en") 		== "I John 1:1 - I John 3:10;");
-		CPPUNIT_ASSERT( parseRangeKey("1Jn 1 -3:10", "en") 		== "I John 1:1 - I John 3:10;");
-		CPPUNIT_ASSERT( parseRangeKey("1Jn 1:1 -3:10; 1Jn 3:11", "en") 		== "I John 1:1 - I John 3:10; I John 3:11;");
+        setLocaleToAll("en");*/
+    }
+    void tearDown()  {
+/*        delete m_vk1;
+        delete m_vk2;
+        delete m_vk3;*/
+    }
 
-		//some range tests with german locale
-		CPPUNIT_ASSERT( parseRangeKey("I. jn 1:1 - 3:10", "de") 			== "1. Johannes 1:1 - 1. Johannes 3:10;");	
-		CPPUNIT_ASSERT( parseRangeKey("1. Joh 1:1 - 3:10", "de") 			== "1. Johannes 1:1 - 1. Johannes 3:10;");	
-		CPPUNIT_ASSERT( parseRangeKey("1. Johannes 1:1- 3:10", "de") 	== "1. Johannes 1:1 - 1. Johannes 3:10;");	
-		CPPUNIT_ASSERT( parseRangeKey("1. Joh 1:1- 3:10", "de") 			== "1. Johannes 1:1 - 1. Johannes 3:10;");	
-		CPPUNIT_ASSERT( parseRangeKey("1. Johannes 1:1 -3:10", "de") 	== "1. Johannes 1:1 - 1. Johannes 3:10;");	
-		CPPUNIT_ASSERT( parseRangeKey("1. Joh 1:1 -3:10", "de") 			== "1. Johannes 1:1 - 1. Johannes 3:10;");
-	}
+    void testSingleKeyParsing() {
+        //testing with I John 2:3 and locale en
+        CPPUNIT_ASSERT( parseKey("1jn.2.3", "en")         == "I John 2:3");
+        CPPUNIT_ASSERT( parseKey("1 jn.2.3", "en")         == "I John 2:3");
+        CPPUNIT_ASSERT( parseKey("Ijn.2.3", "en")         == "I John 2:3");
+        CPPUNIT_ASSERT( parseKey("I jn.2.3", "en")         == "I John 2:3");
+        CPPUNIT_ASSERT( parseKey( "1jn 2.3", "en")         == "I John 2:3");
+        CPPUNIT_ASSERT( parseKey( "1 jn 2.3", "en")     == "I John 2:3");
+        CPPUNIT_ASSERT( parseKey( "Ijn 2.3", "en")         == "I John 2:3");
+        CPPUNIT_ASSERT( parseKey( "I jn 2.3", "en")         == "I John 2:3");
+        CPPUNIT_ASSERT( parseKey( "1jn.2:3", "en")     == "I John 2:3");
+        CPPUNIT_ASSERT( parseKey( "1 jn.2:3", "en")     == "I John 2:3");
+        CPPUNIT_ASSERT( parseKey( "Ijn.2:3", "en")         == "I John 2:3");
+        CPPUNIT_ASSERT( parseKey( "I jn.2:3", "en")     == "I John 2:3");
+        CPPUNIT_ASSERT( parseKey( "1jn 2:3", "en")     == "I John 2:3");
+        CPPUNIT_ASSERT( parseKey( "1 jn 2:3", "en")     == "I John 2:3");
+        CPPUNIT_ASSERT( parseKey( "Ijn 2:3", "en")         == "I John 2:3");
 
-	void testListKeyParsing() {
-		//some range tests with the english locale
-		CPPUNIT_ASSERT( parseRangeKey("1Jn 1:1 3:10", "en") 	== "I John 1:1; I John 3:10;");
-		CPPUNIT_ASSERT( parseRangeKey("1Jn 1:1  3:10", "en") 	== "I John 1:1; I John 3:10;");
-		CPPUNIT_ASSERT( parseRangeKey("1Jn 1:1,3:10", "en") 	== "I John 1:1; I John 3:10;"); 
-		CPPUNIT_ASSERT( parseRangeKey("1Jn 1:1, 3:10", "en") 	== "I John 1:1; I John 3:10;");
-		CPPUNIT_ASSERT( parseRangeKey("1Jn 1:1 ,3:10", "en") 	== "I John 1:1; I John 3:10;");
-		CPPUNIT_ASSERT( parseRangeKey("1Jn 1:1 , 3:10", "en") 	== "I John 1:1; I John 3:10;");
-		CPPUNIT_ASSERT( parseRangeKey("1Jn 1:1;3:10", "en") 	== "I John 1:1; I John 3:10;");  
-		CPPUNIT_ASSERT( parseRangeKey("1Jn 1:1; 3:10", "en") 	== "I John 1:1; I John 3:10;");
-		CPPUNIT_ASSERT( parseRangeKey("1Jn 1:1 ;3:10", "en") 	== "I John 1:1; I John 3:10;");
-		CPPUNIT_ASSERT( parseRangeKey("1Jn 1:1 ; 3:10", "en") 	== "I John 1:1; I John 3:10;");
-	}
-	
-	void testLessThan() {
-		VerseKey vk1("Luke 1:1");
-		VerseKey vk2("Luke 1:1");
-		VerseKey vk3("Luke 1:2");
-		
-		CPPUNIT_ASSERT( !(vk1 < vk2) );
-		CPPUNIT_ASSERT( vk1 < vk3 );
+        CPPUNIT_ASSERT( parseKey("1.jn.2.3", "en")         == "I John 2:3");
+        CPPUNIT_ASSERT( parseKey("1. jn.2.3", "en")     == "I John 2:3");
+        CPPUNIT_ASSERT( parseKey("I.jn.2.3", "en")         == "I John 2:3");
+        CPPUNIT_ASSERT( parseKey("I. jn.2.3", "en")         == "I John 2:3");
+        CPPUNIT_ASSERT( parseKey("1.jn 2.3", "en")         == "I John 2:3");
+        CPPUNIT_ASSERT( parseKey("1. jn 2.3", "en")        == "I John 2:3");
+        CPPUNIT_ASSERT( parseKey("I.jn 2.3", "en")         == "I John 2:3");
+        CPPUNIT_ASSERT( parseKey("I. jn 2.3", "en")         == "I John 2:3");
+        CPPUNIT_ASSERT( parseKey("1.jn.2:3", "en")     == "I John 2:3");
+        CPPUNIT_ASSERT( parseKey("1. jn.2:3", "en")     == "I John 2:3");
+        CPPUNIT_ASSERT( parseKey("I.jn.2:3", "en")         == "I John 2:3");
+        CPPUNIT_ASSERT( parseKey("I. jn.2:3", "en")     == "I John 2:3");
+        CPPUNIT_ASSERT( parseKey("1.jn 2:3", "en")     == "I John 2:3");
+        CPPUNIT_ASSERT( parseKey("1. jn 2:3", "en")     == "I John 2:3");
+        CPPUNIT_ASSERT( parseKey("I.jn 2:3", "en")         == "I John 2:3");
+        CPPUNIT_ASSERT( parseKey("I. jn 2:3", "en")     == "I John 2:3");
 
-		for (int n = 0; n < 30; n++) {//some more stress :)
-			vk1 = "Luke 1:1";
-			vk3 = vk1;
-			
-			for (int j = 0; j < 30; ++j) {
-				vk1--;
-				CPPUNIT_ASSERT( vk1 < vk3 );
-				CPPUNIT_ASSERT( vk1 < VerseKey("Revelation") );
-				CPPUNIT_ASSERT( !(vk1 < VerseKey("Gen")) );
-			}
-		}
-	}
-	void testLessEqualThan() {
-		VerseKey vk1("Luke 1:1");
-		VerseKey vk2("Luke 1:1");
-		VerseKey vk3("Luke 1:2");
-		
-		CPPUNIT_ASSERT( vk1 <= vk2 );
-		CPPUNIT_ASSERT( vk1 <= vk3 );
-	
-		for (int n = 0; n < 30; n++) { //some more stress
-			vk1 = "Luke 1:1";
-			vk3 = vk1;
-			
-			for (int j = 0; j < 30; ++j) {
-				CPPUNIT_ASSERT( vk1 <= vk3 );
-				CPPUNIT_ASSERT( vk1 <= VerseKey("Revelation") );
-				CPPUNIT_ASSERT( !(vk1 <= VerseKey("Gen")) );
-				
-				vk1--;
-			}
-		}
-	}
-	void testEquality() {
-		VerseKey vk1("Luke 1:1");
-		VerseKey vk2("Luke 1:1");
-		VerseKey vk3("Luke 1:2");
-		
-		CPPUNIT_ASSERT( vk1 == vk2 );
-		CPPUNIT_ASSERT( !(vk1 == vk3) );
-	}
-	void testGreaterEqualThan() {
-		VerseKey vk1("Luke 1:3");
-		VerseKey vk2("Luke 1:3");
-		VerseKey vk3("Luke 1:1");
-		
-		CPPUNIT_ASSERT( vk1 >= vk2 );
-		CPPUNIT_ASSERT( vk1 >= vk3 );
-	}
-	void testGreaterThan() {
-		VerseKey vk1("Luke 1:3");
-		VerseKey vk2("Luke 1:1");
-		VerseKey vk3("Luke 1:2");
-		
-		CPPUNIT_ASSERT( vk1 > vk2 );
-		CPPUNIT_ASSERT( vk1 > vk3 );
-	}
 
-	void testDecrement() {
-		VerseKey vk("Matthew 1:1");
-		const int delta = 10;
-		
-		for (int i =0; i < delta; ++i) {
-			vk--;
-		}
-		CPPUNIT_ASSERT( vk == VerseKey("Mal 3:15") );
-	}
-	void testIncrement() {
-		VerseKey vk("Mal 3:15");
-		const int delta = 10;
-		
-		for (int i =0; i < delta; ++i) {
-			vk++;
-		}
-		CPPUNIT_ASSERT( vk == VerseKey("Matthew 1:1") );
-	}
+        //testing the same with german locale
+        CPPUNIT_ASSERT( parseKey("1jn.2.3", "de")         == "1. Johannes 2:3");
+        CPPUNIT_ASSERT( parseKey("1 jn.2.3", "de")         == "1. Johannes 2:3");
+        CPPUNIT_ASSERT( parseKey("Ijn.2.3", "de")         == "1. Johannes 2:3");
+        CPPUNIT_ASSERT( parseKey("I jn.2.3", "de")         == "1. Johannes 2:3");
+        CPPUNIT_ASSERT( parseKey( "1jn 2.3", "de")         == "1. Johannes 2:3");
+        CPPUNIT_ASSERT( parseKey( "1 jn 2.3", "de")     == "1. Johannes 2:3");
+        CPPUNIT_ASSERT( parseKey( "Ijn 2.3", "de")         == "1. Johannes 2:3");
+        CPPUNIT_ASSERT( parseKey( "I jn 2.3", "de")         == "1. Johannes 2:3");
+        CPPUNIT_ASSERT( parseKey( "1jn.2:3", "de")     == "1. Johannes 2:3");
+        CPPUNIT_ASSERT( parseKey( "1 jn.2:3", "de")     == "1. Johannes 2:3");
+        CPPUNIT_ASSERT( parseKey( "Ijn.2:3", "de")         == "1. Johannes 2:3");
+        CPPUNIT_ASSERT( parseKey( "I jn.2:3", "de")     == "1. Johannes 2:3");
+        CPPUNIT_ASSERT( parseKey( "1jn 2:3", "de")     == "1. Johannes 2:3");
+        CPPUNIT_ASSERT( parseKey( "1 jn 2:3", "de")     == "1. Johannes 2:3");
+        CPPUNIT_ASSERT( parseKey( "Ijn 2:3", "de")         == "1. Johannes 2:3");
+
+        CPPUNIT_ASSERT( parseKey("1.jn.2.3", "de")         == "1. Johannes 2:3");
+        CPPUNIT_ASSERT( parseKey("1. jn.2.3", "de")     == "1. Johannes 2:3");
+        CPPUNIT_ASSERT( parseKey("I.jn.2.3", "de")         == "1. Johannes 2:3");
+        CPPUNIT_ASSERT( parseKey("I. jn.2.3", "de")         == "1. Johannes 2:3");
+        CPPUNIT_ASSERT( parseKey("1.jn 2.3", "de")         == "1. Johannes 2:3");
+        CPPUNIT_ASSERT( parseKey("1. jn 2.3", "de")        == "1. Johannes 2:3");
+        CPPUNIT_ASSERT( parseKey("I.jn 2.3", "de")         == "1. Johannes 2:3");
+        CPPUNIT_ASSERT( parseKey("I. jn 2.3", "de")         == "1. Johannes 2:3");
+        CPPUNIT_ASSERT( parseKey("1.jn.2:3", "de")     == "1. Johannes 2:3");
+        CPPUNIT_ASSERT( parseKey("1. jn.2:3", "de")     == "1. Johannes 2:3");
+        CPPUNIT_ASSERT( parseKey("I.jn.2:3", "de")         == "1. Johannes 2:3");
+        CPPUNIT_ASSERT( parseKey("I. jn.2:3", "de")     == "1. Johannes 2:3");
+        CPPUNIT_ASSERT( parseKey("1.jn 2:3", "de")     == "1. Johannes 2:3");
+        CPPUNIT_ASSERT( parseKey("1. jn 2:3", "de")     == "1. Johannes 2:3");
+        CPPUNIT_ASSERT( parseKey("I.jn 2:3", "de")         == "1. Johannes 2:3");
+        CPPUNIT_ASSERT( parseKey("I. jn 2:3", "de")     == "1. Johannes 2:3");
+    }
+
+    void testRangeKeyParsing() {
+        //some range tests with the english locale
+        CPPUNIT_ASSERT( parseRangeKey("I. jn 1:1 - 3:10", "en")     == "I John 1:1 - I John 3:10;");
+        CPPUNIT_ASSERT( parseRangeKey("1Jn 1:1 - 3:10", "en")         == "I John 1:1 - I John 3:10;");
+        CPPUNIT_ASSERT( parseRangeKey("1Jn 1:1 -3:10", "en")         == "I John 1:1 - I John 3:10;");
+        CPPUNIT_ASSERT( parseRangeKey("1Jn 1:1- 3:10", "en")         == "I John 1:1 - I John 3:10;");
+        CPPUNIT_ASSERT( parseRangeKey("1Jn 1- 3:10", "en")         == "I John 1:1 - I John 3:10;");
+        CPPUNIT_ASSERT( parseRangeKey("1Jn 1 -3:10", "en")         == "I John 1:1 - I John 3:10;");
+        CPPUNIT_ASSERT( parseRangeKey("1Jn 1:1 -3:10; 1Jn 3:11", "en")         == "I John 1:1 - I John 3:10; I John 3:11;");
+
+        //some range tests with german locale
+        CPPUNIT_ASSERT( parseRangeKey("I. jn 1:1 - 3:10", "de")             == "1. Johannes 1:1 - 1. Johannes 3:10;");
+        CPPUNIT_ASSERT( parseRangeKey("1. Joh 1:1 - 3:10", "de")             == "1. Johannes 1:1 - 1. Johannes 3:10;");
+        CPPUNIT_ASSERT( parseRangeKey("1. Johannes 1:1- 3:10", "de")     == "1. Johannes 1:1 - 1. Johannes 3:10;");
+        CPPUNIT_ASSERT( parseRangeKey("1. Joh 1:1- 3:10", "de")             == "1. Johannes 1:1 - 1. Johannes 3:10;");
+        CPPUNIT_ASSERT( parseRangeKey("1. Johannes 1:1 -3:10", "de")     == "1. Johannes 1:1 - 1. Johannes 3:10;");
+        CPPUNIT_ASSERT( parseRangeKey("1. Joh 1:1 -3:10", "de")             == "1. Johannes 1:1 - 1. Johannes 3:10;");
+    }
+
+    void testListKeyParsing() {
+        //some range tests with the english locale
+        CPPUNIT_ASSERT( parseRangeKey("1Jn 1:1 3:10", "en")     == "I John 1:1; I John 3:10;");
+        CPPUNIT_ASSERT( parseRangeKey("1Jn 1:1  3:10", "en")     == "I John 1:1; I John 3:10;");
+        CPPUNIT_ASSERT( parseRangeKey("1Jn 1:1,3:10", "en")     == "I John 1:1; I John 3:10;");
+        CPPUNIT_ASSERT( parseRangeKey("1Jn 1:1, 3:10", "en")     == "I John 1:1; I John 3:10;");
+        CPPUNIT_ASSERT( parseRangeKey("1Jn 1:1 ,3:10", "en")     == "I John 1:1; I John 3:10;");
+        CPPUNIT_ASSERT( parseRangeKey("1Jn 1:1 , 3:10", "en")     == "I John 1:1; I John 3:10;");
+        CPPUNIT_ASSERT( parseRangeKey("1Jn 1:1;3:10", "en")     == "I John 1:1; I John 3:10;");
+        CPPUNIT_ASSERT( parseRangeKey("1Jn 1:1; 3:10", "en")     == "I John 1:1; I John 3:10;");
+        CPPUNIT_ASSERT( parseRangeKey("1Jn 1:1 ;3:10", "en")     == "I John 1:1; I John 3:10;");
+        CPPUNIT_ASSERT( parseRangeKey("1Jn 1:1 ; 3:10", "en")     == "I John 1:1; I John 3:10;");
+    }
+
+    void testLessThan() {
+        VerseKey vk1("Luke 1:1");
+        VerseKey vk2("Luke 1:1");
+        VerseKey vk3("Luke 1:2");
+
+        CPPUNIT_ASSERT( !(vk1 < vk2) );
+        CPPUNIT_ASSERT( vk1 < vk3 );
+
+        for (int n = 0; n < 30; n++) {//some more stress :)
+            vk1 = "Luke 1:1";
+            vk3 = vk1;
+
+            for (int j = 0; j < 30; ++j) {
+                vk1--;
+                CPPUNIT_ASSERT( vk1 < vk3 );
+                CPPUNIT_ASSERT( vk1 < VerseKey("Revelation") );
+                CPPUNIT_ASSERT( !(vk1 < VerseKey("Gen")) );
+            }
+        }
+    }
+    void testLessEqualThan() {
+        VerseKey vk1("Luke 1:1");
+        VerseKey vk2("Luke 1:1");
+        VerseKey vk3("Luke 1:2");
+
+        CPPUNIT_ASSERT( vk1 <= vk2 );
+        CPPUNIT_ASSERT( vk1 <= vk3 );
+
+        for (int n = 0; n < 30; n++) { //some more stress
+            vk1 = "Luke 1:1";
+            vk3 = vk1;
+
+            for (int j = 0; j < 30; ++j) {
+                CPPUNIT_ASSERT( vk1 <= vk3 );
+                CPPUNIT_ASSERT( vk1 <= VerseKey("Revelation") );
+                CPPUNIT_ASSERT( !(vk1 <= VerseKey("Gen")) );
+
+                vk1--;
+            }
+        }
+    }
+    void testEquality() {
+        VerseKey vk1("Luke 1:1");
+        VerseKey vk2("Luke 1:1");
+        VerseKey vk3("Luke 1:2");
+
+        CPPUNIT_ASSERT( vk1 == vk2 );
+        CPPUNIT_ASSERT( !(vk1 == vk3) );
+    }
+    void testGreaterEqualThan() {
+        VerseKey vk1("Luke 1:3");
+        VerseKey vk2("Luke 1:3");
+        VerseKey vk3("Luke 1:1");
+
+        CPPUNIT_ASSERT( vk1 >= vk2 );
+        CPPUNIT_ASSERT( vk1 >= vk3 );
+    }
+    void testGreaterThan() {
+        VerseKey vk1("Luke 1:3");
+        VerseKey vk2("Luke 1:1");
+        VerseKey vk3("Luke 1:2");
+
+        CPPUNIT_ASSERT( vk1 > vk2 );
+        CPPUNIT_ASSERT( vk1 > vk3 );
+    }
+
+    void testDecrement() {
+        VerseKey vk("Matthew 1:1");
+        const int delta = 10;
+
+        for (int i =0; i < delta; ++i) {
+            vk--;
+        }
+        CPPUNIT_ASSERT( vk == VerseKey("Mal 3:15") );
+    }
+    void testIncrement() {
+        VerseKey vk("Mal 3:15");
+        const int delta = 10;
+
+        for (int i =0; i < delta; ++i) {
+            vk++;
+        }
+        CPPUNIT_ASSERT( vk == VerseKey("Matthew 1:1") );
+    }
 
 };
 

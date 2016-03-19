@@ -1,13 +1,13 @@
 /******************************************************************************
  *
- *  osiswebif.h -	Implementation of OSISWEBIF
+ *  osiswebif.h -    Implementation of OSISWEBIF
  *
  * $Id$
  *
  * Copyright 2003-2013 CrossWire Bible Society (http://www.crosswire.org)
- *	CrossWire Bible Society
- *	P. O. Box 2528
- *	Tempe, AZ  85280-2528
+ *    CrossWire Bible Society
+ *    P. O. Box 2528
+ *    Tempe, AZ  85280-2528
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -30,16 +30,16 @@ namespace swordxx {
 /** this filter converts OSIS  text to HTML text with hrefs
  */
 class SWDLLEXPORT OSISWEBIF : public OSISXHTML {
-	const SWBuf baseURL;
-	const SWBuf passageStudyURL;
-	bool javascript;
+    const SWBuf baseURL;
+    const SWBuf passageStudyURL;
+    bool javascript;
 
 protected:
-	virtual BasicFilterUserData *createUserData(const SWModule *module, const SWKey *key);
-	virtual bool handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData);
+    virtual BasicFilterUserData *createUserData(const SWModule *module, const SWKey *key);
+    virtual bool handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData);
 public:
-	OSISWEBIF();
-	void setJavascript(bool mode) { javascript = mode; }
+    OSISWEBIF();
+    void setJavascript(bool mode) { javascript = mode; }
 };
 
 } /* namespace swordxx */

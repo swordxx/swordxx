@@ -1,13 +1,13 @@
 /******************************************************************************
  *
- *  indextest.cpp -	
+ *  indextest.cpp -
  *
  * $Id$
  *
  * Copyright 2000-2013 CrossWire Bible Society (http://www.crosswire.org)
- *	CrossWire Bible Society
- *	P. O. Box 2528
- *	Tempe, AZ  85280-2528
+ *    CrossWire Bible Society
+ *    P. O. Box 2528
+ *    Tempe, AZ  85280-2528
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -27,17 +27,17 @@
 using namespace swordxx;
 
 int main(int argc, char **argv) {
-	SWMgr mymgr;
+    SWMgr mymgr;
 
-	SWModule *bbe = mymgr.Modules["BBE"];
+    SWModule *bbe = mymgr.Modules["BBE"];
 
-	if (bbe) {
-		VerseKey vk;
-		vk.setPersist(true);
-		bbe->setKey(vk);
-		for (; !bbe->popError(); (*bbe)++ ) {
-			std::cout << vk.getIndex() << std::endl; 
-		}
-	}
-	return 0;
+    if (bbe) {
+        VerseKey vk;
+        vk.setPersist(true);
+        bbe->setKey(vk);
+        for (; !bbe->popError(); (*bbe)++ ) {
+            std::cout << vk.getIndex() << std::endl;
+        }
+    }
+    return 0;
 }

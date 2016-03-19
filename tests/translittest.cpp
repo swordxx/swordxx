@@ -1,13 +1,13 @@
 /******************************************************************************
  *
- *  translittest.cpp -	
+ *  translittest.cpp -
  *
  * $Id$
  *
  * Copyright 2002-2013 CrossWire Bible Society (http://www.crosswire.org)
- *	CrossWire Bible Society
- *	P. O. Box 2528
- *	Tempe, AZ  85280-2528
+ *    CrossWire Bible Society
+ *    P. O. Box 2528
+ *    Tempe, AZ  85280-2528
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -58,12 +58,12 @@ int main() {
 
   UErrorCode status = U_ZERO_ERROR;
 //  UDataMemory *pappData = udata_open("/usr/local/lib/sword/swicu", "res", "root", &status);
-  if (U_FAILURE(status)) 
+  if (U_FAILURE(status))
   {
-  	std::cout << "error: " << status << ":" << 
-		u_errorName(status) << std::endl;
-	return 0;
-  } 
+      std::cout << "error: " << status << ":" <<
+        u_errorName(status) << std::endl;
+    return 0;
+  }
   UChar * uBuf;
   UChar * target;
   UConverter *conv;
@@ -71,65 +71,65 @@ int main() {
   int32_t uBufSize = 0, uLength = 0;
 //  void * pAppData=NULL;
   const char * samplestring = "If this compiles and runs without errors, apparently ICU is working.";
-  //ures_open("/usr/local/lib/sword/swicu.dat", 
- // 	NULL, &status);
-  //UDataMemory *pappData = udata_open("/usr/local/lib/sword/swicu", 
-//	"res", "root", &status);
-  if (U_FAILURE(status)) 
+  //ures_open("/usr/local/lib/sword/swicu.dat",
+ //     NULL, &status);
+  //UDataMemory *pappData = udata_open("/usr/local/lib/sword/swicu",
+//    "res", "root", &status);
+  if (U_FAILURE(status))
   {
-  	std::cout << "error: " << status << ":" << 
-		u_errorName(status) << std::endl;
-	return 0;
-  } 
-  //UDataMemory *pappData2 = udata_open("/usr/local/lib/sword/swicu", 
-//	"res", "translit_Latin_Gothic", &status);
-  std::cout << status << std::endl; 
-  if (U_FAILURE(status)) 
+      std::cout << "error: " << status << ":" <<
+        u_errorName(status) << std::endl;
+    return 0;
+  }
+  //UDataMemory *pappData2 = udata_open("/usr/local/lib/sword/swicu",
+//    "res", "translit_Latin_Gothic", &status);
+  std::cout << status << std::endl;
+  if (U_FAILURE(status))
   {
-  	std::cout << "error: " << status << ":" << 
-		u_errorName(status) << std::endl;
-	return 0;
-  } 
+      std::cout << "error: " << status << ":" <<
+        u_errorName(status) << std::endl;
+    return 0;
+  }
   std::cout << "available " << Transliterator::countAvailableIDs() << std::endl;
   //udata_setAppData("/usr/local/lib/sword/swicu.dat" , pAppData, &status);
-  //if (U_FAILURE(status)) 
+  //if (U_FAILURE(status))
   //{
-  	//std::cout << "error: " << status << ":" << 
-	//	u_errorName(status) << std::endl;
-	//return 0;
-  //} 
+      //std::cout << "error: " << status << ":" <<
+    //    u_errorName(status) << std::endl;
+    //return 0;
+  //}
 
   int32_t i_ids = Transliterator::countAvailableIDs();
-  
+
   std::cout << "available " << i_ids << std::endl;
   for (int i=0; i<i_ids;i++)
   {
-	std::cout << "id " << i << ": ";
-	uprintf(Transliterator::getAvailableID(i));
-	std::cout << std::endl;
-  } 
+    std::cout << "id " << i << ": ";
+    uprintf(Transliterator::getAvailableID(i));
+    std::cout << std::endl;
+  }
 
 
   //UTF8Transliterator utran = new UTF8Transliterator();
   std::cout << "creating transliterator 2" << std::endl;
-  Transliterator *btrans = Transliterator::createInstance("NFD;Latin-Greek;NFC", 
-	UTRANS_FORWARD, status);
-  if (U_FAILURE(status)) 
+  Transliterator *btrans = Transliterator::createInstance("NFD;Latin-Greek;NFC",
+    UTRANS_FORWARD, status);
+  if (U_FAILURE(status))
   {
-  	std::cout << "error: " << status << ":" << 
-		u_errorName(status) << std::endl;
-	return 0;
-  } 
+      std::cout << "error: " << status << ":" <<
+        u_errorName(status) << std::endl;
+    return 0;
+  }
   std::cout << "creating transliterator 1" << std::endl;
-  Transliterator *trans = Transliterator::createInstance("NFD;Latin-Gothic;NFC", 
-	UTRANS_FORWARD, status);
-  if (U_FAILURE(status)) 
+  Transliterator *trans = Transliterator::createInstance("NFD;Latin-Gothic;NFC",
+    UTRANS_FORWARD, status);
+  if (U_FAILURE(status))
   {
-	delete btrans;
-  	std::cout << "error: " << status << ":" << 
-		u_errorName(status) << std::endl;
-	return 0;
-  } 
+    delete btrans;
+      std::cout << "error: " << status << ":" <<
+        u_errorName(status) << std::endl;
+    return 0;
+  }
 
   std::cout << "deleting transliterator 1" << std::endl;
   delete trans;
@@ -137,26 +137,26 @@ int main() {
   delete btrans;
   std::cout << "the rest" << std::endl;
   uLength = strlen(samplestring);
-  conv = ucnv_open("utf-8", &status);		
-  if (U_FAILURE(status)) 
+  conv = ucnv_open("utf-8", &status);
+  if (U_FAILURE(status))
   {
-  	std::cout << "error: " << status << ":" << 
-		u_errorName(status) << std::endl;
-	return 0;
-  } 
+      std::cout << "error: " << status << ":" <<
+        u_errorName(status) << std::endl;
+    return 0;
+  }
   uBufSize = (uLength/ucnv_getMinCharSize(conv));
   uBuf = (UChar*)malloc(uBufSize * sizeof(UChar));
-  
+
   target = uBuf;
-  
-  ucnv_toUChars(conv, target, uLength, 
-		samplestring, uLength, &status);
-  if (U_FAILURE(status)) 
+
+  ucnv_toUChars(conv, target, uLength,
+        samplestring, uLength, &status);
+  if (U_FAILURE(status))
   {
-  	std::cout << "error: " << status << ":" << 
-		u_errorName(status) << std::endl;
-	return 0;
-  } 
+      std::cout << "error: " << status << ":" <<
+        u_errorName(status) << std::endl;
+    return 0;
+  }
 
   cout << samplestring << endl;
 

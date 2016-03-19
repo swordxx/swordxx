@@ -1,14 +1,14 @@
 /******************************************************************************
  *
- *  utf8hebrewpoints.cpp -	SWFilter descendant to remove UTF-8 Hebrew
- *				vowel points
+ *  utf8hebrewpoints.cpp -    SWFilter descendant to remove UTF-8 Hebrew
+ *                vowel points
  *
  * $Id$
  *
  * Copyright 2001-2013 CrossWire Bible Society (http://www.crosswire.org)
- *	CrossWire Bible Society
- *	P. O. Box 2528
- *	Tempe, AZ  85280-2528
+ *    CrossWire Bible Society
+ *    P. O. Box 2528
+ *    Tempe, AZ  85280-2528
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -30,14 +30,14 @@ namespace swordxx {
 
 namespace {
 
-	static const char oName[] = "Hebrew Vowel Points";
-	static const char oTip[]  = "Toggles Hebrew Vowel Points";
+    static const char oName[] = "Hebrew Vowel Points";
+    static const char oTip[]  = "Toggles Hebrew Vowel Points";
 
-	static const StringList *oValues() {
-		static const SWBuf choices[3] = {"On", "Off", ""};
-		static const StringList oVals(&choices[0], &choices[2]);
-		return &oVals;
-	}
+    static const StringList *oValues() {
+        static const SWBuf choices[3] = {"On", "Off", ""};
+        static const StringList oVals(&choices[0], &choices[2]);
+        return &oVals;
+    }
 }
 
 
@@ -49,20 +49,20 @@ UTF8HebrewPoints::~UTF8HebrewPoints(){};
 
 
 char UTF8HebrewPoints::processText(SWBuf &text, const SWKey *key, const SWModule *module) {
-	if (!option) {
-		//The UTF-8 range 0xD6 0xB0 to 0xD6 0xBF excluding 0xD6 0xBE consist of Hebrew cantillation marks so block those out.
-		SWBuf orig = text;
-		const unsigned char* from = (unsigned char*)orig.c_str();
-		for (text = ""; *from; from++) {
-			if ((*from == 0xD6) && (*(from + 1) >= 0xB0 && *(from + 1) <= 0xBF) && (*(from + 1) != 0xBE)) {
-				from++;
-			}
-			else {
-     			        text += *from;
+    if (!option) {
+        //The UTF-8 range 0xD6 0xB0 to 0xD6 0xBF excluding 0xD6 0xBE consist of Hebrew cantillation marks so block those out.
+        SWBuf orig = text;
+        const unsigned char* from = (unsigned char*)orig.c_str();
+        for (text = ""; *from; from++) {
+            if ((*from == 0xD6) && (*(from + 1) >= 0xB0 && *(from + 1) <= 0xBF) && (*(from + 1) != 0xBE)) {
+                from++;
+            }
+            else {
+                         text += *from;
                         }
-		}
-     	}
-	return 0;
+        }
+         }
+    return 0;
 }
 
 

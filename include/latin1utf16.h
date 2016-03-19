@@ -1,13 +1,13 @@
 /***************************************************************************
  *
- *  latin1utf16.h -	Implementation of Latin1UTF16
+ *  latin1utf16.h -    Implementation of Latin1UTF16
  *
  * $Id$
  *
  * Copyright 2001-2013 CrossWire Bible Society (http://www.crosswire.org)
- *	CrossWire Bible Society
- *	P. O. Box 2528
- *	Tempe, AZ  85280-2528
+ *    CrossWire Bible Society
+ *    P. O. Box 2528
+ *    Tempe, AZ  85280-2528
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -31,8 +31,8 @@ namespace swordxx {
  */
 class SWDLLEXPORT Latin1UTF16 : public SWFilter {
 public:
-	Latin1UTF16();
-	virtual char processText(SWBuf &text, const SWKey *key = 0, const SWModule *module = 0);
+    Latin1UTF16();
+    virtual char processText(SWBuf &text, const SWKey *key = 0, const SWModule *module = 0);
 };
 
 } /* namespace swordxx */

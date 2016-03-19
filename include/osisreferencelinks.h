@@ -1,7 +1,7 @@
 /******************************************************************************
  *
- *  osisreferencelinks.h -	SWFilter descendant to toggle OSIS reference
- *				links with specified type/subType
+ *  osisreferencelinks.h -    SWFilter descendant to toggle OSIS reference
+ *                links with specified type/subType
  *
  * $Id$
  *
@@ -31,22 +31,22 @@ namespace swordxx {
 /** This Filter hides reference links with a particular type/subtype in an OSIS text
  */
 class SWDLLEXPORT OSISReferenceLinks : public SWOptionFilter {
-	SWBuf optionName;
-	SWBuf optionTip;
-	SWBuf type;
-	SWBuf subType;
+    SWBuf optionName;
+    SWBuf optionTip;
+    SWBuf type;
+    SWBuf subType;
 public:
 
-	/**
-	 * @param optionName - name of this option
-	 * @param optionTip - user help tip for this option
-	 * @param type - which reference types to hide
-	 * @param subType - which reference subTypes to hide (optional)
-	 * @param defaultValue - default value of option "On" or "Off" (optional)
-	 */
-	OSISReferenceLinks(const char *optionName, const char *optionTip, const char *type, const char *subType = 0, const char *defaultValue = "On");
-	virtual ~OSISReferenceLinks();
-	virtual char processText(SWBuf &text, const SWKey *key = 0, const SWModule *module = 0);
+    /**
+     * @param optionName - name of this option
+     * @param optionTip - user help tip for this option
+     * @param type - which reference types to hide
+     * @param subType - which reference subTypes to hide (optional)
+     * @param defaultValue - default value of option "On" or "Off" (optional)
+     */
+    OSISReferenceLinks(const char *optionName, const char *optionTip, const char *type, const char *subType = 0, const char *defaultValue = "On");
+    virtual ~OSISReferenceLinks();
+    virtual char processText(SWBuf &text, const SWKey *key = 0, const SWModule *module = 0);
 };
 
 } /* namespace swordxx */

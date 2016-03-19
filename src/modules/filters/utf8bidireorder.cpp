@@ -1,15 +1,15 @@
 /******************************************************************************
  *
- *  utf8bidireorder.cpp -	SWFilter descendant to perform reordering of
- *				UTF-8 text to visual order according to the
- *				Unicode Bidirectional Algorithm (UBA)
+ *  utf8bidireorder.cpp -    SWFilter descendant to perform reordering of
+ *                UTF-8 text to visual order according to the
+ *                Unicode Bidirectional Algorithm (UBA)
  *
  * $Id$
  *
  * Copyright 2001-2013 CrossWire Bible Society (http://www.crosswire.org)
- *	CrossWire Bible Society
- *	P. O. Box 2528
- *	Tempe, AZ  85280-2528
+ *    CrossWire Bible Society
+ *    P. O. Box 2528
+ *    Tempe, AZ  85280-2528
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -50,13 +50,13 @@ UTF8BiDiReorder::~UTF8BiDiReorder() {
 char UTF8BiDiReorder::processText(SWBuf &text, const SWKey *key, const SWModule *module)
 {
         UChar *ustr, *ustr2;
-	if ((unsigned long)key < 2)	// hack, we're en(1)/de(0)ciphering
-		return -1;
-        
+    if ((unsigned long)key < 2)    // hack, we're en(1)/de(0)ciphering
+        return -1;
+
         int32_t len = text.length();
         ustr = new UChar[len]; //each char could become a surrogate pair
 
-	// Convert UTF-8 string to UTF-16 (UChars)
+    // Convert UTF-8 string to UTF-16 (UChars)
         len = ucnv_toUChars(conv, ustr, len, text.c_str(), -1, &err);
         ustr2 = new UChar[len];
 
@@ -69,13 +69,13 @@ char UTF8BiDiReorder::processText(SWBuf &text, const SWKey *key, const SWModule 
 //        len = ubidi_writeReverse(ustr, len, ustr2, len,
 //                UBIDI_DO_MIRRORING | UBIDI_REMOVE_BIDI_CONTROLS, &err);
 
-	   text.setSize(text.size()*2);
-	   len = ucnv_fromUChars(conv, text.getRawData(), text.size(), ustr2, len, &err);
-	   text.setSize(len);
+       text.setSize(text.size()*2);
+       len = ucnv_fromUChars(conv, text.getRawData(), text.size(), ustr2, len, &err);
+       text.setSize(len);
 
         delete [] ustr2;
         delete [] ustr;
-	return 0;
+    return 0;
 }
 
 

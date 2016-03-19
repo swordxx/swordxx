@@ -1,13 +1,13 @@
 /******************************************************************************
  *
- *  canon_nrsv.h -	Versification data for the NRSV system
+ *  canon_nrsv.h -    Versification data for the NRSV system
  *
  * $Id$
  *
  * Copyright 2009-2013 CrossWire Bible Society (http://www.crosswire.org)
- *	CrossWire Bible Society
- *	P. O. Box 2528
- *	Tempe, AZ  85280-2528
+ *    CrossWire Bible Society
+ *    P. O. Box 2528
+ *    Tempe, AZ  85280-2528
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -30,14 +30,14 @@ namespace swordxx {
 
 /******************************************************************************
  * [on]tbooks_nrsv - initialize static instance for all canonical
- *		 text names and chapmax
+ *         text names and chapmax
  */
 // for otbooks_nrsv, use otbooks
 
 // for ntbooks_nrsv, use ntbooks
 
 /******************************************************************************
- *	Maximum verses per chapter
+ *    Maximum verses per chapter
  */
 
 int vm_nrsv[] = {

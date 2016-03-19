@@ -1,13 +1,13 @@
 /******************************************************************************
  *
- *  xml2gbs.cpp -	Importer for GenBooks formatted as OSIS, ThML, or TEI
+ *  xml2gbs.cpp -    Importer for GenBooks formatted as OSIS, ThML, or TEI
  *
  * $Id$
  *
  * Copyright 2003-2012 CrossWire Bible Society (http://www.crosswire.org)
- *	CrossWire Bible Society
- *	P. O. Box 2528
- *	Tempe, AZ  85280-2528
+ *    CrossWire Bible Society
+ *    P. O. Box 2528
+ *    Tempe, AZ  85280-2528
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -21,7 +21,7 @@
  */
 
 #ifdef _MSC_VER
-	#pragma warning( disable: 4251 )
+    #pragma warning( disable: 4251 )
 #endif
 
 #include <ctype.h>
@@ -55,22 +55,22 @@ unsigned char detectFormat(char* filename) {
 
   std::ifstream infile(filename);
   std::string entbuffer;
-  
+
   if (!infile.is_open()) {
         std::cerr << HELPTEXT;
         std::cerr << std::endl << std::endl << "Could not open file \"" << filename << "\"" << std::endl;
   }
   else {
-	while (std::getline(infile, entbuffer) && format == F_AUTODETECT) {
+    while (std::getline(infile, entbuffer) && format == F_AUTODETECT) {
                 if (strstr(entbuffer.c_str(), "<osis")) {
                         format = F_OSIS;
                 }
                 else if (strstr(entbuffer.c_str(), "<ThML")) {
                         format = F_THML;
                 }
-		else if (strstr(entbuffer.c_str(), "<TEI")) {
+        else if (strstr(entbuffer.c_str(), "<TEI")) {
                         format = F_TEI;
-		}
+        }
         }
         infile.close();
   }
@@ -130,174 +130,174 @@ int processXML(const char* filename, char* modname, bool longnames, bool exportf
   int c;
   while ((c = infile.get()) != EOF) {
     if (c == '<') {
-	    {
-		    keybuffer = "";
-		    while ((c = infile.get()) != '>')
-			    keybuffer += c;
-		    keybuffer += c;
-	    }
+        {
+            keybuffer = "";
+            while ((c = infile.get()) != '>')
+                keybuffer += c;
+            keybuffer += c;
+        }
 
       if (keybuffer.length()) {
-	if (((format == F_OSIS) && ((!strncmp(keybuffer.c_str(), "/div>", 5)) || (!strncmp(keybuffer.c_str(), "/verse>", 7)) || (!strncmp(keybuffer.c_str(), "/chapter>", 9)))) ||
+    if (((format == F_OSIS) && ((!strncmp(keybuffer.c_str(), "/div>", 5)) || (!strncmp(keybuffer.c_str(), "/verse>", 7)) || (!strncmp(keybuffer.c_str(), "/chapter>", 9)))) ||
            ((format == F_THML) && ((!strncmp(keybuffer.c_str(), "/div", 4)) && (keybuffer[4] > '0' && keybuffer[4] < '7')))) {
-	  if (!closer) {
-       	    keysize = 0;
+      if (!closer) {
+               keysize = 0;
             keybuffer2 = "";
-       	    for (i = 0; i < level; i++) {
+               for (i = 0; i < level; i++) {
               keybuffer2 += '/';
-       	      keysize++;
-       	      keybuffer2 += divs[i];
+                 keysize++;
+                 keybuffer2 += divs[i];
               keysize += divs[i].length();
-	      std::cout << keybuffer2 << std::endl;
-       	    }
+          std::cout << keybuffer2 << std::endl;
+               }
 
-	    if (level) {
-	      std::cout << keybuffer2 << std::endl;
-	      if (exportfile) {
-		outfile << "$$$" << keybuffer2 << std::endl << entbuffer << std::endl;
-	      }
-	      else {
-		book->setKey(keybuffer2.c_str());
-		book->setEntry(entbuffer.c_str(), entrysize); // save text to module at current position
-	      }
-	    }
-	  }
-	  level--;
-	  entbuffer = "";
-	  entrysize = 0;
+        if (level) {
+          std::cout << keybuffer2 << std::endl;
+          if (exportfile) {
+        outfile << "$$$" << keybuffer2 << std::endl << entbuffer << std::endl;
+          }
+          else {
+        book->setKey(keybuffer2.c_str());
+        book->setEntry(entbuffer.c_str(), entrysize); // save text to module at current position
+          }
+        }
+      }
+      level--;
+      entbuffer = "";
+      entrysize = 0;
 
-	  closer = true;
-	}
-	else if (((format == F_OSIS) && !((!strncmp(keybuffer.c_str(), "div>", 4) || !strncmp(keybuffer.c_str(), "div ", 4)) || (!strncmp(keybuffer.c_str(), "verse>", 6) || !strncmp(keybuffer.c_str(), "verse ", 6)) || (!strncmp(keybuffer.c_str(), "chapter>", 8) || !strncmp(keybuffer.c_str(), "chapter ", 8)))) ||
+      closer = true;
+    }
+    else if (((format == F_OSIS) && !((!strncmp(keybuffer.c_str(), "div>", 4) || !strncmp(keybuffer.c_str(), "div ", 4)) || (!strncmp(keybuffer.c_str(), "verse>", 6) || !strncmp(keybuffer.c_str(), "verse ", 6)) || (!strncmp(keybuffer.c_str(), "chapter>", 8) || !strncmp(keybuffer.c_str(), "chapter ", 8)))) ||
                 ((format == F_THML) && !((!strncmp(keybuffer.c_str(), "div", 3)) && (keybuffer[3] > '0' && keybuffer[3] < '7')))) {
-	  entbuffer += '<';
-	  entrysize++;
-	  entrysize += keybuffer.length();
-	  entbuffer += keybuffer;
-	}
-	else {
-	  //we have a divN...
-       	  if (!closer) {
+      entbuffer += '<';
+      entrysize++;
+      entrysize += keybuffer.length();
+      entbuffer += keybuffer;
+    }
+    else {
+      //we have a divN...
+             if (!closer) {
             keysize = 0;
-       	    keybuffer2= "";
-       	    for (i = 0; i < level; i++) {
+               keybuffer2= "";
+               for (i = 0; i < level; i++) {
               keybuffer2 += '/';
-       	      keysize++;
-       	      keybuffer2 += divs[i];
+                 keysize++;
+                 keybuffer2 += divs[i];
               keysize += divs[i].length();
-	      std::cout << keybuffer2 << std::endl;
-       	    }
+          std::cout << keybuffer2 << std::endl;
+               }
 
-	    if (level) {
-	      std::cout << keybuffer2 << std::endl;
-	      if (exportfile) {
-		outfile << "$$$" << keybuffer2 << std::endl << entbuffer << std::endl;
-	      }
-	      else {
-		book->setKey(keybuffer2.c_str());
-		book->setEntry(entbuffer.c_str(), entrysize); // save text to module at current position
-	      }
-	    }
-	  }
+        if (level) {
+          std::cout << keybuffer2 << std::endl;
+          if (exportfile) {
+        outfile << "$$$" << keybuffer2 << std::endl << entbuffer << std::endl;
+          }
+          else {
+        book->setKey(keybuffer2.c_str());
+        book->setEntry(entbuffer.c_str(), entrysize); // save text to module at current position
+          }
+        }
+      }
 
-	  entbuffer= "";
-	  entrysize = 0;
+      entbuffer= "";
+      entrysize = 0;
 
-	  level++;
+      level++;
           keysize = keybuffer.length()-1;
 
           type = "";
-      	  n = "";
-       	  title = "";
+            n = "";
+             title = "";
 
           if (format == F_OSIS && longnames == false) {
-               	  strtmp = (char*)strstr(keybuffer.c_str(), "osisID=\"");
-               	  if (strtmp) {
-               	    strtmp += 8;
-               	    for (;*strtmp != '\"'; strtmp++) {
-               	      if (*strtmp == 10) {
-               		title += ' ';
-               	      }
-               	      else if (*strtmp == '.') {
+                     strtmp = (char*)strstr(keybuffer.c_str(), "osisID=\"");
+                     if (strtmp) {
+                       strtmp += 8;
+                       for (;*strtmp != '\"'; strtmp++) {
+                         if (*strtmp == 10) {
+                       title += ' ';
+                         }
+                         else if (*strtmp == '.') {
                         title = "";
-               	      }
-               	      else if (*strtmp != 13) {
-               		title += *strtmp;
-               	      }
-               	    }
-               	  }
+                         }
+                         else if (*strtmp != 13) {
+                       title += *strtmp;
+                         }
+                       }
+                     }
                   keybuffer = title;
           }
           else {
-               	  strtmp = (char*)strstr(keybuffer.c_str(), "type=\"");
-               	  if (strtmp) {
-               	    strtmp += 6;
-               	    for (;*strtmp != '\"'; strtmp++) {
-               	      if (*strtmp == 10) {
-               		type+= ' ';
-               	      }
-               	      else if (*strtmp != 13) {
-               		type+= *strtmp;
-               	      }
-               	    }
-               	  }
+                     strtmp = (char*)strstr(keybuffer.c_str(), "type=\"");
+                     if (strtmp) {
+                       strtmp += 6;
+                       for (;*strtmp != '\"'; strtmp++) {
+                         if (*strtmp == 10) {
+                       type+= ' ';
+                         }
+                         else if (*strtmp != 13) {
+                       type+= *strtmp;
+                         }
+                       }
+                     }
 
-               	  strtmp = (char*)strstr(keybuffer.c_str(), "n=\"");
-               	  if (strtmp) {
-               	    strtmp += 3;
-               	    for (;*strtmp != '\"'; strtmp++) {
-               	      if (*strtmp == 10) {
-               		n += ' ';
-               	      }
-               	      else if (*strtmp != 13) {
-               		n += *strtmp;
-               	      }
-               	    }
-               	  }
+                     strtmp = (char*)strstr(keybuffer.c_str(), "n=\"");
+                     if (strtmp) {
+                       strtmp += 3;
+                       for (;*strtmp != '\"'; strtmp++) {
+                         if (*strtmp == 10) {
+                       n += ' ';
+                         }
+                         else if (*strtmp != 13) {
+                       n += *strtmp;
+                         }
+                       }
+                     }
 
                   if (format == F_OSIS) {
-                       	  strtmp = (char*)strstr(keybuffer.c_str(), "title=\"");
-                	  if (strtmp) {
-                	    strtmp += 7;
-                	    for (;*strtmp != '\"'; strtmp++) {
-                	      if (*strtmp == 10) {
-                		title += ' ';
-                	      }
-                	      else if (*strtmp != 13) {
-                		title += *strtmp;
-                	      }
-                	    }
-                	  }
+                             strtmp = (char*)strstr(keybuffer.c_str(), "title=\"");
+                      if (strtmp) {
+                        strtmp += 7;
+                        for (;*strtmp != '\"'; strtmp++) {
+                          if (*strtmp == 10) {
+                        title += ' ';
+                          }
+                          else if (*strtmp != 13) {
+                        title += *strtmp;
+                          }
+                        }
+                      }
                   }
                   else if (format == F_THML) {
-                	  strtmp = (char*)strstr(keybuffer.c_str(), "title=\"");
-                	  if (strtmp) {
-                	    strtmp += 7;
-                	    for (;*strtmp != '\"'; strtmp++) {
-                	      if (*strtmp == 10) {
-                		title += ' ';
-                	      }
-                	      else if (*strtmp != 13) {
-                		title += *strtmp;
-                	      }
-                	    }
-                	  }
+                      strtmp = (char*)strstr(keybuffer.c_str(), "title=\"");
+                      if (strtmp) {
+                        strtmp += 7;
+                        for (;*strtmp != '\"'; strtmp++) {
+                          if (*strtmp == 10) {
+                        title += ' ';
+                          }
+                          else if (*strtmp != 13) {
+                        title += *strtmp;
+                          }
+                        }
+                      }
                   }
 
-        	  keybuffer = type;
-        	  if (keybuffer.length() && n.length())
-        	    keybuffer += " ";
-        	  keybuffer += n;
+              keybuffer = type;
+              if (keybuffer.length() && n.length())
+                keybuffer += " ";
+              keybuffer += n;
 
-        	  if (longnames && keybuffer.length())
-        	    keybuffer += ": ";
-        	  if (longnames || !keybuffer.length())
-        	    keybuffer += title;
+              if (longnames && keybuffer.length())
+                keybuffer += ": ";
+              if (longnames || !keybuffer.length())
+                keybuffer += title;
           }
           divs[level-1] = keybuffer;
 
-	  closer = false;
-	}
+      closer = false;
+    }
       }
     }
     else if (c != 13) {
@@ -311,7 +311,7 @@ int processXML(const char* filename, char* modname, bool longnames, bool exportf
 #endif
 
 //  delete book;  //causes nasty-bad errors upon execution
-	return 0;
+    return 0;
 }
 
 int main(int argc, char **argv) {

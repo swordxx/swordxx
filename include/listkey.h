@@ -1,15 +1,15 @@
 /******************************************************************************
  *
- *  listkey.h -	code for base class 'listkey'.  listkey is the basis for all
- *		types of keys for indexing into modules
- *		(e.g. verse, word, place, etc.)
+ *  listkey.h -    code for base class 'listkey'.  listkey is the basis for all
+ *        types of keys for indexing into modules
+ *        (e.g. verse, word, place, etc.)
  *
  * $Id$
  *
  * Copyright 1997-2013 CrossWire Bible Society (http://www.crosswire.org)
- *	CrossWire Bible Society
- *	P. O. Box 2528
- *	Tempe, AZ  85280-2528
+ *    CrossWire Bible Society
+ *    P. O. Box 2528
+ *    Tempe, AZ  85280-2528
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -37,108 +37,108 @@ namespace swordxx {
   */
 class SWDLLEXPORT ListKey : public SWKey {
 
-	static SWClass classdef;
-	void init();
+    static SWClass classdef;
+    void init();
 
 protected:
-	int arraypos;
-	int arraymax;
-	int arraycnt;
-	SWKey **array;
+    int arraypos;
+    int arraymax;
+    int arraycnt;
+    SWKey **array;
 
 public:
 
-	/** initializes instance of ListKey
-	 *
-	 * @param ikey text key
-	 */
-	ListKey(const char *ikey = 0);
-	ListKey(ListKey const &k);
+    /** initializes instance of ListKey
+     *
+     * @param ikey text key
+     */
+    ListKey(const char *ikey = 0);
+    ListKey(ListKey const &k);
 
-	/** cleans up instance of ListKey
-	 */
-	virtual ~ListKey();
+    /** cleans up instance of ListKey
+     */
+    virtual ~ListKey();
 
-	virtual SWKey *clone() const;
-	
-	/** Clears out elements of list
-	 */
+    virtual SWKey *clone() const;
+
+    /** Clears out elements of list
+     */
     virtual void clear();
 
 
-	/** Returns number of key elements in list
-	 * @return number of key elements in list
-	 */
+    /** Returns number of key elements in list
+     * @return number of key elements in list
+     */
     virtual int getCount() const;
-	
-	/** Removes current element from list
-	 */
+
+    /** Removes current element from list
+     */
     virtual void remove();
 
-	
-	/** Sets container to subkey element number and repositions that subkey to either top or bottom
-	 *
-	 * @param ielement - element number to set to
-	 * @param pos - set the subkey element to position (TOP) or BOTTOM
+
+    /** Sets container to subkey element number and repositions that subkey to either top or bottom
+     *
+     * @param ielement - element number to set to
+     * @param pos - set the subkey element to position (TOP) or BOTTOM
      * @return error status
-	 */
+     */
     virtual char setToElement(int ielement, SW_POSITION = TOP);
 
 
-	
-	/** Gets a key element number
-	 *
-	 * @param pos element number to get (or default current)
-	 * @return Key or null on error
-	 */
-	virtual SWKey *getElement(int pos = -1);
-	virtual const SWKey *getElement(int pos = -1) const;
 
-	/** Adds an element to the list
-	 * @param ikey the element to add
-	 */
-	ListKey & operator <<(const SWKey &ikey) { add(ikey); return *this; }
-	virtual void add(const SWKey &ikey);
+    /** Gets a key element number
+     *
+     * @param pos element number to get (or default current)
+     * @return Key or null on error
+     */
+    virtual SWKey *getElement(int pos = -1);
+    virtual const SWKey *getElement(int pos = -1) const;
 
-	/** Equates this ListKey to another ListKey object
-	 *
-	 * @param ikey other ListKey object
-	 */
-	virtual void copyFrom(const ListKey & ikey);
-	virtual void copyFrom(const SWKey & ikey) { SWKey::copyFrom(ikey); }
+    /** Adds an element to the list
+     * @param ikey the element to add
+     */
+    ListKey & operator <<(const SWKey &ikey) { add(ikey); return *this; }
+    virtual void add(const SWKey &ikey);
 
-	/** Positions this key
-	 *
-	 * @param pos position
-	 * @return *this
-	 */
-	virtual void setPosition(SW_POSITION pos);
-	
-	/** Decrements a number of elements
-	 */
-	virtual void decrement(int step = 1);
-	
-	/** Increments a number of elements
-	 */
-	virtual void increment(int step = 1);
+    /** Equates this ListKey to another ListKey object
+     *
+     * @param ikey other ListKey object
+     */
+    virtual void copyFrom(const ListKey & ikey);
+    virtual void copyFrom(const SWKey & ikey) { SWKey::copyFrom(ikey); }
 
-	virtual bool isTraversable() const { return true; }
-	virtual long getIndex() const { return arraypos; }
-	virtual const char *getRangeText() const;
-	virtual const char *getOSISRefRangeText() const;
-	virtual const char *getShortText() const;
+    /** Positions this key
+     *
+     * @param pos position
+     * @return *this
+     */
+    virtual void setPosition(SW_POSITION pos);
 
-	/**
-	 * Returns the index for the new one given as as parameter.
-	 * The first parameter is the new index.
-	 */
-	virtual void setIndex(long index) { setToElement(index); }
-	virtual const char *getText() const;
-	virtual void setText(const char *ikey);
-	virtual void sort();
+    /** Decrements a number of elements
+     */
+    virtual void decrement(int step = 1);
 
-	SWKEY_OPERATORS
-	ListKey & operator =(const ListKey &key) { copyFrom(key); return *this; }
+    /** Increments a number of elements
+     */
+    virtual void increment(int step = 1);
+
+    virtual bool isTraversable() const { return true; }
+    virtual long getIndex() const { return arraypos; }
+    virtual const char *getRangeText() const;
+    virtual const char *getOSISRefRangeText() const;
+    virtual const char *getShortText() const;
+
+    /**
+     * Returns the index for the new one given as as parameter.
+     * The first parameter is the new index.
+     */
+    virtual void setIndex(long index) { setToElement(index); }
+    virtual const char *getText() const;
+    virtual void setText(const char *ikey);
+    virtual void sort();
+
+    SWKEY_OPERATORS
+    ListKey & operator =(const ListKey &key) { copyFrom(key); return *this; }
 };
 
 } /* namespace swordxx */

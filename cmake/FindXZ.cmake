@@ -20,7 +20,7 @@ FIND_PATH(XZ_INCLUDE_DIR lzma.h )
 
 FIND_LIBRARY(XZ_LIBRARY lzma )
 
-# handle the QUIETLY and REQUIRED arguments and set XZ_FOUND to TRUE if 
+# handle the QUIETLY and REQUIRED arguments and set XZ_FOUND to TRUE if
 # all listed variables are TRUE
 INCLUDE(FindPackageHandleStandardArgs)
 FIND_PACKAGE_HANDLE_STANDARD_ARGS(XZ DEFAULT_MSG XZ_LIBRARY XZ_INCLUDE_DIR)

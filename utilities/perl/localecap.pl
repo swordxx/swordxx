@@ -1,14 +1,14 @@
 #!/usr/bin/perl
 #******************************************************************************
 #
-#  localecap.pl -	This tool is only for locales in Latin-1, not UTF-8
+#  localecap.pl -    This tool is only for locales in Latin-1, not UTF-8
 #
 # $Id$
 #
 # Copyright 2001-2009 CrossWire Bible Society (http://www.crosswire.org)
-#	CrossWire Bible Society
-#	P. O. Box 2528
-#	Tempe, AZ  85280-2528
+#    CrossWire Bible Society
+#    P. O. Box 2528
+#    Tempe, AZ  85280-2528
 #
 # This program is free software; you can redistribute it and/or modify it
 # under the terms of the GNU General Public License as published by the
@@ -32,10 +32,10 @@ open (OUTPUT, ">$ARGV[0]");
 foreach $line (@loc) {
 
     if ($line =~ /\[Book Abbrevs\]/) {
-	$abbrevs = 1;
+    $abbrevs = 1;
     }
     elsif ($abbrevs == 1) {
-	$line = uc($line);
+    $line = uc($line);
     }
     print OUTPUT $line;
 }

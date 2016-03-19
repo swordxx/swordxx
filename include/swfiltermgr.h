@@ -1,14 +1,14 @@
 /******************************************************************************
  *
- *  swfiltermgr.h -	definition of class SWFilterMgr used as an interface to
- *			manage filters on a module
+ *  swfiltermgr.h -    definition of class SWFilterMgr used as an interface to
+ *            manage filters on a module
  *
  * $Id$
  *
  * Copyright 2001-2013 CrossWire Bible Society (http://www.crosswire.org)
- *	CrossWire Bible Society
- *	P. O. Box 2528
- *	Tempe, AZ  85280-2528
+ *    CrossWire Bible Society
+ *    P. O. Box 2528
+ *    Tempe, AZ  85280-2528
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -37,7 +37,7 @@ class SWMgr;
 class SWDLLEXPORT SWFilterMgr {
 
 private:
-	SWMgr *parentMgr;
+    SWMgr *parentMgr;
 
 public:
   SWFilterMgr();
@@ -47,9 +47,9 @@ public:
   virtual SWMgr *getParentMgr();
 
   virtual void AddGlobalOptions(SWModule *module, ConfigEntMap &section, ConfigEntMap::iterator start,
-				 ConfigEntMap::iterator end);
+                 ConfigEntMap::iterator end);
   virtual void AddLocalOptions(SWModule *module, ConfigEntMap &section, ConfigEntMap::iterator start,
-				ConfigEntMap::iterator end);
+                ConfigEntMap::iterator end);
 
 
   /**

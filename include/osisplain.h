@@ -1,13 +1,13 @@
 /******************************************************************************
  *
- *  osisplain.h -	Implementation of OSISPlain
+ *  osisplain.h -    Implementation of OSISPlain
  *
  * $Id$
  *
  * Copyright 2003-2013 CrossWire Bible Society (http://www.crosswire.org)
- *	CrossWire Bible Society
- *	P. O. Box 2528
- *	Tempe, AZ  85280-2528
+ *    CrossWire Bible Society
+ *    P. O. Box 2528
+ *    Tempe, AZ  85280-2528
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -33,10 +33,10 @@ namespace swordxx {
 class SWDLLEXPORT OSISPlain : public SWBasicFilter {
 public:
 protected:
-	virtual BasicFilterUserData *createUserData(const SWModule *module, const SWKey *key);
-	virtual bool handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData);
+    virtual BasicFilterUserData *createUserData(const SWModule *module, const SWKey *key);
+    virtual bool handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData);
 public:
-	OSISPlain();
+    OSISPlain();
 };
 
 } /* namespace swordxx */

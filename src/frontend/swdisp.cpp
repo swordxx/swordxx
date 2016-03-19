@@ -1,15 +1,15 @@
 /******************************************************************************
  *
- *  swdisp.cpp -	code for base class 'SWDisplay'.  SWDisplay is the
- *			basis for all types of displays (e.g. raw textout,
- *			curses, xwindow, etc.)
+ *  swdisp.cpp -    code for base class 'SWDisplay'.  SWDisplay is the
+ *            basis for all types of displays (e.g. raw textout,
+ *            curses, xwindow, etc.)
  *
  * $Id$
  *
  * Copyright 1996-2013 CrossWire Bible Society (http://www.crosswire.org)
- *	CrossWire Bible Society
- *	P. O. Box 2528
- *	Tempe, AZ  85280-2528
+ *    CrossWire Bible Society
+ *    P. O. Box 2528
+ *    Tempe, AZ  85280-2528
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -33,12 +33,12 @@ SWClass SWDisplay::classdef(classes);
 
 /******************************************************************************
  * SWDisplay::Display - casts a module to a character pointer and displays it to
- *			raw output (overriden for different display types and
- *			module types if necessary)
+ *            raw output (overriden for different display types and
+ *            module types if necessary)
  *
- * ENT:	imodule - module to display
+ * ENT:    imodule - module to display
  *
- * RET:	error status
+ * RET:    error status
  */
 
 

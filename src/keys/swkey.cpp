@@ -1,15 +1,15 @@
 /******************************************************************************
  *
- *  swkey.cpp -	code for base class 'SWKey'.  SWKey is the basis for all
- *		types of keys for indexing into modules (e.g. verse, word,
- *		place, etc.)
+ *  swkey.cpp -    code for base class 'SWKey'.  SWKey is the basis for all
+ *        types of keys for indexing into modules (e.g. verse, word,
+ *        place, etc.)
  *
  * $Id$
  *
  * Copyright 1997-2013 CrossWire Bible Society (http://www.crosswire.org)
- *	CrossWire Bible Society
- *	P. O. Box 2528
- *	Tempe, AZ  85280-2528
+ *    CrossWire Bible Society
+ *    P. O. Box 2528
+ *    Tempe, AZ  85280-2528
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -37,45 +37,45 @@ SWKey::LocaleCache   SWKey::localeCache;
 /******************************************************************************
  * SWKey Constructor - initializes instance of SWKey
  *
- * ENT:	ikey - text key
+ * ENT:    ikey - text key
  */
 
 SWKey::SWKey(const char *ikey)
 {
-	init();
-	index     = 0;
-	persist   = 0;
-	keytext   = 0;
-	rangeText = 0;
-	error     = 0;
-	userData  = 0;
-	stdstr(&keytext, ikey);
+    init();
+    index     = 0;
+    persist   = 0;
+    keytext   = 0;
+    rangeText = 0;
+    error     = 0;
+    userData  = 0;
+    stdstr(&keytext, ikey);
 }
 
 SWKey::SWKey(SWKey const &k)
 {
-	init();
-	stdstr(&localeName, k.localeName);
-	index     = k.index;
-	persist   = k.persist;
-	userData  = k.userData;
-	keytext   = 0;
-	rangeText = 0;
-	error     = k.error;
-	setText(k.getText());
+    init();
+    stdstr(&localeName, k.localeName);
+    index     = k.index;
+    persist   = k.persist;
+    userData  = k.userData;
+    keytext   = 0;
+    rangeText = 0;
+    error     = k.error;
+    setText(k.getText());
 }
 
 void SWKey::init() {
-	myclass = &classdef;
-	boundSet = false;
-	locale = 0;
-	localeName = 0;
-	setLocale(LocaleMgr::getSystemLocaleMgr()->getDefaultLocaleName());
+    myclass = &classdef;
+    boundSet = false;
+    locale = 0;
+    localeName = 0;
+    setLocale(LocaleMgr::getSystemLocaleMgr()->getDefaultLocaleName());
 }
 
 SWKey *SWKey::clone() const
 {
-	return new SWKey(*this);
+    return new SWKey(*this);
 }
 
 /******************************************************************************
@@ -83,98 +83,98 @@ SWKey *SWKey::clone() const
  */
 
 SWKey::~SWKey() {
-	delete [] keytext;
-	delete [] rangeText;
-	delete [] localeName;
+    delete [] keytext;
+    delete [] rangeText;
+    delete [] localeName;
 }
 
 
 /******************************************************************************
  * SWKey::Persist - Gets whether this object itself persists within a
- *			module that it was used to setKey or just a copy.
- *			(1 - persists in module; 0 - a copy is attempted
+ *            module that it was used to setKey or just a copy.
+ *            (1 - persists in module; 0 - a copy is attempted
  *
- * RET:	value of persist
+ * RET:    value of persist
  */
 
 bool SWKey::isPersist() const
 {
-	return persist;
+    return persist;
 }
 
 
 /******************************************************************************
  * SWKey::getPrivateLocale - Gets a real locale object from our name
  *
- * RET:	locale object associated with our name
+ * RET:    locale object associated with our name
  */
 
 SWLocale *SWKey::getPrivateLocale() const {
-	if (!locale) {
-		if ((!localeCache.name) || (strcmp(localeCache.name, localeName))) {
-			stdstr(&(localeCache.name), localeName);
-			// this line is the entire bit of work we're trying to avoid with the cache
-			// worth it?  compare time examples/cmdline/search KJV "God love world" to
-			// same with this method reduced to:
-			// if (!local) local = ... (call below); return locale;
-			localeCache.locale = LocaleMgr::getSystemLocaleMgr()->getLocale(localeName);
-		}
-		locale = localeCache.locale;
-	}
-	return locale;
+    if (!locale) {
+        if ((!localeCache.name) || (strcmp(localeCache.name, localeName))) {
+            stdstr(&(localeCache.name), localeName);
+            // this line is the entire bit of work we're trying to avoid with the cache
+            // worth it?  compare time examples/cmdline/search KJV "God love world" to
+            // same with this method reduced to:
+            // if (!local) local = ... (call below); return locale;
+            localeCache.locale = LocaleMgr::getSystemLocaleMgr()->getLocale(localeName);
+        }
+        locale = localeCache.locale;
+    }
+    return locale;
 }
 
 
 /******************************************************************************
  * SWKey::Persist - Set/gets whether this object itself persists within a
- *			module that it was used to setKey or just a copy.
- *			(true - persists in module; false - a copy is attempted
+ *            module that it was used to setKey or just a copy.
+ *            (true - persists in module; false - a copy is attempted
  *
- * ENT:	ipersist - value which to set persist
+ * ENT:    ipersist - value which to set persist
  */
 
 void SWKey::setPersist(bool ipersist)
 {
-	persist = ipersist;
+    persist = ipersist;
 }
 
 
 /******************************************************************************
  * SWKey::Error - Gets and clears error status
  *
- * RET:	error status
+ * RET:    error status
  */
 
 char SWKey::popError()
 {
-	char retval = error;
+    char retval = error;
 
-	error = 0;
-	return retval;
+    error = 0;
+    return retval;
 }
 
 
 /******************************************************************************
  * SWKey::setText Equates this SWKey to a character string
  *
- * ENT:	ikey - other swkey object
+ * ENT:    ikey - other swkey object
  */
 
 void SWKey::setText(const char *ikey) {
-	stdstr(&keytext, ikey);
+    stdstr(&keytext, ikey);
 }
 
 
 /******************************************************************************
  * SWKey::copyFrom Equates this SWKey to another SWKey object
  *
- * ENT:	ikey - other swkey object
+ * ENT:    ikey - other swkey object
  */
 
 void SWKey::copyFrom(const SWKey &ikey) {
-// not desirable	Persist(ikey.Persist());
-	setLocale(ikey.getLocale());
-	setText((const char *)ikey);
+// not desirable    Persist(ikey.Persist());
+    setLocale(ikey.getLocale());
+    setText((const char *)ikey);
 }
 
 
@@ -183,7 +183,7 @@ void SWKey::copyFrom(const SWKey &ikey) {
  */
 
 const char *SWKey::getText() const {
-	return keytext;
+    return keytext;
 }
 
 
@@ -192,8 +192,8 @@ const char *SWKey::getText() const {
  */
 
 const char *SWKey::getRangeText() const {
-	stdstr(&rangeText, keytext);
-	return rangeText;
+    stdstr(&rangeText, keytext);
+    return rangeText;
 }
 
 
@@ -202,65 +202,65 @@ const char *SWKey::getRangeText() const {
  */
 
 const char *SWKey::getOSISRefRangeText() const {
-	return getRangeText();
+    return getRangeText();
 }
 
 
 /******************************************************************************
- * SWKey::compare	- Compares another VerseKey object
+ * SWKey::compare    - Compares another VerseKey object
  *
- * ENT:	ikey - key to compare with this one
+ * ENT:    ikey - key to compare with this one
  *
- * RET:	> 0 if this key is greater than compare key
- *	< 0
- *	  0
+ * RET:    > 0 if this key is greater than compare key
+ *    < 0
+ *      0
  */
 
 int SWKey::compare(const SWKey &ikey)
 {
-	return strcmp((const char *)*this, (const char *)ikey);
+    return strcmp((const char *)*this, (const char *)ikey);
 }
 
 
 /******************************************************************************
- * SWKey::setPosition(SW_POSITION)	- Positions this key if applicable
+ * SWKey::setPosition(SW_POSITION)    - Positions this key if applicable
  */
 
 void SWKey::setPosition(SW_POSITION p) {
-	switch (p) {
-	case POS_TOP:
-//		*this = "";
-		break;
-	case POS_BOTTOM:
-//		*this = "zzzzzzzzz";
-		break;
-	} 
+    switch (p) {
+    case POS_TOP:
+//        *this = "";
+        break;
+    case POS_BOTTOM:
+//        *this = "zzzzzzzzz";
+        break;
+    }
 }
 
 
 /******************************************************************************
- * SWKey::increment	- Increments key a number of entries
+ * SWKey::increment    - Increments key a number of entries
  *
- * ENT:	increment	- Number of entries to jump forward
+ * ENT:    increment    - Number of entries to jump forward
  *
  * RET: *this
  */
 
 void SWKey::increment(int) {
-	error = KEYERR_OUTOFBOUNDS;
+    error = KEYERR_OUTOFBOUNDS;
 }
 
 
 /******************************************************************************
- * SWKey::decrement	- Decrements key a number of entries
+ * SWKey::decrement    - Decrements key a number of entries
  *
- * ENT:	decrement	- Number of entries to jump backward
+ * ENT:    decrement    - Number of entries to jump backward
  *
  * RET: *this
  */
 
 void SWKey::decrement(int) {
-	error = KEYERR_OUTOFBOUNDS;
+    error = KEYERR_OUTOFBOUNDS;
 }
 
 } /* namespace swordxx */

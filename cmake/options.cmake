@@ -24,9 +24,9 @@ endmacro(_SET_FANCY)
 
 # Installation options
 IF(APPLE)
-	SET(SWORD_INSTALL_DIR "/opt/local")
+    SET(SWORD_INSTALL_DIR "/opt/local")
 ELSE(APPLE)
-	SET(SWORD_INSTALL_DIR "/usr/local")
+    SET(SWORD_INSTALL_DIR "/usr/local")
 ENDIF(APPLE)
 
 _SET_FANCY(CMAKE_INSTALL_PREFIX "${SWORD_INSTALL_DIR}" "Directory into which to install architecture-dependent files. Defaults to ${SWORD_INSTALL_DIR}.")

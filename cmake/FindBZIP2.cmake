@@ -20,7 +20,7 @@ FIND_PATH(BZIP2_INCLUDE_DIR bzlib.h )
 
 FIND_LIBRARY(BZIP2_LIBRARY bz2 )
 
-# handle the QUIETLY and REQUIRED arguments and set BZIP2_FOUND to TRUE if 
+# handle the QUIETLY and REQUIRED arguments and set BZIP2_FOUND to TRUE if
 # all listed variables are TRUE
 INCLUDE(FindPackageHandleStandardArgs)
 FIND_PACKAGE_HANDLE_STANDARD_ARGS(BZIP2 DEFAULT_MSG BZIP2_LIBRARY BZIP2_INCLUDE_DIR)

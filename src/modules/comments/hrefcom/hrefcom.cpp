@@ -1,15 +1,15 @@
 /******************************************************************************
  *
- *  hrefcom.cpp -	code for class 'HREFCom'- a module that produces HTML
- *			HREFs pointing to actual text desired.  Uses standard
- *			files:	ot and nt using indexs ??.bks ??.cps ??.vss
+ *  hrefcom.cpp -    code for class 'HREFCom'- a module that produces HTML
+ *            HREFs pointing to actual text desired.  Uses standard
+ *            files:    ot and nt using indexs ??.bks ??.cps ??.vss
  *
  * $Id$
  *
  * Copyright 1998-2013 CrossWire Bible Society (http://www.crosswire.org)
- *	CrossWire Bible Society
- *	P. O. Box 2528
- *	Tempe, AZ  85280-2528
+ *    CrossWire Bible Society
+ *    P. O. Box 2528
+ *    Tempe, AZ  85280-2528
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -38,16 +38,16 @@ namespace swordxx {
  /******************************************************************************
  * HREFCom Constructor - Initializes data for instance of HREFCom
  *
- * ENT:	iname - Internal name for module
- *	iprefix - string to prepend to each HREF (e.g. "file://mods/com/jfb/")
- *	idesc - Name to display to user for module
- *	idisp	 - Display object to use for displaying
+ * ENT:    iname - Internal name for module
+ *    iprefix - string to prepend to each HREF (e.g. "file://mods/com/jfb/")
+ *    idesc - Name to display to user for module
+ *    idisp     - Display object to use for displaying
  */
 
 HREFCom::HREFCom(const char *ipath, const char *iprefix, const char *iname, const char *idesc, SWDisplay *idisp) : RawVerse(ipath), SWCom(iname, idesc, idisp)
 {
-	prefix   = 0;
-	stdstr(&prefix, iprefix);
+    prefix   = 0;
+    stdstr(&prefix, iprefix);
 }
 
 
@@ -57,39 +57,39 @@ HREFCom::HREFCom(const char *ipath, const char *iprefix, const char *iname, cons
 
 HREFCom::~HREFCom()
 {
-	if (prefix)
-		delete [] prefix;
+    if (prefix)
+        delete [] prefix;
 }
 
 
 /******************************************************************************
- * HREFCom::operator char *	- Returns the correct verse when char * cast
- *					is requested
+ * HREFCom::operator char *    - Returns the correct verse when char * cast
+ *                    is requested
  *
  * RET: string buffer with verse
  */
 
 SWBuf &HREFCom::getRawEntryBuf() const {
-	long  start;
-	unsigned short size;
-	VerseKey *key = 0;
+    long  start;
+    unsigned short size;
+    VerseKey *key = 0;
 
         key = &getVerseKey();
 
-	findOffset(key->getTestament(), key->getTestamentIndex(), &start, &size);
-	entrySize = size;        // support getEntrySize call
+    findOffset(key->getTestament(), key->getTestamentIndex(), &start, &size);
+    entrySize = size;        // support getEntrySize call
 
-	SWBuf tmpbuf;
+    SWBuf tmpbuf;
 
-	readText(key->getTestament(), start, size, tmpbuf);
-	entryBuf = prefix;
-	entryBuf += tmpbuf.c_str();
-	prepText(entryBuf);
+    readText(key->getTestament(), start, size, tmpbuf);
+    entryBuf = prefix;
+    entryBuf += tmpbuf.c_str();
+    prepText(entryBuf);
 
-	if (key != this->key)
-		delete key;
+    if (key != this->key)
+        delete key;
 
-	return entryBuf;
+    return entryBuf;
 }
 
 } /* namespace swordxx */

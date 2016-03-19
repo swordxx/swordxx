@@ -11,12 +11,12 @@ The compression algorithms used here are based upon the algorithms developed
 and published by Haruhiko Okumura in a paper entitled "Data Compression
 Algorithms of LARC and LHarc."  This paper discusses three compression
 algorithms, LSZZ, LZARI, and LZHUF.  LZSS is described as the "first" of
-these, and is described as providing moderate compression with good speed. 
+these, and is described as providing moderate compression with good speed.
 LZARI is described as an improved LZSS, a combination of the LZSS algorithm
 with adaptive arithmetic compression.  It is described as being slower than
 LZSS but with better compression.  LZHUF (the basis of the common LHA
 compression program) was included in the paper, however, a free usage license
-was not included. 
+was not included.
 
 The following are copies of the statements included at the beginning of each
 source code listing that was supplied in the working paper.
@@ -96,7 +96,7 @@ void Decode(                        // no return value
 //
 //  N         - This is the size of the ring buffer.  It is set
 //              to 4K.  It is important to note that a position
-//              within the ring buffer requires 12 bits.  
+//              within the ring buffer requires 12 bits.
 //
 //  F         - This is the maximum length of a character sequence
 //              that can be taken from the ring buffer.  It is set
@@ -106,10 +106,10 @@ void Decode(                        // no return value
 //              another way, it is not necessary to encode a length
 //              of 0-18, it is necessary to encode a length of
 //              3-18, which requires 4 bits.
-//              
+//
 //  THRESHOLD - It takes 2 bytes to store an offset and
 //              a length.  If a character sequence only
-//              requires 1 or 2 characters to store 
+//              requires 1 or 2 characters to store
 //              uncompressed, then it is better to store
 //              it uncompressed than as an offset into
 //              the ring buffer.
@@ -117,10 +117,10 @@ void Decode(                        // no return value
 // Note that the 12 bits used to store the position and the 4 bits
 // used to store the length equal a total of 16 bits, or 2 bytes.
 
-#define N		4096
-#define F		18
-#define THRESHOLD	3
-#define NOT_USED	N
+#define N        4096
+#define F        18
+#define THRESHOLD    3
+#define NOT_USED    N
 
 // m_ring_buffer is a text buffer.  It contains "nodes" of
 // uncompressed text that can be indexed by position.  That is,
@@ -128,7 +128,7 @@ void Decode(                        // no return value
 // and a length.  When decoding, the compressed text may contain
 // a position in the ring buffer and a count of the number of
 // bytes from the ring buffer that are to be moved into the
-// uncompressed buffer.  
+// uncompressed buffer.
 //
 // This ring buffer is not maintained as part of the compressed
 // text.  Instead, it is reconstructed dynamically.  That is,
@@ -141,7 +141,7 @@ unsigned char m_ring_buffer[N + F - 1];
 
 // m_match_position and m_match_length are set by InsertNode().
 //
-// These variables indicate the position in the ring buffer 
+// These variables indicate the position in the ring buffer
 // and the number of characters at that position that match
 // a given string.
 
@@ -152,18 +152,18 @@ short int m_match_length;
 // a tree structure.  The dad is the parent and it has a right and
 // left son (child).
 //
-// For i = 0 to N-1, m_rson[i] and m_lson[i] will be the right 
-// and left children of node i.  
+// For i = 0 to N-1, m_rson[i] and m_lson[i] will be the right
+// and left children of node i.
 //
 // For i = 0 to N-1, m_dad[i] is the parent of node i.
 //
-// For i = 0 to 255, rson[N + i + 1] is the root of the tree for 
-// strings that begin with the character i.  Note that this requires 
+// For i = 0 to 255, rson[N + i + 1] is the root of the tree for
+// strings that begin with the character i.  Note that this requires
 // one byte characters.
 //
 // These nodes store values of 0...(N-1).  Memory requirements
 // can be reduces by using 2-byte integers instead of full 4-byte
-// integers (for 32-bit applications).  Therefore, these are 
+// integers (for 32-bit applications).  Therefore, these are
 // defined as "short ints."
 
 short int m_lson[N + 1];
@@ -176,8 +176,8 @@ short int m_dad[N + 1];
 /*
  -------------------------------------------------------------------------
     cLZSS::InitTree
-    
-    This function initializes the tree nodes to "empty" states. 
+
+    This function initializes the tree nodes to "empty" states.
  -------------------------------------------------------------------------
 */
 
@@ -197,7 +197,7 @@ void cLZSS::InitTree(               // no return value
     // For the same range of i, m_dad[i] is the parent of node i.
     // These are initialized to a known value that can represent
     // a "not used" state.
-    
+
     for (i = 0; i < N; i++)
         {
         m_lson[i] = NOT_USED;
@@ -224,11 +224,11 @@ void cLZSS::InitTree(               // no return value
 /*
  -------------------------------------------------------------------------
     cLZSS::InsertNode
-    
+
     This function inserts a string from the ring buffer into one of
     the trees.  It loads the match position and length member variables
     for the longest match.
-    
+
     The string to be inserted is identified by the parameter Pos,
     A full F bytes are inserted.  So, m_ring_buffer[Pos ... Pos+F-1]
     are inserted.
@@ -347,7 +347,7 @@ void cLZSS::InsertNode(                 // no return value
 
 /*
  -------------------------------------------------------------------------
-    cLZSS::DeleteNode   
+    cLZSS::DeleteNode
 
     This function removes the node "Node" from the tree.
  -------------------------------------------------------------------------
@@ -445,7 +445,7 @@ void cLZSS::Encode(                     // no return value
     // that the next unit is a <position,length> pair (2 bytes).
     //
     // code_buf[1..16] stores eight units of code.  Since the best
-    // we can do is store eight <position,length> pairs, at most 16 
+    // we can do is store eight <position,length> pairs, at most 16
     // bytes are needed to store this.
     //
     // This is why the maximum size of the code buffer is 17 bytes.
@@ -460,7 +460,7 @@ void cLZSS::Encode(                     // no return value
     //        |                           |
     //        |             first sequence in code buffer
     //        |
-    //      last sequence in code buffer        
+    //      last sequence in code buffer
 
     mask = 1;
 
@@ -474,7 +474,7 @@ void cLZSS::Encode(                     // no return value
     // with bytes from the input stream.
 
     memset(m_ring_buffer, ' ', N - F);
-    
+
     // Read F bytes into the last F bytes of the ring buffer.
     //
     // This function loads the buffer with X characters and returns
@@ -523,8 +523,8 @@ void cLZSS::Encode(                     // no return value
             // Send one character.  Remember that code_buf[0] is the
             // set of flags for the next eight items.
 
-            m_match_length = 1;     
-            code_buf[0] |= mask;  
+            m_match_length = 1;
+            code_buf[0] |= mask;
             code_buf[code_buf_pos++] = m_ring_buffer[r];
             }
 
@@ -538,7 +538,7 @@ void cLZSS::Encode(                     // no return value
 
             code_buf[code_buf_pos++] = (unsigned char) m_match_position;
             code_buf[code_buf_pos++] = (unsigned char) (
-                ((m_match_position >> 4) & 0xf0) | 
+                ((m_match_position >> 4) & 0xf0) |
                 (m_match_length - THRESHOLD) );
             }
 
@@ -582,12 +582,12 @@ void cLZSS::Encode(                     // no return value
             DeleteNode(s);
 
             // Put this character into the ring buffer.
-            //          
+            //
             // The original comment here says "If the position is near
             // the end of the buffer, extend the buffer to make
             // string comparison easier."
             //
-            // That's a little misleading, because the "end" of the 
+            // That's a little misleading, because the "end" of the
             // buffer is really what we consider to be the "beginning"
             // of the buffer, that is, positions 0 through F.
             //
@@ -619,7 +619,7 @@ void cLZSS::Encode(                     // no return value
             s = (short int) ( (s + 1) & (N - 1) );
             r = (short int) ( (r + 1) & (N - 1) );
 
-            // Register the string that is found in 
+            // Register the string that is found in
             // m_ring_buffer[r..r+F-1].
 
             InsertNode(r);
@@ -630,7 +630,7 @@ void cLZSS::Encode(                     // no return value
         // to process.
 
         while (i++ < last_match_length)
-            {                              
+            {
             DeleteNode(s);
 
             s = (short int) ( (s + 1) & (N - 1) );
@@ -671,7 +671,7 @@ void cLZSS::Encode(                     // no return value
 
 /*
  -------------------------------------------------------------------------
-    cLZSS::Decode   
+    cLZSS::Decode
 
     This function "decodes" the input stream into the output stream.
     The GetChars() and SendChars() functions are used to separate
@@ -696,7 +696,7 @@ void cLZSS::Decode(                     // no return value
     // Note that the last F bytes of the ring buffer are not filled.
 
     memset(m_ring_buffer, ' ', N - F);
-    
+
     r = N - F;
 
     flags = (char) 0;
@@ -708,7 +708,7 @@ void cLZSS::Decode(                     // no return value
         // If there are more bits of interest in this flag, then
         // shift that next interesting bit into the 1's position.
         //
-        // If this flag has been exhausted, the next byte must 
+        // If this flag has been exhausted, the next byte must
         // be a flag.
 
         if (flag_count > 0)
@@ -759,7 +759,7 @@ void cLZSS::Decode(                     // no return value
             //      break;
             //  if ((j = getc(infile)) == EOF)
             //      break;
-            //  i |= ((j & 0xf0) << 4);    
+            //  i |= ((j & 0xf0) << 4);
             //  j = (j & 0x0f) + THRESHOLD;
             //
             // I've modified this to only make one input call, and

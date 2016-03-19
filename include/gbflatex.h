@@ -1,13 +1,13 @@
 /******************************************************************************
  *
- *  gbflatex.h -	Implementation of GBFLaTeX
+ *  gbflatex.h -    Implementation of GBFLaTeX
  *
  * $Id$
  *
  * Copyright 2011-2014 CrossWire Bible Society (http://www.crosswire.org)
- *	CrossWire Bible Society
- *	P. O. Box 2528
- *	Tempe, AZ  85280-2528
+ *    CrossWire Bible Society
+ *    P. O. Box 2528
+ *    Tempe, AZ  85280-2528
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -30,22 +30,22 @@ namespace swordxx {
 /** this filter converts GBF text to classed LaTeX text
  */
 class SWDLLEXPORT GBFLaTeX : public SWBasicFilter {
-	bool renderNoteNumbers;
+    bool renderNoteNumbers;
 protected:
-	class MyUserData : public BasicFilterUserData {
-	public:
-		MyUserData(const SWModule *module, const SWKey *key);
-		bool hasFootnotePreTag;
-		SWBuf version;
-	};
-	virtual BasicFilterUserData *createUserData(const SWModule *module, const SWKey *key) {
-		return new MyUserData(module, key);
-	}
-	virtual bool handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData);
+    class MyUserData : public BasicFilterUserData {
+    public:
+        MyUserData(const SWModule *module, const SWKey *key);
+        bool hasFootnotePreTag;
+        SWBuf version;
+    };
+    virtual BasicFilterUserData *createUserData(const SWModule *module, const SWKey *key) {
+        return new MyUserData(module, key);
+    }
+    virtual bool handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData);
 public:
-	GBFLaTeX();
-	virtual const char *getHeader() const;
-	void setRenderNoteNumbers(bool val = true) { renderNoteNumbers = val; }
+    GBFLaTeX();
+    virtual const char *getHeader() const;
+    void setRenderNoteNumbers(bool val = true) { renderNoteNumbers = val; }
 };
 
 } /* namespace swordxx */

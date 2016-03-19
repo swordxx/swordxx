@@ -1,13 +1,13 @@
 /******************************************************************************
  *
- *  canon_lxx.h -	Versification data for the LXX system
+ *  canon_lxx.h -    Versification data for the LXX system
  *
  * $Id$
  *
  * Copyright 2013 CrossWire Bible Society (http://www.crosswire.org)
- *	CrossWire Bible Society
- *	P. O. Box 2528
- *	Tempe, AZ  85280-2528
+ *    CrossWire Bible Society
+ *    P. O. Box 2528
+ *    Tempe, AZ  85280-2528
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -43,7 +43,7 @@ namespace swordxx {
 
 /******************************************************************************
  * [on]tbooks_lxx - initialize static instance for all canonical
- *		 text names and chapmax
+ *         text names and chapmax
  */
 struct sbook otbooks_lxx[] = {
   {"Genesis", "Gen", "Gen", 50},
@@ -109,7 +109,7 @@ struct sbook otbooks_lxx[] = {
 // for ntbooks_lxx, use ntbooks
 
 /******************************************************************************
- *	Maximum verses per chapter
+ *    Maximum verses per chapter
  */
 int vm_lxx[] = {
   // Genesis
