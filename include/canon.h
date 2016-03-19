@@ -24,6 +24,7 @@
 #define CANON_H
 
 #include <canon_abbrevs.h>
+#include <versificationmgr.h>
 
 namespace sword {
 
