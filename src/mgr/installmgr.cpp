@@ -20,6 +20,7 @@
  *
  */
 
+#include <cassert>
 #include "untgz.h"
 
 #include <installmgr.h>
@@ -30,7 +31,7 @@
 
 #include <swmgr.h>
 #include <swmodule.h>
-#include <swversion.h>
+#include <version.h>
 #include <swlog.h>
 #include <dirent.h>
 
@@ -41,6 +42,7 @@
 #include <curlhttpt.h>
 
 #include <iostream>
+#include <regex>
 
 
 using std::map;
@@ -568,16 +570,12 @@ bool InstallMgr::isDefaultModule(const char *modName) {
 	return defaultMods.count(modName);
 }
 
-
 /************************************************************************
  * getModuleStatus - compare the modules of two SWMgrs and return a 
  * 	vector describing the status of each.  See MODSTAT_*
  */
 map<SWModule *, int> InstallMgr::getModuleStatus(const SWMgr &base, const SWMgr &other) {
-	map<SWModule *, int> retVal;
-	SWBuf targetVersion;
-	SWBuf sourceVersion;
-	SWBuf softwareVersion;
+    map<SWModule *, int> retVal;
 	bool cipher;
 	bool keyPresent;
 	int modStat;
@@ -593,24 +591,100 @@ map<SWModule *, int> InstallMgr::getModuleStatus(const SWMgr &base, const SWMgr 
 		if (v) {
 			cipher = true;
 			keyPresent = *v;
-		}
-		
-		targetVersion = "0.0";
-		sourceVersion = "1.0";
-		softwareVersion = (const char *)SWVersion::currentVersion;
-		
-		v = mod->second->getConfigEntry("Version");
-		if (v) sourceVersion = v;
+        }
 
-		v = mod->second->getConfigEntry("MinimumVersion");
-		if (v) softwareVersion = v;
+        // ##(.##)*
+        static auto const parseVersionString = [](char const * a,
+                                                  uint32_t & triple) noexcept
+        {
+            unsigned haveTripleDigits = 0u;
+            uint32_t outTriple = 0u;
+            assert(a);
+            enum { NEEDNUM, NUM_DELIM_OR_END, DELIM_OR_END } state = NEEDNUM;
+            unsigned lastDigit = 0u;
+            for (;; ++a) {
+                switch (*a) {
+                case '0':
+                    if (state == DELIM_OR_END)
+                        return false;
+                    if (state == NUM_DELIM_OR_END)
+                        lastDigit *= 0x10u;
+                    state = DELIM_OR_END;
+                    break;
+                #define D(ch,val) \
+                    case ch: \
+                        if (state == DELIM_OR_END) \
+                            return false; \
+                        if (state == NEEDNUM) { \
+                            state = NUM_DELIM_OR_END; \
+                            lastDigit = (val); \
+                        } else { \
+                            state = DELIM_OR_END; \
+                            lastDigit = (lastDigit * 0x10u) + (val); \
+                        } \
+                        break;
+                D('1',1u) D('2',2u) D('3',3u) D('4',4u)
+                D('5',5u) D('6',6u) D('7',7u) D('8',8u) D('9',9u)
+                D('a',10u)D('b',11u)D('c',12u)D('d',13u)D('e',14u)D('f',15u)
+                D('A',10u)D('B',11u)D('C',12u)D('D',13u)D('E',14u)D('F',15u)
+                #undef D
+                case '.':
+                    if (state == NEEDNUM)
+                        return false;
+                    if (haveTripleDigits < 3u) {
+                        ++haveTripleDigits;
+                        outTriple = (outTriple * 0x100u) + lastDigit;
+                        lastDigit = 0u;
+                    }
+                    state = NEEDNUM;
+                    break;
+                case '\0':
+                    if (state != NEEDNUM) {
+                        if (haveTripleDigits < 3u) {
+                            ++haveTripleDigits;
+                            outTriple = (outTriple * 0x100u) + lastDigit;
+                        }
+                        while (haveTripleDigits < 3u) {
+                            ++haveTripleDigits;
+                            outTriple *= 0x100u;
+                        }
+                        triple = outTriple;
+                        return true;
+                    }
+                    return false;
+                default: return false;
+                }
+            }
+        };
+
+        static auto const getVersion = [](char const * const str,
+                                          uint32_t const defValue) noexcept
+        {
+            uint32_t parsed;
+            if (str && parseVersionString(str, parsed))
+                return parsed;
+            return defValue;
+        };
+		
+        uint32_t const sourceVersion =
+                getVersion(mod->second->getConfigEntry("Version"), 0x100u);
+        /// \todo Also use MinimumVersion key:
+        #if 0
+        uint32_t const softwareVersion =
+                getVersion(mod->second->getConfigEntry("MinimumVersion"),
+                           SWORDXX_VERSION);
+        #endif
 
 		const SWModule *baseMod = base.getModule(mod->first);
 		if (baseMod) {
-			targetVersion = "1.0";
-			v = baseMod->getConfigEntry("Version");
-			if (v) targetVersion = v;
-			modStat |= (SWVersion(sourceVersion.c_str()) > SWVersion(targetVersion.c_str())) ? MODSTAT_UPDATED : (SWVersion(sourceVersion.c_str()) < SWVersion(targetVersion.c_str())) ? MODSTAT_OLDER : MODSTAT_SAMEVERSION;
+            uint32_t const targetVersion =
+                    getVersion(baseMod->getConfigEntry("Version"), 0x100u);
+            modStat |=
+                    (sourceVersion > targetVersion)
+                     ? MODSTAT_UPDATED
+                     : (sourceVersion < targetVersion)
+                       ? MODSTAT_OLDER
+                       : MODSTAT_SAMEVERSION;
 		}
 		else modStat |= MODSTAT_NEW;
 

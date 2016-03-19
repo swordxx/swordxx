@@ -53,19 +53,25 @@ MACRO(PROCESS_VERSION LEVEL VALUE)
     ENDIF()
 ENDMACRO()
 
-STRING(REGEX MATCHALL "^([0-9]+)\\.([0-9]+)\\.([0-9]+)\\.?([0-9]+)?$"
-    SWORD_VERSION_PARTS "${SWORD_VERSION}")
-# We don't always have a nano version
-IF("${CMAKE_MATCH_4}" STREQUAL "")
-    SET(CMAKE_MATCH_4 "0")
-ENDIF("${CMAKE_MATCH_4}" STREQUAL "")
-
-SET(SWORD_VERSION_MAJOR ${CMAKE_MATCH_1}) # No post-processing on this, so it's not octal
-PROCESS_VERSION("MINOR" ${CMAKE_MATCH_2})
-PROCESS_VERSION("MICRO" ${CMAKE_MATCH_3})
-PROCESS_VERSION("NANO"  ${CMAKE_MATCH_4})
-
-SET(SWORD_VERSION_STR "${SWORD_VERSION}")
-SET(SWORD_VERSION_NUM "${SWORD_VERSION_MAJOR}${MINOR}${MICRO}${NANO}")
-
-MESSAGE(STATUS "SWORD Version ${SWORD_VERSION_NUM}")
+FUNCTION(VERSION_TO_HEX out)
+  SET(hexdigit "[0123456789abcdefABCDEF]")
+  SET(num "0|[123456789abcdefABCDEF]${hexdigit}*")
+  STRING(REGEX MATCHALL "^(${num})\\.(${num})\\.(${num})$"
+         r "${SWORDXX_VERSION}")
+  IF(NOT r)
+    MESSAGE(FATAL_ERROR "Invalid version string in \${SWORDXX_VERSION}!")
+  ENDIF()
+  SET(parts "${CMAKE_MATCH_1}" "${CMAKE_MATCH_2}" "${CMAKE_MATCH_3}")
+  SET(out "")
+  FOREACH(p IN LISTS parts)
+    IF("${p}" MATCHES "^${hexdigit}$")
+      SET(out "${out}0${p}")
+    ELSEIF("${p}" MATCHES "^${hexdigit}${hexdigit}$")
+      SET(out "${out}${p}")
+    ELSE()
+      MESSAGE(FATAL_ERROR "Invalid version component in \${SWORDXX_VERSION}!")
+    ENDIF()
+  ENDFOREACH()
+  SET(SWORDXX_VERSION_HEX "${out}" PARENT_SCOPE)
+ENDFUNCTION()
+VERSION_TO_HEX(SWORDXX_VERSION_HEX)

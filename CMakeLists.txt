@@ -14,6 +14,9 @@ PROJECT(swordxx CXX C)
 CMAKE_MINIMUM_REQUIRED(VERSION 3.3)
 CMAKE_POLICY(SET CMP0017 NEW)
 
+SET(SWORDXX_VERSION 0.0.1)
+MESSAGE(STATUS "Configuring libswordxx version ${SWORDXX_VERSION}")
+
 # If SWORD_USER_CONFIG set, load the file and fail on error. Otherwise, try to
 # include either "config.cmake" under either the build directory or the source
 # directory, whichever file first exists, if at all.
@@ -44,9 +47,6 @@ ELSE()
   UNSET(r)
 ENDIF()
 
-
-SET(SWORD_VERSION 1.7.3)
-
 # Make sure it's an out-of-stream build
 IF(${CMAKE_CURRENT_BINARY_DIR} STREQUAL ${CMAKE_CURRENT_SOURCE_DIR})
 	MESSAGE(FATAL_ERROR "Please invoke CMake from a different directory than the source.")
@@ -63,7 +63,7 @@ INCLUDE("${CMAKE_CURRENT_SOURCE_DIR}/cmake/options.cmake")
 # Source variables
 INCLUDE("${CMAKE_CURRENT_SOURCE_DIR}/cmake/sources.cmake")
 # Our local includes
-INCLUDE_DIRECTORIES("${CMAKE_CURRENT_BINARY_DIR}/include") # For swversion.h
+INCLUDE_DIRECTORIES("${CMAKE_CURRENT_BINARY_DIR}/include") # For generated version.h
 INCLUDE_DIRECTORIES("${CMAKE_CURRENT_SOURCE_DIR}/include") # For everything else
 
 ###########################################################################################
@@ -140,16 +140,15 @@ FILE(WRITE "${CMAKE_CURRENT_BINARY_DIR}/sword.conf" "${CONFFILE}")
 # This allows the user to set a SONAME for the library.  This allows packagers and those who
 # care about that sort of thing to be happy and have all their SONAMES set properly.
 #
-IF(NOT LIBSWORD_SOVERSION AND BUILDING_SHARED)
-        SET(SWORD_SOVERSION ${SWORD_VERSION})
-ELSE(NOT LIBSWORD_SOVERSION AND BUILDING_SHARED)
-        SET(SWORD_SOVERSION ${LIBSWORD_SOVERSION})
-ENDIF(NOT LIBSWORD_SOVERSION AND BUILDING_SHARED)
 
 IF(BUILDING_SHARED)
-	SET_TARGET_PROPERTIES(sword
-		PROPERTIES SOVERSION ${SWORD_SOVERSION})
-	MESSAGE(STATUS "Setting SOVERSION to ${SWORD_SOVERSION}")
+  IF(LIBSWORDXX_SOVERSION_OVERRIDE)
+    SET(LIBSWORDXX_SOVERSION "${LIBSWORDXX_SOVERSION_OVERRIDE}")
+  ELSE()
+    SET(LIBSWORDXX_SOVERSION "${SWORDXX_VERSION}")
+  ENDIF()
+  SET_TARGET_PROPERTIES(sword PROPERTIES SOVERSION "${LIBSWORDXX_SOVERSION}")
+  MESSAGE(STATUS "Using SOVERSION \"${LIBSWORDXX_SOVERSION}\"")
 ENDIF(BUILDING_SHARED)
 
 ##############################################################################################
