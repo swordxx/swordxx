@@ -25,12 +25,28 @@
 #include <versekey.h>
 #include <rawtext.h>
 #include <rawcom.h>
-#include <echomod.h>
 #include <stdlib.h>
-
+#include <swtext.h>
 #include <localemgr.h>
 
 using namespace swordxx;
+
+class EchoMod final: public SWText {
+
+public: /* Methods: */
+
+    inline EchoMod()
+        : SWText("echomod", "Echos back key")
+    {}
+
+    inline SWBuf & getRawEntryBuf() const final override {
+        m_retVal = *key;
+        return m_retVal;
+    }
+
+    mutable SWBuf m_retVal;
+
+};
 
 int main(int argc, char **argv)
 {

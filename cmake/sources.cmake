@@ -229,7 +229,6 @@ SET(SWORD_INSTALL_HEADERS
 	include/curlftpt.h
 	include/curlhttpt.h
 	include/defs.h
-	include/echomod.h
 	include/encfiltmgr.h
 	include/entriesblk.h
 	include/filemgr.h
