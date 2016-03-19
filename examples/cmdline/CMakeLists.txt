@@ -10,6 +10,7 @@ SET(example_PROGRAMS
 	outplain
 	outrender
 	search
+	simple
     stripaccents
 	verserangeparse
 )

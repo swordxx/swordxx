@@ -34,21 +34,43 @@
  *
  */
 
+#include <cstdlib>
+#include <iostream>
 #include <swmgr.h>
 #include <swmodule.h>
-#include <iostream>
 
 
 using namespace swordxx;
-using std::cout;
 
+int main(int argc, char * argv[]) {
+    char const * key = "James 1:19";
+    char const * module = "Darby";
 
-int main(int argc, char **argv) {
-	SWMgr library;
-	SWModule *darby = library.getModule("Darby");
-	darby->setKey("James 1:19");
-	cout << darby->RenderText();
+    /* Parse arguments: (1) module (2) key */
+    switch (argc) {
+    case 0: break;
+    case 1: break; // argv[0] only, e.g. application name
+    case 3:
+        key = argv[2];
+        /* Fall through: */
+    case 2:
+        module = argv[1];
+        break;
+    default:
+        std::cerr << "Usage: " << argv[0] << "[module [key]]" << std::endl;
+        return EXIT_FAILURE;
+    }
 
-	return 0;
+    SWMgr library;
+    if (SWModule * const mod = library.getModule(module)) {
+        if (mod->setKey(key) != 0) {
+            std::cerr << "No such key: \"" << key << "\"!" << std::endl;
+            return EXIT_FAILURE;
+        }
+        std::cout << mod->renderText() << std::endl;
+    } else {
+        std::cerr << "Error opening module \"" << module << "\"!" << std::endl;
+        return EXIT_FAILURE;
+    }
+    return EXIT_SUCCESS;
 }
-
