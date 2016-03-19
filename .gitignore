@@ -1,0 +1,9 @@
+# User configuration:
+/config.cmake
+
+# Possible build directories:
+/b*/
+/*-build/
+
+# Qt Creator generated temporary files:
+/CMakeLists.txt.user*
