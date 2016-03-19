@@ -82,7 +82,8 @@ void XMLTag::parse() const {
 				if (buf[i]) {	// we have attribute value
 					start = i;
 					// Skip until matching quote character
-					for (; ((buf[i]) && (buf[i] != quoteChar)); i++);
+                    while((buf[i]) && (buf[i] != quoteChar))
+                        ++i;
 
 					// Allow for empty quotes
 					//if (i-start) {
