@@ -23,6 +23,7 @@
 #ifndef REMOTETRANS_H
 #define REMOTETRANS_H
 
+#include <atomic>
 #include <vector>
 #include <defs.h>
 #include <swbuf.h>
@@ -52,7 +53,7 @@ class SWDLLEXPORT RemoteTransport {
 protected:
 	StatusReporter *statusReporter;
 	bool passive;
-	bool term;
+    std::atomic<bool> term;
 	SWBuf host;
 	SWBuf u;
 	SWBuf p;
@@ -75,7 +76,7 @@ public:
 	void setPassive(bool passive) { this->passive = passive; }
 	void setUser(const char *user) { u = user; }
 	void setPasswd(const char *passwd) { p = passwd; }
-	void terminate() { term = true; }
+    void terminate() { term.store(true, std::memory_order_release); }
 };
 
 

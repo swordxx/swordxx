@@ -59,12 +59,13 @@ void StatusReporter::statusUpdate(double dtTotal, double dlNow) {
 }
 
 
-RemoteTransport::RemoteTransport(const char *host, StatusReporter *statusReporter) {
+RemoteTransport::RemoteTransport(const char *host, StatusReporter *statusReporter)
+    : term(false)
+{
 	this->statusReporter = statusReporter;
 	this->host = host;
 	u = "ftp";
-	p = "installmgr@user.com";
-	term = false;
+    p = "installmgr@user.com";
 }
 
 
@@ -184,7 +185,7 @@ SWLog::getSystemLog()->logDebug("RemoteTransport::copyDirectory");
 				}
 			}
 			catch (...) {}
-			if (term) {
+            if (term.load(std::memory_order_acquire)) {
 				retVal = -3;
 				break;
 			}

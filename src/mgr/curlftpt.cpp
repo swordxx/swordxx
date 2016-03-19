@@ -74,7 +74,7 @@ namespace {
 
 	struct MyProgressData {
 		StatusReporter *sr;
-		bool *term;
+        std::atomic<bool> & term;
 	};
 
 
@@ -88,7 +88,8 @@ namespace {
 				if (dlnow > dltotal) dlnow = dltotal;
 				pd->sr->update(dltotal, dlnow);
 			}
-			if (*(pd->term)) return 1;
+            if (pd->term.load(std::memory_order_acquire))
+                return 1;
 		}
 		return 0;
 	}
@@ -141,9 +142,7 @@ char CURLFTPTransport::getURL(const char *destPath, const char *sourceURL, SWBuf
 	
 	if (session) {
 
-		struct MyProgressData pd;
-		pd.sr = statusReporter;
-		pd.term = &term;
+        struct MyProgressData pd{statusReporter, term};
 
 		curl_easy_setopt(session, CURLOPT_URL, sourceURL);
 	
