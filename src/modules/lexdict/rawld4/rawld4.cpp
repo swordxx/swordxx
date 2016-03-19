@@ -186,10 +186,8 @@ void RawLD4::deleteEntry() {
 }
 
 
-long RawLD4::getEntryCount() const {
-	if (idxfd < 0) return 0;
-	return idxfd->seek(0, SEEK_END) / IDXENTRYSIZE;
-}
+long RawLD4::getEntryCount() const
+{ return idxfd ? (idxfd->seek(0, SEEK_END) / IDXENTRYSIZE) : 0; }
 
 
 long RawLD4::getEntryForKey(const char *key) const {
