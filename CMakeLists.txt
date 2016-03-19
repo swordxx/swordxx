@@ -10,7 +10,7 @@
 # of their own GPLv2 license and all copyright is transferred to them for
 # all posterity and eternity, wherever such transfer is possible.  Where it is
 # not, then this file is released under the GPLv2 by myself.
-PROJECT(libsword CXX C)
+PROJECT(swordxx CXX C)
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8.12)
 CMAKE_POLICY(SET CMP0017 NEW)
 
