@@ -355,7 +355,6 @@ SET(SWORD_INSTALL_HEADERS
 	include/treekeyidx.h
 	include/unicodertf.h
 	include/url.h
-	include/untgz.h
 	include/utf16utf8.h
 	include/utf8arshaping.h
 	include/utf8bidireorder.h
