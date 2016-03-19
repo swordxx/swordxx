@@ -666,9 +666,7 @@ map<SWModule *, int> InstallMgr::getModuleStatus(const SWMgr &base, const SWMgr 
             return defValue;
         };
 
-        uint32_t const sourceVersion =
-                getVersion(mod->second->getConfigEntry("Version"), 0x100u);
-        /// \todo Also use MinimumVersion key:
+        /// \todo Use MinimumVersion key:
         #if 0
         uint32_t const softwareVersion =
                 getVersion(mod->second->getConfigEntry("MinimumVersion"),
@@ -677,6 +675,8 @@ map<SWModule *, int> InstallMgr::getModuleStatus(const SWMgr &base, const SWMgr 
 
         const SWModule *baseMod = base.getModule(mod->first);
         if (baseMod) {
+            uint32_t const sourceVersion =
+                    getVersion(mod->second->getConfigEntry("Version"), 0x100u);
             uint32_t const targetVersion =
                     getVersion(baseMod->getConfigEntry("Version"), 0x100u);
             modStat |=
