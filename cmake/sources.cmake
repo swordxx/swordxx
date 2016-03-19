@@ -256,7 +256,6 @@ SET(SWORD_INSTALL_HEADERS
 	include/gbflatex.h
 
 	include/greeklexattribs.h
-	include/hebrewmcim.h
 	include/hrefcom.h
 	include/installmgr.h
 	include/latin1utf16.h
@@ -266,7 +265,6 @@ SET(SWORD_INSTALL_HEADERS
 	include/lzsscomprs.h
 	include/markupfiltmgr.h
 	include/multimapwdef.h
-	include/nullim.h
 
 	include/osisenum.h
 	include/osisglosses.h
@@ -317,7 +315,6 @@ SET(SWORD_INSTALL_HEADERS
 	include/swfilter.h
 	include/swfiltermgr.h
 	include/swgenbook.h
-	include/swinputmeth.h
 	include/swkey.h
 	include/swld.h
 	include/swlocale.h
