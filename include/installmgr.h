@@ -26,14 +26,15 @@
 #include <defs.h>
 #include <swbuf.h>
 #include <map>
+#include <memory>
 #include <set>
+#include <remotetrans.h>
 
 namespace sword {
 
 class SWMgr;
 class SWModule;
 class SWConfig;
-class RemoteTransport;
 class StatusReporter;
 
 /** A remote installation source configuration
@@ -89,7 +90,7 @@ protected:
 	/** we have a transport member to set as current running transport so we
 	 *  can ask it to terminate below, if user requests
          */
-	RemoteTransport *transport;
+    std::shared_ptr<RemoteTransport> transport;
 
 public:
 

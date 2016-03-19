@@ -88,8 +88,7 @@ InstallMgr::InstallMgr(const char *privatePath, StatusReporter *sr, SWBuf u, SWB
 	statusReporter = sr;
 	this->u = u;
 	this->p = p;
-	this->privatePath = 0;
-	this->transport = 0;
+    this->privatePath = 0;
 	installConf = 0;
 	stdstr(&(this->privatePath), privatePath);
 	if (this->privatePath) {
@@ -216,7 +215,11 @@ void InstallMgr::saveInstallConf() {
 }
 
 
-void InstallMgr::terminate() { if (transport) transport->terminate(); }
+void InstallMgr::terminate() {
+    std::shared_ptr<RemoteTransport> const transportPtr(transport);
+    if (transportPtr)
+        transportPtr->terminate();
+}
 
 
 int InstallMgr::removeModule(SWMgr *manager, const char *moduleName) {
@@ -306,7 +309,7 @@ SWLog::getSystemLog()->logDebug("remoteCopy: %s, %s, %s, %c, %s", (is?is->source
 	else if (is->type == "HTTP" || is->type == "HTTPS") {
 		trans = createHTTPTransport(is->source, statusReporter);
 	}
-	transport = trans; // set classwide current transport for other thread terminate() call
+    transport.reset(trans); // set classwide current transport for other thread terminate() call
 	if (is->u.length()) {
 		trans->setUser(is->u);
 		trans->setPasswd(is->p);
@@ -365,14 +368,7 @@ SWLog::getSystemLog()->logDebug("remoteCopy: dirTransfer: %s", dir.c_str());
 			retVal = -1;
 		}
 	}
-	try {
-		RemoteTransport *deleteMe = trans;
-		// do this order for threadsafeness
-		// (see terminate())
-		trans = transport = 0;
-		delete deleteMe;
-	}
-	catch (...) {}
+    transport.reset();
 	return retVal;
 }
 
