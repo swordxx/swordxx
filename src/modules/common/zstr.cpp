@@ -295,7 +295,7 @@ signed char zStr::findKeyIndex(const char *ikey, long *idxoff, long away) const
 				*idxoff = tryoff;
 
 
-			if (((laststart != start) || (lastsize != size)) && (start >= 0) && (size)) 
+            if (((laststart != start) || (lastsize != size)) && (size))
 				away += (away < 0) ? 1 : -1;
 		}
 	
