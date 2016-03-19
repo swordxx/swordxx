@@ -61,16 +61,17 @@ int main(int argc, char * argv[]) {
         return EXIT_FAILURE;
     }
 
-    SWMgr library;
-    if (SWModule * const mod = library.getModule(module)) {
-        if (mod->setKey(key) != 0) {
-            std::cerr << "No such key: \"" << key << "\"!" << std::endl;
-            return EXIT_FAILURE;
+    {
+        SWMgr library;
+        if (SWModule * const mod = library.getModule(module)) {
+            if (mod->setKey(key) != 0) {
+                std::cerr << "No such key: \"" << key << "\"!" << std::endl;
+                return EXIT_FAILURE;
+            }
+            std::cout << mod->renderText() << std::endl;
+            return EXIT_SUCCESS;
         }
-        std::cout << mod->renderText() << std::endl;
-    } else {
-        std::cerr << "Error opening module \"" << module << "\"!" << std::endl;
-        return EXIT_FAILURE;
     }
-    return EXIT_SUCCESS;
+    std::cerr << "Error opening module \"" << module << "\"!" << std::endl;
+    return EXIT_FAILURE;
 }
