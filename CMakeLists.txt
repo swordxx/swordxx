@@ -11,7 +11,7 @@
 # all posterity and eternity, wherever such transfer is possible.  Where it is
 # not, then this file is released under the GPLv2 by myself.
 PROJECT(swordxx CXX C)
-CMAKE_MINIMUM_REQUIRED(VERSION 2.8.12)
+CMAKE_MINIMUM_REQUIRED(VERSION 3.3)
 CMAKE_POLICY(SET CMP0017 NEW)
 
 # If SWORD_USER_CONFIG set, load the file and fail on error. Otherwise, try to
@@ -80,6 +80,20 @@ FIND_PACKAGE(CURL REQUIRED QUIET)
 FIND_PACKAGE(CLucene QUIET)
 FIND_PACKAGE(ZLIB REQUIRED QUIET)
 
+
+################################################################################
+# The buildflags depend on the CMAKE_BUILD_TYPE supplied at the command line.
+
+ADD_COMPILE_OPTIONS(
+  "-Wall" "-Wextra" "-O2"
+  "$<$<COMPILE_LANGUAGE:C>:-std=c99>"
+  "$<$<COMPILE_LANGUAGE:CXX>:-std=c++14>"
+  "$<$<CONFIG:Release>:-DNDEBUG>"
+  "$<$<CONFIG:Release>:-fno-omit-frame-pointer>"
+  "$<$<NOT:$<CONFIG:Release>>:-DNDEBUG>"
+  "$<$<NOT:$<CONFIG:Release>>:-fomit-frame-pointer>"
+)
+
 ###########################################################################################
 # Based on user input and the results of the above tests, we may need to mux with the source
 # files to use an internal version of ZLib, cURL-like stuff, or CLucene replacements.  These
@@ -139,29 +153,6 @@ IF(BUILDING_SHARED)
 	MESSAGE(STATUS "Setting SOVERSION to ${SWORD_SOVERSION}")
 ENDIF(BUILDING_SHARED)
 
-###############################################################################################
-# The buildflags depend on the CMAKE_BUILD_TYPE supplied at the command line.
-# For a full lists of different flags see http://cmake.org/Wiki/CMake_Useful_Variables
-#
-# Cmake has sane defaults for None aka '', DEBUG, RELEASE, RELWITHDEBINFO for known compilers.
-#
-# You can override these variables on the command-line or here.
-# We provide our own defaults below
-#
-# Note the below two initialisations done for us by cmake:
-#
-#SET(CMAKE_C_FLAGS                  "${CMAKE_C_FLAGS}"   or "$ENV{CFLAGS}" or "" )
-#SET(CMAKE_CXX_FLAGS                "${CMAKE_CXX_FLAGS}" or "$ENV{CXXFLAGS}" or "" )
-
-SET(CMAKE_C_FLAGS "-std=c99 -Wall -Wextra ${CMAKE_CXX_FLAGS}")
-SET(CMAKE_CXX_FLAGS "-std=c++14 -Wall -Wextra ${CMAKE_CXX_FLAGS}")
-
-SET(CMAKE_C_FLAGS_DEBUG            "-g3 -Wall -O0 ${CMAKE_C_FLAGS}")
-SET(CMAKE_C_FLAGS_RELEASE          "-O3 ${CMAKE_C_FLAGS}")
-SET(CMAKE_C_FLAGS_RELWITHDEBINFO   "-O3 -g ${CMAKE_C_FLAGS}")
-SET(CMAKE_CXX_FLAGS_DEBUG          "-g3 -Wall -O0 ${CMAKE_CXX_FLAGS}")
-SET(CMAKE_CXX_FLAGS_RELEASE        "-O3 ${CMAKE_CXX_FLAGS}")
-SET(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O3 -g ${CMAKE_CXX_FLAGS}")
 ##############################################################################################
 # Setting libraries and includes
 #
