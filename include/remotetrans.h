@@ -39,9 +39,8 @@ public:
 	/** Messages before stages of a batch download */
 	virtual void preStatus(long totalBytes, long completedBytes, const char *message);
 
-	/** frequently called throughout a download, to report status */
-	SWDEPRECATED virtual void statusUpdate(double dtTotal, double dlNow);
-	virtual void update(unsigned long totalBytes, unsigned long completedBytes);
+    /** frequently called throughout a download, to report status */
+    virtual void update(unsigned long totalBytes, unsigned long completedBytes) {};
 };
 
 

@@ -48,7 +48,6 @@ public:
   * @return error status
   */
   virtual char display(SWModule &imodule) = 0;
-  SWDEPRECATED char Display(SWModule &imodule) { return display(imodule); }
 };
 
 } /* namespace sword */

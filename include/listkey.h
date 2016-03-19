@@ -63,35 +63,26 @@ public:
 	
 	/** Clears out elements of list
 	 */
-	virtual void clear();
-	// deprecated, use clear(), instead
-	SWDEPRECATED virtual void ClearList() { clear(); }
+    virtual void clear();
 
 
 	/** Returns number of key elements in list
 	 * @return number of key elements in list
 	 */
-	virtual int getCount() const;
-	//deprecated, use getCount
-	SWDEPRECATED virtual int Count() { return getCount(); }
+    virtual int getCount() const;
 	
 	/** Removes current element from list
 	 */
-	virtual void remove();
-	// deprecated use remove
-	SWDEPRECATED virtual void Remove() { remove(); }
+    virtual void remove();
 
 	
 	/** Sets container to subkey element number and repositions that subkey to either top or bottom
 	 *
 	 * @param ielement - element number to set to
 	 * @param pos - set the subkey element to position (TOP) or BOTTOM
-	 * @return error status
-	 * deprecated use setToElement
+     * @return error status
 	 */
-	virtual char setToElement(int ielement, SW_POSITION = TOP);
-	// deprecated use setToElement
-	SWDEPRECATED virtual char SetToElement(int ielement, SW_POSITION pos = TOP) { return setToElement(ielement, pos); }
+    virtual char setToElement(int ielement, SW_POSITION = TOP);
 
 
 	
@@ -102,9 +93,6 @@ public:
 	 */
 	virtual SWKey *getElement(int pos = -1);
 	virtual const SWKey *getElement(int pos = -1) const;
-	
-	// deprecated, use above function
-	SWDEPRECATED virtual SWKey *GetElement(int pos = -1) { return getElement(pos); }
 
 	/** Adds an element to the list
 	 * @param ikey the element to add

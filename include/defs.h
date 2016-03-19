@@ -44,9 +44,6 @@ namespace sword {
 #    define SWDLLEXPORT_CTORFN
 #  endif
 
-#  define SWDEPRECATED __declspec(deprecated("** WARNING: deprecated method **"))
-
-
 #elif defined(__SWPM__)
 
 #  ifdef SWMAKINGDLL
@@ -62,9 +59,6 @@ namespace sword {
 #    define SWDLLEXPORT_DATA(type) type
 #    define SWDLLEXPORT_CTORFN
 #  endif
-
-#  define SWDEPRECATED 
-
 
 #elif defined(__GNUWIN32__)
 
@@ -82,21 +76,16 @@ namespace sword {
 #    define SWDLLEXPORT_CTORFN
 #  endif
 
-#  define SWDEPRECATED  __attribute__((__deprecated__))
-
-
 #elif defined(__GNUC__)
+
 #  define SWDLLEXPORT
 #  define SWDLLEXPORT_DATA(type) type
 #  define SWDLLEXPORT_CTORFN
-#  define SWDEPRECATED  __attribute__((__deprecated__))
-
 
 #else
 #  define SWDLLEXPORT
 #  define SWDLLEXPORT_DATA(type) type
 #  define SWDLLEXPORT_CTORFN
-#  define SWDEPRECATED
 #endif
 
 
@@ -106,8 +95,6 @@ namespace sword {
 #else
 #  define SWDLLIMPORT
 #endif
-
-
 
 #ifdef __cplusplus
 enum {DIRECTION_LTR = 0, DIRECTION_RTL, DIRECTION_BIDI};

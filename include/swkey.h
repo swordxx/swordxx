@@ -143,21 +143,18 @@ public:
 	 * otherwise just a copy will be used in the module.
 	 * @return 1 - persists in module; 0 - a copy is attempted
 	 */
-	bool isPersist() const;
-	SWDEPRECATED char Persist() const { return isPersist(); }
+    bool isPersist() const;
 
 	/** Sets whether this key should persist in any module to which it is set
 	 * otherwise just a copy will be used in the module.
 	 * @param ipersist value which to set persist;
 	 * @return 1 - persists in module; 0 - a copy is attempted
-	 */
-	SWDEPRECATED char Persist(signed char ipersist) { setPersist(ipersist!=0); return isPersist(); }
+     */
 	void setPersist(bool ipersist);
 
 	/** Gets and clears error status
 	 * @return error status
-	 */
-	SWDEPRECATED char Error() { return popError(); }
+     */
 	virtual char popError();
 	virtual void setError(char err) { error = err; }
 

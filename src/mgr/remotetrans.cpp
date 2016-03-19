@@ -55,10 +55,6 @@ void StatusReporter::preStatus(long totalBytes, long completedBytes, const char 
 }
 
 
-void StatusReporter::statusUpdate(double dtTotal, double dlNow) {
-}
-
-
 RemoteTransport::RemoteTransport(const char *host, StatusReporter *statusReporter)
     : term(false)
 {
@@ -194,14 +190,4 @@ SWLog::getSystemLog()->logDebug("RemoteTransport::copyDirectory");
 	return retVal;
 }
 
-
-#if defined(__GNUC__)
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-#endif
-void StatusReporter::update(unsigned long totalBytes, unsigned long completedBytes) {
-	statusUpdate(totalBytes, completedBytes);
-}
-
-
 } /* namespace sword */
-
