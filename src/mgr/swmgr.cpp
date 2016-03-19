@@ -1371,7 +1371,7 @@ void SWMgr::InstallScan(const char *dirname)
 					else {
 						if (!conffd) {
 							conffd = FileMgr::getSystemFileMgr()->open(config->filename.c_str(), FileMgr::WRONLY|FileMgr::APPEND);
-							if (conffd > 0)
+                            if (conffd)
 								conffd->seek(0L, SEEK_END);
 							else {
 								FileMgr::getSystemFileMgr()->close(conffd);
