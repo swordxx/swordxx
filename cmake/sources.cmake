@@ -33,7 +33,6 @@ SET(sword_base_mgr_SOURCES
     src/mgr/remotetrans.cpp
     src/mgr/swlocale.cpp
     src/mgr/localemgr.cpp
-    src/mgr/swcacher.cpp
     src/mgr/swsearchable.cpp
     src/mgr/installmgr.cpp
     src/mgr/stringmgr.cpp

@@ -576,16 +576,4 @@ void FileMgr::flush() {
     }
 }
 
-long FileMgr::resourceConsumption() {
-    long count = 0;
-    FileDesc **loop;
-    for (loop = &files; *loop; loop = &((*loop)->next)) {
-        if ((*loop)->fd > 0) {
-            count++;
-        }
-    }
-    return count;
-}
-
-
 } /* namespace swordxx */

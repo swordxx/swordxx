@@ -149,7 +149,6 @@ public:
     /** Cacher methods overridden
      */
     virtual void flush();
-    virtual long resourceConsumption();
 
     /** Checks for the existence of a file.
     * @param ipath Path to file.

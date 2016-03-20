@@ -34,11 +34,8 @@ namespace swordxx {
  */
 class SWDLLEXPORT  SWCacher {
 public:
-    SWCacher();
-    virtual ~SWCacher();
-    virtual void flush();
-    virtual long resourceConsumption();
-    virtual long lastAccess();
+    virtual ~SWCacher() noexcept {}
+    virtual void flush() {}
 };
 
 } /* namespace swordxx */
