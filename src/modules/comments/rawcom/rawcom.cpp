@@ -39,12 +39,11 @@ namespace swordxx {
  *
  * ENT:    iname - Internal name for module
  *    idesc - Name to display to user for module
- *    idisp     - Display object to use for displaying
  */
 
-RawCom::RawCom(const char *ipath, const char *iname, const char *idesc, SWDisplay *idisp, SWTextEncoding encoding, SWTextDirection dir, SWTextMarkup markup, const char *ilang, const char *versification)
+RawCom::RawCom(const char *ipath, const char *iname, const char *idesc, SWTextEncoding encoding, SWTextDirection dir, SWTextMarkup markup, const char *ilang, const char *versification)
         : RawVerse(ipath),
-            SWCom(iname, idesc, idisp, encoding, dir, markup, ilang, versification) {
+            SWCom(iname, idesc, encoding, dir, markup, ilang, versification) {
 }
 
 

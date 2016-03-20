@@ -39,7 +39,7 @@ class SWDLLEXPORT RawText4 : public SWText, public RawVerse4 {
 
 public:
 
-    RawText4(const char *ipath, const char *iname = 0, const char *idesc = 0, SWDisplay * idisp = 0, SWTextEncoding encoding = ENC_UNKNOWN, SWTextDirection dir = DIRECTION_LTR, SWTextMarkup markup = FMT_UNKNOWN, const char* ilang = 0, const char *versification = "KJV");
+    RawText4(const char *ipath, const char *iname = 0, const char *idesc = 0, SWTextEncoding encoding = ENC_UNKNOWN, SWTextDirection dir = DIRECTION_LTR, SWTextMarkup markup = FMT_UNKNOWN, const char* ilang = 0, const char *versification = "KJV");
     virtual ~RawText4();
     virtual SWBuf &getRawEntryBuf() const;
     virtual void increment(int steps = 1);

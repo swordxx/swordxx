@@ -40,10 +40,9 @@ namespace swordxx {
  *
  * ENT:    iname - Internal name for module
  *    idesc - Name to display to user for module
- *    idisp     - Display object to use for displaying
  */
 
-RawFiles::RawFiles(const char *ipath, const char *iname, const char *idesc, SWDisplay *idisp, SWTextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char* ilang) : RawVerse(ipath, FileMgr::RDWR), SWCom(iname, idesc, idisp, enc, dir, mark, ilang)
+RawFiles::RawFiles(const char *ipath, const char *iname, const char *idesc, SWTextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char* ilang) : RawVerse(ipath, FileMgr::RDWR), SWCom(iname, idesc, enc, dir, mark, ilang)
 {
 }
 

@@ -36,10 +36,9 @@ namespace swordxx {
  *
  * ENT:    imodname - Internal name for module
  *    imoddesc - Name to display to user for module
- *    idisp     - Display object to use for displaying
  */
 
-SWLD::SWLD(const char *imodname, const char *imoddesc, SWDisplay *idisp, SWTextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char* ilang, bool strongsPadding) : SWModule(imodname, imoddesc, idisp, (char *)"Lexicons / Dictionaries", enc, dir, mark, ilang), strongsPadding(strongsPadding)
+SWLD::SWLD(const char *imodname, const char *imoddesc, SWTextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char* ilang, bool strongsPadding) : SWModule(imodname, imoddesc, (char *)"Lexicons / Dictionaries", enc, dir, mark, ilang), strongsPadding(strongsPadding)
 {
     delete key;
     key = createKey();

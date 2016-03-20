@@ -31,10 +31,9 @@ namespace swordxx {
  *
  * ENT:    imodname - Internal name for module
  *    imoddesc - Name to display to user for module
- *    idisp     - Display object to use for displaying
  */
 
-SWGenBook::SWGenBook(const char *imodname, const char *imoddesc, SWDisplay *idisp, SWTextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char* ilang) : SWModule(imodname, imoddesc, idisp, (char *)"Generic Books", enc, dir, mark, ilang) {
+SWGenBook::SWGenBook(const char *imodname, const char *imoddesc, SWTextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char* ilang) : SWModule(imodname, imoddesc, (char *)"Generic Books", enc, dir, mark, ilang) {
     tmpTreeKey = 0;
 }
 

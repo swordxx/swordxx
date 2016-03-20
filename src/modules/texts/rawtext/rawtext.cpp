@@ -56,11 +56,10 @@ typedef list<long> longlist;
  *
  * ENT:    iname - Internal name for module
  *    idesc - Name to display to user for module
- *    idisp     - Display object to use for displaying
  */
 
-RawText::RawText(const char *ipath, const char *iname, const char *idesc, SWDisplay *idisp, SWTextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char* ilang, const char *versification)
-        : SWText(iname, idesc, idisp, enc, dir, mark, ilang, versification),
+RawText::RawText(const char *ipath, const char *iname, const char *idesc, SWTextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char* ilang, const char *versification)
+        : SWText(iname, idesc, enc, dir, mark, ilang, versification),
         RawVerse(ipath) {
 }
 

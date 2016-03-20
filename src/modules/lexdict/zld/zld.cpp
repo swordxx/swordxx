@@ -40,10 +40,9 @@ namespace swordxx {
  * ENT:    ipath    - path and filename of files (no extension)
  *        iname    - Internal name for module
  *        idesc    - Name to display to user for module
- *        idisp    - Display object to use for displaying
  */
 
-zLD::zLD(const char *ipath, const char *iname, const char *idesc, long blockCount, SWCompress *icomp, SWDisplay *idisp, SWTextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char* ilang, bool caseSensitive, bool strongsPadding) : zStr(ipath, -1, blockCount, icomp, caseSensitive), SWLD(iname, idesc, idisp, enc, dir, mark, ilang, strongsPadding) {
+zLD::zLD(const char *ipath, const char *iname, const char *idesc, long blockCount, SWCompress *icomp, SWTextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char* ilang, bool caseSensitive, bool strongsPadding) : zStr(ipath, -1, blockCount, icomp, caseSensitive), SWLD(iname, idesc, enc, dir, mark, ilang, strongsPadding) {
 
 }
 

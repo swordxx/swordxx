@@ -961,39 +961,39 @@ SWModule *SWMgr::createModule(const char *name, const char *driver, ConfigEntMap
 
         if (compress) {
             if (!stricmp(driver, "zText"))
-                newmod = new zText(datapath.c_str(), name, description.c_str(), blockType, compress, 0, enc, direction, markup, lang.c_str(), versification);
+                newmod = new zText(datapath.c_str(), name, description.c_str(), blockType, compress, enc, direction, markup, lang.c_str(), versification);
             else if (!stricmp(driver, "zText4"))
-                newmod = new zText4(datapath.c_str(), name, description.c_str(), blockType, compress, 0, enc, direction, markup, lang.c_str(), versification);
+                newmod = new zText4(datapath.c_str(), name, description.c_str(), blockType, compress, enc, direction, markup, lang.c_str(), versification);
             else if (!stricmp(driver, "zCom4"))
-                newmod = new zCom4(datapath.c_str(), name, description.c_str(), blockType, compress, 0, enc, direction, markup, lang.c_str(), versification);
+                newmod = new zCom4(datapath.c_str(), name, description.c_str(), blockType, compress, enc, direction, markup, lang.c_str(), versification);
             else
-                newmod = new zCom(datapath.c_str(), name, description.c_str(), blockType, compress, 0, enc, direction, markup, lang.c_str(), versification);
+                newmod = new zCom(datapath.c_str(), name, description.c_str(), blockType, compress, enc, direction, markup, lang.c_str(), versification);
         }
     }
 
     if (!stricmp(driver, "RawText")) {
-        newmod = new RawText(datapath.c_str(), name, description.c_str(), 0, enc, direction, markup, lang.c_str(), versification);
+        newmod = new RawText(datapath.c_str(), name, description.c_str(), enc, direction, markup, lang.c_str(), versification);
     }
 
     if (!stricmp(driver, "RawText4")) {
-        newmod = new RawText4(datapath.c_str(), name, description.c_str(), 0, enc, direction, markup, lang.c_str(), versification);
+        newmod = new RawText4(datapath.c_str(), name, description.c_str(), enc, direction, markup, lang.c_str(), versification);
     }
 
     // backward support old drivers
     if (!stricmp(driver, "RawGBF")) {
-        newmod = new RawText(datapath.c_str(), name, description.c_str(), 0, enc, direction, markup, lang.c_str());
+        newmod = new RawText(datapath.c_str(), name, description.c_str(), enc, direction, markup, lang.c_str());
     }
 
     if (!stricmp(driver, "RawCom")) {
-        newmod = new RawCom(datapath.c_str(), name, description.c_str(), 0, enc, direction, markup, lang.c_str(), versification);
+        newmod = new RawCom(datapath.c_str(), name, description.c_str(), enc, direction, markup, lang.c_str(), versification);
     }
 
     if (!stricmp(driver, "RawCom4")) {
-        newmod = new RawCom4(datapath.c_str(), name, description.c_str(), 0, enc, direction, markup, lang.c_str(), versification);
+        newmod = new RawCom4(datapath.c_str(), name, description.c_str(), enc, direction, markup, lang.c_str(), versification);
     }
 
     if (!stricmp(driver, "RawFiles")) {
-        newmod = new RawFiles(datapath.c_str(), name, description.c_str(), 0, enc, direction, markup, lang.c_str());
+        newmod = new RawFiles(datapath.c_str(), name, description.c_str(), enc, direction, markup, lang.c_str());
     }
 
     if (!stricmp(driver, "HREFCom")) {
@@ -1005,14 +1005,14 @@ SWModule *SWMgr::createModule(const char *name, const char *driver, ConfigEntMap
     if (!stricmp(driver, "RawLD")) {
         bool caseSensitive = ((entry = section.find("CaseSensitiveKeys")) != section.end()) ? (*entry).second == "true": false;
         bool strongsPadding = ((entry = section.find("StrongsPadding")) != section.end()) ? (*entry).second == "true": true;
-        newmod = new RawLD(datapath.c_str(), name, description.c_str(), 0, enc, direction, markup, lang.c_str(), caseSensitive, strongsPadding);
+        newmod = new RawLD(datapath.c_str(), name, description.c_str(), enc, direction, markup, lang.c_str(), caseSensitive, strongsPadding);
                 pos = 1;
         }
 
     if (!stricmp(driver, "RawLD4")) {
         bool caseSensitive = ((entry = section.find("CaseSensitiveKeys")) != section.end()) ? (*entry).second == "true": false;
         bool strongsPadding = ((entry = section.find("StrongsPadding")) != section.end()) ? (*entry).second == "true": true;
-        newmod = new RawLD4(datapath.c_str(), name, description.c_str(), 0, enc, direction, markup, lang.c_str(), caseSensitive, strongsPadding);
+        newmod = new RawLD4(datapath.c_str(), name, description.c_str(), enc, direction, markup, lang.c_str(), caseSensitive, strongsPadding);
                 pos = 1;
         }
 
@@ -1038,14 +1038,14 @@ SWModule *SWMgr::createModule(const char *name, const char *driver, ConfigEntMap
             compress = new LZSSCompress();
 
         if (compress) {
-            newmod = new zLD(datapath.c_str(), name, description.c_str(), blockCount, compress, 0, enc, direction, markup, lang.c_str(), caseSensitive, strongsPadding);
+            newmod = new zLD(datapath.c_str(), name, description.c_str(), blockCount, compress, enc, direction, markup, lang.c_str(), caseSensitive, strongsPadding);
         }
         pos = 1;
     }
 
     if (!stricmp(driver, "RawGenBook")) {
         misc1 = ((entry = section.find("KeyType")) != section.end()) ? (*entry).second : (SWBuf)"TreeKey";
-        newmod = new RawGenBook(datapath.c_str(), name, description.c_str(), 0, enc, direction, markup, lang.c_str(), misc1.c_str());
+        newmod = new RawGenBook(datapath.c_str(), name, description.c_str(), enc, direction, markup, lang.c_str(), misc1.c_str());
         pos = 1;
     }
 

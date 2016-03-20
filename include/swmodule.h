@@ -25,7 +25,6 @@
 #ifndef SWMODULE_H
 #define SWMODULE_H
 
-#include <swdisp.h>
 #include <listkey.h>
 #include <swconfig.h>
 
@@ -91,16 +90,6 @@ typedef std::map < SWBuf, AttributeList, std::less < SWBuf > > AttributeTypeList
 
 class SWDLLEXPORT SWModule : public SWCacher, public SWSearchable {
 
-class StdOutDisplay : public SWDisplay {
-     char display(SWModule &imodule)
-     {
-     #ifndef    _WIN32_WCE
-          std::cout << imodule.renderText();
-     #endif
-          return 0;
-     }
-};
-
 protected:
 
     ConfigEntMap ownConfig;
@@ -124,10 +113,6 @@ protected:
     char markup;
     char encoding;
 
-    /** this module's display object */
-    SWDisplay *disp;
-
-    static StdOutDisplay rawdisp;
     mutable SWBuf entryBuf;
 
     /** filters to be executed to remove all markup (for searches) */
@@ -163,14 +148,13 @@ public:
      *
      * @param imodname Internal name for module; see also getName()
      * @param imoddesc Name to display to user for module; see also getDescription()
-     * @param idisp Display object to use for displaying; see also getDisplay()
      * @param imodtype Type of module (e.g. Biblical Text, Commentary, etc.); see also getType()
      * @param encoding Encoding of the module (e.g. UTF-8)
      * @param dir Direction of text flow (e.g. Right to Left for Hebrew)
      * @param markup Source Markup of the module (e.g. OSIS)
      * @param modlang Language of the module (e.g. en)
      */
-    SWModule(const char *imodname = 0, const char *imoddesc = 0, SWDisplay * idisp = 0, const char *imodtype = 0, SWTextEncoding encoding = ENC_UNKNOWN, SWTextDirection dir = DIRECTION_LTR, SWTextMarkup markup = FMT_UNKNOWN, const char *modlang = 0);
+    SWModule(const char *imodname = 0, const char *imoddesc = 0, const char *imodtype = 0, SWTextEncoding encoding = ENC_UNKNOWN, SWTextDirection dir = DIRECTION_LTR, SWTextMarkup markup = FMT_UNKNOWN, const char *modlang = 0);
 
     /** SWModule d-tor
      */
@@ -190,7 +174,7 @@ public:
     // These methods are useful for modules that come from a standard SWORD install (most do).
     // SWMgr will call setConfig.  The user may use getConfig and getConfigEntry (if they
     // are not comfortable with, or don't wish to use  stl maps).
-    virtual void setConfig(ConfigEntMap *config);
+    virtual void setConfig(ConfigEntMap * conf) { config = conf; }
     virtual const ConfigEntMap &getConfig() const { return *config; }
 
     /**
@@ -235,7 +219,7 @@ public:
     /** Gets the current module key
      * @return the current key of this module
      */
-    virtual SWKey *getKey() const;
+    virtual SWKey *getKey() const { return key; }
 
     /**
      * gets the key text for the module.
@@ -250,41 +234,24 @@ public:
     virtual long getIndex() const { return entryIndex; }
     virtual void setIndex(long iindex) { entryIndex = iindex; }
 
-    /** Calls this module's display object and passes itself
-     *
-     * @return error status
-     */
-    virtual char display();
-
-    /** Gets display driver
-     *
-     * @return pointer to SWDisplay class for this module
-     */
-    virtual SWDisplay *getDisplay() const;
-
-    /** Sets display driver
-     *
-     * @param idisp pointer to SWDisplay class to assign to this module
-     */
-    virtual void setDisplay(SWDisplay * idisp);
 
     /** Gets module name
      *
      * @return pointer to modname
      */
-    const char *getName() const;
+    const char *getName() const { return modname; }
 
     /** Gets module description
      *
      * @return pointer to moddesc
      */
-    const char *getDescription() const;
+    const char *getDescription() const { return moddesc; }
 
     /** Gets module type
      *
      * @return pointer to modtype
      */
-    const char *getType() const;
+    const char *getType() const { return modtype; }
 
     /** Sets module type
      *
@@ -298,7 +265,7 @@ public:
      * @param newdir Value which to set direction; [-1]-only get
      * @return new direction
      */
-    virtual char getDirection() const;
+    virtual char getDirection() const { return direction; }
 
     /** Sets/gets module encoding
      *
@@ -371,20 +338,14 @@ public:
      */
     virtual bool isWritable() const { return false; }
 
-    /** Creates a new, empty module
-     * @param path path where to create the new module
-     * @return error
-     */
-    static signed char createModule(const char *path);
-
     /** Modify the current module entry text - only if module isWritable()
      */
-    virtual void setEntry(const char *inbuf, long len= -1);
+    virtual void setEntry(const char *inbuf, long len= -1) {}
 
     /** Link the current module entry to another module entry - only if
      *    module isWritable()
      */
-    virtual void linkEntry(const SWKey *sourceKey);
+    virtual void linkEntry(const SWKey *sourceKey) {}
 
     /** Delete current module entry - only if module isWritable()
      */
@@ -589,8 +550,9 @@ public:
      * @param render for internal use
      * @return result buffer
      */
-    SWBuf renderText();
-    SWBuf renderText(const char *buf, int len = -1, bool render = true) const;
+    SWBuf renderText(const char *buf = nullptr,
+                     int len = -1,
+                     bool render = true) const;
 
     /** Produces any header data which might be useful which is associated with the
      *    processing done with this filter.  A typical example is a suggested

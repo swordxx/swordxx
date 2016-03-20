@@ -41,10 +41,9 @@ namespace swordxx {
  * ENT:    iname - Internal name for module
  *    iprefix - string to prepend to each HREF (e.g. "file://mods/com/jfb/")
  *    idesc - Name to display to user for module
- *    idisp     - Display object to use for displaying
  */
 
-HREFCom::HREFCom(const char *ipath, const char *iprefix, const char *iname, const char *idesc, SWDisplay *idisp) : RawVerse(ipath), SWCom(iname, idesc, idisp)
+HREFCom::HREFCom(const char *ipath, const char *iprefix, const char *iname, const char *idesc) : RawVerse(ipath), SWCom(iname, idesc)
 {
     prefix   = 0;
     stdstr(&prefix, iprefix);

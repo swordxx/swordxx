@@ -40,11 +40,10 @@ namespace swordxx {
  *        idesc - Name to display to user for module
  *        iblockType - verse, chapter, book, etc. of index chunks
  *        icomp - Compressor object
- *        idisp - Display object to use for displaying
  */
 
-zText4::zText4(const char *ipath, const char *iname, const char *idesc, int iblockType, SWCompress *icomp, SWDisplay *idisp, SWTextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char *ilang, const char *versification)
-        : zVerse4(ipath, FileMgr::RDWR, iblockType, icomp), SWText(iname, idesc, idisp, enc, dir, mark, ilang, versification) {
+zText4::zText4(const char *ipath, const char *iname, const char *idesc, int iblockType, SWCompress *icomp, SWTextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char *ilang, const char *versification)
+        : zVerse4(ipath, FileMgr::RDWR, iblockType, icomp), SWText(iname, idesc, enc, dir, mark, ilang, versification) {
     blockType = iblockType;
     lastWriteKey = 0;
 }

@@ -70,8 +70,6 @@ using std::vector;
 
 namespace swordxx {
 
-SWModule::StdOutDisplay SWModule::rawdisp;
-
 typedef std::list<SWBuf> StringList;
 
 /******************************************************************************
@@ -85,7 +83,7 @@ typedef std::list<SWBuf> StringList;
  *    unicode  - if this module is unicode
  */
 
-SWModule::SWModule(const char *imodname, const char *imoddesc, SWDisplay *idisp, const char *imodtype, SWTextEncoding encoding, SWTextDirection direction, SWTextMarkup markup, const char *imodlang) {
+SWModule::SWModule(const char *imodname, const char *imoddesc, const char *imodtype, SWTextEncoding encoding, SWTextDirection direction, SWTextMarkup markup, const char *imodlang) {
     key       = createKey();
     entryBuf  = "";
     config    = &ownConfig;
@@ -98,7 +96,6 @@ SWModule::SWModule(const char *imodname, const char *imoddesc, SWDisplay *idisp,
     this->direction = direction;
     this->markup  = markup;
     entrySize= -1;
-    disp     = (idisp) ? idisp : &rawdisp;
     stdstr(&modname, imodname);
     stdstr(&moddesc, imoddesc);
     stdstr(&modtype, imodtype);
@@ -173,100 +170,6 @@ char SWModule::popError()
     error = 0;
     if (!retval) retval = key->popError();
     return retval;
-}
-
-
-/******************************************************************************
- * SWModule::Name - Sets/gets module name
- *
- * ENT:    imodname - value which to set modname
- *        [0] - only get
- *
- * RET:    pointer to modname
- */
-
-const char *SWModule::getName() const {
-    return modname;
-}
-
-
-/******************************************************************************
- * SWModule::Description - Sets/gets module description
- *
- * ENT:    imoddesc - value which to set moddesc
- *        [0] - only get
- *
- * RET:    pointer to moddesc
- */
-
-const char *SWModule::getDescription() const {
-    return moddesc;
-}
-
-
-/******************************************************************************
- * SWModule::Type - Sets/gets module type
- *
- * ENT:    imodtype - value which to set modtype
- *        [0] - only get
- *
- * RET:    pointer to modtype
- */
-
-const char *SWModule::getType() const {
-    return modtype;
-}
-
-/******************************************************************************
- * SWModule::getDirection - Sets/gets module direction
- *
- * ENT:    newdir - value which to set direction
- *        [-1] - only get
- *
- * RET:    char direction
- */
-char SWModule::getDirection() const {
-    return direction;
-}
-
-
-/******************************************************************************
- * SWModule::Disp - Sets/gets display driver
- *
- * ENT:    idisp - value which to set disp
- *        [0] - only get
- *
- * RET:    pointer to disp
- */
-
-SWDisplay *SWModule::getDisplay() const {
-    return disp;
-}
-
-void SWModule::setDisplay(SWDisplay *idisp) {
-    disp = idisp;
-}
-
-/******************************************************************************
- *  * SWModule::Display - Calls this modules display object and passes itself
- *   *
- *    * RET:   error status
- *     */
-
-char SWModule::display() {
-    disp->display(*this);
-    return 0;
-}
-
-/******************************************************************************
- * SWModule::getKey - Gets the key from this module that points to the position
- *            record
- *
- * RET:    key object
- */
-
-SWKey *SWModule::getKey() const {
-    return key;
 }
 
 
@@ -850,16 +753,6 @@ const char *SWModule::getRenderHeader() const {
 
 
 /******************************************************************************
- * SWModule::renderText     - calls all renderfilters on current module
- *                position
- *
- * RET: this module's text at current key location massaged by renderText filters
- */
-SWBuf SWModule::renderText() {
-    return renderText((const char *)0);
-}
-
-/******************************************************************************
  * SWModule::renderText     - calls all renderfilters on provided text
  *                or current module position provided text null
  *
@@ -1001,12 +894,6 @@ const char *SWModule::getConfigEntry(const char *key) const {
     ConfigEntMap::iterator it = config->find(key);
     return (it != config->end()) ? it->second.c_str() : 0;
 }
-
-
-void SWModule::setConfig(ConfigEntMap *config) {
-    this->config = config;
-}
-
 
 bool SWModule::hasSearchFramework() {
 #ifdef USELUCENE
@@ -1478,16 +1365,6 @@ void SWModule::filterBuffer(FilterList *filters, SWBuf &buf, const SWKey *key) c
     for (it = filters->begin(); it != filters->end(); it++) {
         (*it)->processText(buf, key, this);
     }
-}
-
-signed char SWModule::createModule(const char*) {
-    return -1;
-}
-
-void SWModule::setEntry(const char*, long) {
-}
-
-void SWModule::linkEntry(const SWKey*) {
 }
 
 

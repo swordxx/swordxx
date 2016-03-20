@@ -6,7 +6,6 @@
 #
 #
 SET(sword_base_frontend_SOURCES
-    src/frontend/swdisp.cpp
     src/frontend/swlog.cpp
 )
 SOURCE_GROUP("src\\frontend" FILES ${sword_base_frontend_SOURCES})
@@ -306,7 +305,6 @@ SET(SWORD_INSTALL_HEADERS
     include/swcom.h
     include/swcomprs.h
     include/swconfig.h
-    include/swdisp.h
     include/swfilter.h
     include/swfiltermgr.h
     include/swgenbook.h

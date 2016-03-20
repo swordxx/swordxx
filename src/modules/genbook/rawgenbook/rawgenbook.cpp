@@ -41,11 +41,10 @@ namespace swordxx {
  *
  * ENT:    iname - Internal name for module
  *    idesc - Name to display to user for module
- *    idisp     - Display object to use for displaying
  */
 
-RawGenBook::RawGenBook(const char *ipath, const char *iname, const char *idesc, SWDisplay *idisp, SWTextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char* ilang, const char *keyType)
-        : SWGenBook(iname, idesc, idisp, enc, dir, mark, ilang) {
+RawGenBook::RawGenBook(const char *ipath, const char *iname, const char *idesc, SWTextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char* ilang, const char *keyType)
+        : SWGenBook(iname, idesc, enc, dir, mark, ilang) {
 
     char *buf = new char [ strlen (ipath) + 20 ];
 
