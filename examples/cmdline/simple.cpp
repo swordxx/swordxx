@@ -57,7 +57,7 @@ int main(int argc, char * argv[]) {
         module = argv[1];
         break;
     default:
-        std::cerr << "Usage: " << argv[0] << "[module [key]]" << std::endl;
+        std::cerr << "Usage: " << argv[0] << " [module [key]]" << std::endl;
         return EXIT_FAILURE;
     }
 
