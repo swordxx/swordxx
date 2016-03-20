@@ -17,7 +17,7 @@ CMAKE_POLICY(SET CMP0017 NEW)
 SET(SWORDXX_VERSION 0.0.1)
 MESSAGE(STATUS "Configuring libswordxx version ${SWORDXX_VERSION}")
 
-# If SWORD_USER_CONFIG set, load the file and fail on error. Otherwise, try to
+# If SWORDXX_BUILDCONFIG set, load the file and fail on error. Otherwise, try to
 # include either "config.cmake" under either the build directory or the source
 # directory, whichever file first exists, if at all.
 IF(DEFINED SWORDXX_BUILDCONFIG)
