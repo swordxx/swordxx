@@ -74,33 +74,6 @@ namespace {
         return 0;
     }
 
-
-    static int myhttp_trace(CURL *handle, curl_infotype type, unsigned char *data, size_t size, void *userp) {
-        SWBuf header;
-        (void)userp; /* prevent compiler warning */
-        (void)handle; /* prevent compiler warning */
-
-        switch (type) {
-        case CURLINFO_TEXT: header = "TEXT"; break;
-        case CURLINFO_HEADER_OUT: header = "=> Send header"; break;
-        case CURLINFO_HEADER_IN: header = "<= Recv header"; break;
-
-        // these we don't want to log (HUGE)
-        case CURLINFO_DATA_OUT: header = "=> Send data";
-        case CURLINFO_SSL_DATA_OUT: header = "=> Send SSL data";
-        case CURLINFO_DATA_IN: header = "<= Recv data";
-        case CURLINFO_SSL_DATA_IN: header = "<= Recv SSL data";
-        default: /* in case a new one is introduced to shock us */
-            return 0;
-        }
-
-        if (size > 120) size = 120;
-        SWBuf text;
-        text.size(size);
-        memcpy(text.getRawData(), data, size);
-        SWLog::getSystemLog()->logDebug("CURLHTTPTransport: %s: %s", header.c_str(), text.c_str());
-        return 0;
-    }
 }
 
 
@@ -132,7 +105,6 @@ char CURLHTTPTransport::getURL(const char *destPath, const char *sourceURL, SWBu
         curl_easy_setopt(session, CURLOPT_FAILONERROR, 1);
         curl_easy_setopt(session, CURLOPT_PROGRESSDATA, statusReporter);
         curl_easy_setopt(session, CURLOPT_PROGRESSFUNCTION, my_httpfprogress);
-        curl_easy_setopt(session, CURLOPT_DEBUGFUNCTION, myhttp_trace);
         /* Set a pointer to our struct to pass to the callback */
         curl_easy_setopt(session, CURLOPT_FILE, &ftpfile);
 
