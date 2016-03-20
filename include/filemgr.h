@@ -27,7 +27,6 @@
 #include <fcntl.h>
 
 #include <defs.h>
-#include <swcacher.h>
 #include <swbuf.h>
 
 namespace swordxx {
@@ -83,7 +82,7 @@ public:
 * It keeps a list of all open files internally and closes them
 * when the destructor is called.
 */
-class SWDLLEXPORT FileMgr : public SWCacher {
+class SWDLLEXPORT FileMgr {
 
     friend class FileDesc;
     friend class __staticsystemFileMgr;
@@ -119,7 +118,7 @@ public:
     /**
     * Destructor. Clean things up. Will close all files opened by this FileMgr object.
     */
-    ~FileMgr();
+    virtual ~FileMgr() noexcept;
 
     /** Open a file and return a FileDesc for it.
     * The file itself will only be opened when FileDesc::getFd() is called.
@@ -146,9 +145,7 @@ public:
     */
     void close(FileDesc *file);
 
-    /** Cacher methods overridden
-     */
-    virtual void flush();
+    void flush() noexcept;
 
     /** Checks for the existence of a file.
     * @param ipath Path to file.

@@ -161,7 +161,7 @@ FileMgr::FileMgr(int maxFiles) {
 }
 
 
-FileMgr::~FileMgr() {
+FileMgr::~FileMgr() noexcept {
     FileDesc *tmp;
 
     while(files) {
@@ -564,7 +564,7 @@ int FileMgr::removeDir(const char *targetDir) {
 }
 
 
-void FileMgr::flush() {
+void FileMgr::flush() noexcept {
     FileDesc **loop;
 
     for (loop = &files; *loop; loop = &((*loop)->next)) {
