@@ -70,7 +70,7 @@ int main(int argc, char **argv) {
 
     cout << "\n" << mod->getKeyText() << ":\n";
 //    cout << (const char *)(*mod);        // we could do this, the same as above
-    mod->display();                // instead of casting mod to const char * to get its contents, we'll call the default display method that writes to stdout;
+    cout << mod->renderText();
     cout << " (" << mod->getName() << ")\n\n";
 
     return 0;
