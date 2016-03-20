@@ -25,7 +25,6 @@
 #include <string.h>
 
 #include <sysdata.h>
-#include <swlog.h>
 #include <swbuf.h>
 
 
@@ -363,9 +362,7 @@ SWBuf assureValidUTF8(const char *buf) {
             }
         }
     }
-    if (invalidChar) {
-//        SWLog::getSystemLog()->logWarning("Changing invalid UTF-8 string (%s) to (%s)\n", buf, myCopy.c_str());
-    }
+    if (invalidChar) { /** \bug !?!?!? */ }
     return myCopy;
 }
 

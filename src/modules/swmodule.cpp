@@ -25,7 +25,6 @@
 
 #include <cstdint>
 #include <vector>
-#include <swlog.h>
 #include <sysdata.h>
 #include <swmodule.h>
 #include <utilstr.h>

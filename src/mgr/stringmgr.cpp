@@ -21,7 +21,6 @@
  */
 
 #include <stringmgr.h>
-#include <swlog.h>
 #include <localemgr.h>
 #include <utilstr.h>
 
@@ -173,10 +172,8 @@ StringMgr* StringMgr::getSystemStringMgr() {
     if (!systemStringMgr) {
 #ifdef _ICU_
         systemStringMgr = new ICUStringMgr();
-//         SWLog::getSystemLog()->logInformation("created default ICUStringMgr");
 #else
         systemStringMgr = new StringMgr();
-//          SWLog::getSystemLog()->logInformation("created default StringMgr");
 #endif
     }
 
@@ -261,7 +258,6 @@ char *ICUStringMgr::upperUTF8(char *buf, unsigned int maxlen) const {
 
     u_strFromUTF8(lowerStr, max+9, 0, buf, -1, &err);
     if (err != U_ZERO_ERROR) {
-//        SWLog::getSystemLog()->logError("from: %s", u_errorName(err));
         delete [] lowerStr;
         delete [] upperStr;
         return ret;
@@ -269,7 +265,6 @@ char *ICUStringMgr::upperUTF8(char *buf, unsigned int maxlen) const {
 
     u_strToUpper(upperStr, max+9, lowerStr, -1, 0, &err);
     if (err != U_ZERO_ERROR) {
-//        SWLog::getSystemLog()->logError("upperCase: %s", u_errorName(err));
         delete [] lowerStr;
         delete [] upperStr;
         return ret;

@@ -21,7 +21,6 @@
  */
 
 #include <url.h>
-#include <swlog.h>
 
 //system includes
 #include <ctype.h>
