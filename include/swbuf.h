@@ -401,16 +401,6 @@ public:
      */
     inline const char *stripPrefix(char separator, bool endOfStringAsSeparator = false) { const char *m = strchr(buf, separator); if (!m && endOfStringAsSeparator) { if (*buf) { operator >>(1); *buf=0; end = buf; return buf + 1;} else return buf; } if (m) { int len = m-buf; char *hold = new char[len]; memcpy(hold, buf, len); *this << (len+1); memcpy(end+1, hold, len); delete [] hold; end[len+1] = 0; } return (m) ? end+1 : 0; }  // safe.  we know we don't actually realloc and shrink buffer when shifting, so we can place our return val at end.
 
-    // this could be nicer, like replacing a contiguous series of target bytes with single replacement; offering replacement const char *
-    /**
-     * Replace with a new byte value all occurances in this buffer of any byte value specified in a set
-     * @param targets a set of bytes, any of which will be replaced
-     * @param newByte value to use as replacement.
-     *
-     * Example: replaceBytes("abc", 'z');  // replaces all occurances of 'a', 'b', and 'c' with 'z'
-     */
-    inline SWBuf &replaceBytes(const char *targets, char newByte) { for (unsigned int i = 0; (i < size()); i++) { if (strchr(targets, buf[i])) buf[i] = newByte; } return *this; }
-
     /**
      * @return returns true if this buffer starts with the specified prefix
      */
@@ -420,11 +410,6 @@ public:
      * @return returns true if this buffer ends with the specified postfix
      */
     inline bool endsWith(const SWBuf &postfix) const { return (size() >= postfix.size())?!strncmp(end-postfix.size(), postfix.c_str(), postfix.size()):false; }
-
-    /**
-     * @return returns the index of a substring if it is found in this buffer; otherwise, returns < 0
-     */
-    inline long indexOf(const SWBuf &needle) const { const char *ch = strstr(buf, needle.c_str()); return (ch) ? ch - buf : -1; }
 
     inline int compare(const SWBuf &other) const { return strcmp(c_str(), other.c_str()); }
     inline bool operator ==(const SWBuf &other) const { return compare(other) == 0; }
