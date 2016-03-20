@@ -23,7 +23,6 @@
  */
 
 
-#include <swmacs.h>
 #include <strkey.h>
 #include <stdio.h>
 

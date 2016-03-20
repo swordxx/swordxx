@@ -27,7 +27,6 @@
 
 #include <versekey.h>
 #include <treekey.h>
-#include <swmacs.h>
 #include <listkey.h>
 
 #include <defs.h>

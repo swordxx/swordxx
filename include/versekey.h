@@ -26,7 +26,6 @@
 #define VERSEKEY_H
 
 #include <swkey.h>
-#include <swmacs.h>
 #include <listkey.h>
 #include <versificationmgr.h>
 
@@ -319,7 +318,7 @@ public:
     * automatically normalize itself when modified
     *
     * @param iautonorm value which to set autonorm
-    * [MAXPOS(char)] - only get
+    * [std::numeric_limits<char>::max()] - only get
     * @return if unchanged -> value of autonorm,
     * if changed -> previous value of autonorm
     */

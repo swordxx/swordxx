@@ -23,7 +23,6 @@
 
 
 #include <cstdint>
-#include <swmacs.h>
 #include <stdio.h>
 #include <fcntl.h>
 #include <stdlib.h>
@@ -1532,7 +1531,7 @@ int VerseKey::getVerse() const
  * VerseKey::setTestament - Sets/gets testament
  *
  * ENT:    itestament - value which to set testament
- *        [MAXPOS(char)] - only get
+ *        [std::numeric_limits<char>::max()] - only get
  *
  */
 
@@ -1604,7 +1603,7 @@ void VerseKey::setChapter(int ichapter)
  * VerseKey::setVerse - Sets/gets verse
  *
  * ENT:    iverse - value which to set verse
- *        [MAXPOS(int)] - only get
+ *        [std::numeric_limits<int>::max()] - only get
  *
  * RET:    if unchanged ->          value of verse
  *    if   changed -> previous value of verse

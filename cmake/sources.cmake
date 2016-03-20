@@ -315,7 +315,6 @@ SET(SWORD_INSTALL_HEADERS
     include/swld.h
     include/swlocale.h
     include/swlog.h
-    include/swmacs.h
     include/swmgr.h
     include/stringmgr.h
     include/swmodule.h
