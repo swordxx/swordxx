@@ -40,6 +40,7 @@ const char *OSISXHTML::getHeader() const {
 		.transChange { font-style: italic;}\n\
 		.transChange[type=tenseChange]::before { content: '|'; vertical-align:sub; font-size: 0.75em; color: red;}\n\
 		.transChange[type=tenseChange]::after    { content: '|'; vertical-align:sub; font-size: 0.75em; color: red;}\n\
+		.transChange:lang(zh) { font-style: normal; text-decoration : dotted underline;}\n\
 		.overline        { text-decoration: overline; }\n\
 		.indent1         { margin-left: 10px }\n\
 		.indent2         { margin-left: 20px }\n\
@@ -51,8 +52,7 @@ const char *OSISXHTML::getHeader() const {
 		.acrostic { text-align: center; }\n\
 		.colophon {font-style: italic; font-size=small; display:block;}\n\
 		.rdg { font-style: italic;}\n\
-		.catchWord {font-style: bold;}\n\
-	";
+		.catchWord {font-style: bold;}\n";
 	// Acrostic for things like the titles in Psalm 119
 	return header;
 }
