@@ -10,6 +10,7 @@
 #import "SwordInstallSourceManager.h"
 #import "SwordInstallSource.h"
 #import "SwordManager.h"
+#import "TestGlobals.h"
 
 @interface SwordInstallSourceManagerTest : XCTestCase
 
@@ -19,8 +20,7 @@
 
 NSString *testConfigPath = @"/tmp/testmodinst";
 NSString *testModuleManagerPath = @"/tmp/testmodmgr";
-#define PROJECT_PATH [@"~/Development/MySources/crosswire/Eloquent_MacOS/trunk/sword_src/sword-trunk/bindings/objc" stringByExpandingTildeInPath]
-#define LOCAL_INSTALLSOURCE_PATH [PROJECT_PATH stringByAppendingPathComponent:@"LocalTestInstallSource"]
+NSString *localInstallSourcePath = @"/Users/mbergmann/Development/MySources/crosswire/Eloquent_MacOS/trunk/sword_src/sword-trunk/bindings/objc/LocalTestInstallSource";
 
 - (void)setUp {
     NSFileManager *fm = [NSFileManager defaultManager];
@@ -42,27 +42,27 @@ NSString *testModuleManagerPath = @"/tmp/testmodmgr";
 - (void)testLocalInstallSource {
     SwordInstallSource *is = [[SwordInstallSource alloc] init];
     [is setSource:@"localhost"];
-    [is setDirectory:LOCAL_INSTALLSOURCE_PATH];
+    [is setDirectory:localInstallSourcePath];
     [is setCaption:@"LocalTest"];
 
     SwordInstallSourceManager *mgr = [[SwordInstallSourceManager alloc] initWithPath:testConfigPath createPath:YES];
     [mgr initManager];
-    [mgr addInstallSource:is];
+    [mgr addInstallSource:is reload:YES];
 
-    NSArray *mods = [mgr listModulesForSource:is];
+    NSDictionary *mods = [mgr listModulesForSource:is];
     XCTAssertTrue([mods count] == 1);
-    XCTAssertTrue([[((SwordModule *) mods[0]) name] isEqualToString:@"KJV"]);
+    XCTAssertTrue([[((SwordModule *) [mods allValues][0]) name] isEqualToString:@"KJV"]);
 }
 
 - (void)testLocalInstallSourceStatusNew {
     SwordInstallSource *is = [[SwordInstallSource alloc] init];
     [is setSource:@"localhost"];
-    [is setDirectory:LOCAL_INSTALLSOURCE_PATH];
+    [is setDirectory:localInstallSourcePath];
     [is setCaption:@"LocalTest"];
 
     SwordInstallSourceManager *mgr = [[SwordInstallSourceManager alloc] initWithPath:testConfigPath createPath:YES];
     [mgr initManager];
-    [mgr addInstallSource:is];
+    [mgr addInstallSource:is reload:YES];
 
     SwordManager *swMgr = [SwordManager managerWithPath:testModuleManagerPath];
     NSArray *stats = [mgr moduleStatusInInstallSource:is baseManager:swMgr];
@@ -78,17 +78,17 @@ NSString *testModuleManagerPath = @"/tmp/testmodmgr";
 - (void)testLocalInstallSourceStatusSame {
     SwordInstallSource *is = [[SwordInstallSource alloc] init];
     [is setSource:@"localhost"];
-    [is setDirectory:LOCAL_INSTALLSOURCE_PATH];
+    [is setDirectory:localInstallSourcePath];
     [is setCaption:@"LocalTest"];
 
     SwordManager *swMgr = [SwordManager managerWithPath:testModuleManagerPath];
     SwordInstallSourceManager *mgr = [[SwordInstallSourceManager alloc] initWithPath:testConfigPath createPath:YES];
     [mgr initManager];
-    [mgr addInstallSource:is];
+    [mgr addInstallSource:is reload:YES];
 
-    [mgr installModule:[mgr listModulesForSource:is][0] fromSource:is withManager:swMgr];
+    [mgr installModule:[[mgr listModulesForSource:is] allValues][0] fromSource:is withManager:swMgr];
 
-    [swMgr reInit];
+    [swMgr reloadManager];
     NSArray *stats = [mgr moduleStatusInInstallSource:is baseManager:swMgr];
     for(SwordModule *mod in stats) {
         NSLog(@"mod.name=%@", [mod name]);
@@ -102,15 +102,15 @@ NSString *testModuleManagerPath = @"/tmp/testmodmgr";
 - (void)testInstallModuleFromLocalSource {
     SwordInstallSource *is = [[SwordInstallSource alloc] init];
     [is setSource:@"localhost"];
-    [is setDirectory:LOCAL_INSTALLSOURCE_PATH];
+    [is setDirectory:localInstallSourcePath];
     [is setCaption:@"LocalTest"];
 
     SwordManager *swMgr = [SwordManager managerWithPath:testModuleManagerPath];
     SwordInstallSourceManager *mgr = [[SwordInstallSourceManager alloc] initWithPath:testConfigPath createPath:YES];
     [mgr initManager];
-    [mgr addInstallSource:is];
+    [mgr addInstallSource:is reload:YES];
 
-    int stat = [mgr installModule:[mgr listModulesForSource:is][0] fromSource:is withManager:swMgr];
+    int stat = [mgr installModule:[[mgr listModulesForSource:is] allValues][0] fromSource:is withManager:swMgr];
     XCTAssertTrue(stat == 0);
 }
 
@@ -175,7 +175,7 @@ NSString *testModuleManagerPath = @"/tmp/testmodmgr";
     [is setSource:@"foo.bar.local"];
     [is setDirectory:@"/foobar"];
 
-    [mgr addInstallSource:is];
+    [mgr addInstallSource:is reload:YES];
 
     XCTAssertTrue([[mgr installSources] count] == 2, @"");
 
@@ -194,7 +194,7 @@ NSString *testModuleManagerPath = @"/tmp/testmodmgr";
     [is setSource:@"foo.bar.local"];
     [is setDirectory:@"/foobar"];
 
-    [mgr addInstallSource:is];
+    [mgr addInstallSource:is reload:YES];
 
     XCTAssertTrue([[mgr installSources] count] == 2, @"");
 
@@ -203,9 +203,12 @@ NSString *testModuleManagerPath = @"/tmp/testmodmgr";
     XCTAssertTrue([[[mgr installSources][@"test"] directory] isEqualToString:@"/foobar"], @"");
 
     // then remove
-    [mgr removeInstallSource:is];
+    [mgr removeInstallSource:is reload:YES];
 
     XCTAssertTrue([[mgr installSources] count] == 1, @"");
+    is = [[[mgr installSources] allValues] firstObject];
+    NSLog(@"IS caption: %@", [is caption]);
+    XCTAssertTrue([[is caption] isEqualToString:@"CrossWire"], @"");
 }
 
 - (void)testUpdateInstallSource {
@@ -217,7 +220,7 @@ NSString *testModuleManagerPath = @"/tmp/testmodmgr";
     [is setCaption:@"test"];
     [is setSource:@"foo.bar.local"];
     [is setDirectory:@"/foobar"];
-    [mgr addInstallSource:is];
+    [mgr addInstallSource:is reload:YES];
 
     XCTAssertTrue([[mgr installSources] count] == 2, @"");
     XCTAssertTrue([[[mgr installSources][@"test"] caption] isEqualToString:@"test"], @"");

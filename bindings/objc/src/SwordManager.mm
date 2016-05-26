@@ -24,7 +24,6 @@ using std::list;
 @property (strong, readwrite) NSDictionary *modules;
 @property (readwrite) BOOL deleteSWMgr;
 
-- (void)refreshModules;
 - (void)addFiltersToModule:(SwordModule *)mod;
 
 @end
@@ -33,6 +32,8 @@ using std::list;
 @implementation SwordManager
 
 # pragma mark - class methods
+
+static SwordManager *instance = nil;
 
 + (NSArray *)moduleTypes {
     return @[SWMOD_TYPES_BIBLES, SWMOD_TYPES_COMMENTARIES, SWMOD_TYPES_DICTIONARIES, SWMOD_TYPES_GENBOOKS];
@@ -44,7 +45,6 @@ using std::list;
 }
 
 + (SwordManager *)defaultManager {
-    static SwordManager *instance = nil;
     if(instance == nil) {
         // use default path
         instance = [[SwordManager alloc] initWithPath:[[Configuration config] defaultModulePath]];
@@ -53,16 +53,20 @@ using std::list;
 	return instance;
 }
 
+- (void)useAsDefaultManager {
+    instance = self;
+}
+
 - (id)initWithPath:(NSString *)path {
 	if((self = [super init])) {
         ALog(@"Init with path:%@", path);
         self.deleteSWMgr = YES;
         self.modulesPath = path;
-		self.modules = [NSDictionary dictionary];
 		self.managerLock = (id) [[NSRecursiveLock alloc] init];
 
-        [self reInit];
+        [self initManager];
         
+        // all global options off
         sword::StringList options = swManager->getGlobalOptions();
         sword::StringList::iterator	it;
         for(it = options.begin(); it != options.end(); it++) {
@@ -79,10 +83,9 @@ using std::list;
         ALog(@"Init with temporary SWMgr");
         swManager = aSWMgr;
         self.deleteSWMgr = NO;
-		self.modules = [NSDictionary dictionary];
         self.managerLock = (id) [[NSRecursiveLock alloc] init];
         
-		[self refreshModules];
+		[self applyFilters];
     }
     
     return self;
@@ -99,7 +102,7 @@ using std::list;
     }
 }
 
-- (void)reInit {
+- (void)initManager {
     DLog(@"");
 	[self.managerLock lock];
     if(self.modulesPath && [self.modulesPath length] > 0) {
@@ -109,7 +112,6 @@ using std::list;
             [self createModuleFolderTemplate];
         }
 
-        // modulePath is the main sw manager
         swManager = new sword::SWMgr([self.modulesPath UTF8String], true, new sword::EncodingFilterMgr(sword::ENC_UTF8));
 
         if(!swManager) {
@@ -138,10 +140,18 @@ using std::list;
                 }
             }
             
-            [self refreshModules];
+            [self applyFilters];
         }
     }
 	[self.managerLock unlock];
+}
+
+- (void)reloadManager {
+    if(swManager != NULL) {
+        
+        swManager->Load();
+        [self applyFilters];
+    }
 }
 
 - (void)createModuleFolderTemplate {
@@ -153,39 +163,16 @@ using std::list;
 
 - (void)addModulesPath:(NSString *)path {
 	[self.managerLock lock];
-	if(swManager == nil) {
-		swManager = new sword::SWMgr([path UTF8String], true, new sword::EncodingFilterMgr(sword::ENC_UTF8));
-    } else {
-		swManager->augmentModules([path UTF8String]);
-    }
+	swManager->augmentModules([path UTF8String]);
 	
-	[self refreshModules];
+	[self applyFilters];
 	[self.managerLock unlock];
 }
 
-- (void)refreshModules {
-    DLog(@"");
-    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
-
-    sword::SWModule *mod;
-	for(sword::ModMap::iterator it = swManager->Modules.begin(); it != swManager->Modules.end(); it++) {
-		mod = it->second;
-
-        if(mod) {
-            // temporary instance
-            SwordModule *swMod = [SwordModule moduleForSWModule:mod];
-            NSString *type = [swMod typeString];
-
-            ModuleType aType = [SwordModule moduleTypeForModuleTypeString:type];
-            SwordModule *sm = [SwordModule moduleForType:aType swModule:mod swordManager:self];
-            dict[[[sm name] lowercaseString]] = sm;
-
-            [self addFiltersToModule:sm];
-        }
-	}
-
-    SendNotifyModulesChanged(NULL);
-    self.modules = dict;
+- (void)applyFilters {
+    for(SwordModule *mod in [[self allModules] allValues]) {
+        [self addFiltersToModule:mod];
+    }
 }
 
 - (void)addFiltersToModule:(SwordModule *)mod {
@@ -195,85 +182,46 @@ using std::list;
 
     switch([mod swModule]->getMarkup()) {
         case sword::FMT_GBF:
-            if(!gbfFilter) {
-                gbfFilter = [filterProvider newGbfRenderFilter];
-            }
-            if(!gbfStripFilter) {
-                gbfStripFilter = [filterProvider newGbfPlainFilter];
-            }
-            [mod addRenderFilter:gbfFilter];
-            [mod addStripFilter:gbfStripFilter];
+            [mod addRenderFilter:[filterProvider newGbfRenderFilter]];
+            [mod addStripFilter:[filterProvider newGbfPlainFilter]];
             break;
         case sword::FMT_THML:
-            if(!thmlFilter) {
-                thmlFilter = [filterProvider newThmlRenderFilter];
-            }
-            if(!thmlStripFilter) {
-                thmlStripFilter = [filterProvider newThmlPlainFilter];
-            }
-            [mod addRenderFilter:thmlFilter];
-            [mod addStripFilter:thmlStripFilter];
+            [mod addRenderFilter:[filterProvider newThmlRenderFilter]];
+            [mod addStripFilter:[filterProvider newThmlPlainFilter]];
             break;
         case sword::FMT_OSIS:
-            if(!osisFilter) {
-                osisFilter = [filterProvider newOsisRenderFilter];
-            }
-            if(!osisStripFilter) {
-                osisStripFilter = [filterProvider newOsisPlainFilter];
-            }
-            [mod addRenderFilter:osisFilter];
-            [mod addStripFilter:osisStripFilter];
+            [mod addRenderFilter:[filterProvider newOsisRenderFilter]];
+            [mod addStripFilter:[filterProvider newOsisPlainFilter]];
             break;
         case sword::FMT_TEI:
-            if(!teiFilter) {
-                teiFilter = [filterProvider newTeiRenderFilter];
-            }
-            if(!teiStripFilter) {
-                teiStripFilter = [filterProvider newTeiPlainFilter];
-            }
-            [mod addRenderFilter:teiFilter];
-            [mod addStripFilter:teiStripFilter];
+            [mod addRenderFilter:[filterProvider newTeiRenderFilter]];
+            [mod addStripFilter:[filterProvider newTeiPlainFilter]];
             break;
         case sword::FMT_PLAIN:
         default:
-            if(!plainFilter) {
-                plainFilter = [filterProvider newOsisPlainFilter];
-            }
-            [mod addRenderFilter:plainFilter];
+            [mod addRenderFilter:[filterProvider newOsisPlainFilter]];
             break;
     }
 }
 
 - (SwordModule *)moduleWithName:(NSString *)name {
     
-	SwordModule	*ret = self.modules[[name lowercaseString]];
-    if(ret == nil) {
-        sword::SWModule *mod = [self getSWModuleWithName:name];
-        if(mod == NULL) {
-            ALog(@"No module by that name: %@!", name);
-        } else {
-            // temporary instance
-            SwordModule *swMod = [SwordModule moduleForSWModule:mod];
-            NSString *type = [swMod typeString];
-            
-            ModuleType aType = [SwordModule moduleTypeForModuleTypeString:type];
-            ret = [SwordModule moduleForType:aType swModule:mod swordManager:self];
-
-            if(ret != nil) {
-                NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithDictionary:self.modules];
-                dict[[name lowercaseString]] = ret;
-                self.modules = dict;                
-            }
-        }        
+    sword::SWModule *mod = [self getSWModuleWithName:name];
+    if(mod == NULL) {
+        ALog(@"No module by that name: %@!", name);
+        return nil;
+        
+    } else {
+        // temporary instance
+        NSString *type = [NSString stringWithUTF8String:mod->getType()];
+        
+        ModuleType aType = [SwordModule moduleTypeForModuleTypeString:type];
+        return [SwordModule moduleForType:aType swModule:mod];
     }
-    
-	return ret;
 }
 
 - (void)setCipherKey:(NSString *)key forModuleNamed:(NSString *)name {
-	[self.managerLock lock];
 	swManager->setCipherKey([name UTF8String], [key UTF8String]);
-	[self.managerLock unlock];
 }
 
 #pragma mark - module access
@@ -288,11 +236,29 @@ using std::list;
     return [[NSString stringWithUTF8String:swManager->getGlobalOption([option UTF8String])] isEqualToString:SW_ON];
 }
 
-- (NSArray *)listModules {
-    return [self.modules allValues];
+- (NSInteger)numberOfModules {
+    return swManager->Modules.size();
 }
+
+- (NSDictionary *)allModules {
+    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+    sword::SWModule *mod;
+    for(sword::ModMap::iterator it = swManager->Modules.begin(); it != swManager->Modules.end(); it++) {
+        mod = it->second;
+        
+        if(mod) {
+            NSString *type = [NSString stringWithUTF8String:mod->getType()];
+            
+            ModuleType aType = [SwordModule moduleTypeForModuleTypeString:type];
+            SwordModule *swMod = [SwordModule moduleForType:aType swModule:mod];
+            [dict setObject:swMod forKey:[swMod name]];
+        }
+    }
+    return [NSDictionary dictionaryWithDictionary:dict];
+}
+
 - (NSArray *)moduleNames {
-    return [self.modules allKeys];
+    return [[self allModules] allKeys];
 }
 
 - (NSArray *)sortedModuleNames {
@@ -301,7 +267,7 @@ using std::list;
 
 - (NSArray *)modulesForFeature:(NSString *)feature {
     NSMutableArray *ret = [NSMutableArray array];
-    for(SwordModule *mod in [self.modules allValues]) {
+    for(SwordModule *mod in [[self allModules] allValues]) {
         if([mod hasFeature:feature]) {
             [ret addObject:mod];
         }
@@ -316,7 +282,7 @@ using std::list;
 
 - (NSArray *)modulesForType:(ModuleType)type {
     NSMutableArray *ret = [NSMutableArray array];
-    for(SwordModule *mod in [self.modules allValues]) {
+    for(SwordModule *mod in [[self allModules] allValues]) {
         if([mod type] == type || type == All) {
             [ret addObject:mod];
         }
@@ -331,7 +297,7 @@ using std::list;
 
 - (NSArray *)modulesForCategory:(ModuleCategory)cat {
     NSMutableArray *ret = [NSMutableArray array];
-    for(SwordModule *mod in [self.modules allValues]) {
+    for(SwordModule *mod in [[self allModules] allValues]) {
         if([mod category] == cat) {
             [ret addObject:mod];
         }
@@ -350,13 +316,7 @@ using std::list;
 }
 
 - (sword::SWModule *)getSWModuleWithName:(NSString *)moduleName {
-	sword::SWModule *module;
-
-	[self.managerLock lock];
-	module = swManager->Modules[[moduleName UTF8String]];	
-	[self.managerLock unlock];
-    
-	return module;
+	return swManager->Modules[[moduleName UTF8String]];
 }
 
 @end

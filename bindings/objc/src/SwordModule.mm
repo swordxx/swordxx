@@ -30,22 +30,18 @@
     return [[SwordModule alloc] initWithSWModule:aModule];
 }
 
-+ (id)moduleForSWModule:(sword::SWModule *)aModule swordManager:(SwordManager *)aManager {
-    return [[SwordModule alloc] initWithSWModule:aModule swordManager:aManager];
-}
-
-+ (id)moduleForType:(ModuleType)aType swModule:(sword::SWModule *)swModule swordManager:(SwordManager *)aManager {
++ (id)moduleForType:(ModuleType)aType swModule:(sword::SWModule *)swModule {
     SwordModule *sm;
     if(aType == Bible) {
-        sm = [[SwordBible alloc] initWithSWModule:swModule swordManager:aManager];
+        sm = [[SwordBible alloc] initWithSWModule:swModule];
     } else if(aType == Commentary) {
-        sm = [[SwordCommentary alloc] initWithSWModule:swModule swordManager:aManager];
+        sm = [[SwordCommentary alloc] initWithSWModule:swModule];
     } else if(aType == Dictionary) {
-        sm = [[SwordDictionary alloc] initWithSWModule:swModule swordManager:aManager];
+        sm = [[SwordDictionary alloc] initWithSWModule:swModule];
     } else if(aType == Genbook) {
-        sm = [[SwordBook alloc] initWithSWModule:swModule swordManager:aManager];
+        sm = [[SwordBook alloc] initWithSWModule:swModule];
     } else {
-        sm = [[SwordModule alloc] initWithSWModule:swModule swordManager:aManager];
+        sm = [[SwordModule alloc] initWithSWModule:swModule];
     }
     
     return sm;
@@ -108,27 +104,10 @@
     self.configEntries = [NSMutableDictionary dictionary];
 }
 
-- (id)initWithName:(NSString *)aName swordManager:(SwordManager *)aManager {
-    self = [super init];
-	if(self) {
-		swModule = [aManager getSWModuleWithName:aName];
-        self.swManager = aManager;
-        
-        [self mainInit];
-	}
-	
-	return self;
-}
-
 - (id)initWithSWModule:(sword::SWModule *)aModule {
-    return [self initWithSWModule:aModule swordManager:nil];
-}
-
-- (id)initWithSWModule:(sword::SWModule *)aModule swordManager:(SwordManager *)aManager {    
     self = [super init];
     if(self) {
         swModule = aModule;
-        self.swManager = aManager;
         
         [self mainInit];
     }
@@ -139,6 +118,7 @@
 #pragma mark - Filters
 
 - (void)addRenderFilter:(SwordFilter *)aFilter {
+    swModule->removeRenderFilter([aFilter swFilter]);
     swModule->addRenderFilter([aFilter swFilter]);
 }
 
@@ -425,24 +405,6 @@
 	return result;
 }
 
-#pragma mark - Module unlocking
-
-- (BOOL)unlock:(NSString *)unlockKey {
-    
-	if (![self isEncrypted]) {
-		return NO;
-    }
-    
-    NSMutableDictionary	*cipherKeys = [NSMutableDictionary dictionaryWithDictionary:
-                                       [[NSUserDefaults standardUserDefaults] objectForKey:DefaultsModuleCipherKeysKey]];
-    cipherKeys[[self name]] = unlockKey;
-    [[NSUserDefaults standardUserDefaults] setObject:cipherKeys forKey:DefaultsModuleCipherKeysKey];
-    
-	[self.swManager setCipherKey:unlockKey forModuleNamed:[self name]];
-    
-	return YES;
-}
-
 #pragma mark - Module positioning
 
 - (void)incKeyPosition {
@@ -647,6 +609,30 @@
     return [self textEntriesForReference:reference textType:TextTypeRendered];
 }
 
+- (NSArray *)textEntriesForReference:(NSString *)aReference textType:(TextPullType)textType {
+    NSArray *ret = nil;
+    
+    SwordModuleTextEntry *entry = [self textEntryForKey:[SwordKey swordKeyWithRef:aReference]
+                                               textType:textType];
+    if(entry) {
+        ret = @[entry];
+    }
+    
+    return ret;
+}
+
+- (SwordModuleTextEntry *)renderedTextEntryForRef:(NSString *)reference {
+    return [self textEntryForKeyString:reference textType:TextTypeRendered];
+}
+
+- (SwordModuleTextEntry *)strippedTextEntryForRef:(NSString *)reference {
+    return [self textEntryForKeyString:reference textType:TextTypeStripped];
+}
+
+- (SwordModuleTextEntry *)textEntryForKeyString:(NSString *)aKeyString textType:(TextPullType)aType {
+    return [self textEntryForKey:[SwordKey swordKeyWithRef:aKeyString] textType:aType];
+}
+
 - (SwordModuleTextEntry *)textEntryForKey:(SwordKey *)aKey textType:(TextPullType)aType {
     SwordModuleTextEntry *ret = nil;
     
@@ -671,22 +657,6 @@
     }
     
     return ret;
-}
-
-- (SwordModuleTextEntry *)textEntryForKeyString:(NSString *)aKeyString textType:(TextPullType)aType {
-    return [self textEntryForKey:[SwordKey swordKeyWithRef:aKeyString] textType:aType];
-}
-
-- (NSArray *)textEntriesForReference:(NSString *)aReference textType:(TextPullType)textType {
-    NSArray *ret = nil;
-    
-    SwordModuleTextEntry *entry = [self textEntryForKey:[SwordKey swordKeyWithRef:aReference] 
-                                               textType:textType];
-    if(entry) {
-        ret = @[entry];
-    }
-    
-    return ret;    
 }
 
 - (void)writeEntry:(SwordModuleTextEntry *)anEntry {}

@@ -102,6 +102,7 @@ base path of the module installation
 
             if(![self existsDefaultInstallSource]) {
                 [self addDefaultInstallSource];
+                [self readInstallMgrConf];
             }
 
             [self setupInstallSources];
@@ -109,11 +110,11 @@ base path of the module installation
 
     } else {
         ALog(@"Re-initializing swInstallMgr");
-        [self reInitialize];
+        [self reloadManager];
     }
 }
 
-- (void)reInitialize {
+- (void)reloadManager {
     [self readInstallMgrConf];
     [self setupInstallSources];
 }
@@ -146,7 +147,7 @@ base path of the module installation
     [is setSource:@"ftp.crosswire.org"];
     [is setDirectory:@"/pub/sword/raw"];
 
-    [self addInstallSource:is];
+    [self addInstallSource:is reload:NO];
 }
 
 - (void)setupConfig {
@@ -196,12 +197,8 @@ base path of the module installation
     return [[self configPath] stringByAppendingPathComponent:@"InstallMgr.conf"];
 }
 
-- (void)addInstallSource:(SwordInstallSource *)is {
+- (void)addInstallSource:(SwordInstallSource *)is reload:(BOOL)doReload {
     ALog(@"Adding install source: %@", [is caption]);
-
-    NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithDictionary:[self installSources]];
-
-    dict[[is caption]] = is;
 
     // modify conf file
     sword::SWConfig config([[self createInstallMgrConfPath] UTF8String]);
@@ -212,13 +209,12 @@ base path of the module installation
 	}
     config.Save();
 
-    [self setInstallSources:dict];
-    [self readInstallMgrConf];
+    if(doReload) [self reloadManager];
 }
 
-- (void)removeInstallSource:(SwordInstallSource *)is {
+- (void)removeInstallSource:(SwordInstallSource *)is reload:(BOOL)doReload {
     ALog(@"Removing install source: %@", [is caption]);
-    NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithDictionary:[self installSources]];
+    NSMutableDictionary *dict = [[self installSources] mutableCopy];
     [dict removeObjectForKey:[is caption]];
 
     // modify conf file
@@ -227,7 +223,7 @@ base path of the module installation
     config["Sources"].erase(INSTALLSOURCE_SECTION_TYPE_FTP);
 
     // build up new
-    for(SwordInstallSource *sis in [self.installSources allValues]) {
+    for(SwordInstallSource *sis in [dict allValues]) {
 		if([[sis type] isEqualToString:INSTALLSOURCE_TYPE_FTP]) {
 			config["Sources"].insert(ConfigEntMap::value_type(INSTALLSOURCE_SECTION_TYPE_FTP, [[sis configEntry] UTF8String]));
 		} else {
@@ -236,8 +232,7 @@ base path of the module installation
     }
     config.Save();
 
-    [self setInstallSources:dict];
-    [self readInstallMgrConf];
+    if(doReload) [self reloadManager];
 }
 
 - (void)updateInstallSource:(SwordInstallSource *)is {
@@ -245,9 +240,11 @@ base path of the module installation
     // hold a ref to the is
     SwordInstallSource *save = is;
     // first remove, then add again
-    [self removeInstallSource:save];
-    [self addInstallSource:save];
+    [self removeInstallSource:save reload:NO];
+    [self addInstallSource:save reload:NO];
     save = nil;
+    
+    [self reloadManager];
 }
 
 - (int)installModule:(SwordModule *)aModule fromSource:(SwordInstallSource *)is withManager:(SwordManager *)manager {
@@ -272,15 +269,15 @@ base path of the module installation
     if(stat) {
         ALog(@"Unable to refresh with master install source!");
     } else {
-        [self reInitialize];
+        [self reloadManager];
     }
     
     return stat;
 }
 
 // list modules in sources
-- (NSArray *)listModulesForSource:(SwordInstallSource *)is {
-    return [is listModules];
+- (NSDictionary *)listModulesForSource:(SwordInstallSource *)is {
+    return [is allModules];
 }
 
 /** refresh modules of this source 

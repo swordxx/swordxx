@@ -35,7 +35,7 @@
     NSString *modIntro = [bible moduleIntroduction];
     NSLog(@"mod intro: %@", modIntro);
     XCTAssertNotNil(modIntro);
-    XCTAssertEqual(@"Im Anfang schuf Gott Himmel und Erde.", modIntro);
+    XCTAssertTrue([@"Im Anfang schuf Gott Himmel und Erde." isEqualToString:modIntro]);
 }
 
 /*
@@ -77,7 +77,7 @@
     XCTAssertNotNil(bible, @"Module is nil");
 
     [mgr setGlobalOption:SW_OPTION_REDLETTERWORDS value:SW_ON];
-    SwordBibleTextEntry *text = (SwordBibleTextEntry *) [bible textEntryForKeyString:@"Mat 4:4" textType:TextTypeRendered];
+    SwordBibleTextEntry *text = (SwordBibleTextEntry *) [bible renderedTextEntryForRef:@"Mat 4:4"];
     XCTAssertTrue(text != nil);
     NSLog(@"Mat 4:4: %@", [text text]);
     XCTAssertTrue([[text text] containsString:@"But he answered and said, <font color=\"red\"> It is written, Man shall not live by bread alone, but by every word that proceedeth out of the mouth of God.</font>"]);
@@ -149,7 +149,7 @@
     SwordBible *bible = (SwordBible *)[mgr moduleWithName:@"GerNeUe"];
 
     [mgr setGlobalOption:SW_OPTION_HEADINGS value:SW_ON];
-    SwordBibleTextEntry *text = (SwordBibleTextEntry *) [bible textEntryForKeyString:@"Numbers 1:47" textType:TextTypeRendered];
+    SwordBibleTextEntry *text = (SwordBibleTextEntry *) [bible renderedTextEntryForRef:@"Numbers 1:47"];
     NSLog(@"Preverse text: %@", [text preVerseHeading]);
     XCTAssertTrue([[text preVerseHeading] length] > 0);
     XCTAssertTrue([[text preVerseHeading] isEqualToString:@"<title>Die Sonderstellung der Leviten</title>"]);
@@ -160,7 +160,7 @@
     SwordBible *bible = (SwordBible *)[mgr moduleWithName:@"GerNeUe"];
 
     [mgr setGlobalOption:SW_OPTION_HEADINGS value:SW_ON];
-    SwordBibleTextEntry *text = (SwordBibleTextEntry *) [bible textEntryForKeyString:@"Numbers 4:21" textType:TextTypeRendered];
+    SwordBibleTextEntry *text = (SwordBibleTextEntry *) [bible renderedTextEntryForRef:@"Numbers 4:21"];
     NSLog(@"Preverse text: %@", [text preVerseHeading]);
     XCTAssertTrue([[text preVerseHeading] length] > 0);
     XCTAssertTrue([[text preVerseHeading] isEqualToString:@"<title>Die Gerschoniten</title>"]);
@@ -180,7 +180,7 @@
     SwordBible *bible = (SwordBible *)[mgr moduleWithName:@"GerSch"];
     XCTAssertNotNil(bible, @"Module is nil");
     
-    SwordModuleTextEntry *text = [bible textEntryForKeyString:@"gen1.1" textType:TextTypeRendered];
+    SwordModuleTextEntry *text = [bible renderedTextEntryForRef:@"gen1.1"];
     XCTAssertNotNil(text, @"");
     NSLog(@"text: %@", [text text]);
     XCTAssertTrue([[text text] length] > 0, @"");

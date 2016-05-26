@@ -22,11 +22,7 @@
 - (NSString *)defaultModulePath {
     NSArray *urls = [[NSFileManager defaultManager] URLsForDirectory:NSApplicationSupportDirectory inDomains:NSUserDomainMask];
     if(urls.count > 0) {
-        NSString *folder = [[(NSURL *)urls[0] path] stringByAppendingPathComponent:@"Sword"];
-        if(![[NSFileManager defaultManager] fileExistsAtPath:folder]) {
-            [[NSFileManager defaultManager] createDirectoryAtPath:folder withIntermediateDirectories:NO attributes:nil error:NULL];
-        }
-        return folder;
+        return [[(NSURL *)urls[0] path] stringByAppendingPathComponent:@"Sword"];
     }
     return nil;
 }

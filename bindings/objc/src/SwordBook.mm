@@ -24,25 +24,14 @@
 
 @synthesize contents;
 
-- (id)initWithName:(NSString *)aName swordManager:(SwordManager *)aManager {
-	self = [super initWithName:aName swordManager:aManager];
-    if(self) {
-        [self setContents:[NSMutableDictionary dictionary]];
-    }
-                         
-	return self;
-}
-
 - (id)initWithSWModule:(sword::SWModule *)aModule swordManager:(SwordManager *)aManager {
-    self = [super initWithSWModule:aModule swordManager:aManager];
+    self = [super initWithSWModule:aModule];
     if(self) {
         [self setContents:[NSMutableDictionary dictionary]];
     }
     
     return self;
 }
-
-
 
 - (SwordModuleTreeEntry *)treeEntryForKey:(NSString *)treeKey {
     SwordModuleTreeEntry * ret;

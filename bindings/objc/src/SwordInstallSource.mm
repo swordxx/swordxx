@@ -109,36 +109,29 @@
 }
 
 /** list all modules of this source */
-- (NSArray *)listModules {
-    NSArray *ret = [NSArray array];
-    
+- (NSDictionary *)allModules {
     SwordManager *sm = [self swordManager];
     if(sm) {
-        ret = [sm listModules];
+        return [sm allModules];
     } else {
         ALog(@"Have nil SwordManager");        
     }
-    
-    return ret;
+    return nil;
 }
 
 - (NSArray *)listModulesForType:(ModuleType)aType {
-    NSArray *ret = [NSArray array];
-
     SwordManager *sm = [self swordManager];
     if(sm) {
-        ret = [sm modulesForType:aType];
+        return [sm modulesForType:aType];
     } else {
         ALog(@"Have nil SwordManager");        
-    }    
-    
-    return ret;
+    }
+    return nil;
 }
 
 /** list module types */
 - (NSArray *)listModuleTypes {
-    NSArray *ret = [SwordManager moduleTypes];
-    return ret;
+    return [SwordManager moduleTypes];
 }
 
 - (SwordManager *)swordManager {

@@ -2,25 +2,89 @@
 //  SwordManagerTest.m
 //  ObjCSword
 //
-//  Created by Manfred Bergmann on 14.06.10.
-//  Copyright 2010 Software by MABE. All rights reserved.
+//  Created by Manfred Bergmann on 02.03.16.
+//
 //
 
+#import <XCTest/XCTest.h>
 #import <ObjCSword/ObjCSword.h>
-#import "SwordManagerTest.h"
 
-@implementation SwordManagerTest
+@interface SwordManagerTest : XCTestCase
 
-- (void)setUp {
-    [Configuration configWithImpl:[[OSXConfiguration alloc] init]];
+@end
+
+@implementation SwordManagerTest {
+    SwordManager *mgr;
 }
 
-- (void)testSwordManagerInit {
-    NSString *modPath = [[Configuration config] defaultModulePath];
-    NSLog(@"%@", modPath);
+- (void)setUp {
+    [super setUp];
+
+    [Configuration configWithImpl:[[OSXConfiguration alloc] init]];
+    [[FilterProviderFactory providerFactory] initWithImpl:[[DefaultFilterProvider alloc] init]];
     
-    SwordManager *sm = [SwordManager managerWithPath:modPath]; 
-    XCTAssertTrue([[sm modules] count] > 0, @"");
+    NSString *modulePath = [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:@"TestModules"];
+    
+    mgr = [SwordManager managerWithPath:modulePath];
+}
+
+- (void)testAvailableModules {
+    XCTAssert(mgr != nil);
+    
+    NSInteger count = [[mgr allModules] count];
+    XCTAssert(count > 0);
+    NSLog(@"Modules: %lu", count);
+}
+
+- (void)testGetModule {
+    SwordModule *mod = [mgr moduleWithName:@"KJV"];
+    XCTAssert(mod != nil);
+    XCTAssert([[mod name] isEqualToString:@"KJV"]);
+}
+
+- (void)testReloadWithRenderedKey_String {
+    SwordModule *mod = [mgr moduleWithName:@"KJV"];
+
+    [mod setKeyString:@"Gen 1:1"];
+    NSString *text = [mod renderedText];
+    XCTAssert(text != nil);
+    XCTAssert(text.length > 0);
+    NSLog(@"text: %@", text);
+    
+    [mgr reloadManager];
+    mod = [mgr moduleWithName:@"KJV"];
+    XCTAssert(mod != nil);
+    XCTAssert([[mod name] isEqualToString:@"KJV"]);
+}
+
+- (void)testReloadWithRenderedKey_SwordKey {
+    SwordModule *mod = [mgr moduleWithName:@"KJV"];
+    
+    SwordKey *key = [SwordKey swordKeyWithRef:@"Gen 1"];
+    [mod setSwordKey:key];
+    NSString *text = [mod renderedText];
+    XCTAssert(text != nil);
+    XCTAssert(text.length > 0);
+    NSLog(@"text: %@", text);
+    
+    [mgr reloadManager];
+    mod = [mgr moduleWithName:@"KJV"];
+    XCTAssert(mod != nil);
+    XCTAssert([[mod name] isEqualToString:@"KJV"]);
+}
+
+- (void)testReloadWithRenderedKey_CustomRender {
+    SwordModule *mod = [mgr moduleWithName:@"KJV"];
+
+    NSArray *textEntries = [(SwordBible *)mod renderedTextEntriesForRef:@"Gen 1" context:0];
+    XCTAssert(textEntries != nil);
+    NSLog(@"Entries: %lu", [textEntries count]);
+    XCTAssert([textEntries count] == 31);
+    
+    [mgr reloadManager];
+    mod = [mgr moduleWithName:@"KJV"];
+    XCTAssert(mod != nil);
+    XCTAssert([[mod name] isEqualToString:@"KJV"]);
 }
 
 @end

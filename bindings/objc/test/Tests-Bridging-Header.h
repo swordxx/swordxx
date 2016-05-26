@@ -3,5 +3,4 @@
 //
 
 #import <ObjCSword/ObjCSword.h>
-//#import <ObjCSword/Configuration.h>
-//#import <ObjCSword/SwordManager.h>
+#import "TestGlobals.h"
