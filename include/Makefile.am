@@ -192,4 +192,7 @@ pkginclude_HEADERS += $(swincludedir)/canon_catholic2.h
 pkginclude_HEADERS += $(swincludedir)/canon_lxx.h
 pkginclude_HEADERS += $(swincludedir)/canon_orthodox.h
 pkginclude_HEADERS += $(swincludedir)/canon_null.h
+pkginclude_HEADERS += $(swincludedir)/canon_segond.h
+pkginclude_HEADERS += $(swincludedir)/canon_calvin.h
+pkginclude_HEADERS += $(swincludedir)/canon_darbyfr.h
 
