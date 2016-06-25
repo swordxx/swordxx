@@ -51,6 +51,7 @@ namespace {
 		SWBuf heading;
 		int depth;
 		int headerNum;
+		bool canonical;
 
 		MyUserData(const SWModule *module, const SWKey *key) : BasicFilterUserData(module, key) {
 			clear();
@@ -62,6 +63,7 @@ namespace {
 			heading = "";
 			depth = 0;
 			headerNum = 0;
+			canonical=false;
 		}
 	};
 }
@@ -88,16 +90,16 @@ bool OSISHeadings::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 	// are we currently in a heading?
 	if (u->currentHeadingName.size()) {
 		u->heading.append(u->lastTextNode);
+		if (SWBuf("true") == tag.getAttribute("canonical")) u->canonical = true;
 		if (name == u->currentHeadingName) {
 			if (tag.isEndTag(u->sID)) {
 				if (!u->depth-- || u->sID) {
 					// see comment below about preverse div changed and needing to preserve the <title> container tag for old school pre-verse titles
 					// we've just finished a heading.  It's all stored up in u->heading
-					bool canonical = (SWBuf("true") == u->currentHeadingTag.getAttribute("canonical"));
 					bool preverse = (SWBuf("x-preverse") == u->currentHeadingTag.getAttribute("subType") || SWBuf("x-preverse") == u->currentHeadingTag.getAttribute("subtype"));
 
 					// do we want to put anything in EntryAttributes?
-					if (u->module->isProcessEntryAttributes() && (option || canonical || !preverse)) {
+					if (u->module->isProcessEntryAttributes() && (option || u->canonical || !preverse)) {
 						SWBuf buf; buf.appendFormatted("%i", u->headerNum++);
 						// leave the actual <title...> wrapper in if we're part of an old school preverse title
 						// because now frontend have to deal with preverse as a div which may or may not include <title> elements
@@ -121,7 +123,7 @@ bool OSISHeadings::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 					}
 
 					// do we want the heading in the body?
-					if (!preverse && (option || canonical)) {
+					if (!preverse && (option || u->canonical)) {
 						buf.append(u->currentHeadingTag);
 						buf.append(u->heading);
 						buf.append(tag);
@@ -148,6 +150,7 @@ bool OSISHeadings::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 		u->sID = u->currentHeadingTag.getAttribute("sID");
 		u->depth = 0;
 		u->suspendTextPassThru = true;
+		u->canonical = (SWBuf("true") == tag.getAttribute("canonical"));
 
 		return true;
 	}
