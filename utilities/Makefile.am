@@ -6,11 +6,12 @@ AM_CPPFLAGS += -I$(top_srcdir)/include/internal/regex
 endif
 LDADD = $(top_builddir)/lib/libsword.la
 noinst_PROGRAMS = cipherraw lexdump \
-	stepdump step2vpl gbfidx modwrite addvs emptyvss \
-	addgb genbookutil treeidxutil addld
+	stepdump step2vpl gbfidx modwrite addvs  \
+	addgb genbookutil treeidxutil addld  
 
 bin_PROGRAMS = mod2imp mod2osis osis2mod tei2mod vs2osisref vs2osisreftxt \
-	mod2vpl mkfastmod vpl2mod imp2vs installmgr xml2gbs imp2gbs imp2ld
+	mod2vpl mkfastmod vpl2mod imp2vs installmgr xml2gbs imp2gbs imp2ld \
+	stripaccents emptyvss
 
 
 if HAVE_LIBZ
@@ -48,6 +49,7 @@ genbookutil_SOURCES = genbookutil.cpp
 treeidxutil_SOURCES = treeidxutil.cpp
 addld_SOURCES = addld.cpp
 imp2ld_SOURCES = imp2ld.cpp
+stripaccents_SOURCES = stripaccents.cpp
 
 installmgr_SOURCES = installmgr.cpp
 
