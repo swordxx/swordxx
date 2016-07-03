@@ -27,6 +27,8 @@
 #include <defs.h>
 
 SWORD_NAMESPACE_START
+#pragma GCC diagnostic warning "-Waddress"
+#pragma GCC diagnostic warning "-Wnonnull-compare"
 #define SWDYNAMIC_CAST(className, object) (className *)((object)?((object->getClass()->isAssignableFrom(#className))?object:0):0)
 
 /**
