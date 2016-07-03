@@ -198,9 +198,10 @@ bool ThMLCGI::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *ba
 
 		else {
 			buf += '<';
-			for (i = 0; i < strlen(token); i++)
+			for (i = 0; i < strlen(token); i++) {
 				buf += token[i];
-				buf += '>';
+			}
+			buf += '>';
 			//return false;  // we still didn't handle token
 		}
 	}

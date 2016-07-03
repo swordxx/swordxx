@@ -259,14 +259,15 @@ void TreeKeyIdx::remove() {
 				getTreeNodeFromIdxOffset(currentNode.parent, &iterator);
 				getTreeNodeFromIdxOffset(iterator.firstChild, &iterator);
 				if (iterator.offset != target) {
-					while ((iterator.next != target) && (iterator.next > -1))
+					while ((iterator.next != target) && (iterator.next > -1)) {
 						getTreeNodeFromIdxOffset(iterator.next, &iterator);
-						if (iterator.next > -1) {
-							TreeNode prev;
-							getTreeNodeFromIdxOffset(iterator.offset, &prev);
-							prev.next = node.next;
-							saveTreeNodeOffsets(&prev);
-							getTreeNodeFromIdxOffset(prev.offset, &currentNode);
+					}
+					if (iterator.next > -1) {
+						TreeNode prev;
+						getTreeNodeFromIdxOffset(iterator.offset, &prev);
+						prev.next = node.next;
+						saveTreeNodeOffsets(&prev);
+						getTreeNodeFromIdxOffset(prev.offset, &currentNode);
 					}
 				}
 			}

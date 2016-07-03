@@ -101,9 +101,12 @@ char GBFRedLetterWords::processText(SWBuf &text, const SWKey *key, const SWModul
 				continue;
 			}
 			if (intoken) {
-				if (tokpos < 4090)
+				if (tokpos < 4090) {
 					token[tokpos++] = *from;
+					// TODO: why is this + 2 ?  The below comment still doesn't help me understand.  The switch statment 
+					// is commented out in this filter
 					token[tokpos+2] = 0;	// +2 cuz we init token with 2 extra '0' because of switch statement
+				}
 			}
 			else {
 				text += *from;

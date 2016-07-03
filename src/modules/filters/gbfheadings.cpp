@@ -93,11 +93,13 @@ char GBFHeadings::processText(SWBuf &text, const SWKey *key, const SWModule *mod
 				continue;
 			}
 			if (intoken) {
-				if (tokpos < 2045)
+				if (tokpos < 2045) {
 					token[tokpos++] = *from;
+					// TODO: why is this + 2 ?
 					token[tokpos+2] = 0;
+				}
 			}
-			else	{
+			else {
 				if (!hide) {
 					text += *from;
 				}

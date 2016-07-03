@@ -73,9 +73,11 @@ int main(int argc, char **argv) {
 
 	while (!mod->popError()) {
 	  
-	if (vkey->getVerse())
-		if (!mod->renderText().length())
-			std::cout << *vkey << std::endl;
-		(*mod)++;
+		if (vkey->getVerse()) {
+			if (!mod->renderText().length()) {
+				std::cout << *vkey << std::endl;
+			}
+			(*mod)++;
+		}
 	}
 }

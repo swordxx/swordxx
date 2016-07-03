@@ -189,9 +189,10 @@ char OSISWordJS::processText(SWBuf &text, const SWKey *key, const SWModule *modu
 				continue;
 			}
 			if (intoken) {
-				if (tokpos < 2045)
+				if (tokpos < 2045) {
 					token[tokpos++] = *from;
 					token[tokpos+2] = 0;
+				}
 			}
 			else	{
 				text.append(*from);

@@ -90,11 +90,12 @@ char OSISMorph::processText(SWBuf &text, const SWKey *key, const SWModule *modul
 				continue;
 			}
 			if (intoken) {
-				if (tokpos < 2045)
+				if (tokpos < 2045) {
 					token[tokpos++] = *from;
 					token[tokpos] = 0;
+				}
 			}
-			else	{
+			else {
 				text.append(*from);
 			}
 		}

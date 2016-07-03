@@ -85,16 +85,14 @@ void XMLTag::parse() const {
 					for (; ((buf[i]) && (buf[i] != quoteChar)); i++);
 
 					// Allow for empty quotes
-					//if (i-start) {
-						if (value)
-							delete [] value;
-						value = new char [ (i-start) + 1 ];
-						if (i-start) {
-							strncpy(value, buf+start, i-start);
-						}
-						value[i-start] = 0;
-						attributes[name] = value;
-					//}
+					if (value)
+						delete [] value;
+					value = new char [ (i-start) + 1 ];
+					if (i-start) {
+						strncpy(value, buf+start, i-start);
+					}
+					value[i-start] = 0;
+					attributes[name] = value;
 				}
 			}
 		}
