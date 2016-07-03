@@ -7,7 +7,7 @@ Raw:
 <div sID="gen12" type="section"/> <title canonical="true" type="psalm">A Psalm of David, when he fled from Absalom his son.</title> <div sID="gen13" type="x-p"/> <lg sID="gen14"/> 
 -------
 Rendered Header:
- <h3>A Psalm of David, when he fled from Absalom his son.</h3>
+ <h3 class="title psalm">A Psalm of David, when he fled from Absalom his son.</h3>
 
 <br />
  
@@ -15,17 +15,28 @@ Rendered Header:
 CSS:
 		.divineName { font-variant: small-caps; }
 		.wordsOfJesus { color: red; }
-		.transChangeSupplied { font-style: italic; }
+		.transChange { font-style: italic;}
+		.transChange.transChange-supplied { font-style: italic;}
+		.transChange.transChange-added { font-style: italic;}
+		.transChange.transChange-tenseChange::before { content: '*';}
+		.transChange:lang(zh) { font-style: normal; text-decoration : dotted underline;}
 		.overline        { text-decoration: overline; }
 		.indent1         { margin-left: 10px }
 		.indent2         { margin-left: 20px }
 		.indent3         { margin-left: 30px }
 		.indent4         { margin-left: 40px }
+		abbr { &:hover{ &:before{ content: attr(title) } } }
+		.small-caps { font-variant: small-caps; }
+		.selah { text-align: right; width: 50%; margin: 0; padding: 0; }
+		.acrostic { text-align: center; }
+		.colophon {font-style: italic; font-size=small; display:block;}
+		.rdg { font-style: italic;}
+		.catchWord {font-style: bold;}
 	
 -------
 RenderText:
  <span class="line indent0"><span class="divineName">Lord</span>, how are they increased that trouble me!</span><br />
-<span class="line indent0">many <span class="transChangeSupplied">are</span> they that rise up against me.</span><br />
+<span class="line indent0">many <span class="transChange transChange-added">are</span> they that rise up against me.</span><br />
 
 -------
 -------
@@ -38,9 +49,9 @@ Raw:
 <div sID="gen22" type="section"/> <title>The Beginning of the Ministry of Jesus</title> <title type="parallel">(<reference osisRef="Matt.4.12-Matt.4.22">Matt 4:12–22</reference>; <reference osisRef="Luke.4.14">Luke 4:14</reference>, <reference osisRef="Luke.4.15">15</reference>; <reference osisRef="Luke.5.1-Luke.5.11">5:1-11</reference>) </title> <div sID="gen23" type="x-p"/> 
 -------
 Rendered Header:
- <h3>The Beginning of the Ministry of Jesus</h3>
+ <h3 class="title">The Beginning of the Ministry of Jesus</h3>
 
-<h3>(<a href="passagestudy.jsp?action=showRef&type=scripRef&value=Matt.4.12-Matt.4.22&module=">Matt 4:12–22</a>; <a href="passagestudy.jsp?action=showRef&type=scripRef&value=Luke.4.14&module=">Luke 4:14</a>, <a href="passagestudy.jsp?action=showRef&type=scripRef&value=Luke.4.15&module=">15</a>; <a href="passagestudy.jsp?action=showRef&type=scripRef&value=Luke.5.1-Luke.5.11&module=">5:1-11</a>) </h3>
+<h3 class="title parallel">(<a href="passagestudy.jsp?action=showRef&type=scripRef&value=Matt.4.12-Matt.4.22&module=">Matt 4:12–22</a>; <a href="passagestudy.jsp?action=showRef&type=scripRef&value=Luke.4.14&module=">Luke 4:14</a>, <a href="passagestudy.jsp?action=showRef&type=scripRef&value=Luke.4.15&module=">15</a>; <a href="passagestudy.jsp?action=showRef&type=scripRef&value=Luke.5.1-Luke.5.11&module=">5:1-11</a>) </h3>
 
 <br />
 
@@ -48,12 +59,23 @@ Rendered Header:
 CSS:
 		.divineName { font-variant: small-caps; }
 		.wordsOfJesus { color: red; }
-		.transChangeSupplied { font-style: italic; }
+		.transChange { font-style: italic;}
+		.transChange.transChange-supplied { font-style: italic;}
+		.transChange.transChange-added { font-style: italic;}
+		.transChange.transChange-tenseChange::before { content: '*';}
+		.transChange:lang(zh) { font-style: normal; text-decoration : dotted underline;}
 		.overline        { text-decoration: overline; }
 		.indent1         { margin-left: 10px }
 		.indent2         { margin-left: 20px }
 		.indent3         { margin-left: 30px }
 		.indent4         { margin-left: 40px }
+		abbr { &:hover{ &:before{ content: attr(title) } } }
+		.small-caps { font-variant: small-caps; }
+		.selah { text-align: right; width: 50%; margin: 0; padding: 0; }
+		.acrostic { text-align: center; }
+		.colophon {font-style: italic; font-size=small; display:block;}
+		.rdg { font-style: italic;}
+		.catchWord {font-style: bold;}
 	
 -------
 RenderText:
@@ -67,7 +89,7 @@ Whitespace tests around headings:
 
  <h1 class="bookHeader">Old Testament</h1>
 
- <h1 class="bookHeader">THE FIRST BOOK OF MOSES CALLED GENESIS</h1>
+ <h1 class="bookHeader main">THE FIRST BOOK OF MOSES CALLED GENESIS</h1>
 
  <h1 class="bookHeader">Introduction and Outline</h1>
 
@@ -75,8 +97,8 @@ Whitespace tests around headings:
 This is the <b>Book of Genesis</b>, the <i>first</i> book in the Bible. It may be outlined as follows: <br />
 <br />
 <ul>
- 	<li><sup>1</i>Creation of Heaven and Earth, 1:1-2:4a</li>
-	<li><sup>2</i>Creation of Man and Woman, 2:4b-25</li>
+ 	<li><sup>1</sup>Creation of Heaven and Earth, 1:1-2:4a</li>
+	<li><sup>2</sup>Creation of Man and Woman, 2:4b-25</li>
 	<li><sub>3</sub>Fall, 3:1-24</li>
 	<li>...</li>
 </ul>
@@ -91,7 +113,7 @@ Tables work like this: <table><tbody>
   <h2 class="chapterHeader">From Creation to Abraham (1:1–11:9)</h2>
 
 
- <h3>Creation of the Heavens and the Earth</h3>
+ <h3 class="title">Creation of the Heavens and the Earth</h3>
 
 <br />
 

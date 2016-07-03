@@ -38,8 +38,9 @@ const char *OSISXHTML::getHeader() const {
 		.divineName { font-variant: small-caps; }\n\
 		.wordsOfJesus { color: red; }\n\
 		.transChange { font-style: italic;}\n\
-		.transChange[type=tenseChange]::before { content: '|'; vertical-align:sub; font-size: 0.75em; color: red;}\n\
-		.transChange[type=tenseChange]::after    { content: '|'; vertical-align:sub; font-size: 0.75em; color: red;}\n\
+		.transChange.transChange-supplied { font-style: italic;}\n\
+		.transChange.transChange-added { font-style: italic;}\n\
+		.transChange.transChange-tenseChange::before { content: '*';}\n\
 		.transChange:lang(zh) { font-style: normal; text-decoration : dotted underline;}\n\
 		.overline        { text-decoration: overline; }\n\
 		.indent1         { margin-left: 10px }\n\
@@ -52,7 +53,8 @@ const char *OSISXHTML::getHeader() const {
 		.acrostic { text-align: center; }\n\
 		.colophon {font-style: italic; font-size=small; display:block;}\n\
 		.rdg { font-style: italic;}\n\
-		.catchWord {font-style: bold;}\n";
+		.catchWord {font-style: bold;}\n\
+	";
 	// Acrostic for things like the titles in Psalm 119
 	return header;
 }
@@ -344,6 +346,7 @@ bool OSISXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 			// <div type="paragraph"  sID... />
 			if (tag.getAttribute("sID")) {	// non-empty start tag
 				u->outputNewline(buf);
+				// safe because we've verified type is present from if statement above
 				if (!strcmp(tag.getAttribute("type"), "colophon")) {
 					outText("<div class=\"colophon\">", buf, u);
 				}
@@ -352,6 +355,7 @@ bool OSISXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 			// <div type="paragraph"  eID... />
 			else if (tag.getAttribute("eID")) {
 				u->outputNewline(buf);
+				// safe because we've verified type is present from if statement above
 				if (!strcmp(tag.getAttribute("type"), "colophon")) {
 					outText("</div>", buf, u);
 				}
@@ -454,18 +458,20 @@ bool OSISXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 		// <milestone type="x-p"/>
 		// <milestone type="cQuote" marker="x"/>
 		else if ((!strcmp(tag.getName(), "milestone")) && (tag.getAttribute("type"))) {
-			if (!strcmp(tag.getAttribute("type"), "line")) {
+			// safe because we've verified type is present from if statement above
+			const char *type = tag.getAttribute("type");
+			if (!strcmp(type, "line")) {
 				u->outputNewline(buf);
 				if (tag.getAttribute("subType") && !strcmp(tag.getAttribute("subType"), "x-PM")) {
 					u->outputNewline(buf);
 				}
 			}
-			else if (!strcmp(tag.getAttribute("type"),"x-p"))  {
+			else if (!strcmp(type,"x-p"))  {
 				if (tag.getAttribute("marker"))
 					outText(tag.getAttribute("marker"), buf, u);
 				else outText("<!p>", buf, u);
 			}
-			else if (!strcmp(tag.getAttribute("type"), "cQuote")) {
+			else if (!strcmp(type, "cQuote")) {
 				const char *tmp = tag.getAttribute("marker");
 				bool hasMark    = tmp;
 				SWBuf mark      = tmp;
@@ -485,35 +491,35 @@ bool OSISXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 		else if (!strcmp(tag.getName(), "title")) {
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
 				SWBuf type = tag.getAttribute("type");
-				bool keepType = false;
+				SWBuf classExtras = "";
 				if (type.size()) {
-					keepType = true;
+					classExtras.append(" ").append(type);
 				}
 				VerseKey *vkey = SWDYNAMIC_CAST(VerseKey, u->key);
 				if (vkey && !vkey->getVerse()) {
 					if (!vkey->getChapter()) {
 						if (!vkey->getBook()) {
 							if (!vkey->getTestament()) {
-								outText(SWBuf("<h1 class=\"moduleHeader ") + (keepType ? type : "") + "\">",  buf, u);
+								outText(SWBuf("<h1 class=\"moduleHeader") + classExtras + "\">",  buf, u);
 								tag.setAttribute("pushed", "h1");
 							}
 							else {
-								outText(SWBuf("<h1 class=\"testamentHeader ") + (keepType ? type : "") + "\">", buf, u);
+								outText(SWBuf("<h1 class=\"testamentHeader") + classExtras + "\">", buf, u);
 								tag.setAttribute("pushed", "h1");
 							}
 						}
 						else {
-							outText(SWBuf("<h1 class=\"bookHeader ") + (keepType ? type : "") + "\">", buf, u);
+							outText(SWBuf("<h1 class=\"bookHeader") + classExtras + "\">", buf, u);
 							tag.setAttribute("pushed", "h1");
 						}
 					}
 					else {
-						outText(SWBuf("<h2 class=\"chapterHeader ") + (keepType ? type : "") + "\">", buf, u);
+						outText(SWBuf("<h2 class=\"chapterHeader") + classExtras + "\">", buf, u);
 						tag.setAttribute("pushed", "h2");
 					}
 				}
 				else {
-					buf += SWBuf("<h3 class=\"") + (keepType ? type : "") + "\">";
+					outText(SWBuf("<h3 class=\"title") + classExtras + "\">", buf, u);
 					tag.setAttribute("pushed", "h3");
 				}
 				u->titleStack->push(tag.toString());
@@ -717,13 +723,12 @@ bool OSISXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 				SWBuf type = tag.getAttribute("type");
 				u->lastTransChange = type;
 				
-				outText("<span class=\"transChange\"", buf, u);
-				if (type) {
-					outText( " type=\"", buf, u);
-					outText( type, buf, u);
-					outText( "\"", buf, u);
+				outText("<span class=\"transChange", buf, u);
+				if (type.length()) {
+					outText(" transChange-", buf, u);
+					outText(type, buf, u);
 				}
-				outText(">", buf, u);
+				outText("\">", buf, u);
 			}
 			else if (tag.isEndTag()) {
 				outText("</span>", buf, u);
