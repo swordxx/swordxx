@@ -13,6 +13,9 @@ AC_REVISION($Revision: 1.45 $)
 AC_CANONICAL_TARGET
 AM_INIT_AUTOMAKE
 
+# this doesn't work
+#AM_INIT_AUTOMAKE([subdir-objects])
+
 AM_CONFIG_HEADER(include/config.h)
 
 AC_CONFIG_MACRO_DIR([m4])
@@ -115,7 +118,7 @@ else
 fi
 
 AM_CFLAGS="$AM_CFLAGS -fPIC"
-AM_CXXFLAGS="$AM_CXXFLAGS -fPIC"
+AM_CXXFLAGS="$AM_CXXFLAGS -fPIC -ftemplate-depth=100"
 
 # ---------------------------------------------------------------------
 # Check libraries
@@ -224,9 +227,6 @@ AM_CXXFLAGS="$AM_CXXFLAGS -D_ICUSWORD_"
 AM_CFLAGS="$AM_CFLAGS -D_ICUSWORD_"
 fi
 
-
-AM_CXXFLAGS="$AM_CXXFLAGS -ftemplate-depth-25"
-
 if test x$enable_warnings = xyes; then
   AM_CFLAGS="$AM_CFLAGS -Werror"
   AM_CXXFLAGS="$AM_CXXFLAGS -Werror -Woverloaded-virtual"
@@ -278,7 +278,7 @@ else
 fi
 
 if test x$with_cxx11regex = xyes; then
-	AM_CXXFLAGS="$AM_CXXFLAGS -DUSECXX11REGEX -std=c++11 -ftemplate-depth=100"
+	AM_CXXFLAGS="$AM_CXXFLAGS -DUSECXX11REGEX -std=c++11"
 fi
 
 # ---------------------------------------------------------------------
