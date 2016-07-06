@@ -48,7 +48,7 @@ OSISMorph::~OSISMorph() {
 
 
 char OSISMorph::processText(SWBuf &text, const SWKey *key, const SWModule *module) {
-    if (!option) {    // if we don't want morph tags
+    if (!option) {	// if we don't want morph tags
         char token[2048]; // cheese.  Fix.
         int tokpos = 0;
         bool intoken = false;
@@ -66,7 +66,7 @@ char OSISMorph::processText(SWBuf &text, const SWKey *key, const SWModule *modul
                 token[0] = 0;
                 continue;
             }
-            if (*from == '>') {    // process tokens
+            if (*from == '>') {	// process tokens
                 intoken = false;
 
                 if ((*token == 'w') && (token[1] == ' ')) {
@@ -90,11 +90,12 @@ char OSISMorph::processText(SWBuf &text, const SWKey *key, const SWModule *modul
                 continue;
             }
             if (intoken) {
-                if (tokpos < 2045)
+                if (tokpos < 2045) {
                     token[tokpos++] = *from;
                     token[tokpos] = 0;
+                }
             }
-            else    {
+            else {
                 text.append(*from);
             }
         }

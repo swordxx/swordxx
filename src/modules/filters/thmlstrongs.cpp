@@ -106,12 +106,12 @@ char ThMLStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *mod
                         module->getEntryAttributes()["Word"][wordstr]["Morph"] = val;
                         module->getEntryAttributes()["Word"][wordstr]["MorphClass"] = "OLBMorph";
 */
-                        word--;    // for now, completely ignore this word attribute.
+                        word--;	// for now, completely ignore this word attribute.
                     }
                     word++;
                 }
 
-                if (!option) {    // if we don't want strongs
+                if (!option) {	// if we don't want strongs
                     if ((from[1] == ' ') || (from[1] == ',') || (from[1] == ';') || (from[1] == '.') || (from[1] == '?') || (from[1] == '!') || (from[1] == ')') || (from[1] == '\'') || (from[1] == '\"')) {
                         if (lastspace)
                             text--;
@@ -154,11 +154,13 @@ char ThMLStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *mod
             continue;
         }
         if (intoken) {
-            if (tokpos < 2045)
+            if (tokpos < 2045) {
                 token[tokpos++] = *from;
+                // TODO: why is this + 2 ?
                 token[tokpos+2] = 0;
+            }
         }
-        else    {
+        else {
             text += *from;
             lastspace = (*from == ' ');
         }

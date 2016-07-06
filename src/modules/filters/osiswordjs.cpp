@@ -88,9 +88,9 @@ char OSISWordJS::processText(SWBuf &text, const SWKey *key, const SWModule *modu
                 token[2] = 0;
                 continue;
             }
-            if (*from == '>') {    // process tokens
+            if (*from == '>') {	// process tokens
                 intoken = false;
-                if ((*token == 'w') && (token[1] == ' ')) {    // Word
+                if ((*token == 'w') && (token[1] == ' ')) {	// Word
                     XMLTag wtag(token);
                     sprintf(wordstr, "%03d", wordNum);
                     SWBuf lemmaClass;
@@ -150,8 +150,8 @@ char OSISWordJS::processText(SWBuf &text, const SWKey *key, const SWModule *modu
 
                     if ((lemmaClass != "strong") && (xlit.startsWith("betacode:"))) {
                         lexName = "betacode";
-//                        const char *m = strchr(xlit.c_str(), ':');
-//                        strong = ++m;
+//						const char *m = strchr(xlit.c_str(), ':');
+//						strong = ++m;
                     }
                     SWBuf wordID;
                     if (vkey) {
@@ -176,7 +176,7 @@ char OSISWordJS::processText(SWBuf &text, const SWKey *key, const SWModule *modu
                         text += "</w></span>";
                     }
                 }
-                if ((*token == '/') && (token[1] == 'w') && option) {    // Word
+                if ((*token == '/') && (token[1] == 'w') && option) {	// Word
                     text += "</w></span>";
                     continue;
                 }
@@ -189,11 +189,12 @@ char OSISWordJS::processText(SWBuf &text, const SWKey *key, const SWModule *modu
                 continue;
             }
             if (intoken) {
-                if (tokpos < 2045)
+                if (tokpos < 2045) {
                     token[tokpos++] = *from;
                     token[tokpos+2] = 0;
+                }
             }
-            else    {
+            else	{
                 text.append(*from);
             }
         }

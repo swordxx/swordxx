@@ -29,22 +29,25 @@
 #include <swlog.h>
 #include <algorithm>
 
-#include <canon_null.h>        // null v11n system
+#include <canon_null.h>		// null v11n system
 
-#include <canon_leningrad.h>    // Leningrad Codex (WLC) v11n system
-#include <canon_mt.h>        // Masoretic Text (MT) v11n system
-#include <canon_kjva.h>        // KJV + Apocrypha v11n system
-#include <canon_nrsv.h>        // NRSV v11n system
-#include <canon_nrsva.h>    // NRSV + Apocrypha v11n system
-#include <canon_synodal.h>    // Russian Synodal v11n system
-#include <canon_synodalprot.h>    // Russian Synodal v11n system
-#include <canon_vulg.h>        // Vulgate v11n system
-#include <canon_german.h>    // German v11n system
-#include <canon_luther.h>    // Luther v11n system
-#include <canon_catholic.h>    // Catholic v11n system (10 chapter Esther)
-#include <canon_catholic2.h>    // Catholic2 v11n system (16 chapter Esther)
-#include <canon_lxx.h>        // General LXX v11n system (includes GNT, as used in Orthodox Bibles)
-#include <canon_orthodox.h>    // Orthodox v11n system as used in Orthodox Bibles
+#include <canon_leningrad.h>	// Leningrad Codex (WLC) v11n system
+#include <canon_mt.h>		// Masoretic Text (MT) v11n system
+#include <canon_kjva.h>		// KJV + Apocrypha v11n system
+#include <canon_nrsv.h>		// NRSV v11n system
+#include <canon_nrsva.h>	// NRSV + Apocrypha v11n system
+#include <canon_synodal.h>	// Russian Synodal v11n system
+#include <canon_synodalprot.h>	// Russian Synodal v11n system
+#include <canon_vulg.h>		// Vulgate v11n system
+#include <canon_german.h>	// German v11n system
+#include <canon_luther.h>	// Luther v11n system
+#include <canon_catholic.h>	// Catholic v11n system (10 chapter Esther)
+#include <canon_catholic2.h>	// Catholic2 v11n system (16 chapter Esther)
+#include <canon_lxx.h>		// General LXX v11n system (includes GNT, as used in Orthodox Bibles)
+#include <canon_orthodox.h>	// Orthodox v11n system as used in Orthodox Bibles
+#include <canon_segond.h>	// French v11n system as used by Segond Bibles and its derivatives
+#include <canon_calvin.h>	// French v11n system
+#include <canon_darbyfr.h>	// French v11n system based on John Darby's French translation
 
 using std::vector;
 using std::map;
@@ -73,6 +76,9 @@ VersificationMgr *VersificationMgr::getSystemVersificationMgr() {
         systemVersificationMgr->registerVersificationSystem("Catholic2", otbooks_catholic2, ntbooks, vm_catholic2);
         systemVersificationMgr->registerVersificationSystem("LXX", otbooks_lxx, ntbooks, vm_lxx);
         systemVersificationMgr->registerVersificationSystem("Orthodox", otbooks_orthodox, ntbooks, vm_orthodox);
+        systemVersificationMgr->registerVersificationSystem("Calvin", otbooks, ntbooks, vm_calvin);
+        systemVersificationMgr->registerVersificationSystem("DarbyFr", otbooks, ntbooks, vm_darbyfr);
+        systemVersificationMgr->registerVersificationSystem("Segond", otbooks, ntbooks, vm_segond);
     }
     return systemVersificationMgr;
 }

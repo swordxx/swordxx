@@ -90,7 +90,7 @@ char GBFPlain::processText (SWBuf &text, const SWKey *key, const SWModule *modul
                     *to++ = '<';
                     continue;
 */
-                case 'L':    //        Bug in WEB.  Use above entry when fixed
+                case 'L':	//        Bug in WEB.  Use above entry when fixed
                 case 'N':               // new line
                     text.append('\n');
                     continue;
@@ -103,11 +103,13 @@ char GBFPlain::processText (SWBuf &text, const SWKey *key, const SWModule *modul
             continue;
         }
         if (intoken) {
-            if (tokpos < 2045)
+            if (tokpos < 2045) {
                 token[tokpos++] = *from;
+                // TODO: why is this + 2 ?
                 token[tokpos+2] = 0;
+            }
         }
-        else    text.append(*from);
+        else	text.append(*from);
     }
     return 0;
 }

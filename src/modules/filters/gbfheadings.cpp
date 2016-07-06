@@ -63,16 +63,16 @@ char GBFHeadings::processText(SWBuf &text, const SWKey *key, const SWModule *mod
             if (*from == '<') {
                 intoken = true;
                 tokpos = 0;
-//                memset(token, 0, 2048);
+//				memset(token, 0, 2048);
                 token[0] = 0;
                 token[1] = 0;
                 token[2] = 0;
                 continue;
             }
-            if (*from == '>') {    // process tokens
+            if (*from == '>') {	// process tokens
                 intoken = false;
                 switch (*token) {
-                case 'T':                // Reference
+                case 'T':				// Reference
                     switch(token[1]) {
                     case 'S':               // Begin heading
                         hide = true;
@@ -81,7 +81,7 @@ char GBFHeadings::processText(SWBuf &text, const SWKey *key, const SWModule *mod
                         hide = false;
                         break;
                     }
-                    continue;    // skip token
+                    continue;	// skip token
                 }
                 // if not a heading token, keep token in text
                 if (!hide) {
@@ -93,11 +93,13 @@ char GBFHeadings::processText(SWBuf &text, const SWKey *key, const SWModule *mod
                 continue;
             }
             if (intoken) {
-                if (tokpos < 2045)
+                if (tokpos < 2045) {
                     token[tokpos++] = *from;
+                    // TODO: why is this + 2 ?
                     token[tokpos+2] = 0;
+                }
             }
-            else    {
+            else {
                 if (!hide) {
                     text += *from;
                 }

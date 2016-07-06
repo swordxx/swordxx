@@ -27,7 +27,7 @@
 
 namespace swordxx {
 
-/** this filter converts TEI text to XHTML text
+/** this filter converts TEI text to LaTeX text
  */
 class SWDLLEXPORT TEILaTeX : public SWBasicFilter {
 private:

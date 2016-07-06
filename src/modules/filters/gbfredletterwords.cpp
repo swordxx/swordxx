@@ -54,7 +54,7 @@ char GBFRedLetterWords::processText(SWBuf &text, const SWKey *key, const SWModul
 /** This function removes the red letter words in Bible like the WEB
 * The words are marked by <FR> as start and <Fr> as end tag.
 */
-    if (!option) {    // if we don't want footnotes
+    if (!option) {	// if we don't want footnotes
         char token[4096]; // cheese.  Fix.
         int tokpos = 0;
         bool intoken = false;
@@ -67,16 +67,16 @@ char GBFRedLetterWords::processText(SWBuf &text, const SWKey *key, const SWModul
             if (*from == '<') {
                 intoken = true;
                 tokpos = 0;
-//                memset(token, 0, 4096);
+//				memset(token, 0, 4096);
                 token[0] = 0;
                 token[1] = 0;
                 token[2] = 0;
                 continue;
             }
-            if (*from == '>') {    // process tokens
+            if (*from == '>') {	// process tokens
                 intoken = false;
                 /*switch (*token) {
-                case 'F':            // Font attribute
+                case 'F':			// Font attribute
                     switch(token[1]) {
                     case 'R':               // Begin red letter words
                         hide = true;
@@ -85,7 +85,7 @@ char GBFRedLetterWords::processText(SWBuf &text, const SWKey *key, const SWModul
                         hide = false;
                         break;
                     }
-                    continue;    // skip token
+                    continue;	// skip token
                 }*/
 
                 //hide the token if either FR or Fr was detected
@@ -101,9 +101,12 @@ char GBFRedLetterWords::processText(SWBuf &text, const SWKey *key, const SWModul
                 continue;
             }
             if (intoken) {
-                if (tokpos < 4090)
+                if (tokpos < 4090) {
                     token[tokpos++] = *from;
-                    token[tokpos+2] = 0;    // +2 cuz we init token with 2 extra '0' because of switch statement
+                    // TODO: why is this + 2 ?  The below comment still doesn't help me understand.  The switch statment
+                    // is commented out in this filter
+                    token[tokpos+2] = 0;	// +2 cuz we init token with 2 extra '0' because of switch statement
+                }
             }
             else {
                 text += *from;

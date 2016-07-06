@@ -45,7 +45,7 @@ void XMLTag::parse() const {
             buf[i] = ' ';
 
             for (; ((buf[i]) && (!isalpha(buf[i]))); i++);
-            if (buf[i]) {        // we have an attribute name
+            if (buf[i]) {		// we have an attribute name
                 start = i;
                 // Deprecated: check for following whitespacee
                 // Should be: for (; (buf[i] && buf[i] != '='; i++);
@@ -79,23 +79,21 @@ void XMLTag::parse() const {
                 if (quoteChar)
                     i++;
 
-                if (buf[i]) {    // we have attribute value
+                if (buf[i]) {	// we have attribute value
                     start = i;
                     // Skip until matching quote character
-                    while((buf[i]) && (buf[i] != quoteChar))
+                    while ((buf[i]) && (buf[i] != quoteChar))
                         ++i;
 
                     // Allow for empty quotes
-                    //if (i-start) {
-                        if (value)
-                            delete [] value;
-                        value = new char [ (i-start) + 1 ];
-                        if (i-start) {
-                            strncpy(value, buf+start, i-start);
-                        }
-                        value[i-start] = 0;
-                        attributes[name] = value;
-                    //}
+                    if (value)
+                        delete [] value;
+                    value = new char [ (i-start) + 1 ];
+                    if (i-start) {
+                        strncpy(value, buf+start, i-start);
+                    }
+                    value[i-start] = 0;
+                    attributes[name] = value;
                 }
             }
         }

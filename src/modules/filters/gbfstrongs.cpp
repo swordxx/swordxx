@@ -78,9 +78,9 @@ char GBFStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *modu
             textEnd = text.size();
             continue;
         }
-        if (*from == '>') {    // process tokens
+        if (*from == '>') {	// process tokens
             intoken = false;
-            if (*token == 'W' && (token[1] == 'G' || token[1] == 'H')) {    // Strongs
+            if (*token == 'W' && (token[1] == 'G' || token[1] == 'H')) {	// Strongs
                 if (module->isProcessEntryAttributes()) {
                     valto = val;
                     for (unsigned int i = 1; ((token[i]) && (i < 150)); i++)
@@ -115,7 +115,7 @@ char GBFStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *modu
                 }
             }
             if (module->isProcessEntryAttributes()) {
-                if ((*token == 'W') && (token[1] == 'T')) {    // Morph
+                if ((*token == 'W') && (token[1] == 'T')) {	// Morph
                     valto = val;
                     for (unsigned int i = 2; ((token[i]) && (i < 150)); i++)
                         *valto++ = token[i];
@@ -134,11 +134,13 @@ char GBFStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *modu
             continue;
         }
         if (intoken) {
-            if (tokpos < 2045)
+            if (tokpos < 2045) {
                 token[tokpos++] = *from;
+                // TODO: why is this + 2 ?
                 token[tokpos+2] = 0;
+            }
         }
-        else    {
+        else {
             text += *from;
             lastspace = (*from == ' ');
         }

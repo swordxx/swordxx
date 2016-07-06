@@ -117,8 +117,7 @@ SWLog::getSystemLog()->logDebug("RemoteTransport::getDirList(%s)", dirURL);
 
 
 int RemoteTransport::copyDirectory(const char *urlPrefix, const char *dir, const char *dest, const char *suffix) {
-SWLog::getSystemLog()->logDebug("RemoteTransport::copyDirectory");
-    unsigned int i;
+    SWLog::getSystemLog()->logDebug("RemoteTransport::copyDirectory");
     int retVal = 0;
 
     SWBuf url = SWBuf(urlPrefix) + SWBuf(dir);
@@ -133,9 +132,30 @@ SWLog::getSystemLog()->logDebug("RemoteTransport::copyDirectory");
         return -1;
     }
 
+    // append files in sub directories and calculate total download size
+    unsigned int i = 0;
     long totalBytes = 0;
-    for (i = 0; i < dirList.size(); i++)
-        totalBytes += dirList[i].size;
+    for (;;) {
+        if (i == dirList.size())
+            break;
+
+        struct DirEntry &e = dirList.at(i);
+
+        if (e.isDirectory) {
+            SWBuf name(e.name); // &e will be invalidated after first insertion
+            vector<struct DirEntry> sd = getDirList((url + name + '/').c_str());
+            for (unsigned int ii = 0; ii < sd.size(); ii++) {
+                sd[ii].name = name + '/' + sd[ii].name;
+                dirList.push_back(sd[ii]);
+            }
+            dirList.erase(dirList.begin() + i);
+        }
+        else {
+            totalBytes += e.size;
+            i++;
+        }
+    }
+
     long completedBytes = 0;
     for (i = 0; i < dirList.size(); i++) {
         struct DirEntry &dirEntry = dirList[i];
@@ -152,28 +172,17 @@ SWLog::getSystemLog()->logDebug("RemoteTransport::copyDirectory");
             buffer2 += dirEntry.name;
             if (statusReporter)
                 statusReporter->preStatus(totalBytes, completedBytes, buffer2.c_str());
-            FileMgr::createParent(buffer.c_str());    // make sure parent directory exists
+            FileMgr::createParent(buffer.c_str());	// make sure parent directory exists
             try {
                 SWBuf url = (SWBuf)urlPrefix + (SWBuf)dir;
                 removeTrailingSlash(url);
                 url += "/";
-                url += dirEntry.name; //dont forget the final slash
-                if (!dirEntry.isDirectory) {
-                    if (getURL(buffer.c_str(), url.c_str())) {
-                        SWLog::getSystemLog()->logWarning("copyDirectory: failed to get file %s\n", url.c_str());
-                        return -2;
-                    }
-                    completedBytes += dirEntry.size;
+                url += dirEntry.name;
+                if (getURL(buffer.c_str(), url.c_str())) {
+                    SWLog::getSystemLog()->logWarning("copyDirectory: failed to get file %s\n", url.c_str());
+                    return -2;
                 }
-                else {
-                    SWBuf subdir = (SWBuf)dir;
-                    removeTrailingSlash(subdir);
-                    subdir += (SWBuf)"/" + dirEntry.name;
-                    if (copyDirectory(urlPrefix, subdir, buffer.c_str(), suffix)) {
-                        SWLog::getSystemLog()->logWarning("copyDirectory: failed to get file %s\n", subdir.c_str());
-                        return -2;
-                    }
-                }
+                completedBytes += dirEntry.size;
             }
             catch (...) {}
             if (term.load(std::memory_order_acquire)) {
