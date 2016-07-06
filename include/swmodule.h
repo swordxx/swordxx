@@ -340,12 +340,15 @@ public:
 
     /** Modify the current module entry text - only if module isWritable()
      */
-    virtual void setEntry(const char *inbuf, long len= -1) {}
+    virtual void setEntry(const char *inbuf, long len= -1) {
+        (void) inbuf;
+        (void) len;
+    }
 
     /** Link the current module entry to another module entry - only if
      *    module isWritable()
      */
-    virtual void linkEntry(const SWKey *sourceKey) {}
+    virtual void linkEntry(SWKey const * sourceKey) { (void) sourceKey; }
 
     /** Delete current module entry - only if module isWritable()
      */
