@@ -14,8 +14,31 @@ PROJECT(swordxx CXX C)
 CMAKE_MINIMUM_REQUIRED(VERSION 3.3)
 CMAKE_POLICY(SET CMP0017 NEW)
 
-SET(SWORDXX_VERSION 0.0.1)
+# Set versions
+SET(SWORDXX_VERSION "2.0.0")
+SET(SWORDXX_VERSION_STR "2.0.0_beta1")
+SET(SWORDXX_SWORD_COMPAT_VERSION "1.7.4")
+
 MESSAGE(STATUS "Configuring libswordxx version ${SWORDXX_VERSION}")
+
+# Calculate version strings for code:
+FUNCTION(CalculateVersionForCode in out)
+    SET(hexdigit "[0123456789abcdefABCDEF]")
+    SET(hexnumber "0|[123456789abcdefABCDEF]${hexdigit}*")
+    SET(hexversion "^(${hexnumber})\\.(${hexnumber})\\.(${hexnumber})$")
+    STRING(REGEX MATCHALL "${hexversion}" r "${in}")
+    IF(NOT r)
+      MESSAGE(FATAL_ERROR "Invalid version string in \${SWORDXX_VERSION}!")
+    ENDIF()
+    UNSET(r)
+    SET(major "${CMAKE_MATCH_1}")
+    SET(minor "${CMAKE_MATCH_2}")
+    SET(patch "${CMAKE_MATCH_3}")
+    SET("${out}" "(((${major}*65536u)+${minor})*65536u)+${patch}" PARENT_SCOPE)
+ENDFUNCTION()
+CalculateVersionForCode("${SWORDXX_VERSION}" SWORDXX_VERSION_C)
+CalculateVersionForCode("${SWORDXX_SWORD_COMPAT_VERSION}"
+                        SWORDXX_SWORD_COMPAT_VERSION_C)
 
 # If SWORDXX_BUILDCONFIG set, load the file and fail on error. Otherwise, try to
 # include either "config.cmake" under either the build directory or the source

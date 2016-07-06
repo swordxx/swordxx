@@ -61,124 +61,6 @@ namespace {
 
     static const char *masterRepoList = "masterRepoList.conf";
 
-bool parseVersionString(char const * a, uint32_t & triple) noexcept {
-    unsigned haveTripleDigits = 0u;
-    uint32_t outTriple = 0u;
-    assert(a);
-    enum { NEEDNUM, NUM_DELIM_OR_END, DELIM_OR_END } state = NEEDNUM;
-    unsigned lastDigit = 0u;
-    for (;; ++a) {
-        switch (*a) {
-        case '0':
-            if (state == DELIM_OR_END)
-                return false;
-            if (state == NUM_DELIM_OR_END)
-                lastDigit *= 0x10u;
-            state = DELIM_OR_END;
-            break;
-        #define D(ch,val) \
-            case ch: \
-                if (state == DELIM_OR_END) \
-                    return false; \
-                if (state == NEEDNUM) { \
-                    state = NUM_DELIM_OR_END; \
-                    lastDigit = (val); \
-                } else { \
-                    state = DELIM_OR_END; \
-                    lastDigit = (lastDigit * 0x10u) + (val); \
-                } \
-                break;
-        D('1',1u)  D('2',2u)  D('3',3u)  D('4',4u)
-        D('5',5u)  D('6',6u)  D('7',7u)  D('8',8u)  D('9',9u)
-        D('a',10u) D('b',11u) D('c',12u) D('d',13u) D('e',14u) D('f',15u)
-        D('A',10u) D('B',11u) D('C',12u) D('D',13u) D('E',14u) D('F',15u)
-        #undef D
-        case '.':
-            if (state == NEEDNUM)
-                return false;
-            if (haveTripleDigits < 3u) {
-                ++haveTripleDigits;
-                outTriple = (outTriple * 0x100u) + lastDigit;
-                lastDigit = 0u;
-            }
-            state = NEEDNUM;
-            break;
-        case '\0':
-            if (state != NEEDNUM) {
-                if (haveTripleDigits < 3u) {
-                    ++haveTripleDigits;
-                    outTriple = (outTriple * 0x100u) + lastDigit;
-                }
-                while (haveTripleDigits < 3u) {
-                    ++haveTripleDigits;
-                    outTriple *= 0x100u;
-                }
-                triple = outTriple;
-                return true;
-            }
-            return false;
-        default:
-            return false;
-        }
-    }
-}
-
-#if 0
-void testParseVersionString() {
-    static auto const succeed = [](char const * const str, uint32_t const expected) {
-        uint32_t parsed;
-        if (!parseVersionString(str, parsed)) {
-            std::cerr << str << ": Expected 0x" << expected << ", got failure" << std::endl;
-            abort();
-        }
-        if (parsed != expected) {
-            std::cerr << str << ": Expected 0x" << expected << ", got 0x" << parsed << std::endl;
-            abort();
-        }
-    };
-    static auto const fail = [](char const * const str) {
-        uint32_t parsed;
-        if (parseVersionString(str, parsed)) {
-            std::cerr << str << ": Expected failure, got 0x" << parsed << std::endl;
-            abort();
-        }
-    };
-    std::cerr << std::hex;
-    fail("");
-    fail("x");
-    fail(".");
-    fail(".3");
-    fail(".3.2");
-    fail(".3.2");
-    fail("00");
-    fail("01");
-    fail("3.01");
-    fail("3.1.9.1.2.01");
-    succeed("0",     0x000000);
-    succeed("3",     0x030000);
-    succeed("3.2",   0x030200);
-    succeed("3.2.1", 0x030201);
-    succeed("3.2.1.12.0.7.fF", 0x030201);
-    succeed("12.34.56", 0x123456);
-    succeed("78.9a.bc", 0x789abc);
-    succeed("de.fA.BC", 0xdefabc);
-    succeed("DE.F0.12", 0xdef012);
-    fail("0.");
-    fail("3.");
-    fail("3.2.");
-    fail("3.2.1.");
-    fail("3.2.1.12.0.7.fF.");
-    fail("12.34.56.");
-    fail("78.9a.bc.");
-    fail("de.fA.BC.");
-    fail("DE.F0.12.");
-    fail("3..2");
-    fail("3.2..1");
-    fail("3..2.1");
-    fail("3.2.1.12.0.7..fF");
-}
-#endif
-
 }
 
 
@@ -712,27 +594,29 @@ map<SWModule *, int> InstallMgr::getModuleStatus(const SWMgr &base, const SWMgr 
         }
 
         static auto const getVersion = [](char const * const str,
-                                          uint32_t const defValue) noexcept
+                                          Version defValue) noexcept
         {
-            uint32_t parsed;
-            if (str && parseVersionString(str, parsed))
-                return parsed;
+            if (str) {
+                auto r(parseVersion(str));
+                if (r.first)
+                    return r.second;
+            }
             return defValue;
         };
 
         /// \todo Use MinimumVersion key:
         #if 0
-        uint32_t const softwareVersion =
+        SwordxxVersionType const softwareVersion =
                 getVersion(mod->second->getConfigEntry("MinimumVersion"),
                            SWORDXX_VERSION);
         #endif
 
         const SWModule *baseMod = base.getModule(mod->first);
         if (baseMod) {
-            uint32_t const sourceVersion =
-                    getVersion(mod->second->getConfigEntry("Version"), 0x100u);
-            uint32_t const targetVersion =
-                    getVersion(baseMod->getConfigEntry("Version"), 0x100u);
+            auto const sourceVersion(
+                    getVersion(mod->second->getConfigEntry("Version"), 0x1u));
+            auto const targetVersion(
+                    getVersion(baseMod->getConfigEntry("Version"), 0x1u));
             modStat |=
                     (sourceVersion > targetVersion)
                      ? MODSTAT_UPDATED
