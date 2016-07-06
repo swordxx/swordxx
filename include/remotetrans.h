@@ -24,6 +24,7 @@
 #define REMOTETRANS_H
 
 #include <atomic>
+#include <cstddef>
 #include <vector>
 #include <defs.h>
 #include <swbuf.h>
@@ -34,13 +35,22 @@ namespace swordxx {
 /** Class for reporting status
 */
 class SWDLLEXPORT StatusReporter {
-public:
-    virtual ~StatusReporter() {};
-    /** Messages before stages of a batch download */
-    virtual void preStatus(long totalBytes, long completedBytes, const char *message);
 
-    /** frequently called throughout a download, to report status */
-    virtual void update(unsigned long totalBytes, unsigned long completedBytes) {};
+public: /* Methods: */
+
+    virtual ~StatusReporter() noexcept {};
+
+    /** Messages before stages of a batch download */
+    virtual void preStatus(std::size_t totalBytes,
+                           std::size_t completedBytes,
+                           const char * message) noexcept
+    {};
+
+    /** Frequently called throughout a download, to report status */
+    virtual void update(std::size_t totalBytes, std::size_t completedBytes)
+            noexcept
+    {};
+
 };
 
 

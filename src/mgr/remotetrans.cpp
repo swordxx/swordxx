@@ -50,11 +50,6 @@ namespace {
 
 };
 
-
-void StatusReporter::preStatus(long totalBytes, long completedBytes, const char *message) {
-}
-
-
 RemoteTransport::RemoteTransport(const char *host, StatusReporter *statusReporter)
     : term(false)
 {
