@@ -111,9 +111,8 @@ ADD_COMPILE_OPTIONS(
   "$<$<COMPILE_LANGUAGE:C>:-std=c99>"
   "$<$<COMPILE_LANGUAGE:CXX>:-std=c++14>"
   "$<$<CONFIG:Release>:-DNDEBUG>"
-  "$<$<CONFIG:Release>:-fno-omit-frame-pointer>"
-  "$<$<NOT:$<CONFIG:Release>>:-DNDEBUG>"
-  "$<$<NOT:$<CONFIG:Release>>:-fomit-frame-pointer>"
+  "$<$<NOT:$<CONFIG:Release>>:-ggdb>"
+  "$<$<NOT:$<CONFIG:Release>>:-fno-omit-frame-pointer>"
 )
 
 ###########################################################################################
