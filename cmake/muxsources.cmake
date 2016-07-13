@@ -5,7 +5,6 @@
 #
 # Written by Greg Hellings
 
-MESSAGE(STATUS "\n-- CONFIGURING SOURCE LIST")
 MESSAGE(STATUS "ZLib: system ${ZLIB_LIBRARY}")
 MESSAGE(STATUS "bzip2: system ${BZIP2_LIBRARY}")
 MESSAGE(STATUS "xz: system ${XZ_LIBRARY}")

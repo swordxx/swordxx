@@ -12,8 +12,6 @@
 # more about how these tests work.
 #
 
-MESSAGE(STATUS "\n-- CONFIGURING LIBRARY TESTS")
-
 INCLUDE_DIRECTORIES("../src/")
 
 SET(test_PROGRAMS

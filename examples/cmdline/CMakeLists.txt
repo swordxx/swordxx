@@ -3,7 +3,6 @@
 # SWORD_BUILD_EXAMPLES="YES".  These will not be installed, so don't worry about
 # that.
 #
-MESSAGE(STATUS "\n-- CONFIGURING LIBRARY EXAMPLES")
 
 INCLUDE_DIRECTORIES("../../src/")
 

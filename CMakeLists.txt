@@ -93,7 +93,7 @@ INCLUDE_DIRECTORIES("${CMAKE_CURRENT_BINARY_DIR}/include") # For generated versi
 # This will look for various libraries that libsword builds against.  There is no REQUIRED
 # attribute added here, since all of the libraries here are not, in actuality, required.
 #
-MESSAGE(STATUS "\n-- SEARCHING FOR SYTEM PACKAGES")
+
 # Find our packages
 FIND_PACKAGE(BZIP2 REQUIRED QUIET)
 FIND_PACKAGE(XZ REQUIRED QUIET)

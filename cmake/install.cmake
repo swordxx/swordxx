@@ -1,8 +1,6 @@
 #####################################################################
 # First, install the library itself
 #
-MESSAGE(STATUS "\n-- CONFIGURING INSTALLATION DESTINATIONS")
-# Configuration files, of course
 
 # Install the library
 IF(BUILDING_SHARED)
