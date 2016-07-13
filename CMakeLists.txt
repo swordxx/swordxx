@@ -114,6 +114,7 @@ ADD_COMPILE_OPTIONS(
   "$<$<NOT:$<CONFIG:Release>>:-fno-omit-frame-pointer>"
 )
 
+
 ###########################################################################################
 # Based on user input and the results of the above tests, we may need to mux with the source
 # files to use an internal version of ZLib, cURL-like stuff, or CLucene replacements.  These
@@ -123,6 +124,7 @@ ADD_COMPILE_OPTIONS(
 # Modify the source variables and set necessary definitions, this is a rather long segment,
 # so I have sorted it out into its own file
 INCLUDE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/muxsources.cmake)
+
 
 ################################################################################################
 # This actually creates the build target that is the libsword building target to be generated.
@@ -139,7 +141,6 @@ SET(sword_SOURCES ${sword_C_SOURCES} ${sword_CXX_SOURCES})
 FILE(GLOB_RECURSE SWORD_INSTALL_HEADERS "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h")
 LIST(APPEND SWORD_INSTALL_HEADERS
     "${CMAKE_CURRENT_BINARY_DIR}/include/version.h")
-
 
 IF(LIBSWORD_LIBRARY_TYPE MATCHES ".*Shared.*" OR NOT LIBSWORD_LIBRARY_TYPE)
     ADD_LIBRARY(sword SHARED ${sword_SOURCES})
@@ -159,6 +160,7 @@ IF(LIBSWORD_LIBRARY_TYPE MATCHES ".*Static.*" OR NOT LIBSWORD_LIBRARY_TYPE)
     SET_TARGET_PROPERTIES(sword_static PROPERTIES OUTPUT_NAME "sword")
     MESSAGE(STATUS "Building Static library.")
 ENDIF(LIBSWORD_LIBRARY_TYPE MATCHES ".*Static.*" OR NOT LIBSWORD_LIBRARY_TYPE)
+
 
 ################################################################################################
 # Some random user settings
@@ -183,6 +185,7 @@ IF(BUILDING_SHARED)
   SET_TARGET_PROPERTIES(sword PROPERTIES SOVERSION "${LIBSWORDXX_SOVERSION}")
   MESSAGE(STATUS "Using SOVERSION \"${LIBSWORDXX_SOVERSION}\"")
 ENDIF(BUILDING_SHARED)
+
 
 ##############################################################################################
 # Setting libraries and includes
