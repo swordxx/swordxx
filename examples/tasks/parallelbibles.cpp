@@ -21,13 +21,13 @@
  *
  */
 
-#include <swmgr.h>
-#include <markupfiltmgr.h>
-#include <swmodule.h>
-#include <versekey.h>
+#include <cstdio>
 #include <iostream>
+#include <swordxx/keys/versekey.h>
+#include <swordxx/mgr/markupfiltmgr.h>
+#include <swordxx/mgr/swmgr.h>
+#include <swordxx/modules/swmodule.h>
 #include <vector>
-#include <stdio.h>
 
 
 using namespace swordxx;

@@ -23,7 +23,7 @@
 #ifndef GBFTHML_H
 #define GBFTHML_H
 
-#include "../../swfilter.h"
+#include "swfilter.h"
 
 
 namespace swordxx {

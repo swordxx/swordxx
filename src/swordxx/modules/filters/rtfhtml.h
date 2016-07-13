@@ -23,7 +23,7 @@
 #ifndef RTFHTML_H
 #define RTFHTML_H
 
-#include "../../swfilter.h"
+#include "swfilter.h"
 
 
 namespace swordxx {

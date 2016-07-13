@@ -36,8 +36,8 @@
 
 #include <cstdlib>
 #include <iostream>
-#include <swmgr.h>
-#include <swmodule.h>
+#include <swordxx/mgr/swmgr.h>
+#include <swordxx/modules/swmodule.h>
 
 
 using namespace swordxx;

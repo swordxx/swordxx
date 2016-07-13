@@ -27,7 +27,7 @@
 #define SWBASICFILTER_H
 
 #include <string>
-#include "../../swfilter.h"
+#include "swfilter.h"
 
 
 namespace swordxx {

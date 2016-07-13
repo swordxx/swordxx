@@ -23,7 +23,7 @@
 #ifndef THMLPLAIN_H
 #define THMLPLAIN_H
 
-#include "../../swfilter.h"
+#include "swfilter.h"
 
 
 namespace swordxx {

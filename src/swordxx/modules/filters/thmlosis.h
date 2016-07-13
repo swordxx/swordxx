@@ -23,7 +23,7 @@
 #ifndef THMLOSIS_H
 #define THMLOSIS_H
 
-#include "../../swfilter.h"
+#include "swfilter.h"
 
 
 namespace swordxx {

@@ -39,11 +39,10 @@
  */
 
 #include <iostream>
-
-#include <swmgr.h>
-#include <swmodule.h>
-#include <versekey.h>
-#include <markupfiltmgr.h>
+#include <swordxx/keys/versekey.h>
+#include <swordxx/mgr/markupfiltmgr.h>
+#include <swordxx/mgr/swmgr.h>
+#include <swordxx/modules/swmodule.h>
 
 
 using namespace swordxx;

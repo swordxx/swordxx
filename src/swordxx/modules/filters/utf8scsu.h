@@ -23,7 +23,7 @@
 #ifndef UTF8SCSU_H
 #define UTF8SCSU_H
 
-#include "../../swfilter.h"
+#include "swfilter.h"
 
 #include <unicode/utypes.h>
 #include <unicode/ucnv.h>

@@ -23,7 +23,7 @@
 #ifndef UNICODERTF_H
 #define UNICODERTF_H
 
-#include "../../swfilter.h"
+#include "swfilter.h"
 
 
 namespace swordxx {

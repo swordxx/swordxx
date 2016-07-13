@@ -25,7 +25,7 @@
  */
 
 #include <iostream>
-#include <swmgr.h>
+#include <swordxx/mgr/swmgr.h>
 
 
 using swordxx::SWMgr;

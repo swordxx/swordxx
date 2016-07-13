@@ -42,9 +42,9 @@
 #include "../mgr/filemgr.h"
 #include "../mgr/stringmgr.h"
 #include "../modules/filters/swoptfilter.h"
-#include "../swfilter.h"
 #include "../sysdata.h"
 #include "../utilfuns/utilstr.h"
+#include "filters/swfilter.h"
 
 
 #if defined(USECXX11REGEX) && !defined(REG_ICASE)

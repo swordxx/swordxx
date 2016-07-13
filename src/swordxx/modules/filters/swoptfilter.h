@@ -23,7 +23,7 @@
 #ifndef SWOPTFILTER_H
 #define SWOPTFILTER_H
 
-#include "../../swfilter.h"
+#include "swfilter.h"
 
 #include <list>
 #include <string>

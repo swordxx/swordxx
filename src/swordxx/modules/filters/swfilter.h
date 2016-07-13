@@ -26,7 +26,7 @@
 
 #include <string>
 
-#include "defs.h"
+#include "../../defs.h"
 
 namespace swordxx {
 

@@ -23,7 +23,7 @@
 #ifndef UTF8ARSHAPING_H
 #define UTF8ARSHAPING_H
 
-#include "../../swfilter.h"
+#include "swfilter.h"
 
 #include <unicode/uchar.h>
 #include <unicode/ucnv.h>

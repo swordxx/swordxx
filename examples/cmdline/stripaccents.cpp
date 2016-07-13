@@ -25,11 +25,12 @@
  *
  */
 
-#include <stdio.h>
+#include <cstdio>
 #include <cstdlib>
-#include <swmgr.h>
-#include <markupfiltmgr.h>
 #include <iostream>
+#include <swordxx/mgr/swmgr.h>
+#include <swordxx/mgr/markupfiltmgr.h>
+
 
 using namespace swordxx;
 

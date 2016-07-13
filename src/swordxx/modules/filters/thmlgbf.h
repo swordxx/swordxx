@@ -23,7 +23,7 @@
 #ifndef THMLGBF_H
 #define THMLGBF_H
 
-#include "../../swfilter.h"
+#include "swfilter.h"
 
 
 namespace swordxx {

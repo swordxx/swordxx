@@ -23,7 +23,7 @@
 #ifndef UTF8Latin1_H
 #define UTF8Latin1_H
 
-#include "../../swfilter.h"
+#include "swfilter.h"
 
 
 namespace swordxx {

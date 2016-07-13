@@ -23,7 +23,7 @@
 #ifndef GBFPLAIN_H
 #define GBFPLAIN_H
 
-#include "../../swfilter.h"
+#include "swfilter.h"
 
 
 namespace swordxx {

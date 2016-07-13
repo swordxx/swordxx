@@ -23,7 +23,7 @@
 #ifndef UTF8NFKD_H
 #define UTF8NFKD_H
 
-#include "../../swfilter.h"
+#include "swfilter.h"
 
 #include <unicode/utypes.h>
 #include <unicode/ucnv.h>

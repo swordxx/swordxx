@@ -23,7 +23,7 @@
 #ifndef GBFOSIS_H
 #define GBFOSIS_H
 
-#include "../../swfilter.h"
+#include "swfilter.h"
 #include <stack>
 #include <string>
 

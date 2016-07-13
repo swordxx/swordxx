@@ -25,13 +25,13 @@
  */
 
 #include <cstdint>
-#include <stdio.h>
-#include <rawtext.h>
-#include <swmgr.h>
-#include <versekey.h>
-#include <markupfiltmgr.h>
-#include <regex.h> // GNU
+#include <cstdio>
 #include <iostream>
+#include <regex.h> // GNU
+#include <swordxx/keys/versekey.h>
+#include <swordxx/mgr/markupfiltmgr.h>
+#include <swordxx/mgr/swmgr.h>
+#include <swordxx/modules/texts/rawtext/rawtext.h>
 
 
 using namespace swordxx;

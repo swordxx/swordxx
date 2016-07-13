@@ -23,7 +23,7 @@
 #ifndef CIPHERFIL_H
 #define CIPHERFIL_H
 
-#include "../../swfilter.h"
+#include "swfilter.h"
 
 
 namespace swordxx {

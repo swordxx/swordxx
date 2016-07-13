@@ -23,7 +23,7 @@
 #ifndef UTF8NFC_H
 #define UTF8NFC_H
 
-#include "../../swfilter.h"
+#include "swfilter.h"
 
 #include <unicode/uchar.h>
 #include <unicode/ucnv.h>

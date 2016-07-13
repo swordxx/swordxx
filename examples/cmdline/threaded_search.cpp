@@ -20,15 +20,15 @@
  *
  */
 
-#include <stdio.h>
-#include <rawtext.h>
-#include <swmgr.h>
-#include <regex.h> // GNU
-#include <listkey.h>
-#include <versekey.h>
+#include <cstdio>
 #include <iostream>
-
 #include <pthread.h>
+#include <regex.h> // GNU
+#include <swordxx/keys/listkey.h>
+#include <swordxx/keys/versekey.h>
+#include <swordxx/mgr/swmgr.h>
+#include <swordxx/modules/texts/rawtext/rawtext.h>
+
 
 using swordxx::SWMgr;
 using swordxx::ListKey;

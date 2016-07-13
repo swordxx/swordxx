@@ -23,7 +23,7 @@
 #ifndef UTF8BIDIREORDER_H
 #define UTF8BIDIREORDER_H
 
-#include "../../swfilter.h"
+#include "swfilter.h"
 
 #include <unicode/ubidi.h>
 #include <unicode/uchar.h>

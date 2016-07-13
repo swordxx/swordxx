@@ -21,15 +21,14 @@
  *
  */
 
-#include <stdio.h>
+#include <cstdio>
 #include <iostream>
-#include <stdlib.h>
-#include <swmgr.h>
-#include <swmodule.h>
-#include <swfilter.h>
-#include <markupfiltmgr.h>
-#include <versekey.h>
-//#include "../../bindings/corba/orbitcpp/webmgr.hpp"
+#include <cstdlib>
+#include <swordxx/keys/versekey.h>
+#include <swordxx/mgr/swmgr.h>
+#include <swordxx/mgr/markupfiltmgr.h>
+#include <swordxx/modules/filters/swfilter.h>
+#include <swordxx/modules/swmodule.h>
 
 
 using swordxx::SWMgr;

@@ -22,11 +22,12 @@
  */
 
 #include <iostream>
-#include <swmgr.h>
-#include <versekey.h>
-#include <listkey.h>
-#include <swmodule.h>
-#include <markupfiltmgr.h>
+#include <swordxx/keys/listkey.h>
+#include <swordxx/keys/versekey.h>
+#include <swordxx/mgr/markupfiltmgr.h>
+#include <swordxx/mgr/swmgr.h>
+#include <swordxx/modules/swmodule.h>
+
 
 using swordxx::SWMgr;
 using swordxx::VerseKey;

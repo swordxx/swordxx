@@ -23,7 +23,7 @@
 #ifndef SCSUUTF8_H
 #define SCSUUTF8_H
 
-#include "../../swfilter.h"
+#include "swfilter.h"
 
 #ifdef _ICU_
 #include <unicode/utypes.h>
