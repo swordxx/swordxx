@@ -1,12 +1,12 @@
-prefix=@prefix@
-exec_prefix=@exec_prefix@
-libdir=@libdir@
-includedir=@includedir@
+prefix=@CMAKE_INSTALL_PREFIX@
+exec_prefix=@BINDIR@
+libdir=@LIB_INSTALL_DIR@
+includedir=@INCLUDE_INSTALL_DIR@
 
 
-Name: SWORD
+Name: SWORD++
 Description: Biblical Text Research Engine
-Version: @VERSION@
+Version: @SWORDXX_VERSION_STR@
 @SHAREDLIB_TRUE@Libs: -L${libdir} -lsword
 @SHAREDLIB_FALSE@Libs: -L${libdir} -lsword @LIBS@
 Libs.private: -L${libdir} -lsword @LIBS@
