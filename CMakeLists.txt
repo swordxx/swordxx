@@ -239,6 +239,7 @@ MESSAGE(STATUS "Setting link libraries to ${SWORD_LINK_LIBRARIES}")
 
 INCLUDE("${CMAKE_CURRENT_SOURCE_DIR}/cmake/install.cmake")
 
+
 ##############################################################################################
 # Utilities are hawt
 #

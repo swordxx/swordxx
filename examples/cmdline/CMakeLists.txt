@@ -4,6 +4,9 @@
 # that.
 #
 MESSAGE(STATUS "\n-- CONFIGURING LIBRARY EXAMPLES")
+
+INCLUDE_DIRECTORIES("../../src/")
+
 SET(example_PROGRAMS
     listoptions
     lookup

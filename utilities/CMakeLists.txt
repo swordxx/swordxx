@@ -10,6 +10,9 @@
 # These are in alphbetical order now - please keep them that way
 # if you edit this list in the future.
 #
+
+INCLUDE_DIRECTORIES("../src/")
+
 SET(install_UTILITIES
     addld
     emptyvss
