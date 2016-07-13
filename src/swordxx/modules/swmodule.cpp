@@ -780,7 +780,6 @@ std::string SWModule::renderText(const char *buf, int len, bool render) const {
 
     std::string &tmpbuf = (buf) ? local : getRawEntryBuf();
     SWKey *key = 0;
-    static const char *null = "";
 
     unsigned long size = (len < 0) ? ((getEntrySize()<0) ? tmpbuf.size() : getEntrySize()) : len;
     if (size > 0) {
