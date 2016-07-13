@@ -250,8 +250,6 @@ IF(BUILDING_STATIC)
     TARGET_LINK_LIBRARIES(sword_static ${SWORD_LINK_LIBRARIES})
 ENDIF(BUILDING_STATIC)
 
-MESSAGE(STATUS "Setting link libraries to ${SWORD_LINK_LIBRARIES}")
-
 
 ##############################################################################################
 # Installing the library, headers, utilies, etc
