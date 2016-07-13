@@ -92,13 +92,31 @@ INCLUDE_DIRECTORIES("${CMAKE_CURRENT_BINARY_DIR}/include") # For generated versi
 # attribute added here, since all of the libraries here are not, in actuality, required.
 #
 
-# Find our packages
-FIND_PACKAGE(BZIP2 REQUIRED QUIET)
-FIND_PACKAGE(XZ REQUIRED QUIET)
-FIND_PACKAGE(ICU QUIET)
-FIND_PACKAGE(CURL REQUIRED QUIET)
-FIND_PACKAGE(CLucene QUIET)
-FIND_PACKAGE(ZLIB REQUIRED QUIET)
+# Required packages:
+FIND_PACKAGE(BZIP2 REQUIRED)
+FIND_PACKAGE(XZ REQUIRED)
+FIND_PACKAGE(CURL REQUIRED)
+FIND_PACKAGE(ZLIB REQUIRED)
+
+# Optional packages:
+FIND_PACKAGE(CLucene)
+IF(CLucene_FOUND AND NOT SWORD_NO_CLUCENE STREQUAL "Yes")
+    MESSAGE(STATUS "Using CLucene: yes")
+    SET(WITH_CLUCENE 1)
+ELSE()
+    MESSAGE(STATUS "Using CLucene: no")
+    SET(WITH_CLUCENE 0)
+ENDIF()
+
+FIND_PACKAGE(ICU)
+IF(ICU_FOUND AND NOT SWORD_NO_ICU STREQUAL "No")
+    MESSAGE(STATUS "Using ICU: yes")
+    ADD_DEFINITIONS(-D_ICU_)
+    SET(WITH_ICU 1)
+ELSE()
+    MESSAGE(STATUS "Using ICU: no")
+    SET(WITH_ICU 0)
+ENDIF()
 
 
 ################################################################################
@@ -113,17 +131,6 @@ ADD_COMPILE_OPTIONS(
   "$<$<NOT:$<CONFIG:Release>>:-ggdb>"
   "$<$<NOT:$<CONFIG:Release>>:-fno-omit-frame-pointer>"
 )
-
-
-###########################################################################################
-# Based on user input and the results of the above tests, we may need to mux with the source
-# files to use an internal version of ZLib, cURL-like stuff, or CLucene replacements.  These
-# lines below will modify the source files directories so that the required files are only
-# included if the option is needed.
-#
-# Modify the source variables and set necessary definitions, this is a rather long segment,
-# so I have sorted it out into its own file
-INCLUDE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/muxsources.cmake)
 
 
 ################################################################################################
