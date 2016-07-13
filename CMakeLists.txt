@@ -83,8 +83,6 @@ ENDIF(${CMAKE_CURRENT_BINARY_DIR} STREQUAL ${CMAKE_CURRENT_SOURCE_DIR})
 SET(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 # User options
 INCLUDE("${CMAKE_CURRENT_SOURCE_DIR}/cmake/options.cmake")
-# Source variables
-INCLUDE("${CMAKE_CURRENT_SOURCE_DIR}/cmake/sources.cmake")
 # Our local includes
 INCLUDE_DIRECTORIES("${CMAKE_CURRENT_BINARY_DIR}/include") # For generated version.h
 
@@ -131,6 +129,18 @@ INCLUDE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/muxsources.cmake)
 # Most of the work for configuration is done above, already.
 #
 # I want to do this manually, there might be reason in the future
+
+# Sources:
+FILE(GLOB_RECURSE sword_C_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/src/*.c")
+FILE(GLOB_RECURSE sword_CXX_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
+SET(sword_SOURCES ${sword_C_SOURCES} ${sword_CXX_SOURCES})
+
+# Headers:
+FILE(GLOB_RECURSE SWORD_INSTALL_HEADERS "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h")
+LIST(APPEND SWORD_INSTALL_HEADERS
+    "${CMAKE_CURRENT_BINARY_DIR}/include/version.h")
+
+
 IF(LIBSWORD_LIBRARY_TYPE MATCHES ".*Shared.*" OR NOT LIBSWORD_LIBRARY_TYPE)
     ADD_LIBRARY(sword SHARED ${sword_SOURCES})
     MESSAGE(STATUS "Building Shared library.")
