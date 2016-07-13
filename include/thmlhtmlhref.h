@@ -31,7 +31,7 @@ namespace swordxx {
 /** this filter converts ThML text to HTML text with hrefs
  */
 class SWDLLEXPORT ThMLHTMLHREF : public SWBasicFilter {
-    SWBuf imgPrefix;
+    std::string imgPrefix;
     bool renderNoteNumbers;
 protected:
     class MyUserData : public BasicFilterUserData {
@@ -40,13 +40,13 @@ protected:
         bool inscriptRef;
         bool SecHead;
         bool BiblicalText;
-        SWBuf version;
+        std::string version;
         XMLTag startTag;
     };
     virtual BasicFilterUserData *createUserData(const SWModule *module, const SWKey *key) {
         return new MyUserData(module, key);
     }
-    virtual bool handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData);
+    virtual bool handleToken(std::string &buf, const char *token, BasicFilterUserData *userData);
 public:
     ThMLHTMLHREF();
     virtual const char *getImagePrefix() { return imgPrefix.c_str(); }

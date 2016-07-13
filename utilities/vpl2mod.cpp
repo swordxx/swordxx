@@ -41,14 +41,13 @@
 #include <filemgr.h>
 #include <swmgr.h>
 #include <rawtext.h>
-#include <swbuf.h>
+#include <string>
 #include <versekey.h>
 
 using swordxx::FileMgr;
 using swordxx::SWMgr;
 using swordxx::RawText;
 using swordxx::VerseKey;
-using swordxx::SWBuf;
 using swordxx::SW_POSITION;
 
 
@@ -242,7 +241,7 @@ int main(int argc, char **argv) {
                 std::cerr << "Error parsing key: " << buffer << "\n";
                 exit(-5);
             }
-            SWBuf orig = mod.getRawEntry();
+            std::string orig = mod.getRawEntry();
 
             if (!isKJVRef(buffer)) {
                 VerseKey origVK = vk;

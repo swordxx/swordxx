@@ -107,7 +107,7 @@ char RawLD4::getEntry(long away) const
  * RET: string buffer with entry
  */
 
-SWBuf &RawLD4::getRawEntryBuf() const {
+std::string &RawLD4::getRawEntryBuf() const {
 
     char ret = getEntry();
     if (!ret) {

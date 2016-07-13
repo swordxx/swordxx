@@ -34,7 +34,7 @@ namespace {
     static const char oTip[]  = "Toggles Hebrew Cantillation Marks";
 
     static const StringList *oValues() {
-        static const SWBuf choices[3] = {"Off", "On", ""};
+        static const std::string choices[3] = {"Off", "On", ""};
         static const StringList oVals(&choices[0], &choices[2]);
         return &oVals;
     }
@@ -48,10 +48,10 @@ UTF8Cantillation::UTF8Cantillation() : SWOptionFilter(oName, oTip, oValues()) {
 UTF8Cantillation::~UTF8Cantillation(){};
 
 
-char UTF8Cantillation::processText(SWBuf &text, const SWKey *key, const SWModule *module) {
+char UTF8Cantillation::processText(std::string &text, const SWKey *key, const SWModule *module) {
     if (!option) {
         //The UTF-8 range 0xD6 0x90 to 0xD6 0xAF and 0xD7 0x84 consist of Hebrew cantillation marks so block those out.
-        SWBuf orig = text;
+        std::string orig = text;
         const unsigned char* from = (unsigned char*)orig.c_str();
         for (text = ""; *from; from++) {
             if (*from != 0xD6) {

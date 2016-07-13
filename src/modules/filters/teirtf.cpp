@@ -59,7 +59,7 @@ TEIRTF::TEIRTF() {
 }
 
 
-bool TEIRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData) {
+bool TEIRTF::handleToken(std::string &buf, const char *token, BasicFilterUserData *userData) {
   // manually process if it wasn't a simple substitution
     if (!substituteToken(buf, token)) {
         MyUserData *u = (MyUserData *)userData;
@@ -74,7 +74,7 @@ bool TEIRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *use
 
         // <hi>
         else if (!strcmp(tag.getName(), "hi") || !strcmp(tag.getName(), "emph")) {
-            SWBuf rend = tag.getAttribute("rend");
+            std::string rend = tag.getAttribute("rend");
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {
                 if (rend == "italic" || rend == "ital")
                     buf += "{\\i1 ";
@@ -92,7 +92,7 @@ bool TEIRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *use
 
         // <entryFree>
         else if (!strcmp(tag.getName(), "entryFree")) {
-            SWBuf n = tag.getAttribute("n");
+            std::string n = tag.getAttribute("n");
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {
                     if (n != "") {
                                     buf += "{\\b1 ";
@@ -103,7 +103,7 @@ bool TEIRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *use
 
         // <sense>
         else if (!strcmp(tag.getName(), "sense")) {
-            SWBuf n = tag.getAttribute("n");
+            std::string n = tag.getAttribute("n");
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {
                     if (n != "") {
                                     buf += "{\\sb100\\par\\b1 ";
@@ -167,9 +167,9 @@ bool TEIRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *use
         else if (!strcmp(tag.getName(), "note")) {
             if (!tag.isEndTag()) {
                 if (!tag.isEmpty()) {
-                    SWBuf type = tag.getAttribute("type");
+                    std::string type = tag.getAttribute("type");
 
-                    SWBuf footnoteNumber = tag.getAttribute("swordFootnote");
+                    std::string footnoteNumber = tag.getAttribute("swordFootnote");
                     VerseKey *vkey = 0;
                     // see if we have a VerseKey * or descendant
                     try {
@@ -177,7 +177,7 @@ bool TEIRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *use
                     }
                     catch ( ... ) {    }
                     if (vkey) {
-                        buf.appendFormatted("{\\super <a href=\"\">*%s</a>} ", footnoteNumber.c_str());
+                        buf += formatted("{\\super <a href=\"\">*%s</a>} ", footnoteNumber.c_str());
                     }
                     u->suspendTextPassThru = true;
                 }
@@ -195,7 +195,7 @@ bool TEIRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *use
 
         // <ref> tag
         else if (!strcmp(tag.getName(), "ref")) {
-            if (!tag.isEndTag() && tag.getAttribute("osisRef")) {
+            if (!tag.isEndTag() && !tag.getAttribute("osisRef").empty()) {
                 buf += "{<a href=\"\">";
                 u->inOsisRef = true;
             }
@@ -206,14 +206,14 @@ bool TEIRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *use
         }
 
         else if (!strcmp(tag.getName(), "graphic")) {
-            const char *src = tag.getAttribute("url");
-            if (!src)        // assert we have a src attribute
+            auto src(tag.getAttribute("url"));
+            if (src.empty())        // assert we have a src attribute
                 return false;
 
             char* filepath = new char[strlen(u->module->getConfigEntry("AbsoluteDataPath")) + strlen(token)];
             *filepath = 0;
             strcpy(filepath, userData->module->getConfigEntry("AbsoluteDataPath"));
-            strcat(filepath, src);
+            strcat(filepath, src.c_str());
 
 // we do this because BibleCS looks for this EXACT format for an image tag
             buf += "<img src=\"";

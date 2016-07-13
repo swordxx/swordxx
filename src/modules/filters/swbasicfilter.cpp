@@ -35,8 +35,8 @@
 namespace swordxx {
 
 
-typedef std::map<SWBuf, SWBuf> DualStringMap;
-typedef std::set<SWBuf> StringSet;
+typedef std::map<std::string, std::string> DualStringMap;
+typedef std::set<std::string> StringSet;
 
 
 // I hate bridge patterns but this isolates std::map from a ton of filters
@@ -179,7 +179,7 @@ void SWBasicFilter::removeEscapeStringSubstitute(const char *findString) {
 }
 
 
-bool SWBasicFilter::substituteToken(SWBuf &buf, const char *token) {
+bool SWBasicFilter::substituteToken(std::string &buf, const char *token) {
     DualStringMap::iterator it;
 
     if (!tokenCaseSensitive) {
@@ -199,14 +199,14 @@ bool SWBasicFilter::substituteToken(SWBuf &buf, const char *token) {
 }
 
 
-void SWBasicFilter::appendEscapeString(SWBuf &buf, const char *escString) {
+void SWBasicFilter::appendEscapeString(std::string &buf, const char *escString) {
     buf += escStart;
     buf += escString;
     buf += escEnd;
 }
 
 
-bool SWBasicFilter::passAllowedEscapeString(SWBuf &buf, const char *escString) {
+bool SWBasicFilter::passAllowedEscapeString(std::string &buf, const char *escString) {
     StringSet::iterator it;
 
     if (!escStringCaseSensitive) {
@@ -227,7 +227,7 @@ bool SWBasicFilter::passAllowedEscapeString(SWBuf &buf, const char *escString) {
 }
 
 
-bool SWBasicFilter::handleNumericEscapeString(SWBuf &buf, const char *escString) {
+bool SWBasicFilter::handleNumericEscapeString(std::string &buf, const char *escString) {
     if (passThruNumericEsc) {
         appendEscapeString(buf, escString);
         return true;
@@ -236,7 +236,7 @@ bool SWBasicFilter::handleNumericEscapeString(SWBuf &buf, const char *escString)
 }
 
 
-bool SWBasicFilter::substituteEscapeString(SWBuf &buf, const char *escString) {
+bool SWBasicFilter::substituteEscapeString(std::string &buf, const char *escString) {
     DualStringMap::iterator it;
 
     if (*escString == '#') {
@@ -264,12 +264,12 @@ bool SWBasicFilter::substituteEscapeString(SWBuf &buf, const char *escString) {
 }
 
 
-bool SWBasicFilter::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData) {
+bool SWBasicFilter::handleToken(std::string &buf, const char *token, BasicFilterUserData *userData) {
     return substituteToken(buf, token);
 }
 
 
-bool SWBasicFilter::handleEscapeString(SWBuf &buf, const char *escString, BasicFilterUserData *userData) {
+bool SWBasicFilter::handleEscapeString(std::string &buf, const char *escString, BasicFilterUserData *userData) {
     return substituteEscapeString(buf, escString);
 }
 
@@ -298,7 +298,7 @@ void SWBasicFilter::setTokenEnd(const char *tokenEnd) {
 }
 
 
-char SWBasicFilter::processText(SWBuf &text, const SWKey *key, const SWModule *module) {
+char SWBasicFilter::processText(std::string &text, const SWKey *key, const SWModule *module) {
     char *from;
     char token[4096];
     int tokpos = 0;
@@ -306,11 +306,11 @@ char SWBasicFilter::processText(SWBuf &text, const SWKey *key, const SWModule *m
     bool inEsc = false;
     int escStartPos = 0, escEndPos = 0;
     int tokenStartPos = 0, tokenEndPos = 0;
-    SWBuf lastTextNode;
+    std::string lastTextNode;
     BasicFilterUserData *userData = createUserData(module, key);
 
-    SWBuf orig = text;
-    from = orig.getRawData();
+    std::string orig = text;
+    from = &orig[0u];
     text = "";
 
     if (processStages & INITIALIZE) {
@@ -397,11 +397,11 @@ char SWBasicFilter::processText(SWBuf &text, const SWKey *key, const SWModule *m
         else {
              if ((!userData->supressAdjacentWhitespace) || (*from != ' ')) {
                 if (!userData->suspendTextPassThru) {
-                    text.append(*from);
-                    userData->lastSuspendSegment.size(0);
+                    text.push_back(*from);
+                    userData->lastSuspendSegment.clear();
                 }
-                else    userData->lastSuspendSegment.append(*from);
-                lastTextNode.append(*from);
+                else    userData->lastSuspendSegment.push_back(*from);
+                lastTextNode.push_back(*from);
              }
             userData->supressAdjacentWhitespace = false;
         }

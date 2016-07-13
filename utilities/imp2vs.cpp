@@ -27,7 +27,7 @@
 #include <stdio.h>
 #include <iostream>
 
-#include <swbuf.h>
+#include <string>
 #include <filemgr.h>
 #include <versekey.h>
 #include <rawtext.h>
@@ -43,7 +43,7 @@ using namespace swordxx;
 
 using namespace std;
 
-void writeEntry(SWModule *module, const SWBuf &key, const SWBuf &entry);
+void writeEntry(SWModule *module, const std::string &key, const std::string &entry);
 
 void usage(const char *progName, const char *error = 0) {
     if (error) fprintf(stderr, "\n%s: %s\n", progName, error);
@@ -89,15 +89,15 @@ int main(int argc, char **argv) {
 
     const char *progName   = argv[0];
     const char *inFileName = argv[1];
-    SWBuf v11n         = "KJV";
-    SWBuf outPath      = "./";
-    SWBuf locale           = "en";
+    std::string v11n         = "KJV";
+    std::string outPath      = "./";
+    std::string locale           = "en";
 
     bool fourByteSize      = false;
     bool append        = false;
     int iType          = 4;
     SWCompress *compressor = 0;
-    SWBuf compType     = "";
+    std::string compType     = "";
 
     for (int i = 2; i < argc; i++) {
         if (!strcmp(argv[i], "-a")) {
@@ -142,7 +142,7 @@ int main(int argc, char **argv) {
             if (i+1 < argc) locale = argv[++i];
             else usage(progName, "-l requires <locale>");
         }
-        else usage(progName, (((SWBuf)"Unknown argument: ")+ argv[i]).c_str());
+        else usage(progName, (((std::string)"Unknown argument: ")+ argv[i]).c_str());
     }
     // -----------------------------------------------------
     const VersificationMgr::System *v = VersificationMgr::getSystemVersificationMgr()->getVersificationSystem(v11n);
@@ -220,9 +220,9 @@ int main(int argc, char **argv) {
     // process input file
     FileDesc *fd = FileMgr::getSystemFileMgr()->open(inFileName, FileMgr::RDONLY);
 
-    SWBuf lineBuffer;
-    SWBuf keyBuffer;
-    SWBuf entBuffer;
+    std::string lineBuffer;
+    std::string keyBuffer;
+    std::string entBuffer;
 
     bool more = true;
     do {
@@ -260,7 +260,7 @@ int main(int argc, char **argv) {
 int page = 0;
 
 
-void writeEntry(SWModule *module, const SWBuf &key, const SWBuf &entry)
+void writeEntry(SWModule *module, const std::string &key, const std::string &entry)
 {
     if (key.size() && entry.size()) {
         std::cout << "from file: " << key << std::endl;
@@ -274,7 +274,7 @@ void writeEntry(SWModule *module, const SWBuf &key, const SWBuf &entry)
             *vkey = listKey;
             if (first) {
                 *linkMaster = *vkey;
-                SWBuf text = module->getRawEntry();
+                std::string text = module->getRawEntry();
                 text += entry;
 
 
@@ -284,7 +284,7 @@ void writeEntry(SWModule *module, const SWBuf &key, const SWBuf &entry)
 /*
                 const char *pageMarker = "<seg type=\"page\" subtype=\"";
                 int newPage = page;
-                SWBuf pageData = strstr(text.c_str(), pageMarker);
+                std::string pageData = strstr(text.c_str(), pageMarker);
                 if (pageData.length()) {
                     pageData << strlen(pageMarker);
                     const char *pn = pageData.stripPrefix('"');
@@ -295,7 +295,7 @@ void writeEntry(SWModule *module, const SWBuf &key, const SWBuf &entry)
                     // don't add anything cuz we already start with one
                 }
                 else {
-                    SWBuf pm = pageMarker;
+                    std::string pm = pageMarker;
                     pm.appendFormatted("%d\" />", page);
                     text = pm + text;
                 }

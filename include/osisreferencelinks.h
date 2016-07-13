@@ -31,10 +31,10 @@ namespace swordxx {
 /** This Filter hides reference links with a particular type/subtype in an OSIS text
  */
 class SWDLLEXPORT OSISReferenceLinks : public SWOptionFilter {
-    SWBuf optionName;
-    SWBuf optionTip;
-    SWBuf type;
-    SWBuf subType;
+    std::string optionName;
+    std::string optionTip;
+    std::string type;
+    std::string subType;
 public:
 
     /**
@@ -46,7 +46,7 @@ public:
      */
     OSISReferenceLinks(const char *optionName, const char *optionTip, const char *type, const char *subType = 0, const char *defaultValue = "On");
     virtual ~OSISReferenceLinks();
-    virtual char processText(SWBuf &text, const SWKey *key = 0, const SWModule *module = 0);
+    virtual char processText(std::string &text, const SWKey *key = 0, const SWModule *module = 0);
 };
 
 } /* namespace swordxx */

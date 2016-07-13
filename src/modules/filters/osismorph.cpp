@@ -21,6 +21,7 @@
  *
  */
 
+#include <cstring>
 #include <stdlib.h>
 #include <osismorph.h>
 
@@ -32,7 +33,7 @@ namespace {
     static const char oTip[]  = "Toggles Morphological Tags On and Off if they exist";
 
     static const StringList *oValues() {
-        static const SWBuf choices[3] = {"Off", "On", ""};
+        static const std::string choices[3] = {"Off", "On", ""};
         static const StringList oVals(&choices[0], &choices[2]);
         return &oVals;
     }
@@ -47,12 +48,12 @@ OSISMorph::~OSISMorph() {
 }
 
 
-char OSISMorph::processText(SWBuf &text, const SWKey *key, const SWModule *module) {
+char OSISMorph::processText(std::string &text, const SWKey *key, const SWModule *module) {
     if (!option) {	// if we don't want morph tags
         char token[2048]; // cheese.  Fix.
         int tokpos = 0;
         bool intoken = false;
-        SWBuf orig = text;
+        std::string orig = text;
         const char *from = orig.c_str();
 
         //taken out of the loop for speed
@@ -74,18 +75,18 @@ char OSISMorph::processText(SWBuf &text, const SWKey *key, const SWModule *modul
                     end = start ? strchr(start+7, '"') : 0; //search the end of the morph value
 
                     if (start && end) { //start and end of the morph tag found
-                        text.append('<');
+                        text.push_back('<');
                         text.append(token, start-token); //the text before the morph attr
                         text.append(end+1); //text after the morph attr
-                        text.append('>');
+                        text.push_back('>');
 
                         continue; //next loop
                     }
                 }
 
-                text.append('<');
+                text.push_back('<');
                 text.append(token);
-                text.append('>');
+                text.push_back('>');
 
                 continue;
             }
@@ -96,7 +97,7 @@ char OSISMorph::processText(SWBuf &text, const SWKey *key, const SWModule *modul
                 }
             }
             else {
-                text.append(*from);
+                text.push_back(*from);
             }
         }
     }

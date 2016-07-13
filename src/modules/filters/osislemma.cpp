@@ -21,8 +21,10 @@
  *
  */
 
+#include <cstring>
 #include <stdlib.h>
 #include <osislemma.h>
+#include <utilstr.h>
 #include <utilxml.h>
 
 
@@ -34,7 +36,7 @@ namespace {
     static const char oTip[]  = "Toggles Lemmas On and Off if they exist";
 
     static const StringList *oValues() {
-        static const SWBuf choices[3] = {"Off", "On", ""};
+        static const std::string choices[3] = {"Off", "On", ""};
         static const StringList oVals(&choices[0], &choices[2]);
         return &oVals;
     }
@@ -49,11 +51,11 @@ OSISLemma::~OSISLemma() {
 }
 
 
-char OSISLemma::processText(SWBuf &text, const SWKey *key, const SWModule *module) {
-    SWBuf token;
+char OSISLemma::processText(std::string &text, const SWKey *key, const SWModule *module) {
+    std::string token;
     bool intoken = false;
 
-    const SWBuf orig = text;
+    const std::string orig = text;
     const char * from = orig.c_str();
 
     if (!option) {
@@ -65,13 +67,18 @@ char OSISLemma::processText(SWBuf &text, const SWKey *key, const SWModule *modul
             }
             if (*from == '>') {    // process tokens
                 intoken = false;
-                if (token.startsWith("w ")) {    // Word
-                    XMLTag wtag(token);
+                if (hasPrefix(token, "w ")) {    // Word
+                    XMLTag wtag(token.c_str());
                     int count = wtag.getAttributePartCount("lemma", ' ');
                     for (int i = 0; i < count; i++) {
-                        SWBuf a = wtag.getAttribute("lemma", i, ' ');
-                        const char *prefix = a.stripPrefix(':');
-                        if ((!prefix) || ((SWBuf)prefix).startsWith("lemma.")) {
+                        std::string a = wtag.getAttribute("lemma", i, ' ');
+                        auto const prefixPos(a.find(':'));
+                        if (prefixPos == std::string::npos
+                            || (prefixPos >= sizeof("lemma.") - 1u
+                                && std::strncmp(a.c_str(),
+                                                "lemma.",
+                                                sizeof("lemma.") - 1u)))
+                        {
                             // remove attribute part
                             wtag.setAttribute("lemma", 0, i, ' ');
                             i--;
@@ -79,16 +86,16 @@ char OSISLemma::processText(SWBuf &text, const SWKey *key, const SWModule *modul
                         }
                     }
                     token = wtag;
-                    token.trim();
+                    trimString(token);
                     // drop <>
-                    token << 1;
-                    token--;
+                    token.erase(0u, 1u);
+                    token.pop_back();
                 }
 
                 // keep token in text
-                text.append('<');
+                text.push_back('<');
                 text.append(token);
-                text.append('>');
+                text.push_back('>');
 
                 continue;
             }
@@ -96,7 +103,7 @@ char OSISLemma::processText(SWBuf &text, const SWKey *key, const SWModule *modul
                 token += *from;
             }
             else    {
-                text.append(*from);
+                text.push_back(*from);
             }
         }
     }

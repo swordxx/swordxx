@@ -27,7 +27,7 @@
 #include <cstddef>
 #include <vector>
 #include <defs.h>
-#include <swbuf.h>
+#include <string>
 
 
 namespace swordxx {
@@ -70,9 +70,9 @@ protected:
     StatusReporter *statusReporter;
     bool passive;
     std::atomic<bool> term;
-    SWBuf host;
-    SWBuf u;
-    SWBuf p;
+    std::string host;
+    std::string u;
+    std::string p;
 
 public:
     RemoteTransport(const char *host, StatusReporter *statusReporter = 0);
@@ -83,7 +83,7 @@ public:
      *
      * if destBuf then write to buffer instead of file
      */
-    virtual char getURL(const char *destPath, const char *sourceURL, SWBuf *destBuf = 0);
+    virtual char getURL(const char *destPath, const char *sourceURL, std::string *destBuf = 0);
 
 
     int copyDirectory(const char *urlPrefix, const char *dir, const char *dest, const char *suffix);

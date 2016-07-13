@@ -35,7 +35,7 @@ namespace {
     static const char oTip[]  = "Toggles Scripture Cross-references On and Off if they exist";
 
     static const StringList *oValues() {
-        static const SWBuf choices[3] = {"Off", "On", ""};
+        static const std::string choices[3] = {"Off", "On", ""};
         static const StringList oVals(&choices[0], &choices[2]);
         return &oVals;
     }
@@ -50,14 +50,14 @@ OSISScripref::~OSISScripref() {
 }
 
 
-char OSISScripref::processText(SWBuf &text, const SWKey *key, const SWModule *module) {
-    SWBuf token;
+char OSISScripref::processText(std::string &text, const SWKey *key, const SWModule *module) {
+    std::string token;
     bool intoken    = false;
     bool hide       = false;
-    SWBuf tagText;
+    std::string tagText;
     XMLTag startTag;
 
-    SWBuf orig = text;
+    std::string orig = text;
     const char *from = orig.c_str();
 
     XMLTag tag;
@@ -71,18 +71,18 @@ char OSISScripref::processText(SWBuf &text, const SWKey *key, const SWModule *mo
         if (*from == '>') {    // process tokens
             intoken = false;
 
-            tag = token;
+            tag = token.c_str();
 
             if (!strncmp(token.c_str(), "note", 4) || !strncmp(token.c_str(), "/note", 5)) {
                 if (!tag.isEndTag() && !tag.isEmpty()) {
                     startTag = tag;
-                    if ((tag.getAttribute("type")) && (!strcmp(tag.getAttribute("type"), "crossReference"))) {
+                    if ((!tag.getAttribute("type").empty()) && (!strcmp(tag.getAttribute("type").c_str(), "crossReference"))) {
                         hide = true;
                         tagText = "";
                         if (option) {    // we want the tag in the text
-                            text.append('<');
+                            text.push_back('<');
                             text.append(token);
-                            text.append('>');
+                            text.push_back('>');
                         }
                         continue;
                     }
@@ -98,24 +98,24 @@ char OSISScripref::processText(SWBuf &text, const SWKey *key, const SWModule *mo
 
             // if not a heading token, keep token in text
             if (!hide) {
-                text.append('<');
+                text.push_back('<');
                 text.append(token);
-                text.append('>');
+                text.push_back('>');
             }
             else {
-                tagText.append('<');
+                tagText.push_back('<');
                 tagText.append(token);
-                tagText.append('>');
+                tagText.push_back('>');
             }
             continue;
         }
         if (intoken) { //copy token
-            token.append(*from);
+            token.push_back(*from);
         }
         else if (!hide) { //copy text which is not inside a token
-            text.append(*from);
+            text.push_back(*from);
         }
-        else tagText.append(*from);
+        else tagText.push_back(*from);
     }
     return 0;
 }

@@ -81,7 +81,7 @@ GBFLaTeX::GBFLaTeX() {
 }
 
 
-bool GBFLaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData) {
+bool GBFLaTeX::handleToken(std::string &buf, const char *token, BasicFilterUserData *userData) {
     const char *tok;
     MyUserData *u = (MyUserData *)userData;
 
@@ -160,9 +160,9 @@ bool GBFLaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *u
             buf += "}";
         }
         else if (!strcmp(tag.getName(), "RF")) {
-            SWBuf type = tag.getAttribute("type");
-            SWBuf footnoteNumber = tag.getAttribute("swordFootnote");
-            SWBuf noteName = tag.getAttribute("n");
+            std::string type = tag.getAttribute("type");
+            std::string footnoteNumber = tag.getAttribute("swordFootnote");
+            std::string noteName = tag.getAttribute("n");
             VerseKey *vkey = NULL;
             // see if we have a VerseKey * or descendant
             try {
@@ -171,7 +171,7 @@ bool GBFLaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *u
             catch ( ... ) {    }
             if (vkey) {
 
-                buf.appendFormatted("\\swordfootnote{%s}{%s}{%s}{",
+                buf += formatted("\\swordfootnote{%s}{%s}{%s}{",
                     footnoteNumber.c_str(),
                     u->version.c_str(),
                     vkey->getText()).c_str();

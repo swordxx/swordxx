@@ -40,7 +40,7 @@ namespace {
     static const char oTip[]  = "Toggles Greek Accents";
 
     static const StringList *oValues() {
-        static const SWBuf choices[3] = {"On", "Off", ""};
+        static const std::string choices[3] = {"On", "Off", ""};
         static const StringList oVals(&choices[0], &choices[2]);
         return &oVals;
     }
@@ -54,7 +54,7 @@ UTF8GreekAccents::UTF8GreekAccents() : SWOptionFilter(oName, oTip, oValues()) {
 UTF8GreekAccents::~UTF8GreekAccents() {};
 
 
-char UTF8GreekAccents::processText(SWBuf &text, const SWKey *key, const SWModule *module) {
+char UTF8GreekAccents::processText(std::string &text, const SWKey *key, const SWModule *module) {
 
     if (!option) { //we don't want greek accents
             //unsigned char *to, *from;
@@ -64,7 +64,7 @@ char UTF8GreekAccents::processText(SWBuf &text, const SWKey *key, const SWModule
         decompose.processText(text, (SWKey *)2);  // note the hack of 2 to mimic a real key. TODO: remove all hacks
 #endif
 
-        SWBuf orig = text;
+        std::string orig = text;
         const unsigned char* from = (unsigned char*)orig.c_str();
         for (text = ""; *from; from++) {
             //first just remove combining characters

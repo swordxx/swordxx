@@ -69,7 +69,7 @@ using std::vector;
 
 namespace swordxx {
 
-typedef std::list<SWBuf> StringList;
+typedef std::list<std::string> StringList;
 
 /******************************************************************************
  * SWModule Constructor - Initializes data for instance of SWModule
@@ -279,13 +279,13 @@ void SWModule::decrement(int steps) {
 ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *scope, bool *justCheckIfSupported, void (*percent)(char, void *), void *percentUserData) {
 
     listKey.clear();
-    SWBuf term = istr;
+    std::string term = istr;
     bool includeComponents = false;    // for entryAttrib e.g., /Lemma.1/
 
-    SWBuf target = getConfigEntry("AbsoluteDataPath");
-    if (!target.endsWith("/") && !target.endsWith("\\")) {
-        target.append('/');
-    }
+    std::string target = getConfigEntry("AbsoluteDataPath");
+    auto const lastChar = *(target.rbegin());
+    if (lastChar != '/' && lastChar != '\\')
+        target.push_back('/');
 #if defined USELUCENE
     target.append("lucene");
 #endif
@@ -303,7 +303,7 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
     SWKey *searchKey = 0;
     SWKey *resultKey = createKey();
     SWKey *lastKey   = createKey();
-    SWBuf lastBuf = "";
+    std::string lastBuf = "";
 
 #ifdef USECXX11REGEX
     std::locale oldLocale;
@@ -314,8 +314,8 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
     regex_t preg;
 #endif
 
-    vector<SWBuf> words;
-    vector<SWBuf> window;
+    vector<std::string> words;
+    vector<std::string> window;
     const char *sres;
     terminateSearch = false;
     char perc = 1;
@@ -352,7 +352,7 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
     *this = TOP;
     if (searchType >= 0) {
 #ifdef USECXX11REGEX
-        preg = std::regex((SWBuf(".*")+istr+".*").c_str(), std::regex_constants::extended & flags);
+        preg = std::regex((std::string(".*")+istr+".*").c_str(), std::regex_constants::extended & flags);
 #else
         flags |=searchType|REG_NOSUB|REG_EXTENDED;
         regcomp(&preg, istr, flags);
@@ -371,13 +371,13 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
         Query                         *q  = 0;
         Hits                          *h  = 0;
         try {
-            ir = IndexReader::open(target);
+            ir = IndexReader::open(target.c_str());
             is = new IndexSearcher(ir);
             const TCHAR *stopWords[] = { 0 };
             standard::StandardAnalyzer analyzer(stopWords);
 
             // parse the query
-            q = QueryParser::parse((wchar_t *)utf8ToWChar(istr).getRawData(), _T("content"), &analyzer);
+            q = QueryParser::parse(utf8ToWChar(istr).c_str(), _T("content"), &analyzer);
             (*percent)(20, percentUserData);
 
             // perform the search
@@ -389,7 +389,7 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
             for (unsigned long i = 0; i < (unsigned long)h->length(); i++) {
                 Document &doc = h->doc(i);
                 // set a temporary verse key to this module position
-                *resultKey = wcharToUTF8(doc.get(_T("key"))); //TODO Does a key always accept utf8?
+                *resultKey = wcharToUTF8(doc.get(_T("key"))).c_str(); //TODO Does a key always accept utf8?
                 uint64_t score = (uint64_t)((uint32_t)(h->score(i)*100));
 
                 // check to see if it sets ok (within our bounds) and if not, skip
@@ -432,12 +432,13 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
     case -5:
         // let's break the term down into our words vector
         while (1) {
-            const char *word = term.stripPrefix(' ');
-            if (!word) {
+            auto const r(getPrefixSize(term, ' '));
+            if (!r.first) {
                 words.push_back(term);
                 break;
             }
-            words.push_back(word);
+            words.emplace_back(term.c_str(), r.second);
+            term.erase(0u, r.second + 1u);
         }
         if ((flags & REG_ICASE) == REG_ICASE) {
             for (unsigned int i = 0; i < words.size(); i++) {
@@ -450,16 +451,17 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
     case -3:
         // let's break the attribute segs down.  We'll reuse our words vector for each segment
         while (1) {
-            const char *word = term.stripPrefix('/');
-            if (!word) {
+            auto const r(getPrefixSize(term, '/'));
+            if (!r.first) {
                 words.push_back(term);
                 break;
             }
-            words.push_back(word);
+            words.emplace_back(term.c_str(), r.second);
+            term.erase(0u, r.second + 1u);
         }
-        if ((words.size()>2) && words[2].endsWith(".")) {
+        if ((words.size()>2) && (*words[2].rbegin() == '.')) {
             includeComponents = true;
-            words[2]--;
+            words[2].pop_back();
         }
         break;
     }
@@ -490,11 +492,11 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 #endif
         }
         if (searchType >= 0) {
-            SWBuf textBuf = stripText();
+            auto textBuf(stripText());
 #ifdef USECXX11REGEX
             if (std::regex_match(std::string(textBuf.c_str()), preg)) {
 #else
-            if (!regexec(&preg, textBuf, 0, 0, 0)) {
+            if (!regexec(&preg, textBuf.c_str(), 0, 0, 0)) {
 #endif
                 *resultKey = *getKey();
                 resultKey->clearBound();
@@ -504,7 +506,7 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 #ifdef USECXX11REGEX
             else if (std::regex_match(std::string((lastBuf + ' ' + textBuf).c_str()), preg)) {
 #else
-            else if (!regexec(&preg, lastBuf + ' ' + textBuf, 0, 0, 0)) {
+            else if (!regexec(&preg, (lastBuf + ' ' + textBuf).c_str(), 0, 0, 0)) {
 #endif
                 lastKey->clearBound();
                 listKey << *lastKey;
@@ -517,7 +519,7 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 
         // phrase
         else {
-            SWBuf textBuf;
+            std::string textBuf;
             switch (searchType) {
 
             // phrase
@@ -608,18 +610,20 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
                         for (;i3Start != i3End; i3Start++) {
                             if ((words.size()>3) && (words[3].length())) {
                                 if (includeComponents) {
-                                    SWBuf key = i3Start->first.c_str();
-                                    key = key.stripPrefix('.', true);
+                                    std::string key(i3Start->first);
+                                    auto const sepPos = key.find_first_of('.');
+                                    if (sepPos != std::string::npos)
+                                        key.resize(sepPos);
                                     // we're iterating all 3 level keys, so be sure we match our
                                     // prefix (e.g., Lemma, Lemma.1, Lemma.2, etc.)
                                     if (key != words[2]) continue;
                                 }
                                 if (flags & SEARCHFLAG_MATCHWHOLEENTRY) {
-                                    bool found = !(((flags & REG_ICASE) == REG_ICASE) ? swordxx::stricmp(i3Start->second.c_str(), words[3]) : strcmp(i3Start->second.c_str(), words[3]));
+                                    bool found = !(((flags & REG_ICASE) == REG_ICASE) ? swordxx::stricmp(i3Start->second.c_str(), words[3].c_str()) : strcmp(i3Start->second.c_str(), words[3].c_str()));
                                     sres = (found) ? i3Start->second.c_str() : 0;
                                 }
                                 else {
-                                    sres = ((flags & REG_ICASE) == REG_ICASE) ? stristr(i3Start->second.c_str(), words[3]) : strstr(i3Start->second.c_str(), words[3]);
+                                    sres = ((flags & REG_ICASE) == REG_ICASE) ? stristr(i3Start->second.c_str(), words[3].c_str()) : strstr(i3Start->second.c_str(), words[3].c_str());
                                 }
                                 if (sres) {
                                     *resultKey = *getKey();
@@ -639,26 +643,26 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
             }
             case -5:
                 AttributeList &words = getEntryAttributes()["Word"];
-                SWBuf kjvWord = "";
-                SWBuf bibWord = "";
+                std::string kjvWord = "";
+                std::string bibWord = "";
                 for (AttributeList::iterator it = words.begin(); it != words.end(); it++) {
-                    int parts = atoi(it->second["PartCount"]);
-                    SWBuf lemma = "";
-                    SWBuf morph = "";
+                    int parts = atoi(it->second["PartCount"].c_str());
+                    std::string lemma = "";
+                    std::string morph = "";
                     for (int i = 1; i <= parts; i++) {
-                        SWBuf key = "";
-                        key = (parts == 1) ? "Lemma" : SWBuf().setFormatted("Lemma.%d", i).c_str();
+                        std::string key = "";
+                        key = (parts == 1) ? "Lemma" : formatted("Lemma.%d", i).c_str();
                         AttributeValue::iterator li = it->second.find(key);
                         if (li != it->second.end()) {
                             if (i > 1) lemma += " ";
-                            key = (parts == 1) ? "LemmaClass" : SWBuf().setFormatted("LemmaClass.%d", i).c_str();
+                            key = (parts == 1) ? "LemmaClass" : formatted("LemmaClass.%d", i).c_str();
                             AttributeValue::iterator lci = it->second.find(key);
                             if (lci != it->second.end()) {
                                 lemma += lci->second + ":";
                             }
                             lemma += li->second;
                         }
-                        key = (parts == 1) ? "Morph" : SWBuf().setFormatted("Morph.%d", i).c_str();
+                        key = (parts == 1) ? "Morph" : formatted("Morph.%d", i).c_str();
                         li = it->second.find(key);
                         // silly.  sometimes morph counts don't equal lemma counts
                         if (i == 1 && parts != 1 && li == it->second.end()) {
@@ -666,7 +670,7 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
                         }
                         if (li != it->second.end()) {
                             if (i > 1) morph += " ";
-                            key = (parts == 1) ? "MorphClass" : SWBuf().setFormatted("MorphClass.%d", i).c_str();
+                            key = (parts == 1) ? "MorphClass" : formatted("MorphClass.%d", i).c_str();
                             AttributeValue::iterator lci = it->second.find(key);
                             // silly.  sometimes morph counts don't equal lemma counts
                             if (i == 1 && parts != 1 && lci == it->second.end()) {
@@ -730,11 +734,8 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
  * RET: this module's text at current key location massaged by Strip filters
  */
 
-const char *SWModule::stripText(const char *buf, int len) {
-    static SWBuf local;
-    local = renderText(buf, len, false);
-    return local.c_str();
-}
+std::string SWModule::stripText(const char * buf, int len)
+{ return renderText(buf, len, false); }
 
 
 /** SWModule::getRenderHeader()    - Produces any header data which might be
@@ -768,7 +769,7 @@ const char *SWModule::getRenderHeader() const {
  * internally sometimes calling with null to save duplication of code.
  */
 
-SWBuf SWModule::renderText(const char *buf, int len, bool render) const {
+std::string SWModule::renderText(const char *buf, int len, bool render) const {
     bool savePEA = isProcessEntryAttributes();
     if (!buf) {
         entryAttributes.clear();
@@ -777,30 +778,25 @@ SWBuf SWModule::renderText(const char *buf, int len, bool render) const {
         setProcessEntryAttributes(false);
     }
 
-    SWBuf local;
+    std::string local;
     if (buf)
         local = buf;
 
-    SWBuf &tmpbuf = (buf) ? local : getRawEntryBuf();
+    std::string &tmpbuf = (buf) ? local : getRawEntryBuf();
     SWKey *key = 0;
     static const char *null = "";
 
-    if (tmpbuf) {
-        unsigned long size = (len < 0) ? ((getEntrySize()<0) ? strlen(tmpbuf) : getEntrySize()) : len;
-        if (size > 0) {
-            key = this->getKey();
+    unsigned long size = (len < 0) ? ((getEntrySize()<0) ? tmpbuf.size() : getEntrySize()) : len;
+    if (size > 0) {
+        key = this->getKey();
 
-            optionFilter(tmpbuf, key);
+        optionFilter(tmpbuf, key);
 
-            if (render) {
-                renderFilter(tmpbuf, key);
-                encodingFilter(tmpbuf, key);
-            }
-            else    stripFilter(tmpbuf, key);
+        if (render) {
+            renderFilter(tmpbuf, key);
+            encodingFilter(tmpbuf, key);
         }
-    }
-    else {
-        tmpbuf = null;
+        else    stripFilter(tmpbuf, key);
     }
 
     setProcessEntryAttributes(savePEA);
@@ -817,9 +813,8 @@ SWBuf SWModule::renderText(const char *buf, int len, bool render) const {
  * RET: this module's text at current key location massaged by RenderFilers
  */
 
-SWBuf SWModule::renderText(const SWKey *tmpKey) {
+std::string SWModule::renderText(const SWKey *tmpKey) {
     SWKey *saveKey;
-    const char *retVal;
 
     if (!key->isPersist()) {
         saveKey = createKey();
@@ -829,7 +824,7 @@ SWBuf SWModule::renderText(const SWKey *tmpKey) {
 
     setKey(*tmpKey);
 
-    retVal = renderText();
+    auto retVal(renderText());
 
     setKey(*saveKey);
 
@@ -848,9 +843,8 @@ SWBuf SWModule::renderText(const SWKey *tmpKey) {
  * RET: this module's text at specified key location massaged by Strip filters
  */
 
-const char *SWModule::stripText(const SWKey *tmpKey) {
+std::string SWModule::stripText(const SWKey *tmpKey) {
     SWKey *saveKey;
-    const char *retVal;
 
     if (!key->isPersist()) {
         saveKey = createKey();
@@ -860,7 +854,7 @@ const char *SWModule::stripText(const SWKey *tmpKey) {
 
     setKey(*tmpKey);
 
-    retVal = stripText();
+    auto retVal(stripText());
 
     setKey(*saveKey);
 
@@ -879,8 +873,8 @@ const char *SWModule::stripText(const SWKey *tmpKey) {
  * RET: bibliographic data in the requested format as a string (BibTeX by default)
  */
 
-SWBuf SWModule::getBibliography(unsigned char bibFormat) const {
-    SWBuf s;
+std::string SWModule::getBibliography(unsigned char bibFormat) const {
+    std::string s;
     switch (bibFormat) {
     case BIB_BIBTEX:
         s.append("@Book {").append(modname).append(", Title = \"").append(moddesc).append("\", Publisher = \"CrossWire Bible Society\"}");
@@ -904,10 +898,10 @@ bool SWModule::hasSearchFramework() {
 
 void SWModule::deleteSearchFramework() {
 #ifdef USELUCENE
-    SWBuf target = getConfigEntry("AbsoluteDataPath");
-    if (!target.endsWith("/") && !target.endsWith("\\")) {
-        target.append('/');
-    }
+    std::string target = getConfigEntry("AbsoluteDataPath");
+    char const lastChar = *(target.rbegin());
+    if (lastChar != '/' && lastChar != '\\')
+        target.push_back('/');
     target.append("lucene");
 
     FileMgr::removeDir(target.c_str());
@@ -920,26 +914,25 @@ void SWModule::deleteSearchFramework() {
 signed char SWModule::createSearchFramework(void (*percent)(char, void *), void *percentUserData) {
 
 #if defined USELUCENE
-    SWBuf target = getConfigEntry("AbsoluteDataPath");
-    if (!target.endsWith("/") && !target.endsWith("\\")) {
-        target.append('/');
-    }
+    std::string target = getConfigEntry("AbsoluteDataPath");
+    char const lastChar = *(target.rbegin());
+    if (lastChar != '/' && lastChar != '\\')
+        target.push_back('/');
     const int MAX_CONV_SIZE = 1024 * 1024;
     target.append("lucene");
-    int status = FileMgr::createParent(target+"/dummy");
+    int status = FileMgr::createParent((target+"/dummy").c_str());
     if (status) return -1;
 
     SWKey *saveKey = 0;
     SWKey *searchKey = 0;
     SWKey textkey;
-    SWBuf c;
 
 
     // turn all filters to default values
     StringList filterSettings;
     for (OptionFilterList::iterator filter = optionFilters->begin(); filter != optionFilters->end(); filter++) {
         filterSettings.push_back((*filter)->getOptionValue());
-        (*filter)->setOptionValue(*((*filter)->getOptionValues().begin()));
+        (*filter)->setOptionValue((*filter)->getOptionValues().begin()->c_str());
 
         if ( (!strcmp("Greek Accents", (*filter)->getOptionName())) ||
             (!strcmp("Hebrew Vowel Points", (*filter)->getOptionName())) ||
@@ -1009,11 +1002,11 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
     // position module at the beginning
     *this = TOP;
 
-    SWBuf proxBuf;
-    SWBuf proxLem;
-    SWBuf proxMorph;
-    SWBuf strong;
-    SWBuf morph;
+    std::string proxBuf;
+    std::string proxLem;
+    std::string proxMorph;
+    std::string strong;
+    std::string morph;
 
     char err = popError();
     while (!err) {
@@ -1034,7 +1027,7 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
         }
 
         // get "content" field
-        const char *content = stripText();
+        auto content(stripText());
 
         bool good = false;
 
@@ -1043,8 +1036,8 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
         Document *doc = new Document();
 #endif
         // get "key" field
-        SWBuf keyText = (vkcheck) ? vkcheck->getOSISRef() : getKeyText();
-        if (content && *content) {
+        std::string keyText = (vkcheck) ? vkcheck->getOSISRef() : getKeyText();
+        if (!content.empty()) {
             good = true;
 
 
@@ -1059,11 +1052,11 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
             words = getEntryAttributes().find("Word");
             if (words != getEntryAttributes().end()) {
                 for (word = words->second.begin();word != words->second.end(); word++) {
-                    int partCount = atoi(word->second["PartCount"]);
+                    int partCount = atoi(word->second["PartCount"].c_str());
                     if (!partCount) partCount = 1;
                     for (int i = 0; i < partCount; i++) {
-                        SWBuf tmp = "Lemma";
-                        if (partCount > 1) tmp.appendFormatted(".%d", i+1);
+                        std::string tmp = "Lemma";
+                        if (partCount > 1) tmp += formatted(".%d", i+1);
                         strongVal = word->second.find(tmp);
                         if (strongVal != word->second.end()) {
                             // cheeze.  skip empty article tags that weren't assigned to any text
@@ -1073,39 +1066,35 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
                             }
                             strong.append(strongVal->second);
                             morph.append(strongVal->second);
-                            morph.append('@');
-                            SWBuf tmp = "Morph";
-                            if (partCount > 1) tmp.appendFormatted(".%d", i+1);
+                            morph.push_back('@');
+                            std::string tmp = "Morph";
+                            if (partCount > 1) tmp += formatted(".%d", i+1);
                             morphVal = word->second.find(tmp);
                             if (morphVal != word->second.end()) {
                                 morph.append(morphVal->second);
                             }
-                            strong.append(' ');
-                            morph.append(' ');
+                            strong.push_back(' ');
+                            morph.push_back(' ');
                         }
                     }
                 }
             }
 
 #if defined USELUCENE
-            doc->add(*_CLNEW Field(_T("key"), (wchar_t *)utf8ToWChar(keyText).getRawData(), Field::STORE_YES | Field::INDEX_UNTOKENIZED));
+            doc->add(*_CLNEW Field(_T("key"), utf8ToWChar(keyText.c_str()).c_str(), Field::STORE_YES | Field::INDEX_UNTOKENIZED));
 #endif
 
-            if (includeKeyInSearch) {
-                c = keyText;
-                c += " ";
-                c += content;
-                content = c.c_str();
-            }
+            if (includeKeyInSearch)
+                content = keyText + " " + content;
 
 #if defined USELUCENE
-            doc->add(*_CLNEW Field(_T("content"), (wchar_t *)utf8ToWChar(content).getRawData(), Field::STORE_NO | Field::INDEX_TOKENIZED));
+            doc->add(*_CLNEW Field(_T("content"), utf8ToWChar(content.c_str()).c_str(), Field::STORE_NO | Field::INDEX_TOKENIZED));
 #endif
 
             if (strong.length() > 0) {
 #if defined USELUCENE
-                doc->add(*_CLNEW Field(_T("lemma"), (wchar_t *)utf8ToWChar(strong).getRawData(), Field::STORE_NO | Field::INDEX_TOKENIZED));
-                doc->add(*_CLNEW Field(_T("morph"), (wchar_t *)utf8ToWChar(morph).getRawData(), Field::STORE_NO | Field::INDEX_TOKENIZED));
+                doc->add(*_CLNEW Field(_T("lemma"), utf8ToWChar(strong.c_str()).c_str(), Field::STORE_NO | Field::INDEX_TOKENIZED));
+                doc->add(*_CLNEW Field(_T("morph"), utf8ToWChar(morph.c_str()).c_str(), Field::STORE_NO | Field::INDEX_TOKENIZED));
 #endif
 //printf("setting fields (%s).\ncontent: %s\nlemma: %s\n", (const char *)*key, content, strong.c_str());
             }
@@ -1127,7 +1116,7 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 //printf("building proxBuf from (%s).\n", (const char *)*key);
 
                     content = stripText();
-                    if (content && *content) {
+                    if (!content.empty()) {
                         // build "strong" field
                         strong = "";
                         morph = "";
@@ -1139,11 +1128,11 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
                         words = getEntryAttributes().find("Word");
                         if (words != getEntryAttributes().end()) {
                             for (word = words->second.begin();word != words->second.end(); word++) {
-                                int partCount = atoi(word->second["PartCount"]);
+                                int partCount = atoi(word->second["PartCount"].c_str());
                                 if (!partCount) partCount = 1;
                                 for (int i = 0; i < partCount; i++) {
-                                    SWBuf tmp = "Lemma";
-                                    if (partCount > 1) tmp.appendFormatted(".%d", i+1);
+                                    std::string tmp = "Lemma";
+                                    if (partCount > 1) tmp += formatted(".%d", i+1);
                                     strongVal = word->second.find(tmp);
                                     if (strongVal != word->second.end()) {
                                         // cheeze.  skip empty article tags that weren't assigned to any text
@@ -1153,21 +1142,21 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
                                         }
                                         strong.append(strongVal->second);
                                         morph.append(strongVal->second);
-                                        morph.append('@');
-                                        SWBuf tmp = "Morph";
-                                        if (partCount > 1) tmp.appendFormatted(".%d", i+1);
+                                        morph.push_back('@');
+                                        std::string tmp = "Morph";
+                                        if (partCount > 1) tmp += formatted(".%d", i+1);
                                         morphVal = word->second.find(tmp);
                                         if (morphVal != word->second.end()) {
                                             morph.append(morphVal->second);
                                         }
-                                        strong.append(' ');
-                                        morph.append(' ');
+                                        strong.push_back(' ');
+                                        morph.push_back(' ');
                                     }
                                 }
                             }
                         }
                         proxBuf += content;
-                        proxBuf.append(' ');
+                        proxBuf.push_back(' ');
                         proxLem += strong;
                         proxMorph += morph;
                         if (proxLem.length()) {
@@ -1192,7 +1181,7 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 //fflush(stdout);
 
                         content = stripText();
-                        if (content && *content) {
+                        if (!content.empty()) {
                             // build "strong" field
                             strong = "";
                             morph = "";
@@ -1204,11 +1193,11 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
                             words = getEntryAttributes().find("Word");
                             if (words != getEntryAttributes().end()) {
                                 for (word = words->second.begin();word != words->second.end(); word++) {
-                                    int partCount = atoi(word->second["PartCount"]);
+                                    int partCount = atoi(word->second["PartCount"].c_str());
                                     if (!partCount) partCount = 1;
                                     for (int i = 0; i < partCount; i++) {
-                                        SWBuf tmp = "Lemma";
-                                        if (partCount > 1) tmp.appendFormatted(".%d", i+1);
+                                        std::string tmp = "Lemma";
+                                        if (partCount > 1) tmp += formatted(".%d", i+1);
                                         strongVal = word->second.find(tmp);
                                         if (strongVal != word->second.end()) {
                                             // cheeze.  skip empty article tags that weren't assigned to any text
@@ -1218,22 +1207,22 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
                                             }
                                             strong.append(strongVal->second);
                                             morph.append(strongVal->second);
-                                            morph.append('@');
-                                            SWBuf tmp = "Morph";
-                                            if (partCount > 1) tmp.appendFormatted(".%d", i+1);
+                                            morph.push_back('@');
+                                            std::string tmp = "Morph";
+                                            if (partCount > 1) tmp += formatted(".%d", i+1);
                                             morphVal = word->second.find(tmp);
                                             if (morphVal != word->second.end()) {
                                                 morph.append(morphVal->second);
                                             }
-                                            strong.append(' ');
-                                            morph.append(' ');
+                                            strong.push_back(' ');
+                                            morph.push_back(' ');
                                         }
                                     }
                                 }
                             }
 
                             proxBuf += content;
-                            proxBuf.append(' ');
+                            proxBuf.push_back(' ');
                             proxLem += strong;
                             proxMorph += morph;
                             if (proxLem.length()) {
@@ -1252,14 +1241,14 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
         if (proxBuf.length() > 0) {
 
 #if defined USELUCENE
-            doc->add(*_CLNEW Field(_T("prox"), (wchar_t *)utf8ToWChar(proxBuf).getRawData(), Field::STORE_NO | Field::INDEX_TOKENIZED));
+            doc->add(*_CLNEW Field(_T("prox"), utf8ToWChar(proxBuf.c_str()).c_str(), Field::STORE_NO | Field::INDEX_TOKENIZED));
 #endif
             good = true;
         }
         if (proxLem.length() > 0) {
 #if defined USELUCENE
-            doc->add(*_CLNEW Field(_T("proxlem"), (wchar_t *)utf8ToWChar(proxLem).getRawData(), Field::STORE_NO | Field::INDEX_TOKENIZED) );
-            doc->add(*_CLNEW Field(_T("proxmorph"), (wchar_t *)utf8ToWChar(proxMorph).getRawData(), Field::STORE_NO | Field::INDEX_TOKENIZED) );
+            doc->add(*_CLNEW Field(_T("proxlem"), utf8ToWChar(proxLem.c_str()).c_str(), Field::STORE_NO | Field::INDEX_TOKENIZED) );
+            doc->add(*_CLNEW Field(_T("proxmorph"), utf8ToWChar(proxMorph.c_str()).c_str(), Field::STORE_NO | Field::INDEX_TOKENIZED) );
 #endif
             good = true;
         }
@@ -1333,7 +1322,7 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
     // reset option filters back to original values
     StringList::iterator origVal = filterSettings.begin();
     for (OptionFilterList::iterator filter = optionFilters->begin(); filter != optionFilters->end(); filter++) {
-        (*filter)->setOptionValue(*origVal++);
+        (*filter)->setOptionValue((origVal++)->c_str());
     }
 
     return 0;
@@ -1347,7 +1336,7 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
  * @param buf the buffer to filter
  * @param key key location from where this buffer was extracted
  */
-void SWModule::filterBuffer(OptionFilterList *filters, SWBuf &buf, const SWKey *key) const {
+void SWModule::filterBuffer(OptionFilterList *filters, std::string &buf, const SWKey *key) const {
     OptionFilterList::iterator it;
     for (it = filters->begin(); it != filters->end(); it++) {
         (*it)->processText(buf, key, this);
@@ -1359,7 +1348,7 @@ void SWModule::filterBuffer(OptionFilterList *filters, SWBuf &buf, const SWKey *
  * @param buf the buffer to filter
  * @param key key location from where this buffer was extracted
  */
-void SWModule::filterBuffer(FilterList *filters, SWBuf &buf, const SWKey *key) const {
+void SWModule::filterBuffer(FilterList *filters, std::string &buf, const SWKey *key) const {
     FilterList::iterator it;
     for (it = filters->begin(); it != filters->end(); it++) {
         (*it)->processText(buf, key, this);
@@ -1375,12 +1364,11 @@ void SWModule::filterBuffer(FilterList *filters, SWBuf &buf, const SWKey *key) c
  *                text.
  */
 
-void SWModule::prepText(SWBuf &buf) {
-    unsigned int to, from;
+void SWModule::prepText(std::string &buf) {
+    decltype(buf.size()) to, from;
     char space = 0, cr = 0, realdata = 0, nlcnt = 0;
-    char *rawBuf = buf.getRawData();
-    for (to = from = 0; rawBuf[from]; from++) {
-        switch (rawBuf[from]) {
+    for (to = from = 0u; buf[from]; from++) {
+        switch (buf[from]) {
         case 10:
             if (!realdata)
                 continue;
@@ -1389,7 +1377,7 @@ void SWModule::prepText(SWBuf &buf) {
             nlcnt++;
             if (nlcnt > 1) {
 //                *to++ = nl;
-                rawBuf[to++] = 10;
+                buf[to++] = 10;
 //                *to++ = nl[1];
 //                nlcnt = 0;
             }
@@ -1398,7 +1386,7 @@ void SWModule::prepText(SWBuf &buf) {
             if (!realdata)
                 continue;
 //            *to++ = nl[0];
-            rawBuf[to++] = 10;
+            buf[to++] = 10;
             space = 0;
             cr = 1;
             continue;
@@ -1407,20 +1395,19 @@ void SWModule::prepText(SWBuf &buf) {
         nlcnt = 0;
         if (space) {
             space = 0;
-            if (rawBuf[from] != ' ') {
-                rawBuf[to++] = ' ';
+            if (buf[from] != ' ') {
+                buf[to++] = ' ';
                 from--;
                 continue;
             }
         }
-        rawBuf[to++] = rawBuf[from];
+        buf[to++] = buf[from];
     }
-    buf.setSize(to);
-
+    buf.resize(to);
     while (to > 1) {            // remove trailing excess
         to--;
-        if ((rawBuf[to] == 10) || (rawBuf[to] == ' '))
-            buf.setSize(to);
+        if ((buf[to] == 10) || (buf[to] == ' '))
+            buf.resize(to);
         else break;
     }
 }

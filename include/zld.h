@@ -39,7 +39,7 @@ public:
 
     zLD(const char *ipath, const char *iname = 0, const char *idesc = 0, long blockCount = 200, SWCompress *icomp = 0, SWTextEncoding encoding = ENC_UNKNOWN, SWTextDirection dir = DIRECTION_LTR, SWTextMarkup markup = FMT_UNKNOWN, const char* ilang = 0, bool caseSensitive = false, bool strongsPadding = true);
     virtual ~zLD();
-    virtual SWBuf &getRawEntryBuf() const;
+    virtual std::string &getRawEntryBuf() const;
 
     virtual void increment(int steps = 1);
     virtual void decrement(int steps = 1) { increment(-steps); }
@@ -55,7 +55,7 @@ public:
     virtual void deleteEntry();    // Delete current module entry
     // end write interface ------------------------
 
-    virtual void rawZFilter(SWBuf &buf, char direction = 0) const { rawFilter(buf, (SWKey *)(long)direction); }// hack, use key as direction for enciphering
+    virtual void rawZFilter(std::string &buf, char direction = 0) const { rawFilter(buf, (SWKey *)(long)direction); }// hack, use key as direction for enciphering
 
     // swcacher interface ----------------------
     virtual void flush() { flushCache(); }

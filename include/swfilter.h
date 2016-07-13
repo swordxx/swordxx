@@ -24,12 +24,13 @@
 #ifndef SWFILTER_H
 #define SWFILTER_H
 
-#include <defs.h>
+#include <string>
+
+#include "defs.h"
 
 namespace swordxx {
 
 class SWKey;
-class SWBuf;
 class SWModule;
 
 
@@ -51,7 +52,7 @@ public:
      * @param module Current module.
      * @return 0
      */
-    virtual char processText(SWBuf &text, const SWKey *key = 0, const SWModule *module = 0) = 0;
+    virtual char processText(std::string &text, const SWKey *key = 0, const SWModule *module = 0) = 0;
 
     /** This method can supply a header associated with the processing done with this filter.
      *    A typical example is a suggested CSS style block for classed containers.

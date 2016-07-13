@@ -170,7 +170,7 @@ ThMLLaTeX::ThMLLaTeX() {
 }
 
 
-bool ThMLLaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData) {
+bool ThMLLaTeX::handleToken(std::string &buf, const char *token, BasicFilterUserData *userData) {
     if (!substituteToken(buf, token)) { // manually process if it wasn't a simple substitution
         MyUserData *u = (MyUserData *)userData;
 
@@ -179,32 +179,30 @@ bool ThMLLaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
             u->startTag = tag;
 
         if (tag.getName() && !strcmp(tag.getName(), "sync")) {
-            SWBuf value = tag.getAttribute("value");
-            if (tag.getAttribute("type") && !strcmp(tag.getAttribute("type"), "morph")) { //&gt;
+            std::string value = tag.getAttribute("value");
+            if (!tag.getAttribute("type").empty() && !strcmp(tag.getAttribute("type").c_str(), "morph")) { //&gt;
                 if (value.length())
-                    buf.appendFormatted("\\swordmorph[Greek]{%s}",
-                        value.c_str());
+                    buf += formatted("\\swordmorph[Greek]{%s}", value.c_str());
             }
-            else if (tag.getAttribute("type") && !strcmp(tag.getAttribute("type"), "lemma")) { //&gt;
+            else if (!tag.getAttribute("type").empty() && !strcmp(tag.getAttribute("type").c_str(), "lemma")) { //&gt;
                 if (value.length())
                     // empty "type=" is deliberate.
-                    buf.appendFormatted("\\swordmorph[lemma]{%s}",
-                        value.c_str());
+                    buf += formatted("\\swordmorph[lemma]{%s}", value.c_str());
             }
-            else if (tag.getAttribute("type") && !strcmp(tag.getAttribute("type"), "Strongs")) {
+            else if (!tag.getAttribute("type").empty() && !strcmp(tag.getAttribute("type").c_str(), "Strongs")) {
                 if (!tag.isEndTag()) {
-                        char ch = *value;
-                        value<<1;
-                        buf.appendFormatted("\\swordstrong[%s]{%s}{",
+                        char const ch = *value.begin();
+                        value.erase(0u, 1u);
+                        buf += formatted("\\swordstrong[%s]{%s}{",
                             ((ch == 'H') ? "Hebrew" : "Greek"),
                             value.c_str());
                                         }
                                 else {     buf += "}"; }
                         }
 
-            else if (tag.getAttribute("type") && !strcmp(tag.getAttribute("type"), "Dict")) {
+            else if (!tag.getAttribute("type").empty() && !strcmp(tag.getAttribute("type").c_str(), "Dict")) {
                 if (!tag.isEndTag()) {
-                        buf.appendFormatted("\\sworddict{%s}{",
+                        buf += formatted("\\sworddict{%s}{",
                             value.c_str());
                                 }
                                 else { buf += "}"; }
@@ -215,10 +213,10 @@ bool ThMLLaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
         else if (!strcmp(tag.getName(), "note")) {
             if (!tag.isEndTag()) {
                 if (!tag.isEmpty()) {
-                    SWBuf type = tag.getAttribute("type");
-                    SWBuf footnoteNumber = tag.getAttribute("swordFootnote");
-                    SWBuf noteName = tag.getAttribute("n");
-                    SWBuf footnoteBody = "";
+                    std::string type = tag.getAttribute("type");
+                    std::string footnoteNumber = tag.getAttribute("swordFootnote");
+                    std::string noteName = tag.getAttribute("n");
+                    std::string footnoteBody = "";
                     if (u->module){
                             footnoteBody += u->module->getEntryAttributes()["Footnote"][footnoteNumber]["body"];
                                         }
@@ -230,8 +228,8 @@ bool ThMLLaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
                     catch ( ... ) {    }
                     if (vkey) {
                         // leave this special osis type in for crossReference notes types?  Might thml use this some day? Doesn't hurt.
-                        char ch = ((tag.getAttribute("type") && ((!strcmp(tag.getAttribute("type"), "crossReference")) || (!strcmp(tag.getAttribute("type"), "x-cross-ref")))) ? 'x':'n');
-                        buf.appendFormatted("\\swordfootnote[%c]{%s}{%s}{%s}{%s}{",
+                        char ch = ((!tag.getAttribute("type").empty() && ((!strcmp(tag.getAttribute("type").c_str(), "crossReference")) || (!strcmp(tag.getAttribute("type").c_str(), "x-cross-ref")))) ? 'x':'n');
+                        buf += formatted("\\swordfootnote[%c]{%s}{%s}{%s}{%s}{",
                             ch,
                             footnoteNumber.c_str(),
                             u->version.c_str(),
@@ -239,8 +237,8 @@ bool ThMLLaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
                             noteName.c_str());
                     }
                     else {
-                        char ch = ((tag.getAttribute("type") && ((!strcmp(tag.getAttribute("type"), "crossReference")) || (!strcmp(tag.getAttribute("type"), "x-cross-ref")))) ? 'x':'n');
-                        buf.appendFormatted("\\swordfootnote[%c]{%s}{%s}{%s}{%s}{",
+                        char ch = ((!tag.getAttribute("type").empty() && ((!strcmp(tag.getAttribute("type").c_str(), "crossReference")) || (!strcmp(tag.getAttribute("type").c_str(), "x-cross-ref")))) ? 'x':'n');
+                        buf += formatted("\\swordfootnote[%c]{%s}{%s}{%s}{%s}{",
                             ch,
                             footnoteNumber.c_str(),
                             u->version.c_str(),
@@ -249,7 +247,7 @@ bool ThMLLaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
                     }
                     u->suspendTextPassThru = true;
                     if (u->module) {
-                                                buf += u->module->renderText(footnoteBody).c_str();
+                                                buf += u->module->renderText(footnoteBody.c_str()).c_str();
                                         }
                 }
             }
@@ -270,21 +268,21 @@ bool ThMLLaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
             }
             if (!tag.isEndTag()) {    //    </scripRef>
                 if (!u->BiblicalText) {
-                    SWBuf refList = u->startTag.getAttribute("passage");
+                    std::string refList = u->startTag.getAttribute("passage");
                     if (!refList.length())
                         refList = u->lastTextNode;
-                    SWBuf version = tag.getAttribute("version");
+                    std::string version = tag.getAttribute("version");
 
-                    buf.appendFormatted("\\swordxref{%s}{%s}{",
+                    buf += formatted("\\swordxref{%s}{%s}{",
                         (refList.length()) ? refList.c_str() : "",
                         (version.length()) ? version.c_str() : "");
                     buf += u->lastTextNode.c_str();
                     buf += "}";
                 }
                 else {
-                    SWBuf footnoteNumber = u->startTag.getAttribute("swordFootnote");
-                    SWBuf noteName = tag.getAttribute("n");
-                    SWBuf footnoteBody = "";
+                    std::string footnoteNumber = u->startTag.getAttribute("swordFootnote");
+                    std::string noteName = tag.getAttribute("n");
+                    std::string footnoteBody = "";
                     if (u->module){
                             footnoteBody += u->module->getEntryAttributes()["Footnote"][footnoteNumber]["body"];
                                         }
@@ -299,14 +297,14 @@ bool ThMLLaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
                         //buf.appendFormatted("<a href=\"noteID=%s.x.%s\"><small><sup>*x</sup></small></a> ", vkey->getText(), footnoteNumber.c_str());
                         // char ch = ((tag.getAttribute("type") && ((!strcmp(tag.getAttribute("type"), "crossReference")) || (!strcmp(tag.getAttribute("type"), "x-cross-ref")))) ? 'x':'n');
                         char ch = 'x';
-                        buf.appendFormatted("\\swordfootnote[%c]{%s}{%s}{%s}{%s}{",
+                        buf += formatted("\\swordfootnote[%c]{%s}{%s}{%s}{%s}{",
                             ch,
                             footnoteNumber.c_str(),
                             u->version.c_str(),
                             vkey->getText(),
                             (renderNoteNumbers ? noteName.c_str() : ""));
                         if (u->module) {
-                                                        buf += u->module->renderText(footnoteBody).c_str();
+                                                        buf += u->module->renderText(footnoteBody.c_str()).c_str();
                                                 }
                     }
                 }
@@ -333,7 +331,7 @@ bool ThMLLaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
                 u->SecHead = false;
             }
 
-            else if (!tag.isEndTag() && tag.getAttribute("class")) {
+            else if (!tag.isEndTag() && !tag.getAttribute("class").empty()) {
                     buf += "\\swordsection{";
                                 buf += tag.getAttribute("class");
                                 buf += "}{";

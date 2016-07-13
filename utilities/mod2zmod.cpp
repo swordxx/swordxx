@@ -35,7 +35,7 @@
 #include <unistd.h>
 #endif
 
-#include <swbuf.h>
+#include <string>
 #include <ztext.h>
 #include <zld.h>
 #include <zcom.h>

@@ -57,7 +57,7 @@
 #include <vector>
 #include <fstream>
 #include <iostream>
-#include <swbuf.h>
+#include <string>
 #include <utilxml.h>
 #include <rawld.h>
 #include <rawld4.h>
@@ -91,7 +91,7 @@ int converted = 0;
 SWLD  *module       = NULL;
 SWKey *currentKey   = NULL;
 bool   normalize    = true;
-SWBuf keyStr;
+std::string keyStr;
 
 unsigned long entryCount = 0;
 
@@ -168,7 +168,7 @@ int detectUTF8(const char *txt) {
     return countUTF8 ? 1 : -1;
 }
 
-void normalizeInput(SWKey &key, SWBuf &text) {
+void normalizeInput(SWKey &key, std::string &text) {
 #ifdef _ICU_
     int utf8State = detectUTF8(text.c_str());
     if (normalize) {
@@ -191,7 +191,7 @@ void normalizeInput(SWKey &key, SWBuf &text) {
         }
 
         if (utf8State > 0) {
-            SWBuf before = text;
+            std::string before = text;
             normalizer->processText(text, (SWKey *)2);  // note the hack of 2 to mimic a real key. TODO: remove all hacks
             if (before != text) {
                 normalized++;
@@ -201,7 +201,7 @@ void normalizeInput(SWKey &key, SWBuf &text) {
 #endif
 }
 
-void writeEntry(SWKey &key, SWBuf &text) {
+void writeEntry(SWKey &key, std::string &text) {
 #ifdef DEBUG
     cout << "(" << entryCount << ") " << key << endl;
 #endif
@@ -213,7 +213,7 @@ void writeEntry(SWKey &key, SWBuf &text) {
     module->setEntry(text);
 }
 
-void linkToEntry(const SWBuf &keyBuf, const SWBuf &linkBuf) {
+void linkToEntry(const std::string &keyBuf, const std::string &linkBuf) {
            SWKey tmpkey = linkBuf.c_str();
     module->linkEntry(&tmpkey);
 #ifdef DEBUG
@@ -223,7 +223,7 @@ void linkToEntry(const SWBuf &keyBuf, const SWBuf &linkBuf) {
 
 // Return true if the content was handled or is to be ignored.
 //      false if the what has been seen is to be accumulated and considered later.
-bool handleToken(SWBuf &text, XMLTag *token) {
+bool handleToken(std::string &text, XMLTag *token) {
         // The start token for the current entry;
     static XMLTag startTag;
 
@@ -363,7 +363,7 @@ int main(int argc, char **argv) {
     normalizer = &normalizr;
 #endif
 
-    SWBuf program = argv[0];
+    std::string program = argv[0];
     fprintf(stderr, "You are running %s: $Rev$\n", argv[0]);
 
     // Let's test our command line arguments
@@ -372,12 +372,12 @@ int main(int argc, char **argv) {
     }
 
     // variables for arguments, holding defaults
-    SWBuf path             = argv[1];
-    SWBuf teiDoc           = argv[2];
-    SWBuf compType           = "";
-    SWBuf modDrv           = "";
-    SWBuf recommendedPath  = "./modules/lexdict/";
-    SWBuf cipherKey        = "";
+    std::string path             = argv[1];
+    std::string teiDoc           = argv[2];
+    std::string compType           = "";
+    std::string modDrv           = "";
+    std::string recommendedPath  = "./modules/lexdict/";
+    std::string cipherKey        = "";
     SWCompress *compressor = 0;
 
     for (int i = 3; i < argc; i++) {
@@ -426,7 +426,7 @@ int main(int argc, char **argv) {
             if (i+1 < argc) cipherKey = argv[++i];
             else usage(*argv, "-c requires <cipher_key>");
         }
-        else usage(*argv, (((SWBuf)"Unknown argument: ")+ argv[i]).c_str());
+        else usage(*argv, (((std::string)"Unknown argument: ")+ argv[i]).c_str());
     }
     if (!modDrv.size()) {
         modDrv           = "RawLD4";
@@ -460,7 +460,7 @@ int main(int argc, char **argv) {
 //      exit(-3);
 #endif
 
-    SWBuf modName = path;
+    std::string modName = path;
     int pathlen   = path.length();
     char lastChar = path[pathlen - 1];
     if (lastChar != '/' && lastChar != '\\') {
@@ -468,9 +468,9 @@ int main(int argc, char **argv) {
     }
     modName += "dict";
 
-    SWBuf keyBuf;
-    SWBuf entBuf;
-    SWBuf lineBuf;
+    std::string keyBuf;
+    std::string entBuf;
+    std::string lineBuf;
     vector<string> linkBuf;
 
     if (modDrv == "zLD") {
@@ -521,8 +521,8 @@ int main(int argc, char **argv) {
 
     (*module) = TOP;
 
-    SWBuf token;
-    SWBuf text;
+    std::string token;
+    std::string text;
     bool intoken = false;
     char curChar = '\0';
 
@@ -591,7 +591,7 @@ int main(int argc, char **argv) {
      * x/y/z/
      * x/y/z/z
      */
-    SWBuf suggestedModuleName = path;
+    std::string suggestedModuleName = path;
     if (lastChar == '/' || lastChar == '\\') {
         suggestedModuleName.setSize(--pathlen);
     }

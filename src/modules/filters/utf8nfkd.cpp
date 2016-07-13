@@ -24,7 +24,7 @@
 #ifdef _ICU_
 
 #include <utf8nfkd.h>
-#include <swbuf.h>
+#include <string>
 
 
 namespace swordxx {
@@ -40,7 +40,7 @@ UTF8NFKD::~UTF8NFKD() {
 }
 
 
-char UTF8NFKD::processText(SWBuf &text, const SWKey *key, const SWModule *module)
+char UTF8NFKD::processText(std::string &text, const SWKey *key, const SWModule *module)
 {
     if ((unsigned long)key < 2)    // hack, we're en(1)/de(0)ciphering
         return -1;
@@ -55,9 +55,9 @@ char UTF8NFKD::processText(SWBuf &text, const SWKey *key, const SWModule *module
         //compatability decomposition
         ulen = unorm_normalize(source, ulen, UNORM_NFKD, 0, target, len, &err);
 
-       text.setSize(len);
-       len = ucnv_fromUChars(conv, text.getRawData(), len, target, ulen, &err);
-       text.setSize(len);
+       text.resize(len, '\0');
+       len = ucnv_fromUChars(conv, &text[0u], len, target, ulen, &err);
+       text.resize(len, '\0');
 
        delete [] source;
        delete [] target;

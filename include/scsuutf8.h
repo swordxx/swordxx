@@ -40,7 +40,7 @@ private:
 #ifdef _ICU_
     UConverter* scsuConv;
     UConverter* utf8Conv;
-    UErrorCode err;
+    UErrorCode err = U_ZERO_ERROR;
 #else
     // without ICU, we'll attempt to use Roman Czyborra's SCSU decoder code
     unsigned char active;
@@ -51,13 +51,13 @@ private:
     static unsigned short slide[8];
     static unsigned short win[256];
 
-    int UTF8Output(unsigned long, SWBuf* utf8Buf);
+    int UTF8Output(unsigned long, std::string* utf8Buf);
 #endif
 
 public:
     SCSUUTF8();
     ~SCSUUTF8();
-    virtual char processText(SWBuf &text, const SWKey *key = 0, const SWModule *module = 0);
+    virtual char processText(std::string &text, const SWKey *key = 0, const SWModule *module = 0);
 };
 
 } /* namespace swordxx */

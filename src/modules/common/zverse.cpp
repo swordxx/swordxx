@@ -35,7 +35,7 @@
 #include <versekey.h>
 #include <zverse.h>
 #include <sysdata.h>
-#include <swbuf.h>
+#include <string>
 #include <filemgr.h>
 #include <swcomprs.h>
 
@@ -65,7 +65,7 @@ zVerse::zVerse(const char *ipath, int fileMode, int blockType, SWCompress *icomp
     // this line, instead of just defaulting, to keep FileMgr out of header
     if (fileMode == -1) fileMode = FileMgr::RDONLY;
 
-    SWBuf buf;
+    std::string buf;
 
     path = 0;
     cacheBufIdx = -1;
@@ -83,23 +83,12 @@ zVerse::zVerse(const char *ipath, int fileMode, int blockType, SWCompress *icomp
         fileMode = FileMgr::RDWR;
     }
 
-    buf.setFormatted("%s/ot.%czs", path, uniqueIndexID[blockType]);
-    idxfp[0] = FileMgr::getSystemFileMgr()->open(buf, fileMode, true);
-
-    buf.setFormatted("%s/nt.%czs", path, uniqueIndexID[blockType]);
-    idxfp[1] = FileMgr::getSystemFileMgr()->open(buf, fileMode, true);
-
-    buf.setFormatted("%s/ot.%czz", path, uniqueIndexID[blockType]);
-    textfp[0] = FileMgr::getSystemFileMgr()->open(buf, fileMode, true);
-
-    buf.setFormatted("%s/nt.%czz", path, uniqueIndexID[blockType]);
-    textfp[1] = FileMgr::getSystemFileMgr()->open(buf, fileMode, true);
-
-    buf.setFormatted("%s/ot.%czv", path, uniqueIndexID[blockType]);
-    compfp[0] = FileMgr::getSystemFileMgr()->open(buf, fileMode, true);
-
-    buf.setFormatted("%s/nt.%czv", path, uniqueIndexID[blockType]);
-    compfp[1] = FileMgr::getSystemFileMgr()->open(buf, fileMode, true);
+    idxfp[0] = FileMgr::getSystemFileMgr()->open(formatted("%s/ot.%czs", path, uniqueIndexID[blockType]).c_str(), fileMode, true);
+    idxfp[1] = FileMgr::getSystemFileMgr()->open(formatted("%s/nt.%czs", path, uniqueIndexID[blockType]).c_str(), fileMode, true);
+    textfp[0] = FileMgr::getSystemFileMgr()->open(formatted("%s/ot.%czz", path, uniqueIndexID[blockType]).c_str(), fileMode, true);
+    textfp[1] = FileMgr::getSystemFileMgr()->open(formatted("%s/nt.%czz", path, uniqueIndexID[blockType]).c_str(), fileMode, true);
+    compfp[0] = FileMgr::getSystemFileMgr()->open(formatted("%s/ot.%czv", path, uniqueIndexID[blockType]).c_str(), fileMode, true);
+    compfp[1] = FileMgr::getSystemFileMgr()->open(formatted("%s/nt.%czv", path, uniqueIndexID[blockType]).c_str(), fileMode, true);
 
     instance++;
 }
@@ -203,7 +192,7 @@ void zVerse::findOffset(char testmt, long idxoff, long *start, unsigned short *s
  *
  */
 
-void zVerse::zReadText(char testmt, long start, unsigned short size, unsigned long ulBuffNum, SWBuf &inBuf) const {
+void zVerse::zReadText(char testmt, long start, unsigned short size, unsigned long ulBuffNum, std::string &inBuf) const {
     uint32_t ulCompOffset = 0;           // compressed buffer start
     uint32_t ulCompSize   = 0;                 // buffer size compressed
     uint32_t ulUnCompSize = 0;              // buffer size uncompressed
@@ -250,18 +239,17 @@ void zVerse::zReadText(char testmt, long start, unsigned short size, unsigned lo
             fprintf(stderr, "Error: could not seek to right place in compressed text\n");
             return;
         }
-        SWBuf pcCompText;
-        pcCompText.setSize(ulCompSize+5);
+        std::string pcCompText(ulCompSize + 5u, '\0');
 
-        if (textfp[testmt-1]->read(pcCompText.getRawData(), ulCompSize)<(long)ulCompSize) {
+        if (textfp[testmt-1]->read(&pcCompText[0u], ulCompSize)<(long)ulCompSize) {
             fprintf(stderr, "Error reading compressed text\n");
             return;
         }
-        pcCompText.setSize(ulCompSize);
+        pcCompText.resize(ulCompSize);
         rawZFilter(pcCompText, 0); // 0 = decipher
 
         unsigned long bufSize = ulCompSize;
-        compressor->zBuf(&bufSize, pcCompText.getRawData());
+        compressor->zBuf(&bufSize, &pcCompText[0u]);
 
         if (cacheBuf) {
             flushCache();
@@ -277,12 +265,11 @@ void zVerse::zReadText(char testmt, long start, unsigned short size, unsigned lo
         cacheBufIdx = ulBuffNum;
     }
 
-    inBuf = "";
+    inBuf.clear();
     if ((size > 0) && cacheBuf && ((unsigned)start < cacheBufSize)) {
-        inBuf.setFillByte(0);
-        inBuf.setSize(size+1);
-        strncpy(inBuf.getRawData(), &(cacheBuf[start]), size);
-        inBuf.setSize(strlen(inBuf.c_str()));
+        inBuf.resize(size + 1u, '\0');
+        strncpy(&inBuf[0u], &(cacheBuf[start]), size);
+        inBuf.resize(std::strlen(inBuf.c_str()));
     }
 }
 
@@ -356,11 +343,11 @@ void zVerse::flushCache() const {
                 compressor->zBuf(&tmpSize);
                 outzsize = zsize = tmpSize;
 
-                SWBuf buf;
-                buf.setSize(zsize + 5);
-                memcpy(buf.getRawData(), compressor->zBuf(&tmpSize), tmpSize);
+                std::string buf(zsize + 5, '\0');
+                /// \bug undefined order of evaluation of arguments:
+                std::memcpy(&buf[0u], compressor->zBuf(&tmpSize), tmpSize);
                 outzsize = zsize = tmpSize;
-                buf.setSize(zsize);
+                buf.resize(zsize);
                 rawZFilter(buf, 1); // 1 = encipher
 
                 start = outstart = textfp[cacheTestament-1]->seek(0, SEEK_END);
@@ -369,7 +356,7 @@ void zVerse::flushCache() const {
                 outsize   = archtosword32(size);
                 outzsize  = archtosword32(zsize);
 
-                textfp[cacheTestament-1]->write(buf, zsize);
+                textfp[cacheTestament-1]->write(buf.c_str(), zsize);
 
                 idxfp[cacheTestament-1]->seek(idxoff, SEEK_SET);
                 idxfp[cacheTestament-1]->write(&outstart, 4);

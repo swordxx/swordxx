@@ -23,7 +23,7 @@
 #include <stdlib.h>
 #include <thmlgbf.h>
 #include <utilstr.h>
-#include <swbuf.h>
+#include <string>
 
 namespace swordxx {
 
@@ -32,7 +32,7 @@ ThMLGBF::ThMLGBF()
 }
 
 
-char ThMLGBF::processText(SWBuf &text, const SWKey *key, const SWModule *module) {
+char ThMLGBF::processText(std::string &text, const SWKey *key, const SWModule *module) {
     const char *from;
     char token[2048];
     int tokpos = 0;
@@ -41,7 +41,7 @@ char ThMLGBF::processText(SWBuf &text, const SWKey *key, const SWModule *module)
     bool sechead = false;
     bool title = false;
 
-    SWBuf orig = text;
+    std::string orig = text;
     from = orig.c_str();
 
     for (text = ""; *from; from++) {

@@ -25,7 +25,7 @@
 #include <stdio.h>
 #include <fcntl.h>
 
-#include <swbuf.h>
+#include <string>
 #include <zverse4.h>
 #include <versekey.h>
 #include <zcom4.h>
@@ -72,7 +72,7 @@ bool zCom4::isWritable() const {
  * RET: buffer with verse
  */
 
-SWBuf &zCom4::getRawEntryBuf() const {
+std::string &zCom4::getRawEntryBuf() const {
     long  start = 0;
     unsigned long size = 0;
     unsigned long buffnum = 0;

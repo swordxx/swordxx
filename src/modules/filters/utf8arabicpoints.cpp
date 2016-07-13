@@ -21,7 +21,7 @@
  *
  */
 
-
+#include <cstring>
 #include <stdlib.h>
 #include <stdio.h>
 #include <utf8arabicpoints.h>
@@ -35,7 +35,7 @@ namespace {
     static const char oTip[]  = "Toggles Arabic Vowel Points";
 
     static const StringList *oValues() {
-        static const SWBuf choices[3] = {"On", "Off", ""};
+        static const std::string choices[3] = {"On", "Off", ""};
         static const StringList oVals(&choices[0], &choices[2]);
         return &oVals;
     }
@@ -123,7 +123,7 @@ UTF8ArabicPoints::~UTF8ArabicPoints(){};
 
 
 
-char UTF8ArabicPoints::processText(SWBuf &text, const SWKey *, const SWModule *) {
+char UTF8ArabicPoints::processText(std::string &text, const SWKey *, const SWModule *) {
     // A non-zero/true option setting means that setOptionValue("On")
     // was called which apparently means that Arabic Vowel Marks are ENABLED,
     // so the filter's actions are DISABLED.
@@ -148,8 +148,8 @@ char UTF8ArabicPoints::processText(SWBuf &text, const SWKey *, const SWModule *)
     if (!mark_pos || !*mark_pos)
         return 0; // no marks found.
 
-    // Purposely granting write access into SWBuf internal buffer via
-    // "end_of_output" avoids a needless temporary SWBuf copy.
+    // Purposely granting write access into std::string internal buffer via
+    // "end_of_output" avoids a needless temporary std::string copy.
     // Everything before the first mark is already in its final position
     // and can be safely ignored. So start appending at the current mark.
     char* end_of_output = mark_pos;

@@ -30,7 +30,7 @@
 #include <utilstr.h>
 #include <rawverse.h>
 #include <hrefcom.h>
-#include <swbuf.h>
+#include <string>
 #include <versekey.h>
 
 namespace swordxx {
@@ -68,7 +68,7 @@ HREFCom::~HREFCom()
  * RET: string buffer with verse
  */
 
-SWBuf &HREFCom::getRawEntryBuf() const {
+std::string &HREFCom::getRawEntryBuf() const {
     long  start;
     unsigned short size;
     VerseKey *key = 0;
@@ -78,7 +78,7 @@ SWBuf &HREFCom::getRawEntryBuf() const {
     findOffset(key->getTestament(), key->getTestamentIndex(), &start, &size);
     entrySize = size;        // support getEntrySize call
 
-    SWBuf tmpbuf;
+    std::string tmpbuf;
 
     readText(key->getTestament(), start, size, tmpbuf);
     entryBuf = prefix;

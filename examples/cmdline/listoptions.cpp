@@ -39,8 +39,8 @@ int main(int argc, char **argv)
 
     StringList options = library.getGlobalOptions();
     for (StringList::const_iterator it = options.begin(); it != options.end(); ++it) {
-        cout << *it << " (" << library.getGlobalOptionTip(*it) << ")\n";
-        StringList optionValues = library.getGlobalOptionValues(*it);
+        cout << *it << " (" << library.getGlobalOptionTip(it->c_str()) << ")\n";
+        StringList optionValues = library.getGlobalOptionValues(it->c_str());
         for (StringList::const_iterator it2 = optionValues.begin(); it2 != optionValues.end(); ++it2) {
             cout << "\t" << *it2 << "\n";
         }

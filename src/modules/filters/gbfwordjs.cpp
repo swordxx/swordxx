@@ -37,7 +37,7 @@ namespace {
     static const char oTip[]  = "Toggles Word Javascript data";
 
     static const StringList *oValues() {
-        static const SWBuf choices[3] = {"Off", "On", ""};
+        static const std::string choices[3] = {"Off", "On", ""};
         static const StringList oVals(&choices[0], &choices[2]);
         return &oVals;
     }
@@ -58,7 +58,7 @@ GBFWordJS::~GBFWordJS() {
 }
 
 
-char GBFWordJS::processText(SWBuf &text, const SWKey *key, const SWModule *module) {
+char GBFWordJS::processText(std::string &text, const SWKey *key, const SWModule *module) {
     if (option) {
         char token[2112]; // cheese.  Fix.
         int tokpos = 0;
@@ -67,14 +67,14 @@ char GBFWordJS::processText(SWBuf &text, const SWKey *key, const SWModule *modul
         char val[128];
         char wordstr[5];
         unsigned int textStart = 0, lastAppendLen = 0, textEnd = 0;
-        SWBuf tmp;
+        std::string tmp;
         bool newText = false;
         bool needWordOut = false;
         AttributeValue *wordAttrs = 0;
-        SWBuf modName = (module)?module->getName():"";
-        SWBuf wordSrcPrefix = modName;
+        std::string modName = (module)?module->getName():"";
+        std::string wordSrcPrefix = modName;
 
-        const SWBuf orig = text;
+        const std::string orig = text;
         const char * from = orig.c_str();
         VerseKey *vkey = 0;
         if (key) {
@@ -106,8 +106,8 @@ char GBFWordJS::processText(SWBuf &text, const SWKey *key, const SWModule *modul
                         tmp.append(text.c_str()+textStart, (int)(textEnd - textStart));
                         (*wordAttrs)["Text"] = tmp;
                         text.append("</span>");
-                        SWBuf ts;
-                        ts.appendFormatted("%d", textStart);
+                        std::string ts;
+                        ts += formatted("%d", textStart);
                         (*wordAttrs)["TextStart"] = ts;
     //printf("Adding: [\"Word\"][%s][\"Text\"] = %s\n", wordstr, tmp.c_str());
                         newText = true;
@@ -141,11 +141,11 @@ char GBFWordJS::processText(SWBuf &text, const SWKey *key, const SWModule *modul
                     sprintf(wstr, "%03d", word-2);
                     AttributeValue *wAttrs = &(module->getEntryAttributes()["Word"][wstr]);
                     needWordOut = false;
-                    SWBuf strong = (*wAttrs)["Lemma"];
-                    SWBuf morph = (*wAttrs)["Morph"];
-                    SWBuf morphClass = (*wAttrs)["MorphClass"];
-                    SWBuf wordText = (*wAttrs)["Text"];
-                    SWBuf textSt = (*wAttrs)["TextStart"];
+                    std::string strong = (*wAttrs)["Lemma"];
+                    std::string morph = (*wAttrs)["Morph"];
+                    std::string morphClass = (*wAttrs)["MorphClass"];
+                    std::string wordText = (*wAttrs)["Text"];
+                    std::string textSt = (*wAttrs)["TextStart"];
                     if (strong.size()) {
                         char gh = 0;
                         gh = isdigit(strong[0]) ? 0:strong[0];
@@ -154,7 +154,7 @@ char GBFWordJS::processText(SWBuf &text, const SWKey *key, const SWModule *modul
                                 gh = vkey->getTestament() ? 'H' : 'G';
                             }
                         }
-                        else strong << 1;
+                        else strong.erase(0u, 1u);
 
                         SWModule *sLex = 0;
                         SWModule *sMorph = 0;
@@ -166,7 +166,7 @@ char GBFWordJS::processText(SWBuf &text, const SWKey *key, const SWModule *modul
                             sLex = defaultHebLex;
                             sMorph = defaultHebParse;
                         }
-                        SWBuf lexName = "";
+                        std::string lexName = "";
                         if (sLex) {
                             // we can pass the real lex name in, but we have some
                             // aliases in the javascript to optimize bandwidth
@@ -176,10 +176,10 @@ char GBFWordJS::processText(SWBuf &text, const SWKey *key, const SWModule *modul
                             if (lexName == "StrongsHebrew")
                                 lexName = "H";
                         }
-                        SWBuf wordID;
+                        std::string wordID;
                         if (vkey) {
                             // optimize for bandwidth and use only the verse as the unique entry id
-                            wordID.appendFormatted("%d", vkey->getVerse());
+                            wordID += formatted("%d", vkey->getVerse());
                         }
                         else {
                             wordID = key->getText();
@@ -189,18 +189,18 @@ char GBFWordJS::processText(SWBuf &text, const SWKey *key, const SWModule *modul
                                 wordID[i] = '_';
                             }
                         }
-                        wordID.appendFormatted("_%s%d", wordSrcPrefix.c_str(), atoi(wstr));
+                        wordID += formatted("_%s%d", wordSrcPrefix.c_str(), atoi(wstr));
                         if (textSt.size()) {
                             int textStr = atoi(textSt.c_str());
                             textStr += lastAppendLen;
-                            SWBuf spanStart = "";
+                            std::string spanStart = "";
 
 
 
                             if (!sMorph) sMorph = 0;    // to pass unused warning for now
 /*
                             if (sMorph) {
-                                SWBuf popMorph = "<a onclick=\"";
+                                std::string popMorph = "<a onclick=\"";
                                 popMorph.appendFormatted("p(\'%s\',\'%s\','%s','');\" >%s</a>", sMorph->getName(), morph.c_str(), wordID.c_str(), morph.c_str());
                                 morph = popMorph;
                             }
@@ -210,7 +210,7 @@ char GBFWordJS::processText(SWBuf &text, const SWKey *key, const SWModule *modul
                             const char *m = strchr(morph.c_str(), ':');
                             if (m) m++;
                             else m = morph.c_str();
-                            spanStart.appendFormatted("<span class=\"clk\" onclick=\"p('%s','%s','%s','%s','','%s');\" >", lexName.c_str(), strong.c_str(), wordID.c_str(), m, modName.c_str());
+                            spanStart += formatted("<span class=\"clk\" onclick=\"p('%s','%s','%s','%s','','%s');\" >", lexName.c_str(), strong.c_str(), wordID.c_str(), m, modName.c_str());
                             text.insert(textStr, spanStart);
                             lastAppendLen = spanStart.length();
                         }
@@ -238,11 +238,11 @@ char GBFWordJS::processText(SWBuf &text, const SWKey *key, const SWModule *modul
         sprintf(wstr, "%03d", word-1);
         AttributeValue *wAttrs = &(module->getEntryAttributes()["Word"][wstr]);
         needWordOut = false;
-        SWBuf strong = (*wAttrs)["Lemma"];
-        SWBuf morph = (*wAttrs)["Morph"];
-        SWBuf morphClass = (*wAttrs)["MorphClass"];
-        SWBuf wordText = (*wAttrs)["Text"];
-        SWBuf textSt = (*wAttrs)["TextStart"];
+        std::string strong = (*wAttrs)["Lemma"];
+        std::string morph = (*wAttrs)["Morph"];
+        std::string morphClass = (*wAttrs)["MorphClass"];
+        std::string wordText = (*wAttrs)["Text"];
+        std::string textSt = (*wAttrs)["TextStart"];
         if (strong.size()) {
             char gh = 0;
             gh = isdigit(strong[0]) ? 0:strong[0];
@@ -251,7 +251,7 @@ char GBFWordJS::processText(SWBuf &text, const SWKey *key, const SWModule *modul
                     gh = vkey->getTestament() ? 'H' : 'G';
                 }
             }
-            else strong << 1;
+            else strong.erase(0u, 1u);
 
             SWModule *sLex = 0;
             if (gh == 'G') {
@@ -260,7 +260,7 @@ char GBFWordJS::processText(SWBuf &text, const SWKey *key, const SWModule *modul
             if (gh == 'H') {
                 sLex = defaultHebLex;
             }
-            SWBuf lexName = "";
+            std::string lexName = "";
             if (sLex) {
                 // we can pass the real lex name in, but we have some
                 // aliases in the javascript to optimize bandwidth
@@ -270,10 +270,10 @@ char GBFWordJS::processText(SWBuf &text, const SWKey *key, const SWModule *modul
                 if (lexName == "StrongsHebrew")
                     lexName = "H";
             }
-            SWBuf wordID;
+            std::string wordID;
             if (vkey) {
                 // optimize for bandwidth and use only the verse as the unique entry id
-                wordID.appendFormatted("%d", vkey->getVerse());
+                wordID += formatted("%d", vkey->getVerse());
             }
             else {
                 wordID = key->getText();
@@ -283,16 +283,16 @@ char GBFWordJS::processText(SWBuf &text, const SWKey *key, const SWModule *modul
                     wordID[i] = '_';
                 }
             }
-            wordID.appendFormatted("_%s%d", wordSrcPrefix.c_str(), atoi(wstr));
+            wordID += formatted("_%s%d", wordSrcPrefix.c_str(), atoi(wstr));
             if (textSt.size()) {
                 int textStr = atoi(textSt.c_str());
                 textStr += lastAppendLen;
-                SWBuf spanStart = "";
+                std::string spanStart = "";
                 // 'p' = 'fillpop' to save bandwidth
                 const char *m = strchr(morph.c_str(), ':');
                 if (m) m++;
                 else m = morph.c_str();
-                spanStart.appendFormatted("<span class=\"clk\" onclick=\"p('%s','%s','%s','%s','','%s');\" >", lexName.c_str(), strong.c_str(), wordID.c_str(), m, modName.c_str());
+                spanStart += formatted("<span class=\"clk\" onclick=\"p('%s','%s','%s','%s','','%s');\" >", lexName.c_str(), strong.c_str(), wordID.c_str(), m, modName.c_str());
                 text.insert(textStr, spanStart);
             }
         }

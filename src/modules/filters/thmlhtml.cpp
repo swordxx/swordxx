@@ -152,33 +152,36 @@ ThMLHTML::ThMLHTML() {
 }
 
 
-bool ThMLHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData) {
+bool ThMLHTML::handleToken(std::string &buf, const char *token, BasicFilterUserData *userData) {
     if (!substituteToken(buf, token)) { // manually process if it wasn't a simple substitution
         MyUserData *u = (MyUserData *)userData;
         XMLTag tag(token);
         if (!strcmp(tag.getName(), "sync")) {
-            if (tag.getAttribute("type") && tag.getAttribute("value") && !strcmp(tag.getAttribute("type"), "Strongs")) {
-                const char* value = tag.getAttribute("value");
-                if (*value == 'H' || *value == 'G' || *value == 'A') {
-                    value++;
-                    buf += "<small><em>";
-                    buf += value;
-                    buf += "</em></small>";
-                }
-                else if (*value == 'T') {
-                    value += 2;
+            if (!tag.getAttribute("type").empty() && !tag.getAttribute("value").empty() && !strcmp(tag.getAttribute("type").c_str(), "Strongs")) {
+                auto value(tag.getAttribute("value"));
+                if (!value.empty()) {
+                    auto const firstChar(*(value.c_str()));
+                    if (firstChar == 'H' || firstChar == 'G' || firstChar == 'A') {
+                        value.erase(0u, 1u);
+                        buf += "<small><em>";
+                        buf += value;
+                        buf += "</em></small>";
+                    }
+                    else if (firstChar == 'T') {
+                        value.erase(0u, 2u);
 
-                    buf += "<small><i>";
-                    buf += value;
-                    buf += "</i></small>";
+                        buf += "<small><i>";
+                        buf += value;
+                        buf += "</i></small>";
+                    }
                 }
             }
-            else if (tag.getAttribute("type") && tag.getAttribute("value") && !strcmp(tag.getAttribute("type"), "morph")) {
+            else if (!tag.getAttribute("type").empty() && !tag.getAttribute("value").empty() && !strcmp(tag.getAttribute("type").c_str(), "morph")) {
                 buf += "<small><em>";
                 buf += tag.getAttribute("value");
                 buf += "</em></small>";
             }
-            else if (tag.getAttribute("type") && tag.getAttribute("value") && !strcmp(tag.getAttribute("type"), "lemma")) {
+            else if (!tag.getAttribute("type").empty() && !tag.getAttribute("value").empty() && !strcmp(tag.getAttribute("type").c_str(), "lemma")) {
                 buf += "<small><em>(";
                 buf += tag.getAttribute("value");
                 buf += ")</em></small>";
@@ -189,12 +192,12 @@ bool ThMLHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *u
                 buf += "</i></b><br />";
                 u->SecHead = false;
             }
-            else if (tag.getAttribute("class")) {
-                if (!strcmp(tag.getAttribute("class"), "sechead")) {
+            else if (!tag.getAttribute("class").empty()) {
+                if (!strcmp(tag.getAttribute("class").c_str(), "sechead")) {
                     u->SecHead = true;
                     buf += "<br /><b><i>";
                 }
-                else if (!strcmp(tag.getAttribute("class"), "title")) {
+                else if (!strcmp(tag.getAttribute("class").c_str(), "title")) {
                     u->SecHead = true;
                     buf += "<br /><b><i>";
                 }

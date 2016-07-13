@@ -29,14 +29,14 @@
 #include <swmgr.h>
 #include <versekey.h>
 #include <markupfiltmgr.h>
-#include <swbuf.h>
+#include <string>
 
 using swordxx::SWMgr;
 using swordxx::SWModule;
 using swordxx::ListKey;
 using swordxx::VerseKey;
 using swordxx::ModMap;
-using swordxx::SWBuf;
+using swordxx::std::string;
 
 void percentUpdate(char percent, void *userData) {
     static char printed = 0;

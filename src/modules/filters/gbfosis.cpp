@@ -41,7 +41,7 @@ GBFOSIS::~GBFOSIS() {
 }
 
 
-char GBFOSIS::processText(SWBuf &text, const SWKey *key, const SWModule *module) {
+char GBFOSIS::processText(std::string &text, const SWKey *key, const SWModule *module) {
     char token[2048]; //cheesy, we seem to like cheese :)
     int tokpos = 0;
     bool intoken = false;
@@ -49,9 +49,9 @@ char GBFOSIS::processText(SWBuf &text, const SWKey *key, const SWModule *module)
 
 //    static QuoteStack quoteStack;
 
-    SWBuf orig = text;
-    SWBuf tmp;
-    SWBuf value;
+    std::string orig = text;
+    std::string tmp;
+    std::string value;
 
     bool suspendTextPassThru = false;
     bool handled = false;
@@ -65,9 +65,9 @@ char GBFOSIS::processText(SWBuf &text, const SWKey *key, const SWModule *module)
     const char *textStart = NULL;
     const char *textEnd = NULL;
 
-    SWBuf textNode = "";
+    std::string textNode = "";
 
-    SWBuf buf;
+    std::string buf;
 
     text = "";
     for (const char* from = orig.c_str(); *from; ++from) {
@@ -217,28 +217,24 @@ char GBFOSIS::processText(SWBuf &text, const SWKey *key, const SWModule *module)
                     if (attStart) {
                         attStart += 7;
 
-                        buf = "";
-                        buf.appendFormatted("strong:%s ", value.c_str());
+                        buf = formatted("strong:%s ", value.c_str());
                     }
                     else { // no lemma attribute
                         attStart = wordStart + 3;
 
-                        buf = "";
-                        buf.appendFormatted(buf, "lemma=\"strong:%s\" ", value.c_str());
+                        buf = formatted("lemma=\"strong:%s\" ", value.c_str());
                     }
 
                     text.insert(attStart - text.c_str(), buf);
                 }
                 else { //wordStart doesn't point to an existing <w> attribute!
                     if (!strcmp(value.c_str(), "H03068")) {    //divineName
-                        buf = "";
-                        buf.appendFormatted("<divineName><w lemma=\"strong:%s\">", value.c_str());
+                        buf = formatted("<divineName><w lemma=\"strong:%s\">", value.c_str());
 
                         divineName = true;
                     }
                     else {
-                        buf = "";
-                        buf.appendFormatted("<w lemma=\"strong:%s\">", value.c_str());
+                        buf = formatted("<w lemma=\"strong:%s\">", value.c_str());
                     }
 
                     text.insert(wordStart - text.c_str(), buf);
@@ -265,20 +261,17 @@ char GBFOSIS::processText(SWBuf &text, const SWKey *key, const SWModule *module)
                     const char *attStart = strstr(wordStart, "morph");
                     if (attStart) { //existing morph attribute, append this one to it
                         attStart += 7;
-                        buf = "";
-                        buf.appendFormatted("%s:%s ", "robinson", value.c_str());
+                        buf = formatted("%s:%s ", "robinson", value.c_str());
                     }
                     else { // no lemma attribute
                         attStart = wordStart + 3;
-                        buf = "";
-                        buf.appendFormatted("morph=\"%s:%s\" ", "robinson", value.c_str());
+                        buf = formatted("morph=\"%s:%s\" ", "robinson", value.c_str());
                     }
 
                     text.insert(attStart - text.c_str(), buf); //hack, we have to
                 }
                 else { //no existing <w> attribute fond
-                    buf = "";
-                    buf.appendFormatted("<w morph=\"%s:%s\">", "robinson", value.c_str());
+                    buf = formatted("<w morph=\"%s:%s\">", "robinson", value.c_str());
                     text.insert(wordStart - text.c_str(), buf);
                     text += "</w>";
                     lastspace = false;
@@ -294,7 +287,7 @@ char GBFOSIS::processText(SWBuf &text, const SWKey *key, const SWModule *module)
                 }
                 if (from[1] && strchr(" ,;.:?!()'\"", from[1])) {
                     if (lastspace) {
-                        text--;
+                        text.pop_back();
                     }
                 }
                 if (newText) {
@@ -305,7 +298,7 @@ char GBFOSIS::processText(SWBuf &text, const SWKey *key, const SWModule *module)
             }
 
             // if not a strongs token, keep token in text
-            text.appendFormatted("<%s>", token);
+            text += formatted("<%s>", token);
 
             if (newText) {
                 textStart = text.c_str() + text.length();
@@ -348,9 +341,9 @@ char GBFOSIS::processText(SWBuf &text, const SWKey *key, const SWModule *module)
 
     VerseKey *vkey = SWDYNAMIC_CAST(VerseKey, key);
     if (vkey) {
-        SWBuf ref = "";
+        std::string ref = "";
         if (vkey->getVerse()) {
-            ref.appendFormatted("\t\t<verse osisID=\"%s\">", vkey->getOSISRef());
+            ref += formatted("\t\t<verse osisID=\"%s\">", vkey->getOSISRef());
         }
 
         if (ref.length() > 0) {
@@ -412,7 +405,7 @@ QuoteStack::~QuoteStack() {
 }
 
 
-void QuoteStack::handleQuote(char *buf, char *quotePos, SWBuf &text) {
+void QuoteStack::handleQuote(char *buf, char *quotePos, std::string &text) {
 //QuoteInstance(char startChar = '\"', char level = 1, string uniqueID = "", char continueCount = 0) {
     if (!quotes.empty()) {
         QuoteInstance last = quotes.top();
@@ -431,8 +424,8 @@ void QuoteStack::handleQuote(char *buf, char *quotePos, SWBuf &text) {
     }
 }
 
-void QuoteStack::QuoteInstance::pushStartStream(SWBuf &text) {
-    text.appendFormatted("<quote level=\"%d\">", level);
+void QuoteStack::QuoteInstance::pushStartStream(std::string &text) {
+    text += formatted("<quote level=\"%d\">", level);
 }
 
 } /* namespace swordxx */

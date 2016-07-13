@@ -41,7 +41,7 @@ void TreeKey::init() {
 void TreeKey::assureKeyPath(const char *keyBuffer) {
 
     if (!keyBuffer) {
-        keyBuffer = unsnappedKeyText;
+        keyBuffer = unsnappedKeyText.c_str();
         //assert we have something to do before setting root
         if (!*keyBuffer)
             return;
@@ -53,8 +53,8 @@ void TreeKey::assureKeyPath(const char *keyBuffer) {
     root();
 
     // TODO: change to NOT use strtok. strtok is dangerous.
-    SWBuf tok = strtok(keybuf, "/");
-    tok.trim();
+    std::string tok = strtok(keybuf, "/");
+    trimString(tok);
     while (tok.size()) {
         bool foundkey = false;
         if (hasChildren()) {
@@ -74,13 +74,13 @@ void TreeKey::assureKeyPath(const char *keyBuffer) {
             }
             if (!foundkey) {
                 append();
-                setLocalName(tok);
+                setLocalName(tok.c_str());
                 save();
             }
         }
         else {
             appendChild();
-            setLocalName(tok);
+            setLocalName(tok.c_str());
             save();
         }
 
@@ -89,7 +89,7 @@ void TreeKey::assureKeyPath(const char *keyBuffer) {
 #endif
 
         tok = strtok(0, "/");
-        tok.trim();
+        trimString(tok);
 
     }
     delete [] keybuf;

@@ -177,8 +177,8 @@ void outputFooter(vector<SWModule *>modules) {
     <<       "</tbody><tfoot><tr>";
 
     for (vector<SWModule *>::iterator module = modules.begin(); module != modules.end(); ++module) {
-        SWBuf copyLine = (*module)->getConfigEntry("ShortCopyright");
-        SWBuf promoLine = (*module)->getConfigEntry("ShortPromo");
+        std::string copyLine = (*module)->getConfigEntry("ShortCopyright");
+        std::string promoLine = (*module)->getConfigEntry("ShortPromo");
         cout
         << "<th>"
         << "<div class=\"copyLine\">" <<  copyLine << "</div>"

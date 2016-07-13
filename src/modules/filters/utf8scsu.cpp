@@ -23,7 +23,7 @@
 #ifdef _ICU_
 
 #include <utf8scsu.h>
-#include <swbuf.h>
+#include <string>
 
 namespace swordxx {
 
@@ -41,17 +41,17 @@ UTF8SCSU::~UTF8SCSU() {
          ucnv_close(utf8Conv);
 }
 
-char UTF8SCSU::processText(SWBuf &text, const SWKey *key, const SWModule *module) {
+char UTF8SCSU::processText(std::string &text, const SWKey *key, const SWModule *module) {
     if ((unsigned long)key < 2)    // hack, we're en(1)/de(0)ciphering
         return -1;
 
     err = U_ZERO_ERROR;
-    UnicodeString utf16Text(text.getRawData(), text.length(), utf8Conv, err);
+    UnicodeString utf16Text(text.c_str(), text.length(), utf8Conv, err);
     err = U_ZERO_ERROR;
-    int32_t len = utf16Text.extract(text.getRawData(), text.size(), scsuConv, err);
+    int32_t len = utf16Text.extract(&text[0u], text.size(), scsuConv, err);
     if (len > (int32_t)text.size()+1) {
-        text.setSize(len+1);
-        utf16Text.extract(text.getRawData(), text.size(), scsuConv, err);
+        text.resize(len + 1, '\0');
+        utf16Text.extract(&text[0u], text.size(), scsuConv, err);
     }
 
     return 0;

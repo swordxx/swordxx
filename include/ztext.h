@@ -58,7 +58,7 @@ public:
             const char *versification = "KJV");
 
     virtual ~zText();
-    virtual SWBuf &getRawEntryBuf() const;
+    virtual std::string &getRawEntryBuf() const;
 
     virtual void increment(int steps = 1);
     virtual void decrement(int steps = 1) { increment(-steps); }
@@ -74,7 +74,7 @@ public:
     virtual void deleteEntry();    // Delete current module entry
     // end write interface ------------------------
 
-    virtual void rawZFilter(SWBuf &buf, char direction = 0) const { rawFilter(buf, (SWKey *)(long)direction); }// hack, use key as direction for enciphering
+    virtual void rawZFilter(std::string &buf, char direction = 0) const { rawFilter(buf, (SWKey *)(long)direction); }// hack, use key as direction for enciphering
 
     // swcacher interface ----------------------
     virtual void flush() { flushCache(); }

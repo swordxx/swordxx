@@ -30,11 +30,11 @@ namespace swordxx {
 /** this filter converts GBF text to classed XHTML for web interfaces
  */
 class SWDLLEXPORT GBFWEBIF : public GBFXHTML {
-    const SWBuf baseURL;
-    const SWBuf passageStudyURL;
+    const std::string baseURL;
+    const std::string passageStudyURL;
 
 protected:
-    virtual bool handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData);
+    virtual bool handleToken(std::string &buf, const char *token, BasicFilterUserData *userData);
 public:
     GBFWEBIF();
 };

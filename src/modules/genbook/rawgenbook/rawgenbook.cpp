@@ -95,7 +95,7 @@ bool RawGenBook::isWritable() const {
  * RET: string buffer with verse
  */
 
-SWBuf &RawGenBook::getRawEntryBuf() const {
+std::string &RawGenBook::getRawEntryBuf() const {
 
     uint32_t offset = 0;
     uint32_t size = 0;
@@ -114,10 +114,9 @@ SWBuf &RawGenBook::getRawEntryBuf() const {
 
         entrySize = size;        // support getEntrySize call
 
-        entryBuf.setFillByte(0);
-        entryBuf.setSize(size);
+        entryBuf.resize(size, '\0');
         bdtfd->seek(offset, SEEK_SET);
-        bdtfd->read(entryBuf.getRawData(), size);
+        bdtfd->read(&entryBuf[0u], size);
 
         rawFilter(entryBuf, 0);    // hack, decipher
         rawFilter(entryBuf, &key);

@@ -23,7 +23,8 @@
 #ifndef URL_H
 #define URL_H
 
-#include <swbuf.h>
+#include <defs.h>
+#include <string>
 #include <map>
 
 namespace swordxx {
@@ -33,7 +34,7 @@ namespace swordxx {
  */
 class SWDLLEXPORT URL {
 public:
-    typedef std::map<SWBuf, SWBuf> ParameterMap;
+    typedef std::map<std::string, std::string> ParameterMap;
 
     /** Constructor.
      * @param url The url string which should be parsed into protocol, hostname, path and paramters
@@ -73,8 +74,8 @@ public:
     *
     * WARNING: It doesn't check if the URL is encoded already, so http://www.crosswire.org/test.jsp?force=1&amp;help=1 becomes http://www.crosswire.org/test.jsp?force=1&amp;amp;help=1
     */
-    static const SWBuf encode(const char *urlText);
-    static const SWBuf decode(const char *encodedText);
+    static const std::string encode(const char *urlText);
+    static const std::string decode(const char *encodedText);
 
 private:
     /** Parse
@@ -82,10 +83,10 @@ private:
      */
     void parse();
 
-    SWBuf url;
-    SWBuf protocol;
-    SWBuf hostname;
-    SWBuf path;
+    std::string url;
+    std::string protocol;
+    std::string hostname;
+    std::string path;
     ParameterMap parameterMap;
 };
 

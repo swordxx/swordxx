@@ -49,8 +49,8 @@ int main(int argc, char **argv) {
     VerseKey *vk = SWDYNAMIC_CAST(VerseKey, book.getKey());
 
     // find the first non-zero entry
-    for (book = TOP; !book.popError() && !book.getRawEntryBuf().size(); book++);
-    if (!book.getRawEntryBuf().size()) return -2;     // empty module
+    for (book = TOP; !book.popError() && !book.getRawEntry().size(); book++);
+    if (!book.getRawEntry().size()) return -2;     // empty module
 
     for (;!book.popError(); book++) {
 

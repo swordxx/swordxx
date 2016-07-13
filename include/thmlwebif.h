@@ -30,11 +30,11 @@ namespace swordxx {
 /** this filter converts ThML text to HTML text with hrefs
  */
 class SWDLLEXPORT ThMLWEBIF : public ThMLXHTML {
-    const SWBuf baseURL;
-    const SWBuf passageStudyURL;
+    const std::string baseURL;
+    const std::string passageStudyURL;
 
 protected:
-    virtual bool handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData);
+    virtual bool handleToken(std::string &buf, const char *token, BasicFilterUserData *userData);
 public:
     ThMLWEBIF();
 };

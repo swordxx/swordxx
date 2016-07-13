@@ -38,7 +38,6 @@ SET(test_PROGRAMS
     romantest
     striptest
     swaptest
-    swbuftest
     testblocks
     utf8norm
     versekeytest

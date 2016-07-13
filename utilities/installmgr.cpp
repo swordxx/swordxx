@@ -44,8 +44,8 @@ using std::map;
 SWMgr *mgr = 0;
 InstallMgr *installMgr = 0;
 StatusReporter *statusReporter = 0;
-SWBuf baseDir;
-SWBuf confPath;
+std::string baseDir;
+std::string confPath;
 
 bool isConfirmed;
 
@@ -96,7 +96,7 @@ class MyStatusReporter : public StatusReporter {
         int p = (totalBytes > 0) ? (int)(74.0 * ((double)completedBytes / (double)totalBytes)) : 0;
         for (;last < p; ++last) {
             if (!last) {
-                SWBuf output;
+                std::string output;
                 output.setFormatted("[ File Bytes: %ld", totalBytes);
                 while (output.size() < 75) output += " ";
                 output += "]";
@@ -107,7 +107,7 @@ class MyStatusReporter : public StatusReporter {
         cout.flush();
     }
         virtual void preStatus(long totalBytes, long completedBytes, const char *message) {
-        SWBuf output;
+        std::string output;
         output.setFormatted("[ Total Bytes: %ld; Completed Bytes: %ld", totalBytes, completedBytes);
         while (output.size() < 75) output += " ";
         output += "]";
@@ -127,7 +127,7 @@ void init() {
         if (!mgr->config)
             usage(0, "ERROR: SWORD configuration not found.  Please configure SWORD before using this program.");
 
-        SWBuf baseDir = mgr->getHomeDir();
+        std::string baseDir = mgr->getHomeDir();
         if (baseDir.length() < 1) baseDir = ".";
         baseDir += "/.sword/InstallMgr";
         confPath = baseDir + "/InstallMgr.conf";
@@ -252,8 +252,8 @@ void listModules(SWMgr *otherMgr = 0, bool onlyNewAndUpdates = false) {
     std::map<SWModule *, int> mods = InstallMgr::getModuleStatus(*mgr, *otherMgr);
     for (std::map<SWModule *, int>::iterator it = mods.begin(); it != mods.end(); it++) {
         module = it->first;
-        SWBuf version = module->getConfigEntry("Version");
-        SWBuf status = " ";
+        std::string version = module->getConfigEntry("Version");
+        std::string status = " ";
         if (it->second & InstallMgr::MODSTAT_NEW) status = "*";
         if (it->second & InstallMgr::MODSTAT_OLDER) status = "-";
         if (it->second & InstallMgr::MODSTAT_UPDATED) status = "+";
@@ -417,7 +417,7 @@ int main(int argc, char **argv) {
             }
             else usage(*argv, "-ri requires <remoteSrcName> <modName>");
         }
-        else usage(*argv, (((SWBuf)"Unknown argument: ")+ argv[i]).c_str());
+        else usage(*argv, (((std::string)"Unknown argument: ")+ argv[i]).c_str());
     }
 
     finish(0);

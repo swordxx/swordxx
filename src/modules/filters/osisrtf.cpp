@@ -40,8 +40,8 @@ namespace {
         bool inXRefNote;
         int suspendLevel;
         std::stack<char *> quoteStack;
-        SWBuf w;
-        SWBuf version;
+        std::string w;
+        std::string version;
         MyUserData(const SWModule *module, const SWKey *key);
         ~MyUserData();
     };
@@ -68,8 +68,8 @@ namespace {
         }
     }
 
-    static inline void outText(const char *t, SWBuf &o, BasicFilterUserData *u) { if (!u->suspendTextPassThru) o += t; else u->lastSuspendSegment += t; }
-    static inline void outText(char t, SWBuf &o, BasicFilterUserData *u) { if (!u->suspendTextPassThru) o += t; else u->lastSuspendSegment += t; }
+    static inline void outText(const char *t, std::string &o, BasicFilterUserData *u) { if (!u->suspendTextPassThru) o += t; else u->lastSuspendSegment += t; }
+    static inline void outText(char t, std::string &o, BasicFilterUserData *u) { if (!u->suspendTextPassThru) o += t; else u->lastSuspendSegment += t; }
 
 }
 
@@ -100,11 +100,11 @@ BasicFilterUserData *OSISRTF::createUserData(const SWModule *module, const SWKey
 }
 
 
-char OSISRTF::processText(SWBuf &text, const SWKey *key, const SWModule *module) {
+char OSISRTF::processText(std::string &text, const SWKey *key, const SWModule *module) {
 
     // preprocess text buffer to escape RTF control codes
     const char *from;
-    SWBuf orig = text;
+    std::string orig = text;
     from = orig.c_str();
     for (text = ""; *from; from++) {  //loop to remove extra spaces
         switch (*from) {
@@ -140,10 +140,10 @@ char OSISRTF::processText(SWBuf &text, const SWKey *key, const SWModule *module)
 }
 
 
-bool OSISRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData) {
+bool OSISRTF::handleToken(std::string &buf, const char *token, BasicFilterUserData *userData) {
   // manually process if it wasn't a simple substitution
     MyUserData *u = (MyUserData *)userData;
-    SWBuf scratch;
+    std::string scratch;
     bool sub = (u->suspendTextPassThru) ? substituteToken(scratch, token) : substituteToken(buf, token);
     if (!sub) {
         XMLTag tag(token);
@@ -160,7 +160,7 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
             // end or empty <w> tag
             else {
                 bool endTag = tag.isEndTag();
-                SWBuf lastText;
+                std::string lastText;
                 bool show = true;    // to handle unplaced article in kjv2003-- temporary till combined
 
                 if (endTag) {
@@ -169,41 +169,41 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
                 }
                 else lastText = "stuff";
 
-                const char *attrib;
+                std::string attrib;
                 const char *val;
-                if ((attrib = tag.getAttribute("xlit"))) {
-                    val = strchr(attrib, ':');
-                    val = (val) ? (val + 1) : attrib;
-                    scratch.setFormatted(" {\\fs15 <%s>}", val);
+                if (!(attrib = tag.getAttribute("xlit")).empty()) {
+                    val = strchr(attrib.c_str(), ':');
+                    val = (val) ? (val + 1) : attrib.c_str();
+                    scratch = formatted(" {\\fs15 <%s>}", val);
                     outText(scratch.c_str(), buf, u);
                 }
-                if ((attrib = tag.getAttribute("gloss"))) {
-                    val = strchr(attrib, ':');
-                    val = (val) ? (val + 1) : attrib;
-                    scratch.setFormatted(" {\\fs15 <%s>}", val);
+                if (!(attrib = tag.getAttribute("gloss")).empty()) {
+                    val = strchr(attrib.c_str(), ':');
+                    val = (val) ? (val + 1) : attrib.c_str();
+                    scratch = formatted(" {\\fs15 <%s>}", val);
                     outText(scratch.c_str(), buf, u);
                 }
-                if ((attrib = tag.getAttribute("lemma"))) {
+                if (!(attrib = tag.getAttribute("lemma")).empty()) {
                     int count = tag.getAttributePartCount("lemma", ' ');
                     int i = (count > 1) ? 0 : -1;        // -1 for whole value cuz it's faster, but does the same thing as 0
                     do {
                         attrib = tag.getAttribute("lemma", i, ' ');
                         if (i < 0) i = 0;    // to handle our -1 condition
-                        val = strchr(attrib, ':');
-                        val = (val) ? (val + 1) : attrib;
+                        val = strchr(attrib.c_str(), ':');
+                        val = (val) ? (val + 1) : attrib.c_str();
                         const char *val2 = val;
                         if ((strchr("GH", *val)) && (isdigit(val[1])))
                             val2++;
                         if ((!strcmp(val2, "3588")) && (lastText.length() < 1))
                             show = false;
                         else    {
-                            scratch.setFormatted(" {\\cf3 \\sub <%s>}", val2);
+                            scratch = formatted(" {\\cf3 \\sub <%s>}", val2);
                             outText(scratch.c_str(), buf, u);
                         }
                     } while (++i < count);
                 }
-                if ((attrib = tag.getAttribute("morph")) && (show)) {
-                    SWBuf savelemma = tag.getAttribute("savlm");
+                if (!(attrib = tag.getAttribute("morph")).empty() && (show)) {
+                    std::string savelemma = tag.getAttribute("savlm");
                     if ((strstr(savelemma.c_str(), "3588")) && (lastText.length() < 1))
                         show = false;
                     if (show) {
@@ -212,20 +212,20 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
                         do {
                             attrib = tag.getAttribute("morph", i, ' ');
                             if (i < 0) i = 0;    // to handle our -1 condition
-                            val = strchr(attrib, ':');
-                            val = (val) ? (val + 1) : attrib;
+                            val = strchr(attrib.c_str(), ':');
+                            val = (val) ? (val + 1) : attrib.c_str();
                             const char *val2 = val;
                             if ((*val == 'T') && (strchr("GH", val[1])) && (isdigit(val[2])))
                                 val2+=2;
-                            scratch.setFormatted(" {\\cf4 \\sub (%s)}", val2);
+                            scratch = formatted(" {\\cf4 \\sub (%s)}", val2);
                             outText(scratch.c_str(), buf, u);
                         } while (++i < count);
                     }
                 }
-                if ((attrib = tag.getAttribute("POS"))) {
-                    val = strchr(attrib, ':');
-                    val = (val) ? (val + 1) : attrib;
-                    scratch.setFormatted(" {\\fs15 <%s>}", val);
+                if (!(attrib = tag.getAttribute("POS")).empty()) {
+                    val = strchr(attrib.c_str(), ':');
+                    val = (val) ? (val + 1) : attrib.c_str();
+                    scratch = formatted(" {\\fs15 <%s>}", val);
                     outText(scratch.c_str(), buf, u);
                 }
 
@@ -238,12 +238,12 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
         else if (!strcmp(tag.getName(), "note")) {
             if (!tag.isEndTag()) {
                 if (!tag.isEmpty()) {
-                    SWBuf type = tag.getAttribute("type");
+                    std::string type = tag.getAttribute("type");
 
                     if ((type != "x-strongsMarkup")            // leave strong's markup notes out, in the future we'll probably have different option filters to turn different note types on or off
                             && (type != "strongsMarkup")    // deprecated
                             ) {
-                        SWBuf footnoteNumber = tag.getAttribute("swordFootnote");
+                        std::string footnoteNumber = tag.getAttribute("swordFootnote");
                         VerseKey *vkey = NULL;
                         // see if we have a VerseKey * or descendant
                         try {
@@ -252,7 +252,7 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
                         catch ( ... ) {    }
                         if (vkey) {
                             char ch = ((!strcmp(type.c_str(), "crossReference")) || (!strcmp(type.c_str(), "x-cross-ref"))) ? 'x':'n';
-                            scratch.setFormatted("{\\super <a href=\"\">*%c%i.%s</a>} ", ch, vkey->getVerse(), footnoteNumber.c_str());
+                            scratch = formatted("{\\super <a href=\"\">*%c%i.%s</a>} ", ch, vkey->getVerse(), footnoteNumber.c_str());
                             outText(scratch.c_str(), buf, u);
                             u->inXRefNote = (ch == 'x');
                         }
@@ -284,13 +284,13 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
         // Milestoned paragraphs, created by osis2mod
         // <div type="paragraph" sID.../>
         // <div type="paragraph" eID.../>
-        else if (tag.isEmpty() && !strcmp(tag.getName(), "div") && tag.getAttribute("type") && (!strcmp(tag.getAttribute("type"), "x-p") || !strcmp(tag.getAttribute("type"), "paragraph"))) {
+        else if (tag.isEmpty() && !strcmp(tag.getName(), "div") && !tag.getAttribute("type").empty() && (!strcmp(tag.getAttribute("type").c_str(), "x-p") || !strcmp(tag.getAttribute("type").c_str(), "paragraph"))) {
             // <div type="paragraph"  sID... />
-            if (tag.getAttribute("sID")) {    // non-empty start tag
+            if (!tag.getAttribute("sID").empty()) {    // non-empty start tag
                 outText("{\\fi200\\par}", buf, u);
             }
             // <div type="paragraph"  eID... />
-            else if (tag.getAttribute("eID")) {
+            else if (!tag.getAttribute("eID").empty()) {
                 outText("{\\par}", buf, u);
                 userData->supressAdjacentWhitespace = true;
             }
@@ -311,12 +311,12 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
         // <l> poetry
         else if (!strcmp(tag.getName(), "l")) {
             // end line marker
-            if (tag.getAttribute("eID")) {
+            if (!tag.getAttribute("eID").empty()) {
                 outText("{\\par}", buf, u);
             }
             // <l/> without eID or sID
             // Note: this is improper osis. This should be <lb/>
-            else if (tag.isEmpty() && !tag.getAttribute("sID")) {
+            else if (tag.isEmpty() && tag.getAttribute("sID").empty()) {
                 outText("{\\par}", buf, u);
             }
             // end of the line
@@ -326,7 +326,7 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
         }
 
         // <milestone type="line"/> or <lb.../>
-        else if ((!strcmp(tag.getName(), "lb") && (!tag.getAttribute("type") || strcmp(tag.getAttribute("type"), "x-optional"))) || ((!strcmp(tag.getName(), "milestone")) && (tag.getAttribute("type")) && (!strcmp(tag.getAttribute("type"), "line")))) {
+        else if ((!strcmp(tag.getName(), "lb") && (tag.getAttribute("type").empty() || strcmp(tag.getAttribute("type").c_str(), "x-optional"))) || ((!strcmp(tag.getName(), "milestone")) && (!tag.getAttribute("type").empty()) && (!strcmp(tag.getAttribute("type").c_str(), "line")))) {
             outText("{\\par}", buf, u);
             userData->supressAdjacentWhitespace = true;
         }
@@ -372,7 +372,7 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 
         // <hi>
         else if (!strcmp(tag.getName(), "hi")) {
-            SWBuf type = tag.getAttribute("type");
+            std::string type = tag.getAttribute("type");
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {
                 if (type == "bold" || type == "b" || type == "x-b")
                     outText("{\\b1 ", buf, u);
@@ -393,16 +393,15 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
         // If there is a marker attribute, possibly empty, this overrides osisQToTick.
         // If osisQToTick, then output the marker, using level to determine the type of mark.
         else if (!strcmp(tag.getName(), "q")) {
-            SWBuf type      = tag.getAttribute("type");
-            SWBuf who       = tag.getAttribute("who");
-            const char *tmp = tag.getAttribute("level");
-            int level       = (tmp) ? atoi(tmp) : 1;
-            tmp             = tag.getAttribute("marker");
-            bool hasMark    = tmp;
-            SWBuf mark      = tmp;
+            std::string type      = tag.getAttribute("type");
+            std::string who       = tag.getAttribute("who");
+            auto tmp(tag.getAttribute("level"));
+            int level       = (!tmp.empty()) ? atoi(tmp.c_str()) : 1;
+            std::string mark(tag.getAttribute("marker"));
+            bool hasMark = !mark.empty();
 
             // open <q> or <q sID... />
-            if ((!tag.isEmpty() && !tag.isEndTag()) || (tag.isEmpty() && tag.getAttribute("sID"))) {
+            if ((!tag.isEmpty() && !tag.isEndTag()) || (tag.isEmpty() && !tag.getAttribute("sID").empty())) {
                 // if <q> then remember it for the </q>
                 if (!tag.isEmpty()) {
                     char *tagData = 0;
@@ -416,13 +415,13 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 
                 // first check to see if we've been given an explicit mark
                 if (hasMark)
-                    outText(mark, buf, u);
+                    outText(mark.c_str(), buf, u);
                 //alternate " and '
                 else if (u->osisQToTick)
                     outText((level % 2) ? '\"' : '\'', buf, u);
             }
             // close </q> or <q eID... />
-            else if ((tag.isEndTag()) || (tag.getAttribute("eID"))) {
+            else if ((tag.isEndTag()) || (!tag.getAttribute("eID").empty())) {
                 // if it is </q> then pop the stack for the attributes
                 if (tag.isEndTag() && !u->quoteStack.empty()) {
                     char *tagData  = u->quoteStack.top();
@@ -433,15 +432,15 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
                     type    = qTag.getAttribute("type");
                     who     = qTag.getAttribute("who");
                     tmp     = qTag.getAttribute("level");
-                    level   = (tmp) ? atoi(tmp) : 1;
+                    level   = (!tmp.empty()) ? atoi(tmp.c_str()) : 1;
                     tmp     = qTag.getAttribute("marker");
-                    hasMark = tmp;
+                    hasMark = !tmp.empty();
                     mark    = tmp;
                 }
 
                 // first check to see if we've been given an explicit mark
                 if (hasMark)
-                    outText(mark, buf, u);
+                    outText(mark.c_str(), buf, u);
                 // finally, alternate " and ', if config says we should supply a mark
                 else if (u->osisQToTick)
                     outText((level % 2) ? '\"' : '\'', buf, u);
@@ -454,16 +453,15 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 
 
         // <milestone type="cQuote" marker="x"/>
-        else if (!strcmp(tag.getName(), "milestone") && tag.getAttribute("type") && !strcmp(tag.getAttribute("type"), "cQuote")) {
-            const char *tmp = tag.getAttribute("marker");
-            bool hasMark    = tmp;
-            SWBuf mark      = tmp;
-            tmp             = tag.getAttribute("level");
-            int level       = (tmp) ? atoi(tmp) : 1;
+        else if (!strcmp(tag.getName(), "milestone") && !tag.getAttribute("type").empty() && !strcmp(tag.getAttribute("type").c_str(), "cQuote")) {
+            auto mark(tag.getAttribute("marker"));
+            bool hasMark = !mark.empty();
+            auto tmp(tag.getAttribute("level"));
+            int level = (!tmp.empty()) ? atoi(tmp.c_str()) : 1;
 
             // first check to see if we've been given an explicit mark
             if (hasMark)
-                outText(mark, buf, u);
+                outText(mark.c_str(), buf, u);
             // finally, alternate " and ', if config says we should supply a mark
             else if (u->osisQToTick)
                 outText((level % 2) ? '\"' : '\'', buf, u);
@@ -471,7 +469,7 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 
         // <transChange>
         else if (!strcmp(tag.getName(), "transChange")) {
-            SWBuf type = tag.getAttribute("type");
+            std::string type = tag.getAttribute("type");
 
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {
 
@@ -508,14 +506,14 @@ bool OSISRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 
         // image
         else if (!strcmp(tag.getName(), "figure")) {
-            const char *src = tag.getAttribute("src");
-            if (!src)        // assert we have a src attribute
+            auto const src(tag.getAttribute("src"));
+            if (src.empty())        // assert we have a src attribute
                 return false;
 
             char* filepath = new char[strlen(u->module->getConfigEntry("AbsoluteDataPath")) + strlen(token)];
             *filepath = 0;
             strcpy(filepath, userData->module->getConfigEntry("AbsoluteDataPath"));
-            strcat(filepath, src);
+            strcat(filepath, src.c_str());
 
 // we do this because BibleCS looks for this EXACT format for an image tag
             outText("<img src=\"", buf, u);

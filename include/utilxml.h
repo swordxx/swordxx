@@ -24,14 +24,14 @@
 #define UTILXML_H
 
 #include <defs.h>
-#include <swbuf.h>
+#include <string>
 #include <list>
 #include <map>
 
 namespace swordxx {
 
-typedef std::map<SWBuf, SWBuf> StringPairMap;
-typedef std::list<SWBuf> StringList;
+typedef std::map<std::string, std::string> StringPairMap;
+typedef std::list<std::string> StringList;
 
 /** Simple XML helper class.
 */
@@ -43,7 +43,7 @@ private:
     mutable bool empty;
     mutable bool endTag;
     mutable StringPairMap attributes;
-    mutable SWBuf junkBuf;
+    mutable std::string junkBuf;
 
     void parse() const;
     const char *getPart(const char *buf, int partNum = 0, char partSplit = '|') const;
@@ -54,7 +54,7 @@ public:
     ~XMLTag();
 
     void setText(const char *tagString);
-    inline const char *getName() const { return (name) ? name : SWBuf::nullStr; }
+    inline const char *getName() const { return (name) ? name : ""; }
 
     inline bool isEmpty() const {
         if (!parsed)
@@ -80,8 +80,8 @@ public:
     int getAttributePartCount(const char *attribName, char partSplit = '|') const;
 
     // return values should not be considered to persist beyond the return of the function.
-    const char *getAttribute(const char *attribName, int partNum = -1, char partSplit = '|') const;
-    const char *setAttribute(const char *attribName, const char *attribValue, int partNum = -1, char partSplit = '|');
+    std::string getAttribute(const char *attribName, int partNum = -1, char partSplit = '|') const;
+    void setAttribute(const char *attribName, const char *attribValue, int partNum = -1, char partSplit = '|');
     const char *toString() const;
     inline operator const char *() const { return toString(); }
     inline XMLTag & operator =(const char *tagString) { setText(tagString); return *this; }

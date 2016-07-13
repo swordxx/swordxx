@@ -20,15 +20,61 @@
  *
  */
 
-#include <utilstr.h>
-#include <ctype.h>
-#include <string.h>
+#include <algorithm>
+#include <cassert>
+#include <cctype>
+#include <cstring>
 
 #include <sysdata.h>
-#include <swbuf.h>
+#include <utilstr.h>
 
 
 namespace swordxx {
+
+void addTrailingDirectorySlash(std::string & buf) {
+    assert(!buf.empty());
+    switch (*buf.rbegin()) {
+        case '/': case '\\':
+            break;
+        default:
+            buf.push_back('/');
+            break;
+    }
+}
+
+void removeTrailingDirectorySlashes(std::string & buf) {
+    while (buf.size() > 1u) {
+        switch (*buf.rbegin()) {
+            case '/': case '\\':
+                buf.pop_back();
+                break;
+            default:
+                return;
+        }
+    }
+}
+
+void trimString(std::string & str) noexcept {
+    str.erase(std::find_if_not(str.rbegin(), str.rend(), charIsSpace).base(),
+              str.end());
+    auto begin(str.begin());
+    str.erase(begin, std::find_if_not(begin, str.end(), charIsSpace));
+}
+
+std::string stripPrefix(std::string & str, char const separator) {
+    char const * m = str.c_str();
+    while (*m && *m != separator)
+        ++m;
+    auto const prefixSize(static_cast<std::size_t>(m - str.c_str()));
+    if (prefixSize == str.size()) {
+        std::string r(std::move(str));
+        str.clear();
+        return r;
+    }
+    std::string r(str.c_str(), prefixSize);
+    str.erase(0u, prefixSize + 1u);
+    return r;
+}
 
 const unsigned char SW_toupper_array[256] = {
     0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
@@ -245,16 +291,17 @@ uint32_t getUniCharFromUTF8(const unsigned char **buf) {
 }
 
 
-SWBuf getUTF8FromUniChar(uint32_t uchar) {
-    SWBuf retVal("", 7);
+std::string getUTF8FromUniChar(uint32_t uchar) {
+    std::string retVal;
+    retVal.reserve(7u);
     unsigned int i;
 
     if (uchar < 0x80) {
-        retVal.append((unsigned char)uchar);
-        retVal.setSize(1);
+        retVal.push_back((unsigned char)uchar);
+        retVal.resize(1);
     }
     else if (uchar < 0x800) {
-        retVal.setSize(2);
+        retVal.resize(2);
         i = uchar & 0x3f;
         retVal[1] = (unsigned char)(0x80 | i);
         uchar >>= 6;
@@ -263,7 +310,7 @@ SWBuf getUTF8FromUniChar(uint32_t uchar) {
         retVal[0] = (unsigned char)(0xc0 | i);
     }
     else if (uchar < 0x10000) {
-        retVal.setSize(3);
+        retVal.resize(3);
         i = uchar & 0x3f;
         retVal[2] = (unsigned char)(0x80 | i);
         uchar >>= 6;
@@ -276,7 +323,7 @@ SWBuf getUTF8FromUniChar(uint32_t uchar) {
         retVal[0] = (unsigned char)(0xe0 | i);
     }
     else if (uchar < 0x200000) {
-        retVal.setSize(4);
+        retVal.resize(4);
         i = uchar & 0x3f;
         retVal[3] = (unsigned char)(0x80 | i);
         uchar >>= 6;
@@ -293,7 +340,7 @@ SWBuf getUTF8FromUniChar(uint32_t uchar) {
         retVal[0] = (unsigned char)(0xf0 | i);
     }
     else if (uchar < 0x4000000) {
-        retVal.setSize(5);
+        retVal.resize(5);
         i = uchar & 0x3f;
         retVal[4] = (unsigned char)(0x80 | i);
         uchar >>= 6;
@@ -314,7 +361,7 @@ SWBuf getUTF8FromUniChar(uint32_t uchar) {
         retVal[0] = (unsigned char)(0xf8 | i);
     }
     else if (uchar < 0x80000000) {
-        retVal.setSize(6);
+        retVal.resize(6);
         i = uchar & 0x3f;
         retVal[5] = (unsigned char)(0x80 | i);
         uchar >>= 6;
@@ -343,9 +390,9 @@ SWBuf getUTF8FromUniChar(uint32_t uchar) {
 }
 
 
-SWBuf assureValidUTF8(const char *buf) {
-
-    SWBuf myCopy = buf;
+std::string assureValidUTF8(const char *buf) {
+    assert(buf);
+    std::string myCopy = buf;
     const unsigned char *b = (const unsigned char *)myCopy.c_str();
     const unsigned char *q = 0;
     bool invalidChar = false;
@@ -366,17 +413,10 @@ SWBuf assureValidUTF8(const char *buf) {
     return myCopy;
 }
 
-
-/****
- * This can be called to convert a UTF8 stream to an SWBuf which manages
- *    a wchar_t[]
- *    access buffer with (wchar_t *)SWBuf::getRawData();
- *
- */
-SWBuf utf8ToWChar(const char *buf) {
-
+std::wstring utf8ToWChar(const char *buf) {
+    assert(buf);
     const char *q = 0;
-    SWBuf wcharBuf;
+    std::wstring wcharBuf;
     while (*buf) {
         q = buf;
         wchar_t wc = getUniCharFromUTF8((const unsigned char **)&buf);
@@ -384,25 +424,24 @@ SWBuf utf8ToWChar(const char *buf) {
             // if my buffer was advanced but nothing was converted, I had invalid data
             if (buf - q) {
                 // invalid bytes in UTF8 stream
-                wcharBuf.append((wchar_t)0x1a);        // unicode replacement character
+                wcharBuf.push_back((wchar_t)0x1a);        // unicode replacement character
             }
         }
-        else wcharBuf.append(wc);
+        else wcharBuf.push_back(wc);
     }
     return wcharBuf;
 }
 
 
 /****
- * This can be called to convert a wchar_t[] to a UTF-8 SWBuf
+ * This can be called to convert a wchar_t[] to a UTF-8 std::string
  *
  */
-SWBuf wcharToUTF8(const wchar_t *buf) {
-
-    SWBuf utf8Buf;
-    while (*buf) {
-        utf8Buf.append(getUTF8FromUniChar(*buf++));
-    }
+std::string wcharToUTF8(const wchar_t * buf) {
+    assert(buf);
+    std::string utf8Buf;
+    for (; *buf; ++buf)
+        utf8Buf.append(getUTF8FromUniChar(*buf));
     return utf8Buf;
 }
 

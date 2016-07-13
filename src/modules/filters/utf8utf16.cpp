@@ -23,7 +23,7 @@
 #include <cstdint>
 #include <utf8utf16.h>
 #include <utilstr.h>
-#include <swbuf.h>
+#include <string>
 
 
 namespace swordxx {
@@ -33,9 +33,9 @@ UTF8UTF16::UTF8UTF16() {
 }
 
 
-char UTF8UTF16::processText(SWBuf &text, const SWKey *key, const SWModule *module) {
+char UTF8UTF16::processText(std::string &text, const SWKey *key, const SWModule *module) {
     const unsigned char *from;
-    SWBuf orig = text;
+    std::string orig = text;
 
     from = (const unsigned char *)orig.c_str();
 
@@ -48,22 +48,20 @@ char UTF8UTF16::processText(SWBuf &text, const SWKey *key, const SWModule *modul
         if (!ch) continue;    // invalid char
 
         if (ch < 0x10000) {
-            text.setSize(text.size()+2);
-            *((uint16_t *)(text.getRawData()+(text.size()-2))) = (uint16_t)ch;
+            auto const oldSize = text.size();
+            text.resize(oldSize + 2);
+            *((uint16_t *) &text[oldSize]) = (uint16_t)ch;
         }
         else {
             uint16_t utf16;
             utf16 = (int16_t)((ch - 0x10000) / 0x400 + 0xD800);
-            text.setSize(text.size()+4);
-            *((uint16_t *)(text.getRawData()+(text.size()-4))) = utf16;
+            auto const oldSize = text.size();
+            text.resize(oldSize + 4);
+            *((uint16_t *) &text[oldSize]) = utf16;
             utf16 = (int16_t)((ch - 0x10000) % 0x400 + 0xDC00);
-            *((uint16_t *)(text.getRawData()+(text.size()-2))) = utf16;
+            *((uint16_t *) &text[oldSize + 2u]) = utf16;
         }
     }
-    text.setSize(text.size()+2);
-    *((uint16_t *)(text.getRawData()+(text.size()-2))) = (uint16_t)0;
-    text.setSize(text.size()-2);
-
     return 0;
 }
 

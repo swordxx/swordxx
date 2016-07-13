@@ -37,7 +37,7 @@ namespace {
     static const char oTip[]  = "Toggles Headings On and Off if they exist";
 
     static const StringList *oValues() {
-        static const SWBuf choices[3] = {"Off", "On", ""};
+        static const std::string choices[3] = {"Off", "On", ""};
         static const StringList oVals(&choices[0], &choices[2]);
         return &oVals;
     }
@@ -45,10 +45,10 @@ namespace {
 
     class MyUserData : public BasicFilterUserData {
     public:
-        SWBuf currentHeadingName;
+        std::string currentHeadingName;
         XMLTag currentHeadingTag;
-        const char *sID;
-        SWBuf heading;
+        std::string sID;
+        std::string heading;
         int depth;
         int headerNum;
         bool canonical;
@@ -59,7 +59,7 @@ namespace {
         void clear() {
             currentHeadingName = "";
             currentHeadingTag = "";
-            sID = 0;
+            sID = "";
             heading = "";
             depth = 0;
             headerNum = 0;
@@ -79,36 +79,36 @@ OSISHeadings::OSISHeadings() : SWOptionFilter(oName, oTip, oValues()) {
 }
 
 
-bool OSISHeadings::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData) {
+bool OSISHeadings::handleToken(std::string &buf, const char *token, BasicFilterUserData *userData) {
 
     MyUserData *u = (MyUserData *)userData;
     XMLTag tag(token);
-    SWBuf name = tag.getName();
+    std::string name = tag.getName();
 
     // we only care about titles and divs or if we're already in a heading
     //
     // are we currently in a heading?
     if (u->currentHeadingName.size()) {
         u->heading.append(u->lastTextNode);
-        if (SWBuf("true") == tag.getAttribute("canonical")) u->canonical = true;
+        if (std::string("true") == tag.getAttribute("canonical")) u->canonical = true;
         if (name == u->currentHeadingName) {
-            if (tag.isEndTag(u->sID)) {
-                if (!u->depth-- || u->sID) {
+            if (tag.isEndTag(u->sID.c_str())) {
+                if (!u->depth-- || !u->sID.empty()) {
                     // see comment below about preverse div changed and needing to preserve the <title> container tag for old school pre-verse titles
                     // we've just finished a heading.  It's all stored up in u->heading
-                    bool preverse = (SWBuf("x-preverse") == u->currentHeadingTag.getAttribute("subType") || SWBuf("x-preverse") == u->currentHeadingTag.getAttribute("subtype"));
+                    bool preverse = (std::string("x-preverse") == u->currentHeadingTag.getAttribute("subType") || std::string("x-preverse") == u->currentHeadingTag.getAttribute("subtype"));
 
                     // do we want to put anything in EntryAttributes?
                     if (u->module->isProcessEntryAttributes() && (option || u->canonical || !preverse)) {
-                        SWBuf buf; buf.appendFormatted("%i", u->headerNum++);
+                        std::string buf(formatted("%i", u->headerNum++));
                         // leave the actual <title...> wrapper in if we're part of an old school preverse title
                         // because now frontend have to deal with preverse as a div which may or may not include <title> elements
                         // and they can't simply wrap all preverse material in <h1>, like they probably did previously
-                        SWBuf heading;
+                        std::string heading;
                         if (u->currentHeadingName == "title") {
                             XMLTag wrapper = u->currentHeadingTag;
-                            if (SWBuf("x-preverse") == wrapper.getAttribute("subType")) wrapper.setAttribute("subType", 0);
-                            else if (SWBuf("x-preverse") == wrapper.getAttribute("subtype")) wrapper.setAttribute("subtype", 0);
+                            if (std::string("x-preverse") == wrapper.getAttribute("subType")) wrapper.setAttribute("subType", 0);
+                            else if (std::string("x-preverse") == wrapper.getAttribute("subtype")) wrapper.setAttribute("subtype", 0);
                             heading = wrapper;
                             heading += u->heading;
                             heading += tag;
@@ -141,8 +141,8 @@ bool OSISHeadings::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
     // are we a title or a preverse div?
     else if (   name == "title"
         || (name == "div"
-            && ( SWBuf("x-preverse") == tag.getAttribute("subType")
-              || SWBuf("x-preverse") == tag.getAttribute("subtype")))) {
+            && ( std::string("x-preverse") == tag.getAttribute("subType")
+              || std::string("x-preverse") == tag.getAttribute("subtype")))) {
 
         u->currentHeadingName = name;
         u->currentHeadingTag = tag;
@@ -150,7 +150,7 @@ bool OSISHeadings::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
         u->sID = u->currentHeadingTag.getAttribute("sID");
         u->depth = 0;
         u->suspendTextPassThru = true;
-        u->canonical = (SWBuf("true") == tag.getAttribute("canonical"));
+        u->canonical = (std::string("true") == tag.getAttribute("canonical"));
 
         return true;
     }

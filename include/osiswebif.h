@@ -30,13 +30,13 @@ namespace swordxx {
 /** this filter converts OSIS  text to HTML text with hrefs
  */
 class SWDLLEXPORT OSISWEBIF : public OSISXHTML {
-    const SWBuf baseURL;
-    const SWBuf passageStudyURL;
+    const std::string baseURL;
+    const std::string passageStudyURL;
     bool javascript;
 
 protected:
     virtual BasicFilterUserData *createUserData(const SWModule *module, const SWKey *key);
-    virtual bool handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData);
+    virtual bool handleToken(std::string &buf, const char *token, BasicFilterUserData *userData);
 public:
     OSISWEBIF();
     void setJavascript(bool mode) { javascript = mode; }

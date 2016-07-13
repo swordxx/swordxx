@@ -46,7 +46,7 @@ public:
             SWTextDirection dir = DIRECTION_LTR,
             SWTextMarkup markup = FMT_UNKNOWN, const char* ilang = 0, const char *keyType = "TreeKey");
     virtual ~RawGenBook();
-    virtual SWBuf &getRawEntryBuf() const;
+    virtual std::string &getRawEntryBuf() const;
     // write interface ----------------------------
     virtual bool isWritable() const;
     static char createModule(const char *ipath);

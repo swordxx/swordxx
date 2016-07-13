@@ -80,13 +80,13 @@ private:
     void registerTrans(const UnicodeString& ID, const UnicodeString& resource, UTransDirection dir, UErrorCode &status);
     bool checkTrans(const UnicodeString& ID, UErrorCode &status);
 #endif
-    bool addTrans(const char* newTrans, SWBuf* transList);
+    bool addTrans(const char* newTrans, std::string* transList);
     Transliterator *createTrans(const UnicodeString& ID, UTransDirection dir, UErrorCode &status);
 
 public:
     UTF8Transliterator();
     ~UTF8Transliterator();
-    virtual char processText(SWBuf &text, const SWKey *key = 0, const SWModule *module = 0);
+    virtual char processText(std::string &text, const SWKey *key = 0, const SWModule *module = 0);
     virtual const char *getOptionName() { return optName; }
     virtual const char *getOptionTip() { return optTip; }
     virtual void setOptionValue(const char *ival);

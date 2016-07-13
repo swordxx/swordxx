@@ -35,14 +35,14 @@ public:
 protected:
     class MyUserData : public BasicFilterUserData {
     public:
-        SWBuf w;
+        std::string w;
         XMLTag tag;
         MyUserData(const SWModule *module, const SWKey *key) : BasicFilterUserData(module, key) {}
     };
     virtual BasicFilterUserData *createUserData(const SWModule *module, const SWKey *key) {
         return new MyUserData(module, key);
     }
-    virtual bool handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData);
+    virtual bool handleToken(std::string &buf, const char *token, BasicFilterUserData *userData);
 public:
     TEIPlain();
 };

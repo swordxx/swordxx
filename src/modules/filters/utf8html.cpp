@@ -23,7 +23,7 @@
 
 #include <stdio.h>
 #include <utf8html.h>
-#include <swbuf.h>
+#include <string>
 
 
 namespace swordxx {
@@ -33,7 +33,7 @@ UTF8HTML::UTF8HTML() {
 }
 
 
-char UTF8HTML::processText(SWBuf &text, const SWKey *key, const SWModule *module)
+char UTF8HTML::processText(std::string &text, const SWKey *key, const SWModule *module)
 {
     unsigned char *from;
         char digit[10];
@@ -41,7 +41,7 @@ char UTF8HTML::processText(SWBuf &text, const SWKey *key, const SWModule *module
      if ((unsigned long)key < 2)    // hack, we're en(1)/de(0)ciphering
         return (char)-1;
 
-    SWBuf orig = text;
+    std::string orig = text;
       from = (unsigned char *)orig.c_str();
 
     // -------------------------------

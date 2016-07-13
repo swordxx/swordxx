@@ -37,17 +37,17 @@ protected:
     class MyUserData : public BasicFilterUserData {
     public:
         bool BiblicalText;
-        SWBuf lastHi;
+        std::string lastHi;
         bool firstCell; // for tables, indicates whether a cell is the first one in a row
         int consecutiveNewlines;
 
-        SWBuf version;
+        std::string version;
         MyUserData(const SWModule *module, const SWKey *key);
     };
     virtual BasicFilterUserData *createUserData(const SWModule *module, const SWKey *key) {
         return new MyUserData(module, key);
     }
-    virtual bool handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData);
+    virtual bool handleToken(std::string &buf, const char *token, BasicFilterUserData *userData);
 public:
     TEILaTeX();
     void setRenderNoteNumbers(bool val = true) { renderNoteNumbers = val; }

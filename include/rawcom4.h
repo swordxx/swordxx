@@ -42,7 +42,7 @@ public:
             const char *ilang = 0, const char *versification = "KJV");
     virtual ~RawCom4();
 
-    virtual SWBuf &getRawEntryBuf() const;
+    virtual std::string &getRawEntryBuf() const;
 
     virtual void increment(int steps = 1);
     virtual void decrement(int steps = 1) { increment(-steps); }

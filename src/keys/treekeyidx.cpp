@@ -26,10 +26,11 @@
 #include <stdio.h>
 #include <errno.h>
 
+#include <cstring>
 #include <swlog.h>
 #include <utilstr.h>
 #include <filemgr.h>
-#include <swbuf.h>
+#include <string>
 #include <sysdata.h>
 
 namespace swordxx {
@@ -47,7 +48,7 @@ TreeKeyIdx::TreeKeyIdx(const TreeKeyIdx &ikey) : currentNode() {
 }
 
 TreeKeyIdx::TreeKeyIdx(const char *idxPath, int fileMode) : currentNode() {
-    SWBuf buf;
+    std::string buf;
 
     init();
     path = 0;
@@ -57,10 +58,12 @@ TreeKeyIdx::TreeKeyIdx(const char *idxPath, int fileMode) : currentNode() {
         fileMode = FileMgr::RDWR;
     }
 
-    buf.setFormatted("%s.idx", path);
-    idxfd = FileMgr::getSystemFileMgr()->open(buf, fileMode, true);
-    buf.setFormatted("%s.dat", path);
-    datfd = FileMgr::getSystemFileMgr()->open(buf, fileMode, true);
+    buf = path;
+    buf += ".idx";
+    idxfd = FileMgr::getSystemFileMgr()->open(buf.c_str(), fileMode, true);
+    buf.resize(buf.size() - 4u);
+    buf += ".dat";
+    datfd = FileMgr::getSystemFileMgr()->open(buf.c_str(), fileMode, true);
 
     if (!datfd) {
         SWLog::getSystemLog()->logError("%d", errno);
@@ -346,7 +349,7 @@ void TreeKeyIdx::getTreeNodeFromDatOffset(long ioffset, TreeNode *node) const {
         datfd->read(&tmp, 4);
         node->firstChild = swordtoarch32(tmp);
 
-        SWBuf name;
+        std::string name;
         do {
             datfd->read(&ch, 1);
             name += ch;
@@ -515,8 +518,13 @@ void TreeKeyIdx::saveTreeNode(TreeNode *node) {
 void TreeKeyIdx::setText(const char *ikey) {
     char *buf = 0;
     stdstr(&buf, ikey);
-    SWBuf leaf = strtok(buf, "/");
-    leaf.trim();
+    static auto const slashTokenOrEmpty =
+            [](char * const str) noexcept {
+                auto const nextToken(std::strtok(str, "/"));
+                return nextToken ? nextToken : "";
+            };
+    std::string leaf(slashTokenOrEmpty(buf));
+    trimString(leaf);
     root();
     while ((leaf.size()) && (!popError())) {
         bool ok, inChild = false;
@@ -528,8 +536,8 @@ void TreeKeyIdx::setText(const char *ikey) {
                 break;
             }
         }
-        leaf = strtok(0, "/");
-        leaf.trim();
+        leaf = slashTokenOrEmpty(nullptr);
+        trimString(leaf);
         if (!ok) {
                 if (inChild) {    // if we didn't find a matching child node, default to first child
                 parent();
@@ -615,12 +623,12 @@ void TreeKeyIdx::increment(int steps) {
 
 const char *TreeKeyIdx::getText() const {
     TreeNode parent;
-    static SWBuf fullPath;
+    static std::string fullPath;
     fullPath = currentNode.name;
     parent.parent = currentNode.parent;
     while (parent.parent > -1) {
         getTreeNodeFromIdxOffset(parent.parent, &parent);
-        fullPath = ((SWBuf)parent.name) + (SWBuf) "/" + fullPath;
+        fullPath = std::string(parent.name) + '/' + fullPath;
     }
     // we've snapped; clear our unsnapped text holder
     unsnappedKeyText = "";

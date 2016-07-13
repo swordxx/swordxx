@@ -28,7 +28,7 @@
 #include <utilstr.h>
 
 #include <utf8arshaping.h>
-#include <swbuf.h>
+#include <string>
 
 namespace swordxx {
 
@@ -40,7 +40,7 @@ UTF8arShaping::~UTF8arShaping() {
         ucnv_close(conv);
 }
 
-char UTF8arShaping::processText(SWBuf &text, const SWKey *key, const SWModule *module)
+char UTF8arShaping::processText(std::string &text, const SWKey *key, const SWModule *module)
 {
         UChar *ustr, *ustr2;
      if ((unsigned long)key < 2)    // hack, we're en(1)/de(0)ciphering
@@ -55,9 +55,9 @@ char UTF8arShaping::processText(SWBuf &text, const SWKey *key, const SWModule *m
 
         len = u_shapeArabic(ustr, len, ustr2, len, U_SHAPE_LETTERS_SHAPE | U_SHAPE_DIGITS_EN2AN, &err);
 
-       text.setSize(text.size()*2);
-       len = ucnv_fromUChars(conv, text.getRawData(), text.size(), ustr2, len, &err);
-       text.setSize(len);
+       text.resize(text.size() * 2u, '\0');
+       len = ucnv_fromUChars(conv, &text[0u], text.size(), ustr2, len, &err);
+       text.resize(len, '\0');
 
         delete [] ustr2;
         delete [] ustr;

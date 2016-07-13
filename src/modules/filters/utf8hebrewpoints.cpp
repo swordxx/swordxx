@@ -34,7 +34,7 @@ namespace {
     static const char oTip[]  = "Toggles Hebrew Vowel Points";
 
     static const StringList *oValues() {
-        static const SWBuf choices[3] = {"On", "Off", ""};
+        static const std::string choices[3] = {"On", "Off", ""};
         static const StringList oVals(&choices[0], &choices[2]);
         return &oVals;
     }
@@ -48,10 +48,10 @@ UTF8HebrewPoints::UTF8HebrewPoints() : SWOptionFilter(oName, oTip, oValues()) {
 UTF8HebrewPoints::~UTF8HebrewPoints(){};
 
 
-char UTF8HebrewPoints::processText(SWBuf &text, const SWKey *key, const SWModule *module) {
+char UTF8HebrewPoints::processText(std::string &text, const SWKey *key, const SWModule *module) {
     if (!option) {
         //The UTF-8 range 0xD6 0xB0 to 0xD6 0xBF excluding 0xD6 0xBE consist of Hebrew cantillation marks so block those out.
-        SWBuf orig = text;
+        std::string orig = text;
         const unsigned char* from = (unsigned char*)orig.c_str();
         for (text = ""; *from; from++) {
             if ((*from == 0xD6) && (*(from + 1) >= 0xB0 && *(from + 1) <= 0xBF) && (*(from + 1) != 0xBE)) {

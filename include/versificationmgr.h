@@ -24,7 +24,7 @@
 #include <list>
 #include <defs.h>
 #include <swcacher.h>
-#include <swbuf.h>
+#include <string>
 
 
 #ifndef VERSIFICATIONMGR_H
@@ -33,7 +33,7 @@
 
 namespace swordxx {
 
-typedef std::list <SWBuf>StringList;
+typedef std::list <std::string>StringList;
 
 struct sbook;
 class TreeKey;
@@ -92,13 +92,13 @@ public:
         Private *p;
 
         /** book name */
-        SWBuf longName;
+        std::string longName;
 
         /** OSIS Abbreviation */
-        SWBuf osisName;
+        std::string osisName;
 
         /** Preferred Abbreviation */
-        SWBuf prefAbbrev;
+        std::string prefAbbrev;
 
         /** Maximum chapters in book */
         unsigned int chapMax;
@@ -127,7 +127,7 @@ public:
     class SWDLLEXPORT System {
         class Private;
         Private *p;
-        SWBuf name;
+        std::string name;
         int BMAX[2];
         long ntStartOffset;
         void init();

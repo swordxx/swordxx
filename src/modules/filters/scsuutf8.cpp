@@ -30,7 +30,7 @@
  */
 
 #include <scsuutf8.h>
-#include <swbuf.h>
+#include <string>
 
 
 namespace swordxx {
@@ -93,7 +93,7 @@ unsigned short SCSUUTF8::win[] = {
     0x0000, 0x00C0, 0x0250, 0x0370, 0x0530, 0x3040, 0x30A0, 0xFF60,
 };
 
-int SCSUUTF8::UTF8Output(unsigned long uchar, SWBuf* utf8Buf)
+int SCSUUTF8::UTF8Output(unsigned long uchar, std::string* utf8Buf)
 {
     // join UTF-16 surrogates without any pairing sanity checks
     if (uchar >= 0xd800 && uchar <= 0xdbff) {
@@ -129,23 +129,23 @@ int SCSUUTF8::UTF8Output(unsigned long uchar, SWBuf* utf8Buf)
 }
 #endif
 
-char SCSUUTF8::processText(SWBuf &text, const SWKey *key, const SWModule *module) {
+char SCSUUTF8::processText(std::string &text, const SWKey *key, const SWModule *module) {
     if ((unsigned long)key < 2)    // hack, we're en(1)/de(0)ciphering
         return -1;
 
 #ifdef _ICU_
     // Try decoding with ICU if possible
     err = U_ZERO_ERROR;
-    UnicodeString utf16Text(text.getRawData(), text.length(), scsuConv, err);
+    UnicodeString utf16Text(text.c_str(), text.length(), scsuConv, err);
     err = U_ZERO_ERROR;
-    int32_t len = utf16Text.extract(text.getRawData(), text.size(), utf8Conv, err);
+    int32_t len = utf16Text.extract(&text[0u], text.size(), utf8Conv, err);
     if (len > (int32_t)text.size()+1) {
-        text.setSize(len+1);
-        utf16Text.extract(text.getRawData(), text.size(), utf8Conv, err);
+        text.resize(len + 1, '\0');
+        utf16Text.extract(&text[0u], text.size(), utf8Conv, err);
     }
 #else
     // If ICU is unavailable, decode using Czyborra's decoder
-    SWBuf utf8Buf = "";
+    std::string utf8Buf = "";
     int len = text.length();
     const char* scsuString = text.c_str();
 

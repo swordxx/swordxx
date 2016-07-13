@@ -20,6 +20,8 @@
  *
  */
 
+#include <cassert>
+#include <cstring>
 #include <stdio.h>
 #include <stdlib.h>
 #include <fcntl.h>
@@ -104,6 +106,15 @@
 
 
 namespace swordxx {
+
+namespace {
+
+std::string getEnvironmentVariable(char const * const key) {
+    auto const value(::getenv(key));
+    return value ? value : std::string();
+};
+
+} // anonymous namespace
 
 
 #ifdef _ICU_
@@ -294,13 +305,12 @@ void SWMgr::init() {
 }
 
 
-SWBuf SWMgr::getHomeDir() {
-
+std::string SWMgr::getHomeDir() {
     // figure out 'home' directory for app data
-    SWBuf homeDir = getenv("HOME");
-    if (!homeDir.length()) {
+    std::string homeDir(getEnvironmentVariable("HOME"));
+    if (homeDir.empty()) {
         // silly windows
-        homeDir = getenv("APPDATA");
+        homeDir = getEnvironmentVariable("APPDATA");
     }
     if (homeDir.length()) {
         if ((homeDir[homeDir.length()-1] != '\\') && (homeDir[homeDir.length()-1] != '/')) {
@@ -352,7 +362,7 @@ SWMgr::SWMgr(const char *iConfigPath, bool autoload, SWFilterMgr *filterMgr, boo
     init();
 
     mgrModeMultiMod = multiMod;
-    SWBuf path;
+    std::string path;
 
     this->filterMgr = filterMgr;
     if (filterMgr)
@@ -360,7 +370,8 @@ SWMgr::SWMgr(const char *iConfigPath, bool autoload, SWFilterMgr *filterMgr, boo
 
     this->augmentHome = augmentHome;
 
-    path = iConfigPath;
+    if (iConfigPath)
+        path = iConfigPath;
     int len = path.length();
     if ((len < 1) || ((iConfigPath[len-1] != '\\') && (iConfigPath[len-1] != '/')))
         path += "/";
@@ -413,18 +424,18 @@ SWMgr::~SWMgr() {
 }
 
 
-void SWMgr::findConfig(char *configType, char **prefixPath, char **configPath, std::list<SWBuf> *augPaths, SWConfig **providedSysConf) {
-    SWBuf path;
-    SWBuf sysConfPath;
+void SWMgr::findConfig(char *configType, char **prefixPath, char **configPath, std::list<std::string> *augPaths, SWConfig **providedSysConf) {
+    std::string path;
+    std::string sysConfPath;
     ConfigEntMap::iterator entry;
     ConfigEntMap::iterator lastEntry;
 
     SWConfig *sysConf = 0;
-    SWBuf sysConfDataPath = "";
+    std::string sysConfDataPath = "";
 
     *configType = 0;
 
-    SWBuf homeDir = getHomeDir();
+    std::string homeDir = getHomeDir();
 
     // check for a sysConf passed in to us
     SWLog::getSystemLog()->logDebug("Checking for provided SWConfig(\"sword.conf\")...");
@@ -440,7 +451,7 @@ void SWMgr::findConfig(char *configType, char **prefixPath, char **configPath, s
         if (FileMgr::existsFile(".", "sword.conf")) {
             SWLog::getSystemLog()->logDebug("Overriding any systemwide or ~/.sword/ sword.conf with one found in current directory.");
             sysConfPath = "./sword.conf";
-            sysConf = new SWConfig(sysConfPath);
+            sysConf = new SWConfig(sysConfPath.c_str());
             if ((entry = sysConf->Sections["Install"].find("DataPath")) != sysConf->Sections["Install"].end()) {
                 sysConfDataPath = (*entry).second;
             }
@@ -483,7 +494,7 @@ void SWMgr::findConfig(char *configType, char **prefixPath, char **configPath, s
             // check environment variable SWORD_PATH
             SWLog::getSystemLog()->logDebug("Checking $SWORD_PATH...");
 
-            SWBuf envsworddir = getenv("SWORD_PATH");
+            std::string envsworddir(getEnvironmentVariable("SWORD_PATH"));
             if (envsworddir.length()) {
 
                 SWLog::getSystemLog()->logDebug("found (%s).", envsworddir.c_str());
@@ -530,16 +541,16 @@ void SWMgr::findConfig(char *configType, char **prefixPath, char **configPath, s
             delete [] globPaths;
 
             if (homeDir.length()) {
-                SWBuf tryPath = homeDir;
+                std::string tryPath = homeDir;
                 tryPath += ".sword/sword.conf";
-                if (FileMgr::existsFile(tryPath)) {
+                if (FileMgr::existsFile(tryPath.c_str())) {
                     SWLog::getSystemLog()->logDebug("Overriding any systemwide sword.conf with one found in users home directory (%s)", tryPath.c_str());
                     sysConfPath = tryPath;
                 }
                 else {
-                    SWBuf tryPath = homeDir;
+                    std::string tryPath = homeDir;
                     tryPath += "sword/sword.conf";
-                    if (FileMgr::existsFile(tryPath)) {
+                    if (FileMgr::existsFile(tryPath.c_str())) {
                         SWLog::getSystemLog()->logDebug("Overriding any systemwide sword.conf with one found in users home directory (%s)", tryPath.c_str());
                         sysConfPath = tryPath;
                     }
@@ -549,16 +560,15 @@ void SWMgr::findConfig(char *configType, char **prefixPath, char **configPath, s
     }
 
     if (!sysConf && sysConfPath.size()) {
-        sysConf = new SWConfig(sysConfPath);
+        sysConf = new SWConfig(sysConfPath.c_str());
     }
 
     if (sysConf) {
         if ((entry = sysConf->Sections["Install"].find("DataPath")) != sysConf->Sections["Install"].end()) {
             sysConfDataPath = (*entry).second;
         }
-        if (sysConfDataPath.size()) {
-            if ((!sysConfDataPath.endsWith("\\")) && (!sysConfDataPath.endsWith("/")))
-                sysConfDataPath += "/";
+        if (!sysConfDataPath.empty()) {
+            addTrailingDirectorySlash(sysConfDataPath);
 
             path = sysConfDataPath;
             SWLog::getSystemLog()->logDebug("DataPath in %s is set to %s.", sysConfPath.c_str(), path.c_str());
@@ -614,12 +624,11 @@ void SWMgr::findConfig(char *configType, char **prefixPath, char **configPath, s
 
     SWLog::getSystemLog()->logDebug("Checking $ALLUSERSPROFILE/Application Data/sword/...");
 
-    SWBuf envallusersdir  = getenv("ALLUSERSPROFILE");
-    if (envallusersdir.length()) {
+    std::string envallusersdir(getEnvironmentVariable("ALLUSERSPROFILE"));
+    if (!envallusersdir.empty()) {
         SWLog::getSystemLog()->logDebug("found (%s).", envallusersdir.c_str());
         path = envallusersdir;
-        if ((!path.endsWith("\\")) && (!path.endsWith("/")))
-            path += "/";
+        addTrailingDirectorySlash(path);
 
         path += "Application Data/sword/";
         SWLog::getSystemLog()->logDebug("Checking %s for mods.d...", path.c_str());
@@ -638,12 +647,11 @@ void SWMgr::findConfig(char *configType, char **prefixPath, char **configPath, s
 
     SWLog::getSystemLog()->logDebug("Checking $HOME/Library/Application Support/Sword/...");
 
-    SWBuf pathCheck = getHomeDir();
+    std::string pathCheck = getHomeDir();
     if (pathCheck.length()) {
         SWLog::getSystemLog()->logDebug("found (%s).", pathCheck.c_str());
         path = pathCheck;
-        if ((!path.endsWith("\\")) && (!path.endsWith("/")))
-            path += "/";
+        addTrailingDirectorySlash(path);
 
         SWLog::getSystemLog()->logDebug("Checking %s for mods.d...", path.c_str());
         if (FileMgr::existsDir(path.c_str(), "mods.d")) {
@@ -700,9 +708,10 @@ void SWMgr::findConfig(char *configType, char **prefixPath, char **configPath, s
 
 void SWMgr::loadConfigDir(const char *ipath)
 {
+    assert(ipath);
     DIR *dir;
     struct dirent *ent;
-    SWBuf newmodfile;
+    std::string newmodfile;
 
     if ((dir = opendir(ipath))) {
         rewinddir(dir);
@@ -736,9 +745,9 @@ void SWMgr::loadConfigDir(const char *ipath)
 
 
 void SWMgr::augmentModules(const char *ipath, bool multiMod) {
-    SWBuf path = ipath;
-    if ((ipath[strlen(ipath)-1] != '\\') && (ipath[strlen(ipath)-1] != '/'))
-        path += "/";
+    assert(ipath);
+    std::string path(ipath);
+    addTrailingDirectorySlash(path);
     if (FileMgr::existsDir(path.c_str(), "mods.d")) {
         char *savePrefixPath = 0;
         char *saveConfigPath = 0;
@@ -760,10 +769,10 @@ void SWMgr::augmentModules(const char *ipath, bool multiMod) {
                 if (saveConfig->Sections.find( (*it).first ) != saveConfig->Sections.end()) { //if the new section is already present rename it
                     ConfigEntMap entMap((*it).second);
 
-                    SWBuf name;
+                    std::string name;
                     int i = 1;
                     do { //module name already used?
-                        name.setFormatted("%s_%d", (*it).first.c_str(), i);
+                        name = formatted("%s_%d", (*it).first.c_str(), i);
                         i++;
                     } while (config->Sections.find(name) != config->Sections.end());
 
@@ -834,14 +843,14 @@ signed char SWMgr::Load() {
 
         CreateMods(mgrModeMultiMod);
 
-        for (std::list<SWBuf>::iterator pathIt = augPaths.begin(); pathIt != augPaths.end(); pathIt++) {
+        for (std::list<std::string>::iterator pathIt = augPaths.begin(); pathIt != augPaths.end(); pathIt++) {
             augmentModules(pathIt->c_str(), mgrModeMultiMod);
         }
         if (augmentHome) {
             // augment config with ~/.sword/mods.d if it exists ---------------------
-            SWBuf homeDir = getHomeDir();
+            std::string homeDir = getHomeDir();
             if (homeDir.length() && configType != 2) { // 2 = user only
-                SWBuf path = homeDir;
+                std::string path = homeDir;
                 path += ".sword/";
                 augmentModules(path.c_str(), mgrModeMultiMod);
                 path = homeDir;
@@ -865,26 +874,26 @@ signed char SWMgr::Load() {
 
 SWModule *SWMgr::createModule(const char *name, const char *driver, ConfigEntMap &section)
 {
-    SWBuf description, datapath, misc1;
+    std::string description, datapath, misc1;
     ConfigEntMap::iterator entry;
     SWModule *newmod = 0;
-    SWBuf lang, sourceformat, encoding;
+    std::string lang, sourceformat, encoding;
     signed char direction, enc, markup;
 
-    description  = ((entry = section.find("Description")) != section.end()) ? (*entry).second : (SWBuf)"";
-    lang  = ((entry = section.find("Lang")) != section.end()) ? (*entry).second : (SWBuf)"en";
-     sourceformat = ((entry = section.find("SourceType"))  != section.end()) ? (*entry).second : (SWBuf)"";
-     encoding = ((entry = section.find("Encoding"))  != section.end()) ? (*entry).second : (SWBuf)"";
+    description  = ((entry = section.find("Description")) != section.end()) ? (*entry).second : (std::string)"";
+    lang  = ((entry = section.find("Lang")) != section.end()) ? (*entry).second : (std::string)"en";
+     sourceformat = ((entry = section.find("SourceType"))  != section.end()) ? (*entry).second : (std::string)"";
+     encoding = ((entry = section.find("Encoding"))  != section.end()) ? (*entry).second : (std::string)"";
     datapath = prefixPath;
     if ((prefixPath[strlen(prefixPath)-1] != '\\') && (prefixPath[strlen(prefixPath)-1] != '/'))
         datapath += "/";
 
-    SWBuf versification = ((entry = section.find("Versification"))  != section.end()) ? (*entry).second : (SWBuf)"KJV";
+    std::string versification = ((entry = section.find("Versification"))  != section.end()) ? (*entry).second : (std::string)"KJV";
 
     // DataPath - relative path to data used by module driver.  May be a directory, may be a File.
     //   Typically not useful by outside world.  See AbsoluteDataPath, PrefixPath, and RelativePrefixPath
     //   below.
-    misc1 += ((entry = section.find("DataPath")) != section.end()) ? (*entry).second : (SWBuf)"";
+    misc1 += ((entry = section.find("DataPath")) != section.end()) ? (*entry).second : (std::string)"";
     char *buf = new char [ strlen(misc1.c_str()) + 1 ];
     char *buf2 = buf;
     strcpy(buf, misc1.c_str());
@@ -939,7 +948,7 @@ SWModule *SWMgr::createModule(const char *name, const char *driver, ConfigEntMap
     if ((!stricmp(driver, "zText")) || (!stricmp(driver, "zCom")) || (!stricmp(driver, "zText4")) || (!stricmp(driver, "zCom4"))) {
         SWCompress *compress = 0;
         int blockType = CHAPTERBLOCKS;
-        misc1 = ((entry = section.find("BlockType")) != section.end()) ? (*entry).second : (SWBuf)"CHAPTER";
+        misc1 = ((entry = section.find("BlockType")) != section.end()) ? (*entry).second : (std::string)"CHAPTER";
         if (!stricmp(misc1.c_str(), "VERSE"))
             blockType = VERSEBLOCKS;
         else if (!stricmp(misc1.c_str(), "CHAPTER"))
@@ -947,7 +956,7 @@ SWModule *SWMgr::createModule(const char *name, const char *driver, ConfigEntMap
         else if (!stricmp(misc1.c_str(), "BOOK"))
             blockType = BOOKBLOCKS;
 
-        misc1 = ((entry = section.find("CompressType")) != section.end()) ? (*entry).second : (SWBuf)"LZSS";
+        misc1 = ((entry = section.find("CompressType")) != section.end()) ? (*entry).second : (std::string)"LZSS";
         if (!stricmp(misc1.c_str(), "ZIP"))
             compress = new ZipCompress();
         else if (!stricmp(misc1.c_str(), "BZIP2"))
@@ -961,22 +970,22 @@ SWModule *SWMgr::createModule(const char *name, const char *driver, ConfigEntMap
 
         if (compress) {
             if (!stricmp(driver, "zText"))
-                newmod = new zText(datapath.c_str(), name, description.c_str(), blockType, compress, enc, direction, markup, lang.c_str(), versification);
+                newmod = new zText(datapath.c_str(), name, description.c_str(), blockType, compress, enc, direction, markup, lang.c_str(), versification.c_str());
             else if (!stricmp(driver, "zText4"))
-                newmod = new zText4(datapath.c_str(), name, description.c_str(), blockType, compress, enc, direction, markup, lang.c_str(), versification);
+                newmod = new zText4(datapath.c_str(), name, description.c_str(), blockType, compress, enc, direction, markup, lang.c_str(), versification.c_str());
             else if (!stricmp(driver, "zCom4"))
-                newmod = new zCom4(datapath.c_str(), name, description.c_str(), blockType, compress, enc, direction, markup, lang.c_str(), versification);
+                newmod = new zCom4(datapath.c_str(), name, description.c_str(), blockType, compress, enc, direction, markup, lang.c_str(), versification.c_str());
             else
-                newmod = new zCom(datapath.c_str(), name, description.c_str(), blockType, compress, enc, direction, markup, lang.c_str(), versification);
+                newmod = new zCom(datapath.c_str(), name, description.c_str(), blockType, compress, enc, direction, markup, lang.c_str(), versification.c_str());
         }
     }
 
     if (!stricmp(driver, "RawText")) {
-        newmod = new RawText(datapath.c_str(), name, description.c_str(), enc, direction, markup, lang.c_str(), versification);
+        newmod = new RawText(datapath.c_str(), name, description.c_str(), enc, direction, markup, lang.c_str(), versification.c_str());
     }
 
     if (!stricmp(driver, "RawText4")) {
-        newmod = new RawText4(datapath.c_str(), name, description.c_str(), enc, direction, markup, lang.c_str(), versification);
+        newmod = new RawText4(datapath.c_str(), name, description.c_str(), enc, direction, markup, lang.c_str(), versification.c_str());
     }
 
     // backward support old drivers
@@ -985,11 +994,11 @@ SWModule *SWMgr::createModule(const char *name, const char *driver, ConfigEntMap
     }
 
     if (!stricmp(driver, "RawCom")) {
-        newmod = new RawCom(datapath.c_str(), name, description.c_str(), enc, direction, markup, lang.c_str(), versification);
+        newmod = new RawCom(datapath.c_str(), name, description.c_str(), enc, direction, markup, lang.c_str(), versification.c_str());
     }
 
     if (!stricmp(driver, "RawCom4")) {
-        newmod = new RawCom4(datapath.c_str(), name, description.c_str(), enc, direction, markup, lang.c_str(), versification);
+        newmod = new RawCom4(datapath.c_str(), name, description.c_str(), enc, direction, markup, lang.c_str(), versification.c_str());
     }
 
     if (!stricmp(driver, "RawFiles")) {
@@ -997,7 +1006,7 @@ SWModule *SWMgr::createModule(const char *name, const char *driver, ConfigEntMap
     }
 
     if (!stricmp(driver, "HREFCom")) {
-        misc1 = ((entry = section.find("Prefix")) != section.end()) ? (*entry).second : (SWBuf)"";
+        misc1 = ((entry = section.find("Prefix")) != section.end()) ? (*entry).second : (std::string)"";
         newmod = new HREFCom(datapath.c_str(), misc1.c_str(), name, description.c_str());
     }
 
@@ -1021,11 +1030,11 @@ SWModule *SWMgr::createModule(const char *name, const char *driver, ConfigEntMap
         int blockCount;
         bool caseSensitive = ((entry = section.find("CaseSensitiveKeys")) != section.end()) ? (*entry).second == "true": false;
         bool strongsPadding = ((entry = section.find("StrongsPadding")) != section.end()) ? (*entry).second == "true": true;
-        misc1 = ((entry = section.find("BlockCount")) != section.end()) ? (*entry).second : (SWBuf)"200";
+        misc1 = ((entry = section.find("BlockCount")) != section.end()) ? (*entry).second : (std::string)"200";
         blockCount = atoi(misc1.c_str());
         blockCount = (blockCount) ? blockCount : 200;
 
-        misc1 = ((entry = section.find("CompressType")) != section.end()) ? (*entry).second : (SWBuf)"LZSS";
+        misc1 = ((entry = section.find("CompressType")) != section.end()) ? (*entry).second : (std::string)"LZSS";
         if (!stricmp(misc1.c_str(), "ZIP"))
             compress = new ZipCompress();
         else if (!stricmp(misc1.c_str(), "BZIP2"))
@@ -1044,27 +1053,17 @@ SWModule *SWMgr::createModule(const char *name, const char *driver, ConfigEntMap
     }
 
     if (!stricmp(driver, "RawGenBook")) {
-        misc1 = ((entry = section.find("KeyType")) != section.end()) ? (*entry).second : (SWBuf)"TreeKey";
+        misc1 = ((entry = section.find("KeyType")) != section.end()) ? (*entry).second : (std::string)"TreeKey";
         newmod = new RawGenBook(datapath.c_str(), name, description.c_str(), enc, direction, markup, lang.c_str(), misc1.c_str());
         pos = 1;
     }
 
     if (pos == 1) {
-        SWBuf &dp = section["AbsoluteDataPath"];
-        for (int i = dp.length() - 1; i; i--) {
-            if (dp[i] == '/') {
-                dp.setSize(i);
-                break;
-            }
-        }
+        std::string &dp = section["AbsoluteDataPath"];
+        removeTrailingDirectorySlashes(dp);
 /*
-        SWBuf &rdp = section["RelativeDataPath"];
-        for (int i = rdp.length() - 1; i; i--) {
-            if (rdp[i] == '/') {
-                rdp.setSize(i);
-                break;
-            }
-        }
+        std::string &rdp = section["RelativeDataPath"];
+        removeTrailingDirectorySlashes(rdp);
 */
     }
 
@@ -1081,28 +1080,32 @@ SWModule *SWMgr::createModule(const char *name, const char *driver, ConfigEntMap
 
 
 void SWMgr::AddGlobalOptions(SWModule *module, ConfigEntMap &section, ConfigEntMap::iterator start, ConfigEntMap::iterator end) {
-
     for (;start != end; ++start) {
         OptionFilterMap::iterator it;
-        SWBuf filterName = start->second;
+        std::string filterName(start->second);
 
 
         // special cases for filters with parameters
 
-        if (filterName.startsWith("OSISReferenceLinks")) {
-            SWBuf params = filterName;
-            filterName = params.stripPrefix('|', true);
-            SWBuf optionName = params.stripPrefix('|', true);
-            SWBuf optionTip = params.stripPrefix('|', true);
-            SWBuf optionType = params.stripPrefix('|', true);
-            SWBuf optionSubType = params.stripPrefix('|', true);
-            SWBuf optionDefaultValue = params.stripPrefix('|', true);
+        if (hasPrefix(filterName, "OSISReferenceLinks")) {
+            std::string params = filterName;
+            filterName = stripPrefix(params, '|');
+            std::string optionName = stripPrefix(params, '|');
+            std::string optionTip = stripPrefix(params, '|');
+            std::string optionType = stripPrefix(params, '|');
+            std::string optionSubType = stripPrefix(params, '|');
+            std::string optionDefaultValue = stripPrefix(params, '|');
             // we'll key off of type and subtype.
             filterName = filterName + "." + optionType + "." + optionSubType;
 
             it = optionFilters.find(filterName);
             if (it == optionFilters.end()) {
-                SWOptionFilter *tmpFilter = new OSISReferenceLinks(optionName, optionTip, optionType, optionSubType, optionDefaultValue);
+                SWOptionFilter *tmpFilter =
+                        new OSISReferenceLinks(optionName.c_str(),
+                                               optionTip.c_str(),
+                                               optionType.c_str(),
+                                               optionSubType.c_str(),
+                                               optionDefaultValue.c_str());
                 optionFilters.insert(OptionFilterMap::value_type(filterName, tmpFilter));
                 cleanupFilters.push_back(tmpFilter);
             }
@@ -1129,7 +1132,7 @@ void SWMgr::AddGlobalOptions(SWModule *module, ConfigEntMap &section, ConfigEntM
 }
 
 
-char SWMgr::filterText(const char *filterName, SWBuf &text, const SWKey *key, const SWModule *module)
+char SWMgr::filterText(const char *filterName, std::string &text, const SWKey *key, const SWModule *module)
 {
     char retVal = -1;
     // why didn't we use find here?
@@ -1182,10 +1185,10 @@ void SWMgr::AddStripFilters(SWModule *module, ConfigEntMap &section, ConfigEntMa
 
 
 void SWMgr::AddRawFilters(SWModule *module, ConfigEntMap &section) {
-    SWBuf sourceformat, cipherKey;
+    std::string cipherKey;
     ConfigEntMap::iterator entry;
 
-    cipherKey = ((entry = section.find("CipherKey")) != section.end()) ? (*entry).second : (SWBuf)"";
+    cipherKey = ((entry = section.find("CipherKey")) != section.end()) ? (*entry).second : (std::string)"";
     if (cipherKey.length()) {
         SWFilter *cipherFilter = new CipherFilter(cipherKey.c_str());
         cipherFilters.insert(FilterMap::value_type(module->getName(), cipherFilter));
@@ -1205,15 +1208,15 @@ void SWMgr::AddEncodingFilters(SWModule *module, ConfigEntMap &section) {
 
 
 void SWMgr::AddRenderFilters(SWModule *module, ConfigEntMap &section) {
-    SWBuf sourceformat;
+    std::string sourceformat;
     ConfigEntMap::iterator entry;
 
-    sourceformat = ((entry = section.find("SourceType")) != section.end()) ? (*entry).second : (SWBuf)"";
+    sourceformat = ((entry = section.find("SourceType")) != section.end()) ? (*entry).second : (std::string)"";
 
     // Temporary: To support old module types
     // TODO: Remove at 1.6.0 release?
     if (!sourceformat.length()) {
-        sourceformat = ((entry = section.find("ModDrv")) != section.end()) ? (*entry).second : (SWBuf)"";
+        sourceformat = ((entry = section.find("ModDrv")) != section.end()) ? (*entry).second : (std::string)"";
         if (!stricmp(sourceformat.c_str(), "RawGBF"))
             sourceformat = "GBF";
         else sourceformat = "";
@@ -1232,13 +1235,13 @@ void SWMgr::AddRenderFilters(SWModule *module, ConfigEntMap &section) {
 
 void SWMgr::AddStripFilters(SWModule *module, ConfigEntMap &section)
 {
-    SWBuf sourceformat;
+    std::string sourceformat;
     ConfigEntMap::iterator entry;
 
-    sourceformat = ((entry = section.find("SourceType")) != section.end()) ? (*entry).second : (SWBuf)"";
+    sourceformat = ((entry = section.find("SourceType")) != section.end()) ? (*entry).second : (std::string)"";
     // Temporary: To support old module types
     if (!sourceformat.length()) {
-        sourceformat = ((entry = section.find("ModDrv")) != section.end()) ? (*entry).second : (SWBuf)"";
+        sourceformat = ((entry = section.find("ModDrv")) != section.end()) ? (*entry).second : (std::string)"";
         if (!stricmp(sourceformat.c_str(), "RawGBF"))
             sourceformat = "GBF";
         else sourceformat = "";
@@ -1269,14 +1272,14 @@ void SWMgr::CreateMods(bool multiMod) {
     ConfigEntMap::iterator end;
     ConfigEntMap::iterator entry;
     SWModule *newmod;
-    SWBuf driver, misc1;
+    std::string driver;
     for (it = config->Sections.begin(); it != config->Sections.end(); it++) {
         ConfigEntMap &section = (*it).second;
         newmod = 0;
 
-        driver = ((entry = section.find("ModDrv")) != section.end()) ? (*entry).second : (SWBuf)"";
+        driver = ((entry = section.find("ModDrv")) != section.end()) ? (*entry).second : (std::string)"";
         if (driver.length()) {
-            newmod = createModule((*it).first, driver, section);
+            newmod = createModule((*it).first.c_str(), driver.c_str(), section);
             if (newmod) {
                 // Filters to add for this module and globally announce as an option to the user
                 // e.g. translit, strongs, redletterwords, etc, so users can turn these on and off globally
@@ -1343,8 +1346,8 @@ void SWMgr::InstallScan(const char *dirname)
    DIR *dir;
    struct dirent *ent;
    FileDesc *conffd = 0;
-   SWBuf newmodfile;
-   SWBuf targetName;
+   std::string newmodfile;
+   std::string targetName;
 
     if (FileMgr::existsDir(dirname)) {
         if ((dir = opendir(dirname))) {

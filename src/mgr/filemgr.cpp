@@ -30,7 +30,7 @@
 #include <sys/types.h>
 #include <stdio.h>
 #include <string.h>
-#include <swbuf.h>
+#include <string>
 #if !defined(__GNUC__) && !defined(_WIN32_WCE)
 #include <io.h>
 #include <direct.h>
@@ -433,16 +433,16 @@ int FileMgr::removeFile(const char *fName) {
     return ::remove(fName);
 }
 
-char FileMgr::getLine(FileDesc *fDesc, SWBuf &line) {
+std::string FileMgr::getLine(FileDesc *fDesc) {
     int len;
     bool more = true;
     char chunk[255];
 
-    line = "";
+    std::string line;
 
     // assert we have a valid file handle
     if (fDesc->getFd() < 1)
-        return 0;
+        return line;
 
     while (more) {
         more = false;
@@ -494,7 +494,7 @@ char FileMgr::getLine(FileDesc *fDesc, SWBuf &line) {
             line.append(chunk+start, size);
         }
     }
-    return ((len > 0) || line.length());
+    return line;
 }
 
 
@@ -512,11 +512,13 @@ int FileMgr::copyDir(const char *srcDir, const char *destDir) {
     int retVal = 0;
     if ((dir = opendir(srcDir))) {
         try {
+            std::string sDir(std::string(srcDir) + '/');
+            std::string dDir(std::string(destDir) + '/');
             rewinddir(dir);
             while ((ent = readdir(dir)) && !retVal) {
                 if ((strcmp(ent->d_name, ".")) && (strcmp(ent->d_name, ".."))) {
-                    SWBuf srcPath  = (SWBuf)srcDir  + (SWBuf)"/" + ent->d_name;
-                    SWBuf destPath = (SWBuf)destDir + (SWBuf)"/" + ent->d_name;
+                    std::string const srcPath(sDir + ent->d_name);
+                    std::string const destPath(dDir + ent->d_name);
                     if (!isDirectory(srcPath.c_str())) {
                         retVal = copyFile(srcPath.c_str(), destPath.c_str());
                     }
@@ -542,7 +544,7 @@ int FileMgr::removeDir(const char *targetDir) {
         rewinddir(dir);
         while ((ent = readdir(dir))) {
             if ((strcmp(ent->d_name, ".")) && (strcmp(ent->d_name, ".."))) {
-                SWBuf targetPath = (SWBuf)targetDir + (SWBuf)"/" + ent->d_name;
+                std::string targetPath(std::string(targetDir) + '/' + ent->d_name);
                 if (!isDirectory(targetPath.c_str())) {
                     FileMgr::removeFile(targetPath.c_str());
                 }

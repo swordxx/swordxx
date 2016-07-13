@@ -54,7 +54,7 @@ OSISOSIS::OSISOSIS() {
 }
 
 
-char OSISOSIS::processText(SWBuf &text, const SWKey *key, const SWModule *module) {
+char OSISOSIS::processText(std::string &text, const SWKey *key, const SWModule *module) {
     char status = SWBasicFilter::processText(text, key, module);
     VerseKey *vkey = SWDYNAMIC_CAST(VerseKey, key);
     if (vkey) {
@@ -92,7 +92,7 @@ char OSISOSIS::processText(SWBuf &text, const SWKey *key, const SWModule *module
     return status;
 }
 
-bool OSISOSIS::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData) {
+bool OSISOSIS::handleToken(std::string &buf, const char *token, BasicFilterUserData *userData) {
   // manually process if it wasn't a simple substitution
     if (!substituteToken(buf, token)) {
         MyUserData *u = (MyUserData *)userData;
@@ -106,25 +106,25 @@ bool OSISOSIS::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *u
 
             // start <w> tag
             if ((!tag.isEmpty()) && (!tag.isEndTag())) {
-                SWBuf attr = tag.getAttribute("lemma");
+                std::string attr = tag.getAttribute("lemma");
                 if (attr.length()) {
                     if (!strncmp(attr.c_str(), "x-Strongs:", 10)) {
-                        memcpy(attr.getRawData()+3, "strong", 6);
-                        attr << 3;
-                        tag.setAttribute("lemma", attr);
+                        std::memcpy(&attr[3u], "strong", 6);
+                        attr.erase(0u, 3u);
+                        tag.setAttribute("lemma", attr.c_str());
                     }
                 }
                 attr = tag.getAttribute("morph");
                 if (attr.length()) {
                     if (!strncmp(attr.c_str(), "x-StrongsMorph:", 15)) {
-                        memcpy(attr.getRawData()+3, "strong", 6);
-                        attr << 3;
-                        tag.setAttribute("lemma", attr);
+                        memcpy(&attr[3u], "strong", 6);
+                        attr.erase(0u, 3u);
+                        tag.setAttribute("lemma", attr.c_str());
                     }
                     if (!strncmp(attr.c_str(), "x-Robinson:", 11)) {
                         attr[2] = 'r';
-                        attr << 2;
-                        tag.setAttribute("lemma", attr);
+                        attr.erase(0u, 2u);
+                        tag.setAttribute("lemma", attr.c_str());
                     }
                 }
                 tag.setAttribute("wn", 0);
@@ -137,7 +137,7 @@ bool OSISOSIS::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *u
         // <note> tag
         else if (!strcmp(tag.getName(), "note")) {
             if (!tag.isEndTag()) {
-                SWBuf type = tag.getAttribute("type");
+                std::string type = tag.getAttribute("type");
 
                 bool strongsMarkup = (type == "x-strongsMarkup" || type == "strongsMarkup");    // the latter is deprecated
                 if (strongsMarkup) {
@@ -155,9 +155,9 @@ bool OSISOSIS::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *u
 
                 if (u->module) {
                                         XMLTag tag = token;
-                                        SWBuf swordFootnote = tag.getAttribute("swordFootnote");
-                                        SWBuf footnoteBody = u->module->getEntryAttributes()["Footnote"][swordFootnote]["body"];
-                                        buf.append(u->module->renderText(footnoteBody));
+                                        std::string swordFootnote = tag.getAttribute("swordFootnote");
+                                        std::string footnoteBody = u->module->getEntryAttributes()["Footnote"][swordFootnote]["body"];
+                                        buf.append(u->module->renderText(footnoteBody.c_str()));
                                 }
             }
             if (tag.isEndTag()) {

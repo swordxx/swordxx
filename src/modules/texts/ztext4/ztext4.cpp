@@ -72,7 +72,7 @@ bool zText4::isWritable() const { return ((idxfp[0]->getFd() > 0) && ((idxfp[0]-
  * RET: buffer with verse
  */
 
-SWBuf &zText4::getRawEntryBuf() const {
+std::string &zText4::getRawEntryBuf() const {
     long  start = 0;
     unsigned long size = 0;
     unsigned long buffnum = 0;

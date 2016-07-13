@@ -50,8 +50,8 @@
 
 using namespace swordxx;
 
-SWBuf outPath;
-SWBuf inFile;
+std::string outPath;
+std::string inFile;
 bool  toUpper     = false;
 bool  greekFilter = false;
 bool  augMod      = false;
@@ -126,7 +126,7 @@ void parseParams(int argc, char **argv) {
 }
 
 
-void writeEntry(SWModule *book, SWBuf keyBuffer, SWBuf entBuffer) {
+void writeEntry(SWModule *book, std::string keyBuffer, std::string entBuffer) {
 
 
     if (greekFilter) {
@@ -207,7 +207,7 @@ void writeEntry(SWModule *book, SWBuf keyBuffer, SWBuf entBuffer) {
 
     // check to see if we already have an entry
     for (int i = 2; book->getKey()->popError() != KEYERR_OUTOFBOUNDS; i++) {
-        SWBuf key;
+        std::string key;
         key.setFormatted("%s {%d}", keyBuffer.c_str(), i);
         std::cout << "dup key, trying: " << key << std::endl;
         book->setKey(key.c_str());
@@ -236,9 +236,9 @@ int main(int argc, char **argv) {
     }
     book = new RawGenBook(outPath);
 
-    SWBuf lineBuffer;
-    SWBuf keyBuffer;
-    SWBuf entBuffer;
+    std::string lineBuffer;
+    std::string keyBuffer;
+    std::string entBuffer;
 
     bool more = true;
     do {

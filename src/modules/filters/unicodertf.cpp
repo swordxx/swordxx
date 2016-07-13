@@ -22,7 +22,7 @@
 
 #include <stdio.h>
 #include <unicodertf.h>
-#include <swbuf.h>
+#include <string>
 
 namespace swordxx {
 
@@ -30,7 +30,7 @@ UnicodeRTF::UnicodeRTF() {
 }
 
 
-char UnicodeRTF::processText(SWBuf &text, const SWKey *key, const SWModule *module)
+char UnicodeRTF::processText(std::string &text, const SWKey *key, const SWModule *module)
 {
     const unsigned char *from;
     char digit[10];
@@ -38,7 +38,7 @@ char UnicodeRTF::processText(SWBuf &text, const SWKey *key, const SWModule *modu
         signed short utf16;
     unsigned char from2[7];
 
-    SWBuf orig = text;
+    std::string orig = text;
 
     from = (const unsigned char *)orig.c_str();
 

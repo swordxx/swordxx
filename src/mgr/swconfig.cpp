@@ -22,6 +22,8 @@
  */
 
 #include <swconfig.h>
+
+#include <cstring>
 #include <utilstr.h>
 #include <filemgr.h>
 #include <fcntl.h>
@@ -50,28 +52,27 @@ void SWConfig::Load() {
 
     FileDesc *cfile;
     char *buf, *data;
-    SWBuf line;
     ConfigEntMap cursect;
-    SWBuf sectname;
+    std::string sectname;
     bool first = true;
 
     Sections.erase(Sections.begin(), Sections.end());
 
     cfile = FileMgr::getSystemFileMgr()->open(filename.c_str(), FileMgr::RDONLY);
     if (cfile->getFd() > 0) {
-        bool goodLine = FileMgr::getLine(cfile, line);
+        std::string line(FileMgr::getLine(cfile));
 
         // clean UTF encoding tags at start of file
-        while (goodLine && line.length() &&
+        while (!line.empty() &&
                 ((((unsigned char)line[0]) == 0xEF) ||
                  (((unsigned char)line[0]) == 0xBB) ||
                  (((unsigned char)line[0]) == 0xBF))) {
-            line << 1;
+            line.erase(0u, 1u);
         }
 
-        while (goodLine) {
+        while (!line.empty()) {
             // ignore commented lines
-            if (!line.startsWith("#")) {
+            if (!line.empty() && (*line.rbegin()) != '#') {
                 buf = new char [ line.length() + 1 ];
                 strcpy(buf, line.c_str());
                 if (*strstrip(buf) == '[') {
@@ -94,7 +95,7 @@ void SWConfig::Load() {
                 }
                 delete [] buf;
             }
-            goodLine = FileMgr::getLine(cfile, line);
+            line = FileMgr::getLine(cfile);
         }
         if (!first)
             Sections.insert(SectionMap::value_type(sectname, cursect));
@@ -109,10 +110,10 @@ void SWConfig::Save() {
     if (!filename.size()) return;    // assert we have a filename
 
     FileDesc *cfile;
-    SWBuf buf;
+    std::string buf;
     SectionMap::iterator sit;
     ConfigEntMap::iterator entry;
-    SWBuf sectname;
+    std::string sectname;
 
     cfile = FileMgr::getSystemFileMgr()->open(filename.c_str(), FileMgr::RDWR|FileMgr::CREAT|FileMgr::TRUNC);
     if (cfile->getFd() > 0) {

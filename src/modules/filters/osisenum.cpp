@@ -23,6 +23,7 @@
 
 #include <stdlib.h>
 #include <osisenum.h>
+#include <utilstr.h>
 #include <utilxml.h>
 
 
@@ -34,7 +35,7 @@ namespace {
     static const char oTip[]  = "Toggles Enumerations On and Off if they exist";
 
     static const StringList *oValues() {
-        static const SWBuf choices[3] = {"Off", "On", ""};
+        static const std::string choices[3] = {"Off", "On", ""};
         static const StringList oVals(&choices[0], &choices[2]);
         return &oVals;
     }
@@ -49,11 +50,11 @@ OSISEnum::~OSISEnum() {
 }
 
 
-char OSISEnum::processText(SWBuf &text, const SWKey *key, const SWModule *module) {
-    SWBuf token;
+char OSISEnum::processText(std::string &text, const SWKey *key, const SWModule *module) {
+    std::string token;
     bool intoken = false;
 
-    const SWBuf orig = text;
+    const std::string orig = text;
     const char * from = orig.c_str();
 
     if (!option) {
@@ -65,23 +66,22 @@ char OSISEnum::processText(SWBuf &text, const SWKey *key, const SWModule *module
             }
             if (*from == '>') {    // process tokens
                 intoken = false;
-                if (token.startsWith("w ")) {    // Word
-                    XMLTag wtag(token);
-                    const char *l = wtag.getAttribute("n");
-                    if (l) {
+                if (hasPrefix(token, "w ")) {    // Word
+                    XMLTag wtag(token.c_str());
+                    if (!wtag.getAttribute("n").empty()) {
                         wtag.setAttribute("n", 0);
                         token = wtag;
-                        token.trim();
+                        trimString(token);
                         // drop <>
-                        token << 1;
-                        token--;
+                        token.erase(0u, 1u);
+                        token.pop_back();
                     }
                 }
 
                 // keep token in text
-                text.append('<');
+                text.push_back('<');
                 text.append(token);
-                text.append('>');
+                text.push_back('>');
 
                 continue;
             }
@@ -89,7 +89,7 @@ char OSISEnum::processText(SWBuf &text, const SWKey *key, const SWModule *module
                 token += *from;
             }
             else    {
-                text.append(*from);
+                text.push_back(*from);
             }
         }
     }

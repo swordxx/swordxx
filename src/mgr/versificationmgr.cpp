@@ -22,6 +22,8 @@
  */
 
 #include <versificationmgr.h>
+
+#include <cstring>
 #include <vector>
 #include <map>
 #include <treekey.h>
@@ -88,7 +90,7 @@ class VersificationMgr::System::Private {
 public:
     /** Array[chapmax] of maximum verses in chapters */
     vector<Book> books;
-    map<SWBuf, int> osisLookup;
+    map<std::string, int> osisLookup;
     /** General mapping rule is that first verse of every chapter corresponds first
         verse of another chapter in default intermediate canon(kjva), so mapping data
         contains expections. Intermediate canon could not contain corresponding data.
@@ -194,7 +196,7 @@ const VersificationMgr::Book *VersificationMgr::System::getBook(int number) cons
 
 
 int VersificationMgr::System::getBookNumberByOSISName(const char *bookName) const {
-    map<SWBuf, int>::const_iterator it = p->osisLookup.find(bookName);
+    map<std::string, int>::const_iterator it = p->osisLookup.find(bookName);
     return (it != p->osisLookup.end()) ? it->second : -1;
 }
 
@@ -374,7 +376,7 @@ public:
         systems = other.systems;
         return *this;
     }
-    map<SWBuf, System> systems;
+    map<std::string, System> systems;
 };
 // ---------------- statics -----------------
 VersificationMgr *VersificationMgr::systemVersificationMgr = 0;
@@ -404,7 +406,7 @@ void VersificationMgr::setSystemVersificationMgr(VersificationMgr *newVersificat
 
 
 const VersificationMgr::System *VersificationMgr::getVersificationSystem(const char *name) const {
-    map<SWBuf, System>::const_iterator it = p->systems.find(name);
+    map<std::string, System>::const_iterator it = p->systems.find(name);
     return (it != p->systems.end()) ? &(it->second) : 0;
 }
 
@@ -422,7 +424,7 @@ void VersificationMgr::registerVersificationSystem(const char *name, const TreeK
 
 const StringList VersificationMgr::getVersificationSystems() const {
     StringList retVal;
-    for (map<SWBuf, System>::const_iterator it = p->systems.begin(); it != p->systems.end(); it++) {
+    for (map<std::string, System>::const_iterator it = p->systems.begin(); it != p->systems.end(); it++) {
         retVal.push_back(it->first);
     }
     return retVal;

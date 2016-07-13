@@ -22,7 +22,7 @@
 
 #include <cipherfil.h>
 #include <filemgr.h>
-#include <swbuf.h>
+#include <string>
 #include <iostream>
 
 using namespace swordxx;
@@ -39,7 +39,7 @@ int main(int argc, char **argv) {
 
     SWFilter *filter = new CipherFilter(argv[1]);
 
-    SWBuf text;
+    std::string text;
     char buf[4096];
     std::cin >> buf;
     text = buf;

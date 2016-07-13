@@ -34,7 +34,7 @@ namespace {
     static const char oTip[]  = "Toggles Red Coloring for Words of Christ On and Off if they are marked";
 
     static const StringList *oValues() {
-        static const SWBuf choices[3] = {"On", "Off", ""};
+        static const std::string choices[3] = {"On", "Off", ""};
         static const StringList oVals(&choices[0], &choices[2]);
         return &oVals;
     }
@@ -49,14 +49,14 @@ OSISRedLetterWords::~OSISRedLetterWords() {
 }
 
 
-char OSISRedLetterWords::processText(SWBuf &text, const SWKey *key, const SWModule *module) {
+char OSISRedLetterWords::processText(std::string &text, const SWKey *key, const SWModule *module) {
     if (option) //leave in the red lettered words
         return 0;
 
-    SWBuf token;
+    std::string token;
     bool intoken    = false;
 
-    SWBuf orig = text;
+    std::string orig = text;
     const char *from = orig.c_str();
 
     //taken out of the loop
@@ -77,27 +77,27 @@ char OSISRedLetterWords::processText(SWBuf &text, const SWKey *key, const SWModu
                 if (start && (strlen(start) >= 12)) { //we found a quote of Jesus Christ
                     end = start+12; //marks the end of the who attribute value
 
-                    text.append('<');
-                    text.append(token, start - (token.c_str())); //the text before the who attr
+                    text.push_back('<');
+                    text.append(token.c_str(), start - (token.c_str())); //the text before the who attr
                     text.append(end, token.c_str() + token.length() - end);  //text after the who attr
-                    text.append('>');
+                    text.push_back('>');
 
                     continue;
                 }
             }
 
             //token not processed, append it. We don't want to alter the text
-            text.append('<');
+            text.push_back('<');
             text.append(token);
-            text.append('>');
+            text.push_back('>');
             continue;
         }
 
         if (intoken) { //copy token
-            token.append(*from);
+            token.push_back(*from);
         }
         else { //copy text which is not inside a token
-            text.append(*from);
+            text.push_back(*from);
         }
     }
     return 0;

@@ -170,11 +170,11 @@ ThMLRTF::ThMLRTF() {
 }
 
 
-char ThMLRTF::processText(SWBuf &text, const SWKey *key, const SWModule *module) {
+char ThMLRTF::processText(std::string &text, const SWKey *key, const SWModule *module) {
 
     // preprocess text buffer to escape RTF control codes
     const char *from;
-    SWBuf orig = text;
+    std::string orig = text;
     from = orig.c_str();
     for (text = ""; *from; from++) {  //loop to remove extra spaces
         switch (*from) {
@@ -220,28 +220,28 @@ ThMLRTF::MyUserData::MyUserData(const SWModule *module, const SWKey *key) : Basi
 }
 
 
-bool ThMLRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData) {
+bool ThMLRTF::handleToken(std::string &buf, const char *token, BasicFilterUserData *userData) {
     if (!substituteToken(buf, token)) { // manually process if it wasn't a simple substitution
         MyUserData *u = (MyUserData *)userData;
         XMLTag tag(token);
         if ((!tag.isEndTag()) && (!tag.isEmpty()))
             u->startTag = tag;
         if (tag.getName() && !strcmp(tag.getName(), "sync")) {
-            SWBuf value = tag.getAttribute("value");
-            if (tag.getAttribute("type") && !strcmp(tag.getAttribute("type"), "morph")) { //&gt;
-                buf.appendFormatted(" {\\cf4 \\sub (%s)}", value.c_str());
+            std::string value = tag.getAttribute("value");
+            if (!tag.getAttribute("type").empty() && !strcmp(tag.getAttribute("type").c_str(), "morph")) { //&gt;
+                buf += formatted(" {\\cf4 \\sub (%s)}", value.c_str());
             }
-            else if( tag.getAttribute("type") && !strcmp(tag.getAttribute("type"), "Strongs")) {
+            else if(!tag.getAttribute("type").empty() && !strcmp(tag.getAttribute("type").c_str(), "Strongs")) {
                 if (value[0] == 'H' || value[0] == 'G' || value[0] == 'A') {
-                    value<<1;
-                    buf.appendFormatted(" {\\cf3 \\sub <%s>}", value.c_str());
+                    value.erase(0u, 1u);
+                    buf += formatted(" {\\cf3 \\sub <%s>}", value.c_str());
                 }
                 else if (value[0] == 'T') {
-                    value<<1;
-                    buf.appendFormatted(" {\\cf4 \\sub (%s)}", value.c_str());
+                    value.erase(0u, 1u);
+                    buf += formatted(" {\\cf4 \\sub (%s)}", value.c_str());
                 }
             }
-            else if (tag.getAttribute("type") && !strcmp(tag.getAttribute("type"), "Dict")) {
+            else if (!tag.getAttribute("type").empty() && !strcmp(tag.getAttribute("type").c_str(), "Dict")) {
                 if (!tag.isEndTag())
                     buf += "{\\b ";
                 else    buf += "}";
@@ -251,8 +251,8 @@ bool ThMLRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
         else if (!strcmp(tag.getName(), "note")) {
             if (!tag.isEndTag()) {
                 if (!tag.isEmpty()) {
-                    SWBuf type = tag.getAttribute("type");
-                    SWBuf footnoteNumber = tag.getAttribute("swordFootnote");
+                    std::string type = tag.getAttribute("type");
+                    std::string footnoteNumber = tag.getAttribute("swordFootnote");
                     VerseKey *vkey = NULL;
                     // see if we have a VerseKey * or descendant
                     try {
@@ -261,8 +261,8 @@ bool ThMLRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
                     catch ( ... ) {    }
                     if (vkey) {
                         // leave this special osis type in for crossReference notes types?  Might thml use this some day? Doesn't hurt.
-                        char ch = ((tag.getAttribute("type") && ((!strcmp(tag.getAttribute("type"), "crossReference")) || (!strcmp(tag.getAttribute("type"), "x-cross-ref")))) ? 'x':'n');
-                        buf.appendFormatted("{\\super <a href=\"\">*%c%i.%s</a>} ", ch, vkey->getVerse(), footnoteNumber.c_str());
+                        char ch = ((!tag.getAttribute("type").empty() && ((!strcmp(tag.getAttribute("type").c_str(), "crossReference")) || (!strcmp(tag.getAttribute("type").c_str(), "x-cross-ref")))) ? 'x':'n');
+                        buf += formatted("{\\super <a href=\"\">*%c%i.%s</a>} ", ch, vkey->getVerse(), footnoteNumber.c_str());
                     }
                     u->suspendTextPassThru = true;
                 }
@@ -281,17 +281,17 @@ bool ThMLRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
             }
             if (tag.isEndTag()) {    //    </scripRef>
                 if (!u->BiblicalText) {
-                    SWBuf refList = u->startTag.getAttribute("passage");
+                    std::string refList = u->startTag.getAttribute("passage");
                     if (!refList.length())
                         refList = u->lastTextNode;
-                    SWBuf version = tag.getAttribute("version");
+                    std::string version = tag.getAttribute("version");
                     buf += "<a href=\"\">";
                     buf += refList.c_str();
 //                    buf += u->lastTextNode.c_str();
                     buf += "</a>";
                 }
                 else {
-                    SWBuf footnoteNumber = u->startTag.getAttribute("swordFootnote");
+                    std::string footnoteNumber = u->startTag.getAttribute("swordFootnote");
                     VerseKey *vkey = NULL;
                     // see if we have a VerseKey * or descendant
                     try {
@@ -300,7 +300,7 @@ bool ThMLRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
                     catch ( ... ) {}
                     if (vkey) {
                         // leave this special osis type in for crossReference notes types?  Might thml use this some day? Doesn't hurt.
-                        buf.appendFormatted("{\\super <a href=\"\">*x%i.%s</a>} ", vkey->getVerse(), footnoteNumber.c_str());
+                        buf += formatted("{\\super <a href=\"\">*x%i.%s</a>} ", vkey->getVerse(), footnoteNumber.c_str());
                     }
                 }
 
@@ -314,26 +314,26 @@ bool ThMLRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
                 buf += "\\par}";
                 u->SecHead = false;
             }
-            else if (tag.getAttribute("class")) {
-                if (!stricmp(tag.getAttribute("class"), "sechead")) {
+            else if (!tag.getAttribute("class").empty()) {
+                if (!stricmp(tag.getAttribute("class").c_str(), "sechead")) {
                     u->SecHead = true;
                     buf += "{\\par\\i1\\b1 ";
                 }
-                else if (!stricmp(tag.getAttribute("class"), "title")) {
+                else if (!stricmp(tag.getAttribute("class").c_str(), "title")) {
                     u->SecHead = true;
                     buf += "{\\par\\i1\\b1 ";
                 }
             }
         }
         else if (tag.getName() && (!strcmp(tag.getName(), "img") || !strcmp(tag.getName(), "image"))) {
-            const char *src = tag.getAttribute("src");
-            if (!src)        // assert we have a src attribute
+            auto const src(tag.getAttribute("src"));
+            if (src.empty())        // assert we have a src attribute
                 return false;
 
             char* filepath = new char[strlen(u->module->getConfigEntry("AbsoluteDataPath")) + strlen(token)];
             *filepath = 0;
             strcpy(filepath, userData->module->getConfigEntry("AbsoluteDataPath"));
-            strcat(filepath, src);
+            strcat(filepath, src.c_str());
 
 // we do this because BibleCS looks for this EXACT format for an image tag
             buf+="<img src=\"";

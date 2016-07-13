@@ -20,6 +20,7 @@
  *
  */
 
+#include <cstring>
 #include <stdlib.h>
 #include <teiplain.h>
 #include <ctype.h>
@@ -45,7 +46,7 @@ TEIPlain::TEIPlain() {
 }
 
 
-bool TEIPlain::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData) {
+bool TEIPlain::handleToken(std::string &buf, const char *token, BasicFilterUserData *userData) {
   // manually process if it wasn't a simple substitution
     if (!substituteToken(buf, token)) {
         //MyUserData *u = (MyUserData *)userData;
@@ -68,7 +69,7 @@ bool TEIPlain::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *u
 
         // <entryFree>
         else if (!strcmp(tag.getName(), "entryFree")) {
-            SWBuf n = tag.getAttribute("n");
+            std::string n = tag.getAttribute("n");
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {
                     if (n != "") {
                     buf += n;
@@ -79,7 +80,7 @@ bool TEIPlain::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *u
 
         // <sense>
         else if (!strcmp(tag.getName(), "sense")) {
-            SWBuf n = tag.getAttribute("n");
+            std::string n = tag.getAttribute("n");
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {
                     if (n != "") {
                     buf += n;

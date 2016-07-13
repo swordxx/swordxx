@@ -334,7 +334,7 @@ char VerseKey::parse(bool checkAutoNormalize)
 
     if (keytext) {
         // pass our own copy of keytext as keytext memory may be freshed during parse
-        ListKey tmpListKey = parseVerseList(SWBuf(keytext).c_str());
+        ListKey tmpListKey = parseVerseList(keytext);
         if (tmpListKey.getCount()) {
             this->positionFrom(*tmpListKey.getElement(0));
             error = this->error;
@@ -516,10 +516,8 @@ ListKey VerseKey::parseVerseList(const char *buf, const char *defaultKey, bool e
 
     // hold on to our own copy of params, as threads/recursion may change outside values
     const char *bufStart = buf;
-    SWBuf iBuf = buf;
+    std::string iBuf = buf ? buf : "";
     buf = iBuf.c_str();
-    SWBuf iDefaultKey = defaultKey;
-    if (defaultKey) defaultKey = iDefaultKey.c_str();
 
     char book[2048];    // TODO: bad, remove
     char number[2048];    // TODO: bad, remove
@@ -1821,9 +1819,11 @@ const char *VerseKey::getOSISRef() const {
 
 const char *VerseKey::getRangeText() const {
     if (isBoundSet() && lowerBound != upperBound) {
-        SWBuf buf = (const char *)getLowerBound();
-        buf += "-";
-        buf += (const char *)getUpperBound();
+        char const * const lb = static_cast<char const *>(getLowerBound());
+        char const * const ub = static_cast<char const *>(getUpperBound());
+        std::string buf(lb ? lb : "");
+        buf += '-';
+        buf += (ub ? ub : "");
         stdstr(&rangeText, buf.c_str());
     }
     else stdstr(&rangeText, getText());
@@ -1837,7 +1837,7 @@ const char *VerseKey::getRangeText() const {
 
 const char *VerseKey::getOSISRefRangeText() const {
     if (isBoundSet() && (lowerBound != upperBound)) {
-        SWBuf buf = getLowerBound().getOSISRef();
+        std::string buf = getLowerBound().getOSISRef();
         buf += "-";
         buf += getUpperBound().getOSISRef();
         stdstr(&rangeText, buf.c_str());
@@ -1849,10 +1849,8 @@ const char *VerseKey::getOSISRefRangeText() const {
 
 // TODO:  this is static so we have no context.  We can only parse KJV v11n now
 //         possibly add a const char *versification = KJV param?
-const char *VerseKey::convertToOSIS(const char *inRef, const SWKey *lastKnownKey) {
-    static SWBuf outRef;
-
-    outRef = "";
+std::string VerseKey::convertToOSIS(const char *inRef, const SWKey *lastKnownKey) {
+    std::string outRef;
 
     VerseKey defLanguage;
     ListKey verses = defLanguage.parseVerseList(inRef, (*lastKnownKey), true);
@@ -1860,7 +1858,7 @@ const char *VerseKey::convertToOSIS(const char *inRef, const SWKey *lastKnownKey
     for (int i = 0; i < verses.getCount(); i++) {
         SWKey *element = verses.getElement(i);
 //        VerseKey *element = SWDYNAMIC_CAST(VerseKey, verses.GetElement(i));
-        SWBuf buf;
+        std::string buf;
         // TODO: This code really needs to not use fixed size arrays
         char frag[800];
         char preJunk[800];
@@ -1892,6 +1890,6 @@ const char *VerseKey::convertToOSIS(const char *inRef, const SWKey *lastKnownKey
     }
     if (startFrag < (inRef + strlen(inRef)))
         outRef += startFrag;
-    return outRef.c_str();
+    return outRef;
 }
 } /* namespace swordxx */

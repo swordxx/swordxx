@@ -25,7 +25,7 @@
 
 #include <swfilter.h>
 #include <stack>
-#include <swbuf.h>
+#include <string>
 
 namespace swordxx {
 
@@ -36,15 +36,15 @@ private:
     public:
         char startChar;
         char level;
-        SWBuf uniqueID;
+        std::string uniqueID;
         char continueCount;
-        QuoteInstance(char startChar = '\"', char level = 1, SWBuf uniqueID = "", char continueCount = 0) {
+        QuoteInstance(char startChar = '\"', char level = 1, std::string uniqueID = "", char continueCount = 0) {
             this->startChar     = startChar;
             this->level         = level;
             this->uniqueID      = uniqueID;
             this->continueCount = continueCount;
         }
-        void pushStartStream(SWBuf &text);
+        void pushStartStream(std::string &text);
     };
 
     typedef std::stack<QuoteInstance> QuoteInstanceStack;
@@ -52,7 +52,7 @@ private:
 public:
     QuoteStack();
     virtual ~QuoteStack();
-    void handleQuote(char *buf, char *quotePos, SWBuf &text);
+    void handleQuote(char *buf, char *quotePos, std::string &text);
     void clear();
     bool empty() { return quotes.empty(); }
 };
@@ -63,7 +63,7 @@ class SWDLLEXPORT GBFOSIS : public SWFilter {
 public:
     GBFOSIS();
     virtual ~GBFOSIS();
-    char processText(SWBuf &text, const SWKey *key = 0, const SWModule *module = 0);
+    char processText(std::string &text, const SWKey *key = 0, const SWModule *module = 0);
 };
 
 } /* namespace swordxx */

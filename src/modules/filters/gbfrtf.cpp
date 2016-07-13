@@ -23,7 +23,7 @@
 #include <gbfrtf.h>
 #include <utilstr.h>
 #include <ctype.h>
-#include <swbuf.h>
+#include <string>
 
 namespace swordxx {
 
@@ -31,7 +31,7 @@ GBFRTF::GBFRTF() {
 }
 
 
-char GBFRTF::processText(SWBuf &text, const SWKey *key, const SWModule *module)
+char GBFRTF::processText(std::string &text, const SWKey *key, const SWModule *module)
 {
     char token[2048];
     char val[128];
@@ -40,13 +40,13 @@ char GBFRTF::processText(SWBuf &text, const SWKey *key, const SWModule *module)
     int tokpos = 0;
     bool intoken = false;
     const char *tok;
-    SWBuf strongnum;
-    SWBuf strongtense;
+    std::string strongnum;
+    std::string strongtense;
     bool hideText = false;
     int wordCount = 0;
 
     const char *from;
-    SWBuf orig = text;
+    std::string orig = text;
     from = orig.c_str();
     for (text = ""; *from; from++) {
         if (*from == '<') {

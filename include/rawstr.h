@@ -28,10 +28,10 @@
 
 #include <cstdint>
 #include <defs.h>
+#include <string>
 
 namespace swordxx {
 
-class SWBuf;
 class FileDesc;
 
 class SWDLLEXPORT RawStr {
@@ -55,7 +55,7 @@ public:
     void getIDXBuf(long ioffset, char **buf) const;
     void getIDXBufDat(long ioffset, char **buf) const;
     signed char findOffset(const char *key, uint32_t *start, uint16_t *size, long away = 0, uint32_t *idxoff = 0) const;
-    void readText(uint32_t start, uint16_t *size, char **idxbuf, SWBuf &buf) const;
+    void readText(uint32_t start, uint16_t *size, char **idxbuf, std::string &buf) const;
     static signed char createModule(const char *path);
 };
 

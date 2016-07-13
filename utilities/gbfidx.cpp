@@ -268,7 +268,7 @@ char findbreak(int fp, long *offset, int *num1, int *num2, int *rangemax, short 
 
 void openfiles(char *fname)
 {
-    SWBuf buf;
+    std::string buf;
 
     if ((fp = FileMgr::openFileReadOnly(fname)) < 0) {
         fprintf(stderr, "Couldn't open file: %s\n", fname);

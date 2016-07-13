@@ -21,8 +21,9 @@
  */
 
 #include <cstdint>
+#include <cstring>
 #include <iostream>
-#include <swbuf.h>
+#include <string>
 #include <filemgr.h>
 #include <papyriplain.h>
 #include <utf8utf16.h>
@@ -40,12 +41,12 @@ int main(int argc, char **argv) {
 //
     FileDesc *fd = (argc > 1) ? FileMgr::getSystemFileMgr()->open(argv[1], FileMgr::RDONLY) : 0;
 
-    SWBuf lineBuffer = "T\\u12345?his is t<e>xt which has papy-\nri markings in it.\n  L[et's be] sure it gets--\n cleaned up well for s(earching)";
+    std::string lineBuffer = "T\\u12345?his is t<e>xt which has papy-\nri markings in it.\n  L[et's be] sure it gets--\n cleaned up well for s(earching)";
 
     if (argc > 1 && !strcmp(argv[1], "-v")) {
         std::cout << "Original:\n\n";
 
-        while (!fd || FileMgr::getLine(fd, lineBuffer)) {
+        while (!(lineBuffer = FileMgr::getLine(fd)).empty()) {
             cout << lineBuffer << "\n";
             if (!fd) break;
         }
@@ -60,7 +61,7 @@ int main(int argc, char **argv) {
 
 //    cout << "\xff\xfe";    // UTF16LE file signature
 
-    while (!fd || FileMgr::getLine(fd, lineBuffer)) {
+    while (!(lineBuffer = FileMgr::getLine(fd)).empty()) {
         lineBuffer += "\n";
         filter.processText(lineBuffer);
 

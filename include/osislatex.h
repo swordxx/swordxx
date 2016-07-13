@@ -38,7 +38,7 @@ protected:
     class TagStack;
     // used by derived classes so we have it in the header
     virtual BasicFilterUserData *createUserData(const SWModule *module, const SWKey *key);
-    virtual bool handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData);
+    virtual bool handleToken(std::string &buf, const char *token, BasicFilterUserData *userData);
 
 
     class MyUserData : public BasicFilterUserData {
@@ -48,23 +48,23 @@ protected:
         bool BiblicalText;
         int suspendLevel;
         bool firstCell; // for tables, indicates whether a cell is the first one in a row
-        SWBuf wordsOfChristStart;
-        SWBuf wordsOfChristEnd;
-        SWBuf divLevel;  // divLevel "module", "testament, "bookgroup", "book", "majorsection", "section", "paragraph" , ignore others.
+        std::string wordsOfChristStart;
+        std::string wordsOfChristEnd;
+        std::string divLevel;  // divLevel "module", "testament, "bookgroup", "book", "majorsection", "section", "paragraph" , ignore others.
 
         TagStack *quoteStack;
         TagStack *hiStack;
         TagStack *titleStack;
         TagStack *lineStack;
         int consecutiveNewlines;
-        SWBuf lastTransChange;
-        SWBuf w;
-        SWBuf fn;
-        SWBuf version;
+        std::string lastTransChange;
+        std::string w;
+        std::string fn;
+        std::string version;
 
         MyUserData(const SWModule *module, const SWKey *key);
         ~MyUserData();
-        void outputNewline(SWBuf &buf);
+        void outputNewline(std::string &buf);
     };
 public:
     OSISLaTeX();

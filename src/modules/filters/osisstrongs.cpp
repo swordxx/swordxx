@@ -38,7 +38,7 @@ namespace {
     static const char oTip[]  = "Toggles Strong's Numbers On and Off if they exist";
 
     static const StringList *oValues() {
-        static const SWBuf choices[3] = {"Off", "On", ""};
+        static const std::string choices[3] = {"Off", "On", ""};
         static const StringList oVals(&choices[0], &choices[2]);
         return &oVals;
     }
@@ -53,15 +53,15 @@ OSISStrongs::~OSISStrongs() {
 }
 
 
-char OSISStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *module) {
-    SWBuf token;
+char OSISStrongs::processText(std::string &text, const SWKey *key, const SWModule *module) {
+    std::string token;
     bool intoken = false;
     int wordNum = 1;
     char wordstr[5];
     const char *wordStart = 0;
-    SWBuf page = "";        // some modules include <seg> page info, so we add these to the words
+    std::string page = "";        // some modules include <seg> page info, so we add these to the words
 
-    const SWBuf orig = text;
+    const std::string orig = text;
     const char * from = orig.c_str();
 
     for (text = ""; *from; ++from) {
@@ -74,11 +74,11 @@ char OSISStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *mod
             intoken = false;
 
             // possible page seg --------------------------------
-            if (token.startsWith("seg ")) {
-                XMLTag stag(token);
-                SWBuf type = stag.getAttribute("type");
+            if (hasPrefix(token, "seg ")) {
+                XMLTag stag(token.c_str());
+                std::string type = stag.getAttribute("type");
                 if (type == "page") {
-                    SWBuf number = stag.getAttribute("subtype");
+                    std::string number = stag.getAttribute("subtype");
                     if (number.length()) {
                         page = number;
                     }
@@ -86,8 +86,8 @@ char OSISStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *mod
             }
             // ---------------------------------------------------
 
-            if (token.startsWith("w ")) {    // Word
-                XMLTag wtag(token);
+            if (hasPrefix(token, "w ")) {    // Word
+                XMLTag wtag(token.c_str());
                 if (module->isProcessEntryAttributes()) {
                     wordStart = from+1;
                     char gh = 0;
@@ -95,31 +95,31 @@ char OSISStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *mod
                     if (key) {
                         vkey = SWDYNAMIC_CAST(VerseKey, key);
                     }
-                    SWBuf lemma      = "";
-                    SWBuf morph      = "";
-                    SWBuf src        = "";
-                    SWBuf morphClass = "";
-                    SWBuf lemmaClass = "";
+                    std::string lemma      = "";
+                    std::string morph      = "";
+                    std::string src        = "";
+                    std::string morphClass = "";
+                    std::string lemmaClass = "";
 
-                    const char *attrib;
+                    std::string attrib;
                     sprintf(wordstr, "%03d", wordNum);
 
                     // why is morph entry attribute processing done in here?  Well, it's faster.  It makes more local sense to place this code in osismorph.
                     // easier to keep lemma and morph in same wordstr number too maybe.
-                    if ((attrib = wtag.getAttribute("morph"))) {
+                    if (!(attrib = wtag.getAttribute("morph")).empty()) {
                         int count = wtag.getAttributePartCount("morph", ' ');
                         int i = (count > 1) ? 0 : -1;        // -1 for whole value cuz it's faster, but does the same thing as 0
                         do {
-                            SWBuf mClass = "";
-                            SWBuf mp = "";
+                            std::string mClass = "";
+                            std::string mp = "";
                             attrib = wtag.getAttribute("morph", i, ' ');
                             if (i < 0) i = 0;    // to handle our -1 condition
 
-                            const char *m = strchr(attrib, ':');
+                            const char *m = strchr(attrib.c_str(), ':');
                             if (m) {
-                                int len = m-attrib;
-                                mClass.append(attrib, len);
-                                attrib += (len+1);
+                                int len = m-attrib.c_str();
+                                mClass.append(attrib.c_str(), len);
+                                attrib.erase(0, len+1);
                             }
                             if ((mClass == "x-Robinsons") || (mClass == "x-Robinson") || (mClass == "Robinson")) {
                                 mClass = "robinson";
@@ -129,30 +129,29 @@ char OSISStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *mod
                             morphClass += mClass;
                             morph += mp;
                             if (count > 1) {
-                                SWBuf tmp;
-                                tmp.setFormatted("Morph.%d", i+1);
+                                std::string tmp(formatted("Morph.%d", i+1));
                                 module->getEntryAttributes()["Word"][wordstr][tmp] = mp;
-                                tmp.setFormatted("MorphClass.%d", i+1);
+                                tmp = formatted("MorphClass.%d", i+1);
                                 module->getEntryAttributes()["Word"][wordstr][tmp] = mClass;
                             }
                         } while (++i < count);
                     }
 
-                    if ((attrib = wtag.getAttribute("lemma"))) {
+                    if (!(attrib = wtag.getAttribute("lemma")).empty()) {
                         int count = wtag.getAttributePartCount("lemma", ' ');
                         int i = (count > 1) ? 0 : -1;        // -1 for whole value cuz it's faster, but does the same thing as 0
                         do {
                             gh = 0;
-                            SWBuf lClass = "";
-                            SWBuf l = "";
+                            std::string lClass = "";
+                            std::string l = "";
                             attrib = wtag.getAttribute("lemma", i, ' ');
                             if (i < 0) i = 0;    // to handle our -1 condition
 
-                            const char *m = strchr(attrib, ':');
+                            const char *m = strchr(attrib.c_str(), ':');
                             if (m) {
-                                int len = m-attrib;
-                                lClass.append(attrib, len);
-                                attrib += (len+1);
+                                int len = m-attrib.c_str();
+                                lClass.append(attrib.c_str(), len);
+                                attrib.erase(0u, len+1);
                             }
                             if ((lClass == "x-Strongs") || (lClass == "strong") || (lClass == "Strong")) {
                                 if (isdigit(attrib[0])) {
@@ -161,8 +160,8 @@ char OSISStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *mod
                                     }
                                 }
                                 else {
-                                    gh = *attrib;
-                                    attrib++;
+                                    gh = *attrib.begin();
+                                    attrib.erase(0u, 1u);
                                 }
                                 lClass = "strong";
                             }
@@ -172,21 +171,20 @@ char OSISStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *mod
                             lemma += l;
                             lemmaClass += lClass;
                             if (count > 1) {
-                                SWBuf tmp;
-                                tmp.setFormatted("Lemma.%d", i+1);
+                                std::string tmp(formatted("Lemma.%d", i+1));
                                 module->getEntryAttributes()["Word"][wordstr][tmp] = l;
-                                tmp.setFormatted("LemmaClass.%d", i+1);
+                                tmp = formatted("LemmaClass.%d", i+1);
                                 module->getEntryAttributes()["Word"][wordstr][tmp] = lClass;
                             }
                         } while (++i < count);
-                        module->getEntryAttributes()["Word"][wordstr]["PartCount"].setFormatted("%d", count);
+                        module->getEntryAttributes()["Word"][wordstr]["PartCount"] = formatted("%d", count);
                     }
 
-                    if ((attrib = wtag.getAttribute("src"))) {
+                    if (!(attrib = wtag.getAttribute("src")).empty()) {
                         int count = wtag.getAttributePartCount("src", ' ');
                         int i = (count > 1) ? 0 : -1;        // -1 for whole value cuz it's faster, but does the same thing as 0
                         do {
-                            SWBuf mp = "";
+                            std::string mp = "";
                             attrib = wtag.getAttribute("src", i, ' ');
                             if (i < 0) i = 0;    // to handle our -1 condition
 
@@ -194,8 +192,7 @@ char OSISStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *mod
                             mp += attrib;
                             src += mp;
                             if (count > 1) {
-                                SWBuf tmp;
-                                tmp.setFormatted("Src.%d", i+1);
+                                std::string tmp(formatted("Src.%d", i+1));
                                 module->getEntryAttributes()["Word"][wordstr][tmp] = mp;
                             }
                         } while (++i < count);
@@ -218,7 +215,7 @@ char OSISStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *mod
                     if (wtag.isEmpty()) {
                         int j;
                         for (j = token.length()-1; ((j>0) && (strchr(" /", token[j]))); j--);
-                        token.size(j+1);
+                        token.resize(j + 1, '\0');
                     }
 
                     token += " wn=\"";
@@ -238,7 +235,7 @@ char OSISStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *mod
  *
                     int count = wtag.getAttributePartCount("lemma", ' ');
                     for (int i = 0; i < count; i++) {
-                        SWBuf a = wtag.getAttribute("lemma", i, ' ');
+                        std::string a = wtag.getAttribute("lemma", i, ' ');
                         const char *prefix = a.stripPrefix(':');
                         if ((prefix) && (!strcmp(prefix, "x-Strongs") || !strcmp(prefix, "strong") || !strcmp(prefix, "Strong"))) {
                             // remove attribute part
@@ -249,23 +246,22 @@ char OSISStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *mod
                     }
 * Instead the codee below just removes the lemma attribute
 *****/
-                    const char *l = wtag.getAttribute("lemma");
-                    if (l) {
-                        SWBuf savlm = l;
+                    auto savlm(wtag.getAttribute("lemma"));
+                    if (!savlm.empty()) {
                         wtag.setAttribute("lemma", 0);
-                        wtag.setAttribute("savlm", savlm);
+                        wtag.setAttribute("savlm", savlm.c_str());
                         token = wtag;
-                        token.trim();
+                        trimString(token);
                         // drop <>
-                        token << 1;
-                        token--;
+                        token.erase(0u, 1u);
+                        token.pop_back();
                     }
                 }
             }
-            if (token.startsWith("/w")) {    // Word End
+            if (hasPrefix(token, "/w")) {    // Word End
                 if (module->isProcessEntryAttributes()) {
                     if (wordStart) {
-                        SWBuf tmp;
+                        std::string tmp;
                         tmp.append(wordStart, (from-wordStart)-3);
                         sprintf(wordstr, "%03d", wordNum-1);
                         module->getEntryAttributes()["Word"][wordstr]["Text"] = tmp;
@@ -275,9 +271,9 @@ char OSISStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *mod
             }
 
             // keep token in text
-            text.append('<');
+            text.push_back('<');
             text.append(token);
-            text.append('>');
+            text.push_back('>');
 
             continue;
         }
@@ -285,7 +281,7 @@ char OSISStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *mod
             token += *from;
         }
         else    {
-            text.append(*from);
+            text.push_back(*from);
         }
     }
     return 0;

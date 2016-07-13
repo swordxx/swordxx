@@ -25,7 +25,7 @@
 #define TREEKEY_H
 
 #include <swkey.h>
-#include <swbuf.h>
+#include <string>
 
 #include <defs.h>
 
@@ -43,7 +43,7 @@ protected:
     // hold on to setText until we've done a snap action: getText or navigation
     // if we set, and then write out userData, we want to assure the path exists.
     // This better conforms to the SWORD write methodology: mod.setKey, mod.setEntry
-    mutable SWBuf unsnappedKeyText;
+    mutable std::string unsnappedKeyText;
 
     // called whenever position of this key is changed.  Should we move this
     // to a more base class?

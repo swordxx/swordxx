@@ -20,6 +20,7 @@
  *
  */
 
+#include <cstring>
 #include <stdlib.h>
 #include <gbfhtml.h>
 #include <ctype.h>
@@ -64,7 +65,7 @@ GBFHTML::GBFHTML() {
 }
 
 
-bool GBFHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData) {
+bool GBFHTML::handleToken(std::string &buf, const char *token, BasicFilterUserData *userData) {
     const char *tok;
     char val[128];
     char *valto;

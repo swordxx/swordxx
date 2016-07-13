@@ -24,7 +24,7 @@
 #define INSTALLMGR_H
 
 #include <defs.h>
-#include <swbuf.h>
+#include <string>
 #include <map>
 #include <memory>
 #include <set>
@@ -44,18 +44,18 @@ class SWDLLEXPORT InstallSource {
 public:
     InstallSource(const char *type, const char *confEnt = 0);
     virtual ~InstallSource();
-    SWBuf getConfEnt() {
+    std::string getConfEnt() {
         return caption +"|" + source + "|" + directory + "|" + u + "|" + p + "|" + uid;
     }
-    SWBuf caption;
-    SWBuf source;
-    SWBuf directory;
-    SWBuf u;
-    SWBuf p;
-    SWBuf uid;
+    std::string caption;
+    std::string source;
+    std::string directory;
+    std::string u;
+    std::string p;
+    std::string uid;
 
-    SWBuf type;
-    SWBuf localShadow;
+    std::string type;
+    std::string localShadow;
     void *userData;
     SWMgr *getMgr();
     void flush();
@@ -63,7 +63,7 @@ public:
 
 /** A standard map of remote install sources.
  */
-typedef std::map<SWBuf, InstallSource *> InstallSourceMap;
+typedef std::map<std::string, InstallSource *> InstallSourceMap;
 
 /** Class to handle installation and maintenance of a SWORD library of books.
  */
@@ -71,12 +71,12 @@ class SWDLLEXPORT InstallMgr {
 
 protected:
     bool userDisclaimerConfirmed;
-    std::set<SWBuf> defaultMods;
+    std::set<std::string> defaultMods;
     char *privatePath;
-    SWBuf confPath;
+    std::string confPath;
     StatusReporter *statusReporter;
     bool passive;
-    SWBuf u, p;
+    std::string u, p;
 
     /** override this method and provide your own custom RemoteTransport subclass
          */
@@ -113,7 +113,7 @@ public:
      *  This will get overridden if a password is required and provided in an indivual
      *  source configuration.
          */
-    InstallMgr(const char *privatePath = "./", StatusReporter *statusReporter = 0, SWBuf u="ftp", SWBuf p="installmgr@user.com");
+    InstallMgr(const char *privatePath = "./", StatusReporter *statusReporter = 0, std::string u="ftp", std::string p="installmgr@user.com");
     virtual ~InstallMgr();
 
     /** Call to re-read InstallMgr.conf
@@ -211,7 +211,7 @@ A sample implementation, roughly taken from the windows installmgr:
 
     SectionMap::iterator section;
     ConfigEntMap::iterator entry;
-    SWBuf tmpBuf;
+    std::string tmpBuf;
     section = config->Sections.find(modName);
     if (section != config->Sections.end()) {
         entry = section->second.find("CipherKey");

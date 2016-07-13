@@ -91,7 +91,7 @@ TEIXHTML::TEIXHTML() {
     renderNoteNumbers = false;
 }
 
-bool TEIXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData) {
+bool TEIXHTML::handleToken(std::string &buf, const char *token, BasicFilterUserData *userData) {
   // manually process if it wasn't a simple substitution
     if (!substituteToken(buf, token)) {
         MyUserData *u = (MyUserData *)userData;
@@ -114,7 +114,7 @@ bool TEIXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *u
         // <hi>
         else if (!strcmp(tag.getName(), "hi")) {
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {
-                SWBuf rend = tag.getAttribute("rend");
+                std::string rend = tag.getAttribute("rend");
 
                 u->lastHi = rend;
                 if (rend == "italic" || rend == "ital")
@@ -130,7 +130,7 @@ bool TEIXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *u
 
             }
             else if (tag.isEndTag()) {
-                SWBuf rend = u->lastHi;
+                std::string rend = u->lastHi;
                 if (rend == "italic" || rend == "ital")
                     buf += "</i>";
                 else if (rend == "bold")
@@ -147,7 +147,7 @@ bool TEIXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *u
         // <entryFree>
         else if (!strcmp(tag.getName(), "entryFree")) {
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {
-                SWBuf n = tag.getAttribute("n");
+                std::string n = tag.getAttribute("n");
                 if (n != "") {
                     buf += "<span class=\"entryFree\">";
                     buf += n;
@@ -159,7 +159,7 @@ bool TEIXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *u
         // <sense>
         else if (!strcmp(tag.getName(), "sense")) {
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {
-                SWBuf n = tag.getAttribute("n");
+                std::string n = tag.getAttribute("n");
                 buf += "<br/><span class=\"sense";
                 if (n != "") {
                     buf += "\" n=\"";
@@ -209,11 +209,11 @@ bool TEIXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *u
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {
                 buf += "<span class=\"";
                 buf += tag.getName();
-                if (tag.getAttribute("type")) {
+                if (!tag.getAttribute("type").empty()) {
                     buf += "\" type =\"";
                     buf += tag.getAttribute("type");
                 }
-                if (tag.getAttribute("rend")) {
+                if (!tag.getAttribute("rend").empty()) {
                     buf += "\" rend =\"";
                     buf += tag.getAttribute("rend");
                 }
@@ -227,22 +227,22 @@ bool TEIXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *u
         else if (!strcmp(tag.getName(), "ref")) {
             if (!tag.isEndTag()) {
                 u->suspendTextPassThru = true;
-                SWBuf target;
-                SWBuf work;
-                SWBuf ref;
+                std::string target;
+                std::string work;
+                std::string ref;
 
                 int was_osisref = false;
-                if(tag.getAttribute("osisRef"))
+                if(!tag.getAttribute("osisRef").empty())
                 {
                     target += tag.getAttribute("osisRef");
                     was_osisref=true;
                 }
-                else if(tag.getAttribute("target"))
+                else if(!tag.getAttribute("target").empty())
                     target += tag.getAttribute("target");
 
                 if(target.size())
                 {
-                    const char* the_ref = strchr(target, ':');
+                    const char* the_ref = std::strchr(target.c_str(), ':');
 
                     if(!the_ref) {
                         // No work
@@ -253,22 +253,22 @@ bool TEIXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *u
                         ref = the_ref + 1;
 
                         int size = target.size() - ref.size() - 1;
-                        work.setSize(size);
-                        strncpy(work.getRawData(), target, size);
+                        work.resize(size, '\0');
+                        std::strncpy(&work[0u], target.c_str(), size);
                     }
 
                     if(was_osisref)
                     {
-                        buf.appendFormatted("<a href=\"passagestudy.jsp?action=showRef&type=scripRef&value=%s&module=%s\">",
-                            (ref) ? URL::encode(ref.c_str()).c_str() : "",
+                        buf += formatted("<a href=\"passagestudy.jsp?action=showRef&type=scripRef&value=%s&module=%s\">",
+                            (ref.c_str()) ? URL::encode(ref.c_str()).c_str() : "",
                             (work.size()) ? URL::encode(work.c_str()).c_str() : "");
                     }
                     else
                     {
                         // Dictionary link, or something
-                        buf.appendFormatted("<a href=\"sword://%s/%s\">",
+                        buf += formatted("<a href=\"sword://%s/%s\">",
                             (work.size()) ? URL::encode(work.c_str()).c_str() : u->version.c_str(),
-                            (ref) ? URL::encode(ref.c_str()).c_str() : ""
+                            (ref.c_str()) ? URL::encode(ref.c_str()).c_str() : ""
                             );
                     }
                 }
@@ -294,10 +294,10 @@ bool TEIXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *u
                 }
             }
             if (tag.isEndTag()) {
-                SWBuf footnoteNumber = tag.getAttribute("swordFootnote");
-                SWBuf noteName = tag.getAttribute("n");
+                std::string footnoteNumber = tag.getAttribute("swordFootnote");
+                std::string noteName = tag.getAttribute("n");
 
-                buf.appendFormatted("<a href=\"passagestudy.jsp?action=showNote&type=n&value=%s&module=%s&passage=%s\"><small><sup class=\"n\">*n%s</sup></small></a>",
+                buf += formatted("<a href=\"passagestudy.jsp?action=showNote&type=n&value=%s&module=%s&passage=%s\"><small><sup class=\"n\">*n%s</sup></small></a>",
                     URL::encode(footnoteNumber.c_str()).c_str(),
                     URL::encode(u->version.c_str()).c_str(),
                     URL::encode(u->key->getText()).c_str(),
@@ -308,16 +308,16 @@ bool TEIXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *u
         }
         // <graphic> image tag
         else if (!strcmp(tag.getName(), "graphic")) {
-            const char *url = tag.getAttribute("url");
-            if (url) {        // assert we have a url attribute
-                SWBuf filepath;
+            auto const url(tag.getAttribute("url"));
+            if (!url.empty()) {        // assert we have a url attribute
+                std::string filepath;
                 if (userData->module) {
                     filepath = userData->module->getConfigEntry("AbsoluteDataPath");
                     if ((filepath.size()) && (filepath[filepath.size()-1] != '/') && (url[0] != '/'))
                         filepath += '/';
                 }
                 filepath += url;
-                buf.appendFormatted("<a href=\"passagestudy.jsp?action=showImage&value=%s&module=%s\"><img src=\"file:%s\" border=\"0\" /></a>",
+                buf += formatted("<a href=\"passagestudy.jsp?action=showImage&value=%s&module=%s\"><img src=\"file:%s\" border=\"0\" /></a>",
                             URL::encode(filepath.c_str()).c_str(),
                             URL::encode(u->version.c_str()).c_str(),
                             filepath.c_str());

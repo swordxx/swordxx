@@ -25,8 +25,8 @@
 #ifndef STRINGMGR_H
 #define STRINGMGR_H
 
+#include <cstring>
 #include <defs.h>
-#include <swbuf.h>
 #include <utilstr.h>
 
 namespace swordxx {
@@ -100,13 +100,13 @@ inline char *toupperstr_utf8(char *t, unsigned int max = 0) {
 }
 
 /**
- * Converts an SWBuf filled with UTF-8 to upper case
+ * Converts an std::string filled with UTF-8 to upper case
  *
- * @param b SWBuf to change to upper case
+ * @param b std::string to change to upper case
  *
  * @return b for convenience
  */
-inline SWBuf &toupperstr(SWBuf &b) {
+inline std::string &toupperstr(std::string & b) {
     char *utf8 = 0;
     stdstr(&utf8, b.c_str(), 2);
     toupperstr(utf8, (unsigned int)strlen(utf8)*2);

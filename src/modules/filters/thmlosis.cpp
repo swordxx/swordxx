@@ -42,7 +42,7 @@ ThMLOSIS::~ThMLOSIS() {
 }
 
 
-char ThMLOSIS::processText(SWBuf &text, const SWKey *key, const SWModule *module) {
+char ThMLOSIS::processText(std::string &text, const SWKey *key, const SWModule *module) {
     char token[2048]; // cheese.  Fix.
     int tokpos = 0;
     bool intoken = false;
@@ -53,7 +53,7 @@ char ThMLOSIS::processText(SWBuf &text, const SWKey *key, const SWModule *module
 
     bool lastspace = false;
     char val[128];
-    SWBuf buf;
+    std::string buf;
     char *valto;
     char *ch;
 
@@ -68,10 +68,10 @@ char ThMLOSIS::processText(SWBuf &text, const SWKey *key, const SWModule *module
     bool newText = false;
     bool newWord = false;
 
-//     SWBuf tmp;
-    SWBuf divEnd = "";
+//     std::string tmp;
+    std::string divEnd = "";
 
-    SWBuf orig = text;
+    std::string orig = text;
     const char* from = orig.c_str();
 
     text = "";
@@ -249,10 +249,10 @@ char ThMLOSIS::processText(SWBuf &text, const SWKey *key, const SWModule *module
             if (!strncmp(token, "div type=\"variant\"", 18)) {
                 XMLTag tag = token;
                 text.append("<seg type=\"x-variant\"");
-                SWBuf cls = "x-class:";
+                std::string cls = "x-class:";
                 cls += tag.getAttribute("class");
                 if (cls.length()>8)
-                    text.appendFormatted(" subType=\"%s\"", cls.c_str());
+                    text += formatted(" subType=\"%s\"", cls.c_str());
 
                 text += ">";
                 divEnd = "</seg>";
@@ -283,7 +283,7 @@ char ThMLOSIS::processText(SWBuf &text, const SWKey *key, const SWModule *module
                 handled = true;
             }
             else    if (!strncmp(token, "/scripRef", 9)) {
-                SWBuf tmp;
+                std::string tmp;
                 tmp = "";
                 tmp.append(textStart, (int)(textEnd - textStart)+1);
                 //pushString(&to, convertToOSIS(tmp.c_str(), key));
@@ -405,20 +405,17 @@ char ThMLOSIS::processText(SWBuf &text, const SWKey *key, const SWModule *module
                         const char *attStart = strstr(wordStart, "lemma");
                         if (attStart) { //existing morph attribute, append this one to it
                             attStart += 7;
-                            buf = "";
-                            buf.appendFormatted("strong:%s ", val);
+                            buf = formatted("strong:%s ", val);
                         }
                         else { // no lemma attribute
                             attStart = wordStart + 3;
-                            buf = "";
-                            buf.appendFormatted(buf, "lemma=\"strong:%s\" ", val);
+                            buf = formatted("lemma=\"strong:%s\" ", val);
                         }
 
                         text.insert(attStart - text.c_str(), buf);
                     }
                     else { //wordStart doesn't point to an existing <w> attribute!
-                        buf = "";
-                        buf.appendFormatted("<w lemma=\"strong:%s\">", val);
+                        buf = formatted("<w lemma=\"strong:%s\">", val);
                         text.insert(wordStart - text.c_str(), buf);
                         text += "</w>";
                         lastspace = false;
@@ -432,8 +429,8 @@ char ThMLOSIS::processText(SWBuf &text, const SWKey *key, const SWModule *module
 
             // Morphology
             else    if (!strncmp(token, "sync type=\"morph\"", 17)) {
-                SWBuf cls = "";
-                SWBuf morph = "";
+                std::string cls = "";
+                std::string morph = "";
                 for (ch = token+17; *ch; ch++) {
                     if (!strncmp(ch, "class=\"", 7)) {
                         valto = val;
@@ -456,20 +453,17 @@ char ThMLOSIS::processText(SWBuf &text, const SWKey *key, const SWModule *module
                     const char *attStart = strstr(wordStart, "morph");
                     if (attStart) { //existing morph attribute, append this one to it
                         attStart += 7;
-                        buf = "";
-                        buf.appendFormatted("%s:%s ", ((cls.length())?cls.c_str():"robinson"), morph.c_str());
+                        buf = formatted("%s:%s ", ((cls.length())?cls.c_str():"robinson"), morph.c_str());
                     }
                     else { // no lemma attribute
                         attStart = wordStart + 3;
-                        buf = "";
-                        buf.appendFormatted("morph=\"%s:%s\" ", ((cls.length())?cls.c_str():"robinson"), morph.c_str());
+                        buf = formatted("morph=\"%s:%s\" ", ((cls.length())?cls.c_str():"robinson"), morph.c_str());
                     }
 
                     text.insert(attStart - text.c_str(), buf); //hack, we have to
                 }
                 else { //no existing <w> attribute fond
-                    buf = "";
-                    buf.appendFormatted("<w morph=\"%s:%s\">", ((cls.length())?cls.c_str():"robinson"), morph.c_str());
+                    buf = formatted("<w morph=\"%s:%s\">", ((cls.length())?cls.c_str():"robinson"), morph.c_str());
                     text.insert(wordStart - text.c_str(), buf);
                     text += "</w>";
                     lastspace = false;
@@ -485,7 +479,7 @@ char ThMLOSIS::processText(SWBuf &text, const SWKey *key, const SWModule *module
                 }
                 if (from[1] && strchr(" ,;.:?!()'\"", from[1])) {
                     if (lastspace) {
-                        text--;
+                        text.pop_back();
                     }
                 }
                 if (newText) {
@@ -496,7 +490,7 @@ char ThMLOSIS::processText(SWBuf &text, const SWKey *key, const SWModule *module
             }
 
             // if not a strongs token, keep token in text
-            text.appendFormatted("<%s>", token);
+            text += formatted("<%s>", token);
 
             if (newText) {
                 textStart = text.c_str() + text.length();
@@ -539,9 +533,9 @@ char ThMLOSIS::processText(SWBuf &text, const SWKey *key, const SWModule *module
 
     VerseKey *vkey = SWDYNAMIC_CAST(VerseKey, key);
     if (vkey) {
-        SWBuf ref = "";
+        std::string ref;
         if (vkey->getVerse()) {
-            ref.appendFormatted("\t\t<verse osisID=\"%s\">", vkey->getOSISRef());
+            ref = formatted("\t\t<verse osisID=\"%s\">", vkey->getOSISRef());
         }
 
         if (ref.length() > 0) {

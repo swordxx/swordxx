@@ -22,7 +22,7 @@
 
 
 #include <utf16utf8.h>
-#include <swbuf.h>
+#include <string>
 
 
 namespace swordxx {
@@ -32,7 +32,7 @@ UTF16UTF8::UTF16UTF8() {
 }
 
 
-char UTF16UTF8::processText(SWBuf &text, const SWKey *key, const SWModule *module)
+char UTF16UTF8::processText(std::string &text, const SWKey *key, const SWModule *module)
 {
   unsigned short *from;
 
@@ -46,7 +46,7 @@ char UTF16UTF8::processText(SWBuf &text, const SWKey *key, const SWModule *modul
         from++;
   }
 
-    SWBuf orig = text;
+    std::string orig = text;
     from = (unsigned short*)orig.c_str();
 
 

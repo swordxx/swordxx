@@ -32,7 +32,7 @@ namespace swordxx {
 class SWDLLEXPORT GBFRTF : public SWFilter {
 public:
     GBFRTF();
-    virtual char processText(SWBuf &text, const SWKey *key = 0, const SWModule *module = 0);
+    virtual char processText(std::string &text, const SWKey *key = 0, const SWModule *module = 0);
 };
 
 } /* namespace swordxx */

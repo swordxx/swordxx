@@ -37,7 +37,7 @@
 #include <swlog.h>
 #include <stringmgr.h>
 #include <filemgr.h>
-#include <swbuf.h>
+#include <string>
 
 namespace swordxx {
 
@@ -58,7 +58,7 @@ const int zStr::ZDXENTRYSIZE = 8;
 
 zStr::zStr(const char *ipath, int fileMode, long blockCount, SWCompress *icomp, bool caseSensitive) : caseSensitive(caseSensitive)
 {
-    SWBuf buf;
+    std::string buf;
 
     lastoff = -1;
     path = 0;
@@ -71,17 +71,10 @@ zStr::zStr(const char *ipath, int fileMode, long blockCount, SWCompress *icomp, 
         fileMode = FileMgr::RDWR;
     }
 
-    buf.setFormatted("%s.idx", path);
-    idxfd = FileMgr::getSystemFileMgr()->open(buf, fileMode, true);
-
-    buf.setFormatted("%s.dat", path);
-    datfd = FileMgr::getSystemFileMgr()->open(buf, fileMode, true);
-
-    buf.setFormatted("%s.zdx", path);
-    zdxfd = FileMgr::getSystemFileMgr()->open(buf, fileMode, true);
-
-    buf.setFormatted("%s.zdt", path);
-    zdtfd = FileMgr::getSystemFileMgr()->open(buf, fileMode, true);
+    idxfd = FileMgr::getSystemFileMgr()->open(formatted("%s.idx", path).c_str(), fileMode, true);
+    datfd = FileMgr::getSystemFileMgr()->open(formatted("%s.dat", path).c_str(), fileMode, true);
+    zdxfd = FileMgr::getSystemFileMgr()->open(formatted("%s.zdx", path).c_str(), fileMode, true);
+    zdtfd = FileMgr::getSystemFileMgr()->open(formatted("%s.zdt", path).c_str(), fileMode, true);
 
     if (!datfd) {
         SWLog::getSystemLog()->logError("%d", errno);
@@ -400,18 +393,17 @@ void zStr::getCompressedText(long block, long entry, char **buf) const {
         start = swordtoarch32(start);
         size = swordtoarch32(size);
 
-        SWBuf buf;
-        buf.setSize(size + 5);
+        std::string buf(size + 5u, '\0');
         zdtfd->seek(start, SEEK_SET);
-        zdtfd->read(buf.getRawData(), size);
+        zdtfd->read(&buf[0u], size);
 
         flushCache();
 
         unsigned long len = size;
-        buf.setSize(size);
+        buf.resize(size);
         rawZFilter(buf, 0); // 0 = decipher
 
-        compressor->zBuf(&len, buf.getRawData());
+        compressor->zBuf(&len, &buf[0u]);
         char *rawBuf = compressor->Buf(0, &len);
         cacheBlock = new EntriesBlock(rawBuf, len);
         cacheBlockIndex = block;
@@ -599,10 +591,10 @@ void zStr::flushCache() const {
             compressor->Buf(rawBuf, &size);
             compressor->zBuf(&size);
 
-            SWBuf buf;
-            buf.setSize(size + 5);
-            memcpy(buf.getRawData(), compressor->zBuf(&size), size); // 1 = encipher
-            buf.setSize(size);
+            std::string buf(size + 5u, '\0');
+            /// \bug order of evaluation of function arguments is undefined:
+            memcpy(&buf[0u], compressor->zBuf(&size), size); // 1 = encipher
+            buf.resize(size);
             rawZFilter(buf, 1); // 1 = encipher
 
             long zdxSize = zdxfd->seek(0, SEEK_END);
@@ -635,7 +627,7 @@ void zStr::flushCache() const {
 
             zdxfd->seek(cacheBlockIndex * ZDXENTRYSIZE, SEEK_SET);
             zdtfd->seek(start, SEEK_SET);
-            zdtfd->write(buf, size);
+            zdtfd->write(buf.c_str(), size);
 
             // add a new line to make data file easier to read in an editor
             zdtfd->write(&nl, 2);

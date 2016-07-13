@@ -41,7 +41,7 @@ public:
     HREFCom(const char *ipath, const char *prefix, const char *iname = 0,
             const char *idesc = 0);
     virtual ~HREFCom();
-    virtual SWBuf &getRawEntryBuf() const;
+    virtual std::string &getRawEntryBuf() const;
 
     // OPERATORS -----------------------------------------------------------------
 

@@ -63,9 +63,9 @@ int main(int argc, char **argv)
     const char *modName    = argv[1];
     bool render            = false;
     bool strip             = false;
-    SWBuf renderForm;
-    SWBuf optionName;
-    map<SWBuf, SWBuf> options; // optionName, optionValue;
+    std::string renderForm;
+    std::string optionName;
+    map<std::string, std::string> options; // optionName, optionValue;
 
     for (int i = 2; i < argc; i++) {
         if (!strcmp(argv[i], "-r")) {
@@ -82,7 +82,7 @@ int main(int argc, char **argv)
             if (i+1 < argc) options[optionName] = argv[++i];
             else usage(progName, "-f requires <option_name> <option_value>");
         }
-        else usage(progName, (((SWBuf)"Unknown argument: ")+ argv[i]).c_str());
+        else usage(progName, (((std::string)"Unknown argument: ")+ argv[i]).c_str());
     }
     // -----------------------------------------------------
 
@@ -93,18 +93,18 @@ int main(int argc, char **argv)
     else if  (renderForm == "LATEX")    markupMgr = new MarkupFilterMgr(swordxx::FMT_LATEX);
     else if  (renderForm == "XHTML")    markupMgr = new MarkupFilterMgr(swordxx::FMT_XHTML);
 
-    else if  (renderForm.length())      usage(progName, (((SWBuf) "Unknown output_format for -r (")+renderForm+")").c_str());
+    else if  (renderForm.length())      usage(progName, (((std::string) "Unknown output_format for -r (")+renderForm+")").c_str());
 
     SWMgr *mgr = (markupMgr) ? new SWMgr(markupMgr) : new SWMgr();
 
     // set any options filters passed with -f
-    for (map<SWBuf, SWBuf>::iterator it = options.begin(); it != options.end(); it++) {
+    for (map<std::string, std::string>::iterator it = options.begin(); it != options.end(); it++) {
         mgr->setGlobalOption(it->first, it->second);
     }
 
     SWModule *module = mgr->getModule(modName);
 
-    if (!module) usage(progName, (((SWBuf) "Couldn't find module: ") + modName).c_str());
+    if (!module) usage(progName, (((std::string) "Couldn't find module: ") + modName).c_str());
 
 
     SWKey *key = module->getKey();

@@ -21,16 +21,17 @@
  *
  */
 
+#include <cstring>
 #include <stdlib.h>
 #include <thmlplain.h>
-#include <swbuf.h>
+#include <string>
 
 namespace swordxx {
 
 ThMLPlain::ThMLPlain() {
 }
 
-char ThMLPlain::processText(SWBuf &text, const SWKey *key, const SWModule *module)
+char ThMLPlain::processText(std::string &text, const SWKey *key, const SWModule *module)
 {
     char token[2048];
     int tokpos = 0;
@@ -38,7 +39,7 @@ char ThMLPlain::processText(SWBuf &text, const SWKey *key, const SWModule *modul
     bool ampersand = false;
 
     const char *from;
-    SWBuf orig = text;
+    std::string orig = text;
     from = orig.c_str();
     for (text = ""; *from; from++)
     {
@@ -211,8 +212,8 @@ char ThMLPlain::processText(SWBuf &text, const SWKey *key, const SWModule *modul
                 //TODO: why is this + 2?  Are we trying to keep 2 or 3 nulls after the last valid char?
                 // tokpos has been incremented past the last valid token. it should be pointing to null
                 // +1 should give us 2 nulls, but we're +2 here, which actually keeps 3 nulls after the
-                // last valid char.  Why are we doing any of this?  These were written before SWBuf and should
-                // probably be switched to SWBuf, but perf tests before and after the switch should be run
+                // last valid char.  Why are we doing any of this?  These were written before std::string and should
+                // probably be switched to std::string, but perf tests before and after the switch should be run
                 token[tokpos+2] = 0;
             }
         }

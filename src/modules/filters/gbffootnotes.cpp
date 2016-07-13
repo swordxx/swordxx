@@ -26,7 +26,7 @@
 #include <stdio.h>
 #include <gbffootnotes.h>
 #include <swmodule.h>
-#include <swbuf.h>
+#include <string>
 #include <versekey.h>
 #include <utilxml.h>
 
@@ -39,7 +39,7 @@ namespace {
     static const char oTip[]  = "Toggles Footnotes On and Off if they exist";
 
     static const StringList *oValues() {
-        static const SWBuf choices[3] = {"Off", "On", ""};
+        static const std::string choices[3] = {"Off", "On", ""};
         static const StringList oVals(&choices[0], &choices[2]);
         return &oVals;
     }
@@ -54,19 +54,19 @@ GBFFootnotes::~GBFFootnotes() {
 }
 
 
-char GBFFootnotes::processText (SWBuf &text, const SWKey *key, const SWModule *module)
+char GBFFootnotes::processText (std::string &text, const SWKey *key, const SWModule *module)
 {
 
-    SWBuf token;
+    std::string token;
     bool intoken    = false;
     bool hide       = false;
-    SWBuf tagText;
+    std::string tagText;
     XMLTag startTag;
-    SWBuf refs = "";
+    std::string refs = "";
     int footnoteNum = 1;
     char buf[254];
 
-    SWBuf orig = text;
+    std::string orig = text;
     const char *from = orig.c_str();
 
     //XMLTag tag;
@@ -81,16 +81,16 @@ char GBFFootnotes::processText (SWBuf &text, const SWKey *key, const SWModule *m
             intoken = false;
 
             //XMLTag tag(token);
-            if (!strncmp(token, "RF",2)) {
+            if (!strncmp(token.c_str(), "RF",2)) {
 //                 tag = token;
 
                 refs = "";
-                startTag = token;
+                startTag = token.c_str();
                 hide = true;
                 tagText = "";
                 continue;
             }
-            else if (!strncmp(token, "Rf",2)) {
+            else if (!strncmp(token.c_str(), "Rf",2)) {
                 if (module->isProcessEntryAttributes()) {
                     //tag = token;
 
@@ -103,7 +103,7 @@ char GBFFootnotes::processText (SWBuf &text, const SWKey *key, const SWModule *m
                             continue;
                         }
                     }
-                    SWBuf fc = module->getEntryAttributes()["Footnote"]["count"]["value"];
+                    std::string fc = module->getEntryAttributes()["Footnote"]["count"]["value"];
                     footnoteNum = (fc.length()) ? atoi(fc.c_str()) : 0;
                     sprintf(buf, "%i", ++footnoteNum);
                     module->getEntryAttributes()["Footnote"]["count"]["value"] = buf;
@@ -122,24 +122,24 @@ char GBFFootnotes::processText (SWBuf &text, const SWKey *key, const SWModule *m
                 else    continue;
             }
             if (!hide) {
-                text.append('<');
+                text.push_back('<');
                 text.append(token);
-                text.append('>');
+                text.push_back('>');
             }
             else {
-                tagText.append('<');
+                tagText.push_back('<');
                 tagText.append(token);
-                tagText.append('>');
+                tagText.push_back('>');
             }
             continue;
         }
         if (intoken) { //copy token
-            token.append(*from);
+            token.push_back(*from);
         }
         else if (!hide) { //copy text which is not inside a token
-            text.append(*from);
+            text.push_back(*from);
         }
-        else tagText.append(*from);
+        else tagText.push_back(*from);
     }
     return 0;
 
@@ -152,7 +152,7 @@ char GBFFootnotes::processText (SWBuf &text, const SWKey *key, const SWModule *m
         bool hide = false;
 
         const char *from;
-        SWBuf orig = text;
+        std::string orig = text;
         from = orig.c_str();
         for (text = ""; *from; from++) {
             if (*from == '<') {

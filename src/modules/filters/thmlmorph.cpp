@@ -21,6 +21,7 @@
  *
  */
 
+#include <cstring>
 #include <stdlib.h>
 #include <thmlmorph.h>
 
@@ -32,7 +33,7 @@ namespace {
     static const char oTip[]  = "Toggles Morphological Tags On and Off if they exist";
 
     static const StringList *oValues() {
-        static const SWBuf choices[3] = {"Off", "On", ""};
+        static const std::string choices[3] = {"Off", "On", ""};
         static const StringList oVals(&choices[0], &choices[2]);
         return &oVals;
     }
@@ -47,12 +48,12 @@ ThMLMorph::~ThMLMorph() {
 }
 
 
-char ThMLMorph::processText(SWBuf &text, const SWKey *key, const SWModule *module) {
+char ThMLMorph::processText(std::string &text, const SWKey *key, const SWModule *module) {
     if (!option) {    // if we don't want morph tags
         bool intoken = false;
 
-        SWBuf token;
-        SWBuf orig = text;
+        std::string token;
+        std::string orig = text;
         const char *from = orig.c_str();
         for (text = ""; *from; from++) {
             if (*from == '<') {

@@ -34,38 +34,38 @@ ThMLWEBIF::ThMLWEBIF() : baseURL(""), passageStudyURL(baseURL + "passagestudy.js
 }
 
 
-bool ThMLWEBIF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData) {
+bool ThMLWEBIF::handleToken(std::string &buf, const char *token, BasicFilterUserData *userData) {
 
     if (!substituteToken(buf, token)) { // manually process if it wasn't a simple substitution
         MyUserData *u = (MyUserData *)userData;
         XMLTag tag(token);
-        SWBuf url;
+        std::string url;
         if (!strcmp(tag.getName(), "sync")) {
-            const char* value = tag.getAttribute("value");
+            auto value(tag.getAttribute("value"));
             url = value;
             if ((url.length() > 1) && strchr("GH", url[0])) {
                 if (isdigit(url[1]))
                     url = url.c_str()+1;
             }
 
-            if(tag.getAttribute("type") && !strcmp(tag.getAttribute("type"), "morph")){
+            if(!tag.getAttribute("type").empty() && !strcmp(tag.getAttribute("type").c_str(), "morph")){
                 buf += "<small><em> (";
-                buf.appendFormatted("<a href=\"%s?showMorph=%s#cv\">", passageStudyURL.c_str(), URL::encode(url).c_str() );
+                buf += formatted("<a href=\"%s?showMorph=%s#cv\">", passageStudyURL.c_str(), URL::encode(url.c_str()).c_str() );
             }
             else {
-                if (value) {
-                    value++; //skip leading G, H or T
+                if (!value.empty()) {
+                    value.erase(0u, 1u); //skip leading G, H or T
                     //url = value;
                 }
 
                 buf += "<small><em> &lt;";
-                buf.appendFormatted("<a href=\"%s?showStrong=%s#cv\">", passageStudyURL.c_str(), URL::encode(url).c_str() );
+                buf += formatted("<a href=\"%s?showStrong=%s#cv\">", passageStudyURL.c_str(), URL::encode(url.c_str()).c_str() );
             }
 
             buf += value;
             buf += "</a>";
 
-            if (tag.getAttribute("type") && !strcmp(tag.getAttribute("type"), "morph")) {
+            if (!tag.getAttribute("type").empty() && !strcmp(tag.getAttribute("type").c_str(), "morph")) {
                 buf += ") </em></small>";
             }
             else {
@@ -80,7 +80,7 @@ bool ThMLWEBIF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
                 }
                 else { // end of scripRef like "<scripRef>John 3:16</scripRef>"
                     url = u->lastTextNode;
-                    buf.appendFormatted("<a href=\"%s?key=%s#cv\">", passageStudyURL.c_str(), URL::encode(url).c_str());
+                    buf += formatted("<a href=\"%s?key=%s#cv\">", passageStudyURL.c_str(), URL::encode(url.c_str()).c_str());
                     buf += u->lastTextNode.c_str();
                     buf += "</a>";
 
@@ -88,10 +88,10 @@ bool ThMLWEBIF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
                     u->suspendTextPassThru = false;
                 }
             }
-            else if (tag.getAttribute("passage")) { //passage given
+            else if (!tag.getAttribute("passage").empty()) { //passage given
                 u->inscriptRef = true;
 
-                buf.appendFormatted("<a href=\"%s?key=%s#cv\">", passageStudyURL.c_str(), URL::encode(tag.getAttribute("passage")).c_str());
+                buf += formatted("<a href=\"%s?key=%s#cv\">", passageStudyURL.c_str(), URL::encode(tag.getAttribute("passage").c_str()).c_str());
             }
             else { //no passage given
                 u->inscriptRef = false;

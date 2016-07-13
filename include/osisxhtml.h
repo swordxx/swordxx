@@ -37,7 +37,7 @@ protected:
 
     class TagStack;
     virtual BasicFilterUserData *createUserData(const SWModule *module, const SWKey *key);
-    virtual bool handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData);
+    virtual bool handleToken(std::string &buf, const char *token, BasicFilterUserData *userData);
 
 
     // used by derived classes so we have it in the header
@@ -47,23 +47,23 @@ protected:
         bool inXRefNote;
         bool BiblicalText;
         int suspendLevel;
-        SWBuf wordsOfChristStart;
-        SWBuf wordsOfChristEnd;
-        SWBuf interModuleLinkStart;
-        SWBuf interModuleLinkEnd;
+        std::string wordsOfChristStart;
+        std::string wordsOfChristEnd;
+        std::string interModuleLinkStart;
+        std::string interModuleLinkEnd;
         TagStack *quoteStack;
         TagStack *hiStack;
         TagStack *titleStack;
         TagStack *lineStack;
         int consecutiveNewlines;
-        SWBuf lastTransChange;
-        SWBuf w;
-        SWBuf fn;
-        SWBuf version;
+        std::string lastTransChange;
+        std::string w;
+        std::string fn;
+        std::string version;
 
         MyUserData(const SWModule *module, const SWKey *key);
         ~MyUserData();
-        void outputNewline(SWBuf &buf);
+        void outputNewline(std::string &buf);
     };
 public:
     OSISXHTML();

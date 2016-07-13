@@ -34,7 +34,7 @@ namespace {
     static const char oTip[]  = "Toggles Headings On and Off if they exist";
 
     static const StringList *oValues() {
-        static const SWBuf choices[3] = {"Off", "On", ""};
+        static const std::string choices[3] = {"Off", "On", ""};
         static const StringList oVals(&choices[0], &choices[2]);
         return &oVals;
     }
@@ -49,7 +49,7 @@ GBFHeadings::~GBFHeadings() {
 }
 
 
-char GBFHeadings::processText(SWBuf &text, const SWKey *key, const SWModule *module) {
+char GBFHeadings::processText(std::string &text, const SWKey *key, const SWModule *module) {
     if (!option) {    // if we don't want headings
         char token[2048]; // cheese.  Fix.
         int tokpos = 0;
@@ -57,7 +57,7 @@ char GBFHeadings::processText(SWBuf &text, const SWKey *key, const SWModule *mod
         bool hide = false;
 
     const char *from;
-    SWBuf orig = text;
+    std::string orig = text;
     from = orig.c_str();
     for (text = ""; *from; from++) {
             if (*from == '<') {

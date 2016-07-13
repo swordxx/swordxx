@@ -47,7 +47,7 @@ using std::find;
 namespace swordxx {
 
 #ifndef USELUCENE
-typedef  map < SWBuf, list<long> > strlist;
+typedef  map < std::string, list<long> > strlist;
 typedef list<long> longlist;
 #endif
 
@@ -84,7 +84,7 @@ bool RawText::isWritable() const {
  * RET: string buffer with verse
  */
 
-SWBuf &RawText::getRawEntryBuf() const {
+std::string &RawText::getRawEntryBuf() const {
     long  start = 0;
     unsigned short size = 0;
     VerseKey &key = getVerseKey();

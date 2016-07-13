@@ -65,7 +65,7 @@ bool RawCom4::isWritable() const {
  * RET: string buffer with verse
  */
 
-SWBuf &RawCom4::getRawEntryBuf() const {
+std::string &RawCom4::getRawEntryBuf() const {
     long  start = 0;
     unsigned long size = 0;
     VerseKey *key = &getVerseKey();

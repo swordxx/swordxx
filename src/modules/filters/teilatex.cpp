@@ -61,7 +61,7 @@ TEILaTeX::TEILaTeX() {
     renderNoteNumbers = false;
 }
 
-bool TEILaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData) {
+bool TEILaTeX::handleToken(std::string &buf, const char *token, BasicFilterUserData *userData) {
   // manually process if it wasn't a simple substitution
     if (!substituteToken(buf, token)) {
         MyUserData *u = (MyUserData *)userData;
@@ -84,7 +84,7 @@ bool TEILaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *u
         // <hi>
         else if (!strcmp(tag.getName(), "hi")) {
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {
-                SWBuf rend = tag.getAttribute("rend");
+                std::string rend = tag.getAttribute("rend");
 
                 u->lastHi = rend;
                 if (rend == "italic" || rend == "ital")
@@ -107,7 +107,7 @@ bool TEILaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *u
         // <entryFree>
         else if (!strcmp(tag.getName(), "entryFree")) {
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {
-                SWBuf n = tag.getAttribute("n");
+                std::string n = tag.getAttribute("n");
                 if (n != "") {
                     buf += "\\teiEntryFree{";
                     buf += n;
@@ -119,7 +119,7 @@ bool TEILaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *u
         // <sense>
         else if (!strcmp(tag.getName(), "sense")) {
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {
-                SWBuf n = tag.getAttribute("n");
+                std::string n = tag.getAttribute("n");
                 if (n != "") {
                     buf += "\n\\teiSense{";
                     buf += n;
@@ -170,22 +170,22 @@ bool TEILaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *u
         else if (!strcmp(tag.getName(), "ref")) {
             if (!tag.isEndTag()) {
                 u->suspendTextPassThru = true;
-                SWBuf target;
-                SWBuf work;
-                SWBuf ref;
+                std::string target;
+                std::string work;
+                std::string ref;
 
                 int was_osisref = false;
-                if(tag.getAttribute("osisRef"))
+                if(!tag.getAttribute("osisRef").empty())
                 {
                     target += tag.getAttribute("osisRef");
                     was_osisref=true;
                 }
-                else if(tag.getAttribute("target"))
+                else if(!tag.getAttribute("target").empty())
                     target += tag.getAttribute("target");
 
                 if(target.size())
                 {
-                    const char* the_ref = strchr(target, ':');
+                    const char* the_ref = std::strchr(target.c_str(), ':');
 
                     if(!the_ref) {
                         // No work
@@ -196,22 +196,22 @@ bool TEILaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *u
                         ref = the_ref + 1;
 
                         int size = target.size() - ref.size() - 1;
-                        work.setSize(size);
-                        strncpy(work.getRawData(), target, size);
+                        work.resize(size, '\0');
+                        strncpy(&work[0u], target.c_str(), size);
                     }
 
                     if(was_osisref)
                     {
-                        buf.appendFormatted("\\swordref{%s}{%s}{",
-                            (ref) ? ref.c_str() : "",
-                            (work.size()) ? work.c_str() : "" );
+                        buf += formatted("\\swordref{%s}{%s}{",
+                            ref.c_str(),
+                            work.c_str());
                     }
                     else
                     {
                         // Dictionary link, or something
-                        buf.appendFormatted("\\sworddictref{%s}{%s}{",
-                            (work.size()) ? work.c_str() : u->version.c_str(),
-                            (ref) ? ref.c_str() : ""
+                        buf += formatted("\\sworddictref{%s}{%s}{",
+                            (!work.empty()) ? work.c_str() : u->version.c_str(),
+                            ref.c_str()
                             );
                     }
                 }
@@ -237,20 +237,20 @@ bool TEILaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *u
                 }
             }
             if (tag.isEndTag()) {
-                SWBuf footnoteNumber = tag.getAttribute("swordFootnote");
-                SWBuf noteName = tag.getAttribute("n");
-                SWBuf footnoteBody = "";
+                std::string footnoteNumber = tag.getAttribute("swordFootnote");
+                std::string noteName = tag.getAttribute("n");
+                std::string footnoteBody = "";
                 if (u->module){
                     footnoteBody += u->module->getEntryAttributes()["Footnote"][footnoteNumber]["body"];
                 }
 
-                buf.appendFormatted("\\swordfootnote{%s}{%s}{%s}{%s}{",
+                buf += formatted("\\swordfootnote{%s}{%s}{%s}{%s}{",
                     footnoteNumber.c_str(),
                     u->version.c_str(),
                     u->key->getText(),
                     renderNoteNumbers ? noteName.c_str() : "");
                     if (u->module) {
-                        buf += u->module->renderText(footnoteBody).c_str();
+                        buf += u->module->renderText(footnoteBody.c_str()).c_str();
                     }
                 u->suspendTextPassThru = false;
             }
@@ -258,9 +258,9 @@ bool TEILaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *u
 
         // <graphic> image tag
         else if (!strcmp(tag.getName(), "graphic")) {
-            const char *url = tag.getAttribute("url");
-            if (url) {        // assert we have a url attribute
-                SWBuf filepath;
+            auto url(tag.getAttribute("url"));
+            if (!url.empty()) {        // assert we have a url attribute
+                std::string filepath;
                 if (userData->module) {
                     filepath = userData->module->getConfigEntry("AbsoluteDataPath");
                     if ((filepath.size()) && (filepath[filepath.size()-1] != '/') && (url[0] != '/'))
@@ -268,7 +268,7 @@ bool TEILaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *u
                 }
                 filepath += url;
 
-                buf.appendFormatted("\\figure{\\includegraphics{%s}}",
+                buf += formatted("\\figure{\\includegraphics{%s}}",
                             filepath.c_str());
                 u->suspendTextPassThru = false;
 

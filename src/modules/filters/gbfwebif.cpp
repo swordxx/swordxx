@@ -23,20 +23,24 @@
 
 
 #include <gbfwebif.h>
+
+#include <cstring>
 #include <ctype.h>
 #include <url.h>
+#include <utilstr.h>
+
 
 namespace swordxx {
 
 GBFWEBIF::GBFWEBIF() : baseURL(""), passageStudyURL(baseURL + "passagestudy.jsp") {
 }
 
-bool GBFWEBIF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData) {
+bool GBFWEBIF::handleToken(std::string &buf, const char *token, BasicFilterUserData *userData) {
     const char *tok;
     char val[128];
     char *valto;
     const char *num;
-    SWBuf url;
+    std::string url;
 
     if (!substituteToken(buf, token)) {
         if (!strncmp(token, "w", 1)) {
@@ -58,7 +62,7 @@ bool GBFWEBIF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *u
                         if (isdigit(url[1]))
                             url = url.c_str()+1;
                     }
-                    buf.appendFormatted("<a href=\"%s?showStrong=%s#cv\">", passageStudyURL.c_str(), URL::encode(url).c_str());
+                    buf += formatted("<a href=\"%s?showStrong=%s#cv\">", passageStudyURL.c_str(), URL::encode(url.c_str()).c_str());
 
                     for (tok = (!isdigit(*val))?val+1:val; *tok; tok++) {
                         buf += *tok;
@@ -83,7 +87,7 @@ bool GBFWEBIF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *u
                             if (isdigit(url[1]))
                                 url = url.c_str()+1;
                         }
-                        buf.appendFormatted("<a href=\"%s?showStrong=%s#cv\">", passageStudyURL.c_str(), URL::encode(url).c_str());
+                        buf += formatted("<a href=\"%s?showStrong=%s#cv\">", passageStudyURL.c_str(), URL::encode(url.c_str()).c_str());
 
                         for (tok = (!isdigit(*val))?val+1:val; *tok; tok++) {
                             buf += *tok;
@@ -104,7 +108,7 @@ bool GBFWEBIF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *u
                 // normal robinsons tense
                     buf += *tok;
                 }
-                buf.appendFormatted("<a href=\"%s?showMorph=%s#cv\">", passageStudyURL.c_str(), URL::encode(url).c_str());
+                buf += formatted("<a href=\"%s?showMorph=%s#cv\">", passageStudyURL.c_str(), URL::encode(url.c_str()).c_str());
 
                 for (tok = val; *tok; tok++) {
                     buf += *tok;
@@ -124,7 +128,7 @@ bool GBFWEBIF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *u
                 if (isdigit(url[1]))
                     url = url.c_str()+1;
             }
-            buf.appendFormatted("<a href=\"%s?showStrong=%s#cv\">", passageStudyURL.c_str(), URL::encode(url).c_str());
+            buf += formatted("<a href=\"%s?showStrong=%s#cv\">", passageStudyURL.c_str(), URL::encode(url.c_str()).c_str());
 
             for (tok = token + 2; *tok; tok++) {
                 buf += *tok;
@@ -143,7 +147,7 @@ bool GBFWEBIF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *u
                 if (isdigit(url[1]))
                     url = url.c_str()+1;
             }
-            buf.appendFormatted("<a href=\"%s?showStrong=%s#cv\">", passageStudyURL.c_str(), URL::encode(url).c_str());
+            buf += formatted("<a href=\"%s?showStrong=%s#cv\">", passageStudyURL.c_str(), URL::encode(url.c_str()).c_str());
 
             for (tok = token + 3; *tok; tok++)
                 if(*tok != '\"')
@@ -157,7 +161,7 @@ bool GBFWEBIF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *u
                 if(*tok != '\"')
                     buf += *tok;
             }
-            buf.appendFormatted("<a href=\"%s?showMorph=%s#cv\">", passageStudyURL.c_str(), URL::encode(url).c_str());
+            buf += formatted("<a href=\"%s?showMorph=%s#cv\">", passageStudyURL.c_str(), URL::encode(url.c_str()).c_str());
 
             for (tok = token + 2; *tok; tok++) {
                 if(*tok != '\"')
@@ -177,12 +181,12 @@ bool GBFWEBIF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *u
               }
             }
 
-            buf.appendFormatted("a href=\"%s?key=%s#cv\">", passageStudyURL.c_str(), URL::encode(url).c_str());
+            buf += formatted("a href=\"%s?key=%s#cv\">", passageStudyURL.c_str(), URL::encode(url.c_str()).c_str());
         }
         // ok to leave these in
         else if ((!strncmp(token, "span", 4))
                 || (!strncmp(token, "/span", 5))) {
-            buf.appendFormatted("<%s>", token);
+            buf += formatted("<%s>", token);
         }
 
         else {

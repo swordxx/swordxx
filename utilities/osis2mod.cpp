@@ -38,7 +38,7 @@
 #include <swmgr.h>
 #include <rawtext.h>
 #include <rawtext4.h>
-#include <swbuf.h>
+#include <string>
 #include <utilxml.h>
 #include <listkey.h>
 #include <versekey.h>
@@ -95,11 +95,11 @@ int converted  = 0;
 
 SWText *module = 0;
 VerseKey currentVerse;
-SWBuf v11n     = "KJV";
+std::string v11n     = "KJV";
 char activeOsisID[255];
 char currentOsisID[255];
 
-SWBuf activeVerseText;
+std::string activeVerseText;
 
 ListKey currentKeyIDs = ListKey();
 
@@ -188,7 +188,7 @@ int detectUTF8(const char *txt) {
     return countUTF8 ? 1 : -1;
 }
 
-void prepareSWText(const char *osisID, SWBuf &text)
+void prepareSWText(const char *osisID, std::string &text)
 {
     // Always check on UTF8 and report on non-UTF8 entries
     int utf8State = detectUTF8(text.c_str());
@@ -219,7 +219,7 @@ void prepareSWText(const char *osisID, SWBuf &text)
         }
 
         if (utf8State > 0) {
-            SWBuf before = text;
+            std::string before = text;
             normalizer.processText(text, (SWKey *)2);  // note the hack of 2 to mimic a real key. TODO: remove all hacks
             if (before != text) {
                 normalized++;
@@ -241,7 +241,7 @@ void prepareSWText(const char *osisID, SWBuf &text)
 //
 // However, SWORD cannot handle work prefixes or grains and expects ranges to be
 // separated with a single;
-void prepareSWVerseKey(SWBuf &buf) {
+void prepareSWVerseKey(std::string &buf) {
     // This routine modifies the buf in place
     char* s = buf.getRawData();
     char* p = s;
@@ -471,7 +471,7 @@ void makeValidRef(VerseKey &key) {
          << " versification. Appending content to " << key.getOSISRef() << endl;
 }
 
-void writeEntry(SWBuf &text, bool force = false) {
+void writeEntry(std::string &text, bool force = false) {
     char keyOsisID[255];
 
     static const char* revision = "<milestone type=\"x-importer\" subType=\"x-osis2mod\" n=\"$Rev$\"/>";
@@ -544,7 +544,7 @@ void writeEntry(SWBuf &text, bool force = false) {
         // The space should not be needed if we retained verse tags.
         if (module->hasEntry(&currentVerse)) {
             module->flush();
-            SWBuf currentText = module->getRawEntry();
+            std::string currentText = module->getRawEntry();
             cout << "INFO(WRITE): Appending entry: " << currentVerse.getOSISRef() << ": " << activeVerseText << endl;
 
             // If we have a non-UTF-8 encoding, we should decode it before concatenating, then re-encode it
@@ -605,7 +605,7 @@ void linkToEntry(VerseKey &linkKey, VerseKey &dest) {
 
 // Return true if the content was handled or is to be ignored.
 //        false if the what has been seen is to be accumulated and considered later.
-bool handleToken(SWBuf &text, XMLTag token) {
+bool handleToken(std::string &text, XMLTag token) {
 
     // Everything between the begin book tag and the first begin chapter tag is inBookIntro
     static bool               inBookIntro     = false;
@@ -634,9 +634,9 @@ bool handleToken(SWBuf &text, XMLTag token) {
 
     // Retain the sID of book, chapter and verse (commentary) divs so that we can find them again.
     // This relies on transformBSP.
-    static SWBuf              sidBook         = "";
-    static SWBuf              sidChapter      = "";
-    static SWBuf              sidVerse        = "";
+    static std::string              sidBook         = "";
+    static std::string              sidChapter      = "";
+    static std::string              sidVerse        = "";
 
     // Stack of quote elements used to handle Words of Christ
     static std::stack<XMLTag> quoteStack;
@@ -654,10 +654,10 @@ bool handleToken(SWBuf &text, XMLTag token) {
     static int                verseDepth      = 0;
 
     int                       tagDepth        = tagStack.size();
-    SWBuf                     tokenName       = token.getName();
+    std::string                     tokenName       = token.getName();
     bool                      isEndTag        = token.isEndTag() || token.getAttribute("eID");
-    SWBuf                     typeAttr        = token.getAttribute("type");
-    SWBuf                     eidAttr         = token.getAttribute("eID");
+    std::string                     typeAttr        = token.getAttribute("type");
+    std::string                     eidAttr         = token.getAttribute("eID");
 
     // process start tags
     if (!isEndTag) {
@@ -807,7 +807,7 @@ bool handleToken(SWBuf &text, XMLTag token) {
                 }
 
                 // Get osisID for verse or annotateRef for commentary
-                SWBuf keyVal = token.getAttribute(tokenName == "verse" ? "osisID" : "annotateRef");
+                std::string keyVal = token.getAttribute(tokenName == "verse" ? "osisID" : "annotateRef");
 
                 // Massage the key into a form that parseVerseList can accept
                 prepareSWVerseKey(keyVal);
@@ -1205,7 +1205,7 @@ XMLTag transformBSP(XMLTag t) {
     static std::stack<XMLTag> bspTagStack;
     static int sID = 1;
     char buf[11];
-    SWBuf typeAttr = t.getAttribute("type");
+    std::string typeAttr = t.getAttribute("type");
 
     // Support simplification transformations
     if (t.isEmpty()) {
@@ -1217,7 +1217,7 @@ XMLTag transformBSP(XMLTag t) {
         return t;
     }
 
-    SWBuf tagName = t.getName();
+    std::string tagName = t.getName();
     if (!t.isEndTag()) {
         // Transform <p> into <div type="x-p"> and milestone it
         if (tagName == "p") {
@@ -1266,7 +1266,7 @@ XMLTag transformBSP(XMLTag t) {
             }
 
             bspTagStack.pop();
-            SWBuf topTypeAttr = topToken.getAttribute("type");
+            std::string topTypeAttr = topToken.getAttribute("type");
 
             // Look for the milestoneable container tags handled above.
             // Have to treat div type="colophon" differently
@@ -1445,15 +1445,15 @@ void processOSIS(istream& infile) {
     module->setKey(currentVerse);
     module->setPosition(TOP);
 
-    SWBuf token;
-    SWBuf text;
+    std::string token;
+    std::string text;
     bool incomment = false;
     t_commentstate commentstate = CS_NOT_IN_COMMENT;
     bool intoken = false;
     bool inWhitespace = false;
     bool seeingSpace = false;
     unsigned char curChar = '\0';
-    SWBuf entityToken;
+    std::string entityToken;
     bool inentity = false;
     t_entitytype entitytype = ET_NONE;
     unsigned char attrQuoteChar = '\0';
@@ -1855,11 +1855,11 @@ int main(int argc, char **argv) {
     const char* path       = argv[1];
     const char* osisDoc    = argv[2];
     int append             = 0;
-    SWBuf compType         = "";
+    std::string compType         = "";
     bool isCommentary      = false;
     int iType              = 4;
     int entrySize          = 0;
-    SWBuf cipherKey        = "";
+    std::string cipherKey        = "";
     SWCompress *compressor = 0;
     int compLevel      = 0;
 
@@ -1950,7 +1950,7 @@ int main(int argc, char **argv) {
                 usage(*argv, "-l requires a value from 1-9");
             }
         }
-        else usage(*argv, (((SWBuf)"Unknown argument: ")+ argv[i]).c_str());
+        else usage(*argv, (((std::string)"Unknown argument: ")+ argv[i]).c_str());
     }
 
     if (isCommentary) isCommentary = true;  // avoid unused warning for now

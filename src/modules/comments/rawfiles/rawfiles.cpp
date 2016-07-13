@@ -23,6 +23,7 @@
  */
 
 #include <cstdint>
+#include <cstring>
 #include <ctype.h>
 #include <stdio.h>
 #include <fcntl.h>
@@ -71,7 +72,7 @@ bool RawFiles::isWritable() const {
  * RET: entry contents
  */
 
-SWBuf &RawFiles::getRawEntryBuf() const {
+std::string &RawFiles::getRawEntryBuf() const {
     FileDesc *datafile;
     long  start = 0;
     unsigned short size = 0;
@@ -81,7 +82,7 @@ SWBuf &RawFiles::getRawEntryBuf() const {
 
     entryBuf = "";
     if (size) {
-        SWBuf tmpbuf = path;
+        std::string tmpbuf = path;
         tmpbuf += '/';
         readText(key->getTestament(), start, size, entryBuf);
         tmpbuf += entryBuf;
@@ -119,21 +120,20 @@ void RawFiles::setEntry(const char *inbuf, long len) {
     findOffset(key->getTestament(), key->getTestamentIndex(), &start, &size);
 
     if (size) {
-        SWBuf tmpbuf;
+        std::string tmpbuf;
         entryBuf = path;
         entryBuf += '/';
         readText(key->getTestament(), start, size, tmpbuf);
         entryBuf += tmpbuf;
     }
     else {
-        SWBuf tmpbuf;
         entryBuf = path;
         entryBuf += '/';
-        tmpbuf = getNextFilename();
-        doSetText(key->getTestament(), key->getTestamentIndex(), tmpbuf);
+        std::string tmpbuf(getNextFilename());
+        doSetText(key->getTestament(), key->getTestamentIndex(), tmpbuf.c_str());
         entryBuf += tmpbuf;
     }
-    datafile = FileMgr::getSystemFileMgr()->open(entryBuf, FileMgr::CREAT|FileMgr::WRONLY|FileMgr::TRUNC);
+    datafile = FileMgr::getSystemFileMgr()->open(entryBuf.c_str(), FileMgr::CREAT|FileMgr::WRONLY|FileMgr::TRUNC);
     if (datafile->getFd() > 0) {
         datafile->write(inbuf, len);
     }
@@ -157,7 +157,7 @@ void RawFiles::linkEntry(const SWKey *inkey) {
     findOffset(key->getTestament(), key->getTestamentIndex(), &start, &size);
 
     if (size) {
-        SWBuf tmpbuf;
+        std::string tmpbuf;
         readText(key->getTestament(), start, size + 2, tmpbuf);
 
         key = &getVerseKey(inkey);
@@ -185,13 +185,12 @@ void RawFiles::deleteEntry() {
  * RET: filename
  */
 
-const char *RawFiles::getNextFilename() {
-    static SWBuf incfile;
+std::string RawFiles::getNextFilename() {
     uint32_t number = 0;
     FileDesc *datafile;
 
-    incfile.setFormatted("%s/incfile", path);
-    datafile = FileMgr::getSystemFileMgr()->open(incfile, FileMgr::RDONLY);
+    std::string r(formatted("%s/incfile", path));
+    datafile = FileMgr::getSystemFileMgr()->open(r.c_str(), FileMgr::RDONLY);
     if (datafile->getFd() != -1) {
         if (datafile->read(&number, 4) != 4) number = 0;
         number = swordtoarch32(number);
@@ -199,14 +198,14 @@ const char *RawFiles::getNextFilename() {
     number++;
     FileMgr::getSystemFileMgr()->close(datafile);
 
-    datafile = FileMgr::getSystemFileMgr()->open(incfile, FileMgr::CREAT|FileMgr::WRONLY|FileMgr::TRUNC);
-    incfile.setFormatted("%.7d", number-1);
+    datafile = FileMgr::getSystemFileMgr()->open(r.c_str(), FileMgr::CREAT|FileMgr::WRONLY|FileMgr::TRUNC);
+    r = formatted("%.7d", number-1);
 
     number = archtosword32(number);
     datafile->write(&number, 4);
 
     FileMgr::getSystemFileMgr()->close(datafile);
-    return incfile;
+    return r;
 }
 
 

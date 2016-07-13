@@ -110,7 +110,7 @@ char zLD::getEntry(long away) const {
  * RET: string buffer with entry
  */
 
-SWBuf &zLD::getRawEntryBuf() const {
+std::string &zLD::getRawEntryBuf() const {
     if (!getEntry() /*&& !isUnicode()*/) {
         prepText(entryBuf);
     }

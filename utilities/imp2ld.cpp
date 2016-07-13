@@ -73,12 +73,12 @@ int main(int argc, char **argv) {
     string linebuffer;
     char links = 0;
     string modname;
-    SWBuf outPath          = "";
+    std::string outPath          = "";
     bool append            = false;
     long blockCount = 30;
     bool caseSensitive = false;
     SWCompress *compressor = 0;
-    SWBuf compType         = "";
+    std::string compType         = "";
     bool fourByteSize      = false;
     bool strongsPadding    = true;
 
@@ -128,7 +128,7 @@ int main(int argc, char **argv) {
         else if (!strcmp(argv[i], "-s")) {
             caseSensitive = true;
         }
-        else usage(progName, (((SWBuf)"Unknown argument: ")+ argv[i]).c_str());
+        else usage(progName, (((std::string)"Unknown argument: ")+ argv[i]).c_str());
     }
 
 

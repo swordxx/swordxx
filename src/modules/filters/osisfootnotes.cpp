@@ -25,7 +25,7 @@
 #include <stdio.h>
 #include <osisfootnotes.h>
 #include <swmodule.h>
-#include <swbuf.h>
+#include <string>
 #include <versekey.h>
 #include <utilxml.h>
 #include <utilstr.h>
@@ -39,7 +39,7 @@ namespace {
     static const char oTip[]  = "Toggles Footnotes On and Off if they exist";
 
     static const StringList *oValues() {
-        static const SWBuf choices[3] = {"Off", "On", ""};
+        static const std::string choices[3] = {"Off", "On", ""};
         static const StringList oVals(&choices[0], &choices[2]);
         return &oVals;
     }
@@ -54,13 +54,13 @@ OSISFootnotes::~OSISFootnotes() {
 }
 
 
-char OSISFootnotes::processText(SWBuf &text, const SWKey *key, const SWModule *module) {
-    SWBuf token;
+char OSISFootnotes::processText(std::string &text, const SWKey *key, const SWModule *module) {
+    std::string token;
     bool intoken    = false;
     bool hide       = false;
-    SWBuf tagText;
+    std::string tagText;
     XMLTag startTag;
-    SWBuf refs = "";
+    std::string refs = "";
     int footnoteNum = 1;
     char buf[254];
     SWKey *p = (module) ? module->createKey() : (key) ? key->clone() : new VerseKey();
@@ -71,7 +71,7 @@ char OSISFootnotes::processText(SWBuf &text, const SWKey *key, const SWModule *m
         }
         *parser = key->getText();
 
-    SWBuf orig = text;
+    std::string orig = text;
     const char *from = orig.c_str();
 
     XMLTag tag;
@@ -83,7 +83,7 @@ char OSISFootnotes::processText(SWBuf &text, const SWKey *key, const SWModule *m
         // remove all newlines temporarily to fix kjv2003 module
         if ((*from == 10) || (*from == 13)) {
             if ((text.length()>1) && (text[text.length()-2] != ' ') && (*(from+1) != ' '))
-                text.append(' ');
+                text.push_back(' ');
             continue;
         }
 
@@ -98,19 +98,20 @@ char OSISFootnotes::processText(SWBuf &text, const SWKey *key, const SWModule *m
 
         if (*from == '>') {    // process tokens
             intoken = false;
-            if (!strncmp(token, "note", 4) || !strncmp(token.c_str(), "/note", 5)) {
-                tag = token;
+            if (!std::strncmp(token.c_str(), "note", 4)
+                || !std::strncmp(token.c_str(), "/note", 5)) {
+                tag = token.c_str();
 
                 if (!tag.isEndTag()) {
-                    if (tag.getAttribute("type") && (!strcmp("x-strongsMarkup", tag.getAttribute("type"))
-                                            || !strcmp("strongsMarkup", tag.getAttribute("type")))    // deprecated
+                    if (!tag.getAttribute("type").empty() && (!strcmp("x-strongsMarkup", tag.getAttribute("type").c_str())
+                                            || !strcmp("strongsMarkup", tag.getAttribute("type").c_str()))    // deprecated
                             ) {
                         tag.setEmpty(false);  // handle bug in KJV2003 module where some note open tags were <note ... />
                         strongsMarkup = true;
                     }
 
                     if (!tag.isEmpty()) {
-//                    if ((!tag.isEmpty()) || (SWBuf("strongsMarkup") == tag.getAttribute("type"))) {
+//                    if ((!tag.isEmpty()) || (std::string("strongsMarkup") == tag.getAttribute("type"))) {
                         refs = "";
                         startTag = tag;
                         hide = true;
@@ -127,14 +128,14 @@ char OSISFootnotes::processText(SWBuf &text, const SWKey *key, const SWModule *m
                         }
                         module->getEntryAttributes()["Footnote"][buf]["body"] = tagText;
                         startTag.setAttribute("swordFootnote", buf);
-                        if ((startTag.getAttribute("type")) && (!strcmp(startTag.getAttribute("type"), "crossReference"))) {
+                        if ((!startTag.getAttribute("type").empty()) && (!strcmp(startTag.getAttribute("type").c_str(), "crossReference"))) {
                             if (!refs.length())
                                 refs = parser->parseVerseList(tagText.c_str(), *parser, true).getRangeText();
                             module->getEntryAttributes()["Footnote"][buf]["refList"] = refs.c_str();
                         }
                     }
                     hide = false;
-                    if (option || (startTag.getAttribute("type") && !strcmp(startTag.getAttribute("type"), "crossReference"))) {    // we want the tag in the text; crossReferences are handled by another filter
+                    if (option || (!startTag.getAttribute("type").empty() && !strcmp(startTag.getAttribute("type").c_str(), "crossReference"))) {    // we want the tag in the text; crossReferences are handled by another filter
                         text.append(startTag);
 //                        text.append(tagText);    // we don't put the body back in because it is retrievable from EntryAttributes["Footnotes"][]["body"].
                     }
@@ -145,8 +146,8 @@ char OSISFootnotes::processText(SWBuf &text, const SWKey *key, const SWModule *m
 
             // if not a heading token, keep token in text
             //if ((!strcmp(tag.getName(), "reference")) && (!tag.isEndTag())) {
-            //    SWBuf osisRef = tag.getAttribute("osisRef");
-            if (!strncmp(token, "reference", 9)) {
+            //    std::string osisRef = tag.getAttribute("osisRef");
+            if (!std::strncmp(token.c_str(), "reference", 9)) {
                 if (refs.length()) {
                     refs.append("; ");
                 }
@@ -159,24 +160,24 @@ char OSISFootnotes::processText(SWBuf &text, const SWKey *key, const SWModule *m
                 }
             }
             if (!hide) {
-                text.append('<');
+                text.push_back('<');
                 text.append(token);
-                text.append('>');
+                text.push_back('>');
             }
             else {
-                tagText.append('<');
+                tagText.push_back('<');
                 tagText.append(token);
-                tagText.append('>');
+                tagText.push_back('>');
             }
             continue;
         }
         if (intoken) { //copy token
-            token.append(*from);
+            token.push_back(*from);
         }
         else if (!hide) { //copy text which is not inside a token
-            text.append(*from);
+            text.push_back(*from);
         }
-        else tagText.append(*from);
+        else tagText.push_back(*from);
     }
         delete parser;
     return 0;

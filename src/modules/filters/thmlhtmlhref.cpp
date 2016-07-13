@@ -165,7 +165,7 @@ ThMLHTMLHREF::ThMLHTMLHREF() {
 }
 
 
-bool ThMLHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData) {
+bool ThMLHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterUserData *userData) {
     if (!substituteToken(buf, token)) { // manually process if it wasn't a simple substitution
         MyUserData *u = (MyUserData *)userData;
 
@@ -174,30 +174,30 @@ bool ThMLHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
             u->startTag = tag;
 
         if (tag.getName() && !strcmp(tag.getName(), "sync")) {
-            SWBuf value = tag.getAttribute("value");
-            if (tag.getAttribute("type") && !strcmp(tag.getAttribute("type"), "morph")) { //&gt;
+            std::string value = tag.getAttribute("value");
+            if (!tag.getAttribute("type").empty() && !strcmp(tag.getAttribute("type").c_str(), "morph")) { //&gt;
                 if(value.length())
-                    buf.appendFormatted("<small><em class=\"morph\">(<a href=\"passagestudy.jsp?action=showMorph&type=Greek&value=%s\" class=\"morph\">%s</a>)</em></small>",
+                    buf += formatted("<small><em class=\"morph\">(<a href=\"passagestudy.jsp?action=showMorph&type=Greek&value=%s\" class=\"morph\">%s</a>)</em></small>",
                         URL::encode(value.c_str()).c_str(),
                         value.c_str());
             }
-            else if (tag.getAttribute("type") && !strcmp(tag.getAttribute("type"), "lemma")) { //&gt;
+            else if (!tag.getAttribute("type").empty() && !strcmp(tag.getAttribute("type").c_str(), "lemma")) { //&gt;
                 if(value.length())
                     // empty "type=" is deliberate.
-                    buf.appendFormatted("<small><em class=\"strongs\">&lt;<a href=\"passagestudy.jsp?action=showStrongs&type=&value=%s\" class=\"strongs\">%s</a>&gt;</em></small>",
+                    buf += formatted("<small><em class=\"strongs\">&lt;<a href=\"passagestudy.jsp?action=showStrongs&type=&value=%s\" class=\"strongs\">%s</a>&gt;</em></small>",
                         URL::encode(value.c_str()).c_str(),
                         value.c_str());
             }
-            else if (tag.getAttribute("type") && !strcmp(tag.getAttribute("type"), "Strongs")) {
-                char ch = *value;
-                value<<1;
-                buf.appendFormatted("<small><em class=\"strongs\">&lt;<a href=\"passagestudy.jsp?action=showStrongs&type=%s&value=%s\" class=\"strongs\">",
+            else if (!tag.getAttribute("type").empty() && !strcmp(tag.getAttribute("type").c_str(), "Strongs")) {
+                char const ch = *value.begin();
+                value.erase(0u, 1u);
+                buf += formatted("<small><em class=\"strongs\">&lt;<a href=\"passagestudy.jsp?action=showStrongs&type=%s&value=%s\" class=\"strongs\">",
                             ((ch == 'H') ? "Hebrew" : "Greek"),
                             URL::encode(value.c_str()).c_str());
                 buf += (value.length()) ? value.c_str() : "";
                 buf += "</a>&gt;</em></small>";
             }
-            else if (tag.getAttribute("type") && !strcmp(tag.getAttribute("type"), "Dict")) {
+            else if (!tag.getAttribute("type").empty() && !strcmp(tag.getAttribute("type").c_str(), "Dict")) {
                 buf += (tag.isEndTag() ? "</b>" : "<b>");
             }
 
@@ -206,9 +206,9 @@ bool ThMLHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
         else if (!strcmp(tag.getName(), "note")) {
             if (!tag.isEndTag()) {
                 if (!tag.isEmpty()) {
-                    SWBuf type = tag.getAttribute("type");
-                    SWBuf footnoteNumber = tag.getAttribute("swordFootnote");
-                    SWBuf noteName = tag.getAttribute("n");
+                    std::string type = tag.getAttribute("type");
+                    std::string footnoteNumber = tag.getAttribute("swordFootnote");
+                    std::string noteName = tag.getAttribute("n");
                     VerseKey *vkey = NULL;
                     // see if we have a VerseKey * or descendant
                     try {
@@ -217,8 +217,8 @@ bool ThMLHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
                     catch ( ... ) {    }
                     if (vkey) {
                         // leave this special osis type in for crossReference notes types?  Might thml use this some day? Doesn't hurt.
-                        char ch = ((tag.getAttribute("type") && ((!strcmp(tag.getAttribute("type"), "crossReference")) || (!strcmp(tag.getAttribute("type"), "x-cross-ref")))) ? 'x':'n');
-                        buf.appendFormatted("<a href=\"passagestudy.jsp?action=showNote&type=%c&value=%s&module=%s&passage=%s\"><small><sup class=\"%c\">*%c%s</sup></small></a>",
+                        char ch = ((!tag.getAttribute("type").empty() && ((!strcmp(tag.getAttribute("type").c_str(), "crossReference")) || (!strcmp(tag.getAttribute("type").c_str(), "x-cross-ref")))) ? 'x':'n');
+                        buf += formatted("<a href=\"passagestudy.jsp?action=showNote&type=%c&value=%s&module=%s&passage=%s\"><small><sup class=\"%c\">*%c%s</sup></small></a>",
                             ch,
                             URL::encode(footnoteNumber.c_str()).c_str(),
                             URL::encode(u->version.c_str()).c_str(),
@@ -228,8 +228,8 @@ bool ThMLHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
                             (renderNoteNumbers ? URL::encode(noteName.c_str()).c_str() : ""));
                     }
                     else {
-                        char ch = ((tag.getAttribute("type") && ((!strcmp(tag.getAttribute("type"), "crossReference")) || (!strcmp(tag.getAttribute("type"), "x-cross-ref")))) ? 'x':'n');
-                        buf.appendFormatted("<a href=\"passagestudy.jsp?action=showNote&type=%c&value=%s&module=%s&passage=%s\"><small><sup class=\"%c\">*%c%s</sup></small></a>",
+                        char ch = ((!tag.getAttribute("type").empty() && ((!strcmp(tag.getAttribute("type").c_str(), "crossReference")) || (!strcmp(tag.getAttribute("type").c_str(), "x-cross-ref")))) ? 'x':'n');
+                        buf += formatted("<a href=\"passagestudy.jsp?action=showNote&type=%c&value=%s&module=%s&passage=%s\"><small><sup class=\"%c\">*%c%s</sup></small></a>",
                             ch,
                             URL::encode(footnoteNumber.c_str()).c_str(),
                             URL::encode(u->version.c_str()).c_str(),
@@ -257,20 +257,20 @@ bool ThMLHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
             }
             if (tag.isEndTag()) {    //    </scripRef>
                 if (!u->BiblicalText) {
-                    SWBuf refList = u->startTag.getAttribute("passage");
+                    std::string refList = u->startTag.getAttribute("passage");
                     if (!refList.length())
                         refList = u->lastTextNode;
-                    SWBuf version = tag.getAttribute("version");
+                    std::string version = tag.getAttribute("version");
 
-                    buf.appendFormatted("<a href=\"passagestudy.jsp?action=showRef&type=scripRef&value=%s&module=%s\">",
+                    buf += formatted("<a href=\"passagestudy.jsp?action=showRef&type=scripRef&value=%s&module=%s\">",
                         (refList.length()) ? URL::encode(refList.c_str()).c_str() : "",
                         (version.length()) ? URL::encode(version.c_str()).c_str() : "");
                     buf += u->lastTextNode.c_str();
                     buf += "</a>";
                 }
                 else {
-                    SWBuf footnoteNumber = u->startTag.getAttribute("swordFootnote");
-                    SWBuf noteName = tag.getAttribute("n");
+                    std::string footnoteNumber = u->startTag.getAttribute("swordFootnote");
+                    std::string noteName = tag.getAttribute("n");
                     VerseKey *vkey = NULL;
                     // see if we have a VerseKey * or descendant
                     try {
@@ -280,7 +280,7 @@ bool ThMLHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
                     if (vkey) {
                         // leave this special osis type in for crossReference notes types?  Might thml use this some day? Doesn't hurt.
                         //buf.appendFormatted("<a href=\"noteID=%s.x.%s\"><small><sup>*x</sup></small></a> ", vkey->getText(), footnoteNumber.c_str());
-                        buf.appendFormatted("<a href=\"passagestudy.jsp?action=showNote&type=x&value=%s&module=%s&passage=%s\"><small><sup class=\"x\">*x%s</sup></small></a>",
+                        buf += formatted("<a href=\"passagestudy.jsp?action=showNote&type=x&value=%s&module=%s&passage=%s\"><small><sup class=\"x\">*x%s</sup></small></a>",
                             URL::encode(footnoteNumber.c_str()).c_str(),
                             URL::encode(u->version.c_str()).c_str(),
                             URL::encode(vkey->getText()).c_str(),
@@ -297,12 +297,12 @@ bool ThMLHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
                 buf += "</i></b><br />";
                 u->SecHead = false;
             }
-            else if (tag.getAttribute("class")) {
-                if (!stricmp(tag.getAttribute("class"), "sechead")) {
+            else if (!tag.getAttribute("class").empty()) {
+                if (!stricmp(tag.getAttribute("class").c_str(), "sechead")) {
                     u->SecHead = true;
                     buf += "<br /><b><i>";
                 }
-                else if (!stricmp(tag.getAttribute("class"), "title")) {
+                else if (!stricmp(tag.getAttribute("class").c_str(), "title")) {
                     u->SecHead = true;
                     buf += "<br /><b><i>";
                 }
@@ -324,14 +324,14 @@ bool ThMLHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
                 ((d = strchr( ++c , '"')) == NULL))    // identify endpoints.
                 return false;            // abandon hope.
 
-            SWBuf imagename = "file:";
+            std::string imagename = "file:";
             if (*c == '/')                // as below, inside for loop.
                 imagename += userData->module->getConfigEntry("AbsoluteDataPath");
             while (c != d)                // move bits into the name.
                 imagename += *(c++);
 
             // images become clickable, if the UI supports showImage.
-            buf.appendFormatted("<a href=\"passagestudy.jsp?action=showImage&value=%s&module=%s\"><",
+            buf += formatted("<a href=\"passagestudy.jsp?action=showImage&value=%s&module=%s\"><",
                         URL::encode(imagename.c_str()).c_str(),
                         URL::encode(u->version.c_str()).c_str());
 

@@ -21,6 +21,7 @@
  *
  */
 
+#include <cstring>
 #include <stdlib.h>
 #include <thmllemma.h>
 
@@ -33,7 +34,7 @@ namespace {
     static const char oTip[]  = "Toggles Lemmas On and Off if they exist";
 
     static const StringList *oValues() {
-        static const SWBuf choices[3] = {"Off", "On", ""};
+        static const std::string choices[3] = {"Off", "On", ""};
         static const StringList oVals(&choices[0], &choices[2]);
         return &oVals;
     }
@@ -48,12 +49,12 @@ ThMLLemma::~ThMLLemma() {
 }
 
 
-char ThMLLemma::processText(SWBuf &text, const SWKey *key, const SWModule *module) {
+char ThMLLemma::processText(std::string &text, const SWKey *key, const SWModule *module) {
     if (!option) {    // if we don't want lemmas
         bool intoken = false;
 
-        SWBuf token;
-        SWBuf orig = text;
+        std::string token;
+        std::string orig = text;
         const char *from = orig.c_str();
         for (text = ""; *from; from++) {
             if (*from == '<') {

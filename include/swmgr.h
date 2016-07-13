@@ -59,7 +59,7 @@
 
 #include <map>
 #include <list>
-#include <swbuf.h>
+#include <string>
 #include <swconfig.h>
 
 #include <defs.h>
@@ -70,13 +70,12 @@ class SWModule;
 class SWFilter;
 class SWOptionFilter;
 class SWFilterMgr;
-class SWBuf;
 class SWKey;
 
-typedef std::map < SWBuf, SWModule *, std::less < SWBuf > >ModMap;
-typedef std::map < SWBuf, SWFilter * >FilterMap;
-typedef std::map < SWBuf, SWOptionFilter * >OptionFilterMap;
-typedef std::list < SWBuf >StringList;
+typedef std::map < std::string, SWModule *, std::less < std::string > >ModMap;
+typedef std::map < std::string, SWFilter * >FilterMap;
+typedef std::map < std::string, SWOptionFilter * >OptionFilterMap;
+typedef std::list < std::string >StringList;
 typedef std::list < SWFilter* >FilterList;
 typedef std::list < SWOptionFilter* >OptionFilterList;
 
@@ -170,7 +169,7 @@ public:
 
     static bool isICU;
     static const char *globalConfPath;
-    static SWBuf getHomeDir();
+    static std::string getHomeDir();
 
     /**
      *
@@ -317,7 +316,7 @@ public:
      * @param module context module if filter needs this for processing
      * @return error status
      */
-    virtual char filterText(const char *filterName, SWBuf &text, const SWKey *key = 0, const SWModule *module = 0);
+    virtual char filterText(const char *filterName, std::string &text, const SWKey *key = 0, const SWModule *module = 0);
 
     /**
      * Sets the cipher key for the given module. This function updates the key

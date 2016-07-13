@@ -33,7 +33,7 @@ namespace swordxx {
 
 
 namespace {
-    typedef std::map < SWBuf, SWBuf, std::less < SWBuf > >LookupMap;
+    typedef std::map < std::string, std::string, std::less < std::string > >LookupMap;
 }
 
 
@@ -62,7 +62,7 @@ SWLocale::SWLocale(const char *ifilename) {
         localeSource   = new SWConfig(ifilename);
     }
     else {
-        localeSource   = new SWConfig(0);
+        localeSource   = new SWConfig();
         (*localeSource)["Meta"]["Name"] = DEFAULT_LOCALE_NAME;
         (*localeSource)["Meta"]["Description"] = "English (US)";
         bookAbbrevs = (struct abbrev *)builtin_abbrevs;
@@ -125,7 +125,7 @@ const char *SWLocale::translate(const char *text) {
                     p->lookupTable.insert(LookupMap::value_type(text, (*confEntry).second.c_str()));
                 }
                 else { //latin1 expected, convert to UTF-8
-                    SWBuf t((*confEntry).second.c_str());
+                    std::string t((*confEntry).second);
                     t = StringHelper::getSystemStringHelper()->latin2unicode( t );
 
                     p->lookupTable.insert(LookupMap::value_type(text, t.c_str()));

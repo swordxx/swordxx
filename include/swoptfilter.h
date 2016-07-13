@@ -24,7 +24,7 @@
 #define SWOPTFILTER_H
 
 #include <swfilter.h>
-#include <swbuf.h>
+#include <string>
 #include <list>
 
 namespace swordxx {
@@ -32,14 +32,14 @@ namespace swordxx {
 /**
 * The type definitoin for option types
 */
-typedef std::list < SWBuf > StringList;
+typedef std::list < std::string > StringList;
 
 
   /** Base class for all option filters.
   */
 class SWDLLEXPORT SWOptionFilter : public virtual SWFilter {
 protected:
-    SWBuf optionValue;
+    std::string optionValue;
     const char *optName;
     const char *optTip;
     const StringList *optValues;

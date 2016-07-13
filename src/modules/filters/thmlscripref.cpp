@@ -37,7 +37,7 @@ namespace {
     static const char oTip[]  = "Toggles Scripture Cross-references On and Off if they exist";
 
     static const StringList *oValues() {
-        static const SWBuf choices[3] = {"Off", "On", ""};
+        static const std::string choices[3] = {"Off", "On", ""};
         static const StringList oVals(&choices[0], &choices[2]);
         return &oVals;
     }
@@ -52,13 +52,13 @@ ThMLScripref::~ThMLScripref() {
 }
 
 
-char ThMLScripref::processText(SWBuf &text, const SWKey *key, const SWModule *module) {
-    SWBuf token;
+char ThMLScripref::processText(std::string &text, const SWKey *key, const SWModule *module) {
+    std::string token;
     bool intoken    = false;
     bool hide       = false;
-    SWBuf tagText;
+    std::string tagText;
     XMLTag startTag;
-    SWBuf refs = "";
+    std::string refs = "";
     int footnoteNum = 1;
     char buf[254];
     SWKey *p = (module) ? module->createKey() : (key) ? key->clone() : new VerseKey();
@@ -69,7 +69,7 @@ char ThMLScripref::processText(SWBuf &text, const SWKey *key, const SWModule *mo
         }
     *parser = key->getText();
 
-    SWBuf orig = text;
+    std::string orig = text;
     const char *from = orig.c_str();
 
     for (text = ""; *from; from++) {
@@ -81,7 +81,7 @@ char ThMLScripref::processText(SWBuf &text, const SWKey *key, const SWModule *mo
         if (*from == '>') {    // process tokens
             intoken = false;
 
-            XMLTag tag(token);
+            XMLTag tag(token.c_str());
             if (!strcmp(tag.getName(), "scripRef")) {
                 if (!tag.isEndTag()) {
                     if (!tag.isEmpty()) {
@@ -94,7 +94,7 @@ char ThMLScripref::processText(SWBuf &text, const SWKey *key, const SWModule *mo
                 }
                 if (hide && tag.isEndTag()) {
                     if (module->isProcessEntryAttributes()) {
-                        SWBuf fc = module->getEntryAttributes()["Footnote"]["count"]["value"];
+                        std::string fc = module->getEntryAttributes()["Footnote"]["count"]["value"];
                         footnoteNum = (fc.length()) ? atoi(fc.c_str()) : 0;
                         sprintf(buf, "%i", ++footnoteNum);
                         module->getEntryAttributes()["Footnote"]["count"]["value"] = buf;
@@ -104,7 +104,7 @@ char ThMLScripref::processText(SWBuf &text, const SWKey *key, const SWModule *mo
                         }
                         module->getEntryAttributes()["Footnote"][buf]["body"] = tagText;
                         startTag.setAttribute("swordFootnote", buf);
-                        SWBuf passage = startTag.getAttribute("passage");
+                        std::string passage = startTag.getAttribute("passage");
                         if (passage.length())
                             refs = parser->parseVerseList(passage.c_str(), *parser, true).getRangeText();
                         else    refs = parser->parseVerseList(tagText.c_str(), *parser, true).getRangeText();
@@ -121,7 +121,7 @@ char ThMLScripref::processText(SWBuf &text, const SWKey *key, const SWModule *mo
 
             // if not a scripRef token, keep token in text
             if ((!strcmp(tag.getName(), "scripRef")) && (!tag.isEndTag())) {
-                SWBuf osisRef = tag.getAttribute("passage");
+                std::string osisRef = tag.getAttribute("passage");
                 if (refs.length())
                     refs += "; ";
                 refs += osisRef;

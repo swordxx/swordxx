@@ -34,7 +34,7 @@ class SWDLLEXPORT OSISHeadings : public SWOptionFilter, public SWBasicFilter {
 public:
     OSISHeadings();
     virtual BasicFilterUserData *createUserData(const SWModule *module, const SWKey *key);
-    virtual bool handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData);
+    virtual bool handleToken(std::string &buf, const char *token, BasicFilterUserData *userData);
 };
 
 } /* namespace swordxx */

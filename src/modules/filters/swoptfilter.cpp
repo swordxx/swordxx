@@ -40,7 +40,8 @@ SWOptionFilter::SWOptionFilter(const char *oName, const char *oTip, const String
     optName   = oName;
     optTip    = oTip;
     optValues = oValues;
-    if (optValues->begin() != optValues->end()) setOptionValue(*(optValues->begin()));
+    if (optValues->begin() != optValues->end())
+        setOptionValue(optValues->begin()->c_str());
     isBooleanVal = optValues->size() == 2 && (optionValue == "On" || optionValue == "Off");
 }
 
@@ -60,7 +61,7 @@ void SWOptionFilter::setOptionValue(const char *ival) {
 }
 
 const char *SWOptionFilter::getOptionValue() {
-    return optionValue;
+    return optionValue.c_str();
 }
 
 

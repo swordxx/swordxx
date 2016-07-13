@@ -166,7 +166,6 @@ SET(sword_base_utilfns_SOURCES
     src/utilfuns/swobject.cpp
     src/utilfuns/utilstr.cpp
     src/utilfuns/utilxml.cpp
-    src/utilfuns/swbuf.cpp
     src/utilfuns/ftpparse.c
     src/utilfuns/url.cpp
     src/utilfuns/roman.cpp
@@ -300,7 +299,6 @@ SET(SWORD_INSTALL_HEADERS
     include/scsuutf8.h
     include/strkey.h
     include/swbasicfilter.h
-    include/swbuf.h
     include/swcacher.h
     include/swcipher.h
     include/swcom.h

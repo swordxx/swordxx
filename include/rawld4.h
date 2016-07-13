@@ -43,7 +43,7 @@ public:
             SWTextMarkup markup = FMT_UNKNOWN, const char *ilang = 0, bool caseSensitive = false, bool strongsPadding = true);
 
     virtual ~RawLD4();
-    virtual SWBuf &getRawEntryBuf() const;
+    virtual std::string &getRawEntryBuf() const;
 
     virtual void increment(int steps = 1);
     virtual void decrement(int steps = 1) { increment(-steps); }

@@ -23,11 +23,73 @@
 #ifndef UTILSTR_H
 #define UTILSTR_H
 
+#include <cstddef>
 #include <cstdint>
-#include <defs.h>
-#include <swbuf.h>
+#include <cstdio>
+#include <cstring>
+#include <string>
+#include <utility>
+#include "defs.h"
+
 
 namespace swordxx {
+
+void addTrailingDirectorySlash(std::string & buf);
+void removeTrailingDirectorySlashes(std::string & buf);
+
+inline bool charIsSpace(char const c) noexcept {
+    switch (c) {
+        case ' ': case '\n': case '\r': case '\t': return true;
+        default: return false;
+    }
+}
+
+void trimString(std::string & str) noexcept;
+
+inline bool hasPrefix(char const * str, char const * prefix) noexcept {
+    while (*prefix != '\0') {
+        if (*prefix != *str)
+            return false;
+        ++prefix;
+        ++str;
+    }
+    return true;
+}
+
+inline bool hasPrefix(std::string const & str,
+                      char const * const prefix) noexcept
+{ return hasPrefix(str.c_str(), prefix); }
+
+inline bool hasPrefix(char const * str,
+                      std::string const & prefix) noexcept
+{ return hasPrefix(str, prefix.c_str()); }
+
+inline bool hasPrefix(std::string const & str,
+                      std::string const & prefix) noexcept
+{ return hasPrefix(str.c_str(), prefix.c_str()); }
+
+template <typename ... Args>
+inline std::string formatted(const char * const formatString,
+                             Args && ... args)
+{
+    std::string buf(std::snprintf(nullptr, 0u, formatString, args...), char());
+    std::sprintf(&buf[0u], formatString, std::forward<Args>(args)...);
+    return buf;
+}
+
+inline std::pair<bool, std::size_t> getPrefixSize(char const * const buf,
+                                                  char const separator)
+{
+    if (const char * const m = std::strchr(buf, separator))
+        return std::make_pair(true, std::size_t(m - buf));
+    return std::make_pair(false, std::size_t(0u));
+}
+
+inline std::pair<bool, std::size_t> getPrefixSize(std::string const & buf,
+                                                  char const separator)
+{ return getPrefixSize(buf.c_str(), separator); }
+
+std::string stripPrefix(std::string & str, char const separator);
 
 /** stdstr - clone a string
 */
@@ -68,7 +130,7 @@ uint32_t getUniCharFromUTF8(const unsigned char **buf);
  *                 bytes for the given Unicode codepoint
  */
 
-SWBuf getUTF8FromUniChar(uint32_t uchar);
+std::string getUTF8FromUniChar(uint32_t uchar);
 
 
 /******************************************************************************
@@ -82,21 +144,18 @@ SWBuf getUTF8FromUniChar(uint32_t uchar);
  * RET:    input buffer validated and any problems fixed by substituting a
  *         replacement character for bytes not valid.
  */
-SWBuf assureValidUTF8(const char *buf);
+std::string assureValidUTF8(const char *buf);
 
 /****
- * This can be called to convert a UTF8 stream to an SWBuf which manages
- *    a wchar_t[]
- *    access buffer with (wchar_t *)SWBuf::getRawData();
- *
+ * This can be called to convert a UTF8 stream to a wstring.
  */
-SWBuf utf8ToWChar(const char *buf);
+std::wstring utf8ToWChar(const char *buf);
 
 /****
- * This can be called to convert a wchar_t[] to a UTF-8 SWBuf
+ * This can be called to convert a wchar_t[] to a UTF-8 string.
  *
  */
-SWBuf wcharToUTF8(const wchar_t *buf);
+std::string wcharToUTF8(const wchar_t *buf);
 
 
 

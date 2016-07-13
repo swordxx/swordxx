@@ -27,13 +27,13 @@
 #define ZSTR_H
 
 #include <defs.h>
+#include <string>
 
 namespace swordxx {
 
 class SWCompress;
 class EntriesBlock;
 class FileDesc;
-class SWBuf;
 
 class SWDLLEXPORT zStr {
 
@@ -68,7 +68,7 @@ public:
     void getText(long index, char **idxbuf, char **buf) const;
     void setText(const char *ikey, const char *buf, long len = -1);
     void linkEntry(const char *destkey, const char *srckey);
-    virtual void rawZFilter(SWBuf &buf, char direction = 0) const { (void) buf; (void) direction; }
+    virtual void rawZFilter(std::string &buf, char direction = 0) const { (void) buf; (void) direction; }
     static signed char createModule (const char *path);
 };
 

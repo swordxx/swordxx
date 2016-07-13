@@ -50,7 +50,7 @@ OSISVariants::~OSISVariants() {
 }
 
 
-char OSISVariants::processText(SWBuf &text, const SWKey *key, const SWModule *module)
+char OSISVariants::processText(std::string &text, const SWKey *key, const SWModule *module)
 {
 
     int option = 0;
@@ -63,8 +63,8 @@ char OSISVariants::processText(SWBuf &text, const SWKey *key, const SWModule *mo
         bool hide = false;
         bool invar = false;
 
-        SWBuf token;
-        SWBuf orig = text;
+        std::string token;
+        std::string orig = text;
         const char *from = orig.c_str();
         XMLTag tag;
 
@@ -81,9 +81,9 @@ char OSISVariants::processText(SWBuf &text, const SWKey *key, const SWModule *mo
                 intoken = false;
 
                 if (!strncmp(token.c_str(), "seg", 3)) {
-                    tag = token;
+                    tag = token.c_str();
 
-                    if (tag.getAttribute("type") && !strcmp("x-variant", tag.getAttribute("type")) && tag.getAttribute("subType") && !strcmp(variantChoice, tag.getAttribute("subType"))) {
+                    if (!tag.getAttribute("type").empty() && !strcmp("x-variant", tag.getAttribute("type").c_str()) && !tag.getAttribute("subType").empty() && !strcmp(variantChoice, tag.getAttribute("subType").c_str())) {
                         invar = true;
                         hide = true;
                         continue;

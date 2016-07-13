@@ -37,7 +37,7 @@ namespace {
     static const char oTip[]  = "Toggles Strong's Numbers On and Off if they exist";
 
     static const StringList *oValues() {
-        static const SWBuf choices[3] = {"Off", "On", ""};
+        static const std::string choices[3] = {"Off", "On", ""};
         static const StringList oVals(&choices[0], &choices[2]);
         return &oVals;
     }
@@ -52,7 +52,7 @@ ThMLStrongs::~ThMLStrongs() {
 }
 
 
-char ThMLStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *module) {
+char ThMLStrongs::processText(std::string &text, const SWKey *key, const SWModule *module) {
     char token[2048]; // cheese.  Fix.
     const char *from;
     int tokpos = 0;
@@ -64,10 +64,10 @@ char ThMLStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *mod
     char *valto;
     char *ch;
     unsigned int textStart = 0, textEnd = 0;
-    SWBuf tmp;
+    std::string tmp;
     bool newText = false;
 
-    SWBuf orig = text;
+    std::string orig = text;
     from = orig.c_str();
 
     for (text = ""; *from; from++) {
@@ -114,7 +114,7 @@ char ThMLStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *mod
                 if (!option) {	// if we don't want strongs
                     if ((from[1] == ' ') || (from[1] == ',') || (from[1] == ';') || (from[1] == '.') || (from[1] == '?') || (from[1] == '!') || (from[1] == ')') || (from[1] == '\'') || (from[1] == '\"')) {
                         if (lastspace)
-                            text--;
+                            text.pop_back();
                     }
                     if (newText) {textStart = text.length(); newText = false; }
                     continue;

@@ -28,14 +28,14 @@
 #include <list>
 
 #include <defs.h>
-#include <swbuf.h>
+#include <string>
 
 namespace swordxx {
 
 class SWLocale;
 
-typedef std::list<SWBuf> StringList;
-typedef std::map < SWBuf, SWLocale *, std::less < SWBuf > > LocaleMap;
+typedef std::list<std::string> StringList;
+typedef std::map < std::string, SWLocale *, std::less < std::string > > LocaleMap;
 /**
 * The LocaleMgr class handles all the different locales of Sword.
 * It provides functions to get a list of all available locales,

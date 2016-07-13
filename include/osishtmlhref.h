@@ -43,21 +43,21 @@ protected:
         bool inXRefNote;
         bool BiblicalText;
         int suspendLevel;
-        SWBuf wordsOfChristStart;
-        SWBuf wordsOfChristEnd;
+        std::string wordsOfChristStart;
+        std::string wordsOfChristEnd;
                 TagStacks *tagStacks;    // TODO: modified to wrap all TagStacks necessary for this filter until 1.7.x
 //                TagStack *hiStack;    // TODO: commented out for binary compat for 1.6.x     wrapped in tagStacks until 1.7.x
-        SWBuf lastTransChange;
-        SWBuf w;
-        SWBuf fn;
-        SWBuf version;
+        std::string lastTransChange;
+        std::string w;
+        std::string fn;
+        std::string version;
         MyUserData(const SWModule *module, const SWKey *key);
         ~MyUserData();
     };
     virtual BasicFilterUserData *createUserData(const SWModule *module, const SWKey *key) {
         return new MyUserData(module, key);
     }
-    virtual bool handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData);
+    virtual bool handleToken(std::string &buf, const char *token, BasicFilterUserData *userData);
 public:
     OSISHTMLHREF();
     void setMorphFirst(bool val = true) { morphFirst = val; }

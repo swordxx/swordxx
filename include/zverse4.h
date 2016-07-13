@@ -28,12 +28,12 @@
 #define ZVERSE4_H
 
 #include <defs.h>
+#include <string>
 
 namespace swordxx {
 
 class FileDesc;
 class SWCompress;
-class SWBuf;
 
 class SWDLLEXPORT zVerse4 {
     SWCompress *compressor;
@@ -68,8 +68,8 @@ public:
     virtual ~zVerse4();
 
     void findOffset(char testmt, long idxoff, long *start, unsigned long *size, unsigned long *buffnum) const;
-    void zReadText(char testmt, long start, unsigned long size, unsigned long buffnum, SWBuf &buf) const;
-    virtual void rawZFilter(SWBuf &buf, char direction = 0) const { (void) buf; (void) direction; }
+    void zReadText(char testmt, long start, unsigned long size, unsigned long buffnum, std::string &buf) const;
+    virtual void rawZFilter(std::string &buf, char direction = 0) const { (void) buf; (void) direction; }
     static char createModule(const char *path, int blockBound, const char *v11n = "KJV");
 };
 

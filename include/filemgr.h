@@ -27,7 +27,7 @@
 #include <fcntl.h>
 
 #include <defs.h>
-#include <swbuf.h>
+#include <string>
 
 namespace swordxx {
 
@@ -35,7 +35,7 @@ class SWDLLEXPORT FileMgr;
 
 struct SWDLLEXPORT DirEntry {
 public:
-    SWBuf name;
+    std::string name;
     unsigned long size;
     bool isDirectory;
 };
@@ -178,7 +178,7 @@ public:
     static int copyDir(const char *srcDir, const char *destDir);
     static int removeDir(const char *targetDir);
     static int removeFile(const char *fName);
-    static char getLine(FileDesc *fDesc, SWBuf &line);
+    static std::string getLine(FileDesc * fDesc);
 
 };
 

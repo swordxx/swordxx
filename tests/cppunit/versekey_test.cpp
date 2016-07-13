@@ -25,7 +25,7 @@
 #include <iostream>
 
 #include "localemgr.h"
-#include "swbuf.h"
+#include "string"
 #include "versekey.h"
 
 using namespace swordxx;
@@ -50,21 +50,21 @@ CPPUNIT_TEST( testIncrement );
 CPPUNIT_TEST_SUITE_END();
 
 protected:
-    SWBuf parseKey(const char* keyValue, const char* locale) {
+    std::string parseKey(const char* keyValue, const char* locale) {
         swordxx::VerseKey vk;
         vk.setLocale(locale);
         vk.setText(keyValue);
 
-        SWBuf ret( vk.getText() );
+        std::string ret( vk.getText() );
         //std::cout << ret.c_str();
         return ret;
     };
 
-    SWBuf parseRangeKey(const char* keyValue, const char* locale) {
+    std::string parseRangeKey(const char* keyValue, const char* locale) {
         const char* oldLocale = LocaleMgr::getSystemLocaleMgr()->getDefaultLocaleName();
         LocaleMgr::getSystemLocaleMgr()->setDefaultLocaleName(locale);
 
-        SWBuf ret;
+        std::string ret;
 
         VerseKey DefaultVSKey;
             DefaultVSKey = "jas3:1";

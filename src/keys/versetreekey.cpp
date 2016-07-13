@@ -23,6 +23,7 @@
 
 
 #include <versetreekey.h>
+#include <cstring>
 #include <ctype.h>
 
 namespace swordxx {
@@ -98,10 +99,10 @@ int VerseTreeKey::getBookFromAbbrev(const char *iabbr) const
             TreeKey *tkey = this->treeKey;
             int saveError = tkey->popError();
             long bookmark = tkey->getOffset();
-            SWBuf segment;
+            std::string segment;
             internalPosChange = true;
             do {
-                segment = (SWBuf)tkey->getLocalName();
+                segment = (std::string)tkey->getLocalName();
             } while (tkey->parent());
             segment << 1;
             if (saveError) {
@@ -188,7 +189,7 @@ void VerseTreeKey::positionChanged() {
         TreeKey *tkey = this->TreeKey::PositionChangeListener::getTreeKey();
         int saveError = tkey->popError();
         long bookmark = tkey->getOffset();
-        SWBuf seg[4];
+        std::string seg[4];
         internalPosChange = true;
         int legs = 0;
         do {
@@ -214,9 +215,9 @@ void VerseTreeKey::positionChanged() {
             setVerse(0);
         }    //path = "[ Module Heading ]";
         else {
-            setBookName(seg[--legs]);
-            chapter = (legs > 0) ? atoi(seg[--legs]) : 0;
-            setVerse((legs > 0) ? atoi(seg[--legs]) : 0);
+            setBookName(seg[--legs].c_str());
+            chapter = (legs > 0) ? atoi(seg[--legs].c_str()) : 0;
+            setVerse((legs > 0) ? atoi(seg[--legs].c_str()) : 0);
         }
 
 //        setText(path);
@@ -232,13 +233,13 @@ void VerseTreeKey::positionChanged() {
 
 void VerseTreeKey::syncVerseToTree() {
     internalPosChange = true;
-    SWBuf path;
+    std::string path;
     if (!getTestament()) path = "/"; // "[ Module Heading ]";
-    else if (!getBook()) path.setFormatted("/[ Testament %d Heading ]", getTestament());
-    else path.setFormatted("/%s/%d/%d", getOSISBookName(), getChapter(), getVerse());
+    else if (!getBook()) path = formatted("/[ Testament %d Heading ]", getTestament());
+    else path = formatted("/%s/%d/%d", getOSISBookName(), getChapter(), getVerse());
     if (getSuffix()) path += getSuffix();
     long bookmark = treeKey->getOffset();
-    treeKey->setText(path);
+    treeKey->setText(path.c_str());
 
     // if our module has jacked inconsistencies, then let's put our tree back to where it was
     if (treeKey->popError()) {

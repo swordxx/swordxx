@@ -75,8 +75,8 @@ LocaleMgr::LocaleMgr(const char *iConfigPath) {
     char *configPath = 0;
     SWConfig *sysConf = 0;
     char configType = 0;
-    SWBuf path;
-    std::list<SWBuf> augPaths;
+    std::string path;
+    std::list<std::string> augPaths;
     ConfigEntMap::iterator entry;
 
     defaultLocaleName = 0;
@@ -120,12 +120,12 @@ LocaleMgr::LocaleMgr(const char *iConfigPath) {
     }
 
     if (augPaths.size() && configType != 9) { //load locale files from all augmented paths
-        std::list<SWBuf>::iterator it = augPaths.begin();
-        std::list<SWBuf>::iterator end = augPaths.end();
+        std::list<std::string>::iterator it = augPaths.begin();
+        std::list<std::string>::iterator end = augPaths.end();
 
         for (;it != end; ++it) {
             if (FileMgr::existsDir((*it).c_str(), "locales.d")) {
-                SWBuf path = (*it) + "locales.d";
+                std::string path = (*it) + "locales.d";
                 loadConfigDir(path.c_str());
             }
         }
@@ -158,7 +158,7 @@ LocaleMgr::~LocaleMgr() {
 void LocaleMgr::loadConfigDir(const char *ipath) {
     DIR *dir;
     struct dirent *ent;
-    SWBuf newmodfile;
+    std::string newmodfile;
     LocaleMap::iterator it;
     SWLog::getSystemLog()->logInformation("LocaleMgr::loadConfigDir loading %s", ipath);
 
@@ -224,8 +224,8 @@ SWLocale *LocaleMgr::getLocale(const char *name) {
 }
 
 
-std::list <SWBuf> LocaleMgr::getAvailableLocales() {
-    std::list <SWBuf> retVal;
+std::list <std::string> LocaleMgr::getAvailableLocales() {
+    std::list <std::string> retVal;
     for (LocaleMap::iterator it = locales->begin(); it != locales->end(); it++) {
         if (strcmp(it->second->getName(), "locales")) {
             retVal.push_back((*it).second->getName());

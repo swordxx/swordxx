@@ -35,11 +35,11 @@ namespace {
 
     class MyUserData : public BasicFilterUserData {
     public:
-        SWBuf w;
+        std::string w;
         XMLTag tag;
         VerseKey *vk;
         char testament;
-        SWBuf hiType;
+        std::string hiType;
         MyUserData(const SWModule *module, const SWKey *key) : BasicFilterUserData(module, key) {}
     };
 }
@@ -76,7 +76,7 @@ BasicFilterUserData *OSISPlain::createUserData(const SWModule *module, const SWK
 }
 
 
-bool OSISPlain::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData) {
+bool OSISPlain::handleToken(std::string &buf, const char *token, BasicFilterUserData *userData) {
        // manually process if it wasn't a simple substitution
     if (!substituteToken(buf, token)) {
         MyUserData *u = (MyUserData *)userData;
@@ -95,31 +95,31 @@ bool OSISPlain::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
             u->tag = (start) ? token : u->w.c_str();
             bool show = true;    // to handle unplaced article in kjv2003-- temporary till combined
 
-            SWBuf lastText = (start) ? "stuff" : u->lastTextNode.c_str();
+            std::string lastText = (start) ? "stuff" : u->lastTextNode.c_str();
 
-            const char *attrib;
+            std::string attrib;
             const char *val;
-            if ((attrib = u->tag.getAttribute("xlit"))) {
-                val = strchr(attrib, ':');
-                val = (val) ? (val + 1) : attrib;
+            if (!(attrib = u->tag.getAttribute("xlit")).empty()) {
+                val = strchr(attrib.c_str(), ':');
+                val = (val) ? (val + 1) : attrib.c_str();
                 buf.append(" <");
                 buf.append(val);
-                buf.append('>');
+                buf.push_back('>');
             }
-            if ((attrib = u->tag.getAttribute("gloss"))) {
+            if (!(attrib = u->tag.getAttribute("gloss")).empty()) {
                 buf.append(" <");
                 buf.append(attrib);
-                buf.append('>');
+                buf.push_back('>');
             }
-            if ((attrib = u->tag.getAttribute("lemma"))) {
+            if (!(attrib = u->tag.getAttribute("lemma")).empty()) {
                 int count = u->tag.getAttributePartCount("lemma", ' ');
                 int i = (count > 1) ? 0 : -1;        // -1 for whole value cuz it's faster, but does the same thing as 0
                 do {
                     char gh;
                     attrib = u->tag.getAttribute("lemma", i, ' ');
                     if (i < 0) i = 0;    // to handle our -1 condition
-                    val = strchr(attrib, ':');
-                    val = (val) ? (val + 1) : attrib;
+                    val = strchr(attrib.c_str(), ':');
+                    val = (val) ? (val + 1) : attrib.c_str();
                     if ((strchr("GH", *val)) && (isdigit(val[1]))) {
                         gh = *val;
                         val++;
@@ -131,34 +131,34 @@ bool OSISPlain::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
                         show = false;
                     else    {
                         buf.append(" <");
-                        buf.append(gh);
+                        buf.push_back(gh);
                         buf.append(val);
                         buf.append(">");
                     }
                 } while (++i < count);
             }
-            if ((attrib = u->tag.getAttribute("morph")) && (show)) {
+            if (!(attrib = u->tag.getAttribute("morph")).empty() && (show)) {
                 int count = u->tag.getAttributePartCount("morph", ' ');
                 int i = (count > 1) ? 0 : -1;        // -1 for whole value cuz it's faster, but does the same thing as 0
                 do {
                     attrib = u->tag.getAttribute("morph", i, ' ');
                     if (i < 0) i = 0;    // to handle our -1 condition
-                    val = strchr(attrib, ':');
-                    val = (val) ? (val + 1) : attrib;
+                    val = strchr(attrib.c_str(), ':');
+                    val = (val) ? (val + 1) : attrib.c_str();
                     if ((*val == 'T') && (strchr("GH", val[1])) && (isdigit(val[2])))
                         val+=2;
                     buf.append(" (");
                     buf.append(val);
-                    buf.append(')');
+                    buf.push_back(')');
                 } while (++i < count);
             }
-            if ((attrib = u->tag.getAttribute("POS"))) {
-                val = strchr(attrib, ':');
-                val = (val) ? (val + 1) : attrib;
+            if (!(attrib = u->tag.getAttribute("POS")).empty()) {
+                val = strchr(attrib.c_str(), ':');
+                val = (val) ? (val + 1) : attrib.c_str();
 
                 buf.append(" <");
                 buf.append(val);
-                buf.append('>');
+                buf.push_back('>');
             }
         }
 
@@ -170,9 +170,9 @@ bool OSISPlain::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
                 else    u->suspendTextPassThru = true;
                 if (u->module) {
                     XMLTag tag = token;
-                    SWBuf swordFootnote = tag.getAttribute("swordFootnote");
-                    SWBuf footnoteBody = u->module->getEntryAttributes()["Footnote"][swordFootnote]["body"];
-                    buf.append(u->module->renderText(footnoteBody));
+                    std::string swordFootnote = tag.getAttribute("swordFootnote");
+                    std::string footnoteBody = u->module->getEntryAttributes()["Footnote"][swordFootnote]["body"];
+                    buf.append(u->module->renderText(footnoteBody.c_str()));
                 }
             }
         else if (!strncmp(token, "/note", 5)) {
@@ -185,30 +185,30 @@ bool OSISPlain::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
         else if (((*token == 'p') && ((token[1] == ' ') || (!token[1]))) ||
             ((*token == '/') && (token[1] == 'p') && (!token[2]))) {
                 userData->supressAdjacentWhitespace = true;
-                buf.append('\n');
+                buf.push_back('\n');
         }
 
         // Milestoned paragraph, created by osis2mod
         // <div type="paragraph"  sID... />
         // <div type="paragraph"  eID... />
-        else if (!strcmp(u->tag.getName(), "div") && u->tag.getAttribute("type") && (!strcmp(u->tag.getAttribute("type"), "x-p") || !strcmp(u->tag.getAttribute("type"), "paragraph")) &&
-            (u->tag.isEmpty() && (u->tag.getAttribute("sID") || u->tag.getAttribute("eID")))) {
+        else if (!strcmp(u->tag.getName(), "div") && !u->tag.getAttribute("type").empty() && (!strcmp(u->tag.getAttribute("type").c_str(), "x-p") || !strcmp(u->tag.getAttribute("type").c_str(), "paragraph")) &&
+            (u->tag.isEmpty() && (!u->tag.getAttribute("sID").empty() || !u->tag.getAttribute("eID").empty()))) {
                 userData->supressAdjacentWhitespace = true;
-                buf.append('\n');
+                buf.push_back('\n');
         }
 
                 // <lb .../>
                 else if (!strncmp(token, "lb", 2)) {
             userData->supressAdjacentWhitespace = true;
-            buf.append('\n');
+            buf.push_back('\n');
         }
         else if (!strncmp(token, "l", 1) && strstr(token, "eID")) {
             userData->supressAdjacentWhitespace = true;
-            buf.append('\n');
+            buf.push_back('\n');
         }
         else if (!strncmp(token, "/divineName", 11)) {
             // Get the end portion of the string, and upper case it
-            char* end = buf.getRawData();
+            char* end = &buf[0u];
             end += buf.size() - u->lastTextNode.size();
             toupperstr(end);
         }
@@ -233,9 +233,9 @@ bool OSISPlain::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
                 while (*b) {
                     const unsigned char *o = b;
                     if (getUniCharFromUTF8(&b)) {
-                        while (o != b) buf.append(*(o++));
-                        buf.append((unsigned char)0xCC);
-                        buf.append((unsigned char)0x85);
+                        while (o != b) buf.push_back(*(o++));
+                        buf.push_back((unsigned char)0xCC);
+                        buf.push_back((unsigned char)0x85);
                     }
                 }
             }
@@ -252,7 +252,7 @@ bool OSISPlain::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
             const char* type = strstr(token+10, "type=\"");
             if (type && strncmp(type+6, "line", 4)) { //we check for type != line
                 userData->supressAdjacentWhitespace = true;
-                    buf.append('\n');
+                    buf.push_back('\n');
             }
                 }
 

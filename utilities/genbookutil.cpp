@@ -59,7 +59,7 @@ void setLocalName(TreeKeyIdx *treeKey) {
     char buf[1023];
     std::cout << "Enter New Node Name: ";
     fgets(buf, 1000, stdin);
-    SWBuf name = buf;
+    std::string name = buf;
     treeKey->setLocalName(name.trim());
     treeKey->save();
 }
@@ -69,7 +69,7 @@ void gotoPath(TreeKeyIdx *treeKey) {
     char buf[1023];
     std::cout << "Enter Path: ";
     fgets(buf, 1000, stdin);
-    SWBuf path = buf;
+    std::string path = buf;
     (*treeKey) = path.trim();
 }
 
@@ -78,7 +78,7 @@ void assurePath(TreeKeyIdx *treeKey) {
     char buf[1023];
     std::cout << "Enter Path: ";
     fgets(buf, 1000, stdin);
-    SWBuf path = buf;
+    std::string path = buf;
     treeKey->assureKeyPath(path.trim());
 }
 
@@ -91,14 +91,14 @@ void viewEntryText(RawGenBook *book) {
 
 
 void setEntryText(RawGenBook *book) {
-    SWBuf body;
+    std::string body;
     TreeKeyIdx *treeKey = (TreeKeyIdx *)(SWKey *)(*book);
     if (treeKey->getOffset()) {
         char buf[1023];
         std::cout << "Enter New Entry Text ('.' on a line by itself to end): \n";
         do {
             fgets(buf, 1000, stdin);
-            SWBuf text = buf;
+            std::string text = buf;
             text.trim();
             if ((text[0] == '.') && (text[1] == 0))
                 break;
@@ -117,7 +117,7 @@ void appendSibbling(TreeKeyIdx *treeKey) {
         char buf[1023];
         std::cout << "Enter New Sibbling Name: ";
         fgets(buf, 1000, stdin);
-        SWBuf name = buf;
+        std::string name = buf;
         treeKey->append();
         treeKey->setLocalName(name.trim());
         treeKey->save();
@@ -130,7 +130,7 @@ void appendChild(TreeKeyIdx *treeKey) {
     char buf[1023];
     std::cout << "Enter New Child Name: ";
     fgets(buf, 1000, stdin);
-    SWBuf name = buf;
+    std::string name = buf;
     treeKey->appendChild();
     treeKey->setLocalName(name.trim());
     treeKey->save();
@@ -170,7 +170,7 @@ int main(int argc, char **argv) {
     TreeKeyIdx root = *((TreeKeyIdx *)((SWKey *)(*book)));
     treeKey = (TreeKeyIdx *)(SWKey *)(*book);
 
-    SWBuf input;
+    std::string input;
     char line[1024];
 
     do {

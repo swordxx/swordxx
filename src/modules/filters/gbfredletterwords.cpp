@@ -35,7 +35,7 @@ namespace {
     static const char oTip[]  = "Toggles Red Coloring for Words of Christ On and Off if they are marked";
 
     static const StringList *oValues() {
-        static const SWBuf choices[3] = {"Off", "On", ""};
+        static const std::string choices[3] = {"Off", "On", ""};
         static const StringList oVals(&choices[0], &choices[2]);
         return &oVals;
     }
@@ -50,7 +50,7 @@ GBFRedLetterWords::~GBFRedLetterWords() {
 }
 
 
-char GBFRedLetterWords::processText(SWBuf &text, const SWKey *key, const SWModule *module) {
+char GBFRedLetterWords::processText(std::string &text, const SWKey *key, const SWModule *module) {
 /** This function removes the red letter words in Bible like the WEB
 * The words are marked by <FR> as start and <Fr> as end tag.
 */
@@ -61,7 +61,7 @@ char GBFRedLetterWords::processText(SWBuf &text, const SWKey *key, const SWModul
         bool hide = false;
 
     const char *from;
-    SWBuf orig = text;
+    std::string orig = text;
     from = orig.c_str();
     for (text = ""; *from; from++) {
             if (*from == '<') {

@@ -20,6 +20,7 @@
  *
  */
 
+#include <cstring>
 #include <stdio.h>
 #include <rawstr.h>
 #include <swmgr.h>
@@ -48,7 +49,7 @@ int main(int argc, char **argv)
     long maxoff = idxfd->seek(0, SEEK_END) - 6;
     FileMgr::getSystemFileMgr()->close(idxfd);
 
-    SWBuf last = "";
+    std::string last = "";
     bool first = true;
     char *trybuf = 0;
     for (long index = 0; index < maxoff; index+=6) {

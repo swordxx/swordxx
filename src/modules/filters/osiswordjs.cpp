@@ -39,7 +39,7 @@ namespace {
     static const char oTip[]  = "Toggles Word Javascript data";
 
     static const StringList *oValues() {
-        static const SWBuf choices[3] = {"Off", "On", ""};
+        static const std::string choices[3] = {"Off", "On", ""};
         static const StringList oVals(&choices[0], &choices[2]);
         return &oVals;
     }
@@ -60,23 +60,23 @@ OSISWordJS::~OSISWordJS() {
 }
 
 
-char OSISWordJS::processText(SWBuf &text, const SWKey *key, const SWModule *module) {
+char OSISWordJS::processText(std::string &text, const SWKey *key, const SWModule *module) {
     if (option) {
         char token[2112]; // cheese.  Fix.
         int tokpos = 0;
         bool intoken = false;
         int wordNum = 1;
         char wordstr[5];
-        SWBuf modName = (module)?module->getName():"";
+        std::string modName = (module)?module->getName():"";
         // add TR to w src in KJV then remove this next line
-        SWBuf wordSrcPrefix = (modName == "KJV")?SWBuf("TR"):modName;
+        std::string wordSrcPrefix = (modName == "KJV")?std::string("TR"):modName;
 
         VerseKey *vkey = 0;
         if (key) {
             vkey = SWDYNAMIC_CAST(VerseKey, key);
         }
 
-        const SWBuf orig = text;
+        const std::string orig = text;
         const char * from = orig.c_str();
 
         for (text = ""; *from; ++from) {
@@ -93,50 +93,50 @@ char OSISWordJS::processText(SWBuf &text, const SWKey *key, const SWModule *modu
                 if ((*token == 'w') && (token[1] == ' ')) {	// Word
                     XMLTag wtag(token);
                     sprintf(wordstr, "%03d", wordNum);
-                    SWBuf lemmaClass;
-                    SWBuf lemma;
-                    SWBuf morph;
-                    SWBuf page;
-                    SWBuf src;
+                    std::string lemmaClass;
+                    std::string lemma;
+                    std::string morph;
+                    std::string page;
+                    std::string src;
                     char gh = 0;
                     page = module->getEntryAttributes()["Word"][wordstr]["Page"].c_str();
-                    if (page.length()) page = (SWBuf)"p:" + page;
+                    if (page.length()) page = (std::string)"p:" + page;
                     int count = atoi(module->getEntryAttributes()["Word"][wordstr]["PartCount"].c_str());
                     for (int i = 0; i < count; i++) {
 
                         // for now, lemma class can just be equal to last lemma class in multi part word
-                        SWBuf tmp = "LemmaClass";
-                        if (count > 1) tmp.appendFormatted(".%d", i+1);
+                        std::string tmp = "LemmaClass";
+                        if (count > 1) tmp += formatted(".%d", i+1);
                         lemmaClass = module->getEntryAttributes()["Word"][wordstr][tmp];
 
                         tmp = "Lemma";
-                        if (count > 1) tmp.appendFormatted(".%d", i+1);
+                        if (count > 1) tmp += formatted(".%d", i+1);
                         tmp = (module->getEntryAttributes()["Word"][wordstr][tmp].c_str());
 
                         // if we're strongs,
                         if (lemmaClass == "strong") {
                             gh = tmp[0];
-                            tmp << 1;
+                            tmp.erase(0u, 1u);
                         }
                         if (lemma.size()) lemma += "|";
                         lemma += tmp;
 
                         tmp = "Morph";
-                        if (count > 1) tmp.appendFormatted(".%d", i+1);
+                        if (count > 1) tmp += formatted(".%d", i+1);
                         tmp = (module->getEntryAttributes()["Word"][wordstr][tmp].c_str());
                         if (morph.size()) morph += "|";
                         morph += tmp;
 
                         tmp = "Src";
-                        if (count > 1) tmp.appendFormatted(".%d", i+1);
+                        if (count > 1) tmp += formatted(".%d", i+1);
                         tmp = (module->getEntryAttributes()["Word"][wordstr][tmp].c_str());
-                        if (!tmp.length()) tmp.appendFormatted("%d", wordNum);
+                        if (!tmp.length()) tmp += formatted("%d", wordNum);
                         tmp.insert(0, wordSrcPrefix);
                         if (src.size()) src += "|";
                         src += tmp;
                     }
 
-                    SWBuf lexName = "";
+                    std::string lexName = "";
                     // we can pass the real lex name in, but we have some
                     // aliases in the javascript to optimize bandwidth
                     if ((gh == 'G') && (defaultGreekLex)) {
@@ -146,22 +146,22 @@ char OSISWordJS::processText(SWBuf &text, const SWKey *key, const SWModule *modu
                         lexName = (!strcmp(defaultHebLex->getName(), "StrongsHebrew"))?"H":defaultHebLex->getName();
                     }
 
-                    SWBuf xlit = wtag.getAttribute("xlit");
+                    std::string xlit = wtag.getAttribute("xlit");
 
-                    if ((lemmaClass != "strong") && (xlit.startsWith("betacode:"))) {
+                    if ((lemmaClass != "strong") && (hasPrefix(xlit, "betacode:"))) {
                         lexName = "betacode";
 //						const char *m = strchr(xlit.c_str(), ':');
 //						strong = ++m;
                     }
-                    SWBuf wordID;
+                    std::string wordID;
                     if (vkey) {
                         // optimize for bandwidth and use only the verse as the unique entry id
-                        wordID.appendFormatted("%d", vkey->getVerse());
+                        wordID += formatted("%d", vkey->getVerse());
                     }
                     else {
                         wordID = key->getText();
                     }
-                    wordID.appendFormatted("_%s", src.c_str());
+                    wordID += formatted("_%s", src.c_str());
                     // clean up our word ID for XHTML
                     for (unsigned int i = 0; i < wordID.size(); i++) {
                         if ((!isdigit(wordID[i])) && (!isalpha(wordID[i]))) {
@@ -169,7 +169,7 @@ char OSISWordJS::processText(SWBuf &text, const SWKey *key, const SWModule *modu
                         }
                     }
                     // 'p' = 'fillpop' to save bandwidth
-                    text.appendFormatted("<span class=\"clk\" onclick=\"p('%s','%s','%s','%s','%s','%s');\" >", lexName.c_str(), lemma.c_str(), wordID.c_str(), morph.c_str(), page.c_str(), modName.c_str());
+                    text += formatted("<span class=\"clk\" onclick=\"p('%s','%s','%s','%s','%s','%s');\" >", lexName.c_str(), lemma.c_str(), wordID.c_str(), morph.c_str(), page.c_str(), modName.c_str());
                     wordNum++;
 
                     if (wtag.isEmpty()) {
@@ -182,9 +182,9 @@ char OSISWordJS::processText(SWBuf &text, const SWKey *key, const SWModule *modu
                 }
 
                 // if not a strongs token, keep token in text
-                text.append('<');
+                text.push_back('<');
                 text.append(token);
-                text.append('>');
+                text.push_back('>');
 
                 continue;
             }
@@ -195,7 +195,7 @@ char OSISWordJS::processText(SWBuf &text, const SWKey *key, const SWModule *modu
                 }
             }
             else	{
-                text.append(*from);
+                text.push_back(*from);
             }
         }
     }

@@ -49,7 +49,7 @@ ThMLVariants::~ThMLVariants() {
 }
 
 
-char ThMLVariants::processText(SWBuf &text, const SWKey *key, const SWModule *module)
+char ThMLVariants::processText(std::string &text, const SWKey *key, const SWModule *module)
 {
 
     int option = 0;
@@ -62,8 +62,8 @@ char ThMLVariants::processText(SWBuf &text, const SWKey *key, const SWModule *mo
         bool hide = false;
         bool invar = false;
 
-        SWBuf token;
-        SWBuf orig = text;
+        std::string token;
+        std::string orig = text;
         const char *from = orig.c_str();
 
         //we use a fixed comparision string to make sure the loop is as fast as the original two blocks with almost the same code

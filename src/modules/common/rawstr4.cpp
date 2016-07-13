@@ -34,7 +34,7 @@
 #include <sysdata.h>
 #include <swlog.h>
 #include <filemgr.h>
-#include <swbuf.h>
+#include <string>
 #include <stringmgr.h>
 
 namespace swordxx {
@@ -58,8 +58,6 @@ const int RawStr4::IDXENTRYSIZE = 8;
 
 RawStr4::RawStr4(const char *ipath, int fileMode, bool caseSensitive) : caseSensitive(caseSensitive)
 {
-    SWBuf buf;
-
     lastoff = -1;
     path = 0;
     stdstr(&path, ipath);
@@ -68,11 +66,8 @@ RawStr4::RawStr4(const char *ipath, int fileMode, bool caseSensitive) : caseSens
         fileMode = FileMgr::RDWR;
     }
 
-    buf.setFormatted("%s.idx", path);
-    idxfd = FileMgr::getSystemFileMgr()->open(buf, fileMode, true);
-
-    buf.setFormatted("%s.dat", path);
-    datfd = FileMgr::getSystemFileMgr()->open(buf, fileMode, true);
+    idxfd = FileMgr::getSystemFileMgr()->open(formatted("%s.idx", path).c_str(), fileMode, true);
+    datfd = FileMgr::getSystemFileMgr()->open(formatted("%s.dat", path).c_str(), fileMode, true);
 
     if (!datfd) {
         SWLog::getSystemLog()->logError("%d", errno);
@@ -313,7 +308,7 @@ signed char RawStr4::findOffset(const char *ikey, uint32_t *start, uint32_t *siz
  *
  */
 
-void RawStr4::readText(uint32_t istart, uint32_t *isize, char **idxbuf, SWBuf &buf) const
+void RawStr4::readText(uint32_t istart, uint32_t *isize, char **idxbuf, std::string &buf) const
 {
     unsigned int ch;
     char *idxbuflocal = 0;
@@ -324,14 +319,13 @@ void RawStr4::readText(uint32_t istart, uint32_t *isize, char **idxbuf, SWBuf &b
         if (*idxbuf)
             delete [] *idxbuf;
 
-        buf = "";
-        buf.setFillByte(0);
-        buf.setSize(++(*isize));
+        buf.clear();
+        buf.resize(++(*isize), '\0');
 
         *idxbuf = new char [ (*isize) ];
 
         datfd->seek(start, SEEK_SET);
-        datfd->read(buf.getRawData(), (int)((*isize) - 1));
+        datfd->read(&buf[0u], (int)((*isize) - 1));
 
         for (ch = 0; buf[ch]; ch++) {        // skip over index string
             if (buf[ch] == 10) {
@@ -339,7 +333,7 @@ void RawStr4::readText(uint32_t istart, uint32_t *isize, char **idxbuf, SWBuf &b
                 break;
             }
         }
-        buf = SWBuf(buf.c_str()+ch);
+        buf = std::string(buf.c_str()+ch);
         // resolve link
         if (!strncmp(buf.c_str(), "@LINK", 5)) {
             for (ch = 0; buf[ch]; ch++) {        // null before nl

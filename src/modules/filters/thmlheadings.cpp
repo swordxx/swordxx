@@ -38,7 +38,7 @@ namespace {
     static const char oTip[]  = "Toggles Headings On and Off if they exist";
 
     static const StringList *oValues() {
-        static const SWBuf choices[3] = {"Off", "On", ""};
+        static const std::string choices[3] = {"Off", "On", ""};
         static const StringList oVals(&choices[0], &choices[2]);
         return &oVals;
     }
@@ -53,20 +53,20 @@ ThMLHeadings::~ThMLHeadings() {
 }
 
 
-char ThMLHeadings::processText(SWBuf &text, const SWKey *key, const SWModule *module) {
-    SWBuf token;
+char ThMLHeadings::processText(std::string &text, const SWKey *key, const SWModule *module) {
+    std::string token;
     bool intoken    = false;
     bool isheader   = false;
     bool hide       = false;
     bool preverse   = false;
     bool withinDiv  = false;
-    SWBuf header;
+    std::string header;
     int headerNum   = 0;
     int pvHeaderNum = 0;
     char buf[254];
     XMLTag startTag;
 
-    SWBuf orig = text;
+    std::string orig = text;
     const char *from = orig.c_str();
 
     XMLTag tag;
@@ -83,14 +83,14 @@ char ThMLHeadings::processText(SWBuf &text, const SWKey *key, const SWModule *mo
 
             if (!strnicmp(token.c_str(), "div", 3) || !strnicmp(token.c_str(), "/div", 4)) {
                 withinDiv =  (!strnicmp(token.c_str(), "div", 3));
-                tag = token;
+                tag = token.c_str();
                 if (hide && tag.isEndTag()) {
                     if (module->isProcessEntryAttributes() && (option || (!preverse))) {
-                        SWBuf heading;
-                        SWBuf cls = startTag.getAttribute("class");
-                        if (!cls.startsWith("fromEntryAttributes")) {
-                            cls = SWBuf("fromEntryAttributes ") + cls;
-                            startTag.setAttribute("class", cls);
+                        std::string heading;
+                        std::string cls = startTag.getAttribute("class");
+                        if (!hasPrefix(cls, "fromEntryAttributes")) {
+                            cls = std::string("fromEntryAttributes ") + cls;
+                            startTag.setAttribute("class", cls.c_str());
                         }
                         heading += startTag;
                         heading += header;
@@ -120,8 +120,8 @@ char ThMLHeadings::processText(SWBuf &text, const SWKey *key, const SWModule *mo
                     }
                     preverse = false;
                 }
-                if (tag.getAttribute("class") && ((!stricmp(tag.getAttribute("class"), "sechead"))
-                                         ||  (!stricmp(tag.getAttribute("class"), "title")))) {
+                if (!tag.getAttribute("class").empty() && ((!stricmp(tag.getAttribute("class").c_str(), "sechead"))
+                                         ||  (!stricmp(tag.getAttribute("class").c_str(), "title")))) {
 
                     isheader = true;
 
@@ -154,38 +154,38 @@ char ThMLHeadings::processText(SWBuf &text, const SWKey *key, const SWModule *mo
                 }
                 else {
                     isheader = false;
-                    SWBuf cls = tag.getAttribute("class");
-                    if (cls.startsWith("fromEntryAttributes ")) {
-                        cls <<  SWBuf("fromEntryAttributes ").size();
-                        tag.setAttribute("class", cls);
+                    std::string cls = tag.getAttribute("class");
+                    if (hasPrefix(cls, "fromEntryAttributes ")) {
+                        cls.erase(0u, std::string("fromEntryAttributes ").size());
+                        tag.setAttribute("class", cls.c_str());
                         token = tag;
-                        token << 1;
-                        token.setSize(token.size() - 1);
+                        token.erase(0u, 1u);
+                        token.pop_back();
                     }
                 }
             }
 
             if (withinDiv && isheader) {
-                header.append('<');
+                header.push_back('<');
                 header.append(token);
-                header.append('>');
+                header.push_back('>');
             } else {
                 // if not a heading token, keep token in text
                 if (!hide) {
-                    text.append('<');
+                    text.push_back('<');
                     text.append(token);
-                    text.append('>');
+                    text.push_back('>');
                 }
             }
             continue;
         }
         if (intoken) { //copy token
-            token.append(*from);
+            token.push_back(*from);
         }
         else if (!hide) { //copy text which is not inside a token
-            text.append(*from);
+            text.push_back(*from);
         }
-        else header.append(*from);
+        else header.push_back(*from);
     }
     return 0;
 }

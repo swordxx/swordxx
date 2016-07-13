@@ -28,24 +28,23 @@
 
 #include <defs.h>
 #include <multimapwdef.h>
-#include <swbuf.h>
 
 namespace swordxx {
 
-typedef multimapwithdefault < SWBuf, SWBuf, std::less < SWBuf > >ConfigEntMap;
-typedef std::map < SWBuf, ConfigEntMap, std::less < SWBuf > >SectionMap;
+typedef multimapwithdefault < std::string, std::string, std::less < std::string > >ConfigEntMap;
+typedef std::map < std::string, ConfigEntMap, std::less < std::string > >SectionMap;
 
 /** The class to read and save settings using a file on disk.
 *
 */
 class SWDLLEXPORT SWConfig {
 private:
-    char getline(int fd, SWBuf &line);
+    char getline(int fd, std::string &line);
 public:
     /** The filename used by this SWConfig object
     *
     */
-    SWBuf filename;
+    std::string filename;
     /** Map of available sections
     * The map of available sections.
     */

@@ -33,7 +33,7 @@ namespace {
     static const char oTip[]  = "Toggles Morphological Tags On and Off if they exist";
 
     static const StringList *oValues() {
-        static const SWBuf choices[3] = {"Off", "On", ""};
+        static const std::string choices[3] = {"Off", "On", ""};
         static const StringList oVals(&choices[0], &choices[2]);
         return &oVals;
     }
@@ -48,7 +48,7 @@ GBFMorph::~GBFMorph() {
 }
 
 
-char GBFMorph::processText(SWBuf &text, const SWKey *key, const SWModule *module) {
+char GBFMorph::processText(std::string &text, const SWKey *key, const SWModule *module) {
     if (!option) {    // if we don't want morph tags
         const char *from;
         char token[2048]; // cheese.  Fix.
@@ -56,7 +56,7 @@ char GBFMorph::processText(SWBuf &text, const SWKey *key, const SWModule *module
         bool intoken = false;
         bool lastspace = false;
 
-        SWBuf orig = text;
+        std::string orig = text;
         from = orig.c_str();
 
         for (text = ""; *from; from++) {
@@ -73,7 +73,7 @@ char GBFMorph::processText(SWBuf &text, const SWKey *key, const SWModule *module
                 if (*token == 'W' && token[1] == 'T') {	// Morph
                   if ((from[1] == ' ') || (from[1] == ',') || (from[1] == ';') || (from[1] == '.') || (from[1] == '?') || (from[1] == '!') || (from[1] == ')') || (from[1] == '\'') || (from[1] == '\"')) {
                     if (lastspace)
-                      text--;
+                      text.pop_back();
                   }
                   continue;
                 }

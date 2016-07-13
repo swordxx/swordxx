@@ -52,13 +52,6 @@ namespace swordxx {
 
 namespace {
 
-    static void removeTrailingSlash(SWBuf &buf) {
-        int len = buf.size();
-        if ((buf[len-1] == '/')
-         || (buf[len-1] == '\\'))
-            buf.size(len-1);
-    }
-
     static const char *masterRepoList = "masterRepoList.conf";
 
 }
@@ -85,7 +78,7 @@ RemoteTransport *InstallMgr::createHTTPTransport(const char *host, StatusReporte
 }
 
 
-InstallMgr::InstallMgr(const char *privatePath, StatusReporter *sr, SWBuf u, SWBuf p) {
+InstallMgr::InstallMgr(const char *privatePath, StatusReporter *sr, std::string u, std::string p) {
     userDisclaimerConfirmed = false;
     statusReporter = sr;
     this->u = u;
@@ -99,7 +92,7 @@ InstallMgr::InstallMgr(const char *privatePath, StatusReporter *sr, SWBuf u, SWB
          || (this->privatePath[len-1] == '\\'))
             this->privatePath[len-1] = 0;
     }
-    confPath = (SWBuf)privatePath + "/InstallMgr.conf";
+    confPath = std::string(privatePath) + "/InstallMgr.conf";
     FileMgr::createParent(confPath.c_str());
 
     readInstallConf();
@@ -143,9 +136,9 @@ void InstallMgr::readInstallConf() {
         while (sourceBegin != sourceEnd) {
             InstallSource *is = new InstallSource("FTP", sourceBegin->second.c_str());
             sources[is->caption] = is;
-            SWBuf parent = (SWBuf)privatePath + "/" + is->uid + "/file";
+            std::string parent = std::string(privatePath) + '/' + is->uid + "/file";
             FileMgr::createParent(parent.c_str());
-            is->localShadow = (SWBuf)privatePath + "/" + is->uid;
+            is->localShadow = std::string(privatePath) + '/' + is->uid;
             sourceBegin++;
         }
 
@@ -156,9 +149,9 @@ void InstallMgr::readInstallConf() {
         while (sourceBegin != sourceEnd) {
             InstallSource *is = new InstallSource("SFTP", sourceBegin->second.c_str());
             sources[is->caption] = is;
-            SWBuf parent = (SWBuf)privatePath + "/" + is->uid + "/file";
+            std::string parent = std::string(privatePath) + '/' + is->uid + "/file";
             FileMgr::createParent(parent.c_str());
-            is->localShadow = (SWBuf)privatePath + "/" + is->uid;
+            is->localShadow = std::string(privatePath) + '/' + is->uid;
             sourceBegin++;
         }
 #endif // CURLSFTPAVAILABLE
@@ -169,9 +162,9 @@ void InstallMgr::readInstallConf() {
         while (sourceBegin != sourceEnd) {
             InstallSource *is = new InstallSource("HTTP", sourceBegin->second.c_str());
             sources[is->caption] = is;
-            SWBuf parent = (SWBuf)privatePath + "/" + is->uid + "/file";
+            std::string parent = std::string(privatePath) + '/' + is->uid + "/file";
             FileMgr::createParent(parent.c_str());
-            is->localShadow = (SWBuf)privatePath + "/" + is->uid;
+            is->localShadow = std::string(privatePath) + '/' + is->uid;
             sourceBegin++;
         }
 
@@ -181,9 +174,9 @@ void InstallMgr::readInstallConf() {
         while (sourceBegin != sourceEnd) {
             InstallSource *is = new InstallSource("HTTPS", sourceBegin->second.c_str());
             sources[is->caption] = is;
-            SWBuf parent = (SWBuf)privatePath + "/" + is->uid + "/file";
+            std::string parent = std::string(privatePath) + '/' + is->uid + "/file";
             FileMgr::createParent(parent.c_str());
-            is->localShadow = (SWBuf)privatePath + "/" + is->uid;
+            is->localShadow = std::string(privatePath) + '/' + is->uid;
             sourceBegin++;
         }
     }
@@ -225,28 +218,30 @@ void InstallMgr::terminate() {
 
 
 int InstallMgr::removeModule(SWMgr *manager, const char *moduleName) {
+    assert(manager);
+    assert(moduleName);
     SectionMap::iterator module;
     ConfigEntMap::iterator fileBegin;
     ConfigEntMap::iterator fileEnd, entry;
 
     // save our own copy, cuz when we remove the module from the SWMgr
     // it's likely we'll free the memory passed to us in moduleName
-    SWBuf modName = moduleName;
+    std::string modName = moduleName;
     module = manager->config->Sections.find(modName);
 
     if (module != manager->config->Sections.end()) {
         // to be sure all files are closed
         // this does not remove the .conf information from SWMgr
-        manager->deleteModule(modName);
+        manager->deleteModule(modName.c_str());
 
         fileBegin = module->second.lower_bound("File");
         fileEnd = module->second.upper_bound("File");
 
-        SWBuf modFile;
-        SWBuf modDir;
+        std::string modFile;
+        std::string modDir;
         entry = module->second.find("AbsoluteDataPath");
         modDir = entry->second.c_str();
-        removeTrailingSlash(modDir);
+        removeTrailingDirectorySlashes(modDir);
         if (fileBegin != fileEnd) {    // remove each file
             while (fileBegin != fileEnd) {
                 modFile = modDir;
@@ -270,7 +265,7 @@ int InstallMgr::removeModule(SWMgr *manager, const char *moduleName) {
                 while ((ent = readdir(dir))) {
                     if ((strcmp(ent->d_name, ".")) && (strcmp(ent->d_name, ".."))) {
                         modFile = manager->configPath;
-                        removeTrailingSlash(modFile);
+                        removeTrailingDirectorySlashes(modFile);
                         modFile += "/";
                         modFile += ent->d_name;
                         SWConfig *config = new SWConfig(modFile.c_str());
@@ -305,41 +300,41 @@ SWLog::getSystemLog()->logDebug("remoteCopy: %s, %s, %s, %c, %s", (is?is->source
 #endif
         ) {
 
-        trans = createFTPTransport(is->source, statusReporter);
+        trans = createFTPTransport(is->source.c_str(), statusReporter);
         trans->setPassive(passive);
     }
     else if (is->type == "HTTP" || is->type == "HTTPS") {
-        trans = createHTTPTransport(is->source, statusReporter);
+        trans = createHTTPTransport(is->source.c_str(), statusReporter);
     }
     transport.reset(trans); // set classwide current transport for other thread terminate() call
     if (is->u.length()) {
-        trans->setUser(is->u);
-        trans->setPasswd(is->p);
+        trans->setUser(is->u.c_str());
+        trans->setPasswd(is->p.c_str());
     }
     else {
-        trans->setUser(u);
-        trans->setPasswd(p);
+        trans->setUser(u.c_str());
+        trans->setPasswd(p.c_str());
     }
 
-    SWBuf urlPrefix;
+    std::string urlPrefix;
     if (is->type == "HTTP") {
-        urlPrefix = (SWBuf) "http://";
+        urlPrefix = "http://";
     }
     else if (is->type == "HTTPS") {
-        urlPrefix = (SWBuf) "https://";
+        urlPrefix = "https://";
     }
 #ifdef CURLSFTPAVAILABLE
     else if (is->type == "SFTP") {
-        urlPrefix = (SWBuf) "sftp://";
+        urlPrefix = "sftp://";
     }
 #endif
     else {
-        urlPrefix = (SWBuf) "ftp://";
+        urlPrefix = "ftp://";
     }
     urlPrefix.append(is->source);
 
     // let's be sure we can connect.  This seems to be necessary but sucks
-//    SWBuf url = urlPrefix + is->directory.c_str() + "/"; //dont forget the final slash
+//    std::string url = urlPrefix + is->directory.c_str() + "/"; //dont forget the final slash
 //    if (trans->getURL("swdirlist.tmp", url.c_str())) {
 //         SWLog::getSystemLog()->logDebug("FTPCopy: failed to get dir %s\n", url.c_str());
 //         return -1;
@@ -347,20 +342,23 @@ SWLog::getSystemLog()->logDebug("remoteCopy: %s, %s, %s, %c, %s", (is?is->source
 
 
     if (dirTransfer) {
-        SWBuf dir = (SWBuf)is->directory.c_str();
-        removeTrailingSlash(dir);
-        dir += (SWBuf)"/" + src; //dont forget the final slash
+        std::string dir(is->directory);
+        removeTrailingDirectorySlashes(dir);
+        (dir += '/') += src; //dont forget the final slash
 SWLog::getSystemLog()->logDebug("remoteCopy: dirTransfer: %s", dir.c_str());
 
-        retVal = trans->copyDirectory(urlPrefix, dir, dest, suffix);
+        retVal = trans->copyDirectory(urlPrefix.c_str(),
+                                      dir.c_str(),
+                                      dest,
+                                      suffix);
 
 
     }
     else {
         try {
-            SWBuf url = urlPrefix + is->directory.c_str();
-            removeTrailingSlash(url);
-            url += (SWBuf)"/" + src; //dont forget the final slash
+            std::string url = urlPrefix + is->directory;
+            removeTrailingDirectorySlashes(url);
+            (url += '/') + src; //dont forget the final slash
             if (trans->getURL(dest, url.c_str())) {
                 SWLog::getSystemLog()->logDebug("netCopy: failed to get file %s", url.c_str());
                 retVal = -1;
@@ -381,13 +379,13 @@ int InstallMgr::installModule(SWMgr *destMgr, const char *fromLocation, const ch
     ConfigEntMap::iterator fileBegin;
     ConfigEntMap::iterator fileEnd;
     ConfigEntMap::iterator entry;
-    SWBuf sourceDir;
-    SWBuf buffer;
+    std::string sourceDir;
+    std::string buffer;
     bool aborted = false;
     bool cipher = false;
     DIR *dir;
     struct dirent *ent;
-    SWBuf modFile;
+    std::string modFile;
 
     SWLog::getSystemLog()->logDebug("***** InstallMgr::installModule\n");
     if (fromLocation)
@@ -395,10 +393,10 @@ int InstallMgr::installModule(SWMgr *destMgr, const char *fromLocation, const ch
     SWLog::getSystemLog()->logDebug("***** modName: %s \n", modName);
 
     if (is)
-        sourceDir = (SWBuf)privatePath + "/" + is->uid;
+        sourceDir = std::string(privatePath) + '/' + is->uid;
     else    sourceDir = fromLocation;
 
-    removeTrailingSlash(sourceDir);
+    removeTrailingDirectorySlashes(sourceDir);
     sourceDir += '/';
 
     SWMgr mgr(sourceDir.c_str());
@@ -434,10 +432,10 @@ int InstallMgr::installModule(SWMgr *destMgr, const char *fromLocation, const ch
             if (!aborted) {
                 // DO THE INSTALL
                 while (fileBegin != fileEnd && !retVal) {
-                    SWBuf sourcePath = sourceDir;
+                    std::string sourcePath = sourceDir;
                     sourcePath += fileBegin->second.c_str();
-                    SWBuf dest = destMgr->prefixPath;
-                    removeTrailingSlash(dest);
+                    std::string dest = destMgr->prefixPath;
+                    removeTrailingDirectorySlashes(dest);
                     dest += '/';
                     dest += fileBegin->second.c_str();
                     retVal = FileMgr::copyFile(sourcePath.c_str(), dest.c_str());
@@ -467,14 +465,14 @@ int InstallMgr::installModule(SWMgr *destMgr, const char *fromLocation, const ch
 
             entry = module->second.find("AbsoluteDataPath");
             if (entry != module->second.end()) {
-                SWBuf absolutePath = entry->second.c_str();
-                SWBuf relativePath = absolutePath;
+                std::string absolutePath(entry->second);
+                std::string relativePath(absolutePath);
                 entry = module->second.find("PrefixPath");
                 if (entry != module->second.end()) {
-                    relativePath << strlen(entry->second.c_str());
+                    relativePath.erase(0u, entry->second.size());
                 }
                 else {
-                    relativePath << strlen(mgr.prefixPath);
+                    relativePath.erase(0u, strlen(mgr.prefixPath));
                 }
                 SWLog::getSystemLog()->logDebug("***** mgr.prefixPath: %s \n", mgr.prefixPath);
                 SWLog::getSystemLog()->logDebug("***** destMgr->prefixPath: %s \n", destMgr->prefixPath);
@@ -487,7 +485,7 @@ int InstallMgr::installModule(SWMgr *destMgr, const char *fromLocation, const ch
                     }
                 }
                 if (!aborted) {
-                    SWBuf destPath = (SWBuf)destMgr->prefixPath + relativePath;
+                    std::string destPath(std::string(destMgr->prefixPath) += relativePath);
                     retVal = FileMgr::copyDir(absolutePath.c_str(), destPath.c_str());
                 }
                 if (is) {        // delete tmp netCopied files
@@ -497,7 +495,7 @@ int InstallMgr::installModule(SWMgr *destMgr, const char *fromLocation, const ch
             }
         }
         if (!aborted) {
-            SWBuf confDir = sourceDir + "mods.d/";
+            std::string confDir = sourceDir + "mods.d/";
             if ((dir = opendir(confDir.c_str()))) {    // find and copy .conf file
                 rewinddir(dir);
                 while ((ent = readdir(dir)) && !retVal) {
@@ -506,8 +504,8 @@ int InstallMgr::installModule(SWMgr *destMgr, const char *fromLocation, const ch
                         modFile += ent->d_name;
                         SWConfig *config = new SWConfig(modFile.c_str());
                         if (config->Sections.find(modName) != config->Sections.end()) {
-                            SWBuf targetFile = destMgr->configPath; //"./mods.d/";
-                            removeTrailingSlash(targetFile);
+                            std::string targetFile = destMgr->configPath; //"./mods.d/";
+                            removeTrailingDirectorySlashes(targetFile);
                             targetFile += "/";
                             targetFile += ent->d_name;
                             retVal = FileMgr::copyFile(modFile.c_str(), targetFile.c_str());
@@ -540,17 +538,17 @@ int InstallMgr::refreshRemoteSource(InstallSource *is) {
     // assert user disclaimer has been confirmed
     if (!isUserDisclaimerConfirmed()) return -1;
 
-    SWBuf root = (SWBuf)privatePath + (SWBuf)"/" + is->uid.c_str();
-    removeTrailingSlash(root);
-    SWBuf target = root + "/mods.d";
+    std::string root(std::string(privatePath) + '/' + is->uid);
+    removeTrailingDirectorySlashes(root);
+    std::string target = root + "/mods.d";
     int errorCode = -1; //0 means successful
 
     FileMgr::removeDir(target.c_str());
 
-    if (!FileMgr::existsDir(target))
-        FileMgr::createPathAndFile(target+"/globals.conf");
+    if (!FileMgr::existsDir(target.c_str()))
+        FileMgr::createPathAndFile((target+"/globals.conf").c_str());
 
-    SWBuf archive = root + "/mods.d.tar.gz";
+    std::string archive = root + "/mods.d.tar.gz";
 
     errorCode = remoteCopy(is, "mods.d.tar.gz", archive.c_str(), false);
     if (!errorCode) { //sucessfully downloaded the tar,gz of module configs
@@ -611,7 +609,7 @@ map<SWModule *, int> InstallMgr::getModuleStatus(const SWMgr &base, const SWMgr 
                            SWORDXX_VERSION);
         #endif
 
-        const SWModule *baseMod = base.getModule(mod->first);
+        const SWModule *baseMod = base.getModule(mod->first.c_str());
         if (baseMod) {
             auto const sourceVersion(
                     getVersion(mod->second->getConfigEntry("Version"), 0x1u));
@@ -643,15 +641,15 @@ int InstallMgr::refreshRemoteSourceConfiguration() {
     // assert user disclaimer has been confirmed
     if (!isUserDisclaimerConfirmed()) return -1;
 
-    SWBuf root = (SWBuf)privatePath;
-    removeTrailingSlash(root);
-    SWBuf masterRepoListPath = root + "/" + masterRepoList;
+    std::string root(privatePath);
+    removeTrailingDirectorySlashes(root);
+    std::string masterRepoListPath = root + "/" + masterRepoList;
     InstallSource is("FTP");
     is.source = "ftp.crosswire.org";
     is.directory = "/pub/sword";
     int errorCode = remoteCopy(&is, masterRepoList, masterRepoListPath.c_str(), false);
     if (!errorCode) { //sucessfully downloaded the repo list
-        SWConfig masterList(masterRepoListPath);
+        SWConfig masterList(masterRepoListPath.c_str());
         SectionMap::iterator sections = masterList.Sections.find("Repos");
         if (sections != masterList.Sections.end()) {
             for (ConfigEntMap::iterator actions = sections->second.begin(); actions != sections->second.end(); actions++) {
@@ -667,7 +665,7 @@ int InstallMgr::refreshRemoteSourceConfiguration() {
                             it->second = 0;
                         }
                         else {
-                            SWBuf key = actions->second.stripPrefix('=');
+                            std::string key(stripPrefix(actions->second, '='));
                             if (key == "FTPSource") {
                                 // we might consider instantiating a temp IS
                                 // from our config string and then copy only
@@ -686,7 +684,7 @@ int InstallMgr::refreshRemoteSourceConfiguration() {
                 }
                 // didn't find our UID, let's add it
                 if (it == sources.end()) {
-                    SWBuf key = actions->second.stripPrefix('=');
+                    std::string key(stripPrefix(actions->second, '='));
                     if (key == "FTPSource") {
                         if (actions->second != "REMOVE") {
                             InstallSource *is = new InstallSource("FTP", actions->second.c_str());
@@ -713,17 +711,17 @@ InstallSource::InstallSource(const char *type, const char *confEnt) {
     mgr = 0;
     userData = 0;
     if (confEnt) {
-        SWBuf buf = confEnt;
-        caption   = buf.stripPrefix('|', true);
-        source    = buf.stripPrefix('|', true);
-        directory = buf.stripPrefix('|', true);
-        u         = buf.stripPrefix('|', true);
-        p         = buf.stripPrefix('|', true);
-        uid       = buf.stripPrefix('|', true);
+        std::string buf = confEnt;
+        caption   = stripPrefix(buf, '|');
+        source    = stripPrefix(buf, '|');
+        directory = stripPrefix(buf, '|');
+        u         = stripPrefix(buf, '|');
+        p         = stripPrefix(buf, '|');
+        uid       = stripPrefix(buf, '|');
 
         if (!uid.length()) uid = source;
 
-        removeTrailingSlash(directory);
+        removeTrailingDirectorySlashes(directory);
     }
 }
 

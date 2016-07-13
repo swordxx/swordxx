@@ -307,7 +307,7 @@ return true;
 }
 #endif // ICU_CUSTOM_RESOURCE_BUILDING
 
-bool UTF8Transliterator::addTrans(const char* newTrans, SWBuf* transList) {
+bool UTF8Transliterator::addTrans(const char* newTrans, std::string* transList) {
 #ifdef ICU_CUSTOM_RESOURCE_BUILDING
 #ifdef _ICUSWORD_
     UErrorCode status;
@@ -354,23 +354,23 @@ const char *UTF8Transliterator::getOptionValue()
     return (NUMTARGETSCRIPTS > option) ? optionstring[option] : 0;
 }
 
-char UTF8Transliterator::processText(SWBuf &text, const SWKey *key, const SWModule *module)
+char UTF8Transliterator::processText(std::string &text, const SWKey *key, const SWModule *module)
 {
     if (option) {    // if we want transliteration
         unsigned long i, j;
                 UErrorCode err = U_ZERO_ERROR;
                 UConverter * conv = NULL;
                 conv = ucnv_open("UTF-8", &err);
-                SWBuf ID;
+                std::string ID;
 
                 bool compat = false;
 
         // Convert UTF-8 string to UTF-16 (UChars)
-                j = strlen(text);
+                j = std::strlen(text.c_str());
                 int32_t len = (j * 2) + 1;
                 UChar *source = new UChar[len];
                 err = U_ZERO_ERROR;
-                len = ucnv_toUChars(conv, source, len, text, j, &err);
+                len = ucnv_toUChars(conv, source, len, text.c_str(), j, &err);
                 source[len] = 0;
 
         // Figure out which scripts are used in the string
@@ -906,13 +906,13 @@ char UTF8Transliterator::processText(SWBuf &text, const SWKey *key, const SWModu
                 addTrans("NFC", &ID);
 
                 err = U_ZERO_ERROR;
-                Transliterator * trans = createTrans(UnicodeString(ID), UTRANS_FORWARD, err);
+                Transliterator * trans = createTrans(UnicodeString(ID.c_str()), UTRANS_FORWARD, err);
                 if (trans && !U_FAILURE(err)) {
                         UnicodeString target = UnicodeString(source);
             trans->transliterate(target);
-            text.setSize(text.size()*2);
-            len = ucnv_fromUChars(conv, text.getRawData(), text.size(), target.getBuffer(), target.length(), &err);
-            text.setSize(len);
+            text.resize(text.size() * 2u, '\0');
+            len = ucnv_fromUChars(conv, &text[0u], text.size(), target.getBuffer(), target.length(), &err);
+            text.resize(len, '\0');
             delete trans;
                 }
                 ucnv_close(conv);

@@ -120,7 +120,7 @@ int main(int argc, char **argv)
             for (i3 = i2->second.begin(); i3 != i2->second.end(); ++i3) {
                 std::cout << "\t\t" << i3->first << " = " << i3->second << "\n";
                 if (preverse) {
-                    std::cout << "\t\tmodule->renderText(heading[" << i3->first << "]) = " << target->renderText(i3->second) << "\n";
+                    std::cout << "\t\tmodule->renderText(heading[" << i3->first << "]) = " << target->renderText(i3->second.c_str()) << "\n";
                 }
             }
         }

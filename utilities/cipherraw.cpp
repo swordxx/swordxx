@@ -43,7 +43,7 @@
 #include <swcipher.h>
 #include <versekey.h>
 #include <rawverse.h>
-#include <swbuf.h>
+#include <string>
 
 using namespace swordxx;
 
@@ -100,7 +100,7 @@ int main(int argc, char **argv) {
             loffset = offset;
 
             if (size) {
-                SWBuf tmpbuf;
+                std::string tmpbuf;
                 rawdrv->readText(key.getTestament(), offset, size, tmpbuf);
                 zobj->Buf(tmpbuf.c_str(), size);
                 unsigned long ulSize = size;

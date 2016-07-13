@@ -36,15 +36,15 @@ protected:
     public:
         MyUserData(const SWModule *module, const SWKey *key);
         bool SecHead;
-        SWBuf version;
+        std::string version;
         bool BiblicalText;
         XMLTag startTag;
     };
     virtual BasicFilterUserData *createUserData(const SWModule *module, const SWKey *key) {
         return new MyUserData(module, key);
     }
-    virtual bool handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData);
-    virtual char processText(SWBuf &text, const SWKey *key = 0, const SWModule *module = 0);
+    virtual bool handleToken(std::string &buf, const char *token, BasicFilterUserData *userData);
+    virtual char processText(std::string &text, const SWKey *key = 0, const SWModule *module = 0);
 public:
     ThMLRTF();
 };

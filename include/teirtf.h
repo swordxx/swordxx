@@ -37,14 +37,14 @@ protected:
     public:
         bool BiblicalText;
         bool inOsisRef;
-        SWBuf w;
-        SWBuf version;
+        std::string w;
+        std::string version;
         MyUserData(const SWModule *module, const SWKey *key);
     };
     virtual BasicFilterUserData *createUserData(const SWModule *module, const SWKey *key) {
         return new MyUserData(module, key);
     }
-    virtual bool handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData);
+    virtual bool handleToken(std::string &buf, const char *token, BasicFilterUserData *userData);
 public:
     TEIRTF();
 };

@@ -29,7 +29,7 @@
 #include <fstream>
 #include <string>
 
-#include <swbuf.h>
+#include <string>
 #include <ztext.h>
 #include <zld.h>
 #include <zcom.h>
@@ -225,7 +225,7 @@ int main(int argc, char **argv)
             cout << "" << buf;
             openchap = true;
         }
-        SWBuf verseText = inModule->getRawEntry();
+        std::string verseText = inModule->getRawEntry();
         sprintf(buf, "\t\t<verse osisID=\"%s\">", vkey->getOSISRef());
         cout << buf << verseText.c_str() << "</verse>\n" << endl;
         lastChap = vkey->getChapter();

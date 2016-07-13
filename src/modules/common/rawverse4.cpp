@@ -26,6 +26,7 @@
 
 
 #include <cstdint>
+#include <cstring>
 #include <ctype.h>
 #include <stdio.h>
 #include <fcntl.h>
@@ -36,7 +37,7 @@
 #include <versekey.h>
 #include <sysdata.h>
 #include <filemgr.h>
-#include <swbuf.h>
+#include <string>
 
 
 namespace swordxx {
@@ -59,8 +60,6 @@ const char RawVerse4::nl = '\n';
 
 RawVerse4::RawVerse4(const char *ipath, int fileMode)
 {
-    SWBuf buf;
-
     path = 0;
     stdstr(&path, ipath);
 
@@ -71,17 +70,10 @@ RawVerse4::RawVerse4(const char *ipath, int fileMode)
         fileMode = FileMgr::RDWR;
     }
 
-    buf.setFormatted("%s/ot.vss", path);
-    idxfp[0] = FileMgr::getSystemFileMgr()->open(buf, fileMode, true);
-
-    buf.setFormatted("%s/nt.vss", path);
-    idxfp[1] = FileMgr::getSystemFileMgr()->open(buf, fileMode, true);
-
-    buf.setFormatted("%s/ot", path);
-    textfp[0] = FileMgr::getSystemFileMgr()->open(buf, fileMode, true);
-
-    buf.setFormatted("%s/nt", path);
-    textfp[1] = FileMgr::getSystemFileMgr()->open(buf, fileMode, true);
+    idxfp[0] = FileMgr::getSystemFileMgr()->open(formatted("%s/ot.vss", path).c_str(), fileMode, true);
+    idxfp[1] = FileMgr::getSystemFileMgr()->open(formatted("%s/nt.vss", path).c_str(), fileMode, true);
+    textfp[0] = FileMgr::getSystemFileMgr()->open(formatted("%s/ot", path).c_str(), fileMode, true);
+    textfp[1] = FileMgr::getSystemFileMgr()->open(formatted("%s/nt", path).c_str(), fileMode, true);
 
     instance++;
 }
@@ -152,16 +144,15 @@ void RawVerse4::findOffset(char testmt, long idxoff, long *start, unsigned long 
  *
  */
 
-void RawVerse4::readText(char testmt, long start, unsigned long size, SWBuf &buf) const {
-    buf = "";
-    buf.setFillByte(0);
-    buf.setSize(size + 1);
+void RawVerse4::readText(char testmt, long start, unsigned long size, std::string &buf) const {
+    buf.clear();
+    buf.resize(size + 1u, '\0');
     if (!testmt)
         testmt = ((idxfp[1]) ? 1:2);
     if (size) {
         if (textfp[testmt-1]->getFd() >= 0) {
             textfp[testmt-1]->seek(start, SEEK_SET);
-            textfp[testmt-1]->read(buf.getRawData(), (int)size);
+            textfp[testmt-1]->read(&buf[0u], (int)size);
         }
     }
 }

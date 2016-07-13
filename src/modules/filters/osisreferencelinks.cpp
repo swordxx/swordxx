@@ -33,7 +33,7 @@ namespace swordxx {
 namespace {
 
     static const StringList *oValues() {
-        static const SWBuf choices[3] = {"On", "Off", ""};
+        static const std::string choices[3] = {"On", "Off", ""};
         static const StringList oVals(&choices[0], &choices[2]);
         return &oVals;
     }
@@ -58,14 +58,14 @@ OSISReferenceLinks::~OSISReferenceLinks() {
 }
 
 
-char OSISReferenceLinks::processText(SWBuf &text, const SWKey *key, const SWModule *module) {
+char OSISReferenceLinks::processText(std::string &text, const SWKey *key, const SWModule *module) {
     if (option) return 0;
 
-    SWBuf token;
+    std::string token;
     bool intoken        = false;
     bool stripThisToken = false;
 
-    SWBuf orig = text;
+    std::string orig = text;
     const char *from = orig.c_str();
 
     for (text = ""; *from; ++from) {
@@ -76,14 +76,15 @@ char OSISReferenceLinks::processText(SWBuf &text, const SWKey *key, const SWModu
         }
         else if (*from == '>') {    // process tokens
             intoken = false;
-            if (strncmp(token, "reference", 9) && strncmp(token.c_str(), "/reference", 10)) {
-                text.append('<');
+            if (std::strncmp(token.c_str(), "reference", 9)
+                && std::strncmp(token.c_str(), "/reference", 10)) {
+                text.push_back('<');
                 text.append(token);
-                text.append('>');
+                text.push_back('>');
             }
             else {
                 XMLTag tag;
-                tag = token;
+                tag = token.c_str();
                 if (!tag.isEndTag() && type == tag.getAttribute("type") && (!subType.size() || subType == tag.getAttribute("subType"))) {
                     stripThisToken = true;
                     continue;
@@ -92,18 +93,18 @@ char OSISReferenceLinks::processText(SWBuf &text, const SWKey *key, const SWModu
                     stripThisToken = false;
                     continue;
                 }
-                text.append('<');
+                text.push_back('<');
                 text.append(token);
-                text.append('>');
+                text.push_back('>');
             }
             continue;
         }
 
         if (intoken) { //copy token
-            token.append(*from);
+            token.push_back(*from);
         }
         else { //copy text which is not inside a token
-            text.append(*from);
+            text.push_back(*from);
         }
     }
     return 0;

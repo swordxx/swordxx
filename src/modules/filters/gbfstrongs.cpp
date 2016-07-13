@@ -36,7 +36,7 @@ namespace {
     static const char oTip[]  = "Toggles Strong's Numbers On and Off if they exist";
 
     static const StringList *oValues() {
-        static const SWBuf choices[3] = {"Off", "On", ""};
+        static const std::string choices[3] = {"Off", "On", ""};
         static const StringList oVals(&choices[0], &choices[2]);
         return &oVals;
     }
@@ -51,7 +51,7 @@ GBFStrongs::~GBFStrongs() {
 }
 
 
-char GBFStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *module) {
+char GBFStrongs::processText(std::string &text, const SWKey *key, const SWModule *module) {
     char token[2048]; // cheese.  Fix.
     int tokpos = 0;
     bool intoken = false;
@@ -62,10 +62,10 @@ char GBFStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *modu
     char *valto;
     unsigned int textStart = 0, textEnd = 0;
     bool newText = false;
-    SWBuf tmp;
+    std::string tmp;
     const char *from;
 
-    SWBuf orig = text;
+    std::string orig = text;
     from = orig.c_str();
 
     for (text = ""; *from; from++) {
@@ -108,7 +108,7 @@ char GBFStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *modu
                 if (!option) {
                     if ((from[1] == ' ') || (from[1] == ',') || (from[1] == ';') || (from[1] == '.') || (from[1] == '?') || (from[1] == '!') || (from[1] == ')') || (from[1] == '\'') || (from[1] == '\"')) {
                         if (lastspace)
-                            text--;
+                            text.pop_back();
                     }
                     if (newText) {textStart = text.size(); newText = false; }
                     continue;

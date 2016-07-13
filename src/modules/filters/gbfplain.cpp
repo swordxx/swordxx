@@ -23,7 +23,7 @@
 
 #include <stdlib.h>
 #include <gbfplain.h>
-#include <swbuf.h>
+#include <string>
 
 
 namespace swordxx {
@@ -33,12 +33,12 @@ GBFPlain::GBFPlain() {
 }
 
 
-char GBFPlain::processText (SWBuf &text, const SWKey *key, const SWModule *module)
+char GBFPlain::processText (std::string &text, const SWKey *key, const SWModule *module)
 {
     char token[2048];
     int tokpos = 0;
     bool intoken = false;
-    SWBuf orig = text;
+    std::string orig = text;
     const char* from = orig.c_str();
 
     for (text = ""; *from; ++from) {
@@ -80,10 +80,10 @@ char GBFPlain::processText (SWBuf &text, const SWKey *key, const SWModule *modul
             case 'C':
                 switch(token[1]) {
                 case 'A':               // ASCII value
-                    text.append((char)atoi(&token[2]));
+                    text.push_back((char)atoi(&token[2]));
                     continue;
                 case 'G':
-                    text.append('>');
+                    text.push_back('>');
                     continue;
 /*                                Bug in WEB
                 case 'L':
@@ -92,7 +92,7 @@ char GBFPlain::processText (SWBuf &text, const SWKey *key, const SWModule *modul
 */
                 case 'L':	//        Bug in WEB.  Use above entry when fixed
                 case 'N':               // new line
-                    text.append('\n');
+                    text.push_back('\n');
                     continue;
                 case 'M':               // new paragraph
                     text.append("\n\n");
@@ -109,7 +109,7 @@ char GBFPlain::processText (SWBuf &text, const SWKey *key, const SWModule *modul
                 token[tokpos+2] = 0;
             }
         }
-        else	text.append(*from);
+        else	text.push_back(*from);
     }
     return 0;
 }

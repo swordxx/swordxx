@@ -22,6 +22,7 @@
 
 #include <curlftpt.h>
 
+#include <cstring>
 #include <fcntl.h>
 
 #include <curl/curl.h>
@@ -37,7 +38,7 @@ namespace {
     struct FtpFile {
         const char *filename;
         FILE *stream;
-        SWBuf *destBuf;
+        std::string *destBuf;
     };
 
 
@@ -64,8 +65,8 @@ namespace {
         }
         if (out->destBuf) {
             int s = out->destBuf->size();
-            out->destBuf->size(s+(size*nmemb));
-            memcpy(out->destBuf->getRawData()+s, buffer, size*nmemb);
+            out->destBuf->resize(s+(size*nmemb), '\0');
+            std::memcpy(&out->destBuf[s], buffer, size*nmemb);
             return nmemb;
         }
         return fwrite(buffer, size, nmemb, out->stream);
@@ -107,7 +108,7 @@ CURLFTPTransport::~CURLFTPTransport() {
 }
 
 
-char CURLFTPTransport::getURL(const char *destPath, const char *sourceURL, SWBuf *destBuf) {
+char CURLFTPTransport::getURL(const char *destPath, const char *sourceURL, std::string *destBuf) {
     signed char retVal = 0;
     struct FtpFile ftpfile = {destPath, 0, destBuf};
 
@@ -119,7 +120,7 @@ char CURLFTPTransport::getURL(const char *destPath, const char *sourceURL, SWBuf
 
         curl_easy_setopt(session, CURLOPT_URL, sourceURL);
 
-        SWBuf credentials = u + ":" + p;
+        std::string credentials = u + ":" + p;
         curl_easy_setopt(session, CURLOPT_USERPWD, credentials.c_str());
         curl_easy_setopt(session, CURLOPT_WRITEFUNCTION, my_fwrite);
         if (!passive)

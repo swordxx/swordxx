@@ -39,12 +39,12 @@ public: /* Methods: */
         : SWText("echomod", "Echos back key")
     {}
 
-    inline SWBuf & getRawEntryBuf() const final override {
+    inline std::string & getRawEntryBuf() const final override {
         m_retVal = *key;
         return m_retVal;
     }
 
-    mutable SWBuf m_retVal;
+    mutable std::string m_retVal;
 
 };
 

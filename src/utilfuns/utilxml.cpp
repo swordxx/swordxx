@@ -22,6 +22,8 @@
  */
 
 #include <utilxml.h>
+
+#include <algorithm>
 #include <ctype.h>
 #include <utilstr.h>
 
@@ -209,7 +211,7 @@ const char *XMLTag::getPart(const char *buf, int partNum, char partSplit) const 
         const char *end = strchr(buf, partSplit);
         junkBuf = buf;
         if (end)
-            junkBuf.setSize(end - buf);
+            junkBuf.resize(end - buf, '\0');
         return junkBuf.c_str();
     }
     return 0;
@@ -217,43 +219,32 @@ const char *XMLTag::getPart(const char *buf, int partNum, char partSplit) const 
 
 
 int XMLTag::getAttributePartCount(const char *attribName, char partSplit) const {
-    int count;
-    const char *buf = getAttribute(attribName);
-    for (count = 0; buf; count++) {
-        buf = strchr(buf, partSplit);
-        if (buf)
-            buf++;
-    }
-    return count;
+    auto buf(getAttribute(attribName));
+    return std::count(buf.begin(), buf.end(), partSplit);
 }
 
 
-const char *XMLTag::getAttribute(const char *attribName, int partNum, char partSplit) const {
-
+std::string XMLTag::getAttribute(const char *attribName, int partNum, char partSplit) const {
     if (!parsed)
         parse();
 
     StringPairMap::const_iterator it = attributes.find(attribName);
-
-    const char *retVal = 0;
-    if (it != attributes.end())
-        retVal = it->second.c_str();
-
-    if ((retVal) && (partNum > -1))
-        retVal = getPart(retVal, partNum, partSplit);
-
-    return retVal;
+    if (it == attributes.end())
+        return std::string();
+    if (partNum > -1)
+        return getPart(it->second.c_str(), partNum, partSplit);
+    return it->second;
 }
 
 
-const char *XMLTag::setAttribute(const char *attribName, const char *attribValue, int partNum, char partSplit) {
+void XMLTag::setAttribute(const char *attribName, const char *attribValue, int partNum, char partSplit) {
     if (!parsed)
         parse();
 
-    SWBuf newVal = "";
+    std::string newVal = "";
     // set part of an attribute
     if (partNum > -1) {
-        const char *wholeAttr = getAttribute(attribName);
+        auto wholeAttr(getAttribute(attribName));
         int attrCount = getAttributePartCount(attribName, partSplit);
         for (int i = 0; i < attrCount; i++) {
             if (i == partNum) {
@@ -266,11 +257,11 @@ const char *XMLTag::setAttribute(const char *attribName, const char *attribValue
                 }
             }
             else {
-                newVal += getPart(wholeAttr, i, partSplit);
+                newVal += getPart(wholeAttr.c_str(), i, partSplit);
                 newVal += partSplit;
             }
         }
-        if (newVal.length()) newVal--;    // discard the last partSplit
+        if (newVal.length()) newVal.pop_back();    // discard the last partSplit
         attribValue = (!attribValue && !newVal.length()) ? 0 : newVal.c_str();
     }
 
@@ -278,33 +269,31 @@ const char *XMLTag::setAttribute(const char *attribName, const char *attribValue
     if (attribValue)
         attributes[attribName] = attribValue;
     else    attributes.erase(attribName);
-
-    return attribValue;
 }
 
 
 const char *XMLTag::toString() const {
-    SWBuf tag = "<";
+    std::string tag = "<";
     if (!parsed)
         parse();
 
     if (isEndTag())
-        tag.append('/');
+        tag.push_back('/');
 
     tag.append(getName());
     for (StringPairMap::iterator it = attributes.begin(); it != attributes.end(); it++) {
         //tag.appendFormatted(" %s=\"%s\"", it->first.c_str(), it->second.c_str());
-        tag.append(' ');
+        tag.push_back(' ');
         tag.append(it->first.c_str());
         tag.append((strchr(it->second.c_str(), '\"')) ? "=\'" : "=\"");
         tag.append(it->second.c_str());
-        tag.append((strchr(it->second.c_str(), '\"'))? '\'' : '\"');
+        tag.push_back((strchr(it->second.c_str(), '\"'))? '\'' : '\"');
     }
 
     if (isEmpty())
-        tag.append('/');
+        tag.push_back('/');
 
-    tag.append('>');
+    tag.push_back('>');
 
 
     if (buf)
@@ -320,7 +309,7 @@ const char *XMLTag::toString() const {
 // otherwise, we return if we're a simple XML end </tag>.
 bool XMLTag::isEndTag(const char *eID) const {
     if (eID) {
-        return (SWBuf(eID) == getAttribute("eID"));
+        return (std::string(eID) == getAttribute("eID"));
     }
     return endTag;
 }

@@ -37,17 +37,17 @@ protected:
     public:
         bool osisQToTick;
         bool inBold;
-        SWBuf lastTransChange;
-        SWBuf w;
-        SWBuf fn;
+        std::string lastTransChange;
+        std::string w;
+        std::string fn;
         XMLTag startTag;
         MyUserData(const SWModule *module, const SWKey *key);
     };
     virtual BasicFilterUserData *createUserData(const SWModule *module, const SWKey *key) {
         return new MyUserData(module, key);
     }
-    virtual char processText(SWBuf &text, const SWKey *key, const SWModule *module);
-    virtual bool handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData);
+    virtual char processText(std::string &text, const SWKey *key, const SWModule *module);
+    virtual bool handleToken(std::string &buf, const char *token, BasicFilterUserData *userData);
 public:
     OSISOSIS();
 };

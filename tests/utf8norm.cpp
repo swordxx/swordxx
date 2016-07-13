@@ -22,7 +22,7 @@
 
 #include <iostream>
 #include <utilstr.h>
-#include <swbuf.h>
+#include <string>
 
 using namespace swordxx;
 using namespace std;
@@ -30,7 +30,7 @@ using namespace std;
 int main(int argc, char **argv) {
     const char *buf = (argc > 1) ? argv[1] : "Description=German Unrevidierte Luther Übersetzung von 1545";
 
-    SWBuf fixed = assureValidUTF8(buf);
+    std::string fixed = assureValidUTF8(buf);
 
     cout << "input / processed:\n" << buf << "\n" << fixed << endl;
 

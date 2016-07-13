@@ -24,12 +24,12 @@
 
 #include <iostream>
 
-#include "swbuf.h"
+#include "string"
 using namespace swordxx;
 using namespace std;
 
-class SWBufTest : public CppUnit::TestFixture  {
-CPPUNIT_TEST_SUITE( SWBufTest );
+class std::stringTest : public CppUnit::TestFixture  {
+CPPUNIT_TEST_SUITE( std::stringTest );
 CPPUNIT_TEST( testEquality );
 CPPUNIT_TEST( testAppendString );
 CPPUNIT_TEST( testAppendChar );
@@ -44,15 +44,15 @@ public:
     }
 
     void testEquality() {
-        SWBuf s1("Hi, this is a test!");
-        SWBuf s2("Hi, this is a test!");
+        std::string s1("Hi, this is a test!");
+        std::string s2("Hi, this is a test!");
 
         CPPUNIT_ASSERT( s1 == s2 );
         CPPUNIT_ASSERT( s1 == "Hi, this is a test!" );
         CPPUNIT_ASSERT( !(s1 == "Hi, this is a wrong test!") );
     }
     void testAppendString() {
-        SWBuf t;
+        std::string t;
 
         for (int i = 0; i < 5000; ++i) {
             t.append("a");
@@ -69,7 +69,7 @@ public:
         }
     }
     void testAppendChar() {
-        SWBuf t;
+        std::string t;
 
         for (int i = 0; i < 5000; ++i) {
             t.append('a');
@@ -87,7 +87,7 @@ public:
     }
 
     void testInsertString() {
-        SWBuf t = "end";
+        std::string t = "end";
 
         for (int i = 0; i < 5000; ++i) {
             t.insert(0, "a");
@@ -109,7 +109,7 @@ public:
     }
 
     void testInsertChar() {
-        SWBuf t = "end";
+        std::string t = "end";
 
         for (int i = 0; i < 5000; ++i) {
             t.insert(0, 'a');
@@ -132,4 +132,4 @@ public:
 
 };
 
-CPPUNIT_TEST_SUITE_REGISTRATION(SWBufTest);
+CPPUNIT_TEST_SUITE_REGISTRATION(std::stringTest);

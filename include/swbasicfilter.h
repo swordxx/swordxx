@@ -26,8 +26,8 @@
 #ifndef SWBASICFILTER_H
 #define SWBASICFILTER_H
 
+#include <string>
 #include <swfilter.h>
-#include <swbuf.h>
 
 namespace swordxx {
 
@@ -39,8 +39,8 @@ public:
     virtual ~BasicFilterUserData() {}
     const SWModule *module;
     const SWKey *key;
-    SWBuf lastTextNode;
-    SWBuf lastSuspendSegment;
+    std::string lastTextNode;
+    std::string lastSuspendSegment;
     bool suspendTextPassThru;
     bool supressAdjacentWhitespace;
 };
@@ -80,7 +80,7 @@ class Private;
 public:
 
     SWBasicFilter();
-    virtual char processText(SWBuf &text, const SWKey *key = 0, const SWModule *module = 0);
+    virtual char processText(std::string &text, const SWKey *key = 0, const SWModule *module = 0);
     virtual ~SWBasicFilter();
 
 protected:
@@ -146,13 +146,13 @@ protected:
     void removeEscapeStringSubstitute(const char *findString);
 
     /** This function performs the substitution of escapeStrings */
-    bool substituteEscapeString(SWBuf &buf, const char *escString);
+    bool substituteEscapeString(std::string &buf, const char *escString);
 
     /** This passes allowed escapeStrings */
-    bool passAllowedEscapeString(SWBuf &buf, const char *escString);
+    bool passAllowedEscapeString(std::string &buf, const char *escString);
 
     /** This appends escString to buf as an entity */
-    void appendEscapeString(SWBuf &buf, const char *escString);
+    void appendEscapeString(std::string &buf, const char *escString);
 
     /** Are tokens case sensitive (like in GBF) or not? Call this
      *    function before addTokenSubstitute()
@@ -169,7 +169,7 @@ protected:
     void removeTokenSubstitute(const char *findString);
 
     /** This function performs the substitution of tokens */
-    bool substituteToken(SWBuf &buf, const char *token);
+    bool substituteToken(std::string &buf, const char *token);
 
     /** This function is called for every token encountered in the input text.
      * @param buf the output buffer
@@ -177,9 +177,9 @@ protected:
      * @param userData user storage space for data transient to 1 full buffer parse
      * @return subclasses should return true if they handled the token, or false if they did not.
      */
-    virtual bool handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData);
+    virtual bool handleToken(std::string &buf, const char *token, BasicFilterUserData *userData);
 
-    virtual bool processStage(char /*stage*/, SWBuf &/*text*/, char *&/*from*/, BasicFilterUserData * /*userData*/) { return false; }
+    virtual bool processStage(char /*stage*/, std::string &/*text*/, char *&/*from*/, BasicFilterUserData * /*userData*/) { return false; }
     virtual void setStageProcessing(char stages) { processStages = stages; }    // see STATICs up above
 
     /** This function is called for every escape sequence encountered in the input text.
@@ -189,14 +189,14 @@ protected:
      * @return <code>false</code> if was not handled and should be handled in
      * @return subclasses should return true if they handled the esc seq, or false if they did not.
      */
-    virtual bool handleEscapeString(SWBuf &buf, const char *escString, BasicFilterUserData *userData);
+    virtual bool handleEscapeString(std::string &buf, const char *escString, BasicFilterUserData *userData);
 
     /** This function is called for all numeric escape sequences. If passThrough
      * @param buf the output buffer
      * @param escString the escape sequence (e.g. <code>"#235"</code> for &amp;235;)
      * @return subclasses should return true if they handled the esc seq, or false if they did not.
          */
-    virtual bool handleNumericEscapeString(SWBuf &buf, const char *escString);
+    virtual bool handleNumericEscapeString(std::string &buf, const char *escString);
 
 
 };

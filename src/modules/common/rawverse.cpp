@@ -25,6 +25,7 @@
 
 
 #include <cstdint>
+#include <cstring>
 #include <ctype.h>
 #include <stdio.h>
 #include <fcntl.h>
@@ -35,7 +36,7 @@
 #include <versekey.h>
 #include <sysdata.h>
 #include <filemgr.h>
-#include <swbuf.h>
+#include <string>
 
 
 namespace swordxx {
@@ -58,29 +59,31 @@ const char RawVerse::nl = '\n';
 
 RawVerse::RawVerse(const char *ipath, int fileMode)
 {
-    SWBuf buf;
+    std::string buf;
+    buf.reserve(std::strlen(ipath) + sizeof("/ot.vss"));
 
     path = 0;
     stdstr(&path, ipath);
 
-    if ((path[strlen(path)-1] == '/') || (path[strlen(path)-1] == '\\'))
-        path[strlen(path)-1] = 0;
+    buf = path;
+    addTrailingDirectorySlash(buf);
 
     if (fileMode == -1) { // try read/write if possible
         fileMode = FileMgr::RDWR;
     }
 
-    buf.setFormatted("%s/ot.vss", path);
-    idxfp[0] = FileMgr::getSystemFileMgr()->open(buf, fileMode, true);
+    buf.append("ot.vss");
+    auto const it(buf.rbegin() + 5u);
+    idxfp[0] = FileMgr::getSystemFileMgr()->open(buf.c_str(), fileMode, true);
 
-    buf.setFormatted("%s/nt.vss", path);
-    idxfp[1] = FileMgr::getSystemFileMgr()->open(buf, fileMode, true);
+    (*it) = 'n';
+    idxfp[1] = FileMgr::getSystemFileMgr()->open(buf.c_str(), fileMode, true);
 
-    buf.setFormatted("%s/ot", path);
-    textfp[0] = FileMgr::getSystemFileMgr()->open(buf, fileMode, true);
+    buf.resize(buf.size() - 4u);
+    textfp[1] = FileMgr::getSystemFileMgr()->open(buf.c_str(), fileMode, true);
 
-    buf.setFormatted("%s/nt", path);
-    textfp[1] = FileMgr::getSystemFileMgr()->open(buf, fileMode, true);
+    (*it) = 'o';
+    textfp[0] = FileMgr::getSystemFileMgr()->open(buf.c_str(), fileMode, true);
 
     instance++;
 }
@@ -151,16 +154,15 @@ void RawVerse::findOffset(char testmt, long idxoff, long *start, unsigned short 
  *
  */
 
-void RawVerse::readText(char testmt, long start, unsigned short size, SWBuf &buf) const {
-    buf = "";
-    buf.setFillByte(0);
-    buf.setSize(size + 1);
+void RawVerse::readText(char testmt, long start, unsigned short size, std::string &buf) const {
+    buf.clear();
+    buf.resize(size + 1u, '\0');
     if (!testmt)
         testmt = ((idxfp[1]) ? 1:2);
     if (size) {
         if (textfp[testmt-1]->getFd() >= 0) {
             textfp[testmt-1]->seek(start, SEEK_SET);
-            textfp[testmt-1]->read(buf.getRawData(), (int)size);
+            textfp[testmt-1]->read(&buf[0u], (int)size);
         }
     }
 }

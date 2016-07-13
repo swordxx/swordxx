@@ -46,7 +46,7 @@ class SWFilter;
 #define SEARCHFLAG_MATCHWHOLEENTRY 4096
 
 #define SWMODULE_OPERATORS \
-    operator SWBuf() { return renderText(); } \
+    operator std::string() { return renderText(); } \
     operator SWKey &() { return *getKey(); } \
     operator SWKey *() { return getKey(); } \
     SWModule &operator <<(const char *inbuf) { setEntry(inbuf); return *this; } \
@@ -60,9 +60,9 @@ class SWFilter;
 
 typedef std::list < SWFilter * >FilterList;
 typedef std::list < SWOptionFilter * >OptionFilterList;
-typedef std::map < SWBuf, SWBuf, std::less < SWBuf > > AttributeValue;
-typedef std::map < SWBuf, AttributeValue, std::less < SWBuf > > AttributeList;
-typedef std::map < SWBuf, AttributeList, std::less < SWBuf > > AttributeTypeList;
+typedef std::map < std::string, std::string, std::less < std::string > > AttributeValue;
+typedef std::map < std::string, AttributeValue, std::less < std::string > > AttributeList;
+typedef std::map < std::string, AttributeList, std::less < std::string > > AttributeTypeList;
 
 #define SWTextDirection char
 #define SWTextEncoding char
@@ -113,7 +113,7 @@ protected:
     char markup;
     char encoding;
 
-    mutable SWBuf entryBuf;
+    mutable std::string entryBuf;
 
     /** filters to be executed to remove all markup (for searches) */
     FilterList *stripFilters;
@@ -133,7 +133,7 @@ protected:
     mutable int entrySize;
     mutable long entryIndex;     // internal common storage for index
 
-    static void prepText(SWBuf &buf);
+    static void prepText(std::string &buf);
 
 
 public:
@@ -194,7 +194,7 @@ public:
      * @param bibFormat format of the bibliographic data
      * @return bibliographic data in the requested format as a string (BibTeX by default)
      */
-    virtual SWBuf getBibliography(unsigned char bibFormat = BIB_BIBTEX) const;
+    virtual std::string getBibliography(unsigned char bibFormat = BIB_BIBTEX) const;
 
     /**
      * @return The size of the text entry for the module's current key position.
@@ -324,13 +324,7 @@ public:
      */
     virtual SWKey *createKey() const;
 
-    /** This function is reimplemented by the different kinds
-     * of module objects
-     * @return the raw module text of the current entry
-     */
-    virtual SWBuf &getRawEntryBuf() const = 0;
-
-    const char *getRawEntry() const { return getRawEntryBuf().c_str(); }
+    std::string const & getRawEntry() const { return getRawEntryBuf(); }
 
     // write interface ----------------------------
     /** Is the module writable? :)
@@ -376,14 +370,14 @@ public:
      * @param buf the buffer to filter
      * @param key key location from where this buffer was extracted
      */
-    virtual void filterBuffer(OptionFilterList *filters, SWBuf &buf, const SWKey *key) const;
+    virtual void filterBuffer(OptionFilterList *filters, std::string &buf, const SWKey *key) const;
 
     /** FilterBuffer a text buffer
      * @param filters the FilterList of filters to iterate
      * @param buf the buffer to filter
      * @param key key location from where this buffer was extracted
      */
-    virtual void filterBuffer(FilterList *filters, SWBuf &buf, const SWKey *key) const;
+    virtual void filterBuffer(FilterList *filters, std::string &buf, const SWKey *key) const;
 
     /** Adds a RenderFilter to this module's renderFilters queue.
      *    Render Filters are called when the module is asked to produce
@@ -431,7 +425,7 @@ public:
      * @param buf the buffer to filter
      * @param key key location from where this buffer was extracted
      */
-    virtual void renderFilter(SWBuf &buf, const SWKey *key) const {
+    virtual void renderFilter(std::string &buf, const SWKey *key) const {
         filterBuffer(renderFilters, buf, key);
     }
 
@@ -474,7 +468,7 @@ public:
      * @param buf the buffer to filter
      * @param key key location from where this buffer was extracted
      */
-    virtual void encodingFilter(SWBuf &buf, const SWKey *key) const {
+    virtual void encodingFilter(std::string &buf, const SWKey *key) const {
         filterBuffer(encodingFilters, buf, key);
     }
 
@@ -502,7 +496,7 @@ public:
      * @param buf the buffer to filter
      * @param key key location from where this buffer was extracted
      */
-    virtual void stripFilter(SWBuf &buf, const SWKey *key) const {
+    virtual void stripFilter(std::string &buf, const SWKey *key) const {
         filterBuffer(stripFilters, buf, key);
     }
 
@@ -511,7 +505,7 @@ public:
      * @param buf the buffer to filter
      * @param key key location from where this buffer was extracted
      */
-    virtual void rawFilter(SWBuf &buf, const SWKey *key) const {
+    virtual void rawFilter(std::string &buf, const SWKey *key) const {
         filterBuffer(rawFilters, buf, key);
     }
 
@@ -531,7 +525,7 @@ public:
      * @param buf the buffer to filter
      * @param key key location from where this buffer was extracted
      */
-    virtual void optionFilter(SWBuf &buf, const SWKey *key) const {
+    virtual void optionFilter(std::string &buf, const SWKey *key) const {
         filterBuffer(optionFilters, buf, key);
     }
 
@@ -543,7 +537,7 @@ public:
      * @param len max len to process
      * @return result buffer
      */
-    virtual const char *stripText(const char *buf = 0, int len = -1);
+    virtual std::string stripText(const char *buf = 0, int len = -1);
 
     /** Produces renderable text of the current module entry or supplied text
      *
@@ -553,7 +547,7 @@ public:
      * @param render for internal use
      * @return result buffer
      */
-    SWBuf renderText(const char *buf = nullptr,
+    std::string renderText(const char *buf = nullptr,
                      int len = -1,
                      bool render = true) const;
 
@@ -567,13 +561,13 @@ public:
      * @param tmpKey desired module entry
      * @return result buffer
      */
-    virtual const char *stripText(const SWKey *tmpKey);
+    virtual std::string stripText(const SWKey *tmpKey);
 
     /** Produces renderable text of the module entry at the supplied key
      * @param tmpKey key to use to grab text
      * @return this module's text at specified key location massaged by Render filters
      */
-    SWBuf renderText(const SWKey *tmpKey);
+    std::string renderText(const SWKey *tmpKey);
 
     /** Whether or not to only hit one entry when iterating encounters
      *    consecutive links when iterating
@@ -618,6 +612,15 @@ public:
 
     // OPERATORS -----------------------------------------------------------------
     SWMODULE_OPERATORS
+
+protected: /* Methods: */
+
+
+    /** This function is reimplemented by the different kinds
+     * of module objects
+     * @return the raw module text of the current entry
+     */
+    virtual std::string &getRawEntryBuf() const = 0;
 
 };
 

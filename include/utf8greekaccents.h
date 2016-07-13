@@ -33,7 +33,7 @@ class SWDLLEXPORT UTF8GreekAccents : public SWOptionFilter {
 public:
     UTF8GreekAccents();
     virtual ~UTF8GreekAccents();
-    virtual char processText(SWBuf &text, const SWKey *key = 0, const SWModule *module = 0);
+    virtual char processText(std::string &text, const SWKey *key = 0, const SWModule *module = 0);
 };
 
 } /* namespace swordxx */

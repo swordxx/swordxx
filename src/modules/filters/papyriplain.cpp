@@ -20,6 +20,7 @@
  *
  */
 
+#include <cstring>
 #include <stdlib.h>
 #include <papyriplain.h>
 
@@ -30,9 +31,9 @@ PapyriPlain::PapyriPlain() {
 }
 
 
-char PapyriPlain::processText (SWBuf &text, const SWKey *key, const SWModule *module)
+char PapyriPlain::processText (std::string &text, const SWKey *key, const SWModule *module)
 {
-    SWBuf orig = text;
+    std::string orig = text;
     const char *from = orig.c_str();
 
     for (text = ""; *from; ++from) {
@@ -60,7 +61,7 @@ char PapyriPlain::processText (SWBuf &text, const SWKey *key, const SWModule *mo
         // remove all newlines
         if ((*from == 10) || (*from == 13)) {
             if ((text.length()>1) && (text[text.length()-2] != ' ') && (*(from+1) != ' '))
-                text.append(' ');
+                text.push_back(' ');
             continue;
         }
 
@@ -79,7 +80,7 @@ char PapyriPlain::processText (SWBuf &text, const SWKey *key, const SWModule *mo
         }
 
         // if we've made it this far
-        text.append(*from);
+        text.push_back(*from);
 
     }
     return 0;

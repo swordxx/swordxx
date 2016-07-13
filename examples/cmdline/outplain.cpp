@@ -17,7 +17,7 @@
  *
  * SWMgr makes its modules available as an STL Map.
  * The Map definition is typedef'ed as ModMap
- * ModMap consists of: FIRST : SWBuf moduleName
+ * ModMap consists of: FIRST : std::string moduleName
  *                     SECOND: SWModule *module
  *
  * $Id$
@@ -60,8 +60,8 @@ int main(int argc, char **argv) {
     SWModule &book = *b;
     book.setProcessEntryAttributes(false);
     VerseKey *vk = SWDYNAMIC_CAST(VerseKey, book.getKey());
-    for (book = TOP; !book.popError() && !book.getRawEntryBuf().size(); book++);
-    if (!book.getRawEntryBuf().size()) return -2;     // empty module
+    for (book = TOP; !book.popError() && !book.getRawEntry().size(); book++);
+    if (!book.getRawEntry().size()) return -2;     // empty module
     for (;!book.popError(); book++) {
         cout << "$$$";
         if (vk) cout << vk->getOSISRef();

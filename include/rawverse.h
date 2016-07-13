@@ -28,11 +28,11 @@
 
 
 #include <defs.h>
+#include <string>
 
 namespace swordxx {
 
 class FileDesc;
-class SWBuf;
 
 class SWDLLEXPORT RawVerse {
 
@@ -51,7 +51,7 @@ public:
     RawVerse(const char *ipath, int fileMode = -1);
     virtual ~RawVerse();
     void findOffset(char testmt, long idxoff, long *start,    unsigned short *end) const;
-    void readText(char testmt, long start, unsigned short size, SWBuf &buf) const;
+    void readText(char testmt, long start, unsigned short size, std::string &buf) const;
     static char createModule(const char *path, const char *v11n = "KJV");
 };
 

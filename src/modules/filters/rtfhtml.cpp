@@ -24,7 +24,7 @@
 #include <cstdint>
 #include <stdlib.h>
 #include <rtfhtml.h>
-#include <swbuf.h>
+#include <string>
 #include <utilstr.h>
 #include <ctype.h>
 #include <sysdata.h>
@@ -36,12 +36,12 @@ RTFHTML::RTFHTML()
 }
 
 
-char RTFHTML::processText(SWBuf &text, const SWKey *key, const SWModule *module)
+char RTFHTML::processText(std::string &text, const SWKey *key, const SWModule *module)
 {
     bool center = false;
 
     const char *from;
-    SWBuf orig = text;
+    std::string orig = text;
     from = orig.c_str();
     for (text = ""; *from; from++)
     {
@@ -52,7 +52,7 @@ char RTFHTML::processText(SWBuf &text, const SWKey *key, const SWModule *module)
                 from += 2;
                 const char *end = from;
                 while (isdigit(*++end));
-                SWBuf num;
+                std::string num;
                 num.append(from, end-from);
                 int16_t n = atoi(num.c_str());
                 uint32_t u = (uint16_t)n;

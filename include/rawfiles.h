@@ -34,7 +34,7 @@ namespace swordxx {
 
 class SWDLLEXPORT RawFiles : public RawVerse, public SWCom {
 
-    const char *getNextFilename();
+    std::string getNextFilename();
 
 public:
 
@@ -44,7 +44,7 @@ public:
             SWTextDirection dir = DIRECTION_LTR, SWTextMarkup markup = FMT_UNKNOWN,
             const char *ilang = 0);
     virtual ~RawFiles();
-    virtual SWBuf &getRawEntryBuf() const;
+    virtual std::string &getRawEntryBuf() const;
 
     // write interface ----------------------------
     /** Is the module writable? :)

@@ -40,11 +40,11 @@ void outputCurrentVerse(SWModule *module) {
     cout << "-------\n";
 
     cout << "Preverse Header 0:\nRaw:\n";
-    SWBuf header = module->getEntryAttributes()["Heading"]["Preverse"]["0"];
+    std::string header = module->getEntryAttributes()["Heading"]["Preverse"]["0"];
     cout << header << endl;
     cout << "-------\n";
     cout << "Rendered Header:\n";
-    cout << module->renderText(header) << endl;
+    cout << module->renderText(header.c_str()) << endl;
     cout << "-------\n";
     cout << "CSS:\n";
     cout << module->getRenderHeader() << endl;
@@ -97,14 +97,14 @@ int main(int argc, char **argv) {
     (*module)++;
     // verse body
     module->renderText();
-    SWBuf header = module->getEntryAttributes()["Heading"]["Preverse"]["0"];
-    cout << module->renderText(header) << endl;
+    std::string header = module->getEntryAttributes()["Heading"]["Preverse"]["0"];
+    cout << module->renderText(header.c_str()) << endl;
     cout << "[ " << module->getKeyText() << " ] " << module->renderText() << "\n";
     (*module)++;
     // verse body
     module->renderText();
     header = module->getEntryAttributes()["Heading"]["Preverse"]["0"];
-    cout << module->renderText(header) << endl;
+    cout << module->renderText(header.c_str()) << endl;
     cout << "[ " << module->getKeyText() << " ] " << module->renderText() << "\n";
 
     return 0;

@@ -60,7 +60,7 @@ int main(int argc, char **argv)
                 usage();
         exit(-1);
         }
-    SWBuf stripTerm = argv[2];
+    std::string stripTerm = argv[2];
 
     manager.setGlobalOption("Greek Accents", "Off");
     manager.setGlobalOption("Arabic Vowel Points", "Off");

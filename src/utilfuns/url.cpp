@@ -27,13 +27,14 @@
 #include <map>
 #include <stdio.h>
 #include <iostream>
+#include <utilstr.h>
 
 
 namespace swordxx {
 
 
 namespace {
-    typedef std::map<unsigned char, SWBuf> DataMap;
+    typedef std::map<unsigned char, std::string> DataMap;
         DataMap m;
     static class __init {
         public:
@@ -43,9 +44,7 @@ namespace {
                         continue; //we don't need an encoding for this char
                     }
 
-                    SWBuf buf;
-                    buf.setFormatted("%%%-.2X", c);
-                    m[c] = buf;
+                    m[c] = formatted("%%%-.2X", c);
                 }
                 //the special encodings for certain chars
                 m[' '] = '+';
@@ -95,10 +94,10 @@ const URL::ParameterMap &URL::getParameters() const {
  * If the parameter is not set an empty string is returned.
  */
 const char *URL::getParameterValue(const char *name) const {
-    static SWBuf emptyStr("");
+    static std::string emptyStr("");
 
     ParameterMap::const_iterator it = parameterMap.find(name);
-    static SWBuf retVal;
+    static std::string retVal;
 
     if (it != parameterMap.end())
         retVal = it->second.c_str();
@@ -178,8 +177,8 @@ void URL::parse() {
 
     if (checkParams) {
         //5. Fill the map with the parameters and their values
-        SWBuf paramName;
-        SWBuf paramValue;
+        std::string paramName;
+        std::string paramValue;
 
         if (checkAnchor) checkAnchor = false;
 /*
@@ -227,15 +226,15 @@ void URL::parse() {
 }
 
 
-const SWBuf URL::encode(const char *urlText) {
-    /*static*/ SWBuf url;
+const std::string URL::encode(const char *urlText) {
+    /*static*/ std::string url;
     url = urlText;
 
-    SWBuf buf;
+    std::string buf;
     const int length = url.length();
     for (int i = 0; i < length; i++) { //fill "buf"
         const char& c = url[i];
-        buf.append( ((m[c].length()) ? m[c] : SWBuf(c)) );
+        buf.append( ((m[c].length()) ? m[c] : std::string(1u, c)) );
     }
 
     url = buf;
@@ -243,11 +242,11 @@ const SWBuf URL::encode(const char *urlText) {
 }
 
 
-const SWBuf URL::decode(const char *encoded) {
-    /*static*/ SWBuf text;
+const std::string URL::decode(const char *encoded) {
+    /*static*/ std::string text;
     text = encoded;
 
-    SWBuf decoded;
+    std::string decoded;
     const int length = text.length();
     int i = 0;
 
@@ -255,7 +254,7 @@ const SWBuf URL::decode(const char *encoded) {
         char a = text[i];
 
         if ( a == '+' ) { //handle special cases
-            decoded.append(' ');
+            decoded.push_back(' ');
         }
         else if ( (a == '%') && (i+2 < length)) { //decode the %ab  hex encoded char
             const char b = toupper( text[i+1] );
@@ -265,13 +264,13 @@ const SWBuf URL::decode(const char *encoded) {
                 unsigned int dec = 16 * ((b >= 'A' && b <= 'F') ? (b - 'A' + 10) : (b - '0')); //dec value of the most left digit (b)
                 dec += (c >= 'A' && c <= 'F') ? (c - 'A' + 10) : (c - '0'); //dec value of the right digit (c)
 
-                decoded.append((char)dec); //append the decoded char
+                decoded.push_back((char)dec); //append the decoded char
 
                 i += 2; //we jump over the %ab part; we have to leave out three, but the while  loop adds one, too
             }
         }
         else { //just append the char
-            decoded.append(a);
+            decoded.push_back(a);
         }
 
         i++;

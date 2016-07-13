@@ -80,15 +80,15 @@ public:
 
     void testParametersMap()
     {
-         std::map< swordxx::SWBuf, swordxx::SWBuf > params = m_url1->getParameters();
-        CPPUNIT_ASSERT( !strcmp(params[swordxx::SWBuf("page")].c_str(), "help") );
-        CPPUNIT_ASSERT( !strcmp(params[swordxx::SWBuf("user")].c_str(),  "foo") );
-        CPPUNIT_ASSERT( !strcmp(params[swordxx::SWBuf("name")].c_str(), "bar") );
+         std::map< swordxx::std::string, swordxx::std::string > params = m_url1->getParameters();
+        CPPUNIT_ASSERT( !strcmp(params[swordxx::std::string("page")].c_str(), "help") );
+        CPPUNIT_ASSERT( !strcmp(params[swordxx::std::string("user")].c_str(),  "foo") );
+        CPPUNIT_ASSERT( !strcmp(params[swordxx::std::string("name")].c_str(), "bar") );
 
          params = m_url2->getParameters(); //test url2 params
-        CPPUNIT_ASSERT( !strcmp(params[swordxx::SWBuf("page")].c_str(), "help") );
-        CPPUNIT_ASSERT( !strcmp(params[swordxx::SWBuf("user")].c_str(),  "foo") );
-        CPPUNIT_ASSERT( !strcmp(params[swordxx::SWBuf("name")].c_str(), "foo bar") );
+        CPPUNIT_ASSERT( !strcmp(params[swordxx::std::string("page")].c_str(), "help") );
+        CPPUNIT_ASSERT( !strcmp(params[swordxx::std::string("user")].c_str(),  "foo") );
+        CPPUNIT_ASSERT( !strcmp(params[swordxx::std::string("name")].c_str(), "foo bar") );
 
          params = m_url3->getParameters(); //test url3 params
         CPPUNIT_ASSERT( params.size() == 0 );
@@ -110,7 +110,7 @@ public:
     void testEncode() {
         cout << URL::encode("this is a test") << endl;
 
-        SWBuf encoded = URL::encode("this is a test");
+        std::string encoded = URL::encode("this is a test");
         CPPUNIT_ASSERT( !strcmp(encoded.c_str(), "this%20is%20a%20test") || !strcmp(encoded.c_str(), "this+is+a+test") );
 
         CPPUNIT_ASSERT( !strcmp(URL::encode("this-is-a-test").c_str(), "this-is-a-test") );

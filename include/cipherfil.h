@@ -34,7 +34,7 @@ class SWDLLEXPORT CipherFilter:public SWFilter {
 public:
     CipherFilter(const char *key);
     virtual ~CipherFilter();
-    virtual char processText(SWBuf &text, const SWKey *key = 0, const SWModule * = 0);
+    virtual char processText(std::string &text, const SWKey *key = 0, const SWModule * = 0);
     virtual SWCipher *getCipher();
 };
 

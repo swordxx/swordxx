@@ -31,6 +31,7 @@
 #include <swlog.h>
 #include <filemgr.h>
 #include <curlhttpt.h>
+#include <utilstr.h>
 
 using std::vector;
 
@@ -42,7 +43,7 @@ namespace {
     struct FtpFile {
         const char *filename;
         FILE *stream;
-        SWBuf *destBuf;
+        std::string *destBuf;
     };
 
 
@@ -56,8 +57,8 @@ namespace {
         }
         if (out->destBuf) {
             int s = out->destBuf->size();
-            out->destBuf->size(s+(size*nmemb));
-            memcpy(out->destBuf->getRawData()+s, buffer, size*nmemb);
+            out->destBuf->resize(s + (size * nmemb), '\0');
+            std::memcpy(&out->destBuf[s], buffer, size*nmemb);
             return nmemb;
         }
         return fwrite(buffer, size, nmemb, out->stream);
@@ -87,7 +88,7 @@ CURLHTTPTransport::~CURLHTTPTransport() {
 }
 
 
-char CURLHTTPTransport::getURL(const char *destPath, const char *sourceURL, SWBuf *destBuf) {
+char CURLHTTPTransport::getURL(const char *destPath, const char *sourceURL, std::string *destBuf) {
     signed char retVal = 0;
     struct FtpFile ftpfile = {destPath, 0, destBuf};
 
@@ -96,7 +97,7 @@ char CURLHTTPTransport::getURL(const char *destPath, const char *sourceURL, SWBu
     if (session) {
         curl_easy_setopt(session, CURLOPT_URL, sourceURL);
 
-        SWBuf credentials = u + ":" + p;
+        std::string credentials = u + ":" + p;
         curl_easy_setopt(session, CURLOPT_USERPWD, credentials.c_str());
         curl_easy_setopt(session, CURLOPT_WRITEFUNCTION, my_httpfwrite);
         if (!passive)
@@ -173,22 +174,22 @@ vector<struct DirEntry> CURLHTTPTransport::getDirList(const char *dirURL) {
 
     vector<struct DirEntry> dirList;
 
-    SWBuf dirBuf;
+    std::string dirBuf;
     const char *pBuf;
     char *pBufRes;
-    SWBuf possibleName;
+    std::string possibleName;
     double fSize;
     int possibleNameLength = 0;
 
     if (!getURL("", dirURL, &dirBuf)) {
-        pBuf = strstr(dirBuf, "<a href=\"");//Find the next link to a possible file name.
+        pBuf = std::strstr(dirBuf.c_str(), "<a href=\"");//Find the next link to a possible file name.
         while (pBuf != NULL) {
             pBuf += 9;//move to the start of the actual name.
             pBufRes = (char *)strchr(pBuf, '\"');//Find the end of the possible file name
             if (!pBufRes)
                 break;
             possibleNameLength = pBufRes - pBuf;
-            possibleName.setFormatted("%.*s", possibleNameLength, pBuf);
+            possibleName = formatted("%.*s", possibleNameLength, pBuf);
             if (isalnum(possibleName[0])) {
                 SWLog::getSystemLog()->logDebug("getDirListHTTP: Found a file: %s", possibleName.c_str());
                 pBuf = pBufRes;
@@ -206,7 +207,7 @@ vector<struct DirEntry> CURLHTTPTransport::getDirList(const char *dirURL) {
                 struct DirEntry i;
                 i.name = possibleName;
                 i.size = (long unsigned int)fSize;
-                i.isDirectory = possibleName.endsWith("/");
+                i.isDirectory = (!possibleName.empty() && *possibleName.rbegin() == '/');
                 dirList.push_back(i);
             } else {
                 pBuf += possibleNameLength;

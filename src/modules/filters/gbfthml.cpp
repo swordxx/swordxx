@@ -22,7 +22,7 @@
 
 #include <stdlib.h>
 #include <gbfthml.h>
-#include <swbuf.h>
+#include <string>
 
 
 namespace swordxx {
@@ -33,14 +33,14 @@ GBFThML::GBFThML()
 }
 
 
-char GBFThML::processText(SWBuf &text, const SWKey *key, const SWModule *module) {
+char GBFThML::processText(std::string &text, const SWKey *key, const SWModule *module) {
     const char *from;
     char token[2048];
     int tokpos = 0;
     bool intoken     = false;
     const char *tok;
 
-    SWBuf orig = text;
+    std::string orig = text;
     from = orig.c_str();
 
     for (text = ""; *from; from++) {
@@ -214,8 +214,8 @@ char GBFThML::processText(SWBuf &text, const SWKey *key, const SWModule *module)
                 //TODO: why is this + 2?  Are we trying to keep 2 or 3 nulls after the last valid char?
                 // tokpos has been incremented past the last valid token. it should be pointing to null
                 // +1 should give us 2 nulls, but we're +2 here, which actually keeps 3 nulls after the
-                // last valid char.  Why are we doing any of this?  These were written before SWBuf and should
-                // probably be switched to SWBuf, but perf tests before and after the switch should be run
+                // last valid char.  Why are we doing any of this?  These were written before std::string and should
+                // probably be switched to std::string, but perf tests before and after the switch should be run
                 token[tokpos+2] = 0;
             }
         }
