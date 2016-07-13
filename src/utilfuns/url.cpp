@@ -20,14 +20,13 @@
  *
  */
 
-#include <url.h>
+#include "url.h"
 
-//system includes
-#include <ctype.h>
-#include <map>
-#include <stdio.h>
+#include <cctype>
+#include <cstdio>
 #include <iostream>
-#include <utilstr.h>
+#include <map>
+#include "utilstr.h"
 
 
 namespace swordxx {

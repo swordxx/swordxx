@@ -20,9 +20,11 @@
  *
  */
 
-#include <stdio.h>
-#include <unicodertf.h>
+#include "unicodertf.h"
+
+#include <cstdio>
 #include <string>
+
 
 namespace swordxx {
 

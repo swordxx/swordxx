@@ -21,13 +21,13 @@
  *
  */
 
-#include <swobject.h>
+#include "swobject.h"
 
 // hack.  remove this when we figure out our link error
 #ifndef __CYGWIN__
-#include <utilstr.h>
+#include "utilstr.h"
 #else
-#include <string.h>
+#include <cstring>
 #endif
 
 

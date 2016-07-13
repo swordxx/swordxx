@@ -21,11 +21,13 @@
  *
  */
 
-#include <utilstr.h>
-#include <swtext.h>
-#include <listkey.h>
-#include <localemgr.h>
-#include <versekey.h>
+#include "swtext.h"
+
+#include "../../keys/listkey.h"
+#include "../../keys/versekey.h"
+#include "../../mgr/localemgr.h"
+#include "../../utilfuns/utilstr.h"
+
 
 namespace swordxx {
 

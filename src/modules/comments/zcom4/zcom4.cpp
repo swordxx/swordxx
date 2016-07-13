@@ -21,15 +21,15 @@
  *
  */
 
-#include <ctype.h>
-#include <stdio.h>
-#include <fcntl.h>
+#include "zcom4.h"
 
+#include <cctype>
+#include <cstdio>
+#include <fcntl.h>
 #include <string>
-#include <zverse4.h>
-#include <versekey.h>
-#include <zcom4.h>
-#include <filemgr.h>
+#include "../../../keys/versekey.h"
+#include "../../../mgr/filemgr.h"
+
 
 namespace swordxx {
 

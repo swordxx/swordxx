@@ -20,13 +20,14 @@
  *
  */
 
-#include <stdlib.h>
-#include <ctype.h>
-#include <teihtmlhref.h>
-#include <utilxml.h>
-#include <swmodule.h>
-#include <url.h>
+#include "teihtmlhref.h"
+
+#include <cctype>
+#include <cstdlib>
 #include <iostream>
+#include "../../utilfuns/url.h"
+#include "../../utilfuns/utilxml.h"
+#include "../swmodule.h"
 
 
 namespace swordxx {

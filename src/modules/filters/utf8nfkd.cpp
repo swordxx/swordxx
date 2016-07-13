@@ -23,7 +23,8 @@
 
 #ifdef _ICU_
 
-#include <utf8nfkd.h>
+#include "utf8nfkd.h"
+
 #include <string>
 
 

@@ -21,9 +21,10 @@
  *
  */
 
-#include <stdlib.h>
-#include <thmlvariants.h>
-#include <utilstr.h>
+#include "thmlvariants.h"
+
+#include <cstdlib>
+#include "../../utilfuns/utilstr.h"
 
 
 namespace swordxx {

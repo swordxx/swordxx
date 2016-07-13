@@ -20,7 +20,8 @@
  *
  */
 
-#include <utf8latin1.h>
+#include "utf8latin1.h"
+
 #include <string>
 
 

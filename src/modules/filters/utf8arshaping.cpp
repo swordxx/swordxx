@@ -23,12 +23,12 @@
 
 #ifdef _ICU_
 
-#include <stdlib.h>
+#include "utf8arshaping.h"
 
-#include <utilstr.h>
-
-#include <utf8arshaping.h>
+#include <cstdlib>
 #include <string>
+#include "../../utilfuns/utilstr.h"
+
 
 namespace swordxx {
 

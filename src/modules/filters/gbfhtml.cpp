@@ -20,10 +20,12 @@
  *
  */
 
+#include "gbfhtml.h"
+
+#include <cctype>
+#include <cstdlib>
 #include <cstring>
-#include <stdlib.h>
-#include <gbfhtml.h>
-#include <ctype.h>
+
 
 namespace swordxx {
 

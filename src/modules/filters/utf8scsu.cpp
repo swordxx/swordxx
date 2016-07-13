@@ -22,7 +22,8 @@
 
 #ifdef _ICU_
 
-#include <utf8scsu.h>
+#include "utf8scsu.h"
+
 #include <string>
 
 namespace swordxx {
@@ -58,4 +59,5 @@ char UTF8SCSU::processText(std::string &text, const SWKey *key, const SWModule *
 }
 
 } /* namespace swordxx */
+
 #endif

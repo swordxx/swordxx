@@ -20,9 +20,10 @@
  *
  */
 
+#include "swgenbook.h"
 
-#include <swgenbook.h>
-#include <versetreekey.h>
+#include "../../keys/versetreekey.h"
+
 
 namespace swordxx {
 

@@ -21,10 +21,11 @@
  *
  */
 
-#include <stdlib.h>
-#include <osisscripref.h>
-#include <swmodule.h>
-#include <utilxml.h>
+#include "osisscripref.h"
+
+#include <cstdlib>
+#include "../../utilfuns/utilxml.h"
+#include "../swmodule.h"
 
 
 namespace swordxx {

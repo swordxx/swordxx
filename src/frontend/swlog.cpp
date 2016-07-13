@@ -21,7 +21,7 @@
  */
 
 #include <stdarg.h>
-#include <stdio.h>
+#include <cstdio>
 #include <iostream>
 #if defined(_ICU_) && !defined(_ICUSWORD_)
 #define _USTDIO_

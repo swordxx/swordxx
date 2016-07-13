@@ -22,41 +22,39 @@
  *
  */
 
-#include <thmlplain.h>
-#include <gbfplain.h>
-#include <osisplain.h>
-#include <teiplain.h>
-#include <thmlgbf.h>
-#include <gbfthml.h>
-#include <thmlhtml.h>
-#include <gbfhtml.h>
-#include <thmlhtmlhref.h>
-#include <gbfhtmlhref.h>
-#include <teihtmlhref.h>
-#include <thmlrtf.h>
-#include <gbfrtf.h>
-#include <gbfosis.h>
-#include <thmlosis.h>
-#include <osisrtf.h>
-#include <osislatex.h>
-#include <teirtf.h>
-#include <osisosis.h>
-#include <osishtmlhref.h>
-#include <gbfwebif.h>
-#include <thmlwebif.h>
-#include <osiswebif.h>
-#include <swmodule.h>
-#include <thmlxhtml.h>
-#include <gbfxhtml.h>
-#include <osisxhtml.h>
-#include <teixhtml.h>
-#include <gbflatex.h>
-#include <thmllatex.h>
-#include <teilatex.h>
-
-#include <markupfiltmgr.h>
-
-#include <swmgr.h>
+#include "markupfiltmgr.h"
+#include "../modules/filters/gbfhtml.h"
+#include "../modules/filters/gbfhtmlhref.h"
+#include "../modules/filters/gbflatex.h"
+#include "../modules/filters/gbfosis.h"
+#include "../modules/filters/gbfplain.h"
+#include "../modules/filters/gbfrtf.h"
+#include "../modules/filters/gbfthml.h"
+#include "../modules/filters/gbfwebif.h"
+#include "../modules/filters/gbfxhtml.h"
+#include "../modules/filters/osishtmlhref.h"
+#include "../modules/filters/osislatex.h"
+#include "../modules/filters/osisosis.h"
+#include "../modules/filters/osisplain.h"
+#include "../modules/filters/osisrtf.h"
+#include "../modules/filters/osiswebif.h"
+#include "../modules/filters/osisxhtml.h"
+#include "../modules/filters/teihtmlhref.h"
+#include "../modules/filters/teilatex.h"
+#include "../modules/filters/teiplain.h"
+#include "../modules/filters/teirtf.h"
+#include "../modules/filters/teixhtml.h"
+#include "../modules/filters/thmlgbf.h"
+#include "../modules/filters/thmlhtml.h"
+#include "../modules/filters/thmlhtmlhref.h"
+#include "../modules/filters/thmllatex.h"
+#include "../modules/filters/thmlosis.h"
+#include "../modules/filters/thmlplain.h"
+#include "../modules/filters/thmlrtf.h"
+#include "../modules/filters/thmlwebif.h"
+#include "../modules/filters/thmlxhtml.h"
+#include "../modules/swmodule.h"
+#include "swmgr.h"
 
 
 namespace swordxx {

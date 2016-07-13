@@ -21,11 +21,12 @@
  *
  */
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <gbfstrongs.h>
-#include <swmodule.h>
-#include <ctype.h>
+#include "gbfstrongs.h"
+
+#include <cctype>
+#include <cstdio>
+#include <cstdlib>
+#include "../swmodule.h"
 
 
 namespace swordxx {

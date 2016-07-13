@@ -21,12 +21,13 @@
  *
  */
 
+#include "bz2comprs.h"
 
-#include <stdlib.h>
-#include <string.h>
-#include <stdio.h>
-#include <bz2comprs.h>
 #include <bzlib.h>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+
 
 namespace swordxx {
 

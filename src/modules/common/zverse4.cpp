@@ -23,20 +23,20 @@
  *
  */
 
-#include <cstdint>
-#include <ctype.h>
-#include <stdio.h>
-#include <fcntl.h>
-#include <errno.h>
-#include <stdlib.h>
+#include "zverse4.h"
 
-#include <utilstr.h>
-#include <versekey.h>
-#include <zverse4.h>
-#include <sysdata.h>
+#include <cctype>
+#include <cerrno>
+#include <cstdint>
+#include <cstdio>
+#include <cstdlib>
+#include <fcntl.h>
 #include <string>
-#include <filemgr.h>
-#include <swcomprs.h>
+#include "../../utilfuns/utilstr.h"
+#include "../../keys/versekey.h"
+#include "../../sysdata.h"
+#include "../../mgr/filemgr.h"
+#include "../common/swcomprs.h"
 
 
 namespace swordxx {

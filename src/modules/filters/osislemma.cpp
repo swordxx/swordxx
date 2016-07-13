@@ -21,11 +21,12 @@
  *
  */
 
+#include "osislemma.h"
+
+#include <cstdlib>
 #include <cstring>
-#include <stdlib.h>
-#include <osislemma.h>
-#include <utilstr.h>
-#include <utilxml.h>
+#include "../../utilfuns/utilstr.h"
+#include "../../utilfuns/utilxml.h"
 
 
 namespace swordxx {

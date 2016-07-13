@@ -22,12 +22,12 @@
  *
  */
 
+#include "listkey.h"
 
-#include <utilstr.h>
-#include <stdlib.h>
-#include <swkey.h>
-#include <listkey.h>
-#include <string.h>
+#include <cstdlib>
+#include <cstring>
+#include "../utilfuns/utilstr.h"
+
 
 namespace swordxx {
 

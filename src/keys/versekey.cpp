@@ -21,21 +21,20 @@
  *
  */
 
+#include "versekey.h"
 
 #include <cstdint>
-#include <stdio.h>
+#include <cstdio>
+#include <cstdlib>
+#include <cctype>
 #include <fcntl.h>
-#include <stdlib.h>
-#include <ctype.h>
+#include "../frontend/swlog.h"
+#include "../mgr/stringmgr.h"
+#include "../mgr/swlocale.h"
+#include "../mgr/versificationmgr.h"
+#include "../utilfuns/roman.h"
+#include "../utilfuns/utilstr.h"
 
-#include <utilstr.h>
-#include <stringmgr.h>
-#include <swkey.h>
-#include <swlog.h>
-#include <versekey.h>
-#include <swlocale.h>
-#include <roman.h>
-#include <versificationmgr.h>
 
 namespace swordxx {
 

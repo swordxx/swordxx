@@ -87,7 +87,7 @@ INCLUDE("${CMAKE_CURRENT_SOURCE_DIR}/cmake/options.cmake")
 INCLUDE("${CMAKE_CURRENT_SOURCE_DIR}/cmake/sources.cmake")
 # Our local includes
 INCLUDE_DIRECTORIES("${CMAKE_CURRENT_BINARY_DIR}/include") # For generated version.h
-INCLUDE_DIRECTORIES("${CMAKE_CURRENT_SOURCE_DIR}/include") # For everything else
+
 
 ###########################################################################################
 # This will look for various libraries that libsword builds against.  There is no REQUIRED
@@ -108,6 +108,7 @@ FIND_PACKAGE(ZLIB REQUIRED QUIET)
 
 ADD_COMPILE_OPTIONS(
   "-Wall" "-Wextra" "-O2"
+  "-DSWORDXX_VERSION_H_FILE=\"${CMAKE_CURRENT_BINARY_DIR}/include/version.h\""
   "$<$<COMPILE_LANGUAGE:C>:-std=c99>"
   "$<$<COMPILE_LANGUAGE:CXX>:-std=c++14>"
   "$<$<CONFIG:Release>:-DNDEBUG>"

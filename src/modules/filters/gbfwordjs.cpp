@@ -20,13 +20,14 @@
  *
  */
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <gbfwordjs.h>
-#include <swmodule.h>
-#include <ctype.h>
-#include <utilstr.h>
-#include <versekey.h>
+#include "gbfwordjs.h"
+
+#include <cctype>
+#include <cstdio>
+#include <cstdlib>
+#include "../../keys/versekey.h"
+#include "../../utilfuns/utilstr.h"
+#include "../swmodule.h"
 
 
 namespace swordxx {

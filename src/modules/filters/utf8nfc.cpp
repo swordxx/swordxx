@@ -23,12 +23,12 @@
 
 #ifdef _ICU_
 
+#include "utf8nfc.h"
+
+#include <string>
 #include <unicode/unistr.h>
 #include <unicode/normlzr.h>
-#include <unicode/unorm.h>
 
-#include <utf8nfc.h>
-#include <string>
 
 namespace swordxx {
 

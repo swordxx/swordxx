@@ -35,7 +35,7 @@
  *
  */
 
-#include <string.h>
+#include <cstring>
 
 #include "sapphire.h"
 

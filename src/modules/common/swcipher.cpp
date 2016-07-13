@@ -21,10 +21,11 @@
  *
  */
 
+#include "swcipher.h"
 
-#include <stdlib.h>
-#include <string.h>
-#include <swcipher.h>
+#include <cstdlib>
+#include <cstring>
+
 
 namespace swordxx {
 

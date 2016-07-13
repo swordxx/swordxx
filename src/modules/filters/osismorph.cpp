@@ -21,9 +21,11 @@
  *
  */
 
+#include "osismorph.h"
+
+#include <cstdlib>
 #include <cstring>
-#include <stdlib.h>
-#include <osismorph.h>
+
 
 namespace swordxx {
 

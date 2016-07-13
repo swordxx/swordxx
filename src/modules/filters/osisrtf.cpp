@@ -20,15 +20,17 @@
  *
  */
 
-#include <stdlib.h>
-#include <ctype.h>
-#include <osisrtf.h>
-#include <utilxml.h>
-#include <utilstr.h>
-#include <versekey.h>
-#include <swmodule.h>
-#include <stringmgr.h>
+#include "osisrtf.h"
+
+#include <cctype>
+#include <cstdlib>
 #include <stack>
+#include "../../keys/versekey.h"
+#include "../../mgr/stringmgr.h"
+#include "../../utilfuns/utilstr.h"
+#include "../../utilfuns/utilxml.h"
+#include "../swmodule.h"
+
 
 namespace swordxx {
 

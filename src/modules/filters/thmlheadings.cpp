@@ -21,13 +21,13 @@
  *
  */
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <thmlheadings.h>
-#include <utilxml.h>
-#include <utilstr.h>
-#include <swmodule.h>
-#include <stdio.h>
+#include "thmlheadings.h"
+
+#include <cstdio>
+#include <cstdlib>
+#include "../../utilfuns/utilstr.h"
+#include "../../utilfuns/utilxml.h"
+#include "../swmodule.h"
 
 
 namespace swordxx {

@@ -22,17 +22,17 @@
  *
  */
 
-#include <cstdint>
-#include <cstring>
-#include <ctype.h>
-#include <stdio.h>
-#include <fcntl.h>
+#include "rawfiles.h"
 
-#include <rawverse.h>
-#include <rawfiles.h>
-#include <filemgr.h>
-#include <versekey.h>
-#include <sysdata.h>
+#include <cctype>
+#include <cstdint>
+#include <cstdio>
+#include <cstring>
+#include <fcntl.h>
+#include "../../../keys/versekey.h"
+#include "../../../mgr/filemgr.h"
+#include "../../../sysdata.h"
+
 
 namespace swordxx {
 

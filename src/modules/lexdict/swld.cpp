@@ -21,11 +21,12 @@
  *
  */
 
-#include <ctype.h>
-#include <stdio.h>
-#include <swld.h>
-#include <strkey.h>
-#include <swkey.h>
+#include "swld.h"
+
+#include <cctype>
+#include <cstdio>
+#include "../../keys/strkey.h"
+#include "../../keys/swkey.h"
 
 
 namespace swordxx {

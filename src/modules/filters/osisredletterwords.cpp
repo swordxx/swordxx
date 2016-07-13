@@ -21,9 +21,10 @@
  *
  */
 
-#include <stdlib.h>
-#include <osisredletterwords.h>
-#include <swmodule.h>
+#include "osisredletterwords.h"
+
+#include <cstdlib>
+#include "../swmodule.h"
 
 
 namespace swordxx {

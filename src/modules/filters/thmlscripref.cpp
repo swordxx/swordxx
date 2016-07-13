@@ -21,12 +21,13 @@
  *
  */
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <thmlscripref.h>
-#include <utilxml.h>
-#include <versekey.h>
-#include <swmodule.h>
+#include "thmlscripref.h"
+
+#include <cstdio>
+#include <cstdlib>
+#include "../../keys/versekey.h"
+#include "../../utilfuns/utilxml.h"
+#include "../swmodule.h"
 
 
 namespace swordxx {

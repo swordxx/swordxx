@@ -21,8 +21,9 @@
  *
  */
 
-#include <swsearchable.h>
-#include <listkey.h>
+#include "swsearchable.h"
+
+#include "../keys/listkey.h"
 
 
 namespace swordxx {

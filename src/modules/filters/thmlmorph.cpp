@@ -21,9 +21,11 @@
  *
  */
 
+#include "thmlmorph.h"
+
+#include <cstdlib>
 #include <cstring>
-#include <stdlib.h>
-#include <thmlmorph.h>
+
 
 namespace swordxx {
 

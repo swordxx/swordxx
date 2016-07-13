@@ -21,10 +21,11 @@
  *
  */
 
+#include "versetreekey.h"
 
-#include <versetreekey.h>
+#include <cctype>
 #include <cstring>
-#include <ctype.h>
+
 
 namespace swordxx {
 

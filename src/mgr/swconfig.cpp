@@ -21,12 +21,12 @@
  *
  */
 
-#include <swconfig.h>
+#include "swconfig.h"
 
 #include <cstring>
-#include <utilstr.h>
-#include <filemgr.h>
 #include <fcntl.h>
+#include "../utilfuns/utilstr.h"
+#include "filemgr.h"
 
 
 namespace swordxx {

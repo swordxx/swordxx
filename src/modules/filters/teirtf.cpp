@@ -20,12 +20,14 @@
  *
  */
 
-#include <stdlib.h>
-#include <ctype.h>
-#include <teirtf.h>
-#include <utilxml.h>
-#include <swmodule.h>
-#include <versekey.h>
+#include "teirtf.h"
+
+#include <cctype>
+#include <cstdlib>
+#include "../../keys/versekey.h"
+#include "../../utilfuns/utilxml.h"
+#include "../swmodule.h"
+
 
 namespace swordxx {
 

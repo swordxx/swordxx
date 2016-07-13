@@ -21,10 +21,11 @@
  *
  */
 
+#include "treekey.h"
 
-#include <treekey.h>
-#include <utilstr.h>
-#include <string.h>
+#include <cstring>
+#include "../utilfuns/utilstr.h"
+
 
 namespace swordxx {
 

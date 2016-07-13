@@ -21,10 +21,11 @@
  *
  */
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <latin1utf8.h>
-#include <swmodule.h>
+#include "latin1utf8.h"
+
+#include <cstdlib>
+#include <cstdio>
+#include "../swmodule.h"
 
 
 namespace swordxx {

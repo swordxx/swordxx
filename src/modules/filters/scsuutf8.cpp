@@ -29,7 +29,8 @@
  * in http://www.unicode.org/unicode/reports/tr6.html
  */
 
-#include <scsuutf8.h>
+#include "scsuutf8.h"
+
 #include <string>
 
 

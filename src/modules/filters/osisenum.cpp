@@ -21,10 +21,11 @@
  *
  */
 
-#include <stdlib.h>
-#include <osisenum.h>
-#include <utilstr.h>
-#include <utilxml.h>
+#include "osisenum.h"
+
+#include <cstdlib>
+#include "../../utilfuns/utilstr.h"
+#include "../../utilfuns/utilxml.h"
 
 
 namespace swordxx {

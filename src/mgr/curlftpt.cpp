@@ -20,15 +20,13 @@
  *
  */
 
-#include <curlftpt.h>
+#include "curlftpt.h"
 
 #include <cstring>
-#include <fcntl.h>
-
 #include <curl/curl.h>
 #include <curl/easy.h>
-
-#include <swlog.h>
+#include <fcntl.h>
+#include "../frontend/swlog.h"
 
 
 namespace swordxx {

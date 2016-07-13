@@ -22,40 +22,36 @@
  *
  */
 
+#include "swmodule.h"
 
+#ifdef USELUCENE
+#include <CLucene.h>
+#endif
 #include <cstdint>
-#include <vector>
-#include <sysdata.h>
-#include <swmodule.h>
-#include <utilstr.h>
-#include <swfilter.h>
-#include <versekey.h>    // KLUDGE for Search
-#include <treekeyidx.h>    // KLUDGE for Search
-#include <swoptfilter.h>
-#include <filemgr.h>
-#include <stringmgr.h>
 #ifndef _MSC_VER
 #include <iostream>
 #endif
-
 #ifdef USECXX11REGEX
 #include <regex>
-#ifndef REG_ICASE
-#define REG_ICASE std::regex::icase
-#endif
 #else
 #include <regex.h>    // GNU
 #endif
+#include <vector>
+#include "../keys/treekeyidx.h" // KLUDGE for Search
+#include "../keys/versekey.h"   // KLUDGE for Search
+#include "../mgr/filemgr.h"
+#include "../mgr/stringmgr.h"
+#include "../modules/filters/swoptfilter.h"
+#include "../swfilter.h"
+#include "../sysdata.h"
+#include "../utilfuns/utilstr.h"
 
-#if defined USELUCENE
-#include <CLucene.h>
 
-//Lucence includes
-//#include "CLucene.h"
-//#include "CLucene/util/Reader.h"
-//#include "CLucene/util/Misc.h"
-//#include "CLucene/util/dirent.h"
+#if defined(USECXX11REGEX) && !defined(REG_ICASE)
+#define REG_ICASE std::regex::icase
+#endif
 
+#ifdef USELUCENE
 using namespace lucene::index;
 using namespace lucene::analysis;
 using namespace lucene::util;

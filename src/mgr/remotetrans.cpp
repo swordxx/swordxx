@@ -20,18 +20,19 @@
  *
  */
 
-#include <remotetrans.h>
+#include "remotetrans.h"
+
 #include <cstring>
-#include <filemgr.h>
-#include <fcntl.h>
 #include <dirent.h>
-#include <swlog.h>
-#include <utilstr.h>
+#include <fcntl.h>
 #include <string>
+#include "../frontend/swlog.h"
+#include "../utilfuns/utilstr.h"
+#include "filemgr.h"
 
 
 extern "C" {
-#include <ftpparse.h>
+#include "../utilfuns/ftpparse.h"
 }
 
 

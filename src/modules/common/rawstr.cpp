@@ -23,18 +23,19 @@
  *
  */
 
-#include <stdio.h>
-#include <fcntl.h>
-#include <errno.h>
+#include "rawstr.h"
 
-#include <stdlib.h>
-#include <utilstr.h>
-#include <rawstr.h>
-#include <sysdata.h>
-#include <swlog.h>
-#include <filemgr.h>
+#include <cerrno>
+#include <cstdio>
+#include <cstdlib>
+#include <fcntl.h>
 #include <string>
-#include <stringmgr.h>
+#include "../../frontend/swlog.h"
+#include "../../mgr/filemgr.h"
+#include "../../mgr/stringmgr.h"
+#include "../../utilfuns/utilstr.h"
+#include "../../sysdata.h"
+
 
 namespace swordxx {
 

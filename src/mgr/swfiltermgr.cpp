@@ -21,7 +21,7 @@
  *
  */
 
-#include <swfiltermgr.h>
+#include "swfiltermgr.h"
 
 
 namespace swordxx {

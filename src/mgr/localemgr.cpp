@@ -21,21 +21,19 @@
  *
  */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <fcntl.h>
+#include "localemgr.h"
 
-#include <sys/stat.h>
+#include <cstdio>
+#include <cstdlib>
 #include <dirent.h>
-
-#include <swmgr.h>
-#include <utilstr.h>
-
-#include <stringmgr.h>
-#include <filemgr.h>
-#include <localemgr.h>
-#include <swlocale.h>
-#include <swlog.h>
+#include <fcntl.h>
+#include <sys/stat.h>
+#include "../frontend/swlog.h"
+#include "../utilfuns/utilstr.h"
+#include "filemgr.h"
+#include "stringmgr.h"
+#include "swmgr.h"
+#include "swlocale.h"
 
 
 namespace swordxx {

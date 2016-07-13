@@ -23,19 +23,18 @@
 
 #ifdef _ICU_
 
-#include <stdlib.h>
+#include "utf8transliterator.h"
 
-#include <utilstr.h>
-
-#include <unicode/ucnv.h>
-#include <unicode/uchar.h>
-#include <utf8transliterator.h>
-#include <swmodule.h>
-
+#include <cstdlib>
 #ifndef _ICUSWORD_
-#include "unicode/resbund.h"
+#include <unicode/resbund.h>
 #endif
-#include <swlog.h>
+#include <unicode/uchar.h>
+#include <unicode/ucnv.h>
+#include "../../frontend/swlog.h"
+#include "../../utilfuns/utilstr.h"
+#include "../swmodule.h"
+
 
 namespace swordxx {
 

@@ -21,12 +21,13 @@
  *
  */
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <osisheadings.h>
-#include <swmodule.h>
-#include <utilxml.h>
-#include <utilstr.h>
+#include "osisheadings.h"
+
+#include <cstdlib>
+#include <cstdio>
+#include "../../utilfuns/utilstr.h"
+#include "../../utilfuns/utilxml.h"
+#include "../swmodule.h"
 
 
 namespace swordxx {

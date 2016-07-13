@@ -20,14 +20,15 @@
  *
  */
 
+#include "gbfhtmlhref.h"
 
-#include <stdlib.h>
-#include <gbfhtmlhref.h>
-#include <swmodule.h>
-#include <utilxml.h>
-#include <versekey.h>
-#include <ctype.h>
-#include <url.h>
+#include <cctype>
+#include <cstdlib>
+#include "../../keys/versekey.h"
+#include "../../utilfuns/url.h"
+#include "../../utilfuns/utilxml.h"
+#include "../swmodule.h"
+
 
 namespace swordxx {
 

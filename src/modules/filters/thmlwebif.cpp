@@ -20,12 +20,14 @@
  *
  */
 
-#include <stdlib.h>
-#include <thmlwebif.h>
-#include <swmodule.h>
-#include <url.h>
-#include <utilxml.h>
-#include <ctype.h>
+#include "thmlwebif.h"
+
+#include <cctype>
+#include <cstdlib>
+#include "../../utilfuns/url.h"
+#include "../../utilfuns/utilxml.h"
+#include "../swmodule.h"
+
 
 namespace swordxx {
 

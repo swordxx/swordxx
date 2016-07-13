@@ -21,8 +21,10 @@
  *
  */
 
-#include <swoptfilter.h>
-#include <utilstr.h>
+#include "swoptfilter.h"
+
+#include "../../utilfuns/utilstr.h"
+
 
 namespace swordxx {
 

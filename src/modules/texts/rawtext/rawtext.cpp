@@ -21,22 +21,21 @@
  *
  */
 
-#include <stdio.h>
-#include <fcntl.h>
-#include <sysdata.h>
+#include "rawtext.h"
 
-#include <utilstr.h>
-#include <rawverse.h>
-#include <rawtext.h>
-#include <rawstr.h>
-#include <filemgr.h>
-#include <versekey.h>
-#include <stringmgr.h>
-
-#include <regex.h>    // GNU
-#include <map>
-#include <list>
 #include <algorithm>
+#include <cstdio>
+#include <fcntl.h>
+#include <list>
+#include <map>
+#include <regex.h>    // GNU
+#include "../../../keys/versekey.h"
+#include "../../../mgr/filemgr.h"
+#include "../../../mgr/stringmgr.h"
+#include "../../../sysdata.h"
+#include "../../../utilfuns/utilstr.h"
+#include "../../common/rawstr.h"
+
 
 #ifndef USELUCENE
 using std::map;

@@ -22,25 +22,21 @@
  *
  */
 
-#include <encfiltmgr.h>
-#include <utilstr.h>
+#include "encfiltmgr.h"
 
-#include <scsuutf8.h>
-#include <latin1utf8.h>
-#include <utf16utf8.h>
-
-#include <unicodertf.h>
-#include <utf8latin1.h>
-#include <utf8utf16.h>
-#include <utf8html.h>
-
+#include "../modules/filters/latin1utf8.h"
+#include "../modules/filters/scsuutf8.h"
+#include "../modules/filters/unicodertf.h"
+#include "../modules/filters/utf16utf8.h"
+#include "../modules/filters/utf8latin1.h"
+#include "../modules/filters/utf8html.h"
 #ifdef _ICU_
-#include <utf8scsu.h>
+#include "../modules/filters/utf8scsu.h"
 #endif
-
-#include <swmodule.h>
-
-#include <swmgr.h>
+#include "../modules/filters/utf8utf16.h"
+#include "../modules/swmodule.h"
+#include "../utilfuns/utilstr.h"
+#include "swmgr.h"
 
 
 namespace swordxx {

@@ -20,10 +20,11 @@
  *
  */
 
+#include "swcomprs.h"
 
-#include <stdlib.h>
-#include <string.h>
-#include <swcomprs.h>
+#include <cstdlib>
+#include <cstring>
+
 
 namespace swordxx {
 

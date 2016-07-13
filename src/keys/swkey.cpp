@@ -22,11 +22,12 @@
  *
  */
 
+#include "swkey.h"
 
-#include <swkey.h>
-#include <utilstr.h>
-#include <string.h>
-#include <localemgr.h>
+#include <cstring>
+#include "../mgr/localemgr.h"
+#include "../utilfuns/utilstr.h"
+
 
 namespace swordxx {
 

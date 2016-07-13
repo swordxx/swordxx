@@ -20,9 +20,10 @@
  *
  */
 
-#include <stdlib.h>
-#include <string.h>
-#include <roman.h>
+#include "roman.h"
+
+#include <cstdlib>
+#include <cstring>
 
 
 namespace swordxx {

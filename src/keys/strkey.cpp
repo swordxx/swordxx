@@ -22,9 +22,10 @@
  *
  */
 
+#include "strkey.h"
 
-#include <strkey.h>
-#include <stdio.h>
+#include <cstdio>
+
 
 namespace swordxx {
 

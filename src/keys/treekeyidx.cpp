@@ -21,17 +21,18 @@
  */
 
 
-#include <treekeyidx.h>
-#include <fcntl.h>
-#include <stdio.h>
-#include <errno.h>
+#include "treekeyidx.h"
 
+#include <cerrno>
+#include <cstdio>
 #include <cstring>
-#include <swlog.h>
-#include <utilstr.h>
-#include <filemgr.h>
+#include <fcntl.h>
 #include <string>
-#include <sysdata.h>
+#include "../frontend/swlog.h"
+#include "../mgr/filemgr.h"
+#include "../sysdata.h"
+#include "../utilfuns/utilstr.h"
+
 
 namespace swordxx {
 

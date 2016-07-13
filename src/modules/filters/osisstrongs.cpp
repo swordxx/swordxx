@@ -21,13 +21,14 @@
  *
  */
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <ctype.h>
-#include <osisstrongs.h>
-#include <swmodule.h>
-#include <versekey.h>
-#include <utilxml.h>
+#include "osisstrongs.h"
+
+#include <cctype>
+#include <cstdio>
+#include <cstdlib>
+#include "../../keys/versekey.h"
+#include "../../utilfuns/utilxml.h"
+#include "../swmodule.h"
 
 
 namespace swordxx {

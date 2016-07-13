@@ -21,9 +21,10 @@
  *
  */
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <utf8hebrewpoints.h>
+#include "utf8hebrewpoints.h"
+
+#include <cstdio>
+#include <cstdlib>
 
 
 namespace swordxx {

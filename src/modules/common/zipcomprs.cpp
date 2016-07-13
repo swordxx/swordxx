@@ -21,12 +21,13 @@
  *
  */
 
+#include "zipcomprs.h"
 
-#include <stdlib.h>
-#include <string.h>
-#include <stdio.h>
-#include <zipcomprs.h>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
 #include <zlib.h>
+
 
 namespace swordxx {
 

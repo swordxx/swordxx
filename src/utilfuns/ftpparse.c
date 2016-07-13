@@ -21,7 +21,8 @@ Long VMS filenames, with information split across two lines.
 NCSA Telnet FTP server. Has LIST = NLST (and bad NLST for directories).
 */
 
-#include <ftpparse.h>
+#include "ftpparse.h"
+
 
 static long totai(long year,long month,long mday)
 {

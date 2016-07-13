@@ -21,9 +21,11 @@
  *
  */
 
-#include <stdlib.h>
-#include <string.h>
-#include <lzsscomprs.h>
+#include "lzsscomprs.h"
+
+#include <cstdlib>
+#include <cstring>
+
 
 // The following are constant sizes used by the compression algorithm.
 //

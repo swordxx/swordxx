@@ -21,15 +21,14 @@
  *
  */
 
+#include "thmlfootnotes.h"
 
-
-#include <stdlib.h>
-#include <stdio.h>
-#include <thmlfootnotes.h>
-#include <swmodule.h>
+#include <cstdio>
+#include <cstdlib>
 #include <string>
-#include <versekey.h>
-#include <utilxml.h>
+#include "../../keys/versekey.h"
+#include "../../utilfuns/utilxml.h"
+#include "../swmodule.h"
 
 
 namespace swordxx {

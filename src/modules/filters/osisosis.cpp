@@ -20,11 +20,12 @@
  *
  */
 
-#include <stdlib.h>
-#include <osisosis.h>
-#include <utilxml.h>
-#include <versekey.h>
-#include <swmodule.h>
+#include "osisosis.h"
+
+#include <cstdlib>
+#include "../../keys/versekey.h"
+#include "../swmodule.h"
+
 
 namespace swordxx {
 

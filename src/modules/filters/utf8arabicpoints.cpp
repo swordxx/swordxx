@@ -21,10 +21,11 @@
  *
  */
 
+#include "utf8arabicpoints.h"
+
+#include <cstdio>
+#include <cstdlib>
 #include <cstring>
-#include <stdlib.h>
-#include <stdio.h>
-#include <utf8arabicpoints.h>
 
 
 namespace swordxx {

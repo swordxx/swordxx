@@ -21,10 +21,12 @@
  *
  */
 
+#include "thmlplain.h"
+
+#include <cstdlib>
 #include <cstring>
-#include <stdlib.h>
-#include <thmlplain.h>
 #include <string>
+
 
 namespace swordxx {
 

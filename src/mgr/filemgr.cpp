@@ -21,16 +21,18 @@
  *
  */
 
-#include <filemgr.h>
-#include <utilstr.h>
+#include "filemgr.h"
 
+#include "../utilfuns/utilstr.h"
+
+#include <cstdio>
+#include <cstring>
 #include <dirent.h>
 #include <fcntl.h>
+#include <string>
 #include <sys/stat.h>
 #include <sys/types.h>
-#include <stdio.h>
-#include <string.h>
-#include <string>
+
 #if !defined(__GNUC__) && !defined(_WIN32_WCE)
 #include <io.h>
 #include <direct.h>

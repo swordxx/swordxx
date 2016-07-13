@@ -21,12 +21,13 @@
  *
  */
 
-#include <swlocale.h>
-#include <utilstr.h>
+#include "swlocale.h"
+
 #include <map>
-#include <swconfig.h>
-#include <versekey.h>
-#include <versificationmgr.h>
+#include "../keys/versekey.h"
+#include "../utilfuns/utilstr.h"
+#include "swconfig.h"
+#include "versificationmgr.h"
 
 
 namespace swordxx {

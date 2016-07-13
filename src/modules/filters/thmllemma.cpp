@@ -21,9 +21,10 @@
  *
  */
 
+#include "thmllemma.h"
+
+#include <cstdlib>
 #include <cstring>
-#include <stdlib.h>
-#include <thmllemma.h>
 
 
 namespace swordxx {

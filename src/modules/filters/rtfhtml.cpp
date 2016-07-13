@@ -21,13 +21,15 @@
  *
  */
 
+#include "rtfhtml.h"
+
+#include <cctype>
 #include <cstdint>
-#include <stdlib.h>
-#include <rtfhtml.h>
+#include <cstdlib>
 #include <string>
-#include <utilstr.h>
-#include <ctype.h>
-#include <sysdata.h>
+#include "../../sysdata.h"
+#include "../../utilfuns/utilstr.h"
+
 
 namespace swordxx {
 

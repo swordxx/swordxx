@@ -20,21 +20,19 @@
  *
  */
 
-#include <fcntl.h>
+#include "curlhttpt.h"
 
-#include <vector>
 #include <cctype>
-
 #include <curl/curl.h>
 #include <curl/easy.h>
+#include <fcntl.h>
+#include <vector>
+#include "../frontend/swlog.h"
+#include "../utilfuns/utilstr.h"
+#include "filemgr.h"
 
-#include <swlog.h>
-#include <filemgr.h>
-#include <curlhttpt.h>
-#include <utilstr.h>
 
 using std::vector;
-
 
 namespace swordxx {
 

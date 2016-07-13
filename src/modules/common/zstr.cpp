@@ -22,22 +22,22 @@
  *
  */
 
+#include "zstr.h"
+
+#include <cerrno>
 #include <cstdint>
-#include <stdio.h>
+#include <cstdio>
+#include <cstdlib>
 #include <fcntl.h>
-#include <errno.h>
-
-#include <stdlib.h>
-#include <utilstr.h>
-#include <zstr.h>
-#include <swcomprs.h>
-
-#include <sysdata.h>
-#include <entriesblk.h>
-#include <swlog.h>
-#include <stringmgr.h>
-#include <filemgr.h>
 #include <string>
+#include "../../frontend/swlog.h"
+#include "../../mgr/filemgr.h"
+#include "../../mgr/stringmgr.h"
+#include "../../sysdata.h"
+#include "../../utilfuns/utilstr.h"
+#include "swcomprs.h"
+#include "entriesblk.h"
+
 
 namespace swordxx {
 

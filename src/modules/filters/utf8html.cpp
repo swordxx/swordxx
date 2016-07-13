@@ -21,8 +21,9 @@
  *
  */
 
-#include <stdio.h>
-#include <utf8html.h>
+#include "utf8html.h"
+
+#include <cstdio>
 #include <string>
 
 

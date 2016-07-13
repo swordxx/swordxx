@@ -20,10 +20,12 @@
  *
  */
 
-#include <stdlib.h>
-#include <thmlgbf.h>
-#include <utilstr.h>
+#include "thmlgbf.h"
+
+#include <cstdlib>
 #include <string>
+#include "../../utilfuns/utilstr.h"
+
 
 namespace swordxx {
 

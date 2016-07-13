@@ -20,14 +20,14 @@
  *
  */
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <stdarg.h>
-#include <gbfosis.h>
-#include <swmodule.h>
-#include <versekey.h>
-#include <swlog.h>
-#include <stdarg.h>
+#include "gbfosis.h"
+
+#include <cstdarg>
+#include <cstdio>
+#include <cstdlib>
+#include "../../frontend/swlog.h"
+#include "../../keys/versekey.h"
+#include "../swmodule.h"
 
 
 namespace swordxx {

@@ -21,9 +21,9 @@
  *
  */
 
+#include "gbfheadings.h"
 
-#include <stdlib.h>
-#include <gbfheadings.h>
+#include <cstdlib>
 
 
 namespace swordxx {

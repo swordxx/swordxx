@@ -21,8 +21,9 @@
  *
  */
 
-#include <stdlib.h>
-#include <gbfmorph.h>
+#include "gbfmorph.h"
+
+#include <cstdlib>
 
 
 namespace swordxx {

@@ -21,8 +21,9 @@
  *
  */
 
-#include <stdlib.h>
-#include <gbfplain.h>
+#include "gbfplain.h"
+
+#include <cstdlib>
 #include <string>
 
 

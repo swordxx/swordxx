@@ -21,13 +21,12 @@
  *
  */
 
+#include "gbfwebif.h"
 
-#include <gbfwebif.h>
-
+#include <cctype>
 #include <cstring>
-#include <ctype.h>
-#include <url.h>
-#include <utilstr.h>
+#include "../../utilfuns/url.h"
+#include "../../utilfuns/utilstr.h"
 
 
 namespace swordxx {

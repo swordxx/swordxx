@@ -20,12 +20,13 @@
  *
  */
 
-#include <stdlib.h>
-#include <thmlrtf.h>
-#include <swmodule.h>
-#include <utilxml.h>
-#include <utilstr.h>
-#include <versekey.h>
+#include "thmlrtf.h"
+
+#include <cstdlib>
+#include "../../keys/versekey.h"
+#include "../../utilfuns/utilstr.h"
+#include "../swmodule.h"
+
 
 namespace swordxx {
 

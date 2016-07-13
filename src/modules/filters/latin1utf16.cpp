@@ -21,9 +21,10 @@
  *
  */
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <latin1utf16.h>
+#include "latin1utf16.h"
+
+#include <cstdio>
+#include <cstdlib>
 #include <string>
 
 namespace swordxx {

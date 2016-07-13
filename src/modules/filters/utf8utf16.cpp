@@ -20,10 +20,11 @@
  *
  */
 
+#include "utf8utf16.h"
+
 #include <cstdint>
-#include <utf8utf16.h>
-#include <utilstr.h>
 #include <string>
+#include "../../utilfuns/utilstr.h"
 
 
 namespace swordxx {

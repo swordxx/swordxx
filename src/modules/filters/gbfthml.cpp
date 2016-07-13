@@ -20,8 +20,9 @@
  *
  */
 
-#include <stdlib.h>
-#include <gbfthml.h>
+#include "gbfthml.h"
+
+#include <cstdlib>
 #include <string>
 
 

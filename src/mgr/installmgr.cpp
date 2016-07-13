@@ -20,33 +20,27 @@
  *
  */
 
+#include "installmgr.h"
+
 #include <cassert>
-#include "untgz.h"
-
-#include <installmgr.h>
-#include <filemgr.h>
-#include <utilstr.h>
-
-#include <fcntl.h>
-
-#include <swmgr.h>
-#include <swmodule.h>
-#include <version.h>
-#include <swlog.h>
+#include <cstdio>
 #include <dirent.h>
-
-#include <stdio.h>
-#include <map>
-
-#include <curlftpt.h>
-#include <curlhttpt.h>
-
+#include <fcntl.h>
 #include <iostream>
+#include <map>
 #include <regex>
+#include "../frontend/swlog.h"
+#include "../modules/swmodule.h"
+#include "../untgz.h"
+#include "../utilfuns/utilstr.h"
+#include "curlftpt.h"
+#include "curlhttpt.h"
+#include "filemgr.h"
+#include "swmgr.h"
+#include SWORDXX_VERSION_H_FILE
 
 
 using std::map;
-
 
 namespace swordxx {
 

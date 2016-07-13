@@ -22,16 +22,16 @@
  *
  */
 
+#include "hrefcom.h"
 
-#include <ctype.h>
-#include <stdio.h>
+#include <cctype>
+#include <cstdio>
 #include <fcntl.h>
-
-#include <utilstr.h>
-#include <rawverse.h>
-#include <hrefcom.h>
 #include <string>
-#include <versekey.h>
+#include "../../../keys/versekey.h"
+#include "../../../utilfuns/utilstr.h"
+#include "../../common/rawverse.h"
+
 
 namespace swordxx {
 

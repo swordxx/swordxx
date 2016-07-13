@@ -21,12 +21,14 @@
  *
  */
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <ctype.h>
+#include "greeklexattribs.h"
+
+#include <cctype>
+#include <cstdio>
+#include <cstdlib>
 #include <string>
-#include <greeklexattribs.h>
-#include <swmodule.h>
+#include "../swmodule.h"
+
 
 using std::string;
 

@@ -20,13 +20,13 @@
  *
  */
 
+#include "utilstr.h"
+
 #include <algorithm>
 #include <cassert>
 #include <cctype>
 #include <cstring>
-
-#include <sysdata.h>
-#include <utilstr.h>
+#include "../sysdata.h"
 
 
 namespace swordxx {

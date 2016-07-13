@@ -21,10 +21,11 @@
  *
  */
 
-#include <stdlib.h>
-#include <gbfredletterwords.h>
-#include <swmodule.h>
-#include <ctype.h>
+#include "gbfredletterwords.h"
+
+#include <cctype>
+#include <cstdlib>
+#include "../swmodule.h"
 
 
 namespace swordxx {

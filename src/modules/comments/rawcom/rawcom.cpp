@@ -22,15 +22,14 @@
  *
  */
 
+#include "rawcom.h"
 
-#include <ctype.h>
-#include <stdio.h>
+#include <cctype>
+#include <cstdio>
 #include <fcntl.h>
+#include "../../../mgr/filemgr.h"
+#include "../../../keys/versekey.h"
 
-#include <filemgr.h>
-#include <rawverse.h>
-#include <rawcom.h>
-#include <versekey.h>
 
 namespace swordxx {
 

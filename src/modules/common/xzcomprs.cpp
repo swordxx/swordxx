@@ -21,13 +21,14 @@
  *
  */
 
-#include <stdlib.h>
-#include <string.h>
-#include <stdio.h>
-#include <xzcomprs.h>
+#include "xzcomprs.h"
 
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
 #define LZMA_API_STATIC
 #include <lzma.h>
+
 
 namespace swordxx {
 

@@ -20,10 +20,11 @@
  *
  */
 
-#include <stdlib.h>
-#include <thmlhtml.h>
-#include <swmodule.h>
-#include <utilxml.h>
+#include "thmlhtml.h"
+
+#include <cstdlib>
+#include "../../utilfuns/utilxml.h"
+#include "../swmodule.h"
 
 
 namespace swordxx {

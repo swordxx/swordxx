@@ -21,18 +21,18 @@
  *
  */
 
+#include "rawgenbook.h"
 
 #include <cstdint>
-#include <stdio.h>
+#include <cstdio>
 #include <fcntl.h>
+#include "../../../keys/treekeyidx.h"
+#include "../../../keys/versetreekey.h"
+#include "../../../mgr/filemgr.h"
+#include "../../../utilfuns/utilstr.h"
+#include "../../../sysdata.h"
+#include "../../common/rawstr.h"
 
-#include <rawgenbook.h>
-#include <rawstr.h>
-#include <utilstr.h>
-#include <filemgr.h>
-#include <sysdata.h>
-#include <treekeyidx.h>
-#include <versetreekey.h>
 
 namespace swordxx {
 

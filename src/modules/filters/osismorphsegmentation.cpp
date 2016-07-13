@@ -22,11 +22,12 @@
  *
  */
 
-#include <osismorphsegmentation.h>
-#include <stdlib.h>
-#include <utilxml.h>
-#include <swmodule.h>
+#include "osismorphsegmentation.h"
+
+#include <cstdlib>
 #include <string>
+#include "../../utilfuns/utilxml.h"
+#include "../swmodule.h"
 
 
 namespace swordxx {

@@ -21,11 +21,11 @@
  *
  */
 
-#include <utilxml.h>
+#include "utilxml.h"
 
 #include <algorithm>
-#include <ctype.h>
-#include <utilstr.h>
+#include <cctype>
+#include "utilstr.h"
 
 
 namespace swordxx {

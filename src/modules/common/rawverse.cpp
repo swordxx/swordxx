@@ -23,20 +23,19 @@
  *
  */
 
+#include "rawverse.h"
 
+#include <cerrno>
+#include <cctype>
 #include <cstdint>
+#include <cstdio>
 #include <cstring>
-#include <ctype.h>
-#include <stdio.h>
 #include <fcntl.h>
-#include <errno.h>
-
-#include <utilstr.h>
-#include <rawverse.h>
-#include <versekey.h>
-#include <sysdata.h>
-#include <filemgr.h>
 #include <string>
+#include "../../keys/versekey.h"
+#include "../../mgr/filemgr.h"
+#include "../../utilfuns/utilstr.h"
+#include "../../sysdata.h"
 
 
 namespace swordxx {

@@ -21,14 +21,13 @@
  *
  */
 
-#include <cstdint>
-#include <fcntl.h>
-#include <utilstr.h>
-#include <rawstr.h>
-#include <rawld.h>
-#include <filemgr.h>
+#include "rawld.h"
 
-#include <stdio.h>
+#include <cstdint>
+#include <cstdio>
+#include <fcntl.h>
+#include "../../../mgr/filemgr.h"
+#include "../../../utilfuns/utilstr.h"
 
 
 namespace swordxx {

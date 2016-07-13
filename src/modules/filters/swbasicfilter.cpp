@@ -23,14 +23,16 @@
  *
  */
 
-#include <stdlib.h>
-#include <swbasicfilter.h>
-#include <stdio.h>
-#include <stdarg.h>
-#include <utilstr.h>
-#include <stringmgr.h>
+#include "swbasicfilter.h"
+
+#include <cstdarg>
+#include <cstdio>
+#include <cstdlib>
 #include <map>
 #include <set>
+#include "../../utilfuns/utilstr.h"
+#include "../../mgr/stringmgr.h"
+
 
 namespace swordxx {
 

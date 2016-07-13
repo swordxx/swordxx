@@ -20,10 +20,12 @@
  *
  */
 
-#include <gbfrtf.h>
-#include <utilstr.h>
-#include <ctype.h>
+#include "gbfrtf.h"
+
+#include <cctype>
 #include <string>
+#include "../../utilfuns/utilstr.h"
+
 
 namespace swordxx {
 

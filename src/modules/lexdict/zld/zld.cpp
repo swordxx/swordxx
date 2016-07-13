@@ -21,14 +21,12 @@
  *
  */
 
+#include "zld.h"
+
+#include <cstdio>
 #include <fcntl.h>
-
-#include <utilstr.h>
-#include <zstr.h>
-#include <zld.h>
-#include <filemgr.h>
-
-#include <stdio.h>
+#include "../../../mgr/filemgr.h"
+#include "../../../utilfuns/utilstr.h"
 
 
 namespace swordxx {

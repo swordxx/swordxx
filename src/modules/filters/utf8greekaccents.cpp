@@ -21,13 +21,12 @@
  *
  */
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <utf8greekaccents.h>
+#include "utf8greekaccents.h"
 
-
+#include <cstdio>
+#include <cstdlib>
 #ifdef _ICU_
-#include <utf8nfkd.h>
+#include "utf8nfkd.h"
 swordxx::UTF8NFKD decompose;
 #endif
 

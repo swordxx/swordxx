@@ -20,9 +20,11 @@
  *
  */
 
+#include "papyriplain.h"
+
+#include <cstdlib>
 #include <cstring>
-#include <stdlib.h>
-#include <papyriplain.h>
+
 
 namespace swordxx {
 

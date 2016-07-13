@@ -20,89 +20,83 @@
  *
  */
 
-#include <cassert>
-#include <cstring>
-#include <stdio.h>
-#include <stdlib.h>
-#include <fcntl.h>
+#include "swmgr.h"
 
-#include <sys/stat.h>
+#include <cassert>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <dirent.h>
+#include <fcntl.h>
 #ifndef _MSC_VER
 #include <iostream>
 #endif
-#include <dirent.h>
-
-#include <swmgr.h>
-#include <rawtext.h>
-#include <rawtext4.h>
-#include <filemgr.h>
-#include <rawgenbook.h>
-#include <rawcom.h>
-#include <rawcom4.h>
-#include <hrefcom.h>
-#include <rawld.h>
-#include <rawld4.h>
-#include <utilstr.h>
-#include <gbfplain.h>
-#include <thmlplain.h>
-#include <osisplain.h>
-#include <teiplain.h>
-#include <papyriplain.h>
-#include <gbfstrongs.h>
-#include <gbffootnotes.h>
-#include <gbfheadings.h>
-#include <gbfredletterwords.h>
-#include <gbfmorph.h>
-#include <osisenum.h>
-#include <osisglosses.h>
-#include <osisheadings.h>
-#include <osisfootnotes.h>
-#include <osisstrongs.h>
-#include <osismorph.h>
-#include <osislemma.h>
-#include <osisredletterwords.h>
-#include <osismorphsegmentation.h>
-#include <osisscripref.h>
-#include <osisvariants.h>
-#include <osisxlit.h>
-#include <osisreferencelinks.h>
-#include <thmlstrongs.h>
-#include <thmlfootnotes.h>
-#include <thmlheadings.h>
-#include <thmlmorph.h>
-#include <thmlvariants.h>
-#include <thmllemma.h>
-#include <thmlscripref.h>
-#include <cipherfil.h>
-#include <rawfiles.h>
-#include <ztext.h>
-#include <ztext4.h>
-#include <zld.h>
-#include <zcom.h>
-#include <zcom4.h>
-#include <lzsscomprs.h>
-#include <utf8greekaccents.h>
-#include <utf8cantillation.h>
-#include <utf8hebrewpoints.h>
-#include <utf8arabicpoints.h>
-#include <greeklexattribs.h>
-#include <swfiltermgr.h>
-#include <swcipher.h>
-#include <swoptfilter.h>
-#include <rtfhtml.h>
-
-#include <swlog.h>
-
 #include <iterator>
-
-#include "zipcomprs.h"
-#include "bz2comprs.h"
-#include "xzcomprs.h"
-
-
+#include <sys/stat.h>
+#include "../frontend/swlog.h"
+#include "../modules/comments/hrefcom/hrefcom.h"
+#include "../modules/comments/rawcom/rawcom.h"
+#include "../modules/comments/rawcom4/rawcom4.h"
+#include "../modules/comments/rawfiles/rawfiles.h"
+#include "../modules/comments/zcom/zcom.h"
+#include "../modules/comments/zcom4/zcom4.h"
+#include "../modules/common/bz2comprs.h"
+#include "../modules/common/lzsscomprs.h"
+#include "../modules/common/swcipher.h"
+#include "../modules/common/xzcomprs.h"
+#include "../modules/common/zipcomprs.h"
+#include "../modules/filters/cipherfil.h"
+#include "../modules/filters/gbffootnotes.h"
+#include "../modules/filters/gbfheadings.h"
+#include "../modules/filters/gbfmorph.h"
+#include "../modules/filters/gbfplain.h"
+#include "../modules/filters/gbfredletterwords.h"
+#include "../modules/filters/gbfstrongs.h"
+#include "../modules/filters/greeklexattribs.h"
+#include "../modules/filters/osisenum.h"
+#include "../modules/filters/osisfootnotes.h"
+#include "../modules/filters/osisglosses.h"
+#include "../modules/filters/osisheadings.h"
+#include "../modules/filters/osislemma.h"
+#include "../modules/filters/osismorph.h"
+#include "../modules/filters/osismorphsegmentation.h"
+#include "../modules/filters/osisplain.h"
+#include "../modules/filters/osisredletterwords.h"
+#include "../modules/filters/osisreferencelinks.h"
+#include "../modules/filters/osisscripref.h"
+#include "../modules/filters/osisstrongs.h"
+#include "../modules/filters/osisvariants.h"
+#include "../modules/filters/osisxlit.h"
+#include "../modules/filters/papyriplain.h"
+#include "../modules/filters/rtfhtml.h"
+#include "../modules/filters/swoptfilter.h"
+#include "../modules/filters/teiplain.h"
+#include "../modules/filters/thmlfootnotes.h"
+#include "../modules/filters/thmlheadings.h"
+#include "../modules/filters/thmllemma.h"
+#include "../modules/filters/thmlmorph.h"
+#include "../modules/filters/thmlplain.h"
+#include "../modules/filters/thmlscripref.h"
+#include "../modules/filters/thmlstrongs.h"
+#include "../modules/filters/thmlvariants.h"
+#include "../modules/filters/utf8arabicpoints.h"
+#include "../modules/filters/utf8cantillation.h"
+#include "../modules/filters/utf8greekaccents.h"
+#include "../modules/filters/utf8hebrewpoints.h"
 #ifdef _ICU_
-#include <utf8transliterator.h>
+#include "../modules/filters/utf8transliterator.h"
 #endif
+#include "../modules/genbook/rawgenbook/rawgenbook.h"
+#include "../modules/lexdict/rawld/rawld.h"
+#include "../modules/lexdict/rawld4/rawld4.h"
+#include "../modules/lexdict/zld/zld.h"
+#include "../modules/texts/rawtext/rawtext.h"
+#include "../modules/texts/rawtext4/rawtext4.h"
+#include "../modules/texts/ztext/ztext.h"
+#include "../modules/texts/ztext4/ztext4.h"
+#include "../utilfuns/utilstr.h"
+#include "filemgr.h"
+#include "swfiltermgr.h"
 
 
 namespace swordxx {

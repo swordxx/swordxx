@@ -20,23 +20,19 @@
  *
  */
 
-#include <stringmgr.h>
-#include <localemgr.h>
-#include <utilstr.h>
+#include "stringmgr.h"
 
 #ifdef _ICU_
-
-#include <unicode/utypes.h>
-#include <unicode/ucnv.h>
-#include <unicode/ustring.h>
-#include <unicode/uchar.h>
-
-#include <unicode/unistr.h>
-#include <unicode/translit.h>
-
 #include <unicode/locid.h>
-
+#include <unicode/translit.h>
+#include <unicode/uchar.h>
+#include <unicode/ucnv.h>
+#include <unicode/unistr.h>
+#include <unicode/ustring.h>
+#include <unicode/utypes.h>
 #endif
+#include "../utilfuns/utilstr.h"
+#include "localemgr.h"
 
 
 namespace swordxx {
