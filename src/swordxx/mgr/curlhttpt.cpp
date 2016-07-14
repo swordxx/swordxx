@@ -27,7 +27,7 @@
 #include <curl/easy.h>
 #include <fcntl.h>
 #include <vector>
-#include "../frontend/swlog.h"
+#include "../swlog.h"
 #include "../utilfuns/utilstr.h"
 #include "filemgr.h"
 

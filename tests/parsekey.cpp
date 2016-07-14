@@ -21,9 +21,9 @@
  */
 
 #include <iostream>
-#include <swordxx/frontend/swlog.h>
 #include <swordxx/keys/versekey.h>
 #include <swordxx/mgr/localemgr.h>
+#include <swordxx/swlog.h>
 
 
 using namespace swordxx;

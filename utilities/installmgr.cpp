@@ -27,12 +27,12 @@
 #include <cstdio>
 #include <iostream>
 #include <map>
-#include <swordxx/frontend/swlog.h>
 #include <swordxx/mgr/filemgr.h>
 #include <swordxx/mgr/installmgr.h>
 #include <swordxx/mgr/remotetrans.h>
 #include <swordxx/mgr/swmgr.h>
 #include <swordxx/modules/swmodule.h>
+#include <swordxx/swlog.h>
 
 
 using namespace swordxx;

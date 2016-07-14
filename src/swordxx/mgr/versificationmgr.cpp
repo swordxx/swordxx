@@ -27,8 +27,6 @@
 #include <cstring>
 #include <vector>
 #include <map>
-#include "../frontend/swlog.h"
-#include "../keys/treekey.h"
 #include "../canon.h"             // KJV internal versification system
 #include "../canon_calvin.h"      // French v11n system
 #include "../canon_catholic.h"    // Catholic v11n system (10 chapter Esther)
@@ -48,6 +46,8 @@
 #include "../canon_synodal.h"     // Russian Synodal v11n system
 #include "../canon_synodalprot.h" // Russian Synodal v11n system
 #include "../canon_vulg.h"        // Vulgate v11n system
+#include "../keys/treekey.h"
+#include "../swlog.h"
 
 
 using std::vector;

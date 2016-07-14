@@ -25,7 +25,7 @@
 #define swlogH
 //---------------------------------------------------------------------------
 
-#include "../defs.h"
+#include "defs.h"
 
 
 namespace swordxx {

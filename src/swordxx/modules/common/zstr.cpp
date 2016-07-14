@@ -30,9 +30,9 @@
 #include <cstdlib>
 #include <fcntl.h>
 #include <string>
-#include "../../frontend/swlog.h"
 #include "../../mgr/filemgr.h"
 #include "../../mgr/stringmgr.h"
+#include "../../swlog.h"
 #include "../../sysdata.h"
 #include "../../utilfuns/utilstr.h"
 #include "swcomprs.h"

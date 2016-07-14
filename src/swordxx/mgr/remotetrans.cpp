@@ -26,7 +26,7 @@
 #include <dirent.h>
 #include <fcntl.h>
 #include <string>
-#include "../frontend/swlog.h"
+#include "../swlog.h"
 #include "../utilfuns/utilstr.h"
 #include "filemgr.h"
 

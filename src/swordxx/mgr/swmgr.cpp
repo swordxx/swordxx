@@ -33,7 +33,6 @@
 #endif
 #include <iterator>
 #include <sys/stat.h>
-#include "../frontend/swlog.h"
 #include "../modules/comments/hrefcom.h"
 #include "../modules/comments/rawcom.h"
 #include "../modules/comments/rawcom4.h"
@@ -94,6 +93,7 @@
 #include "../modules/texts/rawtext4.h"
 #include "../modules/texts/ztext.h"
 #include "../modules/texts/ztext4.h"
+#include "../swlog.h"
 #include "../utilfuns/utilstr.h"
 #include "filemgr.h"
 #include "swfiltermgr.h"

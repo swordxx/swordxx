@@ -26,7 +26,7 @@
 #include <curl/curl.h>
 #include <curl/easy.h>
 #include <fcntl.h>
-#include "../frontend/swlog.h"
+#include "../swlog.h"
 
 
 namespace swordxx {

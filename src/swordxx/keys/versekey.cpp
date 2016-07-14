@@ -28,10 +28,10 @@
 #include <cstdlib>
 #include <cctype>
 #include <fcntl.h>
-#include "../frontend/swlog.h"
 #include "../mgr/stringmgr.h"
 #include "../mgr/swlocale.h"
 #include "../mgr/versificationmgr.h"
+#include "../swlog.h"
 #include "../utilfuns/roman.h"
 #include "../utilfuns/utilstr.h"
 

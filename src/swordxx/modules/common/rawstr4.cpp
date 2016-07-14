@@ -31,9 +31,9 @@
 #include <fcntl.h>
 #include <string>
 #include <sys/types.h>
-#include "../../frontend/swlog.h"
 #include "../../mgr/filemgr.h"
 #include "../../mgr/stringmgr.h"
+#include "../../swlog.h"
 #include "../../utilfuns/utilstr.h"
 #include "../../sysdata.h"
 

@@ -29,8 +29,8 @@
 #include <iostream>
 #include <map>
 #include <regex>
-#include "../frontend/swlog.h"
 #include "../modules/swmodule.h"
+#include "../swlog.h"
 #include "../untgz.h"
 #include "../utilfuns/utilstr.h"
 #include "curlftpt.h"

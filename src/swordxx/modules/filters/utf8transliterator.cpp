@@ -31,7 +31,7 @@
 #endif
 #include <unicode/uchar.h>
 #include <unicode/ucnv.h>
-#include "../../frontend/swlog.h"
+#include "../../swlog.h"
 #include "../../utilfuns/utilstr.h"
 #include "../swmodule.h"
 
