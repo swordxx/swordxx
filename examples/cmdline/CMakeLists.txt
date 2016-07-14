@@ -4,10 +4,6 @@
 # that.
 #
 
-INCLUDE_DIRECTORIES("../../src/")
-
-SwordxxHandleConditionalBuild(EXAMPLES FALSE)
-
 SET(example_PROGRAMS
     listoptions
     lookup

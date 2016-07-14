@@ -1,0 +1,7 @@
+INCLUDE_DIRECTORIES("../src/")
+
+SwordxxHandleConditionalBuild(EXAMPLES FALSE)
+
+#ADD_SUBDIRECTORY(classes)
+ADD_SUBDIRECTORY(cmdline)
+ADD_SUBDIRECTORY(tasks)
