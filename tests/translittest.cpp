@@ -23,16 +23,14 @@
 #include <cstring>
 #include <iostream>
 #include <string>
+#include <swordxx/modules/filters/utf8transliterator.h>
+#include <unicode/ucnv.h>     /* C   Converter API    */
+#include <unicode/udata.h>    /* Data structures */
+#include <unicode/ures.h>     /* Data structures */
+#include <unicode/ustring.h>  /* some more string fcns*/
+#include <unicode/utypes.h>   /* Basic ICU data types */
+#include <unicode/translit.h>
 
-#include "unicode/udata.h"   /* Data structures */
-#include "unicode/ures.h"   /* Data structures */
-#include "unicode/utypes.h"   /* Basic ICU data types */
-#include "unicode/ucnv.h"     /* C   Converter API    */
-#include "unicode/ustring.h"  /* some more string fcns*/
-
-#include "unicode/translit.h"
-
-#include "utf8transliterator.h"
 
 using namespace std;
 

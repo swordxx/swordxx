@@ -21,7 +21,9 @@
  */
 
 #include <iostream>
-#include <swconfig.h>
+#include <swordxx/mgr/swconfig.h>
+
+
 using swordxx::SWConfig;
 
 int main(int argc, char **argv) {

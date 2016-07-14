@@ -20,11 +20,13 @@
  *
  */
 
-#include <stdio.h>
+#include <cstdio>
+#include <cstdlib>
 #include <iostream>
-#include <stdlib.h>
-#include <listkey.h>
-#include <versekey.h>
+#include <swordxx/keys/listkey.h>
+#include <swordxx/keys/versekey.h>
+
+
 using namespace swordxx;
 using namespace std;
 

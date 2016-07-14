@@ -20,11 +20,12 @@
  *
  */
 
+#include <cstdio>
+#include <cstdlib>
 #include <iostream>
-#include <stdio.h>
-#include <stdlib.h>
+#include <swordxx/mgr/versificationmgr.h>
 
-#include <versificationmgr.h>
+
 using namespace swordxx;
 
 using std::cout;

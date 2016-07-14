@@ -20,15 +20,16 @@
  *
  */
 
+#include <cstdio>
+#include <cstdlib>
 #include <iostream>
-#include <stdio.h>
-#include <stdlib.h>
+#include <swordxx/keys/listkey.h>
+#include <swordxx/keys/versekey.h>
+#include <swordxx/mgr/localemgr.h>
+#include <swordxx/mgr/swmgr.h>
+#include <swordxx/modules/swmodule.h>
 
-#include <versekey.h>
-#include <listkey.h>
-#include <localemgr.h>
-#include <swmgr.h>
-#include <swmodule.h>
+
 using namespace swordxx;
 
 using std::cout;

@@ -20,9 +20,10 @@
  *
  */
 
-#include <swmgr.h>
-#include <swmodule.h>
 #include <iostream>
+#include <swordxx/mgr/swmgr.h>
+#include <swordxx/modules/swmodule.h>
+
 
 using namespace swordxx;
 

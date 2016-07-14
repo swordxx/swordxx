@@ -20,8 +20,10 @@
  *
  */
 
-#include <swmgr.h>
 #include <iostream>
+#include <swordxx/mgr/swmgr.h>
+
+
 using namespace swordxx;
 
 int main (int argc, char* argv[]) {

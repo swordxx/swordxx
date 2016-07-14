@@ -21,9 +21,11 @@
  */
 
 #include <iostream>
-#include <versekey.h>
-#include <treekeyidx.h>
-#include <listkey.h>
+#include <swordxx/keys/listkey.h>
+#include <swordxx/keys/treekeyidx.h>
+#include <swordxx/keys/versekey.h>
+
+
 using namespace swordxx;
 
 int main(int argc, char **argv) {

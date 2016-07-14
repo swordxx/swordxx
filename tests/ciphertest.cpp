@@ -20,10 +20,11 @@
  *
  */
 
-#include <cipherfil.h>
-#include <filemgr.h>
-#include <string>
 #include <iostream>
+#include <swordxx/mgr/filemgr.h>
+#include <swordxx/modules/filters/cipherfil.h>
+#include <string>
+
 
 using namespace swordxx;
 

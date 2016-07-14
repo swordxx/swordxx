@@ -21,8 +21,9 @@
  */
 
 #include <iostream>
-#include <utilstr.h>
+#include <swordxx/utilfuns/utilstr.h>
 #include <string>
+
 
 using namespace swordxx;
 using namespace std;

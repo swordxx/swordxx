@@ -21,11 +21,11 @@
  */
 
 #include <iostream>
+#include <swordxx/keys/versekey.h>
+#include <swordxx/mgr/markupfiltmgr.h>
+#include <swordxx/mgr/swmgr.h>
+#include <swordxx/modules/swmodule.h>
 
-#include <swmgr.h>
-#include <markupfiltmgr.h>
-#include <swmodule.h>
-#include <versekey.h>
 
 using namespace std;
 using namespace swordxx;

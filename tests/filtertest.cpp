@@ -24,12 +24,13 @@
 #include <cstring>
 #include <iostream>
 #include <string>
-#include <filemgr.h>
-#include <papyriplain.h>
-#include <utf8utf16.h>
-#include <rtfhtml.h>
-#include <sysdata.h>
-//#include <swmgr.h>
+#include <swordxx/mgr/filemgr.h>
+#include <swordxx/modules/filters/papyriplain.h>
+#include <swordxx/modules/filters/rtfhtml.h>
+#include <swordxx/modules/filters/utf8utf16.h>
+#include <swordxx/sysdata.h>
+
+
 using namespace swordxx;
 using namespace std;
 

@@ -1,7 +1,8 @@
-#include <swmodule.h>
-#include <swmgr.h>
+#include <cstdio>
 #include <iostream>
-#include <stdio.h>
+#include <swordxx/mgr/swmgr.h>
+#include <swordxx/modules/swmodule.h>
+
 
 using namespace swordxx;
 using namespace std;

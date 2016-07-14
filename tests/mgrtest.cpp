@@ -20,12 +20,14 @@
  *
  */
 
-#include <swmgr.h>
-#include <swlog.h>
 #include <iostream>
-#include <versekey.h>
-#include <swmodule.h>
-#include <swconfig.h>
+#include <swordxx/frontend/swlog.h>
+#include <swordxx/keys/versekey.h>
+#include <swordxx/mgr/swconfig.h>
+#include <swordxx/mgr/swmgr.h>
+#include <swordxx/modules/swmodule.h>
+
+
 using namespace swordxx;
 
 int main(int argc, char **argv) {

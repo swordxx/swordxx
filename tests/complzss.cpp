@@ -20,23 +20,21 @@
  *
  */
 
-
-
-#include <ctype.h>
-#include <stdio.h>
+#include <cctype>
+#include <cerrno>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
 #include <fcntl.h>
-#include <errno.h>
-#include <stdlib.h>
-#include <string.h>
-
 #ifndef __GNUC__
 #include <io.h>
-#else
+#endif
+#include <swordxx/mgr/filemgr.h>
+#include <swordxx/modules/common/lzsscomprs.h>
+#ifdef __GNUC__
 #include <unistd.h>
 #endif
 
-#include <filemgr.h>
-#include <lzsscomprs.h>
 
 using namespace swordxx;
 

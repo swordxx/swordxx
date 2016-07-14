@@ -20,17 +20,18 @@
  *
  */
 
+#include <cstdio>
 #include <cstring>
-#include <stdio.h>
-#include <rawstr.h>
-#include <swmgr.h>
-#include <filemgr.h>
-
 #ifndef __GNUC__
 #include <io.h>
-#else
+#endif
+#include <swordxx/mgr/filemgr.h>
+#include <swordxx/mgr/swmgr.h>
+#include <swordxx/modules/common/rawstr.h>
+#ifdef __GNUC__
 #include <unistd.h>
 #endif
+
 
 using namespace swordxx;
 

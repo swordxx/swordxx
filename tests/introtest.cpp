@@ -20,10 +20,12 @@
  *
  */
 
-#include <swmgr.h>
 #include <iostream>
-#include <versekey.h>
-#include <rawtext.h>
+#include <swordxx/keys/versekey.h>
+#include <swordxx/mgr/swmgr.h>
+#include <swordxx/modules/texts/rawtext/rawtext.h>
+
+
 using namespace swordxx;
 
 int main(int argc, char **argv) {

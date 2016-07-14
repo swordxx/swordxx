@@ -21,10 +21,10 @@
  */
 
 #include <iostream>
+#include <swordxx/frontend/swlog.h>
+#include <swordxx/keys/versekey.h>
+#include <swordxx/mgr/localemgr.h>
 
-#include <versekey.h>
-#include <localemgr.h>
-#include <swlog.h>
 
 using namespace swordxx;
 

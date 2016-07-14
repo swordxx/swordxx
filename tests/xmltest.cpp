@@ -20,8 +20,9 @@
  *
  */
 
-#include <utilxml.h>
 #include <iostream>
+#include <swordxx/utilfuns/utilxml.h>
+
 
 using namespace swordxx;
 using namespace std;

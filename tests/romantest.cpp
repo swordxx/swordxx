@@ -20,11 +20,12 @@
  *
  */
 
+#include <cctype>
+#include <cstdio>
+#include <cstdlib>
 #include <iostream>
-#include <stdio.h>
-#include <stdlib.h>
-#include <ctype.h>
-#include <roman.h>
+#include <swordxx/utilfuns/roman.h>
+
 
 using swordxx::from_rom;
 

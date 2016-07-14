@@ -20,9 +20,11 @@
  *
  */
 
-#include <localemgr.h>
-#include <versekey.h>
 #include <iostream>
+#include <swordxx/keys/versekey.h>
+#include <swordxx/mgr/localemgr.h>
+
+
 using namespace swordxx;
 
 int main(int argc, char **argv) {

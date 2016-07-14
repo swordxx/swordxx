@@ -20,8 +20,9 @@
  *
  */
 
-#include <sysdata.h>
-#include <stdio.h>
+#include <cstdio>
+#include <swordxx/sysdata.h>
+
 
 int main(int argc, char **argv) {
     printf("0x%.4x 0x%.4x\n", 255, swordtoarch16(255));

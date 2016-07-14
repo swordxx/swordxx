@@ -20,14 +20,15 @@
  *
  */
 
-#include <stdio.h>
+#include <cstdio>
+#include <cstdlib>
 #include <iostream>
-#include <versekey.h>
-#include <rawtext.h>
-#include <rawcom.h>
-#include <stdlib.h>
-#include <swtext.h>
-#include <localemgr.h>
+#include <swordxx/keys/versekey.h>
+#include <swordxx/mgr/localemgr.h>
+#include <swordxx/modules/comments/rawcom/rawcom.h>
+#include <swordxx/modules/texts/rawtext/rawtext.h>
+#include <swordxx/modules/texts/swtext.h>
+
 
 using namespace swordxx;
 

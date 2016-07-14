@@ -20,23 +20,26 @@
  *
  */
 
+#include <cerrno>
+#include <fcntl.h>
 #ifndef __GNUC__
 #include <io.h>
-#else
+#endif
+#include <iostream>
+#include <swordxx/modules/filters/thmlhtmlhref.h>
+#include <swordxx/modules/filters/unicodertf.h>
+#include <swordxx/modules/filters/thmlosis.h>
+#include <swordxx/modules/filters/gbfosis.h>
+#include <swordxx/modules/filters/thmlosis.h>
+#include <swordxx/keys/versekey.h>
+#include <swordxx/mgr/swmgr.h>
+#include <swordxx/modules/swmodule.h>
+#include <swordxx/mgr/markupfiltmgr.h>
+#ifdef __GNUC__
 #include <unistd.h>
 #endif
-#include <fcntl.h>
-#include <errno.h>
-#include <iostream>
-#include <thmlhtmlhref.h>
-#include <unicodertf.h>
-#include <thmlosis.h>
-#include <gbfosis.h>
-#include <thmlosis.h>
-#include <versekey.h>
-#include <swmgr.h>
-#include <swmodule.h>
-#include <markupfiltmgr.h>
+
+
 using namespace swordxx;
 using namespace std;
 

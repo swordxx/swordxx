@@ -20,11 +20,12 @@
  *
  */
 
-#include <entriesblk.h>
+#include <cstdio>
+#include <cstdlib>
 #include <iostream>
+#include <swordxx/modules/common/entriesblk.h>
 #include <string>
-#include <stdio.h>
-#include <stdlib.h>
+
 
 using namespace std;
 using namespace swordxx;

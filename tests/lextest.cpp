@@ -21,7 +21,9 @@
  */
 
 #include <iostream>
-#include <rawld.h>
+#include <swordxx/modules/lexdict/rawld/rawld.h>
+
+
 using namespace swordxx;
 using std::cout;
 using std::endl;

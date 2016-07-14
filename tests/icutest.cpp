@@ -21,13 +21,12 @@
  */
 
 #include <iostream>
-#include <string.h>
+#include <cstring>
+#include <unicode/translit.h>
+#include <unicode/ucnv.h>     /* C   Converter API    */
+#include <unicode/ustring.h>  /* some more string fcns*/
+#include <unicode/utypes.h>   /* Basic ICU data types */
 
-#include "unicode/utypes.h"   /* Basic ICU data types */
-#include "unicode/ucnv.h"     /* C   Converter API    */
-#include "unicode/ustring.h"  /* some more string fcns*/
-
-#include "unicode/translit.h"
 
 using namespace std;
 
