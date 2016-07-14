@@ -146,7 +146,6 @@ protected:
 
 public:
 
-    static bool isICU;
     static const char *globalConfPath;
     static std::string getHomeDir();
 

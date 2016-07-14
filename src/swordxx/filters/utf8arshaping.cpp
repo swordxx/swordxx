@@ -21,7 +21,7 @@
  *
  */
 
-#ifdef _ICU_
+#if SWORDXX_HAS_ICU
 
 #include "utf8arshaping.h"
 

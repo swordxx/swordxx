@@ -20,7 +20,7 @@
  *
  */
 
-#include <version.h>
+#include SWORDXX_VERSION_H_FILE
 
 #include <array>
 #include <cstdlib>

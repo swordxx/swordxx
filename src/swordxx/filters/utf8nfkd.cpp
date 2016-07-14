@@ -21,7 +21,7 @@
  *
  */
 
-#ifdef _ICU_
+#if SWORDXX_HAS_ICU
 
 #include "utf8nfkd.h"
 
@@ -66,6 +66,6 @@ char UTF8NFKD::processText(std::string &text, const SWKey *key, const SWModule *
     return 0;
 }
 
-
 } /* namespace swordxx */
-#endif
+
+#endif /* SWORDXX_HAS_ICU */

@@ -25,7 +25,7 @@
 
 #include <cstdio>
 #include <cstdlib>
-#ifdef _ICU_
+#if SWORDXX_HAS_ICU
 #include "utf8nfkd.h"
 swordxx::UTF8NFKD decompose;
 #endif
@@ -59,7 +59,7 @@ char UTF8GreekAccents::processText(std::string &text, const SWKey *key, const SW
             //unsigned char *to, *from;
         //to = (unsigned char*)text;
         //for (from = (unsigned char*)text; *from; from++) {
-#ifdef _ICU_
+#if SWORDXX_HAS_ICU
         decompose.processText(text, (SWKey *)2);  // note the hack of 2 to mimic a real key. TODO: remove all hacks
 #endif
 

@@ -82,7 +82,7 @@
 #include "modules/common/swcipher.h"
 #include "modules/common/xzcomprs.h"
 #include "modules/common/zipcomprs.h"
-#ifdef _ICU_
+#if SWORDXX_HAS_ICU
 #include "filters/utf8transliterator.h"
 #endif
 #include "modules/genbook/rawgenbook.h"
@@ -109,14 +109,6 @@ std::string getEnvironmentVariable(char const * const key) {
 };
 
 } // anonymous namespace
-
-
-#ifdef _ICU_
-bool SWMgr::isICU = true;
-#else
-bool SWMgr::isICU = false;
-#endif
-
 
 #ifdef GLOBCONFPATH
 const char *SWMgr::globalConfPath = GLOBCONFPATH;
@@ -260,7 +252,7 @@ void SWMgr::init() {
     cleanupFilters.push_back(tmpFilter);
 
 // UTF8Transliterator needs to be handled differently because it should always available as an option, for all modules
-#ifdef _ICU_
+#if SWORDXX_HAS_ICU
     transliterator = new UTF8Transliterator();
     optionFilters.insert(OptionFilterMap::value_type("UTF8Transliterator", transliterator));
     options.push_back(transliterator->getOptionName());
@@ -1112,7 +1104,7 @@ void SWMgr::AddGlobalOptions(SWModule *module, ConfigEntMap &section, ConfigEntM
     }
     if (filterMgr)
         filterMgr->AddGlobalOptions(module, section, start, end);
-#ifdef _ICU_
+#if SWORDXX_HAS_ICU
        module->addOptionFilter(transliterator);
 #endif
 }

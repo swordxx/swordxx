@@ -21,14 +21,12 @@
  *
  */
 
-#ifdef _ICU_
-
 #include "utf8transliterator.h"
 
+#if SWORDXX_HAS_ICU
+
 #include <cstdlib>
-#ifndef _ICUSWORD_
 #include <unicode/resbund.h>
-#endif
 #include <unicode/uchar.h>
 #include <unicode/ucnv.h>
 #include "../swlog.h"
@@ -94,8 +92,6 @@ const char UTF8Transliterator::optTip[] = "Transliterates between scripts";
 #ifdef ICU_CUSTOM_RESOURCE_BUILDING
 SWTransMap UTF8Transliterator::transMap;
 
-#ifndef _ICUSWORD_
-
 const char UTF8Transliterator::SW_RB_RULE_BASED_IDS[] = "RuleBasedTransliteratorIDs";
 const char UTF8Transliterator::SW_RB_RULE[] = "Rule";
 #ifdef SWICU_DATA
@@ -130,7 +126,6 @@ SWCharString::~SWCharString() {
     }
 }
 
-#endif // _ICUSWORD_
 #endif // ICU_CUSTOM_RESOURCE_BUILDING
 
 UTF8Transliterator::UTF8Transliterator() {
@@ -140,10 +135,8 @@ UTF8Transliterator::UTF8Transliterator() {
         options.push_back(optionstring[i]);
     }
 #ifdef ICU_CUSTOM_RESOURCE_BUILDING
-#ifndef _ICUSWORD_
     utf8status = U_ZERO_ERROR;
     Load(utf8status);
-#endif
 #endif
 }
 
@@ -154,7 +147,6 @@ UTF8Transliterator::~UTF8Transliterator() {
 #ifdef ICU_CUSTOM_RESOURCE_BUILDING
 void UTF8Transliterator::Load(UErrorCode &status)
 {
-#ifndef _ICUSWORD_
     static const char translit_swordindex[] = "translit_swordindex";
 
     UResourceBundle *bundle = 0, *transIDs = 0, *colBund = 0;
@@ -218,14 +210,11 @@ void UTF8Transliterator::Load(UErrorCode &status)
 
     ures_close(transIDs);
     ures_close(bundle);
-
-#endif // _ICUSWORD_
 }
 
 void  UTF8Transliterator::registerTrans(const UnicodeString& ID, const UnicodeString& resource,
         UTransDirection dir, UErrorCode &status )
 {
-#ifndef _ICUSWORD_
         SWLog::getSystemLog()->logDebug("registering ID locally %s", ID.getBuffer());
         SWTransData swstuff;
         swstuff.resource = resource;
@@ -234,12 +223,10 @@ void  UTF8Transliterator::registerTrans(const UnicodeString& ID, const UnicodeSt
         swpair.first = ID;
         swpair.second = swstuff;
         transMap.insert(swpair);
-#endif
 }
 
 bool UTF8Transliterator::checkTrans(const UnicodeString& ID, UErrorCode &status )
 {
-#ifndef _ICUSWORD_
         Transliterator *trans = Transliterator::createInstance(ID, UTRANS_FORWARD, status);
         if (!U_FAILURE(status))
         {
@@ -300,30 +287,13 @@ bool UTF8Transliterator::checkTrans(const UnicodeString& ID, UErrorCode &status 
     {
         return false;
     }
-#else
-return true;
-#endif // _ICUSWORD_
 }
 #endif // ICU_CUSTOM_RESOURCE_BUILDING
 
 bool UTF8Transliterator::addTrans(const char* newTrans, std::string* transList) {
-#ifdef ICU_CUSTOM_RESOURCE_BUILDING
-#ifdef _ICUSWORD_
-    UErrorCode status;
-    if (checkTrans(UnicodeString(newTrans), status)) {
-#endif
-#endif // ICU_CUSTOM_RESOURCE_BUILDING
         *transList += newTrans;
         *transList += ";";
         return true;
-#ifdef ICU_CUSTOM_RESOURCE_BUILDING
-#ifdef _ICUSWORD_
-    }
-    else {
-        return false;
-    }
-#endif
-#endif // ICU_CUSTOM_RESOURCE_BUILDING
 }
 
 

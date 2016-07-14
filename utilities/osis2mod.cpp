@@ -24,6 +24,8 @@
     #pragma warning( disable: 4251 )
 #endif
 
+#include <swordxx/config.h>
+
 #include <cctype>
 #include <cerrno>
 #include <cstdio>
@@ -34,12 +36,12 @@
 #include <stack>
 #include <string>
 #include <swordxx/filters/cipherfil.h>
-#ifdef _ICU_
+#if SWORDXX_HAS_ICU
 #include <swordxx/filters/latin1utf8.h>
 #include <swordxx/filters/scsuutf8.h>
 #endif
 #include <swordxx/filters/utf16utf8.h>
-#ifdef _ICU_
+#if SWORDXX_HAS_ICU
 #include <swordxx/filters/utf8nfc.h>
 #include <swordxx/filters/utf8scsu.h>
 #endif
@@ -83,7 +85,7 @@ const int EXIT_NO_CREATE   =   3; // Could not create the module
 const int EXIT_NO_READ     =   4; // Could not open the input file for reading.
 const int EXIT_BAD_NESTING =   5; // BSP or BCV nesting is bad
 
-#ifdef _ICU_
+#if SWORDXX_HAS_ICU
 UTF8NFC    normalizer;
 Latin1UTF8 converter;
 #endif
@@ -198,7 +200,7 @@ void prepareSWText(const char *osisID, std::string &text)
         cout << "WARNING(UTF8): " << osisID << ": Should be converted to UTF-8 (" << text << ")" << endl;
     }
 
-#ifdef _ICU_
+#if SWORDXX_HAS_ICU
     if (normalize) {
         // Don't need to normalize text that is ASCII
         // But assume other non-UTF-8 text is Latin1 (cp1252) and convert it to UTF-8
@@ -226,7 +228,7 @@ void prepareSWText(const char *osisID, std::string &text)
             }
         }
     }
-#endif
+#endif /* SWORDXX_HAS_ICU */
 }
 
 // This routine converts an osisID or osisRef into one that Sword++ can parse into a verse list
@@ -1350,7 +1352,7 @@ void usage(const char *app, const char *error = 0, const bool verboseHelp = fals
     fprintf(stderr, "  -c <cipher_key>\t encipher module using supplied key\n");
     fprintf(stderr, "\t\t\t\t (default no enciphering)\n");
 
-#ifdef _ICU_
+#if SWORDXX_HAS_ICU
     fprintf(stderr, "  -e <1|2|s>\t\t convert Unicode encoding (default: 1)\n");
     fprintf(stderr, "\t\t\t\t 1 - UTF-8 ; 2 - UTF-16 ; s - SCSU\n");
     fprintf(stderr, "  -N\t\t\t do not normalize to NFC\n");
@@ -1359,7 +1361,7 @@ void usage(const char *app, const char *error = 0, const bool verboseHelp = fals
         fprintf(stderr, "\t\t\t\t  and then normalize to NFC)\n");
         fprintf(stderr, "\t\t\t\t Note: UTF-8 texts should be normalized to NFC.\n");
     }
-#endif
+#endif /* SWORDXX_HAS_ICU */
 
     fprintf(stderr, "  -s <2|4>\t\t bytes used to store entry size (default is 2).\n");
     if (verboseHelp) {
@@ -1821,7 +1823,7 @@ void processOSIS(istream& infile) {
     writeEntry(text, true);
     writeLinks();
 
-#ifdef _ICU_
+#if SWORDXX_HAS_ICU
     if (converted)  fprintf(stderr, "osis2mod converted %d verses to UTF-8\n", converted);
     if (normalized) fprintf(stderr, "osis2mod normalized %d verses to NFC\n", normalized);
 #endif
@@ -1898,7 +1900,7 @@ int main(int argc, char **argv) {
                     outputEncoder = new UTF8UTF16();
                     outputDecoder = new UTF16UTF8();
                     break;
-#ifdef _ICU_
+#if SWORDXX_HAS_ICU
                 case 's':
                     outputEncoder = new UTF8SCSU();
                     outputDecoder = new SCSUUTF8();
@@ -1966,7 +1968,7 @@ int main(int argc, char **argv) {
         compressor->setLevel(compLevel);
     }
 
-#ifndef _ICU_
+#if SWORDXX_HAS_ICU
     if (normalize) {
         normalize = false;
         cout << "WARNING(UTF8): " << program << " is not compiled with support for ICU. Assuming -N." << endl;

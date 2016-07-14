@@ -11,7 +11,7 @@
 # if you edit this list in the future.
 #
 
-INCLUDE_DIRECTORIES("../src/")
+INCLUDE_DIRECTORIES(${SWORD_BUILD_INCLUDES})
 
 SwordxxHandleConditionalBuild(UTILS TRUE)
 

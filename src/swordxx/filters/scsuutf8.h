@@ -25,7 +25,7 @@
 
 #include "../swfilter.h"
 
-#ifdef _ICU_
+#if SWORDXX_HAS_ICU
 #include <unicode/utypes.h>
 #include <unicode/ucnv.h>
 #include <unicode/uchar.h>
@@ -38,7 +38,7 @@ namespace swordxx {
  */
 class SWDLLEXPORT SCSUUTF8 : public SWFilter {
 private:
-#ifdef _ICU_
+#if SWORDXX_HAS_ICU
     UConverter* scsuConv;
     UConverter* utf8Conv;
     UErrorCode err = U_ZERO_ERROR;

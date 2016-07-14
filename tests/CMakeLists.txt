@@ -12,7 +12,7 @@
 # more about how these tests work.
 #
 
-INCLUDE_DIRECTORIES("../src/")
+INCLUDE_DIRECTORIES(${SWORD_BUILD_INCLUDES})
 
 SwordxxHandleConditionalBuild(TESTS FALSE)
 

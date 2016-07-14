@@ -21,7 +21,7 @@
  *
  */
 
-#ifdef _ICU_
+#if SWORDXX_HAS_ICU
 
 #include "utf8nfc.h"
 
@@ -61,4 +61,5 @@ char UTF8NFC::processText(std::string &text, const SWKey *key, const SWModule *m
 }
 
 } /* namespace swordxx */
-#endif
+
+#endif /* SWORDXX_HAS_ICU */

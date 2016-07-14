@@ -20,15 +20,16 @@
  *
  */
 
-#include <stdarg.h>
+#include "swlog.h"
+
+#include <cstdarg>
 #include <cstdio>
 #include <iostream>
-#if defined(_ICU_) && !defined(_ICUSWORD_)
+#if SWORDXX_HAS_ICU
 #define _USTDIO_
 #include <unicode/ustdio.h>
 #include <unicode/ustream.h>
 #endif
-#include "swlog.h"
 
 
 namespace swordxx {

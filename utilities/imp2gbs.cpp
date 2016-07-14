@@ -29,6 +29,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <iostream>
+#include <swordxx/config.h>
 #include <swordxx/filemgr.h>
 #include <swordxx/filters/utf8greekaccents.h>
 #include <swordxx/keys/treekeyidx.h>
@@ -36,7 +37,7 @@
 #include <swordxx/modules/genbook/rawgenbook.h>
 #include <swordxx/stringmgr.h>
 #include <swordxx/utilstr.h>
-#ifdef _ICU_
+#if SWORDXX_HAS_ICU
 #include <unicode/utypes.h>
 #include <unicode/ucnv.h>
 #include <unicode/ustring.h>
@@ -140,7 +141,7 @@ void writeEntry(SWModule *book, std::string keyBuffer, std::string entBuffer) {
 
 // Added for Hesychius, but this stuff should be pushed back into new StringMgr
 // functionality
-#ifdef _ICU_
+#if SWORDXX_HAS_ICU
 //    if (lexLevels) {
     if (lexLevels && !hasPrefix(keyBuffer, "/Intro")) {
         unsigned size = (keyBuffer.size()+(lexLevels*2));
@@ -196,7 +197,7 @@ void writeEntry(SWModule *book, std::string keyBuffer, std::string entBuffer) {
 
         delete [] ubuffer;
     }
-#endif
+#endif /* SWORDXX_HAS_ICU */
 
     std::cout << keyBuffer << std::endl;
 

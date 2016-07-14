@@ -30,7 +30,7 @@
 #include "filters/utf16utf8.h"
 #include "filters/utf8latin1.h"
 #include "filters/utf8html.h"
-#ifdef _ICU_
+#if SWORDXX_HAS_ICU
 #include "filters/utf8scsu.h"
 #endif
 #include "filters/utf8utf16.h"
@@ -62,7 +62,7 @@ EncodingFilterMgr::EncodingFilterMgr(char enc)
         case ENC_UTF16:  targetenc = new UTF8UTF16();  break;
         case ENC_RTF:    targetenc = new UnicodeRTF(); break;
         case ENC_HTML:   targetenc = new UTF8HTML();   break;
-#ifdef _ICU_
+#if SWORDXX_HAS_ICU
         case ENC_SCSU:   targetenc = new UTF8SCSU();   break;
 #endif
         default: // i.e. case ENC_UTF8
@@ -122,7 +122,7 @@ char EncodingFilterMgr::Encoding(char enc) {
             case ENC_UTF16:  targetenc = new UTF8UTF16();  break;
             case ENC_RTF:    targetenc = new UnicodeRTF(); break;
             case ENC_HTML:   targetenc = new UTF8HTML();   break;
-#ifdef _ICU_
+#if SWORDXX_HAS_ICU
             case ENC_SCSU:   targetenc = new UTF8SCSU();   break;
 #endif
             default: // i.e. case ENC_UTF8

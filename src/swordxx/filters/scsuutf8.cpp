@@ -38,7 +38,7 @@ namespace swordxx {
 
 
 SCSUUTF8::SCSUUTF8() {
-#ifdef _ICU_
+#if SWORDXX_HAS_ICU
     // initialize SCSU converter
     scsuConv = ucnv_open("SCSU", &err);
     // initialize UTF-8 converter
@@ -50,13 +50,13 @@ SCSUUTF8::SCSUUTF8() {
 }
 
 SCSUUTF8::~SCSUUTF8() {
-#ifdef _ICU_
+#if SWORDXX_HAS_ICU
     ucnv_close(scsuConv);
     ucnv_close(utf8Conv);
 #endif
 }
 
-#ifndef _ICU_
+#if !SWORDXX_HAS_ICU
 unsigned short SCSUUTF8::start[] = {0x0000,0x0080,0x0100,0x0300,0x2000,0x2080,0x2100,0x3000};
 unsigned short SCSUUTF8::slide[] = {0x0080,0x00C0,0x0400,0x0600,0x0900,0x3040,0x30A0,0xFF00};
 unsigned short SCSUUTF8::win[] = {
@@ -134,7 +134,7 @@ char SCSUUTF8::processText(std::string &text, const SWKey *key, const SWModule *
     if ((unsigned long)key < 2)    // hack, we're en(1)/de(0)ciphering
         return -1;
 
-#ifdef _ICU_
+#if SWORDXX_HAS_ICU
     // Try decoding with ICU if possible
     err = U_ZERO_ERROR;
     UnicodeString utf16Text(text.c_str(), text.length(), scsuConv, err);

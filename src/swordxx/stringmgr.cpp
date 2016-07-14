@@ -22,7 +22,7 @@
 
 #include "stringmgr.h"
 
-#ifdef _ICU_
+#if SWORDXX_HAS_ICU
 #include <unicode/locid.h>
 #include <unicode/translit.h>
 #include <unicode/uchar.h>
@@ -117,7 +117,7 @@ namespace {
 }
 
 
-#ifdef _ICU_
+#if SWORDXX_HAS_ICU
 
 //here comes our ICUStringMgr reimplementation
 class ICUStringMgr : public StringMgr {
@@ -128,7 +128,7 @@ protected:
     virtual bool supportsUnicode() const { return true; };
 };
 
-#endif
+#endif /* SWORDXX_HAS_ICU */
 
 
 /** Default constructor
@@ -166,7 +166,7 @@ void StringMgr::setSystemStringMgr(StringMgr *newStringMgr) {
 */
 StringMgr* StringMgr::getSystemStringMgr() {
     if (!systemStringMgr) {
-#ifdef _ICU_
+#if SWORDXX_HAS_ICU
         systemStringMgr = new ICUStringMgr();
 #else
         systemStringMgr = new StringMgr();
@@ -237,7 +237,7 @@ bool StringMgr::supportsUnicode() const {
 }
 
 
-#ifdef _ICU_
+#if SWORDXX_HAS_ICU
 
 char *ICUStringMgr::upperUTF8(char *buf, unsigned int maxlen) const {
     char *ret = buf;
