@@ -435,6 +435,7 @@ int FileMgr::removeFile(const char *fName) {
     return ::remove(fName);
 }
 
+/// \bug error is same as empty line
 std::string FileMgr::getLine(FileDesc *fDesc) {
     int len;
     bool more = true;
