@@ -25,8 +25,8 @@
 #include <iostream>
 #include <swordxx/keys/versekey.h>
 #include <swordxx/mgr/localemgr.h>
-#include <swordxx/modules/comments/rawcom/rawcom.h>
-#include <swordxx/modules/texts/rawtext/rawtext.h>
+#include <swordxx/modules/comments/rawcom.h>
+#include <swordxx/modules/texts/rawtext.h>
 #include <swordxx/modules/texts/swtext.h>
 
 

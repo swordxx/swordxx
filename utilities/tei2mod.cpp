@@ -65,9 +65,9 @@
 #include <swordxx/modules/common/lzsscomprs.h>
 #include <swordxx/modules/common/xzcomprs.h>
 #include <swordxx/modules/common/zipcomprs.h>
-#include <swordxx/modules/lexdict/rawld/rawld.h>
-#include <swordxx/modules/lexdict/rawld4/rawld4.h>
-#include <swordxx/modules/lexdict/zld/zld.h>
+#include <swordxx/modules/lexdict/rawld.h>
+#include <swordxx/modules/lexdict/rawld4.h>
+#include <swordxx/modules/lexdict/zld.h>
 #include <swordxx/utilfuns/utilxml.h>
 #include <vector>
 

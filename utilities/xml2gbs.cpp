@@ -34,7 +34,7 @@
 #include <string>
 #include <swordxx/keys/treekeyidx.h>
 #include <swordxx/modules/common/entriesblk.h>
-#include <swordxx/modules/genbook/rawgenbook/rawgenbook.h>
+#include <swordxx/modules/genbook/rawgenbook.h>
 
 
 using swordxx::TreeKeyIdx;

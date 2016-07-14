@@ -37,7 +37,7 @@
 #include <string>
 #include <swordxx/modules/common/entriesblk.h>
 #include <swordxx/keys/treekeyidx.h>
-#include <swordxx/modules/genbook/rawgenbook/rawgenbook.h>
+#include <swordxx/modules/genbook/rawgenbook.h>
 #ifdef __GNUC__
 #include <unistd.h>
 #endif

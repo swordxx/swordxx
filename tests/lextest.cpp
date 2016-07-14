@@ -21,7 +21,7 @@
  */
 
 #include <iostream>
-#include <swordxx/modules/lexdict/rawld/rawld.h>
+#include <swordxx/modules/lexdict/rawld.h>
 
 
 using namespace swordxx;

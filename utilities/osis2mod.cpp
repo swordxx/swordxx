@@ -36,10 +36,10 @@
 #include <swordxx/keys/listkey.h>
 #include <swordxx/keys/versekey.h>
 #include <swordxx/mgr/swmgr.h>
-#include <swordxx/modules/texts/rawtext/rawtext.h>
-#include <swordxx/modules/texts/rawtext4/rawtext4.h>
-#include <swordxx/modules/texts/ztext/ztext.h>
-#include <swordxx/modules/texts/ztext4/ztext4.h>
+#include <swordxx/modules/texts/rawtext.h>
+#include <swordxx/modules/texts/rawtext4.h>
+#include <swordxx/modules/texts/ztext.h>
+#include <swordxx/modules/texts/ztext4.h>
 #include <swordxx/modules/common/lzsscomprs.h>
 #include <swordxx/modules/common/zipcomprs.h>
 #include <swordxx/modules/common/bz2comprs.h>

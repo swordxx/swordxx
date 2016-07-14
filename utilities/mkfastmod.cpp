@@ -29,7 +29,7 @@
 #include <swordxx/keys/versekey.h>
 #include <swordxx/mgr/markupfiltmgr.h>
 #include <swordxx/mgr/swmgr.h>
-#include <swordxx/modules/texts/rawtext/rawtext.h>
+#include <swordxx/modules/texts/rawtext.h>
 
 
 using swordxx::SWMgr;

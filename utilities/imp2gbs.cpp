@@ -34,7 +34,7 @@
 #include <swordxx/mgr/stringmgr.h>
 #include <swordxx/modules/common/entriesblk.h>
 #include <swordxx/modules/filters/utf8greekaccents.h>
-#include <swordxx/modules/genbook/rawgenbook/rawgenbook.h>
+#include <swordxx/modules/genbook/rawgenbook.h>
 #include <swordxx/utilfuns/utilstr.h>
 #ifdef _ICU_
 #include <unicode/utypes.h>

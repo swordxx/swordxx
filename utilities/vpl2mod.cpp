@@ -37,7 +37,7 @@
 #include <swordxx/keys/versekey.h>
 #include <swordxx/mgr/filemgr.h>
 #include <swordxx/mgr/swmgr.h>
-#include <swordxx/modules/texts/rawtext/rawtext.h>
+#include <swordxx/modules/texts/rawtext.h>
 #include <sys/stat.h>
 #ifdef __GNUC__
 #include <unistd.h>
