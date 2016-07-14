@@ -189,9 +189,9 @@ ENDIF(LIBSWORD_LIBRARY_TYPE MATCHES ".*Static.*" OR NOT LIBSWORD_LIBRARY_TYPE)
 # Some random user settings
 #
 ADD_DEFINITIONS(-DGLOBCONFPATH="${SWORDXX_SYSCONF_INSTALL_PREFIX}/sword.conf")
-SET(CONFFILE "[Install]
-DataPath=${SWORDXX_SHARE_INSTALL_PREFIX}/sword")
-FILE(WRITE "${CMAKE_CURRENT_BINARY_DIR}/sword.conf" "${CONFFILE}")
+
+CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/swordxx.conf.in"
+               "${CMAKE_CURRENT_BINARY_DIR}/swordxx.conf" @ONLY)
 
 
 ###############################################################################################
@@ -293,7 +293,7 @@ INSTALL(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/src/"
         FILES_MATCHING PATTERN "*.h")
 
 # Install sysconf file
-INSTALL(FILES "${CMAKE_CURRENT_BINARY_DIR}/sword.conf"
+INSTALL(FILES "${CMAKE_CURRENT_BINARY_DIR}/swordxx.conf"
     DESTINATION "${SWORDXX_SYSCONF_INSTALL_PREFIX}")
 # Create the mods.d
 INSTALL(DIRECTORY DESTINATION "${SWORDXX_SHARE_INSTALL_PREFIX}/sword/mods.d")
