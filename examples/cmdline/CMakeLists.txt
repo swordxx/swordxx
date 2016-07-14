@@ -6,6 +6,8 @@
 
 INCLUDE_DIRECTORIES("../../src/")
 
+SwordxxHandleConditionalBuild(EXAMPLES FALSE)
+
 SET(example_PROGRAMS
     listoptions
     lookup
@@ -18,7 +20,7 @@ SET(example_PROGRAMS
 )
 
 FOREACH(DEMO ${example_PROGRAMS})
-    ADD_EXECUTABLE("${DEMO}"    "${DEMO}.cpp")
+    ADD_EXECUTABLE("${DEMO}" "${SWORDXX_EXAMPLES_EXCLUDE}" "${DEMO}.cpp")
     TARGET_LINK_LIBRARIES("${DEMO}" swordxx)
 ENDFOREACH(DEMO ${example_PROGRAMS})
 
@@ -30,7 +32,7 @@ ENDFOREACH(DEMO ${example_PROGRAMS})
 FIND_PACKAGE(Threads)
 
 IF(CMAKE_USE_PTHREADS_INIT OR CMAKE_HP_PTHREADS_INIT)
-    ADD_EXECUTABLE(threaded_search    threaded_search.cpp)
+    ADD_EXECUTABLE(threaded_search "${SWORDXX_EXAMPLES_EXCLUDE}" threaded_search.cpp)
     TARGET_LINK_LIBRARIES(threaded_search
         swordxx
         ${CMAKE_THREAD_LIBS_INIT}

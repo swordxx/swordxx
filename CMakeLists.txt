@@ -314,28 +314,21 @@ INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/swordxx.pc
 
 
 ##############################################################################################
-# Utilities are hawt
+# Subdirectories:
 #
 
-IF(NOT (DEFINED SWORDXX_BUILD_UTILS))
-  SET(SWORDXX_BUILD_UTILS TRUE)
-ENDIF()
-IF(NOT SWORDXX_BUILD_UTILS)
-    ADD_SUBDIRECTORY("${CMAKE_CURRENT_SOURCE_DIR}/utilities")
-ENDIF()
+MACRO(SwordxxHandleConditionalBuild cond defaultValue)
+    IF(NOT (DEFINED "SWORDXX_BUILD_${cond}"))
+        SET("SWORDXX_BUILD_${cond}" "${defaultValue}")
+    ENDIF()
+    IF(SWORDXX_BUILD_${cond})
+        SET("SWORDXX_${cond}_EXCLUDE" "")
+    ELSE()
+        SET("SWORDXX_${cond}_EXCLUDE" EXCLUDE_FROM_ALL)
+    ENDIF()
+ENDMACRO()
 
-##############################################################################################
-# Demos are also hawt
-#
-
-IF(SWORDXX_BUILD_EXAMPLES)
-    ADD_SUBDIRECTORY("${CMAKE_CURRENT_SOURCE_DIR}/examples/cmdline")
-    ADD_SUBDIRECTORY("${CMAKE_CURRENT_SOURCE_DIR}/examples/tasks")
-ENDIF()
-
-##############################################################################################
-# Tests, however, are not
-
-IF(SWORDXX_BUILD_TESTS)
-    ADD_SUBDIRECTORY("${CMAKE_CURRENT_SOURCE_DIR}/tests")
-ENDIF()
+ADD_SUBDIRECTORY("${CMAKE_CURRENT_SOURCE_DIR}/examples/cmdline")
+ADD_SUBDIRECTORY("${CMAKE_CURRENT_SOURCE_DIR}/examples/tasks")
+ADD_SUBDIRECTORY("${CMAKE_CURRENT_SOURCE_DIR}/tests")
+ADD_SUBDIRECTORY("${CMAKE_CURRENT_SOURCE_DIR}/utilities")

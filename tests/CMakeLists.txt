@@ -14,6 +14,8 @@
 
 INCLUDE_DIRECTORIES("../src/")
 
+SwordxxHandleConditionalBuild(TESTS FALSE)
+
 SET(test_PROGRAMS
     bibliotest
     casttest
@@ -62,7 +64,7 @@ SET(test_PROGRAMS
 )
 
 FOREACH(TEST ${test_PROGRAMS})
-    ADD_EXECUTABLE(${TEST} EXCLUDE_FROM_ALL    ${TEST}.cpp)
+    ADD_EXECUTABLE(${TEST} "${SWORDXX_TESTS_EXCLUDE}" ${TEST}.cpp)
     IF(BUILDING_SHARED)
         TARGET_LINK_LIBRARIES(${TEST} swordxx)
     ELSE(BUILDING_SHARED)

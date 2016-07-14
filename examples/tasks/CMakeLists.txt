@@ -6,12 +6,14 @@
 
 INCLUDE_DIRECTORIES("../../src/")
 
+SwordxxHandleConditionalBuild(EXAMPLES FALSE)
+
 SET(example_PROGRAMS
     parallelbibles
 )
 
 FOREACH(DEMO ${example_PROGRAMS})
-    ADD_EXECUTABLE("${DEMO}"    "${DEMO}.cpp")
+    ADD_EXECUTABLE("${DEMO}" "${SWORDXX_EXAMPLES_EXCLUDE}" "${DEMO}.cpp")
     TARGET_LINK_LIBRARIES("${DEMO}" swordxx)
 ENDFOREACH(DEMO ${example_PROGRAMS})
 

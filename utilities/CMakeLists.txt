@@ -13,6 +13,8 @@
 
 INCLUDE_DIRECTORIES("../src/")
 
+SwordxxHandleConditionalBuild(UTILS TRUE)
+
 SET(install_UTILITIES
     addld
     emptyvss
@@ -58,7 +60,7 @@ SET(noinstall_UTILITIES
 #
 
 FOREACH(UTIL ${install_UTILITIES} ${noinstall_UTILITIES})
-    ADD_EXECUTABLE("${UTIL}"    "${UTIL}.cpp")
+    ADD_EXECUTABLE("${UTIL}" "${SWORDXX_UTILS_EXCLUDE}" "${UTIL}.cpp")
     IF(BUILDING_SHARED)
         TARGET_LINK_LIBRARIES("${UTIL}" swordxx)
     ELSE(BUILDING_SHARED)
@@ -71,7 +73,7 @@ ENDFOREACH(UTIL ${install_UTILITIES})
 # and, therefore, needs its own treatment.
 #
 
-ADD_EXECUTABLE(lexdump    lexdump.c)
+ADD_EXECUTABLE("lexdump" "${SWORDXX_UTILS_EXCLUDE}" "lexdump.c")
 IF(BUILDING_SHARED)
     TARGET_LINK_LIBRARIES(lexdump swordxx)
 ELSE(BUILDING_SHARED)
@@ -87,9 +89,12 @@ ENDIF(BUILDING_SHARED)
 # replicate the above list in another place, we'll just handle our
 # own install, since this whole directory is optional, anyway.
 #
-FOREACH(UTIL ${install_UTILITIES})
-    INSTALL(TARGETS ${UTIL}
-        RUNTIME DESTINATION "${SWORDXX_BIN_INSTALL_PREFIX}"
-        COMPONENT utilities
-    )
-ENDFOREACH(UTIL ${install_UTILITIES})
+
+IF(SWORDXX_BUILD_UTILS)
+    FOREACH(UTIL ${install_UTILITIES})
+        INSTALL(TARGETS ${UTIL}
+            RUNTIME DESTINATION "${SWORDXX_BIN_INSTALL_PREFIX}"
+            COMPONENT utilities
+        )
+    ENDFOREACH(UTIL ${install_UTILITIES})
+ENDIF()
