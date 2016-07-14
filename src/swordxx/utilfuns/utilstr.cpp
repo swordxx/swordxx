@@ -54,11 +54,19 @@ void removeTrailingDirectorySlashes(std::string & buf) {
     }
 }
 
-void trimString(std::string & str) noexcept {
-    str.erase(std::find_if_not(str.rbegin(), str.rend(), charIsSpace).base(),
-              str.end());
+void leftTrimString(std::string & str) noexcept {
     auto begin(str.begin());
     str.erase(begin, std::find_if_not(begin, str.end(), charIsSpace));
+}
+
+void rightTrimString(std::string & str) noexcept {
+    str.erase(std::find_if_not(str.rbegin(), str.rend(), charIsSpace).base(),
+              str.end());
+}
+
+void trimString(std::string & str) noexcept {
+    leftTrimString(str);
+    rightTrimString(str);
 }
 
 std::string stripPrefix(std::string & str, char const separator) {

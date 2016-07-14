@@ -44,6 +44,8 @@ inline bool charIsSpace(char const c) noexcept {
     }
 }
 
+void leftTrimString(std::string & str) noexcept;
+void rightTrimString(std::string & str) noexcept;
 void trimString(std::string & str) noexcept;
 
 inline bool hasPrefix(char const * str, char const * prefix) noexcept {
