@@ -48,31 +48,29 @@
  * author DM Smith
  */
 
-
 #ifdef _MSC_VER
     #pragma warning( disable: 4251 )
 #endif
 
-#include <string>
-#include <vector>
+#include <cstdio>
 #include <fstream>
 #include <iostream>
 #include <string>
-#include <utilxml.h>
-#include <rawld.h>
-#include <rawld4.h>
-#include <zld.h>
-#include <lzsscomprs.h>
-#include <zipcomprs.h>
-#include <bz2comprs.h>
-#include <xzcomprs.h>
-#include <stdio.h>
-#include <cipherfil.h>
-
+#include <swordxx/modules/filters/cipherfil.h>
 #ifdef _ICU_
-#include <utf8nfc.h>
-#include <latin1utf8.h>
+#include <swordxx/modules/filters/latin1utf8.h>
+#include <swordxx/modules/filters/utf8nfc.h>
 #endif
+#include <swordxx/modules/common/bz2comprs.h>
+#include <swordxx/modules/common/lzsscomprs.h>
+#include <swordxx/modules/common/xzcomprs.h>
+#include <swordxx/modules/common/zipcomprs.h>
+#include <swordxx/modules/lexdict/rawld/rawld.h>
+#include <swordxx/modules/lexdict/rawld4/rawld4.h>
+#include <swordxx/modules/lexdict/zld/zld.h>
+#include <swordxx/utilfuns/utilxml.h>
+#include <vector>
+
 
 using namespace swordxx;
 
@@ -210,7 +208,7 @@ void writeEntry(SWKey &key, std::string &text) {
 
     normalizeInput(key, text);
 
-    module->setEntry(text);
+    module->setEntry(text.c_str());
 }
 
 void linkToEntry(const std::string &keyBuf, const std::string &linkBuf) {
@@ -253,9 +251,9 @@ bool handleToken(std::string &text, XMLTag *token) {
                 text        = "";
 
                                 keyStr = token->getAttribute("n"); // P5 with linking and/or non-URI chars
-                                if (!strlen(keyStr)) {
+                                if (keyStr.empty()) {
                                     keyStr = token->getAttribute("sortKey"); // P5 otherwise
-                                    if (!strlen(keyStr)) {
+                                    if (keyStr.empty()) {
                             keyStr = token->getAttribute("key"); // P4
                                         }
                                 }
@@ -287,7 +285,7 @@ bool handleToken(std::string &text, XMLTag *token) {
 #ifdef DEBUG
             cout << "keyStr: " << keyStr << endl;
 #endif
-                        splitPtr = strstr(keyStr, "|");
+                        splitPtr = strchr(keyStr.c_str(), '|');
                         if (splitPtr) {
                                 strncpy (splitBuffer, keyStr.c_str(), splitPtr - keyStr.c_str());
                                 splitBuffer[splitPtr - keyStr.c_str()] = 0;
@@ -325,7 +323,7 @@ bool handleToken(std::string &text, XMLTag *token) {
 #endif
                         }
                         else {
-                *currentKey = keyStr;
+                *currentKey = keyStr.c_str();
                 writeEntry(*currentKey, text);
                         }
 
@@ -474,25 +472,25 @@ int main(int argc, char **argv) {
     vector<string> linkBuf;
 
     if (modDrv == "zLD") {
-        if (zLD::createModule(modName)) {
+        if (zLD::createModule(modName.c_str())) {
             fprintf(stderr, "error: %s: couldn't create module at path: %s \n", program.c_str(), modName.c_str());
             exit(-3);
         }
-        module = new zLD(modName, 0, 0, 30, compressor);
+        module = new zLD(modName.c_str(), 0, 0, 30, compressor);
     }
     else if (modDrv == "RawLD") {
-        if (RawLD::createModule(modName)) {
+        if (RawLD::createModule(modName.c_str())) {
             fprintf(stderr, "error: %s: couldn't create module at path: %s \n", program.c_str(), modName.c_str());
             exit(-3);
         }
-        module = new RawLD(modName);
+        module = new RawLD(modName.c_str());
     }
     else {
-        if (RawLD4::createModule(modName)) {
+        if (RawLD4::createModule(modName.c_str())) {
             fprintf(stderr, "error: %s: couldn't create module at path: %s \n", program.c_str(), modName.c_str());
             exit(-3);
         }
-        module = new RawLD4(modName);
+        module = new RawLD4(modName.c_str());
     }
 
     SWFilter *cipherFilter = 0;
@@ -543,7 +541,7 @@ int main(int argc, char **argv) {
 
         if (intoken && curChar == '>') {
             intoken = false;
-            token.append('>');
+            token.push_back('>');
 
             XMLTag *t = new XMLTag(token.c_str());
             if (!handleToken(text, t)) {
@@ -554,12 +552,12 @@ int main(int argc, char **argv) {
         }
 
         if (intoken)
-            token.append(curChar);
+            token.push_back(curChar);
         else
             switch (curChar) {
                 case '>' : text.append("&gt;"); break;
                 case '<' : text.append("&lt;"); break;
-                default  : text.append(curChar); break;
+                default  : text.push_back(curChar); break;
             }
     }
 
@@ -593,7 +591,7 @@ int main(int argc, char **argv) {
      */
     std::string suggestedModuleName = path;
     if (lastChar == '/' || lastChar == '\\') {
-        suggestedModuleName.setSize(--pathlen);
+        suggestedModuleName.resize(--pathlen);
     }
 
     lastChar = suggestedModuleName[pathlen - 1];

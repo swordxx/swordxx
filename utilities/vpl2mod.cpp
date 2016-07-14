@@ -25,24 +25,24 @@
     #pragma warning( disable: 4996 )
 #endif
 
-#include <ctype.h>
-#include <stdio.h>
+#include <cctype>
+#include <cerrno>
+#include <cstdio>
+#include <cstdlib>
 #include <fcntl.h>
-#include <errno.h>
-#include <stdlib.h>
-#include <sys/stat.h>
-
 #ifndef __GNUC__
 #include <io.h>
-#else
+#endif
+#include <string>
+#include <swordxx/keys/versekey.h>
+#include <swordxx/mgr/filemgr.h>
+#include <swordxx/mgr/swmgr.h>
+#include <swordxx/modules/texts/rawtext/rawtext.h>
+#include <sys/stat.h>
+#ifdef __GNUC__
 #include <unistd.h>
 #endif
 
-#include <filemgr.h>
-#include <swmgr.h>
-#include <rawtext.h>
-#include <string>
-#include <versekey.h>
 
 using swordxx::FileMgr;
 using swordxx::SWMgr;
@@ -262,7 +262,7 @@ int main(int argc, char **argv) {
                 orig += ") ";
                 orig += verseText;
                 orig += " ] ";
-                verseText = orig;
+                verseText = orig.c_str();
             }
             else {
               successive = 0;

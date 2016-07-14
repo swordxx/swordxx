@@ -24,19 +24,19 @@
     #pragma warning( disable: 4251 )
 #endif
 
-#include <stdio.h>
-#include <rawtext.h>
-#include <swmgr.h>
-#include <versekey.h>
-#include <markupfiltmgr.h>
+#include <cstdio>
 #include <string>
+#include <swordxx/keys/versekey.h>
+#include <swordxx/mgr/markupfiltmgr.h>
+#include <swordxx/mgr/swmgr.h>
+#include <swordxx/modules/texts/rawtext/rawtext.h>
+
 
 using swordxx::SWMgr;
 using swordxx::SWModule;
 using swordxx::ListKey;
 using swordxx::VerseKey;
 using swordxx::ModMap;
-using swordxx::std::string;
 
 void percentUpdate(char percent, void *userData) {
     static char printed = 0;

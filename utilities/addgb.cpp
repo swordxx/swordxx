@@ -25,24 +25,23 @@
     #pragma warning( disable: 4251 )
 #endif
 
-#include <ctype.h>
-#include <stdio.h>
+#include <cctype>
+#include <cerrno>
+#include <cstdio>
+#include <cstdlib>
 #include <fcntl.h>
-#include <errno.h>
-#include <stdlib.h>
-
 #ifndef __GNUC__
 #include <io.h>
-#else
+#endif
+#include <iostream>
+#include <string>
+#include <swordxx/modules/common/entriesblk.h>
+#include <swordxx/keys/treekeyidx.h>
+#include <swordxx/modules/genbook/rawgenbook/rawgenbook.h>
+#ifdef __GNUC__
 #include <unistd.h>
 #endif
 
-#include <entriesblk.h>
-#include <iostream>
-#include <string>
-#include <stdio.h>
-#include <treekeyidx.h>
-#include <rawgenbook.h>
 
 using swordxx::TreeKeyIdx;
 using swordxx::RawGenBook;

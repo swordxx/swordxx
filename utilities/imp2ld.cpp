@@ -24,18 +24,19 @@
     #pragma warning( disable: 4251 )
 #endif
 
-#include <string>
-#include <vector>
+#include <cstdio>
 #include <fstream>
 #include <iostream>
-#include <rawld.h>
-#include <rawld4.h>
-#include <zld.h>
-#include <lzsscomprs.h>
-#include <zipcomprs.h>
-#include <bz2comprs.h>
-#include <xzcomprs.h>
-#include <stdio.h>
+#include <string>
+#include <swordxx/modules/lexdict/rawld/rawld.h>
+#include <swordxx/modules/lexdict/rawld4/rawld4.h>
+#include <swordxx/modules/lexdict/zld/zld.h>
+#include <swordxx/modules/common/lzsscomprs.h>
+#include <swordxx/modules/common/zipcomprs.h>
+#include <swordxx/modules/common/bz2comprs.h>
+#include <swordxx/modules/common/xzcomprs.h>
+#include <vector>
+
 
 using std::string;
 
@@ -165,27 +166,27 @@ int main(int argc, char **argv) {
     // setup module
     if (!append) {
         if (compressor) {
-            if (zLD::createModule(outPath)) {
+            if (zLD::createModule(outPath.c_str())) {
                 fprintf(stderr, "ERROR: %s: couldn't create module at path: %s \n", *argv, outPath.c_str());
                 exit(-1);
             }
         }
         else {
             if (!fourByteSize)
-                RawLD::createModule(outPath);
-            else    RawLD4::createModule(outPath);
+                RawLD::createModule(outPath.c_str());
+            else    RawLD4::createModule(outPath.c_str());
         }
     }
 
     if (compressor) {
         // Create a compressed text module allowing very large entries
         // Taking defaults except for first, fourth, fifth and last argument
-        mod = new zLD(outPath, 0, 0, blockCount, compressor, 0, ENC_UNKNOWN, DIRECTION_LTR, FMT_UNKNOWN, 0, caseSensitive, strongsPadding);
+        mod = new zLD(outPath.c_str(), nullptr, nullptr, blockCount, compressor, ENC_UNKNOWN, DIRECTION_LTR, FMT_UNKNOWN, nullptr, caseSensitive, strongsPadding);
     }
     else {
         mod = (!fourByteSize)
-            ? (SWModule *)new RawLD (outPath, 0, 0, 0, ENC_UNKNOWN, DIRECTION_LTR, FMT_UNKNOWN, 0, caseSensitive, strongsPadding)
-            : (SWModule *)new RawLD4(outPath, 0, 0, 0, ENC_UNKNOWN, DIRECTION_LTR, FMT_UNKNOWN, 0, caseSensitive, strongsPadding);
+            ? (SWModule *)new RawLD (outPath.c_str(), nullptr, nullptr, ENC_UNKNOWN, DIRECTION_LTR, FMT_UNKNOWN, nullptr, caseSensitive, strongsPadding)
+            : (SWModule *)new RawLD4(outPath.c_str(), nullptr, nullptr, ENC_UNKNOWN, DIRECTION_LTR, FMT_UNKNOWN, nullptr, caseSensitive, strongsPadding);
     }
 
 

@@ -24,11 +24,12 @@
     #pragma warning( disable: 4251 )
 #endif
 
-#include <entriesblk.h>
+#include <cstdio>
 #include <iostream>
-#include <stdio.h>
-#include <treekeyidx.h>
-#include <rawgenbook.h>
+#include <swordxx/keys/treekeyidx.h>
+#include <swordxx/modules/common/entriesblk.h>
+#include <swordxx/modules/genbook/rawgenbook/rawgenbook.h>
+
 
 using namespace swordxx;
 
@@ -60,7 +61,8 @@ void setLocalName(TreeKeyIdx *treeKey) {
     std::cout << "Enter New Node Name: ";
     fgets(buf, 1000, stdin);
     std::string name = buf;
-    treeKey->setLocalName(name.trim());
+    trimString(name);
+    treeKey->setLocalName(name.c_str());
     treeKey->save();
 }
 
@@ -70,7 +72,8 @@ void gotoPath(TreeKeyIdx *treeKey) {
     std::cout << "Enter Path: ";
     fgets(buf, 1000, stdin);
     std::string path = buf;
-    (*treeKey) = path.trim();
+    trimString(path);
+    (*treeKey) = path.c_str();
 }
 
 
@@ -79,7 +82,8 @@ void assurePath(TreeKeyIdx *treeKey) {
     std::cout << "Enter Path: ";
     fgets(buf, 1000, stdin);
     std::string path = buf;
-    treeKey->assureKeyPath(path.trim());
+    trimString(path);
+    treeKey->assureKeyPath(path.c_str());
 }
 
 
@@ -99,7 +103,7 @@ void setEntryText(RawGenBook *book) {
         do {
             fgets(buf, 1000, stdin);
             std::string text = buf;
-            text.trim();
+            trimString(text);
             if ((text[0] == '.') && (text[1] == 0))
                 break;
             body += text;
@@ -118,8 +122,9 @@ void appendSibbling(TreeKeyIdx *treeKey) {
         std::cout << "Enter New Sibbling Name: ";
         fgets(buf, 1000, stdin);
         std::string name = buf;
+        trimString(name);
         treeKey->append();
-        treeKey->setLocalName(name.trim());
+        treeKey->setLocalName(name.c_str());
         treeKey->save();
     }
     else    std::cout << "Can't add sibling to root node\n";
@@ -131,8 +136,9 @@ void appendChild(TreeKeyIdx *treeKey) {
     std::cout << "Enter New Child Name: ";
     fgets(buf, 1000, stdin);
     std::string name = buf;
+    trimString(name);
     treeKey->appendChild();
-    treeKey->setLocalName(name.trim());
+    treeKey->setLocalName(name.c_str());
     treeKey->save();
 }
 
@@ -177,7 +183,7 @@ int main(int argc, char **argv) {
         std::cout << "[" << treeKey->getText() << "] > ";
         fgets(line, 1000, stdin);
         input = line;
-        input.trim();
+        trimString(input);
         if (input.length() > 0) {
             switch (input[0]) {
                 case 'n': printLocalName(treeKey); break;

@@ -24,20 +24,20 @@
     #pragma warning( disable: 4251 )
 #endif
 
-#include <stdio.h>
+#include <cstdio>
 #include <iostream>
-
 #include <string>
-#include <filemgr.h>
-#include <versekey.h>
-#include <rawtext.h>
-#include <rawtext4.h>
-#include <ztext.h>
-#include <lzsscomprs.h>
-#include <zipcomprs.h>
-#include <bz2comprs.h>
-#include <xzcomprs.h>
-#include <localemgr.h>
+#include <swordxx/keys/versekey.h>
+#include <swordxx/mgr/filemgr.h>
+#include <swordxx/mgr/localemgr.h>
+#include <swordxx/modules/common/bz2comprs.h>
+#include <swordxx/modules/common/lzsscomprs.h>
+#include <swordxx/modules/common/xzcomprs.h>
+#include <swordxx/modules/common/zipcomprs.h>
+#include <swordxx/modules/texts/rawtext/rawtext.h>
+#include <swordxx/modules/texts/rawtext4/rawtext4.h>
+#include <swordxx/modules/texts/ztext/ztext.h>
+
 
 using namespace swordxx;
 
@@ -145,7 +145,7 @@ int main(int argc, char **argv) {
         else usage(progName, (((std::string)"Unknown argument: ")+ argv[i]).c_str());
     }
     // -----------------------------------------------------
-    const VersificationMgr::System *v = VersificationMgr::getSystemVersificationMgr()->getVersificationSystem(v11n);
+    const VersificationMgr::System *v = VersificationMgr::getSystemVersificationMgr()->getVersificationSystem(v11n.c_str());
     if (!v) std::cout << "Warning: Versification " << v11n << " not found. Using KJV versification...\n";
 
     if (compType == "LZSS") {
@@ -165,15 +165,15 @@ int main(int argc, char **argv) {
     // setup module
     if (!append) {
         if (compressor) {
-            if (zText::createModule(outPath, iType, v11n)) {
+            if (zText::createModule(outPath.c_str(), iType, v11n.c_str())) {
                 fprintf(stderr, "ERROR: %s: couldn't create module at path: %s \n", *argv, outPath.c_str());
                 exit(-1);
             }
         }
         else {
             if (!fourByteSize)
-                RawText::createModule(outPath, v11n);
-            else    RawText4::createModule(outPath, v11n);
+                RawText::createModule(outPath.c_str(), v11n.c_str());
+            else    RawText4::createModule(outPath.c_str(), v11n.c_str());
         }
     }
 
@@ -182,29 +182,28 @@ int main(int argc, char **argv) {
         // Create a compressed text module allowing very large entries
         // Taking defaults except for first, fourth, fifth and last argument
         module = new zText(
-                outPath,        // ipath
+                outPath.c_str(),        // ipath
                 0,        // iname
                 0,        // idesc
                 iType,        // iblockType
                 compressor,    // icomp
-                0,        // idisp
                 ENC_UNKNOWN,    // enc
                 DIRECTION_LTR,    // dir
                 FMT_UNKNOWN,    // markup
                 0,        // lang
-                v11n        // versification
+                v11n.c_str()        // versification
                );
     }
     else {
         module = (!fourByteSize)
-            ? (SWModule *)new RawText(outPath, 0, 0, 0, ENC_UNKNOWN, DIRECTION_LTR, FMT_UNKNOWN, 0, v11n)
-            : (SWModule *)new RawText4(outPath, 0, 0, 0, ENC_UNKNOWN, DIRECTION_LTR, FMT_UNKNOWN, 0, v11n);
+            ? (SWModule *)new RawText(outPath.c_str(), 0, 0, ENC_UNKNOWN, DIRECTION_LTR, FMT_UNKNOWN, 0, v11n.c_str())
+            : (SWModule *)new RawText4(outPath.c_str(), 0, 0, ENC_UNKNOWN, DIRECTION_LTR, FMT_UNKNOWN, 0, v11n.c_str());
     }
     // -----------------------------------------------------
 
     // setup locale manager
 
-    LocaleMgr::getSystemLocaleMgr()->setDefaultLocaleName(locale);
+    LocaleMgr::getSystemLocaleMgr()->setDefaultLocaleName(locale.c_str());
 
 
     // setup module key to allow full range of possible values, and then some
@@ -224,17 +223,15 @@ int main(int argc, char **argv) {
     std::string keyBuffer;
     std::string entBuffer;
 
-    bool more = true;
-    do {
-        more = FileMgr::getLine(fd, lineBuffer)!=0;
-        if (lineBuffer.startsWith("$$$")) {
+    while (!(lineBuffer = FileMgr::getLine(fd)).empty()) {
+        if (hasPrefix(lineBuffer, "$$$")) {
             if ((keyBuffer.size()) && (entBuffer.size())) {
                 writeEntry(module, keyBuffer, entBuffer);
             }
             keyBuffer = lineBuffer;
-            keyBuffer << 3;
-            keyBuffer.trim();
-            entBuffer.size(0);
+            keyBuffer.erase(0u, 3u);
+            trimString(keyBuffer);
+            entBuffer.clear();
         }
         else {
             if (keyBuffer.size()) {
@@ -242,7 +239,7 @@ int main(int argc, char **argv) {
                 entBuffer += "\n";
             }
         }
-    } while (more);
+    };
     if ((keyBuffer.size()) && (entBuffer.size())) {
         writeEntry(module, keyBuffer, entBuffer);
     }
@@ -309,7 +306,7 @@ void writeEntry(SWModule *module, const std::string &key, const std::string &ent
 
 
                 std::cout << "adding entry: " << *vkey << " length " << entry.size() << "/" << (unsigned short)text.size() << std::endl;
-                module->setEntry(text);
+                module->setEntry(text.c_str());
                 first = false;
             }
             else {

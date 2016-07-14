@@ -24,23 +24,22 @@
     #pragma warning( disable: 4251 )
 #endif
 
-#include <fcntl.h>
-#include <iostream>
-#include <fstream>
-#include <string>
-
-#include <string>
-#include <ztext.h>
-#include <zld.h>
-#include <zcom.h>
-#include <swmgr.h>
-#include <lzsscomprs.h>
-#include <zipcomprs.h>
-#include <versekey.h>
-#include <thmlosis.h>
-#include <stdio.h>
-#include <markupfiltmgr.h>
 #include <algorithm>
+#include <cstdio>
+#include <fcntl.h>
+#include <fstream>
+#include <iostream>
+#include <string>
+#include <swordxx/keys/versekey.h>
+#include <swordxx/mgr/markupfiltmgr.h>
+#include <swordxx/mgr/swmgr.h>
+#include <swordxx/modules/comments/zcom/zcom.h>
+#include <swordxx/modules/common/lzsscomprs.h>
+#include <swordxx/modules/common/zipcomprs.h>
+#include <swordxx/modules/filters/thmlosis.h>
+#include <swordxx/modules/lexdict/zld/zld.h>
+#include <swordxx/modules/texts/ztext/ztext.h>
+
 
 using namespace swordxx;
 using std::endl;
@@ -180,7 +179,7 @@ int main(int argc, char **argv)
         bool newTest = false;
         bool newBook = false;
 
-        if (!strlen(inModule->renderText())) {
+        if (inModule->renderText().empty()) {
             continue;
         }
 

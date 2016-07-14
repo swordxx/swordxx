@@ -25,21 +25,21 @@
     #pragma warning( disable: 4996 )
 #endif
 
-#include <sys/stat.h>
+#include <cstdio>
+#include <cstring>
 #include <fcntl.h>
-#include <stdio.h>
-
-#include <iostream>
-#include <string>
-
 #ifndef __GNUC__
 #include <io.h>
-#else
+#endif
+#include <iostream>
+#include <string>
+#include <swordxx/mgr/filemgr.h>
+#include <swordxx/modules/common/lzsscomprs.h>
+#include <sys/stat.h>
+#ifdef __GNUC__
 #include <unistd.h>
 #endif
 
-#include <filemgr.h>
-#include <lzsscomprs.h>
 
 using namespace std;
 using namespace swordxx;

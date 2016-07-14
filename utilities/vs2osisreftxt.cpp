@@ -25,11 +25,11 @@
     #pragma warning( disable: 4251 )
 #endif
 
+#include <cstdio>
 #include <iostream>
-#include <stdio.h>
+#include <swordxx/keys/versekey.h>
+#include <swordxx/mgr/localemgr.h>
 
-#include <versekey.h>
-#include <localemgr.h>
 
 using namespace swordxx;
 

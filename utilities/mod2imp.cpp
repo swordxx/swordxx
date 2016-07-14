@@ -24,14 +24,14 @@
     #pragma warning( disable: 4251 )
 #endif
 
+#include <cstdio>
 #include <iostream>
 #include <map>
-#include <stdio.h>
+#include <swordxx/keys/versekey.h>
+#include <swordxx/mgr/markupfiltmgr.h>
+#include <swordxx/mgr/swmgr.h>
+#include <swordxx/modules/swmodule.h>
 
-#include <markupfiltmgr.h>
-#include <swmgr.h>
-#include <swmodule.h>
-#include <versekey.h>
 
 using std::map;
 using std::cout;
@@ -99,7 +99,7 @@ int main(int argc, char **argv)
 
     // set any options filters passed with -f
     for (map<std::string, std::string>::iterator it = options.begin(); it != options.end(); it++) {
-        mgr->setGlobalOption(it->first, it->second);
+        mgr->setGlobalOption(it->first.c_str(), it->second.c_str());
     }
 
     SWModule *module = mgr->getModule(modName);

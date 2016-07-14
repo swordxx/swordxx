@@ -24,15 +24,16 @@
     #pragma warning( disable: 4251 )
 #endif
 
-#include <swmgr.h>
-#include <installmgr.h>
-#include <remotetrans.h>
-#include <filemgr.h>
+#include <cstdio>
 #include <iostream>
 #include <map>
-#include <swmodule.h>
-#include <stdio.h>
-#include <swlog.h>
+#include <swordxx/frontend/swlog.h>
+#include <swordxx/mgr/filemgr.h>
+#include <swordxx/mgr/installmgr.h>
+#include <swordxx/mgr/remotetrans.h>
+#include <swordxx/mgr/swmgr.h>
+#include <swordxx/modules/swmodule.h>
+
 
 using namespace swordxx;
 using std::cout;
@@ -92,12 +93,13 @@ virtual bool isUserDisclaimerConfirmed() const {
 
 class MyStatusReporter : public StatusReporter {
     int last;
-        virtual void update(unsigned long totalBytes, unsigned long completedBytes) {
+
+    /// \bug may throw, leading to std::unexpected:
+    void update(std::size_t totalBytes, std::size_t completedBytes) noexcept override {
         int p = (totalBytes > 0) ? (int)(74.0 * ((double)completedBytes / (double)totalBytes)) : 0;
         for (;last < p; ++last) {
             if (!last) {
-                std::string output;
-                output.setFormatted("[ File Bytes: %ld", totalBytes);
+                std::string output(formatted("[ File Bytes: %ld", totalBytes));
                 while (output.size() < 75) output += " ";
                 output += "]";
                 cout << output.c_str() << "\n ";
@@ -106,9 +108,10 @@ class MyStatusReporter : public StatusReporter {
         }
         cout.flush();
     }
-        virtual void preStatus(long totalBytes, long completedBytes, const char *message) {
-        std::string output;
-        output.setFormatted("[ Total Bytes: %ld; Completed Bytes: %ld", totalBytes, completedBytes);
+
+    /// \bug may throw, leading to std::unexpected:
+    void preStatus(std::size_t totalBytes, std::size_t completedBytes, char const * message) noexcept override {
+        std::string output(formatted("[ Total Bytes: %ld; Completed Bytes: %ld", totalBytes, completedBytes));
         while (output.size() < 75) output += " ";
         output += "]";
         cout << "\n" << output.c_str() << "\n ";
@@ -132,7 +135,7 @@ void init() {
         baseDir += "/.swordxx/InstallMgr";
         confPath = baseDir + "/InstallMgr.conf";
         statusReporter = new MyStatusReporter();
-        installMgr = new MyInstallMgr(baseDir, statusReporter);
+        installMgr = new MyInstallMgr(baseDir.c_str(), statusReporter);
     }
 }
 

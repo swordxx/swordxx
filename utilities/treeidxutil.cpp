@@ -24,11 +24,12 @@
     #pragma warning( disable: 4251 )
 #endif
 
-#include <entriesblk.h>
+#include <cstdio>
 #include <iostream>
 #include <string>
-#include <stdio.h>
-#include <treekeyidx.h>
+#include <swordxx/keys/treekeyidx.h>
+#include <swordxx/modules/common/entriesblk.h>
+
 
 using namespace swordxx;
 

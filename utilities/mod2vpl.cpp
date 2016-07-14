@@ -24,12 +24,13 @@
     #pragma warning( disable: 4251 )
 #endif
 
-#include <swmgr.h>
-#include <swmodule.h>
-#include <swkey.h>
-#include <versekey.h>
-#include <stdio.h>
+#include <cstdio>
 #include <iostream>
+#include <swordxx/keys/swkey.h>
+#include <swordxx/keys/versekey.h>
+#include <swordxx/mgr/swmgr.h>
+#include <swordxx/modules/swmodule.h>
+
 
 using swordxx::SWMgr;
 using swordxx::VerseKey;
@@ -94,7 +95,7 @@ int main(int argc, char **argv) {
 
     while (!mod->popError()) {
         buffer = new char [ mod->renderText().length() + 1 ];
-        strcpy(buffer, mod->renderText());
+        std::strcpy(buffer, mod->renderText().c_str());
         cleanbuf(buffer);
         if (vref) {
             if ((strlen(buffer) > 0) && (vref)) {

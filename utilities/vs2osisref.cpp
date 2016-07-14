@@ -25,8 +25,9 @@
 #endif
 
 #include <iostream>
-#include <versekey.h>
-#include <localemgr.h>
+#include <swordxx/keys/versekey.h>
+#include <swordxx/mgr/localemgr.h>
+
 
 using namespace swordxx;
 

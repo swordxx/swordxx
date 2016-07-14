@@ -24,41 +24,41 @@
     #pragma warning( disable: 4251 )
 #endif
 
-#include <ctype.h>
-#include <stdio.h>
+#include <cctype>
+#include <cerrno>
+#include <cstdio>
+#include <cstdlib>
 #include <fcntl.h>
-#include <errno.h>
-#include <stdlib.h>
-#include <stack>
-#include <vector>
-#include <iostream>
 #include <fstream>
-
-#include <utilstr.h>
-#include <swmgr.h>
-#include <rawtext.h>
-#include <rawtext4.h>
+#include <iostream>
+#include <stack>
 #include <string>
-#include <utilxml.h>
-#include <listkey.h>
-#include <versekey.h>
-
-#include <ztext.h>
-#include <ztext4.h>
-#include <lzsscomprs.h>
-#include <zipcomprs.h>
-#include <bz2comprs.h>
-#include <xzcomprs.h>
-#include <cipherfil.h>
-
+#include <swordxx/keys/listkey.h>
+#include <swordxx/keys/versekey.h>
+#include <swordxx/mgr/swmgr.h>
+#include <swordxx/modules/texts/rawtext/rawtext.h>
+#include <swordxx/modules/texts/rawtext4/rawtext4.h>
+#include <swordxx/modules/texts/ztext/ztext.h>
+#include <swordxx/modules/texts/ztext4/ztext4.h>
+#include <swordxx/modules/common/lzsscomprs.h>
+#include <swordxx/modules/common/zipcomprs.h>
+#include <swordxx/modules/common/bz2comprs.h>
+#include <swordxx/modules/common/xzcomprs.h>
+#include <swordxx/modules/filters/cipherfil.h>
 #ifdef _ICU_
-#include <utf8nfc.h>
-#include <latin1utf8.h>
-#include <utf8scsu.h>
-#include <scsuutf8.h>
+#include <swordxx/modules/filters/latin1utf8.h>
+#include <swordxx/modules/filters/scsuutf8.h>
 #endif
-#include <utf8utf16.h>
-#include <utf16utf8.h>
+#include <swordxx/modules/filters/utf16utf8.h>
+#ifdef _ICU_
+#include <swordxx/modules/filters/utf8nfc.h>
+#include <swordxx/modules/filters/utf8scsu.h>
+#endif
+#include <swordxx/modules/filters/utf8utf16.h>
+#include <swordxx/utilfuns/utilstr.h>
+#include <swordxx/utilfuns/utilxml.h>
+#include <vector>
+
 
 using namespace swordxx;
 
@@ -243,7 +243,7 @@ void prepareSWText(const char *osisID, std::string &text)
 // separated with a single;
 void prepareSWVerseKey(std::string &buf) {
     // This routine modifies the buf in place
-    char* s = buf.getRawData();
+    char* s = &buf[0u];
     char* p = s;
     bool inRange = false;
     while (*p) {
@@ -348,7 +348,7 @@ void prepareSWVerseKey(std::string &buf) {
         // null terminate the reference
         *s = '\0';
         // Since we modified the swbuf, we need to tell it what we have done
-        buf.setSize(s - buf.c_str());
+        buf.resize(s - buf.c_str());
 
         if (debug & DEBUG_REF) {
             cout << "DEBUG(REF): shortended keyVal to`" << buf.c_str() << "`"<< endl;
@@ -562,7 +562,7 @@ void writeEntry(std::string &text, bool force = false) {
             cout << "DEBUG(WRITE): " << activeOsisID << ":" << currentVerse.getOSISRef() << ": " << activeVerseText << endl;
         }
 
-        module->setEntry(activeVerseText);
+        module->setEntry(activeVerseText.c_str());
         activeVerseText = "";
     }
 
@@ -572,7 +572,7 @@ void writeEntry(std::string &text, bool force = false) {
     }
     else {
         // Eliminate leading whitespace on the beginning of each verse
-        text.trimStart();
+        leftTrimString(text);
         activeVerseText = text;
     }
     // text has been consumed so clear it out.
@@ -655,7 +655,7 @@ bool handleToken(std::string &text, XMLTag token) {
 
     int                       tagDepth        = tagStack.size();
     std::string                     tokenName       = token.getName();
-    bool                      isEndTag        = token.isEndTag() || token.getAttribute("eID");
+    bool                      isEndTag        = token.isEndTag() || !token.getAttribute("eID").empty();
     std::string                     typeAttr        = token.getAttribute("type");
     std::string                     eidAttr         = token.getAttribute("eID");
 
@@ -690,7 +690,7 @@ bool handleToken(std::string &text, XMLTag token) {
 
         //-- WITH osisID OR annotateRef -------------------------------------------------------------------------
         // Handle Book, Chapter, and Verse (or commentary equivalent)
-        if (token.getAttribute("osisID") || token.getAttribute("annotateRef")) {
+        if (!token.getAttribute("osisID").empty() || !token.getAttribute("annotateRef").empty()) {
 
             // BOOK START, <div type="book" ...>
             if (tokenName == "div" && typeAttr == "book") {
@@ -708,7 +708,7 @@ bool handleToken(std::string &text, XMLTag token) {
                     currentVerse.setVerse(0);
                     writeEntry(text);
                 }
-                currentVerse = token.getAttribute("osisID");
+                currentVerse = token.getAttribute("osisID").c_str();
                 currentVerse.setChapter(0);
                 currentVerse.setVerse(0);
                 strcpy(currentOsisID, currentVerse.getOSISRef());
@@ -728,7 +728,7 @@ bool handleToken(std::string &text, XMLTag token) {
                 chapterDepth    = 0;
                 verseDepth      = 0;
 
-                inCanonicalOSISBook = isOSISAbbrev(token.getAttribute("osisID"));
+                inCanonicalOSISBook = isOSISAbbrev(token.getAttribute("osisID").c_str());
                 if (!inCanonicalOSISBook) {
                     cout << "WARNING(V11N): New book is " << token.getAttribute("osisID") << " and is not in " << v11n << " versification, ignoring" << endl;
                 }
@@ -751,7 +751,7 @@ bool handleToken(std::string &text, XMLTag token) {
                     writeEntry(text);
                 }
 
-                currentVerse = token.getAttribute("osisID");
+                currentVerse = token.getAttribute("osisID").c_str();
                 currentVerse.setVerse(0);
 
                 if (debug & DEBUG_OTHER) {
@@ -779,7 +779,7 @@ bool handleToken(std::string &text, XMLTag token) {
 
             // VERSE, <verse ...> OR COMMENTARY START, <div annotateType="xxx" ...>
             if ((tokenName == "verse") ||
-                (tokenName == "div" && token.getAttribute("annotateType"))
+                (tokenName == "div" && !token.getAttribute("annotateType").empty())
             ) {
                 if (debug & DEBUG_OTHER) {
                     cout << "DEBUG(FOUND): Entering verse" << endl;
@@ -816,7 +816,7 @@ bool handleToken(std::string &text, XMLTag token) {
                 // The first or only one is the currentVerse
                 // Use the last verse seen (i.e. the currentVerse) as the basis for recovering from bad parsing.
                 // This should never happen if the references are valid OSIS references
-                ListKey verseKeys = currentVerse.parseVerseList(keyVal, currentVerse, true);
+                ListKey verseKeys = currentVerse.parseVerseList(keyVal.c_str(), currentVerse, true);
                 int memberKeyCount = verseKeys.getCount();
                 if (memberKeyCount) {
                     currentVerse = verseKeys.getElement(0);
@@ -864,7 +864,7 @@ bool handleToken(std::string &text, XMLTag token) {
                     StringList attrNames = token.getAttributeNames();
                     for (StringList::iterator loop = attrNames.begin(); loop != attrNames.end(); loop++) {
                         const char* attr = (*loop).c_str();
-                        t.setAttribute(attr, token.getAttribute(attr));
+                        t.setAttribute(attr, token.getAttribute(attr).c_str());
                     }
                     text.append(t);
                 }
@@ -918,7 +918,7 @@ bool handleToken(std::string &text, XMLTag token) {
                 cout << "DEBUG(QUOTE): " << currentOsisID << ": quote top(" << quoteStack.size() << ") " << token << endl;
             }
 
-            if (token.getAttribute("who") && !strcmp(token.getAttribute("who"), "Jesus")) {
+            if (!token.getAttribute("who").empty() && !strcmp(token.getAttribute("who").c_str(), "Jesus")) {
                 inWOC = true;
 
                 // Output per verse WOC markup.
@@ -929,7 +929,7 @@ bool handleToken(std::string &text, XMLTag token) {
                 // If there is a marker attribute and it has content, then output that.
                 // If the marker attribute is present and empty, then there is nothing to do.
                 // And have it within the WOC markup
-                if (!token.getAttribute("marker") || token.getAttribute("marker")[0]) {
+                if (token.getAttribute("marker").empty() || token.getAttribute("marker")[0]) {
                     token.setAttribute("who", 0); // remove the who="Jesus"
                     text.append(token);
                 }
@@ -1064,7 +1064,7 @@ bool handleToken(std::string &text, XMLTag token) {
                 StringList attrNames = token.getAttributeNames();
                 for (StringList::iterator loop = attrNames.begin(); loop != attrNames.end(); loop++) {
                     const char* attr = (*loop).c_str();
-                    t.setAttribute(attr, token.getAttribute(attr));
+                    t.setAttribute(attr, token.getAttribute(attr).c_str());
                 }
                 text.append(t);
             }
@@ -1092,22 +1092,16 @@ bool handleToken(std::string &text, XMLTag token) {
 
             // If we have found an end tag for a <q who="Jesus"> then we are done with the WOC
             // and we need to terminate the <q who="Jesus" marker=""> that was added earlier in the verse.
-            if (token.getAttribute("who") && !strcmp(token.getAttribute("who"), "Jesus")) {
+            if (!token.getAttribute("who").empty() && !strcmp(token.getAttribute("who").c_str(), "Jesus")) {
 
                 if (debug & DEBUG_QUOTE) {
                     cout << "DEBUG(QUOTE): " << currentOsisID << ": (" << quoteStack.size() << ") " << topToken << " -- " << token << endl;
                 }
 
                 inWOC = false;
-                const char *sID = topToken.getAttribute("sID");
-                const char *eID = token.getAttribute("eID");
-                if (!sID) {
-                    sID = "";
-                }
-                if (!eID) {
-                    eID = "";
-                }
-                if (strcmp(sID, eID)) {
+                auto sID(topToken.getAttribute("sID"));
+                auto eID(token.getAttribute("eID"));
+                if (sID != eID) {
                     cout << "ERROR(NESTING): improper nesting " << currentOsisID << ": matching (sID,eID) not found. Looking at (" << sID << "," << eID << ")" << endl;
                 }
 
@@ -1117,7 +1111,7 @@ bool handleToken(std::string &text, XMLTag token) {
                 // If there is a marker attribute and it has content, then output that.
                 // If the marker attribute is present and empty, then there is nothing to do.
                 // And have it within the WOC markup
-                if (!token.getAttribute("marker") || token.getAttribute("marker")[0]) {
+                if (token.getAttribute("marker").empty() || token.getAttribute("marker")[0]) {
                     token.setAttribute("who", 0); // remove the who="Jesus"
                     text.append(token);
                 }
@@ -1285,7 +1279,7 @@ XMLTag transformBSP(XMLTag t) {
                 // make this a clone of the start tag with sID changed to eID
                 // Note: in the case of </p> the topToken is a <div type="x-p">
                 t = topToken;
-                t.setAttribute("eID", t.getAttribute("sID"));
+                t.setAttribute("eID", t.getAttribute("sID").c_str());
                 t.setAttribute("sID", 0);
             }
         }
@@ -1437,7 +1431,7 @@ void processOSIS(istream& infile) {
 
     strcpy(currentOsisID,"N/A");
 
-    currentVerse.setVersificationSystem(v11n);
+    currentVerse.setVersificationSystem(v11n.c_str());
     currentVerse.setAutoNormalize(false);
     currentVerse.setIntros(true);  // turn on mod/testmnt/book/chap headings
     currentVerse.setPersist(true);
@@ -1578,7 +1572,7 @@ void processOSIS(istream& infile) {
             }
 
             if (entitytype != ET_ERR) {
-                entityToken.append((char) curChar);
+                entityToken.push_back((char) curChar);
             }
 
             // It is an entity, perhaps invalid, if curChar is ';', error otherwise
@@ -1588,7 +1582,7 @@ void processOSIS(istream& infile) {
                 switch (entitytype) {
                     case ET_ERR :
                     // Remove the leading &
-                    entityToken << 1;
+                    entityToken.erase(0u, 1u);
                     cout << "WARNING(PARSE): malformed entity, replacing &" << entityToken << " with &amp;" << entityToken << endl;
                     if (intoken) {
                         token.append("&amp;");
@@ -1608,15 +1602,15 @@ void processOSIS(istream& infile) {
                     }
                     break;
                     case ET_CHAR :
-                    if (strcmp(entityToken, "&amp;")  &&
-                            strcmp(entityToken, "&lt;")   &&
-                            strcmp(entityToken, "&gt;")   &&
-                            strcmp(entityToken, "&quot;") &&
-                            strcmp(entityToken, "&apos;")) {
+                    if (strcmp(entityToken.c_str(), "&amp;")  &&
+                            strcmp(entityToken.c_str(), "&lt;")   &&
+                            strcmp(entityToken.c_str(), "&gt;")   &&
+                            strcmp(entityToken.c_str(), "&quot;") &&
+                            strcmp(entityToken.c_str(), "&apos;")) {
                         cout << "WARNING(PARSE): XML only supports 5 Character entities &amp;, &lt;, &gt;, &quot; and &apos;, found " << entityToken << endl;
                     }
                     else
-                    if (!strcmp(entityToken, "&apos;")) {
+                    if (!strcmp(entityToken.c_str(), "&apos;")) {
                         cout << "WARNING(PARSE): While valid for XML, XHTML does not support &apos;." << endl;
                         if (!inattribute) {
                             cout << "WARNING(PARSE): &apos; is unnecessary outside of attribute values. Replacing with '. " << endl;
@@ -1635,7 +1629,7 @@ void processOSIS(istream& infile) {
                         }
                     }
                     else
-                    if (!strcmp(entityToken, "&quot;")) {
+                    if (!strcmp(entityToken.c_str(), "&quot;")) {
                         cout << "WARNING(PARSE): While valid for XML, &quot; is only needed within double quoted attribute values" << endl;
                         if (!inattribute) {
                             cout << "WARNING(PARSE): &quot; is unnecessary outside of attribute values. Replace with \"." << endl;
@@ -1696,7 +1690,7 @@ void processOSIS(istream& infile) {
                 case CS_NOT_IN_COMMENT :
                     if (curChar == '!') {
                         commentstate = CS_SEEN_STARTING_EXCLAMATION;
-                        token.append((char) curChar);
+                        token.push_back((char) curChar);
                         continue;
                     } else {
                         break;
@@ -1705,7 +1699,7 @@ void processOSIS(istream& infile) {
                 case CS_SEEN_STARTING_EXCLAMATION :
                     if (curChar == '-') {
                         commentstate = CS_SEEN_STARTING_HYPHEN;
-                        token.append((char) curChar);
+                        token.push_back((char) curChar);
                         continue;
                     } else {
                         commentstate = CS_NOT_IN_COMMENT;
@@ -1716,7 +1710,7 @@ void processOSIS(istream& infile) {
                     if (curChar == '-') {
                         incomment = true;
                         commentstate = CS_IN_COMMENT;
-                        token.append((char) curChar);
+                        token.push_back((char) curChar);
 
                         if (debug & DEBUG_OTHER) {
                             cout << "DEBUG(COMMENTS): in comment" << endl;
@@ -1794,7 +1788,7 @@ void processOSIS(istream& infile) {
         if (intoken && curChar == '>') {
             intoken = false;
             inWhitespace = false;
-            token.append('>');
+            token.push_back('>');
             // take this isalpha if out to check for bugs in text
             if (isalpha(token[1]) ||
                 (((token[1] == '/') || (token[1] == '?')) && isalpha(token[2]))) {
@@ -1811,13 +1805,13 @@ void processOSIS(istream& infile) {
         }
 
         if (intoken) {
-            token.append((char) curChar);
+            token.push_back((char) curChar);
         }
         else {
             switch (curChar) {
                 case '>' : cout << "WARNING(PARSE): > should be &gt;" << endl; text.append("&gt;"); break;
                 case '<' : cout << "WARNING(PARSE): < should be &lt;" << endl; text.append("&lt;"); break;
-                default  : text.append((char) curChar); break;
+                default  : text.push_back((char) curChar); break;
             }
         }
     }
@@ -1988,26 +1982,26 @@ int main(int argc, char **argv) {
     // datapath location passed to us from the user.
         if (compressor) {
             if (entrySize == 4) {
-                if (zText4::createModule(path, iType, v11n)) {
+                if (zText4::createModule(path, iType, v11n.c_str())) {
                     fprintf(stderr, "ERROR: %s: couldn't create module at path: %s \n", program, path);
                     exit(EXIT_NO_CREATE);
                 }
             }
             else {
-                if (zText::createModule(path, iType, v11n)) {
+                if (zText::createModule(path, iType, v11n.c_str())) {
                     fprintf(stderr, "ERROR: %s: couldn't create module at path: %s \n", program, path);
                     exit(EXIT_NO_CREATE);
                 }
             }
         }
         else if (entrySize == 4) {
-            if (RawText4::createModule(path, v11n)) {
+            if (RawText4::createModule(path, v11n.c_str())) {
                 fprintf(stderr, "ERROR: %s: couldn't create module at path: %s \n", program, path);
                 exit(EXIT_NO_CREATE);
             }
         }
         else {
-            if (RawText::createModule(path, v11n)) {
+            if (RawText::createModule(path, v11n.c_str())) {
                 fprintf(stderr, "ERROR: %s: couldn't create module at path: %s \n", program, path);
                 exit(EXIT_NO_CREATE);
             }
@@ -2025,12 +2019,11 @@ int main(int argc, char **argv) {
                 0,              // idesc
                 iType,          // iblockType
                 compressor,     // icomp
-                0,              // idisp
                 ENC_UNKNOWN,    // enc
                 DIRECTION_LTR,  // dir
                 FMT_UNKNOWN,    // markup
                 0,              // lang
-                v11n            // versification
+                v11n.c_str()    // versification
                );
         }
         else {
@@ -2042,12 +2035,11 @@ int main(int argc, char **argv) {
                 0,              // idesc
                 iType,          // iblockType
                 compressor,     // icomp
-                0,              // idisp
                 ENC_UNKNOWN,    // enc
                 DIRECTION_LTR,  // dir
                 FMT_UNKNOWN,    // markup
                 0,              // lang
-                v11n            // versification
+                v11n.c_str()    // versification
                );
         }
     }
@@ -2058,12 +2050,11 @@ int main(int argc, char **argv) {
                 path,           // ipath
                 0,              // iname
                 0,              // idesc
-                0,              // idisp
                 ENC_UNKNOWN,    // encoding
                 DIRECTION_LTR,  // dir
                 FMT_UNKNOWN,    // markup
                 0,              // ilang
-                v11n            // versification
+                v11n.c_str()    // versification
             );
     }
     else {
@@ -2073,12 +2064,11 @@ int main(int argc, char **argv) {
                 path,           // ipath
                 0,              // iname
                 0,              // idesc
-                0,              // idisp
                 ENC_UNKNOWN,    // encoding
                 DIRECTION_LTR,  // dir
                 FMT_UNKNOWN,    // markup
                 0,              // ilang
-                v11n            // versification
+                v11n.c_str()    // versification
             );
     }
 

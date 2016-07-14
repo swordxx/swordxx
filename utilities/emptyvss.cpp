@@ -24,11 +24,12 @@
     #pragma warning( disable: 4251 )
 #endif
 
-#include <swmgr.h>
-#include <swmodule.h>
-#include <versekey.h>
+#include <cstdio>
 #include <iostream>
-#include <stdio.h>
+#include <swordxx/mgr/swmgr.h>
+#include <swordxx/modules/swmodule.h>
+#include <swordxx/keys/versekey.h>
+
 
 using swordxx::SWMgr;
 using swordxx::VerseKey;

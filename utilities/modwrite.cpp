@@ -24,20 +24,19 @@
     #pragma warning( disable: 4251 )
 #endif
 
+#include <cstdio>
 #include <fcntl.h>
-#include <iostream>
 #include <fstream>
-//#include <string>
-
 #ifndef __GNUC__
 #include <io.h>
-#else
+#endif
+#include <iostream>
+#include <swordxx/mgr/swmgr.h>
+#include <swordxx/modules/swmodule.h>
+#ifdef __GNUC__
 #include <unistd.h>
 #endif
 
-#include <swmgr.h>
-#include <swmodule.h>
-#include <stdio.h>
 
 using swordxx::SWMgr;
 using swordxx::SWModule;

@@ -24,23 +24,23 @@
     #pragma warning( disable: 4251 )
 #endif
 
-#include <ctype.h>
-#include <stdio.h>
+#include <cctype>
+#include <cerrno>
+#include <cstdio>
+#include <cstdlib>
 #include <fcntl.h>
-#include <errno.h>
-#include <stdlib.h>
-
 #ifndef __GNUC__
 #include <io.h>
-#else
+#endif
+#include <swordxx/mgr/swmgr.h>
+#include <swordxx/modules/common/zipcomprs.h>
+#include <swordxx/modules/lexdict/rawld/rawld.h>
+#include <swordxx/modules/lexdict/rawld4/rawld4.h>
+#include <swordxx/modules/lexdict/zld/zld.h>
+#ifdef __GNUC__
 #include <unistd.h>
 #endif
 
-#include <swmgr.h>
-#include <rawld.h>
-#include <rawld4.h>
-#include <zld.h>
-#include <zipcomprs.h>
 
 using swordxx::SWMgr;
 using swordxx::ZipCompress;

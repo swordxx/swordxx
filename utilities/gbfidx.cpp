@@ -21,21 +21,20 @@
  *
  */
 
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <ctype.h>
-
+#include <cctype>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <fcntl.h>
 #ifndef __GNUC__
 #include <io.h>
-#else
+#endif
+#include <swordxx/keys/versekey.h>
+#include <swordxx/mgr/filemgr.h>
+#ifdef __GNUC__
 #include <unistd.h>
 #endif
 
-#include <fcntl.h>
-#include <versekey.h>
-#include <filemgr.h>
 
 using namespace swordxx;
 
@@ -268,26 +267,25 @@ char findbreak(int fp, long *offset, int *num1, int *num2, int *rangemax, short 
 
 void openfiles(char *fname)
 {
-    std::string buf;
 
     if ((fp = FileMgr::openFileReadOnly(fname)) < 0) {
         fprintf(stderr, "Couldn't open file: %s\n", fname);
         exit(1);
     }
 
-    buf.setFormatted("%s.vss", fname);
+    std::string buf(formatted("%s.vss", fname));
     if ((vfp = FileMgr::createPathAndFile(buf.c_str())) < 0) {
         fprintf(stderr, "Couldn't open file: %s\n", buf.c_str());
         exit(1);
     }
 
-    buf.setFormatted("%s.cps", fname);
+    buf = formatted("%s.cps", fname);
     if ((cfp = FileMgr::createPathAndFile(buf.c_str())) < 0) {
         fprintf(stderr, "Couldn't open file: %s\n", buf.c_str());
         exit(1);
     }
 
-    buf.setFormatted("%s.bks", fname);
+    buf = formatted("%s.bks", fname);
     if ((bfp = FileMgr::createPathAndFile(buf.c_str())) < 0) {
         fprintf(stderr, "Couldn't open file: %s\n", buf.c_str());
         exit(1);

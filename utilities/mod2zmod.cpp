@@ -24,31 +24,29 @@
     #pragma warning( disable: 4251 )
 #endif
 
+#include <cstdio>
 #include <fcntl.h>
-#include <iostream>
 #include <fstream>
-#include <string>
-
 #ifndef __GNUC__
 #include <io.h>
-#else
+#endif
+#include <iostream>
+#include <string>
+#include <swordxx/keys/versekey.h>
+#include <swordxx/mgr/swmgr.h>
+#include <swordxx/modules/comments/zcom/zcom.h>
+#include <swordxx/modules/common/bz2comprs.h>
+#include <swordxx/modules/common/lzsscomprs.h>
+#include <swordxx/modules/common/xzcomprs.h>
+#include <swordxx/modules/common/zipcomprs.h>
+#include <swordxx/modules/filters/cipherfil.h>
+#include <swordxx/modules/lexdict/zld/zld.h>
+#include <swordxx/modules/texts/swtext.h>
+#include <swordxx/modules/texts/ztext/ztext.h>
+#ifdef __GNUC__
 #include <unistd.h>
 #endif
 
-#include <string>
-#include <ztext.h>
-#include <zld.h>
-#include <zcom.h>
-#include <swtext.h>
-#include <swmgr.h>
-#include <lzsscomprs.h>
-#include <zipcomprs.h>
-#include <bz2comprs.h>
-#include <xzcomprs.h>
-
-#include <versekey.h>
-#include <stdio.h>
-#include <cipherfil.h>
 
 using namespace swordxx;
 
@@ -157,7 +155,7 @@ int main(int argc, char **argv)
         SWKey *k = inModule->getKey();
         VerseKey *vk = SWDYNAMIC_CAST(VerseKey, k);
         outModule = new zText(argv[2], 0, 0, iType, compressor,
-            0, ENC_UNKNOWN, DIRECTION_LTR, FMT_UNKNOWN, 0,
+            ENC_UNKNOWN, DIRECTION_LTR, FMT_UNKNOWN, 0,
             vk->getVersificationSystem());    // open our datapath with our RawText driver.
         ((VerseKey *)(SWKey *)(*inModule))->setIntros(true);
         break;

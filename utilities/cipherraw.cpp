@@ -25,25 +25,25 @@
     #pragma warning( disable: 4996 )
 #endif
 
-#include <ctype.h>
-#include <stdio.h>
+#include <cctype>
+#include <cerrno>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
 #include <fcntl.h>
-#include <errno.h>
-#include <stdlib.h>
-#include <string.h>
-#include <sys/stat.h>
-
 #ifndef __GNUC__
 #include <io.h>
-#else
+#endif
+#include <string>
+#include <swordxx/mgr/filemgr.h>
+#include <swordxx/modules/common/swcipher.h>
+#include <swordxx/keys/versekey.h>
+#include <swordxx/modules/common/rawverse.h>
+#include <sys/stat.h>
+#ifdef __GNUC__
 #include <unistd.h>
 #endif
 
-#include <filemgr.h>
-#include <swcipher.h>
-#include <versekey.h>
-#include <rawverse.h>
-#include <string>
 
 using namespace swordxx;
 

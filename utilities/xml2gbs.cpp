@@ -24,18 +24,17 @@
     #pragma warning( disable: 4251 )
 #endif
 
-#include <ctype.h>
-#include <stdio.h>
+#include <cctype>
+#include <cerrno>
+#include <cstdio>
+#include <cstdlib>
 #include <fcntl.h>
-#include <errno.h>
-#include <stdlib.h>
-
-#include <entriesblk.h>
+#include <fstream>
 #include <iostream>
 #include <string>
-#include <fstream>
-#include <treekeyidx.h>
-#include <rawgenbook.h>
+#include <swordxx/keys/treekeyidx.h>
+#include <swordxx/modules/common/entriesblk.h>
+#include <swordxx/modules/genbook/rawgenbook/rawgenbook.h>
 
 
 using swordxx::TreeKeyIdx;

@@ -25,22 +25,22 @@
     #pragma warning( disable: 4251 )
 #endif
 
-#include <ctype.h>
-#include <stdio.h>
+#include <cctype>
+#include <cerrno>
+#include <cstdio>
+#include <cstdlib>
 #include <fcntl.h>
-#include <errno.h>
-#include <stdlib.h>
-
+#include <iostream>
 #ifndef __GNUC__
 #include <io.h>
-#else
+#endif
+#include <swordxx/keys/versekey.h>
+#include <swordxx/mgr/swmgr.h>
+#include <swordxx/modules/texts/rawtext/rawtext.h>
+#ifdef __GNUC__
 #include <unistd.h>
 #endif
 
-#include <swmgr.h>
-#include <versekey.h>
-#include <rawtext.h>
-#include <iostream>
 
 using swordxx::SWMgr;
 using swordxx::RawText;

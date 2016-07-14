@@ -24,20 +24,18 @@
     #pragma warning( disable: 4251 )
 #endif
 
-#include <ctype.h>
-#include <stdio.h>
-#include <errno.h>
-#include <stdlib.h>
-
-#include <entriesblk.h>
+#include <cctype>
+#include <cerrno>
+#include <cstdio>
+#include <cstdlib>
 #include <iostream>
-#include <treekeyidx.h>
-#include <rawgenbook.h>
-#include <utilstr.h>
-#include <filemgr.h>
-#include <utf8greekaccents.h>
-#include <stringmgr.h>
-
+#include <swordxx/keys/treekeyidx.h>
+#include <swordxx/mgr/filemgr.h>
+#include <swordxx/mgr/stringmgr.h>
+#include <swordxx/modules/common/entriesblk.h>
+#include <swordxx/modules/filters/utf8greekaccents.h>
+#include <swordxx/modules/genbook/rawgenbook/rawgenbook.h>
+#include <swordxx/utilfuns/utilstr.h>
 #ifdef _ICU_
 #include <unicode/utypes.h>
 #include <unicode/ucnv.h>
@@ -47,6 +45,7 @@
 #include <unicode/translit.h>
 #include <unicode/locid.h>
 #endif
+
 
 using namespace swordxx;
 
@@ -121,7 +120,7 @@ void parseParams(int argc, char **argv) {
         outPath = inFile;
         unsigned int i;
         for (i = 0; (i < outPath.size() && outPath[i] != '.'); i++);
-        outPath.size(i);
+        outPath.resize(i);
     }
 }
 
@@ -135,19 +134,17 @@ void writeEntry(SWModule *book, std::string keyBuffer, std::string entBuffer) {
 
     if (toUpper) {
         unsigned size = (keyBuffer.size()+5)*3;
-        keyBuffer.setFillByte(0);
-        keyBuffer.resize(size);
-        StringMgr::getSystemStringMgr()->upperUTF8(keyBuffer.getRawData(), size-2);
+        keyBuffer.resize(size, '\0');
+        StringMgr::getSystemStringMgr()->upperUTF8(&keyBuffer[0u], size-2);
     }
 
 // Added for Hesychius, but this stuff should be pushed back into new StringMgr
 // functionality
 #ifdef _ICU_
 //    if (lexLevels) {
-    if (lexLevels && !keyBuffer.startsWith("/Intro")) {
+    if (lexLevels && !hasPrefix(keyBuffer, "/Intro")) {
         unsigned size = (keyBuffer.size()+(lexLevels*2));
-        keyBuffer.setFillByte(0);
-        keyBuffer.resize(size);
+        keyBuffer.resize(size, '\0');
 
         UErrorCode err = U_ZERO_ERROR;
 
@@ -173,7 +170,7 @@ void writeEntry(SWModule *book, std::string keyBuffer, std::string entBuffer) {
                 ubuffer[shift] = '/';
                 totalShift += (shift+1);
             }
-            u_strToUTF8(keyBuffer.getRawData(), max, 0, ubuffer, -1, &err);
+            u_strToUTF8(&keyBuffer[0u], max, 0, ubuffer, -1, &err);
         }
 
 /*
@@ -207,13 +204,12 @@ void writeEntry(SWModule *book, std::string keyBuffer, std::string entBuffer) {
 
     // check to see if we already have an entry
     for (int i = 2; book->getKey()->popError() != KEYERR_OUTOFBOUNDS; i++) {
-        std::string key;
-        key.setFormatted("%s {%d}", keyBuffer.c_str(), i);
+        std::string key(formatted("%s {%d}", keyBuffer.c_str(), i));
         std::cout << "dup key, trying: " << key << std::endl;
         book->setKey(key.c_str());
     }
 
-    book->setEntry(entBuffer);
+    book->setEntry(entBuffer.c_str());
 }
 
 
@@ -222,7 +218,7 @@ int main(int argc, char **argv) {
     parseParams(argc, argv);
 
     // Let's see if we can open our input file
-    FileDesc *fd = FileMgr::getSystemFileMgr()->open(inFile, FileMgr::RDONLY);
+    FileDesc *fd = FileMgr::getSystemFileMgr()->open(inFile.c_str(), FileMgr::RDONLY);
     if (fd->getFd() < 0) {
         fprintf(stderr, "error: %s: couldn't open input file: %s \n", argv[0], inFile.c_str());
         exit(-2);
@@ -232,25 +228,23 @@ int main(int argc, char **argv) {
 
     // Do some initialization stuff
     if (!augMod) {
-        RawGenBook::createModule(outPath);
+        RawGenBook::createModule(outPath.c_str());
     }
-    book = new RawGenBook(outPath);
+    book = new RawGenBook(outPath.c_str());
 
     std::string lineBuffer;
     std::string keyBuffer;
     std::string entBuffer;
 
-    bool more = true;
-    do {
-        more = FileMgr::getLine(fd, lineBuffer)!=0;
-        if (lineBuffer.startsWith("$$$")) {
+    while (!(lineBuffer = FileMgr::getLine(fd)).empty()) {
+        if (hasPrefix(lineBuffer, "$$$")) {
             if ((keyBuffer.size()) && (entBuffer.size())) {
                 writeEntry(book, keyBuffer, entBuffer);
             }
             keyBuffer = lineBuffer;
-            keyBuffer << 3;
-            keyBuffer.trim();
-            entBuffer.size(0);
+            keyBuffer.erase(0u, 3u);
+            trimString(keyBuffer);
+            entBuffer.clear();
         }
         else {
             if (keyBuffer.size()) {
@@ -258,7 +252,7 @@ int main(int argc, char **argv) {
                 entBuffer += "\n";
             }
         }
-    } while (more);
+    }
     if ((keyBuffer.size()) && (entBuffer.size())) {
         writeEntry(book, keyBuffer, entBuffer);
     }
