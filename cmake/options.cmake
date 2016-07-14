@@ -22,21 +22,12 @@ macro(_SET_FANCY _var _value _comment)
     endif()
 endmacro(_SET_FANCY)
 
-# Installation options
-IF(APPLE)
-    SET(SWORD_INSTALL_DIR "/opt/local")
-ELSE(APPLE)
-    SET(SWORD_INSTALL_DIR "/usr/local")
-ENDIF(APPLE)
+_SET_FANCY(LIB_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/lib" "Object code library install directory. Defaults to ${CMAKE_INSTALL_PREFIX}/lib")
 
-_SET_FANCY(CMAKE_INSTALL_PREFIX "${SWORD_INSTALL_DIR}" "Directory into which to install architecture-dependent files. Defaults to ${SWORD_INSTALL_DIR}.")
+_SET_FANCY(INCLUDE_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/include" "C Header files install directory. Defaults to ${CMAKE_INSTALL_PREFIX}/include.")
 
-_SET_FANCY(LIB_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/lib" "Object code library install directory. Defaults to ${SWORD_INSTALL_DIR}/lib")
+SET(BINDIR "${CMAKE_INSTALL_PREFIX}/bin" CACHE STRING "Directory to install binary executable files. Defaults to ${CMAKE_INSTALL_PREFIX}/bin.")
 
-_SET_FANCY(INCLUDE_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/include" "C Header files install directory. Defaults to ${SWORD_INSTALL_DIR}/include.")
+_SET_FANCY(SYSCONF_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/etc" "Directory to install global config files. Defaults to ${CMAKE_INSTALL_PREFIX}/etc.")
 
-SET(BINDIR "${CMAKE_INSTALL_PREFIX}/bin" CACHE STRING "Directory to install binary executable files. Defaults to ${SWORD_INSTALL_DIR}/bin.")
-
-_SET_FANCY(SYSCONF_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/etc" "Directory to install global config files. Defaults to ${SWORD_INSTALL_DIR}/etc.")
-
-_SET_FANCY(SHARE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}/share" "Directory to install global data files. Defaults to ${SWORD_INSTALL_DIR}/share.")
+_SET_FANCY(SHARE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}/share" "Directory to install global data files. Defaults to ${CMAKE_INSTALL_PREFIX}/share.")
