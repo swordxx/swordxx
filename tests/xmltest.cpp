@@ -21,7 +21,7 @@
  */
 
 #include <iostream>
-#include <swordxx/utilfuns/utilxml.h>
+#include <swordxx/utilxml.h>
 
 
 using namespace swordxx;

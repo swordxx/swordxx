@@ -44,7 +44,7 @@
 #include "swfilter.h"
 #include "swoptfilter.h"
 #include "sysdata.h"
-#include "utilfuns/utilstr.h"
+#include "utilstr.h"
 
 
 #if defined(USECXX11REGEX) && !defined(REG_ICASE)

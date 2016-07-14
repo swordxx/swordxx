@@ -27,7 +27,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include "../swmodule.h"
-#include "../utilfuns/utilstr.h"
+#include "../utilstr.h"
 
 
 namespace swordxx {

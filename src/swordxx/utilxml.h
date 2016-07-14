@@ -26,7 +26,7 @@
 #include <list>
 #include <map>
 #include <string>
-#include "../defs.h"
+#include "defs.h"
 
 
 namespace swordxx {

@@ -29,7 +29,7 @@
 #include <fcntl.h>
 #include <string>
 #include "../../keys/versekey.h"
-#include "../../utilfuns/utilstr.h"
+#include "../../utilstr.h"
 #include "../common/rawverse.h"
 
 

@@ -25,7 +25,7 @@
 
 #include "../swbasicfilter.h"
 
-#include "../utilfuns/utilxml.h"
+#include "../utilxml.h"
 
 
 namespace swordxx {

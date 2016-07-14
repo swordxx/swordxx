@@ -21,7 +21,7 @@
  */
 
 #include <iostream>
-#include <swordxx/utilfuns/utilstr.h>
+#include <swordxx/utilstr.h>
 #include <string>
 
 

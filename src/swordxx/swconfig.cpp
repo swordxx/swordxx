@@ -26,7 +26,7 @@
 #include <cstring>
 #include <fcntl.h>
 #include "filemgr.h"
-#include "utilfuns/utilstr.h"
+#include "utilstr.h"
 
 
 namespace swordxx {

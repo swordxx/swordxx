@@ -24,7 +24,7 @@
 #include "treekey.h"
 
 #include <cstring>
-#include "../utilfuns/utilstr.h"
+#include "../utilstr.h"
 
 
 namespace swordxx {

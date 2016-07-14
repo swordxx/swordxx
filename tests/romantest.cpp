@@ -24,7 +24,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <iostream>
-#include <swordxx/utilfuns/roman.h>
+#include <swordxx/roman.h>
 
 
 using swordxx::from_rom;

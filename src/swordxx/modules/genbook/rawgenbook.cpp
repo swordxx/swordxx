@@ -29,7 +29,7 @@
 #include "../../filemgr.h"
 #include "../../keys/treekeyidx.h"
 #include "../../keys/versetreekey.h"
-#include "../../utilfuns/utilstr.h"
+#include "../../utilstr.h"
 #include "../../sysdata.h"
 #include "../common/rawstr.h"
 

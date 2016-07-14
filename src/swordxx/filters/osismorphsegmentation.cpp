@@ -27,7 +27,7 @@
 #include <cstdlib>
 #include <string>
 #include "../swmodule.h"
-#include "../utilfuns/utilxml.h"
+#include "../utilxml.h"
 
 
 namespace swordxx {

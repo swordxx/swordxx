@@ -39,7 +39,7 @@
 #if defined(__GNUC__) || defined(_WIN32_WCE)
 #include <unistd.h>
 #endif
-#include "utilfuns/utilstr.h"
+#include "utilstr.h"
 
 
 #ifndef O_BINARY

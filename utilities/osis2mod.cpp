@@ -55,8 +55,8 @@
 #include <swordxx/modules/common/bz2comprs.h>
 #include <swordxx/modules/common/xzcomprs.h>
 #include <swordxx/swmgr.h>
-#include <swordxx/utilfuns/utilstr.h>
-#include <swordxx/utilfuns/utilxml.h>
+#include <swordxx/utilstr.h>
+#include <swordxx/utilxml.h>
 #include <vector>
 
 

@@ -35,7 +35,7 @@
 #include "../../filemgr.h"
 #include "../../keys/versekey.h"
 #include "../../sysdata.h"
-#include "../../utilfuns/utilstr.h"
+#include "../../utilstr.h"
 #include "../common/swcomprs.h"
 
 

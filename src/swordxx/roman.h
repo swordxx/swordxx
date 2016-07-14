@@ -22,7 +22,7 @@
 #ifndef ROMAN_H
 #define ROMAN_H
 
-#include "../defs.h"
+#include "defs.h"
 
 
 namespace swordxx {

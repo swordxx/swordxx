@@ -28,7 +28,7 @@
 #include <cstdlib>
 #include <string>
 #include "../sysdata.h"
-#include "../utilfuns/utilstr.h"
+#include "../utilstr.h"
 
 
 namespace swordxx {

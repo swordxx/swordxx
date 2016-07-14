@@ -25,7 +25,7 @@
 
 #include "keys/versekey.h"
 #include "localemgr.h"
-#include "utilfuns/utilstr.h"
+#include "utilstr.h"
 
 
 namespace swordxx {

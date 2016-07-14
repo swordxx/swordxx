@@ -27,7 +27,7 @@
 
 #include <cstring>
 #include "defs.h"
-#include "utilfuns/utilstr.h"
+#include "utilstr.h"
 
 
 namespace swordxx {

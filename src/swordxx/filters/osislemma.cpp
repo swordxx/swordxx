@@ -25,8 +25,8 @@
 
 #include <cstdlib>
 #include <cstring>
-#include "../utilfuns/utilstr.h"
-#include "../utilfuns/utilxml.h"
+#include "../utilstr.h"
+#include "../utilxml.h"
 
 
 namespace swordxx {

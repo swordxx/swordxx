@@ -31,7 +31,7 @@
 #include <map>
 #include <set>
 #include "stringmgr.h"
-#include "utilfuns/utilstr.h"
+#include "utilstr.h"
 
 
 namespace swordxx {

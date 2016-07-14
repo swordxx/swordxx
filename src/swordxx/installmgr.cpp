@@ -36,7 +36,7 @@
 #include "swmgr.h"
 #include "swmodule.h"
 #include "untgz.h"
-#include "utilfuns/utilstr.h"
+#include "utilstr.h"
 #include SWORDXX_VERSION_H_FILE
 
 

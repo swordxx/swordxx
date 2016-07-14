@@ -28,9 +28,9 @@
 #include "../keys/versekey.h"
 #include "../stringmgr.h"
 #include "../swmodule.h"
-#include "../utilfuns/url.h"
-#include "../utilfuns/utilstr.h"
-#include "../utilfuns/utilxml.h"
+#include "../url.h"
+#include "../utilstr.h"
+#include "../utilxml.h"
 
 
 namespace swordxx {

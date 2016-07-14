@@ -25,8 +25,8 @@
 #include <cstdlib>
 #include "../keys/versekey.h"
 #include "../swmodule.h"
-#include "../utilfuns/url.h"
-#include "../utilfuns/utilstr.h"
+#include "../url.h"
+#include "../utilstr.h"
 
 
 namespace swordxx {

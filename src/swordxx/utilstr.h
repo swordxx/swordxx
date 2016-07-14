@@ -29,7 +29,7 @@
 #include <cstring>
 #include <string>
 #include <utility>
-#include "../defs.h"
+#include "defs.h"
 
 
 namespace swordxx {

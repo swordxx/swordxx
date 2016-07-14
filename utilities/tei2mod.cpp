@@ -68,7 +68,7 @@
 #include <swordxx/modules/lexdict/rawld.h>
 #include <swordxx/modules/lexdict/rawld4.h>
 #include <swordxx/modules/lexdict/zld.h>
-#include <swordxx/utilfuns/utilxml.h>
+#include <swordxx/utilxml.h>
 #include <vector>
 
 

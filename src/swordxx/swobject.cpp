@@ -25,7 +25,7 @@
 
 // hack.  remove this when we figure out our link error
 #ifndef __CYGWIN__
-#include "utilfuns/utilstr.h"
+#include "utilstr.h"
 #else
 #include <cstring>
 #endif

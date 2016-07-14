@@ -24,7 +24,7 @@
 
 #include <cctype>
 #include <string>
-#include "../utilfuns/utilstr.h"
+#include "../utilstr.h"
 
 
 namespace swordxx {

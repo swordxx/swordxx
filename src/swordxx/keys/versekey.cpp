@@ -28,11 +28,11 @@
 #include <cstdlib>
 #include <cctype>
 #include <fcntl.h>
+#include "../roman.h"
 #include "../stringmgr.h"
 #include "../swlocale.h"
 #include "../swlog.h"
-#include "../utilfuns/roman.h"
-#include "../utilfuns/utilstr.h"
+#include "../utilstr.h"
 #include "../versificationmgr.h"
 
 

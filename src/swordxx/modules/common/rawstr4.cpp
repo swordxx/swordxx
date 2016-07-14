@@ -35,7 +35,7 @@
 #include "../../stringmgr.h"
 #include "../../swlog.h"
 #include "../../sysdata.h"
-#include "../../utilfuns/utilstr.h"
+#include "../../utilstr.h"
 
 
 namespace swordxx {

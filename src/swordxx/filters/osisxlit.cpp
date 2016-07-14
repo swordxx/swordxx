@@ -24,8 +24,8 @@
 #include "osisxlit.h"
 
 #include <cstdlib>
-#include "../utilfuns/utilstr.h"
-#include "../utilfuns/utilxml.h"
+#include "../utilstr.h"
+#include "../utilxml.h"
 
 
 namespace swordxx {

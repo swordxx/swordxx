@@ -33,7 +33,7 @@
 #include <unicode/ucnv.h>
 #include "../swlog.h"
 #include "../swmodule.h"
-#include "../utilfuns/utilstr.h"
+#include "../utilstr.h"
 
 
 namespace swordxx {

@@ -29,7 +29,7 @@
 #include <vector>
 #include "filemgr.h"
 #include "swlog.h"
-#include "utilfuns/utilstr.h"
+#include "utilstr.h"
 
 
 using std::vector;

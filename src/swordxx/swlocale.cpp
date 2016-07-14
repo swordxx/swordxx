@@ -26,7 +26,7 @@
 #include <map>
 #include "keys/versekey.h"
 #include "swconfig.h"
-#include "utilfuns/utilstr.h"
+#include "utilstr.h"
 #include "versificationmgr.h"
 
 

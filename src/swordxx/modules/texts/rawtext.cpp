@@ -33,7 +33,7 @@
 #include "../../keys/versekey.h"
 #include "../../stringmgr.h"
 #include "../../sysdata.h"
-#include "../../utilfuns/utilstr.h"
+#include "../../utilstr.h"
 #include "../common/rawstr.h"
 
 

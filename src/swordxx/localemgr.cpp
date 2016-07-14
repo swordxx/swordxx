@@ -33,7 +33,7 @@
 #include "swlog.h"
 #include "swmgr.h"
 #include "swlocale.h"
-#include "utilfuns/utilstr.h"
+#include "utilstr.h"
 
 
 namespace swordxx {

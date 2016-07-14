@@ -25,8 +25,8 @@
 
 #include <cctype>
 #include <cstring>
-#include "../utilfuns/url.h"
-#include "../utilfuns/utilstr.h"
+#include "../url.h"
+#include "../utilstr.h"
 
 
 namespace swordxx {

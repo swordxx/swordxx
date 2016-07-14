@@ -36,7 +36,7 @@
 #include "filters/utf8utf16.h"
 #include "swmgr.h"
 #include "swmodule.h"
-#include "utilfuns/utilstr.h"
+#include "utilstr.h"
 
 
 namespace swordxx {

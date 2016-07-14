@@ -35,7 +35,7 @@
 #include <swordxx/modules/common/entriesblk.h>
 #include <swordxx/modules/genbook/rawgenbook.h>
 #include <swordxx/stringmgr.h>
-#include <swordxx/utilfuns/utilstr.h>
+#include <swordxx/utilstr.h>
 #ifdef _ICU_
 #include <unicode/utypes.h>
 #include <unicode/ucnv.h>

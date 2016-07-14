@@ -27,13 +27,13 @@
 #include <fcntl.h>
 #include <string>
 #include "filemgr.h"
-#include "swlog.h"
-#include "utilfuns/utilstr.h"
-
-
 extern "C" {
-#include "utilfuns/ftpparse.h"
+#include "ftpparse.h"
 }
+#include "swlog.h"
+#include "utilstr.h"
+
+
 
 
 using std::vector;
