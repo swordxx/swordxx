@@ -22,20 +22,31 @@
 
 TESTSUITE=`for i in *.good; do basename $i .good; done`
 
+FAILED=0
+echo ''
+echo '======================================================================'
+echo '  Running tests'
+echo '======================================================================'
 for i in $TESTSUITE; do
     echo -n "$i: "
     ./runtest.sh $i -q
     if [ $? -ne 0 ]; then
-        echo FAILED
-        echo ""
-        echo To see problems, try running:
-        echo ./runtest.sh $i
-        echo ""
-        exit 1
+        echo 'FAILED!!!'
+        FAILED=1
     else
-        echo PASSED.
+        echo 'PASSED.'
     fi
 done
-echo "ALL PASSED!"
-exit 0
+
+echo '======================================================================'
+if [ "$FAILED" -eq "0" ]; then
+    echo "ALL TESTS PASSED."
+    echo ''
+else
+    echo 'SOME TESTS FAILED!!!'
+    echo ''
+    echo 'To see problems, try running `./runtest.sh <testname>`'
+    echo '======================================================================'
+    echo ''
+    exit 1
 fi
