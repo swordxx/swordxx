@@ -25,6 +25,12 @@ if [ "$1" = "" ]; then
     exit 1
 fi
 
+if command -v colordiff >/dev/null 2>&1 ; then
+   DIFFCMD=colordiff
+else
+   DIFFCMD=diff
+fi
+
 ./$1.sh > $1.try
 BAD=`diff -uBb $1.try $1.good`
 if [ "$BAD" = "" ]; then
@@ -39,7 +45,7 @@ else
         exit 1
     else
         echo "Script failed at: (- bad output; + should have been)"
-        diff -u $1.try $1.good
+        $DIFFCMD -u $1.try $1.good
     fi
     exit 1
 fi
