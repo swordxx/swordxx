@@ -47,7 +47,7 @@ using swordxx::SWKey;
 
 enum XML_FORMATS { F_AUTODETECT, F_OSIS, F_THML, F_TEI };
 
-#define HELPTEXT "xml2gbs 1.0 OSIS/ThML/TEI General Book module creation tool for the SWORD Project\n  usage:\n   xml2gbs [-l] [-i] [-fT|-fO|-fE] <filename> [modname]\n  -l uses long div names in ThML files\n  -i exports to IMP format instead of creating a module\n  -fO, -fT, and -fE will set the importer to expect OSIS, ThML, or TEI format respectively\n    (otherwise it attempts to autodetect)\n"
+#define HELPTEXT "xml2gbs 1.0 OSIS/ThML/TEI General Book module creation tool for the Sword++ Project\n  usage:\n   xml2gbs [-l] [-i] [-fT|-fO|-fE] <filename> [modname]\n  -l uses long div names in ThML files\n  -i exports to IMP format instead of creating a module\n  -fO, -fT, and -fE will set the importer to expect OSIS, ThML, or TEI format respectively\n    (otherwise it attempts to autodetect)\n"
 
 unsigned char detectFormat(char* filename) {
 

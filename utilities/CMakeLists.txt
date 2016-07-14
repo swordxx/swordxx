@@ -3,7 +3,7 @@
 #
 # The general assumption is that each of these utilities is built from
 # a single source file, which shares its name with the utility itself (appended with .cpp),
-# and then linked against the SWORD library.
+# and then linked against the SWORD++ library.
 #
 # This list will be built and installed, if so chosen
 #
@@ -60,9 +60,9 @@ SET(noinstall_UTILITIES
 FOREACH(UTIL ${install_UTILITIES} ${noinstall_UTILITIES})
     ADD_EXECUTABLE("${UTIL}"    "${UTIL}.cpp")
     IF(BUILDING_SHARED)
-        TARGET_LINK_LIBRARIES("${UTIL}" sword)
+        TARGET_LINK_LIBRARIES("${UTIL}" swordxx)
     ELSE(BUILDING_SHARED)
-        TARGET_LINK_LIBRARIES("${UTIL}" sword_static)
+        TARGET_LINK_LIBRARIES("${UTIL}" swordxx_static)
     ENDIF(BUILDING_SHARED)
 ENDFOREACH(UTIL ${install_UTILITIES})
 
@@ -73,9 +73,9 @@ ENDFOREACH(UTIL ${install_UTILITIES})
 
 ADD_EXECUTABLE(lexdump    lexdump.c)
 IF(BUILDING_SHARED)
-    TARGET_LINK_LIBRARIES(lexdump sword)
+    TARGET_LINK_LIBRARIES(lexdump swordxx)
 ELSE(BUILDING_SHARED)
-    TARGET_LINK_LIBRARIES(lexdump sword_static)
+    TARGET_LINK_LIBRARIES(lexdump swordxx_static)
 ENDIF(BUILDING_SHARED)
 
 ####################################################################

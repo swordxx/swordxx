@@ -34,7 +34,7 @@ static const int ENDOFABBREVS = -2;
 
 /** SWLocale is used for the localisation of the booknames
 * The SWLocale is a class which holds the information of one language.
-* Every language supported by SWORD has one SWLocale object,
+* Every language supported by Sword++ has one SWLocale object,
 * get the name of the Language using @see getname of this class.
 * Another functions useful for frontend developers is @see getDescription.
 */

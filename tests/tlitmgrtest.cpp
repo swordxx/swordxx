@@ -280,7 +280,7 @@ static const char RB_RULE_BASED_IDS[] = "RuleBasedTransliteratorIDs";
 
 static const char RB_RULE[] = "Rule";
 
-static const char SW_RESDATA[] = "/usr/local/lib/sword/";
+static const char SW_RESDATA[] = "/usr/local/lib/swordxx/";
 
 #include <map>
 

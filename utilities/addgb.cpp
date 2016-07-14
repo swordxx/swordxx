@@ -69,9 +69,9 @@ void printTree(TreeKeyIdx treeKey, TreeKeyIdx *target = 0, int level = 1) {
 
 int main(int argc, char **argv) {
 
-  const char * helptext ="addgb 1.0 General Book module creation tool for the SWORD Project\nUse -a to add a new leaf entry from standard input or a file\n  usage:\n   %s -a <filename> <key> [</path/to/file/with/entry>]\n";
+  const char * helptext ="addgb 1.0 General Book module creation tool for the Sword++ Project\nUse -a to add a new leaf entry from standard input or a file\n  usage:\n   %s -a <filename> <key> [</path/to/file/with/entry>]\n";
 
-  //  const char * helptext ="addgb 1.0 General Book module creation tool for the SWORD Project\nUse -a to add a new leaf entry from standard input or a file, -d to delete an\nentry, -l to link two leaf entries.\n  usage:\n   %s -a <filename> <key> [</path/to/file/with/entry>]\n   %s -d <filename> <key>\n   %s -l <filename> <first key (already assigned)> <second key>\n";
+  //  const char * helptext ="addgb 1.0 General Book module creation tool for the Sword++ Project\nUse -a to add a new leaf entry from standard input or a file, -d to delete an\nentry, -l to link two leaf entries.\n  usage:\n   %s -a <filename> <key> [</path/to/file/with/entry>]\n   %s -d <filename> <key>\n   %s -l <filename> <first key (already assigned)> <second key>\n";
 
   char mode;
   unsigned long entrysize;

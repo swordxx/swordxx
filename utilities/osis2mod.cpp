@@ -105,7 +105,7 @@ ListKey currentKeyIDs = ListKey();
 
 std::vector<ListKey> linkedVerses;
 
-static bool inCanonicalOSISBook = true; // osisID is for a book that is not in Sword's canon
+static bool inCanonicalOSISBook = true; // osisID is for a book that is not in Sword++'s canon
 static bool normalize           = true; // Whether to normalize UTF-8 to NFC
 
 bool isOSISAbbrev(const char *buf) {
@@ -229,7 +229,7 @@ void prepareSWText(const char *osisID, std::string &text)
 #endif
 }
 
-// This routine converts an osisID or osisRef into one that SWORD can parse into a verse list
+// This routine converts an osisID or osisRef into one that Sword++ can parse into a verse list
 // An osisRef is made up of:
 // a single osisID
 // an osisID-osisID
@@ -239,7 +239,7 @@ void prepareSWText(const char *osisID, std::string &text)
 // An osisID can have a work prefix which is terminated by a : and may have a grain
 // which is started by a !
 //
-// However, SWORD cannot handle work prefixes or grains and expects ranges to be
+// However, Sword++ cannot handle work prefixes or grains and expects ranges to be
 // separated with a single;
 void prepareSWVerseKey(std::string &buf) {
     // This routine modifies the buf in place
@@ -925,7 +925,7 @@ bool handleToken(std::string &text, XMLTag token) {
                 text.append(wocTag);
 
                 // Output the quotation mark if appropriate, inside the WOC.
-                // If there is no marker attribute, let the SWORD engine manufacture one.
+                // If there is no marker attribute, let the Sword++ engine manufacture one.
                 // If there is a marker attribute and it has content, then output that.
                 // If the marker attribute is present and empty, then there is nothing to do.
                 // And have it within the WOC markup
@@ -1113,7 +1113,7 @@ bool handleToken(std::string &text, XMLTag token) {
 
 
                 // Output the quotation mark if appropriate, inside the WOC.
-                // If there is no marker attribute, let the SWORD engine manufacture one.
+                // If there is no marker attribute, let the Sword++ engine manufacture one.
                 // If there is a marker attribute and it has content, then output that.
                 // If the marker attribute is present and empty, then there is nothing to do.
                 // And have it within the WOC markup
@@ -1190,10 +1190,10 @@ bool handleToken(std::string &text, XMLTag token) {
 }
 
 /**
- * Support normalizations necessary for a SWORD module.
+ * Support normalizations necessary for a Sword++ module.
  * OSIS allows for document structure (Book, Section, Paragraph or BSP)
  * to overlap Bible versification (Book, Chapter, Verse).
- * Most SWORD applications need to display verses in isolation or in HTML table cells,
+ * Most Sword++ applications need to display verses in isolation or in HTML table cells,
  * requiring each stored entry (i.e. verses) to be well-formed xml.
  * This routine normalizes container elements which could cross verse boundaries into milestones.
  * For most of these OSIS elements, there is a milestone form. However, p is not milestoneable.
@@ -1342,7 +1342,7 @@ void usage(const char *app, const char *error = 0, const bool verboseHelp = fals
 
     if (error) fprintf(stderr, "\n%s: %s\n", app, error);
 
-    fprintf(stderr, "OSIS Bible/commentary module creation tool for The SWORD Project\n");
+    fprintf(stderr, "OSIS Bible/commentary module creation tool for The Sword++ Project\n");
     fprintf(stderr, "\nusage: %s <output/path> <osisDoc> [OPTIONS]\n", app);
     fprintf(stderr, "  <output/path>\t\t an existing folder that the module will be written\n");
     fprintf(stderr, "  <osisDoc>\t\t path to the validated OSIS document, or '-' to\n");
@@ -1473,7 +1473,7 @@ void processOSIS(istream& infile) {
         curChar = (unsigned char) possibleChar;
 
         // All newlines are simply whitespace
-        // Does a SWORD module actually require this?
+        // Does a Sword++ module actually require this?
         if (curChar == '\n') {
             curChar = ' ';
             charPos = 0;
@@ -1604,7 +1604,7 @@ void processOSIS(istream& infile) {
                         cout << "WARNING(PARSE): HEX entity must begin with &x, found " << entityToken << endl;
                     }
                     else {
-                        cout << "WARNING(PARSE): SWORD does not search HEX entities, found " << entityToken << endl;
+                        cout << "WARNING(PARSE): Sword++ does not search HEX entities, found " << entityToken << endl;
                     }
                     break;
                     case ET_CHAR :
@@ -1655,7 +1655,7 @@ void processOSIS(istream& infile) {
                     }
                     break;
                     case ET_NUM :
-                    cout << "WARNING(PARSE): SWORD does not search numeric entities, found " << entityToken << endl;
+                    cout << "WARNING(PARSE): Sword++ does not search numeric entities, found " << entityToken << endl;
                     break;
                     case ET_NONE :
                     default:

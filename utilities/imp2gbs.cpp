@@ -61,7 +61,7 @@ UTF8GreekAccents greekAccentsFilter;
 
 
 void usage(const char *app) {
-    fprintf(stderr, "imp2gbs 1.0 General Book module creation tool for the SWORD Project\n\n");
+    fprintf(stderr, "imp2gbs 1.0 General Book module creation tool for the Sword++Project\n\n");
     fprintf(stderr, "usage: %s <inFile> [OPTIONS]\n", app);
     fprintf(stderr, "\t-o <outPath>\n\t\tSpecify an output Path other than inFile location.\n");
     fprintf(stderr, "\t-a\n\t\tAugment Module [default: create new]\n");

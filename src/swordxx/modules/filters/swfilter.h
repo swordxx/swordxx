@@ -36,7 +36,7 @@ class SWModule;
 
 class SWModule;
 
-/** Base class for all filters in sword.
+/** Base class for all filters in Sword++.
 * Filters are used to filter/convert text between different formats
 * like GBF, HTML, RTF ...
 */

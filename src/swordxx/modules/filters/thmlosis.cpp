@@ -375,7 +375,7 @@ char ThMLOSIS::processText(std::string &text, const SWKey *key, const SWModule *
 //                 const char *c;
 //                 for (c = src;((*c) && (*c != '"')); c++);
 
-// uncomment for SWORD absolute path logic
+// uncomment for Sword++ absolute path logic
 //                if (*(c+1) == '/') {
 //                    pushString(buf, "file:");
 //                    pushString(buf, module->getConfigEntry("AbsoluteDataPath"));

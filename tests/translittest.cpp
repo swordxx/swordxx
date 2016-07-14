@@ -58,7 +58,7 @@ int main() {
 
 
   UErrorCode status = U_ZERO_ERROR;
-//  UDataMemory *pappData = udata_open("/usr/local/lib/sword/swicu", "res", "root", &status);
+//  UDataMemory *pappData = udata_open("/usr/local/lib/swordxx/swicu", "res", "root", &status);
   if (U_FAILURE(status))
   {
       std::cout << "error: " << status << ":" <<
@@ -72,9 +72,9 @@ int main() {
   int32_t uBufSize = 0, uLength = 0;
 //  void * pAppData=NULL;
   const char * samplestring = "If this compiles and runs without errors, apparently ICU is working.";
-  //ures_open("/usr/local/lib/sword/swicu.dat",
+  //ures_open("/usr/local/lib/swordxx/swicu.dat",
  //     NULL, &status);
-  //UDataMemory *pappData = udata_open("/usr/local/lib/sword/swicu",
+  //UDataMemory *pappData = udata_open("/usr/local/lib/swordxx/swicu",
 //    "res", "root", &status);
   if (U_FAILURE(status))
   {
@@ -82,7 +82,7 @@ int main() {
         u_errorName(status) << std::endl;
     return 0;
   }
-  //UDataMemory *pappData2 = udata_open("/usr/local/lib/sword/swicu",
+  //UDataMemory *pappData2 = udata_open("/usr/local/lib/swordxx/swicu",
 //    "res", "translit_Latin_Gothic", &status);
   std::cout << status << std::endl;
   if (U_FAILURE(status))
@@ -92,7 +92,7 @@ int main() {
     return 0;
   }
   std::cout << "available " << Transliterator::countAvailableIDs() << std::endl;
-  //udata_setAppData("/usr/local/lib/sword/swicu.dat" , pAppData, &status);
+  //udata_setAppData("/usr/local/lib/swordxx/swicu.dat" , pAppData, &status);
   //if (U_FAILURE(status))
   //{
       //std::cout << "error: " << status << ":" <<

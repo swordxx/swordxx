@@ -1,7 +1,7 @@
 /******************************************************************************
  *
  *  stripaccents.cpp -    This simple example shows how to strip diacritical marks from a stringa
- *            using the SWORD library. It amounts to a simple commandline
+ *            using the Sword++ library. It amounts to a simple commandline
  *            tool with a usage like:
  *
  *                               stripaccents 4 "וְהָאָ֗רֶץ הָיְתָ֥ה תֹ֙הוּ֙ וָבֹ֔הוּ וְחֹ֖שֶׁךְ עַל־פְּנֵ֣י תְהֹ֑ום וְר֣וּחַ "

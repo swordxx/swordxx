@@ -65,7 +65,7 @@ virtual bool isUserDisclaimerConfirmed() const {
         cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
         cout << "                -=+* WARNING *+=- -=+* WARNING *+=-\n\n\n";
         cout << "Although Install Manager provides a convenient way for installing\n";
-        cout << "and upgrading SWORD components, it also uses a systematic method\n";
+        cout << "and upgrading Sword++ components, it also uses a systematic method\n";
         cout << "for accessing sites which gives packet sniffers a target to lock\n";
         cout << "into for singling out users. \n\n\n";
         cout << "IF YOU LIVE IN A PERSECUTED COUNTRY AND DO NOT WISH TO RISK DETECTION,\n";
@@ -125,11 +125,11 @@ void init() {
         mgr = new SWMgr();
 
         if (!mgr->config)
-            usage(0, "ERROR: SWORD configuration not found.  Please configure SWORD before using this program.");
+            usage(0, "ERROR: Sword++ configuration not found.  Please configure Sword++ before using this program.");
 
         std::string baseDir = mgr->getHomeDir();
         if (baseDir.length() < 1) baseDir = ".";
-        baseDir += "/.sword/InstallMgr";
+        baseDir += "/.swordxx/InstallMgr";
         confPath = baseDir + "/InstallMgr.conf";
         statusReporter = new MyStatusReporter();
         installMgr = new MyInstallMgr(baseDir, statusReporter);

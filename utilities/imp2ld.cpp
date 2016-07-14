@@ -43,7 +43,7 @@ using namespace swordxx;
 
 void usage(const char *progName, const char *error = 0) {
     if (error) fprintf(stderr, "\n%s: %s\n", progName, error);
-    fprintf(stderr, "\n=== imp2ld (Revision $Rev$) SWORD lexicon importer.\n");
+    fprintf(stderr, "\n=== imp2ld (Revision $Rev$) Sword++ lexicon importer.\n");
     fprintf(stderr, "\nusage: %s <imp_file> [options]\n", progName);
     fprintf(stderr, "  -a\t\t\t augment module if exists (default is to create new)\n");
     fprintf(stderr, "  -z <l|z|b|x>\t\t use compression (default: none)\n");
@@ -54,7 +54,7 @@ void usage(const char *progName, const char *error = 0) {
     fprintf(stderr, "  -s\t\t\t case sensitive keys (default is not case sensitive)\n");
     fprintf(stderr, "  -P\t\t\t disable key Strong's number padding (by default keys will be padded).");
     fprintf(stderr, "\n");
-    fprintf(stderr, "'imp' format is a simple standard for importing data into SWORD modules.\n"
+    fprintf(stderr, "'imp' format is a simple standard for importing data into Sword++ modules.\n"
         "Required is a plain text file containing $$$key lines followed by content.\n\n"
         "$$$Abraham\n"
         "Abraham was the father of Isaac...\n"

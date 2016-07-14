@@ -1,7 +1,7 @@
 /******************************************************************************
  *
  *  swmgr.h -    definition of class SWMgr used to interact with an install
- *        base of sword modules.
+ *        base of Sword++ modules.
  *
  * $Id$
  *
@@ -21,12 +21,12 @@
  *
  */
 
-/** @mainpage The SWORD Project - API documentation
- * This is the API documentation for The SWORD Project.
- * It describes the structure of the SWORD library and documents the functions of the classes.
+/** @mainpage The Sword++ Project - API documentation
+ * This is the API documentation for The Sword++ Project.
+ * It describes the structure of the Sword++ library and documents the functions of the classes.
  * From time to time this documentation gives programming examples, too.
  *
- * SWORD provides a simple to use engine for working with many types of texts including Bibles,
+ * Sword++ provides a simple to use engine for working with many types of texts including Bibles,
  *    commentaries, lexicons, glossaries, daily devotionals, and others.
  *
  * Some main classes:
@@ -39,19 +39,6 @@
  *
  * http://crosswire.org/sword/develop/swordapi/apiprimer.jsp
  *
- * If you're interested in working on a client which uses SWORD, please first have a look at
- *    some of the existing ones.  They can always use help, and will also prove to be good examples
- *    if you decide to start a new project.
- *
- * Well known frontends are:
- *    -BibleTime
- *    -BPBible
- *    -Eloquent
- *    -PocketSword
- *    -The SWORD Projectfor Windows
- *    -Xiphos
- * See http://crosswire.org/applications.jsp for links to each and a more
- * complete list.
  */
 
 #ifndef SWMGR_H

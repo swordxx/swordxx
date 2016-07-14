@@ -1,8 +1,8 @@
 /******************************************************************************
  *
  *  outplain.cpp -    This example shows how to output the plain text
- *            entries from a SWORD module. This small program
- *            outputs a SWORD module in 'imp' format, e.g.:
+ *            entries from a Sword++ module. This small program
+ *            outputs a Sword++ module in 'imp' format, e.g.:
  *
  * $$$Gen.1.1
  * In the beginning God created

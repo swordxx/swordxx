@@ -51,7 +51,7 @@ using swordxx::SWModule;
 
 int main(int argc, char **argv) {
 
-  const char * helptext = "addvs 1.1 Bible & Commentary module creation tool for the SWORD Project\nUse -a to add a new verse from standard input or a file, -d to delete a verse,\n-l to link two verses, -c to create a new module.\n  usage:\n   %s -a </path/to/module> <verse> [</path/to/file/with/verse>]\n   %s -d </path/to/module> <key>\n   %s -l </path/to/module> <first verse (already assigned)> <second verse>\n   %s -c </path/to/module>\n";
+  const char * helptext = "addvs 1.1 Bible & Commentary module creation tool for the Sword++ Project\nUse -a to add a new verse from standard input or a file, -d to delete a verse,\n-l to link two verses, -c to create a new module.\n  usage:\n   %s -a </path/to/module> <verse> [</path/to/file/with/verse>]\n   %s -d </path/to/module> <key>\n   %s -l </path/to/module> <first verse (already assigned)> <second verse>\n   %s -c </path/to/module>\n";
   long entrysize;
 
   if (argc < 3) {

@@ -1,7 +1,7 @@
 /******************************************************************************
  *
  *  swobject.h -    definition for SWObject used as lowest base class for
- *            many SWORD objects
+ *            many Sword++ objects
  *
  * $Id$
  *
@@ -45,10 +45,10 @@ public:
     bool isAssignableFrom(const char *className) const;
 };
 
-/** Base class for major Sword classes.
-* SWObject is the base class for major Sword classes like SWKey.
+/** Base class for major Sword++ classes.
+* SWObject is the base class for major Sword++ classes like SWKey.
 * It is used because dynamic_cast is not available on all plattforms supported
-* by Sword. Use SWDYNAMIC_CAST(classname, object) instead of dynamic_cast<classname>(object).
+* by Sword++. Use SWDYNAMIC_CAST(classname, object) instead of dynamic_cast<classname>(object).
 */
 class SWDLLEXPORT SWObject {
 protected:

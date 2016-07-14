@@ -52,7 +52,7 @@ using swordxx::RawLD;
 
 int main(int argc, char **argv) {
 
-  const char * helptext ="addld 1.0 Lexicon & Dictionary module creation tool for the SWORD Project\nUse -a to add a new LD entry from standard input or a file, -d to delete an\nentry, -l to link two LD entries, -c to create a new module.\n  usage:\n   %s -a <filename> <key> [</path/to/file/with/entry>]\n   %s -d <filename> <key>\n   %s -l <filename> <first key (already assigned)> <second key>\n   %s -c <filename>\nTo use 4-byte LD instead of 2-byte, insert a 4 immediately after the '-'.\nTo use zLD instead of 2-byte, insert a z immediately after the '-'.\n";
+  const char * helptext ="addld 1.0 Lexicon & Dictionary module creation tool for the Sword++ Project\nUse -a to add a new LD entry from standard input or a file, -d to delete an\nentry, -l to link two LD entries, -c to create a new module.\n  usage:\n   %s -a <filename> <key> [</path/to/file/with/entry>]\n   %s -d <filename> <key>\n   %s -l <filename> <first key (already assigned)> <second key>\n   %s -c <filename>\nTo use 4-byte LD instead of 2-byte, insert a 4 immediately after the '-'.\nTo use zLD instead of 2-byte, insert a z immediately after the '-'.\n";
   long entrysize;
 
   bool fourbyte = false;

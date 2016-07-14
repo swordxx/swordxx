@@ -34,7 +34,7 @@ namespace swordxx {
 
 /**
  * Class TreeKey
- * The base class for all tree-based key implementations in Sword.
+ * The base class for all tree-based key implementations in Sword++.
  */
 class SWDLLEXPORT TreeKey : public SWKey {
     static SWClass classdef;
@@ -43,7 +43,7 @@ class SWDLLEXPORT TreeKey : public SWKey {
 protected:
     // hold on to setText until we've done a snap action: getText or navigation
     // if we set, and then write out userData, we want to assure the path exists.
-    // This better conforms to the SWORD write methodology: mod.setKey, mod.setEntry
+    // This better conforms to the Sword++ write methodology: mod.setKey, mod.setEntry
     mutable std::string unsnappedKeyText;
 
     // called whenever position of this key is changed.  Should we move this

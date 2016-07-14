@@ -30,8 +30,8 @@
 #include <markupfiltmgr.h>
 #include <iostream>
 
-#ifndef NO_SWORD_NAMESPACE
-using namespace sword;
+#ifndef NO_SWORDXX_NAMESPACE
+using namespace swordxx;
 #endif
 
 int usage()

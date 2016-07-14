@@ -1,7 +1,7 @@
 /******************************************************************************
  *
  *  swobject.cpp -    code for SWClass used as lowest base class for many
- *            SWORD objects
+ *            Sword++ objects
  *
  * $Id$
  *

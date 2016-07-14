@@ -101,7 +101,7 @@ const char UTF8Transliterator::SW_RB_RULE[] = "Rule";
 #ifdef SWICU_DATA
 const char UTF8Transliterator::SW_RESDATA[] = SWICU_DATA;
 #else
-const char UTF8Transliterator::SW_RESDATA[] = "/usr/local/lib/sword/";
+const char UTF8Transliterator::SW_RESDATA[] = "/usr/local/lib/swordxx/";
 #endif
 
 class SWCharString {

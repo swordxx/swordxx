@@ -1,7 +1,7 @@
 /******************************************************************************
  *
  *  localemgr.h -    definition of class LocaleMgr used to interact with
- *            registered locales for a sword installation
+ *            registered locales for a Sword++ installation
  *
  * $Id$
  *
@@ -37,7 +37,7 @@ class SWLocale;
 typedef std::list<std::string> StringList;
 typedef std::map < std::string, SWLocale *, std::less < std::string > > LocaleMap;
 /**
-* The LocaleMgr class handles all the different locales of Sword.
+* The LocaleMgr class handles all the different locales of Sword++.
 * It provides functions to get a list of all available locales,
 * to get the default locale name and to get it.
 * The other functions are not interesting for frontend programmers.
@@ -86,7 +86,7 @@ public:
     * This function uses both parameters to return the translated version of the given text.
     *
     * @param text The text to translate into the language given by the first parameter.
-    * @param localeName The name of the locale Sword should use
+    * @param localeName The name of the locale Sword++ should use
     * @return Returns the translated text.
     */
     virtual const char *translate(const char *text, const char *localeName = 0);
@@ -97,13 +97,13 @@ public:
     */
     virtual const char *getDefaultLocaleName();
 
-    /** Set the new standard locale of Sword.
+    /** Set the new standard locale of Sword++.
     *
     * @param name The name of the new default locale
     */
     virtual void setDefaultLocaleName(const char *name);
 
-    /** The LocaleMgr object used globally in the Sword world.
+    /** The LocaleMgr object used globally in the Sword++ world.
     * Do not create your own LocaleMgr, use this static object instead.
     */
     static LocaleMgr *getSystemLocaleMgr();

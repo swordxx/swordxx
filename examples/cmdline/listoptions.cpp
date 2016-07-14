@@ -3,7 +3,7 @@
  *  listoptions.cpp -    Simple example to show how to see which 'options' are
  *            available from the installed set of modules and their
  *            possible settings.
- *            Options in SWORD refer to things like "Strong's
+ *            Options in Sword++ refer to things like "Strong's
  *            Numbers", "Morphology", etc.
  *
  * $Id$

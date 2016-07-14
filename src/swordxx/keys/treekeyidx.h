@@ -34,7 +34,7 @@ class FileDesc;
 
 /**
  * Class TreeKeyIdx
- * The TreeKey implementation used for all tree-based modules in Sword, such as GenBooks.
+ * The TreeKey implementation used for all tree-based modules in Sword++, such as GenBooks.
  */
 class SWDLLEXPORT TreeKeyIdx : public TreeKey {
 

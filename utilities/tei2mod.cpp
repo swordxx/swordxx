@@ -37,13 +37,13 @@
  *    <entryFree> - a very unrestricted form of a dictionary entry.
  *    <superentry> - an entry which can have other entries.
  * The value of the key attribute is used as the key for the entry in the module.
- * Note, for a <superentry> only it's key becomes a SWORD key.
+ * Note, for a <superentry> only it's key becomes a Sword++ key.
  * Keys of entries internal to it are not used.
  *
  * The entries must be sorted according to an ASCII collation of their bytes.
  * This should be the same for Latin-1 and for UTF-8
  *
- * Sword will allow for any tags, but only a few have any styling.
+ * Sword++ will allow for any tags, but only a few have any styling.
  *
  * author DM Smith
  */
@@ -342,7 +342,7 @@ void usage(const char *app, const char *error = 0) {
 
     if (error) fprintf(stderr, "\n%s: %s\n", app, error);
 
-    fprintf(stderr, "TEI Lexicon/Dictionary/Daily Devotional/Glossary module creation tool for\n\tThe SWORD Project\n");
+    fprintf(stderr, "TEI Lexicon/Dictionary/Daily Devotional/Glossary module creation tool for\n\tThe Sword++ Project\n");
     fprintf(stderr, "\nusage: %s <output/path> <teiDoc> [OPTIONS]\n", app);
     fprintf(stderr, "  -z <l|z|b|x>\t\t use compression (default: none)\n");
     fprintf(stderr, "\t\t\t\t l - LZSS; z - ZIP; b - bzip2; x - xz\n");

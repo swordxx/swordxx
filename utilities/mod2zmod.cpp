@@ -57,7 +57,7 @@ using std::string;
 using std::cout;
 
 void errorOutHelp(char *appName) {
-    cerr << appName << " - a tool to create compressed Sword modules\n";
+    cerr << appName << " - a tool to create compressed Sword++ modules\n";
     cerr << "version 0.1\n\n";
     cerr << "usage: "<< appName << " <modname> <datapath> [blockType [compressType [compressLevel [cipherKey]]]]\n\n";
     cerr << "datapath: the directory in which to write the zModule\n";

@@ -69,7 +69,7 @@ typedef std::map < std::string, AttributeList, std::less < std::string > > Attri
 #define SWTextMarkup char
 
 /**
- * The class SWModule is the base class for all modules used in Sword.
+ * The class SWModule is the base class for all modules used in Sword++.
  * It provides functions to look up a text passage, to search in the module,
  * to switch on/off the state of optional things like Strong's numbers or
  * footnotes.
@@ -171,7 +171,7 @@ public:
      */
     virtual bool isUnicode() const { return (encoding == (char)ENC_UTF8 || encoding == (char)ENC_SCSU); }
 
-    // These methods are useful for modules that come from a standard SWORD install (most do).
+    // These methods are useful for modules that come from a standard Sword++ install (most do).
     // SWMgr will call setConfig.  The user may use getConfig and getConfigEntry (if they
     // are not comfortable with, or don't wish to use  stl maps).
     virtual void setConfig(ConfigEntMap * conf) { config = conf; }
@@ -181,7 +181,7 @@ public:
      * Gets a configuration property about a module.  These entries are primarily
      * pulled from the module's .conf file, but also includes some virtual entries
      * such as:
-     *     PrefixPath - the absolute filesystem path to the sword module repository
+     *     PrefixPath - the absolute filesystem path to the Sword++ module repository
      *    location where this module is located.
      *    AbsoluteDataPath - the full path to the root folder where the module
      *    data is stored.

@@ -1,13 +1,13 @@
 /******************************************************************************
  *
  *  simple.cpp -    This is about the simplest useful example of using the
- *            SWORD engine.
+ *            Sword++ engine.
  *
- * After sword is installed, it should compile with something similar to:
+ * After Sword++ is installed, it should compile with something similar to:
  *
- *    g++ -o simple simple.cpp `pkg-config --cflags --libs sword`
+ *    g++ -o simple simple.cpp `pkg-config --cflags --libs swordxx`
  *
- * If you'd like to choose the type of tag markup which sword will output
+ * If you'd like to choose the type of tag markup which Sword++ will output
  *    for you, include:
  *
  *    #include <markupfiltmgr.h>

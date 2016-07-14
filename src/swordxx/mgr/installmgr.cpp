@@ -60,7 +60,7 @@ const int InstallMgr::MODSTAT_CIPHERKEYPRESENT = 0x020;
 
 
 // override this method and provide your own custom RemoteTransport subclass
-// here we try a couple defaults if sword was compiled with support for them.
+// here we try a couple defaults if Sword++ was compiled with support for them.
 // see these classes for examples of how to make your own
 RemoteTransport *InstallMgr::createFTPTransport(const char *host, StatusReporter *statusReporter) {
     return new CURLFTPTransport(host, statusReporter);

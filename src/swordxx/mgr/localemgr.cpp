@@ -1,7 +1,7 @@
 /******************************************************************************
  *
  *  localemgr.cpp -    implementation of class LocaleMgr used to interact with
- *            registered locales for a SWORD installation
+ *            registered locales for a Sword++ installation
  *
  * $Id$
  *

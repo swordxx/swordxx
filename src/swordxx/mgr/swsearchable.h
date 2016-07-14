@@ -84,7 +84,7 @@ public:
     virtual void deleteSearchFramework();
 
     /**
-     * was SWORD compiled with code to optimize searching for this driver?
+     * Was Sword++ compiled with code to optimize searching for this driver?
      */
     virtual bool hasSearchFramework() { return false; }
 

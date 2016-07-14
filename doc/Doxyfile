@@ -1,6 +1,6 @@
 #******************************************************************************
 #
-# Doxyfile doxygen generation file for SWORD API docs
+# Doxyfile doxygen generation file for SWORD++ API docs
 #
 # Submitted by GHellings.
 #
@@ -49,7 +49,7 @@ DOXYFILE_ENCODING      = UTF-8
 # The PROJECT_NAME tag is a single word (or a sequence of words surrounded
 # by quotes) that should identify the project.
 
-PROJECT_NAME           = "The SWORD Project"
+PROJECT_NAME           = "The SWORD++ Project"
 
 # The PROJECT_NUMBER tag can be used to enter a project or revision number.
 # This could be handy for archiving the generated documentation or

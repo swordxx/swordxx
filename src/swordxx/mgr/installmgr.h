@@ -66,7 +66,7 @@ public:
  */
 typedef std::map<std::string, InstallSource *> InstallSourceMap;
 
-/** Class to handle installation and maintenance of a SWORD library of books.
+/** Class to handle installation and maintenance of a Sword++ library of books.
  */
 class SWDLLEXPORT InstallMgr {
 
@@ -172,7 +172,7 @@ A sample impl:
         cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
         cout << "                -=+* WARNING *+=- -=+* WARNING *+=-\n\n\n";
         cout << "Although Install Manager provides a convenient way for installing\n";
-        cout << "and upgrading SWORD components, it also uses a systematic method\n";
+        cout << "and upgrading Sword++ components, it also uses a systematic method\n";
         cout << "for accessing sites which gives packet sniffers a target to lock\n";
         cout << "into for singling out users. \n\n\n";
         cout << "IF YOU LIVE IN A PERSECUTED COUNTRY AND DO NOT WISH TO RISK DETECTION,\n";

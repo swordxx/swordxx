@@ -1,7 +1,7 @@
 /******************************************************************************
  *
  *  lookup.cpp -    Simple example of how to retrieve an entry from a
- *            SWORD module
+ *            Sword++ module
  *
  * $Id$
  *

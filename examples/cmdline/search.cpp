@@ -1,7 +1,7 @@
 /******************************************************************************
  *
  *  search.cpp -    This simple example shows how to perform a search on a
- *            SWORD module. It amounts to a simple commandline
+ *            Sword++ module. It amounts to a simple commandline
  *            search tool with a usage like:
  *
  *                search KJV "swift hear slow speak"

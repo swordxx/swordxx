@@ -42,7 +42,7 @@ using namespace swordxx;
 
 void usage(const char *progName, const char *error = 0) {
     if (error) fprintf(stderr, "\n%s: %s\n", progName, error);
-    fprintf(stderr, "\n=== mod2imp (Revision $Rev$) SWORD module exporter.\n");
+    fprintf(stderr, "\n=== mod2imp (Revision $Rev$) Sword++ module exporter.\n");
     fprintf(stderr, "\nusage: %s <module_name> [options]\n"
         "\t -r [output_format]  - render content instead of outputting raw native\n"
         "\t\tdata.  output_format can be: OSIS, XHTML, LATEX, HTMLHREF, RTF.\n"

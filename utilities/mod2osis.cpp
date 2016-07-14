@@ -48,7 +48,7 @@ using std::cerr;
 using std::cout;
 
 void errorOutHelp(char *appName) {
-    cerr << appName << " - a tool to output a SWORD module in OSIS format\n";
+    cerr << appName << " - a tool to output a Sword++ module in OSIS format\n";
     cerr << "usage: "<< appName << " <modname> \n";
     cerr << "\n\n";
     exit(-1);
@@ -67,14 +67,14 @@ int main(int argc, char **argv)
     cerr << "The ENGINE needs more work to assure export as OSIS works\n";
     cerr << "This utility only gives us occasion to improve the engine.\n";
     cerr << "Our goal is not to produce an export tool.\n\n";
-    cerr << "In fact, you should never export SWORD modules.\n";
+    cerr << "In fact, you should never export Sword++ modules.\n";
     cerr << "Many CrossWire modules are licensed for use from publishers\n";
     cerr << "and you will need to obtain your own permissions.\n";
     cerr << "We also do not encourage propogating encoding errors\n";
     cerr << "which you will avoid by obtaining text data from the source.\n\n";
     cerr << "Please see the TextSource entry in the module's .conf file\n";
     cerr << "for information where to obtain module data from our source.\n\n";
-    cerr << "If you still must export SWORD module data, use mod2imp.\n";
+    cerr << "If you still must export Sword++ module data, use mod2imp.\n";
     cerr << "It is more lossless; or less lossful, and easier to read.\n\n";
 
     if ((argc != 2)) {

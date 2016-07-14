@@ -1,7 +1,7 @@
 /******************************************************************************
  *
  *  outrender.cpp -    This example show how to choose an output render
- *            markup and render entries from a SWORD module. The
+ *            markup and render entries from a Sword++ module. The
  *            following snippet outputs a module in HTML output
  *            encoded as UTF8.
  *
