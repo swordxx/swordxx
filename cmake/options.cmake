@@ -40,15 +40,3 @@ SET(BINDIR "${CMAKE_INSTALL_PREFIX}/bin" CACHE STRING "Directory to install bina
 _SET_FANCY(SYSCONF_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/etc" "Directory to install global config files. Defaults to ${SWORD_INSTALL_DIR}/etc.")
 
 _SET_FANCY(SHARE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}/share" "Directory to install global data files. Defaults to ${SWORD_INSTALL_DIR}/share.")
-
-# Post-processing of variables
-MACRO(PROCESS_VERSION LEVEL VALUE)
-    SET(SWORD_VERSION_${LEVEL} ${VALUE})
-    IF(${VALUE} LESS 10)
-        SET(${LEVEL} "00${VALUE}")
-    ELSEIF(${VALUE} LESS 100)
-        SET(${LEVEL} "0${VALUE}")
-    ELSE()
-        SET(${LEVEL} "${VALUE}")
-    ENDIF()
-ENDMACRO()
