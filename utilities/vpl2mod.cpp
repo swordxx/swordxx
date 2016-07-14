@@ -34,10 +34,10 @@
 #include <io.h>
 #endif
 #include <string>
+#include <swordxx/filemgr.h>
 #include <swordxx/keys/versekey.h>
-#include <swordxx/mgr/filemgr.h>
-#include <swordxx/mgr/swmgr.h>
 #include <swordxx/modules/texts/rawtext.h>
+#include <swordxx/swmgr.h>
 #include <sys/stat.h>
 #ifdef __GNUC__
 #include <unistd.h>

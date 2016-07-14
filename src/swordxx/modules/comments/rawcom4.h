@@ -24,8 +24,8 @@
 #ifndef RAWCOM4_H
 #define RAWCOM4_H
 
+#include "../../swcom.h"
 #include "../common/rawverse4.h"
-#include "swcom.h"
 
 #include "../../defs.h"
 

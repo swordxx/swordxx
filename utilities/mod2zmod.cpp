@@ -32,17 +32,17 @@
 #endif
 #include <iostream>
 #include <string>
+#include <swordxx/filters/cipherfil.h>
 #include <swordxx/keys/versekey.h>
-#include <swordxx/mgr/swmgr.h>
 #include <swordxx/modules/comments/zcom.h>
 #include <swordxx/modules/common/bz2comprs.h>
 #include <swordxx/modules/common/lzsscomprs.h>
 #include <swordxx/modules/common/xzcomprs.h>
 #include <swordxx/modules/common/zipcomprs.h>
-#include <swordxx/modules/filters/cipherfil.h>
 #include <swordxx/modules/lexdict/zld.h>
-#include <swordxx/modules/texts/swtext.h>
 #include <swordxx/modules/texts/ztext.h>
+#include <swordxx/swmgr.h>
+#include <swordxx/swtext.h>
 #ifdef __GNUC__
 #include <unistd.h>
 #endif

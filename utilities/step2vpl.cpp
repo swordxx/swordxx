@@ -33,7 +33,7 @@
 #endif
 #include <iostream>
 #include <string>
-#include <swordxx/mgr/filemgr.h>
+#include <swordxx/filemgr.h>
 #include <swordxx/modules/common/lzsscomprs.h>
 #include <sys/stat.h>
 #ifdef __GNUC__

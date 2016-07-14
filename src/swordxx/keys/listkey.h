@@ -25,7 +25,7 @@
 #ifndef SWLSTKEY_H
 #define SWLSTKEY_H
 
-#include "swkey.h"
+#include "../swkey.h"
 
 #include "../defs.h"
 

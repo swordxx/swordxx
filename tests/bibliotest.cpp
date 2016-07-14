@@ -21,9 +21,9 @@
  */
 
 #include <iostream>
-#include <swordxx/mgr/swmgr.h>
-#include <swordxx/modules/texts/swtext.h>
 #include <swordxx/keys/versekey.h>
+#include <swordxx/swmgr.h>
+#include <swordxx/swtext.h>
 
 
 using namespace swordxx;

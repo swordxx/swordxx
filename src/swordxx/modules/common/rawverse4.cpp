@@ -32,10 +32,10 @@
 #include <cstdio>
 #include <cstring>
 #include <fcntl.h>
+#include "../../filemgr.h"
 #include "../../keys/versekey.h"
-#include "../../mgr/filemgr.h"
-#include "../../utilfuns/utilstr.h"
 #include "../../sysdata.h"
+#include "../../utilfuns/utilstr.h"
 
 
 namespace swordxx {

@@ -24,10 +24,10 @@
 #include <cstring>
 #include <iostream>
 #include <string>
-#include <swordxx/mgr/filemgr.h>
-#include <swordxx/modules/filters/papyriplain.h>
-#include <swordxx/modules/filters/rtfhtml.h>
-#include <swordxx/modules/filters/utf8utf16.h>
+#include <swordxx/filemgr.h>
+#include <swordxx/filters/papyriplain.h>
+#include <swordxx/filters/rtfhtml.h>
+#include <swordxx/filters/utf8utf16.h>
 #include <swordxx/sysdata.h>
 
 

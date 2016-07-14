@@ -23,7 +23,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <iostream>
-#include <swordxx/mgr/versificationmgr.h>
+#include <swordxx/versificationmgr.h>
 
 
 using namespace swordxx;

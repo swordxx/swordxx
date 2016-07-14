@@ -33,9 +33,19 @@
 #include <iostream>
 #include <stack>
 #include <string>
+#include <swordxx/filters/cipherfil.h>
+#ifdef _ICU_
+#include <swordxx/filters/latin1utf8.h>
+#include <swordxx/filters/scsuutf8.h>
+#endif
+#include <swordxx/filters/utf16utf8.h>
+#ifdef _ICU_
+#include <swordxx/filters/utf8nfc.h>
+#include <swordxx/filters/utf8scsu.h>
+#endif
+#include <swordxx/filters/utf8utf16.h>
 #include <swordxx/keys/listkey.h>
 #include <swordxx/keys/versekey.h>
-#include <swordxx/mgr/swmgr.h>
 #include <swordxx/modules/texts/rawtext.h>
 #include <swordxx/modules/texts/rawtext4.h>
 #include <swordxx/modules/texts/ztext.h>
@@ -44,17 +54,7 @@
 #include <swordxx/modules/common/zipcomprs.h>
 #include <swordxx/modules/common/bz2comprs.h>
 #include <swordxx/modules/common/xzcomprs.h>
-#include <swordxx/modules/filters/cipherfil.h>
-#ifdef _ICU_
-#include <swordxx/modules/filters/latin1utf8.h>
-#include <swordxx/modules/filters/scsuutf8.h>
-#endif
-#include <swordxx/modules/filters/utf16utf8.h>
-#ifdef _ICU_
-#include <swordxx/modules/filters/utf8nfc.h>
-#include <swordxx/modules/filters/utf8scsu.h>
-#endif
-#include <swordxx/modules/filters/utf8utf16.h>
+#include <swordxx/swmgr.h>
 #include <swordxx/utilfuns/utilstr.h>
 #include <swordxx/utilfuns/utilxml.h>
 #include <vector>

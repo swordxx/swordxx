@@ -28,7 +28,7 @@
 #include <cstring>
 #include <fcntl.h>
 #include <string>
-#include "../mgr/filemgr.h"
+#include "../filemgr.h"
 #include "../swlog.h"
 #include "../sysdata.h"
 #include "../utilfuns/utilstr.h"

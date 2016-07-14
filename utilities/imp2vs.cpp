@@ -27,9 +27,9 @@
 #include <cstdio>
 #include <iostream>
 #include <string>
+#include <swordxx/filemgr.h>
 #include <swordxx/keys/versekey.h>
-#include <swordxx/mgr/filemgr.h>
-#include <swordxx/mgr/localemgr.h>
+#include <swordxx/localemgr.h>
 #include <swordxx/modules/common/bz2comprs.h>
 #include <swordxx/modules/common/lzsscomprs.h>
 #include <swordxx/modules/common/xzcomprs.h>

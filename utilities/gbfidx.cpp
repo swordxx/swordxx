@@ -29,8 +29,8 @@
 #ifndef __GNUC__
 #include <io.h>
 #endif
+#include <swordxx/filemgr.h>
 #include <swordxx/keys/versekey.h>
-#include <swordxx/mgr/filemgr.h>
 #ifdef __GNUC__
 #include <unistd.h>
 #endif

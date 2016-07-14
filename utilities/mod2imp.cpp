@@ -28,9 +28,9 @@
 #include <iostream>
 #include <map>
 #include <swordxx/keys/versekey.h>
-#include <swordxx/mgr/markupfiltmgr.h>
-#include <swordxx/mgr/swmgr.h>
-#include <swordxx/modules/swmodule.h>
+#include <swordxx/markupfiltmgr.h>
+#include <swordxx/swmgr.h>
+#include <swordxx/swmodule.h>
 
 
 using std::map;

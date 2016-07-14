@@ -25,9 +25,9 @@
 #include <iostream>
 #include <swordxx/keys/listkey.h>
 #include <swordxx/keys/versekey.h>
-#include <swordxx/mgr/localemgr.h>
-#include <swordxx/mgr/swmgr.h>
-#include <swordxx/modules/swmodule.h>
+#include <swordxx/localemgr.h>
+#include <swordxx/swmgr.h>
+#include <swordxx/swmodule.h>
 
 
 using namespace swordxx;

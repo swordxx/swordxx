@@ -56,10 +56,10 @@
 #include <fstream>
 #include <iostream>
 #include <string>
-#include <swordxx/modules/filters/cipherfil.h>
+#include <swordxx/filters/cipherfil.h>
 #ifdef _ICU_
-#include <swordxx/modules/filters/latin1utf8.h>
-#include <swordxx/modules/filters/utf8nfc.h>
+#include <swordxx/filters/latin1utf8.h>
+#include <swordxx/filters/utf8nfc.h>
 #endif
 #include <swordxx/modules/common/bz2comprs.h>
 #include <swordxx/modules/common/lzsscomprs.h>

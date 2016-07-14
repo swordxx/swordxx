@@ -28,7 +28,7 @@
 #include <cstdio>
 #include <iostream>
 #include <swordxx/keys/versekey.h>
-#include <swordxx/mgr/localemgr.h>
+#include <swordxx/localemgr.h>
 
 
 using namespace swordxx;

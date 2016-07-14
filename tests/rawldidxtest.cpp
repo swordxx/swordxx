@@ -25,9 +25,9 @@
 #ifndef __GNUC__
 #include <io.h>
 #endif
-#include <swordxx/mgr/filemgr.h>
-#include <swordxx/mgr/swmgr.h>
+#include <swordxx/filemgr.h>
 #include <swordxx/modules/common/rawstr.h>
+#include <swordxx/swmgr.h>
 #ifdef __GNUC__
 #include <unistd.h>
 #endif

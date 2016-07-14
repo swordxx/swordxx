@@ -24,8 +24,8 @@
 #ifndef ZTEXT_H
 #define ZTEXT_H
 
+#include "../../swtext.h"
 #include "../common/zverse.h"
-#include "swtext.h"
 
 #include "../../defs.h"
 

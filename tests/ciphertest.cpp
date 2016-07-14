@@ -21,8 +21,8 @@
  */
 
 #include <iostream>
-#include <swordxx/mgr/filemgr.h>
-#include <swordxx/modules/filters/cipherfil.h>
+#include <swordxx/filemgr.h>
+#include <swordxx/filters/cipherfil.h>
 #include <string>
 
 

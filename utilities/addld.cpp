@@ -32,11 +32,11 @@
 #ifndef __GNUC__
 #include <io.h>
 #endif
-#include <swordxx/mgr/swmgr.h>
 #include <swordxx/modules/common/zipcomprs.h>
 #include <swordxx/modules/lexdict/rawld.h>
 #include <swordxx/modules/lexdict/rawld4.h>
 #include <swordxx/modules/lexdict/zld.h>
+#include <swordxx/swmgr.h>
 #ifdef __GNUC__
 #include <unistd.h>
 #endif

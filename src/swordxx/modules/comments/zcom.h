@@ -24,7 +24,7 @@
 #ifndef ZCOM_H
 #define ZCOM_H
 
-#include "swcom.h"
+#include "../../swcom.h"
 #include "../common/zverse.h"
 
 #include "../../defs.h"

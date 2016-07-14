@@ -25,7 +25,7 @@
 #ifndef RAWFILES_H
 #define RAWFILES_H
 
-#include "swcom.h"
+#include "../../swcom.h"
 #include "../common/rawverse.h"
 
 #include "../../defs.h"

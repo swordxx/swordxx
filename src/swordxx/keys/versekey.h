@@ -25,11 +25,11 @@
 #ifndef VERSEKEY_H
 #define VERSEKEY_H
 
-#include "swkey.h"
+#include "../swkey.h"
 
 #include "listkey.h"
 #include "../defs.h"
-#include "../mgr/versificationmgr.h"
+#include "../versificationmgr.h"
 
 
 namespace swordxx {

@@ -24,8 +24,8 @@
 #ifndef ZLD_H
 #define ZLD_H
 
+#include "../../swld.h"
 #include "../common/zstr.h"
-#include "swld.h"
 
 #include "../../defs.h"
 

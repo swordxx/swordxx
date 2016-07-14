@@ -26,15 +26,14 @@
 #include <io.h>
 #endif
 #include <iostream>
-#include <swordxx/modules/filters/thmlhtmlhref.h>
-#include <swordxx/modules/filters/unicodertf.h>
-#include <swordxx/modules/filters/thmlosis.h>
-#include <swordxx/modules/filters/gbfosis.h>
-#include <swordxx/modules/filters/thmlosis.h>
+#include <swordxx/filters/gbfosis.h>
+#include <swordxx/filters/thmlhtmlhref.h>
+#include <swordxx/filters/thmlosis.h>
+#include <swordxx/filters/unicodertf.h>
 #include <swordxx/keys/versekey.h>
-#include <swordxx/mgr/swmgr.h>
-#include <swordxx/modules/swmodule.h>
-#include <swordxx/mgr/markupfiltmgr.h>
+#include <swordxx/markupfiltmgr.h>
+#include <swordxx/swmgr.h>
+#include <swordxx/swmodule.h>
 #ifdef __GNUC__
 #include <unistd.h>
 #endif

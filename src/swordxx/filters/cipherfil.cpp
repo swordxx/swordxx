@@ -1,0 +1,69 @@
+/******************************************************************************
+ *
+ *  cipherfil.cpp -    CipherFilter, a SWFilter descendant to decipher
+ *            a module
+ *
+ * $Id$
+ *
+ * Copyright 1999-2013 CrossWire Bible Society (http://www.crosswire.org)
+ *    CrossWire Bible Society
+ *    P. O. Box 2528
+ *    Tempe, AZ  85280-2528
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation version 2.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ *
+ */
+
+#include "cipherfil.h"
+
+#include <cstdlib>
+#include <cstring>
+#include <string>
+#include "../modules/common/swcipher.h"
+
+
+namespace swordxx {
+
+
+CipherFilter::CipherFilter(const char *key) {
+    cipher = new SWCipher((unsigned char *)key);
+}
+
+
+CipherFilter::~CipherFilter() {
+    delete cipher;
+}
+
+
+SWCipher *CipherFilter::getCipher() {
+    return cipher;
+}
+
+
+char CipherFilter::processText(std::string &text, const SWKey *key, const SWModule *module) {
+    if (text.length() > 2) { //check if it's large enough to substract 2 in the next step.
+        unsigned long len = text.length();
+        if (!key) {    // hack, using key to determine encipher, or decipher
+            cipher->cipherBuf(&len, &text[0u]); //set buffer to enciphered text
+            std::memcpy(&text[0u], cipher->Buf(), len);
+//            text = cipher->Buf(); //get the deciphered buffer
+        }
+        else if ((unsigned long)key == 1) {
+            cipher->Buf(&text[0u], len);
+            std::memcpy(&text[0u], cipher->cipherBuf(&len), len);
+//            text = cipher->cipherBuf(&len);
+        }
+    }
+    return 0;
+}
+
+
+} /* namespace swordxx */
+

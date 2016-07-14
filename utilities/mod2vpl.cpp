@@ -26,10 +26,10 @@
 
 #include <cstdio>
 #include <iostream>
-#include <swordxx/keys/swkey.h>
 #include <swordxx/keys/versekey.h>
-#include <swordxx/mgr/swmgr.h>
-#include <swordxx/modules/swmodule.h>
+#include <swordxx/swkey.h>
+#include <swordxx/swmgr.h>
+#include <swordxx/swmodule.h>
 
 
 using swordxx::SWMgr;

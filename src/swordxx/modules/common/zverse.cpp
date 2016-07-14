@@ -32,10 +32,10 @@
 #include <cstdlib>
 #include <fcntl.h>
 #include <string>
-#include "../../utilfuns/utilstr.h"
+#include "../../filemgr.h"
 #include "../../keys/versekey.h"
 #include "../../sysdata.h"
-#include "../../mgr/filemgr.h"
+#include "../../utilfuns/utilstr.h"
 #include "../common/swcomprs.h"
 
 

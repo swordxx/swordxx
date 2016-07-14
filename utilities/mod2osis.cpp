@@ -30,15 +30,15 @@
 #include <fstream>
 #include <iostream>
 #include <string>
+#include <swordxx/filters/thmlosis.h>
 #include <swordxx/keys/versekey.h>
-#include <swordxx/mgr/markupfiltmgr.h>
-#include <swordxx/mgr/swmgr.h>
+#include <swordxx/markupfiltmgr.h>
 #include <swordxx/modules/comments/zcom.h>
 #include <swordxx/modules/common/lzsscomprs.h>
 #include <swordxx/modules/common/zipcomprs.h>
-#include <swordxx/modules/filters/thmlosis.h>
 #include <swordxx/modules/lexdict/zld.h>
 #include <swordxx/modules/texts/ztext.h>
+#include <swordxx/swmgr.h>
 
 
 using namespace swordxx;

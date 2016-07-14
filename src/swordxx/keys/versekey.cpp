@@ -28,12 +28,12 @@
 #include <cstdlib>
 #include <cctype>
 #include <fcntl.h>
-#include "../mgr/stringmgr.h"
-#include "../mgr/swlocale.h"
-#include "../mgr/versificationmgr.h"
+#include "../stringmgr.h"
+#include "../swlocale.h"
 #include "../swlog.h"
 #include "../utilfuns/roman.h"
 #include "../utilfuns/utilstr.h"
+#include "../versificationmgr.h"
 
 
 namespace swordxx {

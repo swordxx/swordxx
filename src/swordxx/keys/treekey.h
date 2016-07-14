@@ -24,7 +24,7 @@
 #ifndef TREEKEY_H
 #define TREEKEY_H
 
-#include "swkey.h"
+#include "../swkey.h"
 
 #include <string>
 #include "../defs.h"

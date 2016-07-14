@@ -35,10 +35,10 @@
 #include <io.h>
 #endif
 #include <string>
-#include <swordxx/mgr/filemgr.h>
-#include <swordxx/modules/common/swcipher.h>
+#include <swordxx/filemgr.h>
 #include <swordxx/keys/versekey.h>
 #include <swordxx/modules/common/rawverse.h>
+#include <swordxx/modules/common/swcipher.h>
 #include <sys/stat.h>
 #ifdef __GNUC__
 #include <unistd.h>

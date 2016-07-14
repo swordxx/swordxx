@@ -21,7 +21,7 @@
  */
 
 #include <iostream>
-#include <swordxx/mgr/swconfig.h>
+#include <swordxx/swconfig.h>
 
 
 using swordxx::SWConfig;

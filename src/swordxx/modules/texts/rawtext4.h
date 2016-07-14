@@ -25,8 +25,8 @@
 #ifndef RAWTEXT4_H
 #define RAWTEXT4_H
 
+#include "../../swtext.h"
 #include "../common/rawverse4.h"
-#include "swtext.h"
 
 #include "../../defs.h"
 

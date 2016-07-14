@@ -27,8 +27,8 @@
 #include <cstdio>
 #include <fcntl.h>
 #include <string>
+#include "../../filemgr.h"
 #include "../../keys/versekey.h"
-#include "../../mgr/filemgr.h"
 
 
 namespace swordxx {

@@ -25,10 +25,10 @@
 #include <iostream>
 #include <cstdlib>
 #include <swordxx/keys/versekey.h>
-#include <swordxx/mgr/swmgr.h>
-#include <swordxx/mgr/markupfiltmgr.h>
-#include <swordxx/modules/filters/swfilter.h>
-#include <swordxx/modules/swmodule.h>
+#include <swordxx/markupfiltmgr.h>
+#include <swordxx/swfilter.h>
+#include <swordxx/swmgr.h>
+#include <swordxx/swmodule.h>
 
 
 using swordxx::SWMgr;

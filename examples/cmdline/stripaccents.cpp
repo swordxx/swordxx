@@ -28,8 +28,8 @@
 #include <cstdio>
 #include <cstdlib>
 #include <iostream>
-#include <swordxx/mgr/swmgr.h>
-#include <swordxx/mgr/markupfiltmgr.h>
+#include <swordxx/markupfiltmgr.h>
+#include <swordxx/swmgr.h>
 
 
 using namespace swordxx;

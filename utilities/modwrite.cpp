@@ -31,8 +31,8 @@
 #include <io.h>
 #endif
 #include <iostream>
-#include <swordxx/mgr/swmgr.h>
-#include <swordxx/modules/swmodule.h>
+#include <swordxx/swmgr.h>
+#include <swordxx/swmodule.h>
 #ifdef __GNUC__
 #include <unistd.h>
 #endif

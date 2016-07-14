@@ -23,7 +23,7 @@
 #include <cstring>
 #include <iostream>
 #include <string>
-#include <swordxx/modules/filters/utf8transliterator.h>
+#include <swordxx/filters/utf8transliterator.h>
 #include <unicode/ucnv.h>     /* C   Converter API    */
 #include <unicode/udata.h>    /* Data structures */
 #include <unicode/ures.h>     /* Data structures */

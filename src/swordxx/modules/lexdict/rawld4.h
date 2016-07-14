@@ -24,8 +24,8 @@
 #ifndef RAWLD4_H
 #define RAWLD4_H
 
+#include "../../swld.h"
 #include "../common/rawstr4.h"
-#include "swld.h"
 
 #include "../../defs.h"
 

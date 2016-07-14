@@ -22,10 +22,10 @@
 
 #include <iostream>
 #include <swordxx/keys/versekey.h>
-#include <swordxx/mgr/swconfig.h>
-#include <swordxx/mgr/swmgr.h>
-#include <swordxx/modules/swmodule.h>
+#include <swordxx/swconfig.h>
 #include <swordxx/swlog.h>
+#include <swordxx/swmgr.h>
+#include <swordxx/swmodule.h>
 
 
 using namespace swordxx;

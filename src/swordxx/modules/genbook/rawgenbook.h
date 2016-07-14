@@ -25,7 +25,7 @@
 #ifndef RAWGENBOOK_H
 #define RAWGENBOOK_H
 
-#include "swgenbook.h"
+#include "../../swgenbook.h"
 
 #include "../../defs.h"
 

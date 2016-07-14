@@ -27,9 +27,9 @@
 #include <cstdio>
 #include <string>
 #include <swordxx/keys/versekey.h>
-#include <swordxx/mgr/markupfiltmgr.h>
-#include <swordxx/mgr/swmgr.h>
+#include <swordxx/markupfiltmgr.h>
 #include <swordxx/modules/texts/rawtext.h>
+#include <swordxx/swmgr.h>
 
 
 using swordxx::SWMgr;

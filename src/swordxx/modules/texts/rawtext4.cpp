@@ -28,9 +28,9 @@
 #include <list>
 #include <map>
 #include <regex.h>    // GNU
+#include "../../filemgr.h"
 #include "../../keys/versekey.h"
-#include "../../mgr/filemgr.h"
-#include "../../mgr/stringmgr.h"
+#include "../../stringmgr.h"
 #include "../../sysdata.h"
 #include "../../utilfuns/utilstr.h"
 #include "../common/rawstr4.h"

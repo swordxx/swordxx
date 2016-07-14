@@ -31,11 +31,11 @@
 #include <fcntl.h>
 #include <string>
 #include <sys/types.h>
-#include "../../mgr/filemgr.h"
-#include "../../mgr/stringmgr.h"
+#include "../../filemgr.h"
+#include "../../stringmgr.h"
 #include "../../swlog.h"
-#include "../../utilfuns/utilstr.h"
 #include "../../sysdata.h"
+#include "../../utilfuns/utilstr.h"
 
 
 namespace swordxx {
