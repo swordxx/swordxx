@@ -136,7 +136,7 @@ void InstallMgr::readInstallConf() {
             sourceBegin++;
         }
 
-#ifdef CURLSFTPAVAILABLE
+#if SWORDXX_CURL_HAS_SFTP
         sourceBegin = confSection->second.lower_bound("SFTPSource");
         sourceEnd   = confSection->second.upper_bound("SFTPSource");
 
@@ -148,7 +148,7 @@ void InstallMgr::readInstallConf() {
             is->localShadow = std::string(privatePath) + '/' + is->uid;
             sourceBegin++;
         }
-#endif // CURLSFTPAVAILABLE
+#endif // SWORDXX_CURL_HAS_SFTP
 
         sourceBegin = confSection->second.lower_bound("HTTPSource");
         sourceEnd = confSection->second.upper_bound("HTTPSource");
@@ -289,7 +289,7 @@ SWLog::getSystemLog()->logDebug("remoteCopy: %s, %s, %s, %c, %s", (is?is->source
     int retVal = 0;
     RemoteTransport *trans = 0;
     if (is->type == "FTP"
-#ifdef CURLSFTPAVAILABLE
+#if SWORDXX_CURL_HAS_SFTP
         || is->type == "SFTP"
 #endif
         ) {
@@ -317,7 +317,7 @@ SWLog::getSystemLog()->logDebug("remoteCopy: %s, %s, %s, %c, %s", (is?is->source
     else if (is->type == "HTTPS") {
         urlPrefix = "https://";
     }
-#ifdef CURLSFTPAVAILABLE
+#if SWORDXX_CURL_HAS_SFTP
     else if (is->type == "SFTP") {
         urlPrefix = "sftp://";
     }
