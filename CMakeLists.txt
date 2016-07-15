@@ -110,7 +110,6 @@ FIND_PACKAGE(CLucene)
 IF(CLucene_FOUND AND NOT SWORDXX_NO_CLUCENE STREQUAL "Yes")
     MESSAGE(STATUS "Using CLucene: yes")
     SET(SWORDXX_WITH_CLUCENE 1)
-    ADD_DEFINITIONS("-DSWORDXX_HAS_CLUCENE=1")
 ELSE()
     MESSAGE(STATUS "Using CLucene: no")
     SET(SWORDXX_WITH_CLUCENE 0)
@@ -120,7 +119,6 @@ FIND_PACKAGE(ICU)
 IF(ICU_FOUND AND NOT SWORDXX_NO_ICU STREQUAL "No")
     MESSAGE(STATUS "Using ICU: yes")
     SET(SWORDXX_WITH_ICU 1)
-    ADD_DEFINITIONS("-DSWORDXX_HAS_ICU=1")
 ELSE()
     MESSAGE(STATUS "Using ICU: no")
     SET(SWORDXX_WITH_ICU 0)
@@ -159,6 +157,17 @@ ENDIF()
 
 ADD_LIBRARY(swordxx_objects OBJECT ${SWORDXX_SOURCES})
 SET_TARGET_PROPERTIES(swordxx_objects PROPERTIES COMPILE_FLAGS "-fPIC")
+SET(swordxx_objects_DEFINITIONS
+    "GLOBCONFPATH=\"${SWORDXX_SYSCONF_INSTALL_PREFIX}/swordxx.conf\"")
+IF(SWORDXX_WITH_CLUCENE)
+    LIST(APPEND swordxx_objects_DEFINITIONS "SWORDXX_HAS_CLUCENE=1")
+ENDIF()
+IF(SWORDXX_WITH_ICU)
+    LIST(APPEND swordxx_objects_DEFINITIONS "SWORDXX_HAS_ICU=1")
+ENDIF()
+SET_TARGET_PROPERTIES(swordxx_objects PROPERTIES COMPILE_DEFINITIONS
+    "${swordxx_objects_DEFINITIONS}")
+UNSET(swordxx_objects_DEFINITIONS)
 
 IF(SWORDXX_INSTALL_STATIC)
     ADD_LIBRARY(swordxx_static STATIC $<TARGET_OBJECTS:swordxx_objects>)
@@ -185,15 +194,6 @@ IF(SWORDXX_INSTALL_SHARED)
 ELSE()
     MESSAGE(STATUS "Building shared library: no")
 ENDIF()
-
-
-################################################################################################
-# Some random user settings
-#
-ADD_DEFINITIONS(-DGLOBCONFPATH="${SWORDXX_SYSCONF_INSTALL_PREFIX}/swordxx.conf")
-
-CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/swordxx.conf.in"
-               "${CMAKE_CURRENT_BINARY_DIR}/swordxx.conf" @ONLY)
 
 
 ##############################################################################################
@@ -278,7 +278,9 @@ INSTALL(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/src/"
         DESTINATION "${SWORDXX_INCLUDE_INSTALL_PREFIX}"
         FILES_MATCHING PATTERN "*.h")
 
-# Install sysconf file
+# Generate and install the sysconf file:
+CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/swordxx.conf.in"
+               "${CMAKE_CURRENT_BINARY_DIR}/swordxx.conf" @ONLY)
 INSTALL(FILES "${CMAKE_CURRENT_BINARY_DIR}/swordxx.conf"
     DESTINATION "${SWORDXX_SYSCONF_INSTALL_PREFIX}")
 # Create the mods.d
