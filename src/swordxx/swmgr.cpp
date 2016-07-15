@@ -110,11 +110,8 @@ std::string getEnvironmentVariable(char const * const key) {
 
 } // anonymous namespace
 
-#ifdef GLOBCONFPATH
-const char *SWMgr::globalConfPath = GLOBCONFPATH;
-#else
-const char *SWMgr::globalConfPath = "/etc/swordxx.conf:/usr/local/etc/swordxx.conf";
-#endif
+const char *SWMgr::globalConfPath =
+        SWORDXX_SYSCONF_INSTALL_PREFIX "/swordxx.conf";
 
 void SWMgr::init() {
     SWOptionFilter *tmpFilter = 0;
