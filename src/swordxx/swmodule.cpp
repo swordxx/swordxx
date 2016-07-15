@@ -24,7 +24,7 @@
 
 #include "swmodule.h"
 
-#ifdef USELUCENE
+#if SWORDXX_HAS_CLUCENE
 #include <CLucene.h>
 #endif
 #include <cstdint>
@@ -51,7 +51,7 @@
 #define REG_ICASE std::regex::icase
 #endif
 
-#ifdef USELUCENE
+#if SWORDXX_HAS_CLUCENE
 using namespace lucene::index;
 using namespace lucene::analysis;
 using namespace lucene::util;
@@ -282,12 +282,12 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
     auto const lastChar = *(target.rbegin());
     if (lastChar != '/' && lastChar != '\\')
         target.push_back('/');
-#if defined USELUCENE
+#if SWORDXX_HAS_CLUCENE
     target.append("lucene");
 #endif
     if (justCheckIfSupported) {
         *justCheckIfSupported = (searchType >= -3);
-#if defined USELUCENE
+#if SWORDXX_HAS_CLUCENE
         if ((searchType == -4) && (IndexReader::indexExists(target.c_str()))) {
             *justCheckIfSupported = true;
         }
@@ -358,7 +358,7 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
     (*percent)(++perc, percentUserData);
 
 
-#if defined USELUCENE
+#if SWORDXX_HAS_CLUCENE
     (*percent)(10, percentUserData);
     if (searchType == -4) {    // indexed search
 
@@ -884,7 +884,7 @@ const char *SWModule::getConfigEntry(const char *key) const {
 }
 
 bool SWModule::hasSearchFramework() {
-#ifdef USELUCENE
+#if SWORDXX_HAS_CLUCENE
     return true;
 #else
     return SWSearchable::hasSearchFramework();
@@ -892,7 +892,7 @@ bool SWModule::hasSearchFramework() {
 }
 
 void SWModule::deleteSearchFramework() {
-#ifdef USELUCENE
+#if SWORDXX_HAS_CLUCENE
     std::string target = getConfigEntry("AbsoluteDataPath");
     char const lastChar = *(target.rbegin());
     if (lastChar != '/' && lastChar != '\\')
@@ -908,7 +908,7 @@ void SWModule::deleteSearchFramework() {
 
 signed char SWModule::createSearchFramework(void (*percent)(char, void *), void *percentUserData) {
 
-#if defined USELUCENE
+#if SWORDXX_HAS_CLUCENE
     std::string target = getConfigEntry("AbsoluteDataPath");
     char const lastChar = *(target.rbegin());
     if (lastChar != '/' && lastChar != '\\')
@@ -958,7 +958,7 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
     bool includeKeyInSearch = getConfig().has("SearchOption", "IncludeKeyInSearch");
 
     // lets create or open our search index
-#if defined USELUCENE
+#if SWORDXX_HAS_CLUCENE
     RAMDirectory *ramDir = 0;
     IndexWriter *coreWriter = 0;
     IndexWriter *fsWriter = 0;
@@ -1027,7 +1027,7 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
         bool good = false;
 
         // start out entry
-#if defined USELUCENE
+#if SWORDXX_HAS_CLUCENE
         Document *doc = new Document();
 #endif
         // get "key" field
@@ -1075,19 +1075,19 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
                 }
             }
 
-#if defined USELUCENE
+#if SWORDXX_HAS_CLUCENE
             doc->add(*_CLNEW Field(_T("key"), utf8ToWChar(keyText.c_str()).c_str(), Field::STORE_YES | Field::INDEX_UNTOKENIZED));
 #endif
 
             if (includeKeyInSearch)
                 content = keyText + " " + content;
 
-#if defined USELUCENE
+#if SWORDXX_HAS_CLUCENE
             doc->add(*_CLNEW Field(_T("content"), utf8ToWChar(content.c_str()).c_str(), Field::STORE_NO | Field::INDEX_TOKENIZED));
 #endif
 
             if (strong.length() > 0) {
-#if defined USELUCENE
+#if SWORDXX_HAS_CLUCENE
                 doc->add(*_CLNEW Field(_T("lemma"), utf8ToWChar(strong.c_str()).c_str(), Field::STORE_NO | Field::INDEX_TOKENIZED));
                 doc->add(*_CLNEW Field(_T("morph"), utf8ToWChar(morph.c_str()).c_str(), Field::STORE_NO | Field::INDEX_TOKENIZED));
 #endif
@@ -1235,13 +1235,13 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 
         if (proxBuf.length() > 0) {
 
-#if defined USELUCENE
+#if SWORDXX_HAS_CLUCENE
             doc->add(*_CLNEW Field(_T("prox"), utf8ToWChar(proxBuf.c_str()).c_str(), Field::STORE_NO | Field::INDEX_TOKENIZED));
 #endif
             good = true;
         }
         if (proxLem.length() > 0) {
-#if defined USELUCENE
+#if SWORDXX_HAS_CLUCENE
             doc->add(*_CLNEW Field(_T("proxlem"), utf8ToWChar(proxLem.c_str()).c_str(), Field::STORE_NO | Field::INDEX_TOKENIZED) );
             doc->add(*_CLNEW Field(_T("proxmorph"), utf8ToWChar(proxMorph.c_str()).c_str(), Field::STORE_NO | Field::INDEX_TOKENIZED) );
 #endif
@@ -1250,11 +1250,11 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
         if (good) {
 //printf("writing (%s).\n", (const char *)*key);
 //fflush(stdout);
-#if defined USELUCENE
+#if SWORDXX_HAS_CLUCENE
             coreWriter->addDocument(doc);
 #endif
         }
-#if defined USELUCENE
+#if SWORDXX_HAS_CLUCENE
         delete doc;
 #endif
 
@@ -1264,7 +1264,7 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 
     // Optimizing automatically happens with the call to addIndexes
     //coreWriter->optimize();
-#if defined USELUCENE
+#if SWORDXX_HAS_CLUCENE
     coreWriter->close();
 
 #ifdef CLUCENE2
