@@ -65,11 +65,7 @@ SET(test_PROGRAMS
 
 FOREACH(TEST ${test_PROGRAMS})
     ADD_EXECUTABLE(${TEST} "${SWORDXX_TESTS_EXCLUDE}" ${TEST}.cpp)
-    IF(BUILDING_SHARED)
-        TARGET_LINK_LIBRARIES(${TEST} swordxx)
-    ELSE(BUILDING_SHARED)
-        TARGET_LINK_LIBRARIES(${TEST} swordxx_static)
-    ENDIF(BUILDING_SHARED)
+    TARGET_LINK_LIBRARIES(${TEST} "${SWORDXX_PREFERRED_LIBRARY}")
 ENDFOREACH(TEST ${test_PROGRAMS})
 
 ########################################################################################

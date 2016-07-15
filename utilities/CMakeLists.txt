@@ -61,11 +61,7 @@ SET(noinstall_UTILITIES
 
 FOREACH(UTIL ${install_UTILITIES} ${noinstall_UTILITIES})
     ADD_EXECUTABLE("${UTIL}" "${SWORDXX_UTILS_EXCLUDE}" "${UTIL}.cpp")
-    IF(BUILDING_SHARED)
-        TARGET_LINK_LIBRARIES("${UTIL}" swordxx)
-    ELSE(BUILDING_SHARED)
-        TARGET_LINK_LIBRARIES("${UTIL}" swordxx_static)
-    ENDIF(BUILDING_SHARED)
+    TARGET_LINK_LIBRARIES("${UTIL}" "${SWORDXX_PREFERRED_LIBRARY}")
 ENDFOREACH(UTIL ${install_UTILITIES})
 
 ####################################################################
@@ -74,11 +70,7 @@ ENDFOREACH(UTIL ${install_UTILITIES})
 #
 
 ADD_EXECUTABLE("lexdump" "${SWORDXX_UTILS_EXCLUDE}" "lexdump.c")
-IF(BUILDING_SHARED)
-    TARGET_LINK_LIBRARIES(lexdump swordxx)
-ELSE(BUILDING_SHARED)
-    TARGET_LINK_LIBRARIES(lexdump swordxx_static)
-ENDIF(BUILDING_SHARED)
+TARGET_LINK_LIBRARIES(lexdump "${SWORDXX_PREFERRED_LIBRARY}")
 
 ####################################################################
 # Install the utilities
