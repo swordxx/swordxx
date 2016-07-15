@@ -1,6 +1,6 @@
 INCLUDE_DIRECTORIES(${SWORD_BUILD_INCLUDES})
 
-SwordxxHandleConditionalBuild(EXAMPLES FALSE)
+SwordxxHandleConditionalBuild("examples" EXAMPLES FALSE TRUE)
 
 #ADD_SUBDIRECTORY(classes)
 ADD_SUBDIRECTORY(cmdline)

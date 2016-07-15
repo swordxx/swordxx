@@ -14,7 +14,7 @@
 
 INCLUDE_DIRECTORIES(${SWORD_BUILD_INCLUDES})
 
-SwordxxHandleConditionalBuild(TESTS FALSE)
+SwordxxHandleConditionalBuild("tests" TESTS FALSE TRUE)
 
 SET(test_PROGRAMS
     bibliotest

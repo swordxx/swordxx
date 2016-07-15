@@ -21,7 +21,12 @@ SET(SWORDXX_SWORD_COMPAT_VERSION "1.7.4")
 
 MESSAGE(STATUS "Configuring libswordxx version ${SWORDXX_VERSION}")
 
+INCLUDE("${CMAKE_CURRENT_SOURCE_DIR}/cmake/helpers.cmake")
 SET(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+
+CalculateVersionForCode("${SWORDXX_VERSION}" SWORDXX_VERSION_C)
+CalculateVersionForCode("${SWORDXX_SWORD_COMPAT_VERSION}"
+                        SWORDXX_SWORD_COMPAT_VERSION_C)
 
 # User options
 SET(SWORDXX_LIB_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}/lib"
@@ -39,24 +44,6 @@ SET(SWORDXX_SYSCONF_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}/etc"
 SET(SWORDXX_SHARE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}/share"
     CACHE STRING "Directory to install global data files. Defaults to \"\${CMAKE_INSTALL_PREFIX}/share\"")
 
-# Calculate version strings for code:
-FUNCTION(CalculateVersionForCode in out)
-    SET(hexdigit "[0123456789abcdefABCDEF]")
-    SET(hexnumber "0|[123456789abcdefABCDEF]${hexdigit}*")
-    SET(hexversion "^(${hexnumber})\\.(${hexnumber})\\.(${hexnumber})$")
-    STRING(REGEX MATCHALL "${hexversion}" r "${in}")
-    IF(NOT r)
-      MESSAGE(FATAL_ERROR "Invalid version string in \${SWORDXX_VERSION}!")
-    ENDIF()
-    UNSET(r)
-    SET(major "${CMAKE_MATCH_1}")
-    SET(minor "${CMAKE_MATCH_2}")
-    SET(patch "${CMAKE_MATCH_3}")
-    SET("${out}" "(((${major}*65536u)+${minor})*65536u)+${patch}" PARENT_SCOPE)
-ENDFUNCTION()
-CalculateVersionForCode("${SWORDXX_VERSION}" SWORDXX_VERSION_C)
-CalculateVersionForCode("${SWORDXX_SWORD_COMPAT_VERSION}"
-                        SWORDXX_SWORD_COMPAT_VERSION_C)
 
 # If SWORDXX_BUILDCONFIG set, load the file and fail on error. Otherwise, try to
 # include either "config.cmake" under either the build directory or the source
@@ -99,25 +86,84 @@ ENDIF()
 # attribute added here, since all of the libraries here are not, in actuality, required.
 #
 
+NewSList(SWORDXX_CFLAGS "-fPIC")
+NewList(SWORDXX_DEFINITIONS
+    "SWORDXX_SYSCONF_INSTALL_PREFIX=\"${SWORDXX_SYSCONF_INSTALL_PREFIX}\"")
+NewList(SWORDXX_INCLUDE_DIRS)
+NewSList(SWORDXX_LDFLAGS)
+NewList(SWORDXX_LINK_LIBRARIES)
+
 # Required packages:
 FIND_PACKAGE(BZIP2 REQUIRED)
+ListAppend(SWORDXX_INCLUDE_DIRS   ${BZIP2_INCLUDE_DIR})
+ListAppend(SWORDXX_LINK_LIBRARIES ${BZIP2_LIBRARY})
+
 FIND_PACKAGE(XZ REQUIRED)
+ListAppend(SWORDXX_INCLUDE_DIRS   ${XZ_INCLUDE_DIR})
+ListAppend(SWORDXX_LINK_LIBRARIES ${XZ_LIBRARY})
+
 FIND_PACKAGE(CURL REQUIRED)
+FIND_PROGRAM(CURL_CONFIG curl-config
+    DOC "The curl-config executable path, used to determine SFTP support.")
+# If we can find the config script, we will run it and attempt to parse out the
+# availability of SFTP support. Otherwise, we will assume the library was built
+# without it.
+IF(CURL_CONFIG)
+    EXECUTE_PROCESS(
+        COMMAND ${CURL_CONFIG} --protocols
+        COMMAND grep SFTP
+        COMMAND wc -l
+        OUTPUT_VARIABLE CURL_CONFIG_OUTPUT
+        OUTPUT_STRIP_TRAILING_WHITESPACE)
+    IF(CURL_CONFIG_OUTPUT STREQUAL "1")
+        ListAppend(SWORDXX_DEFINITIONS CURLSFTPAVAILABLE)
+        MESSAGE(STATUS "cURL SFTP Support: Yes")
+    ELSE()
+        MESSAGE(STATUS "cURL SFTP Support: No")
+    ENDIF()
+ENDIF()
+ListAppend(SWORDXX_INCLUDE_DIRS   ${CURL_INCLUDE_DIRS})
+ListAppend(SWORDXX_LINK_LIBRARIES ${CURL_LIBRARY})
+
 FIND_PACKAGE(ZLIB REQUIRED)
+ListAppend(SWORDXX_INCLUDE_DIRS   ${ZLIB_INCLUDE_DIR})
+ListAppend(SWORDXX_LINK_LIBRARIES ${ZLIB_LIBRARY})
 
 # Optional packages:
-FIND_PACKAGE(CLucene 2.0)
+FIND_PACKAGE(PkgConfig)
+
+IF(PKG_CONFIG_FOUND)
+    pkg_check_modules(CLucene libclucene-core>=2.0)
+ENDIF()
 IF(CLucene_FOUND AND NOT SWORDXX_NO_CLUCENE STREQUAL "Yes")
     MESSAGE(STATUS "Using CLucene >2.0: yes")
+    ListToSList(CLucene_CFLAGS_OTHER)
+    SListAppend(SWORDXX_CFLAGS      ${CLucene_CFLAGS_OTHER})
+    ListAppend(SWORDXX_DEFINITIONS  "SWORDXX_HAS_CLUCENE=1")
+    ListAppend(SWORDXX_INCLUDE_DIRS   ${CLucene_INCLUDE_DIRS})
+    ExpandLibs("${CLucene_LIBRARY_DIRS}" "${CLucene_LIBRARIES}" CLucene_LIBS)
+    ListAppend(SWORDXX_LINK_LIBRARIES ${CLucene_LIBS})
+    ListToSList(CLucene_LDFLAGS_OTHER)
+    SListAppend(SWORDXX_LDFLAGS     ${CLucene_LDFLAGS_OTHER})
     SET(SWORDXX_WITH_CLUCENE 1)
 ELSE()
     MESSAGE(STATUS "Using CLucene >2.0: no")
     SET(SWORDXX_WITH_CLUCENE 0)
 ENDIF()
 
-FIND_PACKAGE(ICU)
+IF(PKG_CONFIG_FOUND)
+    pkg_check_modules(ICU icu-uc icu-i18n)
+ENDIF()
 IF(ICU_FOUND AND NOT SWORDXX_NO_ICU STREQUAL "No")
     MESSAGE(STATUS "Using ICU: yes")
+    ListToSList(ICU_CFLAGS_OTHER)
+    SListAppend(SWORDXX_CFLAGS      ${ICU_CFLAGS_OTHER})
+    ListAppend(SWORDXX_DEFINITIONS  "SWORDXX_HAS_ICU=1")
+    ListAppend(SWORDXX_INCLUDE_DIRS   ${ICU_INCLUDE_DIRS})
+    ExpandLibs("${ICU_LIBRARY_DIRS}" "${ICU_LIBRARIES}" ICU_LIBS)
+    ListAppend(SWORDXX_LINK_LIBRARIES ${ICU_LIBS})
+    ListToSList(ICU_LDFLAGS_OTHER)
+    SListAppend(SWORDXX_LDFLAGS     ${ICU_LDFLAGS_OTHER})
     SET(SWORDXX_WITH_ICU 1)
 ELSE()
     MESSAGE(STATUS "Using ICU: no")
@@ -156,22 +202,19 @@ ELSEIF((NOT SWORDXX_INSTALL_SHARED) AND (NOT SWORDXX_INSTALL_STATIC))
 ENDIF()
 
 ADD_LIBRARY(swordxx_objects OBJECT ${SWORDXX_SOURCES})
-SET_TARGET_PROPERTIES(swordxx_objects PROPERTIES COMPILE_FLAGS "-fPIC")
-SET(swordxx_objects_DEFINITIONS
-    "SWORDXX_SYSCONF_INSTALL_PREFIX=\"${SWORDXX_SYSCONF_INSTALL_PREFIX}\"")
-IF(SWORDXX_WITH_CLUCENE)
-    LIST(APPEND swordxx_objects_DEFINITIONS "SWORDXX_HAS_CLUCENE=1")
-ENDIF()
-IF(SWORDXX_WITH_ICU)
-    LIST(APPEND swordxx_objects_DEFINITIONS "SWORDXX_HAS_ICU=1")
-ENDIF()
+SET_TARGET_PROPERTIES(swordxx_objects PROPERTIES COMPILE_FLAGS
+    "${SWORDXX_CFLAGS}")
 SET_TARGET_PROPERTIES(swordxx_objects PROPERTIES COMPILE_DEFINITIONS
-    "${swordxx_objects_DEFINITIONS}")
-UNSET(swordxx_objects_DEFINITIONS)
-
+    "${SWORDXX_DEFINITIONS}")
+SET_TARGET_PROPERTIES(swordxx_objects PROPERTIES INCLUDE_DIRECTORIES
+    "${SWORDXX_INCLUDE_DIRS}")
 IF(SWORDXX_INSTALL_STATIC)
     ADD_LIBRARY(swordxx_static STATIC $<TARGET_OBJECTS:swordxx_objects>)
     SET_TARGET_PROPERTIES(swordxx_static PROPERTIES OUTPUT_NAME "swordxx")
+    SET_TARGET_PROPERTIES(swordxx_static PROPERTIES LINK_FLAGS
+        "${SWORDXX_LDFLAGS}")
+    SET_TARGET_PROPERTIES(swordxx_static PROPERTIES LINK_LIBRARIES
+        "${SWORDXX_LINK_LIBRARIES}")
     SET(SWORDXX_PREFERRED_LIBRARY swordxx_static)
     MESSAGE(STATUS "Building static library: yes")
 ELSE()
@@ -181,70 +224,21 @@ ENDIF()
 IF(SWORDXX_INSTALL_SHARED)
     ADD_LIBRARY(swordxx_dynamic SHARED $<TARGET_OBJECTS:swordxx_objects>)
     SET_TARGET_PROPERTIES(swordxx_dynamic PROPERTIES OUTPUT_NAME "swordxx")
-    SET(SWORDXX_PREFERRED_LIBRARY swordxx_dynamic)
-
     IF(DEFINED SWORDXX_SOVERSION_OVERRIDE)
       SET(LIBSWORDXX_SOVERSION "${SWORDXX_SOVERSION_OVERRIDE}")
     ELSE()
       SET(LIBSWORDXX_SOVERSION "${SWORDXX_VERSION}")
     ENDIF()
-    SET_TARGET_PROPERTIES(swordxx_dynamic PROPERTIES SOVERSION "${LIBSWORDXX_SOVERSION}")
+    SET_TARGET_PROPERTIES(swordxx_dynamic PROPERTIES SOVERSION
+        "${LIBSWORDXX_SOVERSION}")
+    SET_TARGET_PROPERTIES(swordxx_dynamic PROPERTIES LINK_FLAGS
+        "${SWORDXX_LDFLAGS}")
+    SET_TARGET_PROPERTIES(swordxx_dynamic PROPERTIES LINK_LIBRARIES
+        "${SWORDXX_LINK_LIBRARIES}")
+    SET(SWORDXX_PREFERRED_LIBRARY swordxx_dynamic)
     MESSAGE(STATUS "Building shared library: yes (using SOVERSION \"${LIBSWORDXX_SOVERSION}\")")
 ELSE()
     MESSAGE(STATUS "Building shared library: no")
-ENDIF()
-
-
-##############################################################################################
-# Setting libraries and includes
-#
-
-INCLUDE_DIRECTORIES(${ZLIB_INCLUDE_DIR})
-SET(SWORDXX_LINK_LIBRARIES ${SWORDXX_LINK_LIBRARIES} ${ZLIB_LIBRARY})
-INCLUDE_DIRECTORIES(${BZIP2_INCLUDE_DIR})
-SET(SWORDXX_LINK_LIBRARIES ${SWORDXX_LINK_LIBRARIES} ${BZIP2_LIBRARY})
-INCLUDE_DIRECTORIES(${XZ_INCLUDE_DIR})
-SET(SWORDXX_LINK_LIBRARIES ${SWORDXX_LINK_LIBRARIES} ${XZ_LIBRARY})
-
-FIND_PROGRAM(CURL_CONFIG curl-config
-    DOC "The curl-config executable path, used to determine SFTP support.")
-# If we can find the config script, we will run it and attempt to parse out the
-# availability of SFTP support. Otherwise, we will assume the library was built
-# without it.
-IF(CURL_CONFIG)
-    EXECUTE_PROCESS(
-        COMMAND ${CURL_CONFIG} --protocols
-        COMMAND grep SFTP
-        COMMAND wc -l
-        OUTPUT_VARIABLE CURL_CONFIG_OUTPUT
-        OUTPUT_STRIP_TRAILING_WHITESPACE)
-    IF(CURL_CONFIG_OUTPUT STREQUAL "1")
-        ADD_DEFINITIONS(-DCURLSFTPAVAILABLE)
-        MESSAGE(STATUS "cURL SFTP Support: Yes")
-    ELSE()
-        MESSAGE(STATUS "cURL SFTP Support: No")
-    ENDIF()
-ENDIF()
-INCLUDE_DIRECTORIES(${CURL_INCLUDE_DIRS})
-SET(SWORDXX_LINK_LIBRARIES ${SWORDXX_LINK_LIBRARIES} ${CURL_LIBRARY})
-
-IF(SWORDXX_WITH_CLUCENE)
-    INCLUDE_DIRECTORIES(${CLUCENE_INCLUDE_DIR})
-    SET(SWORDXX_LINK_LIBRARIES ${SWORDXX_LINK_LIBRARIES} ${CLUCENE_LIBRARY})
-    LINK_DIRECTORIES(${CLUCENE_LIBRARY_DIR})
-ENDIF()
-IF(SWORDXX_WITH_ICU)
-    INCLUDE_DIRECTORIES(${ICU_INCLUDE_DIRS})
-    ADD_DEFINITIONS(${ICU_DEFINITIONS})
-    SET(SWORDXX_LINK_LIBRARIES ${SWORDXX_LINK_LIBRARIES} ${ICU_LIBRARIES} ${ICU_I18N_LIBRARIES})
-ENDIF()
-
-IF(SWORDXX_INSTALL_SHARED)
-    TARGET_LINK_LIBRARIES(swordxx_dynamic ${SWORDXX_LINK_LIBRARIES})
-ENDIF()
-
-IF(SWORDXX_INSTALL_STATIC)
-    TARGET_LINK_LIBRARIES(swordxx_static ${SWORDXX_LINK_LIBRARIES})
 ENDIF()
 
 
@@ -283,6 +277,8 @@ INSTALL(DIRECTORY DESTINATION "${SWORDXX_SHARE_INSTALL_PREFIX}/swordxx/mods.d")
 
 MESSAGE(STATUS "Destination: ${CMAKE_INSTALL_PREFIX}")
 
+SET(SWORDXX_PC_LIBS "-L\${libdir} -lswordxx")
+SET(SWORDXX_PC_CFLAGS "-I\${includedir}/swordxx -fPIC")
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/swordxx.pc.in ${CMAKE_CURRENT_BINARY_DIR}/swordxx.pc @ONLY)
 
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/src/swordxx/version.h.in
@@ -302,17 +298,6 @@ INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/swordxx.pc
 SET(SWORD_BUILD_INCLUDES
     "${CMAKE_CURRENT_BINARY_DIR}/include/"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/")
-
-MACRO(SwordxxHandleConditionalBuild cond defaultValue)
-    IF(NOT (DEFINED "SWORDXX_BUILD_${cond}"))
-        SET("SWORDXX_BUILD_${cond}" "${defaultValue}")
-    ENDIF()
-    IF(SWORDXX_BUILD_${cond})
-        SET("SWORDXX_${cond}_EXCLUDE" "")
-    ELSE()
-        SET("SWORDXX_${cond}_EXCLUDE" EXCLUDE_FROM_ALL)
-    ENDIF()
-ENDMACRO()
 
 ADD_SUBDIRECTORY("${CMAKE_CURRENT_SOURCE_DIR}/examples")
 ADD_SUBDIRECTORY("${CMAKE_CURRENT_SOURCE_DIR}/tests")

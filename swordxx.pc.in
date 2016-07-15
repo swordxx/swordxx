@@ -7,7 +7,5 @@ includedir=@SWORDXX_INCLUDE_INSTALL_PREFIX@
 Name: SWORD++
 Description: Biblical Text Research Engine
 Version: @SWORDXX_VERSION_STR@
-Libs: -L${libdir} -lswordxx
-Libs.private: -L${libdir} -lswordxx
-Cflags: -I${includedir}/swordxx
-
+Libs: @SWORDXX_PC_LIBS@
+Cflags: @SWORDXX_PC_CFLAGS@
