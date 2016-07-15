@@ -23,11 +23,8 @@
 
 #include "rawtext.h"
 
-#include <algorithm>
 #include <cstdio>
 #include <fcntl.h>
-#include <list>
-#include <map>
 #include <regex.h>    // GNU
 #include "../../filemgr.h"
 #include "../../keys/versekey.h"
@@ -37,18 +34,7 @@
 #include "../common/rawstr.h"
 
 
-#ifndef USELUCENE
-using std::map;
-using std::list;
-using std::find;
-#endif
-
 namespace swordxx {
-
-#ifndef USELUCENE
-typedef  map < std::string, list<long> > strlist;
-typedef list<long> longlist;
-#endif
 
 /******************************************************************************
  * RawText Constructor - Initializes data for instance of RawText
