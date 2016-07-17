@@ -269,7 +269,7 @@ INSTALL(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/src/"
         FILES_MATCHING PATTERN "*.h")
 
 # Generate and install the sysconf file:
-CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/swordxx.conf.in"
+CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/src/swordxx/swordxx.conf.in"
                "${CMAKE_CURRENT_BINARY_DIR}/swordxx.conf" @ONLY)
 INSTALL(FILES "${CMAKE_CURRENT_BINARY_DIR}/swordxx.conf"
     DESTINATION "${SWORDXX_SYSCONF_INSTALL_PREFIX}")
@@ -280,7 +280,7 @@ MESSAGE(STATUS "Destination: ${CMAKE_INSTALL_PREFIX}")
 
 SET(SWORDXX_PC_LIBS "-L\${libdir} -lswordxx")
 SET(SWORDXX_PC_CFLAGS "-I\${includedir}/swordxx -fPIC")
-CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/swordxx.pc.in ${CMAKE_CURRENT_BINARY_DIR}/swordxx.pc @ONLY)
+CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/src/swordxx/swordxx.pc.in ${CMAKE_CURRENT_BINARY_DIR}/swordxx.pc @ONLY)
 
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/src/swordxx/version.h.in
                ${CMAKE_CURRENT_BINARY_DIR}/include/swordxx/version.h @ONLY)
