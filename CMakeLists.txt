@@ -278,22 +278,35 @@ INSTALL(DIRECTORY DESTINATION "${SWORDXX_SHARE_INSTALL_PREFIX}/swordxx/mods.d")
 
 MESSAGE(STATUS "Destination: ${CMAKE_INSTALL_PREFIX}")
 
-SET(SWORDXX_PC_LIBS "-L\${libdir} -lswordxx")
-SET(SWORDXX_PC_CFLAGS "-I\${includedir}/swordxx -fPIC")
-CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/src/swordxx/swordxx.pc.in ${CMAKE_CURRENT_BINARY_DIR}/swordxx.pc @ONLY)
+SET(SWORDXX_INSTALL_LINK_LIBRARIES "-L${SWORDXX_LIB_INSTALL_PREFIX} -lswordxx")
+SET(SWORDXX_INSTALL_INCLUDE_DIRS "${SWORDXX_INCLUDE_INSTALL_PREFIX}")
+SET(SWORDXX_PC_CFLAGS "-I${SWORDXX_INCLUDE_INSTALL_PREFIX}")
+SET(SWORDXX_INSTALL_DEFINITIONS "")
+CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/src/swordxx/swordxx.pc.in"
+               "${CMAKE_CURRENT_BINARY_DIR}/swordxx.pc" @ONLY)
 
-CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/src/swordxx/version.h.in
-               ${CMAKE_CURRENT_BINARY_DIR}/include/swordxx/version.h @ONLY)
+CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/src/swordxx/SwordxxConfig.cmake.in"
+               "${CMAKE_CURRENT_BINARY_DIR}/SwordxxConfig.cmake" @ONLY)
+INSTALL(FILES "${CMAKE_CURRENT_BINARY_DIR}/SwordxxConfig.cmake"
+        DESTINATION "lib/Swordxx")
+CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/src/swordxx/SwordxxConfigVersion.cmake.in"
+               "${CMAKE_CURRENT_BINARY_DIR}/SwordxxConfigVersion.cmake" @ONLY)
+INSTALL(FILES "${CMAKE_CURRENT_BINARY_DIR}/SwordxxConfigVersion.cmake"
+        DESTINATION "lib/Swordxx")
+
+CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/src/swordxx/version.h.in"
+               "${CMAKE_CURRENT_BINARY_DIR}/include/swordxx/version.h" @ONLY)
 ADD_DEFINITIONS(
     "-DSWORDXX_VERSION_H_FILE=\"${CMAKE_CURRENT_BINARY_DIR}/include/swordxx/version.h\"")
-CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/src/swordxx/config.h.in ${CMAKE_CURRENT_BINARY_DIR}/include/swordxx/config.h @ONLY)
-
-INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/swordxx.pc
-    DESTINATION "${SWORDXX_LIB_INSTALL_PREFIX}/pkgconfig")
 INSTALL(FILES "${CMAKE_CURRENT_BINARY_DIR}/include/swordxx/version.h"
         DESTINATION "${SWORDXX_INCLUDE_INSTALL_PREFIX}/swordxx")
+CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/src/swordxx/config.h.in"
+               "${CMAKE_CURRENT_BINARY_DIR}/include/swordxx/config.h" @ONLY)
 INSTALL(FILES "${CMAKE_CURRENT_BINARY_DIR}/include/swordxx/config.h"
         DESTINATION "${SWORDXX_INCLUDE_INSTALL_PREFIX}/swordxx")
+
+INSTALL(FILES "${CMAKE_CURRENT_BINARY_DIR}/swordxx.pc"
+        DESTINATION "${SWORDXX_LIB_INSTALL_PREFIX}/pkgconfig")
 
 
 ##############################################################################################
