@@ -290,6 +290,10 @@ CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/src/swordxx/config.h.in ${CMAKE_CURRE
 
 INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/swordxx.pc
     DESTINATION "${SWORDXX_LIB_INSTALL_PREFIX}/pkgconfig")
+INSTALL(FILES "${CMAKE_CURRENT_BINARY_DIR}/include/swordxx/version.h"
+        DESTINATION "${SWORDXX_INCLUDE_INSTALL_PREFIX}/swordxx")
+INSTALL(FILES "${CMAKE_CURRENT_BINARY_DIR}/include/swordxx/config.h"
+        DESTINATION "${SWORDXX_INCLUDE_INSTALL_PREFIX}/swordxx")
 
 
 ##############################################################################################
