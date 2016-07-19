@@ -30,7 +30,6 @@
 #  endif
 #  ifdef _MSC_VER
 #    define mkdir(dirname,mode) _mkdir(dirname)
-#    define strdup(str)         _strdup(str)
 #    define unlink(fn)          _unlink(fn)
 #    define access(path,mode)   _access(path,mode)
 #  else
@@ -199,16 +198,17 @@ int ExprMatch(char *string,char *expr)
 
 int makedir (char *newdir)
 {
-  char *buffer = strdup(newdir);
+  size_t len = strlen(newdir);
+  if (len <= 0u)
+      return 0;
+  char * buffer = malloc(len + 1u);
+  if (!buffer)
+      return 0;
+  memcpy(buffer, newdir, len + 1u);
   char *p;
-  int  len = strlen(buffer);
 
-  if (len <= 0) {
-    free(buffer);
-    return 0;
-  }
-  if (buffer[len-1] == '/') {
-    buffer[len-1] = '\0';
+  if (buffer[len - 1u] == '/') {
+    buffer[len - 1u] = '\0';
   }
   if (mkdir(buffer, 0775) == 0)
     {
