@@ -20,6 +20,7 @@ SET(SWORDXX_VERSION_STR "2.0.0_beta1")
 SET(SWORDXX_SWORD_COMPAT_VERSION "1.7.4")
 
 MESSAGE(STATUS "Configuring libswordxx version ${SWORDXX_VERSION}")
+MESSAGE(STATUS "Installation prefix: ${CMAKE_INSTALL_PREFIX}")
 
 INCLUDE("${CMAKE_CURRENT_SOURCE_DIR}/cmake/helpers.cmake")
 SET(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
@@ -185,98 +186,6 @@ ADD_COMPILE_OPTIONS(
 )
 
 
-################################################################################################
-# This actually creates the build target that is the libswordxx building target to be generated.
-# Most of the work for configuration is done above, already.
-#
-# I want to do this manually, there might be reason in the future
-
-# Sources:
-FILE(GLOB_RECURSE SWORDXX_C_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/src/*.c")
-FILE(GLOB_RECURSE SWORDXX_CXX_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
-SET(SWORDXX_SOURCES ${SWORDXX_C_SOURCES} ${SWORDXX_CXX_SOURCES})
-
-ADD_LIBRARY(swordxx SHARED ${SWORDXX_SOURCES})
-SET_TARGET_PROPERTIES(swordxx PROPERTIES COMPILE_FLAGS
-    "${SWORDXX_CFLAGS}")
-SET_TARGET_PROPERTIES(swordxx PROPERTIES COMPILE_DEFINITIONS
-    "${SWORDXX_DEFINITIONS}")
-SET_TARGET_PROPERTIES(swordxx PROPERTIES INCLUDE_DIRECTORIES
-    "${SWORDXX_INCLUDE_DIRS}")
-SET_TARGET_PROPERTIES(swordxx PROPERTIES OUTPUT_NAME "swordxx")
-SET_TARGET_PROPERTIES(swordxx PROPERTIES LINK_FLAGS
-    "${SWORDXX_LDFLAGS}")
-SET_TARGET_PROPERTIES(swordxx PROPERTIES LINK_LIBRARIES
-    "${SWORDXX_LINK_LIBRARIES}")
-IF(DEFINED SWORDXX_SOVERSION_OVERRIDE)
-  SET(LIBSWORDXX_SOVERSION "${SWORDXX_SOVERSION_OVERRIDE}")
-ELSE()
-  SET(LIBSWORDXX_SOVERSION "${SWORDXX_VERSION}")
-ENDIF()
-SET_TARGET_PROPERTIES(swordxx PROPERTIES SOVERSION
-    "${LIBSWORDXX_SOVERSION}")
-MESSAGE(STATUS "Using shared library SOVERSION \"${LIBSWORDXX_SOVERSION}\"")
-
-
-##############################################################################################
-# Installing the library, headers, utilies, etc
-#
-
-INSTALL(TARGETS swordxx
-    RUNTIME DESTINATION "${SWORDXX_BIN_INSTALL_PREFIX}"
-    LIBRARY DESTINATION "${SWORDXX_LIB_INSTALL_PREFIX}"
-    ARCHIVE DESTINATION "${SWORDXX_LIB_INSTALL_PREFIX}")
-
-# Install the locales
-INSTALL(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/locales.d
-    DESTINATION "${SWORDXX_SHARE_INSTALL_PREFIX}/swordxx")
-
-# Install the headers
-INSTALL(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/src/"
-        DESTINATION "${SWORDXX_INCLUDE_INSTALL_PREFIX}"
-        FILES_MATCHING PATTERN "*.h")
-
-# Generate and install the sysconf file:
-CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/src/swordxx/swordxx.conf.in"
-               "${CMAKE_CURRENT_BINARY_DIR}/swordxx.conf" @ONLY)
-INSTALL(FILES "${CMAKE_CURRENT_BINARY_DIR}/swordxx.conf"
-    DESTINATION "${SWORDXX_SYSCONF_INSTALL_PREFIX}")
-# Create the mods.d
-INSTALL(DIRECTORY DESTINATION "${SWORDXX_SHARE_INSTALL_PREFIX}/swordxx/mods.d")
-
-MESSAGE(STATUS "Destination: ${CMAKE_INSTALL_PREFIX}")
-
-SET(SWORDXX_INSTALL_LINK_LIBRARIES "-L${SWORDXX_LIB_INSTALL_PREFIX} -lswordxx")
-SET(SWORDXX_INSTALL_INCLUDE_DIRS "${SWORDXX_INCLUDE_INSTALL_PREFIX}")
-SET(SWORDXX_PC_CFLAGS "-I${SWORDXX_INCLUDE_INSTALL_PREFIX}")
-SET(SWORDXX_INSTALL_DEFINITIONS "")
-CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/src/swordxx/swordxx.pc.in"
-               "${CMAKE_CURRENT_BINARY_DIR}/swordxx.pc" @ONLY)
-
-CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/src/swordxx/SwordxxConfig.cmake.in"
-               "${CMAKE_CURRENT_BINARY_DIR}/SwordxxConfig.cmake" @ONLY)
-INSTALL(FILES "${CMAKE_CURRENT_BINARY_DIR}/SwordxxConfig.cmake"
-        DESTINATION "lib/Swordxx")
-CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/src/swordxx/SwordxxConfigVersion.cmake.in"
-               "${CMAKE_CURRENT_BINARY_DIR}/SwordxxConfigVersion.cmake" @ONLY)
-INSTALL(FILES "${CMAKE_CURRENT_BINARY_DIR}/SwordxxConfigVersion.cmake"
-        DESTINATION "lib/Swordxx")
-
-CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/src/swordxx/version.h.in"
-               "${CMAKE_CURRENT_BINARY_DIR}/include/swordxx/version.h" @ONLY)
-ADD_DEFINITIONS(
-    "-DSWORDXX_VERSION_H_FILE=\"${CMAKE_CURRENT_BINARY_DIR}/include/swordxx/version.h\"")
-INSTALL(FILES "${CMAKE_CURRENT_BINARY_DIR}/include/swordxx/version.h"
-        DESTINATION "${SWORDXX_INCLUDE_INSTALL_PREFIX}/swordxx")
-CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/src/swordxx/config.h.in"
-               "${CMAKE_CURRENT_BINARY_DIR}/include/swordxx/config.h" @ONLY)
-INSTALL(FILES "${CMAKE_CURRENT_BINARY_DIR}/include/swordxx/config.h"
-        DESTINATION "${SWORDXX_INCLUDE_INSTALL_PREFIX}/swordxx")
-
-INSTALL(FILES "${CMAKE_CURRENT_BINARY_DIR}/swordxx.pc"
-        DESTINATION "${SWORDXX_LIB_INSTALL_PREFIX}/pkgconfig")
-
-
 ##############################################################################################
 # Subdirectories:
 #
@@ -285,6 +194,7 @@ SET(SWORD_BUILD_INCLUDES
     "${CMAKE_CURRENT_BINARY_DIR}/include/"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/")
 
+ADD_SUBDIRECTORY("${CMAKE_CURRENT_SOURCE_DIR}/src/swordxx")
 ADD_SUBDIRECTORY("${CMAKE_CURRENT_SOURCE_DIR}/examples")
 ADD_SUBDIRECTORY("${CMAKE_CURRENT_SOURCE_DIR}/tests")
 ADD_SUBDIRECTORY("${CMAKE_CURRENT_SOURCE_DIR}/utilities")
