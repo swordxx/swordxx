@@ -57,13 +57,13 @@ SET(SWORDXX_INSTALL_DEFINITIONS "")
 CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/SwordxxConfig.cmake.in"
                "${CMAKE_CURRENT_BINARY_DIR}/SwordxxConfig.cmake" @ONLY)
 INSTALL(FILES "${CMAKE_CURRENT_BINARY_DIR}/SwordxxConfig.cmake"
-        DESTINATION "lib/Swordxx")
+        DESTINATION "${SWORDXX_LIB_INSTALL_PREFIX}/Swordxx")
 
 # Generate and install SwordxxConfigVersion.cmake:
 CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/SwordxxConfigVersion.cmake.in"
                "${CMAKE_CURRENT_BINARY_DIR}/SwordxxConfigVersion.cmake" @ONLY)
 INSTALL(FILES "${CMAKE_CURRENT_BINARY_DIR}/SwordxxConfigVersion.cmake"
-        DESTINATION "lib/Swordxx")
+        DESTINATION "${SWORDXX_LIB_INSTALL_PREFIX}/Swordxx")
 
 # Generate and install swordxx.pc:
 CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/swordxx.pc.in"
