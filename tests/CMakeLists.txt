@@ -65,7 +65,7 @@ SET(test_PROGRAMS
 
 FOREACH(TEST ${test_PROGRAMS})
     ADD_EXECUTABLE(${TEST} "${SWORDXX_TESTS_EXCLUDE}" ${TEST}.cpp)
-    TARGET_LINK_LIBRARIES(${TEST} "${SWORDXX_PREFERRED_LIBRARY}")
+    TARGET_LINK_LIBRARIES(${TEST} swordxx)
 ENDFOREACH(TEST ${test_PROGRAMS})
 
 ########################################################################################
