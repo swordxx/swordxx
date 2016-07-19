@@ -31,7 +31,6 @@
 #  ifdef _MSC_VER
 #    define mkdir(dirname,mode) _mkdir(dirname)
 #    define unlink(fn)          _unlink(fn)
-#    define access(path,mode)   _access(path,mode)
 #  else
 #    define mkdir(dirname,mode) _mkdir(dirname)
 #  endif
@@ -44,13 +43,7 @@
 
 #define REGTYPE     '0'        /* regular file */
 #define AREGTYPE '\0'        /* regular file */
-#define LNKTYPE  '1'        /* link */
-#define SYMTYPE  '2'        /* reserved */
-#define CHRTYPE  '3'        /* character special */
-#define BLKTYPE  '4'        /* block special */
 #define DIRTYPE  '5'        /* directory */
-#define FIFOTYPE '6'        /* FIFO special */
-#define CONTTYPE '7'        /* reserved */
 
 #define BLOCKSIZE 512
 
@@ -80,50 +73,9 @@ union tar_buffer {
   struct tar_header  header;
 };
 
-enum { TGZ_EXTRACT = 0, TGZ_LIST };
-
-void TGZnotfound(const char *);
-
-int getoct(char *, int);
-char *strtime(time_t *);
-int ExprMatch(char *, char *);
-
-int makedir(char *);
-int matchname(int, int, char **, char *);
-
-void error(const char *);
-int tar(gzFile, int, int, int, char **);
-
-void help(int);
-int main(int, char **);
-
-char *prog;
-
-/* This will give a benign warning */
-
-static char *TGZprefix[] = { "\0", ".tgz", ".tar.gz", ".tar", NULL };
-
-/* Return the real name of the TGZ archive */
-/* or NULL if it does not exist. */
-
-/* error message for the filename */
-
-void TGZnotfound(const char *fname)
-{
-  int i;
-
-  fprintf(stderr,"%s : couldn't find ",prog);
-  for (i=0;TGZprefix[i];i++)
-    fprintf(stderr,(TGZprefix[i+1]) ? "%s%s, " : "or %s%s\n",
-            fname,
-            TGZprefix[i]);
-  exit(1);
-}
-
-
 /* help functions */
 
-int getoct(char *p,int width)
+static int getoct(char *p,int width)
 {
   int result = 0;
   char c;
@@ -140,55 +92,6 @@ int getoct(char *p,int width)
   return result;
 }
 
-char *strtime (time_t *t)
-{
-  struct tm   *local;
-  static char result[32];
-
-  local = localtime(t);
-  sprintf(result,"%2d/%02d/%4d %02d:%02d:%02d",
-      local->tm_mday, local->tm_mon+1, local->tm_year+1900,
-      local->tm_hour, local->tm_min,   local->tm_sec);
-  return result;
-}
-
-
-/* regular expression matching */
-
-#define ISSPECIAL(c) (((c) == '*') || ((c) == '/'))
-
-int ExprMatch(char *string,char *expr)
-{
-  while (1)
-    {
-      if (ISSPECIAL(*expr))
-    {
-      if (*expr == '/')
-        {
-          if (*string != '\\' && *string != '/')
-        return 0;
-          string ++; expr++;
-        }
-      else if (*expr == '*')
-        {
-          if (*expr ++ == 0)
-        return 1;
-          while (*++string != *expr)
-        if (*string == 0)
-          return 0;
-        }
-    }
-      else
-    {
-      if (*string != *expr)
-        return 0;
-      if (*expr++ == 0)
-        return 1;
-      string++;
-    }
-    }
-}
-
 /* recursive make directory */
 /* abort if you get an ENOENT errno somewhere in the middle */
 /* e.g. ignore error "mkdir on existing directory" */
@@ -196,7 +99,7 @@ int ExprMatch(char *string,char *expr)
 /* return 1 if OK */
 /*        0 on error */
 
-int makedir (char *newdir)
+static int makedir (char *newdir)
 {
   size_t len = strlen(newdir);
   if (len <= 0u)
@@ -227,7 +130,7 @@ int makedir (char *newdir)
       *p = 0;
       if ((mkdir(buffer, 0775) == -1) && (errno == ENOENT))
     {
-      fprintf(stderr,"%s: couldn't create directory %s\n",prog,buffer);
+      fprintf(stderr,"couldn't create directory %s\n",buffer);
       free(buffer);
       return 0;
     }
@@ -239,22 +142,9 @@ int makedir (char *newdir)
   return 1;
 }
 
-int matchname (int arg,int argc,char **argv,char *fname)
-{
-  if (arg == argc)        /* no arguments given (untgz tgzarchive) */
-    return 1;
-
-  while (arg < argc)
-    if (ExprMatch(fname,argv[arg++]))
-     return 1;
-
-  return 0; /* ignore this for the moment being */
-}
-
-
 /* Tar file list or extract */
 
-int untar (gzFile in, const char *dest) {
+static int untar (gzFile in, const char *dest) {
     union  tar_buffer buffer;
     int    len;
     int    err;
@@ -267,13 +157,13 @@ int untar (gzFile in, const char *dest) {
     while (1) {
         len = gzread(in, &buffer, BLOCKSIZE);
         if (len < 0)
-            error (gzerror(in, &err));
+            fprintf(stderr, "%s\n", gzerror(in, &err));
         /*
         * Always expect complete blocks to process
         * the tar information.
         */
         if (len != BLOCKSIZE)
-            error("gzread: incomplete block read");
+            fputs("gzread: incomplete block read\n", stderr);
 
         /*
         * If we have to get a tar header
@@ -334,7 +224,7 @@ int untar (gzFile in, const char *dest) {
 
             if (outfile != NULL) {
                 if (fwrite(&buffer,sizeof(char),bytes,outfile) != bytes) {
-                    fprintf(stderr,"%s : error writing %s skipping...\n",prog,fname);
+                    fprintf(stderr,"error writing %s skipping...\n",fname);
                     fclose(outfile);
                     unlink(fname);
                 }
@@ -386,34 +276,12 @@ int untar (gzFile in, const char *dest) {
     return 0;
 }
 
-
-/* =========================================================== */
-
-void help(int exitval)
-{
-  fprintf(stderr,
-      "untgz v 0.1\n"
-      " an sample application of zlib 1.0.4\n\n"
-        "Usage : untgz TGZfile            to extract all files\n"
-        "        untgz TGZfile fname ...  to extract selected files\n"
-        "        untgz -l TGZfile         to list archive contents\n"
-        "        untgz -h                 to display this help\n\n");
-  exit(exitval);
-}
-
-void error(const char *msg)
-{
-    fprintf(stderr, "%s: %s\n", prog, msg);
-//    exit(1); // don't exit on error
-}
-
-
 int untargz(int fd, const char *dest) {
     gzFile    f;
 
     f = gzdopen(fd, "rb");
     if (f == NULL) {
-        fprintf(stderr,"%s: Couldn't gzopen file\n",    prog);
+        fputs("Couldn't gzopen file\n", stderr);
         return 1;
     }
 

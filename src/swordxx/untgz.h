@@ -7,8 +7,7 @@
 extern "C" {
 #endif
 
-int untargz(int fd, const char *dest);
-int untar(gzFile in, const char *dest);
+int untargz(int fd, const char *dest) __attribute__ ((visibility("internal")));
 
 #ifdef __cplusplus
 } /* extern "C" { */
