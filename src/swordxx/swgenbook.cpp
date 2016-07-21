@@ -48,53 +48,29 @@ SWGenBook::~SWGenBook() {
 }
 
 
-TreeKey &SWGenBook::getTreeKey(const SWKey *k) const {
-    const SWKey* thiskey = k?k:this->key;
+TreeKey & SWGenBook::getTreeKey(SWKey * k) const {
+    SWKey * const thiskey = k ? k : this->key;
 
-    TreeKey *key = 0;
+    if (TreeKey * const key = dynamic_cast<TreeKey *>(thiskey))
+        return *key;
 
-    try {
-        key = SWDYNAMIC_CAST(TreeKey, (thiskey));
-    }
-    catch ( ... ) {}
-
-    if (!key) {
-        ListKey *lkTest = 0;
-        try {
-            lkTest = SWDYNAMIC_CAST(ListKey, thiskey);
-        }
-        catch ( ... ) {    }
-        if (lkTest) {
-            try {
-                key = SWDYNAMIC_CAST(TreeKey, lkTest->getElement());
-                if (!key) {
-                    VerseTreeKey *tkey = 0;
-                    try {
-                        tkey = SWDYNAMIC_CAST(VerseTreeKey, lkTest->getElement());
-                    }
-                    catch ( ... ) {}
-                    if (tkey) key = tkey->getTreeKey();
-                }
-            }
-            catch ( ... ) {    }
-        }
-    }
-    if (!key) {
-        VerseTreeKey *tkey = 0;
-        try {
-            tkey = SWDYNAMIC_CAST(VerseTreeKey, (thiskey));
-        }
-        catch ( ... ) {}
-        if (tkey) key = tkey->getTreeKey();
+    if (ListKey * const lkTest = dynamic_cast<ListKey *>(thiskey)) {
+        if (TreeKey * const key = dynamic_cast<TreeKey *>(lkTest->getElement()))
+            return *key;
+        if (VerseTreeKey * const tkey =
+                dynamic_cast<VerseTreeKey *>(lkTest->getElement()))
+            if (TreeKey * const key = tkey->getTreeKey())
+                return *key;
     }
 
-    if (!key) {
-        delete tmpTreeKey;
-        tmpTreeKey = (TreeKey *)createKey();
-        (*tmpTreeKey) = *(thiskey);
-        return (*tmpTreeKey);
-    }
-    else    return *key;
+    if (VerseTreeKey * const tkey = dynamic_cast<VerseTreeKey *>(thiskey))
+        if (TreeKey * const key = tkey->getTreeKey())
+            return *key;
+
+    delete tmpTreeKey;
+    tmpTreeKey = (TreeKey *)createKey();
+    (*tmpTreeKey) = *(thiskey);
+    return (*tmpTreeKey);
 }
 
 } /* namespace swordxx */

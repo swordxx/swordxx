@@ -29,11 +29,7 @@
 
 namespace swordxx {
 
-static const char *classes[] = {"TreeKey", "SWKey", "SWObject", 0};
-SWClass TreeKey::classdef(classes);
-
 void TreeKey::init() {
-    myclass = &classdef;
     unsnappedKeyText = "";
     posChangeListener = 0;
 }

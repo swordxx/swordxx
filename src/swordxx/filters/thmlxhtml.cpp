@@ -215,13 +215,9 @@ bool ThMLXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
                     std::string type = tag.getAttribute("type");
                     std::string footnoteNumber = tag.getAttribute("swordFootnote");
                     std::string noteName = tag.getAttribute("n");
-                    VerseKey *vkey = NULL;
-                    // see if we have a VerseKey * or descendant
-                    try {
-                        vkey = SWDYNAMIC_CAST(VerseKey, u->key);
-                    }
-                    catch ( ... ) {    }
-                    if (vkey) {
+                    if (VerseKey const * const vkey =
+                            dynamic_cast<VerseKey const *>(u->key))
+                    {
                         // leave this special osis type in for crossReference notes types?  Might thml use this some day? Doesn't hurt.
                         char ch = ((!tag.getAttribute("type").empty() && ((!strcmp(tag.getAttribute("type").c_str(), "crossReference")) || (!strcmp(tag.getAttribute("type").c_str(), "x-cross-ref")))) ? 'x':'n');
                         buf += formatted("<a href=\"passagestudy.jsp?action=showNote&type=%c&value=%s&module=%s&passage=%s\"><small><sup class=\"%c\">*%c%s</sup></small></a>",
@@ -277,13 +273,9 @@ bool ThMLXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
                 else {
                     std::string footnoteNumber = u->startTag.getAttribute("swordFootnote");
                     std::string noteName = tag.getAttribute("n");
-                    VerseKey *vkey = NULL;
-                    // see if we have a VerseKey * or descendant
-                    try {
-                        vkey = SWDYNAMIC_CAST(VerseKey, u->key);
-                    }
-                    catch ( ... ) {}
-                    if (vkey) {
+                    if (VerseKey const * const vkey =
+                            dynamic_cast<VerseKey const *>(u->key))
+                    {
                         // leave this special osis type in for crossReference notes types?  Might thml use this some day? Doesn't hurt.
                         //buf.appendFormatted("<a href=\"noteID=%s.x.%s\"><small><sup>*x</sup></small></a> ", vkey->getText(), footnoteNumber.c_str());
                         buf += formatted("<a href=\"passagestudy.jsp?action=showNote&type=x&value=%s&module=%s&passage=%s\"><small><sup class=\"x\">*x%s</sup></small></a>",

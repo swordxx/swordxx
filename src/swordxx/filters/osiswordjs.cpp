@@ -71,9 +71,9 @@ char OSISWordJS::processText(std::string &text, const SWKey *key, const SWModule
         // add TR to w src in KJV then remove this next line
         std::string wordSrcPrefix = (modName == "KJV")?std::string("TR"):modName;
 
-        VerseKey *vkey = 0;
+        VerseKey const * vkey = 0;
         if (key) {
-            vkey = SWDYNAMIC_CAST(VerseKey, key);
+            vkey = dynamic_cast<VerseKey const *>(key);
         }
 
         const std::string orig = text;

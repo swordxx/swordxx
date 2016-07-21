@@ -64,7 +64,7 @@ char ThMLFootnotes::processText(std::string &text, const SWKey *key, const SWMod
     int footnoteNum = 1;
     char buf[254];
     SWKey *p = (module) ? module->createKey() : (key) ? key->clone() : new VerseKey();
-        VerseKey *parser = SWDYNAMIC_CAST(VerseKey, p);
+        VerseKey * parser = dynamic_cast<VerseKey *>(p);
         if (!parser) {
             delete p;
                 parser = new VerseKey();

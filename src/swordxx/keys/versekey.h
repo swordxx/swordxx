@@ -50,8 +50,6 @@ namespace swordxx {
  */
 class SWDLLEXPORT VerseKey : public SWKey {
 
-    static SWClass classdef;
-
     /** number of instantiated VerseKey objects or derivitives
     */
     static int instance;

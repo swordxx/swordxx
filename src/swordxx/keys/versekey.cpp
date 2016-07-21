@@ -38,9 +38,6 @@
 
 namespace swordxx {
 
-static const char *classes[] = {"VerseKey", "SWKey", "SWObject", 0};
-SWClass VerseKey::classdef(classes);
-
 /******************************************************************************
  *  Initialize static members of VerseKey
  */
@@ -53,8 +50,6 @@ int           VerseKey::instance       = 0;
  */
 
 void VerseKey::init(const char *v11n) {
-    myclass = &classdef;
-
     instance++;
     autonorm = 1;        // default auto normalization to true
     intros = false;        // default display intros option is false
@@ -182,12 +177,12 @@ void VerseKey::setFromOther(const VerseKey &ikey) {
 void VerseKey::positionFrom(const SWKey &ikey) {
      error = 0;
         const SWKey *fromKey = &ikey;
-    ListKey *tryList = SWDYNAMIC_CAST(ListKey, fromKey);
+    ListKey const * tryList = dynamic_cast<ListKey const *>(fromKey);
     if (tryList) {
-        SWKey *k = tryList->getElement();
+        SWKey const *k = tryList->getElement();
         if (k) fromKey = k;
     }
-    VerseKey *tryVerse = SWDYNAMIC_CAST(VerseKey, fromKey);
+    VerseKey const * tryVerse = dynamic_cast<VerseKey const *>(fromKey);
     if (tryVerse) {
         setFromOther(*tryVerse);
     }
@@ -239,12 +234,12 @@ void VerseKey::copyFrom(const SWKey &ikey) {
     // check to see if we can do a more specific copy
     // plus some optimizations
     const SWKey *fromKey = &ikey;
-    ListKey *tryList = SWDYNAMIC_CAST(ListKey, fromKey);
+    ListKey const * tryList = dynamic_cast<ListKey const *>(fromKey);
     if (tryList) {
-        SWKey *k = tryList->getElement();
-        if (k) fromKey = k;
+        if (SWKey const * k = tryList->getElement())
+            fromKey = k;
     }
-    VerseKey *tryVerse = SWDYNAMIC_CAST(VerseKey, fromKey);
+    VerseKey const * tryVerse = dynamic_cast<VerseKey const *>(fromKey);
     if (tryVerse) {
         copyFrom(*tryVerse);
     }
@@ -261,13 +256,12 @@ VerseKey::VerseKey(const char *min, const char *max, const char *v11n) : SWKey()
 {
     init(v11n);
     ListKey tmpListKey = parseVerseList(min);
-    if (tmpListKey.getCount()) {
-        VerseKey *newElement = SWDYNAMIC_CAST(VerseKey, tmpListKey.getElement(0));
-        setLowerBound(*newElement);
-    }
+    if (tmpListKey.getCount())
+        setLowerBound(*static_cast<VerseKey *>(tmpListKey.getElement(0)));
     tmpListKey = parseVerseList(max, min, true);
     if (tmpListKey.getCount()) {
-        VerseKey *newElement = SWDYNAMIC_CAST(VerseKey, tmpListKey.getElement(0));
+        VerseKey * const newElement =
+                static_cast<VerseKey *>(tmpListKey.getElement(0));
         setUpperBound((newElement->isBoundSet())?newElement->getUpperBound():*newElement);
     }
     setPosition(TOP);
@@ -804,7 +798,9 @@ ListKey VerseKey::parseVerseList(const char *buf, const char *defaultKey, bool e
                         }
                     }
                     else    if (expandRange) {
-                        VerseKey *newElement = SWDYNAMIC_CAST(VerseKey, tmpListKey.getElement());
+                        VerseKey * const newElement =
+                                dynamic_cast<VerseKey *>(
+                                    tmpListKey.getElement());
                         if (newElement) {
                             if (partial > 1)
                                 *curKey = MAXCHAPTER;
@@ -1075,7 +1071,8 @@ ListKey VerseKey::parseVerseList(const char *buf, const char *defaultKey, bool e
                 }
             }
             else if (expandRange) {
-                VerseKey *newElement = SWDYNAMIC_CAST(VerseKey, tmpListKey.getElement());
+                VerseKey * const newElement =
+                        dynamic_cast<VerseKey *>(tmpListKey.getElement());
                 if (newElement) {
                     if (partial > 1)
                         *curKey = MAXCHAPTER;
@@ -1755,10 +1752,8 @@ void VerseKey::checkBounds() {
 int VerseKey::compare(const SWKey &ikey)
 {
     const SWKey *testKey = &ikey;
-    const VerseKey *vkey = (const VerseKey *)SWDYNAMIC_CAST(VerseKey, testKey);
-    if (vkey) {
+    if (const VerseKey * const vkey = dynamic_cast<VerseKey const *>(testKey))
         return _compare(*vkey);
-    }
     const VerseKey ivkey = (const char *)ikey;
     return _compare(ivkey);
 }

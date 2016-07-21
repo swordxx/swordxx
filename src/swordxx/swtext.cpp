@@ -97,35 +97,22 @@ void SWText::setIndex(long iindex) {
 
 
 VerseKey &SWText::getVerseKey(const SWKey *keyToConvert) const {
-    const SWKey *thisKey = keyToConvert ? keyToConvert : this->key;
+    SWKey const * tmp = keyToConvert ? keyToConvert : this->key;
+    /// \bug remove const_cast:
+    SWKey * thisKey = const_cast<SWKey *>(tmp);
 
-    VerseKey *key = 0;
-    // see if we have a VerseKey * or decendant
-    try {
-        key = SWDYNAMIC_CAST(VerseKey, thisKey);
-    }
-    catch ( ... ) {    }
-    if (!key) {
-        ListKey *lkTest = 0;
-        try {
-            lkTest = SWDYNAMIC_CAST(ListKey, thisKey);
-        }
-        catch ( ... ) {    }
-        if (lkTest) {
-            try {
-                key = SWDYNAMIC_CAST(VerseKey, lkTest->getElement());
-            }
-            catch ( ... ) {    }
-        }
-    }
-    if (!key) {
-                VerseKey *retKey = (tmpSecond) ? tmpVK1 : tmpVK2;
-                tmpSecond = !tmpSecond;
-        retKey->setLocale(LocaleMgr::getSystemLocaleMgr()->getDefaultLocaleName());
-        (*retKey) = *(thisKey);
-        return (*retKey);
-    }
-    else    return *key;
+    if (VerseKey * const key = dynamic_cast<VerseKey *>(thisKey))
+        return *key;
+    if (ListKey * const lkTest = dynamic_cast<ListKey *>(thisKey))
+        if (VerseKey * const key =
+                dynamic_cast<VerseKey *>(lkTest->getElement()))
+            return *key;
+
+    VerseKey * retKey = (tmpSecond) ? tmpVK1 : tmpVK2;
+    tmpSecond = !tmpSecond;
+    retKey->setLocale(LocaleMgr::getSystemLocaleMgr()->getDefaultLocaleName());
+    (*retKey) = *thisKey;
+    return (*retKey);
 }
 
 

@@ -37,7 +37,6 @@ namespace swordxx {
  * The base class for all tree-based key implementations in Sword++.
  */
 class SWDLLEXPORT TreeKey : public SWKey {
-    static SWClass classdef;
     void init();
 
 protected:

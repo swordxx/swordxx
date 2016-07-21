@@ -254,13 +254,7 @@ bool ThMLRTF::handleToken(std::string &buf, const char *token, BasicFilterUserDa
                 if (!tag.isEmpty()) {
                     std::string type = tag.getAttribute("type");
                     std::string footnoteNumber = tag.getAttribute("swordFootnote");
-                    VerseKey *vkey = NULL;
-                    // see if we have a VerseKey * or descendant
-                    try {
-                        vkey = SWDYNAMIC_CAST(VerseKey, u->key);
-                    }
-                    catch ( ... ) {    }
-                    if (vkey) {
+                    if (VerseKey const * const vkey = dynamic_cast<VerseKey const *>(u->key)) {
                         // leave this special osis type in for crossReference notes types?  Might thml use this some day? Doesn't hurt.
                         char ch = ((!tag.getAttribute("type").empty() && ((!strcmp(tag.getAttribute("type").c_str(), "crossReference")) || (!strcmp(tag.getAttribute("type").c_str(), "x-cross-ref")))) ? 'x':'n');
                         buf += formatted("{\\super <a href=\"\">*%c%i.%s</a>} ", ch, vkey->getVerse(), footnoteNumber.c_str());
@@ -293,13 +287,7 @@ bool ThMLRTF::handleToken(std::string &buf, const char *token, BasicFilterUserDa
                 }
                 else {
                     std::string footnoteNumber = u->startTag.getAttribute("swordFootnote");
-                    VerseKey *vkey = NULL;
-                    // see if we have a VerseKey * or descendant
-                    try {
-                        vkey = SWDYNAMIC_CAST(VerseKey, u->key);
-                    }
-                    catch ( ... ) {}
-                    if (vkey) {
+                    if (VerseKey const * const vkey = dynamic_cast<VerseKey const *>(u->key)) {
                         // leave this special osis type in for crossReference notes types?  Might thml use this some day? Doesn't hurt.
                         buf += formatted("{\\super <a href=\"\">*x%i.%s</a>} ", vkey->getVerse(), footnoteNumber.c_str());
                     }

@@ -29,9 +29,6 @@
 
 namespace swordxx {
 
-static const char *classes[] = {"VerseTreeKey", "VerseKey", "SWKey", "SWObject", 0};
-SWClass VerseTreeKey::classdef(classes);
-
 
 /******************************************************************************
  * VerseTreeKey Constructor - initializes instance of VerseTreeKey
@@ -77,7 +74,6 @@ VerseTreeKey::VerseTreeKey(TreeKey *treeKey, const char *min, const char *max) :
 
 void VerseTreeKey::init(TreeKey *treeKey)
 {
-    myclass = &classdef;
     this->treeKey = (TreeKey *)treeKey->clone();
     this->treeKey->setPositionChangeListener(this);
     internalPosChange = false;

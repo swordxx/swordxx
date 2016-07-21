@@ -963,13 +963,11 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 
 
     char perc = 1;
-    VerseKey *vkcheck = 0;
-    vkcheck = SWDYNAMIC_CAST(VerseKey, key);
+    VerseKey *vkcheck = dynamic_cast<VerseKey *>(key);
     VerseKey *chapMax = 0;
     if (vkcheck) chapMax = (VerseKey *)vkcheck->clone();
 
-    TreeKeyIdx *tkcheck = 0;
-    tkcheck = SWDYNAMIC_CAST(TreeKeyIdx, key);
+    TreeKeyIdx *tkcheck = dynamic_cast<TreeKeyIdx *>(key);
 
 
     *this = BOTTOM;

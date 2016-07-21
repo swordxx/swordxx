@@ -36,12 +36,7 @@
 
 namespace swordxx {
 
-static const char *classes[] = {"TreeKeyIdx", "TreeKey", "SWKey", "SWObject", 0};
-SWClass TreeKeyIdx::classdef(classes);
-
-
 TreeKeyIdx::TreeKeyIdx(const TreeKeyIdx &ikey) : currentNode() {
-    init();
     path = 0;
     idxfd = 0;
     datfd = 0;
@@ -51,7 +46,6 @@ TreeKeyIdx::TreeKeyIdx(const TreeKeyIdx &ikey) : currentNode() {
 TreeKeyIdx::TreeKeyIdx(const char *idxPath, int fileMode) : currentNode() {
     std::string buf;
 
-    init();
     path = 0;
     stdstr(&path, idxPath);
 
@@ -73,11 +67,6 @@ TreeKeyIdx::TreeKeyIdx(const char *idxPath, int fileMode) : currentNode() {
     else {
         root();
     }
-}
-
-
-void TreeKeyIdx::init() {
-    myclass = &classdef;
 }
 
 
@@ -582,8 +571,8 @@ int TreeKeyIdx::_compare (const TreeKeyIdx & ikey) {
 
 
 int TreeKeyIdx::compare(const SWKey &ikey) {
-    TreeKeyIdx *treeKey = SWDYNAMIC_CAST(TreeKeyIdx, (&ikey));
-    if (treeKey)
+    if (TreeKeyIdx const * const treeKey =
+            dynamic_cast<TreeKeyIdx const *>(&ikey))
         return _compare(*treeKey);
     return SWKey::compare(ikey);
 }

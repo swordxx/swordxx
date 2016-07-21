@@ -37,8 +37,6 @@ namespace swordxx {
   */
 class SWDLLEXPORT StrKey:public SWKey
 {
-  static SWClass classdef;
-  void init ();
 public:
   /** initializes instance of StrKey
   *

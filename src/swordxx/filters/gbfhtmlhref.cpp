@@ -233,13 +233,9 @@ bool GBFHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterUs
             std::string type = tag.getAttribute("type");
             std::string footnoteNumber = tag.getAttribute("swordFootnote");
             std::string noteName = tag.getAttribute("n");
-            VerseKey *vkey = NULL;
-            // see if we have a VerseKey * or descendant
-            try {
-                vkey = SWDYNAMIC_CAST(VerseKey, u->key);
-            }
-            catch ( ... ) {    }
-            if (vkey) {
+            if (VerseKey const * const vkey =
+                        dynamic_cast<VerseKey const *>(u->key))
+            {
                 // leave this special osis type in for crossReference notes types?  Might thml use this some day? Doesn't hurt.
                 //char ch = ((tag.getAttribute("type") && ((!strcmp(tag.getAttribute("type"), "crossReference")) || (!strcmp(tag.getAttribute("type"), "x-cross-ref")))) ? 'x':'n');
                 buf += formatted("<a href=\"passagestudy.jsp?action=showNote&type=n&value=%s&module=%s&passage=%s\"><small><sup class=\"n\">*n%s</sup></small></a> ",

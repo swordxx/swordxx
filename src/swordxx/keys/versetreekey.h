@@ -40,7 +40,6 @@ namespace swordxx {
  */
 class SWDLLEXPORT VerseTreeKey : public VerseKey, public TreeKey::PositionChangeListener {
 
-    static SWClass classdef;
     TreeKey *treeKey;
 //    vector<struct sbook> books;
 

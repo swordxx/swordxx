@@ -77,9 +77,9 @@ char GBFWordJS::processText(std::string &text, const SWKey *key, const SWModule 
 
         const std::string orig = text;
         const char * from = orig.c_str();
-        VerseKey *vkey = 0;
+        VerseKey const * vkey = nullptr;
         if (key) {
-            vkey = SWDYNAMIC_CAST(VerseKey, key);
+            vkey = dynamic_cast<VerseKey const *>(key);
         }
 
         for (text = ""; *from; from++) {

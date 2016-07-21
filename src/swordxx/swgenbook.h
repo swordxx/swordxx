@@ -38,7 +38,7 @@ class SWDLLEXPORT SWGenBook : public SWModule {
 protected:
     mutable char *entkeytxt;
     mutable TreeKey *tmpTreeKey;
-    TreeKey &getTreeKey(const SWKey *k = 0) const;
+    TreeKey & getTreeKey(SWKey * k = nullptr) const;
 
 public:
     /** Initializes data for instance of SWGenBook

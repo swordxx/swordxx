@@ -92,10 +92,8 @@ char OSISStrongs::processText(std::string &text, const SWKey *key, const SWModul
                 if (module->isProcessEntryAttributes()) {
                     wordStart = from+1;
                     char gh = 0;
-                    VerseKey *vkey = 0;
-                    if (key) {
-                        vkey = SWDYNAMIC_CAST(VerseKey, key);
-                    }
+                    VerseKey const * const vkey =
+                            dynamic_cast<VerseKey const *>(key);
                     std::string lemma      = "";
                     std::string morph      = "";
                     std::string src        = "";

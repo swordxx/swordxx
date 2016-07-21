@@ -295,18 +295,13 @@ bool OSISLaTeX::handleToken(std::string &buf, const char *token, BasicFilterUser
                             footnoteBody += u->module->getEntryAttributes()["Footnote"][footnoteNumber]["body"];
                         }
                         std::string noteName = tag.getAttribute("n");
-                        VerseKey *vkey = NULL;
-
 
                         u->inXRefNote = true; // Why this change? Ben Morgan: Any note can have references in, so we need to set this to true for all notes
 //                        u->inXRefNote = (ch == 'x');
 
-                        // see if we have a VerseKey * or descendant
-                        try {
-                            vkey = SWDYNAMIC_CAST(VerseKey, u->key);
-                        }
-                        catch ( ... ) {    }
-                        if (vkey) {
+                        if (VerseKey const * const vkey =
+                                dynamic_cast<VerseKey const *>(u->key))
+                        {
                             //printf("URL = %s\n",URL::encode(vkey->getText()).c_str());
                             buf += formatted("\\swordfootnote{%s}{%s}{%s}{%s}{%s}{",
 

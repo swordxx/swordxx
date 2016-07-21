@@ -80,10 +80,7 @@ char ThMLWordJS::processText(std::string &text, const SWKey *key, const SWModule
 
         const std::string orig = text;
         const char * from = orig.c_str();
-        VerseKey *vkey = 0;
-        if (key) {
-            vkey = SWDYNAMIC_CAST(VerseKey, key);
-        }
+        VerseKey const * const vkey = dynamic_cast<VerseKey const *>(key);
 
         for (text = ""; *from; from++) {
             if (*from == '<') {

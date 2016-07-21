@@ -38,7 +38,6 @@ namespace swordxx {
   */
 class SWDLLEXPORT ListKey : public SWKey {
 
-    static SWClass classdef;
     void init();
 
 protected:

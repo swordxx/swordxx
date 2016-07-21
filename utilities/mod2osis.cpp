@@ -109,7 +109,7 @@ int main(int argc, char **argv)
 //    inModule->AddRenderFilter(&filter);
 
     SWKey *key = (SWKey *)*inModule;
-    VerseKey *vkey = SWDYNAMIC_CAST(VerseKey, key);
+    VerseKey *vkey = dynamic_cast<VerseKey *>(key);
 
     char buf[1024];
     bool opentest = false;
@@ -165,7 +165,7 @@ int main(int argc, char **argv)
     (*inModule) = TOP;
 
     SWKey *p = inModule->createKey();
-        VerseKey *tmpKey = SWDYNAMIC_CAST(VerseKey, p);
+        VerseKey *tmpKey = dynamic_cast<VerseKey *>(p);
     if (!tmpKey) {
             delete p;
             tmpKey = new VerseKey();

@@ -29,9 +29,6 @@
 
 namespace swordxx {
 
-static const char *classes[] = {"StrKey", "SWKey", "SWObject", 0};
-SWClass StrKey::classdef(classes);
-
 /******************************************************************************
  * StrKey Constructor - initializes instance of StrKey
  *
@@ -39,14 +36,7 @@ SWClass StrKey::classdef(classes);
  */
 
 StrKey::StrKey(const char *ikey) : SWKey(ikey)
-{
-    init();
-}
-
-
-void StrKey::init() {
-    myclass = &classdef;
-}
+{}
 
 SWKey * StrKey::clone() const noexcept
 { return new StrKey(getText()); }

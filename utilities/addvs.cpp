@@ -99,8 +99,9 @@ int main(int argc, char **argv) {
       bool havefirst = false;
       VerseKey firstverse;
       for (i = 0; i < listkey.getCount(); i++) {
-    VerseKey *element = SWDYNAMIC_CAST(VerseKey, listkey.getElement(i));
-    if (element) {
+    if (VerseKey const * const element =
+        dynamic_cast<VerseKey const *>(listkey.getElement(i)))
+    {
       mod->setKey(element->getLowerBound());
       VerseKey finalkey = element->getUpperBound();
       std::cout << mod->getKeyText() << "-" << (const char*)finalkey << std::endl;

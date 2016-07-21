@@ -31,8 +31,6 @@
 
 namespace swordxx {
 
-static const char *classes[] = {"SWKey", "SWObject", 0};
-SWClass SWKey::classdef(classes);
 SWKey::LocaleCache   SWKey::localeCache;
 
 /******************************************************************************
@@ -67,7 +65,6 @@ SWKey::SWKey(SWKey const &k)
 }
 
 void SWKey::init() {
-    myclass = &classdef;
     boundSet = false;
     locale = 0;
     localeName = 0;

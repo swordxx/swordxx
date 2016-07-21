@@ -164,14 +164,9 @@ bool GBFLaTeX::handleToken(std::string &buf, const char *token, BasicFilterUserD
             std::string type = tag.getAttribute("type");
             std::string footnoteNumber = tag.getAttribute("swordFootnote");
             std::string noteName = tag.getAttribute("n");
-            VerseKey *vkey = NULL;
-            // see if we have a VerseKey * or descendant
-            try {
-                vkey = SWDYNAMIC_CAST(VerseKey, u->key);
-            }
-            catch ( ... ) {    }
-            if (vkey) {
-
+            if (VerseKey const * const vkey =
+                    dynamic_cast<VerseKey const *>(u->key))
+            {
                 buf += formatted("\\swordfootnote{%s}{%s}{%s}{",
                     footnoteNumber.c_str(),
                     u->version.c_str(),

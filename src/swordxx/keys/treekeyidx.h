@@ -52,14 +52,10 @@ class SWDLLEXPORT TreeKeyIdx : public TreeKey {
         char *userData;
     } currentNode;
 
-    static SWClass classdef;
-
     char *path;
 
     FileDesc *idxfd;
     FileDesc *datfd;
-
-    void init();
 
     void getTreeNodeFromDatOffset(long ioffset, TreeNode *buf) const;
     char getTreeNodeFromIdxOffset(long ioffset, TreeNode *node) const;

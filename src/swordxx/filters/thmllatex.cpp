@@ -221,13 +221,9 @@ bool ThMLLaTeX::handleToken(std::string &buf, const char *token, BasicFilterUser
                     if (u->module){
                             footnoteBody += u->module->getEntryAttributes()["Footnote"][footnoteNumber]["body"];
                                         }
-                    VerseKey *vkey = NULL;
-                    // see if we have a VerseKey * or descendant
-                    try {
-                        vkey = SWDYNAMIC_CAST(VerseKey, u->key);
-                    }
-                    catch ( ... ) {    }
-                    if (vkey) {
+                    if (VerseKey const * const vkey =
+                            dynamic_cast<VerseKey const *>(u->key))
+                    {
                         // leave this special osis type in for crossReference notes types?  Might thml use this some day? Doesn't hurt.
                         char ch = ((!tag.getAttribute("type").empty() && ((!strcmp(tag.getAttribute("type").c_str(), "crossReference")) || (!strcmp(tag.getAttribute("type").c_str(), "x-cross-ref")))) ? 'x':'n');
                         buf += formatted("\\swordfootnote[%c]{%s}{%s}{%s}{%s}{",
@@ -287,13 +283,9 @@ bool ThMLLaTeX::handleToken(std::string &buf, const char *token, BasicFilterUser
                     if (u->module){
                             footnoteBody += u->module->getEntryAttributes()["Footnote"][footnoteNumber]["body"];
                                         }
-                    VerseKey *vkey = NULL;
-                    // see if we have a VerseKey * or descendant
-                    try {
-                        vkey = SWDYNAMIC_CAST(VerseKey, u->key);
-                    }
-                    catch ( ... ) {}
-                    if (vkey) {
+                    if (VerseKey const * const vkey =
+                            dynamic_cast<VerseKey const *>(u->key))
+                    {
                         // leave this special osis type in for crossReference notes types?  Might thml use this some day? Doesn't hurt.
                         //buf.appendFormatted("<a href=\"noteID=%s.x.%s\"><small><sup>*x</sup></small></a> ", vkey->getText(), footnoteNumber.c_str());
                         // char ch = ((tag.getAttribute("type") && ((!strcmp(tag.getAttribute("type"), "crossReference")) || (!strcmp(tag.getAttribute("type"), "x-cross-ref")))) ? 'x':'n');

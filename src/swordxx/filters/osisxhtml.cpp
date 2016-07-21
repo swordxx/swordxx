@@ -285,18 +285,14 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
                     if (!strongsMarkup) {	// leave strong's markup notes out, in the future we'll probably have different option filters to turn different note types on or off
                         std::string footnoteNumber = tag.getAttribute("swordFootnote");
                         std::string noteName = tag.getAttribute("n");
-                        VerseKey *vkey = NULL;
                         char ch = ((!tag.getAttribute("type").empty() && ((!strcmp(tag.getAttribute("type").c_str(), "crossReference")) || (!strcmp(tag.getAttribute("type").c_str(), "x-cross-ref")))) ? 'x':'n');
 
                         u->inXRefNote = true; // Why this change? Ben Morgan: Any note can have references in, so we need to set this to true for all notes
 //						u->inXRefNote = (ch == 'x');
 
-                        // see if we have a VerseKey * or descendant
-                        try {
-                            vkey = SWDYNAMIC_CAST(VerseKey, u->key);
-                        }
-                        catch ( ... ) {	}
-                        if (vkey) {
+                        if (VerseKey const * const vkey =
+                                dynamic_cast<VerseKey const *>(u->key))
+                        {
                             //printf("URL = %s\n",URL::encode(vkey->getText()).c_str());
                             buf += formatted("<a href=\"passagestudy.jsp?action=showNote&type=%c&value=%s&module=%s&passage=%s\"><small><sup class=\"%c\">*%c%s</sup></small></a>",
                                 ch,
@@ -495,7 +491,8 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
                 if (type.size()) {
                     classExtras.append(" ").append(type);
                 }
-                VerseKey *vkey = SWDYNAMIC_CAST(VerseKey, u->key);
+                VerseKey const * const vkey =
+                        dynamic_cast<VerseKey const *>(u->key);
                 if (vkey && !vkey->getVerse()) {
                     if (!vkey->getChapter()) {
                         if (!vkey->getBook()) {

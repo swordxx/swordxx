@@ -172,13 +172,7 @@ bool TEIRTF::handleToken(std::string &buf, const char *token, BasicFilterUserDat
                     std::string type = tag.getAttribute("type");
 
                     std::string footnoteNumber = tag.getAttribute("swordFootnote");
-                    VerseKey *vkey = 0;
-                    // see if we have a VerseKey * or descendant
-                    try {
-                        vkey = SWDYNAMIC_CAST(VerseKey, u->key);
-                    }
-                    catch ( ... ) {    }
-                    if (vkey) {
+                    if (dynamic_cast<VerseKey const *>(u->key)) {
                         buf += formatted("{\\super <a href=\"\">*%s</a>} ", footnoteNumber.c_str());
                     }
                     u->suspendTextPassThru = true;

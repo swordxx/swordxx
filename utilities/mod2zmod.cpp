@@ -135,7 +135,7 @@ int main(int argc, char **argv)
     case BIBLE:
     case COM: {
         SWKey *k = inModule->getKey();
-        VerseKey *vk = SWDYNAMIC_CAST(VerseKey, k);
+        VerseKey *vk = dynamic_cast<VerseKey *>(k);
         result = zText::createModule(argv[2], iType, vk->getVersificationSystem());
         break;
     }
@@ -153,7 +153,7 @@ int main(int argc, char **argv)
     case BIBLE:
     case COM: {
         SWKey *k = inModule->getKey();
-        VerseKey *vk = SWDYNAMIC_CAST(VerseKey, k);
+        VerseKey *vk = dynamic_cast<VerseKey *>(k);
         outModule = new zText(argv[2], 0, 0, iType, compressor,
             ENC_UNKNOWN, DIRECTION_LTR, FMT_UNKNOWN, 0,
             vk->getVersificationSystem());    // open our datapath with our RawText driver.
@@ -175,7 +175,7 @@ int main(int argc, char **argv)
     SWKey bufferKey;
     SWKey lastBufferKey;
     SWKey *outModuleKey = outModule->createKey();
-    VerseKey *vkey = SWDYNAMIC_CAST(VerseKey, outModuleKey);
+    VerseKey *vkey = dynamic_cast<VerseKey *>(outModuleKey);
     outModuleKey->setPersist(true);
     if (vkey) {
         vkey->setIntros(true);

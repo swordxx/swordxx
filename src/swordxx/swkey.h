@@ -25,8 +25,6 @@
 #ifndef SWKEY_H
 #define SWKEY_H
 
-#include "swobject.h"
-
 #include <cstdint>
 #include "defs.h"
 #include "utilstr.h"
@@ -74,7 +72,7 @@ class SWLocale;
  *    It always represents a possible location into a module and can additionally represent
  *    a domain of entries (e.g. "John 3:16" in the domain "John 1:1 - Mark 5:25")
  */
-class SWDLLEXPORT SWKey : public SWObject {
+class SWDLLEXPORT SWKey {
 
     class LocaleCache {
     public:
@@ -95,7 +93,6 @@ class SWDLLEXPORT SWKey : public SWObject {
 
 
     long index;
-    static SWClass classdef;
     void init();
 
 

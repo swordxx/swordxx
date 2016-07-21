@@ -107,10 +107,7 @@ int main(int argc, char **argv)
     if (!module) usage(progName, (((std::string) "Couldn't find module: ") + modName).c_str());
 
 
-    SWKey *key = module->getKey();
-    VerseKey *vkey = SWDYNAMIC_CAST(VerseKey, key);
-
-    if (vkey)
+    if (VerseKey * const vkey = dynamic_cast<VerseKey *>(module->getKey()))
         vkey->setIntros(true);
 
     for ((*module) = TOP; !module->popError(); (*module)++) {
