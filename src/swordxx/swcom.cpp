@@ -30,6 +30,16 @@
 
 namespace swordxx {
 
+namespace {
+
+SWKey * staticCreateKey(char const * const versification) {
+    VerseKey * const vk = new VerseKey();
+    vk->setVersificationSystem(versification);
+    return vk;
+}
+
+} // anonymous namespace
+
 
 /******************************************************************************
  * SWCom Constructor - Initializes data for instance of SWCom
@@ -38,11 +48,9 @@ namespace swordxx {
  *    imoddesc - Name to display to user for module
  */
 
-SWCom::SWCom(const char *imodname, const char *imoddesc, SWTextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char *ilang, const char *versification): SWModule(imodname, imoddesc, "Commentaries", enc, dir, mark, ilang) {
+SWCom::SWCom(const char *imodname, const char *imoddesc, SWTextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char *ilang, const char *versification): SWModule(staticCreateKey(versification), imodname, imoddesc, "Commentaries", enc, dir, mark, ilang) {
     this->versification = 0;
     stdstr(&(this->versification), versification);
-    delete key;
-    key = (VerseKey *)createKey();
     tmpVK1 = (VerseKey *)createKey();
     tmpVK2 = (VerseKey *)createKey();
         tmpSecond = false;
@@ -60,13 +68,7 @@ SWCom::~SWCom() {
 }
 
 
-SWKey *SWCom::createKey() const {
-    VerseKey *vk = new VerseKey();
-
-    vk->setVersificationSystem(versification);
-
-    return vk;
-}
+SWKey * SWCom::createKey() const { return staticCreateKey(versification); }
 
 
 long SWCom::getIndex() const {

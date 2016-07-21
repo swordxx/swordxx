@@ -146,6 +146,7 @@ public:
 
     /** SWModule c-tor
      *
+     * @param key_ the default key.
      * @param imodname Internal name for module; see also getName()
      * @param imoddesc Name to display to user for module; see also getDescription()
      * @param imodtype Type of module (e.g. Biblical Text, Commentary, etc.); see also getType()
@@ -154,7 +155,7 @@ public:
      * @param markup Source Markup of the module (e.g. OSIS)
      * @param modlang Language of the module (e.g. en)
      */
-    SWModule(const char *imodname = 0, const char *imoddesc = 0, const char *imodtype = 0, SWTextEncoding encoding = ENC_UNKNOWN, SWTextDirection dir = DIRECTION_LTR, SWTextMarkup markup = FMT_UNKNOWN, const char *modlang = 0);
+    SWModule(SWKey * key_, const char *imodname = 0, const char *imoddesc = 0, const char *imodtype = 0, SWTextEncoding encoding = ENC_UNKNOWN, SWTextDirection dir = DIRECTION_LTR, SWTextMarkup markup = FMT_UNKNOWN, const char *modlang = 0);
 
     /** SWModule d-tor
      */
@@ -322,7 +323,7 @@ public:
      * @see VerseKey, ListKey, SWText, SWLD, SWCom
      * @return pointer to allocated key. Caller is responsible for deleting the object
      */
-    virtual SWKey *createKey() const;
+    virtual SWKey *createKey() const = 0;
 
     std::string const & getRawEntry() const { return getRawEntryBuf(); }
 

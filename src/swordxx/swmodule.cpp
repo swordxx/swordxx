@@ -78,8 +78,8 @@ typedef std::list<std::string> StringList;
  *    unicode  - if this module is unicode
  */
 
-SWModule::SWModule(const char *imodname, const char *imoddesc, const char *imodtype, SWTextEncoding encoding, SWTextDirection direction, SWTextMarkup markup, const char *imodlang) {
-    key       = createKey();
+SWModule::SWModule(SWKey * key_, const char *imodname, const char *imoddesc, const char *imodtype, SWTextEncoding encoding, SWTextDirection direction, SWTextMarkup markup, const char *imodlang) {
+    key       = key_;
     entryBuf  = "";
     config    = &ownConfig;
     modname   = 0;
@@ -137,18 +137,6 @@ SWModule::~SWModule()
     delete renderFilters;
     delete optionFilters;
     delete encodingFilters;
-}
-
-
-/******************************************************************************
- * SWModule::createKey - Allocates a key of specific type for module
- *
- * RET:    pointer to allocated key
- */
-
-SWKey *SWModule::createKey() const
-{
-    return new SWKey();
 }
 
 

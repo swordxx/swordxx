@@ -26,6 +26,7 @@
 #include <cstdint>
 #include <cstdio>
 #include <fcntl.h>
+#include <memory>
 #include "../../filemgr.h"
 #include "../../keys/treekeyidx.h"
 #include "../../keys/versetreekey.h"
@@ -36,6 +37,29 @@
 
 namespace swordxx {
 
+namespace {
+
+SWKey * staticCreateKey(char const * const path, bool const verseKey) {
+    auto tKey(std::make_unique<TreeKeyIdx>(path));
+    if (verseKey) {
+        SWKey * const vtKey = new VerseTreeKey(tKey.get());
+        tKey.reset();
+        return vtKey;
+    }
+    return tKey.release();
+}
+
+SWKey * constructorCreateKey(char const * const ipath, bool const verseKey) {
+    char * path = nullptr;
+    stdstr(&path, ipath);
+    if ((path[strlen(path) - 1] == '/') || (path[strlen(path) - 1] == '\\'))
+        path[strlen(path) - 1] = 0;
+    return staticCreateKey(path, verseKey);
+}
+
+} // anonymous namespace
+
+
 /******************************************************************************
  * RawGenBook Constructor - Initializes data for instance of RawGenBook
  *
@@ -44,7 +68,7 @@ namespace swordxx {
  */
 
 RawGenBook::RawGenBook(const char *ipath, const char *iname, const char *idesc, SWTextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char* ilang, const char *keyType)
-        : SWGenBook(iname, idesc, enc, dir, mark, ilang) {
+        : SWGenBook(constructorCreateKey(ipath, !strcmp("VerseKey", keyType)), iname, idesc, enc, dir, mark, ilang) {
 
     char *buf = new char [ strlen (ipath) + 20 ];
 
@@ -56,10 +80,6 @@ RawGenBook::RawGenBook(const char *ipath, const char *iname, const char *idesc, 
 
     if ((path[strlen(path)-1] == '/') || (path[strlen(path)-1] == '\\'))
         path[strlen(path)-1] = 0;
-
-    delete key;
-    key = createKey();
-
 
     sprintf(buf, "%s.bdt", path);
     bdtfd = FileMgr::getSystemFileMgr()->open(buf, FileMgr::RDWR, true);
@@ -207,11 +227,8 @@ char RawGenBook::createModule(const char *ipath) {
 }
 
 
-SWKey *RawGenBook::createKey() const {
-    TreeKey *tKey = new TreeKeyIdx(path);
-    if (verseKey) { SWKey *vtKey = new VerseTreeKey(tKey); delete tKey; return vtKey; }
-    return tKey;
-}
+SWKey * RawGenBook::createKey() const
+{ return staticCreateKey(path, verseKey); }
 
 bool RawGenBook::hasEntry(const SWKey *k) const {
     TreeKey &key = getTreeKey(k);

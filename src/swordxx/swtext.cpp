@@ -31,6 +31,17 @@
 
 namespace swordxx {
 
+namespace {
+
+SWKey * staticCreateKey(char const * const versification) {
+    VerseKey * const vk = new VerseKey();
+    vk->setVersificationSystem(versification);
+    return vk;
+}
+
+} // anonymous namespace
+
+
 /******************************************************************************
  * SWText Constructor - Initializes data for instance of SWText
  *
@@ -38,11 +49,9 @@ namespace swordxx {
  *    imoddesc - Name to display to user for module
  */
 
-SWText::SWText(const char *imodname, const char *imoddesc, SWTextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char* ilang, const char *versification): SWModule(imodname, imoddesc, "Biblical Texts", enc, dir, mark, ilang) {
+SWText::SWText(const char *imodname, const char *imoddesc, SWTextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char* ilang, const char *versification): SWModule(staticCreateKey(versification), imodname, imoddesc, "Biblical Texts", enc, dir, mark, ilang) {
     this->versification = 0;
     stdstr(&(this->versification), versification);
-    delete key;
-    key = (VerseKey *)createKey();
     tmpVK1 = (VerseKey *)createKey();
     tmpVK2 = (VerseKey *)createKey();
         tmpSecond = false;
@@ -65,13 +74,7 @@ SWText::~SWText() {
  * SWText createKey - Create the correct key (VerseKey) for use with SWText
  */
 
-SWKey *SWText::createKey() const {
-    VerseKey *vk = new VerseKey();
-
-    vk->setVersificationSystem(versification);
-
-    return vk;
-}
+SWKey * SWText::createKey() const { return staticCreateKey(versification); }
 
 
 long SWText::getIndex() const {
