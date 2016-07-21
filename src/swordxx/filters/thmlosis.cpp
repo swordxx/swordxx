@@ -44,6 +44,7 @@ ThMLOSIS::~ThMLOSIS() {
 
 
 char ThMLOSIS::processText(std::string &text, const SWKey *key, const SWModule *module) {
+    (void) module;
     char token[2048]; // cheese.  Fix.
     int tokpos = 0;
     bool intoken = false;

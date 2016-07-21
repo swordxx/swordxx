@@ -35,6 +35,8 @@ GBFThML::GBFThML()
 
 
 char GBFThML::processText(std::string &text, const SWKey *key, const SWModule *module) {
+    (void) key;
+    (void) module;
     const char *from;
     char token[2048];
     int tokpos = 0;

@@ -51,6 +51,8 @@ OSISMorph::~OSISMorph() {
 
 
 char OSISMorph::processText(std::string &text, const SWKey *key, const SWModule *module) {
+    (void) key;
+    (void) module;
     if (!option) {	// if we don't want morph tags
         char token[2048]; // cheese.  Fix.
         int tokpos = 0;

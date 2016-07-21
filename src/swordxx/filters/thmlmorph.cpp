@@ -51,6 +51,8 @@ ThMLMorph::~ThMLMorph() {
 
 
 char ThMLMorph::processText(std::string &text, const SWKey *key, const SWModule *module) {
+    (void) key;
+    (void) module;
     if (!option) {    // if we don't want morph tags
         bool intoken = false;
 

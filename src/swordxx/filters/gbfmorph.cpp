@@ -50,6 +50,8 @@ GBFMorph::~GBFMorph() {
 
 
 char GBFMorph::processText(std::string &text, const SWKey *key, const SWModule *module) {
+    (void) key;
+    (void) module;
     if (!option) {    // if we don't want morph tags
         const char *from;
         char token[2048]; // cheese.  Fix.

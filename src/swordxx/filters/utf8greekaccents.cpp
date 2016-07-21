@@ -54,6 +54,8 @@ UTF8GreekAccents::~UTF8GreekAccents() {};
 
 
 char UTF8GreekAccents::processText(std::string &text, const SWKey *key, const SWModule *module) {
+    (void) key;
+    (void) module;
 
     if (!option) { //we don't want greek accents
             //unsigned char *to, *from;

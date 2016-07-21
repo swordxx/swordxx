@@ -60,6 +60,8 @@ OSISReferenceLinks::~OSISReferenceLinks() {
 
 
 char OSISReferenceLinks::processText(std::string &text, const SWKey *key, const SWModule *module) {
+    (void) key;
+    (void) module;
     if (option) return 0;
 
     std::string token;

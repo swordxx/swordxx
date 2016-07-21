@@ -52,6 +52,8 @@ GBFRedLetterWords::~GBFRedLetterWords() {
 
 
 char GBFRedLetterWords::processText(std::string &text, const SWKey *key, const SWModule *module) {
+    (void) key;
+    (void) module;
 /** This function removes the red letter words in Bible like the WEB
 * The words are marked by <FR> as start and <Fr> as end tag.
 */

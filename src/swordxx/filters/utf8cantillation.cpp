@@ -50,6 +50,8 @@ UTF8Cantillation::~UTF8Cantillation(){};
 
 
 char UTF8Cantillation::processText(std::string &text, const SWKey *key, const SWModule *module) {
+    (void) key;
+    (void) module;
     if (!option) {
         //The UTF-8 range 0xD6 0x90 to 0xD6 0xAF and 0xD7 0x84 consist of Hebrew cantillation marks so block those out.
         std::string orig = text;

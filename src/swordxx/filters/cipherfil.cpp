@@ -48,6 +48,7 @@ SWCipher *CipherFilter::getCipher() {
 
 
 char CipherFilter::processText(std::string &text, const SWKey *key, const SWModule *module) {
+    (void) module;
     if (text.length() > 2) { //check if it's large enough to substract 2 in the next step.
         unsigned long len = text.length();
         if (!key) {    // hack, using key to determine encipher, or decipher

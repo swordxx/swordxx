@@ -325,6 +325,7 @@ const char *UTF8Transliterator::getOptionValue()
 
 char UTF8Transliterator::processText(std::string &text, const SWKey *key, const SWModule *module)
 {
+    (void) key;
     if (option) {    // if we want transliteration
         unsigned long i, j;
                 UErrorCode err = U_ZERO_ERROR;

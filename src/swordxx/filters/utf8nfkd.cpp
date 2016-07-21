@@ -43,6 +43,7 @@ UTF8NFKD::~UTF8NFKD() {
 
 char UTF8NFKD::processText(std::string &text, const SWKey *key, const SWModule *module)
 {
+    (void) module;
     if ((unsigned long)key < 2)    // hack, we're en(1)/de(0)ciphering
         return -1;
 

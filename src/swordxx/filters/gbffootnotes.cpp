@@ -56,7 +56,7 @@ GBFFootnotes::~GBFFootnotes() {
 
 char GBFFootnotes::processText (std::string &text, const SWKey *key, const SWModule *module)
 {
-
+    (void) key;
     std::string token;
     bool intoken    = false;
     bool hide       = false;

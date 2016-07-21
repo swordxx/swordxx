@@ -35,6 +35,8 @@ PapyriPlain::PapyriPlain() {
 
 char PapyriPlain::processText (std::string &text, const SWKey *key, const SWModule *module)
 {
+    (void) key;
+    (void) module;
     std::string orig = text;
     const char *from = orig.c_str();
 

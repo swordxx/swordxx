@@ -50,6 +50,8 @@ GBFHeadings::~GBFHeadings() {
 
 
 char GBFHeadings::processText(std::string &text, const SWKey *key, const SWModule *module) {
+    (void) key;
+    (void) module;
     if (!option) {    // if we don't want headings
         char token[2048]; // cheese.  Fix.
         int tokpos = 0;

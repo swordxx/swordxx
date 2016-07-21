@@ -39,6 +39,7 @@ GreekLexAttribs::GreekLexAttribs() {
 
 
 char GreekLexAttribs::processText(std::string &text, const SWKey *key, const SWModule *module) {
+    (void) key;
 
     if (module->isProcessEntryAttributes()) {
         const char *from;

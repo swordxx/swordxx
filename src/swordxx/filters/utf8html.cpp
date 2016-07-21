@@ -36,6 +36,7 @@ UTF8HTML::UTF8HTML() {
 
 char UTF8HTML::processText(std::string &text, const SWKey *key, const SWModule *module)
 {
+    (void) module;
     unsigned char *from;
         char digit[10];
         unsigned long ch;

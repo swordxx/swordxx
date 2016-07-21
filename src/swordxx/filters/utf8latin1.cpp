@@ -34,6 +34,7 @@ UTF8Latin1::UTF8Latin1(char rchar) : replacementChar(rchar) {
 
 char UTF8Latin1::processText(std::string &text, const SWKey *key, const SWModule *module)
 {
+  (void) module;
   unsigned char *from;
 
   unsigned long uchar;

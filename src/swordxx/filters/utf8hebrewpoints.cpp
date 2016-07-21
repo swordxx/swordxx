@@ -50,6 +50,8 @@ UTF8HebrewPoints::~UTF8HebrewPoints(){};
 
 
 char UTF8HebrewPoints::processText(std::string &text, const SWKey *key, const SWModule *module) {
+    (void) key;
+    (void) module;
     if (!option) {
         //The UTF-8 range 0xD6 0xB0 to 0xD6 0xBF excluding 0xD6 0xBE consist of Hebrew cantillation marks so block those out.
         std::string orig = text;

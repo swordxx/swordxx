@@ -52,6 +52,8 @@ OSISScripref::~OSISScripref() {
 
 
 char OSISScripref::processText(std::string &text, const SWKey *key, const SWModule *module) {
+    (void) key;
+    (void) module;
     std::string token;
     bool intoken    = false;
     bool hide       = false;

@@ -34,6 +34,8 @@ UnicodeRTF::UnicodeRTF() {
 
 char UnicodeRTF::processText(std::string &text, const SWKey *key, const SWModule *module)
 {
+    (void) key;
+    (void) module;
     const unsigned char *from;
     char digit[10];
     unsigned long ch;

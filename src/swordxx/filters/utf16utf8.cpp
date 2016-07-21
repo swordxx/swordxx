@@ -34,6 +34,8 @@ UTF16UTF8::UTF16UTF8() {
 
 char UTF16UTF8::processText(std::string &text, const SWKey *key, const SWModule *module)
 {
+  (void) key;
+  (void) module;
   unsigned short *from;
 
   int len;

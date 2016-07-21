@@ -52,6 +52,8 @@ ThMLVariants::~ThMLVariants() {
 
 char ThMLVariants::processText(std::string &text, const SWKey *key, const SWModule *module)
 {
+    (void) key;
+    (void) module;
 
     int option = 0;
     if      (optionValue == choices[0]) option = 0;

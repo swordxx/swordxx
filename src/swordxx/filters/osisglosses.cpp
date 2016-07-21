@@ -52,6 +52,8 @@ OSISGlosses::~OSISGlosses() {
 
 
 char OSISGlosses::processText(std::string &text, const SWKey *key, const SWModule *module) {
+    (void) key;
+    (void) module;
     std::string token;
     bool intoken = false;
 

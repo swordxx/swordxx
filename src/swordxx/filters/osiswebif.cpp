@@ -146,9 +146,7 @@ bool OSISWEBIF::handleToken(std::string &buf, const char *token, BasicFilterUser
                     if (!strongsMarkup) {    // leave strong's markup notes out, in the future we'll probably have different option filters to turn different note types on or off
                         std::string footnoteNumber = tag.getAttribute("swordFootnote");
                         std::string modName = (u->module) ? u->module->getName() : "";
-                        if (VerseKey const * const vkey =
-                                dynamic_cast<VerseKey const *>(u->key))
-                        {
+                        if (dynamic_cast<VerseKey const *>(u->key)) {
                             char ch = ((!tag.getAttribute("type").empty() && ((!strcmp(tag.getAttribute("type").c_str(), "crossReference")) || (!strcmp(tag.getAttribute("type").c_str(), "x-cross-ref")))) ? 'x':'n');
 //                            buf += formatted("<a href=\"noteID=%s.%c.%s\"><small><sup>*%c</sup></small></a> ", vkey->getText(), ch, footnoteNumber.c_str(), ch);
                             buf += formatted("<span class=\"fn\" onclick=\"f(\'%s\',\'%s\',\'%s\');\" >%c</span>", modName.c_str(), u->key->getText(), footnoteNumber.c_str(), ch);

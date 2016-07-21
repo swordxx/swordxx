@@ -40,6 +40,8 @@ RTFHTML::RTFHTML()
 
 char RTFHTML::processText(std::string &text, const SWKey *key, const SWModule *module)
 {
+    (void) key;
+    (void) module;
     bool center = false;
 
     const char *from;

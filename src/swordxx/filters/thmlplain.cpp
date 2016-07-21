@@ -35,6 +35,8 @@ ThMLPlain::ThMLPlain() {
 
 char ThMLPlain::processText(std::string &text, const SWKey *key, const SWModule *module)
 {
+    (void) key;
+    (void) module;
     char token[2048];
     int tokpos = 0;
     bool intoken = false;

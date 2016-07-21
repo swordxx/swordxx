@@ -42,6 +42,7 @@ GBFOSIS::~GBFOSIS() {
 
 
 char GBFOSIS::processText(std::string &text, const SWKey *key, const SWModule *module) {
+    (void) module;
     char token[2048]; //cheesy, we seem to like cheese :)
     int tokpos = 0;
     bool intoken = false;

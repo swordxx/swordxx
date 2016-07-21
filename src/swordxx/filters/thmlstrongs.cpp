@@ -54,6 +54,7 @@ ThMLStrongs::~ThMLStrongs() {
 
 
 char ThMLStrongs::processText(std::string &text, const SWKey *key, const SWModule *module) {
+    (void) key;
     char token[2048]; // cheese.  Fix.
     const char *from;
     int tokpos = 0;

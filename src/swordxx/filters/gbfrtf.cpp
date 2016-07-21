@@ -35,6 +35,8 @@ GBFRTF::GBFRTF() {
 
 char GBFRTF::processText(std::string &text, const SWKey *key, const SWModule *module)
 {
+    (void) key;
+    (void) module;
     char token[2048];
     char val[128];
     char *valto;

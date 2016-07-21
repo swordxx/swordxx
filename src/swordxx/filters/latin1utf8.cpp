@@ -37,6 +37,7 @@ Latin1UTF8::Latin1UTF8() {
 
 char Latin1UTF8::processText(std::string &text, const SWKey *key, const SWModule *module)
 {
+    (void) module;
     const unsigned char *from;
 
     if ((unsigned long)key < 2)    // hack, we're en(1)/de(0)ciphering
