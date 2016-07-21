@@ -623,11 +623,6 @@ public:
     void deleteSearchFramework();
 
     /**
-     * Was Sword++ compiled with code to optimize searching for this driver?
-     */
-    bool hasSearchFramework();
-
-    /**
      * Check if the search is optimally supported (e.g. if index files are
      * presnt and working)
      * This function checks whether the search framework may work in the

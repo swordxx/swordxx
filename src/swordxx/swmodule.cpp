@@ -24,9 +24,7 @@
 
 #include "swmodule.h"
 
-#if SWORDXX_HAS_CLUCENE
 #include <CLucene.h>
-#endif
 #include <cstdint>
 #ifndef _MSC_VER
 #include <iostream>
@@ -51,7 +49,6 @@
 #define REG_ICASE std::regex::icase
 #endif
 
-#if SWORDXX_HAS_CLUCENE
 using namespace lucene::index;
 using namespace lucene::analysis;
 using namespace lucene::util;
@@ -59,7 +56,6 @@ using namespace lucene::store;
 using namespace lucene::document;
 using namespace lucene::queryParser;
 using namespace lucene::search;
-#endif
 
 using std::vector;
 
@@ -272,16 +268,12 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
     auto const lastChar = *(target.rbegin());
     if (lastChar != '/' && lastChar != '\\')
         target.push_back('/');
-#if SWORDXX_HAS_CLUCENE
     target.append("lucene");
-#endif
     if (justCheckIfSupported) {
         *justCheckIfSupported = (searchType >= -3);
-#if SWORDXX_HAS_CLUCENE
         if ((searchType == -4) && (IndexReader::indexExists(target.c_str()))) {
             *justCheckIfSupported = true;
         }
-#endif
         return listKey;
     }
 
@@ -348,7 +340,6 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
     (*percent)(++perc, percentUserData);
 
 
-#if SWORDXX_HAS_CLUCENE
     (*percent)(10, percentUserData);
     if (searchType == -4) {    // indexed search
 
@@ -402,7 +393,6 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
             ir->close();
         }
     }
-#endif
 
     // some pre-loop processing
     switch (searchType) {
@@ -873,14 +863,6 @@ const char *SWModule::getConfigEntry(const char *key) const {
     return (it != config->end()) ? it->second.c_str() : 0;
 }
 
-bool SWModule::hasSearchFramework() {
-#if SWORDXX_HAS_CLUCENE
-    return true;
-#else
-    return false;
-#endif
-}
-
 bool SWModule::isSearchOptimallySupported(const char * istr,
                                           int searchType,
                                           int flags,
@@ -892,7 +874,6 @@ bool SWModule::isSearchOptimallySupported(const char * istr,
 }
 
 void SWModule::deleteSearchFramework() {
-#if SWORDXX_HAS_CLUCENE
     std::string target = getConfigEntry("AbsoluteDataPath");
     char const lastChar = *(target.rbegin());
     if (lastChar != '/' && lastChar != '\\')
@@ -900,13 +881,10 @@ void SWModule::deleteSearchFramework() {
     target.append("lucene");
 
     FileMgr::removeDir(target.c_str());
-#endif
 }
 
 
 signed char SWModule::createSearchFramework(void (*percent)(char, void *), void *percentUserData) {
-
-#if SWORDXX_HAS_CLUCENE
     std::string target = getConfigEntry("AbsoluteDataPath");
     char const lastChar = *(target.rbegin());
     if (lastChar != '/' && lastChar != '\\')
@@ -1279,7 +1257,6 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
         (*filter)->setOptionValue((origVal++)->c_str());
     }
 
-#endif
     return 0;
 }
 

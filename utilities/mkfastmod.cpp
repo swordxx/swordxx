@@ -76,11 +76,6 @@ int main(int argc, char **argv)
     }
     target = it->second;
 
-    if (!target->hasSearchFramework()) {
-        fprintf(stderr, "%s: error: %s does not support a search framework.\n", *argv, it->second->getName());
-        exit(-2);
-    }
-
     printf("Deleting any existing framework...\n");
     target->deleteSearchFramework();
     printf("Building framework, please wait...\n");
