@@ -106,7 +106,7 @@ protected:
     mutable char *rangeText;
     bool boundSet;
     bool persist;
-    mutable char error;
+    char error;
 
     char *localeName;
     SWLocale *getPrivateLocale() const;
