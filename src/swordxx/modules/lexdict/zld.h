@@ -58,9 +58,7 @@ public:
 
     virtual void rawZFilter(std::string &buf, char direction = 0) const { rawFilter(buf, (SWKey *)(long)direction); }// hack, use key as direction for enciphering
 
-    // swcacher interface ----------------------
     virtual void flush() { flushCache(); }
-    // end swcacher interface ----------------------
 
     virtual long getEntryCount() const;
     virtual long getEntryForKey(const char *key) const;

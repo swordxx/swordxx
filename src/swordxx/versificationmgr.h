@@ -21,8 +21,6 @@
  *
  */
 
-#include "swcacher.h"
-
 #include <list>
 #include <string>
 #include "defs.h"
@@ -68,7 +66,7 @@ struct sbook {
 };
 
 
-class SWDLLEXPORT VersificationMgr : public SWCacher {
+class SWDLLEXPORT VersificationMgr {
 
 
 public:

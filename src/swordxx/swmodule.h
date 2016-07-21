@@ -25,8 +25,6 @@
 #ifndef SWMODULE_H
 #define SWMODULE_H
 
-#include "swcacher.h"
-
 #ifndef    _WIN32_WCE
 #include <iostream>
 #endif
@@ -76,18 +74,7 @@ typedef std::map < std::string, AttributeList, std::less < std::string > > Attri
  * SWModule has also functions to write to the data files.
  */
 
-// TODO: should all SWModule decendents be SWCachers?  Only some really
-// cache data.  But if we don't do this, then we need another mechanism to
-// check if we are an SWCacher.  Maybe make SWModule extend SWObject (which
-// it probably should anyway.  But then we need to add all the cheezy
-// heirarchy info to all the decendent classes for our SWDYNAMIC_CAST and
-// then we can see if we implement SWCacher so we know whether or not to add
-// to the yet to be developed cachemgr.
-// Just leave for now.  This lets us always able to call module->flush()
-// to manually flush a cache, and doesn't hurt if there is no work done.
-
-
-class SWDLLEXPORT SWModule : public SWCacher {
+class SWDLLEXPORT SWModule {
 
 protected:
 
@@ -159,6 +146,8 @@ public:
     /** SWModule d-tor
      */
     virtual ~SWModule();
+
+    virtual void flush() {}
 
     /** Gets and clears error status
      *

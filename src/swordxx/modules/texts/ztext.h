@@ -77,9 +77,7 @@ public:
 
     virtual void rawZFilter(std::string &buf, char direction = 0) const { rawFilter(buf, (SWKey *)(long)direction); }// hack, use key as direction for enciphering
 
-    // swcacher interface ----------------------
     virtual void flush() { flushCache(); }
-    // end swcacher interface ----------------------
 
     virtual bool isLinked(const SWKey *k1, const SWKey *k2) const;
     virtual bool hasEntry(const SWKey *k) const;
