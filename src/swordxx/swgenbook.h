@@ -36,7 +36,6 @@ namespace swordxx {
 class SWDLLEXPORT SWGenBook : public SWModule {
 
 protected:
-    mutable char *entkeytxt;
     mutable TreeKey *tmpTreeKey;
     TreeKey & getTreeKey(SWKey * k = nullptr) const;
 
