@@ -156,8 +156,13 @@ public:
     /** Gets and clears error status
      * @return error status
      */
-    virtual char popError();
-    virtual void setError(char err) { error = err; }
+    inline char popError() noexcept {
+        char const r = error;
+        error = 0;
+        return r;
+    }
+
+    inline void setError(char const err) noexcept { error = err; }
 
     /** Sets this SWKey with a character string
      * @param ikey string used to set this key

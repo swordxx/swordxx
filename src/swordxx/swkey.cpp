@@ -141,21 +141,6 @@ void SWKey::setPersist(bool ipersist)
 
 
 /******************************************************************************
- * SWKey::Error - Gets and clears error status
- *
- * RET:    error status
- */
-
-char SWKey::popError()
-{
-    char retval = error;
-
-    error = 0;
-    return retval;
-}
-
-
-/******************************************************************************
  * SWKey::setText Equates this SWKey to a character string
  *
  * ENT:    ikey - other swkey object
