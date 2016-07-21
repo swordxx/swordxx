@@ -920,7 +920,6 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 
     SWKey *saveKey = 0;
     SWKey *searchKey = 0;
-    SWKey textkey;
 
 
     // turn all filters to default values
