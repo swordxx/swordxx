@@ -945,7 +945,6 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
     bool includeKeyInSearch = getConfig().has("SearchOption", "IncludeKeyInSearch");
 
     // lets create or open our search index
-#if SWORDXX_HAS_CLUCENE
     RAMDirectory *ramDir = 0;
     IndexWriter *coreWriter = 0;
     IndexWriter *fsWriter = 0;
@@ -957,10 +956,6 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
     ramDir = new RAMDirectory();
     coreWriter = new IndexWriter(ramDir, an, true);
     coreWriter->setMaxFieldLength(MAX_CONV_SIZE);
-#endif
-
-
-
 
     char perc = 1;
     VerseKey *vkcheck = dynamic_cast<VerseKey *>(key);
@@ -1012,9 +1007,7 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
         bool good = false;
 
         // start out entry
-#if SWORDXX_HAS_CLUCENE
         Document *doc = new Document();
-#endif
         // get "key" field
         std::string keyText = (vkcheck) ? vkcheck->getOSISRef() : getKeyText();
         if (!content.empty()) {
@@ -1060,22 +1053,16 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
                 }
             }
 
-#if SWORDXX_HAS_CLUCENE
             doc->add(*_CLNEW Field(_T("key"), utf8ToWChar(keyText.c_str()).c_str(), Field::STORE_YES | Field::INDEX_UNTOKENIZED));
-#endif
 
             if (includeKeyInSearch)
                 content = keyText + " " + content;
 
-#if SWORDXX_HAS_CLUCENE
             doc->add(*_CLNEW Field(_T("content"), utf8ToWChar(content.c_str()).c_str(), Field::STORE_NO | Field::INDEX_TOKENIZED));
-#endif
 
             if (strong.length() > 0) {
-#if SWORDXX_HAS_CLUCENE
                 doc->add(*_CLNEW Field(_T("lemma"), utf8ToWChar(strong.c_str()).c_str(), Field::STORE_NO | Field::INDEX_TOKENIZED));
                 doc->add(*_CLNEW Field(_T("morph"), utf8ToWChar(morph.c_str()).c_str(), Field::STORE_NO | Field::INDEX_TOKENIZED));
-#endif
 //printf("setting fields (%s).\ncontent: %s\nlemma: %s\n", (const char *)*key, content, strong.c_str());
             }
 
@@ -1219,29 +1206,20 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
         }
 
         if (proxBuf.length() > 0) {
-
-#if SWORDXX_HAS_CLUCENE
             doc->add(*_CLNEW Field(_T("prox"), utf8ToWChar(proxBuf.c_str()).c_str(), Field::STORE_NO | Field::INDEX_TOKENIZED));
-#endif
             good = true;
         }
         if (proxLem.length() > 0) {
-#if SWORDXX_HAS_CLUCENE
             doc->add(*_CLNEW Field(_T("proxlem"), utf8ToWChar(proxLem.c_str()).c_str(), Field::STORE_NO | Field::INDEX_TOKENIZED) );
             doc->add(*_CLNEW Field(_T("proxmorph"), utf8ToWChar(proxMorph.c_str()).c_str(), Field::STORE_NO | Field::INDEX_TOKENIZED) );
-#endif
             good = true;
         }
         if (good) {
 //printf("writing (%s).\n", (const char *)*key);
 //fflush(stdout);
-#if SWORDXX_HAS_CLUCENE
             coreWriter->addDocument(doc);
-#endif
         }
-#if SWORDXX_HAS_CLUCENE
         delete doc;
-#endif
 
         (*this)++;
         err = popError();
@@ -1249,7 +1227,6 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 
     // Optimizing automatically happens with the call to addIndexes
     //coreWriter->optimize();
-#if SWORDXX_HAS_CLUCENE
     coreWriter->close();
 
     d = FSDirectory::getDirectory(target.c_str());
@@ -1272,7 +1249,6 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
     delete coreWriter;
     delete fsWriter;
     delete an;
-#endif
 
     // reposition module back to where it was before we were called
     setKey(*saveKey);
@@ -1293,10 +1269,8 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
         (*filter)->setOptionValue((origVal++)->c_str());
     }
 
-    return 0;
-#else
-    return SWSearchable::createSearchFramework(percent, percentUserData);
 #endif
+    return 0;
 }
 
 /** OptionFilterBuffer a text buffer
