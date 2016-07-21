@@ -144,14 +144,14 @@ public:
      * otherwise just a copy will be used in the module.
      * @return 1 - persists in module; 0 - a copy is attempted
      */
-    bool isPersist() const;
+    inline bool isPersist() const noexcept { return persist; }
 
     /** Sets whether this key should persist in any module to which it is set
      * otherwise just a copy will be used in the module.
      * @param ipersist value which to set persist;
      * @return 1 - persists in module; 0 - a copy is attempted
      */
-    void setPersist(bool ipersist);
+    inline void setPersist(bool ipersist) noexcept { persist = ipersist; }
 
     /** Gets and clears error status
      * @return error status

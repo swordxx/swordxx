@@ -91,20 +91,6 @@ SWKey::~SWKey() {
 
 
 /******************************************************************************
- * SWKey::Persist - Gets whether this object itself persists within a
- *            module that it was used to setKey or just a copy.
- *            (1 - persists in module; 0 - a copy is attempted
- *
- * RET:    value of persist
- */
-
-bool SWKey::isPersist() const
-{
-    return persist;
-}
-
-
-/******************************************************************************
  * SWKey::getPrivateLocale - Gets a real locale object from our name
  *
  * RET:    locale object associated with our name
@@ -123,20 +109,6 @@ SWLocale *SWKey::getPrivateLocale() const {
         locale = localeCache.locale;
     }
     return locale;
-}
-
-
-/******************************************************************************
- * SWKey::Persist - Set/gets whether this object itself persists within a
- *            module that it was used to setKey or just a copy.
- *            (true - persists in module; false - a copy is attempted
- *
- * ENT:    ipersist - value which to set persist
- */
-
-void SWKey::setPersist(bool ipersist)
-{
-    persist = ipersist;
 }
 
 
