@@ -795,7 +795,7 @@ ListKey VerseKey::parseVerseList(const char *buf, const char *defaultKey, bool e
                             }
                             lastKey->setLowerBound(*curKey);
                             if (f && doubleF) (*curKey) = MAXVERSE;
-                            else if (f) (*curKey)++;
+                            else if (f) ++(*curKey);
                             lastKey->setUpperBound(*curKey);
                             *lastKey = TOP;
                             tmpListKey << *lastKey;
@@ -1067,7 +1067,7 @@ ListKey VerseKey::parseVerseList(const char *buf, const char *defaultKey, bool e
                     }
                     lastKey->setLowerBound(*curKey);
                     if (f && doubleF) (*curKey) = MAXVERSE;
-                    else if (f) (*curKey)++;
+                    else if (f) ++(*curKey);
                     lastKey->setUpperBound(*curKey);
                     *lastKey = TOP;
                     tmpListKey << *lastKey;
@@ -1382,7 +1382,7 @@ void VerseKey::decrement(int step) {
         ierror = popError();
     }
     if ((ierror) && (!intros))
-        (*this)++;
+        ++(*this);
 
     error = (ierror) ? ierror : error;
 }

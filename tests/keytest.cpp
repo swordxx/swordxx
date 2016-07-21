@@ -101,7 +101,7 @@ int main(int argc, char **argv)
         bla = "Matthew  1:5";
     else    bla = argv[2];
 
-    for (loop = 0; loop < max && !bla.popError(); loop++,bla++) {
+    for (loop = 0; loop < max && !bla.popError(); loop++, ++bla) {
         index = bla.getIndex();
         std::cout << (const char *)bla << "(" << index << ")\n";
     }
@@ -115,7 +115,7 @@ int main(int argc, char **argv)
         bla = "Matthew  1:5";
     else    bla = argv[2];
 
-    for (loop = max; loop && !bla.popError(); loop--, bla--) {
+    for (loop = max; loop && !bla.popError(); loop--, --bla) {
         index = bla.getIndex();
         std::cout << (const char *)bla << "(" << index << ")\n";
     }
@@ -126,7 +126,7 @@ int main(int argc, char **argv)
         bla = "Genesis  1:5";
     else    bla = argv[2];
 
-    for (loop = max; loop; loop--, bla--) {
+    for (loop = max; loop; loop--, --bla) {
         index = bla.getIndex();
         std::cout << (const char *)bla << "(" << index << ")\n";
     }
@@ -137,7 +137,7 @@ int main(int argc, char **argv)
         bla = "Malachi  4:2";
     else    bla = argv[2];
 
-    for (loop = max; loop; loop--, bla++) {
+    for (loop = max; loop; loop--, ++bla) {
         index = bla.getIndex();
         std::cout << (const char *)bla << "(" << index << ")\n";
     }
@@ -148,7 +148,7 @@ int main(int argc, char **argv)
         bla = "Revelation of John  22:17";
     else    bla = argv[2];
 
-    for (loop = max; loop; loop--, bla++) {
+    for (loop = max; loop; loop--, ++bla) {
         index = bla.getIndex();
         std::cout << (const char *)bla << "(" << index << ")\n";
     }
@@ -163,7 +163,7 @@ int main(int argc, char **argv)
         bla = "Matthew  1:5";
     else    bla = argv[2];
 
-    for (loop = max; loop; loop--, bla--) {
+    for (loop = max; loop; loop--, --bla) {
         index = bla.getIndex();
         std::cout << (const char *)bla << "(" << index << ")\n";
     }
@@ -174,7 +174,7 @@ int main(int argc, char **argv)
         bla = "Genesis  1:5";
     else    bla = argv[2];
 
-    for (loop = max; loop; loop--, bla--) {
+    for (loop = max; loop; loop--, --bla) {
         index = bla.getIndex();
         std::cout << (const char *)bla << "(" << index << ")\n";
     }
@@ -185,7 +185,7 @@ int main(int argc, char **argv)
         bla = "Malachi  4:2";
     else    bla = argv[2];
 
-    for (loop = max; loop; loop--, bla++) {
+    for (loop = max; loop; loop--, ++bla) {
         index = bla.getIndex();
         std::cout << (const char *)bla << "(" << index << ")\n";
     }
@@ -196,7 +196,7 @@ int main(int argc, char **argv)
         bla = "Revelation of John  22:17";
     else    bla = argv[2];
 
-    for (loop = max; loop; loop--, bla++) {
+    for (loop = max; loop; loop--, ++bla) {
         index = bla.getIndex();
         std::cout << (const char *)bla << "(" << index << ")\n";
     }
@@ -209,7 +209,7 @@ int main(int argc, char **argv)
     std::cout << "(const char *)bla = " << (const char *)bla << "\n";
     std::cout << "bla.popError() = " << (int)bla.popError() << " \n";
     std::cout << "bla++ \n";
-    bla++;
+    ++bla;
     std::cout << "bla.popError() = " << (int)bla.popError() << " \n";
 
     bla.setIntros(false);

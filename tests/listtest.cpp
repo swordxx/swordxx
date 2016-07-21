@@ -64,7 +64,7 @@ int main(int argc, char **argv)
     lk2 << lk;
     lk2 << vk2;
     lk2 << "test2";
-    for (lk2 = TOP; !lk2.popError(); lk2++) {
+    for (lk2 = TOP; !lk2.popError(); ++lk2) {
         cout << (const char *) lk2 << "\n";
     }
 
@@ -96,7 +96,7 @@ int main(int argc, char **argv)
 
 */
 
-    for (lk2 = TOP; !lk2.popError(); lk2++)
+    for (lk2 = TOP; !lk2.popError(); ++lk2)
         cout << (const char *) lk2 << "\n";
 
     lk.clear();

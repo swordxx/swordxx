@@ -49,7 +49,7 @@ int main(int argc, char **argv)
     result = parser.parseVerseList(range, parser, true);
 
     // let's iterate the key and display
-    for (result = TOP; !result.popError(); result++) {
+    for (result = TOP; !result.popError(); ++result) {
         cout << result << "\n";
     }
     cout << endl;
@@ -66,7 +66,7 @@ int main(int argc, char **argv)
     if (!book) return -1;
 
     // now let's iterate the book and display
-    for (result = TOP; !result.popError(); result++) {
+    for (result = TOP; !result.popError(); ++result) {
         book->setKey(result);
         cout << "*** " << book->getKeyText() << ": " << book->renderText() << "\n";
     }

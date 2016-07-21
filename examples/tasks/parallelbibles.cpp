@@ -53,7 +53,7 @@ void parallelDisplay(vector<SWModule *>modules, const char *key) {
     for (master->setVerse(1);       (master->getBook()    == curBook)
                     && (master->getChapter() == curChapter)
                     && !master->popError();
-                                        (*master)++) {
+                                        ++(*master)) {
 
         if(o) cout << "<tr class=\"" << (master->getVerse() == curVerse ? "currentverse":"verse") << "\">";
 

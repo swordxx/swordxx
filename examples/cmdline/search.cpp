@@ -125,7 +125,7 @@ int main(int argc, char **argv)
         std::cout << (const char *)listkey;
         if (listkey.getElement()->userData) std::cout << " : " << (uint64_t)listkey.getElement()->userData << "%";
         std::cout << std::endl;
-        listkey++;
+        ++listkey;
     }
 
     return 0;

@@ -169,7 +169,7 @@ void ListKey::increment(int step) {
     for(; step && !popError(); step--) {
         if (arraypos < arraycnt && arraycnt) {
             if (array[arraypos]->isBoundSet())
-                (*(array[arraypos]))++;
+                ++(*(array[arraypos]));
             if ((array[arraypos]->popError()) || (!array[arraypos]->isBoundSet())) {
                 setToElement(arraypos+1);
             }
@@ -193,7 +193,7 @@ void ListKey::decrement(int step) {
     for(; step && !popError(); step--) {
         if (arraypos > -1 && arraycnt) {
             if (array[arraypos]->isBoundSet())
-                (*(array[arraypos]))--;
+                --(*(array[arraypos]));
             if ((array[arraypos]->popError()) || (!array[arraypos]->isBoundSet())) {
                 setToElement(arraypos-1, BOTTOM);
             }

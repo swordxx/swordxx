@@ -84,7 +84,7 @@ int main(int argc, char **argv) {
 
     key.setAutoNormalize(false);
     key.setIntros(true);
-    for (key.setIndex(0); (!key.popError()); key++) {
+    for (key.setIndex(0); (!key.popError()); ++key) {
         rawdrv->findOffset(key.getTestament(), key.getIndex(), &offset, &size);
         printf("%s: OLD offset: %ld; size: %d\n", (const char *)key, offset, size);
 

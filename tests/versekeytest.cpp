@@ -95,18 +95,23 @@ cout << currentVerse << endl;
 
     ListKey scope = parser->parseVerseList("amos 2:2", *parser, true);
 
-    cout << ((scope++ == scope) ? "single" : "multiple") << "\n";
+    static auto const isSingle =
+            [](auto & scope) {
+                auto oldScope(scope);
+                return oldScope == ++scope;
+            };
+    cout << (isSingle(scope) ? "single" : "multiple") << "\n";
 
     scope = parser->parseVerseList("amos", *parser, true);
 
-    cout << ((scope++ == scope) ? "single" : "multiple") << "\n";
+    cout << (isSingle(scope) ? "single" : "multiple") << "\n";
 
     scope = parser->parseVerseList("amos", *parser, true);
 
-    scope++;
-    scope++;
-    scope++;
-    scope++;
+    ++scope;
+    ++scope;
+    ++scope;
+    ++scope;
 
     VerseKey *x = new VerseKey(); //(VerseKey *)mod->CreateKey();
     *x = scope;
@@ -172,9 +177,9 @@ cout << currentVerse << endl;
 
     vk = "jn3.50";
     cout << "jn.3.50: " << vk << "\n";
-    vk++;
+    ++vk;
     cout << "++: " << vk << "\n";
-    vk--;
+    --vk;
     cout << "--: " << vk << "\n";
     vk = MAXVERSE;
     cout << "MAXVERSE: " << vk << "\n";
@@ -192,9 +197,9 @@ cout << currentVerse << endl;
 
     vk = "jn3.50";
     cout << "jn.3.50: " << vk << "\n";
-    vk++;
+    ++vk;
     cout << "++: " << vk << "\n";
-    vk--;
+    --vk;
     cout << "--: " << vk << "\n";
     vk = MAXVERSE;
     cout << "MAXVERSE: " << vk << "\n";
@@ -212,9 +217,9 @@ cout << currentVerse << endl;
 
     vk = "jn3.50";
     cout << "jn.3.50: " << vk << "\n";
-    vk++;
+    ++vk;
     cout << "++: " << vk << "\n";
-    vk--;
+    --vk;
     cout << "--: " << vk << "\n";
     vk = MAXVERSE;
     cout << "MAXVERSE: " << vk << "\n";
@@ -232,9 +237,9 @@ cout << currentVerse << endl;
 
     vk = "jn3.50";
     cout << "jn.3.50: " << vk << "\n";
-    vk++;
+    ++vk;
     cout << "++: " << vk << "\n";
-    vk--;
+    --vk;
     cout << "--: " << vk << "\n";
     vk = MAXVERSE;
     cout << "MAXVERSE: " << vk << "\n";
@@ -246,7 +251,8 @@ cout << currentVerse << endl;
     cout << "BOTTOM: " << vk << "\n";
 
     VerseKey yo = "jn.3.16";
-    VerseKey yo2 = yo++;
+    VerseKey yo2(yo);
+    ++yo;
     cout << yo2 << ": " << (int)yo2.popError() <<  endl;
 
     VerseKey vkey;
@@ -261,17 +267,17 @@ cout << currentVerse << endl;
     cout << "\nBook math\n\n";
 
     vkey = "Mark.1.1";
-    vkey--;
+    --vkey;
     cout << "Mark.1.1-- = " << vkey << "\n";
-    vkey++;
+    ++vkey;
     cout << "++ = " << vkey << "\n";
     vkey.setChapter(vkey.getChapter() - 1);
     cout << ".setChapter(.getChapter() - 1) = " << vkey << "\n";
 
     vkey = "Matthew.1.1";
-    vkey--;
+    --vkey;
     cout << "Matthew.1.1-- = " << vkey << "\n";
-    vkey++;
+    ++vkey;
     cout << "++ = " << vkey << "\n";
     vkey.setBook(vkey.getBook() - 1);
     cout << ".setBook(.getBook() - 1) = " << vkey << "\n";
