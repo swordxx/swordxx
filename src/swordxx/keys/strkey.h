@@ -49,6 +49,8 @@ public:
   */
   virtual ~ StrKey ();
 
+  SWKey * clone() const noexcept override;
+
   SWKEY_OPERATORS
 
 };

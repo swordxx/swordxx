@@ -48,6 +48,9 @@ void StrKey::init() {
     myclass = &classdef;
 }
 
+SWKey * StrKey::clone() const noexcept
+{ return new StrKey(getText()); }
+
 
 /******************************************************************************
  * StrKey Destructor - cleans up instance of StrKey
