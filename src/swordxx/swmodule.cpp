@@ -242,6 +242,8 @@ void SWModule::decrement(int steps) {
 }
 
 
+void SWModule::nullPercent(char, void *) {}
+
 /******************************************************************************
  * SWModule::Search     - Searches a module for a string
  *
@@ -875,8 +877,18 @@ bool SWModule::hasSearchFramework() {
 #if SWORDXX_HAS_CLUCENE
     return true;
 #else
-    return SWSearchable::hasSearchFramework();
+    return false;
 #endif
+}
+
+bool SWModule::isSearchOptimallySupported(const char * istr,
+                                          int searchType,
+                                          int flags,
+                                          SWKey * scope)
+{
+    bool retVal = false;
+    search(istr, searchType, flags, scope, &retVal);
+    return retVal;
 }
 
 void SWModule::deleteSearchFramework() {
@@ -888,8 +900,6 @@ void SWModule::deleteSearchFramework() {
     target.append("lucene");
 
     FileMgr::removeDir(target.c_str());
-#else
-    SWSearchable::deleteSearchFramework();
 #endif
 }
 

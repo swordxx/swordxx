@@ -26,7 +26,6 @@
 #define SWMODULE_H
 
 #include "swcacher.h"
-#include "swsearchable.h"
 
 #ifndef    _WIN32_WCE
 #include <iostream>
@@ -88,7 +87,7 @@ typedef std::map < std::string, AttributeList, std::less < std::string > > Attri
 // to manually flush a cache, and doesn't hurt if there is no work done.
 
 
-class SWDLLEXPORT SWModule : public SWCacher, public SWSearchable {
+class SWDLLEXPORT SWModule : public SWCacher {
 
 protected:
 
@@ -292,6 +291,14 @@ public:
 
     // search interface -------------------------------------------------
 
+    /**
+    * This is the default callback function for searching.
+    * This function is a placeholder and does nothing.
+    * You can define your own function for search progress
+    * evaluation, and pass it over to Search().
+    */
+    static void nullPercent(char percent, void *userData);
+
     /** Searches a module for a string
      *
      * @param istr string for which to search
@@ -310,7 +317,7 @@ public:
      *
      * @return ListKey set to verses that contain istr
      */
-    virtual ListKey &search(const char *istr, int searchType = 0, int flags = 0,
+    ListKey & search(const char *istr, int searchType = 0, int flags = 0,
             SWKey * scope = 0,
             bool * justCheckIfSupported = 0,
             void (*percent) (char, void *) = &nullPercent,
@@ -604,12 +611,31 @@ public:
     virtual bool isProcessEntryAttributes() const { return procEntAttr; }
 
 
-    // SWSearchable Interface Impl -----------------------------------------------
-    virtual signed char createSearchFramework(
+    // Searching:
+
+    /**
+     * ask the object to build any indecies it wants for optimal searching
+     */
+    signed char createSearchFramework(
             void (*percent) (char, void *) = &nullPercent,
             void *percentUserData = 0);
-    virtual void deleteSearchFramework();
-    virtual bool hasSearchFramework();
+
+    void deleteSearchFramework();
+
+    /**
+     * Was Sword++ compiled with code to optimize searching for this driver?
+     */
+    bool hasSearchFramework();
+
+    /**
+     * Check if the search is optimally supported (e.g. if index files are
+     * presnt and working)
+     * This function checks whether the search framework may work in the
+     * best way.
+     * @return true if the the search is optimally supported, false if
+     * it's not working in the best way.
+     */
+    bool isSearchOptimallySupported(const char *istr, int searchType, int flags, SWKey *scope);
 
     // OPERATORS -----------------------------------------------------------------
     SWMODULE_OPERATORS
