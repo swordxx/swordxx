@@ -261,10 +261,7 @@ const SWKey *ListKey::getElement(int pos) const {
     if (pos < 0)
         pos = arraypos;
 
-    if (pos >=arraycnt)
-        error = KEYERR_OUTOFBOUNDS;
-
-    return (error) ? 0:array[pos];
+    return (pos >= arraycnt) ? nullptr : array[pos];
 }
 
 SWKey *ListKey::getElement(int pos) {
