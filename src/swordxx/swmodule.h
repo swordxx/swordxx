@@ -165,18 +165,18 @@ public:
      *
      * @return error status
      */
-    virtual char popError();
+    char popError();
 
     /**
      * @return  True if this module is encoded in Unicode, otherwise returns false.
      */
-    virtual bool isUnicode() const { return (encoding == (char)ENC_UTF8 || encoding == (char)ENC_SCSU); }
+    bool isUnicode() const { return (encoding == (char)ENC_UTF8 || encoding == (char)ENC_SCSU); }
 
     // These methods are useful for modules that come from a standard Sword++ install (most do).
     // SWMgr will call setConfig.  The user may use getConfig and getConfigEntry (if they
     // are not comfortable with, or don't wish to use  stl maps).
-    virtual void setConfig(ConfigEntMap * conf) { config = conf; }
-    virtual const ConfigEntMap &getConfig() const { return *config; }
+    void setConfig(ConfigEntMap * conf) { config = conf; }
+    const ConfigEntMap &getConfig() const { return *config; }
 
     /**
      * Gets a configuration property about a module.  These entries are primarily
@@ -187,7 +187,7 @@ public:
      *    AbsoluteDataPath - the full path to the root folder where the module
      *    data is stored.
      */
-    virtual const char *getConfigEntry(const char *key) const;
+    const char *getConfigEntry(const char *key) const;
 
     /**
      * Returns bibliographic data for a module in the requested format
@@ -195,12 +195,12 @@ public:
      * @param bibFormat format of the bibliographic data
      * @return bibliographic data in the requested format as a string (BibTeX by default)
      */
-    virtual std::string getBibliography(unsigned char bibFormat = BIB_BIBTEX) const;
+    std::string getBibliography(unsigned char bibFormat = BIB_BIBTEX) const;
 
     /**
      * @return The size of the text entry for the module's current key position.
      */
-    virtual int getEntrySize() const { return entrySize; }
+    int getEntrySize() const { return entrySize; }
 
     /**
      * Sets a key to this module for position to a particular record
@@ -208,7 +208,7 @@ public:
      * @param ikey key with which to set this module
      * @return error status
      */
-    virtual char setKey(const SWKey *ikey);
+    char setKey(const SWKey *ikey);
 
     /**
      * Sets a key to this module for position to a particular record
@@ -220,7 +220,7 @@ public:
     /** Gets the current module key
      * @return the current key of this module
      */
-    virtual SWKey *getKey() const { return key; }
+    SWKey *getKey() const { return key; }
 
     /**
      * gets the key text for the module.
@@ -266,7 +266,7 @@ public:
      * @param newdir Value which to set direction; [-1]-only get
      * @return new direction
      */
-    virtual char getDirection() const { return direction; }
+    inline char getDirection() const noexcept { return direction; }
 
     /** Sets/gets module encoding
      *
