@@ -1145,7 +1145,7 @@ void VerseKey::setUpperBound(const VerseKey &ub)
  * VerseKey::getLowerBound    - gets the lower boundary for this key
  */
 
-VerseKey &VerseKey::getLowerBound() const
+VerseKey VerseKey::getLowerBound() const
 {
     initBounds();
     if (!isAutoNormalize()) {
@@ -1168,7 +1168,7 @@ VerseKey &VerseKey::getLowerBound() const
  * VerseKey::getUpperBound    - sets / gets the upper boundary for this key
  */
 
-VerseKey &VerseKey::getUpperBound() const
+VerseKey VerseKey::getUpperBound() const
 {
     initBounds();
     if (!isAutoNormalize()) {
@@ -1282,21 +1282,21 @@ const char *VerseKey::getBookAbbrev() const {
 void VerseKey::setPosition(SW_POSITION p) {
     switch (p) {
     case POS_TOP: {
-        const VerseKey *lb = &getLowerBound();
-        testament = (lb->getTestament() || intros) ? lb->getTestament() : 1;
-        book      = (lb->getBook()      || intros) ? lb->getBook() : 1;
-        chapter   = (lb->getChapter()   || intros) ? lb->getChapter() : 1;
-        verse     = (lb->getVerse()     || intros) ? lb->getVerse() : 1;
-        suffix    = lb->getSuffix();
+        VerseKey const lb(getLowerBound());
+        testament = (lb.getTestament() || intros) ? lb.getTestament() : 1;
+        book      = (lb.getBook()      || intros) ? lb.getBook() : 1;
+        chapter   = (lb.getChapter()   || intros) ? lb.getChapter() : 1;
+        verse     = (lb.getVerse()     || intros) ? lb.getVerse() : 1;
+        suffix    = lb.getSuffix();
         break;
     }
     case POS_BOTTOM: {
-        const VerseKey *ub = &getUpperBound();
-        testament = (ub->getTestament() || intros) ? ub->getTestament() : 1;
-        book      = (ub->getBook()      || intros) ? ub->getBook() : 1;
-        chapter   = (ub->getChapter()   || intros) ? ub->getChapter() : 1;
-        verse     = (ub->getVerse()     || intros) ? ub->getVerse() : 1;
-        suffix    = ub->getSuffix();
+        VerseKey const ub(getUpperBound());
+        testament = (ub.getTestament() || intros) ? ub.getTestament() : 1;
+        book      = (ub.getBook()      || intros) ? ub.getBook() : 1;
+        chapter   = (ub.getChapter()   || intros) ? ub.getChapter() : 1;
+        verse     = (ub.getVerse()     || intros) ? ub.getVerse() : 1;
+        suffix    = ub.getSuffix();
         break;
     }
     case POS_MAXVERSE:

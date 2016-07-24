@@ -180,12 +180,12 @@ public:
     /** gets the lower boundary of this VerseKey
     * @return the lower boundary of this VerseKey
     */
-    VerseKey &getLowerBound() const;
+    VerseKey getLowerBound() const;
 
     /** gets the upper boundary of this VerseKey
     * @return the upper boundary of this VerseKey
     */
-    VerseKey &getUpperBound() const;
+    VerseKey getUpperBound() const;
 
     /** clears the boundaries of this VerseKey
     */
