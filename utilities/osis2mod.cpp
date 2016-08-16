@@ -1,13 +1,13 @@
 /******************************************************************************
  *
- *  osis2mod.cpp - Utility to import a module in OSIS format
+ *  osis2mod.cpp -	Utility to import a module in OSIS format
  *
  * $Id$
  *
  * Copyright 2003-2014 CrossWire Bible Society (http://www.crosswire.org)
- *      CrossWire Bible Society
- *      P. O. Box 2528
- *      Tempe, AZ  85280-2528
+ *	CrossWire Bible Society
+ *	P. O. Box 2528
+ *	Tempe, AZ  85280-2528
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -612,7 +612,7 @@ void linkToEntry(VerseKey &linkKey, VerseKey &dest) {
 }
 
 // Return true if the content was handled or is to be ignored.
-//        false if the what has been seen is to be accumulated and considered later.
+//		false if the what has been seen is to be accumulated and considered later.
 bool handleToken(SWBuf &text, XMLTag token) {
 
 	// Everything between the begin book tag and the first begin chapter tag is inBookIntro
@@ -702,7 +702,7 @@ bool handleToken(SWBuf &text, XMLTag token) {
 
 			// BOOK START, <div type="book" ...>
 			if (tokenName == "div" && typeAttr == "book") {
-				if (inBookIntro || inChapterIntro) { // this one should never happen, but just in case
+				if (inBookIntro || inChapterIntro) {	// this one should never happen, but just in case
 
 					if (debug & DEBUG_TITLE) {
 						cout << "DEBUG(TITLE): " << currentOsisID << ": OOPS INTRO " << endl;
@@ -886,7 +886,8 @@ bool handleToken(SWBuf &text, XMLTag token) {
 
 		// Now consider everything else.
 
-		// "majorSection" is code for the Book 1-5 of Psalms
+/*
+		// "majorSection" is code for the Book 1-5 of Psalms  // "majorSection" can actually also appear in many other places, begin and end within chapters - eg. Gen 1-11.9 //
 		if (tokenName == "div" && typeAttr == "majorSection") {
 			if (inBookIntro) {
 				if (debug & DEBUG_TITLE) {
@@ -901,11 +902,11 @@ bool handleToken(SWBuf &text, XMLTag token) {
 
 			strcpy(currentOsisID, currentVerse.getOSISRef());
 
-			inChapter       = false;
+//			inChapter       = false; // This flag is wrong to my mind as majorSections can begin within a chapter
 			inVerse         = false;
 			inPreVerse      = false;
 			inBookIntro     = false;
-			inChapterIntro  = true;
+//			inChapterIntro  = true; // This flag is wrong to my mind as majorSections can begin within an actual chapter, not just the intro
 
 			if (debug & DEBUG_TITLE) {
 				cout << "DEBUG(TITLE): " << currentOsisID << ": Looking for chapter introduction" << endl;
@@ -914,7 +915,8 @@ bool handleToken(SWBuf &text, XMLTag token) {
 			verseDepth      = 0;
 
 			return false;
-		}
+		} 
+*/
 
 		// Handle WOC quotes.
 		// Note this requires transformBSP to make them into milestones
@@ -961,8 +963,8 @@ bool handleToken(SWBuf &text, XMLTag token) {
 			if (inChapterIntro) {
 				// Determine when we are no longer in a chapter heading, but in pre-verse material:
 				// If we see one of the following:
-				//     a section div
-				//     a title that is not main, chapter or sub or unclassified (no type attribute)
+				// 	a section div
+				// 	a title that is not main, chapter or sub or unclassified (no type attribute)
 				if ((tokenName == "div" && typeAttr == "section") ||
 				    (tokenName == "title" && typeAttr.length() != 0 && typeAttr != "main" && typeAttr != "chapter" && typeAttr != "sub")
 				) {
@@ -1025,7 +1027,7 @@ bool handleToken(SWBuf &text, XMLTag token) {
 
 			if (tokenName != topToken.getName()) {
 				cout << "FATAL(NESTING): " << currentOsisID << ": Expected " << topToken.getName() << " found " << tokenName << endl;
-//				exit(EXIT_BAD_NESTING); // (OSK) I'm sure this validity check is a good idea, but there's a bug somewhere that's killing the converter here.
+//				exit(EXIT_BAD_NESTING);	// (OSK) I'm sure this validity check is a good idea, but there's a bug somewhere that's killing the converter here.
 						// So I'm disabling this line. Unvalidated OSIS files shouldn't be run through the converter anyway.
 						// (DM) This has nothing to do with well-form or valid. It checks milestoned elements for proper nesting.
 			}
@@ -1213,7 +1215,6 @@ XMLTag transformBSP(XMLTag t) {
 	static std::stack<XMLTag> bspTagStack;
 	static int sID = 1;
 	char buf[11];
-	SWBuf typeAttr = t.getAttribute("type");
 
 	// Support simplification transformations
 	if (t.isEmpty()) {
@@ -1238,13 +1239,12 @@ XMLTag transformBSP(XMLTag t) {
 		// The following containers are milestoneable.
 		// abbr, closer, div, foreign, l, lg, salute, signed, speech
 		// Leaving out:
-		//   abbr       When would this ever cross a boundary?
-		//   seg        as it is used for a divineName hack
-		//   foreign    so that it can be easily italicized
-		//   div type="colophon" so that it can be treated as a block
+		//   abbr	When would this ever cross a boundary?
+		//   seg	as it is used for a divineName hack
+		//   foreign	so that it can be easily italicized
 		else if (tagName == "chapter" ||
 			 tagName == "closer"  ||
-			 (tagName == "div" && typeAttr != "colophon") ||
+			 tagName == "div"     ||
 			 tagName == "l"       ||
 			 tagName == "lg"      ||
 			 tagName == "q"       ||
@@ -1274,13 +1274,11 @@ XMLTag transformBSP(XMLTag t) {
 			}
 
 			bspTagStack.pop();
-			SWBuf topTypeAttr = topToken.getAttribute("type");
 
 			// Look for the milestoneable container tags handled above.
-			// Have to treat div type="colophon" differently
 			if (tagName == "chapter" ||
 			    tagName == "closer"  ||
-			    (tagName == "div" && topTypeAttr != "colophon") ||
+			    tagName == "div"     ||
 			    tagName == "l"       ||
 			    tagName == "lg"      ||
 			    tagName == "p"       ||
@@ -1424,7 +1422,7 @@ void usage(const char *app, const char *error = 0, const bool verboseHelp = fals
 
 void processOSIS(istream& infile) {
 	typedef enum {
-		CS_NOT_IN_COMMENT,            // or seen starting "<"
+		CS_NOT_IN_COMMENT,		// or seen starting "<"
 		CS_SEEN_STARTING_EXCLAMATION,
 		CS_SEEN_STARTING_HYPHEN,
 		CS_IN_COMMENT,
@@ -1433,21 +1431,13 @@ void processOSIS(istream& infile) {
 		CS_SEEN_ENDING_GREATER_THAN
 	} t_commentstate;
 
-	typedef enum {
-		ET_NUM,
-		ET_HEX,
-		ET_CHAR,
-		ET_NONE,
-		ET_ERR
-	} t_entitytype;
-
 	activeOsisID[0] = '\0';
 
 	strcpy(currentOsisID,"N/A");
 
 	currentVerse.setVersificationSystem(v11n);
 	currentVerse.setAutoNormalize(false);
-	currentVerse.setIntros(true);  // turn on mod/testmnt/book/chap headings
+	currentVerse.setIntros(true);	// turn on mod/testmnt/book/chap headings
 	currentVerse.setPersist(true);
 
 	module->setKey(currentVerse);
@@ -1461,13 +1451,6 @@ void processOSIS(istream& infile) {
 	bool inWhitespace = false;
 	bool seeingSpace = false;
 	unsigned char curChar = '\0';
-	SWBuf entityToken;
-	bool inentity = false;
-	t_entitytype entitytype = ET_NONE;
-	unsigned char attrQuoteChar = '\0';
-	bool inattribute = false;
-	unsigned int linePos = 1;
-	unsigned int charPos = 0;
 
 	while (infile.good()) {
 
@@ -1484,221 +1467,16 @@ void processOSIS(istream& infile) {
 		// Does a SWORD module actually require this?
 		if (curChar == '\n') {
 			curChar = ' ';
-			charPos = 0;
-			linePos++;
 		}
-		charPos++;
-
-		// Look for entities:
-		// These are of the form &#dddd;, &xHHHH; or &llll;
-		// where dddd is a sequence of digits
-		//       HHHH is a sequence of [A-Fa-f0-9]
-		//       llll is amp, lt, gt, quot or apos
-		//            but we will look for a sequence of [A-Za-z0-9]
-		// All but &amp;, &lt;, &gt;, &quot;, &apos; will produce a WARNING
-		// In the future:
-		//    &#dddd; and &xHHHH; should be converted to UTF-8,
-		//        with a WARNING if the text is not UTF-8
-		//    &llll; other than the xml standard 5 should produce a WARNING
-
-		// For entity diagnostics track whether the text is an attribute value
-		if (inattribute && (curChar == '\'' || curChar == '"')) {
-			if (attrQuoteChar == curChar) {
-				inattribute = false;
-				attrQuoteChar = '\0';
-			}
-			else {
-				attrQuoteChar = curChar;
-			}
-		}
-		if (intoken && curChar == '=') {
-			inattribute = true;
-			attrQuoteChar = '\0';
-		}
-
-		if (!inentity && curChar == '&') {
-			inentity = true;
-			entitytype = ET_NONE;
-			entityToken = "&";
-			continue;
-		}
-
-		if (inentity) {
-			if (curChar == ';') {
-				inentity = false;
-			}
-			else {
-				switch (entitytype) {
-				    case ET_NONE:
-					// A hex entity cannot start with X in XML, but it can in HTML
-					// Allow for it here and complain later
-					if (curChar == 'x' || curChar == 'X') {
-						entitytype = ET_HEX;
-					}
-					else
-					if (curChar == '#') {
-						entitytype = ET_NUM;
-					}
-					else
-					if ((curChar >= 'A' && curChar <= 'Z') ||
-					    (curChar >= 'a' && curChar <= 'z') ||
-					    (curChar >= '0' && curChar <= '9')) {
-						entitytype = ET_CHAR;
-					}
-					else {
-						inentity = false;
-						entitytype = ET_ERR;
-					}
-					break;
-
-				    case ET_NUM :
-					if (!(curChar >= '0' && curChar <= '9')) {
-						inentity = false;
-						entitytype = ET_ERR;
-					}
-					break;
-				    case ET_HEX :
-					if ((curChar >= 'G' && curChar <= 'Z') ||
-					    (curChar >= 'g' && curChar <= 'z')) {
-						// Starts out as a HEX entity, but it isn't one
-						entitytype = ET_CHAR;
-					}
-					else
-					if (!((curChar >= 'A' && curChar <= 'F') ||
-					      (curChar >= 'a' && curChar <= 'f') ||
-					      (curChar >= '0' && curChar <= '9'))) {
-						inentity = false;
-						entitytype = ET_ERR;
-					}
-					break;
-				    case ET_CHAR :
-					if (!((curChar >= 'A' && curChar <= 'Z') ||
-					      (curChar >= 'a' && curChar <= 'z') ||
-					      (curChar >= '0' && curChar <= '9'))) {
-						inentity = false;
-						entitytype = ET_ERR;
-					}
-					break;
-				    default:
-					cout << "FATAL(ENTITY): unknown entitytype on entity end: " << entitytype << endl;
-					exit(EXIT_BAD_NESTING);
-				}
-			}
-
-			if (entitytype != ET_ERR) {
-				entityToken.append((char) curChar);
-			}
-
-			// It is an entity, perhaps invalid, if curChar is ';', error otherwise
-			// Test to see if we now have an entity or a failure
-			// It may not be a valid entity.
-			if (!inentity) {
-				switch (entitytype) {
-				    case ET_ERR :
-					// Remove the leading &
-					entityToken << 1;
-					cout << "WARNING(PARSE): malformed entity, replacing &" << entityToken << " with &amp;" << entityToken << endl;
-					if (intoken) {
-						token.append("&amp;");
-						token.append(entityToken);
-					}
-					else {
-						text.append("&amp;");
-						text.append(entityToken);
-					}
-					break;
-				    case ET_HEX :
-					if (entityToken[1] != 'x') {
-						cout << "WARNING(PARSE): HEX entity must begin with &x, found " << entityToken << endl;
-					}
-					else {
-						cout << "WARNING(PARSE): SWORD does not search HEX entities, found " << entityToken << endl;
-					}
-					break;
-				    case ET_CHAR :
-					if (strcmp(entityToken, "&amp;")  &&
-				            strcmp(entityToken, "&lt;")   &&
-				            strcmp(entityToken, "&gt;")   &&
-				            strcmp(entityToken, "&quot;") &&
-				            strcmp(entityToken, "&apos;")) {
-						cout << "WARNING(PARSE): XML only supports 5 Character entities &amp;, &lt;, &gt;, &quot; and &apos;, found " << entityToken << endl;
-					}
-					else
-					if (!strcmp(entityToken, "&apos;")) {
-						cout << "WARNING(PARSE): While valid for XML, XHTML does not support &apos;." << endl;
-						if (!inattribute) {
-							cout << "WARNING(PARSE): &apos; is unnecessary outside of attribute values. Replacing with '. " << endl;
-							entityToken = "'";
-						}
-						else {
-							switch (attrQuoteChar) {
-							    case '"' :
-								cout << "WARNING(PARSE): &apos; is unnecessary inside double quoted attribute values. Replacing with '. " << endl;
-								entityToken = "'";
-								break;
-							    case '\'' :
-								cout << "WARNING(PARSE): &apos; is only needed within single quoted attribute values. Considering using double quoted attribute and replacing with '." << endl;
-								break;
-							}
-						}
-					}
-					else
-					if (!strcmp(entityToken, "&quot;")) {
-						cout << "WARNING(PARSE): While valid for XML, &quot; is only needed within double quoted attribute values" << endl;
-						if (!inattribute) {
-							cout << "WARNING(PARSE): &quot; is unnecessary outside of attribute values. Replace with \"." << endl;
-							entityToken = "\"";
-						}
-						else {
-							switch (attrQuoteChar) {
-							    case '"' :
-								cout << "WARNING(PARSE): &quot; is only needed within double quoted attribute values. Considering using single quoted attribute and replacing with \"." << endl;
-								break;
-							    case '\'' :
-								cout << "WARNING(PARSE): &quot; is unnecessary inside single quoted attribute values. Replace with \"." << endl;
-								entityToken = "\"";
-								break;
-							}
-						}
-					}
-					break;
-				    case ET_NUM :
-					cout << "WARNING(PARSE): SWORD does not search numeric entities, found " << entityToken << endl;
-					break;
-				    case ET_NONE :
-				    default:
-					break;
-				}
-
-				// Put the entity into the stream.
-				if (intoken) {
-					token.append(entityToken);
-				}
-				else {
-					text.append(entityToken);
-				}
-
-				if (curChar == ';') {
-					// The character was handled, so go get the next one.
-					continue;
-				}
-			}
-			else {
-				// The character was handled, so go get the next one.
-				continue;
-			}
-		}
-
 
 		if (!intoken && curChar == '<') {
 			intoken = true;
 			token = "<";
-			inattribute = false;
-			attrQuoteChar = '\0';
 			continue;
 		}
 
 		// Handle XML comments starting with "<!--", ending with "-->"
+
 		if (intoken && !incomment) {
 			switch (commentstate) {
 				case CS_NOT_IN_COMMENT :
@@ -1823,8 +1601,8 @@ void processOSIS(istream& infile) {
 		}
 		else {
 			switch (curChar) {
-				case '>' : cout << "WARNING(PARSE): > should be &gt;" << endl; text.append("&gt;"); break;
-				case '<' : cout << "WARNING(PARSE): < should be &lt;" << endl; text.append("&lt;"); break;
+				case '>' : text.append("&gt;"); break;
+				case '<' : text.append("&lt;"); break;
 				default  : text.append((char) curChar); break;
 			}
 		}
@@ -1922,7 +1700,7 @@ int main(int argc, char **argv) {
 					outputEncoder = NULL;
 					outputDecoder = NULL;
 				}
-			}
+			} 
 		}
 		else if (!strcmp(argv[i], "-c")) {
 			if (i+1 < argc) cipherKey = argv[++i];
@@ -1951,7 +1729,7 @@ int main(int argc, char **argv) {
 		else if (!strcmp(argv[i], "-l")) {
 			if (i+1 < argc) {
 				compLevel = atoi(argv[++i]);
-			}
+			}		      
 			else usage(*argv, "-l requires a value from 1-9");
 			
 			if (compLevel < 0 || compLevel > 10) {
@@ -1961,7 +1739,7 @@ int main(int argc, char **argv) {
 		else usage(*argv, (((SWBuf)"Unknown argument: ")+ argv[i]).c_str());
 	}
 
-	if (isCommentary) isCommentary = true;  // avoid unused warning for now
+	if (isCommentary) isCommentary = true;	// avoid unused warning for now
 
 	if (compType == "LZSS") {
 		compressor = new LZSSCompress();
@@ -2003,7 +1781,7 @@ int main(int argc, char **argv) {
 		cout << "DEBUG(ARGS):\n\tpath: " << path << "\n\tosisDoc: " << osisDoc << "\n\tcreate: " << append << "\n\tcompressType: " << compType << "\n\tblockType: " << iType << "\n\tcompressLevel: " << compLevel << "\n\tcipherKey: " << cipherKey.c_str() << "\n\tnormalize: " << normalize << endl;
 	}
 
-	if (!append) {  // == 0 then create module
+	if (!append) {	// == 0 then create module
 	// Try to initialize a default set of datafiles and indicies at our
 	// datapath location passed to us from the user.
 		if (compressor) {
@@ -2040,34 +1818,34 @@ int main(int argc, char **argv) {
 			// Create a compressed text module allowing very large entries
 			// Taking defaults except for first, fourth, fifth and last argument
 			module = new zText4(
-				path,           // ipath
-				0,              // iname
-				0,              // idesc
-				iType,          // iblockType
-				compressor,     // icomp
-				0,              // idisp
-				ENC_UNKNOWN,    // enc
-				DIRECTION_LTR,  // dir
-				FMT_UNKNOWN,    // markup
-				0,              // lang
-				v11n            // versification
+				path,		// ipath
+				0,		// iname
+				0,		// idesc
+				iType,		// iblockType
+				compressor,	// icomp
+				0,		// idisp
+				ENC_UNKNOWN,	// enc
+				DIRECTION_LTR,	// dir
+				FMT_UNKNOWN,	// markup
+				0,		// lang
+				v11n		// versification
 		       );
 		}
 		else {
 			// Create a compressed text module allowing reasonable sized entries
 			// Taking defaults except for first, fourth, fifth and last argument
 			module = new zText(
-				path,           // ipath
-				0,              // iname
-				0,              // idesc
-				iType,          // iblockType
-				compressor,     // icomp
-				0,              // idisp
-				ENC_UNKNOWN,    // enc
-				DIRECTION_LTR,  // dir
-				FMT_UNKNOWN,    // markup
-				0,              // lang
-				v11n            // versification
+				path,		// ipath
+				0,		// iname
+				0,		// idesc
+				iType,		// iblockType
+				compressor,	// icomp
+				0,		// idisp
+				ENC_UNKNOWN,	// enc
+				DIRECTION_LTR,	// dir
+				FMT_UNKNOWN,	// markup
+				0,		// lang
+				v11n		// versification
 		       );
 		}
 	}
@@ -2075,30 +1853,30 @@ int main(int argc, char **argv) {
 		// Create a raw text module allowing very large entries
 		// Taking defaults except for first and last argument
 		module = new RawText4(
-				path,           // ipath
-				0,              // iname
-				0,              // idesc
-				0,              // idisp
-				ENC_UNKNOWN,    // encoding
-				DIRECTION_LTR,  // dir
-				FMT_UNKNOWN,    // markup
-				0,              // ilang
-				v11n            // versification
+				path,		// ipath
+				0,		// iname
+				0,		// idesc
+				0,		// idisp
+				ENC_UNKNOWN,	// encoding
+				DIRECTION_LTR,	// dir
+				FMT_UNKNOWN,	// markup
+				0,		// ilang
+				v11n		// versification
 			);
 	}
 	else {
 		// Create a raw text module allowing reasonable sized entries
 		// Taking defaults except for first and last argument
 		module = new RawText(
-				path,           // ipath
-				0,              // iname
-				0,              // idesc
-				0,              // idisp
-				ENC_UNKNOWN,    // encoding
-				DIRECTION_LTR,  // dir
-				FMT_UNKNOWN,    // markup
-				0,              // ilang
-				v11n            // versification
+				path,		// ipath
+				0,		// iname
+				0,		// idesc
+				0,		// idisp
+				ENC_UNKNOWN,	// encoding
+				DIRECTION_LTR,	// dir
+				FMT_UNKNOWN,	// markup
+				0,		// ilang
+				v11n		// versification
 			);
 	}
 
