@@ -64,3 +64,13 @@ Mark.1.1-- = Matthew 28:20
 Matthew.1.1-- = Malachi 4:6
 ++ = Matthew 1:1
 .setBook(.getBook() - 1) = Malachi 1:1
+
+Chapter math
+
+Matthew.1.1 - 1 chapter
+.setChapter(.getChapter() - 1) = Malachi 4:1
+
+Verse math
+
+Matthew.1.1 - 1 verse
+.setVerse(.getVerse() - 1) = Malachi 4:6

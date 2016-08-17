@@ -597,6 +597,7 @@ ListKey VerseKey::parseVerseList(const char *buf, const char *defaultKey, bool e
 				comma = 0;
 				break;
 			}
+			goto terminate_range;
 			// otherwise drop down to next case
 		case ' ':
 			inTerm = true;
@@ -630,6 +631,7 @@ ListKey VerseKey::parseVerseList(const char *buf, const char *defaultKey, bool e
 			}
 		case ',': // on number new verse
 		case ';': // on number new chapter
+terminate_range:
 			number[tonumber] = 0;
 			tonumber = 0;
 			if (*number) {
@@ -1428,6 +1430,11 @@ void VerseKey::normalize(bool autocheck)
 			}
 			if (chapter < (intros?0:1)) {
 				--book;
+				if (book < (intros?0:1)) {
+					if (--testament > 0) {
+						book += (BMAX[testament-1] + (intros?1:0));
+					}
+				}
 				chapter += (getChapterMax() + (intros?1:0));
 				continue;
 			}
@@ -1441,6 +1448,11 @@ void VerseKey::normalize(bool autocheck)
 			if (verse < (intros?0:1)) {
 				if (--chapter < (intros?0:1)) {
 					--book;
+					if (book < (intros?0:1)) {
+						if (--testament > 0) {
+							book += (BMAX[testament-1] + (intros?1:0));
+						}
+					}
 					chapter += (getChapterMax() + (intros?1:0));
 				}
 				verse += (getVerseMax() + (intros?1:0));
@@ -1868,14 +1880,14 @@ const char *VerseKey::convertToOSIS(const char *inRef, const SWKey *lastKnownKey
 		memset(frag, 0, 800);
 		memset(preJunk, 0, 800);
 		memset(postJunk, 0, 800);
-		while ((*startFrag) && (strchr(" {};,()[].", *startFrag))) {
+		while ((*startFrag) && (strchr(" {}:;,()[].", *startFrag))) {
 			outRef += *startFrag;
 			startFrag++;
 		}
 		memmove(frag, startFrag, ((const char *)element->userData - startFrag) + 1);
 		frag[((const char *)element->userData - startFrag) + 1] = 0;
 		int j;
-		for (j = strlen(frag)-1; j && (strchr(" {};,()[].", frag[j])); j--);
+		for (j = strlen(frag)-1; j && (strchr(" {}:;,()[].", frag[j])); j--);
 		if (frag[j+1])
 			strcpy(postJunk, frag+j+1);
 		frag[j+1]=0;
