@@ -880,7 +880,7 @@ bool handleToken(std::string &text, XMLTag token) {
 
         // Now consider everything else.
 
-/*
+#if 0
         // "majorSection" is code for the Book 1-5 of Psalms // This is incorrect assumption - majorSection can appear in any large book and can start and end inside chapters
         if (tokenName == "div" && typeAttr == "majorSection") {
             if (inBookIntro) {
@@ -912,7 +912,8 @@ bool handleToken(std::string &text, XMLTag token) {
 
             return false;
         }
-*/
+#endif
+
         // Handle WOC quotes.
         // Note this requires transformBSP to make them into milestones
         // Otherwise have to do it here
