@@ -880,7 +880,8 @@ bool handleToken(std::string &text, XMLTag token) {
 
         // Now consider everything else.
 
-        // "majorSection" is code for the Book 1-5 of Psalms
+/*
+        // "majorSection" is code for the Book 1-5 of Psalms // This is incorrect assumption - majorSection can appear in any large book and can start and end inside chapters
         if (tokenName == "div" && typeAttr == "majorSection") {
             if (inBookIntro) {
                 if (debug & DEBUG_TITLE) {
@@ -894,6 +895,8 @@ bool handleToken(std::string &text, XMLTag token) {
             }
 
             strcpy(currentOsisID, currentVerse.getOSISRef());
+
+// as a result of the incorrect assumption these flags are set also incorrectly and cause problems in situations where majorSections do not follow the assumptions made during creation of this patch
 
             inChapter       = false;
             inVerse         = false;
@@ -909,7 +912,7 @@ bool handleToken(std::string &text, XMLTag token) {
 
             return false;
         }
-
+*/
         // Handle WOC quotes.
         // Note this requires transformBSP to make them into milestones
         // Otherwise have to do it here
