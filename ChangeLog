@@ -1,4 +1,12 @@
 API ChangeLog
+
+16-Apr-2016	Troy A. Griffitts <scribe@crosswire.org>
+	Added working --chapter --verse decrementors across Testament
+	Added handling of more odd double colon verse reference texts
+	Removed deprecated utility cipherraw; use mod2zmod w/ cipherkey
+		or osis2mod -c instead.
+	Added new tests to testsuite for mod2zmod and osis2mod with cipher
+
 18-Dec-2015     Peter von Kaehne <refdoc@crosswire.org>
 	Added image and table handling to TEI latex
 	Added image handling to TEI RTF

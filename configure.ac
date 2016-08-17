@@ -438,7 +438,7 @@ AM_CONDITIONAL(BUILDEXAMPLES, test x$enable_examples = xyes)
 # ---------------------------------------------------------------------
 # Final output
 # ---------------------------------------------------------------------
-AC_CONFIG_FILES(Makefile lib/Makefile tests/Makefile tests/cppunit/Makefile utilities/Makefile examples/Makefile examples/cmdline/Makefile examples/tasks/Makefile utilities/diatheke/Makefile sword.pc include/swversion.h sword.spec)
+AC_CONFIG_FILES(Makefile lib/Makefile tests/Makefile tests/testsuite/Makefile tests/cppunit/Makefile utilities/Makefile examples/Makefile examples/cmdline/Makefile examples/tasks/Makefile utilities/diatheke/Makefile sword.pc include/swversion.h sword.spec)
 AC_OUTPUT
 
 echo

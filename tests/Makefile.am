@@ -5,7 +5,7 @@ AM_CPPFLAGS += -I$(top_srcdir)/include/internal/regex
 endif
 LDADD = $(top_builddir)/lib/libsword.la
 
-SUBDIRS = cppunit
+SUBDIRS = cppunit testsuite
 
 noinst_PROGRAMS = utf8norm ciphertest keytest mgrtest parsekey versekeytest \
 			vtreekeytest versemgrtest listtest casttest modtest \
@@ -72,7 +72,3 @@ ldtest_SOURCES = ldtest.cpp
 osistest_SOURCES = osistest.cpp
 bibliotest_SOURCES = bibliotest.cpp
 
-EXTRA_DIST = 
-include bcppmake/Makefile.am
-include testsuite/Makefile.am
-include tmp/Makefile.am

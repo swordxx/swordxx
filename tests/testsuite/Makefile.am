@@ -1,6 +1,12 @@
-swtspdir = $(top_srcdir)/tests/testsuite
+all:
+	@echo
+	@echo to run tests type: ./runall.sh
+	@echo or make run
+	@echo
 
-EXTRA_DIST += $(swtspdir)/runall.sh
-EXTRA_DIST += $(swtspdir)/runtest.sh
-EXTRA_DIST += $(swtspdir)/verseparsing.good
-EXTRA_DIST += $(swtspdir)/verseparsing.sh
+run:
+	./runall.sh
+
+clean-local:
+	-rm -rf tmp
+	-rm -rf *.try

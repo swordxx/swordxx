@@ -5,7 +5,7 @@ if USE_INTERNAL_REGEX
 AM_CPPFLAGS += -I$(top_srcdir)/include/internal/regex
 endif
 LDADD = $(top_builddir)/lib/libsword.la
-noinst_PROGRAMS = cipherraw lexdump \
+noinst_PROGRAMS = lexdump \
 	stepdump step2vpl gbfidx modwrite addvs  \
 	addgb genbookutil treeidxutil addld  
 
@@ -23,7 +23,6 @@ endif
 bin_PROGRAMS += $(ZLIBPROG) 
 
 
-cipherraw_SOURCES = cipherraw.cpp
 lexdump_SOURCES = lexdump.c
 lexdump_LDADD = -lstdc++
 mkfastmod_SOURCES = mkfastmod.cpp
