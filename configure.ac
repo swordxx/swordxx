@@ -354,6 +354,23 @@ if test "$V3" -le 9 ; then V3=00$V3 ; elif test "$V3" -le 99 ; then V3=0$V3 ; fi
 if test "$V4" -le 9 ; then V4=00$V4 ; elif test "$V4" -le 99 ; then V4=0$V4 ; fi
 SWORD_VERSION_NUM=$V1$V2$V3$V4
 
+echo "checking compiler warnings"
+m4_foreach(WARN_CHECK, [-Wno-address, -Wno-nonnull-compare],
+[
+	saved_CXXFLAGS="$CXXFLAGS"
+	CXXFLAGS="$CXXFLAGS WARN_CHECK"
+	AC_LANG_PUSH([C++])
+	AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])],[WARNING_CHECK=WARN_CHECK],[WARNING_CHECK=;])
+	AC_LANG_POP([C++])
+	CXXFLAGS="$saved_CXXFLAGS"
+	echo "WARNING_CHECK: $WARNING_CHECK"
+	WARNINGS_OFF="$WARNINGS_OFF $WARNING_CHECK"
+])
+
+echo "WARNINGS_OFF: $WARNINGS_OFF"
+AM_CXXFLAGS="$AM_CXXFLAGS $WARNINGS_OFF"
+ 
+
 AC_SUBST(SWORD_VERSION_NUM)
 AC_SUBST(SWORD_VERSION_STR)
 AC_SUBST(SWORD_VERSION_MAJOR)
