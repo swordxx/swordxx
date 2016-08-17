@@ -589,7 +589,6 @@ ListKey VerseKey::parseVerseList(const char *buf, const char *defaultKey, bool e
                 break;
             }
             goto terminate_range;
-            // otherwise drop down to next case
         case ' ':
             inTerm = true;
             while (true) {
