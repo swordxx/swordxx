@@ -94,14 +94,17 @@ public:
         verse of another chapter in default intermediate canon(kjva), so mapping data
         contains expections. Intermediate canon could not contain corresponding data.
 
-        pointers on uchar[7]: 1 value - book id 1-based, ot+nt, 2-4 map to, 5-7 map
-        from (chap,verse from, verse to if greater then "verse from")
+        Each element in @variable mappings contains of all rules that are related to
+        particular book.
 
-        TODO what if book name in one v11n differs from cannon
-            special section in mapping for book transformation
+        @typedef mappingRule is a pointer on uchar[7]: 1 value - book id 1-based, ot+nt,
+        2-4 map to, 5-7 map from (chap,verse from, verse to if greater then "verse from").
+        Size of rule would be 8 if there is inter-book mapping and target book is abscent
+        in reference system, in this case @variable mappingsExtraBooks data is used and
+        id is rule book id minus book count.
     */
-    typedef vector<const unsigned char*> mapping;
-    vector<mapping> mappings;
+    typedef vector<const unsigned char*> mappingRule;
+    vector<mappingRule> mappings;
     vector<const char*> mappingsExtraBooks;
 
     Private() {
@@ -464,6 +467,9 @@ void VersificationMgr::System::translateVerse(const System *dstSys, const char *
         // reversed mapping should use forward search for item
         for (unsigned int i=0; i<dstSys->p->mappings[b].size(); ++i) {
             const unsigned char *m = dstSys->p->mappings[b][i];
+
+            if (m[0] != b+1) continue; // filter inter-book rules
+
             if (m[4] == *chapter && m[5] <= *verse) {
                 SWLog::getSystemLog()->logDebug("found mapping %i %i %i %i %i %i\n",m[1],m[2],m[3],m[4],m[5],m[6]);
                 if (m[5] == *verse || (m[6] >= *verse && m[5] <= *verse)) {
