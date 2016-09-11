@@ -1,10 +1,10 @@
 #!/bin/sh
 
-rm -rf osis/
-mkdir -p osis/mods.d
-mkdir -p osis/modules
+rm -rf tmp/osis_basic/
+mkdir -p tmp/osis_basic/mods.d
+mkdir -p tmp/osis_basic/modules
 
-cat > osis/mods.d/osisreference.conf <<!
+cat > tmp/osis_basic/mods.d/osisreference.conf <<!
 [OSISReference]
 DataPath=./modules/
 ModDrv=zText
@@ -21,6 +21,6 @@ GlobalOptionFilter=OSISRedLetterWords
 Feature=StrongsNumbers
 !
 
-../../utilities/osis2mod osis/modules/ osisReference.xml -z 2>&1 | grep -v \$Rev
+../../utilities/osis2mod tmp/osis_basic/modules/ osisReference.xml -z 2>&1 | grep -v \$Rev
 
-cd osis && ../../osistest OSISReference
+cd tmp/osis_basic && ../../../osistest OSISReference
