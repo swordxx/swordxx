@@ -45,7 +45,6 @@ SET(install_UTILITIES ${install_UTILITIES} mod2zmod)
 SET(noinstall_UTILITIES
     addgb
     addvs
-    cipherraw
     gbfidx
     genbookutil
     modwrite
