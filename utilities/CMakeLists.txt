@@ -42,7 +42,6 @@ ENDIF(WITH_ZLIB OR WITH_INTERNAL_ZLIB)
 SET(noinstall_UTILITIES
 	addgb
 	addvs
-	cipherraw
 	gbfidx
 	genbookutil
 	modwrite
