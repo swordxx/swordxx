@@ -124,9 +124,6 @@ char CURLHTTPTransport::getURL(const char * destPath,
     curl_easy_setopt(m_session, CURLOPT_VERBOSE, true);
     curl_easy_setopt(m_session, CURLOPT_CONNECTTIMEOUT, 45);
 
-    /* Disable checking host certificate */
-    curl_easy_setopt(m_session, CURLOPT_SSL_VERIFYPEER, false); /// \bug NO TLS!
-
     SWLog::getSystemLog()->logDebug(
                 "***** About to perform curl easy action. \n");
     SWLog::getSystemLog()->logDebug("***** destPath: %s \n", destPath);
