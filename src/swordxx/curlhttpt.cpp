@@ -38,11 +38,9 @@ namespace swordxx {
 CURLHTTPTransport::CURLHTTPTransport(const char * const host,
                                      StatusReporter * const sr)
     : RemoteTransport(host, sr)
-{ /** \todo throw exception on !m_session */ }
-
+{}
 
 CURLHTTPTransport::~CURLHTTPTransport() noexcept {}
-
 
 char CURLHTTPTransport::getURL(const char * destPath,
                                const char * sourceURL,
