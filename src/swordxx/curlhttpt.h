@@ -30,9 +30,6 @@
 
 namespace swordxx {
 
-class CURL;
-
-
 class SWDLLEXPORT CURLHTTPTransport: public RemoteTransport {
 
 public: /* Methods: */
@@ -45,10 +42,6 @@ public: /* Methods: */
     char getURL(const char * destPath,
                 const char * sourceURL,
                 std::string * destBuf = 0) override;
-
-private: /* Fields: */
-
-    CURL * const m_session;
 
 };
 

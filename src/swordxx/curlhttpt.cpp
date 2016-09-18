@@ -39,60 +39,36 @@ namespace swordxx {
 CURLHTTPTransport::CURLHTTPTransport(const char * const host,
                                      StatusReporter * const sr)
     : RemoteTransport(host, sr)
-    , m_session(static_cast<CURL *>(curl_easy_init()))
 { /** \todo throw exception on !m_session */ }
 
 
-CURLHTTPTransport::~CURLHTTPTransport() noexcept
-{ curl_easy_cleanup(m_session); }
+CURLHTTPTransport::~CURLHTTPTransport() noexcept {}
 
 
 char CURLHTTPTransport::getURL(const char * destPath,
                                const char * sourceURL,
                                std::string * destBuf)
 {
-    if (!m_session)
+    CURL * const s = static_cast<CURL *>(curl_easy_init());
+    if (!s)
         return -1;
 
-    struct HttpFile {
-        inline ~HttpFile() noexcept {
-            if (stream)
-                std::fclose(stream);
-        }
+    struct MyCurl {
+        inline ~MyCurl() noexcept { curl_easy_cleanup(m_session); }
 
-        const char * const filename;
-        std::string * const destBuf;
-        FILE * stream;
-    } httpFile{destPath, destBuf, nullptr};
+        CURL * const m_session;
+    } session{s};
 
-    curl_easy_setopt(m_session, CURLOPT_URL, sourceURL);
-    curl_easy_setopt(m_session, CURLOPT_USERNAME, u.c_str());
-    curl_easy_setopt(m_session, CURLOPT_PASSWORD, p.c_str());
-    static auto const my_httpfwrite =
-            [](void * const buffer,
-               std::size_t const size,
-               std::size_t const nmemb,
-               void * const stream) -> int
-            {
-                assert(stream);
-                HttpFile * const out = static_cast<HttpFile *>(stream);
-                if (!out->stream && !out->destBuf) {
-                    out->stream = std::fopen(out->filename, "wb");
-                    if (!out->stream) // Failure, can't open file to write
-                        return -1;
-                }
-                if (out->destBuf) {
-                    auto const s = out->destBuf->size();
-                    out->destBuf->resize(s + (size * nmemb), '\0');
-                    std::memcpy(&out->destBuf[s], buffer, size * nmemb);
-                    return nmemb;
-                }
-                return std::fwrite(buffer, size, nmemb, out->stream);
-            };
-    curl_easy_setopt(m_session, CURLOPT_WRITEFUNCTION, &my_httpfwrite);
-    curl_easy_setopt(m_session, CURLOPT_NOPROGRESS, 0);
-    curl_easy_setopt(m_session, CURLOPT_FAILONERROR, 1);
-    curl_easy_setopt(m_session, CURLOPT_PROGRESSDATA, statusReporter);
+    #define SETOPTION(a,...) \
+        if (curl_easy_setopt(session.m_session, a, __VA_ARGS__) != CURLE_OK) \
+            return -1
+    SETOPTION(CURLOPT_URL, sourceURL);
+    SETOPTION(CURLOPT_USERNAME, u.c_str());
+    SETOPTION(CURLOPT_PASSWORD, p.c_str());
+    SETOPTION(CURLOPT_NOPROGRESS, 0);
+    SETOPTION(CURLOPT_FAILONERROR, 1);
+    SETOPTION(CURLOPT_PROGRESSDATA, statusReporter);
+    SETOPTION(CURLOPT_CONNECTTIMEOUT, 45);
 
     static auto const my_httpfprogress =
             [](void * clientp,
@@ -114,13 +90,44 @@ char CURLHTTPTransport::getURL(const char * destPath,
         }
         return 0;
     };
-    curl_easy_setopt(m_session, CURLOPT_PROGRESSFUNCTION, &my_httpfprogress);
-    /* Set a pointer to our struct to pass to the callback */
-    curl_easy_setopt(m_session, CURLOPT_FILE, &httpFile);
+    SETOPTION(CURLOPT_PROGRESSFUNCTION, &my_httpfprogress);
 
-    /* Switch on full protocol/debug output */
-    curl_easy_setopt(m_session, CURLOPT_VERBOSE, true);
-    curl_easy_setopt(m_session, CURLOPT_CONNECTTIMEOUT, 45);
+    struct HttpFile {
+        inline ~HttpFile() noexcept {
+            if (stream)
+                std::fclose(stream);
+        }
+
+        const char * const filename;
+        std::string * const destBuf;
+        FILE * stream;
+    };
+
+    static auto const my_httpfwrite =
+            [](void * const buffer,
+               std::size_t const size,
+               std::size_t const nmemb,
+               void * const stream) -> int
+            {
+                assert(stream);
+                HttpFile * const out = static_cast<HttpFile *>(stream);
+                if (!out->stream && !out->destBuf) {
+                    out->stream = std::fopen(out->filename, "wb");
+                    if (!out->stream) // Failure, can't open file to write
+                        return -1;
+                }
+                if (out->destBuf) {
+                    auto const s = out->destBuf->size();
+                    out->destBuf->resize(s + (size * nmemb), '\0');
+                    std::memcpy(&out->destBuf[s], buffer, size * nmemb);
+                    return nmemb;
+                }
+                return std::fwrite(buffer, size, nmemb, out->stream);
+            };
+    SETOPTION(CURLOPT_WRITEFUNCTION, &my_httpfwrite);
+    /* Set a pointer to our struct to pass to the callback */
+    HttpFile httpFile{destPath, destBuf, nullptr};
+    SETOPTION(CURLOPT_FILE, &httpFile);
 
     return (curl_easy_perform(session.m_session) == CURLE_OK) ? 0 : -1;
 }
