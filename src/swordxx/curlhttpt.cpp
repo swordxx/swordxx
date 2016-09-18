@@ -111,16 +111,16 @@ char CURLHTTPTransport::getURL(const char * destPath,
             {
                 assert(stream);
                 HttpFile * const out = static_cast<HttpFile *>(stream);
-                if (!out->stream && !out->destBuf) {
-                    out->stream = std::fopen(out->filename, "wb");
-                    if (!out->stream) // Failure, can't open file to write
-                        return -1;
-                }
                 if (out->destBuf) {
                     auto const s = out->destBuf->size();
                     out->destBuf->resize(s + (size * nmemb), '\0');
                     std::memcpy(&out->destBuf[s], buffer, size * nmemb);
                     return nmemb;
+                }
+                if (!out->stream) {
+                    out->stream = std::fopen(out->filename, "wb");
+                    if (!out->stream) // Failure, can't open file to write
+                        return -1;
                 }
                 return std::fwrite(buffer, size, nmemb, out->stream);
             };
