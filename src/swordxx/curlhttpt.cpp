@@ -55,8 +55,8 @@ char CURLHTTPTransport::getURL(const char * destPath,
     if (!m_session)
         return -1;
 
-    struct FtpFile {
-        inline ~FtpFile() noexcept {
+    struct HttpFile {
+        inline ~HttpFile() noexcept {
             if (stream)
                 std::fclose(stream);
         }
@@ -64,7 +64,7 @@ char CURLHTTPTransport::getURL(const char * destPath,
         const char * const filename;
         std::string * const destBuf;
         FILE * stream;
-    } ftpfile{destPath, destBuf, nullptr};
+    } httpFile{destPath, destBuf, nullptr};
 
     curl_easy_setopt(m_session, CURLOPT_URL, sourceURL);
 
@@ -77,7 +77,7 @@ char CURLHTTPTransport::getURL(const char * destPath,
                void * const stream) -> int
             {
                 assert(stream);
-                FtpFile * const out = static_cast<FtpFile *>(stream);
+                HttpFile * const out = static_cast<HttpFile *>(stream);
                 if (!out->stream && !out->destBuf) {
                     out->stream = std::fopen(out->filename, "wb");
                     if (!out->stream) // Failure, can't open file to write
@@ -92,9 +92,6 @@ char CURLHTTPTransport::getURL(const char * destPath,
                 return std::fwrite(buffer, size, nmemb, out->stream);
             };
     curl_easy_setopt(m_session, CURLOPT_WRITEFUNCTION, &my_httpfwrite);
-
-    if (!passive)
-        curl_easy_setopt(m_session, CURLOPT_FTPPORT, "-");
     curl_easy_setopt(m_session, CURLOPT_NOPROGRESS, 0);
     curl_easy_setopt(m_session, CURLOPT_FAILONERROR, 1);
     curl_easy_setopt(m_session, CURLOPT_PROGRESSDATA, statusReporter);
@@ -121,7 +118,7 @@ char CURLHTTPTransport::getURL(const char * destPath,
     };
     curl_easy_setopt(m_session, CURLOPT_PROGRESSFUNCTION, &my_httpfprogress);
     /* Set a pointer to our struct to pass to the callback */
-    curl_easy_setopt(m_session, CURLOPT_FILE, &ftpfile);
+    curl_easy_setopt(m_session, CURLOPT_FILE, &httpFile);
 
     /* Switch on full protocol/debug output */
     curl_easy_setopt(m_session, CURLOPT_VERBOSE, true);
@@ -129,16 +126,6 @@ char CURLHTTPTransport::getURL(const char * destPath,
 
     /* Disable checking host certificate */
     curl_easy_setopt(m_session, CURLOPT_SSL_VERIFYPEER, false); /// \bug NO TLS!
-
-    /* FTP connection settings */
-
-#if (LIBCURL_VERSION_MAJOR > 7) \
-    || ((LIBCURL_VERSION_MAJOR == 7) && (LIBCURL_VERSION_MINOR > 10)) \
-    || ((LIBCURL_VERSION_MAJOR == 7) && (LIBCURL_VERSION_MINOR == 10) \
-        && (LIBCURL_VERSION_PATCH >= 5))
-    curl_easy_setopt(m_session, CURLOPT_FTP_USE_EPRT, 0);
-    SWLog::getSystemLog()->logDebug("***** using CURLOPT_FTP_USE_EPRT\n");
-#endif
 
     SWLog::getSystemLog()->logDebug(
                 "***** About to perform curl easy action. \n");
@@ -226,7 +213,7 @@ vector<DirEntry> CURLHTTPTransport::getDirList(const char *dirURL) {
         }
     } else {
         SWLog::getSystemLog()->logWarning(
-                    "FTPURLGetDir: failed to get dir %s\n",
+                    "CURLHTTPTransport: getDirList: failed to get dir %s\n",
                     dirURL);
     }
     return dirList;
