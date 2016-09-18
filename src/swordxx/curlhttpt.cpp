@@ -69,7 +69,6 @@ char CURLHTTPTransport::getURL(const char * destPath,
     SETOPTION(CURLOPT_PASSWORD, p.c_str());
     SETOPTION(CURLOPT_NOPROGRESS, 0);
     SETOPTION(CURLOPT_FAILONERROR, 1);
-    SETOPTION(CURLOPT_PROGRESSDATA, statusReporter);
     SETOPTION(CURLOPT_CONNECTTIMEOUT, 45);
 
     static auto const my_httpfprogress =
@@ -100,6 +99,7 @@ char CURLHTTPTransport::getURL(const char * destPath,
         return 0;
     };
     SETOPTION(CURLOPT_XFERINFOFUNCTION, &my_httpfprogress);
+    SETOPTION(CURLOPT_XFERINFODATA, statusReporter);
 
     struct HttpFile {
         inline ~HttpFile() noexcept {
