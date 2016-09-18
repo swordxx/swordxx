@@ -24,6 +24,10 @@
 
 #include <cassert>
 #include <cctype>
+#include <cstddef>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
 #include <curl/curl.h>
 #include <curl/easy.h>
 #include <fcntl.h>
