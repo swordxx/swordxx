@@ -23,20 +23,18 @@
 #ifndef CURLHTTPT_H
 #define CURLHTTPT_H
 
-#include "remotetrans.h"
+#include "curltransport.h"
 
 #include "defs.h"
 
 
 namespace swordxx {
 
-class SWDLLEXPORT CURLHTTPTransport: public RemoteTransport {
+class SWDLLEXPORT CURLHTTPTransport: public CurlTransport {
 
 public: /* Methods: */
 
-    CURLHTTPTransport(const char * host,
-                      StatusReporter * statusReporter = nullptr);
-    ~CURLHTTPTransport() noexcept override;
+    using CurlTransport::CurlTransport;
 
     std::vector<DirEntry> getDirList(const char * dirURL) override;
     char getURL(const char * destPath,

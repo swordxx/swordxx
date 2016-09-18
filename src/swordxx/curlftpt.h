@@ -23,7 +23,7 @@
 #ifndef CURLFTPT_H
 #define CURLFTPT_H
 
-#include "remotetrans.h"
+#include "curltransport.h"
 
 #include "defs.h"
 
@@ -33,21 +33,15 @@ namespace swordxx {
 class CURL;
 
 
-class SWDLLEXPORT CURLFTPTransport : public RemoteTransport {
+class SWDLLEXPORT CURLFTPTransport : public CurlTransport {
 
 public: /* Methods: */
 
-    CURLFTPTransport(const char * host,
-                     StatusReporter * statusReporter = nullptr);
-    ~CURLFTPTransport() noexcept override;
+    using CurlTransport::CurlTransport;
 
     char getURL(const char * destPath,
                 const char * sourceURL,
                 std::string * destBuf = 0) override;
-
-private: /* Types: */
-
-    CURL * session;
 
 };
 
