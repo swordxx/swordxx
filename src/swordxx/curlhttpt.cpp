@@ -179,22 +179,19 @@ std::vector<DirEntry> CURLHTTPTransport::getDirList(const char *dirURL) {
     std::vector<DirEntry> dirList;
 
     std::string dirBuf;
-    const char * pBuf;
-    char const * pBufRes;
-    std::string possibleName;
-    double fSize;
-    int possibleNameLength = 0;
 
     if (!getURL("", dirURL, &dirBuf)) {
+        std::string possibleName;
+
         // Find the next link to a possible file name;
-        pBuf = std::strstr(dirBuf.c_str(), "<a href=\"");
+        const char * pBuf = std::strstr(dirBuf.c_str(), "<a href=\"");
         while (pBuf) {
             pBuf += 9; // Move to the start of the actual name.
             // Find the end of the possible file name:
-            pBufRes = std::strchr(pBuf, '"');
+            char const * pBufRes = std::strchr(pBuf, '"');
             if (!pBufRes)
                 break;
-            possibleNameLength = pBufRes - pBuf;
+            int const possibleNameLength = pBufRes - pBuf;
             possibleName = formatted("%.*s", possibleNameLength, pBuf);
             if (std::isalnum(possibleName[0])) {
                 #if 0
@@ -204,7 +201,7 @@ std::vector<DirEntry> CURLHTTPTransport::getDirList(const char *dirURL) {
                 #endif
                 pBuf = pBufRes;
                 pBufRes = findSizeStart(pBufRes);
-                fSize = 0;
+                double fSize = 0.0;
                 if (pBufRes) {
                     pBuf = pBufRes;
                     char * r;
