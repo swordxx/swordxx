@@ -156,16 +156,16 @@ std::vector<DirEntry> CURLHTTPTransport::getDirList(const char *dirURL) {
                 const char *listing = buffer;
                 const char *pEnd;
 
-                pEnd = strstr(listing, "<td");
+                pEnd = std::strstr(listing, "<td");
                 if(pEnd == NULL) {
                     return NULL;
                 }
                 listing = pEnd+2;
-                pEnd = strstr(listing, "<td");
+                pEnd = std::strstr(listing, "<td");
                 if(pEnd == NULL)
                     return NULL;
                 listing = pEnd+2;
-                pEnd = strchr(listing, '>');
+                pEnd = std::strchr(listing, '>');
                 if(pEnd == NULL)
                     return NULL;
 
@@ -186,12 +186,12 @@ std::vector<DirEntry> CURLHTTPTransport::getDirList(const char *dirURL) {
         while (pBuf != NULL) {
             pBuf += 9;//move to the start of the actual name.
             // Find the end of the possible file name:
-            pBufRes = (char *)strchr(pBuf, '\"');
+            pBufRes = (char *)std::strchr(pBuf, '\"');
             if (!pBufRes)
                 break;
             possibleNameLength = pBufRes - pBuf;
             possibleName = formatted("%.*s", possibleNameLength, pBuf);
-            if (isalnum(possibleName[0])) {
+            if (std::isalnum(possibleName[0])) {
                 #if 0
                 SWLog::getSystemLog()->logDebug(
                             "getDirListHTTP: Found a file: %s",
@@ -202,7 +202,7 @@ std::vector<DirEntry> CURLHTTPTransport::getDirList(const char *dirURL) {
                 fSize = 0;
                 if(pBufRes != NULL) {
                     pBuf = pBufRes;
-                    fSize = strtod(pBuf, &pBufRes);
+                    fSize = std::strtod(pBuf, &pBufRes);
                     if (pBufRes[0] == 'K')
                         fSize *= 1024;
                     else if (pBufRes[0] == 'M')
@@ -220,7 +220,7 @@ std::vector<DirEntry> CURLHTTPTransport::getDirList(const char *dirURL) {
             }
             pBuf++;
             // Find the next link to a possible file name:
-            pBuf = strstr(pBuf, "<a href=\"");
+            pBuf = std::strstr(pBuf, "<a href=\"");
         }
     }
     #if 0
