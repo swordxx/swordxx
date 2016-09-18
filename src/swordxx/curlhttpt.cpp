@@ -116,19 +116,20 @@ char CURLHTTPTransport::getURL(const char * destPath,
                    us to return this: */
                 std::size_t const totalSize = size * nmemb;
                 if (out->destBuf) {
+                    auto & destBuffer = *out->destBuf;
                     if (totalSize <= 0u)
                         return 0u;
-                    auto const s = out->destBuf->size();
+                    auto const s = destBuffer.size();
                     try {
                         // Check for overflow:
                         if (std::numeric_limits<std::size_t>::max() - s
                             < totalSize)
                             return 0u;
-                        out->destBuf->resize(totalSize + s, '\0');
+                        destBuffer.resize(totalSize + s, '\0');
                     } catch (...) {
                         return 0u;
                     }
-                    std::memcpy(&out->destBuf[s], buffer, totalSize);
+                    std::memcpy(&(destBuffer[s]), buffer, totalSize);
                     return nmemb;
                 }
                 if (!out->stream) {
