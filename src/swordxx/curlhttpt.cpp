@@ -156,8 +156,8 @@ std::vector<DirEntry> CURLHTTPTransport::getDirList(const char *dirURL) {
     /* We need to find the 2nd "<td" & then find the ">" after that. The size
        starts with the next non-space char */
     static auto const findSizeStart =
-            [](char * inPtr) -> char * {
-                char * pEnd = std::strstr(inPtr, "<td");
+            [](char const * inPtr) -> char const * {
+                char const * pEnd = std::strstr(inPtr, "<td");
                 if (!pEnd)
                     return nullptr;
                 inPtr = pEnd + 2;
@@ -172,7 +172,7 @@ std::vector<DirEntry> CURLHTTPTransport::getDirList(const char *dirURL) {
 
     std::string dirBuf;
     const char * pBuf;
-    char * pBufRes;
+    char const * pBufRes;
     std::string possibleName;
     double fSize;
     int possibleNameLength = 0;
@@ -183,7 +183,7 @@ std::vector<DirEntry> CURLHTTPTransport::getDirList(const char *dirURL) {
         while (pBuf) {
             pBuf += 9; // Move to the start of the actual name.
             // Find the end of the possible file name:
-            pBufRes = (char *) std::strchr(pBuf, '\"');
+            pBufRes = std::strchr(pBuf, '"');
             if (!pBufRes)
                 break;
             possibleNameLength = pBufRes - pBuf;
@@ -199,12 +199,13 @@ std::vector<DirEntry> CURLHTTPTransport::getDirList(const char *dirURL) {
                 fSize = 0;
                 if (pBufRes) {
                     pBuf = pBufRes;
-                    fSize = std::strtod(pBuf, &pBufRes);
-                    if (pBufRes[0] == 'K')
+                    char * r;
+                    fSize = std::strtod(pBuf, &r);
+                    if (r[0] == 'K')
                         fSize *= 1024;
-                    else if (pBufRes[0] == 'M')
+                    else if (r[0] == 'M')
                         fSize *= 1048576;
-                    pBuf = pBufRes;
+                    pBuf = r;
                 }
                 DirEntry i;
                 i.name = possibleName;
