@@ -156,23 +156,17 @@ std::vector<DirEntry> CURLHTTPTransport::getDirList(const char *dirURL) {
     /* We need to find the 2nd "<td" & then find the ">" after that. The size
        starts with the next non-space char */
     static auto const findSizeStart =
-            [](char * buffer) -> char * {
-                char * listing = buffer;
-                char * pEnd;
-
-                pEnd = std::strstr(listing, "<td");
+            [](char * inPtr) -> char * {
+                char * pEnd = std::strstr(inPtr, "<td");
                 if (!pEnd)
                     return nullptr;
-                listing = pEnd + 2;
-                pEnd = std::strstr(listing, "<td");
+                inPtr = pEnd + 2;
+                pEnd = std::strstr(inPtr, "<td");
                 if (!pEnd)
                     return nullptr;
-                listing = pEnd + 2;
-                pEnd = std::strchr(listing, '>');
-                if(!pEnd)
-                    return nullptr;
-
-                return pEnd + 1;
+                inPtr = pEnd + 2;
+                pEnd = std::strchr(inPtr, '>');
+                return pEnd ? (pEnd + 1) : nullptr;
             };
     std::vector<DirEntry> dirList;
 
