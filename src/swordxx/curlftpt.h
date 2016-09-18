@@ -34,15 +34,22 @@ class CURL;
 
 
 class SWDLLEXPORT CURLFTPTransport : public RemoteTransport {
-    CURL *session;
 
-public:
-    CURLFTPTransport(const char *host, StatusReporter *statusReporter = 0);
-    ~CURLFTPTransport();
+public: /* Methods: */
 
-    virtual char getURL(const char *destPath, const char *sourceURL, std::string *destBuf = 0);
+    CURLFTPTransport(const char * host,
+                     StatusReporter * statusReporter = nullptr);
+    ~CURLFTPTransport() noexcept override;
+
+    char getURL(const char * destPath,
+                const char * sourceURL,
+                std::string * destBuf = 0) override;
+
+private: /* Types: */
+
+    CURL * session;
+
 };
-
 
 } /* namespace swordxx */
 
