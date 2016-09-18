@@ -27,6 +27,7 @@
 #include <curl/curl.h>
 #include <curl/easy.h>
 #include <fcntl.h>
+#include <limits>
 #include <vector>
 #include "filemgr.h"
 #include "utilstr.h"
@@ -107,20 +108,38 @@ char CURLHTTPTransport::getURL(const char * destPath,
             [](void * const buffer,
                std::size_t const size,
                std::size_t const nmemb,
-               void * const stream) -> int
+               void * const stream) -> std::size_t
             {
                 assert(stream);
                 HttpFile * const out = static_cast<HttpFile *>(stream);
+                /* We assume that this does not overflow, because CURL expects
+                   us to return this: */
+                std::size_t const totalSize = size * nmemb;
                 if (out->destBuf) {
+                    if (totalSize <= 0u)
+                        return 0u;
                     auto const s = out->destBuf->size();
-                    out->destBuf->resize(s + (size * nmemb), '\0');
-                    std::memcpy(&out->destBuf[s], buffer, size * nmemb);
+                    try {
+                        // Check for overflow:
+                        if (std::numeric_limits<std::size_t>::max() - s
+                            < totalSize)
+                            return 0u;
+                        out->destBuf->resize(totalSize + s, '\0');
+                    } catch (...) {
+                        return 0u;
+                    }
+                    std::memcpy(&out->destBuf[s], buffer, totalSize);
                     return nmemb;
                 }
                 if (!out->stream) {
+                    /* We attempt to create the file even if totalSize == 0 in
+                       case the received file is empty. */
                     out->stream = std::fopen(out->filename, "wb");
-                    if (!out->stream) // Failure, can't open file to write
-                        return -1;
+                    if (!out->stream) { // Failure, can't open file to write
+                        /* The failure return value for CURL must be different
+                           from totalSize (which might itself equal 0u): */
+                        return totalSize ? 0u : ~totalSize;
+                    }
                 }
                 return std::fwrite(buffer, size, nmemb, out->stream);
             };
