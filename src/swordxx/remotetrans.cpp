@@ -56,9 +56,14 @@ RemoteTransport::~RemoteTransport() {
 
 
 // override this method in your real transport class
-char RemoteTransport::getURL(const char *destPath, const char *sourceURL, std::string *destBuf) {
-    char retVal = 0;
-    return retVal;
+char RemoteTransport::getURL(char const * destPath,
+                             char const * sourceURL,
+                             std::string * destBuf)
+{
+    (void) destPath;
+    (void) sourceURL;
+    (void) destBuf;
+    return 0;
 }
 
 
