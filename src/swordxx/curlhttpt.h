@@ -33,15 +33,23 @@ namespace swordxx {
 class CURL;
 
 
-class SWDLLEXPORT CURLHTTPTransport : public RemoteTransport {
-    CURL *session;
+class SWDLLEXPORT CURLHTTPTransport: public RemoteTransport {
 
-public:
-    CURLHTTPTransport(const char *host, StatusReporter *statusReporter = 0);
-    ~CURLHTTPTransport();
+public: /* Methods: */
 
-    virtual std::vector<struct DirEntry> getDirList(const char *dirURL);
-    virtual char getURL(const char *destPath, const char *sourceURL, std::string *destBuf = 0);
+    CURLHTTPTransport(const char * host,
+                      StatusReporter * statusReporter = nullptr);
+    ~CURLHTTPTransport() noexcept override;
+
+    std::vector<DirEntry> getDirList(const char * dirURL) override;
+    char getURL(const char * destPath,
+                const char * sourceURL,
+                std::string * destBuf = 0) override;
+
+private: /* Fields: */
+
+    CURL * const m_session;
+
 };
 
 

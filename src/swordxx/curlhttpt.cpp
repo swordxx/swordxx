@@ -22,6 +22,7 @@
 
 #include "curlhttpt.h"
 
+#include <cassert>
 #include <cctype>
 #include <curl/curl.h>
 #include <curl/easy.h>
@@ -36,141 +37,145 @@ using std::vector;
 
 namespace swordxx {
 
-namespace {
+CURLHTTPTransport::CURLHTTPTransport(const char * const host,
+                                     StatusReporter * const sr)
+    : RemoteTransport(host, sr)
+    , m_session(static_cast<CURL *>(curl_easy_init()))
+{ /** \todo throw exception on !m_session */ }
+
+
+CURLHTTPTransport::~CURLHTTPTransport() noexcept
+{ curl_easy_cleanup(m_session); }
+
+
+char CURLHTTPTransport::getURL(const char * destPath,
+                               const char * sourceURL,
+                               std::string * destBuf)
+{
+    if (!m_session)
+        return -1;
 
     struct FtpFile {
-        const char *filename;
-        FILE *stream;
-        std::string *destBuf;
-    };
-
-
-    static int my_httpfwrite(void *buffer, size_t size, size_t nmemb, void *stream) {
-        struct FtpFile *out=(struct FtpFile *)stream;
-        if (out && !out->stream && !out->destBuf) {
-            /* open file for writing */
-            out->stream=fopen(out->filename, "wb");
-            if (!out->stream)
-                return -1; /* failure, can't open file to write */
+        inline ~FtpFile() noexcept {
+            if (stream)
+                std::fclose(stream);
         }
-        if (out->destBuf) {
-            int s = out->destBuf->size();
-            out->destBuf->resize(s + (size * nmemb), '\0');
-            std::memcpy(&out->destBuf[s], buffer, size*nmemb);
-            return nmemb;
-        }
-        return fwrite(buffer, size, nmemb, out->stream);
-    }
 
+        const char * const filename;
+        std::string * const destBuf;
+        FILE * stream;
+    } ftpfile{destPath, destBuf, nullptr};
 
-    static int my_httpfprogress(void *clientp, double dltotal, double dlnow, double ultotal, double ulnow) {
+    curl_easy_setopt(m_session, CURLOPT_URL, sourceURL);
+
+    std::string credentials = u + ":" + p;
+    curl_easy_setopt(m_session, CURLOPT_USERPWD, credentials.c_str());
+    static auto const my_httpfwrite =
+            [](void * const buffer,
+               std::size_t const size,
+               std::size_t const nmemb,
+               void * const stream) -> int
+            {
+                assert(stream);
+                FtpFile * const out = static_cast<FtpFile *>(stream);
+                if (!out->stream && !out->destBuf) {
+                    out->stream = std::fopen(out->filename, "wb");
+                    if (!out->stream) // Failure, can't open file to write
+                        return -1;
+                }
+                if (out->destBuf) {
+                    auto const s = out->destBuf->size();
+                    out->destBuf->resize(s + (size * nmemb), '\0');
+                    std::memcpy(&out->destBuf[s], buffer, size * nmemb);
+                    return nmemb;
+                }
+                return std::fwrite(buffer, size, nmemb, out->stream);
+            };
+    curl_easy_setopt(m_session, CURLOPT_WRITEFUNCTION, &my_httpfwrite);
+
+    if (!passive)
+        curl_easy_setopt(m_session, CURLOPT_FTPPORT, "-");
+    curl_easy_setopt(m_session, CURLOPT_NOPROGRESS, 0);
+    curl_easy_setopt(m_session, CURLOPT_FAILONERROR, 1);
+    curl_easy_setopt(m_session, CURLOPT_PROGRESSDATA, statusReporter);
+
+    static auto const my_httpfprogress =
+            [](void * clientp,
+               double dltotal,
+               double dlnow,
+               double ultotal,
+               double ulnow) -> int
+    {
+        (void) ultotal;
+        (void) ulnow;
         if (clientp) {
-            if (dltotal < 0) dltotal = 0;
-            if (dlnow < 0) dlnow = 0;
-            if (dlnow > dltotal) dlnow = dltotal;
-            ((StatusReporter *)clientp)->update(dltotal, dlnow);
+            if (dltotal < 0)
+                dltotal = 0;
+            if (dlnow < 0)
+                dlnow = 0;
+            if (dlnow > dltotal)
+                dlnow = dltotal;
+            static_cast<StatusReporter *>(clientp)->update(dltotal, dlnow);
         }
         return 0;
-    }
+    };
+    curl_easy_setopt(m_session, CURLOPT_PROGRESSFUNCTION, &my_httpfprogress);
+    /* Set a pointer to our struct to pass to the callback */
+    curl_easy_setopt(m_session, CURLOPT_FILE, &ftpfile);
 
-}
+    /* Switch on full protocol/debug output */
+    curl_easy_setopt(m_session, CURLOPT_VERBOSE, true);
+    curl_easy_setopt(m_session, CURLOPT_CONNECTTIMEOUT, 45);
 
+    /* Disable checking host certificate */
+    curl_easy_setopt(m_session, CURLOPT_SSL_VERIFYPEER, false); /// \bug NO TLS!
 
-CURLHTTPTransport::CURLHTTPTransport(const char *host, StatusReporter *sr) : RemoteTransport(host, sr) {
-    session = (CURL *)curl_easy_init();
-}
+    /* FTP connection settings */
 
-
-CURLHTTPTransport::~CURLHTTPTransport() {
-    curl_easy_cleanup(session);
-}
-
-
-char CURLHTTPTransport::getURL(const char *destPath, const char *sourceURL, std::string *destBuf) {
-    signed char retVal = 0;
-    struct FtpFile ftpfile = {destPath, 0, destBuf};
-
-    CURLcode res;
-
-    if (session) {
-        curl_easy_setopt(session, CURLOPT_URL, sourceURL);
-
-        std::string credentials = u + ":" + p;
-        curl_easy_setopt(session, CURLOPT_USERPWD, credentials.c_str());
-        curl_easy_setopt(session, CURLOPT_WRITEFUNCTION, my_httpfwrite);
-        if (!passive)
-            curl_easy_setopt(session, CURLOPT_FTPPORT, "-");
-        curl_easy_setopt(session, CURLOPT_NOPROGRESS, 0);
-        curl_easy_setopt(session, CURLOPT_FAILONERROR, 1);
-        curl_easy_setopt(session, CURLOPT_PROGRESSDATA, statusReporter);
-        curl_easy_setopt(session, CURLOPT_PROGRESSFUNCTION, my_httpfprogress);
-        /* Set a pointer to our struct to pass to the callback */
-        curl_easy_setopt(session, CURLOPT_FILE, &ftpfile);
-
-        /* Switch on full protocol/debug output */
-        curl_easy_setopt(session, CURLOPT_VERBOSE, true);
-        curl_easy_setopt(session, CURLOPT_CONNECTTIMEOUT, 45);
-
-        /* Disable checking host certificate */
-        curl_easy_setopt(session, CURLOPT_SSL_VERIFYPEER, false);
-
-        /* FTP connection settings */
-
-#if (LIBCURL_VERSION_MAJOR > 7) || \
-   ((LIBCURL_VERSION_MAJOR == 7) && (LIBCURL_VERSION_MINOR > 10)) || \
-   ((LIBCURL_VERSION_MAJOR == 7) && (LIBCURL_VERSION_MINOR == 10) && (LIBCURL_VERSION_PATCH >= 5))
-#      define EPRT_AVAILABLE 1
+#if (LIBCURL_VERSION_MAJOR > 7) \
+    || ((LIBCURL_VERSION_MAJOR == 7) && (LIBCURL_VERSION_MINOR > 10)) \
+    || ((LIBCURL_VERSION_MAJOR == 7) && (LIBCURL_VERSION_MINOR == 10) \
+        && (LIBCURL_VERSION_PATCH >= 5))
+    curl_easy_setopt(m_session, CURLOPT_FTP_USE_EPRT, 0);
+    SWLog::getSystemLog()->logDebug("***** using CURLOPT_FTP_USE_EPRT\n");
 #endif
 
-#ifdef EPRT_AVAILABLE
-        curl_easy_setopt(session, CURLOPT_FTP_USE_EPRT, 0);
-        SWLog::getSystemLog()->logDebug("***** using CURLOPT_FTP_USE_EPRT\n");
-#endif
+    SWLog::getSystemLog()->logDebug(
+                "***** About to perform curl easy action. \n");
+    SWLog::getSystemLog()->logDebug("***** destPath: %s \n", destPath);
+    SWLog::getSystemLog()->logDebug("***** sourceURL: %s \n", sourceURL);
+    CURLcode const res = curl_easy_perform(m_session);
+    SWLog::getSystemLog()->logDebug(
+                "***** Finished performing curl easy action. \n");
 
-
-        SWLog::getSystemLog()->logDebug("***** About to perform curl easy action. \n");
-        SWLog::getSystemLog()->logDebug("***** destPath: %s \n", destPath);
-        SWLog::getSystemLog()->logDebug("***** sourceURL: %s \n", sourceURL);
-        res = curl_easy_perform(session);
-        SWLog::getSystemLog()->logDebug("***** Finished performing curl easy action. \n");
-
-        if(CURLE_OK != res) {
-            retVal = -1;
-        }
-    }
-
-    if (ftpfile.stream)
-        fclose(ftpfile.stream); /* close the local file */
-
-    return retVal;
+    return (res == CURLE_OK) ? 0 : -1;
 }
 
 
-// we need to find the 2nd "<td" & then find the ">" after that.  The size starts with the next non-space char
-const char *findSizeStart(const char *buffer) {
-    const char *listing = buffer;
-    const char *pEnd;
+vector<DirEntry> CURLHTTPTransport::getDirList(const char *dirURL) {
+    /* We need to find the 2nd "<td" & then find the ">" after that. The size
+       starts with the next non-space char */
+    static auto const findSizeStart =
+            [](const char * buffer) -> const char * {
+                const char *listing = buffer;
+                const char *pEnd;
 
-    pEnd = strstr(listing, "<td");
-    if(pEnd == NULL) {
-        return NULL;
-    }
-    listing = pEnd+2;
-    pEnd = strstr(listing, "<td");
-    if(pEnd == NULL)
-        return NULL;
-    listing = pEnd+2;
-    pEnd = strchr(listing, '>');
-    if(pEnd == NULL)
-        return NULL;
+                pEnd = strstr(listing, "<td");
+                if(pEnd == NULL) {
+                    return NULL;
+                }
+                listing = pEnd+2;
+                pEnd = strstr(listing, "<td");
+                if(pEnd == NULL)
+                    return NULL;
+                listing = pEnd+2;
+                pEnd = strchr(listing, '>');
+                if(pEnd == NULL)
+                    return NULL;
 
-    return pEnd+1;
-}
-
-
-vector<struct DirEntry> CURLHTTPTransport::getDirList(const char *dirURL) {
-
-    vector<struct DirEntry> dirList;
+                return pEnd+1;
+            };
+    vector<DirEntry> dirList;
 
     std::string dirBuf;
     const char *pBuf;
@@ -180,16 +185,20 @@ vector<struct DirEntry> CURLHTTPTransport::getDirList(const char *dirURL) {
     int possibleNameLength = 0;
 
     if (!getURL("", dirURL, &dirBuf)) {
-        pBuf = std::strstr(dirBuf.c_str(), "<a href=\"");//Find the next link to a possible file name.
+        // Find the next link to a possible file name;
+        pBuf = std::strstr(dirBuf.c_str(), "<a href=\"");
         while (pBuf != NULL) {
             pBuf += 9;//move to the start of the actual name.
-            pBufRes = (char *)strchr(pBuf, '\"');//Find the end of the possible file name
+            // Find the end of the possible file name:
+            pBufRes = (char *)strchr(pBuf, '\"');
             if (!pBufRes)
                 break;
             possibleNameLength = pBufRes - pBuf;
             possibleName = formatted("%.*s", possibleNameLength, pBuf);
             if (isalnum(possibleName[0])) {
-                SWLog::getSystemLog()->logDebug("getDirListHTTP: Found a file: %s", possibleName.c_str());
+                SWLog::getSystemLog()->logDebug(
+                            "getDirListHTTP: Found a file: %s",
+                            possibleName.c_str());
                 pBuf = pBufRes;
                 pBufRes = (char *)findSizeStart(pBuf);
                 fSize = 0;
@@ -202,21 +211,23 @@ vector<struct DirEntry> CURLHTTPTransport::getDirList(const char *dirURL) {
                         fSize *= 1048576;
                     pBuf = pBufRes;
                 }
-                struct DirEntry i;
+                DirEntry i;
                 i.name = possibleName;
                 i.size = (long unsigned int)fSize;
-                i.isDirectory = (!possibleName.empty() && *possibleName.rbegin() == '/');
+                i.isDirectory = (!possibleName.empty()
+                                 && *possibleName.rbegin() == '/');
                 dirList.push_back(i);
             } else {
                 pBuf += possibleNameLength;
             }
             pBuf++;
-            pBuf = strstr(pBuf, "<a href=\"");//Find the next link to a possible file name.
+            // Find the next link to a possible file name:
+            pBuf = strstr(pBuf, "<a href=\"");
         }
-    }
-    else
-    {
-        SWLog::getSystemLog()->logWarning("FTPURLGetDir: failed to get dir %s\n", dirURL);
+    } else {
+        SWLog::getSystemLog()->logWarning(
+                    "FTPURLGetDir: failed to get dir %s\n",
+                    dirURL);
     }
     return dirList;
 }
