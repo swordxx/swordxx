@@ -33,8 +33,6 @@
 #include "utilstr.h"
 
 
-using std::vector;
-
 namespace swordxx {
 
 CURLHTTPTransport::CURLHTTPTransport(const char * const host,
@@ -153,7 +151,7 @@ char CURLHTTPTransport::getURL(const char * destPath,
 }
 
 
-vector<DirEntry> CURLHTTPTransport::getDirList(const char *dirURL) {
+std::vector<DirEntry> CURLHTTPTransport::getDirList(const char *dirURL) {
     /* We need to find the 2nd "<td" & then find the ">" after that. The size
        starts with the next non-space char */
     static auto const findSizeStart =
@@ -176,7 +174,7 @@ vector<DirEntry> CURLHTTPTransport::getDirList(const char *dirURL) {
 
                 return pEnd+1;
             };
-    vector<DirEntry> dirList;
+    std::vector<DirEntry> dirList;
 
     std::string dirBuf;
     const char *pBuf;
