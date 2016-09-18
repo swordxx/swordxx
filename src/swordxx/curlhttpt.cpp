@@ -161,17 +161,16 @@ std::vector<DirEntry> CURLHTTPTransport::getDirList(const char *dirURL) {
                 const char *pEnd;
 
                 pEnd = std::strstr(listing, "<td");
-                if(pEnd == NULL) {
-                    return NULL;
-                }
+                if (!pEnd)
+                    return nullptr;
                 listing = pEnd+2;
                 pEnd = std::strstr(listing, "<td");
-                if(pEnd == NULL)
-                    return NULL;
+                if (!pEnd)
+                    return nullptr;
                 listing = pEnd+2;
                 pEnd = std::strchr(listing, '>');
-                if(pEnd == NULL)
-                    return NULL;
+                if(!pEnd)
+                    return nullptr;
 
                 return pEnd+1;
             };
@@ -187,7 +186,7 @@ std::vector<DirEntry> CURLHTTPTransport::getDirList(const char *dirURL) {
     if (!getURL("", dirURL, &dirBuf)) {
         // Find the next link to a possible file name;
         pBuf = std::strstr(dirBuf.c_str(), "<a href=\"");
-        while (pBuf != NULL) {
+        while (pBuf) {
             pBuf += 9;//move to the start of the actual name.
             // Find the end of the possible file name:
             pBufRes = (char *)std::strchr(pBuf, '\"');
@@ -204,7 +203,7 @@ std::vector<DirEntry> CURLHTTPTransport::getDirList(const char *dirURL) {
                 pBuf = pBufRes;
                 pBufRes = (char *)findSizeStart(pBuf);
                 fSize = 0;
-                if(pBufRes != NULL) {
+                if (pBufRes) {
                     pBuf = pBufRes;
                     fSize = std::strtod(pBuf, &pBufRes);
                     if (pBufRes[0] == 'K')
