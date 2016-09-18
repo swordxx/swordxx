@@ -32,6 +32,7 @@
 #include <curl/easy.h>
 #include <fcntl.h>
 #include <limits>
+#include <type_traits>
 #include <vector>
 #include "filemgr.h"
 #include "utilstr.h"
@@ -73,25 +74,32 @@ char CURLHTTPTransport::getURL(const char * destPath,
 
     static auto const my_httpfprogress =
             [](void * clientp,
-               double dltotal,
-               double dlnow,
-               double ultotal,
-               double ulnow) -> int
+               ::curl_off_t dltotal,
+               ::curl_off_t dlnow,
+               ::curl_off_t ultotal,
+               ::curl_off_t ulnow) -> int
     {
         (void) ultotal;
         (void) ulnow;
         if (clientp) {
+            static_assert(std::is_signed<::curl_off_t>::value,
+                          "cURL has unexpectedly fixed their interfaces!");
             if (dltotal < 0)
                 dltotal = 0;
             if (dlnow < 0)
                 dlnow = 0;
             if (dlnow > dltotal)
                 dlnow = dltotal;
-            static_cast<StatusReporter *>(clientp)->update(dltotal, dlnow);
+
+            static_assert(std::numeric_limits<::curl_off_t>::max()
+                          <= std::numeric_limits<std::size_t>::max(), "");
+            static_cast<StatusReporter *>(clientp)->update(
+                        static_cast<std::size_t>(dltotal),
+                        static_cast<std::size_t>(dlnow));
         }
         return 0;
     };
-    SETOPTION(CURLOPT_PROGRESSFUNCTION, &my_httpfprogress);
+    SETOPTION(CURLOPT_XFERINFOFUNCTION, &my_httpfprogress);
 
     struct HttpFile {
         inline ~HttpFile() noexcept {
