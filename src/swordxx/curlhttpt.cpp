@@ -67,9 +67,8 @@ char CURLHTTPTransport::getURL(const char * destPath,
     } httpFile{destPath, destBuf, nullptr};
 
     curl_easy_setopt(m_session, CURLOPT_URL, sourceURL);
-
-    std::string credentials = u + ":" + p;
-    curl_easy_setopt(m_session, CURLOPT_USERPWD, credentials.c_str());
+    curl_easy_setopt(m_session, CURLOPT_USERNAME, u.c_str());
+    curl_easy_setopt(m_session, CURLOPT_PASSWORD, p.c_str());
     static auto const my_httpfwrite =
             [](void * const buffer,
                std::size_t const size,
