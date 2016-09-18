@@ -29,7 +29,6 @@
 #include <fcntl.h>
 #include <vector>
 #include "filemgr.h"
-#include "swlog.h"
 #include "utilstr.h"
 
 
@@ -123,15 +122,7 @@ char CURLHTTPTransport::getURL(const char * destPath,
     curl_easy_setopt(m_session, CURLOPT_VERBOSE, true);
     curl_easy_setopt(m_session, CURLOPT_CONNECTTIMEOUT, 45);
 
-    SWLog::getSystemLog()->logDebug(
-                "***** About to perform curl easy action. \n");
-    SWLog::getSystemLog()->logDebug("***** destPath: %s \n", destPath);
-    SWLog::getSystemLog()->logDebug("***** sourceURL: %s \n", sourceURL);
-    CURLcode const res = curl_easy_perform(m_session);
-    SWLog::getSystemLog()->logDebug(
-                "***** Finished performing curl easy action. \n");
-
-    return (res == CURLE_OK) ? 0 : -1;
+    return (curl_easy_perform(session.m_session) == CURLE_OK) ? 0 : -1;
 }
 
 
@@ -179,9 +170,11 @@ vector<DirEntry> CURLHTTPTransport::getDirList(const char *dirURL) {
             possibleNameLength = pBufRes - pBuf;
             possibleName = formatted("%.*s", possibleNameLength, pBuf);
             if (isalnum(possibleName[0])) {
+                #if 0
                 SWLog::getSystemLog()->logDebug(
                             "getDirListHTTP: Found a file: %s",
                             possibleName.c_str());
+                #endif
                 pBuf = pBufRes;
                 pBufRes = (char *)findSizeStart(pBuf);
                 fSize = 0;
@@ -207,11 +200,14 @@ vector<DirEntry> CURLHTTPTransport::getDirList(const char *dirURL) {
             // Find the next link to a possible file name:
             pBuf = strstr(pBuf, "<a href=\"");
         }
-    } else {
+    }
+    #if 0
+    else {
         SWLog::getSystemLog()->logWarning(
                     "CURLHTTPTransport: getDirList: failed to get dir %s\n",
                     dirURL);
     }
+    #endif
     return dirList;
 }
 
