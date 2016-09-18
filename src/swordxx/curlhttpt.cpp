@@ -133,7 +133,7 @@ char CURLHTTPTransport::getURL(const char * destPath,
                     return nmemb;
                 }
                 if (!out->stream) {
-                    /* We attempt to create the file even if totalSize == 0 in
+                    /* We attempt to create the file even if totalSize == 0u in
                        case the received file is empty. */
                     out->stream = std::fopen(out->filename, "wb");
                     if (!out->stream) { // Failure, can't open file to write
