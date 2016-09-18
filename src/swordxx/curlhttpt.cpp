@@ -127,7 +127,7 @@ char CURLHTTPTransport::getURL(const char * destPath,
     SETOPTION(CURLOPT_WRITEFUNCTION, &my_httpfwrite);
     /* Set a pointer to our struct to pass to the callback */
     HttpFile httpFile{destPath, destBuf, nullptr};
-    SETOPTION(CURLOPT_FILE, &httpFile);
+    SETOPTION(CURLOPT_WRITEDATA, &httpFile);
 
     return (curl_easy_perform(session.m_session) == CURLE_OK) ? 0 : -1;
 }
