@@ -157,28 +157,28 @@ std::vector<DirEntry> CURLHTTPTransport::getDirList(const char *dirURL) {
        starts with the next non-space char */
     static auto const findSizeStart =
             [](const char * buffer) -> const char * {
-                const char *listing = buffer;
-                const char *pEnd;
+                const char * listing = buffer;
+                const char * pEnd;
 
                 pEnd = std::strstr(listing, "<td");
                 if (!pEnd)
                     return nullptr;
-                listing = pEnd+2;
+                listing = pEnd + 2;
                 pEnd = std::strstr(listing, "<td");
                 if (!pEnd)
                     return nullptr;
-                listing = pEnd+2;
+                listing = pEnd + 2;
                 pEnd = std::strchr(listing, '>');
                 if(!pEnd)
                     return nullptr;
 
-                return pEnd+1;
+                return pEnd + 1;
             };
     std::vector<DirEntry> dirList;
 
     std::string dirBuf;
-    const char *pBuf;
-    char *pBufRes;
+    const char * pBuf;
+    char * pBufRes;
     std::string possibleName;
     double fSize;
     int possibleNameLength = 0;
@@ -187,9 +187,9 @@ std::vector<DirEntry> CURLHTTPTransport::getDirList(const char *dirURL) {
         // Find the next link to a possible file name;
         pBuf = std::strstr(dirBuf.c_str(), "<a href=\"");
         while (pBuf) {
-            pBuf += 9;//move to the start of the actual name.
+            pBuf += 9; // Move to the start of the actual name.
             // Find the end of the possible file name:
-            pBufRes = (char *)std::strchr(pBuf, '\"');
+            pBufRes = (char *) std::strchr(pBuf, '\"');
             if (!pBufRes)
                 break;
             possibleNameLength = pBufRes - pBuf;
@@ -201,7 +201,7 @@ std::vector<DirEntry> CURLHTTPTransport::getDirList(const char *dirURL) {
                             possibleName.c_str());
                 #endif
                 pBuf = pBufRes;
-                pBufRes = (char *)findSizeStart(pBuf);
+                pBufRes = (char *) findSizeStart(pBuf);
                 fSize = 0;
                 if (pBufRes) {
                     pBuf = pBufRes;
@@ -214,7 +214,7 @@ std::vector<DirEntry> CURLHTTPTransport::getDirList(const char *dirURL) {
                 }
                 DirEntry i;
                 i.name = possibleName;
-                i.size = (long unsigned int)fSize;
+                i.size = (long unsigned int) fSize;
                 i.isDirectory = (!possibleName.empty()
                                  && *possibleName.rbegin() == '/');
                 dirList.push_back(i);
