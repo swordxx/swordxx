@@ -148,7 +148,6 @@ char CURLHTTPTransport::getURL(const char * destPath,
     return (curl_easy_perform(session.m_session) == CURLE_OK) ? 0 : -1;
 }
 
-
 std::vector<DirEntry> CURLHTTPTransport::getDirList(const char *dirURL) {
     /* We need to find the 2nd "<td" & then find the ">" after that. The size
        starts with the next non-space char */
@@ -235,4 +234,3 @@ std::vector<DirEntry> CURLHTTPTransport::getDirList(const char *dirURL) {
 }
 
 } /* namespace swordxx */
-

@@ -45,7 +45,6 @@ public: /* Methods: */
 
 };
 
-
 } /* namespace swordxx */
 
 #endif
