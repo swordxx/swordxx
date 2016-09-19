@@ -28,16 +28,16 @@
 
 namespace swordxx {
 
-char CURLFTPTransport::getURL(const char * destPath,
+bool CURLFTPTransport::getUrl(const char * destPath,
                               const char * sourceURL,
                               std::string * destBuf)
 {
     Download download(destPath, sourceURL, destBuf, *this);
     if (!download.valid())
-        return -1;
+        return false;
     #define SETOPTION(a,...) \
         if (curl_easy_setopt(download.m_session, a, __VA_ARGS__) != CURLE_OK) \
-            return -1
+            return false
 
     /* FTP connection settings: */
     if (!passive)
@@ -50,7 +50,7 @@ char CURLFTPTransport::getURL(const char * destPath,
     SETOPTION(CURLOPT_FTP_USE_EPRT, 0);
     #endif
 
-    return download.perform() ? 0 : -1;
+    return download.perform();
 }
 
 } /* namespace swordxx */

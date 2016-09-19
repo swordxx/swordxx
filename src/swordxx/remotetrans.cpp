@@ -54,26 +54,13 @@ RemoteTransport::RemoteTransport(const char *host, StatusReporter *statusReporte
 RemoteTransport::~RemoteTransport() {
 }
 
-
-// override this method in your real transport class
-char RemoteTransport::getURL(char const * destPath,
-                             char const * sourceURL,
-                             std::string * destBuf)
-{
-    (void) destPath;
-    (void) sourceURL;
-    (void) destBuf;
-    return 0;
-}
-
-
 vector<struct DirEntry> RemoteTransport::getDirList(const char *dirURL) {
 
 SWLog::getSystemLog()->logDebug("RemoteTransport::getDirList(%s)", dirURL);
     vector<struct DirEntry> dirList;
 
     std::string dirBuf;
-    if (!getURL("", dirURL, &dirBuf)) {
+    if (getUrl("", dirURL, &dirBuf)) {
         char *start = &dirBuf[0u];
         char *end = start;
         while (start < ((&dirBuf[0u]) + dirBuf.size())) {
@@ -174,7 +161,7 @@ int RemoteTransport::copyDirectory(const char *urlPrefix, const char *dir, const
                 removeTrailingDirectorySlashes(url);
                 url += "/";
                 url += dirEntry.name;
-                if (getURL(buffer.c_str(), url.c_str())) {
+                if (!getUrl(buffer.c_str(), url.c_str())) {
                     SWLog::getSystemLog()->logWarning("copyDirectory: failed to get file %s\n", url.c_str());
                     return -2;
                 }

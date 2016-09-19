@@ -37,7 +37,7 @@ public: /* Methods: */
     using CurlTransport::CurlTransport;
 
     std::vector<DirEntry> getDirList(const char * dirURL) override;
-    char getURL(const char * destPath,
+    bool getUrl(const char * destPath,
                 const char * sourceURL,
                 std::string * destBuf = 0) override;
 

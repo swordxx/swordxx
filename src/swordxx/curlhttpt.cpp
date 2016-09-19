@@ -34,12 +34,12 @@
 
 namespace swordxx {
 
-char CURLHTTPTransport::getURL(const char * destPath,
+bool CURLHTTPTransport::getUrl(const char * destPath,
                                const char * sourceURL,
                                std::string * destBuf)
 {
     Download download(destPath, sourceURL, destBuf, *this);
-    return download.valid() ? (download.perform() ? 0 : -1) : -1;
+    return download.valid() && download.perform();
 }
 
 std::vector<DirEntry> CURLHTTPTransport::getDirList(const char *dirURL) {
@@ -62,7 +62,7 @@ std::vector<DirEntry> CURLHTTPTransport::getDirList(const char *dirURL) {
 
     std::string dirBuf;
 
-    if (!getURL("", dirURL, &dirBuf)) {
+    if (getUrl("", dirURL, &dirBuf)) {
         std::string possibleName;
 
         // Find the next link to a possible file name;

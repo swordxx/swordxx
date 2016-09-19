@@ -83,7 +83,9 @@ public:
      *
      * if destBuf then write to buffer instead of file
      */
-    virtual char getURL(const char *destPath, const char *sourceURL, std::string *destBuf = 0);
+    virtual bool getUrl(const char * destPath,
+                        const char * sourceURL,
+                        std::string * destBuf = nullptr) = 0;
 
 
     int copyDirectory(const char *urlPrefix, const char *dir, const char *dest, const char *suffix);
