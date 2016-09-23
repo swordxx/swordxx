@@ -68,7 +68,7 @@ class SWDLLEXPORT RemoteTransport {
 
 protected:
     StatusReporter *statusReporter;
-    bool passive;
+    bool passive = false;
     std::atomic<bool> term;
     std::string host;
     std::string u;
