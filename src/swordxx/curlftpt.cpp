@@ -24,6 +24,11 @@
 
 #include <curl/curl.h>
 #include <curl/easy.h>
+#include "filemgr.h"
+extern "C" {
+#include "ftpparse.h"
+}
+#include "swlog.h"
 
 
 namespace swordxx {
@@ -51,6 +56,50 @@ bool CURLFTPTransport::getUrl(const char * destPath,
     #endif
 
     return download.perform();
+}
+
+std::vector<struct DirEntry> CURLFTPTransport::getDirList(const char * dirURL) {
+
+SWLog::getSystemLog()->logDebug("RemoteTransport::getDirList(%s)", dirURL);
+    std::vector<struct DirEntry> dirList;
+
+    std::string dirBuf;
+    if (getUrl("", dirURL, &dirBuf)) {
+        char *start = &dirBuf[0u];
+        char *end = start;
+        while (start < ((&dirBuf[0u]) + dirBuf.size())) {
+            struct ftpparse item;
+            bool looking = true;
+            for (end = start; *end; end++) {
+                if (looking) {
+                    if ((*end == 10) || (*end == 13)) {
+                        *end = 0;
+                        looking = false;
+                    }
+                }
+                else if ((*end != 10) && (*end != 13))
+                    break;
+            }
+            SWLog::getSystemLog()->logDebug("getDirList: parsing item %s(%d)\n", start, end-start);
+            int status = ftpparse(&item, start, end - start);
+            // in ftpparse.h, there is a warning that name is not necessarily null terminated
+            std::string name;
+            name.append(item.name, item.namelen);
+            SWLog::getSystemLog()->logDebug("getDirList: got item %s\n", name.c_str());
+            if (status && name != "." && name != "..") {
+                struct DirEntry i;
+                i.name = name;
+                i.size = item.size;
+                i.isDirectory = (item.flagtrycwd == 1);
+                dirList.push_back(i);
+            }
+            start = end;
+        }
+    }
+    else {
+        SWLog::getSystemLog()->logWarning("getDirList: failed to get dir %s\n", dirURL);
+    }
+    return dirList;
 }
 
 } /* namespace swordxx */

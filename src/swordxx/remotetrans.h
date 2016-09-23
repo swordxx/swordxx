@@ -87,10 +87,10 @@ public:
                         const char * sourceURL,
                         std::string * destBuf = nullptr) = 0;
 
+    virtual std::vector<struct DirEntry> getDirList(const char * dirURL) = 0;
 
     int copyDirectory(const char *urlPrefix, const char *dir, const char *dest, const char *suffix);
 
-    virtual std::vector<struct DirEntry> getDirList(const char *dirURL);
     void setPassive(bool passive) { this->passive = passive; }
     void setUser(const char *user) { u = user; }
     void setPasswd(const char *passwd) { p = passwd; }

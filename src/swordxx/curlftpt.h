@@ -43,6 +43,8 @@ public: /* Methods: */
                 const char * sourceURL,
                 std::string * destBuf = 0) override;
 
+    std::vector<struct DirEntry> getDirList(const char * dirURL) override;
+
 };
 
 } /* namespace swordxx */
