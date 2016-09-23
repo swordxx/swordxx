@@ -68,7 +68,6 @@ class SWDLLEXPORT RemoteTransport {
 
 protected:
     StatusReporter *statusReporter;
-    bool passive = false;
     std::atomic<bool> term;
     std::string host;
     std::string u;
@@ -91,7 +90,6 @@ public:
 
     int copyDirectory(const char *urlPrefix, const char *dir, const char *dest, const char *suffix);
 
-    void setPassive(bool passive) { this->passive = passive; }
     void setUser(const char *user) { u = user; }
     void setPasswd(const char *passwd) { p = passwd; }
     void terminate() { term.store(true, std::memory_order_release); }

@@ -45,6 +45,12 @@ public: /* Methods: */
 
     std::vector<struct DirEntry> getDirList(const char * dirURL) override;
 
+    void setPassive(bool const passive = true) noexcept { m_passive = passive; }
+
+private: /* Fields: */
+
+    bool m_passive = false;
+
 };
 
 } /* namespace swordxx */

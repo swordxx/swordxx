@@ -45,7 +45,7 @@ bool CURLFTPTransport::getUrl(const char * destPath,
             return false
 
     /* FTP connection settings: */
-    if (!passive)
+    if (!m_passive)
         SETOPTION(CURLOPT_FTPPORT, "-");
 
     #if (LIBCURL_VERSION_MAJOR > 7) || \

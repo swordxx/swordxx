@@ -281,8 +281,10 @@ SWLog::getSystemLog()->logDebug("remoteCopy: %s, %s, %s, %c, %s", (is?is->source
 #endif
         ) {
 
-        trans = new CURLFTPTransport(is->source.c_str(), statusReporter);
-        trans->setPassive(passive);
+        auto * const t =
+                new CURLFTPTransport(is->source.c_str(), statusReporter);
+        t->setPassive(passive);
+        trans = t;
     }
     else if (is->type == "HTTP" || is->type == "HTTPS") {
         trans = new CURLHTTPTransport(is->source.c_str(), statusReporter);
