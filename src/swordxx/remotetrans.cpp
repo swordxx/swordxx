@@ -49,9 +49,10 @@ RemoteTransport::~RemoteTransport() {
 int RemoteTransport::copyDirectory(const char * urlPrefix_,
                                    const char * dir_,
                                    const char * dest_,
-                                   const char * suffix)
+                                   const char * suffix_)
 {
     SWLog::getSystemLog()->logDebug("RemoteTransport::copyDirectory");
+    std::string const suffix(suffix_ ? suffix_ : "");
     std::string const url(
                 [&urlPrefix_, &dir_]() {
                     std::string url(std::string(urlPrefix_ ? urlPrefix_ : "")
@@ -85,7 +86,8 @@ int RemoteTransport::copyDirectory(const char * urlPrefix_,
         DirEntry const & e = dirList[i];
         if (e.isDirectory) {
             std::string const name(e.name + '/');
-            dirList.erase(dirList.begin() + i);
+            dirList.erase(dirList.begin() +
+                          static_cast<decltype(dirList)::difference_type>(i));
             for (auto & dirEntry : getDirList((url + name).c_str())) {
                 dirEntry.name = name + dirEntry.name;
                 dirList.push_back(dirEntry);
@@ -97,37 +99,40 @@ int RemoteTransport::copyDirectory(const char * urlPrefix_,
     }
 
     std::size_t completedBytes = 0u;
-    auto const suffixLength(std::strlen(suffix));
     for (std::size_t i = 0u; i < dirList.size(); ++i) {
         DirEntry const & dirEntry = dirList[i];
         std::string const buffer(dest + dirEntry.name);
-        if (!std::strcmp(&buffer.c_str()[buffer.length() - suffixLength], suffix)) {
-            if (statusReporter) {
-                std::string buffer2 = "Downloading (";
-                buffer2 += formatted("%d", i+1);
-                buffer2 += " of ";
-                buffer2 += formatted("%d", dirList.size());
-                buffer2 += "): ";
-                buffer2 += dirEntry.name;
-                statusReporter->preStatus(totalBytes,
-                                          completedBytes,
-                                          buffer2.c_str());
-            }
-            // make sure parent directory exists:
-            FileMgr::createParent(buffer.c_str());
-            try {
-                std::string const url2(url + dirEntry.name);
-                if (!getUrl(buffer.c_str(), url2.c_str())) {
-                    SWLog::getSystemLog()->logWarning(
-                                "copyDirectory: failed to get file %s\n",
-                                url2.c_str());
-                    return -2;
-                }
-                completedBytes += dirEntry.size;
-            } catch (...) {}
-            if (term.load(std::memory_order_acquire))
-                return -3;
+        if (buffer.size() < suffix.size())
+            continue;
+        if (!std::equal(buffer.begin()
+                        - static_cast<std::string::difference_type>(
+                            suffix.size()),
+                        suffix.begin(),
+                        suffix.end()))
+            continue;
+        if (statusReporter) {
+            std::string buffer2 = "Downloading (";
+            buffer2 += formatted("%d", i+1);
+            buffer2 += " of ";
+            buffer2 += formatted("%d", dirList.size());
+            buffer2 += "): ";
+            buffer2 += dirEntry.name;
+            statusReporter->preStatus(totalBytes,
+                                      completedBytes,
+                                      buffer2.c_str());
         }
+        // make sure parent directory exists:
+        FileMgr::createParent(buffer.c_str());
+        std::string const url2(url + dirEntry.name);
+        if (!getUrl(buffer.c_str(), url2.c_str())) {
+            SWLog::getSystemLog()->logWarning(
+                        "copyDirectory: failed to get file %s\n",
+                        url2.c_str());
+            return -2;
+        }
+        completedBytes += dirEntry.size;
+        if (term.load(std::memory_order_acquire))
+            return -3;
     }
     return 0;
 }
