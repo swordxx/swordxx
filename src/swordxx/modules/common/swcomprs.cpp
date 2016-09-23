@@ -24,6 +24,7 @@
 
 #include <cstdlib>
 #include <cstring>
+#include <new>
 
 
 namespace swordxx {
@@ -139,11 +140,20 @@ unsigned long SWCompress::GetChars(char *ibuf, unsigned long len)
 
 unsigned long SWCompress::SendChars(char *ibuf, unsigned long len)
 {
+    /** \bug Just avoids a null dereference by throwing std::bad_alloc, which is
+             not properly handled. */
+    static auto const saferRealloc =
+            [](void * const ptr, std::size_t const size) {
+                if (auto * const r = realloc(ptr, size))
+                    return r;
+                throw std::bad_alloc();
+            };
+
     if (direct) {
         if (buf) {
 //            slen = strlen(buf);
             if ((pos + len) > (unsigned)slen) {
-                buf = (char *) realloc(buf, pos + len + 1024);
+                buf = (char *) saferRealloc(buf, pos + len + 1024);
                 memset(&buf[pos], 0, len + 1024);
             }
         }
@@ -154,7 +164,7 @@ unsigned long SWCompress::SendChars(char *ibuf, unsigned long len)
     else {
         if (zbuf) {
             if ((zpos + len) > zlen) {
-                zbuf = (char *) realloc(zbuf, zpos + len + 1024);
+                zbuf = (char *) saferRealloc(zbuf, zpos + len + 1024);
                 zlen = zpos + len + 1024;
             }
         }
