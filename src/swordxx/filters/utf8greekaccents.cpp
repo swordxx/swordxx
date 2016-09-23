@@ -265,7 +265,7 @@ char UTF8GreekAccents::processText(std::string &text, const SWKey *key, const SW
                 from+=2;
             }
             //rho
-            else if (*from == 0xE1 && *(from + 1) == 0xBF && (*(from + 2) == 0xA4 && *(from + 2) == 0xA5)) {
+            else if (*from == 0xE1 && *(from + 1) == 0xBF && (*(from + 2) == 0xA4 || *(from + 2) == 0xA5)) {
                 text += 0xCF;
                 text += 0x81;
                 from+=2;
