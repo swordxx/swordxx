@@ -59,19 +59,6 @@ const int InstallMgr::MODSTAT_CIPHERED         = 0x010;
 const int InstallMgr::MODSTAT_CIPHERKEYPRESENT = 0x020;
 
 
-// override this method and provide your own custom RemoteTransport subclass
-// here we try a couple defaults if Sword++ was compiled with support for them.
-// see these classes for examples of how to make your own
-RemoteTransport *InstallMgr::createFTPTransport(const char *host, StatusReporter *statusReporter) {
-    return new CURLFTPTransport(host, statusReporter);
-}
-
-
-RemoteTransport *InstallMgr::createHTTPTransport(const char *host, StatusReporter *statusReporter) {
-    return new CURLHTTPTransport(host, statusReporter);
-}
-
-
 InstallMgr::InstallMgr(const char *privatePath, StatusReporter *sr, std::string u, std::string p) {
     userDisclaimerConfirmed = false;
     statusReporter = sr;
@@ -294,11 +281,11 @@ SWLog::getSystemLog()->logDebug("remoteCopy: %s, %s, %s, %c, %s", (is?is->source
 #endif
         ) {
 
-        trans = createFTPTransport(is->source.c_str(), statusReporter);
+        trans = new CURLFTPTransport(is->source.c_str(), statusReporter);
         trans->setPassive(passive);
     }
     else if (is->type == "HTTP" || is->type == "HTTPS") {
-        trans = createHTTPTransport(is->source.c_str(), statusReporter);
+        trans = new CURLHTTPTransport(is->source.c_str(), statusReporter);
     }
     transport.reset(trans); // set classwide current transport for other thread terminate() call
     if (is->u.length()) {

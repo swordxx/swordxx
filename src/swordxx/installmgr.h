@@ -79,15 +79,6 @@ protected:
     bool passive;
     std::string u, p;
 
-    /** override this method and provide your own custom RemoteTransport subclass
-         */
-    virtual RemoteTransport *createFTPTransport(const char *host, StatusReporter *statusReporter);
-
-    /** override this method and provide your own custom HTTP RemoteTransport
-         */
-    virtual RemoteTransport *createHTTPTransport(const char *host, StatusReporter *statusReporter);
-
-
     /** we have a transport member to set as current running transport so we
      *  can ask it to terminate below, if user requests
          */
