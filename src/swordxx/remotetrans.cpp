@@ -34,10 +34,7 @@ extern "C" {
 #include "utilstr.h"
 
 
-
-
 using std::vector;
-
 
 namespace swordxx {
 
