@@ -81,6 +81,7 @@ private:
     bool mgrModeMultiMod;
     bool augmentHome;
     void commonInit(SWConfig *iconfig, SWConfig *isysconfig, bool autoload, SWFilterMgr *filterMgr, bool multiMod = false);
+    void init(); // use to initialize before loading modules
 
 protected:
     SWFilterMgr *filterMgr;        //made protected because because BibleTime needs it
@@ -101,7 +102,6 @@ protected:
     FilterList cleanupFilters;
     FilterMap extraFilters;
     StringList options;
-    virtual void init(); // use to initialize before loading modules
     virtual char AddModToConfig(FileDesc *conffd, const char *fname);
     virtual void loadConfigDir(const char *ipath);
     virtual void AddGlobalOptions(SWModule *module, ConfigEntMap &section, ConfigEntMap::iterator start, ConfigEntMap::iterator end);
