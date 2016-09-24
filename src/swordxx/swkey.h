@@ -79,8 +79,8 @@ class SWDLLEXPORT SWKey {
         char *name;
         SWLocale *locale;
             LocaleCache() {
-            name = 0;
-            locale = 0;
+            name = nullptr;
+            locale = nullptr;
         }
          virtual ~LocaleCache() {
             if (name)
@@ -117,7 +117,7 @@ public:
      *    to be used to again set the key to the same position
      * @param ikey string to use for initializing this new key
      */
-    SWKey(const char *ikey = 0);
+    SWKey(char const * ikey = nullptr);
 
     /** Copy Constructor
      * @param k The SWKey object to copy.
@@ -213,7 +213,12 @@ public:
     virtual bool isTraversable() const { return false; }
 
     char *getLocale() const { return localeName; }
-    void setLocale(const char *name) { stdstr(&localeName, name); locale = 0;    } // this will force an on demand lookup of our locale
+
+    // this will force an on demand lookup of our locale:
+    void setLocale(char const * name) {
+        stdstr(&localeName, name);
+        locale = nullptr;
+    }
 
     /** Use this function to get an index position within a module.
      */

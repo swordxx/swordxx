@@ -52,7 +52,9 @@ public:
      * @param module Current module.
      * @return 0
      */
-    virtual char processText(std::string &text, const SWKey *key = 0, const SWModule *module = 0) = 0;
+    virtual char processText(std::string & text,
+                             SWKey const * key = nullptr,
+                             SWModule const * module = nullptr) = 0;
 
     /** This method can supply a header associated with the processing done with this filter.
      *    A typical example is a suggested CSS style block for classed containers.

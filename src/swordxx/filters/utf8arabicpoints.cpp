@@ -144,7 +144,7 @@ char UTF8ArabicPoints::processText(std::string &text, const SWKey *, const SWMod
 
     // Here and at the end of the loop,
     // test BOTH mark_pos AND *mark_pos for safety and to give nextMark
-    // the option of returning either NULL or a pointer to the null
+    // the option of returning either nullptr or a pointer to the null
     // terminator when done.
     if (!mark_pos || !*mark_pos)
         return 0; // no marks found.

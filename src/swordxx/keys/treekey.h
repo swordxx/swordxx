@@ -75,7 +75,7 @@ public:
 
     virtual int getLevel() { long bm = getOffset(); int level = 0; do { level++; } while (parent()); setOffset(bm); return level; }
 
-    virtual const char *getUserData(int *size = 0) const = 0;
+    virtual char const * getUserData(int * size = nullptr) const = 0;
     virtual void setUserData(const char *userData, int size = 0) = 0;
 
     /** Go to the root node
@@ -131,7 +131,7 @@ public:
      *    nodes are created as necessary
      * @param keyPath path to set/create; if unsupplied, then use any unsnapped setText value.
      */
-    virtual void assureKeyPath(const char *keyPath = 0);
+    virtual void assureKeyPath(char const * keyPath = nullptr);
     virtual void save() {}
 
     SWKEY_OPERATORS

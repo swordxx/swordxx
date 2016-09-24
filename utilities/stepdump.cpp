@@ -80,7 +80,7 @@ void readViewableHeader(int fd, ViewableHeader *viewableHeaderRecord);
 void readViewableBlock(int fd, ViewableBlock *vb);
 void readViewableBlockText(int fd, ViewableBlock *vb, char **buf);
 
-SWCompress *compress = 0;
+SWCompress * compress = nullptr;
 
 int main(int argc, char **argv) {
 

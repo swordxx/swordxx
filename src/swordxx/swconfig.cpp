@@ -88,7 +88,7 @@ void SWConfig::Load() {
                 else {
                     strtok(buf, "=");
                     if ((*buf) && (*buf != '=')) {
-                        if ((data = strtok(NULL, "")))
+                        if ((data = strtok(nullptr, "")))
                             cursect.insert(ConfigEntMap::value_type(buf, strstrip(data)));
                         else cursect.insert(ConfigEntMap::value_type(buf, ""));
                     }

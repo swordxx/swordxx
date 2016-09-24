@@ -53,12 +53,12 @@ SWLocale::SWLocale(const char *ifilename) {
     p = new Private;
     ConfigEntMap::iterator confEntry;
 
-    name           = 0;
-    description    = 0;
-    encoding       = 0;
-    bookAbbrevs    = 0;
-    bookLongNames  = 0;
-    bookPrefAbbrev = 0;
+    name           = nullptr;
+    description    = nullptr;
+    encoding       = nullptr;
+    bookAbbrevs    = nullptr;
+    bookLongNames  = nullptr;
+    bookPrefAbbrev = nullptr;
     if (ifilename) {
         localeSource   = new SWConfig(ifilename);
     }

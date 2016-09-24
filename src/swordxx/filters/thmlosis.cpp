@@ -60,10 +60,10 @@ char ThMLOSIS::processText(std::string &text, const SWKey *key, const SWModule *
     char *ch;
 
     const char *wordStart = text.c_str();
-    const char *wordEnd = NULL;
+    char const * wordEnd = nullptr;
 
-    const char *textStart = NULL;
-    const char *textEnd = NULL;
+    char const * textStart = nullptr;
+    char const * textEnd = nullptr;
 
     bool suspendTextPassThru = false;
     bool handled = false;

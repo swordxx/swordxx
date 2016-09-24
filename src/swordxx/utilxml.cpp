@@ -34,8 +34,8 @@ namespace swordxx {
 void XMLTag::parse() const {
     int i;
     int start;
-    char *name = 0;
-    char *value = 0;
+    char * name = nullptr;
+    char * value = nullptr;
     attributes.clear();
 
     if (!buf)
@@ -120,8 +120,8 @@ void XMLTag::parse() const {
 
 XMLTag::XMLTag(const char *tagString) {
 
-    name   = 0;
-    buf    = 0;
+    name   = nullptr;
+    buf    = nullptr;
     setText(tagString);
 }
 
@@ -150,7 +150,7 @@ void XMLTag::setText(const char *tagString) {
 
     if (buf) {
         delete [] buf;
-        buf = 0;
+        buf = nullptr;
     }
 
     if (!tagString)        // assert tagString before proceeding
@@ -214,7 +214,7 @@ const char *XMLTag::getPart(const char *buf, int partNum, char partSplit) const 
             junkBuf.resize(end - buf, '\0');
         return junkBuf.c_str();
     }
-    return 0;
+    return nullptr;
 }
 
 
@@ -262,7 +262,9 @@ void XMLTag::setAttribute(const char *attribName, const char *attribValue, int p
             }
         }
         if (newVal.length()) newVal.pop_back();    // discard the last partSplit
-        attribValue = (!attribValue && !newVal.length()) ? 0 : newVal.c_str();
+        attribValue = (!attribValue && !newVal.length())
+                      ? nullptr
+                      : newVal.c_str();
     }
 
     // perform the actual set

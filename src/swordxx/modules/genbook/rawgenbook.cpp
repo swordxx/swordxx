@@ -72,7 +72,7 @@ RawGenBook::RawGenBook(const char *ipath, const char *iname, const char *idesc, 
 
     char *buf = new char [ strlen (ipath) + 20 ];
 
-    path = 0;
+    path = nullptr;
     stdstr(&path, ipath);
     verseKey = !strcmp("VerseKey", keyType);
 
@@ -138,7 +138,7 @@ std::string &RawGenBook::getRawEntryBuf() const {
         bdtfd->seek(offset, SEEK_SET);
         bdtfd->read(&entryBuf[0u], size);
 
-        rawFilter(entryBuf, 0);    // hack, decipher
+        rawFilter(entryBuf, nullptr);    // hack, decipher
         rawFilter(entryBuf, &key);
 
 //           if (!isUnicode())
@@ -203,7 +203,7 @@ void RawGenBook::deleteEntry() {
 
 
 char RawGenBook::createModule(const char *ipath) {
-    char *path = 0;
+    char * path = nullptr;
     char *buf = new char [ strlen (ipath) + 20 ];
     FileDesc *fd;
     signed char retval;

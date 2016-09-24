@@ -45,7 +45,7 @@ using namespace std;
 
 void writeEntry(SWModule *module, const std::string &key, const std::string &entry);
 
-void usage(const char *progName, const char *error = 0) {
+void usage(char const * progName, char const * error = nullptr) {
     if (error) fprintf(stderr, "\n%s: %s\n", progName, error);
     fprintf(stderr, "\n=== imp2vs (Revision $Rev$) Sword++ Bible/Commentary importer.\n");
     fprintf(stderr, "\nusage: %s <imp_file> [options]\n", progName);
@@ -96,7 +96,7 @@ int main(int argc, char **argv) {
     bool fourByteSize      = false;
     bool append        = false;
     int iType          = 4;
-    SWCompress *compressor = 0;
+    SWCompress * compressor = nullptr;
     std::string compType     = "";
 
     for (int i = 2; i < argc; i++) {
@@ -177,27 +177,27 @@ int main(int argc, char **argv) {
         }
     }
 
-    SWModule *module = 0;
+    SWModule * module = nullptr;
     if (compressor) {
         // Create a compressed text module allowing very large entries
         // Taking defaults except for first, fourth, fifth and last argument
         module = new zText(
                 outPath.c_str(),        // ipath
-                0,        // iname
-                0,        // idesc
+                nullptr,        // iname
+                nullptr,        // idesc
                 iType,        // iblockType
                 compressor,    // icomp
                 ENC_UNKNOWN,    // enc
                 DIRECTION_LTR,    // dir
                 FMT_UNKNOWN,    // markup
-                0,        // lang
+                nullptr,        // lang
                 v11n.c_str()        // versification
                );
     }
     else {
         module = (!fourByteSize)
-            ? (SWModule *)new RawText(outPath.c_str(), 0, 0, ENC_UNKNOWN, DIRECTION_LTR, FMT_UNKNOWN, 0, v11n.c_str())
-            : (SWModule *)new RawText4(outPath.c_str(), 0, 0, ENC_UNKNOWN, DIRECTION_LTR, FMT_UNKNOWN, 0, v11n.c_str());
+            ? (SWModule *)new RawText(outPath.c_str(), nullptr, nullptr, ENC_UNKNOWN, DIRECTION_LTR, FMT_UNKNOWN, nullptr, v11n.c_str())
+            : (SWModule *)new RawText4(outPath.c_str(), nullptr, nullptr, ENC_UNKNOWN, DIRECTION_LTR, FMT_UNKNOWN, nullptr, v11n.c_str());
     }
     // -----------------------------------------------------
 

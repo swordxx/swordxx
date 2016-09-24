@@ -65,7 +65,10 @@ public:
 
 
     // fileMode default = RDONLY
-    zVerse4(const char *ipath, int fileMode = -1, int blockType = CHAPTERBLOCKS, SWCompress * icomp = 0);
+    zVerse4(char const * ipath,
+            int fileMode = -1,
+            int blockType = CHAPTERBLOCKS,
+            SWCompress * icomp = nullptr);
     virtual ~zVerse4();
 
     void findOffset(char testmt, long idxoff, long *start, unsigned long *size, unsigned long *buffnum) const;

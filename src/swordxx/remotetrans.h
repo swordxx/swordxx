@@ -74,7 +74,8 @@ protected:
     std::string p;
 
 public:
-    RemoteTransport(const char *host, StatusReporter *statusReporter = 0);
+    RemoteTransport(char const * host,
+                    StatusReporter * statusReporter = nullptr);
     virtual ~RemoteTransport();
 
     /***********

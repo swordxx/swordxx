@@ -69,8 +69,8 @@ bool zLD::isWritable() const {
  */
 
 char zLD::getEntry(long away) const {
-    char *idxbuf = 0;
-    char *ebuf = 0;
+    char * idxbuf = nullptr;
+    char * ebuf = nullptr;
     char retval = 0;
     long index;
     unsigned long size;
@@ -204,7 +204,7 @@ long zLD::getEntryForKey(const char* key) const
 
 char *zLD::getKeyForEntry(long entry) const
 {
-    char *key = 0;
+    char * key = nullptr;
     getKeyFromIdxOffset(entry * IDXENTRYSIZE, &key);
     return key;
 }

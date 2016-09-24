@@ -42,19 +42,22 @@ using std::cin;
 using std::map;
 
 
-SWMgr *mgr = 0;
-InstallMgr *installMgr = 0;
-StatusReporter *statusReporter = 0;
+SWMgr * mgr = nullptr;
+InstallMgr * installMgr = nullptr;
+StatusReporter * statusReporter = nullptr;
 std::string baseDir;
 std::string confPath;
 
 bool isConfirmed;
 
-void usage(const char *progName = 0, const char *error = 0);
+void usage(char const * progName = nullptr, char const * error = nullptr);
 
 class MyInstallMgr : public InstallMgr {
 public:
-    MyInstallMgr(const char *privatePath = "./", StatusReporter *sr = 0) : InstallMgr(privatePath, sr) {}
+    MyInstallMgr(const char * privatePath = "./",
+                 StatusReporter * sr = nullptr)
+        : InstallMgr(privatePath, sr)
+    {}
 
 virtual bool isUserDisclaimerConfirmed() const {
     static bool confirmed = false;
@@ -128,7 +131,9 @@ void init() {
         mgr = new SWMgr();
 
         if (!mgr->config)
-            usage(0, "ERROR: Sword++ configuration not found.  Please configure Sword++ before using this program.");
+            usage(nullptr,
+                  "ERROR: Sword++ configuration not found.  Please configure "
+                  "Sword++ before using this program.");
 
         std::string baseDir = mgr->getHomeDir();
         if (baseDir.length() < 1) baseDir = ".";
@@ -146,8 +151,8 @@ void finish(int status) {
     delete installMgr;
     delete mgr;
 
-    installMgr = 0;
-    mgr        = 0;
+    installMgr = nullptr;
+    mgr        = nullptr;
 
     if (status < 1) {
         cout << "\n";
@@ -248,7 +253,7 @@ void refreshRemoteSource(const char *sourceName) {
 }
 
 
-void listModules(SWMgr *otherMgr = 0, bool onlyNewAndUpdates = false) {
+void listModules(SWMgr * otherMgr = nullptr, bool onlyNewAndUpdates = false) {
     init();
     SWModule *module;
     if (!otherMgr) otherMgr = mgr;
@@ -304,7 +309,7 @@ void remoteInstallModule(const char *sourceName, const char *modName) {
     }
     module = it->second;
 
-    int error = installMgr->installModule(mgr, 0, module->getName(), is);
+    int error = installMgr->installModule(mgr, nullptr, module->getName(), is);
     if (error) {
         cout << "\nError installing module: [" << module->getName() << "] (write permissions?)\n";
     } else cout << "\nInstalled module: [" << module->getName() << "]\n";

@@ -64,7 +64,10 @@ public:
     static const char uniqueIndexID[];
 
     // fileMode default = RDONLY
-    zVerse(const char *ipath, int fileMode = -1, int blockType = CHAPTERBLOCKS, SWCompress * icomp = 0);
+    zVerse(char const * ipath,
+           int fileMode = -1,
+           int blockType = CHAPTERBLOCKS,
+           SWCompress * icomp = nullptr);
     virtual ~zVerse();
 
     void findOffset(char testmt, long idxoff, long *start, unsigned short *size, unsigned long *buffnum) const;

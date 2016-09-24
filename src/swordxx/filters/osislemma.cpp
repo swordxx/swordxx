@@ -83,7 +83,7 @@ char OSISLemma::processText(std::string &text, const SWKey *key, const SWModule 
                                                 sizeof("lemma.") - 1u)))
                         {
                             // remove attribute part
-                            wtag.setAttribute("lemma", 0, i, ' ');
+                            wtag.setAttribute("lemma", nullptr, i, ' ');
                             i--;
                             count--;
                         }

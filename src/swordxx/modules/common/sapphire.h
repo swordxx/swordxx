@@ -38,10 +38,6 @@
  * & 0xFF or % 0x100, whichever is faster.
  */
 
-#ifndef NULL
-#define NULL 0
-#endif    /*  */
-
 #include "../../defs.h"
 
 
@@ -63,7 +59,7 @@ namespace swordxx {
   unsigned char keyrand (int limit, unsigned char *user_key,
               unsigned char keysize, unsigned char *rsum,
 unsigned *keypos); public:sapphire (unsigned char
-                      *key = NULL,    // Calls initialize if a real
+                      *key = nullptr,    // Calls initialize if a real
                       unsigned char keysize = 0);    // key is provided.  If none
   // is provided, call initialize
   // before encrypt or decrypt.

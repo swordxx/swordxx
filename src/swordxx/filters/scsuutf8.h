@@ -58,7 +58,9 @@ private:
 public:
     SCSUUTF8();
     ~SCSUUTF8();
-    virtual char processText(std::string &text, const SWKey *key = 0, const SWModule *module = 0);
+    virtual char processText(std::string & text,
+                             SWKey const * key = nullptr,
+                             SWModule const * module = nullptr);
 };
 
 } /* namespace swordxx */

@@ -63,7 +63,11 @@ protected:
     void getKeyFromIdxOffset(long ioffset, char **buf) const;
 
 public:
-    zStr(const char *ipath, int fileMode = -1, long blockCount = 100, SWCompress *icomp = 0, bool caseSensitive = false);
+    zStr(char const * ipath,
+         int fileMode = -1,
+         long blockCount = 100,
+         SWCompress * icomp = nullptr,
+         bool caseSensitive = false);
     virtual ~zStr();
     signed char findKeyIndex(const char *ikey, long *idxoff, long away = 0) const;
     void getText(long index, char **idxbuf, char **buf) const;

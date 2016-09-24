@@ -42,10 +42,13 @@ protected:
 public:
     /** Initializes data for instance of SWGenBook
     */
-    SWGenBook(SWKey * key_, const char *imodname = 0, const char *imoddesc = 0,
-            SWTextEncoding encoding = ENC_UNKNOWN,
-            SWTextDirection dir = DIRECTION_LTR,
-            SWTextMarkup markup = FMT_UNKNOWN, const char* ilang = 0);
+    SWGenBook(SWKey * key_,
+              char const * imodname = nullptr,
+              char const * imoddesc = nullptr,
+              SWTextEncoding encoding = ENC_UNKNOWN,
+              SWTextDirection dir = DIRECTION_LTR,
+              SWTextMarkup markup = FMT_UNKNOWN,
+              char const * ilang = nullptr);
 
     virtual ~SWGenBook();
 

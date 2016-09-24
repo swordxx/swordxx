@@ -37,16 +37,16 @@
 namespace swordxx {
 
 TreeKeyIdx::TreeKeyIdx(const TreeKeyIdx &ikey) : currentNode() {
-    path = 0;
-    idxfd = 0;
-    datfd = 0;
+    path = nullptr;
+    idxfd = nullptr;
+    datfd = nullptr;
     copyFrom(ikey);
 }
 
 TreeKeyIdx::TreeKeyIdx(const char *idxPath, int fileMode) : currentNode() {
     std::string buf;
 
-    path = 0;
+    path = nullptr;
     stdstr(&path, idxPath);
 
     if (fileMode == -1) { // try read/write if possible
@@ -279,7 +279,7 @@ void TreeKeyIdx::remove() {
  */
 
 signed char TreeKeyIdx::create(const char *ipath) {
-    char *path = 0;
+    char * path = nullptr;
     char *buf = new char [ strlen (ipath) + 20 ];
     FileDesc *fd, *fd2;
 
@@ -459,7 +459,7 @@ void TreeKeyIdx::copyFrom(const TreeKeyIdx &ikey) {
         currentNode.userData = new char [ currentNode.dsize ];
         memcpy(currentNode.userData, ikey.currentNode.userData, currentNode.dsize);
     }
-    else currentNode.userData = 0;
+    else currentNode.userData = nullptr;
 
     bool newFiles = true;
 
@@ -506,7 +506,7 @@ void TreeKeyIdx::saveTreeNode(TreeNode *node) {
 
 
 void TreeKeyIdx::setText(const char *ikey) {
-    char *buf = 0;
+    char * buf = nullptr;
     stdstr(&buf, ikey);
     static auto const slashTokenOrEmpty =
             [](char * const str) noexcept {
@@ -628,9 +628,9 @@ const char *TreeKeyIdx::getText() const {
 
 TreeKeyIdx::TreeNode::TreeNode() {
 
-    name       = 0;
+    name       = nullptr;
     stdstr(&name, "");
-    userData   = 0;
+    userData   = nullptr;
 
     clear();
 }
@@ -645,12 +645,12 @@ void TreeKeyIdx::TreeNode::clear() {
 
     if (name)
         delete [] name;
-    name = 0;
+    name = nullptr;
     stdstr(&name, "");
 
     if (userData)
         delete [] userData;
-    userData   = 0;
+    userData   = nullptr;
 }
 
 

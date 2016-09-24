@@ -61,7 +61,7 @@ char UTF8BiDiReorder::processText(std::string &text, const SWKey *key, const SWM
         ustr2 = new UChar[len];
 
         UBiDi* bidi = ubidi_openSized(len + 1, 0, &err);
-        ubidi_setPara(bidi, ustr, len, UBIDI_DEFAULT_RTL, NULL, &err);
+        ubidi_setPara(bidi, ustr, len, UBIDI_DEFAULT_RTL, nullptr, &err);
         len = ubidi_writeReordered(bidi, ustr2, len,
                 UBIDI_DO_MIRRORING | UBIDI_REMOVE_BIDI_CONTROLS, &err);
         ubidi_close(bidi);

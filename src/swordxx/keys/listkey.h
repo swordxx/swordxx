@@ -52,7 +52,7 @@ public:
      *
      * @param ikey text key
      */
-    ListKey(const char *ikey = 0);
+    ListKey(char const * ikey = nullptr);
     ListKey(ListKey const &k);
 
     /** cleans up instance of ListKey

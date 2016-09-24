@@ -61,7 +61,7 @@ zStr::zStr(const char *ipath, int fileMode, long blockCount, SWCompress *icomp, 
     std::string buf;
 
     lastoff = -1;
-    path = 0;
+    path = nullptr;
     stdstr(&path, ipath);
 
     compressor = (icomp) ? icomp : new SWCompress();
@@ -80,7 +80,7 @@ zStr::zStr(const char *ipath, int fileMode, long blockCount, SWCompress *icomp, 
         SWLog::getSystemLog()->logError("%d", errno);
     }
 
-    cacheBlock = 0;
+    cacheBlock = nullptr;
     cacheBlockIndex = -1;
     cacheDirty = false;
 
@@ -183,7 +183,10 @@ void zStr::getKeyFromIdxOffset(long ioffset, char **buf) const
 
 signed char zStr::findKeyIndex(const char *ikey, long *idxoff, long away) const
 {
-    char *maxbuf = 0, *trybuf = 0, *key = 0, quitflag = 0;
+    char * maxbuf = nullptr;
+    char * trybuf = nullptr;
+    char * key = nullptr;
+    char quitflag = 0;
     signed char retval = 0;
     int32_t headoff, tailoff, tryoff = 0, maxoff = 0;
     uint32_t start, size;
@@ -317,7 +320,7 @@ signed char zStr::findKeyIndex(const char *ikey, long *idxoff, long away) const
 
 void zStr::getText(long offset, char **idxbuf, char **buf) const {
     char *ch;
-    char *idxbuflocal = 0;
+    char * idxbuflocal = nullptr;
     getKeyFromIdxOffset(offset, &idxbuflocal);
     uint32_t start;
     uint32_t size;
@@ -404,7 +407,7 @@ void zStr::getCompressedText(long block, long entry, char **buf) const {
         rawZFilter(buf, 0); // 0 = decipher
 
         compressor->zBuf(&len, &buf[0u]);
-        char *rawBuf = compressor->Buf(0, &len);
+        char * rawBuf = compressor->Buf(nullptr, &len);
         cacheBlock = new EntriesBlock(rawBuf, len);
         cacheBlockIndex = block;
     }
@@ -431,12 +434,12 @@ void zStr::setText(const char *ikey, const char *buf, long len) {
     int32_t endoff;
     long idxoff = 0;
     int32_t shiftSize;
-    char *tmpbuf = 0;
-    char *key = 0;
-    char *dbKey = 0;
-    char *idxBytes = 0;
-    char *outbuf = 0;
-    char *ch = 0;
+    char * tmpbuf = nullptr;
+    char * key = nullptr;
+    char * dbKey = nullptr;
+    char * idxBytes = nullptr;
+    char * outbuf = nullptr;
+    char * ch = nullptr;
 
     len = (len < 0) ? strlen(buf) : len;
     stdstr(&key, ikey, 3);
@@ -636,7 +639,7 @@ void zStr::flushCache() const {
             zdxfd->write(&outsize, 4);
         }
         delete cacheBlock;
-        cacheBlock = 0;
+        cacheBlock = nullptr;
     }
     cacheBlockIndex = -1;
     cacheDirty = false;
@@ -651,7 +654,7 @@ void zStr::flushCache() const {
  */
 
 signed char zStr::createModule(const char *ipath) {
-    char *path = 0;
+    char * path = nullptr;
     char *buf = new char [ strlen (ipath) + 20 ];
     FileDesc *fd, *fd2;
 

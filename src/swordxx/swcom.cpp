@@ -49,7 +49,7 @@ SWKey * staticCreateKey(char const * const versification) {
  */
 
 SWCom::SWCom(const char *imodname, const char *imoddesc, SWTextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char *ilang, const char *versification): SWModule(staticCreateKey(versification), imodname, imoddesc, "Commentaries", enc, dir, mark, ilang) {
-    this->versification = 0;
+    this->versification = nullptr;
     stdstr(&(this->versification), versification);
     tmpVK1 = (VerseKey *)createKey();
     tmpVK2 = (VerseKey *)createKey();

@@ -151,13 +151,15 @@ public:
     * @param ipath Path to file.
     * @param ifileName Name of file to check for.
     */
-    static signed char existsFile(const char *ipath, const char *ifileName = 0);
+    static signed char existsFile(char const * ipath,
+                                  char const * ifileName = nullptr);
 
     /** Checks for the existence of a directory.
     * @param ipath Path to directory.
     * @param idirName Name of directory to check for.
     */
-    static signed char existsDir(const char *ipath, const char *idirName = 0);
+    static signed char existsDir(char const * ipath,
+                                 char const * idirName = nullptr);
 
     /** Truncate a file at its current position
     * leaving byte at current possition intact deleting everything afterward.

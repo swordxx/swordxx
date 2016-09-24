@@ -39,7 +39,7 @@ public: /* Methods: */
     std::vector<DirEntry> getDirList(const char * dirURL) override;
     bool getUrl(const char * destPath,
                 const char * sourceURL,
-                std::string * destBuf = 0) override;
+                std::string * destBuf = nullptr) override;
 
 };
 

@@ -58,7 +58,7 @@ const char RawVerse4::nl = '\n';
 
 RawVerse4::RawVerse4(const char *ipath, int fileMode)
 {
-    path = 0;
+    path = nullptr;
     stdstr(&path, ipath);
 
     if ((path[strlen(path)-1] == '/') || (path[strlen(path)-1] == '\\'))
@@ -237,7 +237,7 @@ void RawVerse4::doLinkEntry(char testmt, long destidxoff, long srcidxoff) {
 
 char RawVerse4::createModule(const char *ipath, const char *v11n)
 {
-    char *path = 0;
+    char * path = nullptr;
     char *buf = new char [ strlen (ipath) + 20 ];
     FileDesc *fd, *fd2;
 

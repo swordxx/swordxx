@@ -135,7 +135,7 @@ void displayBook(int fdbook, int fdviewable, int fdvsync, int fdsections, VSyncB
 void extractVerseText(int fdviewable, int fdbook, SectionLevelInfo *sectionLevelInfo, char **verseText);
 void cleanBuf(char *buf);
 
-SWCompress *compress = 0;
+SWCompress * compress = nullptr;
 
 int main(int argc, char **argv) {
 
@@ -385,7 +385,7 @@ void extractVerseText(int fdviewable, int fdbook, SectionLevelInfo *sectionLevel
     static class FreeCachedEntryText {
     public:
         char *entryText;
-        FreeCachedEntryText() { entryText = 0; }
+        FreeCachedEntryText() { entryText = nullptr; }
         ~FreeCachedEntryText() { if (entryText) delete [] entryText; }
     } _freeCachedEntryText;
 

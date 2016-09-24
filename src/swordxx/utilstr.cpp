@@ -138,7 +138,7 @@ char *stdstr(char **ipstr, const char *istr, unsigned int memPadFactor) {
         *ipstr = new char [ len * memPadFactor ];
         memcpy(*ipstr, istr, len);
     }
-    else *ipstr = 0;
+    else *ipstr = nullptr;
     return *ipstr;
 }
 
@@ -183,7 +183,7 @@ const char *stristr(const char *s1, const char *s2) {
     int cLen = strlen(s1);
     char *target = new char [ tLen + 1 ];
     int i, j;
-    const char *retVal = 0;
+    char const * retVal = nullptr;
 
     strcpy(target, s2);
     for (i = 0; i < tLen; i++)
@@ -402,7 +402,7 @@ std::string assureValidUTF8(const char *buf) {
     assert(buf);
     std::string myCopy = buf;
     const unsigned char *b = (const unsigned char *)myCopy.c_str();
-    const unsigned char *q = 0;
+    unsigned char const * q = nullptr;
     bool invalidChar = false;
     while (*b) {
         q = b;
@@ -423,7 +423,7 @@ std::string assureValidUTF8(const char *buf) {
 
 std::wstring utf8ToWChar(const char *buf) {
     assert(buf);
-    const char *q = 0;
+    char const * q = nullptr;
     std::wstring wcharBuf;
     while (*buf) {
         q = buf;

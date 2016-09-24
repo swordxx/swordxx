@@ -46,7 +46,7 @@ namespace swordxx {
 zText4::zText4(const char *ipath, const char *iname, const char *idesc, int iblockType, SWCompress *icomp, SWTextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char *ilang, const char *versification)
         : zVerse4(ipath, FileMgr::RDWR, iblockType, icomp), SWText(iname, idesc, enc, dir, mark, ilang, versification) {
     blockType = iblockType;
-    lastWriteKey = 0;
+    lastWriteKey = nullptr;
 }
 
 

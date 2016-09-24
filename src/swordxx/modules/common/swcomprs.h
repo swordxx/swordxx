@@ -40,8 +40,8 @@ protected:
 public:
   SWCompress ();
   virtual ~ SWCompress ();
-  virtual char *Buf (const char *buf = 0, unsigned long *len = 0);
-  virtual char *zBuf (unsigned long *len, char *buf = 0);
+  virtual char * Buf(char const * buf = nullptr, unsigned long * len = nullptr);
+  virtual char * zBuf(unsigned long * len, char * buf = nullptr);
   virtual unsigned long GetChars (char *buf, unsigned long len);    // override for other than buffer compression
   virtual unsigned long SendChars (char *buf, unsigned long len);    // override for other than buffer compression
   virtual void Encode (void);    // override to provide compression algorythm

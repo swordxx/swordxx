@@ -106,7 +106,7 @@ inline char * toupperstr_utf8(char * t, std::size_t const max = 0u)
  * @return b for convenience
  */
 inline std::string &toupperstr(std::string & b) {
-    char *utf8 = 0;
+    char * utf8 = nullptr;
     stdstr(&utf8, b.c_str(), 2);
     toupperstr(utf8, strlen(utf8) * 2u);
     b = utf8;

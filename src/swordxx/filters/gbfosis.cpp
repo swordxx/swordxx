@@ -61,10 +61,10 @@ char GBFOSIS::processText(std::string &text, const SWKey *key, const SWModule *m
     bool lastspace = false;
 
     const char *wordStart = text.c_str();
-    const char *wordEnd = NULL;
+    const char * wordEnd = nullptr;
 
-    const char *textStart = NULL;
-    const char *textEnd = NULL;
+    const char * textStart = nullptr;
+    const char * textEnd = nullptr;
 
     std::string textNode = "";
 

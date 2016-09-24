@@ -61,8 +61,8 @@ void VerseKey::init(const char *v11n) {
     chapter = 1;
     verse = 1;
     suffix = 0;
-    tmpClone = 0;
-    refSys = 0;
+    tmpClone = nullptr;
+    refSys = nullptr;
 
     setVersificationSystem(v11n);
 }
@@ -390,7 +390,7 @@ int VerseKey::getBookFromAbbrev(const char *iabbr) const
 {
     int diff, abLen, min, max, target, retVal = -1;
 
-    char *abbr = 0;
+    char * abbr = nullptr;
 
     int abbrevsCnt;
 
@@ -468,7 +468,7 @@ void VerseKey::validateCurrentLocale() const {
         for (int i = 0; i < refSys->getBookCount(); i++) {
             const int bn = getBookFromAbbrev(getPrivateLocale()->translate(refSys->getBook(i)->getLongName()));
             if (bn != i+1) {
-                char *abbr = 0;
+                char * abbr = nullptr;
                 stdstr(&abbr, getPrivateLocale()->translate(refSys->getBook(i)->getLongName()), 2);
                 strstrip(abbr);
                 SWLog::getSystemLog()->logDebug("VerseKey::Book: %s does not have a matching toupper abbrevs entry! book number returned was: %d, should be %d. Required entry to add to locale:", abbr, bn, i);
@@ -1195,7 +1195,7 @@ VerseKey VerseKey::getUpperBound() const
 void VerseKey::clearBounds()
 {
     delete tmpClone;
-    tmpClone = 0;
+    tmpClone = nullptr;
     boundSet = false;
 }
 
@@ -1241,7 +1241,7 @@ const char *VerseKey::getText() const {
 
 
 const char *VerseKey::getShortText() const {
-    static char *stext = 0;
+    static char * stext = nullptr;
     char buf[2047];
     freshtext();
     if (book < 1) {

@@ -60,7 +60,7 @@ const int RawStr4::IDXENTRYSIZE = 8;
 RawStr4::RawStr4(const char *ipath, int fileMode, bool caseSensitive) : caseSensitive(caseSensitive)
 {
     lastoff = -1;
-    path = 0;
+    path = nullptr;
     stdstr(&path, ipath);
 
     if (fileMode == -1) { // try read/write if possible
@@ -175,7 +175,10 @@ void RawStr4::getIDXBuf(long ioffset, char **buf) const
 
 signed char RawStr4::findOffset(const char *ikey, uint32_t *start, uint32_t *size, long away, uint32_t *idxoff) const
 {
-    char *trybuf, *maxbuf, *key = 0, quitflag = 0;
+    char * trybuf;
+    char * maxbuf;
+    char * key = nullptr;
+    char quitflag = 0;
     signed char retval = -1;
     long headoff, tailoff, tryoff = 0, maxoff = 0;
     int diff = 0;
@@ -194,7 +197,7 @@ signed char RawStr4::findOffset(const char *ikey, uint32_t *start, uint32_t *siz
             int keylen = strlen(key);
             bool substr = false;
 
-            trybuf = maxbuf = 0;
+            trybuf = maxbuf = nullptr;
             getIDXBuf(maxoff, &maxbuf);
 
             while (headoff < tailoff) {
@@ -312,7 +315,7 @@ signed char RawStr4::findOffset(const char *ikey, uint32_t *start, uint32_t *siz
 void RawStr4::readText(uint32_t istart, uint32_t *isize, char **idxbuf, std::string &buf) const
 {
     unsigned int ch;
-    char *idxbuflocal = 0;
+    char * idxbuflocal = nullptr;
     getIDXBufDat(istart, &idxbuflocal);
     uint32_t start = istart;
 
@@ -375,12 +378,12 @@ void RawStr4::doSetText(const char *ikey, const char *buf, long len) {
     int32_t shiftSize;
     uint32_t size;
     uint32_t outsize;
-    char *tmpbuf = 0;
-    char *key = 0;
-    char *dbKey = 0;
-    char *idxBytes = 0;
-    char *outbuf = 0;
-    char *ch = 0;
+    char * tmpbuf = nullptr;
+    char * key = nullptr;
+    char * dbKey = nullptr;
+    char * idxBytes = nullptr;
+    char * outbuf = nullptr;
+    char * ch = nullptr;
 
     char errorStatus = findOffset(ikey, &start, &size, 0, &idxoff);
     stdstr(&key, ikey, 3);
@@ -503,7 +506,7 @@ void RawStr4::doLinkEntry(const char *destkey, const char *srckey) {
 
 signed char RawStr4::createModule(const char *ipath)
 {
-    char *path = 0;
+    char * path = nullptr;
     char *buf = new char [ strlen (ipath) + 20 ];
     FileDesc *fd, *fd2;
 

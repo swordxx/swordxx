@@ -246,7 +246,7 @@ char findbreak(int fp, long *offset, int *num1, int *num2, int *rangemax, short 
             if (size) {
                 ch2 = *num1;
                 vs2 = *num2;
-                if (findbreak(fp, &offset2, &ch2, &vs2, &rm2, 0)) {
+                if (findbreak(fp, &offset2, &ch2, &vs2, &rm2, nullptr)) {
                     *size = (short) (lseek(fp, 0, SEEK_END) - (*offset));
                 }
                 else {

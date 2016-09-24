@@ -59,7 +59,7 @@ char OSISStrongs::processText(std::string &text, const SWKey *key, const SWModul
     bool intoken = false;
     int wordNum = 1;
     char wordstr[5];
-    const char *wordStart = 0;
+    char const * wordStart = nullptr;
     std::string page = "";        // some modules include <seg> page info, so we add these to the words
 
     const std::string orig = text;
@@ -247,7 +247,7 @@ char OSISStrongs::processText(std::string &text, const SWKey *key, const SWModul
 *****/
                     auto savlm(wtag.getAttribute("lemma"));
                     if (!savlm.empty()) {
-                        wtag.setAttribute("lemma", 0);
+                        wtag.setAttribute("lemma", nullptr);
                         wtag.setAttribute("savlm", savlm.c_str());
                         token = wtag;
                         trimString(token);
@@ -266,7 +266,7 @@ char OSISStrongs::processText(std::string &text, const SWKey *key, const SWModul
                         module->getEntryAttributes()["Word"][wordstr]["Text"] = tmp;
                     }
                 }
-                wordStart = 0;
+                wordStart = nullptr;
             }
 
             // keep token in text

@@ -37,10 +37,14 @@ class SWDLLEXPORT RawCom : public RawVerse, public SWCom {
 
 public:
 
-    RawCom(const char *ipath, const char *iname = 0, const char *idesc = 0,
-            SWTextEncoding encoding = ENC_UNKNOWN,
-            SWTextDirection dir = DIRECTION_LTR, SWTextMarkup markup = FMT_UNKNOWN,
-            const char *ilang = 0, const char *versification = "KJV");
+    RawCom(char const * ipath,
+           char const * iname = nullptr,
+           char const * idesc = nullptr,
+           SWTextEncoding encoding = ENC_UNKNOWN,
+           SWTextDirection dir = DIRECTION_LTR,
+           SWTextMarkup markup = FMT_UNKNOWN,
+           char const * ilang = nullptr,
+           const char *versification = "KJV");
     virtual ~RawCom();
 
     virtual std::string &getRawEntryBuf() const;

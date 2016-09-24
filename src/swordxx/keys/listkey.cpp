@@ -48,7 +48,9 @@ ListKey::ListKey(ListKey const &k) : SWKey(k.keytext) {
     arraymax = k.arraymax;
     arraypos = k.arraypos;
     arraycnt = k.arraycnt;
-    array = (arraymax)?(SWKey **)malloc(k.arraymax * sizeof(SWKey *)):0;
+    array = arraymax
+            ? static_cast<SWKey **>(malloc(k.arraymax * sizeof(SWKey *)))
+            : nullptr;
     for (int i = 0; i < arraycnt; i++)
         array[i] = k.array[i]->clone();
     init();
@@ -93,7 +95,7 @@ void ListKey::clear()
     }
     arraycnt  = 0;
     arraypos  = 0;
-    array     = 0;
+    array     = nullptr;
 }
 
 
@@ -109,7 +111,9 @@ void ListKey::copyFrom(const ListKey &ikey) {
     arraymax = ikey.arraymax;
     arraypos = ikey.arraypos;
     arraycnt = ikey.arraycnt;
-    array = (arraymax)?(SWKey **)malloc(ikey.arraymax * sizeof(SWKey *)):0;
+    array = arraymax
+            ? static_cast<SWKey **>(malloc(ikey.arraymax * sizeof(SWKey *)))
+            : nullptr;
     for (int i = 0; i < arraycnt; i++)
         array[i] = ikey.array[i]->clone();
 
@@ -325,13 +329,13 @@ const char *ListKey::getOSISRefRangeText() const {
 
 const char *ListKey::getText() const {
     int pos = arraypos;
-    SWKey *key = (pos >= arraycnt || !arraycnt) ? 0:array[pos];
+    SWKey * key = (pos >= arraycnt || !arraycnt) ? nullptr : array[pos];
     return (key) ? key->getText() : keytext;
 }
 
 const char *ListKey::getShortText() const {
     int pos = arraypos;
-    SWKey *key = (pos >= arraycnt || !arraycnt) ? 0:array[pos];
+    SWKey * key = (pos >= arraycnt || !arraycnt) ? nullptr : array[pos];
     return (key) ? key->getShortText() : keytext;
 }
 

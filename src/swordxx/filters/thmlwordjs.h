@@ -41,8 +41,14 @@ class SWDLLEXPORT ThMLWordJS : public SWOptionFilter {
 public:
     ThMLWordJS();
     virtual ~ThMLWordJS();
-    virtual char processText(std::string &text, const SWKey *key = 0, const SWModule *module = 0);
-    void setDefaultModules(SWModule *defaultGreekLex = 0, SWModule *defaultHebLex = 0, SWModule *defaultGreekParse = 0, SWModule *defaultHebParse = 0) {
+    virtual char processText(std::string & text,
+                             SWKey const * key = nullptr,
+                             SWModule const * module = nullptr);
+    void setDefaultModules(SWModule * defaultGreekLex = nullptr,
+                           SWModule * defaultHebLex = nullptr,
+                           SWModule * defaultGreekParse = nullptr,
+                           SWModule * defaultHebParse = nullptr)
+    {
         this->defaultGreekLex   = defaultGreekLex;
         this->defaultHebLex     = defaultHebLex;
         this->defaultGreekParse = defaultGreekParse;

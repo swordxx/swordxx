@@ -42,7 +42,7 @@ using std::string;
 
 using namespace swordxx;
 
-void usage(const char *progName, const char *error = 0) {
+void usage(char const * progName, char const * error = nullptr) {
     if (error) fprintf(stderr, "\n%s: %s\n", progName, error);
     fprintf(stderr, "\n=== imp2ld (Revision $Rev$) Sword++ lexicon importer.\n");
     fprintf(stderr, "\nusage: %s <imp_file> [options]\n", progName);
@@ -78,7 +78,7 @@ int main(int argc, char **argv) {
     bool append            = false;
     long blockCount = 30;
     bool caseSensitive = false;
-    SWCompress *compressor = 0;
+    SWCompress * compressor = nullptr;
     std::string compType         = "";
     bool fourByteSize      = false;
     bool strongsPadding    = true;
@@ -146,7 +146,7 @@ int main(int argc, char **argv) {
         exit(-2);
     }
 
-    SWModule *mod = 0;
+    SWModule * mod = nullptr;
     SWKey *key, *linkKey;
 
     if (compType == "LZSS") {

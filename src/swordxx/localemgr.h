@@ -62,7 +62,7 @@ public:
     /** Default constructor of  LocaleMgr
     * You do normally not need this constructor, use LocaleMgr::getSystemLocaleMgr() instead.
     */
-    LocaleMgr(const char *iConfigPath = 0);
+    LocaleMgr(char const * iConfigPath = nullptr);
 
     /**
     * Default destructor of LocaleMgr
@@ -72,7 +72,7 @@ public:
     /** Get the locale connected with the name "name".
     *
     * @param name The name of the locale you want to have. For example use getLocale("de") to get the locale for the German language.
-    * @return Returns the locale object if the locale with the name given as parameter was found. If it wasn't found return NULL.
+    * @return Returns the locale object if the locale with the name given as parameter was found. If it wasn't found return nullptr.
     */
     virtual SWLocale *getLocale(const char *name);
 
@@ -89,7 +89,8 @@ public:
     * @param localeName The name of the locale Sword++ should use
     * @return Returns the translated text.
     */
-    virtual const char *translate(const char *text, const char *localeName = 0);
+    virtual char const * translate(char const * text,
+                                   char const * localeName = nullptr);
 
     /** Get the default locale name. To set it use @see setDefaultLocaleName
     *

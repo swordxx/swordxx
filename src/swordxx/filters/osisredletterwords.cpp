@@ -63,8 +63,8 @@ char OSISRedLetterWords::processText(std::string &text, const SWKey *key, const 
     const char *from = orig.c_str();
 
     //taken out of the loop
-    const char* start = 0;
-    const char* end = 0;
+    char const * start = nullptr;
+    char const * end = nullptr;
 
     for (text = ""; *from; from++) {
         if (*from == '<') {

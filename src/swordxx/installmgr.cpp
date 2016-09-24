@@ -64,8 +64,8 @@ InstallMgr::InstallMgr(const char *privatePath, StatusReporter *sr, std::string 
     statusReporter = sr;
     this->u = u;
     this->p = p;
-    this->privatePath = 0;
-    installConf = 0;
+    this->privatePath = nullptr;
+    installConf = nullptr;
     stdstr(&(this->privatePath), privatePath);
     if (this->privatePath) {
         int len = strlen(this->privatePath);
@@ -274,7 +274,7 @@ SWLog::getSystemLog()->logDebug("remoteCopy: %s, %s, %s, %c, %s", (is?is->source
     if (!isUserDisclaimerConfirmed()) return -1;
 
     int retVal = 0;
-    RemoteTransport *trans = 0;
+    RemoteTransport * trans = nullptr;
     if (is->type == "FTP"
 #if SWORDXX_CURL_HAS_SFTP
         || is->type == "SFTP"
@@ -645,7 +645,7 @@ int InstallMgr::refreshRemoteSourceConfiguration() {
                             // be sure to call save/reload after this
                             // or this could be dangerous
                             delete it->second;
-                            it->second = 0;
+                            it->second = nullptr;
                         }
                         else {
                             std::string key(stripPrefix(actions->second, '='));
@@ -691,8 +691,8 @@ int InstallMgr::refreshRemoteSourceConfiguration() {
 
 InstallSource::InstallSource(const char *type, const char *confEnt) {
     this->type = type;
-    mgr = 0;
-    userData = 0;
+    mgr = nullptr;
+    userData = nullptr;
     if (confEnt) {
         std::string buf = confEnt;
         caption   = stripPrefix(buf, '|');
@@ -718,7 +718,7 @@ InstallSource::~InstallSource() {
 void InstallSource::flush() {
     if (mgr) {
         delete mgr;
-        mgr = 0;
+        mgr = nullptr;
     }
 }
 
@@ -726,7 +726,7 @@ void InstallSource::flush() {
 SWMgr *InstallSource::getMgr() {
     if (!mgr)
         // ..., false = don't augment ~home directory.
-        mgr = new SWMgr(localShadow.c_str(), true, 0, false, false);
+        mgr = new SWMgr(localShadow.c_str(), true, nullptr, false, false);
     return mgr;
 }
 

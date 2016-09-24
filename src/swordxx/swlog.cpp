@@ -35,7 +35,7 @@
 namespace swordxx {
 
 
-SWLog *SWLog::systemLog = 0;
+SWLog * SWLog::systemLog = nullptr;
 
 const int SWLog::LOG_ERROR     = 1;
 const int SWLog::LOG_WARN      = 2;
@@ -48,7 +48,7 @@ SWLog *SWLog::getSystemLog() {
     SWLog **clear;
     public:
         __staticSystemLog(SWLog **clear) { this->clear = clear; }
-        ~__staticSystemLog() { delete *clear; *clear = 0; }
+        ~__staticSystemLog() { delete *clear; *clear = nullptr; }
     } _staticSystemLog(&SWLog::systemLog);
 
     if (!systemLog)

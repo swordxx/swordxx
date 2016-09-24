@@ -48,7 +48,10 @@ using swordxx::RawGenBook;
 using swordxx::SWKey;
 
 
-void printTree(TreeKeyIdx treeKey, TreeKeyIdx *target = 0, int level = 1) {
+void printTree(TreeKeyIdx treeKey,
+               TreeKeyIdx * target = nullptr,
+               int level = 1)
+{
     if (!target)
         target = &treeKey;
 

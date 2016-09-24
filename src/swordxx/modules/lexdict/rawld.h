@@ -38,10 +38,15 @@ class SWDLLEXPORT RawLD : public RawStr, public SWLD {
 public:
 
 
-    RawLD(const char *ipath, const char *iname = 0, const char *idesc = 0,
-            SWTextEncoding encoding = ENC_UNKNOWN,
-            SWTextDirection dir = DIRECTION_LTR,
-            SWTextMarkup markup = FMT_UNKNOWN, const char* ilang = 0, bool caseSensitive = false, bool strongsPadding = true);
+    RawLD(char const * ipath,
+          char const * iname = nullptr,
+          char const * idesc = nullptr,
+          SWTextEncoding encoding = ENC_UNKNOWN,
+          SWTextDirection dir = DIRECTION_LTR,
+          SWTextMarkup markup = FMT_UNKNOWN,
+          char const * ilang = nullptr,
+          bool caseSensitive = false,
+          bool strongsPadding = true);
 
     virtual ~RawLD();
     virtual std::string &getRawEntryBuf() const;

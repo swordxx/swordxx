@@ -190,7 +190,9 @@ VersificationMgr::System::~System() {
 
 
 const VersificationMgr::Book *VersificationMgr::System::getBook(int number) const {
-    return (number < (signed int)p->books.size()) ? &(p->books[number]) : 0;
+    return (number < (signed int)p->books.size())
+            ? &(p->books[number])
+            : nullptr;
 }
 
 
@@ -242,7 +244,7 @@ void VersificationMgr::System::loadFromSBook(const sbook *ot, const sbook *nt, i
     // TODO: build offset speed array
 
     // parse mappings
-    if (mappings != NULL) {
+    if (mappings) {
         const unsigned char *m=mappings;
         for (; *m != 0; m += strlen((const char*)m)+1) {
             p->mappingsExtraBooks.push_back((const char*)m);
@@ -378,7 +380,7 @@ public:
     map<std::string, System> systems;
 };
 // ---------------- statics -----------------
-VersificationMgr *VersificationMgr::systemVersificationMgr = 0;
+VersificationMgr * VersificationMgr::systemVersificationMgr = nullptr;
 
 class __staticsystemVersificationMgr {
 public:
@@ -406,7 +408,7 @@ void VersificationMgr::setSystemVersificationMgr(VersificationMgr *newVersificat
 
 const VersificationMgr::System *VersificationMgr::getVersificationSystem(const char *name) const {
     map<std::string, System>::const_iterator it = p->systems.find(name);
-    return (it != p->systems.end()) ? &(it->second) : 0;
+    return (it != p->systems.end()) ? &(it->second) : nullptr;
 }
 
 
@@ -459,7 +461,7 @@ void VersificationMgr::System::translateVerse(const System *dstSys, const char *
             return;
         }
 
-        const unsigned char *a = NULL;
+        unsigned char const * a = nullptr;
 
         // reversed mapping should use forward search for item
         for (unsigned int i=0; i<dstSys->p->mappings[b].size(); ++i) {
@@ -478,11 +480,11 @@ void VersificationMgr::System::translateVerse(const System *dstSys, const char *
                     return;
                 }
                 // destination mapping can have duplicate items, use the last (by using <=)
-                if (a == NULL || (a[5]>a[6]?a[5]:a[6]) <= (m[5]>m[6]?m[5]:m[6]))
+                if (!a || (a[5]>a[6]?a[5]:a[6]) <= (m[5]>m[6]?m[5]:m[6]))
                     a = m;
             }
         }
-        if (a != NULL) {
+        if (!a) {
             SWLog::getSystemLog()->logDebug("set appropriate: %i %i %i %i %i %i\n",a[1],a[2],a[3],a[4],a[5],a[6]);
             (*chapter) = a[1];
             // shift verse

@@ -114,13 +114,13 @@ const char *SWMgr::globalConfPath =
         SWORDXX_SYSCONF_INSTALL_PREFIX "/swordxx.conf";
 
 void SWMgr::init() {
-    SWOptionFilter *tmpFilter = 0;
-    configPath  = 0;
-    prefixPath  = 0;
+    SWOptionFilter * tmpFilter = nullptr;
+    configPath  = nullptr;
+    prefixPath  = nullptr;
     configType  = 0;
-    myconfig    = 0;
-    mysysconfig = 0;
-    homeConfig  = 0;
+    myconfig    = nullptr;
+    mysysconfig = nullptr;
+    homeConfig  = nullptr;
     augmentHome = true;
 
     cipherFilters.clear();
@@ -305,14 +305,14 @@ void SWMgr::commonInit(SWConfig *iconfig, SWConfig *isysconfig, bool autoload, S
 
     if (iconfig) {
         config   = iconfig;
-        myconfig = 0;
+        myconfig = nullptr;
     }
-    else config = 0;
+    else config = nullptr;
     if (isysconfig) {
         sysConfig   = isysconfig;
-        mysysconfig = 0;
+        mysysconfig = nullptr;
     }
-    else sysConfig = 0;
+    else sysConfig = nullptr;
 
     if (autoload)
         Load();
@@ -320,7 +320,7 @@ void SWMgr::commonInit(SWConfig *iconfig, SWConfig *isysconfig, bool autoload, S
 
 
 SWMgr::SWMgr(SWFilterMgr *filterMgr, bool multiMod) {
-    commonInit(0, 0, true, filterMgr, multiMod);
+    commonInit(nullptr, nullptr, true, filterMgr, multiMod);
 }
 
 
@@ -366,8 +366,8 @@ SWMgr::SWMgr(const char *iConfigPath, bool autoload, SWFilterMgr *filterMgr, boo
         }
     }
 
-    config = 0;
-    sysConfig = 0;
+    config = nullptr;
+    sysConfig = nullptr;
 
     if (autoload && configPath)
         Load();
@@ -395,7 +395,7 @@ void SWMgr::findConfig(char *configType, char **prefixPath, char **configPath, s
     ConfigEntMap::iterator entry;
     ConfigEntMap::iterator lastEntry;
 
-    SWConfig *sysConf = 0;
+    SWConfig * sysConf = nullptr;
     std::string sysConfDataPath = "";
 
     *configType = 0;
@@ -425,7 +425,7 @@ void SWMgr::findConfig(char *configType, char **prefixPath, char **configPath, s
             }
             else {
                 delete sysConf;
-                sysConf = 0;
+                sysConf = nullptr;
             }
         }
         if (sysConfDataPath.empty()) {
@@ -490,10 +490,11 @@ void SWMgr::findConfig(char *configType, char **prefixPath, char **configPath, s
             // check for systemwide globalConfPath
 
             SWLog::getSystemLog()->logDebug("Parsing %s...", globalConfPath);
-            char *globPaths = 0;
+            char * globPaths = nullptr;
             char *gfp;
             stdstr(&globPaths, globalConfPath);
-            for (gfp = strtok(globPaths, ":"); gfp; gfp = strtok(0, ":")) {
+            for (gfp = strtok(globPaths, ":"); gfp; gfp = strtok(nullptr, ":"))
+            {
                 SWLog::getSystemLog()->logDebug("Checking for %s...", gfp);
                 if (FileMgr::existsFile(gfp)) {
                     SWLog::getSystemLog()->logDebug("found.");
@@ -707,16 +708,16 @@ void SWMgr::augmentModules(const char *ipath, bool multiMod) {
     std::string path(ipath);
     addTrailingDirectorySlash(path);
     if (FileMgr::existsDir(path.c_str(), "mods.d")) {
-        char *savePrefixPath = 0;
-        char *saveConfigPath = 0;
-        SWConfig *saveConfig = 0;
+        char * savePrefixPath = nullptr;
+        char * saveConfigPath = nullptr;
+        SWConfig * saveConfig = nullptr;
         stdstr(&savePrefixPath, prefixPath);
         stdstr(&prefixPath, path.c_str());
         path += "mods.d";
         stdstr(&saveConfigPath, configPath);
         stdstr(&configPath, path.c_str());
         saveConfig = config;
-        config = myconfig = 0;
+        config = myconfig = nullptr;
         loadConfigDir(configPath);
 
         if (multiMod) {
@@ -794,7 +795,7 @@ signed char SWMgr::Load() {
         }
         if (configType) {    // force reload on config object because we may have installed new modules
             delete myconfig;
-            config = myconfig = 0;
+            config = myconfig = nullptr;
             loadConfigDir(configPath);
         }
         else    config->Load();
@@ -833,7 +834,7 @@ SWModule *SWMgr::createModule(const char *name, const char *driver, ConfigEntMap
 {
     std::string description, datapath, misc1;
     ConfigEntMap::iterator entry;
-    SWModule *newmod = 0;
+    SWModule * newmod = nullptr;
     std::string lang, sourceformat, encoding;
     signed char direction, enc, markup;
 
@@ -902,7 +903,7 @@ SWModule *SWMgr::createModule(const char *name, const char *driver, ConfigEntMap
     }
 
     if ((!stricmp(driver, "zText")) || (!stricmp(driver, "zCom")) || (!stricmp(driver, "zText4")) || (!stricmp(driver, "zCom4"))) {
-        SWCompress *compress = 0;
+        SWCompress * compress = nullptr;
         int blockType = CHAPTERBLOCKS;
         misc1 = ((entry = section.find("BlockType")) != section.end()) ? (*entry).second : std::string("CHAPTER");
         if (!stricmp(misc1.c_str(), "VERSE"))
@@ -982,7 +983,7 @@ SWModule *SWMgr::createModule(const char *name, const char *driver, ConfigEntMap
         }
 
     if (!stricmp(driver, "zLD")) {
-        SWCompress *compress = 0;
+        SWCompress * compress = nullptr;
         int blockCount;
         bool caseSensitive = ((entry = section.find("CaseSensitiveKeys")) != section.end()) ? (*entry).second == "true": false;
         bool strongsPadding = ((entry = section.find("StrongsPadding")) != section.end()) ? (*entry).second == "true": true;
@@ -1228,7 +1229,7 @@ void SWMgr::CreateMods(bool multiMod) {
     std::string driver;
     for (auto & sp : config->Sections) {
         ConfigEntMap & section = sp.second;
-        newmod = 0;
+        newmod = nullptr;
 
         driver = ((entry = section.find("ModDrv")) != section.end()) ? (*entry).second : std::string();
         if (!driver.empty()) {
@@ -1294,7 +1295,7 @@ void SWMgr::InstallScan(const char *dirname)
 {
    DIR *dir;
    struct dirent *ent;
-   FileDesc *conffd = 0;
+   FileDesc * conffd = nullptr;
    std::string newmodfile;
    std::string targetName;
 
@@ -1325,7 +1326,7 @@ void SWMgr::InstallScan(const char *dirname)
                                 conffd->seek(0L, SEEK_END);
                             else {
                                 FileMgr::getSystemFileMgr()->close(conffd);
-                                conffd = 0;
+                                conffd = nullptr;
                             }
                         }
                     }

@@ -38,7 +38,17 @@ class SWDLLEXPORT zLD : public zStr, public SWLD {
 public:
 
 
-    zLD(const char *ipath, const char *iname = 0, const char *idesc = 0, long blockCount = 200, SWCompress *icomp = 0, SWTextEncoding encoding = ENC_UNKNOWN, SWTextDirection dir = DIRECTION_LTR, SWTextMarkup markup = FMT_UNKNOWN, const char* ilang = 0, bool caseSensitive = false, bool strongsPadding = true);
+    zLD(char const * ipath,
+        char const * iname = nullptr,
+        char const * idesc = nullptr,
+        long blockCount = 200,
+        SWCompress * icomp = nullptr,
+        SWTextEncoding encoding = ENC_UNKNOWN,
+        SWTextDirection dir = DIRECTION_LTR,
+        SWTextMarkup markup = FMT_UNKNOWN,
+        char const * ilang = nullptr,
+        bool caseSensitive = false,
+        bool strongsPadding = true);
     virtual ~zLD();
     virtual std::string &getRawEntryBuf() const;
 

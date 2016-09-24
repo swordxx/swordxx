@@ -43,7 +43,7 @@ class StatusReporter;
 class SWDLLEXPORT InstallSource {
     SWMgr *mgr;
 public:
-    InstallSource(const char *type, const char *confEnt = 0);
+    InstallSource(char const * type, char const * confEnt = nullptr);
     virtual ~InstallSource();
     std::string getConfEnt() {
         return caption +"|" + source + "|" + directory + "|" + u + "|" + p + "|" + uid;
@@ -105,7 +105,10 @@ public:
      *  This will get overridden if a password is required and provided in an indivual
      *  source configuration.
          */
-    InstallMgr(const char *privatePath = "./", StatusReporter *statusReporter = 0, std::string u="ftp", std::string p="installmgr@user.com");
+    InstallMgr(char const * privatePath = "./",
+               StatusReporter * statusReporter = nullptr,
+               std::string u = "ftp",
+               std::string p = "installmgr@user.com");
     virtual ~InstallMgr();
 
     /** Call to re-read InstallMgr.conf
@@ -130,7 +133,10 @@ public:
 
         /** call to install a module from a local path (fromLocation) or remote InstallSource (is) (leave the other 0)
          */
-    virtual int installModule(SWMgr *destMgr, const char *fromLocation, const char *modName, InstallSource *is = 0);
+    virtual int installModule(SWMgr * destMgr,
+                              char const * fromLocation,
+                              char const * modName,
+                              InstallSource * is = nullptr);
 
         /** call to obtain and locally cache the available content list of the remote source
          */

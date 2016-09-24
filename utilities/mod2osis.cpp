@@ -56,7 +56,7 @@ void errorOutHelp(char *appName) {
 
 int main(int argc, char **argv)
 {
-    SWModule *inModule = 0;
+    SWModule * inModule = nullptr;
     ThMLOSIS filter;
 
     cerr << "\n\n*** Don't use this utility *** \n\n";

@@ -72,7 +72,7 @@ char OSISEnum::processText(std::string &text, const SWKey *key, const SWModule *
                 if (hasPrefix(token, "w ")) {    // Word
                     XMLTag wtag(token.c_str());
                     if (!wtag.getAttribute("n").empty()) {
-                        wtag.setAttribute("n", 0);
+                        wtag.setAttribute("n", nullptr);
                         token = wtag;
                         trimString(token);
                         // drop <>

@@ -61,7 +61,7 @@ RawVerse::RawVerse(const char *ipath, int fileMode)
     std::string buf;
     buf.reserve(std::strlen(ipath) + sizeof("/ot.vss"));
 
-    path = 0;
+    path = nullptr;
     stdstr(&path, ipath);
 
     buf = path;
@@ -248,7 +248,7 @@ void RawVerse::doLinkEntry(char testmt, long destidxoff, long srcidxoff) {
 
 char RawVerse::createModule(const char *ipath, const char *v11n)
 {
-    char *path = 0;
+    char * path = nullptr;
     char *buf = new char [ strlen (ipath) + 20 ];
     FileDesc *fd, *fd2;
 

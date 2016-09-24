@@ -41,12 +41,16 @@ class SWDLLEXPORT zCom : public zVerse, public SWCom {
 
 public:
 
-    zCom(const char *ipath, const char *iname = 0, const char *idesc = 0,
-            int blockType = CHAPTERBLOCKS, SWCompress *icomp = 0,
-            SWTextEncoding encoding = ENC_UNKNOWN,
-            SWTextDirection dir = DIRECTION_LTR,
-            SWTextMarkup markup = FMT_UNKNOWN, const char *ilang = 0,
-            const char *versification = "KJV");
+    zCom(char const * ipath,
+         char const * iname = nullptr,
+         char const * idesc = nullptr,
+         int blockType = CHAPTERBLOCKS,
+         SWCompress * icomp = nullptr,
+         SWTextEncoding encoding = ENC_UNKNOWN,
+         SWTextDirection dir = DIRECTION_LTR,
+         SWTextMarkup markup = FMT_UNKNOWN,
+         char const * ilang = nullptr,
+         char const * versification = "KJV");
     virtual ~zCom();
     virtual std::string &getRawEntryBuf() const;
     virtual void increment(int steps = 1);

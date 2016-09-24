@@ -56,18 +56,20 @@ class SWDLLEXPORT SWCom : public SWModule {
     char *versification;
 
 protected:
-    VerseKey &getVerseKey(const SWKey *key = 0) const;
+    VerseKey & getVerseKey(SWKey const * key = nullptr) const;
 
 
 public:
 
     /** Initializes data for instance of SWCom
     */
-    SWCom(const char *imodname = 0, const char *imoddesc = 0,
-            SWTextEncoding enc = ENC_UNKNOWN,
-            SWTextDirection dir = DIRECTION_LTR,
-            SWTextMarkup mark = FMT_UNKNOWN, const char *ilang = 0,
-            const char *versification = "KJV");
+    SWCom(char const * imodname = nullptr,
+          char const * imoddesc = nullptr,
+          SWTextEncoding enc = ENC_UNKNOWN,
+          SWTextDirection dir = DIRECTION_LTR,
+          SWTextMarkup mark = FMT_UNKNOWN,
+          char const * ilang = nullptr,
+          char const * versification = "KJV");
 
     virtual ~SWCom();
     virtual SWKey *createKey() const;

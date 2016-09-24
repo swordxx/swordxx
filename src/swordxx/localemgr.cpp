@@ -39,7 +39,7 @@
 namespace swordxx {
 
 
-LocaleMgr *LocaleMgr::systemLocaleMgr = 0;
+LocaleMgr * LocaleMgr::systemLocaleMgr = nullptr;
 
 
 class __staticsystemLocaleMgr {
@@ -62,22 +62,22 @@ void LocaleMgr::setSystemLocaleMgr(LocaleMgr *newLocaleMgr) {
     if (systemLocaleMgr)
         delete systemLocaleMgr;
     systemLocaleMgr = newLocaleMgr;
-    SWLocale *locale = new SWLocale(0);
+    SWLocale * locale = new SWLocale(nullptr);
     systemLocaleMgr->locales->insert(LocaleMap::value_type(locale->getName(), locale));
 }
 
 
 LocaleMgr::LocaleMgr(const char *iConfigPath) {
     locales = new LocaleMap();
-    char *prefixPath = 0;
-    char *configPath = 0;
-    SWConfig *sysConf = 0;
+    char * prefixPath = nullptr;
+    char * configPath = nullptr;
+    SWConfig * sysConf = nullptr;
     char configType = 0;
     std::string path;
     std::list<std::string> augPaths;
     ConfigEntMap::iterator entry;
 
-    defaultLocaleName = 0;
+    defaultLocaleName = nullptr;
 
     if (!iConfigPath) {
         SWLog::getSystemLog()->logDebug("LOOKING UP LOCALE DIRECTORY...");
@@ -252,7 +252,7 @@ const char *LocaleMgr::getDefaultLocaleName() {
 
 
 void LocaleMgr::setDefaultLocaleName(const char *name) {
-    char *tmplang=0;
+    char * tmplang = nullptr;
     stdstr(&tmplang, name);
     // discard everything after '.' usually encoding e.g. .UTF-8
     strtok(tmplang, ".");
@@ -264,7 +264,7 @@ void LocaleMgr::setDefaultLocaleName(const char *name) {
     // First check for what we ask for
     if (locales->find(tmplang) == locales->end()) {
         // check for locale without country
-        char *nocntry=0;
+        char * nocntry = nullptr;
         stdstr(&nocntry, tmplang);
         strtok(nocntry, "_");
         if (locales->find(nocntry) != locales->end()) {

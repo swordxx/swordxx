@@ -66,7 +66,7 @@ EncodingFilterMgr::EncodingFilterMgr(char enc)
         case ENC_SCSU:   targetenc = new UTF8SCSU();   break;
 #endif
         default: // i.e. case ENC_UTF8
-            targetenc = NULL;
+            targetenc = nullptr;
     }
 }
 
@@ -126,7 +126,7 @@ char EncodingFilterMgr::Encoding(char enc) {
             case ENC_SCSU:   targetenc = new UTF8SCSU();   break;
 #endif
             default: // i.e. case ENC_UTF8
-                targetenc = NULL;
+                targetenc = nullptr;
         }
 
         ModMap::const_iterator module;

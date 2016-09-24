@@ -59,7 +59,7 @@ public:
     * @param ikey text key (will take various forms of 'BOOK CH:VS'.
     * See parse() for more detailed information)
     */
-    VerseTreeKey(TreeKey *treeKey, const char *ikey = 0);
+    VerseTreeKey(TreeKey * treeKey, char const * ikey = nullptr);
 
     /**
     * VerseKey Constructor - initializes instance of VerseKey

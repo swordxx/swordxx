@@ -34,7 +34,9 @@ class SWDLLEXPORT UTF8HebrewPoints : public SWOptionFilter {
 public:
     UTF8HebrewPoints();
     virtual ~UTF8HebrewPoints();
-    virtual char processText(std::string &text, const SWKey *key = 0, const SWModule *module = 0);
+    virtual char processText(std::string & text,
+                             SWKey const * key = nullptr,
+                             SWModule const * module = nullptr);
 };
 
 } /* namespace swordxx */

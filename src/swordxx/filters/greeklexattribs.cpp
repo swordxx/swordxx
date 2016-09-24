@@ -48,14 +48,14 @@ char GreekLexAttribs::processText(std::string &text, const SWKey *key, const SWM
         string freq;
         char val[128], *valto;
         char wordstr[7];
-        const char *currentPhrase = 0;
-        const char *currentPhraseEnd = 0;
+        char const * currentPhrase = nullptr;
+        char const * currentPhraseEnd = nullptr;
         int number = 0;
 
 
         for (from = text.c_str(); *from; from++) {
             if (inAV) {
-                if (currentPhrase == 0) {
+                if (currentPhrase == nullptr) {
                     if (isalpha(*from))
                         currentPhrase = from;
                 }
@@ -99,8 +99,8 @@ char GreekLexAttribs::processText(std::string &text, const SWKey *key, const SWM
                             freq.erase(0,freq.find_first_not_of("\r\n\v\t ")); freq.erase(freq.find_last_not_of("\r\n\v\t ")+1);
                             module->getEntryAttributes()["AVPhrase"][wordstr]["Phrase"] = phrase.c_str();
                             module->getEntryAttributes()["AVPhrase"][wordstr]["Frequency"] = freq.c_str();
-                            currentPhrase = 0;
-                            currentPhraseEnd = 0;
+                            currentPhrase = nullptr;
+                            currentPhraseEnd = nullptr;
                         }
                     }
                 }

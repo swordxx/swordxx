@@ -31,7 +31,7 @@ namespace swordxx {
 
 void TreeKey::init() {
     unsnappedKeyText = "";
-    posChangeListener = 0;
+    posChangeListener = nullptr;
 }
 
 
@@ -44,7 +44,7 @@ void TreeKey::assureKeyPath(const char *keyBuffer) {
             return;
     }
 
-    char *keybuf = 0;
+    char * keybuf = nullptr;
     stdstr(&keybuf, keyBuffer);
 
     root();
@@ -85,7 +85,7 @@ void TreeKey::assureKeyPath(const char *keyBuffer) {
 //      std::cout << getLocalName() << " : " << tok << std::endl;
 #endif
 
-        tok = strtok(0, "/");
+        tok = strtok(nullptr, "/");
         trimString(tok);
 
     }

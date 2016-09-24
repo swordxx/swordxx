@@ -35,7 +35,7 @@ namespace swordxx {
  */
 
 SWGenBook::SWGenBook(SWKey * key_, const char *imodname, const char *imoddesc, SWTextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char* ilang) : SWModule(key_, imodname, imoddesc, (char *)"Generic Books", enc, dir, mark, ilang) {
-    tmpTreeKey = 0;
+    tmpTreeKey = nullptr;
 }
 
 

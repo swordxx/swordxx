@@ -38,12 +38,15 @@
 namespace swordxx {
 
 
-StringMgr *StringMgr::systemStringMgr = 0;
+StringMgr * StringMgr::systemStringMgr = nullptr;
 
 class __staticsystemStringMgr {
 public:
     __staticsystemStringMgr() { }
-    ~__staticsystemStringMgr() { if (StringMgr::systemStringMgr) delete StringMgr::systemStringMgr; StringMgr::systemStringMgr = 0; }
+    ~__staticsystemStringMgr() {
+        delete StringMgr::systemStringMgr;
+        StringMgr::systemStringMgr = nullptr;
+    }
 } _staticsystemStringMgr;
 
 
@@ -219,7 +222,7 @@ char * StringMgr::upperUTF8(char * t, std::size_t const max) const {
  */
 char * StringMgr::upperLatin1(char * buf, std::size_t maxlen) const {
     if (!buf)
-        return 0;
+        return nullptr;
 
     char *ret = buf;
     bool checkMax = maxlen;
@@ -253,21 +256,21 @@ char * ICUStringMgr::upperUTF8(char * buf, std::size_t const maxlen) const {
     UChar *lowerStr = new UChar[max+10];
     UChar *upperStr = new UChar[max+10];
 
-    u_strFromUTF8(lowerStr, max+9, 0, buf, -1, &err);
+    u_strFromUTF8(lowerStr, max+9, nullptr, buf, -1, &err);
     if (err != U_ZERO_ERROR) {
         delete [] lowerStr;
         delete [] upperStr;
         return ret;
     }
 
-    u_strToUpper(upperStr, max+9, lowerStr, -1, 0, &err);
+    u_strToUpper(upperStr, max+9, lowerStr, -1, nullptr, &err);
     if (err != U_ZERO_ERROR) {
         delete [] lowerStr;
         delete [] upperStr;
         return ret;
     }
 
-    ret = u_strToUTF8(ret, max, 0, upperStr, -1, &err);
+    ret = u_strToUTF8(ret, max, nullptr, upperStr, -1, &err);
 
     delete [] lowerStr;
     delete [] upperStr;

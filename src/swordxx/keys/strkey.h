@@ -42,7 +42,7 @@ public:
   *
   * @param ikey text key (word, city, name, etc.)
   */
-  StrKey (const char *ikey = 0);
+  StrKey(char const * ikey = nullptr);
   /** cleans up instance of StrKey
   */
   virtual ~ StrKey ();

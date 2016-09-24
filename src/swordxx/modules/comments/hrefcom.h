@@ -39,8 +39,10 @@ class SWDLLEXPORT HREFCom:public RawVerse, public SWCom {
 public:
 
 
-    HREFCom(const char *ipath, const char *prefix, const char *iname = 0,
-            const char *idesc = 0);
+    HREFCom(char const * ipath,
+            char const * prefix,
+            char const * iname = nullptr,
+            const char * idesc = nullptr);
     virtual ~HREFCom();
     virtual std::string &getRawEntryBuf() const;
 

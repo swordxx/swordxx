@@ -127,9 +127,9 @@ bool OSISOSIS::handleToken(std::string &buf, const char *token, BasicFilterUserD
                         tag.setAttribute("lemma", attr.c_str());
                     }
                 }
-                tag.setAttribute("wn", 0);
-                tag.setAttribute("savlm", 0);
-                tag.setAttribute("splitID", 0);
+                tag.setAttribute("wn", nullptr);
+                tag.setAttribute("savlm", nullptr);
+                tag.setAttribute("splitID", nullptr);
             }
             buf += tag;
         }
@@ -145,7 +145,7 @@ bool OSISOSIS::handleToken(std::string &buf, const char *token, BasicFilterUserD
                 }
 
                 if (!tag.isEmpty()) {
-                    tag.setAttribute("swordFootnote", 0);
+                    tag.setAttribute("swordFootnote", nullptr);
 
                     if (!strongsMarkup) {
                         buf += tag;

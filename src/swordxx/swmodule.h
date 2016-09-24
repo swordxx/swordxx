@@ -141,7 +141,14 @@ public:
      * @param markup Source Markup of the module (e.g. OSIS)
      * @param modlang Language of the module (e.g. en)
      */
-    SWModule(SWKey * key_, const char *imodname = 0, const char *imoddesc = 0, const char *imodtype = 0, SWTextEncoding encoding = ENC_UNKNOWN, SWTextDirection dir = DIRECTION_LTR, SWTextMarkup markup = FMT_UNKNOWN, const char *modlang = 0);
+    SWModule(SWKey * key_,
+             char const * imodname = nullptr,
+             char const * imoddesc = nullptr,
+             char const * imodtype = nullptr,
+             SWTextEncoding encoding = ENC_UNKNOWN,
+             SWTextDirection dir = DIRECTION_LTR,
+             SWTextMarkup markup = FMT_UNKNOWN,
+             char const * modlang = nullptr);
 
     /** SWModule d-tor
      */
@@ -306,11 +313,13 @@ public:
      *
      * @return ListKey set to verses that contain istr
      */
-    ListKey & search(const char *istr, int searchType = 0, int flags = 0,
-            SWKey * scope = 0,
-            bool * justCheckIfSupported = 0,
-            void (*percent) (char, void *) = &nullPercent,
-            void *percentUserData = 0);
+    ListKey & search(char const * istr,
+                     int searchType = 0,
+                     int flags = 0,
+                     SWKey * scope = nullptr,
+                     bool * justCheckIfSupported = nullptr,
+                     void (* percent)(char, void *) = &nullPercent,
+                     void * percentUserData = nullptr);
 
     /** Allocates a key of specific type for module
      * The different reimplementations of SWModule (e.g. SWText) support SWKey implementations,
@@ -534,7 +543,7 @@ public:
      * @param len max len to process
      * @return result buffer
      */
-    virtual std::string stripText(const char *buf = 0, int len = -1);
+    virtual std::string stripText(char const * buf = nullptr, int len = -1);
 
     /** Produces renderable text of the current module entry or supplied text
      *
@@ -606,8 +615,8 @@ public:
      * ask the object to build any indecies it wants for optimal searching
      */
     signed char createSearchFramework(
-            void (*percent) (char, void *) = &nullPercent,
-            void *percentUserData = 0);
+            void (* percent)(char, void *) = &nullPercent,
+            void * percentUserData = nullptr);
 
     void deleteSearchFramework();
 

@@ -317,7 +317,7 @@ Transliterator *SWTransFactory(const UnicodeString &ID,
         Transliterator *trans = instantiateTrans(ID, swstuff.resource, swstuff.dir, parseError, status);
         return trans;
     }
-    return NULL;
+    return nullptr;
 }
 
 void  instantiateTransFactory(const UnicodeString& ID, const UnicodeString& resource,
@@ -423,14 +423,14 @@ Transliterator * createTrans(const UnicodeString& preID, const UnicodeString& ID
         Transliterator *trans = Transliterator::createInstance(fullID,UTRANS_FORWARD,status);
         if (U_FAILURE(status)) {
             delete trans;
-            return NULL;
+            return nullptr;
         }
         else {
             return trans;
         }
     }
     else {
-        return NULL;
+        return nullptr;
     }
 }
 
@@ -453,7 +453,7 @@ Transliterator * instantiateTrans(const UnicodeString& ID, const UnicodeString& 
     //        parseError, status);
     if (U_FAILURE(status)) {
         std::cout << "Failed to get rules" << std::endl;
-        return NULL;
+        return nullptr;
     }
     //ruleData = parser.orphanData();
     //entry->stringArg = parser.idBlock;
@@ -472,7 +472,7 @@ Transliterator * instantiateTrans(const UnicodeString& ID, const UnicodeString& 
         std::cout << "Parse error: postContext " << *parseError.postContext << std::endl;
         std::cout << "rules were" << std::endl;
         std::cout << rules << std::endl;
-        return NULL;
+        return nullptr;
     }
 
     Transliterator::registerInstance(trans);

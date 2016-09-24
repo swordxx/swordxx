@@ -40,7 +40,7 @@ using std::endl;
 using namespace swordxx;
 
 
-void usage(const char *progName, const char *error = 0) {
+void usage(const char * progName, const char * error = nullptr) {
     if (error) fprintf(stderr, "\n%s: %s\n", progName, error);
     fprintf(stderr, "\n=== mod2imp (Revision $Rev$) Sword++ module exporter.\n");
     fprintf(stderr, "\nusage: %s <module_name> [options]\n"
@@ -86,7 +86,7 @@ int main(int argc, char **argv)
     }
     // -----------------------------------------------------
 
-    MarkupFilterMgr *markupMgr = 0;
+    MarkupFilterMgr * markupMgr = nullptr;
     if       (renderForm == "HTMLHREF") markupMgr = new MarkupFilterMgr(swordxx::FMT_HTMLHREF);
     else if  (renderForm == "OSIS")     markupMgr = new MarkupFilterMgr(swordxx::FMT_OSIS);
     else if  (renderForm == "RTF")      markupMgr = new MarkupFilterMgr(swordxx::FMT_RTF);

@@ -234,7 +234,7 @@ void MarkupFilterMgr::CreateFilters(char markup) {
 
     switch (markup) {
     case FMT_PLAIN:
-        fromplain = NULL;
+        fromplain = nullptr;
         fromthml  = new ThMLPlain();
         fromgbf   = new GBFPlain();
         fromosis  = new OSISPlain();
@@ -242,31 +242,31 @@ void MarkupFilterMgr::CreateFilters(char markup) {
         break;
 
     case FMT_THML:
-        fromplain = NULL;
-        fromthml  = NULL;
+        fromplain = nullptr;
+        fromthml  = nullptr;
         fromgbf   = new GBFThML();
-        fromosis  = NULL;
-        fromtei   = NULL;
+        fromosis  = nullptr;
+        fromtei   = nullptr;
         break;
 
     case FMT_GBF:
-        fromplain = NULL;
+        fromplain = nullptr;
         fromthml  = new ThMLGBF();
-        fromgbf   = NULL;
-        fromosis  = NULL;
-        fromtei   = NULL;
+        fromgbf   = nullptr;
+        fromosis  = nullptr;
+        fromtei   = nullptr;
         break;
 
     case FMT_HTML:
-        fromplain = NULL;
+        fromplain = nullptr;
         fromthml  = new ThMLHTML();
         fromgbf   = new GBFHTML();
-        fromosis  = NULL;
-        fromtei   = NULL;
+        fromosis  = nullptr;
+        fromtei   = nullptr;
         break;
 
     case FMT_HTMLHREF:
-        fromplain = NULL;
+        fromplain = nullptr;
         fromthml  = new ThMLHTMLHREF();
         fromgbf   = new GBFHTMLHREF();
         fromosis  = new OSISHTMLHREF();
@@ -274,7 +274,7 @@ void MarkupFilterMgr::CreateFilters(char markup) {
         break;
 
     case FMT_RTF:
-        fromplain = NULL;
+        fromplain = nullptr;
         fromthml  = new ThMLRTF();
         fromgbf   = new GBFRTF();
         fromosis  = new OSISRTF();
@@ -282,7 +282,7 @@ void MarkupFilterMgr::CreateFilters(char markup) {
         break;
 
     case FMT_LATEX:
-        fromplain = NULL;
+        fromplain = nullptr;
         fromthml  = new ThMLLaTeX();
         fromgbf   = new GBFLaTeX();
         fromosis  = new OSISLaTeX();
@@ -290,31 +290,31 @@ void MarkupFilterMgr::CreateFilters(char markup) {
         break;
 
     case FMT_OSIS:
-        fromplain = NULL;
+        fromplain = nullptr;
         fromthml  = new ThMLOSIS();
         fromgbf   = new GBFOSIS();
         fromosis  = new OSISOSIS();
-        fromtei   = NULL;
+        fromtei   = nullptr;
         break;
 
     case FMT_WEBIF:
-        fromplain = NULL;
+        fromplain = nullptr;
         fromthml  = new ThMLWEBIF();
         fromgbf   = new GBFWEBIF();
         fromosis  = new OSISWEBIF();
-        fromtei   = NULL;
+        fromtei   = nullptr;
         break;
 
     case FMT_TEI:
-        fromplain = NULL;
-        fromthml  = NULL;
-        fromgbf   = NULL;
-        fromosis  = NULL;
-        fromtei   = NULL;
+        fromplain = nullptr;
+        fromthml  = nullptr;
+        fromgbf   = nullptr;
+        fromosis  = nullptr;
+        fromtei   = nullptr;
         break;
 
     case FMT_XHTML:
-        fromplain = NULL;
+        fromplain = nullptr;
         fromthml  = new ThMLXHTML();
         fromgbf   = new GBFXHTML();
         fromosis  = new OSISXHTML();

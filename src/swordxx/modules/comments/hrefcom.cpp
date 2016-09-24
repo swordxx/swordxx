@@ -45,7 +45,7 @@ namespace swordxx {
 
 HREFCom::HREFCom(const char *ipath, const char *iprefix, const char *iname, const char *idesc) : RawVerse(ipath), SWCom(iname, idesc)
 {
-    prefix   = 0;
+    prefix   = nullptr;
     stdstr(&prefix, iprefix);
 }
 
@@ -71,7 +71,7 @@ HREFCom::~HREFCom()
 std::string &HREFCom::getRawEntryBuf() const {
     long  start;
     unsigned short size;
-    VerseKey *key = 0;
+    VerseKey * key = nullptr;
 
         key = &getVerseKey();
 

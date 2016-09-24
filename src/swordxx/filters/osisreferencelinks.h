@@ -45,9 +45,15 @@ public:
      * @param subType - which reference subTypes to hide (optional)
      * @param defaultValue - default value of option "On" or "Off" (optional)
      */
-    OSISReferenceLinks(const char *optionName, const char *optionTip, const char *type, const char *subType = 0, const char *defaultValue = "On");
+    OSISReferenceLinks(char const * optionName,
+                       char const * optionTip,
+                       char const * type,
+                       char const * subType = nullptr,
+                       char const * defaultValue = "On");
     virtual ~OSISReferenceLinks();
-    virtual char processText(std::string &text, const SWKey *key = 0, const SWModule *module = 0);
+    virtual char processText(std::string & text,
+                             SWKey const * key = nullptr,
+                             SWModule const * module = nullptr);
 };
 
 } /* namespace swordxx */

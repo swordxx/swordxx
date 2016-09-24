@@ -51,12 +51,16 @@ class SWDLLEXPORT zText:public zVerse, public SWText {
     int blockType;
 
 public:
-    zText(const char *ipath, const char *iname = 0, const char *idesc = 0,
-            int blockType = CHAPTERBLOCKS, SWCompress *icomp = 0,
-            SWTextEncoding encoding = ENC_UNKNOWN,
-            SWTextDirection dir = DIRECTION_LTR,
-            SWTextMarkup markup = FMT_UNKNOWN, const char *ilang = 0,
-            const char *versification = "KJV");
+    zText(char const * ipath,
+          char const * iname = nullptr,
+          char const * idesc = nullptr,
+          int blockType = CHAPTERBLOCKS,
+          SWCompress * icomp = nullptr,
+          SWTextEncoding encoding = ENC_UNKNOWN,
+          SWTextDirection dir = DIRECTION_LTR,
+          SWTextMarkup markup = FMT_UNKNOWN,
+          char const * ilang = nullptr,
+          char const * versification = "KJV");
 
     virtual ~zText();
     virtual std::string &getRawEntryBuf() const;

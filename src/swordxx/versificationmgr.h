@@ -141,7 +141,10 @@ public:
         int getBookNumberByOSISName(const char *bookName) const;
         const Book *getBook(int number) const;
         int getBookCount() const;
-        void loadFromSBook(const sbook *ot, const sbook *nt, int *chMax, const unsigned char *mappings=NULL);
+        void loadFromSBook(sbook const * ot,
+                           sbook const * nt,
+                           int * chMax,
+                           unsigned char const * mappings = nullptr);
         long getOffsetFromVerse(int book, int chapter, int verse) const;
         char getVerseFromOffset(long offset, int *book, int *chapter, int *verse) const;
         const int *getBMAX() const { return BMAX; };
@@ -154,7 +157,11 @@ public:
     static void setSystemVersificationMgr(VersificationMgr *newVersificationMgr);
     const StringList getVersificationSystems() const;
     const System *getVersificationSystem(const char *name) const;
-    void registerVersificationSystem(const char *name, const sbook *ot, const sbook *nt, int *chMax, const unsigned char *mappings=NULL);
+    void registerVersificationSystem(char const * name,
+                                     sbook const * ot,
+                                     sbook const * nt,
+                                     int * chMax,
+                                     unsigned char const * mappings = nullptr);
     void registerVersificationSystem(const char *name, const TreeKey *);
 };
 

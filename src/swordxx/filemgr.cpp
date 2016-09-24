@@ -87,7 +87,7 @@ int FileMgr::IWRITE = S_IWRITE;
 
 
 // ---------------- statics -----------------
-FileMgr *FileMgr::systemFileMgr = 0;
+FileMgr *FileMgr::systemFileMgr = nullptr;
 
 class __staticsystemFileMgr {
 public:
@@ -115,7 +115,7 @@ void FileMgr::setSystemFileMgr(FileMgr *newFileMgr) {
 
 FileDesc::FileDesc(FileMgr *parent, const char *path, int mode, int perms, bool tryDowngrade) {
     this->parent = parent;
-    this->path = 0;
+    this->path = nullptr;
     stdstr(&this->path, path);
     this->mode = mode;
     this->perms = perms;
@@ -160,7 +160,7 @@ long FileDesc::write(const void *buf, long count) {
 
 FileMgr::FileMgr(int maxFiles) {
     this->maxFiles = maxFiles;        // must be at least 2
-    files = 0;
+    files = nullptr;
 }
 
 

@@ -47,12 +47,11 @@ namespace {
 
 
 ThMLWordJS::ThMLWordJS() : SWOptionFilter(oName, oTip, oValues()) {
-
-     defaultGreekLex   = 0;
-     defaultHebLex     = 0;
-     defaultGreekParse = 0;
-     defaultHebParse   = 0;
-     mgr               = 0;
+     defaultGreekLex   = nullptr;
+     defaultHebLex     = nullptr;
+     defaultGreekParse = nullptr;
+     defaultHebParse   = nullptr;
+     mgr               = nullptr;
 }
 
 
@@ -74,7 +73,7 @@ char ThMLWordJS::processText(std::string &text, const SWKey *key, const SWModule
         std::string tmp;
         bool newText = false;
         bool needWordOut = false;
-        AttributeValue *wordAttrs = 0;
+        AttributeValue * wordAttrs = nullptr;
         std::string modName = (module)?module->getName():"";
         std::string wordSrcPrefix = modName;
 
@@ -168,8 +167,8 @@ char ThMLWordJS::processText(std::string &text, const SWKey *key, const SWModule
                         }
                         else strong.erase(0u, 1u);
 
-                        SWModule *sLex = 0;
-                        SWModule *sMorph = 0;
+                        SWModule * sLex = nullptr;
+                        SWModule * sMorph = nullptr;
                         if (gh == 'G') {
                             sLex = defaultGreekLex;
                             sMorph = defaultGreekParse;
@@ -209,7 +208,8 @@ char ThMLWordJS::processText(std::string &text, const SWKey *key, const SWModule
 
 
 
-                            if (!sMorph) sMorph = 0;    // avoid unused warnings for now
+                            if (!sMorph)
+                                sMorph = nullptr; // avoid unused warnings for now
 /*
                             if (sMorph) {
                                 std::string popMorph = "<a onclick=\"";
@@ -265,7 +265,7 @@ char ThMLWordJS::processText(std::string &text, const SWKey *key, const SWModule
             }
             else strong.erase(0u, 1u);
 
-            SWModule *sLex = 0;
+            SWModule * sLex = nullptr;
             if (gh == 'G') {
                 sLex = defaultGreekLex;
             }

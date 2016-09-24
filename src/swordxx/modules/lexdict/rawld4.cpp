@@ -74,7 +74,7 @@ char RawLD4::getEntry(long away) const
 {
     uint32_t start  = 0;
     uint32_t size   = 0;
-    char *idxbuf = 0;
+    char * idxbuf = nullptr;
     char retval  = 0;
 
     char *buf = new char [ strlen(*key) + 6 ];
@@ -85,7 +85,7 @@ char RawLD4::getEntry(long away) const
     entryBuf = "";
     if (!(retval = findOffset(buf, &start, &size, away))) {
         readText(start, &size, &idxbuf, entryBuf);
-        rawFilter(entryBuf, 0);    // hack, decipher
+        rawFilter(entryBuf, nullptr);    // hack, decipher
         rawFilter(entryBuf, key);
         entrySize = size;        // support getEntrySize call
         if (!key->isPersist())            // If we have our own key
@@ -207,7 +207,7 @@ long RawLD4::getEntryForKey(const char *key) const {
 
 
 char *RawLD4::getKeyForEntry(long entry) const {
-    char *key = 0;
+    char * key = nullptr;
     getIDXBuf(entry * IDXENTRYSIZE, &key);
     return key;
 }

@@ -55,7 +55,11 @@ public:
     virtual ~RawStr();
     void getIDXBuf(long ioffset, char **buf) const;
     void getIDXBufDat(long ioffset, char **buf) const;
-    signed char findOffset(const char *key, uint32_t *start, uint16_t *size, long away = 0, uint32_t *idxoff = 0) const;
+    signed char findOffset(char const * key,
+                           uint32_t * start,
+                           uint16_t * size,
+                           long away = 0,
+                           uint32_t * idxoff = nullptr) const;
     void readText(uint32_t start, uint16_t *size, char **idxbuf, std::string &buf) const;
     static signed char createModule(const char *path);
 };

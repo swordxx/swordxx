@@ -44,8 +44,8 @@ SWKey::SWKey(const char *ikey)
     init();
     index     = 0;
     persist   = 0;
-    keytext   = 0;
-    rangeText = 0;
+    keytext   = nullptr;
+    rangeText = nullptr;
     error     = 0;
     userData  = 0;
     stdstr(&keytext, ikey);
@@ -58,16 +58,16 @@ SWKey::SWKey(SWKey const &k)
     index     = k.index;
     persist   = k.persist;
     userData  = k.userData;
-    keytext   = 0;
-    rangeText = 0;
+    keytext   = nullptr;
+    rangeText = nullptr;
     error     = k.error;
     setText(k.getText());
 }
 
 void SWKey::init() {
     boundSet = false;
-    locale = 0;
-    localeName = 0;
+    locale = nullptr;
+    localeName = nullptr;
     setLocale(LocaleMgr::getSystemLocaleMgr()->getDefaultLocaleName());
 }
 

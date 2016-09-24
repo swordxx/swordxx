@@ -36,7 +36,7 @@ namespace swordxx {
 
 SWCompress::SWCompress()
 {
-    buf = zbuf = 0;
+    buf = zbuf = nullptr;
     level = 6;
     Init();
 }
@@ -64,8 +64,8 @@ void SWCompress::Init()
         if (zbuf)
             free(zbuf);
 
-        buf    = 0;
-        zbuf   = 0;
+        buf    = nullptr;
+        zbuf   = nullptr;
         direct  = 0;
         zlen    = 0;
         slen    = 0;

@@ -72,9 +72,9 @@ int main(int argc, char **argv)
     int iType = 4;
     int compType = 1;
     string cipherKey = "";
-    SWCompress *compressor = 0;
-    SWModule *inModule     = 0;
-    SWModule *outModule    = 0;
+    SWCompress * compressor = nullptr;
+    SWModule * inModule     = nullptr;
+    SWModule * outModule    = nullptr;
     int compLevel = 0;
 
     if ((argc < 3) || (argc > 7)) {
@@ -154,18 +154,18 @@ int main(int argc, char **argv)
     case COM: {
         SWKey *k = inModule->getKey();
         VerseKey *vk = dynamic_cast<VerseKey *>(k);
-        outModule = new zText(argv[2], 0, 0, iType, compressor,
-            ENC_UNKNOWN, DIRECTION_LTR, FMT_UNKNOWN, 0,
+        outModule = new zText(argv[2], nullptr, nullptr, iType, compressor,
+            ENC_UNKNOWN, DIRECTION_LTR, FMT_UNKNOWN, nullptr,
             vk->getVersificationSystem());    // open our datapath with our RawText driver.
         ((VerseKey *)(SWKey *)(*inModule))->setIntros(true);
         break;
     }
     case LEX:
-        outModule = new zLD(argv[2], 0, 0, iType, compressor);        // open our datapath with our RawText driver.
+        outModule = new zLD(argv[2], nullptr, nullptr, iType, compressor);        // open our datapath with our RawText driver.
         break;
     }
 
-    SWFilter *cipherFilter = 0;
+    SWFilter * cipherFilter = nullptr;
     if (!cipherKey.empty()) {
         cipherFilter = new CipherFilter(cipherKey.c_str());
         outModule->addRawFilter(cipherFilter);

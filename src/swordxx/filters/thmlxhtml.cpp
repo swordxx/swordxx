@@ -320,8 +320,8 @@ bool ThMLXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
                 return false;
 
             const char *c, *d;
-            if (((c = strchr(src+3, '"')) == NULL) ||
-                ((d = strchr( ++c , '"')) == NULL))    // identify endpoints.
+            if (((c = strchr(src + 3u, '"')) == nullptr) ||
+                ((d = strchr(++c , '"')) == nullptr))    // identify endpoints.
                 return false;            // abandon hope.
 
             std::string imagename = "file:";

@@ -79,7 +79,7 @@ using namespace swordxx;
 using namespace std;
 
 #if SWORDXX_HAS_ICU
-UTF8NFC *normalizer = 0;
+UTF8NFC * normalizer = nullptr;
 int normalized = 0;
 
 Latin1UTF8 converter;
@@ -88,8 +88,8 @@ int converted = 0;
 
 #define DEBUG
 
-SWLD  *module       = NULL;
-SWKey *currentKey   = NULL;
+SWLD  * module       = nullptr;
+SWKey * currentKey   = nullptr;
 bool   normalize    = true;
 std::string keyStr;
 
@@ -234,7 +234,8 @@ bool handleToken(std::string &text, XMLTag *token) {
 
     const char *tokenName = token->getName();
 
-        static const char *splitPtr, *splitPtr2 = NULL;
+        static char const * splitPtr;
+        static char const * splitPtr2 = nullptr;
         static char *splitBuffer    = new char[4096];
     static SWKey tmpKey;
 //-- START TAG -------------------------------------------------------------------------
@@ -319,7 +320,7 @@ bool handleToken(std::string &text, XMLTag *token) {
                         cout << "currentKey: " << *currentKey << endl;
 #endif
                         linkToEntry(currentKey->getText(), splitBuffer);
-                                                splitPtr = 0;
+                                                splitPtr = nullptr;
                                         }
                                 }
 #endif
@@ -338,7 +339,7 @@ bool handleToken(std::string &text, XMLTag *token) {
     return false;
 }
 
-void usage(const char *app, const char *error = 0) {
+void usage(char const * app, char const * error = nullptr) {
 
     if (error) fprintf(stderr, "\n%s: %s\n", app, error);
 
@@ -378,7 +379,7 @@ int main(int argc, char **argv) {
     std::string modDrv           = "";
     std::string recommendedPath  = "./modules/lexdict/";
     std::string cipherKey        = "";
-    SWCompress *compressor = 0;
+    SWCompress * compressor = nullptr;
 
     for (int i = 3; i < argc; i++) {
         if (!strcmp(argv[i], "-z")) {
@@ -478,7 +479,7 @@ int main(int argc, char **argv) {
             fprintf(stderr, "error: %s: couldn't create module at path: %s \n", program.c_str(), modName.c_str());
             exit(-3);
         }
-        module = new zLD(modName.c_str(), 0, 0, 30, compressor);
+        module = new zLD(modName.c_str(), nullptr, nullptr, 30, compressor);
     }
     else if (modDrv == "RawLD") {
         if (RawLD::createModule(modName.c_str())) {
@@ -495,7 +496,7 @@ int main(int argc, char **argv) {
         module = new RawLD4(modName.c_str());
     }
 
-    SWFilter *cipherFilter = 0;
+    SWFilter * cipherFilter = nullptr;
 
     if (cipherKey.size()) {
         fprintf(stderr, "Adding cipher filter with phrase: %s\n", cipherKey.c_str() );

@@ -55,7 +55,7 @@ void cleanbuf(char *buf) {
 }
 
 int main(int argc, char **argv) {
-    char *buffer = 0;
+    char * buffer = nullptr;
 
     if (argc < 2) {
         fprintf(stderr, "usage: %s <Mod Name> [0|1 - prepend verse reference to each line]\n", argv[0]);
@@ -78,7 +78,7 @@ int main(int argc, char **argv) {
     SWModule *mod = it->second;
 
     SWKey *key = (*mod);
-    VerseKey *vkey = 0;
+    VerseKey * vkey = nullptr;
     try {
         vkey = dynamic_cast<VerseKey *>(key);
     }

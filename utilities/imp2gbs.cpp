@@ -159,7 +159,7 @@ void writeEntry(SWModule *book, std::string keyBuffer, std::string entBuffer) {
             UChar *upper = new UChar[(lexLevels+1)*3];
             memcpy(upper, ubuffer, lexLevels*sizeof(UChar));
             upper[lexLevels] = 0;
-            len = u_strToUpper(upper, (lexLevels+1)*3, upper, -1, 0, &err);
+            len = u_strToUpper(upper, (lexLevels+1)*3, upper, -1, nullptr, &err);
             memmove(ubuffer+len+1, ubuffer, (max-len)*sizeof(UChar));
             memcpy(ubuffer, upper, len*sizeof(UChar));
             ubuffer[len] = '/';
@@ -172,7 +172,7 @@ void writeEntry(SWModule *book, std::string keyBuffer, std::string entBuffer) {
                 ubuffer[shift] = '/';
                 totalShift += (shift+1);
             }
-            u_strToUTF8(&keyBuffer[0u], max, 0, ubuffer, -1, &err);
+            u_strToUTF8(&keyBuffer[0u], max, nullptr, ubuffer, -1, &err);
         }
 
 /*

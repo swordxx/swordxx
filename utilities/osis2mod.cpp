@@ -89,13 +89,13 @@ const int EXIT_BAD_NESTING =   5; // BSP or BCV nesting is bad
 UTF8NFC    normalizer;
 Latin1UTF8 converter;
 #endif
-SWFilter*  outputEncoder = NULL;
-SWFilter*  outputDecoder = NULL;
+SWFilter * outputEncoder = nullptr;
+SWFilter * outputDecoder = nullptr;
 
 int normalized = 0;
 int converted  = 0;
 
-SWText *module = 0;
+SWText * module = nullptr;
 VerseKey currentVerse;
 std::string v11n     = "KJV";
 char activeOsisID[255];
@@ -936,7 +936,7 @@ bool handleToken(std::string &text, XMLTag token) {
                 // If the marker attribute is present and empty, then there is nothing to do.
                 // And have it within the WOC markup
                 if (token.getAttribute("marker").empty() || token.getAttribute("marker")[0]) {
-                    token.setAttribute("who", 0); // remove the who="Jesus"
+                    token.setAttribute("who", nullptr); // remove the who="Jesus"
                     text.append(token);
                 }
                 return true;
@@ -1118,7 +1118,7 @@ bool handleToken(std::string &text, XMLTag token) {
                 // If the marker attribute is present and empty, then there is nothing to do.
                 // And have it within the WOC markup
                 if (token.getAttribute("marker").empty() || token.getAttribute("marker")[0]) {
-                    token.setAttribute("who", 0); // remove the who="Jesus"
+                    token.setAttribute("who", nullptr); // remove the who="Jesus"
                     text.append(token);
                 }
 
@@ -1286,7 +1286,7 @@ XMLTag transformBSP(XMLTag t) {
                 // Note: in the case of </p> the topToken is a <div type="x-p">
                 t = topToken;
                 t.setAttribute("eID", t.getAttribute("sID").c_str());
-                t.setAttribute("sID", 0);
+                t.setAttribute("sID", nullptr);
             }
         }
         else {
@@ -1338,8 +1338,10 @@ void writeLinks()
     }
 }
 
-void usage(const char *app, const char *error = 0, const bool verboseHelp = false) {
-
+void usage(char const * app,
+           char const * error = nullptr,
+           bool const verboseHelp = false)
+{
     if (error) fprintf(stderr, "\n%s: %s\n", app, error);
 
     fprintf(stderr, "OSIS Bible/commentary module creation tool for The Sword++ Project\n");
@@ -1860,7 +1862,7 @@ int main(int argc, char **argv) {
     int iType              = 4;
     int entrySize          = 0;
     std::string cipherKey        = "";
-    SWCompress *compressor = 0;
+    SWCompress * compressor = nullptr;
     int compLevel      = 0;
 
     for (int i = 3; i < argc; i++) {
@@ -1896,8 +1898,8 @@ int main(int argc, char **argv) {
             if (i+1 < argc) {
                 switch (argv[++i][0]) {
                 case '1': // leave as UTF-8
-                    outputEncoder = NULL;
-                    outputDecoder = NULL;
+                    outputEncoder = nullptr;
+                    outputDecoder = nullptr;
                     break;
 
                 case '2':
@@ -1911,8 +1913,8 @@ int main(int argc, char **argv) {
                     break;
 #endif
                 default:
-                    outputEncoder = NULL;
-                    outputDecoder = NULL;
+                    outputEncoder = nullptr;
+                    outputDecoder = nullptr;
                 }
             }
         }
@@ -2021,14 +2023,14 @@ int main(int argc, char **argv) {
             // Taking defaults except for first, fourth, fifth and last argument
             module = new zText4(
                 path,           // ipath
-                0,              // iname
-                0,              // idesc
+                nullptr,        // iname
+                nullptr,        // idesc
                 iType,          // iblockType
                 compressor,     // icomp
                 ENC_UNKNOWN,    // enc
                 DIRECTION_LTR,  // dir
                 FMT_UNKNOWN,    // markup
-                0,              // lang
+                nullptr,        // lang
                 v11n.c_str()    // versification
                );
         }
@@ -2037,14 +2039,14 @@ int main(int argc, char **argv) {
             // Taking defaults except for first, fourth, fifth and last argument
             module = new zText(
                 path,           // ipath
-                0,              // iname
-                0,              // idesc
+                nullptr,        // iname
+                nullptr,        // idesc
                 iType,          // iblockType
                 compressor,     // icomp
                 ENC_UNKNOWN,    // enc
                 DIRECTION_LTR,  // dir
                 FMT_UNKNOWN,    // markup
-                0,              // lang
+                nullptr,        // lang
                 v11n.c_str()    // versification
                );
         }
@@ -2054,12 +2056,12 @@ int main(int argc, char **argv) {
         // Taking defaults except for first and last argument
         module = new RawText4(
                 path,           // ipath
-                0,              // iname
-                0,              // idesc
+                nullptr,        // iname
+                nullptr,        // idesc
                 ENC_UNKNOWN,    // encoding
                 DIRECTION_LTR,  // dir
                 FMT_UNKNOWN,    // markup
-                0,              // ilang
+                nullptr,        // ilang
                 v11n.c_str()    // versification
             );
     }
@@ -2068,17 +2070,17 @@ int main(int argc, char **argv) {
         // Taking defaults except for first and last argument
         module = new RawText(
                 path,           // ipath
-                0,              // iname
-                0,              // idesc
+                nullptr,        // iname
+                nullptr,        // idesc
                 ENC_UNKNOWN,    // encoding
                 DIRECTION_LTR,  // dir
                 FMT_UNKNOWN,    // markup
-                0,              // ilang
+                nullptr,        // ilang
                 v11n.c_str()    // versification
             );
     }
 
-    SWFilter *cipherFilter = 0;
+    SWFilter * cipherFilter = nullptr;
 
     if (cipherKey.length()) {
         fprintf(stderr, "Adding cipher filter with phrase: %s\n", cipherKey.c_str() );

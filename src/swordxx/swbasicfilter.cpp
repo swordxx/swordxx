@@ -61,10 +61,10 @@ SWBasicFilter::SWBasicFilter() {
     p = new Private;
 
     processStages = 0;
-    tokenStart    = 0;
-    tokenEnd      = 0;
-    escStart      = 0;
-    escEnd        = 0;
+    tokenStart    = nullptr;
+    tokenEnd      = nullptr;
+    escStart      = nullptr;
+    escEnd        = nullptr;
 
     setTokenStart("<");
     setTokenEnd(">");
@@ -122,7 +122,7 @@ void SWBasicFilter::setEscapeStringCaseSensitive(bool val) {
 
 
 void SWBasicFilter::addTokenSubstitute(const char *findString, const char *replaceString) {
-    char *buf = 0;
+    char * buf = nullptr;
 
     if (!tokenCaseSensitive) {
         stdstr(&buf, findString);
@@ -142,7 +142,7 @@ void SWBasicFilter::removeTokenSubstitute(const char *findString) {
 
 
 void SWBasicFilter::addAllowedEscapeString(const char *findString) {
-    char *buf = 0;
+    char * buf = nullptr;
 
     if (!escStringCaseSensitive) {
         stdstr(&buf, findString);
@@ -162,7 +162,7 @@ void SWBasicFilter::removeAllowedEscapeString(const char *findString) {
 
 
 void SWBasicFilter::addEscapeStringSubstitute(const char *findString, const char *replaceString) {
-    char *buf = 0;
+    char * buf = nullptr;
 
     if (!escStringCaseSensitive) {
         stdstr(&buf, findString);
@@ -185,7 +185,7 @@ bool SWBasicFilter::substituteToken(std::string &buf, const char *token) {
     DualStringMap::iterator it;
 
     if (!tokenCaseSensitive) {
-            char *tmp = 0;
+        char * tmp = nullptr;
         stdstr(&tmp, token);
         toupperstr(tmp);
         it = p->tokenSubMap.find(tmp);
@@ -212,7 +212,7 @@ bool SWBasicFilter::passAllowedEscapeString(std::string &buf, const char *escStr
     StringSet::iterator it;
 
     if (!escStringCaseSensitive) {
-            char *tmp = 0;
+        char * tmp = nullptr;
         stdstr(&tmp, escString);
         toupperstr(tmp);
         it = p->escPassSet.find(tmp);
@@ -250,7 +250,7 @@ bool SWBasicFilter::substituteEscapeString(std::string &buf, const char *escStri
     }
 
     if (!escStringCaseSensitive) {
-            char *tmp = 0;
+        char * tmp = nullptr;
         stdstr(&tmp, escString);
         toupperstr(tmp);
         it = p->escSubMap.find(tmp);

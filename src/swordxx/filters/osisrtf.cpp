@@ -402,7 +402,7 @@ bool OSISRTF::handleToken(std::string &buf, const char *token, BasicFilterUserDa
             if ((!tag.isEmpty() && !tag.isEndTag()) || (tag.isEmpty() && !tag.getAttribute("sID").empty())) {
                 // if <q> then remember it for the </q>
                 if (!tag.isEmpty()) {
-                    char *tagData = 0;
+                    char * tagData = nullptr;
                     stdstr(&tagData, tag.toString());
                     u->quoteStack.push(tagData);
                 }
@@ -524,7 +524,7 @@ bool OSISRTF::handleToken(std::string &buf, const char *token, BasicFilterUserDa
             FILE* imgfile;
                     if (stricmp(c, "jpg") || stricmp(c, "jpeg")) {
                           imgfile = fopen(filepath, "r");
-                          if (imgfile != NULL) {
+                          if (imgfile != nullptr) {
                                 outText("{\\nonshppict {\\pict\\jpegblip ", buf, u);
                                 while (feof(imgfile) != EOF) {
                                        scratch.setFormatted("%2x", fgetc(imgfile));

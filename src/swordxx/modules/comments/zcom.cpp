@@ -46,7 +46,7 @@ namespace swordxx {
 zCom::zCom(const char *ipath, const char *iname, const char *idesc, int iblockType, SWCompress *icomp, SWTextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char *ilang, const char *versification) : zVerse(ipath, -1, iblockType, icomp), SWCom(iname, idesc, enc, dir, mark, ilang, versification)/*, SWCompress()*/
 {
     blockType = iblockType;
-    lastWriteKey = 0;
+    lastWriteKey = nullptr;
 }
 
 /******************************************************************************

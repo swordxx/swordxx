@@ -64,10 +64,10 @@ zVerse4::zVerse4(const char *ipath, int fileMode, int blockType, SWCompress *ico
     // this line, instead of just defaulting, to keep FileMgr out of header
     if (fileMode == -1) fileMode = FileMgr::RDONLY;
 
-    path = 0;
+    path = nullptr;
     cacheBufIdx = -1;
     cacheTestament = 0;
-    cacheBuf = 0;
+    cacheBuf = nullptr;
     dirtyCache = false;
     stdstr(&path, ipath);
 
@@ -254,7 +254,7 @@ void zVerse4::zReadText(char testmt, long start, unsigned long size, unsigned lo
         }
 
         unsigned long len = 0;
-        compressor->Buf(0, &len);
+        compressor->Buf(nullptr, &len);
         cacheBuf = (char *)calloc(len + 1, 1);
         memcpy(cacheBuf, compressor->Buf(), len);
         cacheBufSize = strlen(cacheBuf);  // TODO: can we just use len?
@@ -357,7 +357,7 @@ void zVerse4::flushCache() const {
                 idxfp[cacheTestament-1]->write(&outsize, 4);
             }
             free(cacheBuf);
-            cacheBuf = 0;
+            cacheBuf = nullptr;
         }
         dirtyCache = false;
     }
@@ -405,7 +405,7 @@ void zVerse4::doLinkEntry(char testmt, long destidxoff, long srcidxoff) {
 
 char zVerse4::createModule(const char *ipath, int blockBound, const char *v11n)
 {
-    char *path = 0;
+    char * path = nullptr;
     char *buf = new char [ strlen (ipath) + 20 ];
     char retVal = 0;
     FileDesc *fd, *fd2;

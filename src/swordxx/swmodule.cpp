@@ -78,11 +78,11 @@ SWModule::SWModule(SWKey * key_, const char *imodname, const char *imoddesc, con
     key       = key_;
     entryBuf  = "";
     config    = &ownConfig;
-    modname   = 0;
+    modname   = nullptr;
     error     = 0;
-    moddesc   = 0;
-    modtype   = 0;
-    modlang   = 0;
+    moddesc   = nullptr;
+    modtype   = nullptr;
+    modlang   = nullptr;
     this->encoding = encoding;
     this->direction = direction;
     this->markup  = markup;
@@ -162,7 +162,7 @@ char SWModule::popError()
  */
 
 char SWModule::setKey(const SWKey *ikey) {
-    SWKey *oldKey = 0;
+    SWKey * oldKey = nullptr;
 
     if (key) {
         if (!key->isPersist())    // if we have our own copy
@@ -277,8 +277,8 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
         return listKey;
     }
 
-    SWKey *saveKey   = 0;
-    SWKey *searchKey = 0;
+    SWKey * saveKey   = nullptr;
+    SWKey * searchKey = nullptr;
     SWKey *resultKey = createKey();
     SWKey *lastKey   = createKey();
     std::string lastBuf = "";
@@ -315,7 +315,9 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
     }
     else    saveKey = key;
 
-    searchKey = (scope)?scope->clone():(key->isPersist())?key->clone():0;
+    searchKey = scope
+                ? scope->clone()
+                : (key->isPersist() ? key->clone() : nullptr);
     if (searchKey) {
         searchKey->setPersist(true);
         setKey(*searchKey);
@@ -343,14 +345,14 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
     (*percent)(10, percentUserData);
     if (searchType == -4) {    // indexed search
 
-        lucene::index::IndexReader    *ir = 0;
-        lucene::search::IndexSearcher *is = 0;
-        Query                         *q  = 0;
-        Hits                          *h  = 0;
+        lucene::index::IndexReader    * ir = nullptr;
+        lucene::search::IndexSearcher * is = nullptr;
+        Query                         * q  = nullptr;
+        Hits                          * h  = nullptr;
         try {
             ir = IndexReader::open(target.c_str());
             is = new IndexSearcher(ir);
-            const TCHAR *stopWords[] = { 0 };
+            const TCHAR *stopWords[] = { nullptr };
             standard::StandardAnalyzer analyzer(stopWords);
 
             // parse the query
@@ -382,7 +384,7 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
             (*percent)(98, percentUserData);
         }
         catch (...) {
-            q = 0;
+            q = nullptr;
             // invalid clucene query
         }
         delete h;
@@ -472,7 +474,7 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 #ifdef USECXX11REGEX
             if (std::regex_match(std::string(textBuf.c_str()), preg)) {
 #else
-            if (!regexec(&preg, textBuf.c_str(), 0, 0, 0)) {
+            if (!regexec(&preg, textBuf.c_str(), 0, nullptr, 0)) {
 #endif
                 *resultKey = *getKey();
                 resultKey->clearBound();
@@ -482,7 +484,7 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 #ifdef USECXX11REGEX
             else if (std::regex_match(std::string((lastBuf + ' ' + textBuf).c_str()), preg)) {
 #else
-            else if (!regexec(&preg, (lastBuf + ' ' + textBuf).c_str(), 0, 0, 0)) {
+            else if (!regexec(&preg, (lastBuf + ' ' + textBuf).c_str(), 0, nullptr, 0)) {
 #endif
                 lastKey->clearBound();
                 listKey << *lastKey;
@@ -596,7 +598,9 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
                                 }
                                 if (flags & SEARCHFLAG_MATCHWHOLEENTRY) {
                                     bool found = !(((flags & REG_ICASE) == REG_ICASE) ? swordxx::stricmp(i3Start->second.c_str(), words[3].c_str()) : strcmp(i3Start->second.c_str(), words[3].c_str()));
-                                    sres = (found) ? i3Start->second.c_str() : 0;
+                                    sres = found
+                                           ? i3Start->second.c_str()
+                                           : nullptr;
                                 }
                                 else {
                                     sres = ((flags & REG_ICASE) == REG_ICASE) ? stristr(i3Start->second.c_str(), words[3].c_str()) : strstr(i3Start->second.c_str(), words[3].c_str());
@@ -759,7 +763,7 @@ std::string SWModule::renderText(const char *buf, int len, bool render) const {
         local = buf;
 
     std::string &tmpbuf = (buf) ? local : getRawEntryBuf();
-    SWKey *key = 0;
+    SWKey * key = nullptr;
 
     unsigned long size = (len < 0) ? ((getEntrySize()<0) ? tmpbuf.size() : getEntrySize()) : len;
     if (size > 0) {
@@ -860,7 +864,7 @@ std::string SWModule::getBibliography(unsigned char bibFormat) const {
 
 const char *SWModule::getConfigEntry(const char *key) const {
     ConfigEntMap::iterator it = config->find(key);
-    return (it != config->end()) ? it->second.c_str() : 0;
+    return (it != config->end()) ? it->second.c_str() : nullptr;
 }
 
 bool SWModule::isSearchOptimallySupported(const char * istr,
@@ -894,8 +898,8 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
     int status = FileMgr::createParent((target+"/dummy").c_str());
     if (status) return -1;
 
-    SWKey *saveKey = 0;
-    SWKey *searchKey = 0;
+    SWKey * saveKey = nullptr;
+    SWKey * searchKey = nullptr;
 
 
     // turn all filters to default values
@@ -924,7 +928,7 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
     }
     else    saveKey = key;
 
-    searchKey = (key->isPersist())?key->clone():0;
+    searchKey = key->isPersist() ? key->clone() : nullptr;
     if (searchKey) {
         searchKey->setPersist(1);
         setKey(*searchKey);
@@ -933,12 +937,12 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
     bool includeKeyInSearch = getConfig().has("SearchOption", "IncludeKeyInSearch");
 
     // lets create or open our search index
-    RAMDirectory *ramDir = 0;
-    IndexWriter *coreWriter = 0;
-    IndexWriter *fsWriter = 0;
-    Directory *d = 0;
+    RAMDirectory * ramDir = nullptr;
+    IndexWriter * coreWriter = nullptr;
+    IndexWriter * fsWriter = nullptr;
+    Directory * d = nullptr;
 
-    const TCHAR *stopWords[] = { 0 };
+    TCHAR const * stopWords[] = { nullptr };
     standard::StandardAnalyzer *an = new standard::StandardAnalyzer(stopWords);
 
     ramDir = new RAMDirectory();
@@ -947,7 +951,7 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 
     char perc = 1;
     VerseKey *vkcheck = dynamic_cast<VerseKey *>(key);
-    VerseKey *chapMax = 0;
+    VerseKey * chapMax = nullptr;
     if (vkcheck) chapMax = (VerseKey *)vkcheck->clone();
 
     TreeKeyIdx *tkcheck = dynamic_cast<TreeKeyIdx *>(key);
@@ -1228,7 +1232,7 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
         fsWriter = new IndexWriter(d, an, true);
     }
 
-    Directory *dirs[] = { ramDir, 0 };
+    Directory * dirs[] = { ramDir, nullptr };
     lucene::util::ConstValueArray< lucene::store::Directory *>dirsa(dirs, 1);
     fsWriter->addIndexes(dirsa);
     fsWriter->close();

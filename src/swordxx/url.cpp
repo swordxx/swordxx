@@ -219,7 +219,11 @@ void URL::parse() {
             }
 
             const char *start = end+1;
-            end = strstr(start, "&amp;") ? strstr(start, "&amp;")+5 : (strstr(start, "&") ? strstr(start, "&")+1 : 0); //try to find a new paramter part
+            end = strstr(start, "&amp;")
+                  ? strstr(start, "&amp;") + 5
+                  : (strstr(start, "&")
+                     ? strstr(start, "&") + 1
+                     : nullptr); // Try to find a new paramter part
         }
     }
 }

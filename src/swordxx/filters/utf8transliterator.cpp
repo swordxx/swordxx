@@ -302,7 +302,7 @@ Transliterator * UTF8Transliterator::createTrans(const UnicodeString& ID, UTrans
     Transliterator *trans = Transliterator::createInstance(ID,UTRANS_FORWARD,status);
     if (U_FAILURE(status)) {
         delete trans;
-        return NULL;
+        return nullptr;
     }
     else {
         return trans;
@@ -319,9 +319,7 @@ void UTF8Transliterator::setOptionValue(const char *ival)
 }
 
 const char *UTF8Transliterator::getOptionValue()
-{
-    return (NUMTARGETSCRIPTS > option) ? optionstring[option] : 0;
-}
+{ return (NUMTARGETSCRIPTS > option) ? optionstring[option] : nullptr; }
 
 char UTF8Transliterator::processText(std::string &text, const SWKey *key, const SWModule *module)
 {
@@ -329,7 +327,7 @@ char UTF8Transliterator::processText(std::string &text, const SWKey *key, const 
     if (option) {    // if we want transliteration
         unsigned long i, j;
                 UErrorCode err = U_ZERO_ERROR;
-                UConverter * conv = NULL;
+                UConverter * conv = nullptr;
                 conv = ucnv_open("UTF-8", &err);
                 std::string ID;
 

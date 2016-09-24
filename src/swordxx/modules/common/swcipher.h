@@ -45,8 +45,8 @@ public:
     SWCipher (unsigned char *key);
   virtual void setCipherKey (const char *key);
     virtual ~ SWCipher ();
-  virtual char *Buf (const char *buf = 0, unsigned long len = 0);
-  virtual char *cipherBuf (unsigned long *len, const char *buf = 0);
+  virtual char * Buf(char const * buf = nullptr, unsigned long len = 0u);
+  virtual char * cipherBuf(unsigned long * len, char const * buf = nullptr);
   virtual void Encode (void);
   virtual void Decode (void);
 };

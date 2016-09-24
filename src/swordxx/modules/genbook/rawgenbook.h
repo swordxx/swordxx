@@ -42,10 +42,14 @@ class SWDLLEXPORT RawGenBook : public SWGenBook {
 public:
 
 
-    RawGenBook(const char *ipath, const char *iname = 0, const char *idesc = 0,
-            SWTextEncoding encoding = ENC_UNKNOWN,
-            SWTextDirection dir = DIRECTION_LTR,
-            SWTextMarkup markup = FMT_UNKNOWN, const char* ilang = 0, const char *keyType = "TreeKey");
+    RawGenBook(char const * ipath,
+               char const * iname = nullptr,
+               char const * idesc = nullptr,
+               SWTextEncoding encoding = ENC_UNKNOWN,
+               SWTextDirection dir = DIRECTION_LTR,
+               SWTextMarkup markup = FMT_UNKNOWN,
+               char const * ilang = nullptr,
+               char const * keyType = "TreeKey");
     virtual ~RawGenBook();
     virtual std::string &getRawEntryBuf() const;
     // write interface ----------------------------

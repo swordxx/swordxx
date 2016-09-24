@@ -100,7 +100,7 @@ int main(int argc, char **argv) {
     }
     else if (compress) {
       char buffer[1048576];  //this is the max size of any entry
-      zLD mod(argv[2], 0, 0, 200, new ZipCompress());    // open our datapath with our RawText driver.
+      zLD mod(argv[2], nullptr, nullptr, 200, new ZipCompress());    // open our datapath with our RawText driver.
       SWKey* key = mod.createKey();
       key->setPersist(true);      // the magical setting
 

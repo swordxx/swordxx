@@ -76,7 +76,7 @@ std::string &RawCom::getRawEntryBuf() const {
     entryBuf = "";
     readText(key->getTestament(), start, size, entryBuf);
 
-    rawFilter(entryBuf, 0);    // hack, decipher
+    rawFilter(entryBuf, nullptr);    // hack, decipher
     rawFilter(entryBuf, key);
 
 //    if (!isUnicode())

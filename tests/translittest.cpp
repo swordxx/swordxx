@@ -68,10 +68,10 @@ int main() {
   UConverter *conv;
   //UParseError perr = U_ZERO_ERROR;
   int32_t uBufSize = 0, uLength = 0;
-//  void * pAppData=NULL;
+//  void * pAppData = nullptr;
   const char * samplestring = "If this compiles and runs without errors, apparently ICU is working.";
   //ures_open("/usr/local/lib/swordxx/swicu.dat",
- //     NULL, &status);
+ //     nullptr, &status);
   //UDataMemory *pappData = udata_open("/usr/local/lib/swordxx/swicu",
 //    "res", "root", &status);
   if (U_FAILURE(status))

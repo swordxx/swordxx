@@ -41,7 +41,7 @@ public: /* Methods: */
 
     bool getUrl(const char * destPath,
                 const char * sourceURL,
-                std::string * destBuf = 0) override;
+                std::string * destBuf = nullptr) override;
 
     std::vector<struct DirEntry> getDirList(const char * dirURL) override;
 

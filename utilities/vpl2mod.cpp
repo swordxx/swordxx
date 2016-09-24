@@ -55,7 +55,7 @@ char readline(int fd, char **buf) {
     char ch;
     if (*buf)
         delete [] *buf;
-    *buf = 0;
+    *buf = nullptr;
     int len;
 
 
@@ -125,7 +125,8 @@ char *parseVReg(char *buf) {
         }
         buf++;
     }
-    return (stage == 4) ? buf : 0;  // if we got to stage 4 return after key buf, else return 0;
+    // if we got to stage 4 return after key buf, else return 0;
+    return (stage == 4) ? buf : nullptr;
 }
 
 
@@ -211,7 +212,7 @@ int main(int argc, char **argv) {
                 ntonly = (argv[4][0] == '0') ? false : true;
 
     // Do some initialization stuff
-    char *buffer = 0;
+    char * buffer = nullptr;
     RawText mod(argv[2]);    // open our datapath with our RawText driver.
     VerseKey vk;
     vk.setAutoNormalize(false);

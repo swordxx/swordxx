@@ -152,7 +152,11 @@ public:
     /**
      *
      */
-    static void findConfig(char *configType, char **prefixPath, char **configPath, StringList *augPaths = 0, SWConfig **providedSysConf = 0);
+    static void findConfig(char * configType,
+                           char ** prefixPath,
+                           char ** configPath,
+                           StringList * augPaths = nullptr,
+                           SWConfig ** providedSysConf = nullptr);
 
     SWConfig *config;
     SWConfig *sysConfig;
@@ -193,8 +197,15 @@ public:
      * @param modName the name of the module to retrieve
      * @return the module, if found, otherwise 0
      */
-    SWModule *getModule(const char *modName) { ModMap::iterator it = Modules.find(modName); return ((it != Modules.end()) ? it->second : 0); }
-    const SWModule *getModule(const char *modName) const { ModMap::const_iterator it = Modules.find(modName); return ((it != Modules.end()) ? it->second : 0); }
+    SWModule * getModule(char const * modName) {
+        auto const it(Modules.find(modName));
+        return (it != Modules.end()) ? it->second : nullptr;
+    }
+
+    SWModule const * getModule(char const * modName) const {
+        auto const it(Modules.find(modName));
+        return (it != Modules.end()) ? it->second : nullptr;
+    }
 
 
     /** Constructs an instance of SWMgr
@@ -212,7 +223,11 @@ public:
      *
      *    SWMgr *myMgr = new SWMgr(0, 0, true, new MarkupFilterMgr(FMT_HTMLHREF));
      */
-    SWMgr(SWConfig *iconfig = 0, SWConfig *isysconfig = 0, bool autoload = true, SWFilterMgr *filterMgr = 0, bool multiMod = false);
+    SWMgr(SWConfig * iconfig = nullptr,
+          SWConfig * isysconfig = nullptr,
+          bool autoload = true,
+          SWFilterMgr * filterMgr = nullptr,
+          bool multiMod = false);
 
     /**
      */
@@ -222,7 +237,11 @@ public:
      * @param iConfigPath provide a custom path to use for module set location, instead of
      *    searching the system for it.
      */
-    SWMgr(const char *iConfigPath, bool autoload = true, SWFilterMgr *filterMgr = 0, bool multiMod = false, bool augmentHome = true);
+    SWMgr(char const * iConfigPath,
+          bool autoload = true,
+          SWFilterMgr * filterMgr = nullptr,
+          bool multiMod = false,
+          bool augmentHome = true);
 
     /** The destructor of SWMgr.
      * This function cleans up the modules and deletes the created object.
@@ -294,7 +313,10 @@ public:
      * @param module context module if filter needs this for processing
      * @return error status
      */
-    virtual char filterText(const char *filterName, std::string &text, const SWKey *key = 0, const SWModule *module = 0);
+    virtual char filterText(char const * filterName,
+                            std::string & text,
+                            SWKey const * key = nullptr,
+                            SWModule const * module = nullptr);
 
     /**
      * Sets the cipher key for the given module. This function updates the key

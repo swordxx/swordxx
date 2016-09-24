@@ -50,7 +50,7 @@ private:
     const char *getPart(const char *buf, int partNum = 0, char partSplit = '|') const;
 
 public:
-    XMLTag(const char *tagString = 0);
+    XMLTag(char const * tagString = nullptr);
     XMLTag(const XMLTag& tag);
     ~XMLTag();
 
@@ -75,7 +75,7 @@ public:
      * if an eID is provided, then we check to be sure we have an attribute <tag eID="xxx"/> value xxx equiv to what is given us
      * otherwise, we return if we're a simple XML end </tag>.
      */
-    bool isEndTag(const char *eID = 0) const;
+    bool isEndTag(char const * eID = nullptr) const;
 
     const StringList getAttributeNames() const;
     int getAttributePartCount(const char *attribName, char partSplit = '|') const;

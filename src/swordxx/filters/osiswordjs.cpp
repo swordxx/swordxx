@@ -47,12 +47,11 @@ namespace {
 
 
 OSISWordJS::OSISWordJS() : SWOptionFilter(oName, oTip, oValues()) {
-
-     defaultGreekLex   = 0;
-     defaultHebLex     = 0;
-     defaultGreekParse = 0;
-     defaultHebParse   = 0;
-     mgr               = 0;
+     defaultGreekLex   = nullptr;
+     defaultHebLex     = nullptr;
+     defaultGreekParse = nullptr;
+     defaultHebParse   = nullptr;
+     mgr               = nullptr;
 }
 
 
@@ -71,7 +70,7 @@ char OSISWordJS::processText(std::string &text, const SWKey *key, const SWModule
         // add TR to w src in KJV then remove this next line
         std::string wordSrcPrefix = (modName == "KJV")?std::string("TR"):modName;
 
-        VerseKey const * vkey = 0;
+        VerseKey const * vkey = nullptr;
         if (key) {
             vkey = dynamic_cast<VerseKey const *>(key);
         }

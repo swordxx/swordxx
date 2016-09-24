@@ -128,7 +128,7 @@ public:
     * @param ikey text key (will take various forms of 'BOOK CH:VS'.
     * See parse() for more detailed information)
     */
-    VerseKey(const char *ikey = 0);
+    VerseKey(char const * ikey = nullptr);
 
     /**
     * VerseKey Constructor - initializes instance of VerseKey
@@ -376,7 +376,10 @@ public:
      *
      * COMMENT: This code works but wreaks.  Rewrite to make more maintainable.
      */
-    virtual ListKey parseVerseList(const char *buf, const char *defaultKey = 0, bool expandRange = false, bool useChapterAsVerse = false);
+    virtual ListKey parseVerseList(char const * buf,
+                                   char const * defaultKey = nullptr,
+                                   bool expandRange = false,
+                                   bool useChapterAsVerse = false);
     virtual const char *getRangeText() const;
     virtual const char *getOSISRefRangeText() const;
     /** Compares another    SWKey object

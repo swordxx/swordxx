@@ -65,7 +65,9 @@ class SWDLLEXPORT GBFOSIS : public SWFilter {
 public:
     GBFOSIS();
     virtual ~GBFOSIS();
-    char processText(std::string &text, const SWKey *key = 0, const SWModule *module = 0);
+    char processText(std::string & text,
+                     SWKey const * key = nullptr,
+                     SWModule const * module = nullptr);
 };
 
 } /* namespace swordxx */
