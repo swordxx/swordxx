@@ -287,11 +287,8 @@ std::string SWMgr::getHomeDir() {
         // silly windows
         homeDir = getEnvironmentVariable("APPDATA");
     }
-    if (homeDir.length()) {
-        if ((homeDir[homeDir.length()-1] != '\\') && (homeDir[homeDir.length()-1] != '/')) {
-            homeDir += "/";
-        }
-    }
+    if (!homeDir.empty())
+        addTrailingDirectorySlash(homeDir);
 
     return homeDir;
 }
@@ -337,7 +334,6 @@ SWMgr::SWMgr(const char *iConfigPath, bool autoload, SWFilterMgr *filterMgr, boo
     init();
 
     mgrModeMultiMod = multiMod;
-    std::string path;
 
     this->filterMgr = filterMgr;
     if (filterMgr)
@@ -345,12 +341,17 @@ SWMgr::SWMgr(const char *iConfigPath, bool autoload, SWFilterMgr *filterMgr, boo
 
     this->augmentHome = augmentHome;
 
-    if (iConfigPath)
+    std::string path;
+    if (iConfigPath) {
         path = iConfigPath;
-    std::size_t const len = path.size();
-    if ((len < 1u) || ((iConfigPath[len - 1u] != '\\')
-                       && (iConfigPath[len - 1u] != '/')))
-        path += '/';
+        if (path.empty()) {
+            path = '/';
+        } else {
+            addTrailingDirectorySlash(path);
+        }
+    } else {
+        path = '/';
+    }
     if (FileMgr::existsFile(path.c_str(), "mods.conf")) {
         stdstr(&prefixPath, path.c_str());
         path += "mods.conf";
@@ -427,7 +428,7 @@ void SWMgr::findConfig(char *configType, char **prefixPath, char **configPath, s
                 sysConf = 0;
             }
         }
-        if (!sysConfDataPath.size()) {
+        if (sysConfDataPath.empty()) {
             SWLog::getSystemLog()->logDebug("Checking working directory for mods.conf...");
             if (FileMgr::existsFile(".", "mods.conf")) {
                 SWLog::getSystemLog()->logDebug("found.");
@@ -459,12 +460,11 @@ void SWMgr::findConfig(char *configType, char **prefixPath, char **configPath, s
             SWLog::getSystemLog()->logDebug("Checking $SWORDXX_PATH...");
 
             std::string envsworddir(getEnvironmentVariable("SWORDXX_PATH"));
-            if (envsworddir.length()) {
+            if (!envsworddir.empty()) {
 
                 SWLog::getSystemLog()->logDebug("found (%s).", envsworddir.c_str());
                 path = envsworddir;
-                if ((envsworddir[envsworddir.length()-1] != '\\') && (envsworddir[envsworddir.length()-1] != '/'))
-                    path += "/";
+                addTrailingDirectorySlash(path);
 
                 SWLog::getSystemLog()->logDebug("Checking $SWORDXX_PATH for mods.conf...");
                 if (FileMgr::existsFile(path.c_str(), "mods.conf")) {
@@ -504,16 +504,13 @@ void SWMgr::findConfig(char *configType, char **prefixPath, char **configPath, s
                 sysConfPath = gfp;
             delete [] globPaths;
 
-            if (homeDir.length()) {
-                std::string tryPath = homeDir;
-                tryPath += ".swordxx/swordxx.conf";
+            if (!homeDir.empty()) {
+                std::string const tryPath(homeDir + ".swordxx/swordxx.conf");
                 if (FileMgr::existsFile(tryPath.c_str())) {
                     SWLog::getSystemLog()->logDebug("Overriding any systemwide swordxx.conf with one found in users home directory (%s)", tryPath.c_str());
                     sysConfPath = tryPath;
-                }
-                else {
-                    std::string tryPath = homeDir;
-                    tryPath += "swordxx/swordxx.conf";
+                } else {
+                    std::string const tryPath(homeDir + "swordxx/swordxx.conf");
                     if (FileMgr::existsFile(tryPath.c_str())) {
                         SWLog::getSystemLog()->logDebug("Overriding any systemwide swordxx.conf with one found in users home directory (%s)", tryPath.c_str());
                         sysConfPath = tryPath;
@@ -523,7 +520,7 @@ void SWMgr::findConfig(char *configType, char **prefixPath, char **configPath, s
         }
     }
 
-    if (!sysConf && sysConfPath.size()) {
+    if (!sysConf && !sysConfPath.empty()) {
         sysConf = new SWConfig(sysConfPath.c_str());
     }
 
@@ -566,8 +563,7 @@ void SWMgr::findConfig(char *configType, char **prefixPath, char **configPath, s
             lastEntry = sysConf->Sections["Install"].upper_bound("AugmentPath");
             for (;entry != lastEntry; entry++) {
                 path = entry->second;
-                if ((entry->second.c_str()[strlen(entry->second.c_str())-1] != '\\') && (entry->second.c_str()[strlen(entry->second.c_str())-1] != '/'))
-                    path += "/";
+                addTrailingDirectorySlash(path);
                 augPaths->push_back(path);
             }
         }
@@ -612,7 +608,7 @@ void SWMgr::findConfig(char *configType, char **prefixPath, char **configPath, s
     SWLog::getSystemLog()->logDebug("Checking $HOME/Library/Application Support/SwordXX/...");
 
     std::string pathCheck = getHomeDir();
-    if (pathCheck.length()) {
+    if (!pathCheck.empty()) {
         SWLog::getSystemLog()->logDebug("found (%s).", pathCheck.c_str());
         path = pathCheck;
         addTrailingDirectorySlash(path);
@@ -633,7 +629,7 @@ void SWMgr::findConfig(char *configType, char **prefixPath, char **configPath, s
 
     SWLog::getSystemLog()->logDebug("Checking home directory for ~/.swordxx...");
 
-    if (homeDir.length()) {
+    if (!homeDir.empty()) {
         path = homeDir;
         path += ".swordxx/";
         SWLog::getSystemLog()->logDebug("  Checking for %smods.conf...", path.c_str());
@@ -686,8 +682,7 @@ void SWMgr::loadConfigDir(const char *ipath)
             }
 
             newmodfile = ipath;
-            if ((ipath[strlen(ipath)-1] != '\\') && (ipath[strlen(ipath)-1] != '/'))
-                newmodfile += "/";
+            addTrailingDirectorySlash(newmodfile);
             newmodfile += ent->d_name;
             if (config) {
                 SWConfig tmpConfig(newmodfile.c_str());
@@ -699,8 +694,7 @@ void SWMgr::loadConfigDir(const char *ipath)
 
         if (!config) {    // if no .conf file exist yet, create a default
             newmodfile = ipath;
-            if ((ipath[strlen(ipath)-1] != '\\') && (ipath[strlen(ipath)-1] != '/'))
-                newmodfile += "/";
+            addTrailingDirectorySlash(newmodfile);
             newmodfile += "globals.conf";
             config = myconfig = new SWConfig(newmodfile.c_str());
         }
@@ -812,7 +806,7 @@ signed char SWMgr::Load() {
         if (augmentHome) {
             // augment config with ~/.swordxx/mods.d if it exists ---------------------
             std::string homeDir = getHomeDir();
-            if (homeDir.length() && configType != 2) { // 2 = user only
+            if (!homeDir.empty() && configType != 2) { // 2 = user only
                 std::string path = homeDir;
                 path += ".swordxx/";
                 augmentModules(path.c_str(), mgrModeMultiMod);
@@ -822,7 +816,7 @@ signed char SWMgr::Load() {
             }
         }
 // -------------------------------------------------------------------------
-        if (!Modules.size()) // config exists, but no modules
+        if (Modules.empty()) // config exists, but no modules
             ret = 1;
 
     }
@@ -848,8 +842,7 @@ SWModule *SWMgr::createModule(const char *name, const char *driver, ConfigEntMap
      sourceformat = ((entry = section.find("SourceType"))  != section.end()) ? (*entry).second : std::string();
      encoding = ((entry = section.find("Encoding"))  != section.end()) ? (*entry).second : std::string();
     datapath = prefixPath;
-    if ((prefixPath[strlen(prefixPath)-1] != '\\') && (prefixPath[strlen(prefixPath)-1] != '/'))
-        datapath += "/";
+    addTrailingDirectorySlash(datapath);
 
     std::string versification = ((entry = section.find("Versification"))  != section.end()) ? (*entry).second : std::string("KJV");
 
@@ -1150,7 +1143,7 @@ void SWMgr::AddRawFilters(SWModule *module, ConfigEntMap &section) {
     ConfigEntMap::iterator entry;
 
     cipherKey = ((entry = section.find("CipherKey")) != section.end()) ? (*entry).second : std::string();
-    if (cipherKey.length()) {
+    if (!cipherKey.empty()) {
         SWFilter *cipherFilter = new CipherFilter(cipherKey.c_str());
         cipherFilters.insert(FilterMap::value_type(module->getName(), cipherFilter));
         cleanupFilters.push_back(cipherFilter);
@@ -1176,7 +1169,7 @@ void SWMgr::AddRenderFilters(SWModule *module, ConfigEntMap &section) {
 
     // Temporary: To support old module types
     // TODO: Remove at 1.6.0 release?
-    if (!sourceformat.length()) {
+    if (sourceformat.empty()) {
         sourceformat = ((entry = section.find("ModDrv")) != section.end()) ? (*entry).second : std::string();
         if (!stricmp(sourceformat.c_str(), "RawGBF"))
             sourceformat = "GBF";
@@ -1201,7 +1194,7 @@ void SWMgr::AddStripFilters(SWModule *module, ConfigEntMap &section)
 
     sourceformat = ((entry = section.find("SourceType")) != section.end()) ? (*entry).second : std::string();
     // Temporary: To support old module types
-    if (!sourceformat.length()) {
+    if (sourceformat.empty()) {
         sourceformat = ((entry = section.find("ModDrv")) != section.end()) ? (*entry).second : std::string();
         if (!stricmp(sourceformat.c_str(), "RawGBF"))
             sourceformat = "GBF";
@@ -1238,7 +1231,7 @@ void SWMgr::CreateMods(bool multiMod) {
         newmod = 0;
 
         driver = ((entry = section.find("ModDrv")) != section.end()) ? (*entry).second : std::string();
-        if (driver.length()) {
+        if (!driver.empty()) {
             newmod = createModule(sp.first.c_str(), driver.c_str(), section);
             if (newmod) {
                 // Filters to add for this module and globally announce as an option to the user
@@ -1311,8 +1304,7 @@ void SWMgr::InstallScan(const char *dirname)
             while ((ent = readdir(dir))) {
                 if ((strcmp(ent->d_name, ".")) && (strcmp(ent->d_name, ".."))) {
                     newmodfile = dirname;
-                    if ((dirname[strlen(dirname)-1] != '\\') && (dirname[strlen(dirname)-1] != '/'))
-                        newmodfile += "/";
+                    addTrailingDirectorySlash(newmodfile);
                     newmodfile += ent->d_name;
 
                     // mods.d
@@ -1320,8 +1312,7 @@ void SWMgr::InstallScan(const char *dirname)
                         if (conffd)
                             FileMgr::getSystemFileMgr()->close(conffd);
                         targetName = configPath;
-                        if ((configPath[strlen(configPath)-1] != '\\') && (configPath[strlen(configPath)-1] != '/'))
-                            targetName += "/";
+                        addTrailingDirectorySlash(targetName);
                         targetName += ent->d_name;
                         conffd = FileMgr::getSystemFileMgr()->open(targetName.c_str(), FileMgr::WRONLY|FileMgr::CREAT, FileMgr::IREAD|FileMgr::IWRITE);
                     }
