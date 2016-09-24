@@ -240,14 +240,15 @@ bool StringMgr::supportsUnicode() const {
 #if SWORDXX_HAS_ICU
 
 char *ICUStringMgr::upperUTF8(char *buf, unsigned int maxlen) const {
+    if (!buf)
+        return nullptr;
     char *ret = buf;
     int max = (maxlen) ? maxlen : strlen(buf);
 
     UErrorCode err = U_ZERO_ERROR;
 
-    if (!buf || !max) {
+    if (!max)
         return ret;
-    }
 
     UChar *lowerStr = new UChar[max+10];
     UChar *upperStr = new UChar[max+10];
