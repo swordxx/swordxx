@@ -36,8 +36,14 @@ class SWDLLEXPORT OSISWEBIF : public OSISXHTML {
     bool javascript;
 
 protected:
-    virtual BasicFilterUserData *createUserData(const SWModule *module, const SWKey *key);
-    virtual bool handleToken(std::string &buf, const char *token, BasicFilterUserData *userData);
+
+    BasicFilterUserData * createUserData(SWModule const * module,
+                                         SWKey const * key) override;
+
+    bool handleToken(std::string & buf,
+                     char const * token,
+                     BasicFilterUserData * userData) override;
+
 public:
     OSISWEBIF();
     void setJavascript(bool mode) { javascript = mode; }

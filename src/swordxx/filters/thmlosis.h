@@ -33,10 +33,12 @@ namespace swordxx {
 class SWDLLEXPORT ThMLOSIS : public SWFilter {
 public:
     ThMLOSIS();
-    virtual ~ThMLOSIS();
-    virtual char processText(std::string & text,
-                             SWKey const * key = nullptr,
-                             SWModule const * module = nullptr);
+    ~ThMLOSIS() override;
+
+    char processText(std::string & text,
+                         SWKey const * key = nullptr,
+                         SWModule const * module = nullptr) override;
+
 };
 
 } /* namespace swordxx */

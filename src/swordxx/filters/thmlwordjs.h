@@ -40,10 +40,12 @@ class SWDLLEXPORT ThMLWordJS : public SWOptionFilter {
 
 public:
     ThMLWordJS();
-    virtual ~ThMLWordJS();
-    virtual char processText(std::string & text,
-                             SWKey const * key = nullptr,
-                             SWModule const * module = nullptr);
+    ~ThMLWordJS() override;
+
+    char processText(std::string & text,
+                         SWKey const * key = nullptr,
+                         SWModule const * module = nullptr) override;
+
     void setDefaultModules(SWModule * defaultGreekLex = nullptr,
                            SWModule * defaultHebLex = nullptr,
                            SWModule * defaultGreekParse = nullptr,

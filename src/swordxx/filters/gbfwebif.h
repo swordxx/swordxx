@@ -35,7 +35,11 @@ class SWDLLEXPORT GBFWEBIF : public GBFXHTML {
     const std::string passageStudyURL;
 
 protected:
-    virtual bool handleToken(std::string &buf, const char *token, BasicFilterUserData *userData);
+
+    bool handleToken(std::string & buf,
+                     char const * token,
+                     BasicFilterUserData * userData) override;
+
 public:
     GBFWEBIF();
 };

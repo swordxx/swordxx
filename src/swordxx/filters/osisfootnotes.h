@@ -33,10 +33,12 @@ namespace swordxx {
 class SWDLLEXPORT OSISFootnotes : public SWOptionFilter {
 public:
     OSISFootnotes();
-    virtual ~OSISFootnotes();
-    virtual char processText(std::string & text,
-                             SWKey const * key = nullptr,
-                             SWModule const * module = nullptr);
+    ~OSISFootnotes() override;
+
+    char processText(std::string & text,
+                         SWKey const * key = nullptr,
+                         SWModule const * module = nullptr) override;
+
 };
 
 } /* namespace swordxx */

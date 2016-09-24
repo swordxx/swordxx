@@ -62,29 +62,31 @@ public:
           char const * ilang = nullptr,
           char const * versification = "KJV");
 
-    virtual ~zText();
-    virtual std::string &getRawEntryBuf() const;
+    ~zText() override;
 
-    virtual void increment(int steps = 1);
-    virtual void decrement(int steps = 1) { increment(-steps); }
+    std::string & getRawEntryBuf() const override;
 
-    // write interface ----------------------------
-    virtual bool isWritable() const;
+    void increment(int steps = 1) override;
+    void decrement(int steps = 1) override { increment(-steps); }
+
+    bool isWritable() const override;
     static char createModule(const char *path, int blockBound, const char *v11n = "KJV") {
         return zVerse::createModule(path, blockBound, v11n);
     }
 
-    virtual void setEntry(const char *inbuf, long len = -1);    // Modify current module entry
-    virtual void linkEntry(const SWKey *linkKey);    // Link current module entry to other module entry
-    virtual void deleteEntry();    // Delete current module entry
-    // end write interface ------------------------
+    void setEntry(char const * inbuf, long len = -1) override;
+    void linkEntry(SWKey const * linkKey) override;
+    void deleteEntry() override;
 
-    virtual void rawZFilter(std::string &buf, char direction = 0) const { rawFilter(buf, (SWKey *)(long)direction); }// hack, use key as direction for enciphering
+    void rawZFilter(std::string & buf, char direction = 0) const override {
+        // hack, use key as direction for enciphering
+        rawFilter(buf, (SWKey *)(long)direction);
+    }
 
-    virtual void flush() { flushCache(); }
+    void flush() override { flushCache(); }
 
-    virtual bool isLinked(const SWKey *k1, const SWKey *k2) const;
-    virtual bool hasEntry(const SWKey *k) const;
+    bool isLinked(SWKey const * k1, SWKey const * k2) const override;
+    bool hasEntry(SWKey const * k) const override;
 
     SWMODULE_OPERATORS
 };

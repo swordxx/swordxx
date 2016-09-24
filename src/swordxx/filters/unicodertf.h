@@ -33,9 +33,9 @@ namespace swordxx {
 class SWDLLEXPORT UnicodeRTF : public SWFilter {
 public:
     UnicodeRTF();
-    virtual char processText(std::string & text,
-                             SWKey const * key = nullptr,
-                             SWModule const * module = nullptr);
+    char processText(std::string & text,
+                     SWKey const * key = nullptr,
+                     SWModule const * module = nullptr) override;
 };
 
 } /* namespace swordxx */

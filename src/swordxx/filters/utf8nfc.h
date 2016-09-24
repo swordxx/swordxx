@@ -41,10 +41,12 @@ private:
     UErrorCode err;
 public:
     UTF8NFC();
-    ~UTF8NFC();
-    virtual char processText(std::string & text,
-                             SWKey const * key = nullptr,
-                             SWModule const * module = nullptr);
+    ~UTF8NFC() override;
+
+    char processText(std::string & text,
+                         SWKey const * key = nullptr,
+                         SWModule const * module = nullptr) override;
+
 };
 
 } /* namespace swordxx */

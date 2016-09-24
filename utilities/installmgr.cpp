@@ -59,7 +59,7 @@ public:
         : InstallMgr(privatePath, sr)
     {}
 
-virtual bool isUserDisclaimerConfirmed() const {
+bool isUserDisclaimerConfirmed() const override {
     static bool confirmed = false;
 
     if (isConfirmed) {

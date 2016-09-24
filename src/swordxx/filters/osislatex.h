@@ -38,9 +38,13 @@ protected:
 
     class TagStack;
     // used by derived classes so we have it in the header
-    virtual BasicFilterUserData *createUserData(const SWModule *module, const SWKey *key);
-    virtual bool handleToken(std::string &buf, const char *token, BasicFilterUserData *userData);
 
+    BasicFilterUserData * createUserData(SWModule const * module,
+                                         SWKey const * key) override;
+
+    bool handleToken(std::string & buf,
+                     char const * token,
+                     BasicFilterUserData * userData) override;
 
     class MyUserData : public BasicFilterUserData {
     public:
@@ -71,7 +75,7 @@ public:
     OSISLaTeX();
     void setMorphFirst(bool val = true) { morphFirst = val; }
     void setRenderNoteNumbers(bool val = true) { renderNoteNumbers = val; }
-    virtual const char *getHeader() const;
+    char const * getHeader() const override;
 };
 
 } /* namespace swordxx */

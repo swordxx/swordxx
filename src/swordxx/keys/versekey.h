@@ -194,16 +194,21 @@ public:
     /** Creates a new SWKey based on the current VerseKey
     * see also the Copy Constructor
     */
-    virtual SWKey *clone() const;
+    SWKey * clone() const override;
 
     /** refreshes keytext before returning if cast to
     * a (char *) is requested
     */
-    virtual const char *getText() const;
-    virtual const char *getShortText() const;
-    virtual void setText(const char *ikey, bool checkNormalize) { SWKey::setText(ikey); parse(checkNormalize); }
-    virtual void setText(const char *ikey) { SWKey::setText(ikey); parse(); }
-    virtual void copyFrom(const SWKey &ikey);
+    char const * getText() const override;
+    char const * getShortText() const override;
+
+    virtual void setText(char const * ikey, bool checkNormalize)
+    { SWKey::setText(ikey); parse(checkNormalize); }
+
+    void setText(char const * ikey) override
+    { SWKey::setText(ikey); parse(); }
+
+    void copyFrom(SWKey const & ikey) override;
 
     /** Equates this VerseKey to another VerseKey
     */
@@ -211,29 +216,29 @@ public:
 
     /** Only repositions this VerseKey to another VerseKey
     */
-    virtual void positionFrom(const SWKey &ikey);
+    void positionFrom(SWKey const & ikey) override;
 
     /** Positions this key
     *
     * @param newpos Position to set to.
     * @return *this
     */
-    virtual void setPosition(SW_POSITION newpos);
+    void setPosition(SW_POSITION newpos) override;
 
     /** Decrements key a number of verses
     *
     * @param steps Number of verses to jump backward
     * @return *this
     */
-    virtual void decrement(int steps = 1);
+    void decrement(int steps = 1) override;
 
     /** Increments key a number of verses
     *
     * @param steps Number of verses to jump forward
     * @return *this
     */
-    virtual void increment(int steps = 1);
-    virtual bool isTraversable() const { return true; }
+    void increment(int steps = 1) override;
+    bool isTraversable() const override { return true; }
 
     /** Get/Set position of this key by Book Name
      */
@@ -335,7 +340,7 @@ public:
     *
     * @return offset
     */
-    virtual long getIndex() const;
+    long getIndex() const override;
 
 
     /** Sets index based upon current verse
@@ -343,7 +348,7 @@ public:
     * @param iindex value to set index to
     * @return offset
     */
-    virtual void setIndex(long iindex);
+    void setIndex(long iindex) override;
 
 
     /** Gets index into current testament based upon current verse
@@ -380,8 +385,8 @@ public:
                                    char const * defaultKey = nullptr,
                                    bool expandRange = false,
                                    bool useChapterAsVerse = false);
-    virtual const char *getRangeText() const;
-    virtual const char *getOSISRefRangeText() const;
+    char const * getRangeText() const override;
+    char const * getOSISRefRangeText() const override;
     /** Compares another    SWKey object
     *
     * @param ikey key to compare with this one
@@ -389,7 +394,7 @@ public:
     * <0 if this    VerseKey is smaller than compare    SWKey,
     * 0 if the keys are the same
     */
-    virtual int compare(const SWKey &ikey);
+    int compare(SWKey const & ikey) override;
 
     /** Compares another    VerseKey object
     *

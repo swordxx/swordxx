@@ -43,10 +43,9 @@ public:
             char const * prefix,
             char const * iname = nullptr,
             const char * idesc = nullptr);
-    virtual ~HREFCom();
-    virtual std::string &getRawEntryBuf() const;
+    ~HREFCom() override;
 
-    // OPERATORS -----------------------------------------------------------------
+    std::string & getRawEntryBuf() const override;
 
     SWMODULE_OPERATORS
 

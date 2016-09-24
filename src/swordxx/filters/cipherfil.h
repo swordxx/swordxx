@@ -34,10 +34,10 @@ class SWDLLEXPORT CipherFilter:public SWFilter {
     SWCipher *cipher;
 public:
     CipherFilter(const char *key);
-    virtual ~CipherFilter();
-    virtual char processText(std::string & text,
-                             SWKey const * key = nullptr,
-                             SWModule const * = nullptr);
+    ~CipherFilter() override;
+    char processText(std::string & text,
+                     SWKey const * key = nullptr,
+                     SWModule const * = nullptr) override;
     virtual SWCipher *getCipher();
 };
 

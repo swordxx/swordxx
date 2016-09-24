@@ -34,10 +34,12 @@ class SWDLLEXPORT OSISVariants : public SWOptionFilter {
 
 public:
     OSISVariants();
-    virtual ~OSISVariants();
-    virtual char processText(std::string & text,
-                             SWKey const * key = nullptr,
-                             SWModule const * module = nullptr);
+    ~OSISVariants() override;
+
+    char processText(std::string & text,
+                         SWKey const * key = nullptr,
+                         SWModule const * module = nullptr) override;
+
 };
 
 } /* namespace swordxx */

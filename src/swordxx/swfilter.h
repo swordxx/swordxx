@@ -42,7 +42,7 @@ class SWModule;
 */
 class SWDLLEXPORT  SWFilter {
 public:
-    virtual ~SWFilter() {}
+    virtual ~SWFilter() noexcept {}
 
     /** This method processes and appropriately modifies the text given it
      *    for a particular filter task

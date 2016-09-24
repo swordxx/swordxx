@@ -36,10 +36,10 @@ class SWDLLEXPORT ZipCompress : public SWCompress {
 protected:
 public:
     ZipCompress();
-    virtual ~ZipCompress();
+    ~ZipCompress() override;
 
-    virtual void Encode(void);
-    virtual void Decode(void);
+    void Encode() override;
+    void Decode() override;
 };
 
 } /* namespace swordxx */

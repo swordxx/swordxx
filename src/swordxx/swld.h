@@ -50,26 +50,18 @@ public:
          char const * ilang = nullptr,
          bool strongsPadding = true);
 
-    virtual ~SWLD();
-    virtual SWKey *createKey() const;
+    ~SWLD() override;
 
-    /** Sets/gets module KeyText, getting from saved text if key is persistent
-    *
-    * @param ikeytext value which to set keytext;
-    *  [0] - only get
-    * @return pointer to keytext
-    */
-    virtual const char *getKeyText() const;
-    virtual void setPosition(SW_POSITION pos);
+    SWKey * createKey() const override;
 
+    char const * getKeyText() const override;
+    void setPosition(SW_POSITION pos) override;
 
     virtual long getEntryCount() const = 0;
     virtual long getEntryForKey(const char *key) const = 0;
     virtual char *getKeyForEntry(long entry) const = 0;
 
-    virtual bool hasEntry(const SWKey *k) const;
-
-    // OPERATORS -----------------------------------------------------------------
+    bool hasEntry(SWKey const * k) const override;
 
     SWMODULE_OPERATORS
 

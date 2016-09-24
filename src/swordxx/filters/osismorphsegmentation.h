@@ -36,11 +36,12 @@ class SWDLLEXPORT OSISMorphSegmentation : public SWOptionFilter {
 
 public:
     OSISMorphSegmentation();
-    virtual ~OSISMorphSegmentation();
+    ~OSISMorphSegmentation() override;
 
-    virtual char processText(std::string & text,
-                             SWKey const * key = nullptr,
-                             SWModule const * module = nullptr);
+    char processText(std::string & text,
+                         SWKey const * key = nullptr,
+                         SWModule const * module = nullptr) override;
+
 };
 
 } /* namespace swordxx */

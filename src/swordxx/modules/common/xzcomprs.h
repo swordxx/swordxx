@@ -37,11 +37,11 @@ class SWDLLEXPORT XzCompress : public SWCompress {
 protected:
 public:
     XzCompress();
-    virtual ~XzCompress();
+    ~XzCompress() override;
 
-    virtual void Encode(void);
-    virtual void Decode(void);
-    virtual void setLevel(int l);
+    void Encode() override;
+    void Decode() override;
+    void setLevel(int l) override;
 private:
     uint64_t memlimit; // memory usage limit during decompression
 };

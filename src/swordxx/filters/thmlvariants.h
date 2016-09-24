@@ -33,10 +33,12 @@ namespace swordxx {
 class SWDLLEXPORT ThMLVariants : public SWOptionFilter {
 public:
     ThMLVariants();
-    virtual ~ThMLVariants();
-    virtual char processText(std::string & text,
-                             SWKey const * key = nullptr,
-                             SWModule const * module = nullptr);
+    ~ThMLVariants() override;
+
+    char processText(std::string & text,
+                         SWKey const * key = nullptr,
+                         SWModule const * module = nullptr) override;
+
 };
 
 } /* namespace swordxx */

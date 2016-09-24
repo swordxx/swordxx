@@ -33,10 +33,12 @@ namespace swordxx {
 class SWDLLEXPORT OSISXlit : public SWOptionFilter {
 public:
     OSISXlit();
-    virtual ~OSISXlit();
-    virtual char processText(std::string & text,
-                             SWKey const * key = nullptr,
-                             SWModule const * module = nullptr);
+    ~OSISXlit() override;
+
+    char processText(std::string & text,
+                         SWKey const * key = nullptr,
+                         SWModule const * module = nullptr) override;
+
 };
 
 } /* namespace swordxx */

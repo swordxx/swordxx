@@ -35,10 +35,12 @@ namespace swordxx {
 class SWDLLEXPORT GBFRedLetterWords : public SWOptionFilter {
 public:
     GBFRedLetterWords();
-    virtual ~GBFRedLetterWords();
-    virtual char processText(std::string & text,
-                             SWKey const * key = nullptr,
-                             SWModule const * module = nullptr);
+    ~GBFRedLetterWords() override;
+
+    char processText(std::string & text,
+                         SWKey const * key = nullptr,
+                         SWModule const * module = nullptr) override;
+
 };
 
 } /* namespace swordxx */

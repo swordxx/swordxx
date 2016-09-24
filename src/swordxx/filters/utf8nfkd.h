@@ -40,10 +40,12 @@ private:
     UErrorCode err;
 public:
     UTF8NFKD();
-    ~UTF8NFKD();
-    virtual char processText(std::string & text,
-                             SWKey const * key = nullptr,
-                             SWModule const * module = nullptr);
+    ~UTF8NFKD() override;
+
+    char processText(std::string & text,
+                         SWKey const * key = nullptr,
+                         SWModule const * module = nullptr) override;
+
 };
 
 } /* namespace swordxx */

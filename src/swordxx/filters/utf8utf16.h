@@ -33,9 +33,9 @@ namespace swordxx {
 class SWDLLEXPORT UTF8UTF16 : public SWFilter {
 public:
     UTF8UTF16();
-    virtual char processText(std::string & text,
-                             SWKey const * key = nullptr,
-                             SWModule const * module = nullptr);
+    char processText(std::string & text,
+                     SWKey const * key = nullptr,
+                     SWModule const * module = nullptr) override;
 };
 
 } /* namespace swordxx */

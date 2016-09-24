@@ -61,8 +61,6 @@ protected:
 
 public:
 
-    /** Initializes data for instance of SWCom
-    */
     SWCom(char const * imodname = nullptr,
           char const * imoddesc = nullptr,
           SWTextEncoding enc = ENC_UNKNOWN,
@@ -71,15 +69,11 @@ public:
           char const * ilang = nullptr,
           char const * versification = "KJV");
 
-    virtual ~SWCom();
-    virtual SWKey *createKey() const;
+    ~SWCom() override;
+    SWKey * createKey() const override;
 
-    virtual long getIndex() const;
-    virtual void setIndex(long iindex);
-
-
-
-    // OPERATORS -----------------------------------------------------------------
+    long getIndex() const override;
+    void setIndex(long iindex) override;
 
     SWMODULE_OPERATORS
 

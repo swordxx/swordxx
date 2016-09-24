@@ -33,10 +33,12 @@ namespace swordxx {
 class SWDLLEXPORT ThMLFootnotes : public SWOptionFilter {
 public:
     ThMLFootnotes();
-    virtual ~ThMLFootnotes();
-    virtual char processText(std::string & text,
-                             SWKey const * key = nullptr,
-                             SWModule const * module = nullptr);
+    ~ThMLFootnotes() override;
+
+    char processText(std::string & text,
+                         SWKey const * key = nullptr,
+                         SWModule const * module = nullptr) override;
+
 };
 
 } /* namespace swordxx */

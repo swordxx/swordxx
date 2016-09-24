@@ -81,10 +81,10 @@ class Private;
 public:
 
     SWBasicFilter();
-    virtual char processText(std::string & text,
-                             SWKey const * key = nullptr,
-                             SWModule const * module = nullptr);
-    virtual ~SWBasicFilter();
+    char processText(std::string & text,
+                     SWKey const * key = nullptr,
+                     SWModule const * module = nullptr) override;
+    ~SWBasicFilter() override;
 
 protected:
 

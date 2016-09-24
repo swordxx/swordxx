@@ -84,15 +84,18 @@ private:
 
 public:
     UTF8Transliterator();
-    ~UTF8Transliterator();
-    virtual char processText(std::string & text,
-                             SWKey const * key = nullptr,
-                             SWModule const * module = nullptr);
-    virtual const char *getOptionName() { return optName; }
-    virtual const char *getOptionTip() { return optTip; }
-    virtual void setOptionValue(const char *ival);
-    virtual const char *getOptionValue();
-    virtual StringList getOptionValues() { return options; }
+    ~UTF8Transliterator() override;
+
+    char processText(std::string & text,
+                         SWKey const * key = nullptr,
+                         SWModule const * module = nullptr) override;
+
+    char const * getOptionName() override { return optName; }
+    char const * getOptionTip() override { return optTip; }
+    void setOptionValue(char const * ival) override;
+    char const * getOptionValue() override;
+    StringList getOptionValues() override { return options; }
+
 };
 
 } /* namespace swordxx */

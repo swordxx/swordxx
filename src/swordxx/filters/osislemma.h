@@ -33,10 +33,12 @@ namespace swordxx {
 class SWDLLEXPORT OSISLemma : public SWOptionFilter {
 public:
     OSISLemma();
-    virtual ~OSISLemma();
-    virtual char processText(std::string & text,
-                             SWKey const * key = nullptr,
-                             SWModule const * module = nullptr);
+    ~OSISLemma() override;
+
+    char processText(std::string & text,
+                         SWKey const * key = nullptr,
+                         SWModule const * module = nullptr) override;
+
 };
 
 } /* namespace swordxx */

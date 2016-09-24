@@ -33,10 +33,12 @@ namespace swordxx {
 class SWDLLEXPORT UTF8GreekAccents : public SWOptionFilter {
 public:
     UTF8GreekAccents();
-    virtual ~UTF8GreekAccents();
-    virtual char processText(std::string & text,
-                             SWKey const * key = nullptr,
-                             SWModule const * module = nullptr);
+    ~UTF8GreekAccents() override;
+
+    char processText(std::string & text,
+                         SWKey const * key = nullptr,
+                         SWModule const * module = nullptr) override;
+
 };
 
 } /* namespace swordxx */

@@ -46,20 +46,18 @@ public:
             SWTextMarkup markup = FMT_UNKNOWN,
             char const * ilang = nullptr,
             char const * versification = "KJV");
-    virtual ~RawText();
-    virtual std::string &getRawEntryBuf() const;
-    virtual void increment(int steps = 1);
-    virtual void decrement(int steps = 1) { increment(-steps); }
-    // write interface ----------------------------
-    virtual bool isWritable() const;
+    ~RawText() override;
+    std::string & getRawEntryBuf() const override;
+    void increment(int steps = 1) override;
+    void decrement(int steps = 1) override { increment(-steps); }
+    bool isWritable() const override;
     static char createModule(const char *path, const char *v11n = "KJV") { return RawVerse::createModule(path, v11n); }
-    virtual void setEntry(const char *inbuf, long len = -1);    // Modify current module entry
-    virtual void linkEntry(const SWKey *linkKey);    // Link current module entry to other module entry
-    virtual void deleteEntry();    // Delete current module entry
-    // end write interface ------------------------
+    void setEntry(char const * inbuf, long len = -1) override;
+    void linkEntry(SWKey const * linkKey) override;
+    void deleteEntry() override;
 
-    virtual bool isLinked(const SWKey *k1, const SWKey *k2) const;
-    virtual bool hasEntry(const SWKey *k) const;
+    bool isLinked(SWKey const * k1, SWKey const * k2) const override;
+    bool hasEntry(SWKey const * k) const override;
 
 
     SWMODULE_OPERATORS

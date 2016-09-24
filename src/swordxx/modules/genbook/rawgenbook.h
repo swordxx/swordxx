@@ -50,20 +50,17 @@ public:
                SWTextMarkup markup = FMT_UNKNOWN,
                char const * ilang = nullptr,
                char const * keyType = "TreeKey");
-    virtual ~RawGenBook();
-    virtual std::string &getRawEntryBuf() const;
-    // write interface ----------------------------
-    virtual bool isWritable() const;
+    ~RawGenBook() override;
+
+    std::string & getRawEntryBuf() const override;
+    bool isWritable() const override;
     static char createModule(const char *ipath);
-    virtual void setEntry(const char *inbuf, long len = -1);    // Modify current module entry
-    virtual void linkEntry(const SWKey * linkKey);    // Link current module entry to other module entry
-    virtual void deleteEntry();    // Delete current module entry
-    virtual SWKey *createKey() const;
-    // end write interface ------------------------
+    void setEntry(char const * inbuf, long len = -1) override;
+    void linkEntry(SWKey const * linkKey) override;
+    void deleteEntry() override;
+    SWKey * createKey() const override;
 
-    virtual bool hasEntry(const SWKey *k) const;
-
-    // OPERATORS -----------------------------------------------------------------
+    bool hasEntry(SWKey const * k) const override;
 
     SWMODULE_OPERATORS
 

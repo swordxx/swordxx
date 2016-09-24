@@ -35,7 +35,11 @@ class SWDLLEXPORT ThMLWEBIF : public ThMLXHTML {
     const std::string passageStudyURL;
 
 protected:
-    virtual bool handleToken(std::string &buf, const char *token, BasicFilterUserData *userData);
+
+    bool handleToken(std::string & buf,
+                     char const * token,
+                     BasicFilterUserData * userData) override;
+
 public:
     ThMLWEBIF();
 };

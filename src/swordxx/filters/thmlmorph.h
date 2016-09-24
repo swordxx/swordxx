@@ -33,10 +33,12 @@ namespace swordxx {
 class SWDLLEXPORT ThMLMorph : public SWOptionFilter {
 public:
     ThMLMorph();
-    virtual ~ThMLMorph();
-    virtual char processText(std::string & text,
-                             SWKey const * key = nullptr,
-                             SWModule const * module = nullptr);
+    ~ThMLMorph() override;
+
+    char processText(std::string & text,
+                         SWKey const * key = nullptr,
+                         SWModule const * module = nullptr) override;
+
 };
 
 } /* namespace swordxx */

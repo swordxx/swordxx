@@ -33,10 +33,12 @@ namespace swordxx {
 class SWDLLEXPORT UTF8Cantillation : public SWOptionFilter {
 public:
     UTF8Cantillation();
-    virtual ~UTF8Cantillation();
-    virtual char processText(std::string & text,
-                             SWKey const * key = nullptr,
-                             SWModule const * module = nullptr);
+    ~UTF8Cantillation() override;
+
+    char processText(std::string & text,
+                         SWKey const * key = nullptr,
+                         SWModule const * module = nullptr) override;
+
 };
 
 } /* namespace swordxx */

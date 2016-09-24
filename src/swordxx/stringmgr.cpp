@@ -125,10 +125,10 @@ namespace {
 //here comes our ICUStringMgr reimplementation
 class ICUStringMgr : public StringMgr {
 public:
-    virtual char * upperUTF8(char *, std::size_t const max = 0u) const;
+    char * upperUTF8(char *, std::size_t const max = 0u) const override;
 
 protected:
-    virtual bool supportsUnicode() const { return true; };
+    bool supportsUnicode() const override { return true; }
 };
 
 #endif /* SWORDXX_HAS_ICU */

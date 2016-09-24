@@ -57,7 +57,7 @@ public:
     /**
      * The destructor of SWMarkupMgr.
      */
-        ~MarkupFilterMgr();
+        ~MarkupFilterMgr() override;
 
     /** Markup sets/gets the markup after initialization
      *
@@ -66,12 +66,7 @@ public:
      */
         char Markup(char m = FMT_UNKNOWN);
 
-    /**
-     * Adds the render filters which are defined in "section" to the SWModule object "module".
-     * @param module To this module the render filter(s) are added
-     * @param section We use this section to get a list of filters we should apply to the module
-     */
-        virtual void AddRenderFilters(SWModule *module, ConfigEntMap &section);
+        void AddRenderFilters(SWModule * module, ConfigEntMap & section) override;
 };
 
 } /* namespace swordxx */

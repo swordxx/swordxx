@@ -48,7 +48,7 @@ class SWDLLEXPORT VerseTreeKey : public VerseKey, public TreeKey::PositionChange
     long lastGoodOffset;
 
 protected:
-    virtual int getBookFromAbbrev(const char *abbr) const;
+    int getBookFromAbbrev(char const * abbr) const override;
 
 public:
 
@@ -86,39 +86,32 @@ public:
     */
     VerseTreeKey(const VerseTreeKey &k);
 
+    ~VerseTreeKey() override;
 
-    /**    VerseKey Destructor
-    * Cleans up an instance of VerseKey
-    */
-    virtual ~VerseTreeKey();
+    SWKey * clone() const override;
 
-    /** Creates a new    SWKey based on the current    VerseKey
-    * see also the Copy Constructor
-    */
-    virtual SWKey *clone() const;
-
-    virtual bool isTraversable() const { return true; }
+    bool isTraversable() const override { return true; }
 
     virtual TreeKey *getTreeKey();
 
-    // TreeKey::PositionChangeListener interface
-    virtual void positionChanged();
+    void positionChanged() override;
     bool internalPosChange;
 
-    virtual void decrement(int steps = 1);
-    virtual void increment(int steps = 1);
+    void decrement(int steps = 1) override;
+    void increment(int steps = 1) override;
 
     virtual void Normalize(char autocheck = 0);
 
-    virtual void setPosition(SW_POSITION newpos);
+    void setPosition(SW_POSITION newpos) override;
     virtual long NewIndex() const;
-    // OPERATORS --------------------------------------------------------------------
-
 
     SWKEY_OPERATORS
 
-    virtual SWKey & operator = (const VerseKey & ikey) { copyFrom(ikey); return *this; }
-//    virtual void copyFrom(const VerseTreeKey &ikey);
+    SWKey & operator=(VerseKey const & ikey) override {
+        copyFrom(ikey);
+        return *this;
+    }
+
 };
 
 } /* namespace swordxx */

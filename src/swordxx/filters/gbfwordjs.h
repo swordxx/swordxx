@@ -40,10 +40,12 @@ class SWDLLEXPORT GBFWordJS : public SWOptionFilter {
 
 public:
     GBFWordJS();
-    virtual ~GBFWordJS();
-    virtual char processText(std::string & text,
-                             SWKey const * key = nullptr,
-                             SWModule const * module = nullptr);
+    ~GBFWordJS() override;
+
+    char processText(std::string & text,
+                         SWKey const * key = nullptr,
+                         SWModule const * module = nullptr) override;
+
     void setDefaultModules(SWModule * defaultGreekLex = nullptr,
                            SWModule * defaultHebLex = nullptr,
                            SWModule * defaultGreekParse = nullptr,

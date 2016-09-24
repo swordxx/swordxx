@@ -66,39 +66,39 @@ class SWDLLEXPORT TreeKeyIdx : public TreeKey {
 public:
     TreeKeyIdx(const TreeKeyIdx &ikey);
     TreeKeyIdx(const char *idxPath, int fileMode = -1);
-    virtual ~TreeKeyIdx();
+    ~TreeKeyIdx() override;
 
-    virtual SWKey *clone() const;
+    SWKey *clone() const override;
 
-    virtual const char *getLocalName();
-    virtual const char *setLocalName(const char *);
+    char const *getLocalName() override;
+    char const *setLocalName(char const *) override;
 
-    virtual char const * getUserData(int * size = nullptr) const;
-    virtual void setUserData(const char *userData, int size = 0);
+    char const * getUserData(int * size = nullptr) const override;
+    void setUserData(char const * userData, int size = 0) override;
 
-    virtual void root();
-    virtual bool parent();
+    void root() override;
+    bool parent() override;
 
-    virtual bool firstChild();
-    virtual bool nextSibling();
-    virtual bool previousSibling();
+    bool firstChild() override;
+    bool nextSibling() override;
+    bool previousSibling() override;
 
-    virtual bool hasChildren();
+    bool hasChildren() override;
 
-    virtual void append();
-    virtual void appendChild();
-    virtual void insertBefore();
+    void append() override;
+    void appendChild() override;
+    void insertBefore() override;
 
-    virtual void remove();
-    virtual void save();
+    void remove() override;
+    void save() override;
 
     virtual void copyFrom(const TreeKeyIdx &ikey);
-    virtual void copyFrom(const SWKey &ikey);
+    void copyFrom(SWKey const & ikey) override;
 
-    void setOffset(unsigned long offset);
-    unsigned long getOffset() const;
+    void setOffset(unsigned long offset) override;
+    unsigned long getOffset() const override;
 
-    virtual int getLevel();
+    int getLevel() override;
 
 
     // OPERATORS ------------------------------------------------------------
@@ -107,14 +107,14 @@ public:
     virtual SWKey &operator = (const TreeKeyIdx &ikey) { copyFrom(ikey); return *this; }
     SWKEY_OPERATORS
 
-    virtual void setText(const char *ikey);
-    virtual void setPosition(SW_POSITION p);
-    virtual const char *getText() const;
-    virtual int _compare (const TreeKeyIdx & ikey);
-    virtual int compare(const SWKey &ikey);
-    virtual void decrement(int steps = 1);
-    virtual void increment(int steps = 1);
-    virtual bool isTraversable() const { return true; }
+    void setText(char const * ikey) override;
+    void setPosition(SW_POSITION p) override;
+    char const * getText() const override;
+    int _compare (TreeKeyIdx const & ikey);
+    int compare(SWKey const & ikey) override;
+    void decrement(int steps = 1) override;
+    void increment(int steps = 1) override;
+    bool isTraversable() const override { return true; }
 
     static signed char create(const char *path);
 };

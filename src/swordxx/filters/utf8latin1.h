@@ -34,9 +34,9 @@ class SWDLLEXPORT UTF8Latin1 : public SWFilter {
     char replacementChar;
 public:
     UTF8Latin1(char rchar = '?');
-    virtual char processText(std::string & text,
-                             SWKey const * key = nullptr,
-                             SWModule const * module = nullptr);
+    char processText(std::string & text,
+                     SWKey const * key = nullptr,
+                     SWModule const * module = nullptr) override;
 };
 
 } /* namespace swordxx */

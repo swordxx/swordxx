@@ -36,10 +36,10 @@ class SWDLLEXPORT Bzip2Compress : public SWCompress {
 protected:
 public:
     Bzip2Compress();
-    virtual ~Bzip2Compress();
+    ~Bzip2Compress() override;
 
-    virtual void Encode(void);
-    virtual void Decode(void);
+    void Encode() override;
+    void Decode() override;
 };
 
 } /* namespace swordxx */

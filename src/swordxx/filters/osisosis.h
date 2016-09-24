@@ -45,11 +45,19 @@ protected:
         XMLTag startTag;
         MyUserData(const SWModule *module, const SWKey *key);
     };
-    virtual BasicFilterUserData *createUserData(const SWModule *module, const SWKey *key) {
-        return new MyUserData(module, key);
-    }
-    virtual char processText(std::string &text, const SWKey *key, const SWModule *module);
-    virtual bool handleToken(std::string &buf, const char *token, BasicFilterUserData *userData);
+
+    BasicFilterUserData * createUserData(SWModule const * module,
+                                         SWKey const * key) override
+    { return new MyUserData(module, key); }
+
+    char processText(std::string & text,
+                     SWKey const * key = nullptr,
+                     SWModule const * module = nullptr) override;
+
+    bool handleToken(std::string & buf,
+                     char const * token,
+                     BasicFilterUserData * userData) override;
+
 public:
     OSISOSIS();
 };

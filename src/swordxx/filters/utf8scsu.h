@@ -41,10 +41,10 @@ private:
     UErrorCode err;
 public:
     UTF8SCSU();
-    ~UTF8SCSU();
-    virtual char processText(std::string & text,
-                             SWKey const * key = nullptr,
-                             SWModule const * module = nullptr);
+    ~UTF8SCSU() override;
+    char processText(std::string & text,
+                     SWKey const * key = nullptr,
+                     SWModule const * module = nullptr) override;
 };
 
 } /* namespace swordxx */

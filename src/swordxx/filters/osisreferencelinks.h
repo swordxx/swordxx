@@ -50,10 +50,12 @@ public:
                        char const * type,
                        char const * subType = nullptr,
                        char const * defaultValue = "On");
-    virtual ~OSISReferenceLinks();
-    virtual char processText(std::string & text,
-                             SWKey const * key = nullptr,
-                             SWModule const * module = nullptr);
+    ~OSISReferenceLinks() override;
+
+    char processText(std::string & text,
+                         SWKey const * key = nullptr,
+                         SWModule const * module = nullptr) override;
+
 };
 
 } /* namespace swordxx */

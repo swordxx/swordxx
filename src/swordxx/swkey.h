@@ -34,21 +34,22 @@ namespace swordxx {
 
 #define KEYERR_OUTOFBOUNDS 1
 
-#define SWKEY_OPERATORS \
+#define SWKEY_OPERATORS_(v,o) \
   SWKey &operator =(const char *ikey) { setText(ikey); return *this; } \
   SWKey &operator =(const SWKey &ikey) { positionFrom(ikey); return *this; } \
   SWKey &operator =(SW_POSITION pos) { setPosition(pos); return *this; } \
   operator const char *() const { return getText(); } \
   bool operator ==(const SWKey &ikey) { return equals(ikey); } \
   bool operator !=(const SWKey &ikey) { return !equals(ikey); } \
-  virtual bool operator >(const SWKey &ikey) { return (compare(ikey) > 0); } \
-  virtual bool operator <(const SWKey &ikey) { return (compare(ikey) < 0); } \
-  virtual bool operator >=(const SWKey &ikey) { return (compare(ikey) > -1); }  \
-  virtual bool operator <=(const SWKey &ikey) { return (compare(ikey) < 1); } \
+  v bool operator >(SWKey const & ikey) o { return (compare(ikey) > 0); } \
+  v bool operator <(SWKey const & ikey) o { return (compare(ikey) < 0); } \
+  v bool operator >=(SWKey const & ikey) o { return (compare(ikey) > -1); } \
+  v bool operator <=(SWKey const & ikey) o { return (compare(ikey) < 1); } \
   SWKey &operator -=(int steps) { decrement(steps); return *this; } \
   SWKey &operator +=(int steps) { increment(steps); return *this; } \
   SWKey &operator ++()    { increment(1); return *this; } \
-  SWKey &operator --()    { decrement(1); return *this; } \
+  SWKey &operator --()    { decrement(1); return *this; }
+#define SWKEY_OPERATORS SWKEY_OPERATORS_(,override)
 
 
 /** For use with = operator to position key.
@@ -228,7 +229,7 @@ public:
      */
     virtual void setIndex(long iindex) { index = iindex; }
 
-    SWKEY_OPERATORS
+    SWKEY_OPERATORS_(virtual,)
 
     };
 

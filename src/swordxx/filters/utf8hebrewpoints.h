@@ -33,10 +33,12 @@ namespace swordxx {
 class SWDLLEXPORT UTF8HebrewPoints : public SWOptionFilter {
 public:
     UTF8HebrewPoints();
-    virtual ~UTF8HebrewPoints();
-    virtual char processText(std::string & text,
-                             SWKey const * key = nullptr,
-                             SWModule const * module = nullptr);
+    ~UTF8HebrewPoints() override;
+
+    char processText(std::string & text,
+                         SWKey const * key = nullptr,
+                         SWModule const * module = nullptr) override;
+
 };
 
 } /* namespace swordxx */

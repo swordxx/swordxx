@@ -33,10 +33,12 @@ namespace swordxx {
 class SWDLLEXPORT OSISMorph : public SWOptionFilter {
 public:
     OSISMorph();
-    virtual ~OSISMorph();
-    virtual char processText(std::string & text,
-                             SWKey const * key = nullptr,
-                             SWModule const * module = nullptr);
+    ~OSISMorph() override;
+
+    char processText(std::string & text,
+                         SWKey const * key = nullptr,
+                         SWModule const * module = nullptr) override;
+
 };
 
 } /* namespace swordxx */

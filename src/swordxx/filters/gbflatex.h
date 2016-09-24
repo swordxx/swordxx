@@ -39,13 +39,18 @@ protected:
         bool hasFootnotePreTag;
         std::string version;
     };
-    virtual BasicFilterUserData *createUserData(const SWModule *module, const SWKey *key) {
-        return new MyUserData(module, key);
-    }
-    virtual bool handleToken(std::string &buf, const char *token, BasicFilterUserData *userData);
+
+    BasicFilterUserData * createUserData(SWModule const * module,
+                                         SWKey const * key) override
+    { return new MyUserData(module, key); }
+
+    bool handleToken(std::string & buf,
+                     char const * token,
+                     BasicFilterUserData * userData) override;
+
 public:
     GBFLaTeX();
-    virtual const char *getHeader() const;
+    char const * getHeader() const override;
     void setRenderNoteNumbers(bool val = true) { renderNoteNumbers = val; }
 };
 

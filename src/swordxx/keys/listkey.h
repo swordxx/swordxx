@@ -57,9 +57,9 @@ public:
 
     /** cleans up instance of ListKey
      */
-    virtual ~ListKey();
+    ~ListKey() override;
 
-    virtual SWKey *clone() const;
+    SWKey * clone() const override;
 
     /** Clears out elements of list
      */
@@ -105,36 +105,36 @@ public:
      * @param ikey other ListKey object
      */
     virtual void copyFrom(const ListKey & ikey);
-    virtual void copyFrom(const SWKey & ikey) { SWKey::copyFrom(ikey); }
+    void copyFrom(SWKey const & ikey) override { SWKey::copyFrom(ikey); }
 
     /** Positions this key
      *
      * @param pos position
      * @return *this
      */
-    virtual void setPosition(SW_POSITION pos);
+    void setPosition(SW_POSITION pos) override;
 
     /** Decrements a number of elements
      */
-    virtual void decrement(int step = 1);
+    void decrement(int step = 1) override;
 
     /** Increments a number of elements
      */
-    virtual void increment(int step = 1);
+    void increment(int step = 1) override;
 
-    virtual bool isTraversable() const { return true; }
-    virtual long getIndex() const { return arraypos; }
-    virtual const char *getRangeText() const;
-    virtual const char *getOSISRefRangeText() const;
-    virtual const char *getShortText() const;
+    bool isTraversable() const override { return true; }
+    long getIndex() const override { return arraypos; }
+    char const * getRangeText() const override;
+    char const * getOSISRefRangeText() const override;
+    char const * getShortText() const override;
 
     /**
      * Returns the index for the new one given as as parameter.
      * The first parameter is the new index.
      */
-    virtual void setIndex(long index) { setToElement(index); }
-    virtual const char *getText() const;
-    virtual void setText(const char *ikey);
+    void setIndex(long index)  override{ setToElement(index); }
+    char const * getText() const override;
+    void setText(char const * ikey) override;
     virtual void sort();
 
     SWKEY_OPERATORS

@@ -32,9 +32,11 @@ namespace swordxx {
  */
 class SWDLLEXPORT ThMLGBF : public SWFilter {
 protected:
-    virtual char processText(std::string & text,
-                             SWKey const * key = nullptr,
-                             SWModule const * module = nullptr);
+
+    char processText(std::string & text,
+                         SWKey const * key = nullptr,
+                         SWModule const * module = nullptr) override;
+
 public:
     ThMLGBF();
 };

@@ -41,10 +41,12 @@ private:
     UErrorCode err;
 public:
     UTF8BiDiReorder();
-    ~UTF8BiDiReorder();
-    virtual char processText(std::string & text,
-                             SWKey const * key = nullptr,
-                             SWModule const * module = nullptr);
+    ~UTF8BiDiReorder() override;
+
+    char processText(std::string & text,
+                         SWKey const * key = nullptr,
+                         SWModule const * module = nullptr) override;
+
 };
 
 } /* namespace swordxx */

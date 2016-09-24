@@ -117,15 +117,15 @@ public:
     virtual void setOffset(unsigned long offset) = 0;
     virtual unsigned long getOffset() const = 0;
 
-    virtual void setText(const char *ikey) = 0;
-    virtual void setPosition(SW_POSITION p) = 0;
-    virtual const char *getText() const = 0;
-    virtual int compare(const SWKey &ikey) = 0;
-    virtual void decrement(int steps = 1) = 0;
-    virtual void increment(int steps = 1) = 0;
-    virtual bool isTraversable() const { return true; }
-    virtual long getIndex() const { return getOffset(); }
-    virtual void setIndex(long iindex) { setOffset(iindex); }
+    void setText(char const * ikey) override = 0;
+    void setPosition(SW_POSITION p) override = 0;
+    const char *getText() const override = 0;
+    int compare(SWKey const & ikey) override = 0;
+    void decrement(int steps = 1) override = 0;
+    void increment(int steps = 1) override = 0;
+    bool isTraversable() const override { return true; }
+    long getIndex() const override { return getOffset(); }
+    void setIndex(long iindex) override { setOffset(iindex); }
 
     /** Set the key to this path.  If the path doesn't exist, then
      *    nodes are created as necessary

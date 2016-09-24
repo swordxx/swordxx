@@ -47,41 +47,15 @@ public:
              SWTextDirection dir = DIRECTION_LTR,
              SWTextMarkup markup = FMT_UNKNOWN,
              char const * ilang = nullptr);
-    virtual ~RawFiles();
-    virtual std::string &getRawEntryBuf() const;
+    ~RawFiles() override;
+    std::string & getRawEntryBuf() const override;
 
-    // write interface ----------------------------
-    /** Is the module writable? :)
-    * @return yes or no
-    */
-    virtual bool isWritable() const;
+    bool isWritable() const override;
 
-    /** Creates a new module
-    * @param path The first parameter is path of the new module
-    * @return error
-    */
     static char createModule(const char *);
-
-    /** Modify the current module entry text
-    * - only if module @ref isWritable
-    * @return *this
-    */
-    virtual void setEntry(const char *inbuf, long len = -1);    // Modify current module entry
-
-    /** Link the current module entry to another module entry
-    * - only if module @ref isWritable
-    * @return *this
-    */
-    virtual void linkEntry(const SWKey *linkKey);    // Link current module entry to other module entry
-
-    /** Delete current module entry - only if module @ref isWritable
-    *
-    */
-    virtual void deleteEntry();
-    // end write interface ------------------------
-
-
-    // OPERATORS -----------------------------------------------------------------
+    void setEntry(char const * inbuf, long len = -1) override;
+    void linkEntry(SWKey const * linkKey) override;
+    void deleteEntry() override;
 
     SWMODULE_OPERATORS
 

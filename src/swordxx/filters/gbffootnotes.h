@@ -33,10 +33,12 @@ namespace swordxx {
 class SWDLLEXPORT GBFFootnotes : public SWOptionFilter {
 public:
     GBFFootnotes();
-    virtual ~GBFFootnotes();
-    virtual char processText(std::string & text,
-                             SWKey const * key = nullptr,
-                             SWModule const * module = nullptr);
+    ~GBFFootnotes() override;
+
+    char processText(std::string & text,
+                         SWKey const * key = nullptr,
+                         SWModule const * module = nullptr) override;
+
 };
 
 } /* namespace swordxx */

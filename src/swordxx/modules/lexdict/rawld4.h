@@ -48,25 +48,21 @@ public:
            bool caseSensitive = false,
            bool strongsPadding = true);
 
-    virtual ~RawLD4();
-    virtual std::string &getRawEntryBuf() const;
+    ~RawLD4() override;
 
-    virtual void increment(int steps = 1);
-    virtual void decrement(int steps = 1) { increment(-steps); }
-    // write interface ----------------------------
-    virtual bool isWritable() const;
+    std::string &getRawEntryBuf() const override;
+
+    void increment(int steps = 1) override;
+    void decrement(int steps = 1) override { increment(-steps); }
+    bool isWritable() const override;
     static char createModule(const char *path) { return RawStr4::createModule(path); }
 
-    virtual void setEntry(const char *inbuf, long len = -1);    // Modify current module entry
-    virtual void linkEntry(const SWKey *linkKey);    // Link current module entry to other module entry
-    virtual void deleteEntry();    // Delete current module entry
-    // end write interface ------------------------
-    virtual long getEntryCount() const;
-    virtual long getEntryForKey(const char *key) const;
-    virtual char *getKeyForEntry(long entry) const;
-
-
-    // OPERATORS -----------------------------------------------------------------
+    void setEntry(char const * inbuf, long len = -1) override;
+    void linkEntry(SWKey const * linkKey) override;
+    void deleteEntry() override;
+    long getEntryCount() const override;
+    long getEntryForKey(char const * key) const override;
+    char * getKeyForEntry(long entry) const override;
 
     SWMODULE_OPERATORS
 

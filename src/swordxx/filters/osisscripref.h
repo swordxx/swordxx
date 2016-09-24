@@ -33,10 +33,12 @@ namespace swordxx {
 class SWDLLEXPORT OSISScripref : public SWOptionFilter {
 public:
     OSISScripref();
-    virtual ~OSISScripref();
-    virtual char processText(std::string & text,
-                             SWKey const * key = nullptr,
-                             SWModule const * module = nullptr);
+    ~OSISScripref() override;
+
+    char processText(std::string & text,
+                         SWKey const * key = nullptr,
+                         SWModule const * module = nullptr) override;
+
 };
 
 } /* namespace swordxx */

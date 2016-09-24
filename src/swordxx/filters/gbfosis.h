@@ -64,10 +64,10 @@ public:
 class SWDLLEXPORT GBFOSIS : public SWFilter {
 public:
     GBFOSIS();
-    virtual ~GBFOSIS();
+    ~GBFOSIS() override;
     char processText(std::string & text,
                      SWKey const * key = nullptr,
-                     SWModule const * module = nullptr);
+                     SWModule const * module = nullptr) override;
 };
 
 } /* namespace swordxx */

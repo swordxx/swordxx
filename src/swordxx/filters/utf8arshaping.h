@@ -42,10 +42,12 @@ private:
     UErrorCode err;
 public:
     UTF8arShaping();
-    ~UTF8arShaping();
-    virtual char processText(std::string & text,
-                             SWKey const * key = nullptr,
-                             SWModule const * module = nullptr);
+    ~UTF8arShaping() override;
+
+    char processText(std::string & text,
+                         SWKey const * key = nullptr,
+                         SWModule const * module = nullptr) override;
+
 };
 
 } /* namespace swordxx */

@@ -37,9 +37,9 @@ class Private;
     Private *p;
 public:
     LZSSCompress ();
-    virtual ~LZSSCompress();
-    virtual void Encode(void);
-    virtual void Decode(void);
+    ~LZSSCompress() override;
+    void Encode() override;
+    void Decode() override;
 };
 
 } /* namespace swordxx */

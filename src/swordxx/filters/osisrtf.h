@@ -34,11 +34,17 @@ class SWDLLEXPORT OSISRTF : public SWBasicFilter {
 private:
 
 protected:
-    virtual BasicFilterUserData *createUserData(const SWModule *module, const SWKey *key);
-    virtual bool handleToken(std::string &buf, const char *token, BasicFilterUserData *userData);
-    virtual char processText(std::string & text,
-                             SWKey const * key = nullptr,
-                             SWModule const * module = nullptr);
+
+    BasicFilterUserData * createUserData(SWModule const * module,
+                                         SWKey const * key) override;
+
+    bool handleToken(std::string & buf,
+                     char const * token,
+                     BasicFilterUserData * userData) override;
+
+    char processText(std::string & text,
+                     SWKey const * key = nullptr,
+                     SWModule const * module = nullptr) override;
 public:
     OSISRTF();
 };

@@ -40,10 +40,12 @@ class SWDLLEXPORT OSISWordJS : public SWOptionFilter {
 
 public:
     OSISWordJS();
-    virtual ~OSISWordJS();
-    virtual char processText(std::string & text,
-                             SWKey const * key = nullptr,
-                             SWModule const * module = nullptr);
+    ~OSISWordJS() override;
+
+    char processText(std::string & text,
+                         SWKey const * key = nullptr,
+                         SWModule const * module = nullptr) override;
+
     void setDefaultModules(SWModule * defaultGreekLex = nullptr,
                            SWModule * defaultHebLex = nullptr,
                            SWModule * defaultGreekParse = nullptr,

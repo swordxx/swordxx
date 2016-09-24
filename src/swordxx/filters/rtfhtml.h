@@ -33,9 +33,11 @@ namespace swordxx {
 class SWDLLEXPORT RTFHTML : public SWFilter {
 public:
     RTFHTML();
-    virtual char processText(std::string & text,
-                             SWKey const * key = nullptr,
-                             SWModule const * module = nullptr);
+
+    char processText(std::string & text,
+                         SWKey const * key = nullptr,
+                         SWModule const * module = nullptr) override;
+
 };
 
 } /* namespace swordxx */

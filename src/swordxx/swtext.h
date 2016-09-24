@@ -47,8 +47,7 @@ protected:
     VerseKey & getVerseKey(SWKey const * key = nullptr) const;
 
 public:
-    /** Initializes data for instance of SWText
-    */
+
     SWText(char const * imodname = nullptr,
            char const * imoddesc = nullptr,
            SWTextEncoding encoding = ENC_UNKNOWN,
@@ -57,13 +56,12 @@ public:
            char const * ilang = nullptr,
            char const * versification = "KJV");
 
-    virtual ~SWText();
-    /** Create the correct key (VerseKey) for use with SWText
-    */
-    virtual SWKey *createKey() const;
+    ~SWText() override;
 
-    virtual long getIndex() const;
-    virtual void setIndex(long iindex);
+    SWKey * createKey() const override;
+
+    long getIndex() const override;
+    void setIndex(long iindex) override;
 
     // OPERATORS -----------------------------------------------------------------
 
