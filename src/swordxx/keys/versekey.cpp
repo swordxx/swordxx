@@ -411,7 +411,7 @@ int VerseKey::getBookFromAbbrev(const char *iabbr) const
 
         if (!i) {
             if (hasUTF8Support) { //we have support for UTF-8 handling; we expect UTF-8 encoded locales
-                stringMgr->upperUTF8(abbr, strlen(abbr)*2);
+                stringMgr->upperUTF8(abbr, std::strlen(abbr) * 2u);
             }
             else {
                 stringMgr->upperLatin1(abbr);
@@ -476,7 +476,7 @@ void VerseKey::validateCurrentLocale() const {
                 StringMgr* stringMgr = StringMgr::getSystemStringMgr();
                 const bool hasUTF8Support = StringMgr::hasUTF8Support();
                 if (hasUTF8Support) { //we have support for UTF-8 handling; we expect UTF-8 encoded locales
-                    stringMgr->upperUTF8(abbr, strlen(abbr)*2);
+                    stringMgr->upperUTF8(abbr, std::strlen(abbr) * 2u);
                 }
                 else {
                     stringMgr->upperLatin1(abbr);

@@ -122,7 +122,7 @@ namespace {
 //here comes our ICUStringMgr reimplementation
 class ICUStringMgr : public StringMgr {
 public:
-    virtual char *upperUTF8(char *, unsigned int maxlen = 0) const;
+    virtual char * upperUTF8(char *, std::size_t const max = 0u) const;
 
 protected:
     virtual bool supportsUnicode() const { return true; };
@@ -188,7 +188,7 @@ StringMgr* StringMgr::getSystemStringMgr() {
  * @param t - The text encoded in utf8 which should be turned into an upper case string
  *
  */
-char *StringMgr::upperUTF8(char *t, unsigned int maxlen) const {
+char * StringMgr::upperUTF8(char * t, std::size_t const max) const {
     // try to decide if it's worth trying to toupper.  Do we have more
     // characters which are probably lower latin than not?
     // we still don't use isValidUTF8 optimally. what if we have 1 unicode
@@ -217,7 +217,7 @@ char *StringMgr::upperUTF8(char *t, unsigned int maxlen) const {
  * Converts the param to an uppercase latin1 string
  * @param The text encoded in latin1 which should be turned into an upper case string
  */
-char *StringMgr::upperLatin1(char *buf, unsigned int maxlen) const {
+char * StringMgr::upperLatin1(char * buf, std::size_t maxlen) const {
     if (!buf)
         return 0;
 
@@ -239,11 +239,11 @@ bool StringMgr::supportsUnicode() const {
 
 #if SWORDXX_HAS_ICU
 
-char *ICUStringMgr::upperUTF8(char *buf, unsigned int maxlen) const {
+char * ICUStringMgr::upperUTF8(char * buf, std::size_t const maxlen) const {
     if (!buf)
         return nullptr;
     char *ret = buf;
-    int max = (maxlen) ? maxlen : strlen(buf);
+    std::size_t const max = maxlen ? maxlen : std::strlen(buf);
 
     UErrorCode err = U_ZERO_ERROR;
 

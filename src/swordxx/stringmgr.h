@@ -61,14 +61,14 @@ public:
     * @param max Max buffer size
     * @return text buffer (only for convenience)
     */
-    virtual char *upperUTF8(char *text, unsigned int max = 0) const;
+    virtual char * upperUTF8(char * text, std::size_t const max = 0u) const;
 
     /** Converts the param to an uppercase latin1 string
     * @param text The text encoded in latin1 which should be turned into an upper case string
     * @param max Max buffer size
     * @return text buffer (only for convenience)
     */
-    virtual char *upperLatin1(char *text, unsigned int max = 0) const;
+    virtual char * upperLatin1(char * text, std::size_t const max = 0u) const;
 
 
 protected:
@@ -92,13 +92,11 @@ private:
     static StringMgr *systemStringMgr;
 };
 
-inline char *toupperstr(char *t, unsigned int max = 0) {
-    return StringMgr::getSystemStringMgr()->upperUTF8(t, max);
-}
+inline char * toupperstr(char * t, std::size_t const max = 0u)
+{ return StringMgr::getSystemStringMgr()->upperUTF8(t, max); }
 
-inline char *toupperstr_utf8(char *t, unsigned int max = 0) {
-    return StringMgr::getSystemStringMgr()->upperUTF8(t, max);
-}
+inline char * toupperstr_utf8(char * t, std::size_t const max = 0u)
+{ return StringMgr::getSystemStringMgr()->upperUTF8(t, max); }
 
 /**
  * Converts an std::string filled with UTF-8 to upper case
@@ -110,7 +108,7 @@ inline char *toupperstr_utf8(char *t, unsigned int max = 0) {
 inline std::string &toupperstr(std::string & b) {
     char *utf8 = 0;
     stdstr(&utf8, b.c_str(), 2);
-    toupperstr(utf8, (unsigned int)strlen(utf8)*2);
+    toupperstr(utf8, strlen(utf8) * 2u);
     b = utf8;
     delete [] utf8;
     return b;
