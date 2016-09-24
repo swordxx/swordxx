@@ -174,9 +174,10 @@ ENDIF()
 # The buildflags depend on the CMAKE_BUILD_TYPE supplied at the command line.
 
 ADD_COMPILE_OPTIONS(
-  "-Wall" "-Wextra" "-Wzero-as-null-pointer-constant" "-O2"
+  "-Wall" "-Wextra" "-O2"
   "$<$<COMPILE_LANGUAGE:C>:-std=c99>"
   "$<$<COMPILE_LANGUAGE:CXX>:-std=c++14>"
+  "$<$<COMPILE_LANGUAGE:CXX>:-Wzero-as-null-pointer-constant>"
   "$<$<CONFIG:Release>:-DNDEBUG>"
   "$<$<NOT:$<CONFIG:Release>>:-ggdb>"
   "$<$<NOT:$<CONFIG:Release>>:-fno-omit-frame-pointer>"
