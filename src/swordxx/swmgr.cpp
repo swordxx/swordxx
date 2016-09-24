@@ -373,29 +373,18 @@ SWMgr::SWMgr(const char *iConfigPath, bool autoload, SWFilterMgr *filterMgr, boo
 
 
 SWMgr::~SWMgr() {
-
     DeleteMods();
 
     for (FilterList::iterator it = cleanupFilters.begin(); it != cleanupFilters.end(); it++)
         delete (*it);
 
-    if (homeConfig)
-        delete homeConfig;
 
-    if (mysysconfig)
-        delete mysysconfig;
-
-    if (myconfig)
-        delete myconfig;
-
-    if (prefixPath)
-        delete [] prefixPath;
-
-    if (configPath)
-        delete [] configPath;
-
-    if (filterMgr)
-        delete filterMgr;
+    delete homeConfig;
+    delete mysysconfig;
+    delete myconfig;
+    delete [] prefixPath;
+    delete [] configPath;
+    delete filterMgr;
 }
 
 
