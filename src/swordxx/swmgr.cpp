@@ -375,9 +375,8 @@ SWMgr::SWMgr(const char *iConfigPath, bool autoload, SWFilterMgr *filterMgr, boo
 SWMgr::~SWMgr() {
     DeleteMods();
 
-    for (FilterList::iterator it = cleanupFilters.begin(); it != cleanupFilters.end(); it++)
-        delete (*it);
-
+    for (auto * const filter : cleanupFilters)
+        delete filter;
 
     delete homeConfig;
     delete mysysconfig;
@@ -807,9 +806,8 @@ signed char SWMgr::Load() {
 
         CreateMods(mgrModeMultiMod);
 
-        for (std::list<std::string>::iterator pathIt = augPaths.begin(); pathIt != augPaths.end(); pathIt++) {
-            augmentModules(pathIt->c_str(), mgrModeMultiMod);
-        }
+        for (auto const & augPath : augPaths)
+            augmentModules(augPath.c_str(), mgrModeMultiMod);
         if (augmentHome) {
             // augment config with ~/.swordxx/mods.d if it exists ---------------------
             std::string homeDir = getHomeDir();
@@ -1079,13 +1077,11 @@ void SWMgr::AddGlobalOptions(SWModule *module, ConfigEntMap &section, ConfigEntM
         it = optionFilters.find(filterName);
         if (it != optionFilters.end()) {
             module->addOptionFilter((*it).second);    // add filter to module and option as a valid option
-            StringList::iterator loop;
-            for (loop = options.begin(); loop != options.end(); loop++) {
-                if (!strcmp((*loop).c_str(), (*it).second->getOptionName()))
-                    break;
-            }
-            if (loop == options.end())    // if we have not yet included the option
-                options.push_back((*it).second->getOptionName());
+            for (auto const & option : options)
+                if (!strcmp(option.c_str(), (*it).second->getOptionName()))
+                    goto option_found;
+            options.push_back((*it).second->getOptionName());
+            option_found: (void) options;
         }
     }
     if (filterMgr)
@@ -1100,10 +1096,10 @@ char SWMgr::filterText(const char *filterName, std::string &text, const SWKey *k
 {
     char retVal = -1;
     // why didn't we use find here?
-    for (OptionFilterMap::iterator it = optionFilters.begin(); it != optionFilters.end(); it++) {
-        if ((*it).second->getOptionName()) {
-            if (!stricmp(filterName, (*it).second->getOptionName())) {
-                retVal = it->second->processText(text, key, module);
+    for (auto const & ofp : optionFilters) {
+        if (ofp.second->getOptionName()) {
+            if (!stricmp(filterName, ofp.second->getOptionName())) {
+                retVal = ofp.second->processText(text, key, module);
                 break;
             }
         }
@@ -1231,19 +1227,18 @@ void SWMgr::AddStripFilters(SWModule *module, ConfigEntMap &section)
 
 
 void SWMgr::CreateMods(bool multiMod) {
-    SectionMap::iterator it;
     ConfigEntMap::iterator start;
     ConfigEntMap::iterator end;
     ConfigEntMap::iterator entry;
     SWModule *newmod;
     std::string driver;
-    for (it = config->Sections.begin(); it != config->Sections.end(); it++) {
-        ConfigEntMap &section = (*it).second;
+    for (auto & sp : config->Sections) {
+        ConfigEntMap & section = sp.second;
         newmod = 0;
 
         driver = ((entry = section.find("ModDrv")) != section.end()) ? (*entry).second : (std::string)"";
         if (driver.length()) {
-            newmod = createModule((*it).first.c_str(), driver.c_str(), section);
+            newmod = createModule(sp.first.c_str(), driver.c_str(), section);
             if (newmod) {
                 // Filters to add for this module and globally announce as an option to the user
                 // e.g. translit, strongs, redletterwords, etc, so users can turn these on and off globally
@@ -1286,12 +1281,8 @@ void SWMgr::CreateMods(bool multiMod) {
 
 
 void SWMgr::DeleteMods() {
-
-    ModMap::iterator it;
-
-    for (it = Modules.begin(); it != Modules.end(); it++)
-        delete (*it).second;
-
+    for (auto const & mp : Modules)
+        delete mp.second;
     Modules.clear();
 }
 
@@ -1376,59 +1367,45 @@ char SWMgr::AddModToConfig(FileDesc *conffd, const char *fname)
 }
 
 
-void SWMgr::setGlobalOption(const char *option, const char *value)
+void SWMgr::setGlobalOption(const char * const option,
+                            const char * const value)
 {
-    for (OptionFilterMap::iterator it = optionFilters.begin(); it != optionFilters.end(); it++) {
-        if ((*it).second->getOptionName()) {
-            if (!stricmp(option, (*it).second->getOptionName()))
-                (*it).second->setOptionValue(value);
-        }
-    }
+    for (auto const & ofp : optionFilters)
+        if (ofp.second->getOptionName()
+            && !stricmp(option, ofp.second->getOptionName()))
+            ofp.second->setOptionValue(value);
 }
 
 
-const char *SWMgr::getGlobalOption(const char *option)
-{
-    for (OptionFilterMap::iterator it = optionFilters.begin(); it != optionFilters.end(); it++) {
-        if ((*it).second->getOptionName()) {
-            if (!stricmp(option, (*it).second->getOptionName()))
-                return (*it).second->getOptionValue();
-        }
-    }
-    return 0;
+const char * SWMgr::getGlobalOption(const char * const option) {
+    for (auto const & ofp : optionFilters)
+        if (ofp.second->getOptionName()
+            && !stricmp(option, ofp.second->getOptionName()))
+            return ofp.second->getOptionValue();
+    return nullptr;
 }
 
 
-const char *SWMgr::getGlobalOptionTip(const char *option)
-{
-    for (OptionFilterMap::iterator it = optionFilters.begin(); it != optionFilters.end(); it++) {
-        if ((*it).second->getOptionName()) {
-            if (!stricmp(option, (*it).second->getOptionName()))
-                return (*it).second->getOptionTip();
-        }
-    }
-    return 0;
+const char * SWMgr::getGlobalOptionTip(const char * const option) {
+    for (auto const & ofp : optionFilters)
+        if (ofp.second->getOptionName()
+            && !stricmp(option, ofp.second->getOptionName()))
+            return ofp.second->getOptionTip();
+    return nullptr;
 }
 
 
-StringList SWMgr::getGlobalOptions()
-{
-    return options;
-}
+StringList SWMgr::getGlobalOptions() { return options; }
 
 
-StringList SWMgr::getGlobalOptionValues(const char *option)
-{
-    StringList options;
-    for (OptionFilterMap::iterator it = optionFilters.begin(); it != optionFilters.end(); it++) {
-        if ((*it).second->getOptionName()) {
-            if (!stricmp(option, (*it).second->getOptionName())) {
-                options = (*it).second->getOptionValues();
-                break;    // just find the first one.  All option filters with the same option name should expect the same values
-            }
-        }
-    }
-    return options;
+StringList SWMgr::getGlobalOptionValues(const char * const option) {
+    /* Just find the first one. All option filters with the same option name
+       should expect the same values. */
+    for (auto const & ofp : optionFilters)
+        if (ofp.second->getOptionName()
+            && !stricmp(option, ofp.second->getOptionName()))
+            return ofp.second->getOptionValues();
+    return StringList();
 }
 
 
