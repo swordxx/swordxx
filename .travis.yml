@@ -1,0 +1,33 @@
+sudo: required
+# Required for C++11/14 and modern cmake
+dist: trusty
+language: generic
+before_install:
+  - curl -sSL https://cmake.org/files/v3.3/cmake-3.3.0-Linux-x86_64.tar.gz | sudo tar -xzC /opt
+  - curl -sSL https://cmake.org/files/v3.6/cmake-3.6.2-Linux-x86_64.tar.gz | sudo tar -xzC /opt
+script: ./travis.sh || exit 1
+matrix:
+  include:
+    - env: CXX=g++-5 CC=gcc-5 CMAKE_VERSION=3.3.0
+      addons: &addons
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - libbz2-dev
+            - xz-utils
+            - liblzma-dev
+            - libcurl4-openssl-dev
+            - zlib1g-dev
+            - cmake
+            - libclucene-dev
+            - curl
+            - gcc-5
+            - g++-5
+            - clang-3.8
+    - env: CXX=g++-5 CC=gcc-5 CMAKE_VERSION=3.6.2
+      addons: *addons
+    - env: CXX=clang++-3.8 CC=clang-3.8 CMAKE_VERSION=3.3.0
+      addons: *addons
+    - env: CXX=clang++-3.8 CC=clang-3.8 CMAKE_VERSION=3.6.2
+      addons: *addons
