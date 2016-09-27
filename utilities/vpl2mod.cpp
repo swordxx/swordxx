@@ -53,8 +53,7 @@ using swordxx::SW_POSITION;
 
 char readline(int fd, char **buf) {
     char ch;
-    if (*buf)
-        delete [] *buf;
+    delete[] *buf;
     *buf = nullptr;
     int len;
 
@@ -283,6 +282,5 @@ int main(int argc, char **argv) {
     }
 
     // clear up our buffer that readline might have allocated
-    if (buffer)
-        delete [] buffer;
+    delete[] buffer;
 }
