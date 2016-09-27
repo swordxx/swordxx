@@ -153,8 +153,7 @@ StringMgr::~StringMgr() {
 * @param newStringMgr The new global StringMgr. This pointer will be deleted by this StringMgr
 */
 void StringMgr::setSystemStringMgr(StringMgr *newStringMgr) {
-    if (systemStringMgr)
-        delete systemStringMgr;
+    delete systemStringMgr;
 
     systemStringMgr = newStringMgr;
 
