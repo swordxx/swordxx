@@ -80,18 +80,10 @@ SWBasicFilter::SWBasicFilter() {
 
 
 SWBasicFilter::~SWBasicFilter() {
-    if (tokenStart)
-        delete [] tokenStart;
-
-    if (tokenEnd)
-        delete [] tokenEnd;
-
-    if (escStart)
-        delete [] escStart;
-
-    if (escEnd)
-        delete [] escEnd;
-
+    delete[] tokenStart;
+    delete[] tokenEnd;
+    delete[] escStart;
+    delete[] escEnd;
     delete p;
 }
 
