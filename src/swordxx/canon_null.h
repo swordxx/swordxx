@@ -34,11 +34,11 @@ namespace swordxx {
  *         text names and chapmax
  */
 struct sbook otbooks_null[] = {
-  {"", "", "", 0}
+  {"", "", "", 0, nullptr}
 };
 
 struct sbook ntbooks_null[] = {
-  {"", "", "", 0}
+  {"", "", "", 0, nullptr}
 };
 
 } /* namespace swordxx */
