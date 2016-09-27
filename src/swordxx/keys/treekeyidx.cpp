@@ -71,8 +71,7 @@ TreeKeyIdx::TreeKeyIdx(const char *idxPath, int fileMode) : currentNode() {
 
 
 TreeKeyIdx::~TreeKeyIdx () {
-    if (path)
-        delete [] path;
+    delete[] path;
 
     FileMgr::getSystemFileMgr()->close(idxfd);
     FileMgr::getSystemFileMgr()->close(datfd);
@@ -96,8 +95,7 @@ const char *TreeKeyIdx::getUserData(int *size) const {
 void TreeKeyIdx::setUserData(const char *userData, int size) {
     // this makes sure any unsnapped path exists
     assureKeyPath();
-    if (currentNode.userData)
-        delete currentNode.userData;
+    delete currentNode.userData;
 
     if (!size)
         size = strlen(userData) + 1;
@@ -351,8 +349,7 @@ void TreeKeyIdx::getTreeNodeFromDatOffset(long ioffset, TreeNode *node) const {
         node->dsize = swordtoarch16(tmp2);
 
         if (node->dsize) {
-            if (node->userData)
-                delete [] node->userData;
+            delete[] node->userData;
             node->userData = new char [node->dsize];
             datfd->read(node->userData, node->dsize);
         }
@@ -453,8 +450,7 @@ void TreeKeyIdx::copyFrom(const TreeKeyIdx &ikey) {
     stdstr(&(currentNode.name), ikey.currentNode.name);
     currentNode.dsize = ikey.currentNode.dsize;
 
-    if (currentNode.userData)
-        delete [] currentNode.userData;
+    delete[] currentNode.userData;
     if (currentNode.dsize) {
         currentNode.userData = new char [ currentNode.dsize ];
         memcpy(currentNode.userData, ikey.currentNode.userData, currentNode.dsize);
@@ -643,23 +639,18 @@ void TreeKeyIdx::TreeNode::clear() {
     firstChild = -1;
     dsize      = 0;
 
-    if (name)
-        delete [] name;
+    delete[] name;
     name = nullptr;
     stdstr(&name, "");
 
-    if (userData)
-        delete [] userData;
+    delete[] userData;
     userData   = nullptr;
 }
 
 
 TreeKeyIdx::TreeNode::~TreeNode() {
-    if (name)
-        delete [] name;
-
-    if (userData)
-        delete [] userData;
+    delete[] name;
+    delete[] userData;
 }
 
 
