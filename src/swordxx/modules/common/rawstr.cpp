@@ -89,8 +89,7 @@ RawStr::RawStr(const char *ipath, int fileMode, bool caseSensitive) : caseSensit
 
 RawStr::~RawStr()
 {
-    if (path)
-        delete [] path;
+    delete [] path;
 
     --instance;
 
@@ -316,8 +315,7 @@ void RawStr::readText(uint32_t istart, uint16_t *isize, char **idxbuf, std::stri
     uint32_t start = istart;
 
     do {
-        if (*idxbuf)
-            delete [] *idxbuf;
+        delete[] *idxbuf;
 
         buf.clear();
         buf.resize(++(*isize), '\0');
