@@ -56,8 +56,7 @@ zCom::zCom(const char *ipath, const char *iname, const char *idesc, int iblockTy
 zCom::~zCom() {
     flushCache();
 
-    if (lastWriteKey)
-        delete lastWriteKey;
+    delete lastWriteKey;
 }
 
 
