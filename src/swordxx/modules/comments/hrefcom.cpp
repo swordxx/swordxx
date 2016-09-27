@@ -54,11 +54,7 @@ HREFCom::HREFCom(const char *ipath, const char *iprefix, const char *iname, cons
  * HREFCom Destructor - Cleans up instance of HREFCom
  */
 
-HREFCom::~HREFCom()
-{
-    if (prefix)
-        delete [] prefix;
-}
+HREFCom::~HREFCom() { delete [] prefix; }
 
 
 /******************************************************************************
