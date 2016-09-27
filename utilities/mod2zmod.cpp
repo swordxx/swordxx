@@ -211,7 +211,6 @@ int main(int argc, char **argv)
     }
     delete outModule;
     delete outModuleKey;
-    if (cipherFilter)
-        delete cipherFilter;
+    delete cipherFilter;
 }
 
