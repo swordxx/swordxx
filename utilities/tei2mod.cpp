@@ -570,8 +570,7 @@ int main(int argc, char **argv) {
 
     delete module;
     delete currentKey;
-    if (cipherFilter)
-        delete cipherFilter;
+    delete cipherFilter;
     infile.close();
 
 #if SWORDXX_HAS_ICU
