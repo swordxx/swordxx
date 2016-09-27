@@ -31,3 +31,5 @@ matrix:
       addons: *addons
     - env: CXX=clang++-3.8 CC=clang-3.8 CMAKE_VERSION=3.6.2
       addons: *addons
+notifications:
+  irc: "chat.freenode.net#sword++"
