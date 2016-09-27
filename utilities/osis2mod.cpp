@@ -2110,12 +2110,9 @@ int main(int argc, char **argv) {
     }
 
     delete module;
-    if (cipherFilter)
-        delete cipherFilter;
-    if (outputEncoder)
-        delete outputEncoder;
-    if (outputDecoder)
-        delete outputDecoder;
+    delete cipherFilter;
+    delete outputEncoder;
+    delete outputDecoder;
 
     fprintf(stderr, "SUCCESS: %s: has finished its work and will now rest\n", program);
     exit(0); // success
