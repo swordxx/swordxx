@@ -400,8 +400,7 @@ VersificationMgr::~VersificationMgr() {
 
 
 void VersificationMgr::setSystemVersificationMgr(VersificationMgr *newVersificationMgr) {
-    if (systemVersificationMgr)
-        delete systemVersificationMgr;
+    delete systemVersificationMgr;
     systemVersificationMgr = newVersificationMgr;
 }
 
