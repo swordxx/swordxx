@@ -94,12 +94,8 @@ RawGenBook::RawGenBook(const char *ipath, const char *iname, const char *idesc, 
  */
 
 RawGenBook::~RawGenBook() {
-
     FileMgr::getSystemFileMgr()->close(bdtfd);
-
-    if (path)
-        delete [] path;
-
+    delete[] path;
 }
 
 
