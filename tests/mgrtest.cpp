@@ -63,8 +63,7 @@ int main(int argc, char **argv) {
             std::cout << mhc->renderText() << "\n";
     }
 
-    if (sysConf)
-        delete sysConf;
+    delete sysConf;
 
     return 0;
 }
