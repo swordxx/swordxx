@@ -50,11 +50,7 @@ SWLD::SWLD(const char *imodname, const char *imoddesc, SWTextEncoding enc, SWTex
  * SWLD Destructor - Cleans up instance of SWLD
  */
 
-SWLD::~SWLD()
-{
-    if (entkeytxt)
-        delete [] entkeytxt;
-}
+SWLD::~SWLD() { delete [] entkeytxt; }
 
 
 SWKey *SWLD::createKey() const { return new StrKey(); }
