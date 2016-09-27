@@ -59,8 +59,7 @@ LocaleMgr *LocaleMgr::getSystemLocaleMgr() {
 
 
 void LocaleMgr::setSystemLocaleMgr(LocaleMgr *newLocaleMgr) {
-    if (systemLocaleMgr)
-        delete systemLocaleMgr;
+    delete systemLocaleMgr;
     systemLocaleMgr = newLocaleMgr;
     SWLocale * locale = new SWLocale(nullptr);
     systemLocaleMgr->locales->insert(LocaleMap::value_type(locale->getName(), locale));
@@ -134,21 +133,15 @@ LocaleMgr::LocaleMgr(const char *iConfigPath) {
     // frontends change the locale if they want
     stdstr(&defaultLocaleName, SWLocale::DEFAULT_LOCALE_NAME);
 
-    if (prefixPath)
-        delete [] prefixPath;
-
-    if (configPath)
-        delete [] configPath;
-
-    if (sysConf)
-        delete sysConf;
+    delete[] prefixPath;
+    delete[] configPath;
+    delete sysConf;
 }
 
 
 LocaleMgr::~LocaleMgr() {
-    if (defaultLocaleName)
-        delete [] defaultLocaleName;
-         deleteLocales();
+    delete[] defaultLocaleName;
+    deleteLocales();
     delete locales;
 }
 
