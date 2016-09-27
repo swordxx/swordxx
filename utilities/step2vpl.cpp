@@ -386,12 +386,11 @@ void extractVerseText(int fdviewable, int fdbook, SectionLevelInfo *sectionLevel
     public:
         char *entryText;
         FreeCachedEntryText() { entryText = nullptr; }
-        ~FreeCachedEntryText() { if (entryText) delete [] entryText; }
+        ~FreeCachedEntryText() { delete[] entryText; }
     } _freeCachedEntryText;
 
     if (sectionLevelInfo->viewableOffset != lastEntryOffset) {
-        if (_freeCachedEntryText.entryText)
-            delete [] _freeCachedEntryText.entryText;
+        delete[] _freeCachedEntryText.entryText;
 
         lseek(fdviewable, sectionLevelInfo->viewableOffset, SEEK_SET);
         readViewableBlock(fdviewable, &vb);
