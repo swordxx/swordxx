@@ -84,8 +84,7 @@ RawStr4::RawStr4(const char *ipath, int fileMode, bool caseSensitive) : caseSens
 
 RawStr4::~RawStr4()
 {
-    if (path)
-        delete [] path;
+    delete[] path;
 
     --instance;
 
@@ -320,8 +319,7 @@ void RawStr4::readText(uint32_t istart, uint32_t *isize, char **idxbuf, std::str
     uint32_t start = istart;
 
     do {
-        if (*idxbuf)
-            delete [] *idxbuf;
+        delete[] *idxbuf;
 
         buf.clear();
         buf.resize(++(*isize), '\0');
