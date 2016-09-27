@@ -105,8 +105,7 @@ FileMgr *FileMgr::getSystemFileMgr() {
 
 
 void FileMgr::setSystemFileMgr(FileMgr *newFileMgr) {
-    if (systemFileMgr)
-        delete systemFileMgr;
+    delete systemFileMgr;
     systemFileMgr = newFileMgr;
 }
 
@@ -129,8 +128,7 @@ FileDesc::~FileDesc() {
     if (fd > 0)
         close(fd);
 
-    if (path)
-        delete [] path;
+    delete[] path;
 }
 
 
