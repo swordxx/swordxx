@@ -64,8 +64,7 @@ int main(int argc, char **argv)
         else first = false;
         last = trybuf;
     }
-    if (trybuf)
-        delete [] trybuf;
+    delete [] trybuf;
 
     return 0;
 }
