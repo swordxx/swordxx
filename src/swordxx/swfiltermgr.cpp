@@ -45,11 +45,11 @@ SWMgr *SWFilterMgr::getParentMgr() {
 }
 
 
-void SWFilterMgr::AddGlobalOptions(SWModule * module, ConfigEntMap & section, ConfigEntMap::iterator start, ConfigEntMap::iterator end) {
+void SWFilterMgr::AddGlobalOptions(SWModule * /* module */, ConfigEntMap & /* section */, ConfigEntMap::iterator /* start */, ConfigEntMap::iterator /* end */) {
 }
 
 
-void SWFilterMgr::AddLocalOptions(SWModule * module, ConfigEntMap & section, ConfigEntMap::iterator start, ConfigEntMap::iterator end) {
+void SWFilterMgr::AddLocalOptions(SWModule * /* module */, ConfigEntMap & /* section */, ConfigEntMap::iterator /* start */, ConfigEntMap::iterator /* end */) {
 }
 
 
@@ -59,7 +59,7 @@ void SWFilterMgr::AddLocalOptions(SWModule * module, ConfigEntMap & section, Con
 * @param section We use this section to get a list of filters we should apply to the module
 */
 
-void SWFilterMgr::AddEncodingFilters(SWModule * module, ConfigEntMap & section) {
+void SWFilterMgr::AddEncodingFilters(SWModule * /* module */, ConfigEntMap & /* section */) {
 }
 
 
@@ -69,7 +69,7 @@ void SWFilterMgr::AddEncodingFilters(SWModule * module, ConfigEntMap & section) 
 * @param section We use this section to get a list of filters we should apply to the module
 */
 
-void SWFilterMgr::AddRenderFilters(SWModule * module, ConfigEntMap & section) {
+void SWFilterMgr::AddRenderFilters(SWModule * /* module */, ConfigEntMap & /*section */) {
 }
 
 
@@ -79,7 +79,7 @@ void SWFilterMgr::AddRenderFilters(SWModule * module, ConfigEntMap & section) {
 * @param section We use this section to get a list of filters we should apply to the module
 */
 
-void SWFilterMgr::AddStripFilters(SWModule * module, ConfigEntMap & section) {
+void SWFilterMgr::AddStripFilters(SWModule * /* module */, ConfigEntMap & /* section */) {
 }
 
 
@@ -89,7 +89,7 @@ void SWFilterMgr::AddStripFilters(SWModule * module, ConfigEntMap & section) {
 * @param section We use this section to get a list of filters we should apply to the module
 */
 
-void SWFilterMgr::AddRawFilters(SWModule * module, ConfigEntMap & section) {
+void SWFilterMgr::AddRawFilters(SWModule * /* module */, ConfigEntMap & /* section */) {
 }
 
 

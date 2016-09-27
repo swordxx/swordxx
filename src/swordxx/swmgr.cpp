@@ -1127,7 +1127,7 @@ void SWMgr::AddLocalOptions(SWModule *module, ConfigEntMap &section, ConfigEntMa
 
 
 // manually specified StripFilters for special cases, like Papyri marks and such
-void SWMgr::AddStripFilters(SWModule *module, ConfigEntMap &section, ConfigEntMap::iterator start, ConfigEntMap::iterator end)
+void SWMgr::AddStripFilters(SWModule *module, ConfigEntMap & /* section */, ConfigEntMap::iterator start, ConfigEntMap::iterator end)
 {
     for (;start != end; start++) {
         OptionFilterMap::iterator it;
@@ -1221,7 +1221,7 @@ void SWMgr::AddStripFilters(SWModule *module, ConfigEntMap &section)
 }
 
 
-void SWMgr::CreateMods(bool multiMod) {
+void SWMgr::CreateMods(bool /* multiMod */) {
     ConfigEntMap::iterator start;
     ConfigEntMap::iterator end;
     ConfigEntMap::iterator entry;

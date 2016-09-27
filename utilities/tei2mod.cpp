@@ -213,7 +213,7 @@ void writeEntry(SWKey &key, std::string &text) {
     module->setEntry(text.c_str());
 }
 
-void linkToEntry(const std::string &keyBuf, const std::string &linkBuf) {
+void linkToEntry(const std::string & /* keyBuf */, const std::string &linkBuf) {
            SWKey tmpkey = linkBuf.c_str();
     module->linkEntry(&tmpkey);
 #ifdef DEBUG

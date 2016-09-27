@@ -297,7 +297,7 @@ bool UTF8Transliterator::addTrans(const char* newTrans, std::string* transList) 
 }
 
 
-Transliterator * UTF8Transliterator::createTrans(const UnicodeString& ID, UTransDirection dir, UErrorCode &status )
+Transliterator * UTF8Transliterator::createTrans(const UnicodeString& ID, UTransDirection /* dir */, UErrorCode &status )
 {
     Transliterator *trans = Transliterator::createInstance(ID,UTRANS_FORWARD,status);
     if (U_FAILURE(status)) {

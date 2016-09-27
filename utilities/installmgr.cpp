@@ -161,7 +161,7 @@ void finish(int status) {
 }
 
 
-void createBasicConfig(bool enableRemote, bool addCrossWire) {
+void createBasicConfig(bool enableRemote, bool /* addCrossWire */) {
 
     FileMgr::createParent(confPath.c_str());
     remove(confPath.c_str());

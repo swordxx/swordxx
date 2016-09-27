@@ -125,7 +125,7 @@ VerseTreeKey::~VerseTreeKey() {
 }
 
 
-void VerseTreeKey::decrement(int steps) {
+void VerseTreeKey::decrement(int /* steps */) {
     int treeError = 0;
     if (!error) lastGoodOffset = getTreeKey()->getOffset();
     do {
@@ -153,7 +153,7 @@ void VerseTreeKey::decrement(int steps) {
 }
 
 
-void VerseTreeKey::increment(int steps) {
+void VerseTreeKey::increment(int /* steps */) {
     int treeError = 0;
     if (!error) lastGoodOffset = getTreeKey()->getOffset();
     do {
@@ -254,7 +254,7 @@ TreeKey *VerseTreeKey::getTreeKey() {
 }
 
 // can autonormalize yet (ever?)
-void VerseTreeKey::Normalize(char autocheck) {
+void VerseTreeKey::Normalize(char /* autocheck */) {
     error = 0;
 }
 

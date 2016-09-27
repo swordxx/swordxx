@@ -405,7 +405,7 @@ QuoteStack::~QuoteStack() {
 }
 
 
-void QuoteStack::handleQuote(char *buf, char *quotePos, std::string &text) {
+void QuoteStack::handleQuote(char * /* buf */, char *quotePos, std::string &text) {
 //QuoteInstance(char startChar = '\"', char level = 1, string uniqueID = "", char continueCount = 0) {
     if (!quotes.empty()) {
         QuoteInstance last = quotes.top();

@@ -99,7 +99,7 @@ void EncodingFilterMgr::AddRawFilters(SWModule *module, ConfigEntMap &section) {
 }
 
 
-void EncodingFilterMgr::AddEncodingFilters(SWModule *module, ConfigEntMap &section) {
+void EncodingFilterMgr::AddEncodingFilters(SWModule *module, ConfigEntMap & /* section */) {
     if (targetenc)
         module->addEncodingFilter(targetenc);
 }

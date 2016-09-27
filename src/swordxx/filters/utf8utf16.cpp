@@ -34,7 +34,7 @@ UTF8UTF16::UTF8UTF16() {
 }
 
 
-char UTF8UTF16::processText(std::string &text, const SWKey *key, const SWModule *module) {
+char UTF8UTF16::processText(std::string &text, const SWKey * /*key */, const SWModule * /* module */) {
     const unsigned char *from;
     std::string orig = text;
 

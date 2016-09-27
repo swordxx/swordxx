@@ -419,7 +419,7 @@ void VersificationMgr::registerVersificationSystem(const char *name, const sbook
 }
 
 
-void VersificationMgr::registerVersificationSystem(const char *name, const TreeKey *tk) {
+void VersificationMgr::registerVersificationSystem(const char * /* name */, const TreeKey * /* tk */) {
 }
 
 

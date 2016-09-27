@@ -204,7 +204,7 @@ char MarkupFilterMgr::Markup(char mark) {
 }
 
 
-void MarkupFilterMgr::AddRenderFilters(SWModule *module, ConfigEntMap &section) {
+void MarkupFilterMgr::AddRenderFilters(SWModule *module, ConfigEntMap & /* section */) {
     switch (module->getMarkup()) {
     case FMT_THML:
         if (fromthml)

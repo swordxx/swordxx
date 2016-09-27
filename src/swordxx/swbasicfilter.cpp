@@ -266,12 +266,12 @@ bool SWBasicFilter::substituteEscapeString(std::string &buf, const char *escStri
 }
 
 
-bool SWBasicFilter::handleToken(std::string &buf, const char *token, BasicFilterUserData *userData) {
+bool SWBasicFilter::handleToken(std::string &buf, const char *token, BasicFilterUserData * /* userData */) {
     return substituteToken(buf, token);
 }
 
 
-bool SWBasicFilter::handleEscapeString(std::string &buf, const char *escString, BasicFilterUserData *userData) {
+bool SWBasicFilter::handleEscapeString(std::string &buf, const char *escString, BasicFilterUserData * /* userData */) {
     return substituteEscapeString(buf, escString);
 }
 

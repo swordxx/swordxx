@@ -128,7 +128,7 @@ void SWLog::logDebug(const char *fmt, ...) const {
     }
 }
 
-void SWLog::logMessage(const char *message, int level) const {
+void SWLog::logMessage(const char *message, int /* level */) const {
     std::cerr << message;
     std::cerr << std::endl;
 }

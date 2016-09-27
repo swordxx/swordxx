@@ -197,7 +197,7 @@ char startentry(char *buf)
 }
 
 
-char findbreak(int fp, long *offset, int *num1, int *num2, int *rangemax, short *size)
+char findbreak(int fp, long *offset, int *num1, int *num2, int * /* rangemax */, short *size)
 {
     char buf[7];
     int loop;

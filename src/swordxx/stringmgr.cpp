@@ -74,7 +74,7 @@ namespace {
      *          0 if there are high order characters that do not form a valid unicode sequence
      * @author DM Smith [dmsmith555 at yahoo dot com]
      */
-    int isValidUTF8(unsigned char *txt) {
+    int isValidUTF8(unsigned char * /* txt */) {
         unsigned int  countUTF8 = 0;
     #if 0
         unsigned char parts     = 0;
@@ -141,7 +141,7 @@ StringMgr::StringMgr() {
 
 /** Copy constructor
 */
-StringMgr::StringMgr(const StringMgr &m) {
+StringMgr::StringMgr(const StringMgr & /* m */) {
 }
 
 /** Destructor
@@ -191,7 +191,7 @@ StringMgr* StringMgr::getSystemStringMgr() {
  * @param t - The text encoded in utf8 which should be turned into an upper case string
  *
  */
-char * StringMgr::upperUTF8(char * t, std::size_t const max) const {
+char * StringMgr::upperUTF8(char * t, std::size_t const /* max */) const {
     // try to decide if it's worth trying to toupper.  Do we have more
     // characters which are probably lower latin than not?
     // we still don't use isValidUTF8 optimally. what if we have 1 unicode
