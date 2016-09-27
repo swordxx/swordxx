@@ -97,7 +97,7 @@ void InstallMgr::clearSources() {
 
 void InstallMgr::readInstallConf() {
 
-    if (installConf) delete installConf;
+    delete installConf;
 
     installConf = new SWConfig(confPath.c_str());
 
@@ -709,17 +709,12 @@ InstallSource::InstallSource(const char *type, const char *confEnt) {
 }
 
 
-InstallSource::~InstallSource() {
-    if (mgr)
-        delete mgr;
-}
+InstallSource::~InstallSource() { delete mgr; }
 
 
 void InstallSource::flush() {
-    if (mgr) {
-        delete mgr;
-        mgr = nullptr;
-    }
+    delete mgr;
+    mgr = nullptr;
 }
 
 
