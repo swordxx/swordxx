@@ -78,7 +78,7 @@ ENDIF()
 # and, therefore, needs its own treatment.
 #
 
-ADD_EXECUTABLE("lexdump" "${SWORDXX_UTILS_EXCLUDE}" "lexdump.c")
+ADD_EXECUTABLE("lexdump" "${SWORDXX_UTILS_EXCLUDE}" "lexdump.cpp")
 TARGET_LINK_LIBRARIES(lexdump swordxx)
 
 ####################################################################
