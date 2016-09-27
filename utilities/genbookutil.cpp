@@ -29,6 +29,7 @@
 #include <swordxx/keys/treekeyidx.h>
 #include <swordxx/modules/common/entriesblk.h>
 #include <swordxx/modules/genbook/rawgenbook.h>
+#include <swordxx/swio.h>
 
 
 using namespace swordxx;
@@ -62,7 +63,7 @@ void printLocalName(TreeKeyIdx *treeKey) {
 void setLocalName(TreeKeyIdx *treeKey) {
     char buf[1023];
     std::cout << "Enter New Node Name: ";
-    fgets(buf, 1000, stdin);
+    swfgets(buf, 1000, stdin);
     std::string name = buf;
     trimString(name);
     treeKey->setLocalName(name.c_str());
@@ -73,7 +74,7 @@ void setLocalName(TreeKeyIdx *treeKey) {
 void gotoPath(TreeKeyIdx *treeKey) {
     char buf[1023];
     std::cout << "Enter Path: ";
-    fgets(buf, 1000, stdin);
+    swfgets(buf, 1000, stdin);
     std::string path = buf;
     trimString(path);
     (*treeKey) = path.c_str();
@@ -83,7 +84,7 @@ void gotoPath(TreeKeyIdx *treeKey) {
 void assurePath(TreeKeyIdx *treeKey) {
     char buf[1023];
     std::cout << "Enter Path: ";
-    fgets(buf, 1000, stdin);
+    swfgets(buf, 1000, stdin);
     std::string path = buf;
     trimString(path);
     treeKey->assureKeyPath(path.c_str());
@@ -104,7 +105,7 @@ void setEntryText(RawGenBook *book) {
         char buf[1023];
         std::cout << "Enter New Entry Text ('.' on a line by itself to end): \n";
         do {
-            fgets(buf, 1000, stdin);
+            swfgets(buf, 1000, stdin);
             std::string text = buf;
             trimString(text);
             if ((text[0] == '.') && (text[1] == 0))
@@ -123,7 +124,7 @@ void appendSibbling(TreeKeyIdx *treeKey) {
     if (treeKey->getOffset()) {
         char buf[1023];
         std::cout << "Enter New Sibbling Name: ";
-        fgets(buf, 1000, stdin);
+        swfgets(buf, 1000, stdin);
         std::string name = buf;
         trimString(name);
         treeKey->append();
@@ -137,7 +138,7 @@ void appendSibbling(TreeKeyIdx *treeKey) {
 void appendChild(TreeKeyIdx *treeKey) {
     char buf[1023];
     std::cout << "Enter New Child Name: ";
-    fgets(buf, 1000, stdin);
+    swfgets(buf, 1000, stdin);
     std::string name = buf;
     trimString(name);
     treeKey->appendChild();
@@ -184,7 +185,7 @@ int main(int argc, char **argv) {
 
     do {
         std::cout << "[" << treeKey->getText() << "] > ";
-        fgets(line, 1000, stdin);
+        swfgets(line, 1000, stdin);
         input = line;
         trimString(input);
         if (input.length() > 0) {

@@ -33,6 +33,7 @@
 #include <swordxx/swlog.h>
 #include <swordxx/swmgr.h>
 #include <swordxx/swmodule.h>
+#include <swordxx/swio.h>
 
 
 using namespace swordxx;
@@ -85,7 +86,7 @@ bool isUserDisclaimerConfirmed() const override {
         cout << "enable? [no] ";
 
         char prompt[10];
-        fgets(prompt, 9, stdin);
+        swfgets(prompt, 9, stdin);
         confirmed = (!strcmp(prompt, "yes\n"));
         cout << "\n";
     }

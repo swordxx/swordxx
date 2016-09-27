@@ -34,6 +34,7 @@
 #include <iostream>
 #include <string>
 #include <swordxx/filemgr.h>
+#include <swordxx/swio.h>
 #include <swordxx/modules/common/lzsscomprs.h>
 #include <sys/stat.h>
 #ifdef __GNUC__
@@ -167,27 +168,27 @@ void readVersion(int fd, Version *versionRecord) {
 //    read(fd, &versionRecord, sizeof(struct Version));
 
     cout << "Version Record Information\n";
-    read(fd, &(versionRecord->versionRecordSize), 2);
+    swread(fd, &(versionRecord->versionRecordSize), 2);
     cout << "\tversionRecordSize: " << versionRecord->versionRecordSize << "\n";
-    read(fd, &(versionRecord->publisherID), 2);
+    swread(fd, &(versionRecord->publisherID), 2);
     cout << "\tpublisherID: " << versionRecord->publisherID << "\n";
-    read(fd, &(versionRecord->bookID), 2);
+    swread(fd, &(versionRecord->bookID), 2);
     cout << "\tbookID: " << versionRecord->bookID << "\n";
-    read(fd, &(versionRecord->setID), 2);
+    swread(fd, &(versionRecord->setID), 2);
     cout << "\tsetID: " << versionRecord->setID << "\n";
-    read(fd, &(versionRecord->conversionProgramVerMajor), 1);
+    swread(fd, &(versionRecord->conversionProgramVerMajor), 1);
     cout << "\tconversionProgramVerMajor: " << (int)versionRecord->conversionProgramVerMajor << "\n";
-    read(fd, &(versionRecord->conversionProgramVerMinor), 1);
+    swread(fd, &(versionRecord->conversionProgramVerMinor), 1);
     cout << "\tconversionProgramVerMinor: " << (int)versionRecord->conversionProgramVerMinor << "\n";
-    read(fd, &(versionRecord->leastCompatSTEPVerMajor), 1);
+    swread(fd, &(versionRecord->leastCompatSTEPVerMajor), 1);
     cout << "\tleastCompatSTEPVerMajor: " << (int)versionRecord->leastCompatSTEPVerMajor << "\n";
-    read(fd, &(versionRecord->leastCompatSTEPVerMinor), 1);
+    swread(fd, &(versionRecord->leastCompatSTEPVerMinor), 1);
     cout << "\tleastCompatSTEPVerMinor: " << (int)versionRecord->leastCompatSTEPVerMinor << "\n";
-    read(fd, &(versionRecord->encryptionType), 1);
+    swread(fd, &(versionRecord->encryptionType), 1);
     cout << "\tencryptionType: " << (int)versionRecord->encryptionType << "\n";
-    read(fd, &(versionRecord->editionID), 1);
+    swread(fd, &(versionRecord->editionID), 1);
     cout << "\teditionID: " << (int)versionRecord->editionID << "\n";
-    read(fd, &(versionRecord->modifiedBy), 2);
+    swread(fd, &(versionRecord->modifiedBy), 2);
     cout << "\tmodifiedBy: " << versionRecord->modifiedBy << "\n";
 
     int skip = versionRecord->versionRecordSize - 16/*sizeof(struct Version*/;
@@ -195,7 +196,7 @@ void readVersion(int fd, Version *versionRecord) {
     if (skip) {
         cout << "\nSkipping " << skip << " unknown bytes.\n";
         char *skipbuf = new char[skip];
-        read(fd, skipbuf, skip);
+        swread(fd, skipbuf, skip);
         delete [] skipbuf;
     }
 }
@@ -209,19 +210,19 @@ void readViewableHeader(int fd, ViewableHeader *viewableHeaderRecord) {
 //    read(fd, &viewableHeaderRecord, sizeof(struct ViewableHeader));
 
     cout << "Viewable Header Record Information\n";
-    read(fd, &(viewableHeaderRecord->viewableHeaderRecordSize), 2);
+    swread(fd, &(viewableHeaderRecord->viewableHeaderRecordSize), 2);
     cout << "\tviewableHeaderRecordSize: " << viewableHeaderRecord->viewableHeaderRecordSize << "\n";
-    read(fd, &(viewableHeaderRecord->viewableBlocksCount), 4);
+    swread(fd, &(viewableHeaderRecord->viewableBlocksCount), 4);
     cout << "\tviewableBlocksCount: " << viewableHeaderRecord->viewableBlocksCount << "\n";
-    read(fd, &(viewableHeaderRecord->glossBlocksCount), 4);
+    swread(fd, &(viewableHeaderRecord->glossBlocksCount), 4);
     cout << "\tglossBlocksCount: " << viewableHeaderRecord->glossBlocksCount << "\n";
-    read(fd, &(viewableHeaderRecord->compressionType), 1);
+    swread(fd, &(viewableHeaderRecord->compressionType), 1);
     cout << "\tcompressionType: " << (int)viewableHeaderRecord->compressionType << "(0 - none; 1 - LZSS)\n";
-    read(fd, &(viewableHeaderRecord->reserved1), 1);
+    swread(fd, &(viewableHeaderRecord->reserved1), 1);
     cout << "\treserved1: " << (int)viewableHeaderRecord->reserved1 << "\n";
-    read(fd, &(viewableHeaderRecord->blockEntriesSize), 2);
+    swread(fd, &(viewableHeaderRecord->blockEntriesSize), 2);
     cout << "\tblockEntriesSize: " << viewableHeaderRecord->blockEntriesSize << "\n";
-    read(fd, &(viewableHeaderRecord->reserved2), 2);
+    swread(fd, &(viewableHeaderRecord->reserved2), 2);
     cout << "\treserved2: " << viewableHeaderRecord->reserved2 << "\n";
 
     int skip = viewableHeaderRecord->viewableHeaderRecordSize - 16/*sizeof(struct ViewableHeader)*/;
@@ -229,7 +230,7 @@ void readViewableHeader(int fd, ViewableHeader *viewableHeaderRecord) {
     if (skip) {
         cout << "\nSkipping " << skip << " unknown bytes.\n";
         char *skipbuf = new char[skip];
-        read(fd, skipbuf, skip);
+        swread(fd, skipbuf, skip);
         delete [] skipbuf;
     }
 }
@@ -240,7 +241,7 @@ void readViewableBlockText(int fd, ViewableBlock *vb, char **buf) {
 
     *buf = new char [ ((vb->size > vb->uncompressedSize) ? vb->size : vb->uncompressedSize) + 1 ];
     lseek(fd, vb->offset, SEEK_SET);
-    read(fd, *buf, vb->size);
+    swread(fd, *buf, vb->size);
 
     compress->zBuf(&size, *buf);
     strcpy(*buf, compress->Buf());
@@ -257,23 +258,23 @@ void readViewableBlock(int fd, ViewableBlock *vb) {
 //    read(fd, &vb, sizeof(struct ViewableBlock));
 
     cout << "Viewable Block Information\n";
-    read(fd, &(vb->offset), 4);
+    swread(fd, &(vb->offset), 4);
     cout << "\toffset: " << vb->offset << "\n";
-    read(fd, &(vb->uncompressedSize), 4);
+    swread(fd, &(vb->uncompressedSize), 4);
     cout << "\tuncompressedSize: " << vb->uncompressedSize << "\n";
-    read(fd, &(vb->size), 4);
+    swread(fd, &(vb->size), 4);
     cout << "\tsize: " << vb->size << "\n";
 }
 
 
 void readHeaderControlWordAreaText(int fd, char **buf) {
     long headerControlWordAreaSize;
-    read(fd, &headerControlWordAreaSize, 4);
+    swread(fd, &headerControlWordAreaSize, 4);
     cout << "Reading Header Control Word Area (" << headerControlWordAreaSize << " bytes)\n\n";
 
     *buf = new char [headerControlWordAreaSize + 1];
 
-    read(fd, *buf, headerControlWordAreaSize);
+    swread(fd, *buf, headerControlWordAreaSize);
     (*buf)[headerControlWordAreaSize] = 0;
 
     cout << "headerControlWordArea:\n" << *buf << "\n";

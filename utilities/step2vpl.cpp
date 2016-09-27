@@ -35,6 +35,7 @@
 #include <string>
 #include <swordxx/filemgr.h>
 #include <swordxx/modules/common/lzsscomprs.h>
+#include <swordxx/swio.h>
 #include <sys/stat.h>
 #ifdef __GNUC__
 #include <unistd.h>
@@ -227,23 +228,23 @@ int main(int argc, char **argv) {
 
 void readVersion(int fd, Version *versionRecord) {
 
-    read(fd, &(versionRecord->versionRecordSize), 2);
-    read(fd, &(versionRecord->publisherID), 2);
-    read(fd, &(versionRecord->bookID), 2);
-    read(fd, &(versionRecord->setID), 2);
-    read(fd, &(versionRecord->conversionProgramVerMajor), 1);
-    read(fd, &(versionRecord->conversionProgramVerMinor), 1);
-    read(fd, &(versionRecord->leastCompatSTEPVerMajor), 1);
-    read(fd, &(versionRecord->leastCompatSTEPVerMinor), 1);
-    read(fd, &(versionRecord->encryptionType), 1);
-    read(fd, &(versionRecord->editionID), 1);
-    read(fd, &(versionRecord->modifiedBy), 2);
+    swread(fd, &(versionRecord->versionRecordSize), 2);
+    swread(fd, &(versionRecord->publisherID), 2);
+    swread(fd, &(versionRecord->bookID), 2);
+    swread(fd, &(versionRecord->setID), 2);
+    swread(fd, &(versionRecord->conversionProgramVerMajor), 1);
+    swread(fd, &(versionRecord->conversionProgramVerMinor), 1);
+    swread(fd, &(versionRecord->leastCompatSTEPVerMajor), 1);
+    swread(fd, &(versionRecord->leastCompatSTEPVerMinor), 1);
+    swread(fd, &(versionRecord->encryptionType), 1);
+    swread(fd, &(versionRecord->editionID), 1);
+    swread(fd, &(versionRecord->modifiedBy), 2);
 
     int skip = versionRecord->versionRecordSize - 16/*sizeof(struct Version*/;
 
     if (skip) {
         char *skipbuf = new char[skip];
-        read(fd, skipbuf, skip);
+        swread(fd, skipbuf, skip);
         delete [] skipbuf;
     }
 }
@@ -251,17 +252,17 @@ void readVersion(int fd, Version *versionRecord) {
 
 void readSectionsHeader(int fd, SectionsHeader *sectionsHeaderRecord) {
 
-    read(fd, &(sectionsHeaderRecord->sectionsHeaderRecordSize), 2);
-    read(fd, &(sectionsHeaderRecord->levelEntriesCount), 4);
-    read(fd, &(sectionsHeaderRecord->glossEntriesCount), 4);
-    read(fd, &(sectionsHeaderRecord->levelEntriesSize), 2);
-    read(fd, &(sectionsHeaderRecord->reserved), 4);
+    swread(fd, &(sectionsHeaderRecord->sectionsHeaderRecordSize), 2);
+    swread(fd, &(sectionsHeaderRecord->levelEntriesCount), 4);
+    swread(fd, &(sectionsHeaderRecord->glossEntriesCount), 4);
+    swread(fd, &(sectionsHeaderRecord->levelEntriesSize), 2);
+    swread(fd, &(sectionsHeaderRecord->reserved), 4);
 
     int skip = sectionsHeaderRecord->sectionsHeaderRecordSize - 16/*sizeof(struct ViewableHeader)*/;
 
     if (skip) {
         char *skipbuf = new char[skip];
-        read(fd, skipbuf, skip);
+        swread(fd, skipbuf, skip);
         delete [] skipbuf;
     }
 }
@@ -269,19 +270,19 @@ void readSectionsHeader(int fd, SectionsHeader *sectionsHeaderRecord) {
 
 void readViewableHeader(int fd, ViewableHeader *viewableHeaderRecord) {
 
-    read(fd, &(viewableHeaderRecord->viewableHeaderRecordSize), 2);
-    read(fd, &(viewableHeaderRecord->viewableBlocksCount), 4);
-    read(fd, &(viewableHeaderRecord->glossBlocksCount), 4);
-    read(fd, &(viewableHeaderRecord->compressionType), 1);
-    read(fd, &(viewableHeaderRecord->reserved1), 1);
-    read(fd, &(viewableHeaderRecord->blockEntriesSize), 2);
-    read(fd, &(viewableHeaderRecord->reserved2), 2);
+    swread(fd, &(viewableHeaderRecord->viewableHeaderRecordSize), 2);
+    swread(fd, &(viewableHeaderRecord->viewableBlocksCount), 4);
+    swread(fd, &(viewableHeaderRecord->glossBlocksCount), 4);
+    swread(fd, &(viewableHeaderRecord->compressionType), 1);
+    swread(fd, &(viewableHeaderRecord->reserved1), 1);
+    swread(fd, &(viewableHeaderRecord->blockEntriesSize), 2);
+    swread(fd, &(viewableHeaderRecord->reserved2), 2);
 
     int skip = viewableHeaderRecord->viewableHeaderRecordSize - 16/*sizeof(struct ViewableHeader)*/;
 
     if (skip) {
         char *skipbuf = new char[skip];
-        read(fd, skipbuf, skip);
+        swread(fd, skipbuf, skip);
         delete [] skipbuf;
     }
 }
@@ -289,19 +290,19 @@ void readViewableHeader(int fd, ViewableHeader *viewableHeaderRecord) {
 
 void readVSyncHeader(int fd, VSyncHeader *vSyncHeaderRecord) {
 
-    read(fd, &(vSyncHeaderRecord->vSyncHeaderRecordSize), 2);
-    read(fd, &(vSyncHeaderRecord->startBookNumber), 2);
-    read(fd, &(vSyncHeaderRecord->endBookNumber), 2);
-    read(fd, &(vSyncHeaderRecord->bookPointerEntriesSize), 2);
-    read(fd, &(vSyncHeaderRecord->syncPointEntriesSize), 2);
-    read(fd, &(vSyncHeaderRecord->reserved1_1), 4);
-    read(fd, &(vSyncHeaderRecord->reserved1_2), 2);
+    swread(fd, &(vSyncHeaderRecord->vSyncHeaderRecordSize), 2);
+    swread(fd, &(vSyncHeaderRecord->startBookNumber), 2);
+    swread(fd, &(vSyncHeaderRecord->endBookNumber), 2);
+    swread(fd, &(vSyncHeaderRecord->bookPointerEntriesSize), 2);
+    swread(fd, &(vSyncHeaderRecord->syncPointEntriesSize), 2);
+    swread(fd, &(vSyncHeaderRecord->reserved1_1), 4);
+    swread(fd, &(vSyncHeaderRecord->reserved1_2), 2);
 
     int skip = vSyncHeaderRecord->vSyncHeaderRecordSize - 16/*sizeof(VSyncHeader)*/;
 
     if (skip) {
         char *skipbuf = new char[skip];
-        read(fd, skipbuf, skip);
+        swread(fd, skipbuf, skip);
         delete [] skipbuf;
     }
 }
@@ -312,7 +313,7 @@ void readViewableBlockText(int fd, ViewableBlock *vb, char **buf) {
 
     *buf = new char [ ((vb->size > vb->uncompressedSize) ? vb->size : vb->uncompressedSize) + 1 ];
     lseek(fd, vb->offset, SEEK_SET);
-    read(fd, *buf, vb->size);
+    swread(fd, *buf, vb->size);
 
     compress->zBuf(&size, *buf);
     strcpy(*buf, compress->Buf());
@@ -321,19 +322,19 @@ void readViewableBlockText(int fd, ViewableBlock *vb, char **buf) {
 
 void readViewableBlock(int fd, ViewableBlock *vb) {
 
-    read(fd, &(vb->offset), 4);
-    read(fd, &(vb->uncompressedSize), 4);
-    read(fd, &(vb->size), 4);
+    swread(fd, &(vb->offset), 4);
+    swread(fd, &(vb->uncompressedSize), 4);
+    swread(fd, &(vb->size), 4);
 }
 
 
 void readHeaderControlWordAreaText(int fd, char **buf) {
     long headerControlWordAreaSize;
-    read(fd, &headerControlWordAreaSize, 4);
+    swread(fd, &headerControlWordAreaSize, 4);
 
     *buf = new char [headerControlWordAreaSize + 1];
 
-    read(fd, *buf, headerControlWordAreaSize);
+    swread(fd, *buf, headerControlWordAreaSize);
     (*buf)[headerControlWordAreaSize] = 0;
 
 }
@@ -343,8 +344,8 @@ void readVSyncBooksInfo(int fd, VSyncHeader *vSyncHeaderRecord, VSyncBooksInfo *
     int bookCount = vSyncHeaderRecord->endBookNumber - vSyncHeaderRecord->startBookNumber;
     *vSyncBooksInfo = new VSyncBooksInfo[bookCount];
     for (int i = 0; i <= bookCount; i++) {
-        read(fd, &(*vSyncBooksInfo)[i].offset, 4);
-        read(fd, &(*vSyncBooksInfo)[i].count, 2);
+        swread(fd, &(*vSyncBooksInfo)[i].offset, 4);
+        swread(fd, &(*vSyncBooksInfo)[i].count, 2);
     }
 }
 
@@ -359,9 +360,9 @@ void displayBook(int fdbook, int fdviewable, int fdvsync, int fdsections, VSyncB
         char *sectionName;
         char *verseText;
 
-        read(fdvsync, &(vSyncPoint.chapter), 2);
-        read(fdvsync, &(vSyncPoint.verse), 2);
-        read(fdvsync, &(vSyncPoint.offset), 4);
+        swread(fdvsync, &(vSyncPoint.chapter), 2);
+        swread(fdvsync, &(vSyncPoint.verse), 2);
+        swread(fdvsync, &(vSyncPoint.offset), 4);
         vSyncPoint.offset = SECTIONSLEVELSTART + (vSyncPoint.offset * SECTIONSLEVELSIZE);
         lseek(fdsections, vSyncPoint.offset, SEEK_SET);
         readSectionLevelInfo(fdsections, &sectionLevelInfo);
@@ -417,24 +418,24 @@ void extractVerseText(int fdviewable, int fdbook, SectionLevelInfo *sectionLevel
 void readSectionName(int fd, SectionLevelInfo *sli, char **name) {
     short size;
     lseek(fd, sli->nameOffset, SEEK_SET);
-    read(fd, &size, 2);
+    swread(fd, &size, 2);
     *name = new char [ size + 1 ];
-    read(fd, *name, size);
+    swread(fd, *name, size);
     (*name)[size] = 0;
 }
 
 void readSectionLevelInfo(int fd, SectionLevelInfo *sli) {
 
-    read(fd, &(sli->parentOffset), 4);
-    read(fd, &(sli->previousOffset), 4);
-    read(fd, &(sli->nextOffset), 4);
-    read(fd, &(sli->viewableOffset), 4);
+    swread(fd, &(sli->parentOffset), 4);
+    swread(fd, &(sli->previousOffset), 4);
+    swread(fd, &(sli->nextOffset), 4);
+    swread(fd, &(sli->viewableOffset), 4);
     sli->viewableOffset = VIEWABLEBLOCKSTART + (VIEWABLEBLOCKSIZE * sli->viewableOffset);
-    read(fd, &(sli->startLevel), 2);
-    read(fd, &(sli->level), 1);
-    read(fd, &(sli->nameOffset), 4);
-    read(fd, &(sli->outSync_1), 4);
-    read(fd, &(sli->outSync_2), 2);
+    swread(fd, &(sli->startLevel), 2);
+    swread(fd, &(sli->level), 1);
+    swread(fd, &(sli->nameOffset), 4);
+    swread(fd, &(sli->outSync_1), 4);
+    swread(fd, &(sli->outSync_2), 2);
 }
 
 void cleanBuf(char *buf) {
