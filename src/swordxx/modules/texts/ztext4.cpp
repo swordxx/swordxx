@@ -58,8 +58,7 @@ zText4::~zText4()
 {
     flushCache();
 
-    if (lastWriteKey)
-        delete lastWriteKey;
+    delete lastWriteKey;
 
 }
 
