@@ -23,6 +23,7 @@
 #include "gbfrtf.h"
 
 #include <cctype>
+#include <cstdlib>
 #include <string>
 #include "../utilstr.h"
 

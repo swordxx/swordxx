@@ -25,6 +25,7 @@
 #define SWCONFIG_H
 
 #include <map>
+#include <string>
 #include "defs.h"
 #include "multimapwdef.h"
 

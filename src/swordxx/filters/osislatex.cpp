@@ -319,7 +319,7 @@ bool OSISLaTeX::handleToken(std::string &buf, const char *token, BasicFilterUser
                                 footnoteNumber.c_str(),
                                 u->version.c_str(),
                                 u->key->getText(),
-                                tag.getAttribute("type"),
+                                tag.getAttribute("type").c_str(),
                                 (renderNoteNumbers ? noteName.c_str() : ""));
                             if (u->module) {
                                 outText(u->module->renderText(footnoteBody.c_str()).c_str(), buf, u);

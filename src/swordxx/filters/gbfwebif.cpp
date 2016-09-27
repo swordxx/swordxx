@@ -24,6 +24,7 @@
 #include "gbfwebif.h"
 
 #include <cctype>
+#include <cstdlib>
 #include <cstring>
 #include "../url.h"
 #include "../utilstr.h"

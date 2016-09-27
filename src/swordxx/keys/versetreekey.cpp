@@ -24,6 +24,7 @@
 #include "versetreekey.h"
 
 #include <cctype>
+#include <cstdlib>
 #include <cstring>
 
 
