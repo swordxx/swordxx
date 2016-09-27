@@ -54,8 +54,7 @@ void XMLTag::parse() const {
                 for (; ((buf[i]) && (!strchr(" =", buf[i]))); i++);
 
                 if (i-start) {
-                    if (name)
-                        delete [] name;
+                    delete[] name;
                     name = new char [ (i-start) + 1 ];
                     strncpy(name, buf+start, i-start);
                     name[i-start] = 0;
@@ -88,8 +87,7 @@ void XMLTag::parse() const {
                         ++i;
 
                     // Allow for empty quotes
-                    if (value)
-                        delete [] value;
+                    delete[] value;
                     value = new char [ (i-start) + 1 ];
                     if (i-start) {
                         strncpy(value, buf+start, i-start);
@@ -113,8 +111,8 @@ void XMLTag::parse() const {
     }
 
     parsed = true;
-    if (name) delete [] name;
-    if (value) delete [] value;
+    delete[] name;
+    delete[] value;
 }
 
 
@@ -148,10 +146,8 @@ void XMLTag::setText(const char *tagString) {
     empty  = false;
     endTag = false;
 
-    if (buf) {
-        delete [] buf;
-        buf = nullptr;
-    }
+    delete[] buf;
+    buf = nullptr;
 
     if (!tagString)        // assert tagString before proceeding
         return;
@@ -169,8 +165,7 @@ void XMLTag::setText(const char *tagString) {
     start = i;
     for (; ((tagString[i]) && (!strchr("\t\r\n />", tagString[i]))); i++);
     if (i-start) {
-        if (name)
-            delete [] name;
+        delete[] name;
         name = new char [ (i-start) + 1 ];
         strncpy(name, tagString+start, i-start);
         name[i-start] = 0;
@@ -181,10 +176,8 @@ void XMLTag::setText(const char *tagString) {
 
 
 XMLTag::~XMLTag() {
-    if (buf)
-        delete [] buf;
-    if (name)
-        delete [] name;
+    delete[] buf;
+    delete[] name;
 }
 
 
@@ -298,8 +291,7 @@ const char *XMLTag::toString() const {
     tag.push_back('>');
 
 
-    if (buf)
-        delete [] buf;
+    delete[] buf;
     buf = new char [ tag.length() + 1 ];
     strcpy(buf, tag.c_str());
 
