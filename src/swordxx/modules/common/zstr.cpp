@@ -96,8 +96,7 @@ zStr::~zStr() {
 
     flushCache();
 
-    if (path)
-        delete [] path;
+    delete[] path;
 
     --instance;
 
@@ -106,10 +105,7 @@ zStr::~zStr() {
     FileMgr::getSystemFileMgr()->close(zdxfd);
     FileMgr::getSystemFileMgr()->close(zdtfd);
 
-
-    if (compressor)
-        delete compressor;
-
+    delete compressor;
 }
 
 
@@ -556,10 +552,9 @@ void zStr::setText(const char *ikey, const char *buf, long len) {
         }
     }
 
-    if (idxBytes)
-        delete [] idxBytes;
-    delete [] key;
-    delete [] outbuf;
+    delete[] idxBytes;
+    delete[] key;
+    delete[] outbuf;
     free(dbKey);
 }
 
