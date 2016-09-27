@@ -1263,10 +1263,7 @@ void SWMgr::CreateMods(bool /* multiMod */) {
                 AddRenderFilters(newmod, section);
                 AddEncodingFilters(newmod, section);
 
-                SWModule *oldmod = Modules[newmod->getName()];
-                if (oldmod) {
-                    delete oldmod;
-                }
+                delete Modules[newmod->getName()];
 
                 Modules[newmod->getName()] = newmod;
             }
