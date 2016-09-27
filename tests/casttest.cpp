@@ -38,7 +38,7 @@ int main(int argc, char **argv) {
 //    ListKey *v = &x;
 
 //    v = SWDYNAMIC_CAST(VerseKey, y);
-    v = SWDYNAMIC_CAST(TreeKeyIdx, y);
+    v = dynamic_cast<TreeKeyIdx*>(y);
 //    v = SWDYNAMIC_CAST(ListKey, y);
     std::cout << std::endl;
     if (v)
