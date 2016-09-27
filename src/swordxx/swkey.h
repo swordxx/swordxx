@@ -84,8 +84,7 @@ class SWDLLEXPORT SWKey {
             locale = nullptr;
         }
          virtual ~LocaleCache() {
-            if (name)
-            delete[]name;
+            delete[] name;
         }
     };
     static LocaleCache localeCache;
