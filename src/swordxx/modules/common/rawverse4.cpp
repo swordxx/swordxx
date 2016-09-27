@@ -85,8 +85,7 @@ RawVerse4::~RawVerse4()
 {
     int loop1;
 
-    if (path)
-        delete [] path;
+    delete[] path;
 
     --instance;
 
