@@ -106,11 +106,9 @@ zVerse::~zVerse()
         free(cacheBuf);
     }
 
-    if (path)
-        delete [] path;
+    delete[] path;
 
-    if (compressor)
-        delete compressor;
+    delete compressor;
 
     --instance;
 
