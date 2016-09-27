@@ -87,15 +87,9 @@ SWLocale::SWLocale(const char *ifilename) {
 SWLocale::~SWLocale() {
 
     delete localeSource;
-
-    if (encoding)
-        delete [] encoding;
-
-    if (description)
-        delete [] description;
-
-    if (name)
-        delete [] name;
+    delete[] encoding;
+    delete[] description;
+    delete[] name;
 
     if (bookAbbrevs != builtin_abbrevs)
         delete [] bookAbbrevs;
