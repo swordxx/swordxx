@@ -107,14 +107,10 @@ SWModule::SWModule(SWKey * key_, const char *imodname, const char *imoddesc, con
 
 SWModule::~SWModule()
 {
-    if (modname)
-        delete [] modname;
-    if (moddesc)
-        delete [] moddesc;
-    if (modtype)
-        delete [] modtype;
-    if (modlang)
-        delete [] modlang;
+    delete[] modname;
+    delete[] moddesc;
+    delete[] modtype;
+    delete[] modlang;
 
     if (key) {
         if (!key->isPersist())
@@ -175,8 +171,7 @@ char SWModule::setKey(const SWKey *ikey) {
     }
     else     key = (SWKey *)ikey;        // if we are to just point to an external key
 
-    if (oldKey)
-        delete oldKey;
+    delete oldKey;
 
     return error = key->popError();
 }
@@ -689,8 +684,7 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
     if (!saveKey->isPersist())
         delete saveKey;
 
-    if (searchKey)
-        delete searchKey;
+    delete searchKey;
     delete resultKey;
     delete lastKey;
 
