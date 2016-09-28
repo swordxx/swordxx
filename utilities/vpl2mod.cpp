@@ -38,8 +38,6 @@
 #include <swordxx/keys/versekey.h>
 #include <swordxx/modules/texts/rawtext.h>
 #include <swordxx/swmgr.h>
-#include <swordxx/swio.h>
-
 #include <sys/stat.h>
 #ifdef __GNUC__
 #include <unistd.h>
@@ -80,8 +78,8 @@ char readline(int fd, char **buf) {
 
     if (size > 0) {
         lseek(fd, index, SEEK_SET);
-        swordxx::swread(fd, *buf, size);
-        swordxx::swread(fd, &ch, 1);   //pop terminating char
+        read(fd, *buf, size);
+        read(fd, &ch, 1);   //pop terminating char
         (*buf)[size] = 0;
 
         // clean up any trailing junk on buf

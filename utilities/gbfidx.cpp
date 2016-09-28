@@ -31,8 +31,6 @@
 #endif
 #include <swordxx/filemgr.h>
 #include <swordxx/keys/versekey.h>
-#include <swordxx/swio.h>
-
 #ifdef __GNUC__
 #include <unistd.h>
 #endif
@@ -68,18 +66,18 @@ int main(int argc, char **argv)
     num1 = key1.getChapter();
     num2 = key1.getVerse();
     pos  = 0;
-    swwrite(bfp, &pos, 4);  /* Book    offset for testament intros */
+    write(bfp, &pos, 4);  /* Book    offset for testament intros */
     pos = 4;
-    swwrite(cfp, &pos, 4);  /* Chapter offset for testament intro */
+    write(cfp, &pos, 4);  /* Chapter offset for testament intro */
 
 
 /*    Right now just zero out intros until parsing correctly */
     pos = 0;
     size = 0;
-    swwrite(vfp, &pos, 4);  /* Module intro */
-    swwrite(vfp, &size, 2);
-    swwrite(vfp, &pos, 4);  /* Testament intro */
-    swwrite(vfp, &size, 2);
+    write(vfp, &pos, 4);  /* Module intro */
+    write(vfp, &size, 2);
+    write(vfp, &pos, 4);  /* Testament intro */
+    write(vfp, &size, 2);
 
     while(!findbreak(fp, &offset, &num1, &num2, &rangemax, &size)) {
         if (!startflag) {
@@ -130,26 +128,26 @@ void writeidx(VerseKey &key1, VerseKey &key2, VerseKey &key3, long offset, short
         if (key1.getVerse() == 1) {    // new chapter
             if (key1.getChapter() == 1) {    // new book
                 pos = lseek(cfp, 0, SEEK_CUR);
-                swwrite(bfp, &pos, 4);
+                write(bfp, &pos, 4);
                 pos = lseek(vfp, 0, SEEK_CUR); /* Book intro (cps) */
-                swwrite(cfp, &pos, 4);
-                swwrite(vfp, &chapoffset, 4);  /* Book intro (vss)  set to same as chap for now(it should be chap 1 which usually contains the book into anyway)*/
-                swwrite(vfp, &chapsize, 2);
+                write(cfp, &pos, 4);
+                write(vfp, &chapoffset, 4);  /* Book intro (vss)  set to same as chap for now(it should be chap 1 which usually contains the book into anyway)*/
+                write(vfp, &chapsize, 2);
             }
             pos = lseek(vfp, 0, SEEK_CUR);
-            swwrite(cfp, &pos, 4);
-            swwrite(vfp, &chapoffset, 4);  /* Chapter intro */
-            swwrite(vfp, &chapsize, 2);
+            write(cfp, &pos, 4);
+            write(vfp, &chapoffset, 4);  /* Chapter intro */
+            write(vfp, &chapsize, 2);
         }
         if (key1 >= key2) {
-            swwrite(vfp, &offset, 4);
-            swwrite(vfp, &size, 2);
+            write(vfp, &offset, 4);
+            write(vfp, &size, 2);
         }
         else    {
             pos = 0;
             tmp = 0;
-            swwrite(vfp, &pos, 4);
-            swwrite(vfp, &tmp, 2);
+            write(vfp, &pos, 4);
+            write(vfp, &tmp, 2);
         }
     }
 }
