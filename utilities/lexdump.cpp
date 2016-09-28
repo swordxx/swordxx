@@ -32,7 +32,6 @@
 #include <errno.h>
 #include <stdlib.h>
 #include <string.h>
-#include <swordxx/swio.h>
 
 #ifndef __GNUC__
 #include <io.h>
@@ -65,11 +64,11 @@ int main(int argc, char **argv) {
 
     offset = atoi(argv[2]) * 6;
     lseek(idxfd, offset, SEEK_SET);
-    swordxx::swread(idxfd, &offset, 4);
-    swordxx::swread(idxfd, &size, 2);
+    read(idxfd, &offset, 4);
+    read(idxfd, &size, 2);
     printf("offset: %ld; size: %d\n", offset, size);
     lseek(datfd, offset, SEEK_SET);
-    swordxx::swread(datfd, datbuf, 40);
+    read(datfd, datbuf, 40);
     datbuf[40] = 0;
     printf("%s\n", datbuf);
     close(datfd);
