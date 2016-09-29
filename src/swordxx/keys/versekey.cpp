@@ -28,6 +28,7 @@
 #include <cstdlib>
 #include <cctype>
 #include <fcntl.h>
+#include <memory>
 #include "../roman.h"
 #include "../stringmgr.h"
 #include "../swlocale.h"
@@ -536,8 +537,8 @@ ListKey VerseKey::parseVerseList(const char *buf, const char *defaultKey, bool e
     // assert we have a buffer
     if (!buf) return internalListKey;
 
-    VerseKey *curKey  = (VerseKey *)this->clone();
-    VerseKey *lastKey = (VerseKey *)this->clone();
+    std::unique_ptr<VerseKey> const curKey(static_cast<VerseKey *>(clone()));
+    std::unique_ptr<VerseKey> const lastKey(static_cast<VerseKey *>(clone()));
     lastKey->clearBounds();
     curKey->clearBounds();
 
@@ -550,8 +551,6 @@ ListKey VerseKey::parseVerseList(const char *buf, const char *defaultKey, bool e
         lastKey->setLowerBound(*curKey);
         lastKey->setUpperBound(*curKey);
         internalListKey << *lastKey;
-        delete curKey;
-        delete lastKey;
         return internalListKey;
     }
     if ((!strncmp(buf, "[ Testament ", 12)) &&
@@ -564,8 +563,6 @@ ListKey VerseKey::parseVerseList(const char *buf, const char *defaultKey, bool e
         lastKey->setLowerBound(*curKey);
         lastKey->setUpperBound(*curKey);
         internalListKey << *lastKey;
-        delete curKey;
-        delete lastKey;
         return internalListKey;
     }
 
@@ -1090,9 +1087,6 @@ terminate_range:
     tmpListKey = TOP;
     internalListKey = tmpListKey;
     internalListKey = TOP;    // Align internalListKey to first element before passing back;
-
-    delete curKey;
-    delete lastKey;
 
     return internalListKey;
 }
