@@ -105,7 +105,7 @@ public:
 
 
     virtual SWKey &operator = (const TreeKeyIdx &ikey) { copyFrom(ikey); return *this; }
-    SWKEY_OPERATORS
+    SWKEY_OPERATORS(TreeKeyIdx)
 
     void setText(char const * ikey) override;
     void setPosition(SW_POSITION p) override;

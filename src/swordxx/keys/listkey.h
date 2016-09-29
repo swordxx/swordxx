@@ -137,7 +137,7 @@ public:
     void setText(char const * ikey) override;
     virtual void sort();
 
-    SWKEY_OPERATORS
+    SWKEY_OPERATORS(ListKey)
     ListKey & operator =(const ListKey &key) { copyFrom(key); return *this; }
 };
 

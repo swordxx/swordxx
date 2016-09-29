@@ -412,7 +412,7 @@ public:
     // OPERATORS --------------------------------------------------------------------
 
 
-    SWKEY_OPERATORS
+    SWKEY_OPERATORS(VerseKey)
 
     virtual SWKey &operator =(const VerseKey &ikey) { positionFrom(ikey); return *this; }
 };

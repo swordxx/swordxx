@@ -49,7 +49,7 @@ public:
 
   SWKey * clone() const noexcept override;
 
-  SWKEY_OPERATORS
+  SWKEY_OPERATORS(StrKey)
 
 };
 } /* namespace swordxx */

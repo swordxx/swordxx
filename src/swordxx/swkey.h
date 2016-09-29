@@ -36,14 +36,14 @@ namespace swordxx {
 
 #define KEYERR_OUTOFBOUNDS 1
 
-#define SWKEY_OPERATORS \
-  SWKey &operator =(const char *ikey) { setText(ikey); return *this; } \
-  SWKey &operator =(const SWKey &ikey) { positionFrom(ikey); return *this; } \
-  SWKey &operator =(SW_POSITION pos) { setPosition(pos); return *this; } \
-  SWKey &operator -=(int steps) { decrement(steps); return *this; } \
-  SWKey &operator +=(int steps) { increment(steps); return *this; } \
-  SWKey &operator ++()    { increment(1); return *this; } \
-  SWKey &operator --()    { decrement(1); return *this; }
+#define SWKEY_OPERATORS(cn) \
+  cn & operator=(char const * ikey) { setText(ikey); return *this; } \
+  cn & operator=(SWKey const & ikey) { positionFrom(ikey); return *this; } \
+  cn & operator=(SW_POSITION pos) { setPosition(pos); return *this; } \
+  cn & operator-=(int steps) { decrement(steps); return *this; } \
+  cn & operator+=(int steps) { increment(steps); return *this; } \
+  cn & operator++() { increment(1); return *this; } \
+  cn & operator--() { decrement(1); return *this; }
 
 
 /** For use with = operator to position key.
@@ -223,7 +223,7 @@ public:
      */
     virtual void setIndex(long iindex) { index = iindex; }
 
-    SWKEY_OPERATORS
+    SWKEY_OPERATORS(SWKey)
 
 }; /* class SWKey */
 

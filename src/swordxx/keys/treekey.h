@@ -133,7 +133,7 @@ public:
     virtual void assureKeyPath(char const * keyPath = nullptr);
     virtual void save() {}
 
-    SWKEY_OPERATORS
+    SWKEY_OPERATORS(TreeKey)
 
     };
 

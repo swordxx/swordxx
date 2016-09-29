@@ -105,7 +105,7 @@ public:
     void setPosition(SW_POSITION newpos) override;
     virtual long NewIndex() const;
 
-    SWKEY_OPERATORS
+    SWKEY_OPERATORS(VerseTreeKey)
 
     SWKey & operator=(VerseKey const & ikey) override {
         copyFrom(ikey);
