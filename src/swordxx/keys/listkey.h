@@ -124,8 +124,8 @@ public:
 
     bool isTraversable() const override { return true; }
     long getIndex() const override { return arraypos; }
-    char const * getRangeText() const override;
-    char const * getOSISRefRangeText() const override;
+    std::string getRangeText() const override;
+    std::string getOSISRefRangeText() const override;
     char const * getShortText() const override;
 
     /**

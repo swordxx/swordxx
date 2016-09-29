@@ -45,7 +45,6 @@ SWKey::SWKey(const char *ikey)
     init();
     index     = 0;
     persist   = 0;
-    rangeText = nullptr;
     error     = 0;
     userData  = 0;
 }
@@ -57,7 +56,6 @@ SWKey::SWKey(SWKey const &k)
     index     = k.index;
     persist   = k.persist;
     userData  = k.userData;
-    rangeText = nullptr;
     error     = k.error;
     setText(k.getText());
 }
@@ -79,7 +77,6 @@ SWKey *SWKey::clone() const
  */
 
 SWKey::~SWKey() {
-    delete [] rangeText;
     delete [] localeName;
 }
 
@@ -150,19 +147,14 @@ const char * SWKey::getText() const
  * SWKey::getRangeText - returns parsable range text for this key
  */
 
-const char *SWKey::getRangeText() const {
-    stdstr(&rangeText, m_keyText ? m_keyText->c_str() : nullptr);
-    return rangeText;
-}
+std::string SWKey::getRangeText() const { return m_keyText ? *m_keyText : ""; }
 
 
 /******************************************************************************
  * SWKey::getOSISRefRangeText - returns parsable range text for this key
  */
 
-const char *SWKey::getOSISRefRangeText() const {
-    return getRangeText();
-}
+std::string SWKey::getOSISRefRangeText() const { return getRangeText(); }
 
 
 /******************************************************************************

@@ -1792,19 +1792,21 @@ const char *VerseKey::getOSISRef() const {
  * VerseKey::getRangeText - returns parsable range text for this key
  */
 
-const char *VerseKey::getRangeText() const {
+std::string VerseKey::getRangeText() const {
     if (isBoundSet() && lowerBound != upperBound) {
         auto const lbKey(getLowerBound());
         auto const ubKey(getUpperBound());
         char const * const lb = lbKey.getText();
         char const * const ub = ubKey.getText();
-        std::string buf(lb ? lb : "");
-        buf += '-';
-        buf += (ub ? ub : "");
-        stdstr(&rangeText, buf.c_str());
+        std::string r(lb ? lb : "");
+        r.append(1u, '-');
+        if (ub)
+            r.append(ub);
+        return r;
+    } else {
+        char const * const text = getText();
+        return std::string(text ? text : "");
     }
-    else stdstr(&rangeText, getText());
-    return rangeText;
 }
 
 
@@ -1812,15 +1814,14 @@ const char *VerseKey::getRangeText() const {
  * VerseKey::getOSISRefRangeText - returns parsable range text for this key
  */
 
-const char *VerseKey::getOSISRefRangeText() const {
+std::string VerseKey::getOSISRefRangeText() const {
     if (isBoundSet() && (lowerBound != upperBound)) {
-        std::string buf = getLowerBound().getOSISRef();
-        buf += "-";
-        buf += getUpperBound().getOSISRef();
-        stdstr(&rangeText, buf.c_str());
+        std::string r(getLowerBound().getOSISRef());
+        r.append(1u, '-');
+        r.append(getUpperBound().getOSISRef());
+        return r;
     }
-    else stdstr(&rangeText, getOSISRef());
-    return rangeText;
+    return getOSISRef();
 }
 
 

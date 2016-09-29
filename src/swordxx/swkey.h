@@ -92,7 +92,6 @@ class SWDLLEXPORT SWKey {
 
 protected:
     std::unique_ptr<std::string> m_keyText;
-    mutable char *rangeText;
     bool boundSet;
     bool persist;
     char error;
@@ -168,8 +167,8 @@ public:
      */
     virtual const char *getText() const;
     virtual const char *getShortText() const { return getText(); }
-    virtual const char *getRangeText() const;
-    virtual const char *getOSISRefRangeText() const;
+    virtual std::string getRangeText() const;
+    virtual std::string getOSISRefRangeText() const;
 
     inline bool isBoundSet() const noexcept { return boundSet; }
     inline void clearBound() noexcept { boundSet = false; }

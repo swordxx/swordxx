@@ -291,17 +291,14 @@ void ListKey::remove() {
  * ListKey::getRangeText - returns parsable range text for this key
  */
 
-const char *ListKey::getRangeText() const {
-    char *buf = new char[(arraycnt + 1) * 255];
-    buf[0] = 0;
+std::string ListKey::getRangeText() const {
+    std::string r;
     for (int i = 0; i < arraycnt; i++) {
-        strcat(buf, array[i]->getRangeText());
-        if (i < arraycnt-1)
-            strcat(buf, "; ");
+        r.append(array[i]->getRangeText());
+        if (i < arraycnt - 1)
+            r.append("; ");
     }
-    stdstr(&rangeText, buf);
-    delete [] buf;
-    return rangeText;
+    return r;
 }
 
 
@@ -309,17 +306,14 @@ const char *ListKey::getRangeText() const {
  * ListKey::getOSISRefRangeText - returns parsable range text for this key
  */
 
-const char *ListKey::getOSISRefRangeText() const {
-    char *buf = new char[(arraycnt + 1) * 255];
-    buf[0] = 0;
+std::string ListKey::getOSISRefRangeText() const {
+    std::string r;
     for (int i = 0; i < arraycnt; i++) {
-        strcat(buf, array[i]->getOSISRefRangeText());
-        if (i < arraycnt-1)
-            strcat(buf, ";");
+        r.append(array[i]->getOSISRefRangeText());
+        if (i < arraycnt - 1)
+            r.append(1u, ';');
     }
-    stdstr(&rangeText, buf);
-    delete [] buf;
-    return rangeText;
+    return r;
 }
 
 

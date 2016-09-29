@@ -382,8 +382,8 @@ public:
                                    char const * defaultKey = nullptr,
                                    bool expandRange = false,
                                    bool useChapterAsVerse = false);
-    char const * getRangeText() const override;
-    char const * getOSISRefRangeText() const override;
+    std::string getRangeText() const override;
+    std::string getOSISRefRangeText() const override;
     /** Compares another    SWKey object
     *
     * @param ikey key to compare with this one
