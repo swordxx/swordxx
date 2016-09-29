@@ -1732,8 +1732,7 @@ void VerseKey::checkBounds() {
  *     0 =
  */
 
-int VerseKey::compare(const SWKey &ikey)
-{
+int VerseKey::compare(SWKey const & ikey) const noexcept {
     const SWKey *testKey = &ikey;
     if (const VerseKey * const vkey = dynamic_cast<VerseKey const *>(testKey))
         return _compare(*vkey);
@@ -1752,8 +1751,7 @@ int VerseKey::compare(const SWKey &ikey)
  *     0 =
  */
 
-int VerseKey::_compare(const VerseKey &ivkey)
-{
+int VerseKey::_compare(VerseKey const & ivkey) const noexcept {
     unsigned long keyval1 = 0;
     unsigned long keyval2 = 0;
 

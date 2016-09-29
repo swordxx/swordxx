@@ -175,7 +175,7 @@ const char *SWKey::getOSISRefRangeText() const {
  *      0
  */
 
-int SWKey::compare(const SWKey &ikey)
+int SWKey::compare(SWKey const & ikey) const noexcept
 {
     return strcmp((const char *)*this, (const char *)ikey);
 }

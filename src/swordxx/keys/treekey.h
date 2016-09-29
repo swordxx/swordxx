@@ -120,7 +120,6 @@ public:
     void setText(char const * ikey) override = 0;
     void setPosition(SW_POSITION p) override = 0;
     const char *getText() const override = 0;
-    int compare(SWKey const & ikey) override = 0;
     void decrement(int steps = 1) override = 0;
     void increment(int steps = 1) override = 0;
     bool isTraversable() const override { return true; }

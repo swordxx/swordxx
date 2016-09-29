@@ -391,7 +391,7 @@ public:
     * <0 if this    VerseKey is smaller than compare    SWKey,
     * 0 if the keys are the same
     */
-    int compare(SWKey const & ikey) override;
+    int compare(SWKey const & ikey) const noexcept override;
 
     /** Compares another    VerseKey object
     *
@@ -400,7 +400,7 @@ public:
     * <0 if this    VerseKey is smaller than compare    VerseKey,
     * 0 if the keys are the same
     */
-    virtual int _compare(const VerseKey &ikey);
+    virtual int _compare(VerseKey const & ikey) const noexcept;
 
     virtual void setVersificationSystem(const char *name);
     virtual const char *getVersificationSystem() const;

@@ -561,12 +561,10 @@ void TreeKeyIdx::setPosition(SW_POSITION p) {
 }
 
 
-int TreeKeyIdx::_compare (const TreeKeyIdx & ikey) {
-        return (getOffset() - ikey.getOffset());
-}
+int TreeKeyIdx::_compare(TreeKeyIdx const & ikey) const noexcept
+{ return (getOffset() - ikey.getOffset()); }
 
-
-int TreeKeyIdx::compare(const SWKey &ikey) {
+int TreeKeyIdx::compare(SWKey const & ikey) const noexcept {
     if (TreeKeyIdx const * const treeKey =
             dynamic_cast<TreeKeyIdx const *>(&ikey))
         return _compare(*treeKey);

@@ -110,8 +110,8 @@ public:
     void setText(char const * ikey) override;
     void setPosition(SW_POSITION p) override;
     char const * getText() const override;
-    int _compare (TreeKeyIdx const & ikey);
-    int compare(SWKey const & ikey) override;
+    int _compare(TreeKeyIdx const & ikey) const noexcept;
+    int compare(SWKey const & ikey) const noexcept override;
     void decrement(int steps = 1) override;
     void increment(int steps = 1) override;
     bool isTraversable() const override { return true; }
