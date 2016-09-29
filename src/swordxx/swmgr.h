@@ -104,44 +104,73 @@ protected:
     StringList options;
     virtual char AddModToConfig(FileDesc *conffd, const char *fname);
     virtual void loadConfigDir(const char *ipath);
-    virtual void AddGlobalOptions(SWModule *module, ConfigEntMap &section, ConfigEntMap::iterator start, ConfigEntMap::iterator end);
-    virtual void AddLocalOptions(SWModule *module, ConfigEntMap &section, ConfigEntMap::iterator start, ConfigEntMap::iterator end);
+
+    /// \todo Does this really need to be virtual?
+    virtual void addGlobalOptions(SWModule & module,
+                                  ConfigEntMap const & section,
+                                  ConfigEntMap::const_iterator start,
+                                  ConfigEntMap::const_iterator end);
+
+    /// \todo Does this really need to be virtual?
+    virtual void addLocalOptions(SWModule & module,
+                                 ConfigEntMap const & section,
+                                 ConfigEntMap::const_iterator start,
+                                 ConfigEntMap::const_iterator end);
     StringList augPaths;
 
     /**
-     * Called to add appropriate Encoding Filters to a module.  Override to do special actions,
-     *    if desired.    See the module.conf Encoding= entry.
-     * @param module module to which to add Encoding Filters
-     * @param section configuration information from module.conf
-     */
-    virtual void AddEncodingFilters(SWModule *module, ConfigEntMap &section);
+      \brief Called to add appropriate Encoding Filters to a module.
+
+      Override this to do special actions, if desired. See the module.conf
+      Encoding= entry.
+      \param module module to which to add Encoding Filters.
+      \param section configuration information from module.conf.
+      \todo Does this really need to be virtual?
+    */
+    virtual void addEncodingFilters(SWModule & module,
+                                    ConfigEntMap const & section);
 
     /**
-     * Called to add appropriate Render Filters to a module.  Override to do special actions,
-     *    if desired.    See the module.conf SourceType= entry.
-     * @param module module to which to add Render Filters
-     * @param section configuration information from module.conf
+      \brief Called to add appropriate Render Filters to a module.
+
+       Override to do special actions, if desired. See the module.conf
+       SourceType= entry.
+       \param module module to which to add Render Filters.
+       \param section configuration information from module.conf.
+       \todo Does this really need to be virtual?
      */
-    virtual void AddRenderFilters(SWModule *module, ConfigEntMap &section);
+    virtual void addRenderFilters(SWModule & module,
+                                  ConfigEntMap const & section);
 
     /**
-     * Called to add appropriate Strip Filters to a module.  Override to do special actions,
-     *    if desired.    See the module.conf SourceType= entry.
-     * @param module module to which to add Strip Filters
-     * @param section configuration information from module.conf
+      \brief Called to add appropriate Strip Filters to a module.
+
+      Override to do special actions, if desired. See the module.conf
+      SourceType= entry.
+      \param module module to which to add Strip Filters.
+      \param section configuration information from module.conf.
+      \todo Does this really need to be virtual?
      */
-    virtual void AddStripFilters(SWModule *module, ConfigEntMap &section);
+    virtual void addStripFilters(SWModule & module,
+                                 ConfigEntMap const & section);
 
     // ones manually specified in .conf file
-    virtual void AddStripFilters(SWModule *module, ConfigEntMap &section, ConfigEntMap::iterator start, ConfigEntMap::iterator end);
+    /// \todo Does this really need to be virtual?
+    virtual void addStripFilters(SWModule & module,
+                                 ConfigEntMap const & section,
+                                 ConfigEntMap::const_iterator start,
+                                 ConfigEntMap::const_iterator end);
 
     /**
-     * Called to add appropriate Raw Filters to a module.  Override to do special actions,
-     *    if desired.    See the module.conf CipherKey= entry.
-     * @param module module to which to add Raw Filters
-     * @param section configuration information from module.conf
+      \brief Called to add appropriate Raw Filters to a module.
+
+      Override to do special actions, if desired. See the module.conf
+      CipherKey= entry.
+      \param module module to which to add Raw Filters.
+      \param section configuration information from module.conf.
+      \todo Does this really need to be virtual?
      */
-    virtual void AddRawFilters(SWModule *module, ConfigEntMap &section);
+    virtual void addRawFilters(SWModule & module, ConfigEntMap const & section);
 
 
 public:
