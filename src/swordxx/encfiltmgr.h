@@ -27,55 +27,51 @@
 
 #include "swfiltermgr.h"
 
+#include <memory>
 #include "defs.h"
+#include "swfilter.h"
 
 
 namespace swordxx {
 
-class SWFilter;
-
-/** This class is like a normal SWMgr,
-  * but you can additonally specify which encoding
-  * you want to use.
-  */
-
+/** This class is like a normal SWMgr, but you can additionally specify which
+    encoding you want to use. */
 class SWDLLEXPORT EncodingFilterMgr : public SWFilterMgr {
 
 public: /* Methods: */
 
 
     /** \param[in] encoding The desired encoding. */
-    EncodingFilterMgr(TextEncoding m_encoding = ENC_UTF8);
+    EncodingFilterMgr(TextEncoding const encoding = ENC_UTF8);
 
-    ~EncodingFilterMgr() override;
+    void setEncoding(TextEncoding const encoding);
 
-    /** Markup sets/gets the encoding after initialization
-     *
-     * @param enc The new encoding or ENC_UNKNOWN if you just want to get the current markup.
-     * @return The current (possibly changed) encoding format.
-     */
-    TextEncoding Encoding(TextEncoding enc);
+    inline TextEncoding encoding() const noexcept { return m_encoding; }
 
     /**
-     * Adds the raw filters which are defined in "section" to the SWModule object "module".
-     * @param module To this module the raw filter(s) are added
-     * @param section We use this section to get a list of filters we should apply to the module
+     * Adds the raw filters which are defined in "section" to the SWModule
+       object "module".
+     * \param module To this module the raw filter(s) are added.
+     * \param section We use this section to get a list of filters we should
+                      apply to the module.
      */
     void AddRawFilters(SWModule * module, ConfigEntMap & section) override;
 
     /**
-     * Adds the encoding filters which are defined in "section" to the SWModule object "module".
-     * @param module To this module the encoding filter(s) are added
-     * @param section We use this section to get a list of filters we should apply to the module
+     * Adds the encoding filters which are defined in "section" to the SWModule
+       object "module".
+     * \param module To this module the encoding filter(s) are added.
+     * \param section We use this section to get a list of filters we should
+                      apply to the module.
      */
     void AddEncodingFilters(SWModule * module, ConfigEntMap & section) override;
 
 private: /* Fields: */
 
-    SWFilter * m_latin1utf8;
-    SWFilter * m_scsuutf8;
-    SWFilter * m_utf16utf8;
-    SWFilter * m_targetenc;
+    std::unique_ptr<SWFilter> const m_latin1utf8;
+    std::unique_ptr<SWFilter> const m_scsuutf8;
+    std::unique_ptr<SWFilter> const m_utf16utf8;
+    std::unique_ptr<SWFilter> m_targetenc;
 
     /** Current encoding value: */
     TextEncoding m_encoding;

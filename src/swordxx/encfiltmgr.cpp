@@ -24,6 +24,7 @@
 
 #include "encfiltmgr.h"
 
+#include <cassert>
 #include "filters/latin1utf8.h"
 #include "filters/scsuutf8.h"
 #include "filters/unicodertf.h"
@@ -40,113 +41,89 @@
 
 
 namespace swordxx {
+namespace {
 
-
-/******************************************************************************
- * EncodingFilterMgr Constructor - initializes instance of EncodingFilterMgr
- *
- * ENT:
- *      enc - Encoding format to emit
- */
-EncodingFilterMgr::EncodingFilterMgr(TextEncoding enc)
-        : SWFilterMgr() {
-
-    m_scsuutf8   = new SCSUUTF8();
-    m_latin1utf8 = new Latin1UTF8();
-    m_utf16utf8  = new UTF16UTF8();
-
-    m_encoding = enc;
-
-    switch (m_encoding) {
-        case ENC_LATIN1: m_targetenc = new UTF8Latin1(); break;
-        case ENC_UTF16:  m_targetenc = new UTF8UTF16();  break;
-        case ENC_RTF:    m_targetenc = new UnicodeRTF(); break;
-        case ENC_HTML:   m_targetenc = new UTF8HTML();   break;
+std::unique_ptr<SWFilter> makeEncodingFilter(TextEncoding const encoding) {
+    switch (encoding) {
+        case ENC_LATIN1: return std::make_unique<UTF8Latin1>();
+        case ENC_UTF16:  return std::make_unique<UTF8UTF16>();
+        case ENC_RTF:    return std::make_unique<UnicodeRTF>();
+        case ENC_HTML:   return std::make_unique<UTF8HTML>();
 #if SWORDXX_HAS_ICU
-        case ENC_SCSU:   m_targetenc = new UTF8SCSU();   break;
+        case ENC_SCSU:   return std::make_unique<UTF8SCSU>();
 #endif
         default: // i.e. case ENC_UTF8
-            m_targetenc = nullptr;
+            return std::unique_ptr<SWFilter>();
+    }
+}
+
+} // anonymous namespace
+
+EncodingFilterMgr::EncodingFilterMgr(TextEncoding const encoding)
+    : m_latin1utf8(new Latin1UTF8())
+    , m_scsuutf8(new SCSUUTF8())
+    , m_utf16utf8(new UTF16UTF8())
+    , m_targetenc(makeEncodingFilter(encoding))
+    , m_encoding(encoding)
+{}
+
+void EncodingFilterMgr::AddRawFilters(SWModule * module,
+                                      ConfigEntMap & section)
+{
+    auto const entry(section.find("Encoding"));
+    if (entry == section.end() || entry->second.empty()) {
+        module->addRawFilter(m_latin1utf8.get()); /// \todo pass as shared_ptr?
+    } else {
+        char const * const rawEncodingStr = entry->second.c_str();
+        if (!stricmp(rawEncodingStr, "Latin-1")) {
+            /// \todo pass as shared_ptr?
+            module->addRawFilter(m_latin1utf8.get());
+        } else if (!stricmp(rawEncodingStr, "SCSU")) {
+            /// \todo pass as shared_ptr?
+            module->addRawFilter(m_scsuutf8.get());
+        } else if (!stricmp(rawEncodingStr, "UTF-16")) {
+            /// \todo pass as shared_ptr?
+            module->addRawFilter(m_utf16utf8.get());
+        }
     }
 }
 
 
-/******************************************************************************
- * EncodingFilterMgr Destructor - Cleans up instance of EncodingFilterMgr
- */
-EncodingFilterMgr::~EncodingFilterMgr() {
-    delete m_scsuutf8;
-    delete m_latin1utf8;
-    delete m_utf16utf8;
-    delete m_targetenc;
-}
-
-
-void EncodingFilterMgr::AddRawFilters(SWModule *module, ConfigEntMap &section) {
-
-    ConfigEntMap::iterator entry;
-
-    std::string encoding = ((entry = section.find("Encoding")) != section.end()) ? (*entry).second : (std::string)"";
-    if (!encoding.length() || !stricmp(encoding.c_str(), "Latin-1")) {
-        module->addRawFilter(m_latin1utf8);
-    }
-    else if (!stricmp(encoding.c_str(), "SCSU")) {
-        module->addRawFilter(m_scsuutf8);
-    }
-    else if (!stricmp(encoding.c_str(), "UTF-16")) {
-        module->addRawFilter(m_utf16utf8);
-    }
-}
-
-
-void EncodingFilterMgr::AddEncodingFilters(SWModule *module, ConfigEntMap & /* section */) {
+void EncodingFilterMgr::AddEncodingFilters(SWModule * module,
+                                           ConfigEntMap & /* section */)
+{
     if (m_targetenc)
-        module->addEncodingFilter(m_targetenc);
+        /// \todo pass as shared_ptr?
+        module->addEncodingFilter(m_targetenc.get());
 }
 
+void EncodingFilterMgr::setEncoding(TextEncoding const encoding) {
+    assert(encoding != ENC_UNKNOWN);
+    if (encoding == m_encoding)
+        return;
 
-/******************************************************************************
- * EncodingFilterMgr::Encoding    - sets/gets encoding
- *
- * ENT:    enc    - new encoding or 0 to simply get the current encoding
- *
- * RET: encoding
- */
-TextEncoding EncodingFilterMgr::Encoding(TextEncoding enc) {
-    if (enc != ENC_UNKNOWN && enc != m_encoding) {
-        m_encoding = enc;
-        SWFilter * const oldfilter = m_targetenc;
-
-        switch (m_encoding) {
-            case ENC_LATIN1: m_targetenc = new UTF8Latin1(); break;
-            case ENC_UTF16:  m_targetenc = new UTF8UTF16();  break;
-            case ENC_RTF:    m_targetenc = new UnicodeRTF(); break;
-            case ENC_HTML:   m_targetenc = new UTF8HTML();   break;
-#if SWORDXX_HAS_ICU
-            case ENC_SCSU:   m_targetenc = new UTF8SCSU();   break;
-#endif
-            default: // i.e. case ENC_UTF8
-                m_targetenc = nullptr;
+    m_encoding = encoding;
+    if (m_targetenc) {
+        std::unique_ptr<SWFilter> const oldfilter(std::move(m_targetenc));
+        m_targetenc = makeEncodingFilter(encoding);
+        if (!m_targetenc) {
+            for (auto const & mp : getParentMgr()->Modules)
+                 /// \todo pass as shared_ptr?
+                mp.second->removeRenderFilter(oldfilter.get());
+        } else {
+            for (auto const & mp : getParentMgr()->Modules)
+                 /// \todo pass as shared_ptr?
+                mp.second->replaceRenderFilter(oldfilter.get(),
+                                               m_targetenc.get());
         }
-
-        if (oldfilter != m_targetenc) {
-            if (oldfilter) {
-                if (!m_targetenc) {
-                    for (auto const & mp : getParentMgr()->Modules)
-                        mp.second->removeRenderFilter(oldfilter);
-                } else {
-                    for (auto const & mp : getParentMgr()->Modules)
-                        mp.second->replaceRenderFilter(oldfilter, m_targetenc);
-                }
-                delete oldfilter;
-            } else if (m_targetenc) {
-                for (auto const & mp : getParentMgr()->Modules)
-                    mp.second->addRenderFilter(m_targetenc);
-            }
-        }
+    } else {
+        m_targetenc = makeEncodingFilter(encoding);
+        if (m_targetenc)
+            for (auto const & mp : getParentMgr()->Modules)
+                 /// \todo pass as shared_ptr?
+                mp.second->addRenderFilter(m_targetenc.get());
     }
-    return m_encoding;
+    return;
 }
-
 
 } /* namespace swordxx */
