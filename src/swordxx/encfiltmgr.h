@@ -41,30 +41,12 @@ class SWFilter;
 
 class SWDLLEXPORT EncodingFilterMgr : public SWFilterMgr {
 
-protected:
-    SWFilter *latin1utf8;
-    SWFilter *scsuutf8;
-    SWFilter *utf16utf8;
-    SWFilter *targetenc;
+public: /* Methods: */
 
 
-    /*
-     * current encoding value
-     */
-    TextEncoding encoding;
+    /** \param[in] encoding The desired encoding. */
+    EncodingFilterMgr(TextEncoding m_encoding = ENC_UTF8);
 
-public:
-
-
-    /** Constructor of SWEncodingMgr.
-     *
-     * @param encoding The desired encoding.
-     */
-    EncodingFilterMgr(TextEncoding encoding = ENC_UTF8);
-
-    /**
-     * The destructor of SWEncodingMgr.
-     */
     ~EncodingFilterMgr() override;
 
     /** Markup sets/gets the encoding after initialization
@@ -87,6 +69,17 @@ public:
      * @param section We use this section to get a list of filters we should apply to the module
      */
     void AddEncodingFilters(SWModule * module, ConfigEntMap & section) override;
+
+private: /* Fields: */
+
+    SWFilter * m_latin1utf8;
+    SWFilter * m_scsuutf8;
+    SWFilter * m_utf16utf8;
+    SWFilter * m_targetenc;
+
+    /** Current encoding value: */
+    TextEncoding m_encoding;
+
 };
 
 } /* namespace swordxx */
