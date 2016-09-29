@@ -48,7 +48,7 @@ namespace swordxx {
  * ENT:
  *      enc - Encoding format to emit
  */
-EncodingFilterMgr::EncodingFilterMgr(char enc)
+EncodingFilterMgr::EncodingFilterMgr(TextEncoding enc)
         : SWFilterMgr() {
 
     scsuutf8   = new SCSUUTF8();
@@ -112,7 +112,7 @@ void EncodingFilterMgr::AddEncodingFilters(SWModule *module, ConfigEntMap & /* s
  *
  * RET: encoding
  */
-char EncodingFilterMgr::Encoding(char enc) {
+TextEncoding EncodingFilterMgr::Encoding(TextEncoding enc) {
     if (enc && enc != encoding) {
         encoding = enc;
         SWFilter *oldfilter = targetenc;

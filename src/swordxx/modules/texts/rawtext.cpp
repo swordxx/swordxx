@@ -43,7 +43,7 @@ namespace swordxx {
  *    idesc - Name to display to user for module
  */
 
-RawText::RawText(const char *ipath, const char *iname, const char *idesc, SWTextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char* ilang, const char *versification)
+RawText::RawText(const char *ipath, const char *iname, const char *idesc, TextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char* ilang, const char *versification)
         : SWText(iname, idesc, enc, dir, mark, ilang, versification),
         RawVerse(ipath) {
 }

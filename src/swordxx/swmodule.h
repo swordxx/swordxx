@@ -62,7 +62,6 @@ typedef std::map < std::string, AttributeValue, std::less < std::string > > Attr
 typedef std::map < std::string, AttributeList, std::less < std::string > > AttributeTypeList;
 
 #define SWTextDirection char
-#define SWTextEncoding char
 #define SWTextMarkup char
 
 /**
@@ -97,7 +96,7 @@ protected:
 
     char direction;
     char markup;
-    char encoding;
+    TextEncoding encoding;
 
     mutable std::string entryBuf;
 
@@ -145,7 +144,7 @@ public:
              char const * imodname = nullptr,
              char const * imoddesc = nullptr,
              char const * imodtype = nullptr,
-             SWTextEncoding encoding = ENC_UNKNOWN,
+             TextEncoding encoding = ENC_UNKNOWN,
              SWTextDirection dir = DIRECTION_LTR,
              SWTextMarkup markup = FMT_UNKNOWN,
              char const * modlang = nullptr);
@@ -165,7 +164,8 @@ public:
     /**
      * @return  True if this module is encoded in Unicode, otherwise returns false.
      */
-    bool isUnicode() const { return (encoding == (char)ENC_UTF8 || encoding == (char)ENC_SCSU); }
+    bool isUnicode() const
+    { return (encoding == ENC_UTF8 || encoding == ENC_SCSU); }
 
     // These methods are useful for modules that come from a standard Sword++ install (most do).
     // SWMgr will call setConfig.  The user may use getConfig and getConfigEntry (if they
@@ -263,12 +263,8 @@ public:
      */
     inline char getDirection() const noexcept { return direction; }
 
-    /** Sets/gets module encoding
-     *
-     * @param enc Value which to set encoding; [-1]-only get
-     * @return Encoding
-     */
-    char getEncoding() const { return encoding; }
+    /** \returns the module encoding. */
+    TextEncoding getEncoding() const { return encoding; }
 
     /** Sets/gets module markup
      *

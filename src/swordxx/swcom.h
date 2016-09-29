@@ -63,7 +63,7 @@ public:
 
     SWCom(char const * imodname = nullptr,
           char const * imoddesc = nullptr,
-          SWTextEncoding enc = ENC_UNKNOWN,
+          TextEncoding enc = ENC_UNKNOWN,
           SWTextDirection dir = DIRECTION_LTR,
           SWTextMarkup mark = FMT_UNKNOWN,
           char const * ilang = nullptr,

@@ -67,7 +67,7 @@ SWKey * constructorCreateKey(char const * const ipath, bool const verseKey) {
  *    idesc - Name to display to user for module
  */
 
-RawGenBook::RawGenBook(const char *ipath, const char *iname, const char *idesc, SWTextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char* ilang, const char *keyType)
+RawGenBook::RawGenBook(const char *ipath, const char *iname, const char *idesc, TextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char* ilang, const char *keyType)
         : SWGenBook(constructorCreateKey(ipath, !strcmp("VerseKey", keyType)), iname, idesc, enc, dir, mark, ilang) {
 
     char *buf = new char [ strlen (ipath) + 20 ];

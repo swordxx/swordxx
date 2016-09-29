@@ -45,7 +45,7 @@ public:
     SWGenBook(SWKey * key_,
               char const * imodname = nullptr,
               char const * imoddesc = nullptr,
-              SWTextEncoding encoding = ENC_UNKNOWN,
+              TextEncoding encoding = ENC_UNKNOWN,
               SWTextDirection dir = DIRECTION_LTR,
               SWTextMarkup markup = FMT_UNKNOWN,
               char const * ilang = nullptr);

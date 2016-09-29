@@ -42,7 +42,7 @@ namespace swordxx {
  *        idesc    - Name to display to user for module
  */
 
-RawLD4::RawLD4(const char *ipath, const char *iname, const char *idesc, SWTextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char* ilang, bool caseSensitive, bool strongsPadding) : RawStr4(ipath, -1, caseSensitive), SWLD(iname, idesc, enc, dir, mark, ilang, strongsPadding)
+RawLD4::RawLD4(const char *ipath, const char *iname, const char *idesc, TextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char* ilang, bool caseSensitive, bool strongsPadding) : RawStr4(ipath, -1, caseSensitive), SWLD(iname, idesc, enc, dir, mark, ilang, strongsPadding)
 {
 }
 

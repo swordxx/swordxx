@@ -68,7 +68,7 @@ namespace swordxx {
  *      mark - Markup format to emit
  */
 
-MarkupFilterMgr::MarkupFilterMgr(char mark, char enc)
+MarkupFilterMgr::MarkupFilterMgr(char mark, TextEncoding enc)
         : EncodingFilterMgr(enc) {
 
     markup = mark;

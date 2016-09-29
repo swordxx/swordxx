@@ -40,7 +40,7 @@ namespace swordxx {
  *    idesc - Name to display to user for module
  */
 
-RawCom::RawCom(const char *ipath, const char *iname, const char *idesc, SWTextEncoding encoding, SWTextDirection dir, SWTextMarkup markup, const char *ilang, const char *versification)
+RawCom::RawCom(const char *ipath, const char *iname, const char *idesc, TextEncoding encoding, SWTextDirection dir, SWTextMarkup markup, const char *ilang, const char *versification)
         : RawVerse(ipath),
             SWCom(iname, idesc, encoding, dir, markup, ilang, versification) {
 }

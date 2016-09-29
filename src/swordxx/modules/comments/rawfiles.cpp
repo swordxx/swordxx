@@ -43,7 +43,7 @@ namespace swordxx {
  *    idesc - Name to display to user for module
  */
 
-RawFiles::RawFiles(const char *ipath, const char *iname, const char *idesc, SWTextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char* ilang) : RawVerse(ipath, FileMgr::RDWR), SWCom(iname, idesc, enc, dir, mark, ilang)
+RawFiles::RawFiles(const char *ipath, const char *iname, const char *idesc, TextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char* ilang) : RawVerse(ipath, FileMgr::RDWR), SWCom(iname, idesc, enc, dir, mark, ilang)
 {
 }
 

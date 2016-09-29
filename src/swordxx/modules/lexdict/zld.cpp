@@ -40,7 +40,7 @@ namespace swordxx {
  *        idesc    - Name to display to user for module
  */
 
-zLD::zLD(const char *ipath, const char *iname, const char *idesc, long blockCount, SWCompress *icomp, SWTextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char* ilang, bool caseSensitive, bool strongsPadding) : zStr(ipath, -1, blockCount, icomp, caseSensitive), SWLD(iname, idesc, enc, dir, mark, ilang, strongsPadding) {
+zLD::zLD(const char *ipath, const char *iname, const char *idesc, long blockCount, SWCompress *icomp, TextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char* ilang, bool caseSensitive, bool strongsPadding) : zStr(ipath, -1, blockCount, icomp, caseSensitive), SWLD(iname, idesc, enc, dir, mark, ilang, strongsPadding) {
 
 }
 

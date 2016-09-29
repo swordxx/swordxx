@@ -27,6 +27,8 @@
 
 #include "swfiltermgr.h"
 
+#include "defs.h"
+
 
 namespace swordxx {
 
@@ -49,7 +51,7 @@ protected:
     /*
      * current encoding value
      */
-    char encoding;
+    TextEncoding encoding;
 
 public:
 
@@ -58,7 +60,7 @@ public:
      *
      * @param encoding The desired encoding.
      */
-    EncodingFilterMgr (char encoding = ENC_UTF8);
+    EncodingFilterMgr(TextEncoding encoding = ENC_UTF8);
 
     /**
      * The destructor of SWEncodingMgr.
@@ -70,7 +72,7 @@ public:
      * @param enc The new encoding or ENC_UNKNOWN if you just want to get the current markup.
      * @return The current (possibly changed) encoding format.
      */
-    char Encoding(char enc);
+    TextEncoding Encoding(TextEncoding enc);
 
     /**
      * Adds the raw filters which are defined in "section" to the SWModule object "module".

@@ -43,7 +43,7 @@ public:
         char const * idesc = nullptr,
         long blockCount = 200,
         SWCompress * icomp = nullptr,
-        SWTextEncoding encoding = ENC_UNKNOWN,
+        TextEncoding encoding = ENC_UNKNOWN,
         SWTextDirection dir = DIRECTION_LTR,
         SWTextMarkup markup = FMT_UNKNOWN,
         char const * ilang = nullptr,

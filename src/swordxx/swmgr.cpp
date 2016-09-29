@@ -836,7 +836,8 @@ SWModule *SWMgr::createModule(const char *name, const char *driver, ConfigEntMap
     ConfigEntMap::iterator entry;
     SWModule * newmod = nullptr;
     std::string lang, sourceformat, encoding;
-    signed char direction, enc, markup;
+    signed char direction, markup;
+    TextEncoding enc;
 
     description  = ((entry = section.find("Description")) != section.end()) ? (*entry).second : std::string();
     lang  = ((entry = section.find("Lang")) != section.end()) ? (*entry).second : std::string("en");
