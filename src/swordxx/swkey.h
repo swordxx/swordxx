@@ -214,7 +214,7 @@ public:
      */
     virtual bool isTraversable() const { return false; }
 
-    char *getLocale() const { return localeName; }
+    char const * getLocale() const noexcept { return localeName; }
 
     // this will force an on demand lookup of our locale:
     void setLocale(char const * name) {
