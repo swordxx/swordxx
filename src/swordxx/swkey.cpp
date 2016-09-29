@@ -40,15 +40,14 @@ SWKey::LocaleCache   SWKey::localeCache;
  */
 
 SWKey::SWKey(const char *ikey)
+    : m_keyText(std::make_unique<std::string>(ikey))
 {
     init();
     index     = 0;
     persist   = 0;
-    keytext   = nullptr;
     rangeText = nullptr;
     error     = 0;
     userData  = 0;
-    stdstr(&keytext, ikey);
 }
 
 SWKey::SWKey(SWKey const &k)
@@ -58,7 +57,6 @@ SWKey::SWKey(SWKey const &k)
     index     = k.index;
     persist   = k.persist;
     userData  = k.userData;
-    keytext   = nullptr;
     rangeText = nullptr;
     error     = k.error;
     setText(k.getText());
@@ -81,7 +79,6 @@ SWKey *SWKey::clone() const
  */
 
 SWKey::~SWKey() {
-    delete [] keytext;
     delete [] rangeText;
     delete [] localeName;
 }
@@ -115,8 +112,16 @@ SWLocale *SWKey::getPrivateLocale() const {
  * ENT:    ikey - other swkey object
  */
 
-void SWKey::setText(const char *ikey) {
-    stdstr(&keytext, ikey);
+void SWKey::setText(const char * const ikey) {
+    if (m_keyText) {
+        if (ikey) {
+            (*m_keyText) = ikey;
+        } else {
+            m_keyText.reset();
+        }
+    } else if (ikey) {
+        m_keyText = std::make_unique<std::string>(ikey);
+    }
 }
 
 
@@ -137,9 +142,8 @@ void SWKey::copyFrom(const SWKey &ikey) {
  * SWKey::getText - returns text key if (const char *) cast is requested
  */
 
-const char *SWKey::getText() const {
-    return keytext;
-}
+const char * SWKey::getText() const
+{ return m_keyText ? m_keyText->c_str() : nullptr; }
 
 
 /******************************************************************************
@@ -147,7 +151,7 @@ const char *SWKey::getText() const {
  */
 
 const char *SWKey::getRangeText() const {
-    stdstr(&rangeText, keytext);
+    stdstr(&rangeText, m_keyText ? m_keyText->c_str() : nullptr);
     return rangeText;
 }
 

@@ -312,7 +312,7 @@ char VerseKey::parse(bool checkAutoNormalize)
 
     int error = 0;
 
-    if (keytext) {
+    if (auto const keytext = SWKey::getText()) {
         // pass our own copy of keytext as keytext memory may be freshed during parse
         ListKey tmpListKey = parseVerseList(keytext);
         if (tmpListKey.getCount()) {
@@ -360,7 +360,8 @@ void VerseKey::freshtext() const
         }
     }
 
-    stdstr((char **)&keytext, buf);
+    /// \todo Fix this ugly hack:
+    const_cast<VerseKey *>(this)->SWKey::setText(buf);
 }
 
 
@@ -1207,7 +1208,7 @@ std::unique_ptr<VerseKey> VerseKey::initBounds() const {
 
 const char *VerseKey::getText() const {
     freshtext();
-    return keytext;
+    return SWKey::getText();
 }
 
 

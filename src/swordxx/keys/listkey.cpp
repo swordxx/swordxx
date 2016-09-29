@@ -44,7 +44,7 @@ ListKey::ListKey(const char *ikey): SWKey(ikey) {
 }
 
 
-ListKey::ListKey(ListKey const &k) : SWKey(k.keytext) {
+ListKey::ListKey(ListKey const &k) : SWKey(k.SWKey::getText()) {
     arraymax = k.arraymax;
     arraypos = k.arraypos;
     arraycnt = k.arraycnt;
@@ -330,13 +330,13 @@ const char *ListKey::getOSISRefRangeText() const {
 const char *ListKey::getText() const {
     int pos = arraypos;
     SWKey * key = (pos >= arraycnt || !arraycnt) ? nullptr : array[pos];
-    return (key) ? key->getText() : keytext;
+    return (key) ? key->getText() : SWKey::getText();
 }
 
 const char *ListKey::getShortText() const {
     int pos = arraypos;
     SWKey * key = (pos >= arraycnt || !arraycnt) ? nullptr : array[pos];
-    return (key) ? key->getShortText() : keytext;
+    return (key) ? key->getShortText() : SWKey::getText();
 }
 
 

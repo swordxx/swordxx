@@ -26,6 +26,8 @@
 #define SWKEY_H
 
 #include <cstdint>
+#include <memory>
+#include <string>
 #include "defs.h"
 #include "utilstr.h"
 
@@ -97,7 +99,7 @@ class SWDLLEXPORT SWKey {
 
 
 protected:
-    char *keytext;
+    std::unique_ptr<std::string> m_keyText;
     mutable char *rangeText;
     bool boundSet;
     bool persist;
@@ -162,7 +164,7 @@ public:
     /** Sets this SWKey with a character string
      * @param ikey string used to set this key
      */
-    virtual void setText(const char *ikey);
+    virtual void setText(const char * const ikey);
 
     /** Copies as much info (position, range, etc.) as possible from another SWKey object
      * @param ikey other SWKey object from which to copy
