@@ -36,21 +36,14 @@ namespace swordxx {
 
 #define KEYERR_OUTOFBOUNDS 1
 
-#define SWKEY_OPERATORS_(v,o) \
+#define SWKEY_OPERATORS \
   SWKey &operator =(const char *ikey) { setText(ikey); return *this; } \
   SWKey &operator =(const SWKey &ikey) { positionFrom(ikey); return *this; } \
   SWKey &operator =(SW_POSITION pos) { setPosition(pos); return *this; } \
-  bool operator ==(SWKey const & ikey) const noexcept { return equals(ikey); } \
-  bool operator !=(SWKey const & ikey) const noexcept { return !equals(ikey); } \
-  v bool operator >(SWKey const & ikey) const noexcept o { return (compare(ikey) > 0); } \
-  v bool operator <(SWKey const & ikey) const noexcept o { return (compare(ikey) < 0); } \
-  v bool operator >=(SWKey const & ikey) const noexcept o { return (compare(ikey) > -1); } \
-  v bool operator <=(SWKey const & ikey) const noexcept o { return (compare(ikey) < 1); } \
   SWKey &operator -=(int steps) { decrement(steps); return *this; } \
   SWKey &operator +=(int steps) { increment(steps); return *this; } \
   SWKey &operator ++()    { increment(1); return *this; } \
   SWKey &operator --()    { decrement(1); return *this; }
-#define SWKEY_OPERATORS SWKEY_OPERATORS_(,override)
 
 
 /** For use with = operator to position key.
@@ -230,9 +223,27 @@ public:
      */
     virtual void setIndex(long iindex) { index = iindex; }
 
-    SWKEY_OPERATORS_(virtual,)
+    SWKEY_OPERATORS
 
-    };
+}; /* class SWKey */
+
+inline bool operator==(SWKey const & lhs, SWKey const & rhs) noexcept
+{ return lhs.equals(rhs); }
+
+inline bool operator!=(SWKey const & lhs, SWKey const & rhs) noexcept
+{ return !lhs.equals(rhs); }
+
+inline bool operator>(SWKey const & lhs, SWKey const & rhs) noexcept
+{ return lhs.compare(rhs) > 0; }
+
+inline bool operator<(SWKey const & lhs, SWKey const & rhs) noexcept
+{ return lhs.compare(rhs) < 0; }
+
+inline bool operator>=(SWKey const & lhs, SWKey const & rhs) noexcept
+{ return !(lhs.compare(rhs) < 0); }
+
+inline bool operator<=(SWKey const & lhs, SWKey const & rhs) noexcept
+{ return !(lhs.compare(rhs) > 0); }
 
 } /* namespace swordxx */
 #endif
