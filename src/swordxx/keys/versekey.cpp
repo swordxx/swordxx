@@ -40,18 +40,10 @@
 namespace swordxx {
 
 /******************************************************************************
- *  Initialize static members of VerseKey
- */
-
-int           VerseKey::instance       = 0;
-
-
-/******************************************************************************
  * VerseKey::init - initializes instance of VerseKey
  */
 
 void VerseKey::init(const char *v11n) {
-    instance++;
     autonorm = 1;        // default auto normalization to true
     intros = false;        // default display intros option is false
     upperBound = 0;
@@ -281,12 +273,7 @@ SWKey *VerseKey::clone() const
  * ENT:    ikey - text key
  */
 
-VerseKey::~VerseKey() {
-
-    delete tmpClone;
-
-    --instance;
-}
+VerseKey::~VerseKey() { delete tmpClone; }
 
 
 void VerseKey::setVersificationSystem(const char *name) {

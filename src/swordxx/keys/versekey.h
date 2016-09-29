@@ -50,9 +50,6 @@ namespace swordxx {
  */
 class SWDLLEXPORT VerseKey : public SWKey {
 
-    /** number of instantiated VerseKey objects or derivitives
-    */
-    static int instance;
     ListKey internalListKey;
 
     const VersificationMgr::System *refSys;
