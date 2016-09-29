@@ -27,6 +27,7 @@
 
 #include "../swkey.h"
 
+#include <memory>
 #include "listkey.h"
 #include "../defs.h"
 #include "../versificationmgr.h"
@@ -67,7 +68,7 @@ class SWDLLEXPORT VerseKey : public SWKey {
     void init(const char *v11n = "KJV");
 
     // bounds caching is mutable, thus const
-    void initBounds() const;
+    std::unique_ptr<VerseKey> initBounds() const;
 
     // private with no bounds check
     void setFromOther(const VerseKey &vk);
@@ -76,7 +77,6 @@ class SWDLLEXPORT VerseKey : public SWKey {
 
     // internal upper/lower bounds optimizations
     mutable long lowerBound, upperBound;    // if autonorms is on
-    mutable VerseKey *tmpClone;
 
     typedef struct { int test; int book; int chap; int verse; char suffix; } VerseComponents;
 

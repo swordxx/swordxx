@@ -54,7 +54,6 @@ void VerseKey::init(const char *v11n) {
     chapter = 1;
     verse = 1;
     suffix = 0;
-    tmpClone = nullptr;
     refSys = nullptr;
 
     setVersificationSystem(v11n);
@@ -273,7 +272,7 @@ SWKey *VerseKey::clone() const
  * ENT:    ikey - text key
  */
 
-VerseKey::~VerseKey() { delete tmpClone; }
+VerseKey::~VerseKey() {}
 
 
 void VerseKey::setVersificationSystem(const char *name) {
@@ -1129,7 +1128,7 @@ void VerseKey::setUpperBound(const VerseKey &ub)
 
 VerseKey VerseKey::getLowerBound() const
 {
-    initBounds();
+    auto const tmpClone(initBounds());
     if (!isAutoNormalize()) {
         tmpClone->testament = lowerBoundComponents.test;
         tmpClone->book      = lowerBoundComponents.book;
@@ -1152,7 +1151,7 @@ VerseKey VerseKey::getLowerBound() const
 
 VerseKey VerseKey::getUpperBound() const
 {
-    initBounds();
+    auto const tmpClone(initBounds());
     if (!isAutoNormalize()) {
         tmpClone->testament = upperBoundComponents.test;
         tmpClone->book      = upperBoundComponents.book;
@@ -1173,40 +1172,31 @@ VerseKey VerseKey::getUpperBound() const
  * VerseKey::clearBounds    - clears bounds for this VerseKey
  */
 
-void VerseKey::clearBounds()
-{
-    delete tmpClone;
-    tmpClone = nullptr;
-    boundSet = false;
-}
+void VerseKey::clearBounds() { boundSet = false; }
 
 
-void VerseKey::initBounds() const
-{
-    if (!tmpClone) {
-        tmpClone = (VerseKey *)this->clone();
-        tmpClone->setAutoNormalize(false);
-        tmpClone->setIntros(true);
-        tmpClone->setTestament((BMAX[1])?2:1);
-        tmpClone->setBook(BMAX[(BMAX[1])?1:0]);
-        tmpClone->setChapter(tmpClone->getChapterMax());
-        tmpClone->setVerse(tmpClone->getVerseMax());
-        upperBound = tmpClone->getIndex();
-        upperBoundComponents.test   = tmpClone->getTestament();
-        upperBoundComponents.book   = tmpClone->getBook();
-        upperBoundComponents.chap   = tmpClone->getChapter();
-        upperBoundComponents.verse  = tmpClone->getVerse();
-        upperBoundComponents.suffix = tmpClone->getSuffix();
+std::unique_ptr<VerseKey> VerseKey::initBounds() const {
+    std::unique_ptr<VerseKey> r(static_cast<VerseKey *>(clone()));
+    r->setAutoNormalize(false);
+    r->setIntros(true);
+    r->setTestament((BMAX[1])?2:1);
+    r->setBook(BMAX[(BMAX[1])?1:0]);
+    r->setChapter(r->getChapterMax());
+    r->setVerse(r->getVerseMax());
+    upperBound = r->getIndex();
+    upperBoundComponents.test   = r->getTestament();
+    upperBoundComponents.book   = r->getBook();
+    upperBoundComponents.chap   = r->getChapter();
+    upperBoundComponents.verse  = r->getVerse();
+    upperBoundComponents.suffix = r->getSuffix();
 
-        lowerBound = 0;
-        lowerBoundComponents.test   = 0;
-        lowerBoundComponents.book   = 0;
-        lowerBoundComponents.chap   = 0;
-        lowerBoundComponents.verse  = 0;
-        lowerBoundComponents.suffix = 0;
-
-    }
-    else tmpClone->setLocale(getLocale());
+    lowerBound = 0;
+    lowerBoundComponents.test   = 0;
+    lowerBoundComponents.book   = 0;
+    lowerBoundComponents.chap   = 0;
+    lowerBoundComponents.verse  = 0;
+    lowerBoundComponents.suffix = 0;
+    return r;
 }
 
 
