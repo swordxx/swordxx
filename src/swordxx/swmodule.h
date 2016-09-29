@@ -222,9 +222,7 @@ public:
      * do we really need this?
      */
 
-    virtual const char *getKeyText() const {
-        return *getKey();
-    }
+    virtual const char *getKeyText() const { return getKey()->getText(); }
 
 
     virtual long getIndex() const { return entryIndex; }

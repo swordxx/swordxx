@@ -283,7 +283,10 @@ char GBFOSIS::processText(std::string &text, const SWKey *key, const SWModule *m
 
             if (!keepToken) {
                 if (!handled) {
-                    SWLog::getSystemLog()->logError("Unprocessed Token: <%s> in key %s", token, key ? (const char*)*key : "<unknown>");
+                    SWLog::getSystemLog()->logError(
+                                "Unprocessed Token: <%s> in key %s",
+                                token,
+                                key ? key->getText() : "<unknown>");
 //                    exit(-1);
                 }
                 if (from[1] && strchr(" ,;.:?!()'\"", from[1])) {

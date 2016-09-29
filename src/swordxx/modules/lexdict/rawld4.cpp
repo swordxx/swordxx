@@ -77,8 +77,9 @@ char RawLD4::getEntry(long away) const
     char * idxbuf = nullptr;
     char retval  = 0;
 
-    char *buf = new char [ strlen(*key) + 6 ];
-    strcpy(buf, *key);
+    auto const keyText = key->getText();
+    char * const buf = new char[strlen(keyText) + 6u];
+    strcpy(buf, keyText);
 
     strongsPad(buf);
 
@@ -144,8 +145,9 @@ void RawLD4::increment(int steps) {
 
 
 void RawLD4::setEntry(const char *inbuf, long len) {
-    char *buf = new char [ strlen(*key) + 6 ];
-    strcpy(buf, *key);
+    auto const keyText = key->getText();
+    char * const buf = new char[strlen(keyText) + 6u];
+    strcpy(buf, keyText);
 
     if (strongsPadding) strongsPad(buf);
 
@@ -156,12 +158,13 @@ void RawLD4::setEntry(const char *inbuf, long len) {
 
 
 void RawLD4::linkEntry(const SWKey *inkey) {
-    char *buf = new char [ strlen(*key) + 6 ];
-    strcpy(buf, *key);
+    auto const keyText = key->getText();
+    char * const buf = new char[strlen(keyText) + 6u];
+    strcpy(buf, keyText);
 
     if (strongsPadding) strongsPad(buf);
 
-    doLinkEntry(buf, *inkey);
+    doLinkEntry(buf, inkey->getText());
 
     delete [] buf;
 }
@@ -174,8 +177,9 @@ void RawLD4::linkEntry(const SWKey *inkey) {
  */
 
 void RawLD4::deleteEntry() {
-    char *buf = new char [ strlen(*key) + 6 ];
-    strcpy(buf, *key);
+    auto const keyText = key->getText();
+    char * const buf = new char[strlen(keyText) + 6u];
+    strcpy(buf, keyText);
 
     if (strongsPadding) strongsPad(buf);
 

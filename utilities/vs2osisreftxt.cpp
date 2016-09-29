@@ -46,7 +46,7 @@ int main(int argc, char **argv) {
 
     DefaultVSKey = "jas3:1";
 
-    ListKey verses = DefaultVSKey.parseVerseList(argv[1], DefaultVSKey, true);
+    ListKey verses = DefaultVSKey.parseVerseList(argv[1], DefaultVSKey.getText(), true);
 
     std::cout << verses.getOSISRefRangeText() << "\n";
 

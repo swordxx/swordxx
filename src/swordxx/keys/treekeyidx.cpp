@@ -542,7 +542,7 @@ void TreeKeyIdx::setText(const char *ikey) {
 
 
 void TreeKeyIdx::copyFrom(const SWKey &ikey) {
-    unsnappedKeyText = ikey;
+    unsnappedKeyText = ikey.getText();
     SWKey::copyFrom(ikey);
     positionChanged();
 }

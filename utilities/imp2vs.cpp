@@ -269,12 +269,12 @@ void writeEntry(SWModule *module, const std::string &key, const std::string &ent
                 std::string text = module->getRawEntry();
                 text += entry;
 
-                std::cout << "adding entry: " << *vkey << " length " << entry.size() << "/" << (unsigned short)text.size() << std::endl;
+                std::cout << "adding entry: " << vkey->getText() << " length " << entry.size() << "/" << (unsigned short)text.size() << std::endl;
                 module->setEntry(text.c_str());
                 first = false;
             }
             else {
-                std::cout << "linking entry: " << *vkey << " to " << *linkMaster << std::endl;
+                std::cout << "linking entry: " << vkey->getText() << " to " << linkMaster->getText() << std::endl;
                 module->linkEntry(linkMaster);
             }
         }

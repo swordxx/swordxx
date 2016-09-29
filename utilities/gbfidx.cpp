@@ -90,7 +90,7 @@ int main(int argc, char **argv)
                     key2.setChapter(1);
                     key2.setBook(key2.getBook()+1);
                 }
-                printf("Found Chapter Break: %d ('%s')\n", num1, (const char *)key2);
+                printf("Found Chapter Break: %d ('%s')\n", num1, key2.getText());
                 chapoffset = offset;
                 chapsize = size;
 //                continue;

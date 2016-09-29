@@ -1736,7 +1736,7 @@ int VerseKey::compare(SWKey const & ikey) const noexcept {
     const SWKey *testKey = &ikey;
     if (const VerseKey * const vkey = dynamic_cast<VerseKey const *>(testKey))
         return _compare(*vkey);
-    const VerseKey ivkey = (const char *)ikey;
+    VerseKey const ivkey(ikey.getText());
     return _compare(ivkey);
 }
 
@@ -1794,8 +1794,10 @@ const char *VerseKey::getOSISRef() const {
 
 const char *VerseKey::getRangeText() const {
     if (isBoundSet() && lowerBound != upperBound) {
-        char const * const lb = static_cast<char const *>(getLowerBound());
-        char const * const ub = static_cast<char const *>(getUpperBound());
+        auto const lbKey(getLowerBound());
+        auto const ubKey(getUpperBound());
+        char const * const lb = lbKey.getText();
+        char const * const ub = ubKey.getText();
         std::string buf(lb ? lb : "");
         buf += '-';
         buf += (ub ? ub : "");
@@ -1828,7 +1830,9 @@ std::string VerseKey::convertToOSIS(const char *inRef, const SWKey *lastKnownKey
     std::string outRef;
 
     VerseKey defLanguage;
-    ListKey verses = defLanguage.parseVerseList(inRef, (*lastKnownKey), true);
+    ListKey verses = defLanguage.parseVerseList(inRef,
+                                                lastKnownKey->getText(),
+                                                true);
     const char *startFrag = inRef;
     for (int i = 0; i < verses.getCount(); i++) {
         SWKey *element = verses.getElement(i);

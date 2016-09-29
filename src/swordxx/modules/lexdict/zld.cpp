@@ -74,8 +74,9 @@ char zLD::getEntry(long away) const {
     char retval = 0;
     long index;
     unsigned long size;
-    char *buf = new char [ strlen(*key) + 6 ];
-    strcpy(buf, *key);
+    auto const keyText = key->getText();
+    char * const buf = new char[strlen(keyText) + 6u];
+    strcpy(buf, keyText);
 
     if (strongsPadding) strongsPad(buf);
 
@@ -141,8 +142,9 @@ void zLD::increment(int steps) {
 
 
 void zLD::setEntry(const char *inbuf, long len) {
-    char *buf = new char [ strlen(*key) + 6 ];
-    strcpy(buf, *key);
+    auto const keyText = key->getText();
+    char * const buf = new char[strlen(keyText) + 6u];
+    strcpy(buf, keyText);
 
     if (strongsPadding) strongsPad(buf);
 
@@ -153,12 +155,13 @@ void zLD::setEntry(const char *inbuf, long len) {
 
 
 void zLD::linkEntry(const SWKey *inkey) {
-    char *buf = new char [ strlen(*key) + 6 ];
-    strcpy(buf, *key);
+    auto const keyText = key->getText();
+    char * const buf = new char[strlen(keyText) + 6u];
+    strcpy(buf, keyText);
 
     if (strongsPadding) strongsPad(buf);
 
-    zStr::linkEntry(buf, *inkey);
+    zStr::linkEntry(buf, inkey->getText());
 
     delete [] buf;
 }
@@ -171,8 +174,9 @@ void zLD::linkEntry(const SWKey *inkey) {
  */
 
 void zLD::deleteEntry() {
-    char *buf = new char [ strlen(*key) + 6 ];
-    strcpy(buf, *key);
+    auto const keyText = key->getText();
+    char * const buf = new char[strlen(keyText) + 6u];
+    strcpy(buf, keyText);
 
     if (strongsPadding) strongsPad(buf);
 

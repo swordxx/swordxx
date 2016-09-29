@@ -99,7 +99,7 @@ int main(int argc, char **argv) {
         cleanbuf(buffer);
         if (vref) {
             if ((strlen(buffer) > 0) && (vref)) {
-                std::cout << (const char *)(*vkey) << " ";
+                std::cout << vkey->getText() << " ";
                 std::cout << buffer << std::endl;
             }
         }

@@ -255,10 +255,10 @@ int main(int argc, char **argv) {
                 vk -= successive;
                 orig = mod.getRawEntry();
 
-                std::cerr << "Not a valid KJV ref: " << origVK << "\n";
-                std::cerr << "appending to ref: " << vk << "\n";
+                std::cerr << "Not a valid KJV ref: " << origVK.getText() << "\n";
+                std::cerr << "appending to ref: " << vk.getText() << "\n";
                 orig += " [ (";
-                orig += origVK;
+                orig += origVK.getText();
                 orig += ") ";
                 orig += verseText;
                 orig += " ] ";
@@ -269,7 +269,7 @@ int main(int argc, char **argv) {
             }
 
             if (orig.length() > 1)
-                   std::cerr << "Warning, overwriting verse: " << vk << std::endl;
+                   std::cerr << "Warning, overwriting verse: " << vk.getText() << std::endl;
 
             // ------------- End verse tests -----------------
             mod << verseText;    // save text to module at current position

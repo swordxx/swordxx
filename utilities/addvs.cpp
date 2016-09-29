@@ -104,7 +104,7 @@ int main(int argc, char **argv) {
     {
       mod->setKey(element->getLowerBound());
       VerseKey finalkey = element->getUpperBound();
-      std::cout << mod->getKeyText() << "-" << (const char*)finalkey << std::endl;
+      std::cout << mod->getKeyText() << "-" << finalkey.getText() << std::endl;
       if (!havefirst) {
         havefirst = true;
         firstverse = *mod->getKey();
@@ -118,7 +118,7 @@ int main(int argc, char **argv) {
         entrysize = fread(buffer, sizeof(char), sizeof(buffer), infile);
 
         mod->setEntry(buffer, entrysize);    // save text to module at current position
-        std::cout << "f" << (const char*)firstverse << std::endl;
+        std::cout << "f" << firstverse.getText() << std::endl;
         (*mod)++;
       }
       while (*mod->getKey() <= finalkey) {
@@ -147,7 +147,7 @@ int main(int argc, char **argv) {
         entrysize = fread(buffer, sizeof(char), sizeof(buffer), infile);
 
         mod->setEntry(buffer, entrysize);    // save text to module at current position
-        std::cout << "f" << (const char*)firstverse << std::endl;
+        std::cout << "f" << firstverse.getText() << std::endl;
       }
     }
       }

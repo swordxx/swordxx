@@ -393,7 +393,8 @@ bool isValidRef(const char *buf, const char *caller) {
     // If we have gotten here the reference is not in the selected versification.
     // cout << "INFO(V11N): " << before << " is not in the " << currentVerse.getVersificationSystem() << " versification." << endl;
     if (debug & DEBUG_REV11N) {
-        cout << "DEBUG(V11N)[" << caller << "]: " << before << " normalizes to "  << after << endl;
+        cout << "DEBUG(V11N)[" << caller << "]: " << before.getText()
+             << " normalizes to "  << after.getText() << endl;
     }
 
     return false;
@@ -505,7 +506,7 @@ void writeEntry(std::string &text, bool force = false) {
     // If we have seen a verse and the supplied one is different then we output the collected one.
     if (*activeOsisID && strcmp(activeOsisID, keyOsisID)) {
 
-        if (!isValidRef(lastKey, "writeEntry")) {
+        if (!isValidRef(lastKey.getText(), "writeEntry")) {
             makeValidRef(lastKey);
         }
 
@@ -588,7 +589,7 @@ void writeEntry(std::string &text, bool force = false) {
 void linkToEntry(VerseKey &linkKey, VerseKey &dest) {
 
     // Only link verses that are in the versification.
-    if (!isValidRef(linkKey, "linkToEntry")) {
+    if (!isValidRef(linkKey.getText(), "linkToEntry")) {
         return;
     }
 
@@ -818,7 +819,7 @@ bool handleToken(std::string &text, XMLTag token) {
                 // The first or only one is the currentVerse
                 // Use the last verse seen (i.e. the currentVerse) as the basis for recovering from bad parsing.
                 // This should never happen if the references are valid OSIS references
-                ListKey verseKeys = currentVerse.parseVerseList(keyVal.c_str(), currentVerse, true);
+                ListKey verseKeys = currentVerse.parseVerseList(keyVal.c_str(), currentVerse.getText(), true);
                 int memberKeyCount = verseKeys.getCount();
                 if (memberKeyCount) {
                     currentVerse = verseKeys.getElement(0);

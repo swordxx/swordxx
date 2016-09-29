@@ -175,7 +175,7 @@ void normalizeInput(SWKey &key, std::string &text) {
         // Don't need to normalize text that is ASCII
         // But assume other non-UTF-8 text is Latin1 (cp1252) and convert it to UTF-8
         if (!utf8State) {
-            cout << "Warning: " << key << ": Converting to UTF-8 (" << text << ")" << endl;
+            cout << "Warning: " << key.getText() << ": Converting to UTF-8 (" << text << ")" << endl;
             converter.processText(text, (SWKey *)2);  // note the hack of 2 to mimic a real key. TODO: remove all hacks
             converted++;
 
@@ -187,7 +187,7 @@ void normalizeInput(SWKey &key, std::string &text) {
 
         // Double check. This probably can be removed.
         if (!utf8State) {
-            cout << "Error: " << key << ": Converting to UTF-8 (" << text << ")" << endl;
+            cout << "Error: " << key.getText() << ": Converting to UTF-8 (" << text << ")" << endl;
         }
 
         if (utf8State > 0) {
@@ -203,7 +203,7 @@ void normalizeInput(SWKey &key, std::string &text) {
 
 void writeEntry(SWKey &key, std::string &text) {
 #ifdef DEBUG
-    cout << "(" << entryCount << ") " << key << endl;
+    cout << "(" << entryCount << ") " << key.getText() << endl;
 #endif
 
     module->setKey(key);
@@ -295,7 +295,7 @@ bool handleToken(std::string &text, XMLTag *token) {
                 *currentKey = splitBuffer;
 #ifdef DEBUG
                 cout << "splitBuffer: " << splitBuffer << endl;
-                cout << "currentKey: " << *currentKey << endl;
+                cout << "currentKey: " << currentKey->getText() << endl;
 #endif
                 writeEntry(*currentKey, text);
 #if 1
@@ -308,7 +308,7 @@ bool handleToken(std::string &text, XMLTag *token) {
                                                 splitBuffer[splitPtr2 - splitPtr] = 0;
 #ifdef DEBUG
                         cout << "splitBuffer: " << splitBuffer << endl;
-                        cout << "currentKey: " << *currentKey << endl;
+                        cout << "currentKey: " << currentKey->getText() << endl;
 #endif
                         linkToEntry(currentKey->getText(), splitBuffer);
                                             splitPtr = splitPtr2;
@@ -317,7 +317,7 @@ bool handleToken(std::string &text, XMLTag *token) {
                         strcpy (splitBuffer, splitPtr);
 #ifdef DEBUG
                                       cout << "splitBuffer: " << splitBuffer << endl;
-                        cout << "currentKey: " << *currentKey << endl;
+                        cout << "currentKey: " << currentKey->getText() << endl;
 #endif
                         linkToEntry(currentKey->getText(), splitBuffer);
                                                 splitPtr = nullptr;

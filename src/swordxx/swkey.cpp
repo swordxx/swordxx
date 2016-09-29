@@ -134,7 +134,7 @@ void SWKey::setText(const char * const ikey) {
 void SWKey::copyFrom(const SWKey &ikey) {
 // not desirable    Persist(ikey.Persist());
     setLocale(ikey.getLocale());
-    setText((const char *)ikey);
+    setText(ikey.getText());
 }
 
 
@@ -175,9 +175,9 @@ const char *SWKey::getOSISRefRangeText() const {
  *      0
  */
 
-int SWKey::compare(SWKey const & ikey) const noexcept
-{
-    return strcmp((const char *)*this, (const char *)ikey);
+int SWKey::compare(SWKey const & ikey) const noexcept {
+    /// \bug Potential null pointer dereference
+    return strcmp(m_keyText->c_str(), ikey.m_keyText->c_str());
 }
 
 

@@ -40,7 +40,6 @@ namespace swordxx {
   SWKey &operator =(const char *ikey) { setText(ikey); return *this; } \
   SWKey &operator =(const SWKey &ikey) { positionFrom(ikey); return *this; } \
   SWKey &operator =(SW_POSITION pos) { setPosition(pos); return *this; } \
-  operator const char *() const { return getText(); } \
   bool operator ==(SWKey const & ikey) const noexcept { return equals(ikey); } \
   bool operator !=(SWKey const & ikey) const noexcept { return !equals(ikey); } \
   v bool operator >(SWKey const & ikey) const noexcept o { return (compare(ikey) > 0); } \

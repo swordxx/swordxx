@@ -173,7 +173,7 @@ void ListKey::increment(int step) {
             if ((array[arraypos]->popError()) || (!array[arraypos]->isBoundSet())) {
                 setToElement(arraypos+1);
             }
-            else SWKey::setText((const char *)(*array[arraypos]));
+            else SWKey::setText(array[arraypos]->getText());
         }
         else error = KEYERR_OUTOFBOUNDS;
     }
@@ -197,7 +197,7 @@ void ListKey::decrement(int step) {
             if ((array[arraypos]->popError()) || (!array[arraypos]->isBoundSet())) {
                 setToElement(arraypos-1, BOTTOM);
             }
-            else SWKey::setText((const char *)(*array[arraypos]));
+            else SWKey::setText(array[arraypos]->getText());
         }
         else error = KEYERR_OUTOFBOUNDS;
     }
@@ -241,7 +241,7 @@ char ListKey::setToElement(int ielement, SW_POSITION pos) {
     if (arraycnt) {
         if (array[arraypos]->isBoundSet())
             (*array[arraypos]) = pos;
-        SWKey::setText((const char *)(*array[arraypos]));
+        SWKey::setText(array[arraypos]->getText());
     }
     else SWKey::setText("");
 

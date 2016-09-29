@@ -95,8 +95,8 @@ void SWLD::setPosition(SW_POSITION p) {
 
 
 bool SWLD::hasEntry(const SWKey *key) const {
-    const char *key_str = *key;
-    char *buf = new char [ strlen(key_str) + 6 ];
+    const char * const key_str = key->getText();
+    char * const buf = new char[strlen(key_str) + 6u];
     strcpy(buf, key_str);
 
     if (strongsPadding) strongsPad(buf);

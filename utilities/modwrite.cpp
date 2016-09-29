@@ -75,7 +75,7 @@ int main(int argc, char **argv)
         else module->deleteEntry();
         break;
     case 1:
-        (*module) << (SWKey)argv[3];
+        (*module) << SWKey(argv[3]).getText();
         break;
     default:
         cerr << "Unknown action " << action << "\n";

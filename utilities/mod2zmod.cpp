@@ -191,20 +191,20 @@ int main(int argc, char **argv)
         if ((lastBuffer == inModule->getRawEntry()) &&(lastBuffer.length() > 0)) {
             *outModuleKey = bufferKey;
             outModule->linkEntry(&lastBufferKey);    // link to last key
-        cout << "Adding [" << bufferKey << "] link to: [" << lastBufferKey << "]\n";
+        cout << "Adding [" << bufferKey.getText() << "] link to: [" << lastBufferKey.getText() << "]\n";
         }
         else {
             lastBuffer = inModule->getRawEntry();
             lastBufferKey = inModule->getKeyText();
             if (lastBuffer.length() > 0) {
-                cout << "Adding [" << bufferKey << "] new text.\n";
+                cout << "Adding [" << bufferKey.getText() << "] new text.\n";
                 *outModuleKey = bufferKey;
 //                outModule->getRawEntry();    // snap
 //                outModule->setKey(bufferKey);
                 (*outModule) << lastBuffer.c_str();    // save new text;
             }
             else {
-                    cout << "Skipping [" << bufferKey << "] no entry in Module.\n";
+                    cout << "Skipping [" << bufferKey.getText() << "] no entry in Module.\n";
             }
         }
         (*inModule)++;
