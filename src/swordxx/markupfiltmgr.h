@@ -66,7 +66,8 @@ public:
      */
         char Markup(char m = FMT_UNKNOWN);
 
-        void AddRenderFilters(SWModule * module, ConfigEntMap & section) override;
+        void addRenderFilters(SWModule & module,
+                              ConfigEntMap const & section) override;
 };
 
 } /* namespace swordxx */

@@ -40,7 +40,6 @@ class SWDLLEXPORT EncodingFilterMgr : public SWFilterMgr {
 
 public: /* Methods: */
 
-
     /** \param[in] encoding The desired encoding. */
     EncodingFilterMgr(TextEncoding const encoding = ENC_UTF8);
 
@@ -55,7 +54,8 @@ public: /* Methods: */
      * \param section We use this section to get a list of filters we should
                       apply to the module.
      */
-    void AddRawFilters(SWModule * module, ConfigEntMap & section) override;
+    void addRawFilters(SWModule & module,
+                       ConfigEntMap const & section) override;
 
     /**
      * Adds the encoding filters which are defined in "section" to the SWModule
@@ -64,7 +64,8 @@ public: /* Methods: */
      * \param section We use this section to get a list of filters we should
                       apply to the module.
      */
-    void AddEncodingFilters(SWModule * module, ConfigEntMap & section) override;
+    void addEncodingFilters(SWModule & module,
+                            ConfigEntMap const & section) override;
 
 private: /* Fields: */
 

@@ -1081,7 +1081,7 @@ void SWMgr::AddGlobalOptions(SWModule *module, ConfigEntMap &section, ConfigEntM
         }
     }
     if (filterMgr)
-        filterMgr->AddGlobalOptions(module, section, start, end);
+        filterMgr->addGlobalOptions(*module, section, start, end);
 #if SWORDXX_HAS_ICU
        module->addOptionFilter(transliterator);
 #endif
@@ -1123,7 +1123,7 @@ void SWMgr::AddLocalOptions(SWModule *module, ConfigEntMap &section, ConfigEntMa
     }
 
     if (filterMgr)
-        filterMgr->AddLocalOptions(module, section, start, end);
+        filterMgr->addLocalOptions(*module, section, start, end);
 }
 
 
@@ -1153,13 +1153,13 @@ void SWMgr::AddRawFilters(SWModule *module, ConfigEntMap &section) {
     }
 
     if (filterMgr)
-        filterMgr->AddRawFilters(module, section);
+        filterMgr->addRawFilters(*module, section);
 }
 
 
 void SWMgr::AddEncodingFilters(SWModule *module, ConfigEntMap &section) {
     if (filterMgr)
-        filterMgr->AddEncodingFilters(module, section);
+        filterMgr->addEncodingFilters(*module, section);
 }
 
 
@@ -1184,7 +1184,7 @@ void SWMgr::AddRenderFilters(SWModule *module, ConfigEntMap &section) {
 //    }
 
     if (filterMgr)
-        filterMgr->AddRenderFilters(module, section);
+        filterMgr->addRenderFilters(*module, section);
 
 }
 
@@ -1217,7 +1217,7 @@ void SWMgr::AddStripFilters(SWModule *module, ConfigEntMap &section)
     }
 
     if (filterMgr)
-        filterMgr->AddStripFilters(module, section);
+        filterMgr->addStripFilters(*module, section);
 
 }
 

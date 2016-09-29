@@ -67,34 +67,34 @@ EncodingFilterMgr::EncodingFilterMgr(TextEncoding const encoding)
     , m_encoding(encoding)
 {}
 
-void EncodingFilterMgr::AddRawFilters(SWModule * module,
-                                      ConfigEntMap & section)
+void EncodingFilterMgr::addRawFilters(SWModule & module,
+                                      ConfigEntMap const & section)
 {
     auto const entry(section.find("Encoding"));
     if (entry == section.end() || entry->second.empty()) {
-        module->addRawFilter(m_latin1utf8.get()); /// \todo pass as shared_ptr?
+        module.addRawFilter(m_latin1utf8.get()); /// \todo pass as shared_ptr?
     } else {
         char const * const rawEncodingStr = entry->second.c_str();
         if (!stricmp(rawEncodingStr, "Latin-1")) {
             /// \todo pass as shared_ptr?
-            module->addRawFilter(m_latin1utf8.get());
+            module.addRawFilter(m_latin1utf8.get());
         } else if (!stricmp(rawEncodingStr, "SCSU")) {
             /// \todo pass as shared_ptr?
-            module->addRawFilter(m_scsuutf8.get());
+            module.addRawFilter(m_scsuutf8.get());
         } else if (!stricmp(rawEncodingStr, "UTF-16")) {
             /// \todo pass as shared_ptr?
-            module->addRawFilter(m_utf16utf8.get());
+            module.addRawFilter(m_utf16utf8.get());
         }
     }
 }
 
 
-void EncodingFilterMgr::AddEncodingFilters(SWModule * module,
-                                           ConfigEntMap & /* section */)
+void EncodingFilterMgr::addEncodingFilters(SWModule & module,
+                                           ConfigEntMap const & /* section */)
 {
     if (m_targetenc)
         /// \todo pass as shared_ptr?
-        module->addEncodingFilter(m_targetenc.get());
+        module.addEncodingFilter(m_targetenc.get());
 }
 
 void EncodingFilterMgr::setEncoding(TextEncoding const encoding) {

@@ -204,27 +204,29 @@ char MarkupFilterMgr::Markup(char mark) {
 }
 
 
-void MarkupFilterMgr::AddRenderFilters(SWModule *module, ConfigEntMap & /* section */) {
-    switch (module->getMarkup()) {
+void MarkupFilterMgr::addRenderFilters(SWModule & module,
+                                       ConfigEntMap const & /* section */)
+{
+    switch (module.getMarkup()) {
     case FMT_THML:
         if (fromthml)
-            module->addRenderFilter(fromthml);
+            module.addRenderFilter(fromthml);
         break;
     case FMT_GBF:
         if (fromgbf)
-            module->addRenderFilter(fromgbf);
+            module.addRenderFilter(fromgbf);
         break;
     case FMT_PLAIN:
         if (fromplain)
-            module->addRenderFilter(fromplain);
+            module.addRenderFilter(fromplain);
         break;
     case FMT_OSIS:
         if (fromosis)
-            module->addRenderFilter(fromosis);
+            module.addRenderFilter(fromosis);
         break;
     case FMT_TEI:
         if (fromtei)
-            module->addRenderFilter(fromtei);
+            module.addRenderFilter(fromtei);
         break;
     }
 }
