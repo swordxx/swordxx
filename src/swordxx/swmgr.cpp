@@ -1292,9 +1292,9 @@ void SWMgr::DeleteMods() {
 
 
 void SWMgr::deleteModule(const char *modName) {
-    ModMap::iterator it = Modules.find(modName);
+    ModMap::iterator const it(Modules.find(modName));
     if (it != Modules.end()) {
-        delete (*it).second;
+        delete it->second;
         Modules.erase(it);
     }
 }
