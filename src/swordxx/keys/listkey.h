@@ -27,6 +27,8 @@
 
 #include "../swkey.h"
 
+#include <memory>
+#include <vector>
 #include "../defs.h"
 
 
@@ -38,13 +40,10 @@ namespace swordxx {
   */
 class SWDLLEXPORT ListKey : public SWKey {
 
-    void init();
+private:
 
-protected:
-    int arraypos;
-    int arraymax;
-    int arraycnt;
-    SWKey **array;
+    long m_arrayPos = 0;
+    std::vector<std::unique_ptr<SWKey> > m_array;
 
 public:
 
@@ -123,7 +122,7 @@ public:
     void increment(int step = 1) override;
 
     bool isTraversable() const override { return true; }
-    long getIndex() const override { return arraypos; }
+    long getIndex() const override { return m_arrayPos; }
     std::string getRangeText() const override;
     std::string getOSISRefRangeText() const override;
     char const * getShortText() const override;

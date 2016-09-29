@@ -24,6 +24,7 @@
 
 #include "listkey.h"
 
+#include <algorithm>
 #include <cstdlib>
 #include <cstring>
 #include "../utilstr.h"
@@ -37,66 +38,45 @@ namespace swordxx {
  * ENT:    ikey - text key
  */
 
-ListKey::ListKey(const char *ikey): SWKey(ikey) {
-    arraymax = 0;
-    clear();
-    init();
-}
-
-
-ListKey::ListKey(ListKey const &k) : SWKey(k.SWKey::getText()) {
-    arraymax = k.arraymax;
-    arraypos = k.arraypos;
-    arraycnt = k.arraycnt;
-    array = arraymax
-            ? static_cast<SWKey **>(malloc(k.arraymax * sizeof(SWKey *)))
-            : nullptr;
-    for (int i = 0; i < arraycnt; i++)
-        array[i] = k.array[i]->clone();
-    init();
-}
-
-
-void ListKey::init() {
-    // this is a listkey, bound is always set
+ListKey::ListKey(char const * const ikey)
+    : SWKey(ikey)
+{
     boundSet = true;
 }
 
 
-SWKey *ListKey::clone() const
+ListKey::ListKey(ListKey const & copy)
+    : SWKey(copy.SWKey::getText())
+    , m_arrayPos(copy.m_arrayPos)
+    , m_array(copy.m_array.size())
 {
-    return new ListKey(*this);
+    try {
+        std::transform(copy.m_array.cbegin(),
+                       copy.m_array.cend(),
+                       m_array.begin(),
+                       [](auto const & key)
+                       { return std::unique_ptr<SWKey>(key->clone()); });
+    } catch (...) {
+        clear();
+        throw;
+    }
+    boundSet = true;
 }
+
+SWKey * ListKey::clone() const { return new ListKey(*this); }
 
 /******************************************************************************
  * ListKey Destructor - cleans up instance of ListKey
  */
 
-ListKey::~ListKey()
-{
-    clear();
-}
+ListKey::~ListKey() { clear(); }
 
 
 /******************************************************************************
  * ListKey::clear    - Clears out elements of list
  */
 
-void ListKey::clear()
-{
-    int loop;
-
-    if (arraymax) {
-        for (loop = 0; loop < arraycnt; loop++)
-            delete array[loop];
-
-        free(array);
-        arraymax  = 0;
-    }
-    arraycnt  = 0;
-    arraypos  = 0;
-    array     = nullptr;
-}
+void ListKey::clear() { m_array.clear(); }
 
 
 /******************************************************************************
@@ -105,19 +85,16 @@ void ListKey::clear()
  * ENT:    ikey - other ListKey object
  */
 
-void ListKey::copyFrom(const ListKey &ikey) {
-    clear();
-
-    arraymax = ikey.arraymax;
-    arraypos = ikey.arraypos;
-    arraycnt = ikey.arraycnt;
-    array = arraymax
-            ? static_cast<SWKey **>(malloc(ikey.arraymax * sizeof(SWKey *)))
-            : nullptr;
-    for (int i = 0; i < arraycnt; i++)
-        array[i] = ikey.array[i]->clone();
-
+void ListKey::copyFrom(ListKey const & rhs) {
+    decltype(m_array) newArray(rhs.m_array.size());
+    std::transform(rhs.m_array.cbegin(),
+                   rhs.m_array.cend(),
+                   newArray.begin(),
+                   [](auto const & key)
+                   { return std::unique_ptr<SWKey>(key->clone()); });
     setToElement(0);
+    clear();
+    m_array = std::move(newArray);
 }
 
 
@@ -125,13 +102,9 @@ void ListKey::copyFrom(const ListKey &ikey) {
  * ListKey::add - Adds an element to the list
  */
 
-void ListKey::add(const SWKey &ikey) {
-    if (++arraycnt > arraymax) {
-        array = (SWKey **) ((array) ? realloc(array, (arraycnt + 32) * sizeof(SWKey *)) : calloc(arraycnt + 32, sizeof(SWKey *)));
-        arraymax = arraycnt + 32;
-    }
-    array[arraycnt-1] = ikey.clone();
-    setToElement(arraycnt-1);
+void ListKey::add(SWKey const & ikey) {
+    m_array.emplace_back(ikey.clone());
+    setToElement(m_array.size() - 1u);
 }
 
 
@@ -150,7 +123,7 @@ void ListKey::setPosition(SW_POSITION p) {
         setToElement(0, p);
         break;
     case 2:    // GCC won't compile P_BOTTOM
-        setToElement(arraycnt-1, p);
+        setToElement(m_array.size() - 1u, p);
         break;
     }
 }
@@ -162,20 +135,23 @@ void ListKey::setPosition(SW_POSITION p) {
 
 void ListKey::increment(int step) {
     if (step < 0) {
-        decrement(step*-1);
+        decrement(step * -1);
         return;
     }
     popError();        // clear error
     for(; step && !popError(); step--) {
-        if (arraypos < arraycnt && arraycnt) {
-            if (array[arraypos]->isBoundSet())
-                ++(*(array[arraypos]));
-            if ((array[arraypos]->popError()) || (!array[arraypos]->isBoundSet())) {
-                setToElement(arraypos+1);
+        if (!m_array.empty() && m_arrayPos < m_array.size()) {
+            auto const & key = m_array[m_arrayPos];
+            if (key->isBoundSet())
+                key->increment();
+            if (key->popError() || !key->isBoundSet()) {
+                setToElement(m_arrayPos + 1);
+            } else {
+                SWKey::setText(key->getText());
             }
-            else SWKey::setText(array[arraypos]->getText());
+        } else {
+            error = KEYERR_OUTOFBOUNDS;
         }
-        else error = KEYERR_OUTOFBOUNDS;
     }
 }
 
@@ -186,20 +162,23 @@ void ListKey::increment(int step) {
 
 void ListKey::decrement(int step) {
     if (step < 0) {
-        increment(step*-1);
+        increment(step * -1);
         return;
     }
     popError();        // clear error
     for(; step && !popError(); step--) {
-        if (arraypos > -1 && arraycnt) {
-            if (array[arraypos]->isBoundSet())
-                --(*(array[arraypos]));
-            if ((array[arraypos]->popError()) || (!array[arraypos]->isBoundSet())) {
-                setToElement(arraypos-1, BOTTOM);
+        if (!m_array.empty() && m_arrayPos > -1) {
+            auto const & key = m_array[m_arrayPos];
+            if (key->isBoundSet())
+                key->decrement();
+            if (key->popError() || !key->isBoundSet()) {
+                setToElement(m_arrayPos - 1, BOTTOM);
+            } else {
+                SWKey::setText(key->getText());
             }
-            else SWKey::setText(array[arraypos]->getText());
+        } else {
+            error = KEYERR_OUTOFBOUNDS;
         }
-        else error = KEYERR_OUTOFBOUNDS;
     }
 }
 
@@ -208,9 +187,7 @@ void ListKey::decrement(int step) {
  * ListKey::getCount    - Returns number of elements in list
  */
 
-int ListKey::getCount() const {
-    return arraycnt;
-}
+int ListKey::getCount() const { return m_array.size(); }
 
 
 /******************************************************************************
@@ -223,27 +200,28 @@ int ListKey::getCount() const {
  */
 
 char ListKey::setToElement(int ielement, SW_POSITION pos) {
-    arraypos = ielement;
-    if (arraypos >= arraycnt) {
-        arraypos = (arraycnt>0)?arraycnt - 1:0;
+    m_arrayPos = ielement;
+    auto const arraySize(m_array.size());
+    if (m_arrayPos >= arraySize) {
+        m_arrayPos = (arraySize > 0u) ? arraySize - 1u : 0u;
         error = KEYERR_OUTOFBOUNDS;
-    }
-    else {
-        if (arraypos < 0) {
-            arraypos = 0;
+    } else {
+        if (m_arrayPos < 0) {
+            m_arrayPos = 0;
             error = KEYERR_OUTOFBOUNDS;
-        }
-        else {
+        } else {
             error = 0;
         }
     }
 
-    if (arraycnt) {
-        if (array[arraypos]->isBoundSet())
-            (*array[arraypos]) = pos;
-        SWKey::setText(array[arraypos]->getText());
+    if (arraySize) {
+        auto const & key = m_array[m_arrayPos];
+        if (key->isBoundSet())
+            key->setPosition(pos);
+        SWKey::setText(key->getText());
+    } else {
+        SWKey::setText("");
     }
-    else SWKey::setText("");
 
     return error;
 }
@@ -259,9 +237,9 @@ char ListKey::setToElement(int ielement, SW_POSITION pos) {
 
 const SWKey *ListKey::getElement(int pos) const {
     if (pos < 0)
-        pos = arraypos;
+        pos = m_arrayPos;
 
-    return (pos >= arraycnt) ? nullptr : array[pos];
+    return (pos >= m_array.size()) ? nullptr : m_array[pos].get();
 }
 
 SWKey *ListKey::getElement(int pos) {
@@ -276,13 +254,9 @@ SWKey *ListKey::getElement(int pos) {
  */
 
 void ListKey::remove() {
-    if ((arraypos > -1) && (arraypos < arraycnt)) {
-        delete array[arraypos];
-        if (arraypos < arraycnt - 1)
-            memmove(&array[arraypos], &array[arraypos+1], (arraycnt - arraypos - 1) * sizeof(SWKey *));
-        arraycnt--;
-
-        setToElement((arraypos)?arraypos-1:0);
+    if ((m_arrayPos > -1) && (m_arrayPos < m_array.size())) {
+        m_array.erase(m_array.begin() + m_arrayPos);
+        setToElement(m_arrayPos ? m_arrayPos - 1 : 0);
     }
 }
 
@@ -293,9 +267,9 @@ void ListKey::remove() {
 
 std::string ListKey::getRangeText() const {
     std::string r;
-    for (int i = 0; i < arraycnt; i++) {
-        r.append(array[i]->getRangeText());
-        if (i < arraycnt - 1)
+    for (auto it = m_array.cbegin(); it != m_array.cend(); ++it) {
+        r.append((*it)->getRangeText());
+        if (it != m_array.rbegin().base())
             r.append("; ");
     }
     return r;
@@ -308,9 +282,9 @@ std::string ListKey::getRangeText() const {
 
 std::string ListKey::getOSISRefRangeText() const {
     std::string r;
-    for (int i = 0; i < arraycnt; i++) {
-        r.append(array[i]->getOSISRefRangeText());
-        if (i < arraycnt - 1)
+    for (auto it = m_array.cbegin(); it != m_array.cend(); ++it) {
+        r.append((*it)->getOSISRefRangeText());
+        if (it != m_array.rbegin().base())
             r.append(1u, ';');
     }
     return r;
@@ -322,37 +296,36 @@ std::string ListKey::getOSISRefRangeText() const {
  */
 
 const char *ListKey::getText() const {
-    int pos = arraypos;
-    SWKey * key = (pos >= arraycnt || !arraycnt) ? nullptr : array[pos];
-    return (key) ? key->getText() : SWKey::getText();
+    if (m_array.empty() || m_arrayPos >= m_array.size())
+        return SWKey::getText();
+    return m_array[m_arrayPos]->getText();
 }
 
 const char *ListKey::getShortText() const {
-    int pos = arraypos;
-    SWKey * key = (pos >= arraycnt || !arraycnt) ? nullptr : array[pos];
-    return (key) ? key->getShortText() : SWKey::getText();
+    if (m_array.empty() || m_arrayPos >= m_array.size())
+        return SWKey::getText();
+    return m_array[m_arrayPos]->getShortText();
 }
 
 
 void ListKey::setText(const char *ikey) {
     // at least try to set the current element to this text
-    for (arraypos = 0; arraypos < arraycnt; arraypos++) {
-        SWKey *key = array[arraypos];
-        if (key) {
+    auto const arraySize(m_array.size());
+    for (m_arrayPos = 0; m_arrayPos < arraySize; m_arrayPos++) {
+        if (auto const & key = m_array[m_arrayPos]) {
             if (key->isTraversable() && key->isBoundSet()) {
                 key->setText(ikey);
                 if (!key->popError())
                     break;
-            }
-            else {
+            } else {
                 if (!strcmp(key->getText(), ikey))
                     break;
             }
         }
     }
-    if (arraypos >= arraycnt) {
+    if (m_arrayPos >= arraySize) {
         error = 1;
-        arraypos = arraycnt-1;
+        m_arrayPos = arraySize - 1u;
     }
 
     SWKey::setText(ikey);
@@ -360,15 +333,10 @@ void ListKey::setText(const char *ikey) {
 
 // This sort impl sucks.  Let's change it to a quicksort or some other efficient algol
 void ListKey::sort() {
-    for (int i = 0; i < arraycnt; i++) {
-        for (int j = i; j < arraycnt; j++) {
-            if (*array[j] < *array[i]) {
-                SWKey *tmp = array[i];
-                array[i] = array[j];
-                array[j] = tmp;
-            }
-        }
-    }
+    std::sort(m_array.begin(),
+              m_array.end(),
+              [](auto const & lhs, auto const & rhs) noexcept
+              { return (*lhs) < (*rhs); });
 }
 
 } /* namespace swordxx */
