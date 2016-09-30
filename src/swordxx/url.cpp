@@ -21,6 +21,7 @@
 namespace swordxx {
 namespace URL {
 
+/// \todo Should we actually follow RFC 3986 here?
 std::string encode(std::string const & url) {
     std::string r;
     for (auto const & c : url) {
