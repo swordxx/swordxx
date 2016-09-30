@@ -22,6 +22,7 @@
  */
 
 #include <list>
+#include <memory>
 #include <string>
 #include "defs.h"
 
@@ -73,7 +74,6 @@ public:
     class System;
 
 private:
-    friend class __staticsystemVersificationMgr;
 
     class Private;
     Private *p;
@@ -81,7 +81,7 @@ private:
     void init();
 
 protected:
-    static VersificationMgr *systemVersificationMgr;
+    static std::unique_ptr<VersificationMgr> systemVersificationMgr;
 
 public:
     class SWDLLEXPORT Book {

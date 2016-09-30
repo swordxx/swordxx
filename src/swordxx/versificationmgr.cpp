@@ -61,7 +61,7 @@ namespace swordxx {
 
 VersificationMgr *VersificationMgr::getSystemVersificationMgr() {
     if (!systemVersificationMgr) {
-        systemVersificationMgr = new VersificationMgr();
+        systemVersificationMgr = std::make_unique<VersificationMgr>();
         systemVersificationMgr->registerVersificationSystem("KJV", otbooks, ntbooks, vm);
         systemVersificationMgr->registerVersificationSystem("Leningrad", otbooks_leningrad, ntbooks_null, vm_leningrad);
         systemVersificationMgr->registerVersificationSystem("MT", otbooks_mt, ntbooks_null, vm_mt);
@@ -81,7 +81,7 @@ VersificationMgr *VersificationMgr::getSystemVersificationMgr() {
         systemVersificationMgr->registerVersificationSystem("DarbyFr", otbooks, ntbooks, vm_darbyfr);
         systemVersificationMgr->registerVersificationSystem("Segond", otbooks, ntbooks, vm_segond);
     }
-    return systemVersificationMgr;
+    return systemVersificationMgr.get();
 }
 
 
@@ -380,14 +380,7 @@ public:
     map<std::string, System> systems;
 };
 // ---------------- statics -----------------
-VersificationMgr * VersificationMgr::systemVersificationMgr = nullptr;
-
-class __staticsystemVersificationMgr {
-public:
-    __staticsystemVersificationMgr() { }
-    ~__staticsystemVersificationMgr() { delete VersificationMgr::systemVersificationMgr; }
-} _staticsystemVersificationMgr;
-
+std::unique_ptr<VersificationMgr> VersificationMgr::systemVersificationMgr;
 
 void VersificationMgr::init() {
     p = new Private();
@@ -400,8 +393,7 @@ VersificationMgr::~VersificationMgr() {
 
 
 void VersificationMgr::setSystemVersificationMgr(VersificationMgr *newVersificationMgr) {
-    delete systemVersificationMgr;
-    systemVersificationMgr = newVersificationMgr;
+    systemVersificationMgr.reset(newVersificationMgr);
 }
 
 
