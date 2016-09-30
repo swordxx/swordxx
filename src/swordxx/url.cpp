@@ -1,13 +1,6 @@
 /******************************************************************************
  *
- *  url.cpp -    code for an URL parser utility class
- *
- * $Id$
- *
- * Copyright 2004-2013 CrossWire Bible Society (http://www.crosswire.org)
- *    CrossWire Bible Society
- *    P. O. Box 2528
- *    Tempe, AZ  85280-2528
+ * Copyright 2016 Jaak Ristioja
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -22,269 +15,44 @@
 
 #include "url.h"
 
-#include <cctype>
 #include <cstdio>
-#include <iostream>
-#include <map>
 #include "utilstr.h"
 
 
 namespace swordxx {
+namespace URL {
 
+std::string encode(std::string const & url) {
+    std::string r;
+    for (auto const & c : url) {
+        switch (c) {
+        case 'A': case 'B': case 'C': case 'D': case 'E': case 'F': case 'G':
+        case 'H': case 'I': case 'J': case 'K': case 'L': case 'M': case 'N':
+        case 'O': case 'P': case 'Q': case 'R': case 'S': case 'T': case 'U':
+        case 'V': case 'W': case 'X': case 'Y': case 'Z':
 
-namespace {
-    typedef std::map<unsigned char, std::string> DataMap;
-        DataMap m;
-    static class __init {
-        public:
-            __init() {
-                for (unsigned short int c = 32; c <= 255; ++c) { //first set all encoding chars
-                    if ( (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9') || strchr("-_.!~*'()", c)) {
-                        continue; //we don't need an encoding for this char
-                    }
+        case 'a': case 'b': case 'c': case 'd': case 'e': case 'f': case 'g':
+        case 'h': case 'i': case 'j': case 'k': case 'l': case 'm': case 'n':
+        case 'o': case 'p': case 'q': case 'r': case 's': case 't': case 'u':
+        case 'v': case 'w': case 'x': case 'y': case 'z':
 
-                    m[c] = formatted("%%%-.2X", c);
-                }
-                //the special encodings for certain chars
-                m[' '] = '+';
-            }
-    } ___init;
-}
+        case '0': case '1': case '2': case '3': case '4':
+        case '5': case '6': case '7': case '8': case '9':
 
-
-/**
- * Constructors/Destructors
- */
-URL::URL(const char *url)
-    :     url(""),
-        protocol(""),
-        hostname(""),
-        path("")
-{
-    if (url && strlen(url)) {
-        this->url = url;
-        parse();
-    }
-}
-
-
-const char *URL::getProtocol() const {
-    return protocol.c_str();
-}
-
-
-const char *URL::getHostName () const {
-    return hostname.c_str();
-}
-
-
-const char *URL::getPath() const {
-    return path.c_str();
-}
-
-
-const URL::ParameterMap &URL::getParameters() const {
-    return parameterMap;
-}
-
-
-/**
- * Returns the value of an URL parameter. For the URL "http://www.crosswire.org/index.jsp?page=test&amp;user=nobody" the value of the parameter "page" would be "test".
- * If the parameter is not set an empty string is returned.
- */
-const char *URL::getParameterValue(const char *name) const {
-    static std::string emptyStr("");
-
-    ParameterMap::const_iterator it = parameterMap.find(name);
-    static std::string retVal;
-
-    if (it != parameterMap.end())
-        retVal = it->second.c_str();
-        else
-        retVal = emptyStr.c_str();
-
-    return retVal.c_str();
-}
-
-
-/** Parse the URL.
- * Parse the URL into the protocol, the hostname, the path and the paramters with their values
- *
- */
-void URL::parse() {
-    /* format example        protocol://hostname/path/path/path.pl?param1=value1&amp;param2=value2
-    * we include the script name in the path, so the path would be /path/path/path.pl in this example
-    *  &amp; could also be &
-    */
-
-    //1. Init
-    const char *urlPtr = url.c_str();
-
-    protocol = "";
-    hostname = "";
-    path     = "";
-    parameterMap.clear();
-
-     // 2. Get the protocol, which is from the begining to the first ://
-    const char *end = strchr( urlPtr, ':' );
-    if (end) { //protocol was found
-         protocol.append(urlPtr, end-urlPtr);
-         urlPtr = end + 1;
-
-        //find the end of the protocol separator (e.g. "://")
-        for (; (*urlPtr == ':') || (*urlPtr == '/'); urlPtr++);
-    }
-
- //3.Get the hostname part. This is the part from pos up to the first slash
-    bool checkPath   = true;
-    bool checkParams = true;
-    bool checkAnchor = true;
-
-    end = strchr(urlPtr, '/');
-    if (!end) {
-        checkPath = false;
-        end = strchr(urlPtr, '?');
-    }
-    if (!end) {
-        checkParams = false;
-        end = strchr(urlPtr, '#');
-    }
-    if (!end) {
-        checkAnchor = false;
-        end = urlPtr+strlen(urlPtr);
-    }
-
-    hostname.append(urlPtr, end-urlPtr);
-
-    urlPtr = end + ((*end)? 1 : 0);
-
-    if (checkPath) {
-        end = strchr(urlPtr, '?');
-        if (!end) {
-            checkParams = false;
-            end = strchr(urlPtr, '#');
-        }
-        if (!end) {
-            checkAnchor = false;
-            end = urlPtr+strlen(urlPtr);
-        }
-
-         path.append(urlPtr, end-urlPtr);
-
-        urlPtr = end + ((*end)? 1 : 0);
-     }
-
-    if (checkParams) {
-        //5. Fill the map with the parameters and their values
-        std::string paramName;
-        std::string paramValue;
-
-        if (checkAnchor) checkAnchor = false;
-/*
-        end = strchr(urlPtr, '#');
-        if (!end) {
-            checkAnchor = false;
-            end = urlPtr+strlen(urlPtr);
-        }
-*/
-        //end = (start && strchr(start, '?')) ? strchr(start, '?')+1 :0;
-        end = urlPtr;
-        while (end) {
-            paramName = "";
-            paramValue = "";
-
-            //search for the equal sign to find the value part
-            const char *valueStart = strchr(end, '=');
-            if (valueStart) {
-                const char* valueEnd = strstr(valueStart, "&amp;") ? strstr(valueStart, "&amp;") : strstr(valueStart, "&"); //try to find a new paramter part
-
-                if (valueEnd) {
-                    paramName.append(end, valueStart-end);
-                    paramValue.append(valueStart+1, valueEnd-(valueStart+1));
-                }
-                else { //this is the last paramter of the URL
-                    paramName.append(end, valueStart-end);
-                    paramValue.append(valueStart+1);
-                }
-
-                if (paramName.length() && paramValue.length()) {//insert the param into the map if it's valid
-                    paramName = decode(paramName.c_str());
-                    paramValue = decode(paramValue.c_str());
-
-                    parameterMap[ paramName ] = paramValue;
-                }
-            }
-            else {
-                break; //no valid parameter in the url
-            }
-
-            const char *start = end+1;
-            end = strstr(start, "&amp;")
-                  ? strstr(start, "&amp;") + 5
-                  : (strstr(start, "&")
-                     ? strstr(start, "&") + 1
-                     : nullptr); // Try to find a new paramter part
+        case '-': case '_': case '.': case '!': case '~':
+        case '*': case '\'': case '(': case ')':
+            r += c;
+            break;
+        case ' ':
+            r += '+';
+            break;
+        default:
+            r += formatted("%%%-.2X", c);
+            break;
         }
     }
+    return r;
 }
 
-
-const std::string URL::encode(const char *urlText) {
-    /*static*/ std::string url;
-    url = urlText;
-
-    std::string buf;
-    const int length = url.length();
-    for (int i = 0; i < length; i++) { //fill "buf"
-        const char& c = url[i];
-        buf.append( ((m[c].length()) ? m[c] : std::string(1u, c)) );
-    }
-
-    url = buf;
-    return url;
-}
-
-
-const std::string URL::decode(const char *encoded) {
-    /*static*/ std::string text;
-    text = encoded;
-
-    std::string decoded;
-    const int length = text.length();
-    int i = 0;
-
-    while (i < length) {
-        char a = text[i];
-
-        if ( a == '+' ) { //handle special cases
-            decoded.push_back(' ');
-        }
-        else if ( (a == '%') && (i+2 < length)) { //decode the %ab  hex encoded char
-            const char b = toupper( text[i+1] );
-            const char c = toupper( text[i+2] );
-
-            if (isxdigit(b) && isxdigit(c)) { //valid %ab part
-                unsigned int dec = 16 * ((b >= 'A' && b <= 'F') ? (b - 'A' + 10) : (b - '0')); //dec value of the most left digit (b)
-                dec += (c >= 'A' && c <= 'F') ? (c - 'A' + 10) : (c - '0'); //dec value of the right digit (c)
-
-                decoded.push_back((char)dec); //append the decoded char
-
-                i += 2; //we jump over the %ab part; we have to leave out three, but the while  loop adds one, too
-            }
-        }
-        else { //just append the char
-            decoded.push_back(a);
-        }
-
-        i++;
-    }
-
-    if (decoded.length()) {
-        text = decoded;
-    }
-    return text;
-}
-
-
-} /* namespace swordxx */
-
+} /* namespace URL { */
+} /* namespace swordxx { */
