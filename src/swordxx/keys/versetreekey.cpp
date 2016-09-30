@@ -270,22 +270,22 @@ void VerseTreeKey::setPosition(SW_POSITION p) {
     }
 
     switch (p) {
-    case POS_TOP:
+    case TOP:
         popError();
         treeKey->setPosition(p);
         increment();
         decrement();
         popError();
         break;
-    case POS_BOTTOM:
+    case BOTTOM:
         popError();
         treeKey->setPosition(p);
         decrement();
         increment();
         popError();
         break;
-    case POS_MAXVERSE:
-    case POS_MAXCHAPTER:
+    case MAXVERSE:
+    case MAXCHAPTER:
         VerseKey::setPosition(p);
         break;
     }

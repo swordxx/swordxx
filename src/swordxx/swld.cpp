@@ -81,10 +81,10 @@ const char *SWLD::getKeyText() const {
 void SWLD::setPosition(SW_POSITION p) {
     if (!key->isTraversable()) {
         switch (p) {
-        case POS_TOP:
+        case TOP:
             *key = "";
             break;
-        case POS_BOTTOM:
+        case BOTTOM:
             *key = "zzzzzzzzz";
             break;
         }

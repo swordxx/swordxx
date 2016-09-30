@@ -46,20 +46,12 @@ namespace swordxx {
   cn & operator--() { decrement(1); return *this; }
 
 
-/** For use with = operator to position key.
-*/
-class SW_POSITION {
-    char pos;
-public:
-    SW_POSITION(char ipos) { pos = ipos; }
-    operator char() { return pos; }
+enum SW_POSITION {
+    TOP,
+    BOTTOM,
+    MAXVERSE,
+    MAXCHAPTER
 };
-
-#define POS_TOP ((char)1)
-#define POS_BOTTOM ((char)2)
-
-#define TOP SW_POSITION(POS_TOP)
-#define BOTTOM SW_POSITION(POS_BOTTOM)
 
 class SWLocale;
 

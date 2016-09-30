@@ -35,16 +35,6 @@
 
 namespace swordxx {
 
-#define POS_MAXVERSE ((char)3)
-#define POS_MAXCHAPTER ((char)4)
-#define POS_MAXBOOK ((char)5)
-
-#define MAXVERSE SW_POSITION(POS_MAXVERSE)
-#define MAXCHAPTER SW_POSITION(POS_MAXCHAPTER)
-#define MAXBOOK SW_POSITION(POS_MAXBOOK)
-
-
-
 /**
  * Class VerseKey
  * The SWKey implementation used for verse based modules like Bibles or commentaries.

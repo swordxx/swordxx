@@ -190,12 +190,12 @@ void SWModule::setPosition(SW_POSITION p) {
     char saveError = key->popError();
 
     switch (p) {
-    case POS_TOP:
+    case TOP:
         this->increment();
         this->decrement();
         break;
 
-    case POS_BOTTOM:
+    case BOTTOM:
         this->decrement();
         this->increment();
         break;

@@ -222,7 +222,7 @@ int main(int argc, char **argv) {
 
     // Loop through module from TOP to BOTTOM and set next line from
     // input file as text for this entry in the module
-    mod = TOP;
+    mod = swordxx::TOP;
     if (ntonly) vk = "Matthew 1:1";
 
     int successive = 0;  //part of hack below

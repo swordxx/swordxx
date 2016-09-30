@@ -549,10 +549,10 @@ void TreeKeyIdx::copyFrom(const SWKey &ikey) {
 
 void TreeKeyIdx::setPosition(SW_POSITION p) {
     switch (p) {
-    case POS_TOP:
+    case TOP:
         root();
         break;
-    case POS_BOTTOM:
+    case BOTTOM:
         error = getTreeNodeFromIdxOffset(idxfd->seek(-4, SEEK_END), &currentNode);
         break;
     }

@@ -91,7 +91,7 @@ int main(int argc, char **argv) {
 
     vkey->setIntros(true);    // turn on mod/testmnt/book/chap headings
 
-    (*mod) = TOP;
+    (*mod) = swordxx::TOP;
 
     while (!mod->popError()) {
         buffer = new char [ mod->renderText().length() + 1 ];

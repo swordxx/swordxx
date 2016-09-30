@@ -68,7 +68,7 @@ int main(int argc, char **argv) {
 
     vkey->setIntros(false);    // turn on mod/testmnt/book/chap headings
 
-    (*mod) = TOP;
+    (*mod) = swordxx::TOP;
 
     while (!mod->popError()) {
         if (vkey->getVerse()) {

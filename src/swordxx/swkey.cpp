@@ -179,10 +179,10 @@ int SWKey::compare(SWKey const & ikey) const noexcept {
 
 void SWKey::setPosition(SW_POSITION p) {
     switch (p) {
-    case POS_TOP:
+    case TOP:
 //        *this = "";
         break;
-    case POS_BOTTOM:
+    case BOTTOM:
 //        *this = "zzzzzzzzz";
         break;
     }
