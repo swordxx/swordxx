@@ -39,28 +39,16 @@
 namespace swordxx {
 
 
-LocaleMgr * LocaleMgr::systemLocaleMgr = nullptr;
-
-
-class __staticsystemLocaleMgr {
-public:
-    __staticsystemLocaleMgr() { }
-    ~__staticsystemLocaleMgr() { delete LocaleMgr::systemLocaleMgr; }
-} _staticsystemLocaleMgr;
-
+std::unique_ptr<LocaleMgr> LocaleMgr::systemLocaleMgr;
 
 LocaleMgr *LocaleMgr::getSystemLocaleMgr() {
-    if (!systemLocaleMgr) {
+    if (!systemLocaleMgr)
         setSystemLocaleMgr(new LocaleMgr());
-    }
-
-    return systemLocaleMgr;
+    return systemLocaleMgr.get();
 }
 
-
 void LocaleMgr::setSystemLocaleMgr(LocaleMgr *newLocaleMgr) {
-    delete systemLocaleMgr;
-    systemLocaleMgr = newLocaleMgr;
+    systemLocaleMgr.reset(newLocaleMgr);
     SWLocale * locale = new SWLocale(nullptr);
     systemLocaleMgr->locales->insert(LocaleMap::value_type(locale->getName(), locale));
 }

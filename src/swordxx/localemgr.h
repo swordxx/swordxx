@@ -25,6 +25,7 @@
 #define LOCALEMGR_H
 
 #include <map>
+#include <memory>
 #include <list>
 #include <string>
 #include "defs.h"
@@ -52,10 +53,9 @@ private:
     void deleteLocales();
     char *defaultLocaleName;
     LocaleMgr(const LocaleMgr &);
-    friend class __staticsystemLocaleMgr;
 protected:
     LocaleMap *locales;
-    static LocaleMgr *systemLocaleMgr;
+    static std::unique_ptr<LocaleMgr> systemLocaleMgr;
 
 public:
 
