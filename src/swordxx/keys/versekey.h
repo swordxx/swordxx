@@ -35,11 +35,6 @@
 
 namespace swordxx {
 
-namespace Position {
-enum { MaxVerse };
-enum { MaxChapter };
-}
-
 #define VERSEKEY_OPERATORS(cn) \
     SWKEY_OPERATORS(cn) \
     cn & operator=(decltype(Position::MaxVerse)) \

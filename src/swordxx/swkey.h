@@ -30,16 +30,12 @@
 #include <string>
 #include "defs.h"
 #include "utilstr.h"
+#include "position.h"
 
 
 namespace swordxx {
 
 #define KEYERR_OUTOFBOUNDS 1
-
-namespace Position {
-enum { Top };
-enum { Bottom };
-};
 
 #define SWKEY_OPERATORS(cn) \
   cn & operator=(char const * ikey) { setText(ikey); return *this; } \
