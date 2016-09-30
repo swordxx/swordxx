@@ -26,6 +26,7 @@
 #define STRINGMGR_H
 
 #include <cstring>
+#include <memory>
 #include "defs.h"
 #include "utilstr.h"
 
@@ -72,7 +73,6 @@ public:
 
 
 protected:
-    friend class __staticsystemStringMgr;
 
     /** Default constructor. Protected to make instances on user side impossible, because this is a Singleton
     */
@@ -82,14 +82,10 @@ protected:
     */
     StringMgr(const StringMgr &);
 
-    /** Destructor
-    */
-    virtual ~StringMgr();
-
     virtual bool supportsUnicode() const;
 
 private:
-    static StringMgr *systemStringMgr;
+    static std::unique_ptr<StringMgr> systemStringMgr;
 };
 
 inline char * toupperstr(char * t, std::size_t const max = 0u)

@@ -38,17 +38,7 @@
 namespace swordxx {
 
 
-StringMgr * StringMgr::systemStringMgr = nullptr;
-
-class __staticsystemStringMgr {
-public:
-    __staticsystemStringMgr() { }
-    ~__staticsystemStringMgr() {
-        delete StringMgr::systemStringMgr;
-        StringMgr::systemStringMgr = nullptr;
-    }
-} _staticsystemStringMgr;
-
+std::unique_ptr<StringMgr> StringMgr::systemStringMgr;
 
 namespace {
 
@@ -144,18 +134,11 @@ StringMgr::StringMgr() {
 StringMgr::StringMgr(const StringMgr & /* m */) {
 }
 
-/** Destructor
-*/
-StringMgr::~StringMgr() {
-}
-
 /** Sets the global StringMgr handle
 * @param newStringMgr The new global StringMgr. This pointer will be deleted by this StringMgr
 */
 void StringMgr::setSystemStringMgr(StringMgr *newStringMgr) {
-    delete systemStringMgr;
-
-    systemStringMgr = newStringMgr;
+    systemStringMgr.reset(newStringMgr);
 
    // TODO: this is magic. apparently we have to reset the system localemgr upon changing stringmgr.
    // setting system stringmgr should be set before localemgr and not possible to change.
@@ -169,13 +152,13 @@ void StringMgr::setSystemStringMgr(StringMgr *newStringMgr) {
 StringMgr* StringMgr::getSystemStringMgr() {
     if (!systemStringMgr) {
 #if SWORDXX_HAS_ICU
-        systemStringMgr = new ICUStringMgr();
+        systemStringMgr = std::make_unique<ICUStringMgr>();
 #else
-        systemStringMgr = new StringMgr();
+        systemStringMgr = std::make_unique<StringMgr>();
 #endif
     }
 
-    return systemStringMgr;
+    return systemStringMgr.get();
 }
 
 
