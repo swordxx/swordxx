@@ -55,7 +55,8 @@ public:
     SWKey * createKey() const override;
 
     char const * getKeyText() const override;
-    void setPosition(SW_POSITION pos) override;
+    void positionToTop() override;
+    void positionToBottom() override;
 
     virtual long getEntryCount() const = 0;
     virtual long getEntryForKey(const char *key) const = 0;

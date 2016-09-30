@@ -102,10 +102,11 @@ public:
 
     virtual void Normalize(char autocheck = 0);
 
-    void setPosition(SW_POSITION newpos) override;
+    void positionToTop() override;
+    void positionToBottom() override;
     virtual long NewIndex() const;
 
-    SWKEY_OPERATORS(VerseTreeKey)
+    VERSEKEY_OPERATORS(VerseTreeKey)
 
     SWKey & operator=(VerseKey const & ikey) override {
         copyFrom(ikey);

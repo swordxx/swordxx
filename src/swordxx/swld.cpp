@@ -73,26 +73,23 @@ const char *SWLD::getKeyText() const {
     return entkeytxt;
 }
 
-
-/******************************************************************************
- * SWLD::setPosition(SW_POSITION)    - Positions this key if applicable
- */
-
-void SWLD::setPosition(SW_POSITION p) {
+void SWLD::positionToTop() {
     if (!key->isTraversable()) {
-        switch (p) {
-        case TOP:
-            *key = "";
-            break;
-        case BOTTOM:
-            *key = "zzzzzzzzz";
-            break;
-        }
+        *key = "";
+    } else {
+        *key = Position::Top;
     }
-    else    *key = p;
     getRawEntryBuf();
 }
 
+void SWLD::positionToBottom() {
+    if (!key->isTraversable()) {
+        *key = "zzzzzzzzz";
+    } else {
+        *key = Position::Bottom;
+    }
+    getRawEntryBuf();
+}
 
 bool SWLD::hasEntry(const SWKey *key) const {
     const char * const key_str = key->getText();

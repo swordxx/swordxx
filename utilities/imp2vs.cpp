@@ -262,7 +262,7 @@ void writeEntry(SWModule *module, const std::string &key, const std::string &ent
         ListKey listKey = vkey->parseVerseList(key.c_str(), "Gen1:1", true);
 
         bool first = true;
-        for (listKey = TOP; !listKey.popError(); ++listKey) {
+        for (listKey = Position::Top; !listKey.popError(); ++listKey) {
             *vkey = listKey;
             if (first) {
                 *linkMaster = *vkey;

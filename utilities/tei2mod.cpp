@@ -520,7 +520,7 @@ int main(int argc, char **argv) {
     currentKey->setPersist(true);
     module->setKey(*currentKey);
 
-    (*module) = TOP;
+    (*module) = Position::Top;
 
     std::string token;
     std::string text;

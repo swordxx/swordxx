@@ -108,7 +108,8 @@ public:
     SWKEY_OPERATORS(TreeKeyIdx)
 
     void setText(char const * ikey) override;
-    void setPosition(SW_POSITION p) override;
+    void positionToTop() override;
+    void positionToBottom() override;
     char const * getText() const override;
     int _compare(TreeKeyIdx const & ikey) const noexcept;
     int compare(SWKey const & ikey) const noexcept override;

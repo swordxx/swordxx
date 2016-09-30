@@ -176,31 +176,19 @@ char SWModule::setKey(const SWKey *ikey) {
     return error = key->popError();
 }
 
-
-/******************************************************************************
- * SWModule::setPosition(SW_POSITION)    - Positions this modules to an entry
- *
- * ENT:    p    - position (e.g. TOP, BOTTOM)
- *
- * RET: *this
- */
-
-void SWModule::setPosition(SW_POSITION p) {
-    *key = p;
+void SWModule::positionToTop() {
+    *key = Position::Top;
     char saveError = key->popError();
+    this->increment();
+    this->decrement();
+    error = saveError;
+}
 
-    switch (p) {
-    case TOP:
-        this->increment();
-        this->decrement();
-        break;
-
-    case BOTTOM:
-        this->decrement();
-        this->increment();
-        break;
-    }
-
+void SWModule::positionToBottom() {
+    *key = Position::Bottom;
+    char saveError = key->popError();
+    this->decrement();
+    this->increment();
     error = saveError;
 }
 
@@ -320,11 +308,11 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 
     (*percent)(perc, percentUserData);
 
-    *this = BOTTOM;
+    *this = Position::Bottom;
     long highIndex = key->getIndex();
     if (!highIndex)
         highIndex = 1;        // avoid division by zero errors.
-    *this = TOP;
+    *this = Position::Top;
     if (searchType >= 0) {
 #ifdef USECXX11REGEX
         preg = std::regex((std::string(".*")+istr+".*").c_str(), std::regex_constants::extended & flags);
@@ -688,7 +676,7 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
     delete resultKey;
     delete lastKey;
 
-    listKey = TOP;
+    listKey = Position::Top;
     setProcessEntryAttributes(savePEA);
 
 
@@ -951,7 +939,7 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
     TreeKeyIdx *tkcheck = dynamic_cast<TreeKeyIdx *>(key);
 
 
-    *this = BOTTOM;
+    *this = Position::Bottom;
     long highIndex = key->getIndex();
     if (!highIndex)
         highIndex = 1;        // avoid division by zero errors.
@@ -961,7 +949,7 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 
     // prox chapter blocks
     // position module at the beginning
-    *this = TOP;
+    *this = Position::Top;
 
     std::string proxBuf;
     std::string proxLem;
@@ -1062,7 +1050,7 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
             *chapMax = *vkcheck;
             // we're the first verse in a chapter
             if (vkcheck->getVerse() == 1) {
-                *chapMax = MAXVERSE;
+                *chapMax = Position::MaxVerse;
                 VerseKey saveKey = *vkcheck;
                 while ((!err) && (*vkcheck <= *chapMax)) {
 //printf("building proxBuf from (%s).\nproxBuf.c_str(): %s\n", (const char *)*key, proxBuf.c_str());

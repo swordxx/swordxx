@@ -48,7 +48,6 @@ using swordxx::FileMgr;
 using swordxx::SWMgr;
 using swordxx::RawText;
 using swordxx::VerseKey;
-using swordxx::SW_POSITION;
 
 
 char readline(int fd, char **buf) {
@@ -222,7 +221,7 @@ int main(int argc, char **argv) {
 
     // Loop through module from TOP to BOTTOM and set next line from
     // input file as text for this entry in the module
-    mod = swordxx::TOP;
+    mod = swordxx::Position::Top;
     if (ntonly) vk = "Matthew 1:1";
 
     int successive = 0;  //part of hack below

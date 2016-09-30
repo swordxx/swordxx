@@ -263,34 +263,25 @@ long VerseTreeKey::NewIndex() const {
 }
 
 
-void VerseTreeKey::setPosition(SW_POSITION p) {
-
-    if (isBoundSet()) {
-        return VerseKey::setPosition(p);
-    }
-
-    switch (p) {
-    case TOP:
-        popError();
-        treeKey->setPosition(p);
-        increment();
-        decrement();
-        popError();
-        break;
-    case BOTTOM:
-        popError();
-        treeKey->setPosition(p);
-        decrement();
-        increment();
-        popError();
-        break;
-    case MAXVERSE:
-    case MAXCHAPTER:
-        VerseKey::setPosition(p);
-        break;
-    }
+void VerseTreeKey::positionToTop() {
+    if (isBoundSet())
+        return VerseKey::positionToTop();
+    popError();
+    treeKey->positionToTop();
+    increment();
+    decrement();
+    popError();
 }
 
+void VerseTreeKey::positionToBottom() {
+    if (isBoundSet())
+        return VerseKey::positionToBottom();
+    popError();
+    treeKey->positionToBottom();
+    decrement();
+    increment();
+    popError();
+}
 
 /******************************************************************************
  * VerseTreeKey::copyFrom - Equates this VerseTreeKey to another VerseTreeKey

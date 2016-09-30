@@ -172,21 +172,8 @@ int SWKey::compare(SWKey const & ikey) const noexcept {
     return strcmp(m_keyText->c_str(), ikey.m_keyText->c_str());
 }
 
-
-/******************************************************************************
- * SWKey::setPosition(SW_POSITION)    - Positions this key if applicable
- */
-
-void SWKey::setPosition(SW_POSITION p) {
-    switch (p) {
-    case TOP:
-//        *this = "";
-        break;
-    case BOTTOM:
-//        *this = "zzzzzzzzz";
-        break;
-    }
-}
+void SWKey::positionToTop() {}
+void SWKey::positionToBottom() {}
 
 
 /******************************************************************************

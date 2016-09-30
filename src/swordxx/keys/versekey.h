@@ -35,6 +35,18 @@
 
 namespace swordxx {
 
+namespace Position {
+enum { MaxVerse };
+enum { MaxChapter };
+}
+
+#define VERSEKEY_OPERATORS(cn) \
+    SWKEY_OPERATORS(cn) \
+    cn & operator=(decltype(Position::MaxVerse)) \
+    { positionToMaxVerse(); return *this; } \
+    cn & operator=(decltype(Position::MaxChapter)) \
+    { positionToMaxChapter(); return *this; }
+
 /**
  * Class VerseKey
  * The SWKey implementation used for verse based modules like Bibles or commentaries.
@@ -205,12 +217,10 @@ public:
     */
     void positionFrom(SWKey const & ikey) override;
 
-    /** Positions this key
-    *
-    * @param newpos Position to set to.
-    * @return *this
-    */
-    void setPosition(SW_POSITION newpos) override;
+    void positionToTop() override;
+    void positionToBottom() override;
+    virtual void positionToMaxChapter();
+    virtual void positionToMaxVerse();
 
     /** Decrements key a number of verses
     *
@@ -402,7 +412,7 @@ public:
     // OPERATORS --------------------------------------------------------------------
 
 
-    SWKEY_OPERATORS(VerseKey)
+    VERSEKEY_OPERATORS(VerseKey)
 
     virtual SWKey &operator =(const VerseKey &ikey) { positionFrom(ikey); return *this; }
 };

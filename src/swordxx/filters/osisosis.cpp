@@ -64,13 +64,13 @@ char OSISOSIS::processText(std::string &text, const SWKey *key, const SWModule *
             tmp->setAutoNormalize(false);
             tmp->setIntros(true);
 
-            *tmp = MAXVERSE;
+            *tmp = Position::MaxVerse;
             if (*vkey == *tmp) {
                 tmp->setVerse(0);
 //                sprintf(ref, "\t</div>");
 //                pushString(&to, ref);
-                *tmp = MAXCHAPTER;
-                *tmp = MAXVERSE;
+                *tmp = Position::MaxChapter;
+                *tmp = Position::MaxVerse;
                 if (*vkey == *tmp) {
                     tmp->setChapter(0);
                     tmp->setVerse(0);

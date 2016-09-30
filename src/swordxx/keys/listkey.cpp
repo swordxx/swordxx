@@ -117,16 +117,9 @@ void ListKey::add(SWKey const & ikey) {
  * RET:    *this
  */
 
-void ListKey::setPosition(SW_POSITION p) {
-    switch (p) {
-    case 1:    // GCC won't compile P_TOP
-        setToElement(0, p);
-        break;
-    case 2:    // GCC won't compile P_BOTTOM
-        setToElement(m_array.size() - 1u, p);
-        break;
-    }
-}
+void ListKey::positionToTop() { setToElementAndTop(0); }
+
+void ListKey::positionToBottom() { setToElementAndBottom(m_array.size() - 1u); }
 
 
 /******************************************************************************
@@ -145,7 +138,7 @@ void ListKey::increment(int step) {
             if (key->isBoundSet())
                 key->increment();
             if (key->popError() || !key->isBoundSet()) {
-                setToElement(m_arrayPos + 1);
+                setToElementAndTop(m_arrayPos + 1);
             } else {
                 SWKey::setText(key->getText());
             }
@@ -172,7 +165,7 @@ void ListKey::decrement(int step) {
             if (key->isBoundSet())
                 key->decrement();
             if (key->popError() || !key->isBoundSet()) {
-                setToElement(m_arrayPos - 1, BOTTOM);
+                setToElementAndBottom(m_arrayPos - 1);
             } else {
                 SWKey::setText(key->getText());
             }
@@ -189,17 +182,7 @@ void ListKey::decrement(int step) {
 
 int ListKey::getCount() const { return m_array.size(); }
 
-
-/******************************************************************************
- * ListKey::setToElement    - Sets key to element number
- *
- * ENT:    ielement    - element number to set to
- *     pos        - set the subkey element to position (TOP) or BOTTOM
- *
- * RET:    error status
- */
-
-char ListKey::setToElement(int ielement, SW_POSITION pos) {
+char ListKey::setToElementAndTop(int ielement) {
     m_arrayPos = ielement;
     auto const arraySize(m_array.size());
     if (m_arrayPos >= arraySize) {
@@ -217,7 +200,34 @@ char ListKey::setToElement(int ielement, SW_POSITION pos) {
     if (arraySize) {
         auto const & key = m_array[m_arrayPos];
         if (key->isBoundSet())
-            key->setPosition(pos);
+            key->positionToTop();
+        SWKey::setText(key->getText());
+    } else {
+        SWKey::setText("");
+    }
+
+    return error;
+}
+
+char ListKey::setToElementAndBottom(int ielement) {
+    m_arrayPos = ielement;
+    auto const arraySize(m_array.size());
+    if (m_arrayPos >= arraySize) {
+        m_arrayPos = (arraySize > 0u) ? arraySize - 1u : 0u;
+        error = KEYERR_OUTOFBOUNDS;
+    } else {
+        if (m_arrayPos < 0) {
+            m_arrayPos = 0;
+            error = KEYERR_OUTOFBOUNDS;
+        } else {
+            error = 0;
+        }
+    }
+
+    if (arraySize) {
+        auto const & key = m_array[m_arrayPos];
+        if (key->isBoundSet())
+            key->positionToBottom();
         SWKey::setText(key->getText());
     } else {
         SWKey::setText("");

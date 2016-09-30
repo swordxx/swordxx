@@ -829,7 +829,7 @@ bool handleToken(std::string &text, XMLTag token) {
                     // This can be done by incrementing, which will produce an error
                     // if there is only one verse.
                     if (memberKeyCount > 1) {
-                        verseKeys.setPosition(TOP);
+                        verseKeys.positionToTop();
                         verseKeys.increment(1);
                         if (!verseKeys.popError()) {
                             cout << "DEBUG(LINK): " << currentVerse.getOSISRef() << endl;
@@ -1327,7 +1327,7 @@ void writeLinks()
         // where the first is the real verse
         // and the others link to it.
         ListKey verseKeys = linkedVerses[i];
-        verseKeys.setPosition(TOP);
+        verseKeys.positionToTop();
         destKey = verseKeys.getElement();
         verseKeys.increment(1);
 
@@ -1446,7 +1446,7 @@ void processOSIS(istream& infile) {
     currentVerse.setPersist(true);
 
     module->setKey(currentVerse);
-    module->setPosition(TOP);
+    module->positionToTop();
 
     std::string token;
     std::string text;

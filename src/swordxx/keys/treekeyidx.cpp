@@ -547,15 +547,14 @@ void TreeKeyIdx::copyFrom(const SWKey &ikey) {
     positionChanged();
 }
 
-void TreeKeyIdx::setPosition(SW_POSITION p) {
-    switch (p) {
-    case TOP:
-        root();
-        break;
-    case BOTTOM:
-        error = getTreeNodeFromIdxOffset(idxfd->seek(-4, SEEK_END), &currentNode);
-        break;
-    }
+void TreeKeyIdx::positionToTop() {
+    root();
+    positionChanged();
+    popError();    // clear error from normalize
+}
+
+void TreeKeyIdx::positionToBottom() {
+    error = getTreeNodeFromIdxOffset(idxfd->seek(-4, SEEK_END), &currentNode);
     positionChanged();
     popError();    // clear error from normalize
 }

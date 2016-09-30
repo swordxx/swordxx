@@ -36,22 +36,20 @@ namespace swordxx {
 
 #define KEYERR_OUTOFBOUNDS 1
 
+namespace Position {
+enum { Top };
+enum { Bottom };
+};
+
 #define SWKEY_OPERATORS(cn) \
   cn & operator=(char const * ikey) { setText(ikey); return *this; } \
   cn & operator=(SWKey const & ikey) { positionFrom(ikey); return *this; } \
-  cn & operator=(SW_POSITION pos) { setPosition(pos); return *this; } \
+  cn & operator=(decltype(Position::Top)) { positionToTop(); return *this; } \
+  cn & operator=(decltype(Position::Bottom)) { positionToBottom(); return *this; } \
   cn & operator-=(int steps) { decrement(steps); return *this; } \
   cn & operator+=(int steps) { increment(steps); return *this; } \
   cn & operator++() { increment(1); return *this; } \
   cn & operator--() { decrement(1); return *this; }
-
-
-enum SW_POSITION {
-    TOP,
-    BOTTOM,
-    MAXVERSE,
-    MAXCHAPTER
-};
 
 class SWLocale;
 
@@ -180,7 +178,8 @@ public:
     virtual bool equals(SWKey const & ikey) const noexcept
     { return !compare(ikey); }
 
-    virtual void setPosition(SW_POSITION);
+    virtual void positionToTop();
+    virtual void positionToBottom();
 
     /** Decrements key a number of entry positions
      * This is only valid if isTraversable is true

@@ -75,13 +75,23 @@ public:
     virtual void remove();
 
 
-    /** Sets container to subkey element number and repositions that subkey to either top or bottom
+    /** \returns setToElementAndTop(ielement); */
+    char setToElement(int ielement)
+    { return setToElementAndTop(ielement); }
+
+    /** Sets container to subkey element number and repositions that subkey to top
      *
      * @param ielement - element number to set to
-     * @param pos - set the subkey element to position (TOP) or BOTTOM
      * @return error status
      */
-    virtual char setToElement(int ielement, SW_POSITION = TOP);
+    virtual char setToElementAndTop(int ielement);
+
+    /** Sets container to subkey element number and repositions that subkey to bottom
+     *
+     * @param ielement - element number to set to
+     * @return error status
+     */
+    virtual char setToElementAndBottom(int ielement);
 
 
 
@@ -106,12 +116,8 @@ public:
     virtual void copyFrom(const ListKey & ikey);
     void copyFrom(SWKey const & ikey) override { SWKey::copyFrom(ikey); }
 
-    /** Positions this key
-     *
-     * @param pos position
-     * @return *this
-     */
-    void setPosition(SW_POSITION pos) override;
+    void positionToTop() override;
+    void positionToBottom() override;
 
     /** Decrements a number of elements
      */

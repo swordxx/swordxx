@@ -456,7 +456,7 @@ char zVerse4::createModule(const char *ipath, int blockBound, const char *v11n)
     offset = archtosword32(offset);
     size   = archtosword32(size);
 
-    for (vk = TOP; !vk.popError(); ++vk) {
+    for (vk = Position::Top; !vk.popError(); ++vk) {
         if (vk.getTestament() < 2) {
             if (fd->write(&offset, 4) != 4) goto writefailure;    //compBufIdxOffset
             if (fd->write(&offset, 4) != 4) goto writefailure;

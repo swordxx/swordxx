@@ -52,7 +52,10 @@ class SWFilter;
     SWModule &operator +=(int steps) { increment(steps); return *this; } \
     SWModule &operator ++(int) { return *this += 1; } \
     SWModule &operator --(int) { return *this -= 1; } \
-    SWModule &operator =(SW_POSITION p) { setPosition(p); return *this; }
+    SWModule & operator=(decltype(Position::Top)) \
+    { positionToTop(); return *this; } \
+    SWModule & operator=(decltype(Position::Bottom)) \
+    { positionToBottom(); return *this; } \
 
 
 typedef std::list < SWFilter * >FilterList;
@@ -360,10 +363,8 @@ public:
      */
     virtual void increment(int steps = 1);
 
-    /** Positions this modules to a logical position entry
-     * @param pos position (e.g. TOP, BOTTOM)
-     */
-    virtual void setPosition(SW_POSITION pos);
+    virtual void positionToTop();
+    virtual void positionToBottom();
 
     /** OptionFilterBuffer a text buffer
      * @param filters the FilterList of filters to iterate

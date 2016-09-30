@@ -256,7 +256,7 @@ VerseKey::VerseKey(const char *min, const char *max, const char *v11n) : SWKey()
                 static_cast<VerseKey *>(tmpListKey.getElement(0));
         setUpperBound((newElement->isBoundSet())?newElement->getUpperBound():*newElement);
     }
-    setPosition(TOP);
+    positionToTop();
 }
 
 
@@ -747,7 +747,7 @@ terminate_range:
                 if ((buf[q] == '-') && (expandRange)) {    // if this is a dash save lowerBound and wait for upper
                     buf+=q;
                     lastKey->setLowerBound(*curKey);
-                    lastKey->setPosition(TOP);
+                    lastKey->positionToTop();
                     tmpListKey << *lastKey;
                     ((VerseKey *)tmpListKey.getElement())->setAutoNormalize(isAutoNormalize());
                     tmpListKey.getElement()->userData = (uint64_t)(bufStart+(buf-iBuf.c_str()));
@@ -757,11 +757,11 @@ terminate_range:
                         if (expandRange && partial) {
                             lastKey->setLowerBound(*curKey);
                             if (partial > 1)
-                                curKey->setPosition(MAXCHAPTER);
+                                curKey->positionToMaxChapter();
                             if (partial > 0)
-                                *curKey = MAXVERSE;
+                                *curKey = Position::MaxVerse;
                             lastKey->setUpperBound(*curKey);
-                            *lastKey = TOP;
+                            *lastKey = Position::Top;
                             tmpListKey << *lastKey;
                             ((VerseKey *)tmpListKey.getElement())->setAutoNormalize(isAutoNormalize());
                             tmpListKey.getElement()->userData = (uint64_t)(bufStart+(buf-iBuf.c_str()));
@@ -773,10 +773,10 @@ terminate_range:
                                 f = true;
                             }
                             lastKey->setLowerBound(*curKey);
-                            if (f && doubleF) (*curKey) = MAXVERSE;
+                            if (f && doubleF) (*curKey) = Position::MaxVerse;
                             else if (f) ++(*curKey);
                             lastKey->setUpperBound(*curKey);
-                            *lastKey = TOP;
+                            *lastKey = Position::Top;
                             tmpListKey << *lastKey;
                             ((VerseKey *)tmpListKey.getElement())->setAutoNormalize(isAutoNormalize());
                             tmpListKey.getElement()->userData = (uint64_t)(bufStart+(buf-iBuf.c_str()));
@@ -788,12 +788,12 @@ terminate_range:
                                     tmpListKey.getElement());
                         if (newElement) {
                             if (partial > 1)
-                                *curKey = MAXCHAPTER;
+                                *curKey = Position::MaxChapter;
                             if (partial > 0)
-                                *curKey = MAXVERSE;
+                                *curKey = Position::MaxVerse;
                             newElement->setUpperBound(*curKey);
                             *lastKey = *curKey;
-                            *newElement = TOP;
+                            *newElement = Position::Top;
                             tmpListKey.getElement()->userData = (uint64_t)(bufStart+(buf-iBuf.c_str()));
                         }
                     }
@@ -1023,7 +1023,7 @@ terminate_range:
 
         if ((*buf == '-') && (expandRange)) {    // if this is a dash save lowerBound and wait for upper
             lastKey->setLowerBound(*curKey);
-            *lastKey = TOP;
+            *lastKey = Position::Top;
             tmpListKey << *lastKey;
             tmpListKey.getElement()->userData = (uint64_t)(bufStart+(buf-iBuf.c_str()));
         }
@@ -1032,11 +1032,11 @@ terminate_range:
                 if (expandRange && partial) {
                     lastKey->setLowerBound(*curKey);
                     if (partial > 1)
-                        *curKey = MAXCHAPTER;
+                        *curKey = Position::MaxChapter;
                     if (partial > 0)
-                        *curKey = MAXVERSE;
+                        *curKey = Position::MaxVerse;
                     lastKey->setUpperBound(*curKey);
-                    *lastKey = TOP;
+                    *lastKey = Position::Top;
                     tmpListKey << *lastKey;
                     tmpListKey.getElement()->userData = (uint64_t)(bufStart+(buf-iBuf.c_str()));
                 }
@@ -1047,10 +1047,10 @@ terminate_range:
                         f = true;
                     }
                     lastKey->setLowerBound(*curKey);
-                    if (f && doubleF) (*curKey) = MAXVERSE;
+                    if (f && doubleF) (*curKey) = Position::MaxVerse;
                     else if (f) ++(*curKey);
                     lastKey->setUpperBound(*curKey);
-                    *lastKey = TOP;
+                    *lastKey = Position::Top;
                     tmpListKey << *lastKey;
                     tmpListKey.getElement()->userData = (uint64_t)(bufStart+(buf-iBuf.c_str()));
                 }
@@ -1060,20 +1060,20 @@ terminate_range:
                         dynamic_cast<VerseKey *>(tmpListKey.getElement());
                 if (newElement) {
                     if (partial > 1)
-                        *curKey = MAXCHAPTER;
+                        *curKey = Position::MaxChapter;
                     if (partial > 0)
-                        *curKey = MAXVERSE;
+                        *curKey = Position::MaxVerse;
                     newElement->setUpperBound(*curKey);
-                    *newElement = TOP;
+                    *newElement = Position::Top;
                     tmpListKey.getElement()->userData = (uint64_t)(bufStart+(buf-iBuf.c_str()));
                 }
             }
         }
     }
     *book = 0;
-    tmpListKey = TOP;
+    tmpListKey = Position::Top;
     internalListKey = tmpListKey;
-    internalListKey = TOP;    // Align internalListKey to first element before passing back;
+    internalListKey = Position::Top;    // Align internalListKey to first element before passing back;
 
     return internalListKey;
 }
@@ -1243,50 +1243,43 @@ const char *VerseKey::getBookAbbrev() const {
     return refSys->getBook(((testament>1)?BMAX[0]:0)+book-1)->getPreferredAbbreviation();
 }
 
+void VerseKey::positionToTop() {
+    VerseKey const lb(getLowerBound());
+    testament = (lb.getTestament() || intros) ? lb.getTestament() : 1;
+    book      = (lb.getBook()      || intros) ? lb.getBook() : 1;
+    chapter   = (lb.getChapter()   || intros) ? lb.getChapter() : 1;
+    verse     = (lb.getVerse()     || intros) ? lb.getVerse() : 1;
+    suffix    = lb.getSuffix();
+    normalize(true);
+    popError();    // clear error from normalize
+}
+void VerseKey::positionToBottom() {
+    VerseKey const ub(getUpperBound());
+    testament = (ub.getTestament() || intros) ? ub.getTestament() : 1;
+    book      = (ub.getBook()      || intros) ? ub.getBook() : 1;
+    chapter   = (ub.getChapter()   || intros) ? ub.getChapter() : 1;
+    verse     = (ub.getVerse()     || intros) ? ub.getVerse() : 1;
+    suffix    = ub.getSuffix();
+    normalize(true);
+    popError();    // clear error from normalize
+}
 
-/******************************************************************************
- * VerseKey::setPosition(SW_POSITION)    - Positions this key
- *
- * ENT:    p    - position
- *
- * RET:    *this
- */
+void VerseKey::positionToMaxChapter() {
+    suffix    = 0;
+    verse     = 1;
+    chapter   = 1;
+    normalize();
+    chapter   = getChapterMax();
+    normalize(true);
+    popError();    // clear error from normalize
+}
 
-void VerseKey::setPosition(SW_POSITION p) {
-    switch (p) {
-    case TOP: {
-        VerseKey const lb(getLowerBound());
-        testament = (lb.getTestament() || intros) ? lb.getTestament() : 1;
-        book      = (lb.getBook()      || intros) ? lb.getBook() : 1;
-        chapter   = (lb.getChapter()   || intros) ? lb.getChapter() : 1;
-        verse     = (lb.getVerse()     || intros) ? lb.getVerse() : 1;
-        suffix    = lb.getSuffix();
-        break;
-    }
-    case BOTTOM: {
-        VerseKey const ub(getUpperBound());
-        testament = (ub.getTestament() || intros) ? ub.getTestament() : 1;
-        book      = (ub.getBook()      || intros) ? ub.getBook() : 1;
-        chapter   = (ub.getChapter()   || intros) ? ub.getChapter() : 1;
-        verse     = (ub.getVerse()     || intros) ? ub.getVerse() : 1;
-        suffix    = ub.getSuffix();
-        break;
-    }
-    case MAXVERSE:
-        suffix    = 0;
-        verse     = 1;
-        normalize();
-        verse     = getVerseMax();
-        suffix    = 0;
-        break;
-    case MAXCHAPTER:
-        suffix    = 0;
-        verse     = 1;
-        chapter   = 1;
-        normalize();
-        chapter   = getChapterMax();
-        break;
-    }
+void VerseKey::positionToMaxVerse() {
+    suffix    = 0;
+    verse     = 1;
+    normalize();
+    verse     = getVerseMax();
+    suffix    = 0;
     normalize(true);
     popError();    // clear error from normalize
 }

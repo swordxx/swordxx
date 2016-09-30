@@ -36,7 +36,6 @@ using swordxx::VerseKey;
 using swordxx::ModMap;
 using swordxx::SWKey;
 using swordxx::SWModule;
-using swordxx::SW_POSITION;
 
 int main(int argc, char **argv) {
     if (argc < 2) {
@@ -68,7 +67,7 @@ int main(int argc, char **argv) {
 
     vkey->setIntros(false);    // turn on mod/testmnt/book/chap headings
 
-    (*mod) = swordxx::TOP;
+    (*mod) = swordxx::Position::Top;
 
     while (!mod->popError()) {
         if (vkey->getVerse()) {

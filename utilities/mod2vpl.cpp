@@ -36,7 +36,6 @@ using swordxx::SWMgr;
 using swordxx::VerseKey;
 using swordxx::SWModule;
 using swordxx::SWKey;
-using swordxx::SW_POSITION;
 using swordxx::ModMap;
 
 void cleanbuf(char *buf) {
@@ -91,7 +90,7 @@ int main(int argc, char **argv) {
 
     vkey->setIntros(true);    // turn on mod/testmnt/book/chap headings
 
-    (*mod) = swordxx::TOP;
+    (*mod) = swordxx::Position::Top;
 
     while (!mod->popError()) {
         buffer = new char [ mod->renderText().length() + 1 ];
