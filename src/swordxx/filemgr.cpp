@@ -87,26 +87,18 @@ int FileMgr::IWRITE = S_IWRITE;
 
 
 // ---------------- statics -----------------
-FileMgr *FileMgr::systemFileMgr = nullptr;
-
-class __staticsystemFileMgr {
-public:
-    __staticsystemFileMgr() { }
-    ~__staticsystemFileMgr() { delete FileMgr::systemFileMgr; }
-} _staticsystemFileMgr;
-
+std::unique_ptr<FileMgr> FileMgr::systemFileMgr;
 
 FileMgr *FileMgr::getSystemFileMgr() {
     if (!systemFileMgr)
-        systemFileMgr = new FileMgr();
+        systemFileMgr.reset(new FileMgr());
 
-    return systemFileMgr;
+    return systemFileMgr.get();
 }
 
 
 void FileMgr::setSystemFileMgr(FileMgr *newFileMgr) {
-    delete systemFileMgr;
-    systemFileMgr = newFileMgr;
+    systemFileMgr.reset(newFileMgr);
 }
 
 // --------------- end statics --------------

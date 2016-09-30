@@ -26,6 +26,7 @@
 #include <string>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <memory>
 #include "defs.h"
 
 
@@ -85,12 +86,11 @@ public:
 class SWDLLEXPORT FileMgr {
 
     friend class FileDesc;
-    friend class __staticsystemFileMgr;
 
     FileDesc *files;
     int sysOpen(FileDesc * file);
 protected:
-    static FileMgr *systemFileMgr;
+    static std::unique_ptr<FileMgr> systemFileMgr;
 public:
     static int CREAT;
     static int APPEND;
