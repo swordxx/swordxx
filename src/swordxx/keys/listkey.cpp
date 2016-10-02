@@ -182,22 +182,25 @@ void ListKey::decrement(int step) {
 
 int ListKey::getCount() const { return m_array.size(); }
 
-char ListKey::setToElementAndTop(int ielement) {
+long ListKey::setToElementCheckBounds(int ielement) noexcept {
     auto const arraySize(m_array.size());
     if (ielement >= arraySize) {
-        m_arrayPos = (arraySize > 0u) ? arraySize - 1u : 0u;
         error = KEYERR_OUTOFBOUNDS;
+        return (arraySize > 0u) ? arraySize - 1u : 0u;
     } else {
         if (ielement < 0) {
-            m_arrayPos = 0;
             error = KEYERR_OUTOFBOUNDS;
+            return 0;
         } else {
-            m_arrayPos = ielement;
             error = 0;
+            return ielement;
         }
     }
+}
 
-    if (arraySize) {
+char ListKey::setToElementAndTop(int ielement) {
+    m_arrayPos = setToElementCheckBounds(ielement);
+    if (!m_array.empty()) {
         auto const & key = m_array[m_arrayPos];
         if (key->isBoundSet())
             key->positionToTop();
@@ -210,21 +213,8 @@ char ListKey::setToElementAndTop(int ielement) {
 }
 
 char ListKey::setToElementAndBottom(int ielement) {
-    auto const arraySize(m_array.size());
-    if (ielement >= arraySize) {
-        m_arrayPos = (arraySize > 0u) ? arraySize - 1u : 0u;
-        error = KEYERR_OUTOFBOUNDS;
-    } else {
-        if (ielement < 0) {
-            m_arrayPos = 0;
-            error = KEYERR_OUTOFBOUNDS;
-        } else {
-            m_arrayPos = ielement;
-            error = 0;
-        }
-    }
-
-    if (arraySize) {
+    m_arrayPos = setToElementCheckBounds(ielement);
+    if (!m_array.empty()) {
         auto const & key = m_array[m_arrayPos];
         if (key->isBoundSet())
             key->positionToBottom();

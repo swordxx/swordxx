@@ -144,6 +144,11 @@ public:
 
     SWKEY_OPERATORS(ListKey)
     ListKey & operator =(const ListKey &key) { copyFrom(key); return *this; }
+
+private: /* Methods: */
+
+    long setToElementCheckBounds(int ielement) noexcept;
+
 };
 
 } /* namespace swordxx */
