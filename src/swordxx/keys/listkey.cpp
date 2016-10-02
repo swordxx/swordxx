@@ -341,7 +341,6 @@ void ListKey::setText(const char *ikey) {
     SWKey::setText(ikey);
 }
 
-// This sort impl sucks.  Let's change it to a quicksort or some other efficient algol
 void ListKey::sort() {
     std::sort(m_array.begin(),
               m_array.end(),
