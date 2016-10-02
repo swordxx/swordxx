@@ -27,7 +27,9 @@
 
 #include "../swkey.h"
 
+#include <limits>
 #include <memory>
+#include <type_traits>
 #include <vector>
 #include "../defs.h"
 
@@ -42,7 +44,7 @@ class SWDLLEXPORT ListKey : public SWKey {
 
 private:
 
-    long m_arrayPos = 0;
+    std::size_t m_arrayPos = 0;
     std::vector<std::unique_ptr<SWKey> > m_array;
 
 public:
@@ -128,7 +130,7 @@ public:
     void increment(int step = 1) override;
 
     bool isTraversable() const override { return true; }
-    long getIndex() const override { return m_arrayPos; }
+    long getIndex() const override;
     std::string getRangeText() const override;
     std::string getOSISRefRangeText() const override;
     char const * getShortText() const override;
@@ -137,7 +139,9 @@ public:
      * Returns the index for the new one given as as parameter.
      * The first parameter is the new index.
      */
-    void setIndex(long index)  override{ setToElement(index); }
+    void setIndex(long index) override
+    { setToElementAndTop_(setToElementCheckBounds(index)); }
+
     char const * getText() const override;
     void setText(char const * ikey) override;
     virtual void sort();
@@ -147,7 +151,22 @@ public:
 
 private: /* Methods: */
 
-    long setToElementCheckBounds(int ielement) noexcept;
+    char setToElementAndTop_(std::size_t const ielement);
+    char setToElementAndBottom_(std::size_t const ielement);
+
+    template <typename T>
+    std::size_t setToElementCheckBounds(T const ielement) noexcept {
+        static_assert(std::is_signed<T>::value, "");
+        if (ielement < 0) {
+            error = KEYERR_OUTOFBOUNDS;
+            return 0u;
+        }
+        static_assert(std::numeric_limits<T>::max()
+                      <= std::numeric_limits<std::size_t>::max(), "");
+        return setToElementCheckBounds_(static_cast<std::size_t>(ielement));
+    }
+
+    std::size_t setToElementCheckBounds_(std::size_t const ielement) noexcept;
 
 };
 

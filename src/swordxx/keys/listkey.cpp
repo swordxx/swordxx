@@ -25,6 +25,7 @@
 #include "listkey.h"
 
 #include <algorithm>
+#include <cassert>
 #include <cstdlib>
 #include <cstring>
 #include "../utilstr.h"
@@ -92,7 +93,7 @@ void ListKey::copyFrom(ListKey const & rhs) {
                    newArray.begin(),
                    [](auto const & key)
                    { return std::unique_ptr<SWKey>(key->clone()); });
-    setToElement(0);
+    setToElementAndTop_(0u);
     clear();
     m_array = std::move(newArray);
 }
@@ -104,7 +105,7 @@ void ListKey::copyFrom(ListKey const & rhs) {
 
 void ListKey::add(SWKey const & ikey) {
     m_array.emplace_back(ikey.clone());
-    setToElement(m_array.size() - 1u);
+    setToElementAndTop_(m_array.size() - 1u);
 }
 
 
@@ -117,9 +118,16 @@ void ListKey::add(SWKey const & ikey) {
  * RET:    *this
  */
 
-void ListKey::positionToTop() { setToElementAndTop(0); }
+void ListKey::positionToTop() { setToElementAndTop_(0u); }
 
-void ListKey::positionToBottom() { setToElementAndBottom(m_array.size() - 1u); }
+void ListKey::positionToBottom() {
+    if (m_array.empty()) {
+        error = KEYERR_OUTOFBOUNDS;
+        setToElementAndBottom_(0u);
+    } else {
+        setToElementAndBottom_(m_array.size() - 1u);
+    }
+}
 
 
 /******************************************************************************
@@ -138,7 +146,7 @@ void ListKey::increment(int step) {
             if (key->isBoundSet())
                 key->increment();
             if (key->popError() || !key->isBoundSet()) {
-                setToElementAndTop(m_arrayPos + 1);
+                setToElementAndTop_(setToElementCheckBounds_(m_arrayPos + 1u));
             } else {
                 SWKey::setText(key->getText());
             }
@@ -160,12 +168,17 @@ void ListKey::decrement(int step) {
     }
     popError();        // clear error
     for(; step && !popError(); step--) {
-        if (!m_array.empty() && m_arrayPos > -1) {
+        if (!m_array.empty()) {
             auto const & key = m_array[m_arrayPos];
             if (key->isBoundSet())
                 key->decrement();
             if (key->popError() || !key->isBoundSet()) {
-                setToElementAndBottom(m_arrayPos - 1);
+                if (!m_arrayPos) {
+                    error = KEYERR_OUTOFBOUNDS;
+                    setToElementAndBottom_(0u);
+                } else {
+                    setToElementAndBottom_(m_arrayPos - 1u);
+                }
             } else {
                 SWKey::setText(key->getText());
             }
@@ -175,6 +188,7 @@ void ListKey::decrement(int step) {
     }
 }
 
+long ListKey::getIndex() const { return m_arrayPos; }
 
 /******************************************************************************
  * ListKey::getCount    - Returns number of elements in list
@@ -182,11 +196,9 @@ void ListKey::decrement(int step) {
 
 int ListKey::getCount() const { return m_array.size(); }
 
-long ListKey::setToElementCheckBounds(int ielement) noexcept {
-    if (ielement < 0) {
-        error = KEYERR_OUTOFBOUNDS;
-        return 0;
-    }
+std::size_t ListKey::setToElementCheckBounds_(std::size_t const ielement)
+        noexcept
+{
     auto const arraySize(m_array.size());
     if (ielement >= arraySize) {
         error = KEYERR_OUTOFBOUNDS;
@@ -196,9 +208,13 @@ long ListKey::setToElementCheckBounds(int ielement) noexcept {
     return ielement;
 }
 
-char ListKey::setToElementAndTop(int ielement) {
-    m_arrayPos = setToElementCheckBounds(ielement);
+char ListKey::setToElementAndTop(int ielement)
+{ return setToElementAndTop_(setToElementCheckBounds(ielement)); }
+
+char ListKey::setToElementAndTop_(std::size_t const ielement) {
+    m_arrayPos = ielement;
     if (!m_array.empty()) {
+        assert(m_arrayPos < m_array.size());
         auto const & key = m_array[m_arrayPos];
         if (key->isBoundSet())
             key->positionToTop();
@@ -210,9 +226,13 @@ char ListKey::setToElementAndTop(int ielement) {
     return error;
 }
 
-char ListKey::setToElementAndBottom(int ielement) {
-    m_arrayPos = setToElementCheckBounds(ielement);
+char ListKey::setToElementAndBottom(int ielement)
+{ return setToElementAndBottom_(setToElementCheckBounds(ielement)); }
+
+char ListKey::setToElementAndBottom_(std::size_t const ielement) {
+    m_arrayPos = ielement;
     if (!m_array.empty()) {
+        assert(m_arrayPos < m_array.size());
         auto const & key = m_array[m_arrayPos];
         if (key->isBoundSet())
             key->positionToBottom();
@@ -234,10 +254,11 @@ char ListKey::setToElementAndBottom(int ielement) {
  */
 
 const SWKey *ListKey::getElement(int pos) const {
-    if (pos < 0)
-        pos = m_arrayPos;
-
-    return (pos >= m_array.size()) ? nullptr : m_array[pos].get();
+    static_assert(std::numeric_limits<int>::max()
+                  <= std::numeric_limits<std::size_t>::max(), "");
+    std::size_t const p =
+            (pos < 0) ? m_arrayPos : static_cast<std::size_t>(pos);
+    return (p >= m_array.size()) ? nullptr : m_array[p].get();
 }
 
 SWKey *ListKey::getElement(int pos) {
@@ -252,9 +273,18 @@ SWKey *ListKey::getElement(int pos) {
  */
 
 void ListKey::remove() {
-    if ((m_arrayPos > -1) && (m_arrayPos < m_array.size())) {
-        m_array.erase(m_array.begin() + m_arrayPos);
-        setToElement(m_arrayPos ? m_arrayPos - 1 : 0);
+    if (m_arrayPos < m_array.size()) {
+        auto it(m_array.begin());
+        auto toIncrease(m_arrayPos);
+        using DiffT = decltype(m_array)::difference_type;
+        while (toIncrease > std::numeric_limits<DiffT>::max()) {
+            it += std::numeric_limits<DiffT>::max();
+            toIncrease -= std::numeric_limits<DiffT>::max();
+        }
+        m_array.erase(it + static_cast<DiffT>(toIncrease));
+        setToElementAndTop_(
+                    setToElementCheckBounds_(
+                        m_arrayPos ? m_arrayPos - 1u : 0u));
     }
 }
 
