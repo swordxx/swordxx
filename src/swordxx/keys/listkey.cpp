@@ -183,19 +183,17 @@ void ListKey::decrement(int step) {
 int ListKey::getCount() const { return m_array.size(); }
 
 long ListKey::setToElementCheckBounds(int ielement) noexcept {
+    if (ielement < 0) {
+        error = KEYERR_OUTOFBOUNDS;
+        return 0;
+    }
     auto const arraySize(m_array.size());
     if (ielement >= arraySize) {
         error = KEYERR_OUTOFBOUNDS;
         return (arraySize > 0u) ? arraySize - 1u : 0u;
-    } else {
-        if (ielement < 0) {
-            error = KEYERR_OUTOFBOUNDS;
-            return 0;
-        } else {
-            error = 0;
-            return ielement;
-        }
     }
+    error = 0;
+    return ielement;
 }
 
 char ListKey::setToElementAndTop(int ielement) {
