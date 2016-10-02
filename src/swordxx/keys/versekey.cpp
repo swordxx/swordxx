@@ -249,11 +249,11 @@ VerseKey::VerseKey(const char *min, const char *max, const char *v11n) : SWKey()
     init(v11n);
     ListKey tmpListKey = parseVerseList(min);
     if (tmpListKey.getCount())
-        setLowerBound(*static_cast<VerseKey *>(tmpListKey.getElement(0)));
+        setLowerBound(*static_cast<VerseKey *>(tmpListKey.getElement(0u)));
     tmpListKey = parseVerseList(max, min, true);
     if (tmpListKey.getCount()) {
         VerseKey * const newElement =
-                static_cast<VerseKey *>(tmpListKey.getElement(0));
+                static_cast<VerseKey *>(tmpListKey.getElement(0u));
         setUpperBound((newElement->isBoundSet())?newElement->getUpperBound():*newElement);
     }
     positionToTop();
@@ -316,7 +316,7 @@ char VerseKey::parse(bool checkAutoNormalize)
         // pass our own copy of keytext as keytext memory may be freshed during parse
         ListKey tmpListKey = parseVerseList(keytext);
         if (tmpListKey.getCount()) {
-            this->positionFrom(*tmpListKey.getElement(0));
+            this->positionFrom(*tmpListKey.getElement(0u));
             error = this->error;
         } else error = 1;
     }
@@ -1828,7 +1828,7 @@ std::string VerseKey::convertToOSIS(const char *inRef, const SWKey *lastKnownKey
                                                 lastKnownKey->getText(),
                                                 true);
     const char *startFrag = inRef;
-    for (int i = 0; i < verses.getCount(); i++) {
+    for (std::size_t i = 0u; i < verses.getCount(); ++i) {
         SWKey *element = verses.getElement(i);
 //        VerseKey *element = SWDYNAMIC_CAST(VerseKey, verses.GetElement(i));
         std::string buf;

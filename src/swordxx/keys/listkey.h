@@ -70,7 +70,7 @@ public:
     /** Returns number of key elements in list
      * @return number of key elements in list
      */
-    virtual int getCount() const;
+    virtual std::size_t getCount() const;
 
     /** Removes current element from list
      */
@@ -102,8 +102,10 @@ public:
      * @param pos element number to get (or default current)
      * @return Key or null on error
      */
-    virtual SWKey *getElement(int pos = -1);
-    virtual const SWKey *getElement(int pos = -1) const;
+    SWKey * getElement() { return getElement(m_arrayPos); }
+    SWKey const * getElement() const { return getElement(m_arrayPos); }
+    SWKey * getElement(std::size_t const pos);
+    SWKey const * getElement(std::size_t const pos) const;
 
     /** Adds an element to the list
      * @param ikey the element to add

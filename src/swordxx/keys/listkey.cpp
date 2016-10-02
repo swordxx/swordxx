@@ -194,7 +194,7 @@ long ListKey::getIndex() const { return m_arrayPos; }
  * ListKey::getCount    - Returns number of elements in list
  */
 
-int ListKey::getCount() const { return m_array.size(); }
+std::size_t ListKey::getCount() const { return m_array.size(); }
 
 std::size_t ListKey::setToElementCheckBounds_(std::size_t const ielement)
         noexcept
@@ -253,15 +253,10 @@ char ListKey::setToElementAndBottom_(std::size_t const ielement) {
  * RET:    Key or null on error
  */
 
-const SWKey *ListKey::getElement(int pos) const {
-    static_assert(std::numeric_limits<int>::max()
-                  <= std::numeric_limits<std::size_t>::max(), "");
-    std::size_t const p =
-            (pos < 0) ? m_arrayPos : static_cast<std::size_t>(pos);
-    return (p >= m_array.size()) ? nullptr : m_array[p].get();
-}
+SWKey const * ListKey::getElement(std::size_t const pos) const
+{ return (pos >= m_array.size()) ? nullptr : m_array[pos].get(); }
 
-SWKey *ListKey::getElement(int pos) {
+SWKey * ListKey::getElement(std::size_t const pos) {
     const ListKey &self = *this;
     return const_cast<SWKey *>(self.getElement(pos));
 }

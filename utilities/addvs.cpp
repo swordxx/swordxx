@@ -95,10 +95,10 @@ int main(int argc, char **argv) {
     }
     else {
       ListKey listkey = vkey->parseVerseList(argv[3], "Gen1:1", true);
-      int i;
+      std::size_t i;
       bool havefirst = false;
       VerseKey firstverse;
-      for (i = 0; i < listkey.getCount(); i++) {
+      for (i = 0u; i < listkey.getCount(); ++i) {
     if (VerseKey const * const element =
         dynamic_cast<VerseKey const *>(listkey.getElement(i)))
     {

@@ -820,15 +820,15 @@ bool handleToken(std::string &text, XMLTag token) {
                 // Use the last verse seen (i.e. the currentVerse) as the basis for recovering from bad parsing.
                 // This should never happen if the references are valid OSIS references
                 ListKey verseKeys = currentVerse.parseVerseList(keyVal.c_str(), currentVerse.getText(), true);
-                int memberKeyCount = verseKeys.getCount();
+                auto memberKeyCount(verseKeys.getCount());
                 if (memberKeyCount) {
-                    currentVerse = verseKeys.getElement(0);
+                    currentVerse = verseKeys.getElement(0u);
                     // See if this osisID or annotateRef refers to more than one verse.
                     // If it does, save it until all verses have been seen.
                     // At that point we will output links.
                     // This can be done by incrementing, which will produce an error
                     // if there is only one verse.
-                    if (memberKeyCount > 1) {
+                    if (memberKeyCount > 1u) {
                         verseKeys.positionToTop();
                         verseKeys.increment(1);
                         if (!verseKeys.popError()) {
