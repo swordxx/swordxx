@@ -325,7 +325,7 @@ void ListKey::setText(const char *ikey) {
     }
     if (m_arrayPos >= arraySize) {
         error = KEYERR_OUTOFBOUNDS;
-        m_arrayPos = arraySize - 1u;
+        m_arrayPos = arraySize ? arraySize - 1u : 0u;
     }
 
     SWKey::setText(ikey);
