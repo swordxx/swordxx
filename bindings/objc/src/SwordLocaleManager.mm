@@ -49,10 +49,10 @@
         sword::SWBuf locale;
         for(it = localeList.begin(); it != localeList.end(); ++it) {
             locale = *it;
-            NSString *swLoc = [NSString stringWithCString:locale.c_str() encoding:NSUTF8StringEncoding];
-            if([swLoc hasPrefix:loc]) {
+            NSString *swLoc = [NSString stringWithUTF8String:locale.c_str()];
+            if([loc hasPrefix:swLoc]) {
                 haveLocale = YES;
-                lang = loc;
+                lang = swLoc;
                 break;
             }
         }        
@@ -61,6 +61,14 @@
     if(haveLocale) {
         lManager->setDefaultLocaleName([lang UTF8String]);    
     }
+}
+
+- (NSString *)getDefaultLocaleName {
+    sword::LocaleMgr *lManager = sword::LocaleMgr::getSystemLocaleMgr();
+    
+    const char *localeName = lManager->getDefaultLocaleName();
+    if(localeName == NULL) return nil;
+    else return [NSString stringWithUTF8String:localeName];
 }
 
 @end

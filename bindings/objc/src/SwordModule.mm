@@ -273,7 +273,7 @@
 							unicodeChar = [unicodeCharString integerValue];
 							if (negative) unicodeChar = 65536 - unicodeChar;
 							i += j+2;
-							[retStr appendFormat:@"%C", unicodeChar];
+							[retStr appendFormat:@"%C", (unichar)unicodeChar];
 						}
 						@catch (NSException * e) {
 							[retStr appendFormat:@"%C", c];

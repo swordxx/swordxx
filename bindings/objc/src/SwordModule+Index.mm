@@ -36,7 +36,7 @@
 	results.sort();
 
 	NSMutableArray *retArray = [NSMutableArray array];
-	if(results.Count() > 0) {
+	if(results.getCount() > 0) {
 		while(!results.popError()) {
             NSString *keyString = [NSString stringWithUTF8String:results.getText()];
 			SwordModuleTextEntry *entry = [SwordModuleTextEntry textEntryForKey:keyString andText:nil];
