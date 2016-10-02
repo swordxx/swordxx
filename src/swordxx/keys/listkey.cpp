@@ -183,16 +183,16 @@ void ListKey::decrement(int step) {
 int ListKey::getCount() const { return m_array.size(); }
 
 char ListKey::setToElementAndTop(int ielement) {
-    m_arrayPos = ielement;
     auto const arraySize(m_array.size());
-    if (m_arrayPos >= arraySize) {
+    if (ielement >= arraySize) {
         m_arrayPos = (arraySize > 0u) ? arraySize - 1u : 0u;
         error = KEYERR_OUTOFBOUNDS;
     } else {
-        if (m_arrayPos < 0) {
+        if (ielement < 0) {
             m_arrayPos = 0;
             error = KEYERR_OUTOFBOUNDS;
         } else {
+            m_arrayPos = ielement;
             error = 0;
         }
     }
@@ -210,16 +210,16 @@ char ListKey::setToElementAndTop(int ielement) {
 }
 
 char ListKey::setToElementAndBottom(int ielement) {
-    m_arrayPos = ielement;
     auto const arraySize(m_array.size());
-    if (m_arrayPos >= arraySize) {
+    if (ielement >= arraySize) {
         m_arrayPos = (arraySize > 0u) ? arraySize - 1u : 0u;
         error = KEYERR_OUTOFBOUNDS;
     } else {
-        if (m_arrayPos < 0) {
+        if (ielement < 0) {
             m_arrayPos = 0;
             error = KEYERR_OUTOFBOUNDS;
         } else {
+            m_arrayPos = ielement;
             error = 0;
         }
     }
