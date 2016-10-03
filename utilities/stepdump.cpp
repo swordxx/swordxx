@@ -109,9 +109,16 @@ int main(int argc, char **argv) {
         exit (-2);
     }
 
-    readVersion(fd, &versionRecord);
-    readHeaderControlWordAreaText(fd, &buf);
+    try {
+        readVersion(fd, &versionRecord);
+        readHeaderControlWordAreaText(fd, &buf);
+    }
+    catch (std::runtime_error &e) {
+        std::cout << e.what () << '\n';
+        exit (-3);
+    }
     delete [] buf;
+    buf = nullptr;
 
 
     fileName = bookpath + "Viewable.idx";
@@ -119,19 +126,32 @@ int main(int argc, char **argv) {
 
     if (fdv < 1) {
         cerr << "error, couldn't open file: " << fileName << "\n";
-        exit (-3);
+        exit (-4);
     }
 
-    readVersion(fdv, &versionRecord);
-    readViewableHeader(fdv, &viewableHeaderRecord);
+    try {
+        readVersion(fdv, &versionRecord);
+        readViewableHeader(fdv, &viewableHeaderRecord);
+    }
+    catch (std::runtime_error &e) {
+        std::cout << e.what () << '\n';
+        exit (-5);
+    }
 
     ViewableBlock vb;
 
     cout << "\n\nReading special preface viewable BLOCK 0";
 
-    readViewableBlock(fdv, &vb);
-    readViewableBlockText(fd, &vb, &buf);
+    try {
+        readViewableBlock(fdv, &vb);
+        readViewableBlockText(fd, &vb, &buf);
+    }
+    catch (std::runtime_error &e) {
+        std::cout << e.what () << '\n';
+        exit (-6);
+    }
     delete [] buf;
+    buf = nullptr;
 
     int nonGlossBlocksCount = viewableHeaderRecord.viewableBlocksCount
                         - viewableHeaderRecord.glossBlocksCount;
@@ -143,6 +163,7 @@ int main(int argc, char **argv) {
         readViewableBlock(fdv, &vb);
         readViewableBlockText(fd, &vb, &buf);
         delete [] buf;
+        buf = nullptr;
     }
 
     cout << "\n\nReading " << viewableHeaderRecord.glossBlocksCount << " glossary viewable blocks";
@@ -151,6 +172,7 @@ int main(int argc, char **argv) {
         readViewableBlock(fdv, &vb);
         readViewableBlockText(fd, &vb, &buf);
         delete [] buf;
+        buf = nullptr;
     }
 
     close(fdv);
@@ -162,32 +184,45 @@ int main(int argc, char **argv) {
 
 void readVersion(int fd, Version *versionRecord) {
 
+    string readError = "Error reading Version Record.";
+
     cout << "\n\nReading Version Record (" << 16/*sizeof(struct Version)*/ << " bytes)\n\n";
 // DO NOT USE BECAUSE OF RECORD BYTE ALIGNMENT PROBLEMS
 //    read(fd, &versionRecord, sizeof(struct Version));
 
     cout << "Version Record Information\n";
-    read(fd, &(versionRecord->versionRecordSize), 2);
+    int rtn = read(fd, &(versionRecord->versionRecordSize), 2);
+    if (rtn <= 0) throw runtime_error(readError);
     cout << "\tversionRecordSize: " << versionRecord->versionRecordSize << "\n";
-    read(fd, &(versionRecord->publisherID), 2);
+    rtn = read(fd, &(versionRecord->publisherID), 2);
+    if (rtn <= 0) throw runtime_error(readError);
     cout << "\tpublisherID: " << versionRecord->publisherID << "\n";
-    read(fd, &(versionRecord->bookID), 2);
+    rtn = read(fd, &(versionRecord->bookID), 2);
+    if (rtn <= 0) throw runtime_error(readError);
     cout << "\tbookID: " << versionRecord->bookID << "\n";
-    read(fd, &(versionRecord->setID), 2);
+    rtn = read(fd, &(versionRecord->setID), 2);
+    if (rtn <= 0) throw runtime_error(readError);
     cout << "\tsetID: " << versionRecord->setID << "\n";
-    read(fd, &(versionRecord->conversionProgramVerMajor), 1);
+    rtn = read(fd, &(versionRecord->conversionProgramVerMajor), 1);
+    if (rtn <= 0) throw runtime_error(readError);
     cout << "\tconversionProgramVerMajor: " << (int)versionRecord->conversionProgramVerMajor << "\n";
-    read(fd, &(versionRecord->conversionProgramVerMinor), 1);
+    rtn = read(fd, &(versionRecord->conversionProgramVerMinor), 1);
+    if (rtn <= 0) throw runtime_error(readError);
     cout << "\tconversionProgramVerMinor: " << (int)versionRecord->conversionProgramVerMinor << "\n";
-    read(fd, &(versionRecord->leastCompatSTEPVerMajor), 1);
+    rtn = read(fd, &(versionRecord->leastCompatSTEPVerMajor), 1);
+    if (rtn <= 0) throw runtime_error(readError);
     cout << "\tleastCompatSTEPVerMajor: " << (int)versionRecord->leastCompatSTEPVerMajor << "\n";
-    read(fd, &(versionRecord->leastCompatSTEPVerMinor), 1);
+    rtn = read(fd, &(versionRecord->leastCompatSTEPVerMinor), 1);
+    if (rtn <= 0) throw runtime_error(readError);
     cout << "\tleastCompatSTEPVerMinor: " << (int)versionRecord->leastCompatSTEPVerMinor << "\n";
-    read(fd, &(versionRecord->encryptionType), 1);
+    rtn = read(fd, &(versionRecord->encryptionType), 1);
+    if (rtn <= 0) throw runtime_error(readError);
     cout << "\tencryptionType: " << (int)versionRecord->encryptionType << "\n";
-    read(fd, &(versionRecord->editionID), 1);
+    rtn = read(fd, &(versionRecord->editionID), 1);
+    if (rtn <= 0) throw runtime_error(readError);
     cout << "\teditionID: " << (int)versionRecord->editionID << "\n";
-    read(fd, &(versionRecord->modifiedBy), 2);
+    rtn = read(fd, &(versionRecord->modifiedBy), 2);
+    if (rtn <= 0) throw runtime_error(readError);
     cout << "\tmodifiedBy: " << versionRecord->modifiedBy << "\n";
 
     int skip = versionRecord->versionRecordSize - 16/*sizeof(struct Version*/;
@@ -195,13 +230,16 @@ void readVersion(int fd, Version *versionRecord) {
     if (skip) {
         cout << "\nSkipping " << skip << " unknown bytes.\n";
         char *skipbuf = new char[skip];
-        read(fd, skipbuf, skip);
+        rtn = read(fd, skipbuf, skip);
         delete [] skipbuf;
+        if (rtn <= 0) throw runtime_error(readError);
     }
 }
 
 
 void readViewableHeader(int fd, ViewableHeader *viewableHeaderRecord) {
+
+    string readError = "Error reading Viewable Header.";
 
     cout << "\n\nReading Viewable Header Record (" << 16/*sizeof(struct ViewableHeader)*/ << " bytes)\n\n";
 
@@ -209,19 +247,26 @@ void readViewableHeader(int fd, ViewableHeader *viewableHeaderRecord) {
 //    read(fd, &viewableHeaderRecord, sizeof(struct ViewableHeader));
 
     cout << "Viewable Header Record Information\n";
-    read(fd, &(viewableHeaderRecord->viewableHeaderRecordSize), 2);
+    int rtn = read(fd, &(viewableHeaderRecord->viewableHeaderRecordSize), 2);
+    if (rtn <= 0) throw runtime_error(readError);
     cout << "\tviewableHeaderRecordSize: " << viewableHeaderRecord->viewableHeaderRecordSize << "\n";
-    read(fd, &(viewableHeaderRecord->viewableBlocksCount), 4);
+    rtn = read(fd, &(viewableHeaderRecord->viewableBlocksCount), 4);
+    if (rtn <= 0) throw runtime_error(readError);
     cout << "\tviewableBlocksCount: " << viewableHeaderRecord->viewableBlocksCount << "\n";
-    read(fd, &(viewableHeaderRecord->glossBlocksCount), 4);
+    rtn = read(fd, &(viewableHeaderRecord->glossBlocksCount), 4);
+    if (rtn <= 0) throw runtime_error(readError);
     cout << "\tglossBlocksCount: " << viewableHeaderRecord->glossBlocksCount << "\n";
-    read(fd, &(viewableHeaderRecord->compressionType), 1);
+    rtn = read(fd, &(viewableHeaderRecord->compressionType), 1);
+    if (rtn <= 0) throw runtime_error(readError);
     cout << "\tcompressionType: " << (int)viewableHeaderRecord->compressionType << "(0 - none; 1 - LZSS)\n";
-    read(fd, &(viewableHeaderRecord->reserved1), 1);
+    rtn = read(fd, &(viewableHeaderRecord->reserved1), 1);
+    if (rtn <= 0) throw runtime_error(readError);
     cout << "\treserved1: " << (int)viewableHeaderRecord->reserved1 << "\n";
-    read(fd, &(viewableHeaderRecord->blockEntriesSize), 2);
+    rtn = read(fd, &(viewableHeaderRecord->blockEntriesSize), 2);
+    if (rtn <= 0) throw runtime_error(readError);
     cout << "\tblockEntriesSize: " << viewableHeaderRecord->blockEntriesSize << "\n";
-    read(fd, &(viewableHeaderRecord->reserved2), 2);
+    rtn = read(fd, &(viewableHeaderRecord->reserved2), 2);
+    if (rtn <= 0) throw runtime_error(readError);
     cout << "\treserved2: " << viewableHeaderRecord->reserved2 << "\n";
 
     int skip = viewableHeaderRecord->viewableHeaderRecordSize - 16/*sizeof(struct ViewableHeader)*/;
@@ -229,18 +274,22 @@ void readViewableHeader(int fd, ViewableHeader *viewableHeaderRecord) {
     if (skip) {
         cout << "\nSkipping " << skip << " unknown bytes.\n";
         char *skipbuf = new char[skip];
-        read(fd, skipbuf, skip);
+        rtn = read(fd, skipbuf, skip);
         delete [] skipbuf;
+        if (rtn <= 0) throw runtime_error(readError);
     }
 }
 
 
 void readViewableBlockText(int fd, ViewableBlock *vb, char **buf) {
+    string readError = "Error reading Viewable Block Text.";
+
     unsigned long size = vb->size;
 
     *buf = new char [ ((vb->size > vb->uncompressedSize) ? vb->size : vb->uncompressedSize) + 1 ];
     lseek(fd, vb->offset, SEEK_SET);
-    read(fd, *buf, vb->size);
+    int rtn = read(fd, *buf, vb->size);
+    if (rtn <= 0) throw runtime_error(readError);
 
     compress->zBuf(&size, *buf);
     strcpy(*buf, compress->Buf());
@@ -250,6 +299,7 @@ void readViewableBlockText(int fd, ViewableBlock *vb, char **buf) {
 
 
 void readViewableBlock(int fd, ViewableBlock *vb) {
+    string readError = "Error reading Viewable Block.";
 
     cout << "\n\nReading Viewable Block (" << 12/*sizeof(struct ViewableHeader)*/ << " bytes)\n\n";
 
@@ -257,23 +307,30 @@ void readViewableBlock(int fd, ViewableBlock *vb) {
 //    read(fd, &vb, sizeof(struct ViewableBlock));
 
     cout << "Viewable Block Information\n";
-    read(fd, &(vb->offset), 4);
+    int rtn = read(fd, &(vb->offset), 4);
+    if (rtn <= 0) throw runtime_error(readError);
     cout << "\toffset: " << vb->offset << "\n";
-    read(fd, &(vb->uncompressedSize), 4);
+    rtn = read(fd, &(vb->uncompressedSize), 4);
+    if (rtn <= 0) throw runtime_error(readError);
     cout << "\tuncompressedSize: " << vb->uncompressedSize << "\n";
-    read(fd, &(vb->size), 4);
+    rtn = read(fd, &(vb->size), 4);
+    if (rtn <= 0) throw runtime_error(readError);
     cout << "\tsize: " << vb->size << "\n";
 }
 
 
 void readHeaderControlWordAreaText(int fd, char **buf) {
+    string readError = "Error reading Control Word Area.";
+
     long headerControlWordAreaSize;
-    read(fd, &headerControlWordAreaSize, 4);
+    int rtn = read(fd, &headerControlWordAreaSize, 4);
+    if (rtn <= 0) throw runtime_error(readError);
     cout << "Reading Header Control Word Area (" << headerControlWordAreaSize << " bytes)\n\n";
 
     *buf = new char [headerControlWordAreaSize + 1];
 
-    read(fd, *buf, headerControlWordAreaSize);
+    rtn = read(fd, *buf, headerControlWordAreaSize);
+    if (rtn <= 0) throw runtime_error(readError);
     (*buf)[headerControlWordAreaSize] = 0;
 
     cout << "headerControlWordArea:\n" << *buf << "\n";
