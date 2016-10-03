@@ -40,7 +40,7 @@ SWKey::LocaleCache   SWKey::localeCache;
  */
 
 SWKey::SWKey(const char *ikey)
-    : m_keyText(std::make_unique<std::string>(ikey))
+    : m_keyText(std::make_unique<std::string>(ikey ? ikey : ""))
 {
     init();
     index     = 0;
