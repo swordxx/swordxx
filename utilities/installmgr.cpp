@@ -84,9 +84,9 @@ bool isUserDisclaimerConfirmed() const override {
         cout << "then type yes at the prompt\n\n";
         cout << "enable? [no] ";
 
-        char prompt[10];
-        fgets(prompt, 9, stdin);
-        confirmed = (!strcmp(prompt, "yes\n"));
+        std::string prompt;
+        std::getline(cin , prompt);
+        confirmed = prompt == "yes";
         cout << "\n";
     }
     return confirmed;
