@@ -42,7 +42,7 @@ namespace swordxx {
 ListKey::ListKey(char const * const ikey)
     : SWKey(ikey)
 {
-    boundSet = true;
+    m_boundSet = true;
 }
 
 
@@ -61,7 +61,7 @@ ListKey::ListKey(ListKey const & copy)
         clear();
         throw;
     }
-    boundSet = true;
+    m_boundSet = true;
 }
 
 SWKey * ListKey::clone() const { return new ListKey(*this); }
@@ -122,7 +122,7 @@ void ListKey::positionToTop() { setToElementAndTop_(0u); }
 
 void ListKey::positionToBottom() {
     if (m_array.empty()) {
-        error = KEYERR_OUTOFBOUNDS;
+        m_error = KEYERR_OUTOFBOUNDS;
         setToElementAndBottom_(0u);
     } else {
         setToElementAndBottom_(m_array.size() - 1u);
@@ -151,7 +151,7 @@ void ListKey::increment(int step) {
                 SWKey::setText(key->getText());
             }
         } else {
-            error = KEYERR_OUTOFBOUNDS;
+            m_error = KEYERR_OUTOFBOUNDS;
         }
     }
 }
@@ -174,7 +174,7 @@ void ListKey::decrement(int step) {
                 key->decrement();
             if (key->popError() || !key->isBoundSet()) {
                 if (!m_arrayPos) {
-                    error = KEYERR_OUTOFBOUNDS;
+                    m_error = KEYERR_OUTOFBOUNDS;
                     setToElementAndBottom_(0u);
                 } else {
                     setToElementAndBottom_(m_arrayPos - 1u);
@@ -183,7 +183,7 @@ void ListKey::decrement(int step) {
                 SWKey::setText(key->getText());
             }
         } else {
-            error = KEYERR_OUTOFBOUNDS;
+            m_error = KEYERR_OUTOFBOUNDS;
         }
     }
 }
@@ -201,10 +201,10 @@ std::size_t ListKey::setToElementCheckBounds_(std::size_t const ielement)
 {
     auto const arraySize(m_array.size());
     if (ielement >= arraySize) {
-        error = KEYERR_OUTOFBOUNDS;
+        m_error = KEYERR_OUTOFBOUNDS;
         return (arraySize > 0u) ? arraySize - 1u : 0u;
     }
-    error = 0;
+    m_error = 0;
     return ielement;
 }
 
@@ -223,7 +223,7 @@ char ListKey::setToElementAndTop_(std::size_t const ielement) {
         SWKey::setText("");
     }
 
-    return error;
+    return m_error;
 }
 
 char ListKey::setToElementAndBottom(int ielement)
@@ -241,7 +241,7 @@ char ListKey::setToElementAndBottom_(std::size_t const ielement) {
         SWKey::setText("");
     }
 
-    return error;
+    return m_error;
 }
 
 
@@ -347,7 +347,7 @@ void ListKey::setText(const char *ikey) {
         }
     }
     if (m_arrayPos >= arraySize) {
-        error = KEYERR_OUTOFBOUNDS;
+        m_error = KEYERR_OUTOFBOUNDS;
         m_arrayPos = arraySize ? arraySize - 1u : 0u;
     }
 

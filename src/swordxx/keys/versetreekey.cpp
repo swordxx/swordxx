@@ -127,57 +127,57 @@ VerseTreeKey::~VerseTreeKey() {
 
 void VerseTreeKey::decrement(int /* steps */) {
     int treeError = 0;
-    if (!error) lastGoodOffset = getTreeKey()->getOffset();
+    if (!m_error) lastGoodOffset = getTreeKey()->getOffset();
     do {
         treeKey->decrement();
         treeError = treeKey->popError();
     // iterate until 3 levels and no versekey parse errors
-    } while (!treeError && ((treeKey->getLevel() < 3) || error));
-    if (error && !treeError) {
-        int saveError = error;
+    } while (!treeError && ((treeKey->getLevel() < 3) || m_error));
+    if (m_error && !treeError) {
+        int saveError = m_error;
         increment();
-        error = saveError;
+        m_error = saveError;
     }
     if (treeError) {
         treeKey->setOffset(lastGoodOffset);
-        error = treeError;
+        m_error = treeError;
     }
     if (compare_(getUpperBound()) > 0) {
         positionFrom(getUpperBound());
-        error = KEYERR_OUTOFBOUNDS;
+        m_error = KEYERR_OUTOFBOUNDS;
     }
     if (compare_(getLowerBound()) < 0) {
         positionFrom(getLowerBound());
-        error = KEYERR_OUTOFBOUNDS;
+        m_error = KEYERR_OUTOFBOUNDS;
     }
 }
 
 
 void VerseTreeKey::increment(int /* steps */) {
     int treeError = 0;
-    if (!error) lastGoodOffset = getTreeKey()->getOffset();
+    if (!m_error) lastGoodOffset = getTreeKey()->getOffset();
     do {
         treeKey->increment();
         treeError = treeKey->popError();
     // iterate until 3 levels and no versekey parse errors
-    } while (!treeError && ((treeKey->getLevel() < 3) || error));
-    if (error && !treeError) {
-        int saveError = error;
+    } while (!treeError && ((treeKey->getLevel() < 3) || m_error));
+    if (m_error && !treeError) {
+        int saveError = m_error;
         decrement();
-        error = saveError;
+        m_error = saveError;
     }
     if (treeError) {
         treeKey->setOffset(lastGoodOffset);
-        error = treeError;
+        m_error = treeError;
     }
     // bounds
     if (compare_(getUpperBound()) > 0) {
         positionFrom(getUpperBound());
-        error = KEYERR_OUTOFBOUNDS;
+        m_error = KEYERR_OUTOFBOUNDS;
     }
     if (compare_(getLowerBound()) < 0) {
         positionFrom(getLowerBound());
-        error = KEYERR_OUTOFBOUNDS;
+        m_error = KEYERR_OUTOFBOUNDS;
     }
 }
 
@@ -220,7 +220,7 @@ void VerseTreeKey::positionChanged() {
 
 //        setText(path);
         if (saveError) {
-            error = saveError;
+            m_error = saveError;
         }
         tkey->setOffset(bookmark);
         tkey->setError(saveError);
@@ -255,7 +255,7 @@ TreeKey *VerseTreeKey::getTreeKey() {
 
 // can autonormalize yet (ever?)
 void VerseTreeKey::Normalize(char /* autocheck */) {
-    error = 0;
+    m_error = 0;
 }
 
 long VerseTreeKey::NewIndex() const {

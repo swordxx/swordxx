@@ -48,7 +48,7 @@ void VerseKey::init(const char *v11n) {
     m_intros = false;        // default display intros option is false
     m_upperBound = 0;
     m_lowerBound = 0;
-    boundSet = false;
+    m_boundSet = false;
     m_testament = 1;
     m_book = 1;
     m_chapter = 1;
@@ -130,16 +130,16 @@ void VerseKey::setFromOther(const VerseKey &ikey) {
         // check existence
         if (m_book == -1) {
             m_book = 1;
-            error = KEYERR_OUTOFBOUNDS;
+            m_error = KEYERR_OUTOFBOUNDS;
         }
         else if (m_refSys->getBook(m_book-1)->getChapterMax() < map_chapter) {
             map_chapter = m_refSys->getBook(m_book-1)->getChapterMax();
             map_verse = m_refSys->getBook(m_book-1)->getVerseMax(map_chapter);
-            error = KEYERR_OUTOFBOUNDS;
+            m_error = KEYERR_OUTOFBOUNDS;
         }
         else if (map_chapter > 0 && m_refSys->getBook(m_book-1)->getVerseMax(map_chapter) < map_verse) {
             map_verse = m_refSys->getBook(m_book-1)->getVerseMax(map_chapter);
-            error = KEYERR_OUTOFBOUNDS;
+            m_error = KEYERR_OUTOFBOUNDS;
         }
 
         // set values
@@ -167,7 +167,7 @@ void VerseKey::setFromOther(const VerseKey &ikey) {
 
 
 void VerseKey::positionFrom(const SWKey &ikey) {
-     error = 0;
+     m_error = 0;
         const SWKey *fromKey = &ikey;
     ListKey const * tryList = dynamic_cast<ListKey const *>(fromKey);
     if (tryList) {
@@ -188,11 +188,11 @@ void VerseKey::positionFrom(const SWKey &ikey) {
      // should we always perform bounds checks?  Tried but seems to cause infinite recursion
     if (compare_(getUpperBound()) > 0) {
         setFromOther(getUpperBound());
-        error = KEYERR_OUTOFBOUNDS;
+        m_error = KEYERR_OUTOFBOUNDS;
     }
     if (compare_(getLowerBound()) < 0) {
         setFromOther(getLowerBound());
-        error = KEYERR_OUTOFBOUNDS;
+        m_error = KEYERR_OUTOFBOUNDS;
     }
 }
 
@@ -317,7 +317,7 @@ char VerseKey::parse(bool checkAutoNormalize)
         ListKey tmpListKey = parseVerseList(keytext);
         if (tmpListKey.getCount()) {
             this->positionFrom(*tmpListKey.getElement(0u));
-            error = this->error;
+            error = this->m_error;
         } else error = 1;
     }
     if (checkAutoNormalize) {
@@ -325,7 +325,7 @@ char VerseKey::parse(bool checkAutoNormalize)
     }
     freshtext();
 
-    return (this->error) ? this->error : (this->error = error);
+    return (this->m_error) ? this->m_error : (this->m_error = error);
 }
 
 
@@ -750,7 +750,7 @@ terminate_range:
                     lastKey->positionToTop();
                     tmpListKey << *lastKey;
                     ((VerseKey *)tmpListKey.getElement())->setAutoNormalize(isAutoNormalize());
-                    tmpListKey.getElement()->userData = (uint64_t)(bufStart+(buf-iBuf.c_str()));
+                    tmpListKey.getElement()->m_userData = (uint64_t)(bufStart+(buf-iBuf.c_str()));
                 }
                 else {
                     if (!dash) {     // if last separator was not a dash just add
@@ -764,7 +764,7 @@ terminate_range:
                             *lastKey = Position::Top;
                             tmpListKey << *lastKey;
                             ((VerseKey *)tmpListKey.getElement())->setAutoNormalize(isAutoNormalize());
-                            tmpListKey.getElement()->userData = (uint64_t)(bufStart+(buf-iBuf.c_str()));
+                            tmpListKey.getElement()->m_userData = (uint64_t)(bufStart+(buf-iBuf.c_str()));
                         }
                         else {
                             bool f = false;
@@ -779,7 +779,7 @@ terminate_range:
                             *lastKey = Position::Top;
                             tmpListKey << *lastKey;
                             ((VerseKey *)tmpListKey.getElement())->setAutoNormalize(isAutoNormalize());
-                            tmpListKey.getElement()->userData = (uint64_t)(bufStart+(buf-iBuf.c_str()));
+                            tmpListKey.getElement()->m_userData = (uint64_t)(bufStart+(buf-iBuf.c_str()));
                         }
                     }
                     else    if (expandRange) {
@@ -794,7 +794,7 @@ terminate_range:
                             newElement->setUpperBound(*curKey);
                             *lastKey = *curKey;
                             *newElement = Position::Top;
-                            tmpListKey.getElement()->userData = (uint64_t)(bufStart+(buf-iBuf.c_str()));
+                            tmpListKey.getElement()->m_userData = (uint64_t)(bufStart+(buf-iBuf.c_str()));
                         }
                     }
                 }
@@ -1025,7 +1025,7 @@ terminate_range:
             lastKey->setLowerBound(*curKey);
             *lastKey = Position::Top;
             tmpListKey << *lastKey;
-            tmpListKey.getElement()->userData = (uint64_t)(bufStart+(buf-iBuf.c_str()));
+            tmpListKey.getElement()->m_userData = (uint64_t)(bufStart+(buf-iBuf.c_str()));
         }
         else {
             if (!dash) {     // if last separator was not a dash just add
@@ -1038,7 +1038,7 @@ terminate_range:
                     lastKey->setUpperBound(*curKey);
                     *lastKey = Position::Top;
                     tmpListKey << *lastKey;
-                    tmpListKey.getElement()->userData = (uint64_t)(bufStart+(buf-iBuf.c_str()));
+                    tmpListKey.getElement()->m_userData = (uint64_t)(bufStart+(buf-iBuf.c_str()));
                 }
                 else {
                     bool f = false;
@@ -1052,7 +1052,7 @@ terminate_range:
                     lastKey->setUpperBound(*curKey);
                     *lastKey = Position::Top;
                     tmpListKey << *lastKey;
-                    tmpListKey.getElement()->userData = (uint64_t)(bufStart+(buf-iBuf.c_str()));
+                    tmpListKey.getElement()->m_userData = (uint64_t)(bufStart+(buf-iBuf.c_str()));
                 }
             }
             else if (expandRange) {
@@ -1065,7 +1065,7 @@ terminate_range:
                         *curKey = Position::MaxVerse;
                     newElement->setUpperBound(*curKey);
                     *newElement = Position::Top;
-                    tmpListKey.getElement()->userData = (uint64_t)(bufStart+(buf-iBuf.c_str()));
+                    tmpListKey.getElement()->m_userData = (uint64_t)(bufStart+(buf-iBuf.c_str()));
                 }
             }
         }
@@ -1098,7 +1098,7 @@ void VerseKey::setLowerBound(const VerseKey &lb)
     // change allowing LowerBound then UpperBound logic to always flow
     // and set values without restrictions, as expected
     if (m_upperBound < m_lowerBound) m_upperBound = m_lowerBound;
-    boundSet = true;
+    m_boundSet = true;
 }
 
 
@@ -1119,7 +1119,7 @@ void VerseKey::setUpperBound(const VerseKey &ub)
 
     // see setLowerBound comment, above
     if (m_upperBound < m_lowerBound) m_upperBound = m_lowerBound;
-    boundSet = true;
+    m_boundSet = true;
 }
 
 
@@ -1173,7 +1173,7 @@ VerseKey VerseKey::getUpperBound() const
  * VerseKey::clearBounds    - clears bounds for this VerseKey
  */
 
-void VerseKey::clearBounds() { boundSet = false; }
+void VerseKey::clearBounds() { m_boundSet = false; }
 
 
 std::unique_ptr<VerseKey> VerseKey::initBounds() const {
@@ -1319,7 +1319,7 @@ void VerseKey::increment(int step) {
         ierror = popError();
     }
 
-    error = (ierror) ? ierror : error;
+    m_error = (ierror) ? ierror : m_error;
 }
 
 
@@ -1347,7 +1347,7 @@ void VerseKey::decrement(int step) {
     if ((ierror) && (!m_intros))
         ++(*this);
 
-    error = (ierror) ? ierror : error;
+    m_error = (ierror) ? ierror : m_error;
 }
 
 
@@ -1363,7 +1363,7 @@ void VerseKey::normalize(bool autocheck)
 
     if ((!autocheck || m_autonorm)    // only normalize if we were explicitely called or if autonorm is turned on
     ) {
-        error = 0;
+        m_error = 0;
 
         while ((m_testament < 3) && (m_testament > 0)) {
 
@@ -1425,11 +1425,11 @@ void VerseKey::normalize(bool autocheck)
             m_book      = m_BMAX[m_testament-1];
             m_chapter   = getChapterMax();
             m_verse     = getVerseMax();
-            error     = KEYERR_OUTOFBOUNDS;
+            m_error     = KEYERR_OUTOFBOUNDS;
         }
 
         if (m_testament < 1) {
-            error     = ((!m_intros) || (m_testament < 0) || (m_book < 0)) ? KEYERR_OUTOFBOUNDS : 0;
+            m_error     = ((!m_intros) || (m_testament < 0) || (m_book < 0)) ? KEYERR_OUTOFBOUNDS : 0;
             m_testament = ((m_intros) ? 0 : 1);
             m_book      = ((m_intros) ? 0 : 1);
             m_chapter   = ((m_intros) ? 0 : 1);
@@ -1439,11 +1439,11 @@ void VerseKey::normalize(bool autocheck)
             // should we always perform bounds checks?  Tried but seems to cause infinite recursion
         if (compare_(getUpperBound()) > 0) {
             positionFrom(getUpperBound());
-            error = KEYERR_OUTOFBOUNDS;
+            m_error = KEYERR_OUTOFBOUNDS;
         }
         if (compare_(getLowerBound()) < 0) {
             positionFrom(getLowerBound());
-            error = KEYERR_OUTOFBOUNDS;
+            m_error = KEYERR_OUTOFBOUNDS;
         }
     }
 }
@@ -1550,7 +1550,7 @@ void VerseKey::setBookName(const char *bname)
         else    m_testament = 1;
         setBook(bnum);
     }
-    else error = KEYERR_OUTOFBOUNDS;
+    else m_error = KEYERR_OUTOFBOUNDS;
 }
 
 
@@ -1679,12 +1679,12 @@ void VerseKey::setIndex(long iindex)
 {
     // assert we're sane
     if (iindex < 0) {
-        error = KEYERR_OUTOFBOUNDS;
+        m_error = KEYERR_OUTOFBOUNDS;
         return;
     }
 
     int b;
-    error = m_refSys->getVerseFromOffset(iindex, &b, &m_chapter, &m_verse);
+    m_error = m_refSys->getVerseFromOffset(iindex, &b, &m_chapter, &m_verse);
     m_book = (unsigned char)b;
     m_testament = 1;
     if (m_book > m_BMAX[0]) {
@@ -1706,11 +1706,11 @@ void VerseKey::checkBounds() {
     if (i > m_upperBound) {
         setIndex(m_upperBound);
         i = getIndex();
-        error = KEYERR_OUTOFBOUNDS;
+        m_error = KEYERR_OUTOFBOUNDS;
     }
     if (i < m_lowerBound) {
         setIndex(m_lowerBound);
-        error = KEYERR_OUTOFBOUNDS;
+        m_error = KEYERR_OUTOFBOUNDS;
     }
 }
 
@@ -1843,14 +1843,14 @@ std::string VerseKey::convertToOSIS(const char *inRef, const SWKey *lastKnownKey
             outRef += *startFrag;
             startFrag++;
         }
-        memmove(frag, startFrag, ((const char *)element->userData - startFrag) + 1);
-        frag[((const char *)element->userData - startFrag) + 1] = 0;
+        memmove(frag, startFrag, ((const char *)element->m_userData - startFrag) + 1);
+        frag[((const char *)element->m_userData - startFrag) + 1] = 0;
         int j;
         for (j = strlen(frag)-1; j && (strchr(" {}:;,()[].", frag[j])); j--);
         if (frag[j+1])
             strcpy(postJunk, frag+j+1);
         frag[j+1]=0;
-        startFrag += ((const char *)element->userData - startFrag) + 1;
+        startFrag += ((const char *)element->m_userData - startFrag) + 1;
         buf = "<reference osisRef=\"";
         buf += element->getOSISRefRangeText();
         buf += "\">";

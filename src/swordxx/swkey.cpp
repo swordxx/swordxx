@@ -31,7 +31,7 @@
 
 namespace swordxx {
 
-SWKey::LocaleCache   SWKey::localeCache;
+SWKey::LocaleCache   SWKey::m_localeCache;
 
 /******************************************************************************
  * SWKey Constructor - initializes instance of SWKey
@@ -43,27 +43,27 @@ SWKey::SWKey(const char *ikey)
     : m_keyText(std::make_unique<std::string>(ikey ? ikey : ""))
 {
     init();
-    index     = 0;
-    persist   = 0;
-    error     = 0;
-    userData  = 0;
+    m_index     = 0;
+    m_persist   = 0;
+    m_error     = 0;
+    m_userData  = 0;
 }
 
 SWKey::SWKey(SWKey const &k)
 {
     init();
-    stdstr(&localeName, k.localeName);
-    index     = k.index;
-    persist   = k.persist;
-    userData  = k.userData;
-    error     = k.error;
+    stdstr(&m_localeName, k.m_localeName);
+    m_index     = k.m_index;
+    m_persist   = k.m_persist;
+    m_userData  = k.m_userData;
+    m_error     = k.m_error;
     setText(k.getText());
 }
 
 void SWKey::init() {
-    boundSet = false;
-    locale = nullptr;
-    localeName = nullptr;
+    m_boundSet = false;
+    m_locale = nullptr;
+    m_localeName = nullptr;
     setLocale(LocaleMgr::getSystemLocaleMgr()->getDefaultLocaleName());
 }
 
@@ -77,7 +77,7 @@ SWKey *SWKey::clone() const
  */
 
 SWKey::~SWKey() {
-    delete [] localeName;
+    delete [] m_localeName;
 }
 
 
@@ -88,18 +88,18 @@ SWKey::~SWKey() {
  */
 
 SWLocale *SWKey::getPrivateLocale() const {
-    if (!locale) {
-        if ((!localeCache.name) || (strcmp(localeCache.name, localeName))) {
-            stdstr(&(localeCache.name), localeName);
+    if (!m_locale) {
+        if ((!m_localeCache.name) || (strcmp(m_localeCache.name, m_localeName))) {
+            stdstr(&(m_localeCache.name), m_localeName);
             // this line is the entire bit of work we're trying to avoid with the cache
             // worth it?  compare time examples/cmdline/search KJV "God love world" to
             // same with this method reduced to:
             // if (!local) local = ... (call below); return locale;
-            localeCache.locale = LocaleMgr::getSystemLocaleMgr()->getLocale(localeName);
+            m_localeCache.locale = LocaleMgr::getSystemLocaleMgr()->getLocale(m_localeName);
         }
-        locale = localeCache.locale;
+        m_locale = m_localeCache.locale;
     }
-    return locale;
+    return m_locale;
 }
 
 
@@ -185,7 +185,7 @@ void SWKey::positionToBottom() {}
  */
 
 void SWKey::increment(int) {
-    error = KEYERR_OUTOFBOUNDS;
+    m_error = KEYERR_OUTOFBOUNDS;
 }
 
 
@@ -198,7 +198,7 @@ void SWKey::increment(int) {
  */
 
 void SWKey::decrement(int) {
-    error = KEYERR_OUTOFBOUNDS;
+    m_error = KEYERR_OUTOFBOUNDS;
 }
 
 } /* namespace swordxx */

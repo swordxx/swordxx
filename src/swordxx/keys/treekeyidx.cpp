@@ -62,7 +62,7 @@ TreeKeyIdx::TreeKeyIdx(const char *idxPath, int fileMode) : currentNode() {
 
     if (!datfd) {
         SWLog::getSystemLog()->logError("%d", errno);
-        error = errno;
+        m_error = errno;
     }
     else {
         root();
@@ -118,7 +118,7 @@ void TreeKeyIdx::save() {
 
 
 void TreeKeyIdx::root() {
-    error = getTreeNodeFromIdxOffset(0, &currentNode);
+    m_error = getTreeNodeFromIdxOffset(0, &currentNode);
     positionChanged();
 }
 
@@ -136,7 +136,7 @@ int TreeKeyIdx::getLevel() {
 
 bool TreeKeyIdx::parent() {
     if (currentNode.parent > -1) {
-        error = getTreeNodeFromIdxOffset(currentNode.parent, &currentNode);
+        m_error = getTreeNodeFromIdxOffset(currentNode.parent, &currentNode);
         positionChanged();
         return true;
     }
@@ -146,7 +146,7 @@ bool TreeKeyIdx::parent() {
 
 bool TreeKeyIdx::firstChild() {
     if (currentNode.firstChild > -1) {
-        error = getTreeNodeFromIdxOffset(currentNode.firstChild, &currentNode);
+        m_error = getTreeNodeFromIdxOffset(currentNode.firstChild, &currentNode);
         positionChanged();
         return true;
     }
@@ -156,7 +156,7 @@ bool TreeKeyIdx::firstChild() {
 
 bool TreeKeyIdx::nextSibling() {
     if (currentNode.next > -1) {
-        error = getTreeNodeFromIdxOffset(currentNode.next, &currentNode);
+        m_error = getTreeNodeFromIdxOffset(currentNode.next, &currentNode);
         positionChanged();
         return true;
     }
@@ -174,7 +174,7 @@ bool TreeKeyIdx::previousSibling() {
             while ((iterator.next != target) && (iterator.next > -1))
                 getTreeNodeFromIdxOffset(iterator.next, &iterator);
             if (iterator.next > -1) {
-                error = getTreeNodeFromIdxOffset(iterator.offset, &currentNode);
+                m_error = getTreeNodeFromIdxOffset(iterator.offset, &currentNode);
                 positionChanged();
                 return true;
             }
@@ -404,7 +404,7 @@ unsigned long TreeKeyIdx::getOffset() const {
 }
 
 void TreeKeyIdx::setOffset(unsigned long offset) {
-    error = getTreeNodeFromIdxOffset(offset, &currentNode);
+    m_error = getTreeNodeFromIdxOffset(offset, &currentNode);
     positionChanged();
 }
 
@@ -514,11 +514,11 @@ void TreeKeyIdx::setText(const char *ikey) {
     root();
     while ((leaf.size()) && (!popError())) {
         bool ok, inChild = false;
-        error = KEYERR_OUTOFBOUNDS;
+        m_error = KEYERR_OUTOFBOUNDS;
         for (ok = firstChild(); ok; ok = nextSibling()) {
             inChild = true;
             if (leaf == getLocalName()) {
-                error = 0;
+                m_error = 0;
                 break;
             }
         }
@@ -529,11 +529,11 @@ void TreeKeyIdx::setText(const char *ikey) {
                 parent();
                 firstChild();
             }
-            error = KEYERR_OUTOFBOUNDS;
+            m_error = KEYERR_OUTOFBOUNDS;
         }
     }
     if (leaf.size())
-        error = KEYERR_OUTOFBOUNDS;
+        m_error = KEYERR_OUTOFBOUNDS;
     delete [] buf;
     unsnappedKeyText = ikey;
     positionChanged();
@@ -554,7 +554,7 @@ void TreeKeyIdx::positionToTop() {
 }
 
 void TreeKeyIdx::positionToBottom() {
-    error = getTreeNodeFromIdxOffset(idxfd->seek(-4, SEEK_END), &currentNode);
+    m_error = getTreeNodeFromIdxOffset(idxfd->seek(-4, SEEK_END), &currentNode);
     positionChanged();
     popError();    // clear error from normalize
 }
@@ -572,13 +572,13 @@ int TreeKeyIdx::compare(SWKey const & ikey) const noexcept {
 
 
 void TreeKeyIdx::decrement(int steps) {
-    error = getTreeNodeFromIdxOffset(currentNode.offset - (4*steps), &currentNode);
+    m_error = getTreeNodeFromIdxOffset(currentNode.offset - (4*steps), &currentNode);
     positionChanged();
 }
 
 void TreeKeyIdx::increment(int steps) {
-    error = getTreeNodeFromIdxOffset(currentNode.offset + (4*steps), &currentNode);
-    if (error) {
+    m_error = getTreeNodeFromIdxOffset(currentNode.offset + (4*steps), &currentNode);
+    if (m_error) {
 //        SWLog::getSystemLog()->logError("error: %d", error);
     }
     positionChanged();

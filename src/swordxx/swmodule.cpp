@@ -362,7 +362,7 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
                     }
                 }
                 listKey << *resultKey;
-                listKey.getElement()->userData = score;
+                listKey.getElement()->m_userData = score;
             }
             (*percent)(98, percentUserData);
         }

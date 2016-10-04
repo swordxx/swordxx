@@ -67,29 +67,29 @@ class SWDLLEXPORT SWKey {
             delete[] name;
         }
     };
-    static LocaleCache localeCache;
+    static LocaleCache m_localeCache;
     // for caching; don't use directly, call getPrivateLocale()
-    mutable SWLocale *locale;
+    mutable SWLocale * m_locale;
 
 
-    long index;
+    long m_index;
     void init();
 
 
 protected:
     std::unique_ptr<std::string> m_keyText;
-    bool boundSet;
-    bool persist;
-    char error;
+    bool m_boundSet;
+    bool m_persist;
+    char m_error;
 
-    char *localeName;
+    char * m_localeName;
     SWLocale *getPrivateLocale() const;
 
 
 public:
 
     // misc storage for whatever
-    uint64_t userData;
+    uint64_t m_userData;
 
     /** initializes instance of SWKey from a string
      * All keys can be reduced to a string representation which should be able
@@ -118,25 +118,25 @@ public:
      * otherwise just a copy will be used in the module.
      * @return 1 - persists in module; 0 - a copy is attempted
      */
-    inline bool isPersist() const noexcept { return persist; }
+    inline bool isPersist() const noexcept { return m_persist; }
 
     /** Sets whether this key should persist in any module to which it is set
      * otherwise just a copy will be used in the module.
      * @param ipersist value which to set persist;
      * @return 1 - persists in module; 0 - a copy is attempted
      */
-    inline void setPersist(bool ipersist) noexcept { persist = ipersist; }
+    inline void setPersist(bool ipersist) noexcept { m_persist = ipersist; }
 
     /** Gets and clears error status
      * @return error status
      */
     inline char popError() noexcept {
-        char const r = error;
-        error = 0;
+        char const r = m_error;
+        m_error = 0;
         return r;
     }
 
-    inline void setError(char const err) noexcept { error = err; }
+    inline void setError(char const err) noexcept { m_error = err; }
 
     /** Sets this SWKey with a character string
      * @param ikey string used to set this key
@@ -156,8 +156,8 @@ public:
     virtual std::string getRangeText() const;
     virtual std::string getOSISRefRangeText() const;
 
-    inline bool isBoundSet() const noexcept { return boundSet; }
-    inline void clearBound() noexcept { boundSet = false; }
+    inline bool isBoundSet() const noexcept { return m_boundSet; }
+    inline void clearBound() noexcept { m_boundSet = false; }
 
     /** Compares this key object to another SWKey object
      * @param ikey key to compare with this one
@@ -193,21 +193,21 @@ public:
      */
     virtual bool isTraversable() const { return false; }
 
-    char const * getLocale() const noexcept { return localeName; }
+    char const * getLocale() const noexcept { return m_localeName; }
 
     // this will force an on demand lookup of our locale:
     void setLocale(char const * name) {
-        stdstr(&localeName, name);
-        locale = nullptr;
+        stdstr(&m_localeName, name);
+        m_locale = nullptr;
     }
 
     /** Use this function to get an index position within a module.
      */
-    virtual long getIndex() const { return index; }
+    virtual long getIndex() const { return m_index; }
 
     /** See documentation for @ref Index()
      */
-    virtual void setIndex(long iindex) { index = iindex; }
+    virtual void setIndex(long iindex) { m_index = iindex; }
 
     SWKEY_OPERATORS(SWKey)
 

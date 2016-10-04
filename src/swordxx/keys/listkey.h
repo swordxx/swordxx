@@ -160,7 +160,7 @@ private: /* Methods: */
     std::size_t setToElementCheckBounds(T const ielement) noexcept {
         static_assert(std::is_signed<T>::value, "");
         if (ielement < 0) {
-            error = KEYERR_OUTOFBOUNDS;
+            m_error = KEYERR_OUTOFBOUNDS;
             return 0u;
         }
         static_assert(std::numeric_limits<T>::max()
