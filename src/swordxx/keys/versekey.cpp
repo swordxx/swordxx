@@ -44,7 +44,7 @@ namespace swordxx {
  */
 
 void VerseKey::init(const char *v11n) {
-    m_autonorm = 1;        // default auto normalization to true
+    m_autonorm = true;        // default auto normalization to true
     m_intros = false;        // default display intros option is false
     m_upperBound = 0;
     m_lowerBound = 0;
@@ -1607,7 +1607,7 @@ bool VerseKey::isAutoNormalize() const
 
 void VerseKey::setAutoNormalize(bool iautonorm)
 {
-    m_autonorm = iautonorm?1:0;
+    m_autonorm = iautonorm;
     normalize(true);
 }
 

@@ -54,11 +54,11 @@ class SWDLLEXPORT VerseKey : public SWKey {
 
     /** flag for auto normalization
     */
-    char m_autonorm;
+    bool m_autonorm;
 
     /** flag for intros on/off
     */
-    char m_intros;
+    bool m_intros;
 
     /** initializes this VerseKey()
     */
