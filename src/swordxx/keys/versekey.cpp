@@ -40,14 +40,6 @@
 namespace swordxx {
 
 /******************************************************************************
- * VerseKey::init - initializes instance of VerseKey
- */
-
-void VerseKey::init(const char *v11n) {
-    setVersificationSystem(v11n);
-}
-
-/******************************************************************************
  * VerseKey Constructor - initializes instance of VerseKey
  *
  * ENT:    ikey - base key (will take various forms of 'BOOK CH:VS'.  See
@@ -56,14 +48,14 @@ void VerseKey::init(const char *v11n) {
 
 VerseKey::VerseKey(const SWKey &ikey) : SWKey(ikey)
 {
-    init();
+    setVersificationSystem("KJV");
     copyFrom(ikey);
 }
 
 
 VerseKey::VerseKey(const SWKey *ikey) : SWKey(*ikey)
 {
-    init();
+    setVersificationSystem("KJV");
     if (ikey)
         copyFrom(*ikey);
 }
@@ -78,7 +70,7 @@ VerseKey::VerseKey(const SWKey *ikey) : SWKey(*ikey)
 
 VerseKey::VerseKey(const char *ikeyText) : SWKey(ikeyText)
 {
-    init();
+    setVersificationSystem("KJV");
     if (ikeyText)
         parse();
 }
@@ -86,7 +78,6 @@ VerseKey::VerseKey(const char *ikeyText) : SWKey(ikeyText)
 
 VerseKey::VerseKey(VerseKey const &k) : SWKey(k)
 {
-    init();
     copyFrom(k);
 }
 
@@ -234,7 +225,7 @@ void VerseKey::copyFrom(const SWKey &ikey) {
 
 VerseKey::VerseKey(const char *min, const char *max, const char *v11n) : SWKey()
 {
-    init(v11n);
+    setVersificationSystem(v11n);
     ListKey tmpListKey = parseVerseList(min);
     if (tmpListKey.getCount())
         setLowerBound(*static_cast<VerseKey *>(tmpListKey.getElement(0u)));

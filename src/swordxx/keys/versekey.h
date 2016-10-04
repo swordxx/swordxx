@@ -60,10 +60,6 @@ class SWDLLEXPORT VerseKey : public SWKey {
     */
     bool m_intros = false;
 
-    /** initializes this VerseKey()
-    */
-    void init(const char *v11n = "KJV");
-
     // bounds caching is mutable, thus const
     std::unique_ptr<VerseKey> initBounds() const;
 
