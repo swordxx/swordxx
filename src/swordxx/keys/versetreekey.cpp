@@ -198,23 +198,23 @@ void VerseTreeKey::positionChanged() {
         legs--;
 
         if ((legs < 2) && (!seg[0].length() || seg[0] == "/")) {        //"[ Module Heading ]";
-            testament = 0;
-            book      = 0;
-            chapter   = 0;
+            m_testament = 0;
+            m_book      = 0;
+            m_chapter   = 0;
             setVerse(0);
         }
         else if ((legs < 2)
             && ((!strncmp(seg[0].c_str(), "[ Testament ", 12)) &&        //"[ Testament n Heading ]";
                 (isdigit(seg[0][12])) &&
                 (!strcmp(seg[0].c_str()+13, " Heading ]")))) {
-            testament = (seg[0][12]-48);
-            book      = 0;
-            chapter   = 0;
+            m_testament = (seg[0][12]-48);
+            m_book      = 0;
+            m_chapter   = 0;
             setVerse(0);
         }    //path = "[ Module Heading ]";
         else {
             setBookName(seg[--legs].c_str());
-            chapter = (legs > 0) ? atoi(seg[--legs].c_str()) : 0;
+            m_chapter = (legs > 0) ? atoi(seg[--legs].c_str()) : 0;
             setVerse((legs > 0) ? atoi(seg[--legs].c_str()) : 0);
         }
 

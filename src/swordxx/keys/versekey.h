@@ -48,17 +48,17 @@ namespace swordxx {
  */
 class SWDLLEXPORT VerseKey : public SWKey {
 
-    ListKey internalListKey;
+    ListKey m_internalListKey;
 
-    const VersificationMgr::System *refSys;
+    const VersificationMgr::System *m_refSys;
 
     /** flag for auto normalization
     */
-    char autonorm;
+    char m_autonorm;
 
     /** flag for intros on/off
     */
-    char intros;
+    char m_intros;
 
     /** initializes this VerseKey()
     */
@@ -73,21 +73,21 @@ class SWDLLEXPORT VerseKey : public SWKey {
     void checkBounds();
 
     // internal upper/lower bounds optimizations
-    mutable long lowerBound, upperBound;    // if autonorms is on
+    mutable long m_lowerBound, m_upperBound;    // if autonorms is on
 
-    typedef struct { int test; int book; int chap; int verse; char suffix; } VerseComponents;
+    typedef struct VerseComponents { int test; int book; int chap; int verse; char suffix; } VerseComponents;
 
-    mutable VerseComponents lowerBoundComponents, upperBoundComponents;    // if autonorms is off, we can't optimize with index
+    mutable VerseComponents m_lowerBoundComponents, m_upperBoundComponents;    // if autonorms is off, we can't optimize with index
 
 protected:
 
     /** The Testament: 0 - Module Heading; 1 - Old; 2 - New
     */
-    signed char testament;
-    signed char book;
-    signed int chapter;
-    signed int verse;
-    signed char suffix;
+    signed char m_testament;
+    signed char m_book;
+    signed int m_chapter;
+    signed int m_verse;
+    signed char m_suffix;
 
     /************************************************************************
      * VerseKey::getBookFromAbbrev - Attempts to find a book no from a name or
@@ -114,7 +114,7 @@ public:
     static long ntbks[];
     static long ntcps[];
 #endif
-    int BMAX[2];
+    int m_BMAX[2];
 
     /**
     * VerseKey Constructor - initializes Instance of VerseKey
@@ -250,7 +250,7 @@ public:
     * @return value of book
     */
     char getBook() const;
-    int getBookMax() const { return BMAX[testament-1]; }
+    int getBookMax() const { return m_BMAX[m_testament-1]; }
 
     /** Gets chapter
     *

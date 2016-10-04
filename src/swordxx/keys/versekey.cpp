@@ -44,17 +44,17 @@ namespace swordxx {
  */
 
 void VerseKey::init(const char *v11n) {
-    autonorm = 1;        // default auto normalization to true
-    intros = false;        // default display intros option is false
-    upperBound = 0;
-    lowerBound = 0;
+    m_autonorm = 1;        // default auto normalization to true
+    m_intros = false;        // default display intros option is false
+    m_upperBound = 0;
+    m_lowerBound = 0;
     boundSet = false;
-    testament = 1;
-    book = 1;
-    chapter = 1;
-    verse = 1;
-    suffix = 0;
-    refSys = nullptr;
+    m_testament = 1;
+    m_book = 1;
+    m_chapter = 1;
+    m_verse = 1;
+    m_suffix = 0;
+    m_refSys = nullptr;
 
     setVersificationSystem(v11n);
 }
@@ -108,12 +108,12 @@ VerseKey::VerseKey(VerseKey const &k) : SWKey(k)
  */
 
 void VerseKey::setFromOther(const VerseKey &ikey) {
-    if (refSys == ikey.refSys) {
-        testament = ikey.getTestament();
-        book = ikey.getBook();
-        chapter = ikey.getChapter();
-        verse = ikey.getVerse();
-        suffix = ikey.getSuffix();
+    if (m_refSys == ikey.m_refSys) {
+        m_testament = ikey.getTestament();
+        m_book = ikey.getBook();
+        m_chapter = ikey.getChapter();
+        m_verse = ikey.getVerse();
+        m_suffix = ikey.getSuffix();
     }
     else {
         // map verse between systems
@@ -122,44 +122,44 @@ void VerseKey::setFromOther(const VerseKey &ikey) {
         int map_verse = ikey.getVerse();
         int map_range = map_verse;
 
-        ikey.refSys->translateVerse(refSys, &map_book, &map_chapter, &map_verse, &map_range);
+        ikey.m_refSys->translateVerse(m_refSys, &map_book, &map_chapter, &map_verse, &map_range);
         //printf("verse: %s.%i.%i-%i\n",map_book,map_chapter,map_verse,map_range);
 
-        book = refSys->getBookNumberByOSISName(map_book);
+        m_book = m_refSys->getBookNumberByOSISName(map_book);
 
         // check existence
-        if (book == -1) {
-            book = 1;
+        if (m_book == -1) {
+            m_book = 1;
             error = KEYERR_OUTOFBOUNDS;
         }
-        else if (refSys->getBook(book-1)->getChapterMax() < map_chapter) {
-            map_chapter = refSys->getBook(book-1)->getChapterMax();
-            map_verse = refSys->getBook(book-1)->getVerseMax(map_chapter);
+        else if (m_refSys->getBook(m_book-1)->getChapterMax() < map_chapter) {
+            map_chapter = m_refSys->getBook(m_book-1)->getChapterMax();
+            map_verse = m_refSys->getBook(m_book-1)->getVerseMax(map_chapter);
             error = KEYERR_OUTOFBOUNDS;
         }
-        else if (map_chapter > 0 && refSys->getBook(book-1)->getVerseMax(map_chapter) < map_verse) {
-            map_verse = refSys->getBook(book-1)->getVerseMax(map_chapter);
+        else if (map_chapter > 0 && m_refSys->getBook(m_book-1)->getVerseMax(map_chapter) < map_verse) {
+            map_verse = m_refSys->getBook(m_book-1)->getVerseMax(map_chapter);
             error = KEYERR_OUTOFBOUNDS;
         }
 
         // set values
-        if (book > BMAX[0])
-            book -= BMAX[0], testament = 2;
+        if (m_book > m_BMAX[0])
+            m_book -= m_BMAX[0], m_testament = 2;
         else
-            testament = 1;
+            m_testament = 1;
 
         //if (map_verse == 0) Headings(1);
 
-        chapter = map_chapter;
-        verse = map_verse;
-        suffix = ikey.getSuffix();
+        m_chapter = map_chapter;
+        m_verse = map_verse;
+        m_suffix = ikey.getSuffix();
 
         if (map_verse < map_range) {
-            if (map_range > refSys->getBook(((testament>1)?BMAX[0]:0)+book-1)->getVerseMax(chapter))
+            if (map_range > m_refSys->getBook(((m_testament>1)?m_BMAX[0]:0)+m_book-1)->getVerseMax(m_chapter))
                 ++map_range;
-            verse = map_range;
+            m_verse = map_range;
             setUpperBound(this);
-            verse = map_verse;
+            m_verse = map_verse;
             setLowerBound(this);
         }
     }
@@ -202,13 +202,13 @@ void VerseKey::positionFrom(const SWKey &ikey) {
  */
 
 void VerseKey::copyFrom(const VerseKey &ikey) {
-    autonorm = ikey.autonorm;
-    intros = ikey.intros;
-    testament = ikey.getTestament();
-    book = ikey.getBook();
-    chapter = ikey.getChapter();
-    verse = ikey.getVerse();
-    suffix = ikey.getSuffix();
+    m_autonorm = ikey.m_autonorm;
+    m_intros = ikey.m_intros;
+    m_testament = ikey.getTestament();
+    m_book = ikey.getBook();
+    m_chapter = ikey.getChapter();
+    m_verse = ikey.getVerse();
+    m_suffix = ikey.getSuffix();
     setLocale(ikey.getLocale());
     setVersificationSystem(ikey.getVersificationSystem());
     if (ikey.isBoundSet()) {
@@ -279,10 +279,10 @@ void VerseKey::setVersificationSystem(const char *name) {
     const VersificationMgr::System *newRefSys = VersificationMgr::getSystemVersificationMgr()->getVersificationSystem(name);
     // TODO: cheese, but what should we do if requested v11n system isn't found?
     if (!newRefSys)   newRefSys = VersificationMgr::getSystemVersificationMgr()->getVersificationSystem("KJV");
-    if (refSys != newRefSys) {
-        refSys = newRefSys;
-        BMAX[0] = refSys->getBMAX()[0];
-        BMAX[1] = refSys->getBMAX()[1];
+    if (m_refSys != newRefSys) {
+        m_refSys = newRefSys;
+        m_BMAX[0] = m_refSys->getBMAX()[0];
+        m_BMAX[1] = m_refSys->getBMAX()[1];
 
         // TODO: adjust bounds for versificaion system ???
         // TODO: when we have mapping done, rethink this
@@ -293,7 +293,7 @@ void VerseKey::setVersificationSystem(const char *name) {
 }
 
 
-const char *VerseKey::getVersificationSystem() const { return refSys->getName(); }
+const char *VerseKey::getVersificationSystem() const { return m_refSys->getName(); }
 
 
 
@@ -305,10 +305,10 @@ const char *VerseKey::getVersificationSystem() const { return refSys->getName();
 
 char VerseKey::parse(bool checkAutoNormalize)
 {
-    testament = BMAX[1]?2:1;
-    book      = BMAX[BMAX[1]?1:0];
-    chapter   = 1;
-    verse     = 1;
+    m_testament = m_BMAX[1]?2:1;
+    m_book      = m_BMAX[m_BMAX[1]?1:0];
+    m_chapter   = 1;
+    m_verse     = 1;
 
     int error = 0;
 
@@ -337,26 +337,26 @@ char VerseKey::parse(bool checkAutoNormalize)
 void VerseKey::freshtext() const
 {
     char buf[2024];
-    int realTest = testament;
-    int realbook = book;
+    int realTest = m_testament;
+    int realbook = m_book;
 
-    if (book < 1) {
-        if (testament < 1)
+    if (m_book < 1) {
+        if (m_testament < 1)
             sprintf(buf, "[ Module Heading ]");
-        else sprintf(buf, "[ Testament %d Heading ]", (int)testament);
+        else sprintf(buf, "[ Testament %d Heading ]", (int)m_testament);
     }
     else {
-        if (realbook > BMAX[realTest-1]) {
-            realbook -= BMAX[realTest-1];
+        if (realbook > m_BMAX[realTest-1]) {
+            realbook -= m_BMAX[realTest-1];
             if (realTest < 2)
                 realTest++;
-            if (realbook > BMAX[realTest-1])
-                realbook = BMAX[realTest-1];
+            if (realbook > m_BMAX[realTest-1])
+                realbook = m_BMAX[realTest-1];
         }
-        sprintf(buf, "%s %d:%d", getBookName(), chapter, verse);
-        if (suffix) {
+        sprintf(buf, "%s %d:%d", getBookName(), m_chapter, m_verse);
+        if (m_suffix) {
             buf[strlen(buf)+1] = 0;
-            buf[strlen(buf)] = suffix;
+            buf[strlen(buf)] = m_suffix;
         }
     }
 
@@ -431,10 +431,10 @@ int VerseKey::getBookFromAbbrev(const char *iabbr) const
 
             if (!diff) {
                 // lets keep moving forward till we find an abbrev in our refSys
-                retVal = refSys->getBookNumberByOSISName(abbrevs[target].osis);
+                retVal = m_refSys->getBookNumberByOSISName(abbrevs[target].osis);
                 while ((retVal < 0)  && (target < max) && (!strncmp(abbr, abbrevs[target+1].ab, abLen))) {
                     target++;
-                    retVal = refSys->getBookNumberByOSISName(abbrevs[target].osis);
+                    retVal = m_refSys->getBookNumberByOSISName(abbrevs[target].osis);
                 }
             }
             else retVal = -1;
@@ -453,11 +453,11 @@ int VerseKey::getBookFromAbbrev(const char *iabbr) const
  */
 void VerseKey::validateCurrentLocale() const {
     if (SWLog::getSystemLog()->getLogLevel() >= SWLog::LOG_DEBUG) { //make sure log is wanted, this loop stuff costs a lot of time
-        for (int i = 0; i < refSys->getBookCount(); i++) {
-            const int bn = getBookFromAbbrev(getPrivateLocale()->translate(refSys->getBook(i)->getLongName()));
+        for (int i = 0; i < m_refSys->getBookCount(); i++) {
+            const int bn = getBookFromAbbrev(getPrivateLocale()->translate(m_refSys->getBook(i)->getLongName()));
             if (bn != i+1) {
                 char * abbr = nullptr;
-                stdstr(&abbr, getPrivateLocale()->translate(refSys->getBook(i)->getLongName()), 2);
+                stdstr(&abbr, getPrivateLocale()->translate(m_refSys->getBook(i)->getLongName()), 2);
                 strstrip(abbr);
                 SWLog::getSystemLog()->logDebug("VerseKey::Book: %s does not have a matching toupper abbrevs entry! book number returned was: %d, should be %d. Required entry to add to locale:", abbr, bn, i);
 
@@ -469,7 +469,7 @@ void VerseKey::validateCurrentLocale() const {
                 else {
                     stringMgr->upperLatin1(abbr);
                 }
-                SWLog::getSystemLog()->logDebug("%s=%s\n", abbr, refSys->getBook(i)->getOSISName());
+                SWLog::getSystemLog()->logDebug("%s=%s\n", abbr, m_refSys->getBook(i)->getOSISName());
                 delete [] abbr;
             }
         }
@@ -699,9 +699,9 @@ terminate_range:
                 }
                 else {
                     int t = 1;
-                    if (bookno > BMAX[0]) {
+                    if (bookno > m_BMAX[0]) {
                         t++;
-                        bookno -= BMAX[0];
+                        bookno -= m_BMAX[0];
                     }
                     curKey->setTestament(t);
                     curKey->setBook(bookno);
@@ -980,9 +980,9 @@ terminate_range:
         }
         else {
             int t = 1;
-            if (bookno > BMAX[0]) {
+            if (bookno > m_BMAX[0]) {
                 t++;
-                bookno -= BMAX[0];
+                bookno -= m_BMAX[0];
             }
             curKey->setTestament(t);
             curKey->setBook(bookno);
@@ -1087,17 +1087,17 @@ void VerseKey::setLowerBound(const VerseKey &lb)
 {
     initBounds();
 
-    lowerBound = lb.getIndex();
-    lowerBoundComponents.test   = lb.getTestament();
-    lowerBoundComponents.book   = lb.getBook();
-    lowerBoundComponents.chap   = lb.getChapter();
-    lowerBoundComponents.verse  = lb.getVerse();
-    lowerBoundComponents.suffix = lb.getSuffix();
+    m_lowerBound = lb.getIndex();
+    m_lowerBoundComponents.test   = lb.getTestament();
+    m_lowerBoundComponents.book   = lb.getBook();
+    m_lowerBoundComponents.chap   = lb.getChapter();
+    m_lowerBoundComponents.verse  = lb.getVerse();
+    m_lowerBoundComponents.suffix = lb.getSuffix();
 
     // both this following check and UpperBound check force upperBound to
     // change allowing LowerBound then UpperBound logic to always flow
     // and set values without restrictions, as expected
-    if (upperBound < lowerBound) upperBound = lowerBound;
+    if (m_upperBound < m_lowerBound) m_upperBound = m_lowerBound;
     boundSet = true;
 }
 
@@ -1110,15 +1110,15 @@ void VerseKey::setUpperBound(const VerseKey &ub)
 {
     initBounds();
 
-    upperBound = ub.getIndex();
-    upperBoundComponents.test   = ub.getTestament();
-    upperBoundComponents.book   = ub.getBook();
-    upperBoundComponents.chap   = ub.getChapter();
-    upperBoundComponents.verse  = ub.getVerse();
-    upperBoundComponents.suffix = ub.getSuffix();
+    m_upperBound = ub.getIndex();
+    m_upperBoundComponents.test   = ub.getTestament();
+    m_upperBoundComponents.book   = ub.getBook();
+    m_upperBoundComponents.chap   = ub.getChapter();
+    m_upperBoundComponents.verse  = ub.getVerse();
+    m_upperBoundComponents.suffix = ub.getSuffix();
 
     // see setLowerBound comment, above
-    if (upperBound < lowerBound) upperBound = lowerBound;
+    if (m_upperBound < m_lowerBound) m_upperBound = m_lowerBound;
     boundSet = true;
 }
 
@@ -1131,15 +1131,15 @@ VerseKey VerseKey::getLowerBound() const
 {
     auto const tmpClone(initBounds());
     if (!isAutoNormalize()) {
-        tmpClone->testament = lowerBoundComponents.test;
-        tmpClone->book      = lowerBoundComponents.book;
-        tmpClone->chapter   = lowerBoundComponents.chap;
-        tmpClone->setVerse   (lowerBoundComponents.verse);
-        tmpClone->setSuffix  (lowerBoundComponents.suffix);
+        tmpClone->m_testament = m_lowerBoundComponents.test;
+        tmpClone->m_book      = m_lowerBoundComponents.book;
+        tmpClone->m_chapter   = m_lowerBoundComponents.chap;
+        tmpClone->setVerse   (m_lowerBoundComponents.verse);
+        tmpClone->setSuffix  (m_lowerBoundComponents.suffix);
     }
     else {
-        tmpClone->setIndex(lowerBound);
-        tmpClone->setSuffix  (lowerBoundComponents.suffix);
+        tmpClone->setIndex(m_lowerBound);
+        tmpClone->setSuffix  (m_lowerBoundComponents.suffix);
     }
 
     return (*tmpClone);
@@ -1154,15 +1154,15 @@ VerseKey VerseKey::getUpperBound() const
 {
     auto const tmpClone(initBounds());
     if (!isAutoNormalize()) {
-        tmpClone->testament = upperBoundComponents.test;
-        tmpClone->book      = upperBoundComponents.book;
-        tmpClone->chapter   = upperBoundComponents.chap;
-        tmpClone->setVerse   (upperBoundComponents.verse);
-        tmpClone->setSuffix  (upperBoundComponents.suffix);
+        tmpClone->m_testament = m_upperBoundComponents.test;
+        tmpClone->m_book      = m_upperBoundComponents.book;
+        tmpClone->m_chapter   = m_upperBoundComponents.chap;
+        tmpClone->setVerse   (m_upperBoundComponents.verse);
+        tmpClone->setSuffix  (m_upperBoundComponents.suffix);
     }
     else {
-        tmpClone->setIndex(upperBound);
-        tmpClone->setSuffix  (upperBoundComponents.suffix);
+        tmpClone->setIndex(m_upperBound);
+        tmpClone->setSuffix  (m_upperBoundComponents.suffix);
     }
 
     return (*tmpClone);
@@ -1180,23 +1180,23 @@ std::unique_ptr<VerseKey> VerseKey::initBounds() const {
     std::unique_ptr<VerseKey> r(static_cast<VerseKey *>(clone()));
     r->setAutoNormalize(false);
     r->setIntros(true);
-    r->setTestament((BMAX[1])?2:1);
-    r->setBook(BMAX[(BMAX[1])?1:0]);
+    r->setTestament((m_BMAX[1])?2:1);
+    r->setBook(m_BMAX[(m_BMAX[1])?1:0]);
     r->setChapter(r->getChapterMax());
     r->setVerse(r->getVerseMax());
-    upperBound = r->getIndex();
-    upperBoundComponents.test   = r->getTestament();
-    upperBoundComponents.book   = r->getBook();
-    upperBoundComponents.chap   = r->getChapter();
-    upperBoundComponents.verse  = r->getVerse();
-    upperBoundComponents.suffix = r->getSuffix();
+    m_upperBound = r->getIndex();
+    m_upperBoundComponents.test   = r->getTestament();
+    m_upperBoundComponents.book   = r->getBook();
+    m_upperBoundComponents.chap   = r->getChapter();
+    m_upperBoundComponents.verse  = r->getVerse();
+    m_upperBoundComponents.suffix = r->getSuffix();
 
-    lowerBound = 0;
-    lowerBoundComponents.test   = 0;
-    lowerBoundComponents.book   = 0;
-    lowerBoundComponents.chap   = 0;
-    lowerBoundComponents.verse  = 0;
-    lowerBoundComponents.suffix = 0;
+    m_lowerBound = 0;
+    m_lowerBoundComponents.test   = 0;
+    m_lowerBoundComponents.book   = 0;
+    m_lowerBoundComponents.chap   = 0;
+    m_lowerBoundComponents.verse  = 0;
+    m_lowerBoundComponents.suffix = 0;
     return r;
 }
 
@@ -1216,13 +1216,13 @@ const char *VerseKey::getShortText() const {
     static char * stext = nullptr;
     char buf[2047];
     freshtext();
-    if (book < 1) {
-        if (testament < 1)
+    if (m_book < 1) {
+        if (m_testament < 1)
             sprintf(buf, "[ Module Heading ]");
-        else sprintf(buf, "[ Testament %d Heading ]", (int)testament);
+        else sprintf(buf, "[ Testament %d Heading ]", (int)m_testament);
     }
     else {
-        sprintf(buf, "%s %d:%d", getBookAbbrev(), chapter, verse);
+        sprintf(buf, "%s %d:%d", getBookAbbrev(), m_chapter, m_verse);
     }
     stdstr(&stext, buf);
     return stext;
@@ -1230,70 +1230,70 @@ const char *VerseKey::getShortText() const {
 
 
 const char *VerseKey::getBookName() const {
-    return getPrivateLocale()->translate(refSys->getBook(((testament>1)?BMAX[0]:0)+book-1)->getLongName());
+    return getPrivateLocale()->translate(m_refSys->getBook(((m_testament>1)?m_BMAX[0]:0)+m_book-1)->getLongName());
 }
 
 
 const char *VerseKey::getOSISBookName() const {
-    return refSys->getBook(((testament>1)?BMAX[0]:0)+book-1)->getOSISName();
+    return m_refSys->getBook(((m_testament>1)?m_BMAX[0]:0)+m_book-1)->getOSISName();
 }
 
 
 const char *VerseKey::getBookAbbrev() const {
-    return refSys->getBook(((testament>1)?BMAX[0]:0)+book-1)->getPreferredAbbreviation();
+    return m_refSys->getBook(((m_testament>1)?m_BMAX[0]:0)+m_book-1)->getPreferredAbbreviation();
 }
 
 void VerseKey::positionToTop() {
     VerseKey const lb(getLowerBound());
-    testament = (lb.getTestament() || intros) ? lb.getTestament() : 1;
-    book      = (lb.getBook()      || intros) ? lb.getBook() : 1;
-    chapter   = (lb.getChapter()   || intros) ? lb.getChapter() : 1;
-    verse     = (lb.getVerse()     || intros) ? lb.getVerse() : 1;
-    suffix    = lb.getSuffix();
+    m_testament = (lb.getTestament() || m_intros) ? lb.getTestament() : 1;
+    m_book      = (lb.getBook()      || m_intros) ? lb.getBook() : 1;
+    m_chapter   = (lb.getChapter()   || m_intros) ? lb.getChapter() : 1;
+    m_verse     = (lb.getVerse()     || m_intros) ? lb.getVerse() : 1;
+    m_suffix    = lb.getSuffix();
     normalize(true);
     popError();    // clear error from normalize
 }
 void VerseKey::positionToBottom() {
     VerseKey const ub(getUpperBound());
-    testament = (ub.getTestament() || intros) ? ub.getTestament() : 1;
-    book      = (ub.getBook()      || intros) ? ub.getBook() : 1;
-    chapter   = (ub.getChapter()   || intros) ? ub.getChapter() : 1;
-    verse     = (ub.getVerse()     || intros) ? ub.getVerse() : 1;
-    suffix    = ub.getSuffix();
+    m_testament = (ub.getTestament() || m_intros) ? ub.getTestament() : 1;
+    m_book      = (ub.getBook()      || m_intros) ? ub.getBook() : 1;
+    m_chapter   = (ub.getChapter()   || m_intros) ? ub.getChapter() : 1;
+    m_verse     = (ub.getVerse()     || m_intros) ? ub.getVerse() : 1;
+    m_suffix    = ub.getSuffix();
     normalize(true);
     popError();    // clear error from normalize
 }
 
 void VerseKey::positionToMaxChapter() {
-    suffix    = 0;
-    verse     = 1;
-    chapter   = 1;
+    m_suffix    = 0;
+    m_verse     = 1;
+    m_chapter   = 1;
     normalize();
-    chapter   = getChapterMax();
+    m_chapter   = getChapterMax();
     normalize(true);
     popError();    // clear error from normalize
 }
 
 void VerseKey::positionToMaxVerse() {
-    suffix    = 0;
-    verse     = 1;
+    m_suffix    = 0;
+    m_verse     = 1;
     normalize();
-    verse     = getVerseMax();
-    suffix    = 0;
+    m_verse     = getVerseMax();
+    m_suffix    = 0;
     normalize(true);
     popError();    // clear error from normalize
 }
 
 int VerseKey::getChapterMax() const {
-    if (book < 1) return 0;
-    const VersificationMgr::Book *b = refSys->getBook(((testament>1)?BMAX[0]:0)+book-1);
+    if (m_book < 1) return 0;
+    const VersificationMgr::Book *b = m_refSys->getBook(((m_testament>1)?m_BMAX[0]:0)+m_book-1);
     return (b) ? b->getChapterMax() : -1;
 }
 
 int VerseKey::getVerseMax() const {
-    if (book < 1) return 0;
-    const VersificationMgr::Book *b = refSys->getBook(((testament>1)?BMAX[0]:0)+book-1);
-    return (b) ? b->getVerseMax(chapter) : -1;
+    if (m_book < 1) return 0;
+    const VersificationMgr::Book *b = m_refSys->getBook(((m_testament>1)?m_BMAX[0]:0)+m_book-1);
+    return (b) ? b->getVerseMax(m_chapter) : -1;
 }
 
 
@@ -1307,14 +1307,14 @@ int VerseKey::getVerseMax() const {
 
 void VerseKey::increment(int step) {
     // if we're not autonormalizing and we're already not normalized
-    if (!autonorm && chapter > 0 && verse > getVerseMax()) {
-        verse += step;
+    if (!m_autonorm && m_chapter > 0 && m_verse > getVerseMax()) {
+        m_verse += step;
         checkBounds();
         return;
     }
     char ierror = 0;
     setIndex(getIndex() + step);
-    while ((!verse) && (!intros) && (!ierror)) {
+    while ((!m_verse) && (!m_intros) && (!ierror)) {
         setIndex(getIndex() + 1);
         ierror = popError();
     }
@@ -1333,18 +1333,18 @@ void VerseKey::increment(int step) {
 
 void VerseKey::decrement(int step) {
     // if we're not autonormalizing and we're already not normalized
-    if (!autonorm && chapter > 0 && verse > getVerseMax()) {
-        verse -= step;
+    if (!m_autonorm && m_chapter > 0 && m_verse > getVerseMax()) {
+        m_verse -= step;
         checkBounds();
         return;
     }
     char ierror = 0;
     setIndex(getIndex() - step);
-    while ((!verse) && (!intros) && (!ierror)) {
+    while ((!m_verse) && (!m_intros) && (!ierror)) {
         setIndex(getIndex() - 1);
         ierror = popError();
     }
-    if ((ierror) && (!intros))
+    if ((ierror) && (!m_intros))
         ++(*this);
 
     error = (ierror) ? ierror : error;
@@ -1361,79 +1361,79 @@ void VerseKey::decrement(int step) {
 void VerseKey::normalize(bool autocheck)
 {
 
-    if ((!autocheck || autonorm)    // only normalize if we were explicitely called or if autonorm is turned on
+    if ((!autocheck || m_autonorm)    // only normalize if we were explicitely called or if autonorm is turned on
     ) {
         error = 0;
 
-        while ((testament < 3) && (testament > 0)) {
+        while ((m_testament < 3) && (m_testament > 0)) {
 
 
-            if (book > BMAX[testament-1]) {
-                book -= (BMAX[testament-1] + (intros?1:0));
-                testament++;
+            if (m_book > m_BMAX[m_testament-1]) {
+                m_book -= (m_BMAX[m_testament-1] + (m_intros?1:0));
+                m_testament++;
                 continue;
             }
-            if (book < (intros?0:1)) {
-                if (--testament > 0) {
-                    book += (BMAX[testament-1] + (intros?1:0));
+            if (m_book < (m_intros?0:1)) {
+                if (--m_testament > 0) {
+                    m_book += (m_BMAX[m_testament-1] + (m_intros?1:0));
                 }
                 continue;
             }
 
 
-            if (chapter > getChapterMax()) {
-                chapter -= (getChapterMax() + (intros?1:0));
-                book++;
+            if (m_chapter > getChapterMax()) {
+                m_chapter -= (getChapterMax() + (m_intros?1:0));
+                m_book++;
                 continue;
             }
-            if (chapter < (intros?0:1)) {
-                --book;
-                if (book < (intros?0:1)) {
-                    if (--testament > 0) {
-                        book += (BMAX[testament-1] + (intros?1:0));
+            if (m_chapter < (m_intros?0:1)) {
+                --m_book;
+                if (m_book < (m_intros?0:1)) {
+                    if (--m_testament > 0) {
+                        m_book += (m_BMAX[m_testament-1] + (m_intros?1:0));
                     }
                 }
-                chapter += (getChapterMax() + (intros?1:0));
+                m_chapter += (getChapterMax() + (m_intros?1:0));
                 continue;
             }
 
 
-            if (chapter > 0 && verse > getVerseMax()) {
-                verse -= (getVerseMax() + (intros?1:0));
-                chapter++;
+            if (m_chapter > 0 && m_verse > getVerseMax()) {
+                m_verse -= (getVerseMax() + (m_intros?1:0));
+                m_chapter++;
                 continue;
             }
-            if (verse < (intros?0:1)) {
-                if (--chapter < (intros?0:1)) {
-                    --book;
-                    if (book < (intros?0:1)) {
-                        if (--testament > 0) {
-                            book += (BMAX[testament-1] + (intros?1:0));
+            if (m_verse < (m_intros?0:1)) {
+                if (--m_chapter < (m_intros?0:1)) {
+                    --m_book;
+                    if (m_book < (m_intros?0:1)) {
+                        if (--m_testament > 0) {
+                            m_book += (m_BMAX[m_testament-1] + (m_intros?1:0));
                         }
                     }
-                    chapter += (getChapterMax() + (intros?1:0));
+                    m_chapter += (getChapterMax() + (m_intros?1:0));
                 }
-                verse += (getVerseMax() + (intros?1:0));
+                m_verse += (getVerseMax() + (m_intros?1:0));
                 continue;
             }
 
             break;  // If we've made it this far (all failure checks continue) we're ok
         }
 
-        if (testament > (BMAX[1]?2:1)) {
-            testament = BMAX[1]?2:1;
-            book      = BMAX[testament-1];
-            chapter   = getChapterMax();
-            verse     = getVerseMax();
+        if (m_testament > (m_BMAX[1]?2:1)) {
+            m_testament = m_BMAX[1]?2:1;
+            m_book      = m_BMAX[m_testament-1];
+            m_chapter   = getChapterMax();
+            m_verse     = getVerseMax();
             error     = KEYERR_OUTOFBOUNDS;
         }
 
-        if (testament < 1) {
-            error     = ((!intros) || (testament < 0) || (book < 0)) ? KEYERR_OUTOFBOUNDS : 0;
-            testament = ((intros) ? 0 : 1);
-            book      = ((intros) ? 0 : 1);
-            chapter   = ((intros) ? 0 : 1);
-            verse     = ((intros) ? 0 : 1);
+        if (m_testament < 1) {
+            error     = ((!m_intros) || (m_testament < 0) || (m_book < 0)) ? KEYERR_OUTOFBOUNDS : 0;
+            m_testament = ((m_intros) ? 0 : 1);
+            m_book      = ((m_intros) ? 0 : 1);
+            m_chapter   = ((m_intros) ? 0 : 1);
+            m_verse     = ((m_intros) ? 0 : 1);
         }
 
             // should we always perform bounds checks?  Tried but seems to cause infinite recursion
@@ -1457,7 +1457,7 @@ void VerseKey::normalize(bool autocheck)
 
 char VerseKey::getTestament() const
 {
-    return testament;
+    return m_testament;
 }
 
 
@@ -1469,7 +1469,7 @@ char VerseKey::getTestament() const
 
 char VerseKey::getBook() const
 {
-    return book;
+    return m_book;
 }
 
 
@@ -1481,7 +1481,7 @@ char VerseKey::getBook() const
 
 int VerseKey::getChapter() const
 {
-    return chapter;
+    return m_chapter;
 }
 
 
@@ -1493,7 +1493,7 @@ int VerseKey::getChapter() const
 
 int VerseKey::getVerse() const
 {
-    return verse;
+    return m_verse;
 }
 
 
@@ -1507,11 +1507,11 @@ int VerseKey::getVerse() const
 
 void VerseKey::setTestament(char itestament)
 {
-    suffix  = 0;
-    verse   = (intros) ? 0 : 1;
-    chapter = (intros) ? 0 : 1;
-    book    = (intros) ? 0 : 1;
-    testament = itestament;
+    m_suffix  = 0;
+    m_verse   = (m_intros) ? 0 : 1;
+    m_chapter = (m_intros) ? 0 : 1;
+    m_book    = (m_intros) ? 0 : 1;
+    m_testament = itestament;
     normalize(true);
 }
 
@@ -1524,10 +1524,10 @@ void VerseKey::setTestament(char itestament)
 
 void VerseKey::setBook(char ibook)
 {
-    suffix  = 0;
-    verse   = (intros) ? 0 : 1;
-    chapter = (intros) ? 0 : 1;
-    book    = ibook;
+    m_suffix  = 0;
+    m_verse   = (m_intros) ? 0 : 1;
+    m_chapter = (m_intros) ? 0 : 1;
+    m_book    = ibook;
     normalize(true);
 }
 
@@ -1543,11 +1543,11 @@ void VerseKey::setBookName(const char *bname)
 {
     int bnum = getBookFromAbbrev(bname);
     if (bnum > -1) {
-        if (bnum > BMAX[0]) {
-            bnum -= BMAX[0];
-            testament = 2;
+        if (bnum > m_BMAX[0]) {
+            bnum -= m_BMAX[0];
+            m_testament = 2;
         }
-        else    testament = 1;
+        else    m_testament = 1;
         setBook(bnum);
     }
     else error = KEYERR_OUTOFBOUNDS;
@@ -1562,9 +1562,9 @@ void VerseKey::setBookName(const char *bname)
 
 void VerseKey::setChapter(int ichapter)
 {
-    suffix  = 0;
-    verse   = (intros) ? 0 : 1;
-    chapter = ichapter;
+    m_suffix  = 0;
+    m_verse   = (m_intros) ? 0 : 1;
+    m_chapter = ichapter;
     normalize(true);
 }
 
@@ -1581,18 +1581,18 @@ void VerseKey::setChapter(int ichapter)
 
 void VerseKey::setVerse(int iverse)
 {
-    suffix  = 0;
-    verse   = iverse;
+    m_suffix  = 0;
+    m_verse   = iverse;
     normalize(true);
 }
 
 
 char VerseKey::getSuffix() const {
-    return suffix;
+    return m_suffix;
 }
 
 void VerseKey::setSuffix(char suf) {
-    suffix = suf;
+    m_suffix = suf;
 }
 
 /******************************************************************************
@@ -1602,12 +1602,12 @@ void VerseKey::setSuffix(char suf) {
 
 bool VerseKey::isAutoNormalize() const
 {
-    return autonorm;
+    return m_autonorm;
 }
 
 void VerseKey::setAutoNormalize(bool iautonorm)
 {
-    autonorm = iautonorm?1:0;
+    m_autonorm = iautonorm?1:0;
     normalize(true);
 }
 
@@ -1622,13 +1622,13 @@ void VerseKey::setAutoNormalize(bool iautonorm)
 
 void VerseKey::setIntros(bool val)
 {
-    intros = val;
+    m_intros = val;
     normalize(true);
 }
 
 bool VerseKey::isIntros() const
 {
-    return intros;
+    return m_intros;
 }
 
 
@@ -1642,14 +1642,14 @@ long VerseKey::getIndex() const
 {
     long  offset;
 
-    if (!testament) { // if we want module heading
+    if (!m_testament) { // if we want module heading
         offset = 0;
     }
-    else if (!book) {    // we want testament heading
-        offset = ((testament == 2) ? refSys->getNTStartOffset():0) + 1;
+    else if (!m_book) {    // we want testament heading
+        offset = ((m_testament == 2) ? m_refSys->getNTStartOffset():0) + 1;
     }
     else {
-        offset = refSys->getOffsetFromVerse((((testament>1)?BMAX[0]:0)+book-1), chapter, verse);
+        offset = m_refSys->getOffsetFromVerse((((m_testament>1)?m_BMAX[0]:0)+m_book-1), m_chapter, m_verse);
     }
     return offset;
 }
@@ -1664,7 +1664,7 @@ long VerseKey::getIndex() const
 long VerseKey::getTestamentIndex() const
 {
     long offset = getIndex();
-    return (testament > 1) ? offset - refSys->getNTStartOffset() : offset;
+    return (m_testament > 1) ? offset - m_refSys->getNTStartOffset() : offset;
 }
 
 
@@ -1684,16 +1684,16 @@ void VerseKey::setIndex(long iindex)
     }
 
     int b;
-    error = refSys->getVerseFromOffset(iindex, &b, &chapter, &verse);
-    book = (unsigned char)b;
-    testament = 1;
-    if (book > BMAX[0]) {
-        book -= BMAX[0];
-        testament = 2;
+    error = m_refSys->getVerseFromOffset(iindex, &b, &m_chapter, &m_verse);
+    m_book = (unsigned char)b;
+    m_testament = 1;
+    if (m_book > m_BMAX[0]) {
+        m_book -= m_BMAX[0];
+        m_testament = 2;
     }
     // special case for Module and Testament heading
-    if (book < 0) { testament = 0; book = 0; }
-    if (chapter < 0) { book = 0; chapter = 0; }
+    if (m_book < 0) { m_testament = 0; m_book = 0; }
+    if (m_chapter < 0) { m_book = 0; m_chapter = 0; }
 
     checkBounds();
 }
@@ -1703,13 +1703,13 @@ void VerseKey::checkBounds() {
     long i = getIndex();
 
     initBounds();
-    if (i > upperBound) {
-        setIndex(upperBound);
+    if (i > m_upperBound) {
+        setIndex(m_upperBound);
         i = getIndex();
         error = KEYERR_OUTOFBOUNDS;
     }
-    if (i < lowerBound) {
-        setIndex(lowerBound);
+    if (i < m_lowerBound) {
+        setIndex(m_lowerBound);
         error = KEYERR_OUTOFBOUNDS;
     }
 }
@@ -1786,7 +1786,7 @@ const char *VerseKey::getOSISRef() const {
  */
 
 std::string VerseKey::getRangeText() const {
-    if (isBoundSet() && lowerBound != upperBound) {
+    if (isBoundSet() && m_lowerBound != m_upperBound) {
         auto const lbKey(getLowerBound());
         auto const ubKey(getUpperBound());
         char const * const lb = lbKey.getText();
@@ -1808,7 +1808,7 @@ std::string VerseKey::getRangeText() const {
  */
 
 std::string VerseKey::getOSISRefRangeText() const {
-    if (isBoundSet() && (lowerBound != upperBound)) {
+    if (isBoundSet() && (m_lowerBound != m_upperBound)) {
         std::string r(getLowerBound().getOSISRef());
         r.append(1u, '-');
         r.append(getUpperBound().getOSISRef());
