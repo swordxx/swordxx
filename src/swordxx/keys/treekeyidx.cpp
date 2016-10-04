@@ -79,13 +79,13 @@ TreeKeyIdx::~TreeKeyIdx () {
 
 
 const char *TreeKeyIdx::getLocalName() {
-    unsnappedKeyText = "";
+    m_unsnappedKeyText = "";
     return currentNode.name;
 }
 
 
 const char *TreeKeyIdx::getUserData(int *size) const {
-    unsnappedKeyText = "";
+    m_unsnappedKeyText = "";
     if (size)
         *size = (int)currentNode.dsize;
     return currentNode.userData;
@@ -106,7 +106,7 @@ void TreeKeyIdx::setUserData(const char *userData, int size) {
 }
 
 const char *TreeKeyIdx::setLocalName(const char *newName) {
-    unsnappedKeyText = "";
+    m_unsnappedKeyText = "";
     stdstr(&(currentNode.name), newName);
     return currentNode.name;
 }
@@ -319,7 +319,7 @@ signed char TreeKeyIdx::create(const char *ipath) {
  */
 
 void TreeKeyIdx::getTreeNodeFromDatOffset(long ioffset, TreeNode *node) const {
-    unsnappedKeyText = "";
+    m_unsnappedKeyText = "";
     char ch;
     int32_t  tmp;
     uint16_t  tmp2;
@@ -367,7 +367,7 @@ void TreeKeyIdx::getTreeNodeFromDatOffset(long ioffset, TreeNode *node) const {
  */
 
 char TreeKeyIdx::getTreeNodeFromIdxOffset(long ioffset, TreeNode *node) const {
-    unsnappedKeyText = "";
+    m_unsnappedKeyText = "";
     uint32_t offset;
     char error = KEYERR_OUTOFBOUNDS;
 
@@ -399,7 +399,7 @@ char TreeKeyIdx::getTreeNodeFromIdxOffset(long ioffset, TreeNode *node) const {
 
 
 unsigned long TreeKeyIdx::getOffset() const {
-    unsnappedKeyText = "";
+    m_unsnappedKeyText = "";
     return currentNode.offset;
 }
 
@@ -410,7 +410,7 @@ void TreeKeyIdx::setOffset(unsigned long offset) {
 
 
 void TreeKeyIdx::saveTreeNodeOffsets(TreeNode *node) {
-    unsnappedKeyText = "";
+    m_unsnappedKeyText = "";
     long datOffset = 0;
     int32_t tmp;
 
@@ -439,7 +439,7 @@ void TreeKeyIdx::saveTreeNodeOffsets(TreeNode *node) {
 
 
 void TreeKeyIdx::copyFrom(const TreeKeyIdx &ikey) {
-    unsnappedKeyText = "";
+    m_unsnappedKeyText = "";
 
     SWKey::copyFrom(ikey);
 
@@ -535,14 +535,14 @@ void TreeKeyIdx::setText(const char *ikey) {
     if (leaf.size())
         m_error = KEYERR_OUTOFBOUNDS;
     delete [] buf;
-    unsnappedKeyText = ikey;
+    m_unsnappedKeyText = ikey;
     positionChanged();
 }
 
 
 
 void TreeKeyIdx::copyFrom(const SWKey &ikey) {
-    unsnappedKeyText = ikey.getText();
+    m_unsnappedKeyText = ikey.getText();
     SWKey::copyFrom(ikey);
     positionChanged();
 }
@@ -614,7 +614,7 @@ const char *TreeKeyIdx::getText() const {
         fullPath = std::string(parent.name) + '/' + fullPath;
     }
     // we've snapped; clear our unsnapped text holder
-    unsnappedKeyText = "";
+    m_unsnappedKeyText = "";
     return fullPath.c_str();
 }
 

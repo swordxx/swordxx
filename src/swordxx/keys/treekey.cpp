@@ -30,15 +30,15 @@
 namespace swordxx {
 
 void TreeKey::init() {
-    unsnappedKeyText = "";
-    posChangeListener = nullptr;
+    m_unsnappedKeyText = "";
+    m_posChangeListener = nullptr;
 }
 
 
 void TreeKey::assureKeyPath(const char *keyBuffer) {
 
     if (!keyBuffer) {
-        keyBuffer = unsnappedKeyText.c_str();
+        keyBuffer = m_unsnappedKeyText.c_str();
         //assert we have something to do before setting root
         if (!*keyBuffer)
             return;

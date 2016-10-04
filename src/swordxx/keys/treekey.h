@@ -43,25 +43,25 @@ protected:
     // hold on to setText until we've done a snap action: getText or navigation
     // if we set, and then write out userData, we want to assure the path exists.
     // This better conforms to the Sword++ write methodology: mod.setKey, mod.setEntry
-    mutable std::string unsnappedKeyText;
+    mutable std::string m_unsnappedKeyText;
 
     // called whenever position of this key is changed.  Should we move this
     // to a more base class?
-    void positionChanged() { if (posChangeListener) posChangeListener->positionChanged(); }
+    void positionChanged() { if (m_posChangeListener) m_posChangeListener->positionChanged(); }
 
 public:
 
     class PositionChangeListener {
-        TreeKey *treeKey;
+        TreeKey *m_treeKey;
     public:
         PositionChangeListener() {}
         virtual ~PositionChangeListener() {}
         virtual void positionChanged() = 0;
-        TreeKey *getTreeKey() { return treeKey; }
-        void setTreeKey(TreeKey *tk) { treeKey = tk; }
-    } *posChangeListener;
+        TreeKey *getTreeKey() { return m_treeKey; }
+        void setTreeKey(TreeKey *tk) { m_treeKey = tk; }
+    } * m_posChangeListener;
 
-    void setPositionChangeListener(PositionChangeListener *pcl) { posChangeListener = pcl; posChangeListener->setTreeKey(this); }
+    void setPositionChangeListener(PositionChangeListener *pcl) { m_posChangeListener = pcl; m_posChangeListener->setTreeKey(this); }
 
 //    TreeKey (const char *ikey = 0);
 //    TreeKey (const SWKey * ikey);
