@@ -1977,7 +1977,7 @@ int main(int argc, char **argv) {
         compressor->setLevel(compLevel);
     }
 
-#if SWORDXX_HAS_ICU
+#ifndef SWORDXX_HAS_ICU
     if (normalize) {
         normalize = false;
         cout << "WARNING(UTF8): " << program << " is not compiled with support for ICU. Assuming -N." << endl;
