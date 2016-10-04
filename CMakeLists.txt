@@ -177,12 +177,42 @@ ADD_COMPILE_OPTIONS(
   "-Wall" "-Wextra" "-O2"
   "$<$<COMPILE_LANGUAGE:C>:-std=c99>"
   "$<$<COMPILE_LANGUAGE:CXX>:-std=c++14>"
-  "$<$<COMPILE_LANGUAGE:CXX>:-Wsuggest-override>"
-  "$<$<COMPILE_LANGUAGE:CXX>:-Wzero-as-null-pointer-constant>"
   "$<$<CONFIG:Release>:-DNDEBUG>"
   "$<$<NOT:$<CONFIG:Release>>:-ggdb>"
   "$<$<NOT:$<CONFIG:Release>>:-fno-omit-frame-pointer>"
 )
+INCLUDE(CheckCCompilerFlag)
+FUNCTION(CHECK_ADD_C_COMPILER_FLAG flag)
+    STRING(SUBSTRING "${flag}" 1 -1 FlagName)
+    STRING(REPLACE "+" "--plus--" TestName "${FlagName}")
+    CHECK_C_COMPILER_FLAG("${flag}" "${TestName}")
+    IF(${TestName})
+        ADD_COMPILE_OPTIONS("$<$<COMPILE_LANGUAGE:C>:${flag}>")
+    ENDIF()
+ENDFUNCTION()
+CHECK_ADD_C_COMPILER_FLAG("-Weverything")
+CHECK_ADD_C_COMPILER_FLAG("-Wlogical-op")
+CHECK_ADD_C_COMPILER_FLAG("-Wno-float-equal")
+CHECK_ADD_C_COMPILER_FLAG("-Wno-covered-switch-default")
+CHECK_ADD_C_COMPILER_FLAG("-Wno-packed")
+INCLUDE(CheckCXXCompilerFlag)
+FUNCTION(CHECK_ADD_CXX_COMPILER_FLAG flag)
+    STRING(SUBSTRING "${flag}" 1 -1 FlagName)
+    STRING(REPLACE "+" "--plus--" TestName "${FlagName}")
+    CHECK_CXX_COMPILER_FLAG("${flag}" "${TestName}")
+    IF(${TestName})
+        ADD_COMPILE_OPTIONS("$<$<COMPILE_LANGUAGE:CXX>:${flag}>")
+    ENDIF()
+ENDFUNCTION()
+CHECK_ADD_CXX_COMPILER_FLAG("-Weverything")
+CHECK_ADD_CXX_COMPILER_FLAG("-Wlogical-op")
+CHECK_ADD_CXX_COMPILER_FLAG("-Wno-c++98-compat")
+CHECK_ADD_CXX_COMPILER_FLAG("-Wno-c++98-compat-pedantic")
+CHECK_ADD_CXX_COMPILER_FLAG("-Wno-float-equal")
+CHECK_ADD_CXX_COMPILER_FLAG("-Wno-covered-switch-default")
+CHECK_ADD_CXX_COMPILER_FLAG("-Wno-packed")
+CHECK_ADD_CXX_COMPILER_FLAG("-Wsuggest-override")
+CHECK_ADD_CXX_COMPILER_FLAG("-Wzero-as-null-pointer-constant")
 
 
 ##############################################################################################
