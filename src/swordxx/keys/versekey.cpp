@@ -1099,20 +1099,20 @@ void VerseKey::setUpperBound(const VerseKey &ub)
 
 VerseKey VerseKey::getLowerBound() const
 {
-    auto const tmpClone(initBounds());
+    initBounds();
     if (!isAutoNormalize()) {
-        tmpClone->m_testament = m_lowerBoundComponents.test;
-        tmpClone->m_book      = m_lowerBoundComponents.book;
-        tmpClone->m_chapter   = m_lowerBoundComponents.chap;
-        tmpClone->setVerse   (m_lowerBoundComponents.verse);
-        tmpClone->setSuffix  (m_lowerBoundComponents.suffix);
+        m_tmpClone->m_testament = m_lowerBoundComponents.test;
+        m_tmpClone->m_book      = m_lowerBoundComponents.book;
+        m_tmpClone->m_chapter   = m_lowerBoundComponents.chap;
+        m_tmpClone->setVerse   (m_lowerBoundComponents.verse);
+        m_tmpClone->setSuffix  (m_lowerBoundComponents.suffix);
     }
     else {
-        tmpClone->setIndex(m_lowerBound);
-        tmpClone->setSuffix  (m_lowerBoundComponents.suffix);
+        m_tmpClone->setIndex(m_lowerBound);
+        m_tmpClone->setSuffix  (m_lowerBoundComponents.suffix);
     }
 
-    return (*tmpClone);
+    return (*m_tmpClone);
 }
 
 
@@ -1122,20 +1122,20 @@ VerseKey VerseKey::getLowerBound() const
 
 VerseKey VerseKey::getUpperBound() const
 {
-    auto const tmpClone(initBounds());
+    initBounds();
     if (!isAutoNormalize()) {
-        tmpClone->m_testament = m_upperBoundComponents.test;
-        tmpClone->m_book      = m_upperBoundComponents.book;
-        tmpClone->m_chapter   = m_upperBoundComponents.chap;
-        tmpClone->setVerse   (m_upperBoundComponents.verse);
-        tmpClone->setSuffix  (m_upperBoundComponents.suffix);
+        m_tmpClone->m_testament = m_upperBoundComponents.test;
+        m_tmpClone->m_book      = m_upperBoundComponents.book;
+        m_tmpClone->m_chapter   = m_upperBoundComponents.chap;
+        m_tmpClone->setVerse   (m_upperBoundComponents.verse);
+        m_tmpClone->setSuffix  (m_upperBoundComponents.suffix);
     }
     else {
-        tmpClone->setIndex(m_upperBound);
-        tmpClone->setSuffix  (m_upperBoundComponents.suffix);
+        m_tmpClone->setIndex(m_upperBound);
+        m_tmpClone->setSuffix  (m_upperBoundComponents.suffix);
     }
 
-    return (*tmpClone);
+    return (*m_tmpClone);
 }
 
 
@@ -1143,31 +1143,39 @@ VerseKey VerseKey::getUpperBound() const
  * VerseKey::clearBounds    - clears bounds for this VerseKey
  */
 
-void VerseKey::clearBounds() { m_boundSet = false; }
+void VerseKey::clearBounds()
+{
+    m_tmpClone.reset();
+    m_boundSet = false;
+}
 
 
-std::unique_ptr<VerseKey> VerseKey::initBounds() const {
-    std::unique_ptr<VerseKey> r(static_cast<VerseKey *>(clone()));
-    r->setAutoNormalize(false);
-    r->setIntros(true);
-    r->setTestament((m_BMAX[1])?2:1);
-    r->setBook(m_BMAX[(m_BMAX[1])?1:0]);
-    r->setChapter(r->getChapterMax());
-    r->setVerse(r->getVerseMax());
-    m_upperBound = r->getIndex();
-    m_upperBoundComponents.test   = r->getTestament();
-    m_upperBoundComponents.book   = r->getBook();
-    m_upperBoundComponents.chap   = r->getChapter();
-    m_upperBoundComponents.verse  = r->getVerse();
-    m_upperBoundComponents.suffix = r->getSuffix();
+void VerseKey::initBounds() const
+{
+    if (!m_tmpClone) {
+        m_tmpClone.reset(static_cast<VerseKey *>(clone()));
+        m_tmpClone->setAutoNormalize(false);
+        m_tmpClone->setIntros(true);
+        m_tmpClone->setTestament(m_BMAX[1] ? 2 : 1);
+        m_tmpClone->setBook(m_BMAX[m_BMAX[1] ? 1 : 0]);
+        m_tmpClone->setChapter(m_tmpClone->getChapterMax());
+        m_tmpClone->setVerse(m_tmpClone->getVerseMax());
+        m_upperBound = m_tmpClone->getIndex();
+        m_upperBoundComponents.test   = m_tmpClone->getTestament();
+        m_upperBoundComponents.book   = m_tmpClone->getBook();
+        m_upperBoundComponents.chap   = m_tmpClone->getChapter();
+        m_upperBoundComponents.verse  = m_tmpClone->getVerse();
+        m_upperBoundComponents.suffix = m_tmpClone->getSuffix();
 
-    m_lowerBound = 0;
-    m_lowerBoundComponents.test   = 0;
-    m_lowerBoundComponents.book   = 0;
-    m_lowerBoundComponents.chap   = 0;
-    m_lowerBoundComponents.verse  = 0;
-    m_lowerBoundComponents.suffix = 0;
-    return r;
+        m_lowerBound = 0;
+        m_lowerBoundComponents.test   = 0;
+        m_lowerBoundComponents.book   = 0;
+        m_lowerBoundComponents.chap   = 0;
+        m_lowerBoundComponents.verse  = 0;
+        m_lowerBoundComponents.suffix = 0;
+    } else {
+        m_tmpClone->setLocale(getLocale());
+    }
 }
 
 

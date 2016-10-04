@@ -61,7 +61,7 @@ class SWDLLEXPORT VerseKey : public SWKey {
     bool m_intros = false;
 
     // bounds caching is mutable, thus const
-    std::unique_ptr<VerseKey> initBounds() const;
+    void initBounds() const;
 
     // private with no bounds check
     void setFromOther(const VerseKey &vk);
@@ -71,6 +71,7 @@ class SWDLLEXPORT VerseKey : public SWKey {
     // internal upper/lower bounds optimizations, if autonorms is on
     mutable long m_lowerBound = 0;
     mutable long m_upperBound = 0;
+    mutable std::unique_ptr<VerseKey> m_tmpClone;
 
     typedef struct VerseComponents { int test; int book; int chap; int verse; char suffix; } VerseComponents;
 
