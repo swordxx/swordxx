@@ -1724,21 +1724,22 @@ int VerseKey::compare(SWKey const & ikey) const noexcept {
  */
 
 int VerseKey::compare_(VerseKey const & ivkey) const noexcept {
-    unsigned long keyval1 = 0;
-    unsigned long keyval2 = 0;
+    if (getTestament() != ivkey.getTestament())
+        return (getTestament() < ivkey.getTestament()) ? -1 : 1;
 
-    keyval1 += getTestament()       * 1000000000;
-    keyval2 += ivkey.getTestament() * 1000000000;
-    keyval1 += getBook()            * 10000000;
-    keyval2 += ivkey.getBook()      * 10000000;
-    keyval1 += getChapter()         * 10000;
-    keyval2 += ivkey.getChapter()   * 10000;
-    keyval1 += getVerse()           * 50;
-    keyval2 += ivkey.getVerse()     * 50;
-    keyval1 += (int)getSuffix();
-    keyval2 += (int)ivkey.getSuffix();
-    keyval1 = (keyval1 != keyval2) ? ((keyval1 > keyval2) ? 1 : -1) : 0; // -1 | 0 | 1
-    return keyval1;
+    if (getBook() != ivkey.getBook())
+        return (getBook() < ivkey.getBook()) ? -1 : 1;
+
+    if (getChapter() != ivkey.getChapter())
+        return (getChapter() < ivkey.getChapter()) ? -1 : 1;
+
+    if (getVerse() != ivkey.getVerse())
+        return (getVerse() < ivkey.getVerse()) ? -1 : 1;
+
+    if (getSuffix() != ivkey.getSuffix())
+        return (getSuffix() < ivkey.getSuffix()) ? -1 : 1;
+
+    return 0;
 }
 
 
