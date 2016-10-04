@@ -186,11 +186,11 @@ void VerseKey::positionFrom(const SWKey &ikey) {
     }
 
      // should we always perform bounds checks?  Tried but seems to cause infinite recursion
-    if (_compare(getUpperBound()) > 0) {
+    if (compare_(getUpperBound()) > 0) {
         setFromOther(getUpperBound());
         error = KEYERR_OUTOFBOUNDS;
     }
-    if (_compare(getLowerBound()) < 0) {
+    if (compare_(getLowerBound()) < 0) {
         setFromOther(getLowerBound());
         error = KEYERR_OUTOFBOUNDS;
     }
@@ -1437,11 +1437,11 @@ void VerseKey::normalize(bool autocheck)
         }
 
             // should we always perform bounds checks?  Tried but seems to cause infinite recursion
-        if (_compare(getUpperBound()) > 0) {
+        if (compare_(getUpperBound()) > 0) {
             positionFrom(getUpperBound());
             error = KEYERR_OUTOFBOUNDS;
         }
-        if (_compare(getLowerBound()) < 0) {
+        if (compare_(getLowerBound()) < 0) {
             positionFrom(getLowerBound());
             error = KEYERR_OUTOFBOUNDS;
         }
@@ -1728,14 +1728,14 @@ void VerseKey::checkBounds() {
 int VerseKey::compare(SWKey const & ikey) const noexcept {
     const SWKey *testKey = &ikey;
     if (const VerseKey * const vkey = dynamic_cast<VerseKey const *>(testKey))
-        return _compare(*vkey);
+        return compare_(*vkey);
     VerseKey const ivkey(ikey.getText());
-    return _compare(ivkey);
+    return compare_(ivkey);
 }
 
 
 /******************************************************************************
- * VerseKey::_compare    - Compares another VerseKey object
+ * VerseKey::compare_    - Compares another VerseKey object
  *
  * ENT:    ikey - key to compare with this one
  *
@@ -1744,7 +1744,7 @@ int VerseKey::compare(SWKey const & ikey) const noexcept {
  *     0 =
  */
 
-int VerseKey::_compare(VerseKey const & ivkey) const noexcept {
+int VerseKey::compare_(VerseKey const & ivkey) const noexcept {
     unsigned long keyval1 = 0;
     unsigned long keyval2 = 0;
 

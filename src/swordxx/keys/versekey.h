@@ -395,7 +395,7 @@ public:
     * <0 if this    VerseKey is smaller than compare    VerseKey,
     * 0 if the keys are the same
     */
-    int _compare(VerseKey const & ikey) const noexcept;
+    int compare_(VerseKey const & ikey) const noexcept;
 
     void setVersificationSystem(const char *name);
     const char *getVersificationSystem() const;

@@ -142,11 +142,11 @@ void VerseTreeKey::decrement(int /* steps */) {
         treeKey->setOffset(lastGoodOffset);
         error = treeError;
     }
-    if (_compare(getUpperBound()) > 0) {
+    if (compare_(getUpperBound()) > 0) {
         positionFrom(getUpperBound());
         error = KEYERR_OUTOFBOUNDS;
     }
-    if (_compare(getLowerBound()) < 0) {
+    if (compare_(getLowerBound()) < 0) {
         positionFrom(getLowerBound());
         error = KEYERR_OUTOFBOUNDS;
     }
@@ -171,11 +171,11 @@ void VerseTreeKey::increment(int /* steps */) {
         error = treeError;
     }
     // bounds
-    if (_compare(getUpperBound()) > 0) {
+    if (compare_(getUpperBound()) > 0) {
         positionFrom(getUpperBound());
         error = KEYERR_OUTOFBOUNDS;
     }
-    if (_compare(getLowerBound()) < 0) {
+    if (compare_(getLowerBound()) < 0) {
         positionFrom(getLowerBound());
         error = KEYERR_OUTOFBOUNDS;
     }
