@@ -36,31 +36,31 @@
 
 namespace swordxx {
 
-TreeKeyIdx::TreeKeyIdx(const TreeKeyIdx &ikey) : currentNode() {
-    path = nullptr;
-    idxfd = nullptr;
-    datfd = nullptr;
+TreeKeyIdx::TreeKeyIdx(const TreeKeyIdx &ikey) : m_currentNode() {
+    m_path = nullptr;
+    m_idxfd = nullptr;
+    m_datfd = nullptr;
     copyFrom(ikey);
 }
 
-TreeKeyIdx::TreeKeyIdx(const char *idxPath, int fileMode) : currentNode() {
+TreeKeyIdx::TreeKeyIdx(const char *idxPath, int fileMode) : m_currentNode() {
     std::string buf;
 
-    path = nullptr;
-    stdstr(&path, idxPath);
+    m_path = nullptr;
+    stdstr(&m_path, idxPath);
 
     if (fileMode == -1) { // try read/write if possible
         fileMode = FileMgr::RDWR;
     }
 
-    buf = path;
+    buf = m_path;
     buf += ".idx";
-    idxfd = FileMgr::getSystemFileMgr()->open(buf.c_str(), fileMode, true);
+    m_idxfd = FileMgr::getSystemFileMgr()->open(buf.c_str(), fileMode, true);
     buf.resize(buf.size() - 4u);
     buf += ".dat";
-    datfd = FileMgr::getSystemFileMgr()->open(buf.c_str(), fileMode, true);
+    m_datfd = FileMgr::getSystemFileMgr()->open(buf.c_str(), fileMode, true);
 
-    if (!datfd) {
+    if (!m_datfd) {
         SWLog::getSystemLog()->logError("%d", errno);
         m_error = errno;
     }
@@ -71,60 +71,60 @@ TreeKeyIdx::TreeKeyIdx(const char *idxPath, int fileMode) : currentNode() {
 
 
 TreeKeyIdx::~TreeKeyIdx () {
-    delete[] path;
+    delete[] m_path;
 
-    FileMgr::getSystemFileMgr()->close(idxfd);
-    FileMgr::getSystemFileMgr()->close(datfd);
+    FileMgr::getSystemFileMgr()->close(m_idxfd);
+    FileMgr::getSystemFileMgr()->close(m_datfd);
 }
 
 
 const char *TreeKeyIdx::getLocalName() {
     m_unsnappedKeyText = "";
-    return currentNode.name;
+    return m_currentNode.name;
 }
 
 
 const char *TreeKeyIdx::getUserData(int *size) const {
     m_unsnappedKeyText = "";
     if (size)
-        *size = (int)currentNode.dsize;
-    return currentNode.userData;
+        *size = (int)m_currentNode.dsize;
+    return m_currentNode.userData;
 }
 
 
 void TreeKeyIdx::setUserData(const char *userData, int size) {
     // this makes sure any unsnapped path exists
     assureKeyPath();
-    delete currentNode.userData;
+    delete m_currentNode.userData;
 
     if (!size)
         size = strlen(userData) + 1;
 
-    currentNode.userData = new char [ size ];
-    memcpy(currentNode.userData, userData, size);
-    currentNode.dsize = size;
+    m_currentNode.userData = new char [ size ];
+    memcpy(m_currentNode.userData, userData, size);
+    m_currentNode.dsize = size;
 }
 
 const char *TreeKeyIdx::setLocalName(const char *newName) {
     m_unsnappedKeyText = "";
-    stdstr(&(currentNode.name), newName);
-    return currentNode.name;
+    stdstr(&(m_currentNode.name), newName);
+    return m_currentNode.name;
 }
 
 
 void TreeKeyIdx::save() {
-    saveTreeNode(&currentNode);
+    saveTreeNode(&m_currentNode);
 }
 
 
 void TreeKeyIdx::root() {
-    m_error = getTreeNodeFromIdxOffset(0, &currentNode);
+    m_error = getTreeNodeFromIdxOffset(0, &m_currentNode);
     positionChanged();
 }
 
 int TreeKeyIdx::getLevel() {
     TreeNode iterator;
-    iterator.parent = currentNode.parent;
+    iterator.parent = m_currentNode.parent;
     int level = 0;
     while (iterator.parent > -1) {
         level++;
@@ -135,8 +135,8 @@ int TreeKeyIdx::getLevel() {
 
 
 bool TreeKeyIdx::parent() {
-    if (currentNode.parent > -1) {
-        m_error = getTreeNodeFromIdxOffset(currentNode.parent, &currentNode);
+    if (m_currentNode.parent > -1) {
+        m_error = getTreeNodeFromIdxOffset(m_currentNode.parent, &m_currentNode);
         positionChanged();
         return true;
     }
@@ -145,8 +145,8 @@ bool TreeKeyIdx::parent() {
 
 
 bool TreeKeyIdx::firstChild() {
-    if (currentNode.firstChild > -1) {
-        m_error = getTreeNodeFromIdxOffset(currentNode.firstChild, &currentNode);
+    if (m_currentNode.firstChild > -1) {
+        m_error = getTreeNodeFromIdxOffset(m_currentNode.firstChild, &m_currentNode);
         positionChanged();
         return true;
     }
@@ -155,8 +155,8 @@ bool TreeKeyIdx::firstChild() {
 
 
 bool TreeKeyIdx::nextSibling() {
-    if (currentNode.next > -1) {
-        m_error = getTreeNodeFromIdxOffset(currentNode.next, &currentNode);
+    if (m_currentNode.next > -1) {
+        m_error = getTreeNodeFromIdxOffset(m_currentNode.next, &m_currentNode);
         positionChanged();
         return true;
     }
@@ -166,15 +166,15 @@ bool TreeKeyIdx::nextSibling() {
 
 bool TreeKeyIdx::previousSibling() {
     TreeNode iterator;
-    int32_t target = currentNode.offset;
-    if (currentNode.parent > -1) {
-        getTreeNodeFromIdxOffset(currentNode.parent, &iterator);
+    int32_t target = m_currentNode.offset;
+    if (m_currentNode.parent > -1) {
+        getTreeNodeFromIdxOffset(m_currentNode.parent, &iterator);
         getTreeNodeFromIdxOffset(iterator.firstChild, &iterator);
         if (iterator.offset != target) {
             while ((iterator.next != target) && (iterator.next > -1))
                 getTreeNodeFromIdxOffset(iterator.next, &iterator);
             if (iterator.next > -1) {
-                m_error = getTreeNodeFromIdxOffset(iterator.offset, &currentNode);
+                m_error = getTreeNodeFromIdxOffset(iterator.offset, &m_currentNode);
                 positionChanged();
                 return true;
             }
@@ -185,24 +185,24 @@ bool TreeKeyIdx::previousSibling() {
 
 
 bool TreeKeyIdx::hasChildren() {
-    return (currentNode.firstChild > -1);
+    return (m_currentNode.firstChild > -1);
 }
 
 
 void TreeKeyIdx::append() {
     TreeNode lastSib;
-    if (currentNode.offset) {
-        getTreeNodeFromIdxOffset(currentNode.offset, &lastSib);
+    if (m_currentNode.offset) {
+        getTreeNodeFromIdxOffset(m_currentNode.offset, &lastSib);
         while (lastSib.next > -1) {
             getTreeNodeFromIdxOffset(lastSib.next, &lastSib);
         }
-        uint32_t idxOffset = idxfd->seek(0, SEEK_END);
+        uint32_t idxOffset = m_idxfd->seek(0, SEEK_END);
         lastSib.next = idxOffset;
         saveTreeNodeOffsets(&lastSib);
-        uint32_t parent = currentNode.parent;
-        currentNode.clear();
-        currentNode.offset = idxOffset;
-        currentNode.parent = parent;
+        uint32_t parent = m_currentNode.parent;
+        m_currentNode.clear();
+        m_currentNode.offset = idxOffset;
+        m_currentNode.parent = parent;
         positionChanged();
     }
 }
@@ -213,13 +213,13 @@ void TreeKeyIdx::appendChild() {
         append();
     }
     else {
-        uint32_t idxOffset = idxfd->seek(0, SEEK_END);
-        currentNode.firstChild = idxOffset;
-        saveTreeNodeOffsets(&currentNode);
-        uint32_t parent = currentNode.offset;
-        currentNode.clear();
-        currentNode.offset = idxOffset;
-        currentNode.parent = parent;
+        uint32_t idxOffset = m_idxfd->seek(0, SEEK_END);
+        m_currentNode.firstChild = idxOffset;
+        saveTreeNodeOffsets(&m_currentNode);
+        uint32_t parent = m_currentNode.offset;
+        m_currentNode.clear();
+        m_currentNode.offset = idxOffset;
+        m_currentNode.parent = parent;
     }
     positionChanged();
 }
@@ -232,23 +232,23 @@ void TreeKeyIdx::insertBefore() {
 void TreeKeyIdx::remove() {
     TreeNode node;
     bool done = false;
-    if (currentNode.offset) {
-        getTreeNodeFromIdxOffset(currentNode.offset, &node);
+    if (m_currentNode.offset) {
+        getTreeNodeFromIdxOffset(m_currentNode.offset, &node);
         if (node.parent > -1) {
             TreeNode parent;
             getTreeNodeFromIdxOffset(node.parent, &parent);
             if (parent.firstChild == node.offset) {
                 parent.firstChild = node.next;
                 saveTreeNodeOffsets(&parent);
-                getTreeNodeFromIdxOffset(parent.offset, &currentNode);
+                getTreeNodeFromIdxOffset(parent.offset, &m_currentNode);
                 done = true;
             }
         }
         if (!done) {
             TreeNode iterator;
-            int32_t target = currentNode.offset;
-            if (currentNode.parent > -1) {
-                getTreeNodeFromIdxOffset(currentNode.parent, &iterator);
+            int32_t target = m_currentNode.offset;
+            if (m_currentNode.parent > -1) {
+                getTreeNodeFromIdxOffset(m_currentNode.parent, &iterator);
                 getTreeNodeFromIdxOffset(iterator.firstChild, &iterator);
                 if (iterator.offset != target) {
                     while ((iterator.next != target) && (iterator.next > -1)) {
@@ -259,7 +259,7 @@ void TreeKeyIdx::remove() {
                         getTreeNodeFromIdxOffset(iterator.offset, &prev);
                         prev.next = node.next;
                         saveTreeNodeOffsets(&prev);
-                        getTreeNodeFromIdxOffset(prev.offset, &currentNode);
+                        getTreeNodeFromIdxOffset(prev.offset, &m_currentNode);
                     }
                 }
             }
@@ -324,34 +324,34 @@ void TreeKeyIdx::getTreeNodeFromDatOffset(long ioffset, TreeNode *node) const {
     int32_t  tmp;
     uint16_t  tmp2;
 
-    if (datfd) {
+    if (m_datfd) {
 
-        datfd->seek(ioffset, SEEK_SET);
+        m_datfd->seek(ioffset, SEEK_SET);
 
-        datfd->read(&tmp, 4);
+        m_datfd->read(&tmp, 4);
         node->parent = swordtoarch32(tmp);
 
-        datfd->read(&tmp, 4);
+        m_datfd->read(&tmp, 4);
         node->next = swordtoarch32(tmp);
 
-        datfd->read(&tmp, 4);
+        m_datfd->read(&tmp, 4);
         node->firstChild = swordtoarch32(tmp);
 
         std::string name;
         do {
-            datfd->read(&ch, 1);
+            m_datfd->read(&ch, 1);
             name += ch;
         } while (ch);
 
         stdstr(&(node->name), name.c_str());
 
-        datfd->read(&tmp2, 2);
+        m_datfd->read(&tmp2, 2);
         node->dsize = swordtoarch16(tmp2);
 
         if (node->dsize) {
             delete[] node->userData;
             node->userData = new char [node->dsize];
-            datfd->read(node->userData, node->dsize);
+            m_datfd->read(node->userData, node->dsize);
         }
     }
 }
@@ -377,17 +377,17 @@ char TreeKeyIdx::getTreeNodeFromIdxOffset(long ioffset, TreeNode *node) const {
     }
 
     node->offset = ioffset;
-    if (idxfd) {
-        if (idxfd->getFd() > 0) {
-            idxfd->seek(ioffset, SEEK_SET);
-            if (idxfd->read(&offset, 4) == 4) {
+    if (m_idxfd) {
+        if (m_idxfd->getFd() > 0) {
+            m_idxfd->seek(ioffset, SEEK_SET);
+            if (m_idxfd->read(&offset, 4) == 4) {
                 offset = swordtoarch32(offset);
                 error = (error == 77) ? KEYERR_OUTOFBOUNDS : 0;
                 getTreeNodeFromDatOffset(offset, node);
             }
             else {
-                idxfd->seek(-4, SEEK_END);
-                if (idxfd->read(&offset, 4) == 4) {
+                m_idxfd->seek(-4, SEEK_END);
+                if (m_idxfd->read(&offset, 4) == 4) {
                     offset = swordtoarch32(offset);
                     getTreeNodeFromDatOffset(offset, node);
                 }
@@ -400,11 +400,11 @@ char TreeKeyIdx::getTreeNodeFromIdxOffset(long ioffset, TreeNode *node) const {
 
 unsigned long TreeKeyIdx::getOffset() const {
     m_unsnappedKeyText = "";
-    return currentNode.offset;
+    return m_currentNode.offset;
 }
 
 void TreeKeyIdx::setOffset(unsigned long offset) {
-    m_error = getTreeNodeFromIdxOffset(offset, &currentNode);
+    m_error = getTreeNodeFromIdxOffset(offset, &m_currentNode);
     positionChanged();
 }
 
@@ -414,26 +414,26 @@ void TreeKeyIdx::saveTreeNodeOffsets(TreeNode *node) {
     long datOffset = 0;
     int32_t tmp;
 
-    if (idxfd) {
-        idxfd->seek(node->offset, SEEK_SET);
-        if (idxfd->read(&tmp, 4) != 4) {
-            datOffset = datfd->seek(0, SEEK_END);
+    if (m_idxfd) {
+        m_idxfd->seek(node->offset, SEEK_SET);
+        if (m_idxfd->read(&tmp, 4) != 4) {
+            datOffset = m_datfd->seek(0, SEEK_END);
             tmp = archtosword32(datOffset);
-            idxfd->write(&tmp, 4);
+            m_idxfd->write(&tmp, 4);
         }
         else {
             datOffset = swordtoarch32(tmp);
-            datfd->seek(datOffset, SEEK_SET);
+            m_datfd->seek(datOffset, SEEK_SET);
         }
 
         tmp = archtosword32(node->parent);
-        datfd->write(&tmp, 4);
+        m_datfd->write(&tmp, 4);
 
         tmp = archtosword32(node->next);
-        datfd->write(&tmp, 4);
+        m_datfd->write(&tmp, 4);
 
         tmp = archtosword32(node->firstChild);
-        datfd->write(&tmp, 4);
+        m_datfd->write(&tmp, 4);
     }
 }
 
@@ -443,34 +443,34 @@ void TreeKeyIdx::copyFrom(const TreeKeyIdx &ikey) {
 
     SWKey::copyFrom(ikey);
 
-    currentNode.offset = ikey.currentNode.offset;
-    currentNode.parent = ikey.currentNode.parent;
-    currentNode.next = ikey.currentNode.next;
-    currentNode.firstChild = ikey.currentNode.firstChild;
-    stdstr(&(currentNode.name), ikey.currentNode.name);
-    currentNode.dsize = ikey.currentNode.dsize;
+    m_currentNode.offset = ikey.m_currentNode.offset;
+    m_currentNode.parent = ikey.m_currentNode.parent;
+    m_currentNode.next = ikey.m_currentNode.next;
+    m_currentNode.firstChild = ikey.m_currentNode.firstChild;
+    stdstr(&(m_currentNode.name), ikey.m_currentNode.name);
+    m_currentNode.dsize = ikey.m_currentNode.dsize;
 
-    delete[] currentNode.userData;
-    if (currentNode.dsize) {
-        currentNode.userData = new char [ currentNode.dsize ];
-        memcpy(currentNode.userData, ikey.currentNode.userData, currentNode.dsize);
+    delete[] m_currentNode.userData;
+    if (m_currentNode.dsize) {
+        m_currentNode.userData = new char [ m_currentNode.dsize ];
+        memcpy(m_currentNode.userData, ikey.m_currentNode.userData, m_currentNode.dsize);
     }
-    else currentNode.userData = nullptr;
+    else m_currentNode.userData = nullptr;
 
     bool newFiles = true;
 
-    if (path && ikey.path)
-        newFiles = strcmp(path, ikey.path);
+    if (m_path && ikey.m_path)
+        newFiles = strcmp(m_path, ikey.m_path);
 
     if (newFiles) {
-        stdstr(&path, ikey.path);
+        stdstr(&m_path, ikey.m_path);
 
-        if (idxfd) {
-            FileMgr::getSystemFileMgr()->close(idxfd);
-            FileMgr::getSystemFileMgr()->close(datfd);
+        if (m_idxfd) {
+            FileMgr::getSystemFileMgr()->close(m_idxfd);
+            FileMgr::getSystemFileMgr()->close(m_datfd);
         }
-        idxfd = FileMgr::getSystemFileMgr()->open(ikey.idxfd->path, ikey.idxfd->mode, ikey.idxfd->perms);
-        datfd = FileMgr::getSystemFileMgr()->open(ikey.datfd->path, ikey.datfd->mode, ikey.datfd->perms);
+        m_idxfd = FileMgr::getSystemFileMgr()->open(ikey.m_idxfd->path, ikey.m_idxfd->mode, ikey.m_idxfd->perms);
+        m_datfd = FileMgr::getSystemFileMgr()->open(ikey.m_datfd->path, ikey.m_datfd->mode, ikey.m_datfd->perms);
     }
     positionChanged();
 }
@@ -479,23 +479,23 @@ void TreeKeyIdx::copyFrom(const TreeKeyIdx &ikey) {
 void TreeKeyIdx::saveTreeNode(TreeNode *node) {
     long datOffset = 0;
     int32_t tmp;
-    if (idxfd) {
-        idxfd->seek(node->offset, SEEK_SET);
-        datOffset = datfd->seek(0, SEEK_END);
+    if (m_idxfd) {
+        m_idxfd->seek(node->offset, SEEK_SET);
+        datOffset = m_datfd->seek(0, SEEK_END);
         tmp = archtosword32(datOffset);
-        idxfd->write(&tmp, 4);
+        m_idxfd->write(&tmp, 4);
 
         saveTreeNodeOffsets(node);
 
-        datfd->write(node->name, strlen(node->name));
+        m_datfd->write(node->name, strlen(node->name));
         char null = 0;
-        datfd->write(&null, 1);
+        m_datfd->write(&null, 1);
 
         uint16_t tmp2 = archtosword16(node->dsize);
-        datfd->write(&tmp2, 2);
+        m_datfd->write(&tmp2, 2);
 
         if (node->dsize) {
-            datfd->write(node->userData, node->dsize);
+            m_datfd->write(node->userData, node->dsize);
         }
     }
 }
@@ -554,7 +554,7 @@ void TreeKeyIdx::positionToTop() {
 }
 
 void TreeKeyIdx::positionToBottom() {
-    m_error = getTreeNodeFromIdxOffset(idxfd->seek(-4, SEEK_END), &currentNode);
+    m_error = getTreeNodeFromIdxOffset(m_idxfd->seek(-4, SEEK_END), &m_currentNode);
     positionChanged();
     popError();    // clear error from normalize
 }
@@ -572,12 +572,12 @@ int TreeKeyIdx::compare(SWKey const & ikey) const noexcept {
 
 
 void TreeKeyIdx::decrement(int steps) {
-    m_error = getTreeNodeFromIdxOffset(currentNode.offset - (4*steps), &currentNode);
+    m_error = getTreeNodeFromIdxOffset(m_currentNode.offset - (4*steps), &m_currentNode);
     positionChanged();
 }
 
 void TreeKeyIdx::increment(int steps) {
-    m_error = getTreeNodeFromIdxOffset(currentNode.offset + (4*steps), &currentNode);
+    m_error = getTreeNodeFromIdxOffset(m_currentNode.offset + (4*steps), &m_currentNode);
     if (m_error) {
 //        SWLog::getSystemLog()->logError("error: %d", error);
     }
@@ -607,8 +607,8 @@ void TreeKeyIdx::increment(int steps) {
 const char *TreeKeyIdx::getText() const {
     TreeNode parent;
     static std::string fullPath;
-    fullPath = currentNode.name;
-    parent.parent = currentNode.parent;
+    fullPath = m_currentNode.name;
+    parent.parent = m_currentNode.parent;
     while (parent.parent > -1) {
         getTreeNodeFromIdxOffset(parent.parent, &parent);
         fullPath = std::string(parent.name) + '/' + fullPath;
