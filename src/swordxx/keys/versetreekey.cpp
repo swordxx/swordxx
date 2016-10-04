@@ -63,7 +63,7 @@ VerseTreeKey::VerseTreeKey(TreeKey *treeKey, const char *ikey) : VerseKey(ikey)
 
 VerseTreeKey::VerseTreeKey(VerseTreeKey const &k) : VerseKey(k)
 {
-    init(k.treeKey);
+    init(k.m_treeKey);
 }
 
 
@@ -75,9 +75,9 @@ VerseTreeKey::VerseTreeKey(TreeKey *treeKey, const char *min, const char *max) :
 
 void VerseTreeKey::init(TreeKey *treeKey)
 {
-    this->treeKey = (TreeKey *)treeKey->clone();
-    this->treeKey->setPositionChangeListener(this);
-    internalPosChange = false;
+    this->m_treeKey = (TreeKey *)treeKey->clone();
+    this->m_treeKey->setPositionChangeListener(this);
+    m_internalPosChange = false;
 }
 
 
@@ -121,25 +121,25 @@ int VerseTreeKey::getBookFromAbbrev(const char *iabbr) const
  */
 
 VerseTreeKey::~VerseTreeKey() {
-    delete treeKey;
+    delete m_treeKey;
 }
 
 
 void VerseTreeKey::decrement(int /* steps */) {
     int treeError = 0;
-    if (!m_error) lastGoodOffset = getTreeKey()->getOffset();
+    if (!m_error) m_lastGoodOffset = getTreeKey()->getOffset();
     do {
-        treeKey->decrement();
-        treeError = treeKey->popError();
+        m_treeKey->decrement();
+        treeError = m_treeKey->popError();
     // iterate until 3 levels and no versekey parse errors
-    } while (!treeError && ((treeKey->getLevel() < 3) || m_error));
+    } while (!treeError && ((m_treeKey->getLevel() < 3) || m_error));
     if (m_error && !treeError) {
         int saveError = m_error;
         increment();
         m_error = saveError;
     }
     if (treeError) {
-        treeKey->setOffset(lastGoodOffset);
+        m_treeKey->setOffset(m_lastGoodOffset);
         m_error = treeError;
     }
     if (compare_(getUpperBound()) > 0) {
@@ -155,19 +155,19 @@ void VerseTreeKey::decrement(int /* steps */) {
 
 void VerseTreeKey::increment(int /* steps */) {
     int treeError = 0;
-    if (!m_error) lastGoodOffset = getTreeKey()->getOffset();
+    if (!m_error) m_lastGoodOffset = getTreeKey()->getOffset();
     do {
-        treeKey->increment();
-        treeError = treeKey->popError();
+        m_treeKey->increment();
+        treeError = m_treeKey->popError();
     // iterate until 3 levels and no versekey parse errors
-    } while (!treeError && ((treeKey->getLevel() < 3) || m_error));
+    } while (!treeError && ((m_treeKey->getLevel() < 3) || m_error));
     if (m_error && !treeError) {
         int saveError = m_error;
         decrement();
         m_error = saveError;
     }
     if (treeError) {
-        treeKey->setOffset(lastGoodOffset);
+        m_treeKey->setOffset(m_lastGoodOffset);
         m_error = treeError;
     }
     // bounds
@@ -183,12 +183,12 @@ void VerseTreeKey::increment(int /* steps */) {
 
 
 void VerseTreeKey::positionChanged() {
-    if (!internalPosChange) {
+    if (!m_internalPosChange) {
         TreeKey *tkey = this->TreeKey::PositionChangeListener::getTreeKey();
         int saveError = tkey->popError();
         long bookmark = tkey->getOffset();
         std::string seg[4];
-        internalPosChange = true;
+        m_internalPosChange = true;
         int legs = 0;
         do {
             seg[legs] = tkey->getLocalName();
@@ -224,33 +224,33 @@ void VerseTreeKey::positionChanged() {
         }
         tkey->setOffset(bookmark);
         tkey->setError(saveError);
-        internalPosChange = false;
+        m_internalPosChange = false;
     }
 }
 
 
 void VerseTreeKey::syncVerseToTree() {
-    internalPosChange = true;
+    m_internalPosChange = true;
     std::string path;
     if (!getTestament()) path = "/"; // "[ Module Heading ]";
     else if (!getBook()) path = formatted("/[ Testament %d Heading ]", getTestament());
     else path = formatted("/%s/%d/%d", getOSISBookName(), getChapter(), getVerse());
     if (getSuffix()) path += getSuffix();
-    long bookmark = treeKey->getOffset();
-    treeKey->setText(path.c_str());
+    long bookmark = m_treeKey->getOffset();
+    m_treeKey->setText(path.c_str());
 
     // if our module has jacked inconsistencies, then let's put our tree back to where it was
-    if (treeKey->popError()) {
-        treeKey->setOffset(bookmark);
+    if (m_treeKey->popError()) {
+        m_treeKey->setOffset(bookmark);
     }
 
-    internalPosChange = false;
+    m_internalPosChange = false;
 }
 
 
 TreeKey *VerseTreeKey::getTreeKey() {
     syncVerseToTree();
-    return treeKey;
+    return m_treeKey;
 }
 
 // can autonormalize yet (ever?)
@@ -259,7 +259,7 @@ void VerseTreeKey::Normalize(char /* autocheck */) {
 }
 
 long VerseTreeKey::NewIndex() const {
-    return treeKey->getOffset();
+    return m_treeKey->getOffset();
 }
 
 
@@ -267,7 +267,7 @@ void VerseTreeKey::positionToTop() {
     if (isBoundSet())
         return VerseKey::positionToTop();
     popError();
-    treeKey->positionToTop();
+    m_treeKey->positionToTop();
     increment();
     decrement();
     popError();
@@ -277,7 +277,7 @@ void VerseTreeKey::positionToBottom() {
     if (isBoundSet())
         return VerseKey::positionToBottom();
     popError();
-    treeKey->positionToBottom();
+    m_treeKey->positionToBottom();
     decrement();
     increment();
     popError();

@@ -40,12 +40,12 @@ namespace swordxx {
  */
 class SWDLLEXPORT VerseTreeKey : public VerseKey, public TreeKey::PositionChangeListener {
 
-    TreeKey *treeKey;
+    TreeKey * m_treeKey;
 //    vector<struct sbook> books;
 
     void init(TreeKey *treeKey);
     void syncVerseToTree();
-    long lastGoodOffset;
+    long m_lastGoodOffset;
 
 protected:
     int getBookFromAbbrev(char const * abbr) const override;
@@ -95,7 +95,7 @@ public:
     virtual TreeKey *getTreeKey();
 
     void positionChanged() override;
-    bool internalPosChange;
+    bool m_internalPosChange;
 
     void decrement(int steps = 1) override;
     void increment(int steps = 1) override;
