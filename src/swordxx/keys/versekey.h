@@ -106,7 +106,7 @@ protected:
     /**    Parse a character array into testament|book|chapter|verse
     *
     */
-    virtual char parse(bool checkNormalize = true);
+    char parse(bool checkNormalize = true);
 public:
 #if 0
     static long otbks[];
@@ -157,7 +157,7 @@ public:
     /**    VerseKey Destructor
     * Cleans up an instance of VerseKey
     */
-    virtual ~VerseKey();
+    ~VerseKey() override;
 
     /** sets the lower boundary for this VerseKey
     *
@@ -196,7 +196,7 @@ public:
     char const * getText() const override;
     char const * getShortText() const override;
 
-    virtual void setText(char const * ikey, bool checkNormalize)
+    void setText(char const * ikey, bool checkNormalize)
     { SWKey::setText(ikey); parse(checkNormalize); }
 
     void setText(char const * ikey) override
@@ -234,73 +234,73 @@ public:
 
     /** Get/Set position of this key by Book Name
      */
-    virtual const char *getBookName() const;
-    virtual void setBookName(const char *bname);
+    const char *getBookName() const;
+    void setBookName(const char *bname);
 
-    virtual const char *getBookAbbrev() const;
+    const char *getBookAbbrev() const;
     /** Gets testament
     *
     * @return value of testament
     */
-    virtual char getTestament() const;
-    virtual int getTestamentMax() const { return 2; }
+    char getTestament() const;
+    int getTestamentMax() const { return 2; }
 
     /** Gets book
     *
     * @return value of book
     */
-    virtual char getBook() const;
-    virtual int getBookMax() const { return BMAX[testament-1]; }
+    char getBook() const;
+    int getBookMax() const { return BMAX[testament-1]; }
 
     /** Gets chapter
     *
     * @return value of chapter
     */
-    virtual int getChapter() const;
-    virtual int getChapterMax() const;
+    int getChapter() const;
+    int getChapterMax() const;
 
     /** Gets verse
     *
     * @return value of verse
     */
-    virtual int getVerse() const;
-    virtual int getVerseMax() const;
+    int getVerse() const;
+    int getVerseMax() const;
 
     /** Gets verse suffix
     *
     * @return value of verse suffix
     */
-    virtual char getSuffix() const;
+    char getSuffix() const;
 
     /** Sets testament
     *
     * @param itestament value which to set testament
     */
-    virtual void setTestament(char itestament);
+    void setTestament(char itestament);
 
     /** Sets book
     *
     * @param ibook value which to set book
     */
-    virtual void setBook(char ibook);
+    void setBook(char ibook);
 
     /** Sets chapter
     *
     * @param ichapter value which to set chapter
     */
-    virtual void setChapter(int ichapter);
+    void setChapter(int ichapter);
 
     /** Sets verse
     *
     * @param iverse value which to set verse
     */
-    virtual void setVerse(int iverse);
+    void setVerse(int iverse);
 
     /** Sets/gets verse suffix
     *
     * @param isuffix value which to set verse suffix
     */
-    virtual void setSuffix(char isuffix);
+    void setSuffix(char isuffix);
 
     /** checks limits and normalizes if necessary (e.g.
     * Matthew 29:47 = Mark 2:2).    If last verse is
@@ -308,7 +308,7 @@ public:
     *
     * @return *this
     */
-    virtual void normalize(bool autocheck = false);
+    void normalize(bool autocheck = false);
 
     /** Sets flag that tells VerseKey to
     * automatically normalize itself when modified
@@ -318,14 +318,14 @@ public:
     * @return if unchanged -> value of autonorm,
     * if changed -> previous value of autonorm
     */
-    virtual void setAutoNormalize(bool iautonorm);
-    virtual bool isAutoNormalize() const;
+    void setAutoNormalize(bool iautonorm);
+    bool isAutoNormalize() const;
 
     /** The Intros property determine whether or not to include
     * chapter/book/testament/module intros
     */
-    virtual void setIntros(bool val);
-    virtual bool isIntros() const;
+    void setIntros(bool val);
+    bool isIntros() const;
 
 
     /** Gets index based upon current verse
@@ -347,10 +347,10 @@ public:
     *
     * @return offset
     */
-    virtual long getTestamentIndex() const;
+    long getTestamentIndex() const;
 
-    virtual const char *getOSISRef() const;
-    virtual const char *getOSISBookName() const;
+    const char *getOSISRef() const;
+    const char *getOSISBookName() const;
 
     /** Tries to parse a string and convert it into an OSIS reference
      * @param inRef reference string to try to parse
@@ -373,10 +373,10 @@ public:
      *
      * COMMENT: This code works but wreaks.  Rewrite to make more maintainable.
      */
-    virtual ListKey parseVerseList(char const * buf,
-                                   char const * defaultKey = nullptr,
-                                   bool expandRange = false,
-                                   bool useChapterAsVerse = false);
+    ListKey parseVerseList(char const * buf,
+                           char const * defaultKey = nullptr,
+                           bool expandRange = false,
+                           bool useChapterAsVerse = false);
     std::string getRangeText() const override;
     std::string getOSISRefRangeText() const override;
     /** Compares another    SWKey object
@@ -395,10 +395,10 @@ public:
     * <0 if this    VerseKey is smaller than compare    VerseKey,
     * 0 if the keys are the same
     */
-    virtual int _compare(VerseKey const & ikey) const noexcept;
+    int _compare(VerseKey const & ikey) const noexcept;
 
-    virtual void setVersificationSystem(const char *name);
-    virtual const char *getVersificationSystem() const;
+    void setVersificationSystem(const char *name);
+    const char *getVersificationSystem() const;
 
     // DEBUG
     void validateCurrentLocale() const;
