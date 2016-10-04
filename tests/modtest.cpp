@@ -33,11 +33,11 @@ int main(int argc, char **argv) {
     ModMap::iterator it;
     SWModule *module = mymgr.Modules["KJV"];
     VerseKey parser;
-    ListKey lk = parser.parseVerseList("mal4:6-rev", parser, true);
+    ListKey lk = parser.parseVerseList("mal4:6-rev", "", true);
     lk.setPersist(true);
     module->setKey(lk);
 
-    (*module) = TOP;
+    (*module).positionToTop();
     std::cout << module->getKeyText() << "\n";
     return 0;
 }

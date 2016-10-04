@@ -21,7 +21,7 @@ int main(int argc, char **argv) {
         exit(-2);
     }
     int i = 0;
-    for ((*module) = TOP; !module->popError(); module->increment()) {
+    for ((*module).positionToTop(); !module->popError(); module->increment()) {
         cout << module->getKeyText() << ": " << module->stripText() << "\n";
         if (++i > 10) {
             cout << "ERROR: more than 10 iterations. stopping.\n";

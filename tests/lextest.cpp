@@ -39,7 +39,7 @@ int main(int argc, char **argv)
     lex.setKey("a");
     lex << "entry for a";
 
-    lex = TOP;
+    lex.positionToTop();
     cout << lex.getKeyText() << endl;
     lex++;
     cout << lex.getKeyText() << endl;
@@ -50,6 +50,6 @@ int main(int argc, char **argv)
 //    lex.setKey("a");
 //    lex << "y";
 
-    lex = BOTTOM;
+    lex.positionToBottom();
     return 0;
 }

@@ -37,16 +37,16 @@ int main(int argc, char **argv)
     VerseKey vk("jn 1:1", "jn 1:12");
     vk = "jas 1:19";
     cout << "\nError should be set: " << ((vk.popError()) ? "set":"not set");
-    text = (const char *)vk;
-    cout << "\nshould be jn 1.12: " << text << "\n";
+    text = vk.getText();
+    cout << "\nshould be jn 1.12: " << text.getText() << "\n";
     vk = "mat 1:19";
     cout << "\nError should be set: " << ((vk.popError()) ? "set":"not set");
-    text = (const char *)vk;
-    cout << "\nshould be jn 1.1: " << text << "\n";
+    text = vk.getText();
+    cout << "\nshould be jn 1.1: " << text.getText() << "\n";
     vk = "jn 1:7";
     cout << "\nError should not be set: " << ((vk.popError()) ? "set":"not set");
-    text = (const char *)vk;
-    cout << "\nshould be jn 1.7: " << text << "\n";
+    text = vk.getText();
+    cout << "\nshould be jn 1.7: " << text.getText() << "\n";
 
     // complex listkey in listkey text
     ListKey lk, lk2;
@@ -64,8 +64,8 @@ int main(int argc, char **argv)
     lk2 << lk;
     lk2 << vk2;
     lk2 << "test2";
-    for (lk2 = TOP; !lk2.popError(); ++lk2) {
-        cout << (const char *) lk2 << "\n";
+    for (lk2.positionToTop(); !lk2.popError(); ++lk2) {
+        cout << lk2.getText() << "\n";
     }
 
     cout << "\n\n---------\n";
@@ -74,8 +74,8 @@ int main(int argc, char **argv)
 
     // c-tor not bound setting, just parsing to jn.1.1
     VerseKey yoyo("john");
-    yoyo = MAXCHAPTER;
-    cout << "should be jn.21.1: " << yoyo << "\n";
+    yoyo.positionToMaxChapter();
+    cout << "should be jn.21.1: " << yoyo.getText() << "\n";
 
     lk2 << yoyo;
 /*
@@ -96,19 +96,19 @@ int main(int argc, char **argv)
 
 */
 
-    for (lk2 = TOP; !lk2.popError(); ++lk2)
-        cout << (const char *) lk2 << "\n";
+    for (lk2.positionToTop(); !lk2.popError(); ++lk2)
+        cout << lk2.getText() << "\n";
 
     lk.clear();
     lk << "john 3:16";
     cout << "\nCount should be 1: " << lk.getCount();
 
-    lk = vk.parseVerseList("mat;mark;luke", vk, true);
+    lk = vk.parseVerseList("mat;mark;luke", vk.getText(), true);
     lk = (VerseKey)"mark 3:16";
     cout << "\nError should not be set: " << ((lk.popError()) ? "set":"not set");
     lk = (VerseKey)"john 3:16";
     cout << "\nError should be set: " << ((lk.popError()) ? "set":"not set");
-    lk = vk.parseVerseList("mk 3:16", vk, true);
+    lk = vk.parseVerseList("mk 3:16", vk.getText(), true);
     lk = (VerseKey)"john 3:16";
     cout << "\nError should be set: " << ((lk.popError()) ? "set":"not set");
     lk = (VerseKey)"mark 3:16";

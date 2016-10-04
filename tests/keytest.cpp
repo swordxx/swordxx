@@ -32,22 +32,22 @@
 
 using namespace swordxx;
 
-class EchoMod final: public SWText {
+//class EchoMod final: public SWText {
 
-public: /* Methods: */
+//public: /* Methods: */
 
-    inline EchoMod()
-        : SWText("echomod", "Echos back key")
-    {}
+//    inline EchoMod()
+//        : SWText("echomod", "Echos back key")
+//    {}
 
-    inline std::string & getRawEntryBuf() const final override {
-        m_retVal = *key;
-        return m_retVal;
-    }
+//    inline std::string & getRawEntryBuf() const final override {
+//        m_retVal = *key;
+//        return m_retVal;
+//    }
 
-    mutable std::string m_retVal;
+//    mutable std::string m_retVal;
 
-};
+//};
 
 int main(int argc, char **argv)
 {
@@ -74,9 +74,9 @@ int main(int argc, char **argv)
 
     for (loop = 0; loop < max; loop++) {
         index = bla.getIndex();
-        std::cout << (const char *)bla << "(" << index << ")";
+        std::cout << bla.getText() << "(" << index << ")";
         bla.setIndex(index+1);
-        std::cout << "-> " << (const char *)bla << "\n";
+        std::cout << "-> " << bla.getText() << "\n";
     }
 
     std::cout << "-----------------\n";
@@ -87,9 +87,9 @@ int main(int argc, char **argv)
 
     for (loop = max; loop; loop--) {
         index = bla.getIndex();
-        std::cout << (const char *)bla << "(" << index << ")";
+        std::cout << bla.getText() << "(" << index << ")";
         bla.setIndex(index-1);
-        std::cout << "-> " << (const char *)bla << "\n";
+        std::cout << "-> " << bla.getText() << "\n";
     }
 
     std::cout << "-----------------\n";
@@ -103,7 +103,7 @@ int main(int argc, char **argv)
 
     for (loop = 0; loop < max && !bla.popError(); loop++, ++bla) {
         index = bla.getIndex();
-        std::cout << (const char *)bla << "(" << index << ")\n";
+        std::cout << bla.getText() << "(" << index << ")\n";
     }
 
     std::cout << "-----------------\n";
@@ -117,7 +117,7 @@ int main(int argc, char **argv)
 
     for (loop = max; loop && !bla.popError(); loop--, --bla) {
         index = bla.getIndex();
-        std::cout << (const char *)bla << "(" << index << ")\n";
+        std::cout << bla.getText() << "(" << index << ")\n";
     }
 
     std::cout << "-----------------\n";
@@ -128,7 +128,7 @@ int main(int argc, char **argv)
 
     for (loop = max; loop; loop--, --bla) {
         index = bla.getIndex();
-        std::cout << (const char *)bla << "(" << index << ")\n";
+        std::cout << bla.getText() << "(" << index << ")\n";
     }
 
     std::cout << "-----------------\n";
@@ -139,7 +139,7 @@ int main(int argc, char **argv)
 
     for (loop = max; loop; loop--, ++bla) {
         index = bla.getIndex();
-        std::cout << (const char *)bla << "(" << index << ")\n";
+        std::cout << bla.getText() << "(" << index << ")\n";
     }
 
     std::cout << "-----------------\n";
@@ -150,7 +150,7 @@ int main(int argc, char **argv)
 
     for (loop = max; loop; loop--, ++bla) {
         index = bla.getIndex();
-        std::cout << (const char *)bla << "(" << index << ")\n";
+        std::cout << bla.getText() << "(" << index << ")\n";
     }
 
 
@@ -165,7 +165,7 @@ int main(int argc, char **argv)
 
     for (loop = max; loop; loop--, --bla) {
         index = bla.getIndex();
-        std::cout << (const char *)bla << "(" << index << ")\n";
+        std::cout << bla.getText() << "(" << index << ")\n";
     }
 
     std::cout << "-----------------\n";
@@ -176,7 +176,7 @@ int main(int argc, char **argv)
 
     for (loop = max; loop; loop--, --bla) {
         index = bla.getIndex();
-        std::cout << (const char *)bla << "(" << index << ")\n";
+        std::cout << bla.getText() << "(" << index << ")\n";
     }
 
     std::cout << "-----------------\n";
@@ -187,7 +187,7 @@ int main(int argc, char **argv)
 
     for (loop = max; loop; loop--, ++bla) {
         index = bla.getIndex();
-        std::cout << (const char *)bla << "(" << index << ")\n";
+        std::cout << bla.getText() << "(" << index << ")\n";
     }
 
     std::cout << "-----------------\n";
@@ -198,7 +198,7 @@ int main(int argc, char **argv)
 
     for (loop = max; loop; loop--, ++bla) {
         index = bla.getIndex();
-        std::cout << (const char *)bla << "(" << index << ")\n";
+        std::cout << bla.getText() << "(" << index << ")\n";
     }
 
     std::cout << "\n\n";
@@ -206,24 +206,24 @@ int main(int argc, char **argv)
     std::cout << "-------- Error Check ------------\n\n";
     bla = "Revelation of John 23:19";
     std::cout << "bla = \"Revelation of John 23:19\"\n";
-    std::cout << "(const char *)bla = " << (const char *)bla << "\n";
+    std::cout << "bla.getText() = " << bla.getText() << "\n";
     std::cout << "bla.popError() = " << (int)bla.popError() << " \n";
     std::cout << "bla++ \n";
     ++bla;
     std::cout << "bla.popError() = " << (int)bla.popError() << " \n";
 
     bla.setIntros(false);
-    for (bla = BOTTOM; !bla.popError(); bla.setBook(bla.getBook()-1))
-        std::cout << (const char *)bla << "\n";
+    for (bla.positionToBottom(); !bla.popError(); bla.setBook(bla.getBook()-1))
+        std::cout << bla.getText() << "\n";
     bla.setTestament(1);
-    bla = BOTTOM;
+    bla.positionToBottom();
     std::cout << bla.getTestamentIndex() << "\n";
     std::cout << bla.getIndex() << "\n";
-    std::cout << bla << "\n";
+    std::cout << bla.getText() << "\n";
     bla.setTestament(2);
-    bla = BOTTOM;
+    bla.positionToBottom();
     std::cout << bla.getTestamentIndex() << "\n";
     std::cout << bla.getIndex() << "\n";
-    std::cout << bla << "\n";
+    std::cout << bla.getText() << "\n";
     return 0;
 }

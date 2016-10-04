@@ -41,10 +41,10 @@ int main(int argc, char **argv) {
     v = dynamic_cast<TreeKeyIdx*>(y);
 //    v = SWDYNAMIC_CAST(ListKey, y);
     std::cout << std::endl;
-    if (v)
-        std::cout << (const char *)(*v);
-    else
-        std::cout << "cast failed\n";
+//    if (v)
+//        std::cout << (const char *)(*v);
+//    else
+//        std::cout << "cast failed\n";
 
     std::cout << std::endl;
     std::cout << std::endl;
