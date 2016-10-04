@@ -43,7 +43,7 @@ class SWDLLEXPORT VerseTreeKey : public VerseKey, public TreeKey::PositionChange
     TreeKey * m_treeKey;
 //    vector<struct sbook> books;
 
-    void init(TreeKey *treeKey);
+    void init(TreeKey const & treeKey);
     void syncVerseToTree();
     long m_lastGoodOffset;
 
@@ -59,7 +59,7 @@ public:
     * @param ikey text key (will take various forms of 'BOOK CH:VS'.
     * See parse() for more detailed information)
     */
-    VerseTreeKey(TreeKey * treeKey, char const * ikey = nullptr);
+    VerseTreeKey(TreeKey const & treeKey, char const * const ikey = nullptr);
 
     /**
     * VerseKey Constructor - initializes instance of VerseKey
@@ -68,7 +68,7 @@ public:
     * @param ikey base key (will take various forms of 'BOOK CH:VS'.
     *    See parse() for more detailed information)
     */
-    VerseTreeKey(TreeKey *treeKey, const SWKey *ikey);
+    VerseTreeKey(TreeKey const & treeKey, SWKey const & ikey);
 
     /** VerseKey Constructor - initializes instance of VerseKey
     * with boundariess - see also LowerBound()
@@ -77,14 +77,16 @@ public:
     * @param min the lower boundary of the new    VerseKey
     * @param max the upper boundary of the new    VerseKey
     */
-    VerseTreeKey(TreeKey *treeKey, const char *min, const char *max);
+    VerseTreeKey(TreeKey const & treeKey,
+                 char const * const min,
+                 char const * const max);
 
     /**    VerseKey Copy Constructor - will create a new    VerseKey
     * based on an existing one
     *
     * @param k the    VerseKey to copy from
     */
-    VerseTreeKey(const VerseTreeKey &k);
+    VerseTreeKey(VerseTreeKey const & k);
 
     ~VerseTreeKey() override;
 

@@ -42,7 +42,7 @@ namespace {
 SWKey * staticCreateKey(char const * const path, bool const verseKey) {
     auto tKey(std::make_unique<TreeKeyIdx>(path));
     if (verseKey) {
-        SWKey * const vtKey = new VerseTreeKey(tKey.get());
+        SWKey * const vtKey = new VerseTreeKey(*tKey);
         tKey.reset();
         return vtKey;
     }

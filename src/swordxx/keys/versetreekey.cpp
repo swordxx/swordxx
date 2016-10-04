@@ -38,11 +38,11 @@ namespace swordxx {
  *        VerseTreeKey::parse for more detailed information)
  */
 
-VerseTreeKey::VerseTreeKey(TreeKey *treeKey, const SWKey *ikey) : VerseKey(*ikey)
+VerseTreeKey::VerseTreeKey(TreeKey const & treeKey, SWKey const & ikey)
+    : VerseKey(ikey)
 {
     init(treeKey);
-    if (ikey)
-        parse();
+    parse();
 }
 
 
@@ -53,29 +53,28 @@ VerseTreeKey::VerseTreeKey(TreeKey *treeKey, const SWKey *ikey) : VerseKey(*ikey
  *        VerseTreeKey::parse for more detailed information)
  */
 
-VerseTreeKey::VerseTreeKey(TreeKey *treeKey, const char *ikey) : VerseKey(ikey)
+VerseTreeKey::VerseTreeKey(TreeKey const & treeKey, char const * const ikey)
+    : VerseKey(ikey)
 {
     init(treeKey);
-    if (ikey)
-        parse();
+    parse();
 }
 
 
-VerseTreeKey::VerseTreeKey(VerseTreeKey const &k) : VerseKey(k)
-{
-    init(k.m_treeKey);
-}
+VerseTreeKey::VerseTreeKey(VerseTreeKey const & k)
+    : VerseKey(k)
+{ init(*k.m_treeKey); }
 
 
-VerseTreeKey::VerseTreeKey(TreeKey *treeKey, const char *min, const char *max) : VerseKey(min, max)
-{
-    init(treeKey);
-}
+VerseTreeKey::VerseTreeKey(TreeKey const & treeKey,
+                           const char * const min,
+                           const char * const max)
+    : VerseKey(min, max)
+{ init(treeKey); }
 
 
-void VerseTreeKey::init(TreeKey *treeKey)
-{
-    this->m_treeKey = (TreeKey *)treeKey->clone();
+void VerseTreeKey::init(TreeKey const & treeKey) {
+    this->m_treeKey = static_cast<TreeKey *>(treeKey.clone());
     this->m_treeKey->setPositionChangeListener(this);
     m_internalPosChange = false;
 }
