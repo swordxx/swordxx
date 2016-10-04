@@ -822,7 +822,7 @@ bool handleToken(std::string &text, XMLTag token) {
                 ListKey verseKeys = currentVerse.parseVerseList(keyVal.c_str(), currentVerse.getText(), true);
                 auto memberKeyCount(verseKeys.getCount());
                 if (memberKeyCount) {
-                    currentVerse = verseKeys.getElement(0u);
+                    currentVerse = *verseKeys.getElement(0u);
                     // See if this osisID or annotateRef refers to more than one verse.
                     // If it does, save it until all verses have been seen.
                     // At that point we will output links.
@@ -1328,11 +1328,13 @@ void writeLinks()
         // and the others link to it.
         ListKey verseKeys = linkedVerses[i];
         verseKeys.positionToTop();
-        destKey = verseKeys.getElement();
+        /// \todo possible null pointer dereference?
+        destKey = *verseKeys.getElement();
         verseKeys.increment(1);
 
         while (!verseKeys.popError()) {
-            linkKey = verseKeys.getElement();
+            /// \todo possible null pointer dereference?
+            linkKey = *verseKeys.getElement();
             linkToEntry(linkKey, destKey);
             verseKeys.increment(1);
         }

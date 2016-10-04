@@ -52,15 +52,6 @@ VerseKey::VerseKey(const SWKey &ikey) : SWKey(ikey)
     copyFrom(ikey);
 }
 
-
-VerseKey::VerseKey(const SWKey *ikey) : SWKey(*ikey)
-{
-    setVersificationSystem("KJV");
-    if (ikey)
-        copyFrom(*ikey);
-}
-
-
 /******************************************************************************
  * VerseKey Constructor - initializes instance of VerseKey
  *
@@ -137,9 +128,9 @@ void VerseKey::setFromOther(const VerseKey &ikey) {
             if (map_range > m_refSys->getBook(((m_testament>1)?m_BMAX[0]:0)+m_book-1)->getVerseMax(m_chapter))
                 ++map_range;
             m_verse = map_range;
-            setUpperBound(this);
+            setUpperBound(*this);
             m_verse = map_verse;
-            setLowerBound(this);
+            setLowerBound(*this);
         }
     }
 }

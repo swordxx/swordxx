@@ -121,14 +121,6 @@ public:
     */
     VerseKey(char const * ikey = nullptr);
 
-    /**
-    * VerseKey Constructor - initializes instance of VerseKey
-    *
-    * @param ikey base key (will take various forms of 'BOOK CH:VS'.
-    *    See parse() for more detailed information)
-    */
-    VerseKey(const SWKey *ikey);
-
     /** VerseKey Constructor - initializes instance of VerseKey
     * with boundariess - see also LowerBound()
     * and UpperBound()

@@ -38,7 +38,7 @@ namespace swordxx {
  *        VerseTreeKey::parse for more detailed information)
  */
 
-VerseTreeKey::VerseTreeKey(TreeKey *treeKey, const SWKey *ikey) : VerseKey(ikey)
+VerseTreeKey::VerseTreeKey(TreeKey *treeKey, const SWKey *ikey) : VerseKey(*ikey)
 {
     init(treeKey);
     if (ikey)
