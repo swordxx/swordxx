@@ -44,7 +44,6 @@ namespace swordxx {
  */
 
 void VerseKey::init(const char *v11n) {
-    m_boundSet = false;
     setVersificationSystem(v11n);
 }
 
