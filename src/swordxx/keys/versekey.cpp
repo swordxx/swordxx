@@ -44,18 +44,7 @@ namespace swordxx {
  */
 
 void VerseKey::init(const char *v11n) {
-    m_autonorm = true;        // default auto normalization to true
-    m_intros = false;        // default display intros option is false
-    m_upperBound = 0;
-    m_lowerBound = 0;
     m_boundSet = false;
-    m_testament = 1;
-    m_book = 1;
-    m_chapter = 1;
-    m_verse = 1;
-    m_suffix = 0;
-    m_refSys = nullptr;
-
     setVersificationSystem(v11n);
 }
 

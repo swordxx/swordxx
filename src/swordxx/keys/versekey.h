@@ -50,15 +50,15 @@ class SWDLLEXPORT VerseKey : public SWKey {
 
     ListKey m_internalListKey;
 
-    const VersificationMgr::System *m_refSys;
+    VersificationMgr::System const * m_refSys = nullptr;
 
     /** flag for auto normalization
     */
-    bool m_autonorm;
+    bool m_autonorm = true;
 
     /** flag for intros on/off
     */
-    bool m_intros;
+    bool m_intros = false;
 
     /** initializes this VerseKey()
     */
@@ -72,8 +72,9 @@ class SWDLLEXPORT VerseKey : public SWKey {
 
     void checkBounds();
 
-    // internal upper/lower bounds optimizations
-    mutable long m_lowerBound, m_upperBound;    // if autonorms is on
+    // internal upper/lower bounds optimizations, if autonorms is on
+    mutable long m_lowerBound = 0;
+    mutable long m_upperBound = 0;
 
     typedef struct VerseComponents { int test; int book; int chap; int verse; char suffix; } VerseComponents;
 
@@ -83,11 +84,11 @@ protected:
 
     /** The Testament: 0 - Module Heading; 1 - Old; 2 - New
     */
-    signed char m_testament;
-    signed char m_book;
-    signed int m_chapter;
-    signed int m_verse;
-    signed char m_suffix;
+    signed char m_testament = 1;
+    signed char m_book = 1;
+    signed int m_chapter = 1;
+    signed int m_verse = 1;
+    signed char m_suffix = 0;
 
     /************************************************************************
      * VerseKey::getBookFromAbbrev - Attempts to find a book no from a name or
