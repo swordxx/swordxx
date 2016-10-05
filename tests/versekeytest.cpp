@@ -89,7 +89,7 @@ cout << currentVerse << endl;
     cout << "Should be: [ Testament 1 Heading ]\n" << result.getText() << "\n\n";
 
     parser->setText("[ Testament 1 Heading ]");
-    cout << "Should be: [ Testament 1 Heading ]\n" << *parser->getText() << "\n\n";
+    cout << "Should be: [ Testament 1 Heading ]\n" << parser->getText() << "\n\n";
 
     result.clear();
 
@@ -143,8 +143,11 @@ cout << currentVerse << endl;
 
 
      *x = "Is.1.13";
-     scope = *x;
-     if (scope == *x) std::cout << "Error restricting bounds: " << x->getText() << " is in " << bounds << "\n";
+     scope = x->getText();
+     const std::string T1 = scope.getText();
+     const std::string T2 = x->getText();
+     if (T1 == T2) std::cout << "Error restricting bounds: " << x->getText() << " is in " << bounds << "\n";
+
      if (!scope.popError()) std::cout << "Error restricting bounds: " << x->getText() << " is in " << bounds << "\n";
 
      *x = "1Sam.21.1";
