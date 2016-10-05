@@ -291,11 +291,11 @@ void ListKey::remove() {
 std::string ListKey::getRangeText() const {
     std::string r;
     bool appendSep = false;
-    for (auto it = m_array.cbegin(); it != m_array.cend(); ++it) {
+    for (auto const & key : m_array) {
         if (appendSep)
             r.append("; ");
         appendSep = true;
-        r.append((*it)->getRangeText());
+        r.append(key->getRangeText());
     }
     return r;
 }
@@ -307,10 +307,12 @@ std::string ListKey::getRangeText() const {
 
 std::string ListKey::getOSISRefRangeText() const {
     std::string r;
-    for (auto it = m_array.cbegin(); it != m_array.cend(); ++it) {
-        r.append((*it)->getOSISRefRangeText());
-        if (it != m_array.rbegin().base())
+    bool appendSeparator = false;
+    for (auto const & key : m_array) {
+        if (appendSeparator)
             r.append(1u, ';');
+        appendSeparator = true;
+        r.append(key->getOSISRefRangeText());
     }
     return r;
 }
