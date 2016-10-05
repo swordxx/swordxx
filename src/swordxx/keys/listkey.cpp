@@ -290,10 +290,12 @@ void ListKey::remove() {
 
 std::string ListKey::getRangeText() const {
     std::string r;
+    bool appendSep = false;
     for (auto it = m_array.cbegin(); it != m_array.cend(); ++it) {
-        r.append((*it)->getRangeText());
-        if (it != m_array.rbegin().base())
+        if (appendSep)
             r.append("; ");
+        appendSep = true;
+        r.append((*it)->getRangeText());
     }
     return r;
 }
