@@ -213,7 +213,7 @@ const char *XMLTag::getPart(const char *buf, int partNum, char partSplit) const 
 
 int XMLTag::getAttributePartCount(const char *attribName, char partSplit) const {
     auto buf(getAttribute(attribName));
-    return std::count(buf.begin(), buf.end(), partSplit);
+    return std::count(buf.begin(), buf.end(), partSplit)+1;
 }
 
 
