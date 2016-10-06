@@ -18,7 +18,6 @@ SwordxxHandleConditionalBuild("tests" TESTS FALSE TRUE)
 
 SET(test_PROGRAMS
     bibliotest
-    casttest
     ciphertest
     complzss
     compnone
