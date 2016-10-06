@@ -49,7 +49,7 @@ int main(int argc, char **argv) {
     const char* modName = (argc >= 2) ? argv[1] : "KJV";
     const char* keyName = (argc == 3) ? argv[2] : "John 1:1";
 
-    SWMgr mgr(0, 0, true, new MarkupFilterMgr(FMT_WEBIF, ENC_UTF8));
+    SWMgr mgr(nullptr, nullptr, true, new MarkupFilterMgr(FMT_WEBIF, ENC_UTF8));
     mgr.setGlobalOption("Strong's Numbers", "on");
     mgr.setGlobalOption("Morphological Tags", "on");
 
@@ -62,7 +62,7 @@ int main(int argc, char **argv) {
 
     //------------------------
 
-    SWMgr mgr2(0, 0, true, new MarkupFilterMgr(FMT_HTMLHREF, ENC_UTF8));
+    SWMgr mgr2(nullptr, nullptr, true, new MarkupFilterMgr(FMT_HTMLHREF, ENC_UTF8));
     mgr2.setGlobalOption("Strong's Numbers", "on");
     mgr2.setGlobalOption("Morphological Tags", "on");
     module = mgr2.Modules[modName];

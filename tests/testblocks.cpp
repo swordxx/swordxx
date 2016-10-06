@@ -72,7 +72,7 @@ void removeEntry(EntriesBlock *eb, int index) {
 }
 
 
-int main(int argc, char **argv) {
+int main(int /* argc */, char ** /* argv */) {
 
     EntriesBlock *eb = new EntriesBlock();
     string input;

@@ -26,7 +26,7 @@
 
 using swordxx::SWConfig;
 
-int main(int argc, char **argv) {
+int main(int /* argc */, char ** /* argv */) {
     SWConfig config("./test1.conf");
     config["Section1"]["Entry1"] = "Value1";
     config["Section1"]["Entry2"] = "oops";

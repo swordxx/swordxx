@@ -33,11 +33,11 @@ using namespace swordxx;
 int main(int argc, char **argv) {
     std::cerr << "\n";
     SWLog::getSystemLog()->setLogLevel(SWLog::LOG_DEBUG);
-    SWConfig *sysConf = 0;
+    SWConfig *sysConf = nullptr;
     if (argc > 1) {
         sysConf = new SWConfig(argv[1]);
     }
-    SWMgr mymgr(0, sysConf);
+    SWMgr mymgr(nullptr, sysConf);
     std::cerr << "\n\nprefixPath: " << mymgr.prefixPath;
     std::cerr << "\nconfigPath: " << mymgr.configPath << "\n\n";
 

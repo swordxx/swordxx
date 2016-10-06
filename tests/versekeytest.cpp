@@ -44,7 +44,7 @@ public:
 } out;
 } System;
 
-int main(int argc, char **argv) {
+int main(int /* argc */, char ** /* argv */) {
         VerseKey vk;
 /*
         vk.setTestament(2);

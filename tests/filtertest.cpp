@@ -40,7 +40,7 @@ int main(int argc, char **argv) {
     RTFHTML filter;
 //    PapyriPlain filter;
 //
-    FileDesc *fd = (argc > 1) ? FileMgr::getSystemFileMgr()->open(argv[1], FileMgr::RDONLY) : 0;
+    FileDesc *fd = (argc > 1) ? FileMgr::getSystemFileMgr()->open(argv[1], FileMgr::RDONLY) : nullptr;
 
     std::string lineBuffer = "T\\u12345?his is t<e>xt which has papy-\nri markings in it.\n  L[et's be] sure it gets--\n cleaned up well for s(earching)";
 

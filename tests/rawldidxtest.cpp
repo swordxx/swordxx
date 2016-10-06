@@ -52,7 +52,7 @@ int main(int argc, char **argv)
 
     std::string last = "";
     bool first = true;
-    char *trybuf = 0;
+    char *trybuf = nullptr;
     for (long index = 0; index < maxoff; index+=6) {
         mod.getIDXBuf(index, &trybuf);
         if (!first) {

@@ -35,7 +35,7 @@ using namespace swordxx;
 using std::cout;
 using std::endl;
 
-int main(int argc, char **argv) {
+int main(int /* argc */, char ** /* argv */) {
 
     SWMgr mgr;
     SWModule *mod = mgr.getModule("KJVgb");
@@ -74,7 +74,7 @@ int main(int argc, char **argv) {
 
 
     cout << "\nListkey persist key iteration test\n\n";
-    keys = key1->parseVerseList("mat1", 0, true);
+    keys = key1->parseVerseList("mat1", nullptr, true);
 
     for (keys.positionToTop(); !keys.popError(); ++keys) {
         cout << "\n" << keys.getText() << ":\n" << endl;

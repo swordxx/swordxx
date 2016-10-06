@@ -28,7 +28,7 @@
 
 using namespace swordxx;
 
-int main(int argc, char **argv) {
+int main(int /* argc */, char ** /* argv */) {
     SWMgr mymgr;
 
     SWModule *bbe = mymgr.Modules["BBE"];

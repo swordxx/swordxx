@@ -30,7 +30,7 @@
 using namespace swordxx;
 using namespace std;
 
-int main(int argc, char **argv)
+int main(int /* argc */, char ** /* argv */)
 {
     // simple bounds check on verse first before we try this with listkey
     SWKey text;
@@ -70,7 +70,7 @@ int main(int argc, char **argv)
 
     cout << "\n\n---------\n";
 
-    lk2 = VerseKey().parseVerseList("1jn-2jn;mk1.9", 0, true);
+    lk2 = VerseKey().parseVerseList("1jn-2jn;mk1.9", nullptr, true);
 
     // c-tor not bound setting, just parsing to jn.1.1
     VerseKey yoyo("john");

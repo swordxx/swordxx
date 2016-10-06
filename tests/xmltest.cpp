@@ -65,10 +65,10 @@ int main(int argc, char **argv) {
         x.setAttribute("multiPart", "MMM", 2, ' ');
         cout << x << "\n";
         cout << "Removing part 1\n";
-        x.setAttribute("multiPart", 0, 1, ' ');
+        x.setAttribute("multiPart", nullptr, 1, ' ');
         cout << x << "\n";
         cout << "Removing part 2\n";
-        x.setAttribute("multiPart", 0, 2, ' ');
+        x.setAttribute("multiPart", nullptr, 2, ' ');
         cout << x << "\n";
     }
 

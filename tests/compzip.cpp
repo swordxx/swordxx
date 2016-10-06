@@ -46,10 +46,10 @@ class FileCompress: public ZipCompress {
 public:
     FileCompress(char *);
     ~FileCompress();
-    unsigned long GetChars(char *, unsigned long len);
-    unsigned long SendChars(char *, unsigned long len);
-    void Encode();
-    void Decode();
+    unsigned long GetChars(char *, unsigned long len) override;
+    unsigned long SendChars(char *, unsigned long len) override;
+    void Encode() override;
+    void Decode() override;
 };
 
 
