@@ -1151,9 +1151,7 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
     if (!saveKey->isPersist())
         delete saveKey;
 
-    if (searchKey)
-        delete searchKey;
-
+    delete searchKey;
     delete chapMax;
 
     setProcessEntryAttributes(savePEA);
