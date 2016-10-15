@@ -49,15 +49,6 @@
 #define REG_ICASE std::regex::icase
 #endif
 
-using namespace lucene::index;
-using namespace lucene::analysis;
-using namespace lucene::util;
-using namespace lucene::store;
-using namespace lucene::document;
-using namespace lucene::queryParser;
-using namespace lucene::search;
-
-using std::vector;
 
 namespace swordxx {
 
@@ -230,9 +221,9 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
     target.append("lucene");
     if (justCheckIfSupported) {
         *justCheckIfSupported = (searchType >= -3);
-        if ((searchType == -4) && (IndexReader::indexExists(target.c_str()))) {
+        if ((searchType == -4)
+            && (lucene::index::IndexReader::indexExists(target.c_str())))
             *justCheckIfSupported = true;
-        }
         return listKey;
     }
 
@@ -251,7 +242,7 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
     regex_t preg;
 #endif
 
-    vector<std::string> words;
+    std::vector<std::string> words;
     const char *sres;
     char perc = 1;
     bool savePEA = isProcessEntryAttributes();
@@ -304,16 +295,19 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 
         lucene::index::IndexReader    * ir = nullptr;
         lucene::search::IndexSearcher * is = nullptr;
-        Query                         * q  = nullptr;
-        Hits                          * h  = nullptr;
+        lucene::search::Query         * q  = nullptr;
+        lucene::search::Hits          * h  = nullptr;
         try {
-            ir = IndexReader::open(target.c_str());
-            is = new IndexSearcher(ir);
+            ir = lucene::index::IndexReader::open(target.c_str());
+            is = new lucene::search::IndexSearcher(ir);
             const TCHAR *stopWords[] = { nullptr };
-            standard::StandardAnalyzer analyzer(stopWords);
+            lucene::analysis::standard::StandardAnalyzer analyzer(stopWords);
 
             // parse the query
-            q = QueryParser::parse(utf8ToWChar(istr).c_str(), _T("content"), &analyzer);
+            q = lucene::queryParser::QueryParser::parse(
+                    utf8ToWChar(istr).c_str(),
+                    _T("content"),
+                    &analyzer);
             (*percent)(20, percentUserData);
 
             // perform the search
@@ -323,7 +317,7 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
             // iterate thru each good module position that meets the search
             bool checkBounds = getKey()->isBoundSet();
             for (unsigned long i = 0; i < (unsigned long)h->length(); i++) {
-                Document &doc = h->doc(i);
+                lucene::document::Document &doc = h->doc(i);
                 // set a temporary verse key to this module position
                 *resultKey = wcharToUTF8(doc.get(_T("key"))).c_str(); //TODO Does a key always accept utf8?
                 uint64_t score = (uint64_t)((uint32_t)(h->score(i)*100));
@@ -840,16 +834,17 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
     bool includeKeyInSearch = getConfig().has("SearchOption", "IncludeKeyInSearch");
 
     // lets create or open our search index
-    RAMDirectory * ramDir = nullptr;
-    IndexWriter * coreWriter = nullptr;
-    IndexWriter * fsWriter = nullptr;
-    Directory * d = nullptr;
+    lucene::store::RAMDirectory * ramDir = nullptr;
+    lucene::index::IndexWriter * coreWriter = nullptr;
+    lucene::index::IndexWriter * fsWriter = nullptr;
+    lucene::store::Directory * d = nullptr;
 
     TCHAR const * stopWords[] = { nullptr };
-    standard::StandardAnalyzer *an = new standard::StandardAnalyzer(stopWords);
+    auto * const an =
+            new lucene::analysis::standard::StandardAnalyzer(stopWords);
 
-    ramDir = new RAMDirectory();
-    coreWriter = new IndexWriter(ramDir, an, true);
+    ramDir = new lucene::store::RAMDirectory();
+    coreWriter = new lucene::index::IndexWriter(ramDir, an, true);
     coreWriter->setMaxFieldLength(MAX_CONV_SIZE);
 
     char perc = 1;
@@ -902,7 +897,7 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
         bool good = false;
 
         // start out entry
-        Document *doc = new Document();
+        auto * const doc = new lucene::document::Document();
         // get "key" field
         std::string keyText = (vkcheck) ? vkcheck->getOSISRef() : getKeyText();
         if (!content.empty()) {
@@ -948,6 +943,7 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
                 }
             }
 
+            using lucene::document::Field;
             doc->add(*_CLNEW Field(_T("key"), utf8ToWChar(keyText.c_str()).c_str(), Field::STORE_YES | Field::INDEX_UNTOKENIZED));
 
             if (includeKeyInSearch)
@@ -1100,6 +1096,7 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
             }
         }
 
+        using lucene::document::Field;
         if (proxBuf.length() > 0) {
             doc->add(*_CLNEW Field(_T("prox"), utf8ToWChar(proxBuf.c_str()).c_str(), Field::STORE_NO | Field::INDEX_TOKENIZED));
             good = true;
@@ -1124,18 +1121,18 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
     //coreWriter->optimize();
     coreWriter->close();
 
-    d = FSDirectory::getDirectory(target.c_str());
-    if (IndexReader::indexExists(target.c_str())) {
-        if (IndexReader::isLocked(d)) {
-            IndexReader::unlock(d);
+    d = lucene::store::FSDirectory::getDirectory(target.c_str());
+    if (lucene::index::IndexReader::indexExists(target.c_str())) {
+        if (lucene::index::IndexReader::isLocked(d)) {
+            lucene::index::IndexReader::unlock(d);
         }
-        fsWriter = new IndexWriter( d, an, false);
+        fsWriter = new lucene::index::IndexWriter( d, an, false);
     }
     else {
-        fsWriter = new IndexWriter(d, an, true);
+        fsWriter = new lucene::index::IndexWriter(d, an, true);
     }
 
-    Directory * dirs[] = { ramDir, nullptr };
+    lucene::store::Directory * dirs[] = { ramDir, nullptr };
     lucene::util::ConstValueArray< lucene::store::Directory *>dirsa(dirs, 1);
     fsWriter->addIndexes(dirsa);
     fsWriter->close();
