@@ -97,6 +97,11 @@ private: /* Fields: */
 
     ConfigEntMap ownConfig;
 
+    char * modname = nullptr;
+    char * moddesc = nullptr;
+    char * modtype = nullptr;
+    char * modlang = nullptr;
+
 protected:
 
     ConfigEntMap * config{&ownConfig};
@@ -110,10 +115,6 @@ protected:
     SWKey *key;
 
     ListKey listKey;
-    char * modname = nullptr;
-    char * moddesc = nullptr;
-    char * modtype = nullptr;
-    char * modlang = nullptr;
 
     char direction;
     char markup;
