@@ -108,7 +108,7 @@ int main(int argc, char **argv)
     inModule = it->second;
 //    inModule->AddRenderFilter(&filter);
 
-    SWKey *key = (SWKey *)*inModule;
+    SWKey *key = inModule->getKey();
     VerseKey *vkey = dynamic_cast<VerseKey *>(key);
 
     char buf[1024];

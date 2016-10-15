@@ -43,9 +43,6 @@ class SWFilter;
 #define SEARCHFLAG_MATCHWHOLEENTRY 4096
 
 #define SWMODULE_OPERATORS \
-    operator std::string() { return renderText(); } \
-    operator SWKey &() { return *getKey(); } \
-    operator SWKey *() { return getKey(); } \
     SWModule &operator <<(const char *inbuf) { setEntry(inbuf); return *this; } \
     SWModule &operator <<(const SWKey *sourceKey) { linkEntry(sourceKey); return *this; } \
     SWModule &operator -=(int steps) { decrement(steps); return *this; } \

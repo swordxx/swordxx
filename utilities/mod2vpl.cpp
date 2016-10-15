@@ -76,7 +76,7 @@ int main(int argc, char **argv) {
 
     SWModule *mod = it->second;
 
-    SWKey *key = (*mod);
+    SWKey *key = mod->getKey();
     VerseKey * vkey = nullptr;
     try {
         vkey = dynamic_cast<VerseKey *>(key);

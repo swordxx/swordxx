@@ -99,7 +99,7 @@ void viewEntryText(RawGenBook *book) {
 
 void setEntryText(RawGenBook *book) {
     std::string body;
-    TreeKeyIdx *treeKey = (TreeKeyIdx *)(SWKey *)(*book);
+    TreeKeyIdx * treeKey = static_cast<TreeKeyIdx *>(book->getKey());
     if (treeKey->getOffset()) {
         char buf[1023];
         std::cout << "Enter New Entry Text ('.' on a line by itself to end): \n";
@@ -176,8 +176,8 @@ int main(int argc, char **argv) {
     delete treeKey;
 
     RawGenBook *book = new RawGenBook(argv[1]);
-    TreeKeyIdx root = *((TreeKeyIdx *)((SWKey *)(*book)));
-    treeKey = (TreeKeyIdx *)(SWKey *)(*book);
+    TreeKeyIdx root = *static_cast<TreeKeyIdx *>(book->getKey());
+    treeKey = static_cast<TreeKeyIdx *>(book->getKey());
 
     std::string input;
     char line[1024];

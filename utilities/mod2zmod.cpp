@@ -157,7 +157,7 @@ int main(int argc, char **argv)
         outModule = new zText(argv[2], nullptr, nullptr, iType, compressor,
             ENC_UNKNOWN, DIRECTION_LTR, FMT_UNKNOWN, nullptr,
             vk->getVersificationSystem());    // open our datapath with our RawText driver.
-        ((VerseKey *)(SWKey *)(*inModule))->setIntros(true);
+        static_cast<VerseKey *>(inModule->getKey())->setIntros(true);
         break;
     }
     case LEX:
@@ -186,7 +186,7 @@ int main(int argc, char **argv)
     inModule->setSkipConsecutiveLinks(false);
     (*inModule) = Position::Top;
     while (!inModule->popError()) {
-        bufferKey = *(SWKey *)(*inModule);
+        bufferKey = *inModule->getKey();
         // pseudo-check for link.  Will get most common links.
         if ((lastBuffer == inModule->getRawEntry()) &&(lastBuffer.length() > 0)) {
             *outModuleKey = bufferKey;
