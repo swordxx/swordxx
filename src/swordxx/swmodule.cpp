@@ -681,13 +681,8 @@ std::string SWModule::stripText(const char * buf, int len)
  *    A typical example is a suggested CSS style block for classed
  *    containers.
  */
-const char *SWModule::getRenderHeader() const {
-    FilterList::const_iterator first = getRenderFilters().begin();
-    if (first != getRenderFilters().end()) {
-        return (*first)->getHeader();
-    }
-    return "";
-}
+char const * SWModule::getRenderHeader() const
+{ return renderFilters.empty() ? "" : renderFilters.front()->getHeader(); }
 
 
 /******************************************************************************
