@@ -91,11 +91,6 @@ SWModule::SWModule(SWKey * key_, const char *imodname, const char *imoddesc, con
     stdstr(&moddesc, imoddesc);
     stdstr(&modtype, imodtype);
     stdstr(&modlang, imodlang);
-    stripFilters = new FilterList();
-    rawFilters = new FilterList();
-    renderFilters = new FilterList();
-    optionFilters = new OptionFilterList();
-    encodingFilters = new FilterList();
     skipConsecutiveLinks = true;
     procEntAttr = true;
 }
@@ -117,18 +112,7 @@ SWModule::~SWModule()
             delete key;
     }
 
-    stripFilters->clear();
-    rawFilters->clear();
-    renderFilters->clear();
-    optionFilters->clear();
-    encodingFilters->clear();
     entryAttributes.clear();
-
-    delete stripFilters;
-    delete rawFilters;
-    delete renderFilters;
-    delete optionFilters;
-    delete encodingFilters;
 }
 
 
@@ -886,15 +870,15 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 
     // turn all filters to default values
     StringList filterSettings;
-    for (OptionFilterList::iterator filter = optionFilters->begin(); filter != optionFilters->end(); filter++) {
-        filterSettings.push_back((*filter)->getOptionValue());
-        (*filter)->setOptionValue((*filter)->getOptionValues().begin()->c_str());
+    for (auto * const filterPtr : optionFilters) {
+        filterSettings.push_back(filterPtr->getOptionValue());
+        filterPtr->setOptionValue(filterPtr->getOptionValues().begin()->c_str());
 
-        if ( (!strcmp("Greek Accents", (*filter)->getOptionName())) ||
-            (!strcmp("Hebrew Vowel Points", (*filter)->getOptionName())) ||
-            (!strcmp("Arabic Vowel Points", (*filter)->getOptionName()))
+        if ( (!strcmp("Greek Accents", filterPtr->getOptionName())) ||
+            (!strcmp("Hebrew Vowel Points", filterPtr->getOptionName())) ||
+            (!strcmp("Arabic Vowel Points", filterPtr->getOptionName()))
            ) {
-            (*filter)->setOptionValue("Off");
+            filterPtr->setOptionValue("Off");
         }
     }
 
@@ -1239,9 +1223,8 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 
     // reset option filters back to original values
     StringList::iterator origVal = filterSettings.begin();
-    for (OptionFilterList::iterator filter = optionFilters->begin(); filter != optionFilters->end(); filter++) {
-        (*filter)->setOptionValue((origVal++)->c_str());
-    }
+    for (auto * const filterPtr : optionFilters)
+        filterPtr->setOptionValue((origVal++)->c_str());
 
     return 0;
 }
@@ -1251,11 +1234,12 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
  * @param buf the buffer to filter
  * @param key key location from where this buffer was extracted
  */
-void SWModule::filterBuffer(OptionFilterList *filters, std::string &buf, const SWKey *key) const {
-    OptionFilterList::iterator it;
-    for (it = filters->begin(); it != filters->end(); it++) {
-        (*it)->processText(buf, key, this);
-    }
+void SWModule::filterBuffer(OptionFilterList const & filters,
+                            std::string & buf,
+                            SWKey const * key) const
+{
+    for (auto * const filterPtr : filters)
+        filterPtr->processText(buf, key, this);
 }
 
 /** FilterBuffer a text buffer
@@ -1263,11 +1247,12 @@ void SWModule::filterBuffer(OptionFilterList *filters, std::string &buf, const S
  * @param buf the buffer to filter
  * @param key key location from where this buffer was extracted
  */
-void SWModule::filterBuffer(FilterList *filters, std::string &buf, const SWKey *key) const {
-    FilterList::iterator it;
-    for (it = filters->begin(); it != filters->end(); it++) {
-        (*it)->processText(buf, key, this);
-    }
+void SWModule::filterBuffer(FilterList const & filters,
+                            std::string & buf,
+                            SWKey const * key) const
+{
+    for (auto * const filterPtr : filters)
+        filterPtr->processText(buf, key, this);
 }
 
 

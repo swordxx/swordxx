@@ -81,19 +81,19 @@ class SWDLLEXPORT SWModule {
 private: /* Fields: */
 
     /** filters to be executed to remove all markup (for searches) */
-    FilterList *stripFilters;
+    FilterList stripFilters;
 
     /** filters to be executed immediately upon fileread */
-    FilterList *rawFilters;
+    FilterList rawFilters;
 
     /** filters to be executed to format for display */
-    FilterList *renderFilters;
+    FilterList renderFilters;
 
     /** filters to be executed to change markup to user prefs */
-    OptionFilterList *optionFilters;
+    OptionFilterList optionFilters;
 
     /** filters to be executed to decode text for display */
-    FilterList *encodingFilters;
+    FilterList encodingFilters;
 
 protected:
 
@@ -373,14 +373,18 @@ public:
      * @param buf the buffer to filter
      * @param key key location from where this buffer was extracted
      */
-    virtual void filterBuffer(OptionFilterList *filters, std::string &buf, const SWKey *key) const;
+    virtual void filterBuffer(OptionFilterList const & filters,
+                              std::string & buf,
+                              SWKey const * key) const;
 
     /** FilterBuffer a text buffer
      * @param filters the FilterList of filters to iterate
      * @param buf the buffer to filter
      * @param key key location from where this buffer was extracted
      */
-    virtual void filterBuffer(FilterList *filters, std::string &buf, const SWKey *key) const;
+    virtual void filterBuffer(FilterList const & filters,
+                              std::string & buf,
+                              SWKey const * key) const;
 
     /** Adds a RenderFilter to this module's renderFilters queue.
      *    Render Filters are called when the module is asked to produce
@@ -389,7 +393,7 @@ public:
      * @return *this
      */
     virtual SWModule &addRenderFilter(SWFilter *newFilter) {
-        renderFilters->push_back(newFilter);
+        renderFilters.push_back(newFilter);
         return *this;
     }
 
@@ -398,7 +402,7 @@ public:
      * @return container of render filters
      */
     virtual const FilterList &getRenderFilters() const {
-        return *renderFilters;
+        return renderFilters;
     }
 
     /** Removes a RenderFilter from this module's renderFilters queue
@@ -406,7 +410,7 @@ public:
      * @return *this
      */
     virtual SWModule &removeRenderFilter(SWFilter *oldFilter) {
-        renderFilters->remove(oldFilter);
+        renderFilters.remove(oldFilter);
         return *this;
     }
 
@@ -416,11 +420,9 @@ public:
      * @return *this
      */
     virtual SWModule &replaceRenderFilter(SWFilter *oldFilter, SWFilter *newFilter) {
-        FilterList::iterator iter;
-        for (iter = renderFilters->begin(); iter != renderFilters->end(); iter++) {
-            if (*iter == oldFilter)
-                *iter = newFilter;
-        }
+        for (auto & filter : renderFilters)
+            if (filter == oldFilter)
+                filter = newFilter;
         return *this;
     }
 
@@ -440,7 +442,7 @@ public:
      * @return *this
      */
     virtual SWModule &addEncodingFilter(SWFilter *newFilter) {
-        encodingFilters->push_back(newFilter);
+        encodingFilters.push_back(newFilter);
         return *this;
     }
 
@@ -449,7 +451,7 @@ public:
      * @return *this
      */
     virtual SWModule &removeEncodingFilter(SWFilter *oldFilter) {
-        encodingFilters->remove(oldFilter);
+        encodingFilters.remove(oldFilter);
         return *this;
     }
 
@@ -459,11 +461,9 @@ public:
      * @return *this
      */
     virtual SWModule &replaceEncodingFilter(SWFilter *oldFilter, SWFilter *newFilter) {
-        FilterList::iterator iter;
-        for (iter = encodingFilters->begin(); iter != encodingFilters->end(); iter++) {
-            if (*iter == oldFilter)
-                *iter = newFilter;
-        }
+        for (auto & filter : encodingFilters)
+            if (filter == oldFilter)
+                filter = newFilter;
         return *this;
     }
 
@@ -482,7 +482,7 @@ public:
      * @return *this
      */
     virtual SWModule &addStripFilter(SWFilter *newFilter) {
-        stripFilters->push_back(newFilter);
+        stripFilters.push_back(newFilter);
         return *this;
     }
 
@@ -491,7 +491,7 @@ public:
      * @return *this
      */
     virtual SWModule &addRawFilter(SWFilter *newfilter) {
-        rawFilters->push_back(newfilter);
+        rawFilters.push_back(newfilter);
         return *this;
     }
 
@@ -520,7 +520,7 @@ public:
      * @return *this
      */
     virtual SWModule &addOptionFilter(SWOptionFilter *newFilter) {
-        optionFilters->push_back(newFilter);
+        optionFilters.push_back(newFilter);
         return *this;
     }
 
