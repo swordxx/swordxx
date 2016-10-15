@@ -284,11 +284,11 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 
     (*percent)(perc, percentUserData);
 
-    *this = Position::Bottom;
+    positionToBottom();
     long highIndex = key->getIndex();
     if (!highIndex)
         highIndex = 1;        // avoid division by zero errors.
-    *this = Position::Top;
+    positionToTop();
     if (searchType >= 0) {
 #ifdef USECXX11REGEX
         preg = std::regex((std::string(".*")+istr+".*").c_str(), std::regex_constants::extended & flags);
@@ -915,7 +915,7 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
     TreeKeyIdx *tkcheck = dynamic_cast<TreeKeyIdx *>(key);
 
 
-    *this = Position::Bottom;
+    positionToBottom();
     long highIndex = key->getIndex();
     if (!highIndex)
         highIndex = 1;        // avoid division by zero errors.
@@ -925,7 +925,7 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 
     // prox chapter blocks
     // position module at the beginning
-    *this = Position::Top;
+    positionToTop();
 
     std::string proxBuf;
     std::string proxLem;

@@ -162,7 +162,7 @@ int main(int argc, char **argv)
     cout << "\t</header>\n\n";
 
 
-    (*inModule) = Position::Top;
+    inModule->positionToTop();
 
     SWKey *p = inModule->createKey();
         VerseKey *tmpKey = dynamic_cast<VerseKey *>(p);
@@ -175,7 +175,7 @@ int main(int argc, char **argv)
     tmpKey->setIntros(true);
     tmpKey->setAutoNormalize(false);
 
-    for ((*inModule) = Position::Top; !inModule->popError(); (*inModule)++) {
+    for (inModule->positionToTop(); !inModule->popError(); (*inModule)++) {
         bool newTest = false;
         bool newBook = false;
 

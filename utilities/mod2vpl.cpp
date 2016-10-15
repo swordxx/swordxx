@@ -90,7 +90,7 @@ int main(int argc, char **argv) {
 
     vkey->setIntros(true);    // turn on mod/testmnt/book/chap headings
 
-    (*mod) = swordxx::Position::Top;
+    mod->positionToTop();
 
     while (!mod->popError()) {
         buffer = new char [ mod->renderText().length() + 1 ];

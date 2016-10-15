@@ -184,7 +184,7 @@ int main(int argc, char **argv)
     outModule->setKey(*outModuleKey);
 
     inModule->setSkipConsecutiveLinks(false);
-    (*inModule) = Position::Top;
+    inModule->positionToTop();
     while (!inModule->popError()) {
         bufferKey = *inModule->getKey();
         // pseudo-check for link.  Will get most common links.

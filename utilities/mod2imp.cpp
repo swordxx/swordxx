@@ -110,7 +110,7 @@ int main(int argc, char **argv)
     if (VerseKey * const vkey = dynamic_cast<VerseKey *>(module->getKey()))
         vkey->setIntros(true);
 
-    for ((*module) = Position::Top; !module->popError(); (*module)++) {
+    for (module->positionToTop(); !module->popError(); (*module)++) {
         std::cout << "$$$" << module->getKeyText() << std::endl;
         std::cout << ((render) ? module->renderText().c_str() : (strip) ? module->stripText() : module->getRawEntry()) << "\n";
     }
