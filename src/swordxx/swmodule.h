@@ -64,8 +64,6 @@ typedef std::map < std::string, std::string, std::less < std::string > > Attribu
 typedef std::map < std::string, AttributeValue, std::less < std::string > > AttributeList;
 typedef std::map < std::string, AttributeList, std::less < std::string > > AttributeTypeList;
 
-#define SWTextMarkup char
-
 /**
  * The class SWModule is the base class for all modules used in Sword++.
  * It provides functions to look up a text passage, to search in the module,
@@ -108,7 +106,7 @@ private: /* Fields: */
     ListKey listKey;
 
     SWTextDirection direction;
-    char markup;
+    SWTextMarkup markup;
     TextEncoding encoding;
 
 protected:
@@ -270,7 +268,7 @@ public:
      * @param markup Value which to set markup; [-1]-only get
      * @return Markup
      */
-    char getMarkup() const { return markup; }
+    SWTextMarkup getMarkup() const { return markup; }
 
     /** Sets/gets module language
      *

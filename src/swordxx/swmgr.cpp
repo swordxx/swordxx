@@ -837,7 +837,7 @@ SWModule *SWMgr::createModule(const char *name, const char *driver, ConfigEntMap
     SWModule * newmod = nullptr;
     std::string lang, sourceformat, encoding;
     SWTextDirection direction;
-    signed char markup;
+    SWTextMarkup markup;
     TextEncoding enc;
 
     description  = ((entry = section.find("Description")) != section.end()) ? (*entry).second : std::string();

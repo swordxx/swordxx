@@ -68,7 +68,20 @@ namespace swordxx {
 
 
 enum SWTextDirection: char { DIRECTION_LTR = 0, DIRECTION_RTL, DIRECTION_BIDI };
-enum {FMT_UNKNOWN = 0, FMT_PLAIN, FMT_THML, FMT_GBF, FMT_HTML, FMT_HTMLHREF, FMT_RTF, FMT_OSIS, FMT_WEBIF, FMT_TEI, FMT_XHTML, FMT_LATEX};
+enum SWTextMarkup: char {
+    FMT_UNKNOWN = 0,
+    FMT_PLAIN,
+    FMT_THML,
+    FMT_GBF,
+    FMT_HTML,
+    FMT_HTMLHREF,
+    FMT_RTF,
+    FMT_OSIS,
+    FMT_WEBIF,
+    FMT_TEI,
+    FMT_XHTML,
+    FMT_LATEX
+};
 
 enum TextEncoding: char {
     ENC_UNKNOWN = 0,
