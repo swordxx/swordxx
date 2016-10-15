@@ -315,18 +315,18 @@ public:
      * @param buf the buffer to filter
      * @param key key location from where this buffer was extracted
      */
-    virtual void filterBuffer(OptionFilterList const & filters,
-                              std::string & buf,
-                              SWKey const * key) const;
+    void filterBuffer(OptionFilterList const & filters,
+                      std::string & buf,
+                      SWKey const * key) const;
 
     /** FilterBuffer a text buffer
      * @param filters the FilterList of filters to iterate
      * @param buf the buffer to filter
      * @param key key location from where this buffer was extracted
      */
-    virtual void filterBuffer(FilterList const & filters,
-                              std::string & buf,
-                              SWKey const * key) const;
+    void filterBuffer(FilterList const & filters,
+                      std::string & buf,
+                      SWKey const * key) const;
 
     /** Adds a RenderFilter to this module's renderFilters queue.
      *    Render Filters are called when the module is asked to produce
@@ -334,7 +334,7 @@ public:
      * @param newfilter the filter to add
      * @return *this
      */
-    virtual SWModule &addRenderFilter(SWFilter *newFilter) {
+    SWModule & addRenderFilter(SWFilter * newFilter) {
         renderFilters.push_back(newFilter);
         return *this;
     }
@@ -343,15 +343,13 @@ public:
      *    module.
      * @return container of render filters
      */
-    virtual const FilterList &getRenderFilters() const {
-        return renderFilters;
-    }
+    FilterList const & getRenderFilters() const { return renderFilters; }
 
     /** Removes a RenderFilter from this module's renderFilters queue
      * @param oldfilter the filter to remove
      * @return *this
      */
-    virtual SWModule &removeRenderFilter(SWFilter *oldFilter) {
+    SWModule & removeRenderFilter(SWFilter * oldFilter) {
         renderFilters.remove(oldFilter);
         return *this;
     }
@@ -361,7 +359,7 @@ public:
      * @param newfilter the filter to add in its place
      * @return *this
      */
-    virtual SWModule &replaceRenderFilter(SWFilter *oldFilter, SWFilter *newFilter) {
+    SWModule & replaceRenderFilter(SWFilter * oldFilter, SWFilter * newFilter) {
         for (auto & filter : renderFilters)
             if (filter == oldFilter)
                 filter = newFilter;
@@ -372,7 +370,7 @@ public:
      * @param buf the buffer to filter
      * @param key key location from where this buffer was extracted
      */
-    virtual void renderFilter(std::string &buf, const SWKey *key) const {
+    void renderFilter(std::string & buf, SWKey const * key) const {
         filterBuffer(renderFilters, buf, key);
     }
 
@@ -383,7 +381,7 @@ public:
      * @param newfilter the filter to add
      * @return *this
      */
-    virtual SWModule &addEncodingFilter(SWFilter *newFilter) {
+    SWModule & addEncodingFilter(SWFilter * newFilter) {
         encodingFilters.push_back(newFilter);
         return *this;
     }
@@ -392,7 +390,7 @@ public:
      * @param oldfilter the filter to remove
      * @return *this
      */
-    virtual SWModule &removeEncodingFilter(SWFilter *oldFilter) {
+    SWModule & removeEncodingFilter(SWFilter * oldFilter) {
         encodingFilters.remove(oldFilter);
         return *this;
     }
@@ -402,7 +400,8 @@ public:
      * @param newfilter the filter to add in its place
      * @return *this
      */
-    virtual SWModule &replaceEncodingFilter(SWFilter *oldFilter, SWFilter *newFilter) {
+    SWModule & replaceEncodingFilter(SWFilter * oldFilter, SWFilter * newFilter)
+    {
         for (auto & filter : encodingFilters)
             if (filter == oldFilter)
                 filter = newFilter;
@@ -413,7 +412,7 @@ public:
      * @param buf the buffer to filter
      * @param key key location from where this buffer was extracted
      */
-    virtual void encodingFilter(std::string &buf, const SWKey *key) const {
+    void encodingFilter(std::string & buf, SWKey const * key) const {
         filterBuffer(encodingFilters, buf, key);
     }
 
@@ -423,7 +422,7 @@ public:
      * @param newfilter the filter to add
      * @return *this
      */
-    virtual SWModule &addStripFilter(SWFilter *newFilter) {
+    SWModule & addStripFilter(SWFilter * newFilter) {
         stripFilters.push_back(newFilter);
         return *this;
     }
@@ -432,7 +431,7 @@ public:
      * @param newFilter the filter to add
      * @return *this
      */
-    virtual SWModule &addRawFilter(SWFilter *newfilter) {
+    SWModule & addRawFilter(SWFilter * newfilter) {
         rawFilters.push_back(newfilter);
         return *this;
     }
@@ -441,7 +440,7 @@ public:
      * @param buf the buffer to filter
      * @param key key location from where this buffer was extracted
      */
-    virtual void stripFilter(std::string &buf, const SWKey *key) const {
+    void stripFilter(std::string & buf, SWKey const * key) const {
         filterBuffer(stripFilters, buf, key);
     }
 
@@ -450,7 +449,7 @@ public:
      * @param buf the buffer to filter
      * @param key key location from where this buffer was extracted
      */
-    virtual void rawFilter(std::string &buf, const SWKey *key) const {
+    void rawFilter(std::string & buf, SWKey const * key) const {
         filterBuffer(rawFilters, buf, key);
     }
 
@@ -461,7 +460,7 @@ public:
      * @param newfilter the filter to add
      * @return *this
      */
-    virtual SWModule &addOptionFilter(SWOptionFilter *newFilter) {
+    SWModule & addOptionFilter(SWOptionFilter * newFilter) {
         optionFilters.push_back(newFilter);
         return *this;
     }
@@ -470,7 +469,7 @@ public:
      * @param buf the buffer to filter
      * @param key key location from where this buffer was extracted
      */
-    virtual void optionFilter(std::string &buf, const SWKey *key) const {
+    void optionFilter(std::string & buf, SWKey const * key) const {
         filterBuffer(optionFilters, buf, key);
     }
 
@@ -482,7 +481,7 @@ public:
      * @param len max len to process
      * @return result buffer
      */
-    virtual std::string stripText(char const * buf = nullptr, int len = -1);
+    std::string stripText(char const * buf = nullptr, int len = -1);
 
     /** Produces renderable text of the current module entry or supplied text
      *
@@ -500,30 +499,30 @@ public:
      *    processing done with this filter.  A typical example is a suggested
      *    CSS style block for classed containers.
      */
-    virtual const char *getRenderHeader() const;
+    char const * getRenderHeader() const;
 
     /** Produces plain text, without markup, of the module entry at the supplied key
      * @param tmpKey desired module entry
      * @return result buffer
      */
-    virtual std::string stripText(const SWKey *tmpKey);
+    std::string stripText(SWKey const * tmpKey);
 
     /** Produces renderable text of the module entry at the supplied key
      * @param tmpKey key to use to grab text
      * @return this module's text at specified key location massaged by Render filters
      */
-    std::string renderText(const SWKey *tmpKey);
+    std::string renderText(SWKey const * tmpKey);
 
     /** Whether or not to only hit one entry when iterating encounters
      *    consecutive links when iterating
      * @param val = true means only include entry once in iteration
      */
-    virtual void setSkipConsecutiveLinks(bool val) { skipConsecutiveLinks = val; }
+    void setSkipConsecutiveLinks(bool val) { skipConsecutiveLinks = val; }
 
     /** Whether or not to only hit one entry when iterating encounters
      *    consecutive links when iterating
      */
-    virtual bool isSkipConsecutiveLinks() { return skipConsecutiveLinks; }
+    bool isSkipConsecutiveLinks() { return skipConsecutiveLinks; }
 
     virtual bool isLinked(const SWKey *, const SWKey *) const { return false; }
     virtual bool hasEntry(const SWKey *) const { return false; }
@@ -534,17 +533,17 @@ public:
      *    displays this information.  It is also useful as an example of how
      *    to access such.
      */
-    virtual AttributeTypeList &getEntryAttributes() const { return entryAttributes; }
+    AttributeTypeList & getEntryAttributes() const { return entryAttributes; }
 
     /** Processing Entry Attributes can be expensive.  This method allows
      * turning the processing off if they are not desired.  Some internal
      * engine processing turns them off (like searching) temporarily for
      * optimization.
      */
-    virtual void setProcessEntryAttributes(bool val) const { procEntAttr = val; }
+    void setProcessEntryAttributes(bool val) const { procEntAttr = val; }
 
     /** Whether or not we're processing Entry Attributes */
-    virtual bool isProcessEntryAttributes() const { return procEntAttr; }
+    bool isProcessEntryAttributes() const { return procEntAttr; }
 
 
     // Searching:
