@@ -78,6 +78,23 @@ typedef std::map < std::string, AttributeList, std::less < std::string > > Attri
 
 class SWDLLEXPORT SWModule {
 
+private: /* Fields: */
+
+    /** filters to be executed to remove all markup (for searches) */
+    FilterList *stripFilters;
+
+    /** filters to be executed immediately upon fileread */
+    FilterList *rawFilters;
+
+    /** filters to be executed to format for display */
+    FilterList *renderFilters;
+
+    /** filters to be executed to change markup to user prefs */
+    OptionFilterList *optionFilters;
+
+    /** filters to be executed to decode text for display */
+    FilterList *encodingFilters;
+
 protected:
 
     ConfigEntMap ownConfig;
@@ -102,21 +119,6 @@ protected:
     TextEncoding encoding;
 
     mutable std::string entryBuf;
-
-    /** filters to be executed to remove all markup (for searches) */
-    FilterList *stripFilters;
-
-    /** filters to be executed immediately upon fileread */
-    FilterList *rawFilters;
-
-    /** filters to be executed to format for display */
-    FilterList *renderFilters;
-
-    /** filters to be executed to change markup to user prefs */
-    OptionFilterList *optionFilters;
-
-    /** filters to be executed to decode text for display */
-    FilterList *encodingFilters;
 
     mutable int entrySize;
     mutable long entryIndex;     // internal common storage for index
