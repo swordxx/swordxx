@@ -99,21 +99,21 @@ private: /* Fields: */
 
 protected:
 
-    ConfigEntMap *config;
+    ConfigEntMap * config{&ownConfig};
     mutable AttributeTypeList entryAttributes;
-    mutable bool procEntAttr;
+    mutable bool procEntAttr = true;
 
-    mutable char error;
-    bool skipConsecutiveLinks;
+    mutable char error = 0;
+    bool skipConsecutiveLinks = true;
 
     /** the current key */
     SWKey *key;
 
     ListKey listKey;
-    char *modname;
-    char *moddesc;
-    char *modtype;
-    char *modlang;
+    char * modname = nullptr;
+    char * moddesc = nullptr;
+    char * modtype = nullptr;
+    char * modlang = nullptr;
 
     char direction;
     char markup;
@@ -121,7 +121,7 @@ protected:
 
     mutable std::string entryBuf;
 
-    mutable int entrySize;
+    mutable int entrySize = -1;
     mutable long entryIndex;     // internal common storage for index
 
     static void prepText(std::string &buf);

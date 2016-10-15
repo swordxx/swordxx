@@ -76,23 +76,13 @@ typedef std::list<std::string> StringList;
 
 SWModule::SWModule(SWKey * key_, const char *imodname, const char *imoddesc, const char *imodtype, TextEncoding encoding, SWTextDirection direction, SWTextMarkup markup, const char *imodlang) {
     key       = key_;
-    entryBuf  = "";
-    config    = &ownConfig;
-    modname   = nullptr;
-    error     = 0;
-    moddesc   = nullptr;
-    modtype   = nullptr;
-    modlang   = nullptr;
     this->encoding = encoding;
     this->direction = direction;
     this->markup  = markup;
-    entrySize= -1;
     stdstr(&modname, imodname);
     stdstr(&moddesc, imoddesc);
     stdstr(&modtype, imodtype);
     stdstr(&modlang, imodlang);
-    skipConsecutiveLinks = true;
-    procEntAttr = true;
 }
 
 
