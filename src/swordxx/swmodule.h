@@ -64,7 +64,6 @@ typedef std::map < std::string, std::string, std::less < std::string > > Attribu
 typedef std::map < std::string, AttributeValue, std::less < std::string > > AttributeList;
 typedef std::map < std::string, AttributeList, std::less < std::string > > AttributeTypeList;
 
-#define SWTextDirection char
 #define SWTextMarkup char
 
 /**
@@ -108,7 +107,7 @@ private: /* Fields: */
 
     ListKey listKey;
 
-    char direction;
+    SWTextDirection direction;
     char markup;
     TextEncoding encoding;
 
@@ -261,7 +260,7 @@ public:
      * @param newdir Value which to set direction; [-1]-only get
      * @return new direction
      */
-    inline char getDirection() const noexcept { return direction; }
+    inline SWTextDirection getDirection() const noexcept { return direction; }
 
     /** \returns the module encoding. */
     TextEncoding getEncoding() const { return encoding; }
