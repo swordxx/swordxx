@@ -97,10 +97,10 @@ private: /* Fields: */
 
     ConfigEntMap ownConfig;
 
-    char * modname = nullptr;
-    char * moddesc = nullptr;
-    char * modtype = nullptr;
-    char * modlang = nullptr;
+    std::string modname;
+    std::string moddesc;
+    std::string modtype;
+    std::string modlang;
 
 protected:
 
@@ -234,26 +234,27 @@ public:
      *
      * @return pointer to modname
      */
-    const char *getName() const { return modname; }
+    char const * getName() const { return modname.c_str(); }
 
     /** Gets module description
      *
      * @return pointer to moddesc
      */
-    const char *getDescription() const { return moddesc; }
+    char const * getDescription() const { return moddesc.c_str(); }
 
     /** Gets module type
      *
      * @return pointer to modtype
      */
-    const char *getType() const { return modtype; }
+    char const * getType() const { return modtype.c_str(); }
 
     /** Sets module type
      *
      * @param imodtype Value which to set modtype; [0]-only get
      * @return pointer to modtype
      */
-    void setType(const char *imodtype) { stdstr(&modtype, imodtype); }
+    void setType(char const * imodtype)
+    { modtype = (imodtype ? imodtype : ""); }
 
     /** Sets/gets module direction
      *
@@ -277,7 +278,7 @@ public:
      * @param imodlang Value which to set modlang; [0]-only get
      * @return pointer to modlang
      */
-    const char *getLanguage() const { return modlang; }
+    char const * getLanguage() const { return modlang.c_str(); }
 
 
     // search interface -------------------------------------------------
