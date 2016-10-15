@@ -95,9 +95,10 @@ private: /* Fields: */
     /** filters to be executed to decode text for display */
     FilterList encodingFilters;
 
+    ConfigEntMap ownConfig;
+
 protected:
 
-    ConfigEntMap ownConfig;
     ConfigEntMap *config;
     mutable AttributeTypeList entryAttributes;
     mutable bool procEntAttr;
