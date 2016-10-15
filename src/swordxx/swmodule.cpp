@@ -810,9 +810,9 @@ std::string SWModule::stripText(const SWKey *tmpKey) {
  * RET: bibliographic data in the requested format as a string (BibTeX by default)
  */
 
-std::string SWModule::getBibliography(unsigned char bibFormat) const {
+std::string SWModule::getBibliography(BibliographyFormat format) const {
     std::string s;
-    switch (bibFormat) {
+    switch (format) {
     case BIB_BIBTEX:
         s.append("@Book {").append(modname).append(", Title = \"").append(moddesc).append("\", Publisher = \"CrossWire Bible Society\"}");
         break;

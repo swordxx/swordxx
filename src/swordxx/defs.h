@@ -93,7 +93,12 @@ enum TextEncoding: char {
     ENC_HTML
 };
 
-enum {BIB_BIBTEX = 0, /* possible future formats: BIB_MARCXML, BIB_MARC21, BIB_DCMI BIB_OSISHEADER, BIB_SBL_XHTML, BIB_MLA_XHTML, BIB_APA_XHTML, BIB_CHICAGO_XHTML */};
+enum BibliographyFormat: char {
+    BIB_BIBTEX = 0,
+    /* possible future formats: BIB_MARCXML, BIB_MARC21, BIB_DCMI,
+       BIB_OSISHEADER, BIB_SBL_XHTML, BIB_MLA_XHTML, BIB_APA_XHTML,
+       BIB_CHICAGO_XHTML */
+};
 
 } /* namespace swordxx */
 #endif //SWORDDEFS_H
