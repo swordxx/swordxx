@@ -119,12 +119,12 @@ int main(int argc, char **argv) {
 
         mod->setEntry(buffer, entrysize);    // save text to module at current position
         std::cout << "f" << firstverse.getText() << std::endl;
-        (*mod)++;
+        mod->increment();
       }
       while (*mod->getKey() <= finalkey) {
         std::cout << mod->getKeyText() << std::endl;
         *(SWModule*)mod << &firstverse;
-        (*mod)++;
+        mod->increment();
       }
     }
     else {

@@ -207,7 +207,7 @@ int main(int argc, char **argv)
                     cout << "Skipping [" << bufferKey.getText() << "] no entry in Module.\n";
             }
         }
-        (*inModule)++;
+        inModule->increment();
     }
     delete outModule;
     delete outModuleKey;

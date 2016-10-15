@@ -105,6 +105,6 @@ int main(int argc, char **argv) {
         else std::cout << buffer << std::endl;
 
         delete [] buffer;
-        (*mod)++;
+        mod->increment();
     }
 }

@@ -276,7 +276,7 @@ int main(int argc, char **argv) {
         else {
             fixText(buffer);
             mod << buffer;    // save text to module at current position
-            mod++;    // increment module position
+            mod.increment();    // increment module position
         }
     }
 

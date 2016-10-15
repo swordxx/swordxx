@@ -630,7 +630,7 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
             } // end switch
         }
         *lastKey = *getKey();
-        (*this)++;
+        increment(1);
     }
 
 
@@ -1076,7 +1076,7 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
                             proxMorph.append("\n");
                         }
                     }
-                    (*this)++;
+                    increment(1);
                     err = popError();
                 }
                 err = 0;
@@ -1166,7 +1166,7 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
         }
         delete doc;
 
-        (*this)++;
+        increment(1);
         err = popError();
     }
 

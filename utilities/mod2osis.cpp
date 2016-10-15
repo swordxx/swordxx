@@ -175,7 +175,7 @@ int main(int argc, char **argv)
     tmpKey->setIntros(true);
     tmpKey->setAutoNormalize(false);
 
-    for (inModule->positionToTop(); !inModule->popError(); (*inModule)++) {
+    for (inModule->positionToTop(); !inModule->popError(); inModule->increment()) {
         bool newTest = false;
         bool newBook = false;
 

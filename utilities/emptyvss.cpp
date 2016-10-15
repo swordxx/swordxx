@@ -74,7 +74,7 @@ int main(int argc, char **argv) {
             if (!mod->renderText().length()) {
                 std::cout << vkey->getText() << std::endl;
             }
-            (*mod)++;
+            mod->increment();
         }
     }
 }
