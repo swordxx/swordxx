@@ -69,7 +69,6 @@ typedef std::map < std::string, AttributeList, std::less < std::string > > Attri
  *
  * SWModule has also functions to write to the data files.
  */
-
 class SWDLLEXPORT SWModule {
 
 private: /* Fields: */
@@ -77,13 +76,13 @@ private: /* Fields: */
     /** filters to be executed to remove all markup (for searches) */
     FilterList stripFilters;
 
-    /** filters to be executed immediately upon fileread */
+    /** filters to be executed immediately upon file read */
     FilterList rawFilters;
 
     /** filters to be executed to format for display */
     FilterList renderFilters;
 
-    /** filters to be executed to change markup to user prefs */
+    /** filters to be executed to change markup to user preferences */
     OptionFilterList optionFilters;
 
     /** filters to be executed to decode text for display */
@@ -121,11 +120,9 @@ protected:
 
     static void prepText(std::string &buf);
 
-
 public:
 
-    /** SWModule c-tor
-     *
+    /**
      * @param key_ the default key.
      * @param imodname Internal name for module; see also getName()
      * @param imoddesc Name to display to user for module; see also getDescription()
@@ -144,8 +141,6 @@ public:
              SWTextMarkup markup = FMT_UNKNOWN,
              char const * modlang = nullptr);
 
-    /** SWModule d-tor
-     */
     virtual ~SWModule();
 
     virtual void flush() {}
@@ -207,71 +202,31 @@ public:
      */
     char setKey(const SWKey &ikey) { return setKey(&ikey); }
 
-    /** Gets the current module key
-     * @return the current key of this module
-     */
+    /** \returns the current key of this module. */
     SWKey *getKey() const { return key; }
 
     /**
      * gets the key text for the module.
      * do we really need this?
      */
-
     virtual const char *getKeyText() const { return getKey()->getText(); }
-
 
     virtual long getIndex() const { return entryIndex; }
     virtual void setIndex(long iindex) { entryIndex = iindex; }
 
-
-    /** Gets module name
-     *
-     * @return pointer to modname
-     */
     char const * getName() const { return modname.c_str(); }
-
-    /** Gets module description
-     *
-     * @return pointer to moddesc
-     */
     char const * getDescription() const { return moddesc.c_str(); }
-
-    /** Gets module type
-     *
-     * @return pointer to modtype
-     */
     char const * getType() const { return modtype.c_str(); }
 
-    /** Sets module type
-     *
-     * @param imodtype Value which to set modtype; [0]-only get
-     * @return pointer to modtype
-     */
     void setType(char const * imodtype)
     { modtype = (imodtype ? imodtype : ""); }
 
-    /** Sets/gets module direction
-     *
-     * @param newdir Value which to set direction; [-1]-only get
-     * @return new direction
-     */
     inline SWTextDirection getDirection() const noexcept { return direction; }
 
-    /** \returns the module encoding. */
     TextEncoding getEncoding() const { return encoding; }
 
-    /** Sets/gets module markup
-     *
-     * @param markup Value which to set markup; [-1]-only get
-     * @return Markup
-     */
     SWTextMarkup getMarkup() const { return markup; }
 
-    /** Sets/gets module language
-     *
-     * @param imodlang Value which to set modlang; [0]-only get
-     * @return pointer to modlang
-     */
     char const * getLanguage() const { return modlang.c_str(); }
 
 
@@ -323,13 +278,10 @@ public:
     std::string const & getRawEntry() const { return getRawEntryBuf(); }
 
     // write interface ----------------------------
-    /** Is the module writable? :)
-     * @return yes or no
-     */
+
     virtual bool isWritable() const { return false; }
 
-    /** Modify the current module entry text - only if module isWritable()
-     */
+    /** Modify the current module entry text - only if module isWritable() */
     virtual void setEntry(const char *inbuf, long len= -1) {
         (void) inbuf;
         (void) len;
@@ -340,8 +292,7 @@ public:
      */
     virtual void linkEntry(SWKey const * sourceKey) { (void) sourceKey; }
 
-    /** Delete current module entry - only if module isWritable()
-     */
+    /** Delete current module entry - only if module isWritable() */
     virtual void deleteEntry() {}
 
     // end write interface ------------------------
@@ -592,16 +543,13 @@ public:
      */
     virtual void setProcessEntryAttributes(bool val) const { procEntAttr = val; }
 
-    /** Whether or not we're processing Entry Attributes
-     */
+    /** Whether or not we're processing Entry Attributes */
     virtual bool isProcessEntryAttributes() const { return procEntAttr; }
 
 
     // Searching:
 
-    /**
-     * ask the object to build any indecies it wants for optimal searching
-     */
+    /** Ask the object to build any indecies it wants for optimal searching */
     signed char createSearchFramework(
             void (* percent)(char, void *) = &nullPercent,
             void * percentUserData = nullptr);
@@ -610,7 +558,7 @@ public:
 
     /**
      * Check if the search is optimally supported (e.g. if index files are
-     * presnt and working)
+     * present and working)
      * This function checks whether the search framework may work in the
      * best way.
      * @return true if the the search is optimally supported, false if
@@ -619,6 +567,7 @@ public:
     bool isSearchOptimallySupported(const char *istr, int searchType, int flags, SWKey *scope);
 
     // OPERATORS -----------------------------------------------------------------
+
     SWMODULE_OPERATORS
 
 protected: /* Methods: */
