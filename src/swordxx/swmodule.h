@@ -47,8 +47,8 @@ class SWFilter;
     SWModule &operator <<(const SWKey *sourceKey) { linkEntry(sourceKey); return *this; } \
     SWModule &operator -=(int steps) { decrement(steps); return *this; } \
     SWModule &operator +=(int steps) { increment(steps); return *this; } \
-    SWModule &operator ++(int) { return *this += 1; } \
-    SWModule &operator --(int) { return *this -= 1; }
+    SWModule &operator --(int) { decrement(1); return *this; } \
+    SWModule &operator ++(int) { increment(1); return *this; }
 
 typedef std::list < SWFilter * >FilterList;
 typedef std::list < SWOptionFilter * >OptionFilterList;
