@@ -210,7 +210,6 @@ void SWModule::nullPercent(char, void *) {}
  *                -2  - multiword
  *                -3  - entryAttrib (eg. Word//Lemma./G1234/)     (Lemma with dot means check components (Lemma.[1-9]) also)
  *                -4  - clucene
- *                -5  - multilemma window; flags = window size
  *     flags        - options flags for search
  *    justCheckIfSupported    - if set, don't search, only tell if this
  *                            function supports requested search.
@@ -253,7 +252,6 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 #endif
 
     vector<std::string> words;
-    vector<std::string> window;
     const char *sres;
     char perc = 1;
     bool savePEA = isProcessEntryAttributes();
@@ -366,7 +364,6 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 
     // multi-word
     case -2:
-    case -5:
         // let's break the term down into our words vector
         while (1) {
             auto const r(getPrefixSize(term, ' '));
@@ -580,53 +577,6 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
                 }
                 break;
             }
-            case -5:
-                AttributeList &words = getEntryAttributes()["Word"];
-                std::string kjvWord = "";
-                std::string bibWord = "";
-                for (AttributeList::iterator it = words.begin(); it != words.end(); it++) {
-                    int parts = atoi(it->second["PartCount"].c_str());
-                    std::string lemma = "";
-                    std::string morph = "";
-                    for (int i = 1; i <= parts; i++) {
-                        std::string key = "";
-                        key = (parts == 1) ? "Lemma" : formatted("Lemma.%d", i).c_str();
-                        AttributeValue::iterator li = it->second.find(key);
-                        if (li != it->second.end()) {
-                            if (i > 1) lemma += " ";
-                            key = (parts == 1) ? "LemmaClass" : formatted("LemmaClass.%d", i).c_str();
-                            AttributeValue::iterator lci = it->second.find(key);
-                            if (lci != it->second.end()) {
-                                lemma += lci->second + ":";
-                            }
-                            lemma += li->second;
-                        }
-                        key = (parts == 1) ? "Morph" : formatted("Morph.%d", i).c_str();
-                        li = it->second.find(key);
-                        // silly.  sometimes morph counts don't equal lemma counts
-                        if (i == 1 && parts != 1 && li == it->second.end()) {
-                            li = it->second.find("Morph");
-                        }
-                        if (li != it->second.end()) {
-                            if (i > 1) morph += " ";
-                            key = (parts == 1) ? "MorphClass" : formatted("MorphClass.%d", i).c_str();
-                            AttributeValue::iterator lci = it->second.find(key);
-                            // silly.  sometimes morph counts don't equal lemma counts
-                            if (i == 1 && parts != 1 && lci == it->second.end()) {
-                                lci = it->second.find("MorphClass");
-                            }
-                            if (lci != it->second.end()) {
-                                morph += lci->second + ":";
-                            }
-                            morph += li->second;
-                        }
-                        // TODO: add src tags and maybe other attributes
-                    }
-                    while (window.size() < (unsigned)flags) {
-
-                    }
-                }
-                break;
             } // end switch
         }
         *lastKey = *getKey();
