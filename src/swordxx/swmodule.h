@@ -102,23 +102,23 @@ private: /* Fields: */
     std::string modtype;
     std::string modlang;
 
-protected:
-
     ConfigEntMap * config{&ownConfig};
     mutable AttributeTypeList entryAttributes;
     mutable bool procEntAttr = true;
-
-    mutable char error = 0;
-    bool skipConsecutiveLinks = true;
-
-    /** the current key */
-    SWKey *key;
 
     ListKey listKey;
 
     char direction;
     char markup;
     TextEncoding encoding;
+
+protected:
+
+    mutable char error = 0;
+    bool skipConsecutiveLinks = true;
+
+    /** the current key */
+    SWKey *key;
 
     mutable std::string entryBuf;
 
