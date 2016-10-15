@@ -262,7 +262,6 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
     vector<std::string> words;
     vector<std::string> window;
     const char *sres;
-    terminateSearch = false;
     char perc = 1;
     bool savePEA = isProcessEntryAttributes();
 
@@ -417,7 +416,7 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
     (*percent)(perc, percentUserData);
 
 
-    while ((searchType != -4) && !popError() && !terminateSearch) {
+    while ((searchType != -4) && !popError()) {
         long mindex = key->getIndex();
         float per = (float)mindex / highIndex;
         per *= 93;

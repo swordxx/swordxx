@@ -128,12 +128,6 @@ protected:
 
 public:
 
-    /**
-     * Set this bool to false to terminate the search which is executed by this module (search()).
-     * This is useful for threaded applications to terminate the search from another thread.
-     */
-    bool terminateSearch;
-
     /** SWModule c-tor
      *
      * @param key_ the default key.
