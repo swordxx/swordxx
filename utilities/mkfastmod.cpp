@@ -24,69 +24,79 @@
     #pragma warning( disable: 4251 )
 #endif
 
-#include <cstdio>
-#include <string>
-#include <swordxx/keys/versekey.h>
-#include <swordxx/markupfiltmgr.h>
-#include <swordxx/modules/texts/rawtext.h>
+#include <cassert>
+#include <cstddef>
+#include <cstdlib>
+#include <iostream>
 #include <swordxx/swmgr.h>
+#include <swordxx/swmodule.h>
 
 
-using swordxx::SWMgr;
-using swordxx::SWModule;
-using swordxx::ListKey;
-using swordxx::VerseKey;
-using swordxx::ModMap;
-
-void percentUpdate(char percent, void *userData) {
-    static char printed = 0;
-    char maxHashes = *((char *)userData);
-
-    while ((((float)percent)/100) * maxHashes > printed) {
-        printf("=");
-        printed++;
-        fflush(stdout);
-    }
-/*
-    std::cout << (int)percent << "% ";
-*/
-    fflush(stdout);
-}
-
-
-int main(int argc, char **argv)
-{
+int main(int argc, char * argv[]) {
+    auto const outErr =
+            [argv]() noexcept -> std::ostream &
+            { return std::cerr << argv[0u] << ": "; };
     if (argc != 2) {
-        fprintf(stderr, "usage: %s <modname>\n", argv[0]);
-        exit(-1);
+        outErr() << "Usage: " << argv[0u] << " <modname>" << std::endl;
+        return EXIT_FAILURE;
     }
 
-    SWModule *target;
-    ListKey listkey;
-    ModMap::iterator it;
-
-    SWMgr manager;
-    it = manager.Modules.find(argv[1]);
+    swordxx::SWMgr manager;
+    auto const it(manager.Modules.find(argv[1]));
     if (it == manager.Modules.end()) {
-        fprintf(stderr, "Could not find module [%s].  Available modules:\n", argv[1]);
-        for (it = manager.Modules.begin(); it != manager.Modules.end(); it++) {
-            fprintf(stderr,
-                    "[%s]\t - %s\n",
-                    (*it).second->getName().c_str(),
-                    (*it).second->getDescription().c_str());
+        outErr() << "Could not find module [" << argv[1u]
+                 << "].  Available modules:\n";
+        for (auto const & rp : manager.Modules) {
+            auto const & module = *rp.second;
+            std::cerr << '[' << module.getName() << "s]\t - "
+                      << module.getDescription() << '\n';
         }
-        exit(-1);
+        std::cerr << std::flush;
+        return EXIT_FAILURE;
     }
-    target = it->second;
 
-    printf("Deleting any existing framework...\n");
-    target->deleteSearchFramework();
-    printf("Building framework, please wait...\n");
-    char lineLen = 70;
-    printf("[0=================================50==============================100]\n ");
-    char error = target->createSearchFramework(&percentUpdate, &lineLen);
+    auto & module = *it->second;
+    std::cout << "Deleting any existing framework..." << std::flush;
+    module.deleteSearchFramework();
+    std::cout << "done\nBuilding framework, please wait..." << std::endl;
+    std::cout << "[0================================5"
+                 "0==============================100]" << std::endl;
+
+    constexpr static std::size_t const progressBarLength = 70u;
+    auto const percentUpdate =
+            [](char percent, void * userData) {
+                assert(percent >= 0);
+                assert(percent <= 100);
+                std::size_t newLength;
+                if (percent <= 0) {
+                    newLength = 0u;
+                } else if (percent >= 100) {
+                    newLength = progressBarLength;
+                } else {
+                    float const ratio = static_cast<float>(percent) / 100.0f;
+                    newLength =
+                            static_cast<std::size_t>(ratio * progressBarLength);
+                }
+                std::size_t & printed = *static_cast<std::size_t *>(userData);
+                std::size_t const p = printed;
+                if (p < newLength) {
+                    std::size_t toPrint = newLength - p;
+                    do {
+                        std::cout << '=';
+                    } while (--toPrint);
+                    std::cout << std::flush;
+                    printed = newLength;
+                }
+            };
+
+    std::size_t progressPrinted = 0u;
+    auto const error =
+            module.createSearchFramework(percentUpdate, &progressPrinted);
+    std::cout << std::endl;
     if (error) {
-        fprintf(stderr, "%s: couldn't create search framework (permissions?)\n", *argv);
+        outErr() << "Couldn't create search framework (permissions?)"
+                 << std::endl;
+        return EXIT_FAILURE;
     }
-    printf("\n");
+    return EXIT_SUCCESS;
 }
