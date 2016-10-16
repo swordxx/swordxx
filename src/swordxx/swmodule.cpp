@@ -834,17 +834,12 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
     bool includeKeyInSearch = getConfig().has("SearchOption", "IncludeKeyInSearch");
 
     // lets create or open our search index
-    lucene::store::RAMDirectory * ramDir = nullptr;
-    lucene::index::IndexWriter * coreWriter = nullptr;
-    lucene::index::IndexWriter * fsWriter = nullptr;
-    lucene::store::Directory * d = nullptr;
-
     static TCHAR const * stopWords[] = { nullptr };
     auto * const an =
             new lucene::analysis::standard::StandardAnalyzer(stopWords);
 
-    ramDir = new lucene::store::RAMDirectory();
-    coreWriter = new lucene::index::IndexWriter(ramDir, an, true);
+    auto * ramDir = new lucene::store::RAMDirectory();
+    auto * coreWriter = new lucene::index::IndexWriter(ramDir, an, true);
     coreWriter->setMaxFieldLength(MAX_CONV_SIZE);
 
     char perc = 1;
@@ -1121,17 +1116,17 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
     //coreWriter->optimize();
     coreWriter->close();
 
-    d = lucene::store::FSDirectory::getDirectory(target.c_str());
-    if (lucene::index::IndexReader::indexExists(target.c_str())) {
-        if (lucene::index::IndexReader::isLocked(d)) {
-            lucene::index::IndexReader::unlock(d);
-        }
-        fsWriter = new lucene::index::IndexWriter( d, an, false);
-    }
-    else {
-        fsWriter = new lucene::index::IndexWriter(d, an, true);
-    }
-
+    auto * d = lucene::store::FSDirectory::getDirectory(target.c_str());
+    bool const createIndex =
+            [d,&target]() {
+                if (lucene::index::IndexReader::indexExists(target.c_str())) {
+                    if (lucene::index::IndexReader::isLocked(d))
+                        lucene::index::IndexReader::unlock(d);
+                    return false;
+                }
+                return true;
+            }();
+    auto * fsWriter = new lucene::index::IndexWriter(d, an, createIndex);
     lucene::store::Directory * dirs[] = { ramDir, nullptr };
     lucene::util::ConstValueArray< lucene::store::Directory *>dirsa(dirs, 1);
     fsWriter->addIndexes(dirsa);
