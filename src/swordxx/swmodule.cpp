@@ -215,9 +215,7 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
     bool includeComponents = false;    // for entryAttrib e.g., /Lemma.1/
 
     std::string target = getConfigEntry("AbsoluteDataPath");
-    auto const lastChar = *(target.rbegin());
-    if (lastChar != '/' && lastChar != '\\')
-        target.push_back('/');
+    addTrailingDirectorySlash(target);
     target.append("lucene");
     if (justCheckIfSupported) {
         *justCheckIfSupported = (searchType >= -3);
