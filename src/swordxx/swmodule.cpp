@@ -300,7 +300,7 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
         try {
             ir = lucene::index::IndexReader::open(target.c_str());
             is = new lucene::search::IndexSearcher(ir);
-            const TCHAR *stopWords[] = { nullptr };
+            static TCHAR const * stopWords[] = { nullptr };
             lucene::analysis::standard::StandardAnalyzer analyzer(stopWords);
 
             // parse the query
@@ -839,7 +839,7 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
     lucene::index::IndexWriter * fsWriter = nullptr;
     lucene::store::Directory * d = nullptr;
 
-    TCHAR const * stopWords[] = { nullptr };
+    static TCHAR const * stopWords[] = { nullptr };
     auto * const an =
             new lucene::analysis::standard::StandardAnalyzer(stopWords);
 
