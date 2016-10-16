@@ -94,7 +94,7 @@ char GBFFootnotes::processText (std::string &text, const SWKey *key, const SWMod
                 if (module->isProcessEntryAttributes()) {
                     //tag = token;
 
-                    if((tagText.length() == 1) || !strcmp(module->getName(), "IGNT")) {
+                    if((tagText.length() == 1) || (module->getName() == "IGNT")) {
                         if (option) { // for ASV marks text in verse then put explanation at end of verse
                             text.append(" <FS>[");
                             text.append(tagText);

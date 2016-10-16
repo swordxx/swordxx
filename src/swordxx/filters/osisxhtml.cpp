@@ -180,7 +180,7 @@ OSISXHTML::MyUserData::MyUserData(const SWModule *module, const SWKey *key) : Ba
     if (module) {
         osisQToTick = ((!module->getConfigEntry("OSISqToTick")) || (strcmp(module->getConfigEntry("OSISqToTick"), "false")));
         version = module->getName();
-        BiblicalText = (!strcmp(module->getType(), "Biblical Texts"));
+        BiblicalText = (module->getType() == "Biblical Texts");
     }
     else {
         osisQToTick = true;    // default

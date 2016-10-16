@@ -216,7 +216,7 @@ ThMLRTF::MyUserData::MyUserData(const SWModule *module, const SWKey *key) : Basi
     XMLTag startTag = "";
     if (module) {
         version = module->getName();
-        BiblicalText = (!strcmp(module->getType(), "Biblical Texts"));
+        BiblicalText = (module->getType() == "Biblical Texts");
     }
 }
 

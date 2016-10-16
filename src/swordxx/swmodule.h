@@ -207,9 +207,9 @@ public:
     virtual long getIndex() const { return entryIndex; }
     virtual void setIndex(long iindex) { entryIndex = iindex; }
 
-    char const * getName() const { return modname.c_str(); }
-    char const * getDescription() const { return moddesc.c_str(); }
-    char const * getType() const { return modtype.c_str(); }
+    std::string const & getName() const { return modname; }
+    std::string const & getDescription() const { return moddesc; }
+    std::string const & getType() const { return modtype; }
 
     void setType(char const * imodtype)
     { modtype = (imodtype ? imodtype : ""); }
@@ -220,7 +220,7 @@ public:
 
     SWTextMarkup getMarkup() const { return markup; }
 
-    char const * getLanguage() const { return modlang.c_str(); }
+    std::string const & getLanguage() const { return modlang; }
 
 
     // search interface -------------------------------------------------

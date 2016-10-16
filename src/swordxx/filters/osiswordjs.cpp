@@ -139,10 +139,10 @@ char OSISWordJS::processText(std::string &text, const SWKey *key, const SWModule
                     // we can pass the real lex name in, but we have some
                     // aliases in the javascript to optimize bandwidth
                     if ((gh == 'G') && (defaultGreekLex)) {
-                        lexName = (!strcmp(defaultGreekLex->getName(), "StrongsGreek"))?"G":defaultGreekLex->getName();
+                        lexName = (defaultGreekLex->getName() == "StrongsGreek")?"G":defaultGreekLex->getName();
                     }
                     else if ((gh == 'H') && (defaultHebLex)) {
-                        lexName = (!strcmp(defaultHebLex->getName(), "StrongsHebrew"))?"H":defaultHebLex->getName();
+                        lexName = (defaultHebLex->getName() == "StrongsHebrew")?"H":defaultHebLex->getName();
                     }
 
                     std::string xlit = wtag.getAttribute("xlit");

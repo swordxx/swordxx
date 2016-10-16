@@ -67,7 +67,7 @@ TEIXHTML::MyUserData::MyUserData(const SWModule *module, const SWKey *key) : Bas
     BiblicalText = false;
     if (module) {
         version = module->getName();
-        BiblicalText = (!strcmp(module->getType(), "Biblical Texts"));
+        BiblicalText = (module->getType() == "Biblical Texts");
     }
 }
 

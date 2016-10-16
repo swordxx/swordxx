@@ -143,10 +143,8 @@ int main(int argc, char **argv)
         cout << " osisIDWork=\"";
         cout << inModule->getName() << "\"";
         cout << " osisRefWork=\"defaultReferenceScheme\"";
-        if (inModule->getLanguage()) {
-            if (strlen(inModule->getLanguage()))
-                cout << " xml:lang=\"" << inModule->getLanguage() << "\"";
-        }
+        if (!inModule->getLanguage().empty())
+            cout << " xml:lang=\"" << inModule->getLanguage() << "\"";
         cout << ">\n\n";
 
     cout << "\t<header>\n";

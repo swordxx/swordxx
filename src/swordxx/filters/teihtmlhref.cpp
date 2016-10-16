@@ -37,7 +37,7 @@ TEIHTMLHREF::MyUserData::MyUserData(const SWModule *module, const SWKey *key) : 
     BiblicalText = false;
     if (module) {
         version = module->getName();
-        BiblicalText = (!strcmp(module->getType(), "Biblical Texts"));
+        BiblicalText = (module->getType() == "Biblical Texts");
     }
 }
 

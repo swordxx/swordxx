@@ -41,7 +41,7 @@ const char *ThMLLaTeX::getHeader() const {
 ThMLLaTeX::MyUserData::MyUserData(const SWModule *module, const SWKey *key) : BasicFilterUserData(module, key) {
     if (module) {
         version = module->getName();
-        BiblicalText = (!strcmp(module->getType(), "Biblical Texts"));
+        BiblicalText = (module->getType() == "Biblical Texts");
         SecHead = false;
     }
 }

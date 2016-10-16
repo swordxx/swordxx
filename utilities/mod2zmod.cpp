@@ -116,9 +116,13 @@ int main(int argc, char **argv)
 #define COM 3
 
     int modType = 0;
-    if (!strcmp(inModule->getType(), "Biblical Texts")) modType = BIBLE;
-    if (!strcmp(inModule->getType(), "Lexicons / Dictionaries")) modType = LEX;
-    if (!strcmp(inModule->getType(), "Commentaries")) modType = COM;
+    if (inModule->getType() == "Biblical Texts") {
+        modType = BIBLE;
+    } else if (inModule->getType() == "Lexicons / Dictionaries") {
+        modType = LEX;
+    } else if (inModule->getType() == "Commentaries") {
+        modType = COM;
+    }
 
     switch (compType) {    // these are deleted by zText
     case 1: compressor = new LZSSCompress(); break;

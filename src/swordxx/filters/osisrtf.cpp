@@ -55,7 +55,7 @@ namespace {
         suspendLevel  = 0;
         if (module) {
             version = module->getName();
-            BiblicalText = (!strcmp(module->getType(), "Biblical Texts"));
+            BiblicalText = (module->getType() == "Biblical Texts");
         }
         osisQToTick = ((!module->getConfigEntry("OSISqToTick")) || (strcmp(module->getConfigEntry("OSISqToTick"), "false")));
     }
