@@ -52,11 +52,6 @@ public:
 
     virtual ~SWGenBook();
 
-
-    // OPERATORS -----------------------------------------------------------------
-
-    SWMODULE_OPERATORS
-
 };
 
 } /* namespace swordxx */

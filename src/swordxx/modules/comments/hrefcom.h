@@ -47,8 +47,6 @@ public:
 
     std::string & getRawEntryBuf() const override;
 
-    SWMODULE_OPERATORS
-
 };
 
 } /* namespace swordxx */

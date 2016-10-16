@@ -75,8 +75,6 @@ public:
     long getIndex() const override;
     void setIndex(long iindex) override;
 
-    SWMODULE_OPERATORS
-
 };
 
 } /* namespace swordxx */

@@ -79,7 +79,7 @@ int main(int argc, char **argv) {
       // 0:1 is Testament intro
       int backstep = vkey->getVerse();
       vkey->setVerse(0);
-      *mod -= backstep;
+      mod->decrement(backstep);
       // << bad hack
 
       FILE *infile;
@@ -123,14 +123,14 @@ int main(int argc, char **argv) {
       }
       while (*mod->getKey() <= finalkey) {
         std::cout << mod->getKeyText() << std::endl;
-        *(SWModule*)mod << &firstverse;
+        mod->linkEntry(&firstverse);
         mod->increment();
       }
     }
     else {
       if (havefirst) {
         mod->setKey(*listkey.getElement(i));
-        *(SWModule*)mod << &firstverse;
+        mod->linkEntry(&firstverse);
         std::cout << mod->getKeyText() << std::endl;
       }
       else {
@@ -161,7 +161,7 @@ int main(int argc, char **argv) {
 
    mod->setKey(argv[4]);    // set key from argument
    SWKey tmpkey = (SWKey) argv[3];
-   *(SWModule*)mod << &(tmpkey);
+   mod->linkEntry(&tmpkey);
    delete mod;
  }
 
@@ -186,7 +186,7 @@ int main(int argc, char **argv) {
        // 0:1 is Testament intro
        int backstep = vkey->getVerse();
        vkey->setVerse(0);
-       mod -= backstep;
+       mod.decrement(backstep);
        // << bad hack
      }
 

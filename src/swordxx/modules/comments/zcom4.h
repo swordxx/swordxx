@@ -75,8 +75,6 @@ public:
     bool isLinked(SWKey const * k1, SWKey const * k2) const override;
     bool hasEntry(SWKey const * k) const override;
 
-    SWMODULE_OPERATORS
-
 };
 
 } /* namespace swordxx */

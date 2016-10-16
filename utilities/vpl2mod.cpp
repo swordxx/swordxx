@@ -271,11 +271,11 @@ int main(int argc, char **argv) {
                    std::cerr << "Warning, overwriting verse: " << vk.getText() << std::endl;
 
             // ------------- End verse tests -----------------
-            mod << verseText;    // save text to module at current position
+            mod.setEntry(verseText);    // save text to module at current position
         }
         else {
             fixText(buffer);
-            mod << buffer;    // save text to module at current position
+            mod.setEntry(buffer);    // save text to module at current position
             mod.increment();    // increment module position
         }
     }

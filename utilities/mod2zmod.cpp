@@ -205,7 +205,7 @@ int main(int argc, char **argv)
                 *outModuleKey = bufferKey;
 //                outModule->getRawEntry();    // snap
 //                outModule->setKey(bufferKey);
-                (*outModule) << lastBuffer.c_str();    // save new text;
+                outModule->setEntry(lastBuffer.c_str());    // save new text;
             }
             else {
                     cout << "Skipping [" << bufferKey.getText() << "] no entry in Module.\n";

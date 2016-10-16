@@ -76,8 +76,6 @@ public:
     long getEntryForKey(char const * key) const override;
     char * getKeyForEntry(long entry) const override;
 
-    SWMODULE_OPERATORS
-
 };
 
 } /* namespace swordxx */

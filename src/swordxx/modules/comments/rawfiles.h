@@ -57,8 +57,6 @@ public:
     void linkEntry(SWKey const * linkKey) override;
     void deleteEntry() override;
 
-    SWMODULE_OPERATORS
-
 };
 
 } /* namespace swordxx */

@@ -64,8 +64,6 @@ public:
 
     bool hasEntry(SWKey const * k) const override;
 
-    SWMODULE_OPERATORS
-
 };
 
 } /* namespace swordxx */

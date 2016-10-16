@@ -42,12 +42,6 @@ class SWFilter;
 
 #define SEARCHFLAG_MATCHWHOLEENTRY 4096
 
-#define SWMODULE_OPERATORS \
-    SWModule &operator <<(const char *inbuf) { setEntry(inbuf); return *this; } \
-    SWModule &operator <<(const SWKey *sourceKey) { linkEntry(sourceKey); return *this; } \
-    SWModule &operator -=(int steps) { decrement(steps); return *this; } \
-    SWModule &operator +=(int steps) { increment(steps); return *this; }
-
 typedef std::list < SWFilter * >FilterList;
 typedef std::list < SWOptionFilter * >OptionFilterList;
 typedef std::map < std::string, std::string, std::less < std::string > > AttributeValue;
@@ -557,10 +551,6 @@ public:
      * it's not working in the best way.
      */
     bool isSearchOptimallySupported(const char *istr, int searchType, int flags, SWKey *scope);
-
-    // OPERATORS -----------------------------------------------------------------
-
-    SWMODULE_OPERATORS
 
 protected: /* Methods: */
 
