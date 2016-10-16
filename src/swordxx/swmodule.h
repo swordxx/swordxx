@@ -561,6 +561,10 @@ protected: /* Methods: */
      */
     virtual std::string &getRawEntryBuf() const = 0;
 
+private: /* Methods: */
+
+    std::string searchIndexPath();
+
 };
 
 } /* namespace swordxx */

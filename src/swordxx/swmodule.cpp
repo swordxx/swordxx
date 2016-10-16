@@ -214,13 +214,10 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
     std::string term = istr;
     bool includeComponents = false;    // for entryAttrib e.g., /Lemma.1/
 
-    std::string target = getConfigEntry("AbsoluteDataPath");
-    addTrailingDirectorySlash(target);
-    target.append("lucene");
     if (justCheckIfSupported) {
         *justCheckIfSupported = (searchType >= -3);
         if ((searchType == -4)
-            && (lucene::index::IndexReader::indexExists(target.c_str())))
+            && (lucene::index::IndexReader::indexExists(searchIndexPath().c_str())))
             *justCheckIfSupported = true;
         return listKey;
     }
@@ -296,7 +293,7 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
         lucene::search::Query         * q  = nullptr;
         lucene::search::Hits          * h  = nullptr;
         try {
-            ir = lucene::index::IndexReader::open(target.c_str());
+            ir = lucene::index::IndexReader::open(searchIndexPath().c_str());
             is = new lucene::search::IndexSearcher(ir);
             static TCHAR const * stopWords[] = { nullptr };
             lucene::analysis::standard::StandardAnalyzer analyzer(stopWords);
@@ -772,24 +769,13 @@ bool SWModule::isSearchOptimallySupported(const char * istr,
     return retVal;
 }
 
-void SWModule::deleteSearchFramework() {
-    std::string target = getConfigEntry("AbsoluteDataPath");
-    char const lastChar = *(target.rbegin());
-    if (lastChar != '/' && lastChar != '\\')
-        target.push_back('/');
-    target.append("lucene");
-
-    FileMgr::removeDir(target.c_str());
-}
+void SWModule::deleteSearchFramework()
+{ FileMgr::removeDir(searchIndexPath().c_str()); }
 
 
 signed char SWModule::createSearchFramework(void (*percent)(char, void *), void *percentUserData) {
-    std::string target = getConfigEntry("AbsoluteDataPath");
-    char const lastChar = *(target.rbegin());
-    if (lastChar != '/' && lastChar != '\\')
-        target.push_back('/');
     const int MAX_CONV_SIZE = 1024 * 1024;
-    target.append("lucene");
+    auto target(searchIndexPath());
     int status = FileMgr::createParent((target+"/dummy").c_str());
     if (status) return -1;
 
@@ -1235,6 +1221,13 @@ void SWModule::prepText(std::string &buf) {
             buf.resize(to);
         else break;
     }
+}
+
+std::string SWModule::searchIndexPath() {
+    std::string target = getConfigEntry("AbsoluteDataPath");
+    addTrailingDirectorySlash(target);
+    target.append("lucene");
+    return target;
 }
 
 } /* namespace swordxx */
