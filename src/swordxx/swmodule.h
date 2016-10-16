@@ -542,15 +542,7 @@ public:
 
     void deleteSearchFramework();
 
-    /**
-     * Check if the search is optimally supported (e.g. if index files are
-     * present and working)
-     * This function checks whether the search framework may work in the
-     * best way.
-     * @return true if the the search is optimally supported, false if
-     * it's not working in the best way.
-     */
-    bool isSearchOptimallySupported(const char *istr, int searchType, int flags, SWKey *scope);
+    bool hasSearchIndex();
 
 protected: /* Methods: */
 

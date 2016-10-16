@@ -759,15 +759,8 @@ const char *SWModule::getConfigEntry(const char *key) const {
     return (it != config->end()) ? it->second.c_str() : nullptr;
 }
 
-bool SWModule::isSearchOptimallySupported(const char * istr,
-                                          int searchType,
-                                          int flags,
-                                          SWKey * scope)
-{
-    bool retVal = false;
-    search(istr, searchType, flags, scope, &retVal);
-    return retVal;
-}
+bool SWModule::hasSearchIndex()
+{ return lucene::index::IndexReader::indexExists(searchIndexPath().c_str()); }
 
 void SWModule::deleteSearchFramework()
 { FileMgr::removeDir(searchIndexPath().c_str()); }
