@@ -202,25 +202,20 @@ void SWModule::nullPercent(char, void *) {}
  *                -3  - entryAttrib (eg. Word//Lemma./G1234/)     (Lemma with dot means check components (Lemma.[1-9]) also)
  *                -4  - clucene
  *     flags        - options flags for search
- *    justCheckIfSupported    - if set, don't search, only tell if this
- *                            function supports requested search.
  *
  * RET: ListKey set to verses that contain istr
  */
 
-ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *scope, bool *justCheckIfSupported, void (*percent)(char, void *), void *percentUserData) {
-
+ListKey &SWModule::search(char const * istr,
+                          int searchType,
+                          int flags,
+                          SWKey * scope,
+                          void (* percent)(char, void *),
+                          void * percentUserData)
+{
     listKey.clear();
     std::string term = istr;
     bool includeComponents = false;    // for entryAttrib e.g., /Lemma.1/
-
-    if (justCheckIfSupported) {
-        *justCheckIfSupported = (searchType >= -3);
-        if ((searchType == -4)
-            && (lucene::index::IndexReader::indexExists(searchIndexPath().c_str())))
-            *justCheckIfSupported = true;
-        return listKey;
-    }
 
     SWKey * saveKey   = nullptr;
     SWKey * searchKey = nullptr;

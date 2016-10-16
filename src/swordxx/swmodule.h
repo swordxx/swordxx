@@ -238,8 +238,6 @@ public:
      *            -4  - Lucene
      * @param flags options flags for search
      * @param scope Key containing the scope. VerseKey or ListKey are useful here.
-     * @param justCheckIfSupported if set, don't search,
-     * only tell if this function supports requested search.
      * @param percent Callback function to get the current search status in %.
      * @param percentUserData User data that is given to the callback function as parameter.
      *
@@ -249,7 +247,6 @@ public:
                      int searchType = 0,
                      int flags = 0,
                      SWKey * scope = nullptr,
-                     bool * justCheckIfSupported = nullptr,
                      void (* percent)(char, void *) = &nullPercent,
                      void * percentUserData = nullptr);
 
