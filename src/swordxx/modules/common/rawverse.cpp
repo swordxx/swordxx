@@ -65,7 +65,7 @@ void RawVerse::findOffset(char testmt, long idxoff, long *start, unsigned short 
         int32_t tmpStart;
         uint16_t tmpSize;
         idxfp[testmt-1]->read(&tmpStart, 4);
-        long len = idxfp[testmt-1]->read(&tmpSize, 2);         // read size
+        long len = idxfp[testmt-1]->read(&tmpSize, sizeof(tmpSize)); // read size
 
         *start = swordtoarch32(tmpStart);
         *size  = swordtoarch16(tmpSize);
@@ -119,8 +119,8 @@ void RawVerse::doSetText(char testmt, long idxoff, const char *buf, long len)
     start = archtosword32(start);
     size  = archtosword16(size);
 
-    idxfp[testmt-1]->write(&start, 4);
-    idxfp[testmt-1]->write(&size, 2);
+    idxfp[testmt-1]->write(&start, sizeof(start));
+    idxfp[testmt-1]->write(&size, sizeof(size));
 }
 
 
@@ -144,13 +144,13 @@ void RawVerse::doLinkEntry(char testmt, long destidxoff, long srcidxoff) {
 
     // get source
     idxfp[testmt-1]->seek(srcidxoff, SEEK_SET);
-    idxfp[testmt-1]->read(&start, 4);
-    idxfp[testmt-1]->read(&size, 2);
+    idxfp[testmt-1]->read(&start, sizeof(start));
+    idxfp[testmt-1]->read(&size, sizeof(size));
 
     // write dest
     idxfp[testmt-1]->seek(destidxoff, SEEK_SET);
-    idxfp[testmt-1]->write(&start, 4);
-    idxfp[testmt-1]->write(&size, 2);
+    idxfp[testmt-1]->write(&start, sizeof(start));
+    idxfp[testmt-1]->write(&size, sizeof(size));
 }
 
 
@@ -205,16 +205,16 @@ char RawVerse::createModule(const char *ipath, const char *v11n)
 
     for (vk = Position::Top; !vk.popError(); ++vk) {
         if (vk.getTestament() < 2) {
-            fd->write(&offset, 4);
-            fd->write(&size, 2);
+            fd->write(&offset, sizeof(offset));
+            fd->write(&size, sizeof(size));
         }
         else    {
-            fd2->write(&offset, 4);
-            fd2->write(&size, 2);
+            fd2->write(&offset, sizeof(offset));
+            fd2->write(&size, sizeof(size));
         }
     }
-    fd2->write(&offset, 4);
-    fd2->write(&size, 2);
+    fd2->write(&offset, sizeof(offset));
+    fd2->write(&size, sizeof(size));
 
     FileMgr::getSystemFileMgr()->close(fd);
     FileMgr::getSystemFileMgr()->close(fd2);
