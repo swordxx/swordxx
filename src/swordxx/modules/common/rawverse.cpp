@@ -62,20 +62,15 @@ RawVerse::RawVerse(char const * ipath_, int fileMode) {
     std::string ipath(ipath_);
     removeTrailingDirectorySlashes(ipath);
 
-    std::string buf;
-    buf.reserve(ipath.size() + sizeof("/ot.vss"));
+    std::string buf(ipath + "/ot.vss");
 
     path = nullptr;
     stdstr(&path, ipath.c_str());
-
-    buf = path;
-    addTrailingDirectorySlash(buf);
 
     if (fileMode == -1) { // try read/write if possible
         fileMode = FileMgr::RDWR;
     }
 
-    buf.append("ot.vss");
     auto const it(buf.rbegin() + 5u);
     idxfp[0] = FileMgr::getSystemFileMgr()->open(buf.c_str(), fileMode, true);
 
