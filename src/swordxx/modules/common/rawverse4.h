@@ -29,7 +29,6 @@
 
 #include "rawversebase.h"
 
-#include <string>
 #include "../../defs.h"
 
 
