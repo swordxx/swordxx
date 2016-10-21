@@ -163,6 +163,7 @@ public:
     static bool existsDir(char const * ipath,
                           char const * idirName = nullptr);
 
+    /** \returns whether the given path exists and is visible to the process. */
     static bool exists(std::string const & fullPath) noexcept;
 
     /** Truncate a file at its current position
