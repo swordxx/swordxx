@@ -23,6 +23,7 @@
 
 #include "treekeyidx.h"
 
+#include <cassert>
 #include <cerrno>
 #include <cstdio>
 #include <cstring>
@@ -277,33 +278,32 @@ void TreeKeyIdx::remove() {
  */
 
 signed char TreeKeyIdx::create(const char *ipath) {
-    char * path = nullptr;
-    char *buf = new char [ strlen (ipath) + 20 ];
-    FileDesc *fd, *fd2;
+    assert(ipath);
+    std::string path(ipath);
+    removeTrailingDirectorySlashes(path); /// \todo is this line needed at all?
+    std::string const datFilename(path + ".dat");
+    std::string const idxFilename(path + ".idx");
 
-    stdstr(&path, ipath);
-
-    if ((path[strlen(path)-1] == '/') || (path[strlen(path)-1] == '\\'))
-        path[strlen(path)-1] = 0;
-
-    sprintf(buf, "%s.dat", path);
-    FileMgr::removeFile(buf);
-    fd = FileMgr::getSystemFileMgr()->open(buf, FileMgr::CREAT|FileMgr::WRONLY, FileMgr::IREAD|FileMgr::IWRITE);
+    FileMgr::removeFile(datFilename.c_str());
+    FileDesc * const fd =
+            FileMgr::getSystemFileMgr()->open(datFilename.c_str(),
+                                              FileMgr::CREAT | FileMgr::WRONLY,
+                                              FileMgr::IREAD | FileMgr::IWRITE);
     fd->getFd();
     FileMgr::getSystemFileMgr()->close(fd);
 
-    sprintf(buf, "%s.idx", path);
-    FileMgr::removeFile(buf);
-    fd2 = FileMgr::getSystemFileMgr()->open(buf, FileMgr::CREAT|FileMgr::WRONLY, FileMgr::IREAD|FileMgr::IWRITE);
+    FileMgr::removeFile(idxFilename.c_str());
+    FileDesc * const fd2 =
+            FileMgr::getSystemFileMgr()->open(idxFilename.c_str(),
+                                              FileMgr::CREAT | FileMgr::WRONLY,
+                                              FileMgr::IREAD | FileMgr::IWRITE);
     fd2->getFd();
     FileMgr::getSystemFileMgr()->close(fd2);
 
-    TreeKeyIdx newTree(path);
+    TreeKeyIdx newTree(path.c_str());
     TreeKeyIdx::TreeNode root;
     stdstr(&(root.name), "");
     newTree.saveTreeNode(&root);
-
-    delete [] path;
 
     return 0;
 }
