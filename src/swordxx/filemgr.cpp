@@ -358,12 +358,8 @@ int FileMgr::createParent(const char *pName) {
     return retCode;
 }
 
-
-int FileMgr::openFileReadOnly(const char *fName) {
-    int fd = ::open(fName, O_RDONLY|O_BINARY, S_IREAD|S_IWRITE|S_IRGRP|S_IROTH);
-    return fd;
-}
-
+int FileMgr::openFileReadOnly(char const * fName)
+{ return ::open(fName, O_RDONLY|O_BINARY, S_IREAD|S_IWRITE|S_IRGRP|S_IROTH); }
 
 int FileMgr::createPathAndFile(const char *fName) {
     int fd;
