@@ -23,6 +23,7 @@
 
 #include "filemgr.h"
 
+#include <cassert>
 #include <cstdio>
 #include <cstring>
 #if !defined(__GNUC__) && !defined(_WIN32_WCE)
@@ -307,44 +308,21 @@ signed char FileMgr::trunc(FileDesc *file) {
 }
 
 
-signed char FileMgr::existsFile(const char *ipath, const char *ifileName)
-{
-    int len = strlen(ipath) + ((ifileName)?strlen(ifileName):0) + 3;
-    char *ch;
-    char *path = new char [ len ];
-    strcpy(path, ipath);
+bool FileMgr::existsFile(char const * ipath, char const * ifileName) {
+    assert(ipath);
+    std::string fullPath(ipath);
+    removeTrailingDirectorySlashes(fullPath);
+    if (ifileName)
+        fullPath.append("/").append(ifileName);
 
-    if ((path[strlen(path)-1] == '\\') || (path[strlen(path)-1] == '/'))
-        path[strlen(path)-1] = 0;
-
-    if (ifileName) {
-        ch = path + strlen(path);
-        sprintf(ch, "/%s", ifileName);
-    }
-    signed char retVal = !access(path, 04);
-    delete [] path;
-    return retVal;
+    return exists(fullPath);
 }
 
+bool FileMgr::existsDir(const char *ipath, const char *idirName)
+{ return existsFile((assert(ipath), ipath), idirName); }
 
-signed char FileMgr::existsDir(const char *ipath, const char *idirName)
-{
-    char *ch;
-    int len = strlen(ipath) + ((idirName)?strlen(idirName):0) + 1;
-    char *path = new char [ len ];
-    strcpy(path, ipath);
-
-    if ((path[strlen(path)-1] == '\\') || (path[strlen(path)-1] == '/'))
-        path[strlen(path)-1] = 0;
-
-    if (idirName) {
-        ch = path + strlen(path);
-        sprintf(ch, "/%s", idirName);
-    }
-    signed char retVal = !access(path, 04);
-    delete [] path;
-    return retVal;
-}
+bool FileMgr::exists(std::string const & fullPath) noexcept
+{ return !::access(fullPath.c_str(), F_OK); }
 
 
 int FileMgr::createParent(const char *pName) {
