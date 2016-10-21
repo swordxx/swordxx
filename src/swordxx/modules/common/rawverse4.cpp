@@ -26,6 +26,7 @@
 
 #include "rawverse4.h"
 
+#include <cassert>
 #include <cctype>
 #include <cerrno>
 #include <cstdint>
@@ -56,22 +57,31 @@ const char RawVerse4::nl = '\n';
  *        (e.g. 'modules/texts/rawtext/webster/')
  */
 
-RawVerse4::RawVerse4(const char *ipath, int fileMode)
-{
-    path = nullptr;
-    stdstr(&path, ipath);
+RawVerse4::RawVerse4(char const * ipath_, int fileMode) {
+    assert(ipath_);
+    std::string ipath(ipath_);
+    removeTrailingDirectorySlashes(ipath);
 
-    if ((path[strlen(path)-1] == '/') || (path[strlen(path)-1] == '\\'))
-        path[strlen(path)-1] = 0;
+    std::string buf(ipath + "/ot.vss");
+
+    path = nullptr;
+    stdstr(&path, ipath.c_str());
 
     if (fileMode == -1) { // try read/write if possible
         fileMode = FileMgr::RDWR;
     }
 
-    idxfp[0] = FileMgr::getSystemFileMgr()->open(formatted("%s/ot.vss", path).c_str(), fileMode, true);
-    idxfp[1] = FileMgr::getSystemFileMgr()->open(formatted("%s/nt.vss", path).c_str(), fileMode, true);
-    textfp[0] = FileMgr::getSystemFileMgr()->open(formatted("%s/ot", path).c_str(), fileMode, true);
-    textfp[1] = FileMgr::getSystemFileMgr()->open(formatted("%s/nt", path).c_str(), fileMode, true);
+    auto const it(buf.rbegin() + 5u);
+    idxfp[0] = FileMgr::getSystemFileMgr()->open(buf.c_str(), fileMode, true);
+
+    (*it) = 'n';
+    idxfp[1] = FileMgr::getSystemFileMgr()->open(buf.c_str(), fileMode, true);
+
+    buf.resize(buf.size() - 4u);
+    textfp[1] = FileMgr::getSystemFileMgr()->open(buf.c_str(), fileMode, true);
+
+    (*it) = 'o';
+    textfp[0] = FileMgr::getSystemFileMgr()->open(buf.c_str(), fileMode, true);
 
     instance++;
 }
