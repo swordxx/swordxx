@@ -326,26 +326,20 @@ bool FileMgr::exists(std::string const & fullPath) noexcept
 
 
 int FileMgr::createParent(const char *pName) {
-    char *buf = new char [ strlen(pName) + 1 ];
-    int retCode = 0;
+    assert(pName);
+    std::string buf(pName);
+    removeTrailingDirectorySlashes(buf);
 
-    strcpy(buf, pName);
-    int end = strlen(buf) - 1;
-    while (end) {
-        if ((buf[end] == '/') || (buf[end] == '\\'))
-            break;
-        end--;
-    }
-    buf[end] = 0;
-    if (strlen(buf)>0) {
-        if (access(buf, 02)) {  // not exists with write access?
-            if ((retCode = mkdir(buf
+    int retCode = 0;
+    if (!buf.empty()) {
+        if (::access(buf.c_str(), 02)) {  // not exists with write access?
+            if ((retCode = ::mkdir(buf.c_str()
 #ifndef WIN32
                     , 0755
 #endif
                     ))) {
-                createParent(buf);
-                retCode = mkdir(buf
+                createParent(buf.c_str());
+                retCode = ::mkdir(buf.c_str()
 #ifndef WIN32
                     , 0755
 #endif
@@ -354,7 +348,6 @@ int FileMgr::createParent(const char *pName) {
         }
     }
     else retCode = -1;
-    delete [] buf;
     return retCode;
 }
 
