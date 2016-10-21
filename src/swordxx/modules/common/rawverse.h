@@ -45,7 +45,6 @@ protected:
     void doLinkEntry(char testmt, long destidxoff, long srcidxoff);
 
 public:
-    static const char nl;
     RawVerse(const char *ipath, int fileMode = -1);
     virtual ~RawVerse();
     void findOffset(char testmt, long idxoff, long *start,    unsigned short *end) const;

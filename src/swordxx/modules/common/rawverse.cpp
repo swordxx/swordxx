@@ -42,13 +42,6 @@
 namespace swordxx {
 
 /******************************************************************************
- * RawVerse Statics
- */
-
-const char RawVerse::nl = '\n';
-
-
-/******************************************************************************
  * RawVerse Constructor - Initializes data for instance of RawVerse
  *
  * ENT:    ipath - path of the directory where data and index files are located.
@@ -188,6 +181,7 @@ void RawVerse::doSetText(char testmt, long idxoff, const char *buf, long len)
         textfp[testmt-1]->write(buf, (int)size);
 
         // add a new line to make data file easier to read in an editor
+        static char const nl = '\n';
         textfp[testmt-1]->write(&nl, 1);
     }
     else {
