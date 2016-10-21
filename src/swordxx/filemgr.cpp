@@ -464,11 +464,11 @@ std::string FileMgr::getLine(FileDesc *fDesc) {
 }
 
 
-char FileMgr::isDirectory(const char *path) {
-    struct stat stats;
-    if (stat(path, &stats))
-        return 0;
-    return ((stats.st_mode & S_IFDIR) == S_IFDIR);
+bool FileMgr::isDirectory(char const * path) {
+    struct ::stat stats;
+    if (::stat(path, &stats))
+        return false;
+    return (stats.st_mode & S_IFDIR) == S_IFDIR;
 }
 
 
