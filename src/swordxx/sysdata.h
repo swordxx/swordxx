@@ -78,5 +78,22 @@
 
 #endif
 
+namespace swordxx {
+
+constexpr int16_t swapToArch(int16_t v) noexcept { return swordtoarch16(v); }
+constexpr int32_t swapToArch(int32_t v) noexcept { return swordtoarch32(v); }
+constexpr int64_t swapToArch(int64_t v) noexcept { return swordtoarch64(v); }
+constexpr uint16_t swapToArch(uint16_t v) noexcept { return swordtoarch16(v); }
+constexpr uint32_t swapToArch(uint32_t v) noexcept { return swordtoarch32(v); }
+constexpr uint64_t swapToArch(uint64_t v) noexcept { return swordtoarch64(v); }
+
+constexpr int16_t swapFromArch(int16_t v) noexcept { return archtosword16(v); }
+constexpr int32_t swapFromArch(int32_t v) noexcept { return archtosword32(v); }
+constexpr int64_t swapFromArch(int64_t v) noexcept { return archtosword64(v); }
+constexpr uint16_t swapFromArch(uint16_t v) noexcept { return archtosword16(v); }
+constexpr uint32_t swapFromArch(uint32_t v) noexcept { return archtosword32(v); }
+constexpr uint64_t swapFromArch(uint64_t v) noexcept { return archtosword64(v); }
+
+} /* namespace swordxx */
 
 #endif
