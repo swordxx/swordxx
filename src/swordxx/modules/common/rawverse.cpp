@@ -45,7 +45,6 @@ namespace swordxx {
  * RawVerse Statics
  */
 
-int RawVerse::instance = 0;
 const char RawVerse::nl = '\n';
 
 
@@ -82,8 +81,6 @@ RawVerse::RawVerse(char const * ipath_, int fileMode) {
 
     (*it) = 'o';
     textfp[0] = FileMgr::getSystemFileMgr()->open(buf.c_str(), fileMode, true);
-
-    instance++;
 }
 
 
@@ -96,8 +93,6 @@ RawVerse::~RawVerse()
     int loop1;
 
     delete[] path;
-
-    --instance;
 
     for (loop1 = 0; loop1 < 2; loop1++) {
         FileMgr::getSystemFileMgr()->close(idxfp[loop1]);

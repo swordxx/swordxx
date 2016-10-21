@@ -36,8 +36,6 @@ class FileDesc;
 
 class SWDLLEXPORT RawVerse {
 
-
-    static int instance;        // number of instantiated RawVerse objects or derivitives
 protected:
     FileDesc *idxfp[2];
     FileDesc *textfp[2];
