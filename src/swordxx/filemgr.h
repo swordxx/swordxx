@@ -92,14 +92,14 @@ class SWDLLEXPORT FileMgr {
 protected:
     static std::unique_ptr<FileMgr> systemFileMgr;
 public:
-    static int CREAT;
-    static int APPEND;
-    static int TRUNC;
-    static int RDONLY;
-    static int RDWR;
-    static int WRONLY;
-    static int IREAD;
-    static int IWRITE;
+    static int const CREAT;
+    static int const APPEND;
+    static int const TRUNC;
+    static int const RDONLY;
+    static int const RDWR;
+    static int const WRONLY;
+    static int const IREAD;
+    static int const IWRITE;
 
     /** Maximum number of open files set in the constructor.
     * determines the max number of real system files that
