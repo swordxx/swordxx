@@ -67,8 +67,8 @@ void RawVerse::findOffset(char testmt, long idxoff, long *start, unsigned short 
         idxfp[testmt-1]->read(&tmpStart, 4);
         long len = idxfp[testmt-1]->read(&tmpSize, sizeof(tmpSize)); // read size
 
-        *start = swordtoarch32(tmpStart);
-        *size  = swordtoarch16(tmpSize);
+        *start = swapToArch(tmpStart);
+        *size  = swapToArch(tmpSize);
 
         if (len < 2) {
             *size = (unsigned short)((*start) ? (textfp[testmt-1]->seek(0, SEEK_END) - (long)*start) : 0);    // if for some reason we get an error reading size, make size to end of file
@@ -116,8 +116,8 @@ void RawVerse::doSetText(char testmt, long idxoff, const char *buf, long len)
         start = 0;
     }
 
-    start = archtosword32(start);
-    size  = archtosword16(size);
+    start = swapFromArch(start);
+    size  = swapFromArch(size);
 
     idxfp[testmt-1]->write(&start, sizeof(start));
     idxfp[testmt-1]->write(&size, sizeof(size));
@@ -200,8 +200,8 @@ char RawVerse::createModule(const char *ipath, const char *v11n)
 
     int32_t offset = 0;
     uint16_t size = 0;
-    offset = archtosword32(offset);
-    size = archtosword16(size);
+    offset = swapFromArch(offset);
+    size = swapFromArch(size);
 
     for (vk = Position::Top; !vk.popError(); ++vk) {
         if (vk.getTestament() < 2) {
