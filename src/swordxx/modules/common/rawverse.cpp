@@ -41,57 +41,9 @@
 
 namespace swordxx {
 
-/******************************************************************************
- * RawVerse Constructor - Initializes data for instance of RawVerse
- *
- * ENT:    ipath - path of the directory where data and index files are located.
- *        be sure to include the trailing separator (e.g. '/' or '\')
- *        (e.g. 'modules/texts/rawtext/webster/')
- */
-
-RawVerse::RawVerse(char const * ipath_, int fileMode) {
-    assert(ipath_);
-    std::string ipath(ipath_);
-    removeTrailingDirectorySlashes(ipath);
-
-    std::string buf(ipath + "/ot.vss");
-
-    path = nullptr;
-    stdstr(&path, ipath.c_str());
-
-    if (fileMode == -1) { // try read/write if possible
-        fileMode = FileMgr::RDWR;
-    }
-
-    auto const it(buf.rbegin() + 5u);
-    idxfp[0] = FileMgr::getSystemFileMgr()->open(buf.c_str(), fileMode, true);
-
-    (*it) = 'n';
-    idxfp[1] = FileMgr::getSystemFileMgr()->open(buf.c_str(), fileMode, true);
-
-    buf.resize(buf.size() - 4u);
-    textfp[1] = FileMgr::getSystemFileMgr()->open(buf.c_str(), fileMode, true);
-
-    (*it) = 'o';
-    textfp[0] = FileMgr::getSystemFileMgr()->open(buf.c_str(), fileMode, true);
-}
-
-
-/******************************************************************************
- * RawVerse Destructor - Cleans up instance of RawVerse
- */
-
-RawVerse::~RawVerse()
-{
-    int loop1;
-
-    delete[] path;
-
-    for (loop1 = 0; loop1 < 2; loop1++) {
-        FileMgr::getSystemFileMgr()->close(idxfp[loop1]);
-        FileMgr::getSystemFileMgr()->close(textfp[loop1]);
-    }
-}
+RawVerse::RawVerse(char const * ipath, int fileMode)
+    : RawVerseBase(ipath, fileMode)
+{}
 
 
 /******************************************************************************
@@ -102,7 +54,7 @@ RawVerse::~RawVerse()
  *    start    - address to store the starting offset
  *    size    - address to store the size of the entry
  */
-
+/// \todo Deduplicate RawVerse::findOffset() and RawVerse4::findOffset()
 void RawVerse::findOffset(char testmt, long idxoff, long *start, unsigned short *size) const {
     idxoff *= 6;
     if (!testmt)
@@ -130,30 +82,6 @@ void RawVerse::findOffset(char testmt, long idxoff, long *start, unsigned short 
 
 
 /******************************************************************************
- * RawVerse::readtext    - gets text at a given offset
- *
- * ENT:    testmt    - testament file to search in (0 - Old; 1 - New)
- *    start    - starting offset where the text is located in the file
- *    size    - size of text entry + 2 (null)(null)
- *    buf    - buffer to store text
- *
- */
-
-void RawVerse::readText(char testmt, long start, unsigned short size, std::string &buf) const {
-    buf.clear();
-    buf.resize(size + 1u, '\0');
-    if (!testmt)
-        testmt = ((idxfp[1]) ? 1:2);
-    if (size) {
-        if (textfp[testmt-1]->getFd() >= 0) {
-            textfp[testmt-1]->seek(start, SEEK_SET);
-            textfp[testmt-1]->read(&buf[0u], (int)size);
-        }
-    }
-}
-
-
-/******************************************************************************
  * RawVerse::settext    - Sets text for current offset
  *
  * ENT: testmt    - testament to find (0 - Bible/module introduction)
@@ -161,7 +89,7 @@ void RawVerse::readText(char testmt, long start, unsigned short size, std::strin
  *    buf    - buffer to store
  *      len     - length of buffer (0 - null terminated)
  */
-
+/// \todo Deduplicate RawVerse::doSetText() and RawVerse4::doSetText()
 void RawVerse::doSetText(char testmt, long idxoff, const char *buf, long len)
 {
     int32_t start;
@@ -203,7 +131,7 @@ void RawVerse::doSetText(char testmt, long idxoff, const char *buf, long len)
  *    destidxoff    - dest offset into .vss
  *    srcidxoff        - source offset into .vss
  */
-
+/// \todo Deduplicate RawVerse::doLinkEntry() and RawVerse4::doLinkEntry()
 void RawVerse::doLinkEntry(char testmt, long destidxoff, long srcidxoff) {
     int32_t start;
     uint16_t size;
@@ -232,7 +160,7 @@ void RawVerse::doLinkEntry(char testmt, long destidxoff, long srcidxoff) {
  * ENT: path    - directory to store module files
  * RET: error status
  */
-
+/// \todo Deduplicate RawVerse::createModule() and RawVerse4::createModule()
 char RawVerse::createModule(const char *ipath, const char *v11n)
 {
     char * path = nullptr;

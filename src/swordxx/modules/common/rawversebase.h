@@ -23,10 +23,8 @@
  *
  */
 
-#ifndef RAWVERSE_H
-#define RAWVERSE_H
-
-#include "rawversebase.h"
+#ifndef RAWVERSEBASE_H
+#define RAWVERSEBASE_H
 
 #include <string>
 #include "../../defs.h"
@@ -36,19 +34,27 @@ namespace swordxx {
 
 class FileDesc;
 
-class SWDLLEXPORT RawVerse: public RawVerseBase {
+class SWDLLEXPORT RawVerseBase {
 
-protected:
+protected: /* Fields: */
 
-    void doSetText(char testmt, long idxoff, const char *buf, long len = -1);
-    void doLinkEntry(char testmt, long destidxoff, long srcidxoff);
+    FileDesc * idxfp[2];
+    FileDesc * textfp[2];
 
-public:
-    RawVerse(const char *ipath, int fileMode = -1);
+    char * path;
 
-    void findOffset(char testmt, long idxoff, long *start,    unsigned short *end) const;
-    static char createModule(const char *path, const char *v11n = "KJV");
-};
+public: /* Methods: */
+
+    RawVerseBase(const char *ipath, int fileMode = -1);
+    virtual ~RawVerseBase() noexcept;
+
+    void readText(char testmt,
+                  long start,
+                  unsigned short size,
+                  std::string & buf) const;
+
+}; /* class RawVerseBase */
 
 } /* namespace swordxx */
-#endif
+
+#endif /* RAWVERSEBASE_H */
