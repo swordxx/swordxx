@@ -331,8 +331,6 @@ signed char FileMgr::existsDir(const char *ipath, const char *idirName)
 {
     char *ch;
     int len = strlen(ipath) + ((idirName)?strlen(idirName):0) + 1;
-    if (idirName)
-        len +=  strlen(idirName);
     char *path = new char [ len ];
     strcpy(path, ipath);
 
