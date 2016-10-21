@@ -36,6 +36,7 @@
 #include "../../swlog.h"
 #include "../../sysdata.h"
 #include "../../utilstr.h"
+#include "rawstr.h"
 
 
 namespace swordxx {
@@ -503,31 +504,6 @@ void RawStr4::doLinkEntry(const char *destkey, const char *srckey) {
  */
 
 signed char RawStr4::createModule(const char *ipath)
-{
-    char * path = nullptr;
-    char *buf = new char [ strlen (ipath) + 20 ];
-    FileDesc *fd, *fd2;
-
-    stdstr(&path, ipath);
-
-    if ((path[strlen(path)-1] == '/') || (path[strlen(path)-1] == '\\'))
-        path[strlen(path)-1] = 0;
-
-    sprintf(buf, "%s.dat", path);
-    FileMgr::removeFile(buf);
-    fd = FileMgr::getSystemFileMgr()->open(buf, FileMgr::CREAT|FileMgr::WRONLY, FileMgr::IREAD|FileMgr::IWRITE);
-    fd->getFd();
-    FileMgr::getSystemFileMgr()->close(fd);
-
-    sprintf(buf, "%s.idx", path);
-    FileMgr::removeFile(buf);
-    fd2 = FileMgr::getSystemFileMgr()->open(buf, FileMgr::CREAT|FileMgr::WRONLY, FileMgr::IREAD|FileMgr::IWRITE);
-    fd2->getFd();
-    FileMgr::getSystemFileMgr()->close(fd2);
-
-    delete [] path;
-
-    return 0;
-}
+{ return RawStr::createModule(ipath); }
 
 } /* namespace swordxx */
