@@ -151,6 +151,7 @@ public:
     * @param ipath Path to file.
     * @param ifileName Name of file to check for.
     */
+    [[deprecated("Use exists() or something more suitable instead.")]]
     static bool existsFile(char const * ipath,
                            char const * ifileName = nullptr);
 
@@ -158,6 +159,7 @@ public:
     * @param ipath Path to directory.
     * @param idirName Name of directory to check for.
     */
+    [[deprecated("Use exists() or something more suitable instead.")]]
     static bool existsDir(char const * ipath,
                           char const * idirName = nullptr);
 
