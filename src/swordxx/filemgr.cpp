@@ -220,7 +220,7 @@ int FileMgr::sysOpen(FileDesc *file) {
                 file->next = files;
                 files = file;
             }
-            if ((!access(file->path, 04)) || ((file->mode & O_CREAT) == O_CREAT)) {    // check for at least file exists / read access before we try to open
+            if ((!::access(file->path, R_OK)) || ((file->mode & O_CREAT) == O_CREAT)) {    // check for at least file exists / read access before we try to open
                 char tries = (((file->mode & O_RDWR) == O_RDWR) && (file->tryDowngrade)) ? 2 : 1;  // try read/write if possible
                 for (int i = 0; i < tries; i++) {
                     if (i > 0) {
@@ -332,7 +332,7 @@ int FileMgr::createParent(const char *pName) {
 
     int retCode = 0;
     if (!buf.empty()) {
-        if (::access(buf.c_str(), 02)) {  // not exists with write access?
+        if (::access(buf.c_str(), W_OK)) {  // not exists with write access?
             if ((retCode = ::mkdir(buf.c_str()
 #ifndef WIN32
                     , 0755
