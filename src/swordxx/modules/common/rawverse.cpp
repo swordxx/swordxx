@@ -25,8 +25,9 @@
 
 #include "rawverse.h"
 
-#include <cerrno>
+#include <cassert>
 #include <cctype>
+#include <cerrno>
 #include <cstdint>
 #include <cstdio>
 #include <cstring>
@@ -56,13 +57,16 @@ const char RawVerse::nl = '\n';
  *        (e.g. 'modules/texts/rawtext/webster/')
  */
 
-RawVerse::RawVerse(const char *ipath, int fileMode)
-{
+RawVerse::RawVerse(char const * ipath_, int fileMode) {
+    assert(ipath_);
+    std::string ipath(ipath_);
+    removeTrailingDirectorySlashes(ipath);
+
     std::string buf;
-    buf.reserve(std::strlen(ipath) + sizeof("/ot.vss"));
+    buf.reserve(ipath.size() + sizeof("/ot.vss"));
 
     path = nullptr;
-    stdstr(&path, ipath);
+    stdstr(&path, ipath.c_str());
 
     buf = path;
     addTrailingDirectorySlash(buf);
