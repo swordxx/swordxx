@@ -494,13 +494,13 @@ void writeEntry(std::string &text, bool force = false) {
 
     static VerseKey lastKey;
     lastKey.setVersificationSystem(currentVerse.getVersificationSystem());
-    lastKey.setAutoNormalize(0);
-    lastKey.setIntros(1);
+    lastKey.setAutoNormalize(false);
+    lastKey.setIntros(true);
 
     VerseKey saveKey;
     saveKey.setVersificationSystem(currentVerse.getVersificationSystem());
-    saveKey.setAutoNormalize(0);
-    saveKey.setIntros(1);
+    saveKey.setAutoNormalize(false);
+    saveKey.setIntros(true);
     saveKey = currentVerse;
 
     // If we have seen a verse and the supplied one is different then we output the collected one.
@@ -519,8 +519,8 @@ void writeEntry(std::string &text, bool force = false) {
         if ((testmt == 1 && firstOT) || (testmt == 2 && firstNT)) {
             VerseKey t;
             t.setVersificationSystem(currentVerse.getVersificationSystem());
-            t.setAutoNormalize(0);
-            t.setIntros(1);
+            t.setAutoNormalize(false);
+            t.setIntros(true);
             t = currentVerse;
             currentVerse.setBook(0);
             currentVerse.setChapter(0);
@@ -595,8 +595,8 @@ void linkToEntry(VerseKey &linkKey, VerseKey &dest) {
 
     VerseKey saveKey;
     saveKey.setVersificationSystem(currentVerse.getVersificationSystem());
-    saveKey.setAutoNormalize(0);
-    saveKey.setIntros(1);
+    saveKey.setAutoNormalize(false);
+    saveKey.setIntros(true);
     saveKey = currentVerse;
     currentVerse = linkKey;
 
@@ -1315,13 +1315,13 @@ void writeLinks()
     // Link all the verses
     VerseKey destKey;
     destKey.setVersificationSystem(currentVerse.getVersificationSystem());
-    destKey.setAutoNormalize(0);
-    destKey.setIntros(1);
+    destKey.setAutoNormalize(false);
+    destKey.setIntros(true);
 
     VerseKey linkKey;
     linkKey.setVersificationSystem(currentVerse.getVersificationSystem());
-    linkKey.setAutoNormalize(0);
-    linkKey.setIntros(1);
+    linkKey.setAutoNormalize(false);
+    linkKey.setIntros(true);
     for (unsigned int i = 0; i < linkedVerses.size(); i++) {
         // The verseKeys is a list of verses
         // where the first is the real verse
