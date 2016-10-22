@@ -151,13 +151,13 @@ public:
 	virtual void flush();
 	virtual long resourceConsumption();
 
-	/** Checks for the existence of a file.
+	/** Checks for the existence and readability of a file.
 	* @param ipath Path to file.
 	* @param ifileName Name of file to check for.
 	*/
 	static signed char existsFile(const char *ipath, const char *ifileName = 0);
 
-	/** Checks for the existence of a directory.
+	/** Checks for the existence and readability of a directory.
 	* @param ipath Path to directory.
 	* @param idirName Name of directory to check for.
 	*/
