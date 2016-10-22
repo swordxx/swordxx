@@ -26,6 +26,7 @@
 #ifndef RAWVERSEBASE_H
 #define RAWVERSEBASE_H
 
+#include <cassert>
 #include <cstring>
 #include <fcntl.h>
 #include <string>
@@ -156,40 +157,46 @@ public: /* Methods: */
 
     template <typename OffsetType, typename SizeType>
     static char createModule(char const * ipath, char const * v11n) {
-        char * path = nullptr;
-        char *buf = new char [ strlen (ipath) + 20 ];
-        FileDesc *fd, *fd2;
+        assert(ipath);
+        std::string path(ipath);
+        removeTrailingDirectorySlashes(path);
 
-        stdstr(&path, ipath);
+        std::string const otPath(path + "/ot");
+        std::string const ntPath(path + "/nt");
+        std::string const otVssPath(path + "/ot.vss");
+        std::string const ntVssPath(path + "/nt.vss");
 
-        if ((path[strlen(path)-1] == '/') || (path[strlen(path)-1] == '\\'))
-            path[strlen(path)-1] = 0;
+        FileMgr & fileMgr = *FileMgr::getSystemFileMgr();
 
-        sprintf(buf, "%s/ot", path);
-        FileMgr::removeFile(buf);
-        fd = FileMgr::getSystemFileMgr()->open(buf, FileMgr::CREAT|FileMgr::WRONLY, FileMgr::IREAD|FileMgr::IWRITE);
-        fd->getFd();
-        FileMgr::getSystemFileMgr()->close(fd);
+        static auto const openFile =
+                [](FileMgr & fileMgr, std::string const & filename) {
+                    auto * const fd =
+                            fileMgr.open(filename.c_str(),
+                                         FileMgr::CREAT | FileMgr::WRONLY,
+                                         FileMgr::IREAD | FileMgr::IWRITE);
+                    fd->getFd();
+                    return fd;
+                };
 
-        sprintf(buf, "%s/nt", path);
-        FileMgr::removeFile(buf);
-        fd = FileMgr::getSystemFileMgr()->open(buf, FileMgr::CREAT|FileMgr::WRONLY, FileMgr::IREAD|FileMgr::IWRITE);
-        fd->getFd();
-        FileMgr::getSystemFileMgr()->close(fd);
+        static auto const touchFile =
+                [](FileMgr & fileMgr, std::string const & filename)
+                { return fileMgr.close(openFile(fileMgr, filename.c_str())); };
 
-        sprintf(buf, "%s/ot.vss", path);
-        FileMgr::removeFile(buf);
-        fd = FileMgr::getSystemFileMgr()->open(buf, FileMgr::CREAT|FileMgr::WRONLY, FileMgr::IREAD|FileMgr::IWRITE);
-        fd->getFd();
+        FileMgr::removeFile(otPath.c_str());
+        touchFile(fileMgr, otPath);
 
-        sprintf(buf, "%s/nt.vss", path);
-        FileMgr::removeFile(buf);
-        fd2 = FileMgr::getSystemFileMgr()->open(buf, FileMgr::CREAT|FileMgr::WRONLY, FileMgr::IREAD|FileMgr::IWRITE);
-        fd2->getFd();
+        FileMgr::removeFile(ntPath.c_str());
+        touchFile(fileMgr, ntPath);
+
+        FileMgr::removeFile(otVssPath.c_str());
+        FileDesc * const fd = openFile(fileMgr, otVssPath);
+
+        FileMgr::removeFile(ntVssPath.c_str());
+        FileDesc * const fd2 = openFile(fileMgr, ntVssPath);
 
         VerseKey vk;
         vk.setVersificationSystem(v11n);
-        vk.setIntros(1);
+        vk.setIntros(true);
         OffsetType offset = 0;
         SizeType size = 0;
         offset = swapFromArch(offset);
@@ -199,8 +206,7 @@ public: /* Methods: */
             if (vk.getTestament() < 2) {
                 fd->write(&offset, sizeof(offset));
                 fd->write(&size, sizeof(size));
-            }
-            else    {
+            } else {
                 fd2->write(&offset, sizeof(offset));
                 fd2->write(&size, sizeof(size));
             }
@@ -210,9 +216,6 @@ public: /* Methods: */
 
         FileMgr::getSystemFileMgr()->close(fd);
         FileMgr::getSystemFileMgr()->close(fd2);
-
-        delete [] path;
-        delete [] buf;
 
         return 0;
     }
