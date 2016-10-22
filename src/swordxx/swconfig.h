@@ -24,16 +24,42 @@
 #ifndef SWCONFIG_H
 #define SWCONFIG_H
 
+#include <algorithm>
 #include <map>
 #include <string>
 #include "defs.h"
-#include "multimapwdef.h"
 
 
 namespace swordxx {
+namespace detail {
 
-typedef multimapwithdefault < std::string, std::string, std::less < std::string > >ConfigEntMap;
-typedef std::map < std::string, ConfigEntMap, std::less < std::string > >SectionMap;
+/* A multimap that still lets you use [] to reference the first entry of a key
+   if multiples exist. Default-constructs a value if no such key exists. */
+template <typename Key, typename T, typename ... Args>
+class MultiMapWithDefault: public std::multimap<Key, T, Args...> {
+
+public: /* Methods: */
+
+    T & operator[](Key const & key) {
+        auto const it(this->find(key));
+        return (it != this->end())
+               ? it->second
+               : this->emplace(key, T())->second;
+    }
+
+    bool has(Key const & key, T const & value) const noexcept {
+        auto const end(this->upper_bound(key));
+        return std::find_if(this->lower_bound(key),
+                            end,
+                            [&value](auto const & vp)
+                            { return vp.second == value; }) != end;
+    }
+};
+
+} /* namespace detail { */
+
+using ConfigEntMap = detail::MultiMapWithDefault<std::string, std::string>;
+using SectionMap = std::map<std::string, ConfigEntMap>;
 
 /** The class to read and save settings using a file on disk.
 *
