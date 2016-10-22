@@ -23,37 +23,33 @@
 #ifndef MULTIMAPWDEF_H
 #define MULTIMAPWDEF_H
 
+#include <algorithm>
 #include <map>
 
 namespace swordxx {
 
 // multmap that still lets you use [] to reference FIRST
 // entry of a key if multiples exist
-template <class Key, class T, class Compare>
-class multimapwithdefault : public std::multimap<Key, T, Compare> {
-public:
-    typedef std::pair<const Key, T> value_type;
-    T& getWithDefault(const Key& k, const T& defaultValue) {
-        if (find(k) == this->end()) {
-            insert(value_type(k, defaultValue));
-        }
-        return (*(find(k))).second;
+template <typename Key, typename T, typename ... Args>
+class multimapwithdefault: public std::multimap<Key, T, Args...> {
+
+public: /* Methods: */
+
+    T & getWithDefault(Key const & key, T const & defaultValue) {
+        auto const it(this->find(key));
+        return (it != this->end())
+               ? it->second
+               : this->emplace(key, defaultValue)->second;
     }
 
-    T& operator[](const Key& k) {
-        if (this->find(k) == this->end()) {
-            this->insert(value_type(k, T()));
-        }
-        return (*(this->find(k))).second;
-    }
-    bool has(const Key& k, const T &val) const {
-        typename std::multimap<Key, T, Compare>::const_iterator start = this->lower_bound(k);
-        typename std::multimap<Key, T, Compare>::const_iterator end = this->upper_bound(k);
-        for (; start!=end; start++) {
-            if (start->second == val)
-                return true;
-        }
-        return false;
+    T & operator[](Key const & key) { return getWithDefault(key, T()); }
+
+    bool has(Key const & key, T const & value) const noexcept {
+        auto const end(this->upper_bound(key));
+        return std::find_if(this->lower_bound(key),
+                            end,
+                            [&value](auto const & vp)
+                            { return vp.second == value; }) != end;
     }
 };
 
