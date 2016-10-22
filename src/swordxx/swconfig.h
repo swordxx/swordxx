@@ -39,8 +39,6 @@ typedef std::map < std::string, ConfigEntMap, std::less < std::string > >Section
 *
 */
 class SWDLLEXPORT SWConfig {
-private:
-    char getline(int fd, std::string &line);
 public:
     /** The filename used by this SWConfig object
     *
