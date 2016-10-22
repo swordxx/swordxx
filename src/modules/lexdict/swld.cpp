@@ -108,7 +108,7 @@ bool SWLD::hasEntry(const SWKey *key) const {
 	if (strongsPadding) strongsPad(buf);
 	
 	bool retVal = !strcmp(buf, getKeyForEntry(getEntryForKey(buf)));
-	delete buf;
+	delete [] buf;
 
 	return retVal;
 }
