@@ -55,12 +55,12 @@ namespace {
 				return -1; /* failure, can't open file to write */
 		}
 		if (out->destBuf) {
-			int s = out->destBuf->size();
+			int s = (int)out->destBuf->size();
 			out->destBuf->size(s+(size*nmemb));
 			memcpy(out->destBuf->getRawData()+s, buffer, size*nmemb);
-			return nmemb;
+			return (int)nmemb;
 		}
-		return fwrite(buffer, size, nmemb, out->stream);
+		return (int)fwrite(buffer, size, nmemb, out->stream);
 	}
 
 
@@ -215,7 +215,7 @@ vector<struct DirEntry> CURLHTTPTransport::getDirList(const char *dirURL) {
 			pBufRes = (char *)strchr(pBuf, '\"');//Find the end of the possible file name
 			if (!pBufRes)
 				break;
-			possibleNameLength = pBufRes - pBuf;
+			possibleNameLength = (int)(pBufRes - pBuf);
 			possibleName.setFormatted("%.*s", possibleNameLength, pBuf);
 			if (isalnum(possibleName[0])) {
 				SWLog::getSystemLog()->logDebug("getDirListHTTP: Found a file: %s", possibleName.c_str());

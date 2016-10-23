@@ -77,7 +77,7 @@ char ThMLStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *mod
 			token[0] = 0;
 			token[1] = 0;
 			token[2] = 0;
-			textEnd = text.length();
+			textEnd = (unsigned int)text.length();
 			continue;
 		}
 		if (*from == '>') {	// process tokens
@@ -116,7 +116,7 @@ char ThMLStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *mod
 						if (lastspace)
 							text--;
 					}
-					if (newText) {textStart = text.length(); newText = false; }
+					if (newText) {textStart = (unsigned int)text.length(); newText = false; }
 					continue;
 				}
 			}
@@ -150,7 +150,7 @@ char ThMLStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *mod
 			text += '<';
 			text += token;
 			text += '>';
-			if (newText) {textStart = text.length(); newText = false; }
+			if (newText) {textStart = (unsigned int)text.length(); newText = false; }
 			continue;
 		}
 		if (intoken) {

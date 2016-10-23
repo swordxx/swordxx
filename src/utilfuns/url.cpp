@@ -233,8 +233,8 @@ const SWBuf URL::encode(const char *urlText) {
 	url = urlText;
 	
 	SWBuf buf;
-	const int length = url.length();
-	for (int i = 0; i < length; i++) { //fill "buf"
+	const long length = url.length();
+	for (long i = 0; i < length; i++) { //fill "buf"
 		const char& c = url[i];
 		buf.append( ((m[c].length()) ? m[c] : SWBuf(c)) );
 	}
@@ -249,7 +249,7 @@ const SWBuf URL::decode(const char *encoded) {
 	text = encoded;	
 
 	SWBuf decoded;	
-	const int length = text.length();
+	const long length = text.length();
 	int i = 0;
 	
 	while (i < length) {

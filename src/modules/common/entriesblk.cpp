@@ -84,8 +84,8 @@ void EntriesBlock::getMetaEntry(int index, unsigned long *offset, unsigned long 
 
 
 void EntriesBlock::setMetaEntry(int index, unsigned long offset, unsigned long size) {
-	__u32 rawOffset = archtosword32(offset);
-	__u32 rawSize = archtosword32(size);
+	__u32 rawOffset = (__u32)archtosword32(offset);
+	__u32 rawSize = (__u32)archtosword32(size);
 
 	if (index >= getCount())	// assert index < count
 		return;

@@ -75,7 +75,7 @@ char GBFStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *modu
 			token[0] = 0;
 			token[1] = 0;
 			token[2] = 0;
-			textEnd = text.size();
+			textEnd = (unsigned int)text.size();
 			continue;
 		}
 		if (*from == '>') {	// process tokens
@@ -110,7 +110,7 @@ char GBFStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *modu
 						if (lastspace)
 							text--;
 					}
-					if (newText) {textStart = text.size(); newText = false; }
+					if (newText) {textStart = (unsigned int)text.size(); newText = false; }
 					continue;
 				}
 			}
@@ -130,7 +130,7 @@ char GBFStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *modu
 			text += '<';
 			text += token;
 			text += '>';
-			if (newText) {textStart = text.size(); newText = false; }
+			if (newText) {textStart = (unsigned int)text.size(); newText = false; }
 			continue;
 		}
 		if (intoken) {

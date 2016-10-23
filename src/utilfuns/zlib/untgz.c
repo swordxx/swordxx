@@ -201,7 +201,7 @@ int makedir (char *newdir)
 {
   char *buffer = strdup(newdir);
   char *p;
-  int  len = strlen(buffer);
+  int  len = (int)strlen(buffer);
   
   if (len <= 0) {
     free(buffer);

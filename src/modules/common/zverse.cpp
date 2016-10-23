@@ -272,7 +272,7 @@ void zVerse::zReadText(char testmt, long start, unsigned short size, unsigned lo
 		compressor->Buf(0, &len);
 		cacheBuf = (char *)calloc(len + 1, 1);
 		memcpy(cacheBuf, compressor->Buf(), len);
-		cacheBufSize = strlen(cacheBuf);  // TODO: can we just use len?
+		cacheBufSize = (int)strlen(cacheBuf);  // TODO: can we just use len?
 		cacheTestament = testmt;
 		cacheBufIdx = ulBuffNum;
 	}	
@@ -314,12 +314,12 @@ void zVerse::doSetText(char testmt, long idxoff, const char *buf, long len) {
 
 	__u32 start;
 	__u16 size;
-	__u32 outBufIdx = cacheBufIdx;
+	__u32 outBufIdx = (__u32)cacheBufIdx;
 
 	idxoff *= 10;
 	size = len;
 
-	start = strlen(cacheBuf);
+	start = (__u32)strlen(cacheBuf);
 
 	if (!size)
 		start = outBufIdx = 0;
@@ -343,9 +343,9 @@ void zVerse::flushCache() const {
 		__u32 size, outsize;
 		__u32 zsize, outzsize;
 
-		idxoff = cacheBufIdx * 12;
+		idxoff = (__u32)cacheBufIdx * 12;
 		if (cacheBuf) {
-			size = outsize = zsize = outzsize = strlen(cacheBuf);
+			size = outsize = zsize = outzsize = (__u32)strlen(cacheBuf);
 			if (size) {
 	//			if (compressor) {
 	//				delete compressor;
@@ -354,16 +354,16 @@ void zVerse::flushCache() const {
 				compressor->Buf(cacheBuf);
 				unsigned long tmpSize;
 				compressor->zBuf(&tmpSize);
-				outzsize = zsize = tmpSize;
+				outzsize = zsize = (__u32)tmpSize;
 
 				SWBuf buf;
 				buf.setSize(zsize + 5);
 				memcpy(buf.getRawData(), compressor->zBuf(&tmpSize), tmpSize);
-				outzsize = zsize = tmpSize;
+				outzsize = zsize = (__u32)tmpSize;
 				buf.setSize(zsize);
 				rawZFilter(buf, 1); // 1 = encipher
 
-				start = outstart = textfp[cacheTestament-1]->seek(0, SEEK_END);
+				start = outstart = (__u32)textfp[cacheTestament-1]->seek(0, SEEK_END);
 
 				outstart  = archtosword32(start);
 				outsize   = archtosword32(size);

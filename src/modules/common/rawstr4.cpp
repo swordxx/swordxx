@@ -193,9 +193,9 @@ signed char RawStr4::findOffset(const char *ikey, __u32 *start, __u32 *size, lon
 			headoff = 0;
 
 			stdstr(&key, ikey, 3);
-			if (!caseSensitive) toupperstr_utf8(key, strlen(key)*3);
+			if (!caseSensitive) toupperstr_utf8(key, (unsigned int)(strlen(key)*3));
 
-			int keylen = strlen(key);
+			int keylen = (int)strlen(key);
 			bool substr = false;
 
 			trybuf = maxbuf = 0;
@@ -252,7 +252,7 @@ signed char RawStr4::findOffset(const char *ikey, __u32 *start, __u32 *size, lon
 		idxfd->read(&tmpStart, 4);
 		idxfd->read(&tmpSize, 4);
 		if (idxoff)
-			*idxoff = tryoff;
+			*idxoff = (__u32)tryoff;
 
 		*start = swordtoarch32(tmpStart);
 		*size  = swordtoarch32(tmpSize);
@@ -271,17 +271,17 @@ signed char RawStr4::findOffset(const char *ikey, __u32 *start, __u32 *size, lon
 			if (bad) {
 				if(!awayFromSubstrCheck)
 					retval = -1;
-				*start = laststart;
-				*size = lastsize;
+				*start = (__u32)laststart;
+				*size = (__u32)lastsize;
 				tryoff = lasttry;
 				if (idxoff)
-					*idxoff = tryoff;
+					*idxoff = (__u32)tryoff;
 				break;
 			}
 			idxfd->read(&tmpStart, 4);
 			idxfd->read(&tmpSize, 4);
 			if (idxoff)
-				*idxoff = tryoff;
+				*idxoff = (__u32)tryoff;
 
 			*start = swordtoarch32(tmpStart);
 			*size  = swordtoarch32(tmpSize);
@@ -355,7 +355,7 @@ void RawStr4::readText(__u32 istart, __u32 *isize, char **idxbuf, SWBuf &buf) co
 	while (true);	// while we're resolving links
 
 	if (idxbuflocal) {
-		unsigned int localsize = strlen(idxbuflocal);
+		unsigned int localsize = (unsigned int)strlen(idxbuflocal);
 		localsize = (localsize < (*isize - 1)) ? localsize : (*isize - 1);
 		strncpy(*idxbuf, idxbuflocal, localsize);
 		(*idxbuf)[localsize] = 0;
@@ -389,7 +389,7 @@ void RawStr4::doSetText(const char *ikey, const char *buf, long len) {
 
 	char errorStatus = findOffset(ikey, &start, &size, 0, &idxoff);
 	stdstr(&key, ikey, 3);
-	if (!caseSensitive) toupperstr_utf8(key, strlen(key)*3);
+	if (!caseSensitive) toupperstr_utf8(key, (unsigned int)(strlen(key)*3));
 
 	len = (len < 0) ? strlen(buf) : len;
 	getIDXBufDat(start, &dbKey);
@@ -432,7 +432,7 @@ void RawStr4::doSetText(const char *ikey, const char *buf, long len) {
 		while (true);	// while we're resolving links
 	}
 
-	endoff = idxfd->seek(0, SEEK_END);
+	endoff = (__u32)idxfd->seek(0, SEEK_END);
 
 	shiftSize = endoff - idxoff;
 
@@ -446,9 +446,9 @@ void RawStr4::doSetText(const char *ikey, const char *buf, long len) {
 	sprintf(outbuf, "%s%c%c", key, 13, 10);
 	size = strlen(outbuf);
 	memcpy(outbuf + size, buf, len);
-	size = outsize = size + len;
+	size = outsize = size + (__u32)len;
 
-	start = outstart = datfd->seek(0, SEEK_END);
+	start = outstart = (__u32)datfd->seek(0, SEEK_END);
 
 	outstart = archtosword32(start);
 	outsize  = archtosword32(size);

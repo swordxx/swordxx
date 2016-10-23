@@ -163,7 +163,7 @@ char UTF8ArabicPoints::processText(SWBuf &text, const SWKey *, const SWModule *)
 		// "start_of_input" is either mark_pos or any text between the
         	// end of any previous mark and the current mark_pos.
 		// This text is now ready to be moved into the output.
-		int ready_size = mark_pos - start_of_input;
+		int ready_size = (int)(mark_pos - start_of_input);
 		if (ready_size > 0) {
 			// Append the input text before the current mark to the
 			// output.

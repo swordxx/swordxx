@@ -37,7 +37,7 @@ char isroman (const char *str, int maxchars) {
 }
 
 int from_rom(const char* str) {
-	int i, n = strlen(str);
+	int i, n = (int)strlen(str);
 	short * num= (short *) calloc(n, sizeof(short));
 	for (i = 0; str[i]; i++) {
 		switch(str[i]) {

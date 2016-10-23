@@ -59,7 +59,7 @@ SWORD_NAMESPACE_START
 namespace {
 
 	static void removeTrailingSlash(SWBuf &buf) {
-		int len = buf.size();
+		int len = (int)buf.size();
 		if ((buf[len-1] == '/')
 		 || (buf[len-1] == '\\'))
 			buf.size(len-1);
@@ -109,7 +109,7 @@ InstallMgr::InstallMgr(const char *privatePath, StatusReporter *sr, SWBuf u, SWB
 	installConf = 0;
 	stdstr(&(this->privatePath), privatePath);
 	if (this->privatePath) {
-		int len = strlen(this->privatePath);
+		int len = (int)strlen(this->privatePath);
 		if ((this->privatePath[len-1] == '/')
 		 || (this->privatePath[len-1] == '\\'))
 			this->privatePath[len-1] = 0;

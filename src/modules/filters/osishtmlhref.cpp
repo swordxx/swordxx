@@ -322,7 +322,7 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 						// Compensate for starting :
 						ref = the_ref + 1;
 
-						int size = target.size() - ref.size() - 1;
+						int size = (int)(target.size() - ref.size() - 1);
 						work.setSize(size);
 						strncpy(work.getRawData(), target, size);
 
@@ -460,7 +460,7 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 
 					const unsigned char *tmpBuf = (const unsigned char *)lastText.c_str();
 					getUniCharFromUTF8(&tmpBuf);
-					int char_length = (tmpBuf - (const unsigned char *)lastText.c_str());
+					int char_length = (int)(tmpBuf - (const unsigned char *)lastText.c_str());
 					scratch.setFormatted("%.*s<font size=\"-1\">%s</font>", 
 						char_length, 
 						lastText.c_str(),

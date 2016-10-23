@@ -174,7 +174,7 @@ const struct abbrev *SWLocale::getBookAbbrevs(int *retSize) {
 		for (; it != end; it++) {
 			p->mergedAbbrevs[it->first.c_str()] = it->second.c_str();
 		}
-		int size = p->mergedAbbrevs.size();
+		int size = (int)p->mergedAbbrevs.size();
 		bookAbbrevs = new struct abbrev[size + 1];
 		int i = 0;
 		for (LookupMap::iterator it = p->mergedAbbrevs.begin(); it != p->mergedAbbrevs.end(); it++, i++) {

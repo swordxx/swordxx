@@ -185,9 +185,9 @@ void RawVerse4::doSetText(char testmt, long idxoff, const char *buf, long len)
 	if (!testmt)
 		testmt = ((idxfp[1]) ? 1:2);
 
-	size = (len < 0) ? strlen(buf) : len;
+	size = (__u32)((len < 0) ? strlen(buf) : len);
 
-	start = textfp[testmt-1]->seek(0, SEEK_END);
+	start = (__u32)textfp[testmt-1]->seek(0, SEEK_END);
 	idxfp[testmt-1]->seek(idxoff, SEEK_SET);
 
 	if (size) {

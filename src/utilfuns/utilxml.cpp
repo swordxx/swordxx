@@ -128,12 +128,12 @@ XMLTag::XMLTag(const XMLTag& t) : attributes(t.attributes)  {
 	empty = t.empty;
 	endTag = t.endTag;
 	if (t.buf) {
-		int len = strlen(t.buf);
+		int len = (int)strlen(t.buf);
 		buf = new char[len + 1];
 		memcpy(buf, t.buf, len + 1);
 	}
 	if (t.name) {
-		int len = strlen(t.name);
+		int len = (int)strlen(t.name);
 		name = new char[len + 1];
 		memcpy(name, t.name, len + 1);
 	}

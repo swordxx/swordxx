@@ -125,7 +125,7 @@ void SWLD::strongsPad(char *buf)
 {
 	char *check;
 	int size = 0;
-	int len = strlen(buf);
+	int len = (int)strlen(buf);
 	char subLet = 0;
 	bool bang = false, prefix=false;
 	if ((len < 9) && (len > 0)) {

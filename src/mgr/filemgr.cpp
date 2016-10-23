@@ -282,8 +282,8 @@ signed char FileMgr::trunc(FileDesc *file) {
 	
 		file->seek(0, SEEK_SET);
 		while (size > 0) {	 
-			bytes = file->read(nibble, 32767);
-			bytes = (bytes < size)?bytes:size;
+			bytes = (int)file->read(nibble, 32767);
+			bytes = (bytes < size)?bytes:(int)size;
 			if (write(fd, nibble, bytes) != bytes) { break; }
 			size -= bytes;
 		}
@@ -296,7 +296,7 @@ signed char FileMgr::trunc(FileDesc *file) {
 			// copy tmp file back (dumb, but must preserve file permissions)
 			lseek(fd, 0, SEEK_SET);
 			do {
-				bytes = read(fd, nibble, 32767);
+				bytes = (int)read(fd, nibble, 32767);
 				file->write(nibble, bytes);
 			} while (bytes == 32767);
 		}
@@ -316,7 +316,7 @@ signed char FileMgr::trunc(FileDesc *file) {
 
 signed char FileMgr::existsFile(const char *ipath, const char *ifileName)
 {
-	int len = strlen(ipath) + ((ifileName)?strlen(ifileName):0) + 3;
+	int len = (int)strlen(ipath) + ((ifileName)?strlen(ifileName):0) + 3;
 	char *ch;
 	char *path = new char [ len ];
 	strcpy(path, ipath);
@@ -337,7 +337,7 @@ signed char FileMgr::existsFile(const char *ipath, const char *ifileName)
 signed char FileMgr::existsDir(const char *ipath, const char *idirName)
 {
 	char *ch;
-	int len = strlen(ipath) + ((idirName)?strlen(idirName):0) + 1;
+	int len = (int)strlen(ipath) + ((idirName)?strlen(idirName):0) + 1;
 	if (idirName)
 		len +=  strlen(idirName);
 	char *path = new char [ len ];
@@ -361,7 +361,7 @@ int FileMgr::createParent(const char *pName) {
 	int retCode = 0;
 	
 	strcpy(buf, pName);
-	int end = strlen(buf) - 1;
+	int end = (int)strlen(buf) - 1;
 	while (end) {
 		if ((buf[end] == '/') || (buf[end] == '\\'))
 			break;
@@ -418,7 +418,7 @@ int FileMgr::copyFile(const char *sourceFile, const char *targetFile) {
 		return -1;
 
 	do {
-		len = read(sfd, buf, 4096);
+		len = (int)read(sfd, buf, 4096);
 		if (write(dfd, buf, len) != len) break;
 	}
 	while(len == 4096);	
@@ -447,7 +447,7 @@ char FileMgr::getLine(FileDesc *fDesc, SWBuf &line) {
 	while (more) {
 		more = false;
 		long index = fDesc->seek(0, SEEK_CUR);
-		len = fDesc->read(chunk, 254);
+		len = (int)fDesc->read(chunk, 254);
 
 		// assert we have a readable file (not a directory)
 		if (len < 1)

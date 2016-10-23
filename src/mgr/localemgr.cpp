@@ -101,7 +101,7 @@ LocaleMgr::LocaleMgr(const char *iConfigPath) {
 		switch (configType) {
 		case 2:
 			int i;
-			for (i = strlen(configPath)-1; ((i) && (configPath[i] != '/') && (configPath[i] != '\\')); i--);
+			for (i = (int)strlen(configPath)-1; ((i) && (configPath[i] != '/') && (configPath[i] != '\\')); i--);
 			configPath[i] = 0;
 			path = configPath;
 			path += "/";

@@ -42,10 +42,10 @@ namespace {
 
 	static int my_swbufwriter(netbuf *nControl, void *buffer, size_t size, void *swbuf) {
 		SWBuf &output = *(SWBuf *)swbuf;
-		int s = output.size();
+		int s = (int)output.size();
 		output.size(s+size);
 		memcpy(output.getRawData()+s, buffer, size);
-		return size;
+		return (int)size;
 	}
 
 #if defined(__GNUC__)

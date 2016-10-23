@@ -151,7 +151,7 @@ void SWBuf::insert(unsigned long pos, const char* str, unsigned long start, sign
 // 		return;
 
 	str += start;
-	int len = (max > -1) ? max : strlen(str);
+	int len = (int)((max > -1) ? max : strlen(str));
 
 	if (!len || (pos > length())) //nothing to do, return
 		return;

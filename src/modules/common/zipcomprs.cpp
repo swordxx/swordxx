@@ -153,7 +153,7 @@ ZEXTERN int ZEXPORT uncompress OF((Bytef *dest,   uLongf *destLen,
 	char *chunkbuf = zbuf;
 	int chunklen;
 	unsigned long zlen = 0;
-	while((chunklen = GetChars(chunk, 1023))) {
+	while((chunklen = (int)GetChars(chunk, 1023))) {
 		memcpy(chunkbuf, chunk, chunklen);
 		zlen += chunklen;
 		if (chunklen < 1023)

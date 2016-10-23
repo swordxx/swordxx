@@ -72,7 +72,7 @@ SWBuf &RawCom4::getRawEntryBuf() const {
 	VerseKey *key = &getVerseKey();
 
 	findOffset(key->getTestament(), key->getTestamentIndex(), &start, &size);
-	entrySize = size;        // support getEntrySize call
+	entrySize = (int)size;        // support getEntrySize call
 
 	entryBuf = "";
 	readText(key->getTestament(), start, size, entryBuf);

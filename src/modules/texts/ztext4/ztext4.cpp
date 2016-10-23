@@ -80,7 +80,7 @@ SWBuf &zText4::getRawEntryBuf() const {
 	VerseKey &key = getVerseKey();
 
 	findOffset(key.getTestament(), key.getTestamentIndex(), &start, &size, &buffnum);
-	entrySize = size;        // support getEntrySize call
+	entrySize = (int)size;        // support getEntrySize call
 			  
 	entryBuf = "";
 	

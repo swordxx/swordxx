@@ -248,7 +248,7 @@ bool StringMgr::supportsUnicode() const {
 
 char *ICUStringMgr::upperUTF8(char *buf, unsigned int maxlen) const {
 	char *ret = buf;
-	int max = (maxlen) ? maxlen : strlen(buf);
+	int max = (int)((maxlen) ? maxlen : strlen(buf));
 		
 	UErrorCode err = U_ZERO_ERROR;
 		

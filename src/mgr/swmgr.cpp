@@ -367,7 +367,7 @@ SWMgr::SWMgr(const char *iConfigPath, bool autoload, SWFilterMgr *filterMgr, boo
 	this->augmentHome = augmentHome;
 
 	path = iConfigPath;
-	int len = path.length();
+	int len = (int)path.length();
 	if ((len < 1) || ((iConfigPath[len-1] != '\\') && (iConfigPath[len-1] != '/')))
 		path += "/";
 	if (FileMgr::existsFile(path.c_str(), "mods.conf")) {
@@ -1071,7 +1071,7 @@ SWModule *SWMgr::createModule(const char *name, const char *driver, ConfigEntMap
 
 	if (pos == 1) {
 		SWBuf &dp = section["AbsoluteDataPath"];
-		for (int i = dp.length() - 1; i; i--) {
+		for (int i = (int)dp.length() - 1; i; i--) {
 			if (dp[i] == '/') {
 				dp.setSize(i);
 				break;

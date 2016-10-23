@@ -63,12 +63,12 @@ namespace {
 				return -1; /* failure, can't open file to write */
 		}
 		if (out->destBuf) {
-			int s = out->destBuf->size();
+			int s = (int)out->destBuf->size();
 			out->destBuf->size(s+(size*nmemb));
 			memcpy(out->destBuf->getRawData()+s, buffer, size*nmemb);
-			return nmemb;
+			return (int)nmemb;
 		}
-		return fwrite(buffer, size, nmemb, out->stream);
+		return (int)fwrite(buffer, size, nmemb, out->stream);
 	}
 
 

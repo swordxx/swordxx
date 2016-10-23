@@ -102,7 +102,7 @@ SWLog::getSystemLog()->logDebug("RemoteTransport::getDirList(%s)", dirURL);
 					break;
 			}
 			SWLog::getSystemLog()->logDebug("getDirList: parsing item %s(%d)\n", start, end-start);
-			int status = ftpparse(&item, start, end - start);
+			int status = ftpparse(&item, start, (int)(end - start));
 			// in ftpparse.h, there is a warning that name is not necessarily null terminated
 			SWBuf name;
 			name.append(item.name, item.namelen);

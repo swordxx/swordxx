@@ -88,7 +88,7 @@ char GBFWordJS::processText(SWBuf &text, const SWKey *key, const SWModule *modul
 				token[0] = 0;
 				token[1] = 0;
 				token[2] = 0;
-				textEnd = text.length();
+				textEnd = (unsigned int)text.length();
 				continue;
 			}
 			if (*from == '>') {	// process tokens
@@ -212,13 +212,13 @@ char GBFWordJS::processText(SWBuf &text, const SWKey *key, const SWModule *modul
 							else m = morph.c_str();
 							spanStart.appendFormatted("<span class=\"clk\" onclick=\"p('%s','%s','%s','%s','','%s');\" >", lexName.c_str(), strong.c_str(), wordID.c_str(), m, modName.c_str());
 							text.insert(textStr, spanStart);
-							lastAppendLen = spanStart.length();
+							lastAppendLen = (unsigned int)spanStart.length();
 						}
 					}
 
 				}
 				if (newText) {
-					textStart = text.length(); newText = false;
+					textStart = (unsigned int)text.length(); newText = false;
 				}
 				continue;
 			}

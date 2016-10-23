@@ -117,7 +117,7 @@ char OSISStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *mod
 
 							const char *m = strchr(attrib, ':');
 							if (m) {
-								int len = m-attrib;
+								int len = (int)(m-attrib);
 								mClass.append(attrib, len);
 								attrib += (len+1);
 							}
@@ -150,7 +150,7 @@ char OSISStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *mod
 
 							const char *m = strchr(attrib, ':');
 							if (m) {
-								int len = m-attrib;
+								int len = (int)(m-attrib);
 								lClass.append(attrib, len);
 								attrib += (len+1);
 							}
@@ -217,7 +217,7 @@ char OSISStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *mod
 
 					if (wtag.isEmpty()) {
 						int j;
-						for (j = token.length()-1; ((j>0) && (strchr(" /", token[j]))); j--);
+						for (j = (int)token.length()-1; ((j>0) && (strchr(" /", token[j]))); j--);
 						token.size(j+1);
 					}
 					

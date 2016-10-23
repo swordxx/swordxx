@@ -106,7 +106,7 @@ void TreeKeyIdx::setUserData(const char *userData, int size) {
 		delete currentNode.userData;
 
 	if (!size)
-		size = strlen(userData) + 1;
+		size = (int)strlen(userData) + 1;
 
 	currentNode.userData = new char [ size ];
 	memcpy(currentNode.userData, userData, size);
@@ -204,7 +204,7 @@ void TreeKeyIdx::append() {
 		while (lastSib.next > -1) {
 			getTreeNodeFromIdxOffset(lastSib.next, &lastSib);
 		}
-		__u32 idxOffset = idxfd->seek(0, SEEK_END);
+		__u32 idxOffset = (__u32)idxfd->seek(0, SEEK_END);
 		lastSib.next = idxOffset;
 		saveTreeNodeOffsets(&lastSib);
 		__u32 parent = currentNode.parent;
@@ -221,7 +221,7 @@ void TreeKeyIdx::appendChild() {
 		append();
 	}
 	else {
-		__u32 idxOffset = idxfd->seek(0, SEEK_END);
+		__u32 idxOffset = (__u32)idxfd->seek(0, SEEK_END);
 		currentNode.firstChild = idxOffset;
 		saveTreeNodeOffsets(&currentNode);
 		__u32 parent = currentNode.offset;
@@ -385,7 +385,7 @@ char TreeKeyIdx::getTreeNodeFromIdxOffset(long ioffset, TreeNode *node) const {
 		error = 77;	// out of bounds but still position to 0;
 	}
 
-	node->offset = ioffset;
+	node->offset = (__s32)ioffset;
 	if (idxfd > 0) {
 		if (idxfd->getFd() > 0) {
 			idxfd->seek(ioffset, SEEK_SET);
@@ -427,7 +427,7 @@ void TreeKeyIdx::saveTreeNodeOffsets(TreeNode *node) {
 		idxfd->seek(node->offset, SEEK_SET);
 		if (idxfd->read(&tmp, 4) != 4) {
 			datOffset = datfd->seek(0, SEEK_END);
-			tmp = archtosword32(datOffset);
+			tmp = (__s32)archtosword32(datOffset);
 			idxfd->write(&tmp, 4);
 		}
 		else {
@@ -435,13 +435,13 @@ void TreeKeyIdx::saveTreeNodeOffsets(TreeNode *node) {
 			datfd->seek(datOffset, SEEK_SET);
 		}
 
-		tmp = archtosword32(node->parent);
+		tmp = (__s32)archtosword32(node->parent);
 		datfd->write(&tmp, 4);
 
-		tmp = archtosword32(node->next);
+		tmp = (__s32)archtosword32(node->next);
 		datfd->write(&tmp, 4);
 
-		tmp = archtosword32(node->firstChild);
+		tmp = (__s32)archtosword32(node->firstChild);
 		datfd->write(&tmp, 4);
 	}
 }
@@ -493,7 +493,7 @@ void TreeKeyIdx::saveTreeNode(TreeNode *node) {
 
 		idxfd->seek(node->offset, SEEK_SET);
 		datOffset = datfd->seek(0, SEEK_END);
-		tmp = archtosword32(datOffset);
+		tmp = (__s32)archtosword32(datOffset);
 		idxfd->write(&tmp, 4);
 
 		saveTreeNodeOffsets(node);
@@ -568,7 +568,7 @@ void TreeKeyIdx::setPosition(SW_POSITION p) {
 
 
 int TreeKeyIdx::_compare (const TreeKeyIdx & ikey) {
-		return (getOffset() - ikey.getOffset());
+		return (int)(getOffset() - ikey.getOffset());
 }
 
 

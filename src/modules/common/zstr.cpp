@@ -198,19 +198,19 @@ signed char zStr::findKeyIndex(const char *ikey, long *idxoff, long away) const
 	bool awayFromSubstrCheck = false;
 
 	if (idxfd->getFd() >= 0) {
-		tailoff = maxoff = idxfd->seek(0, SEEK_END) - IDXENTRYSIZE;
+		tailoff = maxoff = (__s32)idxfd->seek(0, SEEK_END) - IDXENTRYSIZE;
 		if (*ikey) {
 			headoff = 0;
 			stdstr(&key, ikey, 3);
-			if (!caseSensitive) toupperstr_utf8(key, strlen(key)*3);
+			if (!caseSensitive) toupperstr_utf8(key, (unsigned int)(strlen(key)*3));
 
-			int keylen = strlen(key);
+			int keylen = (int)strlen(key);
 			bool substr = false;
 
 			getKeyFromIdxOffset(maxoff, &maxbuf);
 
 			while (headoff < tailoff) {
-				tryoff = (lastoff == -1) ? headoff + (((((tailoff / IDXENTRYSIZE) - (headoff / IDXENTRYSIZE))) / 2) * IDXENTRYSIZE) : lastoff;
+				tryoff = ((__s32)lastoff == -1) ? headoff + (((((tailoff / IDXENTRYSIZE) - (headoff / IDXENTRYSIZE))) / 2) * IDXENTRYSIZE) : (__s32)lastoff;
 				lastoff = -1;
 
 				getKeyFromIdxOffset(tryoff, &trybuf);
@@ -366,7 +366,7 @@ void zStr::getText(long offset, char **idxbuf, char **buf) const {
 	while (true);	// while we're resolving links
 
 	if (idxbuflocal) {
-		__u32 localsize = strlen(idxbuflocal);
+		__u32 localsize = (__u32)strlen(idxbuflocal);
 		localsize = (localsize < (size - 1)) ? localsize : (size - 1);
 		strncpy(*idxbuf, idxbuflocal, localsize);
 		(*idxbuf)[localsize] = 0;
@@ -416,7 +416,7 @@ void zStr::getCompressedText(long block, long entry, char **buf) const {
 		cacheBlock = new EntriesBlock(rawBuf, len);
 		cacheBlockIndex = block;
 	}
-	size = cacheBlock->getEntrySize(entry);
+	size = (__u32)cacheBlock->getEntrySize(entry);
 	*buf = (*buf) ? (char *)realloc(*buf, size*2 + 1) : (char *)malloc(size*2 + 1);
 	strcpy(*buf, cacheBlock->getEntry(entry));
 }
@@ -448,7 +448,7 @@ void zStr::setText(const char *ikey, const char *buf, long len) {
 
 	len = (len < 0) ? strlen(buf) : len;
 	stdstr(&key, ikey, 3);
-	if (!caseSensitive) toupperstr_utf8(key, strlen(key)*3);
+	if (!caseSensitive) toupperstr_utf8(key, (unsigned int)(strlen(key)*3));
 
 	char notFound = findKeyIndex(ikey, &idxoff, 0);
 	if (!notFound) {
@@ -497,9 +497,9 @@ void zStr::setText(const char *ikey, const char *buf, long len) {
 		}
 	}
 
-	endoff = idxfd->seek(0, SEEK_END);
+	endoff = (__s32)idxfd->seek(0, SEEK_END);
 
-	shiftSize = endoff - idxoff;
+	shiftSize = endoff - (__s32)idxoff;
 
 	if (shiftSize > 0) {
 	        idxBytes = new char [ shiftSize ];
@@ -509,7 +509,7 @@ void zStr::setText(const char *ikey, const char *buf, long len) {
 
 	outbuf = new char [ len + strlen(key) + 5 ];
 	sprintf(outbuf, "%s%c%c", key, 13, 10);
-	size = strlen(outbuf);
+	size = (__u32)strlen(outbuf);
 	if (len > 0) {	// NOT a link
 		if (!cacheBlock) {
 			flushCache();
@@ -523,7 +523,7 @@ void zStr::setText(const char *ikey, const char *buf, long len) {
 		}
 		__u32 entry = cacheBlock->addEntry(buf);
 		cacheDirty = true;
-		outstart = archtosword32(cacheBlockIndex);
+		outstart = (__u32)archtosword32(cacheBlockIndex);
 		outsize = archtosword32(entry);
 		memcpy (outbuf + size, &outstart, sizeof(__u32));
 		memcpy (outbuf + size + sizeof(__u32), &outsize, sizeof(__u32));
@@ -534,7 +534,7 @@ void zStr::setText(const char *ikey, const char *buf, long len) {
 		size += len;
 	}
 
-	start = datfd->seek(0, SEEK_END);
+	start = (__u32)datfd->seek(0, SEEK_END);
 
 	outstart = archtosword32(start);
 	outsize  = archtosword32(size);
@@ -609,7 +609,7 @@ void zStr::flushCache() const {
 			unsigned long zdtSize = zdtfd->seek(0, SEEK_END);
 
 			if ((cacheBlockIndex * ZDXENTRYSIZE) > (zdxSize - ZDXENTRYSIZE)) {	// New Block
-				start = zdtSize;
+				start = (__u32)zdtSize;
 			}
 			else {
 				zdxfd->seek(cacheBlockIndex * ZDXENTRYSIZE, SEEK_SET);
@@ -624,7 +624,7 @@ void zStr::flushCache() const {
 					size = outsize;
 				}
 				else {	// middle and bigger-- we have serious problems, for now let's put it at the end = lots of wasted space
-					start = zdtSize;
+					start = (__u32)zdtSize;
 				}
 			}
 

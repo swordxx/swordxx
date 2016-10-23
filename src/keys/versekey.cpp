@@ -418,14 +418,14 @@ int VerseKey::getBookFromAbbrev(const char *iabbr) const
 
 		if (!i) {
 			if (hasUTF8Support) { //we have support for UTF-8 handling; we expect UTF-8 encoded locales
-				stringMgr->upperUTF8(abbr, strlen(abbr)*2);
+				stringMgr->upperUTF8(abbr, (unsigned int)(strlen(abbr)*2));
 			}
 			else {
 				stringMgr->upperLatin1(abbr);
 			}
 		}
 
-		abLen = strlen(abbr);
+		abLen = (int)strlen(abbr);
 
 		if (abLen) {
 			min = 0;
@@ -483,7 +483,7 @@ void VerseKey::validateCurrentLocale() const {
 				StringMgr* stringMgr = StringMgr::getSystemStringMgr();
 				const bool hasUTF8Support = StringMgr::hasUTF8Support();
 				if (hasUTF8Support) { //we have support for UTF-8 handling; we expect UTF-8 encoded locales
-					stringMgr->upperUTF8(abbr, strlen(abbr)*2);
+					stringMgr->upperUTF8(abbr, (unsigned int)(strlen(abbr)*2));
 				}
 				else {
 					stringMgr->upperLatin1(abbr);
@@ -644,7 +644,7 @@ terminate_range:
 			tobook = 0;
 			bookno = -1;
 			if (*book) {
-				loop = strlen(book) - 1;
+				loop = (int)strlen(book) - 1;
 
 				for (; loop+1; loop--) { if (book[loop] == ' ') book[loop] = 0; else break; }
 
@@ -667,7 +667,7 @@ terminate_range:
 					break;
 				}
 
-				for (loop = strlen(book) - 1; loop+1; loop--) {
+				for (loop = (int)strlen(book) - 1; loop+1; loop--) {
 					if (book[loop] == ' ') {
 						// "PS C" is ok, but "II C" is not ok
 						if (isroman(&book[loop+1]) && !isroman(book,loop)) {
@@ -682,14 +682,14 @@ terminate_range:
 				}
 
 				// check for special inscriptio and subscriptio which are saved as book intro and chap 1 intro (for INTF)
-				for (loop = strlen(book) - 1; loop+1; loop--) {
+				for (loop = (int)strlen(book) - 1; loop+1; loop--) {
 					if (book[loop] == ' ') {
-						if (!strnicmp(&book[loop+1], "inscriptio", strlen(&book[loop+1]))) {
+						if (!strnicmp(&book[loop+1], "inscriptio", (int)strlen(&book[loop+1]))) {
 							book[loop] = 0;
 							verse = 0;
 							chap = 0;
 						}
-						else if (!strnicmp(&book[loop+1], "subscriptio", strlen(&book[loop+1]))) {
+						else if (!strnicmp(&book[loop+1], "subscriptio", (int)strlen(&book[loop+1]))) {
 							book[loop] = 0;
 							verse = 0;
 							chap = 1;
@@ -915,7 +915,7 @@ terminate_range:
 	book[tobook] = 0;
 	tobook = 0;
 	if (*book) {
-		loop = strlen(book) - 1;
+		loop = (int)strlen(book) - 1;
 
 		// strip trailing spaces
 		for (; loop+1; loop--) { if (book[loop] == ' ') book[loop] = 0; else break; }
@@ -944,7 +944,7 @@ terminate_range:
 		}
 
 		// check for roman numeral chapter
-		for (loop = strlen(book) - 1; loop+1; loop--) {
+		for (loop = (int)strlen(book) - 1; loop+1; loop--) {
 			if (book[loop] == ' ') {
 				// "PS C" is ok, but "II C" is not ok
 				if (isroman(&book[loop+1]) && !isroman(book,loop)) {
@@ -958,19 +958,19 @@ terminate_range:
 			}
 		}
 		// check for special inscriptio and subscriptio which are saved as book intro and chap 1 intro (for INTF)
-		for (loop = strlen(book) - 1; loop+1; loop--) {
+		for (loop = (int)strlen(book) - 1; loop+1; loop--) {
 			if (book[loop] == ' ') {
-				if (!strnicmp(&book[loop+1], "inscriptio", strlen(&book[loop+1]))) {
+				if (!strnicmp(&book[loop+1], "inscriptio", (int)strlen(&book[loop+1]))) {
 					book[loop] = 0;
 					verse = 0;
 					chap = 0;
 					suffix = 0;
 				}
-				else if (!strnicmp(&book[loop+1], "subscriptio", strlen(&book[loop+1]))) {
+				else if (!strnicmp(&book[loop+1], "subscriptio", (int)strlen(&book[loop+1]))) {
 					book[loop] = 0;
 					verse = 0;
 					chap = 1;
-						suffix = 0;
+					suffix = 0;
 				}
 				break;
 			}
@@ -1805,7 +1805,7 @@ int VerseKey::_compare(const VerseKey &ivkey)
 	keyval1 += (int)getSuffix();
 	keyval2 += (int)ivkey.getSuffix();
 	keyval1 = (keyval1 != keyval2) ? ((keyval1 > keyval2) ? 1 : -1) : 0; // -1 | 0 | 1
-	return keyval1;
+	return (int)keyval1;
 }
 
 
@@ -1884,7 +1884,7 @@ const char *VerseKey::convertToOSIS(const char *inRef, const SWKey *lastKnownKey
 			outRef += *startFrag;
 			startFrag++;
 		}
-		memmove(frag, startFrag, ((const char *)element->userData - startFrag) + 1);
+		memmove(frag, startFrag, (size_t)((const char *)element->userData - startFrag) + 1);
 		frag[((const char *)element->userData - startFrag) + 1] = 0;
 		int j;
 		for (j = strlen(frag)-1; j && (strchr(" {}:;,()[].", frag[j])); j--);

@@ -81,7 +81,7 @@ char *stdstr(char **ipstr, const char *istr, unsigned int memPadFactor) {
 	if (*ipstr)
 		delete [] *ipstr;
 	if (istr) {
-		int len = strlen(istr) + 1;
+		int len = (int)strlen(istr) + 1;
 		*ipstr = new char [ len * memPadFactor ];
 		memcpy(*ipstr, istr, len);
 	}
@@ -102,7 +102,7 @@ char *strstrip(char *istr) {
 	char *tmp = istr;
 	char *rtmp;
 
-	int len = strlen(istr);
+	int len = (int)strlen(istr);
 	if (len < 1)
 		return istr;
 	rtmp = istr + (len - 1);
@@ -126,8 +126,8 @@ char *strstrip(char *istr) {
  */
 
 const char *stristr(const char *s1, const char *s2) {
-	int tLen = strlen(s2);
-	int cLen = strlen(s1);
+	int tLen = (int)strlen(s2);
+	int cLen = (int)strlen(s1);
 	char *target = new char [ tLen + 1 ];
 	int i, j;
 	const char *retVal = 0;
@@ -161,8 +161,8 @@ const char *stristr(const char *s1, const char *s2) {
  */
 
 int strnicmp(const char *s1, const char *s2, int len) {
-	int tLen = strlen(s2);
-	int cLen = strlen(s1);
+	int tLen = (int)strlen(s2);
+	int cLen = (int)strlen(s1);
 	char diff;
 	int i;
 	for (i = 0; ((i < len) && (i < tLen) && (i < cLen)); i++) {

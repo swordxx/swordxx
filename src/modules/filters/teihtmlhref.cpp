@@ -221,7 +221,7 @@ bool TEIHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData
 						// Compensate for starting :
 						ref = the_ref + 1;
 
-						int size = target.size() - ref.size() - 1;
+						int size = (int)(target.size() - ref.size() - 1);
 						work.setSize(size);
 						strncpy(work.getRawData(), target, size);
 					}

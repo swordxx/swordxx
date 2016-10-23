@@ -144,7 +144,7 @@ public:
 	 * Returns the index for the new one given as as parameter.
 	 * The first parameter is the new index.
 	 */
-	virtual void setIndex(long index) { setToElement(index); }
+	virtual void setIndex(long index) { setToElement((int)index); }
 	virtual const char *getText() const;
 	virtual void setText(const char *ikey);
 	virtual void sort();

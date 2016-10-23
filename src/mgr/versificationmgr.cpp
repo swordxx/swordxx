@@ -134,7 +134,7 @@ public:
 	}
 	VersificationMgr::Book::Private &operator =(const VersificationMgr::Book::Private &other) {
 		verseMax.clear();
-                int s = other.verseMax.size();
+                int s = (int)other.verseMax.size();
                 if (s) verseMax = other.verseMax;
 		offsetPrecomputed = other.offsetPrecomputed;
 		return *this;
@@ -208,7 +208,7 @@ void VersificationMgr::System::loadFromSBook(const sbook *ot, const sbook *nt, i
 		p->books.push_back(Book(ot->name, ot->osis, ot->prefAbbrev, ot->chapmax));
 		offset++;		// book heading
 		Book &b = p->books[p->books.size()-1];
-		p->osisLookup[b.getOSISName()] = p->books.size();
+		p->osisLookup[b.getOSISName()] = (int)p->books.size();
 		for (int i = 0; i < ot->chapmax; i++) {
 			b.p->verseMax.push_back(chMax[chap]);
 			offset++;		// chapter heading
@@ -226,7 +226,7 @@ void VersificationMgr::System::loadFromSBook(const sbook *ot, const sbook *nt, i
 		p->books.push_back(Book(nt->name, nt->osis, nt->prefAbbrev, nt->chapmax));
 		offset++;		// book heading
 		Book &b = p->books[p->books.size()-1];
-		p->osisLookup[b.getOSISName()] = p->books.size();
+		p->osisLookup[b.getOSISName()] = (int)p->books.size();
 		for (int i = 0; i < nt->chapmax; i++) {
 			b.p->verseMax.push_back(chMax[chap]);
 			offset++;		// chapter heading
@@ -292,7 +292,7 @@ int VersificationMgr::Book::getVerseMax(int chapter) const {
 
 
 int VersificationMgr::System::getBookCount() const {
-	return (p ? p->books.size() : 0);
+	return (int)(p ? p->books.size() : 0);
 }
 
 
@@ -445,7 +445,7 @@ void VersificationMgr::System::translateVerse(const System *dstSys, const char *
 			for (int i=0; i<(int)dstSys->p->mappingsExtraBooks.size(); ++i) {
 				SWLog::getSystemLog()->logDebug("\t%s %s.\n", *book, dstSys->p->mappingsExtraBooks[i]);
 				if (!strcmp(*book, dstSys->p->mappingsExtraBooks[i])) {
-					b = p->books.size()+i-2;
+					b = (int)p->books.size()+i-2;
 					break;
 				}
 			}
@@ -529,7 +529,7 @@ void VersificationMgr::System::translateVerse(const System *dstSys, const char *
 		if (b >= (int)p->mappings.size())
 			return;
 		// forward mapping should use reversed search for item
-		for (int i=p->mappings[b].size()-1; i>=0; --i) {
+		for (int i = (int)p->mappings[b].size()-1; i>=0; --i) {
 			const unsigned char *m = p->mappings[b][i];
 			if (m[1] < *chapter) {
 				SWLog::getSystemLog()->logWarning("There is no mapping for this chapter.\n");

@@ -133,7 +133,7 @@ SWBuf &RawGenBook::getRawEntryBuf() const {
 
 void RawGenBook::setEntry(const char *inbuf, long len) {
 
-	__u32 offset = archtosword32(bdtfd->seek(0, SEEK_END));
+	__u32 offset = (__u32)archtosword32(bdtfd->seek(0, SEEK_END));
 	__u32 size = 0;
 	TreeKeyIdx *key = ((TreeKeyIdx *)&(getTreeKey()));
 
@@ -144,7 +144,7 @@ void RawGenBook::setEntry(const char *inbuf, long len) {
 
 	bdtfd->write(inbuf, len);
 
-	size = archtosword32(len);
+	size = (__u32)archtosword32(len);
 	memcpy(userData, &offset, 4);
 	memcpy(userData+4, &size, 4);
 	key->setUserData(userData, 8);
