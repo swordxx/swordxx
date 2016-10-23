@@ -445,7 +445,7 @@ public:
 	/**
 	 * @return returns true if this buffer ends with the specified postfix
 	 */
-	inline bool endsWith(const char *postfix) const { unsigned int psize = (int)strlen(postfix); return (size() >= psize)?!strncmp(end-psize, postfix, psize):false; }
+	inline bool endsWith(const char *postfix) const { unsigned int psize = (unsigned int)strlen(postfix); return (size() >= psize)?!strncmp(end-psize, postfix, psize):false; }
 
 	// be sure we've been given a valid pointer to compare.  If not, we return !=; specifically less-than, for lack of better options
 	inline int compare(const char *other) const { return (other?strcmp(c_str(), other):-1); }
