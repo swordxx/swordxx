@@ -160,7 +160,7 @@ public:
 
     void flush() noexcept;
 
-    /** Checks for the existence of a file.
+    /** Checks for the existence and readability of a file.
     * @param ipath Path to file.
     * @param ifileName Name of file to check for.
     */
@@ -168,7 +168,7 @@ public:
     static bool existsFile(char const * ipath,
                            char const * ifileName = nullptr);
 
-    /** Checks for the existence of a directory.
+    /** Checks for the existence and readability of a directory.
     * @param ipath Path to directory.
     * @param idirName Name of directory to check for.
     */
