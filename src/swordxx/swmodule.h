@@ -29,6 +29,7 @@
 #include <iostream>
 #endif
 #include <list>
+#include <map>
 #include "defs.h"
 #include "keys/listkey.h"
 #include "swconfig.h"
