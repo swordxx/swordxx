@@ -75,7 +75,6 @@ bool SWConfig::reload() {
     return true;
 }
 
-
 bool SWConfig::save() {
     assert(!m_filename.empty());
 
