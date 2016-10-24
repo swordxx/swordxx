@@ -39,34 +39,38 @@ bool SWConfig::reload() {
     assert(!m_filename.empty());
 
     decltype(m_sections) data;
-    std::string section;
-    std::string line;
-    std::ifstream inFile(m_filename);
-    try {
-        inFile.exceptions(std::ios_base::badbit | std::ios_base::failbit);
-        while (std::getline(inFile, line)) {
-            if (line.empty() || (*line.begin()) == '#')
-                continue;
-            if (section.empty()) {
-                if (line.size() < 3 || (*line.begin()) != '['
-                                    || line.find(']', 1u) != line.size() - 1u)
-                    return false;
-                section.assign(line, 1u, line.size() - 2u);
-            } else {
-                auto it(std::find(line.begin(), line.end(), '='));
-                if (it == line.begin() || it == line.end())
-                    return false;
-                std::string key(line.begin(), it);
-                std::string value(++it, line.end());
-                trimString(value);
-                data[section].emplace(std::move(key), std::move(value));
+    {
+        std::string section;
+        std::string line;
+        std::ifstream inFile(m_filename);
+        try {
+            inFile.exceptions(std::ios_base::badbit | std::ios_base::failbit);
+            while (std::getline(inFile, line)) {
+                if (line.empty() || (*line.begin()) == '#')
+                    continue;
+                if (section.empty()) {
+                    if (line.size() < 3
+                        || (*line.begin()) != '['
+                        || line.find(']', 1u) != line.size() - 1u)
+                        return false;
+                    section.assign(line, 1u, line.size() - 2u);
+                } else {
+                    auto it(std::find(line.begin(), line.end(), '='));
+                    if (it == line.begin() || it == line.end())
+                        return false;
+                    std::string key(line.begin(), it);
+                    std::string value(++it, line.end());
+                    trimString(value);
+                    data[section].emplace(std::move(key), std::move(value));
+                }
             }
+        } catch (std::ios_base::failure const &) {
+            return false;
         }
-    } catch (std::ios_base::failure const &) {
-        return false;
+
+        assert(inFile.eof());
     }
 
-    assert(inFile.eof());
     m_sections = data;
     return true;
 }
