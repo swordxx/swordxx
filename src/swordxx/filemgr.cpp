@@ -37,9 +37,6 @@
 #include <string>
 #include <sys/stat.h>
 #include <sys/types.h>
-#if defined(__GNUC__) || defined(_WIN32_WCE)
-#include <unistd.h>
-#endif
 #include "utilstr.h"
 
 
@@ -132,22 +129,6 @@ int FileDesc::getFd() {
 //        return 777;
     return fd;
 }
-
-
-long FileDesc::seek(long offset, int whence) {
-    return lseek(getFd(), offset, whence);
-}
-
-
-long FileDesc::read(void *buf, long count) {
-    return ::read(getFd(), buf, count);
-}
-
-
-long FileDesc::write(const void *buf, long count) {
-    return ::write(getFd(), buf, count);
-}
-
 
 FileMgr::FileMgr(int maxFiles) {
     this->maxFiles = maxFiles;        // must be at least 2

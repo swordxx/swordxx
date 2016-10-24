@@ -25,8 +25,13 @@
 
 #include <string>
 #include <sys/stat.h>
+#include <sys/types.h>
 #include <fcntl.h>
 #include <memory>
+#if defined(__GNUC__) || defined(_WIN32_WCE)
+#include <unistd.h>
+#endif
+#include <utility>
 #include "defs.h"
 
 
@@ -60,9 +65,17 @@ public:
     */
     int getFd();
 
-    long seek(long offset, int whence);
-    long read(void *buf, long count);
-    long write(const void *buf, long count);
+    template <typename ... Args>
+    auto seek(Args && ... args)
+    { return ::lseek(getFd(), std::forward<Args>(args)...); }
+
+    template <typename ... Args>
+    auto read(Args && ... args)
+    { return ::read(getFd(), std::forward<Args>(args)...); }
+
+    template <typename ... Args>
+    auto write(Args && ... args)
+    { return ::write(getFd(), std::forward<Args>(args)...); }
 
     /** Path to file.
     */
