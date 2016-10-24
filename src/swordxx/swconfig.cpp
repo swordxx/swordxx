@@ -66,9 +66,7 @@ bool SWConfig::reload() {
         return false;
     }
 
-    if (!inFile.eof())
-        return false;
-
+    assert(inFile.eof());
     m_sections = data;
     return true;
 }
