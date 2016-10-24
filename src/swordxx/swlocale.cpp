@@ -70,16 +70,16 @@ SWLocale::SWLocale(const char *ifilename) {
         for (abbrevsCnt = 0; builtin_abbrevs[abbrevsCnt].osis[0]; abbrevsCnt++);
     }
 
-    confEntry = localeSource->Sections["Meta"].find("Name");
-    if (confEntry != localeSource->Sections["Meta"].end())
+    confEntry = localeSource->sections()["Meta"].find("Name");
+    if (confEntry != localeSource->sections()["Meta"].end())
         stdstr(&name, (*confEntry).second.c_str());
 
-    confEntry = localeSource->Sections["Meta"].find("Description");
-    if (confEntry != localeSource->Sections["Meta"].end())
+    confEntry = localeSource->sections()["Meta"].find("Description");
+    if (confEntry != localeSource->sections()["Meta"].end())
         stdstr(&description, (*confEntry).second.c_str());
 
-    confEntry = localeSource->Sections["Meta"].find("Encoding"); //Either empty (==Latin1) or UTF-8
-    if (confEntry != localeSource->Sections["Meta"].end())
+    confEntry = localeSource->sections()["Meta"].find("Encoding"); //Either empty (==Latin1) or UTF-8
+    if (confEntry != localeSource->sections()["Meta"].end())
         stdstr(&encoding, (*confEntry).second.c_str());
 }
 
@@ -105,8 +105,8 @@ const char *SWLocale::translate(const char *text) {
 
     if (entry == p->lookupTable.end()) {
         ConfigEntMap::iterator confEntry;
-        confEntry = localeSource->Sections["Text"].find(text);
-        if (confEntry == localeSource->Sections["Text"].end())
+        confEntry = localeSource->sections()["Text"].find(text);
+        if (confEntry == localeSource->sections()["Text"].end())
             p->lookupTable.insert(LookupMap::value_type(text, text));
         else {//valid value found
             /*
@@ -153,7 +153,7 @@ const char *SWLocale::getEncoding() {
 
 
 void SWLocale::augment(SWLocale &addFrom) {
-    *localeSource += *addFrom.localeSource;
+    localeSource->augment(*addFrom.localeSource);
 }
 
 
@@ -164,8 +164,8 @@ const struct abbrev *SWLocale::getBookAbbrevs(int *retSize) {
         for (int j = 0; builtin_abbrevs[j].osis[0]; j++) {
             p->mergedAbbrevs[builtin_abbrevs[j].ab] = builtin_abbrevs[j].osis;
         }
-        ConfigEntMap::iterator it = localeSource->Sections["Book Abbrevs"].begin();
-        ConfigEntMap::iterator end = localeSource->Sections["Book Abbrevs"].end();
+        ConfigEntMap::iterator it = localeSource->sections()["Book Abbrevs"].begin();
+        ConfigEntMap::iterator end = localeSource->sections()["Book Abbrevs"].end();
         for (; it != end; it++) {
             p->mergedAbbrevs[it->first.c_str()] = it->second.c_str();
         }

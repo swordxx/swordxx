@@ -1,14 +1,6 @@
 /******************************************************************************
  *
- *  swconfig.cpp -    used for saving and retrieval of configuration
- *            information
- *
- * $Id$
- *
- * Copyright 1998-2013 CrossWire Bible Society (http://www.crosswire.org)
- *    CrossWire Bible Society
- *    P. O. Box 2528
- *    Tempe, AZ  85280-2528
+ * Copyright 2016 Jaak Ristioja
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -23,152 +15,130 @@
 
 #include "swconfig.h"
 
-#include <cstring>
-#include <fcntl.h>
-#include "filemgr.h"
+#include <algorithm>
+#include <cassert>
+#include <fstream>
+#include <tuple>
 #include "utilstr.h"
 
 
 namespace swordxx {
 
+SWConfig::SWConfig() {}
 
-SWConfig::SWConfig() {
+SWConfig::SWConfig(std::string filename)
+    : m_filename(std::move(filename))
+{
+    if (!m_filename.empty())
+        reload();
 }
 
+SWConfig::~SWConfig() {}
 
-SWConfig::SWConfig(const char * ifilename) {
-    filename = ifilename;
-    Load();
-}
+bool SWConfig::reload() {
+    assert(!m_filename.empty());
 
-
-SWConfig::~SWConfig() {
-}
-
-
-void SWConfig::Load() {
-
-    if (!filename.size()) return;    // assert we have a filename
-
-    FileDesc *cfile;
-    char *buf, *data;
-    ConfigEntMap cursect;
-    std::string sectname;
-    bool first = true;
-
-    Sections.erase(Sections.begin(), Sections.end());
-
-    cfile = FileMgr::getSystemFileMgr()->open(filename.c_str(), FileMgr::RDONLY);
-    if (cfile->getFd() > 0) {
-        std::string line(FileMgr::getLine(cfile));
-
-        // clean UTF encoding tags at start of file
-        while (!line.empty() &&
-                ((((unsigned char)line[0]) == 0xEF) ||
-                 (((unsigned char)line[0]) == 0xBB) ||
-                 (((unsigned char)line[0]) == 0xBF))) {
-            line.erase(0u, 1u);
-        }
-
-        while (!line.empty()) {
-            // ignore commented lines
-            if (!line.empty() && (*line.rbegin()) != '#') {
-                buf = new char [ line.length() + 1 ];
-                strcpy(buf, line.c_str());
-                if (*strstrip(buf) == '[') {
-                    if (!first)
-                        Sections.insert(SectionMap::value_type(sectname, cursect));
-                    else first = false;
-
-                    cursect.erase(cursect.begin(), cursect.end());
-
-                    strtok(buf, "]");
-                    sectname = buf+1;
-                }
-                else {
-                    strtok(buf, "=");
-                    if ((*buf) && (*buf != '=')) {
-                        if ((data = strtok(nullptr, "")))
-                            cursect.insert(ConfigEntMap::value_type(buf, strstrip(data)));
-                        else cursect.insert(ConfigEntMap::value_type(buf, ""));
-                    }
-                }
-                delete [] buf;
-            }
-            line = FileMgr::getLine(cfile);
-        }
-        if (!first)
-            Sections.insert(SectionMap::value_type(sectname, cursect));
-
-        FileMgr::getSystemFileMgr()->close(cfile);
-    }
-}
-
-
-void SWConfig::Save() {
-
-    if (!filename.size()) return;    // assert we have a filename
-
-    FileDesc *cfile;
-    std::string buf;
-    SectionMap::iterator sit;
-    ConfigEntMap::iterator entry;
-    std::string sectname;
-
-    cfile = FileMgr::getSystemFileMgr()->open(filename.c_str(), FileMgr::RDWR|FileMgr::CREAT|FileMgr::TRUNC);
-    if (cfile->getFd() > 0) {
-
-        for (sit = Sections.begin(); sit != Sections.end(); sit++) {
-            buf =  "\n[";
-            buf += (*sit).first.c_str();
-            buf += "]\n";
-            cfile->write(buf.c_str(), buf.length());
-            for (entry = (*sit).second.begin(); entry != (*sit).second.end(); entry++) {
-                buf = (*entry).first.c_str();
-                buf += "=";
-                buf += (*entry).second.c_str();
-                buf += "\n";
-                cfile->write(buf.c_str(), buf.length());
+    decltype(m_sections) data;
+    std::string section;
+    std::string line;
+    std::ifstream inFile(m_filename);
+    try {
+        inFile.exceptions(std::ios_base::badbit | std::ios_base::failbit);
+        while (std::getline(inFile, line)) {
+            if (line.empty() || (*line.begin()) == '#')
+                continue;
+            if (section.empty()) {
+                if (line.size() < 3 || (*line.begin()) != '['
+                                    || line.find(']', 1u) != line.size() - 1u)
+                    return false;
+                section.assign(line, 1u, line.size() - 2u);
+            } else {
+                auto it(std::find(line.begin(), line.end(), '='));
+                if (it == line.begin() || it == line.end())
+                    return false;
+                std::string key(line.begin(), it);
+                std::string value(++it, line.end());
+                trimString(value);
+                data[section].emplace(std::move(key), std::move(value));
             }
         }
-        buf = "\n";
-        cfile->write(buf.c_str(), buf.length());
-        FileMgr::getSystemFileMgr()->close(cfile);
+    } catch (std::ios_base::failure const &) {
+        return false;
     }
+
+    if (!inFile.eof())
+        return false;
+
+    m_sections = data;
+    return true;
 }
 
 
-void SWConfig::augment(SWConfig &addFrom) {
+bool SWConfig::save() {
+    assert(!m_filename.empty());
 
-    SectionMap::iterator section;
-    ConfigEntMap::iterator entry, start, end;
-
-    for (section = addFrom.Sections.begin(); section != addFrom.Sections.end(); section++) {
-        for (entry = (*section).second.begin(); entry != (*section).second.end(); entry++) {
-            start = Sections[section->first].lower_bound(entry->first);
-            end   = Sections[section->first].upper_bound(entry->first);
-            if (start != end) {
-                if (((++start) != end)
-                        || ((++(addFrom.Sections[section->first].lower_bound(entry->first))) != addFrom.Sections[section->first].upper_bound(entry->first))) {
-                    for (--start; start != end; start++) {
-                        if (!strcmp(start->second.c_str(), entry->second.c_str()))
-                            break;
-                    }
-                    if (start == end)
-                        Sections[(*section).first].insert(ConfigEntMap::value_type((*entry).first, (*entry).second));
-                }
-                else    Sections[section->first][entry->first.c_str()] = entry->second.c_str();
+    /// \todo Add proper error handling, perhaps even rollback.
+    std::ofstream outFile(m_filename,
+                          std::ios_base::out | std::ios_base::trunc);
+    try {
+        outFile.exceptions(std::ios_base::badbit | std::ios_base::failbit);
+        bool start = true;
+        for (auto const & sp : m_sections) {
+            if (sp.second.empty())
+                continue;
+            if (!start) {
+                outFile << "\n[" << sp.first << "]\n";
+                start = true;
+            } else {
+                outFile << '[' << sp.first << "]\n";
             }
-            else    Sections[section->first][entry->first.c_str()] = entry->second.c_str();
+            for (auto const & ep : sp.second)
+                outFile << ep.first << '=' << ep.second << '\n';
         }
+    } catch (std::ios_base::failure const &) {
+        return false;
+    }
+    return true;
+}
+
+void SWConfig::augment(SWConfig const & addFrom) {
+    /* Currently, we write all changes to m_sections directly. Hence an
+       exclusive write lock must be used for the whole duration of this if this
+       function needs to be atomic. One could optimize by using copy-on-write
+       semantics and/or a journal if performance is a must. */
+    bool needRestoreFromBackup = false;
+    decltype(m_sections) backup;
+    auto const safeWriteOperation =
+            [this, &backup, &needRestoreFromBackup](auto op) {
+                if (!needRestoreFromBackup)
+                    backup = m_sections;
+                op();
+                needRestoreFromBackup = true;
+            };
+    try {
+        for (auto const & sp : addFrom.m_sections) {
+            if (sp.second.empty()) // Skip empty sections
+                continue;
+            auto sectionIterator(m_sections.find(sp.first));
+            if (sectionIterator == m_sections.end()) {
+                safeWriteOperation([this, &sp]() { m_sections.emplace(sp); });
+            } else {
+                auto & section = sectionIterator->second;
+                for (auto const & ep : sp.second) {
+                    decltype(section.equal_range(ep.first).first) start;
+                    decltype(section.equal_range(ep.first).second) end;
+                    std::tie(start, end) = section.equal_range(ep.first);
+                    if (std::find(start, end, ep) == end) // Skip duplicates
+                        safeWriteOperation(
+                                    [&section, &ep]() { section.emplace(ep); });
+                }
+            }
+        }
+    } catch (...) {
+        if (needRestoreFromBackup)
+            m_sections = std::move(backup);
+        throw;
     }
 }
-
-
-ConfigEntMap & SWConfig::operator [] (const char *section) {
-    return Sections[section];
-}
-
 
 } /* namespace swordxx */
-

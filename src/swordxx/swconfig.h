@@ -1,14 +1,6 @@
 /******************************************************************************
  *
- *  swconfig.h -    definition of Class SWConfig used for saving and
- *            retrieval of configuration information
- *
- * $Id$
- *
- * Copyright 1997-2013 CrossWire Bible Society (http://www.crosswire.org)
- *    CrossWire Bible Society
- *    P. O. Box 2528
- *    Tempe, AZ  85280-2528
+ * Copyright 2016 Jaak Ristioja
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -21,12 +13,13 @@
  *
  */
 
-#ifndef SWCONFIG_H
-#define SWCONFIG_H
+#ifndef SWORDXX_SWCONFIG_H
+#define SWORDXX_SWCONFIG_H
 
 #include <algorithm>
 #include <map>
 #include <string>
+#include <utility>
 #include "defs.h"
 
 
@@ -61,53 +54,65 @@ public: /* Methods: */
 using ConfigEntMap = detail::MultiMapWithDefault<std::string, std::string>;
 using SectionMap = std::map<std::string, ConfigEntMap>;
 
-/** The class to read and save settings using a file on disk.
-*
+/**
+   \brief A class to read and save settings from and to a file.
+   \note Alternatively, if an empty file-name is given, the object acts as an
+         in-memory representation of a configuration.
 */
 class SWDLLEXPORT SWConfig {
-public:
-    /** The filename used by this SWConfig object
-    *
-    */
-    std::string filename;
-    /** Map of available sections
-    * The map of available sections.
-    */
-    SectionMap Sections;
 
-    /** Constructor of SWConfig
-    * @param ifilename The file, which should be used for this config.
+public: /* Methods: */
+
+    /**
+      \brief Constructs a memory-backed configuration object.
     */
-    SWConfig(const char *ifilename);
     SWConfig();
+
+    /**
+      \brief Constructs a file-backed configuration object.
+      \param[in] filename the file to use for the configuration. Empty for
+                          memory-backed configuration.
+    */
+    SWConfig(std::string filename);
     virtual ~SWConfig();
 
-    /** Load from disk
-    * Load the content from disk.
-    */
-    virtual void Load();
+    inline std::string const & filename() const noexcept { return m_filename; }
+    inline SectionMap const & sections() const noexcept { return m_sections; }
+    inline SectionMap & sections() noexcept { return m_sections; }
 
-    /** Save to disk
-    * Save the content of this config object to disk.
+    /**
+       \brief Reloads configuration settings from disk.
+       \pre This is not a memory-backed SWConfig object.
+       \returns whether loading the configuration from the file succeeded.
     */
-    virtual void Save();
+    bool reload();
 
-    /** Merges the values of addFrom
-    * @param addFrom The config which values should be merged to this config object. Already existing values will be overwritten.
+    /**
+       \brief Flushes configuration settings to disk.
+       \pre This is not a memory-backed SWConfig object.
+       \returns whether saving the configuration to the file succeeded.
     */
-    virtual void augment(SWConfig &addFrom);
-    virtual SWConfig & operator +=(SWConfig &addFrom) { augment(addFrom); return *this; }
+    bool save();
 
-    /** Get a section
-    * This is an easy way to get and store config values.
-    * The following will work:\n
-    *
-    * @code
-    * SWConfig config("/home/user/.setttings");
-    * config["Colors"]["Background"] = "red";
-    * @endcode
+    /**
+       \brief Merges the settings from other to this object.
+       \param[in] other The other object to merge settings from.
+       \warning Any values already present in this object will be overwritten.
     */
-    virtual ConfigEntMap & operator [](const char *section);
-    };
+    void augment(SWConfig const & other);
+
+    /// \brief Shorthand for sections()[sectionIndex]
+    template <typename SectionIndex>
+    ConfigEntMap & operator[](SectionIndex && sectionIndex)
+    { return m_sections[std::forward<SectionIndex>(sectionIndex)]; }
+
+private: /* Fields: */
+
+    std::string m_filename; /**< The filename of the configuration file. */
+    SectionMap m_sections; /**< Mapping of available sections. */
+
+}; /* class SWConfig */
+
 } /* namespace swordxx */
-#endif
+
+#endif /* SWORDXX_SWCONFIG_H */

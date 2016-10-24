@@ -105,11 +105,11 @@ void InstallMgr::readInstallConf() {
 
     setFTPPassive(stricmp((*installConf)["General"]["PassiveFTP"].c_str(), "false") != 0);
 
-    SectionMap::iterator confSection = installConf->Sections.find("Sources");
+    SectionMap::iterator confSection = installConf->sections().find("Sources");
     ConfigEntMap::iterator sourceBegin;
     ConfigEntMap::iterator sourceEnd;
 
-    if (confSection != installConf->Sections.end()) {
+    if (confSection != installConf->sections().end()) {
 
         sourceBegin = confSection->second.lower_bound("FTPSource");
         sourceEnd = confSection->second.upper_bound("FTPSource");
@@ -163,8 +163,8 @@ void InstallMgr::readInstallConf() {
     }
 
     defaultMods.clear();
-    confSection = installConf->Sections.find("General");
-    if (confSection != installConf->Sections.end()) {
+    confSection = installConf->sections().find("General");
+    if (confSection != installConf->sections().end()) {
         sourceBegin = confSection->second.lower_bound("DefaultMod");
         sourceEnd = confSection->second.upper_bound("DefaultMod");
 
@@ -178,16 +178,16 @@ void InstallMgr::readInstallConf() {
 
 void InstallMgr::saveInstallConf() {
 
-    installConf->Sections["Sources"].clear();
+    installConf->sections()["Sources"].clear();
 
     for (InstallSourceMap::iterator it = sources.begin(); it != sources.end(); ++it) {
         if (it->second) {
-            installConf->Sections["Sources"].insert(ConfigEntMap::value_type(it->second->type + "Source", it->second->getConfEnt().c_str()));
+            installConf->sections()["Sources"].insert(ConfigEntMap::value_type(it->second->type + "Source", it->second->getConfEnt().c_str()));
         }
     }
     (*installConf)["General"]["PassiveFTP"] = (isFTPPassive()) ? "true" : "false";
 
-    installConf->Save();
+    installConf->save();
 }
 
 
@@ -208,9 +208,9 @@ int InstallMgr::removeModule(SWMgr *manager, const char *moduleName) {
     // save our own copy, cuz when we remove the module from the SWMgr
     // it's likely we'll free the memory passed to us in moduleName
     std::string modName = moduleName;
-    module = manager->config->Sections.find(modName);
+    module = manager->config->sections().find(modName);
 
-    if (module != manager->config->Sections.end()) {
+    if (module != manager->config->sections().end()) {
         // to be sure all files are closed
         // this does not remove the .conf information from SWMgr
         manager->deleteModule(modName.c_str());
@@ -250,7 +250,7 @@ int InstallMgr::removeModule(SWMgr *manager, const char *moduleName) {
                         modFile += "/";
                         modFile += ent->d_name;
                         SWConfig *config = new SWConfig(modFile.c_str());
-                        if (config->Sections.find(modName) != config->Sections.end()) {
+                        if (config->sections().find(modName) != config->sections().end()) {
                             delete config;
                             FileMgr::removeFile(modFile.c_str());
                         }
@@ -384,9 +384,9 @@ int InstallMgr::installModule(SWMgr *destMgr, const char *fromLocation, const ch
 
     SWMgr mgr(sourceDir.c_str());
 
-    module = mgr.config->Sections.find(modName);
+    module = mgr.config->sections().find(modName);
 
-    if (module != mgr.config->Sections.end()) {
+    if (module != mgr.config->sections().end()) {
 
         entry = module->second.find("CipherKey");
         if (entry != module->second.end())
@@ -486,7 +486,7 @@ int InstallMgr::installModule(SWMgr *destMgr, const char *fromLocation, const ch
                         modFile = confDir;
                         modFile += ent->d_name;
                         SWConfig *config = new SWConfig(modFile.c_str());
-                        if (config->Sections.find(modName) != config->Sections.end()) {
+                        if (config->sections().find(modName) != config->sections().end()) {
                             std::string targetFile = destMgr->configPath; //"./mods.d/";
                             removeTrailingDirectorySlashes(targetFile);
                             targetFile += "/";
@@ -499,7 +499,7 @@ int InstallMgr::installModule(SWMgr *destMgr, const char *fromLocation, const ch
                                     aborted = true;
                                 }
                                 else {
-                                    config->Save();
+                                    config->save();
                                     retVal = FileMgr::copyFile(modFile.c_str(), targetFile.c_str());
                                 }
                             }
@@ -633,8 +633,8 @@ int InstallMgr::refreshRemoteSourceConfiguration() {
     int errorCode = remoteCopy(&is, masterRepoList, masterRepoListPath.c_str(), false);
     if (!errorCode) { //sucessfully downloaded the repo list
         SWConfig masterList(masterRepoListPath.c_str());
-        SectionMap::iterator sections = masterList.Sections.find("Repos");
-        if (sections != masterList.Sections.end()) {
+        SectionMap::iterator sections = masterList.sections().find("Repos");
+        if (sections != masterList.sections().end()) {
             for (ConfigEntMap::iterator actions = sections->second.begin(); actions != sections->second.end(); actions++) {
                 // Search through our current sources and see if we have a matching UID
                 InstallSourceMap::iterator it;

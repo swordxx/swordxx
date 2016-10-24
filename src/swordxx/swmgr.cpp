@@ -417,7 +417,7 @@ void SWMgr::findConfig(char *configType, char **prefixPath, char **configPath, s
             SWLog::getSystemLog()->logDebug("Overriding any systemwide or ~/.swordxx/ swordxx.conf with one found in current directory.");
             sysConfPath = "./swordxx.conf";
             sysConf = new SWConfig(sysConfPath.c_str());
-            if ((entry = sysConf->Sections["Install"].find("DataPath")) != sysConf->Sections["Install"].end()) {
+            if ((entry = sysConf->sections()["Install"].find("DataPath")) != sysConf->sections()["Install"].end()) {
                 sysConfDataPath = (*entry).second;
             }
             if (providedSysConf) {
@@ -526,7 +526,7 @@ void SWMgr::findConfig(char *configType, char **prefixPath, char **configPath, s
     }
 
     if (sysConf) {
-        if ((entry = sysConf->Sections["Install"].find("DataPath")) != sysConf->Sections["Install"].end()) {
+        if ((entry = sysConf->sections()["Install"].find("DataPath")) != sysConf->sections()["Install"].end()) {
             sysConfDataPath = (*entry).second;
         }
         if (!sysConfDataPath.empty()) {
@@ -560,8 +560,8 @@ void SWMgr::findConfig(char *configType, char **prefixPath, char **configPath, s
     if (sysConf) {
         if (augPaths) {
             augPaths->clear();
-            entry     = sysConf->Sections["Install"].lower_bound("AugmentPath");
-            lastEntry = sysConf->Sections["Install"].upper_bound("AugmentPath");
+            entry     = sysConf->sections()["Install"].lower_bound("AugmentPath");
+            lastEntry = sysConf->sections()["Install"].upper_bound("AugmentPath");
             for (;entry != lastEntry; entry++) {
                 path = entry->second;
                 addTrailingDirectorySlash(path);
@@ -685,10 +685,8 @@ void SWMgr::loadConfigDir(const char *ipath)
             newmodfile = ipath;
             addTrailingDirectorySlash(newmodfile);
             newmodfile += ent->d_name;
-            if (config) {
-                SWConfig tmpConfig(newmodfile.c_str());
-                *config += tmpConfig;
-            }
+            if (config)
+                config->augment(SWConfig(newmodfile.c_str()));
             else    config = myconfig = new SWConfig(newmodfile.c_str());
         }
         closedir(dir);
@@ -724,8 +722,8 @@ void SWMgr::augmentModules(const char *ipath, bool multiMod) {
             // fix config's Section names to rename modules which are available more than once
             // find out which sections are in both config objects
             // inserting all configs first is not good because that overwrites old keys and new modules would share the same config
-            for (SectionMap::iterator it = config->Sections.begin(); it != config->Sections.end();) {
-                if (saveConfig->Sections.find( (*it).first ) != saveConfig->Sections.end()) { //if the new section is already present rename it
+            for (SectionMap::iterator it = config->sections().begin(); it != config->sections().end();) {
+                if (saveConfig->sections().find( (*it).first ) != saveConfig->sections().end()) { //if the new section is already present rename it
                     ConfigEntMap entMap((*it).second);
 
                     std::string name;
@@ -733,11 +731,11 @@ void SWMgr::augmentModules(const char *ipath, bool multiMod) {
                     do { //module name already used?
                         name = formatted("%s_%d", (*it).first.c_str(), i);
                         i++;
-                    } while (config->Sections.find(name) != config->Sections.end());
+                    } while (config->sections().find(name) != config->sections().end());
 
-                    config->Sections.insert(SectionMap::value_type(name, entMap) );
+                    config->sections().insert(SectionMap::value_type(name, entMap) );
                     SectionMap::iterator toErase = it++;
-                    config->Sections.erase(toErase);
+                    config->sections().erase(toErase);
                 }
                 else ++it;
             }
@@ -750,7 +748,7 @@ void SWMgr::augmentModules(const char *ipath, bool multiMod) {
         stdstr(&configPath, saveConfigPath);
         delete []saveConfigPath;
 
-        (*saveConfig) += *config;
+        saveConfig->augment(*config);
 
         homeConfig = myconfig;
         config = myconfig = saveConfig;
@@ -789,7 +787,7 @@ signed char SWMgr::Load() {
 
         DeleteMods();
 
-        for (Sectloop = config->Sections.lower_bound("Globals"), Sectend = config->Sections.upper_bound("Globals"); Sectloop != Sectend; Sectloop++) {        // scan thru all 'Globals' sections
+        for (Sectloop = config->sections().lower_bound("Globals"), Sectend = config->sections().upper_bound("Globals"); Sectloop != Sectend; Sectloop++) {        // scan thru all 'Globals' sections
             for (Entryloop = (*Sectloop).second.lower_bound("AutoInstall"), Entryend = (*Sectloop).second.upper_bound("AutoInstall"); Entryloop != Entryend; Entryloop++)    // scan thru all AutoInstall entries
                 InstallScan((*Entryloop).second.c_str());        // Scan AutoInstall entry directory for new modules and install
         }
@@ -798,7 +796,7 @@ signed char SWMgr::Load() {
             config = myconfig = nullptr;
             loadConfigDir(configPath);
         }
-        else    config->Load();
+        else    config->reload();
 
         CreateMods(mgrModeMultiMod);
 
@@ -1240,7 +1238,7 @@ void SWMgr::CreateMods(bool /* multiMod */) {
     ConfigEntMap::iterator entry;
     SWModule *newmod;
     std::string driver;
-    for (auto & sp : config->Sections) {
+    for (auto & sp : config->sections()) {
         ConfigEntMap & section = sp.second;
         newmod = nullptr;
 
@@ -1331,7 +1329,7 @@ void SWMgr::InstallScan(const char *dirname)
                     // mods.conf
                     else {
                         if (!conffd) {
-                            conffd = FileMgr::getSystemFileMgr()->open(config->filename.c_str(), FileMgr::WRONLY|FileMgr::APPEND);
+                            conffd = FileMgr::getSystemFileMgr()->open(config->filename().c_str(), FileMgr::WRONLY|FileMgr::APPEND);
                             if (conffd)
                                 conffd->seek(0L, SEEK_END);
                             else {
