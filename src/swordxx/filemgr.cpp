@@ -296,7 +296,7 @@ bool FileMgr::existsFile(char const * ipath, char const * ifileName) {
     if (ifileName)
         fullPath.append("/").append(ifileName);
 
-    return exists(fullPath);
+    return isReadable(fullPath);
 }
 
 bool FileMgr::existsDir(const char *ipath, const char *idirName)
@@ -304,6 +304,9 @@ bool FileMgr::existsDir(const char *ipath, const char *idirName)
 
 bool FileMgr::exists(std::string const & fullPath) noexcept
 { return !::access(fullPath.c_str(), F_OK); }
+
+bool FileMgr::isReadable(std::string const & fullPath) noexcept
+{ return !::access(fullPath.c_str(), R_OK); }
 
 
 int FileMgr::createParent(const char *pName) {

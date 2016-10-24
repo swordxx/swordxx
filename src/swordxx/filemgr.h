@@ -164,7 +164,7 @@ public:
     * @param ipath Path to file.
     * @param ifileName Name of file to check for.
     */
-    [[deprecated("Use exists() or something more suitable instead.")]]
+    [[deprecated("Use exists() or isReadable() instead.")]]
     static bool existsFile(char const * ipath,
                            char const * ifileName = nullptr);
 
@@ -172,12 +172,15 @@ public:
     * @param ipath Path to directory.
     * @param idirName Name of directory to check for.
     */
-    [[deprecated("Use exists() or something more suitable instead.")]]
+    [[deprecated("Use exists() or isReadable() instead.")]]
     static bool existsDir(char const * ipath,
                           char const * idirName = nullptr);
 
     /** \returns whether the given path exists and is visible to the process. */
     static bool exists(std::string const & fullPath) noexcept;
+
+    /** \returns whether the given path is readable to the process.*/
+    static bool isReadable(std::string const & fullPath) noexcept;
 
     /** Truncate a file at its current position
     * leaving byte at current possition intact deleting everything afterward.
