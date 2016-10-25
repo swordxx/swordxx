@@ -84,11 +84,15 @@ LocaleMgr::LocaleMgr(const char *iConfigPath) {
 
     if (!prefixPath.empty()) {
         switch (configType) {
-        case 2:
-            removeTrailingDirectorySlashes(configPath);
-            path = configPath;
+        case 2: {
+            std::size_t i = configPath.size() - 1u;
+            while (i > 0u && (configPath[i] != '/') && (configPath[i] != '\\'))
+                --i;
+            path = configPath.substr(0u, i);
+            removeTrailingDirectorySlashes(path);
             path += "/";
             break;
+        }
         default:
             path = prefixPath;
             addTrailingDirectorySlash(path);
