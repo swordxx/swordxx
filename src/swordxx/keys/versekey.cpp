@@ -650,7 +650,7 @@ terminate_range:
                     }
                 }
                 if ((!stricmp(book, "ch")) || (!stricmp(book, "chap"))) {    // Verse abbrev
-                    strcpy(book, lastKey->getBookName());
+                    strcpy(book, lastKey->getBookName().c_str());
                 }
                 bookno = getBookFromAbbrev(book);
                 if ((bookno > -1) && (suffix == 'f') && (book[strlen(book)-1] == 'f')) {
@@ -931,7 +931,7 @@ terminate_range:
         }
 
         if ((!stricmp(book, "ch")) || (!stricmp(book, "chap"))) {    // Verse abbrev
-            strcpy(book, lastKey->getBookName());
+            strcpy(book, lastKey->getBookName().c_str());
         }
         bookno = getBookFromAbbrev(book);
         if ((bookno > -1) && (suffix == 'f') && (book[strlen(book)-1] == 'f')) {
@@ -1207,8 +1207,8 @@ const char *VerseKey::getShortText() const {
 }
 
 
-const char *VerseKey::getBookName() const {
-    return getPrivateLocale()->translate(m_refSys->getBook(((m_testament>1)?m_BMAX[0]:0)+m_book-1)->getLongName().c_str()).c_str();
+std::string const & VerseKey::getBookName() const {
+    return getPrivateLocale()->translate(m_refSys->getBook(((m_testament>1)?m_BMAX[0]:0)+m_book-1)->getLongName().c_str());
 }
 
 

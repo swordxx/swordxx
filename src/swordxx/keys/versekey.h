@@ -224,7 +224,7 @@ public:
 
     /** Get/Set position of this key by Book Name
      */
-    const char *getBookName() const;
+    std::string const & getBookName() const;
     void setBookName(const char *bname);
 
     std::string const & getBookAbbrev() const;
