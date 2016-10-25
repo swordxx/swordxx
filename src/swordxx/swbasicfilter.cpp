@@ -186,7 +186,7 @@ bool SWBasicFilter::substituteToken(std::string &buf, const char *token) {
     it = p->tokenSubMap.find(token);
 
     if (it != p->tokenSubMap.end()) {
-        buf += it->second.c_str();
+        buf += it->second;
         return true;
     }
     return false;
@@ -251,7 +251,7 @@ bool SWBasicFilter::substituteEscapeString(std::string &buf, const char *escStri
     it = p->escSubMap.find(escString);
 
     if (it != p->escSubMap.end()) {
-        buf += it->second.c_str();
+        buf += it->second;
         return true;
     }
     return false;
