@@ -11,6 +11,7 @@ SET(example_PROGRAMS
 	outrender
 	search
 	verserangeparse
+	stripaccents
 )
 
 FOREACH(DEMO ${example_PROGRAMS})
