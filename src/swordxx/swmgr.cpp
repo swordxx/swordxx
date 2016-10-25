@@ -812,7 +812,7 @@ signed char SWMgr::Load() {
 
     }
     else {
-        SWLog::getSystemLog()->logError("SWMgr: Can't find 'mods.conf' or 'mods.d'.  Try setting:\n\tSWORDXX_PATH=<directory containing mods.conf>\n\tOr see the README file for a full description of setup options (%s)", !m_configPath.empty() ? m_configPath : "<configPath is empty>");
+        SWLog::getSystemLog()->logError("SWMgr: Can't find 'mods.conf' or 'mods.d'.  Try setting:\n\tSWORDXX_PATH=<directory containing mods.conf>\n\tOr see the README file for a full description of setup options (%s)", !m_configPath.empty() ? m_configPath.c_str() : "<configPath is empty>");
         ret = -1;
     }
 
