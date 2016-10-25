@@ -43,17 +43,17 @@ class SWDLLEXPORT SWLocale {
 
 class Private;
 
-    Private *p;
+    Private * m_p;
 
-    SWConfig *localeSource;
+    SWConfig * m_localeSource;
 
-    char *name;
-    char *description;
-    char *encoding;
-    struct abbrev *bookAbbrevs;
-    int abbrevsCnt;
-    const char **bookLongNames;
-    const char **bookPrefAbbrev;
+    std::string m_name;
+    char * m_description;
+    char * m_encoding;
+    struct abbrev * m_bookAbbrevs;
+    int m_abbrevsCnt;
+    const char ** m_bookLongNames;
+    const char ** m_bookPrefAbbrev;
 
 public:
     SWLocale(const char *ifilename);
@@ -63,7 +63,7 @@ public:
     * This function is used to get the name of the languages which this object is handling.
     * @return The name of the managed language. A possible example is "de".
     */
-    virtual const char *getName();
+    virtual std::string const & getName() const noexcept { return m_name; }
     /**
     * @return The description. A possible example is "German".
     */

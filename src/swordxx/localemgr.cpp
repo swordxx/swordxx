@@ -151,7 +151,8 @@ void LocaleMgr::loadConfigDir(const char *ipath) {
                 newmodfile += ent->d_name;
                 SWLocale *locale = new SWLocale(newmodfile.c_str());
 
-                if (locale->getName()) {
+                auto const & localeName = locale->getName();
+                if (!localeName.empty()) {
                     bool supported = false;
                     if (StringMgr::hasUTF8Support()) {
                         supported = (locale->getEncoding() && (!strcmp(locale->getEncoding(), "UTF-8") || !strcmp(locale->getEncoding(), "ASCII")) );
@@ -165,12 +166,12 @@ void LocaleMgr::loadConfigDir(const char *ipath) {
                         continue;
                     }
 
-                    it = locales->find(locale->getName());
+                    it = locales->find(localeName);
                     if (it != locales->end()) { // already present
                         *((*it).second) += *locale;
                         delete locale;
                     }
-                    else locales->insert(LocaleMap::value_type(locale->getName(), locale));
+                    else locales->insert(LocaleMap::value_type(localeName, locale));
                 }
                 else    delete locale;
             }
@@ -206,7 +207,7 @@ SWLocale *LocaleMgr::getLocale(const char *name) {
 std::list <std::string> LocaleMgr::getAvailableLocales() {
     std::list <std::string> retVal;
     for (LocaleMap::iterator it = locales->begin(); it != locales->end(); it++) {
-        if (strcmp(it->second->getName(), "locales")) {
+        if (it->second->getName() != "locales") {
             retVal.push_back((*it).second->getName());
         }
     }
