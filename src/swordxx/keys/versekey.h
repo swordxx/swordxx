@@ -388,7 +388,7 @@ public:
     int compare_(VerseKey const & ikey) const noexcept;
 
     void setVersificationSystem(const char *name);
-    const char *getVersificationSystem() const;
+    std::string const & getVersificationSystem() const;
 
     // DEBUG
     void validateCurrentLocale() const;

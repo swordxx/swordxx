@@ -112,7 +112,9 @@ static bool normalize           = true; // Whether to normalize UTF-8 to NFC
 
 bool isOSISAbbrev(const char *buf) {
     VersificationMgr *vmgr = VersificationMgr::getSystemVersificationMgr();
-    const VersificationMgr::System *av11n = vmgr->getVersificationSystem(currentVerse.getVersificationSystem());
+    VersificationMgr::System const * av11n =
+            vmgr->getVersificationSystem(
+                currentVerse.getVersificationSystem().c_str());
     return av11n->getBookNumberByOSISName(buf) >= 0;
 }
 
@@ -367,7 +369,7 @@ bool isValidRef(const char *buf, const char *caller) {
     // Note: need to turn on headings so that a heading does not get normalized anyway
     // And set it to the reference under question
     VerseKey before;
-    before.setVersificationSystem(currentVerse.getVersificationSystem());
+    before.setVersificationSystem(currentVerse.getVersificationSystem().c_str());
     before.setAutoNormalize(false);
     before.setIntros(true);
     before.setText(buf);
@@ -381,7 +383,7 @@ bool isValidRef(const char *buf, const char *caller) {
     // Create a VerseKey that does do auto normalization
     // And set it to the reference under question
     VerseKey after;
-    after.setVersificationSystem(currentVerse.getVersificationSystem());
+    after.setVersificationSystem(currentVerse.getVersificationSystem().c_str());
     after.setAutoNormalize(true);
     after.setText(buf);
 
@@ -426,7 +428,7 @@ bool isValidRef(const char *buf, const char *caller) {
  */
 void makeValidRef(VerseKey &key) {
     VerseKey saveKey;
-    saveKey.setVersificationSystem(key.getVersificationSystem());
+    saveKey.setVersificationSystem(key.getVersificationSystem().c_str());
     saveKey.setAutoNormalize(false);
     saveKey.setIntros(true);
     saveKey = key;
@@ -493,12 +495,14 @@ void writeEntry(std::string &text, bool force = false) {
     }
 
     static VerseKey lastKey;
-    lastKey.setVersificationSystem(currentVerse.getVersificationSystem());
+    lastKey.setVersificationSystem(
+                currentVerse.getVersificationSystem().c_str());
     lastKey.setAutoNormalize(false);
     lastKey.setIntros(true);
 
     VerseKey saveKey;
-    saveKey.setVersificationSystem(currentVerse.getVersificationSystem());
+    saveKey.setVersificationSystem(
+                currentVerse.getVersificationSystem().c_str());
     saveKey.setAutoNormalize(false);
     saveKey.setIntros(true);
     saveKey = currentVerse;
@@ -518,7 +522,8 @@ void writeEntry(std::string &text, bool force = false) {
         int testmt = currentVerse.getTestament();
         if ((testmt == 1 && firstOT) || (testmt == 2 && firstNT)) {
             VerseKey t;
-            t.setVersificationSystem(currentVerse.getVersificationSystem());
+            t.setVersificationSystem(
+                        currentVerse.getVersificationSystem().c_str());
             t.setAutoNormalize(false);
             t.setIntros(true);
             t = currentVerse;
@@ -594,7 +599,8 @@ void linkToEntry(VerseKey &linkKey, VerseKey &dest) {
     }
 
     VerseKey saveKey;
-    saveKey.setVersificationSystem(currentVerse.getVersificationSystem());
+    saveKey.setVersificationSystem(
+                currentVerse.getVersificationSystem().c_str());
     saveKey.setAutoNormalize(false);
     saveKey.setIntros(true);
     saveKey = currentVerse;
@@ -1314,12 +1320,14 @@ void writeLinks()
 {
     // Link all the verses
     VerseKey destKey;
-    destKey.setVersificationSystem(currentVerse.getVersificationSystem());
+    destKey.setVersificationSystem(
+                currentVerse.getVersificationSystem().c_str());
     destKey.setAutoNormalize(false);
     destKey.setIntros(true);
 
     VerseKey linkKey;
-    linkKey.setVersificationSystem(currentVerse.getVersificationSystem());
+    linkKey.setVersificationSystem(
+                currentVerse.getVersificationSystem().c_str());
     linkKey.setAutoNormalize(false);
     linkKey.setIntros(true);
     for (unsigned int i = 0; i < linkedVerses.size(); i++) {

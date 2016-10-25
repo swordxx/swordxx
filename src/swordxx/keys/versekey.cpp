@@ -180,7 +180,7 @@ void VerseKey::copyFrom(const VerseKey &ikey) {
     m_verse = ikey.getVerse();
     m_suffix = ikey.getSuffix();
     setLocale(ikey.getLocale());
-    setVersificationSystem(ikey.getVersificationSystem());
+    setVersificationSystem(ikey.getVersificationSystem().c_str());
     if (ikey.isBoundSet()) {
         setLowerBound(ikey.getLowerBound());
         setUpperBound(ikey.getUpperBound());
@@ -263,7 +263,8 @@ void VerseKey::setVersificationSystem(const char *name) {
 }
 
 
-const char *VerseKey::getVersificationSystem() const { return m_refSys->getName().c_str(); }
+std::string const & VerseKey::getVersificationSystem() const
+{ return m_refSys->getName(); }
 
 
 

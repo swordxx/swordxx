@@ -140,7 +140,7 @@ int main(int argc, char **argv)
     case COM: {
         SWKey *k = inModule->getKey();
         VerseKey *vk = dynamic_cast<VerseKey *>(k);
-        result = zText::createModule(argv[2], iType, vk->getVersificationSystem());
+        result = zText::createModule(argv[2], iType, vk->getVersificationSystem().c_str());
         break;
     }
     case LEX:
@@ -160,7 +160,7 @@ int main(int argc, char **argv)
         VerseKey *vk = dynamic_cast<VerseKey *>(k);
         outModule = new zText(argv[2], nullptr, nullptr, iType, compressor,
             ENC_UNKNOWN, DIRECTION_LTR, FMT_UNKNOWN, nullptr,
-            vk->getVersificationSystem());    // open our datapath with our RawText driver.
+            vk->getVersificationSystem().c_str());    // open our datapath with our RawText driver.
         static_cast<VerseKey *>(inModule->getKey())->setIntros(true);
         break;
     }
