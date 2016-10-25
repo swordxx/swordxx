@@ -183,7 +183,7 @@ public:
      */
     static void findConfig(char * configType,
                            std::string & prefixPath,
-                           char ** configPath,
+                           std::string & configPath,
                            StringList * augPaths = nullptr,
                            SWConfig ** providedSysConf = nullptr);
 
@@ -196,7 +196,7 @@ public:
 
     /** path to main module set configuration
      */
-    char *configPath;
+    std::string m_configPath;
 
     /** The map of available modules.
      *    This map exposes the installed modules.

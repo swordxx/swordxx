@@ -241,11 +241,11 @@ int InstallMgr::removeModule(SWMgr *manager, const char *moduleName) {
 
             FileMgr::removeDir(modDir.c_str());
 
-            if ((dir = opendir(manager->configPath))) {    // find and remove .conf file
+            if ((dir = opendir(manager->m_configPath.c_str()))) {    // find and remove .conf file
                 rewinddir(dir);
                 while ((ent = readdir(dir))) {
                     if ((strcmp(ent->d_name, ".")) && (strcmp(ent->d_name, ".."))) {
-                        modFile = manager->configPath;
+                        modFile = manager->m_configPath;
                         removeTrailingDirectorySlashes(modFile);
                         modFile += "/";
                         modFile += ent->d_name;
@@ -487,7 +487,7 @@ int InstallMgr::installModule(SWMgr *destMgr, const char *fromLocation, const ch
                         modFile += ent->d_name;
                         SWConfig *config = new SWConfig(modFile.c_str());
                         if (config->sections().find(modName) != config->sections().end()) {
-                            std::string targetFile = destMgr->configPath; //"./mods.d/";
+                            std::string targetFile = destMgr->m_configPath; //"./mods.d/";
                             removeTrailingDirectorySlashes(targetFile);
                             targetFile += "/";
                             targetFile += ent->d_name;
