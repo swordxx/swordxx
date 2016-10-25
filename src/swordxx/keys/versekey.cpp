@@ -1213,7 +1213,7 @@ const char *VerseKey::getBookName() const {
 
 
 const char *VerseKey::getOSISBookName() const {
-    return m_refSys->getBook(((m_testament>1)?m_BMAX[0]:0)+m_book-1)->getOSISName();
+    return m_refSys->getBook(((m_testament>1)?m_BMAX[0]:0)+m_book-1)->getOSISName().c_str();
 }
 
 

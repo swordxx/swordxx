@@ -466,7 +466,7 @@ void VersificationMgr::System::translateVerse(const System *dstSys, const char *
                     *verse_end = m[3];
                     if (*m >= dstSys->p->books.size()) {
                         SWLog::getSystemLog()->logWarning("map to extra books, possible bug source\n");
-                        *book = dstSys->getBook(m[7]-1)->getOSISName();
+                        *book = dstSys->getBook(m[7]-1)->getOSISName().c_str();
                     }
                     return;
                 }
@@ -487,8 +487,8 @@ void VersificationMgr::System::translateVerse(const System *dstSys, const char *
             *verse += d;
             if (*a > dstSys->p->books.size()) {
                 SWLog::getSystemLog()->logDebug("appropriate: %i %i %i %i %i %i %i %i\n",a[0],a[1],a[2],a[3],a[4],a[5],a[6],a[7]);
-                SWLog::getSystemLog()->logDebug("book: %s\n", dstSys->getBook(a[7]-1)->getOSISName());
-                *book = dstSys->getBook(a[7]-1)->getOSISName();
+                SWLog::getSystemLog()->logDebug("book: %s\n", dstSys->getBook(a[7]-1)->getOSISName().c_str());
+                *book = dstSys->getBook(a[7]-1)->getOSISName().c_str();
             }
             return;
         }
