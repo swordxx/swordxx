@@ -63,16 +63,16 @@ public:
     * This function is used to get the name of the languages which this object is handling.
     * @return The name of the managed language. A possible example is "de".
     */
-    virtual std::string const & getName() const noexcept { return m_name; }
+    std::string const & getName() const noexcept { return m_name; }
     /**
     * @return The description. A possible example is "German".
     */
-    virtual const char *getDescription();
-    virtual const char *getEncoding();
-    virtual std::string const & translate(const char *text);
-    virtual void augment(SWLocale &addFrom);
-    virtual SWLocale & operator +=(SWLocale &addFrom) { augment(addFrom); return *this; }
-    virtual const struct abbrev *getBookAbbrevs(int *retSize);
+    const char *getDescription();
+    const char *getEncoding();
+    std::string const & translate(const char *text);
+    void augment(SWLocale &addFrom);
+    SWLocale & operator +=(SWLocale &addFrom) { augment(addFrom); return *this; }
+    const struct abbrev *getBookAbbrevs(int *retSize);
     static const char *DEFAULT_LOCALE_NAME;
 };
 
