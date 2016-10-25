@@ -140,7 +140,7 @@ public:
         System &operator =(const System &other);
         System(const char *name) { this->name = name; init(); }
         ~System();
-        const char *getName() const { return name.c_str(); }
+        std::string const & getName() const { return name; }
         const Book *getBookByName(const char *bookName) const;
         int getBookNumberByOSISName(const char *bookName) const;
         const Book *getBook(int number) const;

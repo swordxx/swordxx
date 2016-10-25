@@ -263,7 +263,7 @@ void VerseKey::setVersificationSystem(const char *name) {
 }
 
 
-const char *VerseKey::getVersificationSystem() const { return m_refSys->getName(); }
+const char *VerseKey::getVersificationSystem() const { return m_refSys->getName().c_str(); }
 
 
 

@@ -423,10 +423,13 @@ const StringList VersificationMgr::getVersificationSystems() const {
 }
 
 void VersificationMgr::System::translateVerse(const System *dstSys, const char **book, int *chapter, int *verse, int *verse_end) const {
-    SWLog::getSystemLog()->logDebug("translate verse from %s to %s: %s.%i.%i-%i\n",getName(), dstSys->getName(), *book, *chapter, *verse, *verse_end);
+    auto const & myName(getName());
+    auto const & dstName(dstSys->getName());
 
-    if (!strcmp(getName(),"KJVA") || !strcmp(getName(),"KJV")) {
-        if (!strcmp(dstSys->getName(),"KJVA") || !strcmp(dstSys->getName(),"KJV"))
+    SWLog::getSystemLog()->logDebug("translate verse from %s to %s: %s.%i.%i-%i\n",myName.c_str(), dstName.c_str(), *book, *chapter, *verse, *verse_end);
+
+    if (myName == "KJVA" || myName == "KJV") {
+        if (dstName == "KJVA" || dstName == "KJV")
             return;
         // reversed mapping
         SWLog::getSystemLog()->logDebug("Perform reversed mapping.\n");
@@ -494,7 +497,7 @@ void VersificationMgr::System::translateVerse(const System *dstSys, const char *
         }
         SWLog::getSystemLog()->logDebug("There is no mapping.\n");
     }
-    else if (strcmp(dstSys->getName(),"KJVA") && strcmp(dstSys->getName(),"KJV")) {
+    else if (dstName != "KJVA" && dstName != "KJV") {
         const System *kjva = getSystemVersificationMgr()->getVersificationSystem("KJVA");
         const int src_verse = *verse;
 
