@@ -120,10 +120,10 @@ public:
             init();
         }
         ~Book();
-        const char *getLongName() const { return m_longName.c_str(); }
-        const char *getOSISName() const { return m_osisName.c_str(); }
-        const char *getPreferredAbbreviation() const { return m_prefAbbrev.c_str(); }
-        int getChapterMax() const { return m_chapMax; }
+        const char *getLongName() const noexcept { return m_longName.c_str(); }
+        const char *getOSISName() const noexcept { return m_osisName.c_str(); }
+        const char *getPreferredAbbreviation() const noexcept { return m_prefAbbrev.c_str(); }
+        int getChapterMax() const noexcept { return m_chapMax; }
         int getVerseMax(int chapter) const;
     };
 
