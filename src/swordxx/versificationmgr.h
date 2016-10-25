@@ -108,11 +108,15 @@ public:
         Book() { init(); }
         Book(const Book &other);
         Book &operator =(const Book &other);
-        Book(const char *longName, const char *osisName, const char *prefAbbrev, int chapMax) {
-            this->m_longName = longName;
-            this->m_osisName = osisName;
-            this->m_prefAbbrev = prefAbbrev;
-            this->m_chapMax = chapMax;
+        Book(std::string longName,
+             std::string osisName,
+             std::string prefAbbrev,
+             int chapMax)
+            : m_longName(std::move(longName))
+            , m_osisName(std::move(osisName))
+            , m_prefAbbrev(std::move(prefAbbrev))
+            , m_chapMax(chapMax)
+        {
             init();
         }
         ~Book();
