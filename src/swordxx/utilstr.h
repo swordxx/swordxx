@@ -28,6 +28,7 @@
 #include <cstdio>
 #include <cstring>
 #include <string>
+#include <type_traits>
 #include <utility>
 #include "defs.h"
 
@@ -70,10 +71,31 @@ inline bool hasPrefix(std::string const & str,
                       std::string const & prefix) noexcept
 { return hasPrefix(str.c_str(), prefix.c_str()); }
 
+template <typename T> struct OkFormattedType
+        : std::integral_constant<
+            bool,
+            std::is_arithmetic<T>::value || std::is_pointer<T>::value>
+{};
+
+template <typename ...> struct OkFormattedTypes;
+template <> struct OkFormattedTypes<>: std::integral_constant<bool, true> {};
+
+template <typename T> struct OkFormattedTypes<T>
+        : std::integral_constant<bool, OkFormattedType<T>::value> {};
+
+template <typename T, typename ... Ts> struct OkFormattedTypes<T, Ts...>
+        : std::integral_constant<
+            bool,
+            OkFormattedType<T>::value && OkFormattedTypes<Ts...>::value
+        >
+{};
+
 template <typename ... Args>
 inline std::string formatted(const char * const formatString,
                              Args && ... args)
 {
+    static_assert(OkFormattedTypes<std::decay_t<Args>...>::value,
+                  "Invalid arguments!");
     std::string buf(std::snprintf(nullptr, 0u, formatString, args...), char());
     std::sprintf(&buf[0u], formatString, std::forward<Args>(args)...);
     return buf;
