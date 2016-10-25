@@ -115,13 +115,10 @@ void SWBasicFilter::setEscapeStringCaseSensitive(bool val) {
 
 
 void SWBasicFilter::addTokenSubstitute(const char *findString, const char *replaceString) {
-    char * buf = nullptr;
-
     if (!tokenCaseSensitive) {
-        stdstr(&buf, findString);
+        std::string buf(findString);
         toupperstr(buf);
         p->tokenSubMap[buf] = replaceString;
-        delete [] buf;
     }
     else p->tokenSubMap[findString] = replaceString;
 }
@@ -135,13 +132,10 @@ void SWBasicFilter::removeTokenSubstitute(const char *findString) {
 
 
 void SWBasicFilter::addAllowedEscapeString(const char *findString) {
-    char * buf = nullptr;
-
     if (!escStringCaseSensitive) {
-        stdstr(&buf, findString);
+        std::string buf(findString);
         toupperstr(buf);
-        p->escPassSet.insert(StringSet::value_type(buf));
-        delete [] buf;
+        p->escPassSet.insert(StringSet::value_type(std::move(buf)));
     }
     else p->escPassSet.insert(StringSet::value_type(findString));
 }
@@ -155,13 +149,10 @@ void SWBasicFilter::removeAllowedEscapeString(const char *findString) {
 
 
 void SWBasicFilter::addEscapeStringSubstitute(const char *findString, const char *replaceString) {
-    char * buf = nullptr;
-
     if (!escStringCaseSensitive) {
-        stdstr(&buf, findString);
+        std::string buf(findString);
         toupperstr(buf);
-        p->escSubMap.insert(DualStringMap::value_type(buf, replaceString));
-        delete [] buf;
+        p->escSubMap.insert(DualStringMap::value_type(std::move(buf), replaceString));
     }
     else p->escSubMap.insert(DualStringMap::value_type(findString, replaceString));
 }
@@ -178,11 +169,9 @@ bool SWBasicFilter::substituteToken(std::string &buf, const char *token) {
     DualStringMap::iterator it;
 
     if (!tokenCaseSensitive) {
-        char * tmp = nullptr;
-        stdstr(&tmp, token);
+        std::string tmp(token);
         toupperstr(tmp);
-        it = p->tokenSubMap.find(tmp);
-        delete [] tmp;
+        it = p->tokenSubMap.find(std::move(tmp));
     } else
     it = p->tokenSubMap.find(token);
 
@@ -205,11 +194,9 @@ bool SWBasicFilter::passAllowedEscapeString(std::string &buf, const char *escStr
     StringSet::iterator it;
 
     if (!escStringCaseSensitive) {
-        char * tmp = nullptr;
-        stdstr(&tmp, escString);
+        std::string tmp(escString);
         toupperstr(tmp);
-        it = p->escPassSet.find(tmp);
-        delete [] tmp;
+        it = p->escPassSet.find(std::move(tmp));
     } else
         it = p->escPassSet.find(escString);
 
@@ -243,11 +230,9 @@ bool SWBasicFilter::substituteEscapeString(std::string &buf, const char *escStri
     }
 
     if (!escStringCaseSensitive) {
-        char * tmp = nullptr;
-        stdstr(&tmp, escString);
+        std::string tmp(escString);
         toupperstr(tmp);
         it = p->escSubMap.find(tmp);
-        delete [] tmp;
     } else
     it = p->escSubMap.find(escString);
 
