@@ -122,7 +122,7 @@ public:
         ~Book();
         std::string const & getLongName() const noexcept { return m_longName; }
         std::string const & getOSISName() const noexcept { return m_osisName; }
-        const char *getPreferredAbbreviation() const noexcept { return m_prefAbbrev.c_str(); }
+        std::string const & getPreferredAbbreviation() const noexcept { return m_prefAbbrev; }
         unsigned int getChapterMax() const noexcept { return m_chapMax; }
         int getVerseMax(int chapter) const;
     };

@@ -1218,7 +1218,7 @@ const char *VerseKey::getOSISBookName() const {
 
 
 const char *VerseKey::getBookAbbrev() const {
-    return m_refSys->getBook(((m_testament>1)?m_BMAX[0]:0)+m_book-1)->getPreferredAbbreviation();
+    return m_refSys->getBook(((m_testament>1)?m_BMAX[0]:0)+m_book-1)->getPreferredAbbreviation().c_str();
 }
 
 void VerseKey::positionToTop() {
