@@ -82,7 +82,7 @@ TreeKeyIdx::~TreeKeyIdx () {
 
 const char *TreeKeyIdx::getLocalName() {
     m_unsnappedKeyText = "";
-    return m_currentNode.name;
+    return m_currentNode.name.c_str();
 }
 
 
@@ -109,8 +109,8 @@ void TreeKeyIdx::setUserData(const char *userData, int size) {
 
 const char *TreeKeyIdx::setLocalName(const char *newName) {
     m_unsnappedKeyText = "";
-    stdstr(&(m_currentNode.name), newName);
-    return m_currentNode.name;
+    m_currentNode.name = newName ? newName : "";
+    return m_currentNode.name.c_str();
 }
 
 
@@ -303,7 +303,6 @@ signed char TreeKeyIdx::create(const char *ipath) {
 
     TreeKeyIdx newTree(path.c_str());
     TreeKeyIdx::TreeNode root;
-    stdstr(&(root.name), "");
     newTree.saveTreeNode(&root);
 
     return 0;
@@ -344,7 +343,7 @@ void TreeKeyIdx::getTreeNodeFromDatOffset(long ioffset, TreeNode *node) const {
             name += ch;
         } while (ch);
 
-        stdstr(&(node->name), name.c_str());
+        node->name = name;
 
         m_datfd->read(&tmp2, 2);
         node->dsize = swordtoarch16(tmp2);
@@ -448,7 +447,7 @@ void TreeKeyIdx::copyFrom(const TreeKeyIdx &ikey) {
     m_currentNode.parent = ikey.m_currentNode.parent;
     m_currentNode.next = ikey.m_currentNode.next;
     m_currentNode.firstChild = ikey.m_currentNode.firstChild;
-    stdstr(&(m_currentNode.name), ikey.m_currentNode.name);
+    m_currentNode.name = ikey.m_currentNode.name;
     m_currentNode.dsize = ikey.m_currentNode.dsize;
 
     delete[] m_currentNode.userData;
@@ -488,7 +487,7 @@ void TreeKeyIdx::saveTreeNode(TreeNode *node) {
 
         saveTreeNodeOffsets(node);
 
-        m_datfd->write(node->name, strlen(node->name));
+        m_datfd->write(node->name.c_str(), node->name.size());
         char null = 0;
         m_datfd->write(&null, 1);
 
@@ -625,9 +624,6 @@ const char *TreeKeyIdx::getText() const {
 
 
 TreeKeyIdx::TreeNode::TreeNode() {
-
-    name       = nullptr;
-    stdstr(&name, "");
     userData   = nullptr;
 
     clear();
@@ -641,9 +637,7 @@ void TreeKeyIdx::TreeNode::clear() {
     firstChild = -1;
     dsize      = 0;
 
-    delete[] name;
-    name = nullptr;
-    stdstr(&name, "");
+    name.clear();
 
     delete[] userData;
     userData   = nullptr;
@@ -651,7 +645,6 @@ void TreeKeyIdx::TreeNode::clear() {
 
 
 TreeKeyIdx::TreeNode::~TreeNode() {
-    delete[] name;
     delete[] userData;
 }
 

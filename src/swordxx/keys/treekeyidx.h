@@ -47,7 +47,7 @@ class SWDLLEXPORT TreeKeyIdx : public TreeKey {
         int32_t parent;
         int32_t next;
         int32_t firstChild;
-        char *name;
+        std::string name;
         uint16_t dsize;
         char *userData;
     } m_currentNode;
