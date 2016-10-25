@@ -417,7 +417,7 @@ int InstallMgr::installModule(SWMgr *destMgr, const char *fromLocation, const ch
                 while (fileBegin != fileEnd && !retVal) {
                     std::string sourcePath = sourceDir;
                     sourcePath += fileBegin->second.c_str();
-                    std::string dest = destMgr->prefixPath;
+                    std::string dest = destMgr->m_prefixPath;
                     removeTrailingDirectorySlashes(dest);
                     dest += '/';
                     dest += fileBegin->second.c_str();
@@ -455,10 +455,10 @@ int InstallMgr::installModule(SWMgr *destMgr, const char *fromLocation, const ch
                     relativePath.erase(0u, entry->second.size());
                 }
                 else {
-                    relativePath.erase(0u, strlen(mgr.prefixPath));
+                    relativePath.erase(0u, mgr.m_prefixPath.size());
                 }
-                SWLog::getSystemLog()->logDebug("***** mgr.prefixPath: %s \n", mgr.prefixPath);
-                SWLog::getSystemLog()->logDebug("***** destMgr->prefixPath: %s \n", destMgr->prefixPath);
+                SWLog::getSystemLog()->logDebug("***** mgr.prefixPath: %s \n", mgr.m_prefixPath);
+                SWLog::getSystemLog()->logDebug("***** destMgr->prefixPath: %s \n", destMgr->m_prefixPath);
                 SWLog::getSystemLog()->logDebug("***** absolutePath: %s \n", absolutePath.c_str());
                 SWLog::getSystemLog()->logDebug("***** relativePath: %s \n", relativePath.c_str());
 
@@ -468,7 +468,7 @@ int InstallMgr::installModule(SWMgr *destMgr, const char *fromLocation, const ch
                     }
                 }
                 if (!aborted) {
-                    std::string destPath(std::string(destMgr->prefixPath) += relativePath);
+                    std::string destPath(std::string(destMgr->m_prefixPath) += relativePath);
                     retVal = FileMgr::copyDir(absolutePath.c_str(), destPath.c_str());
                 }
                 if (is) {        // delete tmp netCopied files
@@ -494,7 +494,7 @@ int InstallMgr::installModule(SWMgr *destMgr, const char *fromLocation, const ch
                             retVal = FileMgr::copyFile(modFile.c_str(), targetFile.c_str());
                             if (cipher) {
                                 if (getCipherCode(modName, config)) {
-                                    SWMgr newDest(destMgr->prefixPath);
+                                    SWMgr newDest(destMgr->m_prefixPath.c_str());
                                     removeModule(&newDest, modName);
                                     aborted = true;
                                 }

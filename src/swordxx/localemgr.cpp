@@ -56,7 +56,7 @@ void LocaleMgr::setSystemLocaleMgr(LocaleMgr *newLocaleMgr) {
 
 LocaleMgr::LocaleMgr(const char *iConfigPath) {
     locales = new LocaleMap();
-    char * prefixPath = nullptr;
+    std::string prefixPath;
     char * configPath = nullptr;
     SWConfig * sysConf = nullptr;
     char configType = 0;
@@ -68,11 +68,11 @@ LocaleMgr::LocaleMgr(const char *iConfigPath) {
 
     if (!iConfigPath) {
         SWLog::getSystemLog()->logDebug("LOOKING UP LOCALE DIRECTORY...");
-        SWMgr::findConfig(&configType, &prefixPath, &configPath, &augPaths, &sysConf);
+        SWMgr::findConfig(&configType, prefixPath, &configPath, &augPaths, &sysConf);
         if (sysConf) {
             if ((entry = (*sysConf)["Install"].find("LocalePath")) != (*sysConf)["Install"].end()) {
                 configType = 9;    // our own
-                stdstr(&prefixPath, (char *)entry->second.c_str());
+                prefixPath = entry->second;
                 SWLog::getSystemLog()->logDebug("LocalePath provided in sysConfig.");
             }
         }
@@ -82,7 +82,7 @@ LocaleMgr::LocaleMgr(const char *iConfigPath) {
         loadConfigDir(iConfigPath);
     }
 
-    if (prefixPath) {
+    if (!prefixPath.empty()) {
         switch (configType) {
         case 2:
             int i;
@@ -93,9 +93,7 @@ LocaleMgr::LocaleMgr(const char *iConfigPath) {
             break;
         default:
             path = prefixPath;
-            if ((prefixPath[strlen(prefixPath)-1] != '\\') && (prefixPath[strlen(prefixPath)-1] != '/'))
-                path += "/";
-
+            addTrailingDirectorySlash(path);
             break;
         }
         if (FileMgr::existsDir(path.c_str(), "locales.d")) {
@@ -121,7 +119,6 @@ LocaleMgr::LocaleMgr(const char *iConfigPath) {
     // frontends change the locale if they want
     stdstr(&defaultLocaleName, SWLocale::DEFAULT_LOCALE_NAME);
 
-    delete[] prefixPath;
     delete[] configPath;
     delete sysConf;
 }

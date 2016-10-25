@@ -38,7 +38,7 @@ int main(int argc, char **argv) {
         sysConf = new SWConfig(argv[1]);
     }
     SWMgr mymgr(nullptr, sysConf);
-    std::cerr << "\n\nprefixPath: " << mymgr.prefixPath;
+    std::cerr << "\n\nprefixPath: " << mymgr.m_prefixPath;
     std::cerr << "\nconfigPath: " << mymgr.configPath << "\n\n";
 
 

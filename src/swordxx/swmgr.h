@@ -182,7 +182,7 @@ public:
      *
      */
     static void findConfig(char * configType,
-                           char ** prefixPath,
+                           std::string & prefixPath,
                            char ** configPath,
                            StringList * augPaths = nullptr,
                            SWConfig ** providedSysConf = nullptr);
@@ -192,7 +192,7 @@ public:
 
     /** The path to main module set and locales
      */
-    char *prefixPath;
+    std::string m_prefixPath;
 
     /** path to main module set configuration
      */
