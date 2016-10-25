@@ -70,19 +70,15 @@ SWLocale::SWLocale(const char *ifilename) {
     auto const metaSectionIt(sections.find("Meta"));
     if (metaSectionIt != sections.end()) {
         auto const & metaSection = metaSectionIt->second;
-        {
-            auto const nameEntry(metaSection.find("Name"));
-            if (nameEntry != metaSection.end())
-                m_name = nameEntry->second;
-        }{
-            auto const descEntry(metaSection.find("Description"));
-            if (descEntry != metaSection.end())
-                m_description = descEntry->second;
-        }{ // Either empty (==Latin1) or UTF-8:
-            auto const encEntry(metaSection.find("Encoding"));
-            if (encEntry != metaSection.end())
-                m_encoding = encEntry->second;
-        }
+        auto const maybeGetEntry =
+                [&metaSection](std::string & field, char const * const key) {
+                    auto const entry(metaSection.find(key));
+                    if (entry != metaSection.end())
+                        field = entry->second;
+                };
+        maybeGetEntry(m_name, "Name");
+        maybeGetEntry(m_description, "Description");
+        maybeGetEntry(m_encoding, "Encoding");
     }
 }
 
