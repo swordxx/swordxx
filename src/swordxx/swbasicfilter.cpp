@@ -29,6 +29,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <map>
+#include <memory>
 #include <set>
 #include "stringmgr.h"
 #include "utilstr.h"
@@ -301,25 +302,21 @@ char SWBasicFilter::processText(std::string &text, const SWKey *key, const SWMod
     int escStartPos = 0, escEndPos = 0;
     int tokenStartPos = 0, tokenEndPos = 0;
     std::string lastTextNode;
-    BasicFilterUserData *userData = createUserData(module, key);
+    std::unique_ptr<BasicFilterUserData> userData(createUserData(module, key));
 
     std::string orig = text;
     from = &orig[0u];
     text = "";
 
-    if (processStages & INITIALIZE) {
-        if (processStage(INITIALIZE, text, from, userData)) {    // processStage handled it all
-            delete userData;
-            return 0;
-        }
-    }
+    if ((processStages & INITIALIZE)
+        && processStage(INITIALIZE, text, from, userData.get())) // processStage handled it all
+        return 0;
 
     for (;*from; from++) {
-
-        if (processStages & PRECHAR) {
-            if (processStage(PRECHAR, text, from, userData))    // processStage handled this char
-                continue;
-        }
+        // If processStage handled this char:
+        if ((processStages & PRECHAR)
+            && processStage(PRECHAR, text, from, userData.get()))
+            continue;
 
         if (*from == tokenStart[tokenStartPos]) {
             if (tokenStartPos == (tokenStartLen - 1)) {
@@ -353,11 +350,11 @@ char SWBasicFilter::processText(std::string &text, const SWKey *key, const SWMod
                     intoken = inEsc = false;
                     userData->lastTextNode = lastTextNode;
 
-                    if (!userData->suspendTextPassThru)  { //if text through is disabled no tokens should pass, too
-                        if ((!handleEscapeString(text, token, userData)) && (passThruUnknownEsc)) {
-                            appendEscapeString(text, token);
-                        }
-                    }
+                    // If text through is disabled no tokens should pass, too:
+                    if (!userData->suspendTextPassThru
+                        && !handleEscapeString(text, token, userData.get())
+                        && passThruUnknownEsc)
+                        appendEscapeString(text, token);
                     escEndPos = escStartPos = tokenEndPos = tokenStartPos = 0;
                     lastTextNode = "";
                     continue;
@@ -370,7 +367,9 @@ char SWBasicFilter::processText(std::string &text, const SWKey *key, const SWMod
                 if (tokenEndPos == (tokenEndLen - 1)) {
                     intoken = false;
                     userData->lastTextNode = lastTextNode;
-                    if ((!handleToken(text, token, userData)) && (passThruUnknownToken)) {
+                    if (!handleToken(text, token, userData.get())
+                        && passThruUnknownToken)
+                    {
                         text += tokenStart;
                         text += token;
                         text += tokenEnd;
@@ -401,14 +400,13 @@ char SWBasicFilter::processText(std::string &text, const SWKey *key, const SWMod
         }
 
         if (processStages & POSTCHAR)
-            processStage(POSTCHAR, text, from, userData);
+            processStage(POSTCHAR, text, from, userData.get());
 
     }
 
     if (processStages & FINALIZE)
-        processStage(FINALIZE, text, from, userData);
+        processStage(FINALIZE, text, from, userData.get());
 
-    delete userData;
     return 0;
 }
 
