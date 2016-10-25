@@ -71,24 +71,21 @@ inline bool hasPrefix(std::string const & str,
                       std::string const & prefix) noexcept
 { return hasPrefix(str.c_str(), prefix.c_str()); }
 
-template <typename T> struct OkFormattedType
-        : std::integral_constant<
-            bool,
-            std::is_arithmetic<T>::value || std::is_pointer<T>::value>
-{};
+template <typename T> struct OkFormattedType {
+    static constexpr bool const value =
+            std::is_arithmetic<T>::value || std::is_pointer<T>::value;
+};
 
 template <typename ...> struct OkFormattedTypes;
-template <> struct OkFormattedTypes<>: std::integral_constant<bool, true> {};
+template <> struct OkFormattedTypes<>
+{ static constexpr bool const value = true; };
 
-template <typename T> struct OkFormattedTypes<T>
-        : std::integral_constant<bool, OkFormattedType<T>::value> {};
+template <typename T> struct OkFormattedTypes<T>: OkFormattedType<T> {};
 
-template <typename T, typename ... Ts> struct OkFormattedTypes<T, Ts...>
-        : std::integral_constant<
-            bool,
-            OkFormattedType<T>::value && OkFormattedTypes<Ts...>::value
-        >
-{};
+template <typename T, typename ... Ts> struct OkFormattedTypes<T, Ts...> {
+    static constexpr bool const value =
+            OkFormattedType<T>::value && OkFormattedTypes<Ts...>::value;
+};
 
 template <typename ... Args>
 inline std::string formatted(const char * const formatString,
