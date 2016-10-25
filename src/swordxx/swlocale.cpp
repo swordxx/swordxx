@@ -52,7 +52,6 @@ public:
 SWLocale::SWLocale(const char *ifilename) {
     m_p = new Private;
 
-    m_encoding       = nullptr;
     m_bookAbbrevs    = nullptr;
     m_bookLongNames  = nullptr;
     m_bookPrefAbbrev = nullptr;
@@ -82,7 +81,7 @@ SWLocale::SWLocale(const char *ifilename) {
         }{ // Either empty (==Latin1) or UTF-8:
             auto const encEntry(metaSection.find("Encoding"));
             if (encEntry != metaSection.end())
-                stdstr(&m_encoding, encEntry->second.c_str());
+                m_encoding = encEntry->second;
         }
     }
 }
@@ -91,7 +90,6 @@ SWLocale::SWLocale(const char *ifilename) {
 SWLocale::~SWLocale() {
 
     delete m_localeSource;
-    delete[] m_encoding;
 
     if (m_bookAbbrevs != builtin_abbrevs)
         delete [] m_bookAbbrevs;
@@ -137,11 +135,6 @@ std::string const & SWLocale::translate(const char *text) {
     }
     return (*entry).second;
 }
-
-const char *SWLocale::getEncoding() {
-    return m_encoding;
-}
-
 
 void SWLocale::augment(SWLocale &addFrom) {
     m_localeSource->augment(*addFrom.m_localeSource);

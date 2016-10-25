@@ -49,7 +49,7 @@ class Private;
 
     std::string m_name;
     std::string m_description;
-    char * m_encoding;
+    std::string m_encoding;
     struct abbrev * m_bookAbbrevs;
     int m_abbrevsCnt;
     const char ** m_bookLongNames;
@@ -68,7 +68,7 @@ public:
     * @return The description. A possible example is "German".
     */
     std::string const & getDescription() const noexcept { return m_description; }
-    const char *getEncoding();
+    std::string const & getEncoding() const noexcept { return m_encoding; }
     std::string const & translate(const char *text);
     void augment(SWLocale &addFrom);
     SWLocale & operator +=(SWLocale &addFrom) { augment(addFrom); return *this; }

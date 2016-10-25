@@ -154,11 +154,12 @@ void LocaleMgr::loadConfigDir(const char *ipath) {
                 auto const & localeName = locale->getName();
                 if (!localeName.empty()) {
                     bool supported = false;
+                    auto const & localeEncoding = locale->getEncoding();
                     if (StringMgr::hasUTF8Support()) {
-                        supported = (locale->getEncoding() && (!strcmp(locale->getEncoding(), "UTF-8") || !strcmp(locale->getEncoding(), "ASCII")) );
+                        supported = (localeEncoding == "UTF-8" || localeEncoding == "ASCII");
                     }
                     else {
-                        supported = !locale->getEncoding() || (locale->getEncoding() && (strcmp(locale->getEncoding(), "UTF-8") != 0)); //exclude UTF-8 locales
+                        supported = localeEncoding.empty() || localeEncoding != "UTF-8"; //exclude UTF-8 locales
                     }
 
                     if (!supported) { //not supported
