@@ -706,13 +706,11 @@ void SWMgr::augmentModules(const char *ipath, bool multiMod) {
     std::string path(ipath);
     addTrailingDirectorySlash(path);
     if (FileMgr::existsDir(path.c_str(), "mods.d")) {
-        char * savePrefixPath = nullptr;
-        char * saveConfigPath = nullptr;
         SWConfig * saveConfig = nullptr;
-        stdstr(&savePrefixPath, prefixPath);
+        std::string const savePrefixPath(prefixPath ? prefixPath : "");
         stdstr(&prefixPath, path.c_str());
         path += "mods.d";
-        stdstr(&saveConfigPath, configPath);
+        std::string const saveConfigPath(configPath ? configPath : "");
         stdstr(&configPath, path.c_str());
         saveConfig = config;
         config = myconfig = nullptr;
@@ -743,10 +741,8 @@ void SWMgr::augmentModules(const char *ipath, bool multiMod) {
 
         CreateMods(multiMod);
 
-        stdstr(&prefixPath, savePrefixPath);
-        delete []savePrefixPath;
-        stdstr(&configPath, saveConfigPath);
-        delete []saveConfigPath;
+        stdstr(&prefixPath, savePrefixPath.c_str());
+        stdstr(&configPath, saveConfigPath.c_str());
 
         saveConfig->augment(*config);
 
@@ -851,9 +847,7 @@ SWModule *SWMgr::createModule(const char *name, const char *driver, ConfigEntMap
     //   Typically not useful by outside world.  See AbsoluteDataPath, PrefixPath, and RelativePrefixPath
     //   below.
     misc1 += ((entry = section.find("DataPath")) != section.end()) ? (*entry).second : std::string();
-    char *buf = new char [ strlen(misc1.c_str()) + 1 ];
-    char *buf2 = buf;
-    strcpy(buf, misc1.c_str());
+    char const * buf2 = misc1.c_str();
 //    for (; ((*buf2) && ((*buf2 == '.') || (*buf2 == '/') || (*buf2 == '\\'))); buf2++);
     for (; ((*buf2) && ((*buf2 == '/') || (*buf2 == '\\'))); buf2++);
     if (!strncmp(buf2, "./", 2)) { //remove the leading ./ in the module data path to make it look better
@@ -863,7 +857,6 @@ SWModule *SWMgr::createModule(const char *name, const char *driver, ConfigEntMap
     section["PrefixPath"] = datapath;
     if (*buf2)
         datapath += buf2;
-    delete [] buf;
 
     section["AbsoluteDataPath"] = datapath;
 
