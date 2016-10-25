@@ -88,19 +88,19 @@ public:
         friend class System;
         friend struct BookOffsetLess;
         class Private;
-        Private *p;
+        Private *m_p;
 
         /** book name */
-        std::string longName;
+        std::string m_longName;
 
         /** OSIS Abbreviation */
-        std::string osisName;
+        std::string m_osisName;
 
         /** Preferred Abbreviation */
-        std::string prefAbbrev;
+        std::string m_prefAbbrev;
 
         /** Maximum chapters in book */
-        unsigned int chapMax;
+        unsigned int m_chapMax;
 
         void init();
 
@@ -109,17 +109,17 @@ public:
         Book(const Book &other);
         Book &operator =(const Book &other);
         Book(const char *longName, const char *osisName, const char *prefAbbrev, int chapMax) {
-            this->longName = longName;
-            this->osisName = osisName;
-            this->prefAbbrev = prefAbbrev;
-            this->chapMax = chapMax;
+            this->m_longName = longName;
+            this->m_osisName = osisName;
+            this->m_prefAbbrev = prefAbbrev;
+            this->m_chapMax = chapMax;
             init();
         }
         ~Book();
-        const char *getLongName() const { return longName.c_str(); }
-        const char *getOSISName() const { return osisName.c_str(); }
-        const char *getPreferredAbbreviation() const { return prefAbbrev.c_str(); }
-        int getChapterMax() const { return chapMax; }
+        const char *getLongName() const { return m_longName.c_str(); }
+        const char *getOSISName() const { return m_osisName.c_str(); }
+        const char *getPreferredAbbreviation() const { return m_prefAbbrev.c_str(); }
+        int getChapterMax() const { return m_chapMax; }
         int getVerseMax(int chapter) const;
     };
 

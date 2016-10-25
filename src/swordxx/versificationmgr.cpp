@@ -144,15 +144,15 @@ public:
 
 
 struct BookOffsetLess {
-    bool operator() (const VersificationMgr::Book &o1, const VersificationMgr::Book &o2) const { return o1.p->offsetPrecomputed[0] < o2.p->offsetPrecomputed[0]; }
-    bool operator() (const long &o1, const VersificationMgr::Book &o2) const { return o1 < o2.p->offsetPrecomputed[0]; }
-    bool operator() (const VersificationMgr::Book &o1, const long &o2) const { return o1.p->offsetPrecomputed[0] < o2; }
+    bool operator() (const VersificationMgr::Book &o1, const VersificationMgr::Book &o2) const { return o1.m_p->offsetPrecomputed[0] < o2.m_p->offsetPrecomputed[0]; }
+    bool operator() (const long &o1, const VersificationMgr::Book &o2) const { return o1 < o2.m_p->offsetPrecomputed[0]; }
+    bool operator() (const VersificationMgr::Book &o1, const long &o2) const { return o1.m_p->offsetPrecomputed[0] < o2; }
     bool operator() (const long &o1, const long &o2) const { return o1 < o2; }
 };
 
 
 void VersificationMgr::Book::init() {
-    p = new Private();
+    m_p = new Private();
 }
 
 
@@ -213,9 +213,9 @@ void VersificationMgr::System::loadFromSBook(const sbook *ot, const sbook *nt, i
         Book &b = p->books[p->books.size()-1];
         p->osisLookup[b.getOSISName()] = p->books.size();
         for (int i = 0; i < ot->chapmax; i++) {
-            b.p->verseMax.push_back(chMax[chap]);
+            b.m_p->verseMax.push_back(chMax[chap]);
             offset++;        // chapter heading
-            b.p->offsetPrecomputed.push_back(offset);
+            b.m_p->offsetPrecomputed.push_back(offset);
             offset += chMax[chap++];
         }
         ot++;
@@ -231,9 +231,9 @@ void VersificationMgr::System::loadFromSBook(const sbook *ot, const sbook *nt, i
         Book &b = p->books[p->books.size()-1];
         p->osisLookup[b.getOSISName()] = p->books.size();
         for (int i = 0; i < nt->chapmax; i++) {
-            b.p->verseMax.push_back(chMax[chap]);
+            b.m_p->verseMax.push_back(chMax[chap]);
             offset++;        // chapter heading
-            b.p->offsetPrecomputed.push_back(offset);
+            b.m_p->offsetPrecomputed.push_back(offset);
             offset += chMax[chap++];
         }
         nt++;
@@ -263,34 +263,34 @@ void VersificationMgr::System::loadFromSBook(const sbook *ot, const sbook *nt, i
 
 
 VersificationMgr::Book::Book(const Book &other) {
-    longName = other.longName;
-    osisName = other.osisName;
-    prefAbbrev = other.prefAbbrev;
-    chapMax = other.chapMax;
+    m_longName = other.m_longName;
+    m_osisName = other.m_osisName;
+    m_prefAbbrev = other.m_prefAbbrev;
+    m_chapMax = other.m_chapMax;
     init();
-    (*p) = *(other.p);
+    (*m_p) = *(other.m_p);
 }
 
 
 VersificationMgr::Book& VersificationMgr::Book::operator =(const Book &other) {
-    longName = other.longName;
-    osisName = other.osisName;
-    prefAbbrev = other.prefAbbrev;
-    chapMax = other.chapMax;
+    m_longName = other.m_longName;
+    m_osisName = other.m_osisName;
+    m_prefAbbrev = other.m_prefAbbrev;
+    m_chapMax = other.m_chapMax;
     init();
-    (*p) = *(other.p);
+    (*m_p) = *(other.m_p);
     return *this;
 }
 
 
 VersificationMgr::Book::~Book() {
-    delete p;
+    delete m_p;
 }
 
 
 int VersificationMgr::Book::getVerseMax(int chapter) const {
     chapter--;
-    return (p && (chapter < (signed int)p->verseMax.size()) && (chapter > -1)) ? p->verseMax[chapter] : -1;
+    return (m_p && (chapter < (signed int)m_p->verseMax.size()) && (chapter > -1)) ? m_p->verseMax[chapter] : -1;
 }
 
 
@@ -306,9 +306,9 @@ long VersificationMgr::System::getOffsetFromVerse(int book, int chapter, int ver
     const Book *b = getBook(book);
 
     if (!b)                                        return -1;    // assert we have a valid book
-    if ((chapter > -1) && (chapter >= (signed int)b->p->offsetPrecomputed.size())) return -1;    // assert we have a valid chapter
+    if ((chapter > -1) && (chapter >= (signed int)b->m_p->offsetPrecomputed.size())) return -1;    // assert we have a valid chapter
 
-    offset = b->p->offsetPrecomputed[(chapter > -1)?chapter:0];
+    offset = b->m_p->offsetPrecomputed[(chapter > -1)?chapter:0];
     if (chapter < 0) offset--;
 
 /* old code
@@ -337,25 +337,25 @@ char VersificationMgr::System::getVerseFromOffset(long offset, int *book, int *c
     vector<Book>::iterator b = lower_bound(p->books.begin(), p->books.end(), offset, BookOffsetLess());
     if (b == p->books.end()) b--;
     (*book)    = distance(p->books.begin(), b)+1;
-    if (offset < (*(b->p->offsetPrecomputed.begin()))-((((!(*book)) || (*book)==BMAX[0]+1))?2:1)) { // -1 for chapter headings
+    if (offset < (*(b->m_p->offsetPrecomputed.begin()))-((((!(*book)) || (*book)==BMAX[0]+1))?2:1)) { // -1 for chapter headings
         (*book)--;
         if (b != p->books.begin()) {
             b--;
         }
     }
-    vector<long>::iterator c = lower_bound(b->p->offsetPrecomputed.begin(), b->p->offsetPrecomputed.end(), offset);
+    vector<long>::iterator c = lower_bound(b->m_p->offsetPrecomputed.begin(), b->m_p->offsetPrecomputed.end(), offset);
 
     // if we're a book heading, we are lessthan chapter precomputes, but greater book.  This catches corner case.
-    if (c == b->p->offsetPrecomputed.end()) {
+    if (c == b->m_p->offsetPrecomputed.end()) {
         c--;
     }
-    if ((offset < *c) && (c == b->p->offsetPrecomputed.begin())) {
+    if ((offset < *c) && (c == b->m_p->offsetPrecomputed.begin())) {
         (*chapter) = (offset - *c)+1;    // should be 0 or -1 (for testament heading)
         (*verse) = 0;
     }
     else {
         if (offset < *c) c--;
-        (*chapter) = distance(b->p->offsetPrecomputed.begin(), c)+1;
+        (*chapter) = distance(b->m_p->offsetPrecomputed.begin(), c)+1;
         (*verse)   = (offset - *c);
     }
     return ((*chapter > 0) && (*verse > b->getVerseMax(*chapter))) ? KEYERR_OUTOFBOUNDS : 0;
