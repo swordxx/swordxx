@@ -323,7 +323,7 @@ void VerseKey::freshtext() const
             if (realbook > m_BMAX[realTest-1])
                 realbook = m_BMAX[realTest-1];
         }
-        sprintf(buf, "%s %d:%d", getBookName(), m_chapter, m_verse);
+        sprintf(buf, "%s %d:%d", getBookName().c_str(), m_chapter, m_verse);
         if (m_suffix) {
             buf[strlen(buf)+1] = 0;
             buf[strlen(buf)] = m_suffix;
