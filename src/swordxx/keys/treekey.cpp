@@ -61,23 +61,22 @@ void TreeKey::assureKeyPath(const char *keyBuffer) {
             }
             else {
                 while (nextSibling()) {
-                    if (getLocalName()) {
-                        if (tok == getLocalName()) {
-                            foundkey = true;
-                            break;
-                        }
+                    auto const & localName = getLocalName();
+                    if (!localName.empty() && tok == localName) {
+                        foundkey = true;
+                        break;
                     }
                 }
             }
             if (!foundkey) {
                 append();
-                setLocalName(tok.c_str());
+                setLocalName(std::move(tok));
                 save();
             }
         }
         else {
             appendChild();
-            setLocalName(tok.c_str());
+            setLocalName(std::move(tok));
             save();
         }
 

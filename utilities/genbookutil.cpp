@@ -65,7 +65,7 @@ void setLocalName(TreeKeyIdx *treeKey) {
     fgets(buf, 1000, stdin);
     std::string name = buf;
     trimString(name);
-    treeKey->setLocalName(name.c_str());
+    treeKey->setLocalName(std::move(name));
     treeKey->save();
 }
 
@@ -127,7 +127,7 @@ void appendSibbling(TreeKeyIdx *treeKey) {
         std::string name = buf;
         trimString(name);
         treeKey->append();
-        treeKey->setLocalName(name.c_str());
+        treeKey->setLocalName(std::move(name));
         treeKey->save();
     }
     else    std::cout << "Can't add sibling to root node\n";
@@ -141,7 +141,7 @@ void appendChild(TreeKeyIdx *treeKey) {
     std::string name = buf;
     trimString(name);
     treeKey->appendChild();
-    treeKey->setLocalName(name.c_str());
+    treeKey->setLocalName(std::move(name));
     treeKey->save();
 }
 

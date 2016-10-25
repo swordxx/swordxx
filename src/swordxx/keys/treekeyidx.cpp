@@ -80,9 +80,9 @@ TreeKeyIdx::~TreeKeyIdx () {
 }
 
 
-const char *TreeKeyIdx::getLocalName() {
+std::string const & TreeKeyIdx::getLocalName() {
     m_unsnappedKeyText.clear();
-    return m_currentNode.name.c_str();
+    return m_currentNode.name;
 }
 
 
@@ -107,10 +107,14 @@ void TreeKeyIdx::setUserData(const char *userData, int size) {
     m_currentNode.dsize = size;
 }
 
-const char *TreeKeyIdx::setLocalName(const char *newName) {
+void TreeKeyIdx::setLocalName(std::string const & newName) {
     m_unsnappedKeyText.clear();
-    m_currentNode.name = newName ? newName : "";
-    return m_currentNode.name.c_str();
+    m_currentNode.name = newName;
+}
+
+void TreeKeyIdx::setLocalName(std::string && newName) {
+    m_unsnappedKeyText.clear();
+    m_currentNode.name = std::move(newName);
 }
 
 

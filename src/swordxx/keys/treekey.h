@@ -70,8 +70,9 @@ public:
     ~TreeKey () {};
 
 
-    virtual const char *getLocalName() = 0;
-    virtual const char *setLocalName(const char *) = 0;
+    virtual std::string const & getLocalName() = 0;
+    virtual void setLocalName(std::string const & newName) = 0;
+    virtual void setLocalName(std::string && newName) = 0;
 
     virtual int getLevel() { long bm = getOffset(); int level = 0; do { level++; } while (parent()); setOffset(bm); return level; }
 

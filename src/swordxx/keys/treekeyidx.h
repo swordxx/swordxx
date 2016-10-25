@@ -70,8 +70,9 @@ public:
 
     SWKey *clone() const override;
 
-    char const *getLocalName() override;
-    char const *setLocalName(char const *) override;
+    std::string const & getLocalName() override;
+    void setLocalName(std::string const & newName) override;
+    void setLocalName(std::string && newName) override;
 
     char const * getUserData(int * size = nullptr) const override;
     void setUserData(char const * userData, int size = 0) override;
