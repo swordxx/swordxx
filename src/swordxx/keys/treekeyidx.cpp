@@ -29,6 +29,7 @@
 #include <cstring>
 #include <fcntl.h>
 #include <string>
+#include <utility>
 #include "../filemgr.h"
 #include "../swlog.h"
 #include "../sysdata.h"
@@ -502,14 +503,18 @@ void TreeKeyIdx::saveTreeNode(TreeNode *node) {
 
 
 void TreeKeyIdx::setText(const char *ikey) {
-    char * buf = nullptr;
-    stdstr(&buf, ikey);
-    static auto const slashTokenOrEmpty =
-            [](char * const str) noexcept {
-                auto const nextToken(std::strtok(str, "/"));
-                return nextToken ? nextToken : "";
+    static auto const nextTokenBounds =
+            [](char const * s) noexcept {
+                assert(s);
+                while (*s == '/') // Skip any leading '/' delimeters
+                    ++s;
+                char const * end = s;
+                while (*end && *end != '/') // Skip until next '/' delimeter/end
+                    ++end;
+                return std::make_pair(s, end);
             };
-    std::string leaf(slashTokenOrEmpty(buf));
+    auto r = nextTokenBounds(ikey);
+    std::string leaf(r.first, r.second);
     trimString(leaf);
     root();
     while ((leaf.size()) && (!popError())) {
@@ -522,7 +527,8 @@ void TreeKeyIdx::setText(const char *ikey) {
                 break;
             }
         }
-        leaf = slashTokenOrEmpty(nullptr);
+        r = nextTokenBounds(r.second);
+        leaf.assign(r.first, r.second);
         trimString(leaf);
         if (!ok) {
                 if (inChild) {    // if we didn't find a matching child node, default to first child
@@ -534,7 +540,6 @@ void TreeKeyIdx::setText(const char *ikey) {
     }
     if (leaf.size())
         m_error = KEYERR_OUTOFBOUNDS;
-    delete [] buf;
     m_unsnappedKeyText = ikey;
     positionChanged();
 }
