@@ -53,7 +53,6 @@ SWLocale::SWLocale(const char *ifilename) {
     m_p = new Private;
     ConfigEntMap::iterator confEntry;
 
-    m_description    = nullptr;
     m_encoding       = nullptr;
     m_bookAbbrevs    = nullptr;
     m_bookLongNames  = nullptr;
@@ -75,7 +74,7 @@ SWLocale::SWLocale(const char *ifilename) {
 
     confEntry = m_localeSource->sections()["Meta"].find("Description");
     if (confEntry != m_localeSource->sections()["Meta"].end())
-        stdstr(&m_description, (*confEntry).second.c_str());
+        m_description = confEntry->second;
 
     confEntry = m_localeSource->sections()["Meta"].find("Encoding"); //Either empty (==Latin1) or UTF-8
     if (confEntry != m_localeSource->sections()["Meta"].end())
@@ -87,7 +86,6 @@ SWLocale::~SWLocale() {
 
     delete m_localeSource;
     delete[] m_encoding;
-    delete[] m_description;
 
     if (m_bookAbbrevs != builtin_abbrevs)
         delete [] m_bookAbbrevs;
@@ -133,11 +131,6 @@ std::string const & SWLocale::translate(const char *text) {
     }
     return (*entry).second;
 }
-
-const char *SWLocale::getDescription() {
-    return m_description;
-}
-
 
 const char *SWLocale::getEncoding() {
     return m_encoding;

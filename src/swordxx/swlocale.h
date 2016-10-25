@@ -48,7 +48,7 @@ class Private;
     SWConfig * m_localeSource;
 
     std::string m_name;
-    char * m_description;
+    std::string m_description;
     char * m_encoding;
     struct abbrev * m_bookAbbrevs;
     int m_abbrevsCnt;
@@ -67,7 +67,7 @@ public:
     /**
     * @return The description. A possible example is "German".
     */
-    const char *getDescription();
+    std::string const & getDescription() const noexcept { return m_description; }
     const char *getEncoding();
     std::string const & translate(const char *text);
     void augment(SWLocale &addFrom);
