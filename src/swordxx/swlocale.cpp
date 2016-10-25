@@ -98,7 +98,7 @@ SWLocale::~SWLocale() {
 }
 
 
-const char *SWLocale::translate(const char *text) {
+std::string const & SWLocale::translate(const char *text) {
     LookupMap::iterator entry;
 
     entry = p->lookupTable.find(text);
@@ -133,7 +133,7 @@ const char *SWLocale::translate(const char *text) {
         }
         entry = p->lookupTable.find(text);
     }
-    return (*entry).second.c_str();
+    return (*entry).second;
 }
 
 

@@ -222,7 +222,7 @@ const char *LocaleMgr::translate(const char *text, const char *localeName) {
     }
     target = getLocale(localeName);
     if (target)
-        return target->translate(text);
+        return target->translate(text).c_str();
     return text;
 }
 

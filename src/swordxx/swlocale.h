@@ -24,6 +24,7 @@
 #ifndef SWLOCALE_H
 #define SWLOCALE_H
 
+#include <string>
 #include "defs.h"
 
 
@@ -68,7 +69,7 @@ public:
     */
     virtual const char *getDescription();
     virtual const char *getEncoding();
-    virtual const char *translate(const char *text);
+    virtual std::string const & translate(const char *text);
     virtual void augment(SWLocale &addFrom);
     virtual SWLocale & operator +=(SWLocale &addFrom) { augment(addFrom); return *this; }
     virtual const struct abbrev *getBookAbbrevs(int *retSize);

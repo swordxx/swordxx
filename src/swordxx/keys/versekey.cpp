@@ -424,10 +424,10 @@ int VerseKey::getBookFromAbbrev(const char *iabbr) const
 void VerseKey::validateCurrentLocale() const {
     if (SWLog::getSystemLog()->getLogLevel() >= SWLog::LOG_DEBUG) { //make sure log is wanted, this loop stuff costs a lot of time
         for (int i = 0; i < m_refSys->getBookCount(); i++) {
-            const int bn = getBookFromAbbrev(getPrivateLocale()->translate(m_refSys->getBook(i)->getLongName().c_str()));
+            const int bn = getBookFromAbbrev(getPrivateLocale()->translate(m_refSys->getBook(i)->getLongName().c_str()).c_str());
             if (bn != i+1) {
                 char * abbr = nullptr;
-                stdstr(&abbr, getPrivateLocale()->translate(m_refSys->getBook(i)->getLongName().c_str()), 2);
+                stdstr(&abbr, getPrivateLocale()->translate(m_refSys->getBook(i)->getLongName().c_str()).c_str(), 2);
                 strstrip(abbr);
                 SWLog::getSystemLog()->logDebug("VerseKey::Book: %s does not have a matching toupper abbrevs entry! book number returned was: %d, should be %d. Required entry to add to locale:", abbr, bn, i);
 
@@ -1208,7 +1208,7 @@ const char *VerseKey::getShortText() const {
 
 
 const char *VerseKey::getBookName() const {
-    return getPrivateLocale()->translate(m_refSys->getBook(((m_testament>1)?m_BMAX[0]:0)+m_book-1)->getLongName().c_str());
+    return getPrivateLocale()->translate(m_refSys->getBook(((m_testament>1)?m_BMAX[0]:0)+m_book-1)->getLongName().c_str()).c_str();
 }
 
 
