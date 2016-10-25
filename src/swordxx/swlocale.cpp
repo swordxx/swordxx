@@ -51,7 +51,6 @@ public:
 
 SWLocale::SWLocale(const char *ifilename) {
     m_p = new Private;
-    ConfigEntMap::iterator confEntry;
 
     m_encoding       = nullptr;
     m_bookAbbrevs    = nullptr;
@@ -68,17 +67,24 @@ SWLocale::SWLocale(const char *ifilename) {
         for (m_abbrevsCnt = 0; builtin_abbrevs[m_abbrevsCnt].osis[0]; m_abbrevsCnt++);
     }
 
-    confEntry = m_localeSource->sections()["Meta"].find("Name");
-    if (confEntry != m_localeSource->sections()["Meta"].end())
-        m_name = (*confEntry).second;
-
-    confEntry = m_localeSource->sections()["Meta"].find("Description");
-    if (confEntry != m_localeSource->sections()["Meta"].end())
-        m_description = confEntry->second;
-
-    confEntry = m_localeSource->sections()["Meta"].find("Encoding"); //Either empty (==Latin1) or UTF-8
-    if (confEntry != m_localeSource->sections()["Meta"].end())
-        stdstr(&m_encoding, (*confEntry).second.c_str());
+    auto const & sections = m_localeSource->sections();
+    auto const metaSectionIt(sections.find("Meta"));
+    if (metaSectionIt != sections.end()) {
+        auto const & metaSection = metaSectionIt->second;
+        {
+            auto const nameEntry(metaSection.find("Name"));
+            if (nameEntry != metaSection.end())
+                m_name = nameEntry->second;
+        }{
+            auto const descEntry(metaSection.find("Description"));
+            if (descEntry != metaSection.end())
+                m_description = descEntry->second;
+        }{ // Either empty (==Latin1) or UTF-8:
+            auto const encEntry(metaSection.find("Encoding"));
+            if (encEntry != metaSection.end())
+                stdstr(&m_encoding, encEntry->second.c_str());
+        }
+    }
 }
 
 
