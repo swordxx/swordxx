@@ -111,7 +111,7 @@ public:
         Book(std::string longName,
              std::string osisName,
              std::string prefAbbrev,
-             int chapMax)
+             unsigned int chapMax)
             : m_longName(std::move(longName))
             , m_osisName(std::move(osisName))
             , m_prefAbbrev(std::move(prefAbbrev))
