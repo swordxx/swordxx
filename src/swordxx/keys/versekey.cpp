@@ -439,7 +439,7 @@ void VerseKey::validateCurrentLocale() const {
                 else {
                     stringMgr->upperLatin1(abbr);
                 }
-                SWLog::getSystemLog()->logDebug("%s=%s\n", abbr, m_refSys->getBook(i)->getOSISName());
+                SWLog::getSystemLog()->logDebug("%s=%s\n", abbr, m_refSys->getBook(i)->getOSISName().c_str());
                 delete [] abbr;
             }
         }
