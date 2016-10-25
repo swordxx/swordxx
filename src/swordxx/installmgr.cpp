@@ -457,8 +457,8 @@ int InstallMgr::installModule(SWMgr *destMgr, const char *fromLocation, const ch
                 else {
                     relativePath.erase(0u, mgr.m_prefixPath.size());
                 }
-                SWLog::getSystemLog()->logDebug("***** mgr.prefixPath: %s \n", mgr.m_prefixPath);
-                SWLog::getSystemLog()->logDebug("***** destMgr->prefixPath: %s \n", destMgr->m_prefixPath);
+                SWLog::getSystemLog()->logDebug("***** mgr.prefixPath: %s \n", mgr.m_prefixPath.c_str());
+                SWLog::getSystemLog()->logDebug("***** destMgr->prefixPath: %s \n", destMgr->m_prefixPath.c_str());
                 SWLog::getSystemLog()->logDebug("***** absolutePath: %s \n", absolutePath.c_str());
                 SWLog::getSystemLog()->logDebug("***** relativePath: %s \n", relativePath.c_str());
 
