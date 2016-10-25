@@ -87,7 +87,7 @@ void VerseKey::setFromOther(const VerseKey &ikey) {
     }
     else {
         // map verse between systems
-        const char* map_book = ikey.getOSISBookName();
+        const char* map_book = ikey.getOSISBookName().c_str();
         int map_chapter = ikey.getChapter();
         int map_verse = ikey.getVerse();
         int map_range = map_verse;
@@ -1212,8 +1212,8 @@ std::string const & VerseKey::getBookName() const {
 }
 
 
-const char *VerseKey::getOSISBookName() const {
-    return m_refSys->getBook(((m_testament>1)?m_BMAX[0]:0)+m_book-1)->getOSISName().c_str();
+std::string const & VerseKey::getOSISBookName() const {
+    return m_refSys->getBook(((m_testament>1)?m_BMAX[0]:0)+m_book-1)->getOSISName();
 }
 
 
@@ -1750,11 +1750,11 @@ const char *VerseKey::getOSISRef() const {
         loop = 0;
 
     if (getVerse())
-        sprintf(buf[loop], "%s.%d.%d", getOSISBookName(), getChapter(), getVerse());
+        sprintf(buf[loop], "%s.%d.%d", getOSISBookName().c_str(), getChapter(), getVerse());
     else if (getChapter())
-        sprintf(buf[loop], "%s.%d", getOSISBookName(), getChapter());
+        sprintf(buf[loop], "%s.%d", getOSISBookName().c_str(), getChapter());
     else if (getBook())
-        sprintf(buf[loop], "%s", getOSISBookName());
+        sprintf(buf[loop], "%s", getOSISBookName().c_str());
     else    buf[loop][0] = 0;
     return buf[loop++];
 }

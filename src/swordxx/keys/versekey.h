@@ -340,7 +340,7 @@ public:
     long getTestamentIndex() const;
 
     const char *getOSISRef() const;
-    const char *getOSISBookName() const;
+    std::string const & getOSISBookName() const;
 
     /** Tries to parse a string and convert it into an OSIS reference
      * @param inRef reference string to try to parse
