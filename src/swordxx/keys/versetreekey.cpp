@@ -233,7 +233,7 @@ void VerseTreeKey::syncVerseToTree() {
     std::string path;
     if (!getTestament()) path = "/"; // "[ Module Heading ]";
     else if (!getBook()) path = formatted("/[ Testament %d Heading ]", getTestament());
-    else path = formatted("/%s/%d/%d", getOSISBookName(), getChapter(), getVerse());
+    else path = formatted("/%s/%d/%d", getOSISBookName().c_str(), getChapter(), getVerse());
     if (getSuffix()) path += getSuffix();
     long bookmark = m_treeKey->getOffset();
     m_treeKey->setText(path.c_str());
