@@ -1200,7 +1200,7 @@ const char *VerseKey::getShortText() const {
         else sprintf(buf, "[ Testament %d Heading ]", (int)m_testament);
     }
     else {
-        sprintf(buf, "%s %d:%d", getBookAbbrev(), m_chapter, m_verse);
+        sprintf(buf, "%s %d:%d", getBookAbbrev().c_str(), m_chapter, m_verse);
     }
     stdstr(&stext, buf);
     return stext;
@@ -1217,8 +1217,8 @@ const char *VerseKey::getOSISBookName() const {
 }
 
 
-const char *VerseKey::getBookAbbrev() const {
-    return m_refSys->getBook(((m_testament>1)?m_BMAX[0]:0)+m_book-1)->getPreferredAbbreviation().c_str();
+std::string const & VerseKey::getBookAbbrev() const {
+    return m_refSys->getBook(((m_testament>1)?m_BMAX[0]:0)+m_book-1)->getPreferredAbbreviation();
 }
 
 void VerseKey::positionToTop() {

@@ -227,7 +227,7 @@ public:
     const char *getBookName() const;
     void setBookName(const char *bname);
 
-    const char *getBookAbbrev() const;
+    std::string const & getBookAbbrev() const;
     /** Gets testament
     *
     * @return value of testament
