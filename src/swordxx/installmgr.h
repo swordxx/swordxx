@@ -73,7 +73,7 @@ class SWDLLEXPORT InstallMgr {
 protected:
     bool userDisclaimerConfirmed;
     std::set<std::string> defaultMods;
-    std::string privatePath;
+    std::string privatePath; /**< \note Includes trailing slash. */
     std::string confPath;
     StatusReporter *statusReporter;
     bool passive;
