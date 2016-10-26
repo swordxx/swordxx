@@ -93,7 +93,7 @@ public:
     static const int MODSTAT_CIPHERED;
     static const int MODSTAT_CIPHERKEYPRESENT;
 
-    SWConfig *installConf;
+    std::unique_ptr<SWConfig> installConf;
 
         /** all remote sources configured for this installmgr.  Use this to gain access
          *  to individual remote sources.

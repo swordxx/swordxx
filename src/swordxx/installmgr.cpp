@@ -68,7 +68,6 @@ InstallMgr::InstallMgr(std::string privatePath, StatusReporter *sr, std::string 
     privatePath.push_back('/');
     confPath = privatePath + "InstallMgr.conf";
     this->privatePath = std::move(privatePath);
-    installConf = nullptr;
     FileMgr::createParent(confPath.c_str());
 
     readInstallConf();
@@ -76,7 +75,7 @@ InstallMgr::InstallMgr(std::string privatePath, StatusReporter *sr, std::string 
 
 
 InstallMgr::~InstallMgr() {
-    delete installConf;
+    installConf.reset();
     clearSources();
 }
 
@@ -89,10 +88,7 @@ void InstallMgr::clearSources() {
 
 
 void InstallMgr::readInstallConf() {
-
-    delete installConf;
-
-    installConf = new SWConfig(confPath.c_str());
+    installConf = std::make_unique<SWConfig>(confPath.c_str());
 
     clearSources();
 
