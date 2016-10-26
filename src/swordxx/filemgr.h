@@ -79,7 +79,7 @@ public:
 
     /** Path to file.
     */
-    char *path;
+    std::string path;
     /** File access mode.
     */
     int mode;

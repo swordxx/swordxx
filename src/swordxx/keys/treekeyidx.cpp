@@ -473,8 +473,8 @@ void TreeKeyIdx::copyFrom(const TreeKeyIdx &ikey) {
             FileMgr::getSystemFileMgr()->close(m_idxfd);
             FileMgr::getSystemFileMgr()->close(m_datfd);
         }
-        m_idxfd = FileMgr::getSystemFileMgr()->open(ikey.m_idxfd->path, ikey.m_idxfd->mode, ikey.m_idxfd->perms);
-        m_datfd = FileMgr::getSystemFileMgr()->open(ikey.m_datfd->path, ikey.m_datfd->mode, ikey.m_datfd->perms);
+        m_idxfd = FileMgr::getSystemFileMgr()->open(ikey.m_idxfd->path.c_str(), ikey.m_idxfd->mode, ikey.m_idxfd->perms);
+        m_datfd = FileMgr::getSystemFileMgr()->open(ikey.m_datfd->path.c_str(), ikey.m_datfd->mode, ikey.m_datfd->perms);
     }
     positionChanged();
 }

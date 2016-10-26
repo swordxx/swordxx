@@ -104,8 +104,7 @@ void FileMgr::setSystemFileMgr(FileMgr *newFileMgr) {
 
 FileDesc::FileDesc(FileMgr *parent, const char *path, int mode, int perms, bool tryDowngrade) {
     this->parent = parent;
-    this->path = nullptr;
-    stdstr(&this->path, path);
+    path = path ? path : "";
     this->mode = mode;
     this->perms = perms;
     this->tryDowngrade = tryDowngrade;
@@ -117,8 +116,6 @@ FileDesc::FileDesc(FileMgr *parent, const char *path, int mode, int perms, bool 
 FileDesc::~FileDesc() {
     if (fd > 0)
         close(fd);
-
-    delete[] path;
 }
 
 
@@ -201,14 +198,14 @@ int FileMgr::sysOpen(FileDesc *file) {
                 file->next = files;
                 files = file;
             }
-            if ((!::access(file->path, R_OK)) || ((file->mode & O_CREAT) == O_CREAT)) {    // check for at least file exists / read access before we try to open
+            if ((!::access(file->path.c_str(), R_OK)) || ((file->mode & O_CREAT) == O_CREAT)) {    // check for at least file exists / read access before we try to open
                 char tries = (((file->mode & O_RDWR) == O_RDWR) && (file->tryDowngrade)) ? 2 : 1;  // try read/write if possible
                 for (int i = 0; i < tries; i++) {
                     if (i > 0) {
                         file->mode = (file->mode & ~O_RDWR);    // remove write access
                         file->mode = (file->mode | O_RDONLY);// add read access
                     }
-                    file->fd = ::open(file->path, file->mode|O_BINARY, file->perms);
+                    file->fd = ::open(file->path.c_str(), file->mode|O_BINARY, file->perms);
 
                     if (file->fd >= 0)
                         break;
@@ -241,10 +238,10 @@ signed char FileMgr::trunc(FileDesc *file) {
 
     if (writable) {
         // get tmpfilename
-        char *buf = new char [ strlen(file->path) + 10 ];
+        char * buf = new char[file->path.size() + 10];
         int i;
         for (i = 0; i < 9999; i++) {
-            sprintf(buf, "%stmp%.4d", file->path, i);
+            sprintf(buf, "%stmp%.4d", file->path.c_str(), i);
             if (!existsFile(buf))
                 break;
         }
@@ -265,7 +262,7 @@ signed char FileMgr::trunc(FileDesc *file) {
         if (size < 1) {
             // zero out the file
             ::close(file->fd);
-            file->fd = ::open(file->path, O_TRUNC, S_IREAD|S_IWRITE|S_IRGRP|S_IROTH);
+            file->fd = ::open(file->path.c_str(), O_TRUNC, S_IREAD|S_IWRITE|S_IRGRP|S_IROTH);
             ::close(file->fd);
             file->fd = -77;    // force file open by filemgr
             // copy tmp file back (dumb, but must preserve file permissions)
