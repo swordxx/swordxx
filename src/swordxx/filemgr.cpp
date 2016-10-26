@@ -238,17 +238,17 @@ signed char FileMgr::trunc(FileDesc *file) {
 
     if (writable) {
         // get tmpfilename
-        char * buf = new char[file->path.size() + 10];
-        int i;
-        for (i = 0; i < 9999; i++) {
-            sprintf(buf, "%stmp%.4d", file->path.c_str(), i);
-            if (!existsFile(buf))
-                break;
-        }
-        if (i == 9999)
-            return -2;
+        std::string tmpFileName;
+        int i = 0;
+        do {
+            tmpFileName = formatted("%stmp%.4d", file->path.c_str(), i);
+            if (!exists(tmpFileName.c_str()))
+                goto tmpFileNameReady;
+        } while (++i < 10000);
+        return -2;
+        tmpFileNameReady:
 
-        int fd = ::open(buf, O_CREAT|O_RDWR, S_IREAD|S_IWRITE|S_IRGRP|S_IROTH);
+        int fd = ::open(tmpFileName.c_str(), O_CREAT|O_RDWR, S_IREAD|S_IWRITE|S_IRGRP|S_IROTH);
         if (fd < 0)
             return -3;
 
@@ -275,7 +275,7 @@ signed char FileMgr::trunc(FileDesc *file) {
 
         ::close(fd);
         ::close(file->fd);
-        removeFile(buf);        // remove our tmp file
+        removeFile(tmpFileName.c_str()); // remove our tmp file
         file->fd = -77;    // causes file to be swapped out forcing open on next call to getFd()
     }
     else { // put offset back and return failure
