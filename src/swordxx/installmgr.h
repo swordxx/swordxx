@@ -73,7 +73,7 @@ class SWDLLEXPORT InstallMgr {
 protected:
     bool userDisclaimerConfirmed;
     std::set<std::string> defaultMods;
-    char *privatePath;
+    std::string privatePath;
     std::string confPath;
     StatusReporter *statusReporter;
     bool passive;
@@ -105,7 +105,7 @@ public:
      *  This will get overridden if a password is required and provided in an indivual
      *  source configuration.
          */
-    InstallMgr(char const * privatePath = "./",
+    InstallMgr(std::string privatePath = "./",
                StatusReporter * statusReporter = nullptr,
                std::string u = "ftp",
                std::string p = "installmgr@user.com");

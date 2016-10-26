@@ -59,21 +59,15 @@ const int InstallMgr::MODSTAT_CIPHERED         = 0x010;
 const int InstallMgr::MODSTAT_CIPHERKEYPRESENT = 0x020;
 
 
-InstallMgr::InstallMgr(const char *privatePath, StatusReporter *sr, std::string u, std::string p) {
+InstallMgr::InstallMgr(std::string privatePath, StatusReporter *sr, std::string u, std::string p) {
     userDisclaimerConfirmed = false;
     statusReporter = sr;
     this->u = u;
     this->p = p;
-    this->privatePath = nullptr;
+    removeTrailingDirectorySlashes(privatePath);
+    this->privatePath = privatePath;
     installConf = nullptr;
-    stdstr(&(this->privatePath), privatePath);
-    if (this->privatePath) {
-        int len = strlen(this->privatePath);
-        if ((this->privatePath[len-1] == '/')
-         || (this->privatePath[len-1] == '\\'))
-            this->privatePath[len-1] = 0;
-    }
-    confPath = std::string(privatePath) + "/InstallMgr.conf";
+    confPath = std::move(privatePath += "/InstallMgr.conf");
     FileMgr::createParent(confPath.c_str());
 
     readInstallConf();
@@ -81,7 +75,6 @@ InstallMgr::InstallMgr(const char *privatePath, StatusReporter *sr, std::string 
 
 
 InstallMgr::~InstallMgr() {
-    delete [] privatePath;
     delete installConf;
     clearSources();
 }
@@ -117,9 +110,9 @@ void InstallMgr::readInstallConf() {
         while (sourceBegin != sourceEnd) {
             InstallSource *is = new InstallSource("FTP", sourceBegin->second.c_str());
             sources[is->caption] = is;
-            std::string parent = std::string(privatePath) + '/' + is->uid + "/file";
+            std::string parent = privatePath + '/' + is->uid + "/file";
             FileMgr::createParent(parent.c_str());
-            is->localShadow = std::string(privatePath) + '/' + is->uid;
+            is->localShadow = privatePath + '/' + is->uid;
             sourceBegin++;
         }
 
@@ -130,9 +123,9 @@ void InstallMgr::readInstallConf() {
         while (sourceBegin != sourceEnd) {
             InstallSource *is = new InstallSource("SFTP", sourceBegin->second.c_str());
             sources[is->caption] = is;
-            std::string parent = std::string(privatePath) + '/' + is->uid + "/file";
+            std::string parent = privatePath + '/' + is->uid + "/file";
             FileMgr::createParent(parent.c_str());
-            is->localShadow = std::string(privatePath) + '/' + is->uid;
+            is->localShadow = privatePath + '/' + is->uid;
             sourceBegin++;
         }
 #endif // SWORDXX_CURL_HAS_SFTP
@@ -143,9 +136,9 @@ void InstallMgr::readInstallConf() {
         while (sourceBegin != sourceEnd) {
             InstallSource *is = new InstallSource("HTTP", sourceBegin->second.c_str());
             sources[is->caption] = is;
-            std::string parent = std::string(privatePath) + '/' + is->uid + "/file";
+            std::string parent = privatePath + '/' + is->uid + "/file";
             FileMgr::createParent(parent.c_str());
-            is->localShadow = std::string(privatePath) + '/' + is->uid;
+            is->localShadow = privatePath + '/' + is->uid;
             sourceBegin++;
         }
 
@@ -155,9 +148,9 @@ void InstallMgr::readInstallConf() {
         while (sourceBegin != sourceEnd) {
             InstallSource *is = new InstallSource("HTTPS", sourceBegin->second.c_str());
             sources[is->caption] = is;
-            std::string parent = std::string(privatePath) + '/' + is->uid + "/file";
+            std::string parent = privatePath + '/' + is->uid + "/file";
             FileMgr::createParent(parent.c_str());
-            is->localShadow = std::string(privatePath) + '/' + is->uid;
+            is->localShadow = privatePath + '/' + is->uid;
             sourceBegin++;
         }
     }
@@ -376,7 +369,7 @@ int InstallMgr::installModule(SWMgr *destMgr, const char *fromLocation, const ch
     SWLog::getSystemLog()->logDebug("***** modName: %s \n", modName);
 
     if (is)
-        sourceDir = std::string(privatePath) + '/' + is->uid;
+        sourceDir = privatePath + '/' + is->uid;
     else    sourceDir = fromLocation;
 
     removeTrailingDirectorySlashes(sourceDir);
@@ -521,7 +514,7 @@ int InstallMgr::refreshRemoteSource(InstallSource *is) {
     // assert user disclaimer has been confirmed
     if (!isUserDisclaimerConfirmed()) return -1;
 
-    std::string root(std::string(privatePath) + '/' + is->uid);
+    std::string root(privatePath + '/' + is->uid);
     removeTrailingDirectorySlashes(root);
     std::string target = root + "/mods.d";
     int errorCode = -1; //0 means successful
