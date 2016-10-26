@@ -82,9 +82,8 @@ InstallMgr::~InstallMgr() {
 
 
 void InstallMgr::clearSources() {
-    for (InstallSourceMap::iterator it = sources.begin(); it != sources.end(); ++it) {
-        delete it->second;
-    }
+    for (auto const & sp : sources)
+        delete sp.second;
     sources.clear();
 }
 
@@ -174,11 +173,12 @@ void InstallMgr::saveInstallConf() {
 
     installConf->sections()["Sources"].clear();
 
-    for (InstallSourceMap::iterator it = sources.begin(); it != sources.end(); ++it) {
-        if (it->second) {
-            installConf->sections()["Sources"].insert(ConfigEntMap::value_type(it->second->type + "Source", it->second->getConfEnt().c_str()));
-        }
-    }
+    for (auto const & sp : sources)
+        if (sp.second)
+            installConf->sections()["Sources"].emplace(
+                        sp.second->type + "Source",
+                        sp.second->getConfEnt().c_str());
+
     (*installConf)["General"]["PassiveFTP"] = (isFTPPassive()) ? "true" : "false";
 
     installConf->save();
@@ -555,14 +555,13 @@ map<SWModule *, int> InstallMgr::getModuleStatus(const SWMgr &base, const SWMgr 
     bool keyPresent;
     int modStat;
 
-    for (ModMap::const_iterator mod = other.Modules.begin(); mod != other.Modules.end(); mod++) {
-
+    for (auto const & mp : other.Modules) {
         modStat = 0;
 
         cipher = false;
         keyPresent = false;
 
-        const char *v = mod->second->getConfigEntry("CipherKey");
+        const char *v = mp.second->getConfigEntry("CipherKey");
         if (v) {
             cipher = true;
             keyPresent = *v;
@@ -586,10 +585,10 @@ map<SWModule *, int> InstallMgr::getModuleStatus(const SWMgr &base, const SWMgr 
                            SWORDXX_VERSION);
         #endif
 
-        const SWModule *baseMod = base.getModule(mod->first.c_str());
+        const SWModule *baseMod = base.getModule(mp.first.c_str());
         if (baseMod) {
             auto const sourceVersion(
-                    getVersion(mod->second->getConfigEntry("Version"), 0x1u));
+                    getVersion(mp.second->getConfigEntry("Version"), 0x1u));
             auto const targetVersion(
                     getVersion(baseMod->getConfigEntry("Version"), 0x1u));
             modStat |=
@@ -603,7 +602,7 @@ map<SWModule *, int> InstallMgr::getModuleStatus(const SWMgr &base, const SWMgr 
 
         if (cipher) modStat |= MODSTAT_CIPHERED;
         if (keyPresent) modStat |= MODSTAT_CIPHERKEYPRESENT;
-        retVal[mod->second] = modStat;
+        retVal[mp.second] = modStat;
     }
     return retVal;
 }
@@ -629,20 +628,19 @@ int InstallMgr::refreshRemoteSourceConfiguration() {
         SWConfig masterList(masterRepoListPath.c_str());
         SectionMap::iterator sections = masterList.sections().find("Repos");
         if (sections != masterList.sections().end()) {
-            for (ConfigEntMap::iterator actions = sections->second.begin(); actions != sections->second.end(); actions++) {
+            for (auto & ap : sections->second) {
                 // Search through our current sources and see if we have a matching UID
-                InstallSourceMap::iterator it;
-                for (it = sources.begin(); it != sources.end(); ++it) {
+                for (auto & sp : sources) {
                     // is this our UID?
-                    if ((it->second) && (it->second->uid == actions->first)) {
-                        if (actions->second == "REMOVE") {
+                    if (sp.second && sp.second->uid == ap.first) {
+                        if (ap.second == "REMOVE") {
                             // be sure to call save/reload after this
                             // or this could be dangerous
-                            delete it->second;
-                            it->second = nullptr;
+                            delete sp.second;
+                            sp.second = nullptr;
                         }
                         else {
-                            std::string key(stripPrefix(actions->second, '='));
+                            std::string key(stripPrefix(ap.second, '='));
                             if (key == "FTPSource") {
                                 // we might consider instantiating a temp IS
                                 // from our config string and then copy only
@@ -651,25 +649,27 @@ int InstallMgr::refreshRemoteSourceConfiguration() {
                                 // but it seems like we might want to change any
                                 // of the current fields so we don't do this now
                                 // InstallSource i("FTP", actions->second);
-                                delete it->second;
-                                it->second = new InstallSource("FTP", actions->second.c_str());
-                                it->second->uid = actions->first;
+                                delete sp.second;
+                                sp.second = new InstallSource("FTP", ap.second.c_str());
+                                sp.second->uid = ap.first;
                             }
                         }
-                        break;
+                        goto foundIt;
                     }
                 }
                 // didn't find our UID, let's add it
-                if (it == sources.end()) {
-                    std::string key(stripPrefix(actions->second, '='));
+                {
+                    std::string key(stripPrefix(ap.second, '='));
                     if (key == "FTPSource") {
-                        if (actions->second != "REMOVE") {
-                            InstallSource *is = new InstallSource("FTP", actions->second.c_str());
-                            is->uid = actions->first;
+                        if (ap.second != "REMOVE") {
+                            InstallSource *is = new InstallSource("FTP", ap.second.c_str());
+                            is->uid = ap.first;
                             sources[is->caption] = is;
                         }
                     }
                 }
+
+                foundIt: (void) 0;
             }
 
             // persist and re-read
