@@ -36,19 +36,15 @@ void TreeKey::init() {
 
 
 void TreeKey::assureKeyPath(const char *keyBuffer) {
-
-    if (!keyBuffer)
-        keyBuffer = m_unsnappedKeyText.c_str();
-
-    char * keybuf = nullptr;
-    stdstr(&keybuf, keyBuffer);
+    std::string keyBuf(keyBuffer ? std::string(keyBuffer) : m_unsnappedKeyText);
 
     root();
 
-    // TODO: change to NOT use strtok. strtok is dangerous.
-    std::string tok = strtok(keybuf, "/");
-    trimString(tok);
-    while (!tok.empty()) {
+    std::string tok(stripPrefix(keyBuf, '/'));
+    for (;; tok = stripPrefix(keyBuf, '/')) {
+        trimString(tok);
+        if (tok.empty())
+            break;
         bool foundkey = false;
         if (hasChildren()) {
             firstChild();
@@ -79,12 +75,7 @@ void TreeKey::assureKeyPath(const char *keyBuffer) {
 #ifdef DEBUG
 //      std::cout << getLocalName() << " : " << tok << std::endl;
 #endif
-
-        tok = strtok(nullptr, "/");
-        trimString(tok);
-
     }
-    delete [] keybuf;
 }
 
 
