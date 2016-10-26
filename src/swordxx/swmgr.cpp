@@ -486,20 +486,21 @@ void SWMgr::findConfig(char *configType, std::string & prefixPath, std::string &
             // check for systemwide globalConfPath
 
             SWLog::getSystemLog()->logDebug("Parsing %s...", globalConfPath);
-            char * globPaths = nullptr;
-            char *gfp;
-            stdstr(&globPaths, globalConfPath);
-            for (gfp = strtok(globPaths, ":"); gfp; gfp = strtok(nullptr, ":"))
             {
-                SWLog::getSystemLog()->logDebug("Checking for %s...", gfp);
-                if (FileMgr::existsFile(gfp)) {
-                    SWLog::getSystemLog()->logDebug("found.");
-                    break;
+                std::string globPaths(globalConfPath);
+                for (std::string gfp = stripPrefix(globPaths, ':');
+                     !gfp.empty();
+                     gfp = stripPrefix(globPaths, ':'))
+                {
+                    SWLog::getSystemLog()->logDebug("Checking for %s...",
+                                                    gfp.c_str());
+                    if (FileMgr::existsFile(gfp.c_str())) {
+                        SWLog::getSystemLog()->logDebug("found.");
+                        sysConfPath = gfp;
+                        break;
+                    }
                 }
             }
-            if (gfp)
-                sysConfPath = gfp;
-            delete [] globPaths;
 
             if (!homeDir.empty()) {
                 std::string const tryPath(homeDir + ".swordxx/swordxx.conf");
