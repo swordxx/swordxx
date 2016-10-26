@@ -79,20 +79,19 @@ class SWOptionFilter;
  */
 class SWDLLEXPORT SWMgr {
 private:
-    bool mgrModeMultiMod;
-    bool augmentHome;
-    void commonInit(SWConfig *iconfig, SWConfig *isysconfig, bool autoload, SWFilterMgr *filterMgr, bool multiMod = false);
+    bool const mgrModeMultiMod;
+    bool augmentHome = true;
     void init(); // use to initialize before loading modules
 
 protected:
     SWFilterMgr *filterMgr;        //made protected because because BibleTime needs it
-    SWConfig *myconfig;        //made protected because because BibleTime needs it
-    SWConfig *mysysconfig;
-    SWConfig *homeConfig;
+    SWConfig * myconfig = nullptr; // made protected because because BibleTime needs it
+    SWConfig * mysysconfig = nullptr;
+    SWConfig * homeConfig = nullptr;
     void CreateMods(bool multiMod = false);
     virtual SWModule *createModule(const char *name, const char *driver, ConfigEntMap &section);
     void DeleteMods();
-    char configType;        // 0 = file; 1 = directory
+    char configType = 0;        // 0 = file; 1 = directory
     OptionFilterMap optionFilters;
     std::map<std::string, CipherFilter *> cipherFilters;
     SWFilter *gbfplain;

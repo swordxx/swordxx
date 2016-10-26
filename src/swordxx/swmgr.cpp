@@ -115,16 +115,7 @@ const char *SWMgr::globalConfPath =
 
 void SWMgr::init() {
     SWOptionFilter * tmpFilter = nullptr;
-    configType  = 0;
-    myconfig    = nullptr;
-    mysysconfig = nullptr;
-    homeConfig  = nullptr;
-    augmentHome = true;
 
-    cipherFilters.clear();
-    optionFilters.clear();
-    cleanupFilters.clear();
-    extraFilters.clear();
     tmpFilter = new ThMLVariants();
     optionFilters.insert(OptionFilterMap::value_type("ThMLVariants", tmpFilter));
     cleanupFilters.push_back(tmpFilter);
@@ -291,13 +282,20 @@ std::string SWMgr::getHomeDir() {
     return homeDir;
 }
 
+SWMgr::SWMgr(SWFilterMgr * filterMgr, bool multiMod)
+    : SWMgr(nullptr, nullptr, true, filterMgr, multiMod)
+{}
 
-void SWMgr::commonInit(SWConfig *iconfig, SWConfig *isysconfig, bool autoload, SWFilterMgr *filterMgr, bool multiMod) {
-
+SWMgr::SWMgr(SWConfig * iconfig,
+             SWConfig * isysconfig,
+             bool autoload,
+             SWFilterMgr * filterMgr_,
+             bool multiMod)
+    : mgrModeMultiMod(multiMod)
+    , filterMgr(filterMgr_)
+{
     init();
 
-    mgrModeMultiMod = multiMod;
-    this->filterMgr = filterMgr;
     if (filterMgr)
         filterMgr->setParentMgr(this);
 
@@ -316,28 +314,19 @@ void SWMgr::commonInit(SWConfig *iconfig, SWConfig *isysconfig, bool autoload, S
         Load();
 }
 
-
-SWMgr::SWMgr(SWFilterMgr *filterMgr, bool multiMod) {
-    commonInit(nullptr, nullptr, true, filterMgr, multiMod);
-}
-
-
-SWMgr::SWMgr(SWConfig *iconfig, SWConfig *isysconfig, bool autoload, SWFilterMgr *filterMgr, bool multiMod) {
-    commonInit(iconfig, isysconfig, autoload, filterMgr, multiMod);
-}
-
-
-SWMgr::SWMgr(const char *iConfigPath, bool autoload, SWFilterMgr *filterMgr, bool multiMod, bool augmentHome) {
-
+SWMgr::SWMgr(char const * iConfigPath,
+             bool autoload,
+             SWFilterMgr * filterMgr_,
+             bool multiMod,
+             bool augmentHome_)
+    : mgrModeMultiMod(multiMod)
+    , augmentHome(augmentHome_)
+    , filterMgr(filterMgr_)
+{
     init();
 
-    mgrModeMultiMod = multiMod;
-
-    this->filterMgr = filterMgr;
     if (filterMgr)
         filterMgr->setParentMgr(this);
-
-    this->augmentHome = augmentHome;
 
     std::string path;
     if (iConfigPath) {
@@ -370,7 +359,6 @@ SWMgr::SWMgr(const char *iConfigPath, bool autoload, SWFilterMgr *filterMgr, boo
     if (autoload && !m_configPath.empty())
         Load();
 }
-
 
 SWMgr::~SWMgr() {
     DeleteMods();
