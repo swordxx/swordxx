@@ -48,7 +48,7 @@ void TreeKey::assureKeyPath(const char *keyBuffer) {
     // TODO: change to NOT use strtok. strtok is dangerous.
     std::string tok = strtok(keybuf, "/");
     trimString(tok);
-    while (tok.size()) {
+    while (!tok.empty()) {
         bool foundkey = false;
         if (hasChildren()) {
             firstChild();
