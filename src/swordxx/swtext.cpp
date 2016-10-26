@@ -50,8 +50,7 @@ SWKey * staticCreateKey(char const * const versification) {
  */
 
 SWText::SWText(const char *imodname, const char *imoddesc, TextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char* ilang, const char *versification): SWModule(staticCreateKey(versification), imodname, imoddesc, "Biblical Texts", enc, dir, mark, ilang) {
-    this->versification = nullptr;
-    stdstr(&(this->versification), versification);
+    this->versification = versification;
     tmpVK1 = (VerseKey *)createKey();
     tmpVK2 = (VerseKey *)createKey();
         tmpSecond = false;
@@ -66,7 +65,6 @@ SWText::SWText(const char *imodname, const char *imoddesc, TextEncoding enc, SWT
 SWText::~SWText() {
     delete tmpVK1;
     delete tmpVK2;
-    delete [] versification;
 }
 
 
@@ -74,8 +72,8 @@ SWText::~SWText() {
  * SWText createKey - Create the correct key (VerseKey) for use with SWText
  */
 
-SWKey * SWText::createKey() const { return staticCreateKey(versification); }
-
+SWKey * SWText::createKey() const
+{ return staticCreateKey(versification.c_str()); }
 
 long SWText::getIndex() const {
     VerseKey *key = &getVerseKey();

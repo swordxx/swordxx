@@ -41,7 +41,7 @@ class SWDLLEXPORT SWText : public SWModule {
     mutable VerseKey *tmpVK1;
     mutable VerseKey *tmpVK2;
         mutable bool tmpSecond;
-    char *versification;
+    std::string versification;
 
 protected:
     VerseKey & getVerseKey(SWKey const * key = nullptr) const;
