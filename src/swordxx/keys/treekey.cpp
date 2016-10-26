@@ -37,12 +37,8 @@ void TreeKey::init() {
 
 void TreeKey::assureKeyPath(const char *keyBuffer) {
 
-    if (!keyBuffer) {
+    if (!keyBuffer)
         keyBuffer = m_unsnappedKeyText.c_str();
-        //assert we have something to do before setting root
-        if (!*keyBuffer)
-            return;
-    }
 
     char * keybuf = nullptr;
     stdstr(&keybuf, keyBuffer);
