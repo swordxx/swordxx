@@ -1401,28 +1401,25 @@ StringList SWMgr::getGlobalOptionValues(const char * const option) {
 
 
 signed char SWMgr::setCipherKey(const char *modName, const char *key) {
-    FilterMap::iterator it;
-    ModMap::iterator it2;
-
-    // check for filter that already exists
-    it = cipherFilters.find(modName);
-    if (it != cipherFilters.end()) {
-        static_cast<CipherFilter *>((*it).second)->getCipher()->setCipherKey(
-                    key);
-        return 0;
-    }
-    // check if module exists
-    else {
-        it2 = Modules.find(modName);
-        if (it2 != Modules.end()) {
-            SWFilter *cipherFilter = new CipherFilter(key);
-            cipherFilters.insert(FilterMap::value_type(modName, cipherFilter));
-            cleanupFilters.push_back(cipherFilter);
-            (*it2).second->addRawFilter(cipherFilter);
+    { // check for filter that already exists
+        auto const it = cipherFilters.find(modName);
+        if (it != cipherFilters.end()) {
+            static_cast<CipherFilter *>((*it).second)->getCipher()->setCipherKey(
+                        key);
             return 0;
         }
     }
-    return -1;
+
+    // check if module exists
+    auto const it = Modules.find(modName);
+    if (it == Modules.end())
+        return -1;
+
+    SWFilter * const cipherFilter = new CipherFilter(key);
+    cipherFilters.emplace(modName, cipherFilter);
+    cleanupFilters.push_back(cipherFilter);
+    it->second->addRawFilter(cipherFilter);
+    return 0;
 }
 
 
