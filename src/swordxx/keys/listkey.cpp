@@ -310,7 +310,7 @@ std::string ListKey::getOSISRefRangeText() const {
     bool appendSeparator = false;
     for (auto const & key : m_array) {
         if (appendSeparator)
-            r.append(1u, ';');
+            r.push_back(';');
         appendSeparator = true;
         r.append(key->getOSISRefRangeText());
     }

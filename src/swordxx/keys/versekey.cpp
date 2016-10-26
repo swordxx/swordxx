@@ -1772,7 +1772,7 @@ std::string VerseKey::getRangeText() const {
         char const * const lb = lbKey.getText();
         char const * const ub = ubKey.getText();
         std::string r(lb ? lb : "");
-        r.append(1u, '-');
+        r.push_back('-');
         if (ub)
             r.append(ub);
         return r;
@@ -1790,7 +1790,7 @@ std::string VerseKey::getRangeText() const {
 std::string VerseKey::getOSISRefRangeText() const {
     if (isBoundSet() && (m_lowerBound != m_upperBound)) {
         std::string r(getLowerBound().getOSISRef());
-        r.append(1u, '-');
+        r.push_back('-');
         r.append(getUpperBound().getOSISRef());
         return r;
     }
