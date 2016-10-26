@@ -388,7 +388,8 @@ public:
      * @param modName For this module we change the unlockKey
      * @param key This is the new unlck key we use for te module.
      */
-    virtual signed char setCipherKey(const char *modName, const char *key);
+    virtual bool setCipherKey(std::string const & modName,
+                              char const * key);
 };
 
 } /* namespace swordxx */

@@ -1387,25 +1387,25 @@ StringList SWMgr::getGlobalOptionValues(const char * const option) {
 }
 
 
-signed char SWMgr::setCipherKey(const char *modName, const char *key) {
+bool SWMgr::setCipherKey(std::string const & modName, char const * key) {
     { // check for filter that already exists
         auto const it = cipherFilters.find(modName);
         if (it != cipherFilters.end()) {
             it->second->getCipher()->setCipherKey(key);
-            return 0;
+            return true;
         }
     }
 
     // check if module exists
     auto const it = Modules.find(modName);
     if (it == Modules.end())
-        return -1;
+        return false;
 
     CipherFilter * const cipherFilter = new CipherFilter(key);
     cipherFilters.emplace(modName, cipherFilter);
     cleanupFilters.push_back(cipherFilter);
     it->second->addRawFilter(cipherFilter);
-    return 0;
+    return true;
 }
 
 
