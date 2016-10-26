@@ -53,6 +53,7 @@
 
 namespace swordxx {
 
+class CipherFilter;
 class SWModule;
 class SWFilter;
 class SWOptionFilter;
@@ -93,7 +94,7 @@ protected:
     void DeleteMods();
     char configType;        // 0 = file; 1 = directory
     OptionFilterMap optionFilters;
-    FilterMap cipherFilters;
+    std::map<std::string, CipherFilter *> cipherFilters;
     SWFilter *gbfplain;
     SWFilter *thmlplain;
     SWFilter *osisplain;

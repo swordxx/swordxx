@@ -1145,9 +1145,8 @@ void SWMgr::addRawFilters(SWModule & module, ConfigEntMap const & section) {
     std::string cipherKey(
                 (entry != section.end()) ? entry->second : std::string());
     if (!cipherKey.empty()) {
-        SWFilter * const cipherFilter = new CipherFilter(cipherKey.c_str());
-        cipherFilters.insert(
-                    FilterMap::value_type(module.getName(), cipherFilter));
+        CipherFilter * const cipherFilter = new CipherFilter(cipherKey.c_str());
+        cipherFilters.emplace(module.getName(), cipherFilter);
         cleanupFilters.push_back(cipherFilter);
         module.addRawFilter(cipherFilter);
     }
@@ -1404,8 +1403,7 @@ signed char SWMgr::setCipherKey(const char *modName, const char *key) {
     { // check for filter that already exists
         auto const it = cipherFilters.find(modName);
         if (it != cipherFilters.end()) {
-            static_cast<CipherFilter *>((*it).second)->getCipher()->setCipherKey(
-                        key);
+            it->second->getCipher()->setCipherKey(key);
             return 0;
         }
     }
@@ -1415,7 +1413,7 @@ signed char SWMgr::setCipherKey(const char *modName, const char *key) {
     if (it == Modules.end())
         return -1;
 
-    SWFilter * const cipherFilter = new CipherFilter(key);
+    CipherFilter * const cipherFilter = new CipherFilter(key);
     cipherFilters.emplace(modName, cipherFilter);
     cleanupFilters.push_back(cipherFilter);
     it->second->addRawFilter(cipherFilter);
