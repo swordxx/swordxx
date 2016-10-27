@@ -23,14 +23,14 @@
 #ifndef UTF8GREEKACCENTS_H
 #define UTF8GREEKACCENTS_H
 
-#include "../swoptfilter.h"
+#include "../onoffoptionfilter.h"
 
 
 namespace swordxx {
 
   /** This Filter shows/hides Greek Accents marks in UTF8 text
   */
-class SWDLLEXPORT UTF8GreekAccents : public SWOptionFilter {
+class SWDLLEXPORT UTF8GreekAccents: public OnOffOptionFilter {
 public:
     UTF8GreekAccents();
     ~UTF8GreekAccents() override;

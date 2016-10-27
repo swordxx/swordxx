@@ -23,14 +23,14 @@
 #ifndef UTF8HEBREWPOINTS_H
 #define UTF8HEBREWPOINTS_H
 
-#include "../swoptfilter.h"
+#include "../onoffoptionfilter.h"
 
 
 namespace swordxx {
 
 /** This Filter shows/hides Hebrew vowel points in UTF8 text
  */
-class SWDLLEXPORT UTF8HebrewPoints : public SWOptionFilter {
+class SWDLLEXPORT UTF8HebrewPoints: public OnOffOptionFilter {
 public:
     UTF8HebrewPoints();
     ~UTF8HebrewPoints() override;

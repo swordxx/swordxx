@@ -23,14 +23,14 @@
 #ifndef OSISREDLETTERWORDS_H
 #define OSISREDLETTERWORDS_H
 
-#include "../swoptfilter.h"
+#include "../onoffoptionfilter.h"
 
 
 namespace swordxx {
 
 /** This Filter shows/hides headings in a OSIS text
  */
-class SWDLLEXPORT OSISRedLetterWords : public SWOptionFilter {
+class SWDLLEXPORT OSISRedLetterWords: public OnOffOptionFilter {
 public:
     OSISRedLetterWords();
     ~OSISRedLetterWords() override;

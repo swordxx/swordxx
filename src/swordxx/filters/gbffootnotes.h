@@ -23,14 +23,14 @@
 #ifndef GBFFOOTNOTES_H
 #define GBFFOOTNOTES_H
 
-#include "../swoptfilter.h"
+#include "../offonoptionfilter.h"
 
 
 namespace swordxx {
 
 /** This Filter shows/hides footnotes in a GBF text
   */
-class SWDLLEXPORT GBFFootnotes : public SWOptionFilter {
+class SWDLLEXPORT GBFFootnotes: public OffOnOptionFilter {
 public:
     GBFFootnotes();
     ~GBFFootnotes() override;

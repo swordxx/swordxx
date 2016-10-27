@@ -38,22 +38,17 @@ namespace {
     static const char oName[] = "Word Javascript";
     static const char oTip[]  = "Toggles Word Javascript data";
 
-    static const StringList *oValues() {
-        static const std::string choices[3] = {"Off", "On", ""};
-        static const StringList oVals(&choices[0], &choices[2]);
-        return &oVals;
-    }
 }
 
-
-ThMLWordJS::ThMLWordJS() : SWOptionFilter(oName, oTip, oValues()) {
+ThMLWordJS::ThMLWordJS()
+    : OffOnOptionFilter(oName, oTip)
+{
      defaultGreekLex   = nullptr;
      defaultHebLex     = nullptr;
      defaultGreekParse = nullptr;
      defaultHebParse   = nullptr;
      mgr               = nullptr;
 }
-
 
 ThMLWordJS::~ThMLWordJS() {
 }

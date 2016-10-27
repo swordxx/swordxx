@@ -24,14 +24,14 @@
 #ifndef OSISREFERENCELINKS_H
 #define OSISREFERENCELINKS_H
 
-#include "../swoptfilter.h"
+#include "../onoffoptionfilter.h"
 
 
 namespace swordxx {
 
 /** This Filter hides reference links with a particular type/subtype in an OSIS text
  */
-class SWDLLEXPORT OSISReferenceLinks : public SWOptionFilter {
+class SWDLLEXPORT OSISReferenceLinks : public OnOffOptionFilter {
     std::string optionName;
     std::string optionTip;
     std::string type;

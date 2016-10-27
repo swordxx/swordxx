@@ -23,7 +23,7 @@
 #ifndef GBFWORDSJS_H
 #define GBFWORDSJS_H
 
-#include "../swoptfilter.h"
+#include "../offonoptionfilter.h"
 
 
 namespace swordxx {
@@ -31,7 +31,7 @@ namespace swordxx {
 class SWMgr;
   /** This Filter shows/hides strong's numbers in a GBF text
   */
-class SWDLLEXPORT GBFWordJS : public SWOptionFilter {
+class SWDLLEXPORT GBFWordJS: public OffOnOptionFilter {
      SWModule *defaultGreekLex;
      SWModule *defaultHebLex;
      SWModule *defaultGreekParse;

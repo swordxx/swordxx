@@ -23,14 +23,14 @@
 #ifndef THMLHEADINGS_H
 #define THMLHEADINGS_H
 
-#include "../swoptfilter.h"
+#include "../offonoptionfilter.h"
 
 
 namespace swordxx {
 
 /** This Filter shows/hides headings in a ThML text
  */
-class SWDLLEXPORT ThMLHeadings : public SWOptionFilter {
+class SWDLLEXPORT ThMLHeadings: public OffOnOptionFilter {
 public:
     ThMLHeadings();
     ~ThMLHeadings() override;

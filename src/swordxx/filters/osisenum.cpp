@@ -35,17 +35,11 @@ namespace {
     static const char oName[] = "Enumerations";
     static const char oTip[]  = "Toggles Enumerations On and Off if they exist";
 
-    static const StringList *oValues() {
-        static const std::string choices[3] = {"Off", "On", ""};
-        static const StringList oVals(&choices[0], &choices[2]);
-        return &oVals;
-    }
 }
 
-
-OSISEnum::OSISEnum() : SWOptionFilter(oName, oTip, oValues()) {
-}
-
+OSISEnum::OSISEnum()
+    : OffOnOptionFilter(oName, oTip)
+{}
 
 OSISEnum::~OSISEnum() {
 }

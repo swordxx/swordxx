@@ -34,17 +34,11 @@ namespace {
     static const char oName[] = "Lemmas";
     static const char oTip[]  = "Toggles Lemmas On and Off if they exist";
 
-    static const StringList *oValues() {
-        static const std::string choices[3] = {"Off", "On", ""};
-        static const StringList oVals(&choices[0], &choices[2]);
-        return &oVals;
-    }
 }
 
-
-ThMLLemma::ThMLLemma() : SWOptionFilter(oName, oTip, oValues()) {
-}
-
+ThMLLemma::ThMLLemma()
+    : OffOnOptionFilter(oName, oTip)
+{}
 
 ThMLLemma::~ThMLLemma() {
 }

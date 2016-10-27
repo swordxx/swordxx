@@ -35,13 +35,6 @@ namespace {
     static const char oName[] = "Arabic Vowel Points";
     static const char oTip[]  = "Toggles Arabic Vowel Points";
 
-    static const StringList *oValues() {
-        static const std::string choices[3] = {"On", "Off", ""};
-        static const StringList oVals(&choices[0], &choices[2]);
-        return &oVals;
-    }
-
-
     static char *nextMark(const char* from, int* mark_size) {
         // Arabic vowel points currently targeted for elimination:
         // Table entries excerpted from
@@ -115,10 +108,9 @@ namespace {
     }
 }
 
-
-UTF8ArabicPoints::UTF8ArabicPoints() : SWOptionFilter(oName, oTip, oValues()) {
-}
-
+UTF8ArabicPoints::UTF8ArabicPoints()
+    : OnOffOptionFilter(oName, oTip)
+{}
 
 UTF8ArabicPoints::~UTF8ArabicPoints(){};
 

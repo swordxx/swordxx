@@ -23,14 +23,14 @@
 #ifndef THMLLEMMA_H
 #define THMLLEMMA_H
 
-#include "../swoptfilter.h"
+#include "../offonoptionfilter.h"
 
 
 namespace swordxx {
 
 /** This Filter shows/hides lemmas in a ThML text
  */
-class SWDLLEXPORT ThMLLemma : public SWOptionFilter {
+class SWDLLEXPORT ThMLLemma: public OffOnOptionFilter {
 public:
     ThMLLemma();
     ~ThMLLemma() override;

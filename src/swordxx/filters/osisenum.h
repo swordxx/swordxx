@@ -23,14 +23,14 @@
 #ifndef OSISENUM_H
 #define OSISENUM_H
 
-#include "../swoptfilter.h"
+#include "../offonoptionfilter.h"
 
 
 namespace swordxx {
 
 /** This Filter shows/hides headings in a OSIS text
  */
-class SWDLLEXPORT OSISEnum : public SWOptionFilter {
+class SWDLLEXPORT OSISEnum: public OffOnOptionFilter {
 public:
     OSISEnum();
     ~OSISEnum() override;

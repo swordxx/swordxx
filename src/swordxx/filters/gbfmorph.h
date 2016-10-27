@@ -23,14 +23,14 @@
 #ifndef GBFMORPH_H
 #define GBFMORPH_H
 
-#include "../swoptfilter.h"
+#include "../offonoptionfilter.h"
 
 
 namespace swordxx {
 
   /** This Filter shows/hides morph tags in a GBF text
   */
-class SWDLLEXPORT GBFMorph : public SWOptionFilter {
+class SWDLLEXPORT GBFMorph: public OffOnOptionFilter {
 public:
     GBFMorph();
     ~GBFMorph() override;

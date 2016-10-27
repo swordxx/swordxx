@@ -23,14 +23,14 @@
 #ifndef GBFHEADINGS_H
 #define GBFHEADINGS_H
 
-#include "../swoptfilter.h"
+#include "../offonoptionfilter.h"
 
 
 namespace swordxx {
 
   /** This Filter shows/hides headings in a GBF text
   */
-class SWDLLEXPORT GBFHeadings : public SWOptionFilter {
+class SWDLLEXPORT GBFHeadings: public OffOnOptionFilter {
 public:
     GBFHeadings();
     ~GBFHeadings() override;

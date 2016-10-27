@@ -23,14 +23,14 @@
 #ifndef UTF8CANTILLATION_H
 #define UTF8CANTILLATION_H
 
-#include "../swoptfilter.h"
+#include "../offonoptionfilter.h"
 
 
 namespace swordxx {
 
   /** This Filter shows/hides Hebrew cantillation marks in UTF8 text
   */
-class SWDLLEXPORT UTF8Cantillation : public SWOptionFilter {
+class SWDLLEXPORT UTF8Cantillation: public OffOnOptionFilter {
 public:
     UTF8Cantillation();
     ~UTF8Cantillation() override;

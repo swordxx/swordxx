@@ -23,7 +23,7 @@
 #ifndef OSISMORPHSEGMENTATION_H
 #define OSISMORPHSEGMENTATION_H
 
-#include "../swoptfilter.h"
+#include "../offonoptionfilter.h"
 
 
 namespace swordxx {
@@ -32,7 +32,7 @@ namespace swordxx {
  *  (for morpheme segmented Hebrew in the WLC)
  */
 
-class SWDLLEXPORT OSISMorphSegmentation : public SWOptionFilter {
+class SWDLLEXPORT OSISMorphSegmentation: public OffOnOptionFilter {
 
 public:
     OSISMorphSegmentation();

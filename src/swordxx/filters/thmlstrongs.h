@@ -23,14 +23,14 @@
 #ifndef THMLSTRONGS_H
 #define THMLSTRONGS_H
 
-#include "../swoptfilter.h"
+#include "../offonoptionfilter.h"
 
 
 namespace swordxx {
 
 /** This Filter shows/hides strong's numbers in a ThML text
  */
-class SWDLLEXPORT ThMLStrongs : public SWOptionFilter {
+class SWDLLEXPORT ThMLStrongs: public OffOnOptionFilter {
 public:
     ThMLStrongs();
     ~ThMLStrongs() override;

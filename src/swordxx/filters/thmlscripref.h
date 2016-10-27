@@ -23,14 +23,14 @@
 #ifndef THMLSCRIPREF_H
 #define THMLSCRIPREF_H
 
-#include "../swoptfilter.h"
+#include "../offonoptionfilter.h"
 
 
 namespace swordxx {
 
 /** This Filter shows/hides scripture references in a ThML text
  */
-class SWDLLEXPORT ThMLScripref : public SWOptionFilter {
+class SWDLLEXPORT ThMLScripref: public OffOnOptionFilter {
 public:
     ThMLScripref();
     ~ThMLScripref() override;

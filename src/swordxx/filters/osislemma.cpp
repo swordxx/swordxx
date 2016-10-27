@@ -36,17 +36,11 @@ namespace {
     static const char oName[] = "Lemmas";
     static const char oTip[]  = "Toggles Lemmas On and Off if they exist";
 
-    static const StringList *oValues() {
-        static const std::string choices[3] = {"Off", "On", ""};
-        static const StringList oVals(&choices[0], &choices[2]);
-        return &oVals;
-    }
 }
 
-
-OSISLemma::OSISLemma() : SWOptionFilter(oName, oTip, oValues()) {
-}
-
+OSISLemma::OSISLemma()
+    : OffOnOptionFilter(oName, oTip)
+{}
 
 OSISLemma::~OSISLemma() {
 }

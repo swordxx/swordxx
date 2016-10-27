@@ -30,27 +30,14 @@
 
 namespace swordxx {
 
-
-namespace {
-
-    static const StringList *oValues() {
-        static const std::string choices[3] = {"On", "Off", ""};
-        static const StringList oVals(&choices[0], &choices[2]);
-        return &oVals;
-    }
-}
-
-
 OSISReferenceLinks::OSISReferenceLinks(const char *optionName, const char *optionTip, const char *type, const char *subType, const char *defaultValue)
-        : SWOptionFilter(),
-          optionName(optionName),
-          optionTip(optionTip),
-          type(type),
-          subType(subType) {
-
+        : optionName(optionName)
+        , optionTip(optionTip)
+        , type(type)
+        , subType(subType)
+{
     optName   = this->optionName.c_str();
     optTip    = this->optionTip.c_str();
-    optValues = oValues();
     setOptionValue(defaultValue);
 }
 

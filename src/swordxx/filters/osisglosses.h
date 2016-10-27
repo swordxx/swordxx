@@ -23,14 +23,14 @@
 #ifndef OSISGLOSSES_H
 #define OSISGLOSSES_H
 
-#include "../swoptfilter.h"
+#include "../offonoptionfilter.h"
 
 
 namespace swordxx {
 
 /** This Filter shows/hides headings in a OSIS text
  */
-class SWDLLEXPORT OSISGlosses : public SWOptionFilter {
+class SWDLLEXPORT OSISGlosses: public OffOnOptionFilter {
 public:
     OSISGlosses();
     ~OSISGlosses() override;

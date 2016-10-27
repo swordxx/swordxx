@@ -37,17 +37,11 @@ namespace {
     static const char oName[] = "Morpheme Segmentation";
     static const char oTip[]  = "Toggles Morpheme Segmentation On and Off, when present";
 
-    static const StringList *oValues() {
-        static const std::string choices[3] = {"Off", "On", ""};
-        static const StringList oVals(&choices[0], &choices[2]);
-        return &oVals;
-    }
 }
 
-
-OSISMorphSegmentation::OSISMorphSegmentation() : SWOptionFilter(oName, oTip, oValues()) {
-}
-
+OSISMorphSegmentation::OSISMorphSegmentation()
+    : OffOnOptionFilter(oName, oTip)
+{}
 
 OSISMorphSegmentation::~OSISMorphSegmentation() {}
 

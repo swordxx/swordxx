@@ -23,7 +23,7 @@
 #ifndef THMLWORDSJS_H
 #define THMLWORDSJS_H
 
-#include "../swoptfilter.h"
+#include "../offonoptionfilter.h"
 
 
 namespace swordxx {
@@ -31,7 +31,7 @@ namespace swordxx {
 class SWMgr;
   /** This Filter shows/hides strong's numbers in a ThML text
   */
-class SWDLLEXPORT ThMLWordJS : public SWOptionFilter {
+class SWDLLEXPORT ThMLWordJS: public OffOnOptionFilter {
      SWModule *defaultGreekLex;
      SWModule *defaultHebLex;
      SWModule *defaultGreekParse;

@@ -23,14 +23,14 @@
 #ifndef OSISFOOTNOTES_H
 #define OSISFOOTNOTES_H
 
-#include "../swoptfilter.h"
+#include "../offonoptionfilter.h"
 
 
 namespace swordxx {
 
 /** This Filter shows/hides headings in a OSIS text
  */
-class SWDLLEXPORT OSISFootnotes : public SWOptionFilter {
+class SWDLLEXPORT OSISFootnotes: public OffOnOptionFilter {
 public:
     OSISFootnotes();
     ~OSISFootnotes() override;

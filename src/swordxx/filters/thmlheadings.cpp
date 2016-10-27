@@ -37,17 +37,11 @@ namespace {
     static const char oName[] = "Headings";
     static const char oTip[]  = "Toggles Headings On and Off if they exist";
 
-    static const StringList *oValues() {
-        static const std::string choices[3] = {"Off", "On", ""};
-        static const StringList oVals(&choices[0], &choices[2]);
-        return &oVals;
-    }
 }
 
-
-ThMLHeadings::ThMLHeadings() : SWOptionFilter(oName, oTip, oValues()) {
-}
-
+ThMLHeadings::ThMLHeadings()
+    : OffOnOptionFilter(oName, oTip)
+{}
 
 ThMLHeadings::~ThMLHeadings() {
 }

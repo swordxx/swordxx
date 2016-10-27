@@ -38,17 +38,11 @@ namespace {
     static const char oName[] = "Footnotes";
     static const char oTip[]  = "Toggles Footnotes On and Off if they exist";
 
-    static const StringList *oValues() {
-        static const std::string choices[3] = {"Off", "On", ""};
-        static const StringList oVals(&choices[0], &choices[2]);
-        return &oVals;
-    }
 }
 
-
-GBFFootnotes::GBFFootnotes() : SWOptionFilter(oName, oTip, oValues()) {
-}
-
+GBFFootnotes::GBFFootnotes()
+    : OffOnOptionFilter(oName, oTip)
+{}
 
 GBFFootnotes::~GBFFootnotes() {
 }

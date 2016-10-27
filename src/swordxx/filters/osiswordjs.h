@@ -23,7 +23,7 @@
 #ifndef OSISWORDSJS_H
 #define OSISWORDSJS_H
 
-#include "../swoptfilter.h"
+#include "../offonoptionfilter.h"
 
 
 namespace swordxx {
@@ -31,7 +31,7 @@ namespace swordxx {
 class SWMgr;
   /** This Filter shows/hides strong's numbers in a OSIS text
   */
-class SWDLLEXPORT OSISWordJS : public SWOptionFilter {
+class SWDLLEXPORT OSISWordJS: public OffOnOptionFilter {
      SWModule *defaultGreekLex;
      SWModule *defaultHebLex;
      SWModule *defaultGreekParse;

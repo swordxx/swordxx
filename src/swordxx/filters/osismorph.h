@@ -23,14 +23,14 @@
 #ifndef OSISMORPH_H
 #define OSISMORPH_H
 
-#include "../swoptfilter.h"
+#include "../offonoptionfilter.h"
 
 
 namespace swordxx {
 
 /** This Filter shows/hides morph tags in a OSIS text
  */
-class SWDLLEXPORT OSISMorph : public SWOptionFilter {
+class SWDLLEXPORT OSISMorph: public OffOnOptionFilter {
 public:
     OSISMorph();
     ~OSISMorph() override;

@@ -34,16 +34,12 @@ namespace {
     static const char oName[] = "Words of Christ in Red";
     static const char oTip[]  = "Toggles Red Coloring for Words of Christ On and Off if they are marked";
 
-    static const StringList *oValues() {
-        static const std::string choices[3] = {"On", "Off", ""};
-        static const StringList oVals(&choices[0], &choices[2]);
-        return &oVals;
-    }
 }
 
 
-OSISRedLetterWords::OSISRedLetterWords() : SWOptionFilter(oName, oTip, oValues()) {
-}
+OSISRedLetterWords::OSISRedLetterWords()
+    : OnOffOptionFilter(oName, oTip)
+{}
 
 
 OSISRedLetterWords::~OSISRedLetterWords() {

@@ -23,7 +23,7 @@
 #ifndef GBFREDLETTERWORDS_H
 #define GBFREDLETTERWORDS_H
 
-#include "../swoptfilter.h"
+#include "../offonoptionfilter.h"
 
 
 namespace swordxx {
@@ -32,7 +32,7 @@ namespace swordxx {
  * words of Jesus) in a GBF text. Turn this off if you don't want
  * to have this kind of markup in the text.
  */
-class SWDLLEXPORT GBFRedLetterWords : public SWOptionFilter {
+class SWDLLEXPORT GBFRedLetterWords: public OffOnOptionFilter {
 public:
     GBFRedLetterWords();
     ~GBFRedLetterWords() override;

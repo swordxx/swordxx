@@ -23,14 +23,14 @@
 #ifndef GBFSTRONGS_H
 #define GBFSTRONGS_H
 
-#include "../swoptfilter.h"
+#include "../offonoptionfilter.h"
 
 
 namespace swordxx {
 
 /** This Filter shows/hides strong's numbers in a GBF text
  */
-class SWDLLEXPORT GBFStrongs : public SWOptionFilter {
+class SWDLLEXPORT GBFStrongs: public OffOnOptionFilter {
 public:
     GBFStrongs();
     ~GBFStrongs() override;

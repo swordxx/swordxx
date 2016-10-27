@@ -23,14 +23,14 @@
 #ifndef OSISSTRONGS_H
 #define OSISSTRONGS_H
 
-#include "../swoptfilter.h"
+#include "../offonoptionfilter.h"
 
 
 namespace swordxx {
 
   /** This Filter shows/hides strong's numbers in a OSIS text
   */
-class SWDLLEXPORT OSISStrongs : public SWOptionFilter {
+class SWDLLEXPORT OSISStrongs: public OffOnOptionFilter {
 public:
     OSISStrongs();
     ~OSISStrongs() override;

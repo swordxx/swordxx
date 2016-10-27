@@ -23,14 +23,14 @@
 #ifndef THMLFOOTNOTES_H
 #define THMLFOOTNOTES_H
 
-#include "../swoptfilter.h"
+#include "../offonoptionfilter.h"
 
 
 namespace swordxx {
 
 /** This Filter shows/hides footnotes in a ThML text
  */
-class SWDLLEXPORT ThMLFootnotes : public SWOptionFilter {
+class SWDLLEXPORT ThMLFootnotes: public OffOnOptionFilter {
 public:
     ThMLFootnotes();
     ~ThMLFootnotes() override;

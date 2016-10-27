@@ -34,17 +34,11 @@ namespace {
     static const char oName[] = "Morphological Tags";
     static const char oTip[]  = "Toggles Morphological Tags On and Off if they exist";
 
-    static const StringList *oValues() {
-        static const std::string choices[3] = {"Off", "On", ""};
-        static const StringList oVals(&choices[0], &choices[2]);
-        return &oVals;
-    }
 }
 
-
-ThMLMorph::ThMLMorph() : SWOptionFilter(oName, oTip, oValues()) {
-}
-
+ThMLMorph::ThMLMorph()
+    : OffOnOptionFilter(oName, oTip)
+{}
 
 ThMLMorph::~ThMLMorph() {
 }

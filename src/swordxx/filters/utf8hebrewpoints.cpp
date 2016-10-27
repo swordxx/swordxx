@@ -34,17 +34,11 @@ namespace {
     static const char oName[] = "Hebrew Vowel Points";
     static const char oTip[]  = "Toggles Hebrew Vowel Points";
 
-    static const StringList *oValues() {
-        static const std::string choices[3] = {"On", "Off", ""};
-        static const StringList oVals(&choices[0], &choices[2]);
-        return &oVals;
-    }
 }
 
-
-UTF8HebrewPoints::UTF8HebrewPoints() : SWOptionFilter(oName, oTip, oValues()) {
-}
-
+UTF8HebrewPoints::UTF8HebrewPoints()
+    : OnOffOptionFilter(oName, oTip)
+{}
 
 UTF8HebrewPoints::~UTF8HebrewPoints(){};
 

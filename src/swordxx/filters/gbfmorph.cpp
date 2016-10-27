@@ -33,17 +33,11 @@ namespace {
     static const char oName[] = "Morphological Tags";
     static const char oTip[]  = "Toggles Morphological Tags On and Off if they exist";
 
-    static const StringList *oValues() {
-        static const std::string choices[3] = {"Off", "On", ""};
-        static const StringList oVals(&choices[0], &choices[2]);
-        return &oVals;
-    }
 }
 
-
-GBFMorph::GBFMorph() : SWOptionFilter(oName, oTip, oValues()) {
-}
-
+GBFMorph::GBFMorph()
+    : OffOnOptionFilter(oName, oTip)
+{}
 
 GBFMorph::~GBFMorph() {
 }

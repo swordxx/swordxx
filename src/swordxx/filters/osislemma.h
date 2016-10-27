@@ -23,14 +23,14 @@
 #ifndef OSISLEMMA_H
 #define OSISLEMMA_H
 
-#include "../swoptfilter.h"
+#include "../offonoptionfilter.h"
 
 
 namespace swordxx {
 
 /** This Filter shows/hides headings in a OSIS text
  */
-class SWDLLEXPORT OSISLemma : public SWOptionFilter {
+class SWDLLEXPORT OSISLemma: public OffOnOptionFilter {
 public:
     OSISLemma();
     ~OSISLemma() override;

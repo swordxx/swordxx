@@ -38,22 +38,18 @@ namespace {
     static const char oName[] = "Word Javascript";
     static const char oTip[]  = "Toggles Word Javascript data";
 
-    static const StringList *oValues() {
-        static const std::string choices[3] = {"Off", "On", ""};
-        static const StringList oVals(&choices[0], &choices[2]);
-        return &oVals;
-    }
 }
 
-
-OSISWordJS::OSISWordJS() : SWOptionFilter(oName, oTip, oValues()) {
+OSISWordJS::OSISWordJS()
+    : OffOnOptionFilter(oName,
+                        oTip)
+{
      defaultGreekLex   = nullptr;
      defaultHebLex     = nullptr;
      defaultGreekParse = nullptr;
      defaultHebParse   = nullptr;
      mgr               = nullptr;
 }
-
 
 OSISWordJS::~OSISWordJS() {
 }

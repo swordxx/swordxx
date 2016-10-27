@@ -23,14 +23,14 @@
 #ifndef OSISXLIT_H
 #define OSISXLIT_H
 
-#include "../swoptfilter.h"
+#include "../offonoptionfilter.h"
 
 
 namespace swordxx {
 
 /** This Filter shows/hides headings in a OSIS text
  */
-class SWDLLEXPORT OSISXlit : public SWOptionFilter {
+class SWDLLEXPORT OSISXlit: public OffOnOptionFilter {
 public:
     OSISXlit();
     ~OSISXlit() override;

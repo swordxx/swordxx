@@ -24,14 +24,14 @@
 #ifndef UTF8ARABICPOINTS_H
 #define UTF8ARABICPOINTS_H
 
-#include "../swoptfilter.h"
+#include "../onoffoptionfilter.h"
 
 
 namespace swordxx {
 
 /** This Filter shows/hides Arabic vowel points in UTF8 text
  */
-class SWDLLEXPORT UTF8ArabicPoints : public SWOptionFilter {
+class SWDLLEXPORT UTF8ArabicPoints: public OnOffOptionFilter {
 public:
     UTF8ArabicPoints();
     ~UTF8ArabicPoints() override;

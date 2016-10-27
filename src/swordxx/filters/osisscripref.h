@@ -23,14 +23,14 @@
 #ifndef OSISSCRIPREF_H
 #define OSISSCRIPREF_H
 
-#include "../swoptfilter.h"
+#include "../offonoptionfilter.h"
 
 
 namespace swordxx {
 
 /** This Filter shows/hides headings in a OSIS text
  */
-class SWDLLEXPORT OSISScripref : public SWOptionFilter {
+class SWDLLEXPORT OSISScripref: public OffOnOptionFilter {
 public:
     OSISScripref();
     ~OSISScripref() override;

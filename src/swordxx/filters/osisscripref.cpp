@@ -35,17 +35,11 @@ namespace {
     static const char oName[] = "Cross-references";
     static const char oTip[]  = "Toggles Scripture Cross-references On and Off if they exist";
 
-    static const StringList *oValues() {
-        static const std::string choices[3] = {"Off", "On", ""};
-        static const StringList oVals(&choices[0], &choices[2]);
-        return &oVals;
-    }
 }
 
-
-OSISScripref::OSISScripref() : SWOptionFilter(oName, oTip, oValues()) {
-}
-
+OSISScripref::OSISScripref()
+    : OffOnOptionFilter(oName, oTip)
+{}
 
 OSISScripref::~OSISScripref() {
 }

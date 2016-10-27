@@ -23,7 +23,7 @@
 #ifndef OSISHEADINGS_H
 #define OSISHEADINGS_H
 
-#include "../swoptfilter.h"
+#include "../offonoptionfilter.h"
 #include "../swbasicfilter.h"
 
 
@@ -31,7 +31,7 @@ namespace swordxx {
 
 /** This Filter shows/hides headings in a OSIS text
  */
-class SWDLLEXPORT OSISHeadings : public SWOptionFilter, public SWBasicFilter {
+class SWDLLEXPORT OSISHeadings: public OffOnOptionFilter, public SWBasicFilter {
 public:
     OSISHeadings();
 

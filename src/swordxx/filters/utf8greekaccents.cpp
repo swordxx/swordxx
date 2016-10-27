@@ -38,17 +38,11 @@ namespace {
     static const char oName[] = "Greek Accents";
     static const char oTip[]  = "Toggles Greek Accents";
 
-    static const StringList *oValues() {
-        static const std::string choices[3] = {"On", "Off", ""};
-        static const StringList oVals(&choices[0], &choices[2]);
-        return &oVals;
-    }
 }
 
-
-UTF8GreekAccents::UTF8GreekAccents() : SWOptionFilter(oName, oTip, oValues()) {
-}
-
+UTF8GreekAccents::UTF8GreekAccents()
+    : OnOffOptionFilter(oName, oTip)
+{}
 
 UTF8GreekAccents::~UTF8GreekAccents() {};
 

@@ -38,17 +38,11 @@ namespace {
     static const char oName[] = "Footnotes";
     static const char oTip[]  = "Toggles Footnotes On and Off if they exist";
 
-    static const StringList *oValues() {
-        static const std::string choices[3] = {"Off", "On", ""};
-        static const StringList oVals(&choices[0], &choices[2]);
-        return &oVals;
-    }
 }
 
-
-ThMLFootnotes::ThMLFootnotes() : SWOptionFilter(oName, oTip, oValues()) {
-}
-
+ThMLFootnotes::ThMLFootnotes()
+    : OffOnOptionFilter(oName, oTip)
+{}
 
 ThMLFootnotes::~ThMLFootnotes() {
 }

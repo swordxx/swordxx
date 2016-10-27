@@ -34,17 +34,11 @@ namespace {
     static const char oName[] = "Hebrew Cantillation";
     static const char oTip[]  = "Toggles Hebrew Cantillation Marks";
 
-    static const StringList *oValues() {
-        static const std::string choices[3] = {"Off", "On", ""};
-        static const StringList oVals(&choices[0], &choices[2]);
-        return &oVals;
-    }
 }
 
-
-UTF8Cantillation::UTF8Cantillation() : SWOptionFilter(oName, oTip, oValues()) {
-}
-
+UTF8Cantillation::UTF8Cantillation()
+    : OffOnOptionFilter(oName, oTip)
+{}
 
 UTF8Cantillation::~UTF8Cantillation(){};
 

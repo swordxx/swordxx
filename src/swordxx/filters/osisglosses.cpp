@@ -35,17 +35,11 @@ namespace {
     static const char oName[] = "Glosses";
     static const char oTip[]  = "Toggles Glosses On and Off if they exist";
 
-    static const StringList *oValues() {
-        static const std::string choices[3] = {"Off", "On", ""};
-        static const StringList oVals(&choices[0], &choices[2]);
-        return &oVals;
-    }
 }
 
-
-OSISGlosses::OSISGlosses() : SWOptionFilter(oName, oTip, oValues()) {
-}
-
+OSISGlosses::OSISGlosses()
+    : OffOnOptionFilter(oName, oTip)
+{}
 
 OSISGlosses::~OSISGlosses() {
 }

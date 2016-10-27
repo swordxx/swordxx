@@ -36,17 +36,11 @@ namespace {
     static const char oName[] = "Strong's Numbers";
     static const char oTip[]  = "Toggles Strong's Numbers On and Off if they exist";
 
-    static const StringList *oValues() {
-        static const std::string choices[3] = {"Off", "On", ""};
-        static const StringList oVals(&choices[0], &choices[2]);
-        return &oVals;
-    }
 }
 
-
-GBFStrongs::GBFStrongs() : SWOptionFilter(oName, oTip, oValues()) {
-}
-
+GBFStrongs::GBFStrongs()
+    : OffOnOptionFilter(oName, oTip)
+{}
 
 GBFStrongs::~GBFStrongs() {
 }

@@ -37,13 +37,6 @@ namespace {
     static const char oName[] = "Headings";
     static const char oTip[]  = "Toggles Headings On and Off if they exist";
 
-    static const StringList *oValues() {
-        static const std::string choices[3] = {"Off", "On", ""};
-        static const StringList oVals(&choices[0], &choices[2]);
-        return &oVals;
-    }
-
-
     class MyUserData : public BasicFilterUserData {
     public:
         std::string currentHeadingName;
@@ -74,11 +67,9 @@ BasicFilterUserData *OSISHeadings::createUserData(const SWModule *module, const 
     return new MyUserData(module, key);
 }
 
-
-OSISHeadings::OSISHeadings() : SWOptionFilter(oName, oTip, oValues()) {
-    setPassThruUnknownToken(true);
-}
-
+OSISHeadings::OSISHeadings()
+    : OffOnOptionFilter(oName, oTip)
+{ setPassThruUnknownToken(true); }
 
 bool OSISHeadings::handleToken(std::string &buf, const char *token, BasicFilterUserData *userData) {
 
