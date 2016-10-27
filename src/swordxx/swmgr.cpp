@@ -117,153 +117,153 @@ void SWMgr::init() {
     SWOptionFilter * tmpFilter = nullptr;
 
     tmpFilter = new ThMLVariants();
-    optionFilters.insert(OptionFilterMap::value_type("ThMLVariants", tmpFilter));
+    optionFilters.emplace("ThMLVariants", tmpFilter);
     cleanupFilters.push_back(tmpFilter);
 
     tmpFilter = new GBFStrongs();
-    optionFilters.insert(OptionFilterMap::value_type("GBFStrongs", tmpFilter));
+    optionFilters.emplace("GBFStrongs", tmpFilter);
     cleanupFilters.push_back(tmpFilter);
 
     tmpFilter = new GBFFootnotes();
-    optionFilters.insert(OptionFilterMap::value_type("GBFFootnotes", tmpFilter));
+    optionFilters.emplace("GBFFootnotes", tmpFilter);
     cleanupFilters.push_back(tmpFilter);
 
     tmpFilter = new GBFRedLetterWords();
-    optionFilters.insert(OptionFilterMap::value_type("GBFRedLetterWords", tmpFilter));
+    optionFilters.emplace("GBFRedLetterWords", tmpFilter);
     cleanupFilters.push_back(tmpFilter);
 
     tmpFilter = new GBFMorph();
-    optionFilters.insert(OptionFilterMap::value_type("GBFMorph", tmpFilter));
+    optionFilters.emplace("GBFMorph", tmpFilter);
     cleanupFilters.push_back(tmpFilter);
 
     tmpFilter = new GBFHeadings();
-    optionFilters.insert(OptionFilterMap::value_type("GBFHeadings", tmpFilter));
+    optionFilters.emplace("GBFHeadings", tmpFilter);
     cleanupFilters.push_back(tmpFilter);
 
     tmpFilter = new OSISHeadings();
-    optionFilters.insert(OptionFilterMap::value_type("OSISHeadings", tmpFilter));
+    optionFilters.emplace("OSISHeadings", tmpFilter);
     cleanupFilters.push_back(tmpFilter);
 
     tmpFilter = new OSISStrongs();
-    optionFilters.insert(OptionFilterMap::value_type("OSISStrongs", tmpFilter));
+    optionFilters.emplace("OSISStrongs", tmpFilter);
     cleanupFilters.push_back(tmpFilter);
 
     tmpFilter = new OSISMorph();
-    optionFilters.insert(OptionFilterMap::value_type("OSISMorph", tmpFilter));
+    optionFilters.emplace("OSISMorph", tmpFilter);
     cleanupFilters.push_back(tmpFilter);
 
     tmpFilter = new OSISLemma();
-    optionFilters.insert(OptionFilterMap::value_type("OSISLemma", tmpFilter));
+    optionFilters.emplace("OSISLemma", tmpFilter);
     cleanupFilters.push_back(tmpFilter);
 
     tmpFilter = new OSISFootnotes();
-    optionFilters.insert(OptionFilterMap::value_type("OSISFootnotes", tmpFilter));
+    optionFilters.emplace("OSISFootnotes", tmpFilter);
     cleanupFilters.push_back(tmpFilter);
 
     tmpFilter = new OSISScripref();
-    optionFilters.insert(OptionFilterMap::value_type("OSISScripref", tmpFilter));
+    optionFilters.emplace("OSISScripref", tmpFilter);
     cleanupFilters.push_back(tmpFilter);
 
     tmpFilter = new OSISRedLetterWords();
-    optionFilters.insert(OptionFilterMap::value_type("OSISRedLetterWords", tmpFilter));
+    optionFilters.emplace("OSISRedLetterWords", tmpFilter);
     cleanupFilters.push_back(tmpFilter);
 
     tmpFilter = new OSISMorphSegmentation();
-    optionFilters.insert(OptionFilterMap::value_type("OSISMorphSegmentation", tmpFilter));
+    optionFilters.emplace("OSISMorphSegmentation", tmpFilter);
     cleanupFilters.push_back(tmpFilter);
 
     tmpFilter = new OSISGlosses();
-    optionFilters.insert(OptionFilterMap::value_type("OSISGlosses", tmpFilter));
-    optionFilters.insert(OptionFilterMap::value_type("OSISRuby", tmpFilter));
+    optionFilters.emplace("OSISGlosses", tmpFilter);
+    optionFilters.emplace("OSISRuby", tmpFilter);
     cleanupFilters.push_back(tmpFilter);
 
     tmpFilter = new OSISXlit();
-    optionFilters.insert(OptionFilterMap::value_type("OSISXlit", tmpFilter));
+    optionFilters.emplace("OSISXlit", tmpFilter);
     cleanupFilters.push_back(tmpFilter);
 
     tmpFilter = new OSISEnum();
-    optionFilters.insert(OptionFilterMap::value_type("OSISEnum", tmpFilter));
+    optionFilters.emplace("OSISEnum", tmpFilter);
     cleanupFilters.push_back(tmpFilter);
 
     tmpFilter = new OSISVariants();
-    optionFilters.insert(OptionFilterMap::value_type("OSISVariants", tmpFilter));
+    optionFilters.emplace("OSISVariants", tmpFilter);
     cleanupFilters.push_back(tmpFilter);
 
     tmpFilter = new ThMLStrongs();
-    optionFilters.insert(OptionFilterMap::value_type("ThMLStrongs", tmpFilter));
+    optionFilters.emplace("ThMLStrongs", tmpFilter);
     cleanupFilters.push_back(tmpFilter);
 
     tmpFilter = new ThMLFootnotes();
-    optionFilters.insert(OptionFilterMap::value_type("ThMLFootnotes", tmpFilter));
+    optionFilters.emplace("ThMLFootnotes", tmpFilter);
     cleanupFilters.push_back(tmpFilter);
 
     tmpFilter = new ThMLMorph();
-    optionFilters.insert(OptionFilterMap::value_type("ThMLMorph", tmpFilter));
+    optionFilters.emplace("ThMLMorph", tmpFilter);
     cleanupFilters.push_back(tmpFilter);
 
     tmpFilter = new ThMLHeadings();
-    optionFilters.insert(OptionFilterMap::value_type("ThMLHeadings", tmpFilter));
+    optionFilters.emplace("ThMLHeadings", tmpFilter);
     cleanupFilters.push_back(tmpFilter);
 
     tmpFilter = new ThMLLemma();
-    optionFilters.insert(OptionFilterMap::value_type("ThMLLemma", tmpFilter));
+    optionFilters.emplace("ThMLLemma", tmpFilter);
     cleanupFilters.push_back(tmpFilter);
 
     tmpFilter = new ThMLScripref();
-    optionFilters.insert(OptionFilterMap::value_type("ThMLScripref", tmpFilter));
+    optionFilters.emplace("ThMLScripref", tmpFilter);
     cleanupFilters.push_back(tmpFilter);
 
     tmpFilter = new UTF8GreekAccents();
-    optionFilters.insert(OptionFilterMap::value_type("UTF8GreekAccents", tmpFilter));
+    optionFilters.emplace("UTF8GreekAccents", tmpFilter);
     cleanupFilters.push_back(tmpFilter);
 
     tmpFilter = new UTF8HebrewPoints();
-    optionFilters.insert(OptionFilterMap::value_type("UTF8HebrewPoints", tmpFilter));
+    optionFilters.emplace("UTF8HebrewPoints", tmpFilter);
     cleanupFilters.push_back(tmpFilter);
 
     tmpFilter = new UTF8ArabicPoints();
-    optionFilters.insert(OptionFilterMap::value_type("UTF8ArabicPoints", tmpFilter));
+    optionFilters.emplace("UTF8ArabicPoints", tmpFilter);
     cleanupFilters.push_back(tmpFilter);
 
     tmpFilter = new UTF8Cantillation();
-    optionFilters.insert(OptionFilterMap::value_type("UTF8Cantillation", tmpFilter));
+    optionFilters.emplace("UTF8Cantillation", tmpFilter);
     cleanupFilters.push_back(tmpFilter);
 
     tmpFilter = new GreekLexAttribs();
-    optionFilters.insert(OptionFilterMap::value_type("GreekLexAttribs", tmpFilter));
+    optionFilters.emplace("GreekLexAttribs", tmpFilter);
     cleanupFilters.push_back(tmpFilter);
 
     tmpFilter = new PapyriPlain();
-    optionFilters.insert(OptionFilterMap::value_type("PapyriPlain", tmpFilter));
+    optionFilters.emplace("PapyriPlain", tmpFilter);
     cleanupFilters.push_back(tmpFilter);
 
 // UTF8Transliterator needs to be handled differently because it should always available as an option, for all modules
 #if SWORDXX_HAS_ICU
     transliterator = new UTF8Transliterator();
-    optionFilters.insert(OptionFilterMap::value_type("UTF8Transliterator", transliterator));
+    optionFilters.emplace("UTF8Transliterator", transliterator);
     options.push_back(transliterator->getOptionName());
     cleanupFilters.push_back(transliterator);
 #endif
 
     gbfplain = new GBFPlain();
     cleanupFilters.push_back(gbfplain);
-    extraFilters.insert(FilterMap::value_type("GBFPlain", gbfplain));
+    extraFilters.emplace("GBFPlain", gbfplain);
 
     thmlplain = new ThMLPlain();
     cleanupFilters.push_back(thmlplain);
-    extraFilters.insert(FilterMap::value_type("ThMLPlain", thmlplain));
+    extraFilters.emplace("ThMLPlain", thmlplain);
 
     osisplain = new OSISPlain();
     cleanupFilters.push_back(osisplain);
-    extraFilters.insert(FilterMap::value_type("OSISPlain", osisplain));
+    extraFilters.emplace("OSISPlain", osisplain);
 
     teiplain = new TEIPlain();
     cleanupFilters.push_back(teiplain);
-    extraFilters.insert(FilterMap::value_type("TEIPlain", teiplain));
+    extraFilters.emplace("TEIPlain", teiplain);
 
     // filters which aren't really used anywhere but which we want available for a "FilterName" -> filter mapping (e.g., filterText)
     SWFilter *f = new RTFHTML();
-    extraFilters.insert(FilterMap::value_type("RTFHTML", f));
+    extraFilters.emplace("RTFHTML", f);
     cleanupFilters.push_back(f);
 
 }
@@ -716,7 +716,8 @@ void SWMgr::augmentModules(const char *ipath, bool multiMod) {
                         i++;
                     } while (config->sections().find(name) != config->sections().end());
 
-                    config->sections().insert(SectionMap::value_type(name, entMap) );
+                    config->sections().emplace(std::move(name),
+                                               std::move(entMap));
                     SectionMap::iterator toErase = it++;
                     config->sections().erase(toErase);
                 }
@@ -1041,8 +1042,7 @@ void SWMgr::addGlobalOptions(SWModule & module,
                                                optionType.c_str(),
                                                optionSubType.c_str(),
                                                optionDefaultValue.c_str());
-                optionFilters.insert(
-                            OptionFilterMap::value_type(filterName, tmpFilter));
+                optionFilters.emplace(filterName, tmpFilter);
                 cleanupFilters.push_back(tmpFilter);
             }
         }
