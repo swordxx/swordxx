@@ -203,18 +203,13 @@ public:
      *    Here's an example how to iterate over the map and check the module type of each module.
      *
      *@code
-     * ModMap::iterator it;
-     * SWModule *curMod = 0;
-     *
-     * for (it = Modules.begin(); it != Modules.end(); it++) {
-     *      curMod = (*it).second;
-     *      if (!strcmp(curMod->Type(), "Biblical Texts")) {
+     * for (auto const & mp : Modules) {
+     *      auto const & curMod(*mp.second);
+     *      if (!strcmp(curMod.Type(), "Biblical Texts")) {
      *           // do something with curMod
-     *      }
-     *      else if (!strcmp(curMod->Type(), "Commentaries")) {
+     *      } else if (!strcmp(curMod.Type(), "Commentaries")) {
      *           // do something with curMod
-     *      }
-     *      else if (!strcmp(curMod->Type(), "Lexicons / Dictionaries")) {
+     *      } else if (!strcmp(curMod.Type(), "Lexicons / Dictionaries")) {
      *           // do something with curMod
      *      }
      * }
@@ -353,36 +348,27 @@ public:
      * To write the new unlock key to the config file use code like this:
      *
      * @code
-     * SectionMap::iterator section;
-     * ConfigEntMap::iterator entry;
-     * DIR *dir = opendir(configPath);
-     * struct dirent *ent;
-     * char* modFile;
-     * if (dir) {    // find and update .conf file
+     * if (auto dir = opendir(configPath)) { // Find and update .conf file
      *   rewinddir(dir);
-     *   while ((ent = readdir(dir)))
-     *   {
-     *     if ((strcmp(ent->d_name, ".")) && (strcmp(ent->d_name, "..")))
-     *     {
-     *       modFile = m_backend->configPath;
-     *       modFile += "/";
-     *       modFile += ent->d_name;
-     *       SWConfig *myConfig = new SWConfig( modFile );
-     *       section = myConfig->Sections.find( m_module->Name() );
-     *       if ( section != myConfig->Sections.end() )
-     *       {
-     *         entry = section->second.find("CipherKey");
-     *         if (entry != section->second.end())
-     *         {
-     *           entry->second = unlockKey;//set cipher key
-     *           myConfig->Save();//save config file
+     *   struct dirent * ent;
+     *   while ((ent = readdir(dir))) {
+     *     if ((strcmp(ent->d_name, ".")) && (strcmp(ent->d_name, ".."))) {
+     *       std::string modFile(m_backend->configPath);
+     *       modFile.push_back('/');
+     *       modFile.append(ent->d_name);
+     *       auto myConfig(std::make_unique<SWConfig>(modFile));
+     *       auto section(myConfig->Sections.find(m_module->Name()));
+     *       if (section != myConfig->Sections.end()) {
+     *         auto entry(section->second.find("CipherKey"));
+     *         if (entry != section->second.end()) {
+     *           entry->second = unlockKey; // Set cipher key
+     *           myConfig->Save(); // Save config file
      *         }
      *       }
-     *       delete myConfig;
      *     }
      *   }
+     *   closedir(dir);
      * }
-     * closedir(dir);
      * @endcode
      *
      * @param modName For this module we change the unlockKey
