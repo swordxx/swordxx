@@ -955,7 +955,7 @@ void SWMgr::addGlobalOptions(SWModule & module,
         }
 
 
-        OptionFilterMap::const_iterator const it(
+        decltype(optionFilters)::const_iterator const it(
                     optionFilters.find(filterName));
         if (it != optionFilters.end()) {
             // Add filter to module and option as a valid option:
@@ -1007,7 +1007,8 @@ void SWMgr::addLocalOptions(SWModule & module,
                             ConfigEntMap::const_iterator end)
 {
     for (; start != end; ++start) {
-        OptionFilterMap::iterator const it(optionFilters.find(start->second));
+        decltype(optionFilters)::iterator const it(
+                    optionFilters.find(start->second));
         if (it != optionFilters.end())
             module.addOptionFilter(it->second);
     }
@@ -1025,7 +1026,7 @@ void SWMgr::addStripFilters(SWModule & module,
                             ConfigEntMap::const_iterator end)
 {
     for (; start != end; ++start) {
-        OptionFilterMap::const_iterator const it(
+        decltype(optionFilters)::const_iterator const it(
                     optionFilters.find(start->second));
         if (it != optionFilters.end())
             module.addStripFilter(it->second);

@@ -63,7 +63,6 @@ class SWKey;
 
 typedef std::map < std::string, SWModule *, std::less < std::string > >ModMap;
 typedef std::map < std::string, SWFilter * >FilterMap;
-typedef std::map < std::string, SWOptionFilter * >OptionFilterMap;
 typedef std::list < std::string >StringList;
 typedef std::list < SWFilter* >FilterList;
 typedef std::list < SWOptionFilter* >OptionFilterList;
@@ -93,7 +92,7 @@ protected:
     virtual SWModule *createModule(const char *name, const char *driver, ConfigEntMap &section);
     void DeleteMods();
     char configType = 0;        // 0 = file; 1 = directory
-    OptionFilterMap optionFilters;
+    std::map<std::string, SWOptionFilter *> optionFilters;
     std::map<std::string, CipherFilter *> cipherFilters;
     SWFilter *gbfplain;
     SWFilter *thmlplain;
