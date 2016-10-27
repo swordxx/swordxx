@@ -943,7 +943,8 @@ void SWMgr::addGlobalOptions(SWModule & module,
             // we'll key off of type and subtype.
             filterName = filterName + "." + optionType + "." + optionSubType;
 
-            if (optionFilters.find(filterName) == optionFilters.end()) {
+            it = optionFilters.find(filterName);
+            if (it == optionFilters.end()) {
                 auto filter(std::make_unique<OSISReferenceLinks>(
                                 optionName.c_str(),
                                 optionTip.c_str(),
