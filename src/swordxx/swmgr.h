@@ -99,7 +99,7 @@ protected:
     SWFilter *osisplain;
     SWFilter *teiplain;
     SWOptionFilter *transliterator;
-    FilterList cleanupFilters;
+    FilterList cleanupFilters; /**< List of filters to free during ~SWMgr(). */
     FilterMap extraFilters;
     StringList options;
     virtual char AddModToConfig(FileDesc *conffd, const char *fname);
