@@ -33,6 +33,7 @@
 #endif
 #include <iterator>
 #include <sys/stat.h>
+#include <tuple>
 #include "filemgr.h"
 #include "filters/cipherfil.h"
 #include "filters/gbffootnotes.h"
@@ -928,9 +929,9 @@ void SWMgr::addGlobalOptions(SWModule & module,
 {
     for (; start != end; ++start) {
         std::string filterName(start->second);
+        decltype(optionFilters)::const_iterator it;
 
         // special cases for filters with parameters
-
         if (hasPrefix(filterName, "OSISReferenceLinks")) {
             std::string params = filterName;
             filterName = stripPrefix(params, '|');
@@ -949,23 +950,22 @@ void SWMgr::addGlobalOptions(SWModule & module,
                                 optionType.c_str(),
                                 optionSubType.c_str(),
                                 optionDefaultValue.c_str()));
-                optionFilters.emplace(filterName, filter.get());
+                std::tie(it, std::ignore) =
+                        optionFilters.emplace(filterName, filter.get());
                 cleanupFilters.emplace_back(std::move(filter));
             }
+        } else {
+            it = optionFilters.find(filterName);
+            if (it == optionFilters.end())
+                continue;
         }
 
-
-        decltype(optionFilters)::const_iterator const it(
-                    optionFilters.find(filterName));
-        if (it != optionFilters.end()) {
-            // Add filter to module and option as a valid option:
-            module.addOptionFilter(it->second);
-            for (auto const & option : options)
-                if (!strcmp(option.c_str(), it->second->getOptionName()))
-                    goto option_found;
+        // Add filter to module and option as a valid option:
+        module.addOptionFilter(it->second);
+        if (std::find(options.cbegin(),
+                      options.cend(),
+                      it->second->getOptionName()) == options.cend())
             options.push_back(it->second->getOptionName());
-            option_found: (void) options;
-        }
     }
 
     if (filterMgr)
