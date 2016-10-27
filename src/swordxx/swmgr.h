@@ -44,6 +44,7 @@
 #ifndef SWMGR_H
 #define SWMGR_H
 
+#include <memory>
 #include <map>
 #include <list>
 #include <string>
@@ -99,7 +100,10 @@ protected:
     SWFilter *osisplain;
     SWFilter *teiplain;
     SWOptionFilter *transliterator;
-    FilterList cleanupFilters; /**< List of filters to free during ~SWMgr(). */
+
+    /** List of filters to free during ~SWMgr(). */
+    std::list<std::unique_ptr<SWFilter> > cleanupFilters;
+
     FilterMap extraFilters;
     StringList options;
     virtual char AddModToConfig(FileDesc *conffd, const char *fname);

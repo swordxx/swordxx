@@ -114,158 +114,66 @@ const char *SWMgr::globalConfPath =
         SWORDXX_SYSCONF_INSTALL_PREFIX "/swordxx.conf";
 
 void SWMgr::init() {
-    SWOptionFilter * tmpFilter = nullptr;
+    #define ADD_FILTER(mapping,type,...) \
+        do { \
+            auto filter(std::make_unique<type>()); \
+            (mapping).emplace(#type, filter.get()); \
+            __VA_ARGS__ \
+            cleanupFilters.emplace_back(std::move(filter)); \
+        } while(false)
+    #define ADD_OPTION_FILTER(...) ADD_FILTER(optionFilters, __VA_ARGS__)
+    #define ADD_EXTRA_FILTER(...) ADD_FILTER(extraFilters, __VA_ARGS__)
 
-    tmpFilter = new ThMLVariants();
-    optionFilters.emplace("ThMLVariants", tmpFilter);
-    cleanupFilters.push_back(tmpFilter);
-
-    tmpFilter = new GBFStrongs();
-    optionFilters.emplace("GBFStrongs", tmpFilter);
-    cleanupFilters.push_back(tmpFilter);
-
-    tmpFilter = new GBFFootnotes();
-    optionFilters.emplace("GBFFootnotes", tmpFilter);
-    cleanupFilters.push_back(tmpFilter);
-
-    tmpFilter = new GBFRedLetterWords();
-    optionFilters.emplace("GBFRedLetterWords", tmpFilter);
-    cleanupFilters.push_back(tmpFilter);
-
-    tmpFilter = new GBFMorph();
-    optionFilters.emplace("GBFMorph", tmpFilter);
-    cleanupFilters.push_back(tmpFilter);
-
-    tmpFilter = new GBFHeadings();
-    optionFilters.emplace("GBFHeadings", tmpFilter);
-    cleanupFilters.push_back(tmpFilter);
-
-    tmpFilter = new OSISHeadings();
-    optionFilters.emplace("OSISHeadings", tmpFilter);
-    cleanupFilters.push_back(tmpFilter);
-
-    tmpFilter = new OSISStrongs();
-    optionFilters.emplace("OSISStrongs", tmpFilter);
-    cleanupFilters.push_back(tmpFilter);
-
-    tmpFilter = new OSISMorph();
-    optionFilters.emplace("OSISMorph", tmpFilter);
-    cleanupFilters.push_back(tmpFilter);
-
-    tmpFilter = new OSISLemma();
-    optionFilters.emplace("OSISLemma", tmpFilter);
-    cleanupFilters.push_back(tmpFilter);
-
-    tmpFilter = new OSISFootnotes();
-    optionFilters.emplace("OSISFootnotes", tmpFilter);
-    cleanupFilters.push_back(tmpFilter);
-
-    tmpFilter = new OSISScripref();
-    optionFilters.emplace("OSISScripref", tmpFilter);
-    cleanupFilters.push_back(tmpFilter);
-
-    tmpFilter = new OSISRedLetterWords();
-    optionFilters.emplace("OSISRedLetterWords", tmpFilter);
-    cleanupFilters.push_back(tmpFilter);
-
-    tmpFilter = new OSISMorphSegmentation();
-    optionFilters.emplace("OSISMorphSegmentation", tmpFilter);
-    cleanupFilters.push_back(tmpFilter);
-
-    tmpFilter = new OSISGlosses();
-    optionFilters.emplace("OSISGlosses", tmpFilter);
-    optionFilters.emplace("OSISRuby", tmpFilter);
-    cleanupFilters.push_back(tmpFilter);
-
-    tmpFilter = new OSISXlit();
-    optionFilters.emplace("OSISXlit", tmpFilter);
-    cleanupFilters.push_back(tmpFilter);
-
-    tmpFilter = new OSISEnum();
-    optionFilters.emplace("OSISEnum", tmpFilter);
-    cleanupFilters.push_back(tmpFilter);
-
-    tmpFilter = new OSISVariants();
-    optionFilters.emplace("OSISVariants", tmpFilter);
-    cleanupFilters.push_back(tmpFilter);
-
-    tmpFilter = new ThMLStrongs();
-    optionFilters.emplace("ThMLStrongs", tmpFilter);
-    cleanupFilters.push_back(tmpFilter);
-
-    tmpFilter = new ThMLFootnotes();
-    optionFilters.emplace("ThMLFootnotes", tmpFilter);
-    cleanupFilters.push_back(tmpFilter);
-
-    tmpFilter = new ThMLMorph();
-    optionFilters.emplace("ThMLMorph", tmpFilter);
-    cleanupFilters.push_back(tmpFilter);
-
-    tmpFilter = new ThMLHeadings();
-    optionFilters.emplace("ThMLHeadings", tmpFilter);
-    cleanupFilters.push_back(tmpFilter);
-
-    tmpFilter = new ThMLLemma();
-    optionFilters.emplace("ThMLLemma", tmpFilter);
-    cleanupFilters.push_back(tmpFilter);
-
-    tmpFilter = new ThMLScripref();
-    optionFilters.emplace("ThMLScripref", tmpFilter);
-    cleanupFilters.push_back(tmpFilter);
-
-    tmpFilter = new UTF8GreekAccents();
-    optionFilters.emplace("UTF8GreekAccents", tmpFilter);
-    cleanupFilters.push_back(tmpFilter);
-
-    tmpFilter = new UTF8HebrewPoints();
-    optionFilters.emplace("UTF8HebrewPoints", tmpFilter);
-    cleanupFilters.push_back(tmpFilter);
-
-    tmpFilter = new UTF8ArabicPoints();
-    optionFilters.emplace("UTF8ArabicPoints", tmpFilter);
-    cleanupFilters.push_back(tmpFilter);
-
-    tmpFilter = new UTF8Cantillation();
-    optionFilters.emplace("UTF8Cantillation", tmpFilter);
-    cleanupFilters.push_back(tmpFilter);
-
-    tmpFilter = new GreekLexAttribs();
-    optionFilters.emplace("GreekLexAttribs", tmpFilter);
-    cleanupFilters.push_back(tmpFilter);
-
-    tmpFilter = new PapyriPlain();
-    optionFilters.emplace("PapyriPlain", tmpFilter);
-    cleanupFilters.push_back(tmpFilter);
+    ADD_OPTION_FILTER(ThMLVariants,);
+    ADD_OPTION_FILTER(GBFStrongs,);
+    ADD_OPTION_FILTER(GBFFootnotes,);
+    ADD_OPTION_FILTER(GBFRedLetterWords,);
+    ADD_OPTION_FILTER(GBFMorph,);
+    ADD_OPTION_FILTER(GBFHeadings,);
+    ADD_OPTION_FILTER(OSISHeadings,);
+    ADD_OPTION_FILTER(OSISStrongs,);
+    ADD_OPTION_FILTER(OSISMorph,);
+    ADD_OPTION_FILTER(OSISLemma,);
+    ADD_OPTION_FILTER(OSISFootnotes,);
+    ADD_OPTION_FILTER(OSISScripref,);
+    ADD_OPTION_FILTER(OSISRedLetterWords,);
+    ADD_OPTION_FILTER(OSISMorphSegmentation,);
+    ADD_OPTION_FILTER(OSISGlosses,
+                      optionFilters.emplace("OSISRuby", filter.get()););
+    ADD_OPTION_FILTER(OSISXlit,);
+    ADD_OPTION_FILTER(OSISEnum,);
+    ADD_OPTION_FILTER(OSISVariants,);
+    ADD_OPTION_FILTER(ThMLStrongs,);
+    ADD_OPTION_FILTER(ThMLFootnotes,);
+    ADD_OPTION_FILTER(ThMLMorph,);
+    ADD_OPTION_FILTER(ThMLHeadings,);
+    ADD_OPTION_FILTER(ThMLLemma,);
+    ADD_OPTION_FILTER(ThMLScripref,);
+    ADD_OPTION_FILTER(UTF8GreekAccents,);
+    ADD_OPTION_FILTER(UTF8HebrewPoints,);
+    ADD_OPTION_FILTER(UTF8ArabicPoints,);
+    ADD_OPTION_FILTER(UTF8Cantillation,);
+    ADD_OPTION_FILTER(GreekLexAttribs,);
+    ADD_OPTION_FILTER(PapyriPlain,);
 
 // UTF8Transliterator needs to be handled differently because it should always available as an option, for all modules
 #if SWORDXX_HAS_ICU
-    transliterator = new UTF8Transliterator();
-    optionFilters.emplace("UTF8Transliterator", transliterator);
-    options.push_back(transliterator->getOptionName());
-    cleanupFilters.push_back(transliterator);
+    ADD_OPTION_FILTER(UTF8Transliterator,
+                      transliterator = filter.get();
+                      options.push_back(filter->getOptionName()););
 #endif
 
-    gbfplain = new GBFPlain();
-    cleanupFilters.push_back(gbfplain);
-    extraFilters.emplace("GBFPlain", gbfplain);
+    ADD_EXTRA_FILTER(GBFPlain,  gbfplain  = filter.get(););
+    ADD_EXTRA_FILTER(ThMLPlain, thmlplain = filter.get(););
+    ADD_EXTRA_FILTER(OSISPlain, osisplain = filter.get(););
+    ADD_EXTRA_FILTER(TEIPlain,  teiplain  = filter.get(););
+    /* Filters which aren't really used anywhere but which we want available for
+       a "FilterName" -> filter mapping (e.g., filterText): */
+    ADD_EXTRA_FILTER(RTFHTML,);
 
-    thmlplain = new ThMLPlain();
-    cleanupFilters.push_back(thmlplain);
-    extraFilters.emplace("ThMLPlain", thmlplain);
-
-    osisplain = new OSISPlain();
-    cleanupFilters.push_back(osisplain);
-    extraFilters.emplace("OSISPlain", osisplain);
-
-    teiplain = new TEIPlain();
-    cleanupFilters.push_back(teiplain);
-    extraFilters.emplace("TEIPlain", teiplain);
-
-    // filters which aren't really used anywhere but which we want available for a "FilterName" -> filter mapping (e.g., filterText)
-    SWFilter *f = new RTFHTML();
-    extraFilters.emplace("RTFHTML", f);
-    cleanupFilters.push_back(f);
-
+    #undef ADD_EXTRA_FILTER
+    #undef ADD_OPTION_FILTER
+    #undef ADD_FILTER
 }
 
 
@@ -363,8 +271,7 @@ SWMgr::SWMgr(char const * iConfigPath,
 SWMgr::~SWMgr() {
     DeleteMods();
 
-    for (auto * const filter : cleanupFilters)
-        delete filter;
+    cleanupFilters.clear();
 
     delete homeConfig;
     delete mysysconfig;
@@ -1036,14 +943,14 @@ void SWMgr::addGlobalOptions(SWModule & module,
             filterName = filterName + "." + optionType + "." + optionSubType;
 
             if (optionFilters.find(filterName) == optionFilters.end()) {
-                SWOptionFilter * const tmpFilter =
-                        new OSISReferenceLinks(optionName.c_str(),
-                                               optionTip.c_str(),
-                                               optionType.c_str(),
-                                               optionSubType.c_str(),
-                                               optionDefaultValue.c_str());
-                optionFilters.emplace(filterName, tmpFilter);
-                cleanupFilters.push_back(tmpFilter);
+                auto filter(std::make_unique<OSISReferenceLinks>(
+                                optionName.c_str(),
+                                optionTip.c_str(),
+                                optionType.c_str(),
+                                optionSubType.c_str(),
+                                optionDefaultValue.c_str()));
+                optionFilters.emplace(filterName, filter.get());
+                cleanupFilters.emplace_back(std::move(filter));
             }
         }
 
@@ -1133,10 +1040,10 @@ void SWMgr::addRawFilters(SWModule & module, ConfigEntMap const & section) {
     std::string cipherKey(
                 (entry != section.end()) ? entry->second : std::string());
     if (!cipherKey.empty()) {
-        CipherFilter * const cipherFilter = new CipherFilter(cipherKey.c_str());
-        cipherFilters.emplace(module.getName(), cipherFilter);
-        cleanupFilters.push_back(cipherFilter);
-        module.addRawFilter(cipherFilter);
+        auto cipherFilter(std::make_unique<CipherFilter>(cipherKey.c_str()));
+        cipherFilters.emplace(module.getName(), cipherFilter.get());
+        module.addRawFilter(cipherFilter.get());
+        cleanupFilters.emplace_back(std::move(cipherFilter));
     }
 
     if (filterMgr)
@@ -1401,10 +1308,10 @@ bool SWMgr::setCipherKey(std::string const & modName, char const * key) {
     if (it == Modules.end())
         return false;
 
-    CipherFilter * const cipherFilter = new CipherFilter(key);
-    cipherFilters.emplace(modName, cipherFilter);
-    cleanupFilters.push_back(cipherFilter);
-    it->second->addRawFilter(cipherFilter);
+    auto cipherFilter(std::make_unique<CipherFilter>(key));
+    cipherFilters.emplace(modName, cipherFilter.get());
+    it->second->addRawFilter(cipherFilter.get());
+    cleanupFilters.emplace_back(std::move(cipherFilter));
     return true;
 }
 
