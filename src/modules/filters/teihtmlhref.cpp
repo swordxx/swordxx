@@ -132,7 +132,7 @@ bool TEIHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData
 				if (n != "") {
 					buf += "<br /><b>";
 					buf += n;
-					buf += "</b>";
+					buf += "</b> ";
 				}
 			}
 		}

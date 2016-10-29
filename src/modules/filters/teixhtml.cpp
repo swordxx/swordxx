@@ -170,7 +170,7 @@ bool TEIXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *u
 				buf += "\">";
 			}
 			else if (tag.isEndTag()) {
-				buf += "</span>";
+				buf += "</span> ";
 			}
 		}
 
