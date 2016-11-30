@@ -60,9 +60,9 @@ std::unique_ptr<SWFilter> makeEncodingFilter(TextEncoding const encoding) {
 } // anonymous namespace
 
 EncodingFilterMgr::EncodingFilterMgr(TextEncoding const encoding)
-    : m_latin1utf8(new Latin1UTF8())
-    , m_scsuutf8(new SCSUUTF8())
-    , m_utf16utf8(new UTF16UTF8())
+    : m_latin1utf8(std::make_unique<Latin1UTF8>())
+    , m_scsuutf8(std::make_unique<SCSUUTF8>())
+    , m_utf16utf8(std::make_unique<UTF16UTF8>())
     , m_targetenc(makeEncodingFilter(encoding))
     , m_encoding(encoding)
 {}
