@@ -305,11 +305,24 @@ bool FileMgr::exists(std::string const & fullPath) noexcept
 bool FileMgr::isReadable(std::string const & fullPath) noexcept
 { return !::access(fullPath.c_str(), R_OK); }
 
+static std::string getParent(const std::string& buf) {
+
+    int last = buf.length() - 1;
+    for (int i=last - 1; i>0; i--) {
+        char c = buf[i];
+        if (c == '/' || c == '\\') {
+            std::string parent = buf.substr(0,i);
+            return parent;
+        }
+    }
+    return "";
+}
 
 int FileMgr::createParent(const char *pName) {
     assert(pName);
     std::string buf(pName);
-    removeTrailingDirectorySlashes(buf);
+
+    buf = getParent(buf);
 
     int retCode = 0;
     if (!buf.empty()) {
