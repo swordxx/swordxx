@@ -65,7 +65,8 @@ bool SWConfig::reload() {
                 }
             }
         } catch (std::ios_base::failure const &) {
-            return false;
+            if (!inFile.eof())
+                return false;
         }
 
         assert(inFile.eof());
