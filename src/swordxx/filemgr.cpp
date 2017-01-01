@@ -104,7 +104,7 @@ void FileMgr::setSystemFileMgr(FileMgr *newFileMgr) {
 
 FileDesc::FileDesc(FileMgr *parent, const char *path, int mode, int perms, bool tryDowngrade) {
     this->parent = parent;
-    path = path ? path : "";
+    this->path = path ? path : "";
     this->mode = mode;
     this->perms = perms;
     this->tryDowngrade = tryDowngrade;
