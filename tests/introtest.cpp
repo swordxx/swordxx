@@ -45,35 +45,35 @@ int main(int /* argc */, char ** /* argv */) {
     vk.setBook(0);
     vk.setTestament(0);
 
-    mod << "Module heading text";
+    mod.setEntry("Module heading text");
 
     vk.setVerse(0);
     vk.setChapter(0);
     vk.setBook(0);
     vk.setTestament(1);
 
-    mod << "OT heading text";
+    mod.setEntry("OT heading text");
 
     vk.setTestament(1);
     vk.setBook(1);
     vk.setChapter(0);
     vk.setVerse(0);
 
-    mod << "Gen heading text";
+    mod.setEntry("Gen heading text");
 
     vk.setTestament(1);
     vk.setBook(1);
     vk.setChapter(1);
     vk.setVerse(0);
 
-    mod << "Gen 1 heading text";
+    mod.setEntry("Gen 1 heading text");
 
     vk.setTestament(1);
     vk.setBook(1);
     vk.setChapter(1);
     vk.setVerse(1);
 
-    mod << "Gen 1:1 text";
+    mod.setEntry("Gen 1:1 text");
 
 
     vk.setTestament(0);

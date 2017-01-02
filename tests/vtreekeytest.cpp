@@ -85,7 +85,7 @@ int main(int /* argc */, char ** /* argv */) {
 
     mod->setKey(keys);
 
-    for ((*mod).positionToTop(); !mod->popError(); (*mod)++) {
+    for ((*mod).positionToTop(); !mod->popError(); (*mod).increment()) {
         cout << "\n" << mod->getKeyText() << ":\n" << endl;
     }
 

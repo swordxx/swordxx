@@ -85,22 +85,22 @@ int main(int argc, char **argv) {
     (*module).positionToTop();
     // module heading
     cout << module->renderText() << "\n";
-    (*module)++;
+    (*module).increment();
     // testament heading
     cout << module->renderText() << "\n";
-    (*module)++;
+    (*module).increment();
     // book heading
     cout << module->renderText() << "\n";
-    (*module)++;
+    (*module).increment();
     // chapter heading
     cout << module->renderText() << "\n";
-    (*module)++;
+    (*module).increment();
     // verse body
     module->renderText();
     std::string header = module->getEntryAttributes()["Heading"]["Preverse"]["0"];
     cout << module->renderText(header.c_str()) << endl;
     cout << "[ " << module->getKeyText() << " ] " << module->renderText() << "\n";
-    (*module)++;
+    (*module).increment();
     // verse body
     module->renderText();
     header = module->getEntryAttributes()["Heading"]["Preverse"]["0"];

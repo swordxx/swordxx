@@ -39,7 +39,7 @@ int main(int argc, char **argv) {
     }
     SWMgr mymgr(nullptr, sysConf);
     std::cerr << "\n\nprefixPath: " << mymgr.m_prefixPath;
-    std::cerr << "\nconfigPath: " << mymgr.configPath << "\n\n";
+    std::cerr << "\nconfigPath: " << mymgr.m_configPath << "\n\n";
 
 
 
@@ -49,7 +49,7 @@ int main(int argc, char **argv) {
         std::cout << "[" << (*it).second->getName() << "] (Writable: " << (it->second->isWritable()?"Yes":"No") << ") [" << (*it).second->getDescription() << "]\n";
         std::cout << "AbsoluteDataPath = " << it->second->getConfigEntry("AbsoluteDataPath") << "\n";
         std::cout << "Has Feature HebrewDef = " << it->second->getConfig().has("Feature", "HebrewDef") << "\n";
-        if ((!strcmp((*it).second->getType(), "Biblical Texts")) || (!strcmp((*it).second->getType(), "Commentaries"))) {
+        if ((!strcmp(    (*it).second->getType().c_str()    , "Biblical Texts")) || (!strcmp((*it).second->getType().c_str(), "Commentaries"))) {
             it->second->setKey("James 1:19");
             std::cout << (*it).second->renderText() << "\n\n";
         }
@@ -59,7 +59,7 @@ int main(int argc, char **argv) {
 
     if (mhc) {
         std::cout << "MHC, Lang = " << mhc->getLanguage() << "\n\n";
-        for (mhc->setKey("Gen 1:1"); *mhc->getKey() < (VerseKey) "Gen 1:10"; (*mhc)++)
+        for (mhc->setKey("Gen 1:1"); *mhc->getKey() < (VerseKey) "Gen 1:10"; (*mhc).increment())
             std::cout << mhc->renderText() << "\n";
     }
 

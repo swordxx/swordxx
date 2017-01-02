@@ -37,7 +37,7 @@ int main(int /* argc */, char ** /* argv */) {
         VerseKey vk;
         vk.setPersist(true);
         bbe->setKey(vk);
-        for (; !bbe->popError(); (*bbe)++ ) {
+        for (; !bbe->popError(); (*bbe).increment()) {
             std::cout << vk.getIndex() << std::endl;
         }
     }

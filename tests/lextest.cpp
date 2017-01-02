@@ -34,14 +34,14 @@ int main(int /* argc */, char ** /* argv */)
     RawLD lex("tmp/lextest");
 
     lex.setKey("b");
-    lex << "entry for b";
+    lex.setEntry("entry for b");
 
     lex.setKey("a");
-    lex << "entry for a";
+    lex.setEntry("entry for a");
 
     lex.positionToTop();
     cout << lex.getKeyText() << endl;
-    lex++;
+    lex.increment();
     cout << lex.getKeyText() << endl;
 
     lex.setKey("a");
