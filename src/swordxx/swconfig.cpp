@@ -48,10 +48,9 @@ bool SWConfig::reload() {
             while (std::getline(inFile, line)) {
                 if (line.empty() || (*line.begin()) == '#')
                     continue;
-                if (section.empty()) {
+                if (*line.begin() == '[') {
                     if (line.size() < 3
-                        || (*line.begin()) != '['
-                        || line.find(']', 1u) != line.size() - 1u)
+                            || line.find(']', 1u) != line.size() - 1u)
                         return false;
                     section.assign(line, 1u, line.size() - 2u);
                 } else {
