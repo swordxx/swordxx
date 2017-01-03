@@ -26,7 +26,7 @@
 
 using namespace swordxx;
 
-int main (int /* argc */, char* /* argv[] */) {
+int main (int /* argc */, char** /* argv[] */) {
         SWMgr mgr;
 
 //the commented out code works
