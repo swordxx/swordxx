@@ -113,8 +113,8 @@ CurlTransport::Download::Download(const char * const destPath,
                                   std::string * const destBuf,
                                   CurlTransport & transport) noexcept
     : m_session(static_cast<CURL *>(curl_easy_init()))
-    , m_statusReporter(transport.statusReporter)
-    , m_term(transport.term)
+    , m_statusReporter(transport.m_statusReporter)
+    , m_term(transport.m_term)
     , m_outFile{destPath, destBuf, nullptr}
 {
     if (!m_session)
@@ -127,8 +127,8 @@ CurlTransport::Download::Download(const char * const destPath,
     SETOPTION(CURLOPT_XFERINFODATA, this);
     SETOPTION(CURLOPT_WRITEFUNCTION, &curlOutWrite<OutFile>);
     SETOPTION(CURLOPT_WRITEDATA, &m_outFile);
-    SETOPTION(CURLOPT_USERNAME, transport.u.c_str());
-    SETOPTION(CURLOPT_PASSWORD, transport.p.c_str());
+    SETOPTION(CURLOPT_USERNAME, transport.m_u.c_str());
+    SETOPTION(CURLOPT_PASSWORD, transport.m_p.c_str());
     SETOPTION(CURLOPT_FAILONERROR, 1);
     SETOPTION(CURLOPT_CONNECTTIMEOUT, 45);
     SETOPTION(CURLOPT_NOPROGRESS, 0);

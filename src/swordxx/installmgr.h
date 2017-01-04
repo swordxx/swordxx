@@ -46,18 +46,18 @@ public:
     InstallSource(char const * type, char const * confEnt = nullptr);
     virtual ~InstallSource();
     std::string getConfEnt() {
-        return caption +"|" + source + "|" + directory + "|" + u + "|" + p + "|" + uid;
+        return m_caption +"|" + m_source + "|" + m_directory + "|" + m_u + "|" + m_p + "|" + m_uid;
     }
-    std::string caption;
-    std::string source;
-    std::string directory;
-    std::string u;
-    std::string p;
-    std::string uid;
+    std::string m_caption;
+    std::string m_source;
+    std::string m_directory;
+    std::string m_u;
+    std::string m_p;
+    std::string m_uid;
 
-    std::string type;
-    std::string localShadow;
-    void *userData;
+    std::string m_type;
+    std::string m_localShadow;
+    void *m_userData;
     SWMgr *getMgr();
     void flush();
 };
@@ -71,18 +71,18 @@ typedef std::map<std::string, InstallSource *> InstallSourceMap;
 class SWDLLEXPORT InstallMgr {
 
 protected:
-    bool userDisclaimerConfirmed;
-    std::set<std::string> defaultMods;
-    std::string privatePath; /**< \note Includes trailing slash. */
-    std::string confPath;
-    StatusReporter *statusReporter;
-    bool passive;
-    std::string u, p;
+    bool m_userDisclaimerConfirmed;
+    std::set<std::string> m_defaultMods;
+    std::string m_privatePath; /**< \note Includes trailing slash. */
+    std::string m_confPath;
+    StatusReporter * m_statusReporter;
+    bool m_passive;
+    std::string m_u, m_p;
 
     /** we have a transport member to set as current running transport so we
      *  can ask it to terminate below, if user requests
          */
-    std::shared_ptr<RemoteTransport> transport;
+    std::shared_ptr<RemoteTransport> m_transport;
 
 public:
 
@@ -191,13 +191,13 @@ A sample impl:
         return confirmed;
 
          */
-    virtual bool isUserDisclaimerConfirmed() const { return userDisclaimerConfirmed; }
+    virtual bool isUserDisclaimerConfirmed() const { return m_userDisclaimerConfirmed; }
 
     /** Preferred method of reporting user disclaimer confirmation is to override the above method
      * instead of using the setter below. This is provided for clients who don't wish to inherit
      * InstallMgr and override method.
      */
-    void setUserDisclaimerConfirmed(bool val) { userDisclaimerConfirmed = val; }
+    void setUserDisclaimerConfirmed(bool val) { m_userDisclaimerConfirmed = val; }
 
 
     /** override this and provide an input mechanism to allow your users
@@ -241,8 +241,8 @@ A sample implementation, roughly taken from the windows installmgr:
 
     /** whether or not to use passive mode when doing ftp transfers
          */
-    void setFTPPassive(bool passive) { this->passive = passive; }
-    bool isFTPPassive() { return passive; }
+    void setFTPPassive(bool passive) { this->m_passive = passive; }
+    bool isFTPPassive() { return m_passive; }
 
         /** call from another thread to terminate the installation process
          */

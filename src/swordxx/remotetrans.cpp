@@ -34,12 +34,12 @@
 namespace swordxx {
 
 RemoteTransport::RemoteTransport(const char *host, StatusReporter *statusReporter)
-    : term(false)
+    : m_term(false)
 {
-    this->statusReporter = statusReporter;
-    this->host = host;
-    u = "ftp";
-    p = "installmgr@user.com";
+    this->m_statusReporter = statusReporter;
+    this->m_host = host;
+    m_u = "ftp";
+    m_p = "installmgr@user.com";
 }
 
 
@@ -113,14 +113,14 @@ int RemoteTransport::copyDirectory(const char * urlPrefix_,
                         suffix.begin(),
                         suffix.end()))
             continue;
-        if (statusReporter) {
+        if (m_statusReporter) {
             std::string buffer2 = "Downloading (";
             buffer2 += formatted("%d", i+1);
             buffer2 += " of ";
             buffer2 += formatted("%d", dirList.size());
             buffer2 += "): ";
             buffer2 += entryName;
-            statusReporter->preStatus(totalBytes,
+            m_statusReporter->preStatus(totalBytes,
                                       completedBytes,
                                       buffer2.c_str());
         }
@@ -134,7 +134,7 @@ int RemoteTransport::copyDirectory(const char * urlPrefix_,
             return -2;
         }
         completedBytes += dirEntry.size;
-        if (term.load(std::memory_order_acquire))
+        if (m_term.load(std::memory_order_acquire))
             return -3;
     }
     return 0;

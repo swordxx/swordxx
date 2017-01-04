@@ -60,15 +60,15 @@ const int InstallMgr::MODSTAT_CIPHERKEYPRESENT = 0x020;
 
 
 InstallMgr::InstallMgr(std::string privatePath, StatusReporter *sr, std::string u, std::string p) {
-    userDisclaimerConfirmed = false;
-    statusReporter = sr;
-    this->u = u;
-    this->p = p;
+    m_userDisclaimerConfirmed = false;
+    m_statusReporter = sr;
+    this->m_u = u;
+    this->m_p = p;
     removeTrailingDirectorySlashes(privatePath);
     privatePath.push_back('/');
-    confPath = privatePath + "InstallMgr.conf";
-    this->privatePath = std::move(privatePath);
-    FileMgr::createParent(confPath.c_str());
+    m_confPath = privatePath + "InstallMgr.conf";
+    this->m_privatePath = std::move(privatePath);
+    FileMgr::createParent(m_confPath.c_str());
 
     readInstallConf();
 }
@@ -88,7 +88,7 @@ void InstallMgr::clearSources() {
 
 
 void InstallMgr::readInstallConf() {
-    installConf = std::make_unique<SWConfig>(confPath.c_str());
+    installConf = std::make_unique<SWConfig>(m_confPath.c_str());
 
     clearSources();
 
@@ -105,10 +105,10 @@ void InstallMgr::readInstallConf() {
 
         while (sourceBegin != sourceEnd) {
             InstallSource *is = new InstallSource("FTP", sourceBegin->second.c_str());
-            sources[is->caption] = is;
-            std::string parent = privatePath + is->uid + "/file";
+            sources[is->m_caption] = is;
+            std::string parent = m_privatePath + is->m_uid + "/file";
             FileMgr::createParent(parent.c_str());
-            is->localShadow = privatePath + is->uid;
+            is->m_localShadow = m_privatePath + is->m_uid;
             sourceBegin++;
         }
 
@@ -131,10 +131,10 @@ void InstallMgr::readInstallConf() {
 
         while (sourceBegin != sourceEnd) {
             InstallSource *is = new InstallSource("HTTP", sourceBegin->second.c_str());
-            sources[is->caption] = is;
-            std::string parent = privatePath + is->uid + "/file";
+            sources[is->m_caption] = is;
+            std::string parent = m_privatePath + is->m_uid + "/file";
             FileMgr::createParent(parent.c_str());
-            is->localShadow = privatePath + is->uid;
+            is->m_localShadow = m_privatePath + is->m_uid;
             sourceBegin++;
         }
 
@@ -143,22 +143,22 @@ void InstallMgr::readInstallConf() {
 
         while (sourceBegin != sourceEnd) {
             InstallSource *is = new InstallSource("HTTPS", sourceBegin->second.c_str());
-            sources[is->caption] = is;
-            std::string parent = privatePath + is->uid + "/file";
+            sources[is->m_caption] = is;
+            std::string parent = m_privatePath + is->m_uid + "/file";
             FileMgr::createParent(parent.c_str());
-            is->localShadow = privatePath + is->uid;
+            is->m_localShadow = m_privatePath + is->m_uid;
             sourceBegin++;
         }
     }
 
-    defaultMods.clear();
+    m_defaultMods.clear();
     confSection = installConf->sections().find("General");
     if (confSection != installConf->sections().end()) {
         sourceBegin = confSection->second.lower_bound("DefaultMod");
         sourceEnd = confSection->second.upper_bound("DefaultMod");
 
         while (sourceBegin != sourceEnd) {
-            defaultMods.insert(sourceBegin->second.c_str());
+            m_defaultMods.insert(sourceBegin->second.c_str());
             sourceBegin++;
         }
     }
@@ -172,7 +172,7 @@ void InstallMgr::saveInstallConf() {
     for (auto const & sp : sources)
         if (sp.second)
             installConf->sections()["Sources"].emplace(
-                        sp.second->type + "Source",
+                        sp.second->m_type + "Source",
                         sp.second->getConfEnt().c_str());
 
     (*installConf)["General"]["PassiveFTP"] = (isFTPPassive()) ? "true" : "false";
@@ -182,7 +182,7 @@ void InstallMgr::saveInstallConf() {
 
 
 void InstallMgr::terminate() {
-    std::shared_ptr<RemoteTransport> const transportPtr(transport);
+    std::shared_ptr<RemoteTransport> const transportPtr(m_transport);
     if (transportPtr)
         transportPtr->terminate();
 }
@@ -258,42 +258,42 @@ int InstallMgr::removeModule(SWMgr *manager, const char *moduleName) {
 
 // TODO: rename to netCopy
 int InstallMgr::remoteCopy(InstallSource *is, const char *src, const char *dest, bool dirTransfer, const char *suffix) {
-SWLog::getSystemLog()->logDebug("remoteCopy: %s, %s, %s, %c, %s", (is?is->source.c_str():"null"), src, (dest?dest:"null"), (dirTransfer?'t':'f'), (suffix?suffix:"null"));
+SWLog::getSystemLog()->logDebug("remoteCopy: %s, %s, %s, %c, %s", (is?is->m_source.c_str():"null"), src, (dest?dest:"null"), (dirTransfer?'t':'f'), (suffix?suffix:"null"));
 
     // assert user disclaimer has been confirmed
     if (!isUserDisclaimerConfirmed()) return -1;
 
     int retVal = 0;
     RemoteTransport * trans = nullptr;
-    if (is->type == "FTP"
+    if (is->m_type == "FTP"
 #if SWORDXX_CURL_HAS_SFTP
         || is->type == "SFTP"
 #endif
         ) {
 
         auto * const t =
-                new CURLFTPTransport(is->source.c_str(), statusReporter);
-        t->setPassive(passive);
+                new CURLFTPTransport(is->m_source.c_str(), m_statusReporter);
+        t->setPassive(m_passive);
         trans = t;
     }
-    else if (is->type == "HTTP" || is->type == "HTTPS") {
-        trans = new CURLHTTPTransport(is->source.c_str(), statusReporter);
+    else if (is->m_type == "HTTP" || is->m_type == "HTTPS") {
+        trans = new CURLHTTPTransport(is->m_source.c_str(), m_statusReporter);
     }
-    transport.reset(trans); // set classwide current transport for other thread terminate() call
-    if (is->u.length()) {
-        trans->setUser(is->u.c_str());
-        trans->setPasswd(is->p.c_str());
+    m_transport.reset(trans); // set classwide current transport for other thread terminate() call
+    if (is->m_u.length()) {
+        trans->setUser(is->m_u.c_str());
+        trans->setPasswd(is->m_p.c_str());
     }
     else {
-        trans->setUser(u.c_str());
-        trans->setPasswd(p.c_str());
+        trans->setUser(m_u.c_str());
+        trans->setPasswd(m_p.c_str());
     }
 
     std::string urlPrefix;
-    if (is->type == "HTTP") {
+    if (is->m_type == "HTTP") {
         urlPrefix = "http://";
     }
-    else if (is->type == "HTTPS") {
+    else if (is->m_type == "HTTPS") {
         urlPrefix = "https://";
     }
 #if SWORDXX_CURL_HAS_SFTP
@@ -304,7 +304,7 @@ SWLog::getSystemLog()->logDebug("remoteCopy: %s, %s, %s, %c, %s", (is?is->source
     else {
         urlPrefix = "ftp://";
     }
-    urlPrefix.append(is->source);
+    urlPrefix.append(is->m_source);
 
     // let's be sure we can connect.  This seems to be necessary but sucks
 //    std::string url = urlPrefix + is->directory.c_str() + "/"; //dont forget the final slash
@@ -315,7 +315,7 @@ SWLog::getSystemLog()->logDebug("remoteCopy: %s, %s, %s, %c, %s", (is?is->source
 
 
     if (dirTransfer) {
-        std::string dir(is->directory);
+        std::string dir(is->m_directory);
         removeTrailingDirectorySlashes(dir);
         (dir += '/') += src; //dont forget the final slash
 SWLog::getSystemLog()->logDebug("remoteCopy: dirTransfer: %s", dir.c_str());
@@ -329,7 +329,7 @@ SWLog::getSystemLog()->logDebug("remoteCopy: dirTransfer: %s", dir.c_str());
     }
     else {
         try {
-            std::string url = urlPrefix + is->directory;
+            std::string url = urlPrefix + is->m_directory;
             removeTrailingDirectorySlashes(url);
             url += std::string("/") + src; //dont forget the final slash
             if (!trans->getUrl(dest, url.c_str())) {
@@ -341,7 +341,7 @@ SWLog::getSystemLog()->logDebug("remoteCopy: dirTransfer: %s", dir.c_str());
             retVal = -1;
         }
     }
-    transport.reset();
+    m_transport.reset();
     return retVal;
 }
 
@@ -366,7 +366,7 @@ int InstallMgr::installModule(SWMgr *destMgr, const char *fromLocation, const ch
     SWLog::getSystemLog()->logDebug("***** modName: %s \n", modName);
 
     if (is)
-        sourceDir = privatePath + is->uid;
+        sourceDir = m_privatePath + is->m_uid;
     else    sourceDir = fromLocation;
 
     removeTrailingDirectorySlashes(sourceDir);
@@ -511,7 +511,7 @@ int InstallMgr::refreshRemoteSource(InstallSource *is) {
     // assert user disclaimer has been confirmed
     if (!isUserDisclaimerConfirmed()) return -1;
 
-    std::string root(privatePath + is->uid);
+    std::string root(m_privatePath + is->m_uid);
     removeTrailingDirectorySlashes(root);
     std::string target = root + "/mods.d";
     int errorCode = -1; //0 means successful
@@ -538,7 +538,7 @@ int InstallMgr::refreshRemoteSource(InstallSource *is) {
 
 
 bool InstallMgr::isDefaultModule(const char *modName) {
-    return defaultMods.count(modName);
+    return m_defaultMods.count(modName);
 }
 
 /************************************************************************
@@ -613,12 +613,12 @@ int InstallMgr::refreshRemoteSourceConfiguration() {
     // assert user disclaimer has been confirmed
     if (!isUserDisclaimerConfirmed()) return -1;
 
-    std::string root(privatePath);
+    std::string root(m_privatePath);
     removeTrailingDirectorySlashes(root);
     std::string masterRepoListPath = root + "/" + masterRepoList;
     InstallSource is("FTP");
-    is.source = "ftp.crosswire.org";
-    is.directory = "/pub/sword";
+    is.m_source = "ftp.crosswire.org";
+    is.m_directory = "/pub/sword";
     int errorCode = remoteCopy(&is, masterRepoList, masterRepoListPath.c_str(), false);
     if (!errorCode) { //sucessfully downloaded the repo list
         SWConfig masterList(masterRepoListPath.c_str());
@@ -628,7 +628,7 @@ int InstallMgr::refreshRemoteSourceConfiguration() {
                 // Search through our current sources and see if we have a matching UID
                 for (auto & sp : sources) {
                     // is this our UID?
-                    if (sp.second && sp.second->uid == ap.first) {
+                    if (sp.second && sp.second->m_uid == ap.first) {
                         if (ap.second == "REMOVE") {
                             // be sure to call save/reload after this
                             // or this could be dangerous
@@ -647,7 +647,7 @@ int InstallMgr::refreshRemoteSourceConfiguration() {
                                 // InstallSource i("FTP", actions->second);
                                 delete sp.second;
                                 sp.second = new InstallSource("FTP", ap.second.c_str());
-                                sp.second->uid = ap.first;
+                                sp.second->m_uid = ap.first;
                             }
                         }
                         goto foundIt;
@@ -659,8 +659,8 @@ int InstallMgr::refreshRemoteSourceConfiguration() {
                     if (key == "FTPSource") {
                         if (ap.second != "REMOVE") {
                             InstallSource *is = new InstallSource("FTP", ap.second.c_str());
-                            is->uid = ap.first;
-                            sources[is->caption] = is;
+                            is->m_uid = ap.first;
+                            sources[is->m_caption] = is;
                         }
                     }
                 }
@@ -680,21 +680,21 @@ int InstallMgr::refreshRemoteSourceConfiguration() {
 
 
 InstallSource::InstallSource(const char *type, const char *confEnt) {
-    this->type = type;
+    this->m_type = type;
     mgr = nullptr;
-    userData = nullptr;
+    m_userData = nullptr;
     if (confEnt) {
         std::string buf = confEnt;
-        caption   = stripPrefix(buf, '|');
-        source    = stripPrefix(buf, '|');
-        directory = stripPrefix(buf, '|');
-        u         = stripPrefix(buf, '|');
-        p         = stripPrefix(buf, '|');
-        uid       = stripPrefix(buf, '|');
+        m_caption   = stripPrefix(buf, '|');
+        m_source    = stripPrefix(buf, '|');
+        m_directory = stripPrefix(buf, '|');
+        m_u         = stripPrefix(buf, '|');
+        m_p         = stripPrefix(buf, '|');
+        m_uid       = stripPrefix(buf, '|');
 
-        if (!uid.length()) uid = source;
+        if (!m_uid.length()) m_uid = m_source;
 
-        removeTrailingDirectorySlashes(directory);
+        removeTrailingDirectorySlashes(m_directory);
     }
 }
 
@@ -711,7 +711,7 @@ void InstallSource::flush() {
 SWMgr *InstallSource::getMgr() {
     if (!mgr)
         // ..., false = don't augment ~home directory.
-        mgr = new SWMgr(localShadow.c_str(), true, nullptr, false, false);
+        mgr = new SWMgr(m_localShadow.c_str(), true, nullptr, false, false);
     return mgr;
 }
 

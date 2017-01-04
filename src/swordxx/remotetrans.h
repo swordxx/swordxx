@@ -67,11 +67,11 @@ public: /* Methods: */
 class SWDLLEXPORT RemoteTransport {
 
 protected:
-    StatusReporter *statusReporter;
-    std::atomic<bool> term;
-    std::string host;
-    std::string u;
-    std::string p;
+    StatusReporter * m_statusReporter;
+    std::atomic<bool> m_term;
+    std::string m_host;
+    std::string m_u;
+    std::string m_p;
 
 public:
     RemoteTransport(char const * host,
@@ -91,9 +91,9 @@ public:
 
     int copyDirectory(const char *urlPrefix, const char *dir, const char *dest, const char *suffix);
 
-    void setUser(const char *user) { u = user; }
-    void setPasswd(const char *passwd) { p = passwd; }
-    void terminate() { term.store(true, std::memory_order_release); }
+    void setUser(const char *user) { m_u = user; }
+    void setPasswd(const char *passwd) { m_p = passwd; }
+    void terminate() { m_term.store(true, std::memory_order_release); }
 };
 
 

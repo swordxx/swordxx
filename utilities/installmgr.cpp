@@ -167,9 +167,9 @@ void createBasicConfig(bool enableRemote, bool /* addCrossWire */) {
     remove(confPath.c_str());
 
     InstallSource is("FTP");
-    is.caption = "CrossWire";
-    is.source = "ftp.crosswire.org";
-    is.directory = "/pub/sword/raw";
+    is.m_caption = "CrossWire";
+    is.m_source = "ftp.crosswire.org";
+    is.m_directory = "/pub/sword/raw";
 
     SWConfig config(confPath.c_str());
     config["General"]["PassiveFTP"] = "true";
@@ -231,10 +231,10 @@ void listRemoteSources() {
     init();
     cout << "Remote Sources:\n\n";
     for (InstallSourceMap::iterator it = installMgr->sources.begin(); it != installMgr->sources.end(); it++) {
-        cout << "[" << it->second->caption << "]\n";
-        cout << "\tType     : " << it->second->type << "\n";
-        cout << "\tSource   : " << it->second->source << "\n";
-        cout << "\tDirectory: " << it->second->directory << "\n";
+        cout << "[" << it->second->m_caption << "]\n";
+        cout << "\tType     : " << it->second->m_type << "\n";
+        cout << "\tSource   : " << it->second->m_source << "\n";
+        cout << "\tDirectory: " << it->second->m_directory << "\n";
     }
 }
 

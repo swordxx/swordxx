@@ -129,18 +129,18 @@ public:
 
     class SWDLLEXPORT System {
         class Private;
-        Private *p;
-        std::string name;
-        int BMAX[2];
-        long ntStartOffset;
+        Private * m_p;
+        std::string m_name;
+        int m_BMAX[2];
+        long m_ntStartOffset;
         void init();
     public:
-        System() { this->name = ""; init(); }
+        System() { this->m_name = ""; init(); }
         System(const System &other);
         System &operator =(const System &other);
-        System(const char *name) { this->name = name; init(); }
+        System(const char *name) { this->m_name = name; init(); }
         ~System();
-        std::string const & getName() const { return name; }
+        std::string const & getName() const { return m_name; }
         const Book *getBookByName(const char *bookName) const;
         int getBookNumberByOSISName(const char *bookName) const;
         const Book *getBook(int number) const;
@@ -151,8 +151,8 @@ public:
                            unsigned char const * mappings = nullptr);
         long getOffsetFromVerse(int book, int chapter, int verse) const;
         char getVerseFromOffset(long offset, int *book, int *chapter, int *verse) const;
-        const int *getBMAX() const { return BMAX; };
-        long getNTStartOffset() const { return ntStartOffset; }
+        const int *getBMAX() const { return m_BMAX; };
+        long getNTStartOffset() const { return m_ntStartOffset; }
         void translateVerse(const System *dstSys, const char **book, int *chapter, int *verse, int *verse_end) const;
     };
     VersificationMgr() { init(); }
