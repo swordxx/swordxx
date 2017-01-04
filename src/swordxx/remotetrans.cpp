@@ -101,10 +101,13 @@ int RemoteTransport::copyDirectory(const char * urlPrefix_,
     std::size_t completedBytes = 0u;
     for (std::size_t i = 0u; i < dirList.size(); ++i) {
         DirEntry const & dirEntry = dirList[i];
-        std::string const buffer(dest + dirEntry.name);
+        std::string entryName = dirEntry.name;
+        if (entryName[entryName.size()-1] == 0)   // Remove trailing null char
+            entryName = entryName.substr(0,entryName.size()-1);
+        std::string const buffer(dest + entryName);
         if (buffer.size() < suffix.size())
             continue;
-        if (!std::equal(buffer.begin()
+        if (std::equal(buffer.end()
                         - static_cast<std::string::difference_type>(
                             suffix.size()),
                         suffix.begin(),
@@ -116,14 +119,14 @@ int RemoteTransport::copyDirectory(const char * urlPrefix_,
             buffer2 += " of ";
             buffer2 += formatted("%d", dirList.size());
             buffer2 += "): ";
-            buffer2 += dirEntry.name;
+            buffer2 += entryName;
             statusReporter->preStatus(totalBytes,
                                       completedBytes,
                                       buffer2.c_str());
         }
         // make sure parent directory exists:
         FileMgr::createParent(buffer.c_str());
-        std::string const url2(url + dirEntry.name);
+        std::string const url2(url + entryName);
         if (!getUrl(buffer.c_str(), url2.c_str())) {
             SWLog::getSystemLog()->logWarning(
                         "copyDirectory: failed to get file %s\n",
