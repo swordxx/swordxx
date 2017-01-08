@@ -38,21 +38,17 @@ SWCompress::SWCompress()
 
 SWCompress::~SWCompress()
 {
-    if (zbuf)
-        std::free(zbuf);
+    std::free(zbuf);
 
-    if (buf)
-        std::free(buf);
+    std::free(buf);
 }
 
 
 void SWCompress::reset()
 {
-        if (buf)
-            std::free(buf);
+        std::free(buf);
 
-        if (zbuf)
-            std::free(zbuf);
+        std::free(zbuf);
 
         buf    = nullptr;
         zbuf   = nullptr;
