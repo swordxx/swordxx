@@ -24,29 +24,22 @@
 #include <swordxx/swmgr.h>
 
 
-using namespace swordxx;
+int main() {
+    swordxx::SWMgr mgr;
 
-int main (int /* argc */, char** /* argv[] */) {
-        SWMgr mgr;
+#if 0
+    // This works
+    auto globalOptions = mgr.getGlobalOptions();
+    for (auto const & str : globalOptions) {
+        std::cout << str << std::endl;
+        for (auto const & str2 : mgr.getGlobalOptionValues(str.c_str()))
+            std::cout << "\t"<< str2 << std::endl;
+    }
+#endif
 
-//the commented out code works
-/*
-        StringList globalOptions = mgr.getGlobalOptions();
-        for (StringList::iterator it = globalOptions.begin(); it != globalOptions.end(); it++) {
-                std::cout << *it << std::endl;
-
-                StringList values = mgr.getGlobalOptionValues((*it).c_str());
-                for (StringList::iterator it2 = values.begin(); it2 != values.end(); it2++) {
-                        std::cout << "\t"<< *it2 << std::endl;
-                }
-        }
-*/
-
-//crashes
-    StringList values = mgr.getGlobalOptionValues("Footnotes");
-        for (StringList::iterator it2 = values.begin(); it2 != values.end(); it2++) {
-              std::cout << "\t"<< *it2 << std::endl;
-        }
+    // This crashes:
+    for (auto const & str : mgr.getGlobalOptionValues("Footnotes"))
+        std::cout << "\t"<< str << std::endl;
 };
 
 
