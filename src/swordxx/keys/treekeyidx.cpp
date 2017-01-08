@@ -34,7 +34,7 @@
 #include "../swlog.h"
 #include "../sysdata.h"
 #include "../utilstr.h"
-
+#include <iostream>
 
 namespace swordxx {
 
@@ -347,6 +347,8 @@ void TreeKeyIdx::getTreeNodeFromDatOffset(long ioffset, TreeNode *node) const {
             name += ch;
         } while (ch);
 
+        if (name[name.size()-1] == 0)   // Remove trailing null char
+            name = name.substr(0, name.size()-1);
         node->name = name;
 
         m_datfd->read(&tmp2, 2);
