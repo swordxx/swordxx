@@ -904,7 +904,8 @@ SWModule *SWMgr::createModule(const char *name, const char *driver, ConfigEntMap
 
     if (pos == 1) {
         std::string &dp = section["AbsoluteDataPath"];
-        removeTrailingDirectorySlashes(dp);
+        dp = FileMgr::getParentDirectory(dp);
+        section["AbsoluteDataPath"] = dp;
 /*
         std::string &rdp = section["RelativeDataPath"];
         removeTrailingDirectorySlashes(rdp);
