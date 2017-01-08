@@ -29,22 +29,12 @@
 
 namespace swordxx {
 
-/******************************************************************************
- * SWCompress Constructor - Initializes data for instance of SWCompress
- *
- */
-
 SWCompress::SWCompress()
 {
     buf = zbuf = nullptr;
     level = 6;
     reset();
 }
-
-
-/******************************************************************************
- * SWCompress Destructor - Cleans up instance of SWCompress
- */
 
 SWCompress::~SWCompress()
 {
