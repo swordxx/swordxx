@@ -29,38 +29,26 @@
 
 namespace swordxx {
 
-SWCompress::SWCompress()
-{
-    buf = zbuf = nullptr;
-    level = 6;
-    reset();
-}
+SWCompress::SWCompress() {}
 
-SWCompress::~SWCompress()
-{
+SWCompress::~SWCompress() {
     std::free(zbuf);
-
     std::free(buf);
 }
 
-
-void SWCompress::reset()
-{
-        std::free(buf);
-
-        std::free(zbuf);
-
-        buf    = nullptr;
-        zbuf   = nullptr;
-        direct  = 0;
-        zlen    = 0;
-        slen    = 0;
-        zpos    = 0;
-        pos     = 0;
+void SWCompress::reset() {
+    std::free(buf);
+    buf = nullptr;
+    std::free(zbuf);
+    zbuf = nullptr;
+    direct = 0;
+    zlen = 0;
+    zpos = 0;
+    pos = 0;
+    slen = 0;
 }
 
-
-char *SWCompress::Buf(const char *ibuf, unsigned long *len) {
+char * SWCompress::Buf(const char * ibuf, unsigned long * len) {
     // setting an uncompressed buffer
     if (ibuf) {
         reset();
@@ -82,9 +70,7 @@ char *SWCompress::Buf(const char *ibuf, unsigned long *len) {
     return buf;
 }
 
-
-char *SWCompress::zBuf(unsigned long *len, char *ibuf)
-{
+char * SWCompress::zBuf(unsigned long * len, char * ibuf) {
     // setting a compressed buffer
     if (ibuf) {
         reset();
@@ -103,19 +89,17 @@ char *SWCompress::zBuf(unsigned long *len, char *ibuf)
     return zbuf;
 }
 
-
-unsigned long SWCompress::GetChars(char *ibuf, unsigned long len)
-{
+/// \note Override for other than buffer compression
+unsigned long SWCompress::GetChars(char * ibuf, unsigned long len) {
     if (direct) {
-        len = (((zlen - zpos) > (unsigned)len) ? len : zlen - zpos);
+        len = ((zlen - zpos) > len) ? len : zlen - zpos;
         if (len > 0) {
             std::memmove(ibuf, &zbuf[zpos], len);
             zpos += len;
         }
-    }
-    else {
+    } else {
 //        slen = strlen(buf);
-        len = (((slen - pos) > (unsigned)len) ? len : slen - pos);
+        len = ((slen - pos) > len) ? len : slen - pos;
         if (len > 0) {
             std::memmove(ibuf, &buf[pos], len);
             pos += len;
@@ -124,9 +108,8 @@ unsigned long SWCompress::GetChars(char *ibuf, unsigned long len)
     return len;
 }
 
-
-unsigned long SWCompress::SendChars(char *ibuf, unsigned long len)
-{
+/// \note override for other than buffer compression
+unsigned long SWCompress::SendChars(char *ibuf, unsigned long len) {
     /** \bug Just avoids a null dereference by throwing std::bad_alloc, which is
              not properly handled. */
     static auto const saferRealloc =
@@ -139,7 +122,7 @@ unsigned long SWCompress::SendChars(char *ibuf, unsigned long len)
     if (direct) {
         if (buf) {
 //            slen = strlen(buf);
-            if ((pos + len) > (unsigned)slen) {
+            if ((pos + len) > slen) {
                 buf = saferRealloc(buf, pos + len + 1024);
                 std::memset(&buf[pos], 0, len + 1024);
             }
@@ -148,15 +131,13 @@ unsigned long SWCompress::SendChars(char *ibuf, unsigned long len)
         }
         std::memmove(&buf[pos], ibuf, len);
         pos += len;
-    }
-    else {
+    } else {
         if (zbuf) {
             if ((zpos + len) > zlen) {
                 zbuf = saferRealloc(zbuf, zpos + len + 1024);
                 zlen = zpos + len + 1024;
             }
-        }
-        else {
+        } else {
             zbuf = static_cast<char *>(std::calloc(1, len + 1024));
             zlen = len + 1024;
         }
@@ -166,38 +147,30 @@ unsigned long SWCompress::SendChars(char *ibuf, unsigned long len)
     return len;
 }
 
+/**
+    \brief "Encodes" the input stream into the output stream.
 
-/******************************************************************************
- * SWCompress::Encode    - This function "encodes" the input stream into the
- *                        output stream.
- *                        The GetChars() and SendChars() functions are
- *                        used to separate this method from the actual
- *                        i/o.
- */
+    The GetChars() and SendChars() functions are used to separate this method
+    from the actual I/O.
 
-void SWCompress::Encode(void)
-{
-    cycleStream();
-}
+    \note Override to provide compression algorithm.
+*/
+void SWCompress::Encode() { cycleStream(); }
 
+/**
+    \brief "Decodes" the input stream into the output stream.
 
-/******************************************************************************
- * SWCompress::Decode    - This function "decodes" the input stream into the
- *                        output stream.
- *                        The GetChars() and SendChars() functions are
- *                        used to separate this method from the actual
- *                        i/o.
- */
+    The GetChars() and SendChars() functions are used to separate this method
+    from the actual I/O.
 
-void SWCompress::Decode(void)
-{
-    cycleStream();
-}
-
+    \note Override to provide compression algorithm.
+*/
+void SWCompress::Decode() { cycleStream(); }
 
 void SWCompress::cycleStream() {
     char buf[1024];
-    unsigned long len, totlen = 0;
+    unsigned long len;
+    unsigned long totlen = 0;
 
     do {
         len = GetChars(buf, 1024);

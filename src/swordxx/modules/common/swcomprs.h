@@ -29,25 +29,37 @@
 
 namespace swordxx {
 
-class SWDLLEXPORT SWCompress
-{
-  void reset();
-  void cycleStream ();
-protected:
-  char *buf, *zbuf, direct;    // 0 - encode; 1 - decode
-  unsigned long zlen, zpos, pos, slen;
-  int level;
-public:
-  SWCompress ();
-  virtual ~ SWCompress ();
-  virtual char * Buf(char const * buf = nullptr, unsigned long * len = nullptr);
-  virtual char * zBuf(unsigned long * len, char * buf = nullptr);
-  virtual unsigned long GetChars (char *buf, unsigned long len);    // override for other than buffer compression
-  virtual unsigned long SendChars (char *buf, unsigned long len);    // override for other than buffer compression
-  virtual void Encode ();    // override to provide compression algorythm
-  virtual void Decode ();    // override to provide compression algorythm
-  virtual void setLevel(int l) {level = l;};
-  virtual int getLevel() {return level;};
+class SWDLLEXPORT SWCompress {
+
+public: /* Methods: */
+
+    SWCompress();
+    virtual ~ SWCompress();
+    virtual char * Buf(char const * buf = nullptr, unsigned long * len = nullptr);
+    virtual char * zBuf(unsigned long * len, char * buf = nullptr);
+    virtual unsigned long GetChars(char * buf, unsigned long len);
+    virtual unsigned long SendChars(char * buf, unsigned long len);
+    virtual void Encode();
+    virtual void Decode();
+    virtual void setLevel(int l) { level = l; }
+    virtual int getLevel() { return level; }
+
+private: /* Methods: */
+
+    void reset();
+    void cycleStream();
+
+protected: /* Fields: */
+
+    char * buf = nullptr;
+    char * zbuf = nullptr;
+    char direct = 0; // 0 - encode; 1 - decode
+    unsigned long zlen = 0;
+    unsigned long zpos = 0;
+    unsigned long pos = 0;
+    unsigned long slen = 0;
+    int level = 6;
+
 };
 
 } /* namespace swordxx */
