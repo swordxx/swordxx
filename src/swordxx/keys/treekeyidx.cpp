@@ -29,6 +29,7 @@
 #include <cstring>
 #include <fcntl.h>
 #include <string>
+#include <system_error>
 #include <utility>
 #include "../filemgr.h"
 #include "../swlog.h"
@@ -324,7 +325,6 @@ signed char TreeKeyIdx::create(const char *ipath) {
 
 void TreeKeyIdx::getTreeNodeFromDatOffset(long ioffset, TreeNode *node) const {
     m_unsnappedKeyText.clear();
-    char ch;
     int32_t  tmp;
     uint16_t  tmp2;
 
@@ -342,13 +342,19 @@ void TreeKeyIdx::getTreeNodeFromDatOffset(long ioffset, TreeNode *node) const {
         node->firstChild = swordtoarch32(tmp);
 
         std::string name;
-        do {
-            m_datfd->read(&ch, 1);
+        for (;;) {
+            char ch;
+            auto const r = m_datfd->read(&ch, 1u);
+            assert(r <= 1);
+            if (r < 0) {
+                assert(r == -1);
+                throw std::system_error(errno, std::system_category());
+            }
+            if ((r == 0) || (ch == '\0'))
+                break;
             name += ch;
-        } while (ch);
+        };
 
-        if (name[name.size()-1] == 0)   // Remove trailing null char
-            name = name.substr(0, name.size()-1);
         node->name = name;
 
         m_datfd->read(&tmp2, 2);
