@@ -320,9 +320,7 @@ std::string FileMgr::getParentDirectory(const std::string& buf) {
 
 int FileMgr::createParent(const char *pName) {
     assert(pName);
-    std::string buf(pName);
-
-    buf = getParentDirectory(buf);
+    auto buf(getParentDirectory(pName));
 
     int retCode = 0;
     if (!buf.empty()) {
