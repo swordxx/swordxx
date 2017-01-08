@@ -331,7 +331,7 @@ SWLog::getSystemLog()->logDebug("remoteCopy: dirTransfer: %s", dir.c_str());
         try {
             std::string url = urlPrefix + is->m_directory;
             removeTrailingDirectorySlashes(url);
-            url += std::string("/") + src; //dont forget the final slash
+            (url += '/') += src; // Dont forget the final slash
             if (!trans->getUrl(dest, url.c_str())) {
                 SWLog::getSystemLog()->logDebug("netCopy: failed to get file %s", url.c_str());
                 retVal = -1;
