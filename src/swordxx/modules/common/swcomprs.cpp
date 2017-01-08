@@ -38,7 +38,7 @@ SWCompress::SWCompress()
 {
     buf = zbuf = nullptr;
     level = 6;
-    Init();
+    reset();
 }
 
 
@@ -56,7 +56,7 @@ SWCompress::~SWCompress()
 }
 
 
-void SWCompress::Init()
+void SWCompress::reset()
 {
         if (buf)
             free(buf);
@@ -77,7 +77,7 @@ void SWCompress::Init()
 char *SWCompress::Buf(const char *ibuf, unsigned long *len) {
     // setting an uncompressed buffer
     if (ibuf) {
-        Init();
+        reset();
         slen = (len) ? *len : strlen(ibuf);
         buf = (char *) calloc(slen + 1, 1);
         memcpy(buf, ibuf, slen);
@@ -100,7 +100,7 @@ char *SWCompress::zBuf(unsigned long *len, char *ibuf)
 {
     // setting a compressed buffer
     if (ibuf) {
-        Init();
+        reset();
         zbuf = (char *) malloc(*len);
         memcpy(zbuf, ibuf, *len);
         zlen = *len;

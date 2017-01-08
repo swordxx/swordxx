@@ -31,7 +31,7 @@ namespace swordxx {
 
 class SWDLLEXPORT SWCompress
 {
-  void Init ();
+  void reset();
   void cycleStream ();
 protected:
   char *buf, *zbuf, direct;    // 0 - encode; 1 - decode
