@@ -191,7 +191,7 @@ public:
     static bool isDirectory(char const * path);
     static int createParent(const char *pName);
     static int createPathAndFile(const char *fName);
-    static std::string getParentDirectory(const std::string& buf);
+    static std::string getParentDirectory(std::string buf);
 
     /** attempts to open a file readonly
      * @param fName filename to open
