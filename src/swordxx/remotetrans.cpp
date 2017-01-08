@@ -22,6 +22,7 @@
 
 #include "remotetrans.h"
 
+#include <cassert>
 #include <cstring>
 #include <dirent.h>
 #include <fcntl.h>
@@ -102,8 +103,12 @@ int RemoteTransport::copyDirectory(const char * urlPrefix_,
     for (std::size_t i = 0u; i < dirList.size(); ++i) {
         DirEntry const & dirEntry = dirList[i];
         std::string entryName = dirEntry.name;
-        if (entryName[entryName.size()-1] == 0)   // Remove trailing null char
-            entryName = entryName.substr(0,entryName.size()-1);
+        assert(!entryName.empty());
+        while (*entryName.rbegin() == '\0') { // Remove trailing null chars
+            entryName.pop_back();
+            if (entryName.empty())
+                break;
+        }
         std::string const buffer(dest + entryName);
         if (buffer.size() < suffix.size())
             continue;
