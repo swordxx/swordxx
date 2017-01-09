@@ -61,7 +61,7 @@ Bzip2Compress::~Bzip2Compress() {
 
 void Bzip2Compress::Encode(void)
 {
-    direct = 0;    // set direction needed by parent [Get|Send]Chars()
+    direction = ENCODE;    // set direction needed by parent [Get|Send]Chars()
 
     // get buffer
     char chunk[1024];
@@ -111,7 +111,7 @@ void Bzip2Compress::Encode(void)
 
 void Bzip2Compress::Decode(void)
 {
-    direct = 1;    // set direction needed by parent [Get|Send]Chars()
+    direction = DECODE;    // set direction needed by parent [Get|Send]Chars()
 
     // get buffer
     char chunk[1024];

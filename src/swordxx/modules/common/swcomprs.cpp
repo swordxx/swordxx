@@ -59,7 +59,7 @@ void SWCompress::reset() noexcept {
     buf = nullptr;
     std::free(zbuf);
     zbuf = nullptr;
-    direct = 0;
+    direction = ENCODE;
     zlen = 0;
     zpos = 0;
     pos = 0;
@@ -81,7 +81,7 @@ char * SWCompress::Buf(const char * ibuf, unsigned long * len) {
     if (!buf) {
         // be sure we at least allocate an empty buf for return:
         buf = saferCalloc(1, 1);
-        direct = 1;
+        direction = DECODE;
         Decode();
 //        slen = strlen(buf);
         if (len)
@@ -102,7 +102,7 @@ char * SWCompress::zBuf(unsigned long * len, char * ibuf) {
 
     // getting a compressed buffer
     if (!zbuf) {
-        direct = 0;
+        direction = ENCODE;
         Encode();
     }
 
@@ -112,7 +112,7 @@ char * SWCompress::zBuf(unsigned long * len, char * ibuf) {
 
 /// \note Override for other than buffer compression
 unsigned long SWCompress::GetChars(char * ibuf, unsigned long len) {
-    if (direct) {
+    if (direction == DECODE) {
         len = ((zlen - zpos) > len) ? len : zlen - zpos;
         if (len > 0) {
             std::memmove(ibuf, &zbuf[zpos], len);
@@ -131,7 +131,7 @@ unsigned long SWCompress::GetChars(char * ibuf, unsigned long len) {
 
 /// \note override for other than buffer compression
 unsigned long SWCompress::SendChars(char *ibuf, unsigned long len) {
-    if (direct) {
+    if (direction == DECODE) {
         if (buf) {
 //            slen = strlen(buf);
             if ((pos + len) > slen) {

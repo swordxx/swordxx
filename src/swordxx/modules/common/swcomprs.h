@@ -31,6 +31,10 @@ namespace swordxx {
 
 class SWDLLEXPORT SWCompress {
 
+protected: /* Types: */
+
+    enum Direction { ENCODE, DECODE };
+
 public: /* Methods: */
 
     SWCompress();
@@ -53,7 +57,7 @@ protected: /* Fields: */
 
     char * buf = nullptr;
     char * zbuf = nullptr;
-    char direct = 0; // 0 - encode; 1 - decode
+    Direction direction = ENCODE;
     unsigned long zlen = 0;
     unsigned long zpos = 0;
     unsigned long pos = 0;

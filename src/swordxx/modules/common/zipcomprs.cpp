@@ -79,7 +79,7 @@ ZEXTERN int ZEXPORT compress2 OF((Bytef *dest,   uLongf *destLen,
    memory, Z_BUF_ERROR if there was not enough room in the output buffer,
    Z_STREAM_ERROR if the level parameter is invalid.
 */
-    direct = 0;    // set direction needed by parent [Get|Send]Chars()
+    direction = ENCODE;    // set direction needed by parent [Get|Send]Chars()
 
     // get buffer
     char chunk[1024];
@@ -146,7 +146,7 @@ ZEXTERN int ZEXPORT uncompress OF((Bytef *dest,   uLongf *destLen,
    enough memory, Z_BUF_ERROR if there was not enough room in the output
    buffer, or Z_DATA_ERROR if the input data was corrupted.
 */
-    direct = 1;    // set direction needed by parent [Get|Send]Chars()
+    direction = DECODE;    // set direction needed by parent [Get|Send]Chars()
 
     // get buffer
     char chunk[1024];
