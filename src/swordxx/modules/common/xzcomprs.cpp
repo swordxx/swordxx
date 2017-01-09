@@ -37,26 +37,9 @@ namespace swordxx {
  *
  */
 
-XzCompress::XzCompress() : SWCompress() {
-    level = 3;
-
-    // start with the estimated memory usage for our preset
-    memlimit = lzma_easy_decoder_memusage(level | LZMA_PRESET_EXTREME);
-
-    // and round up to a power of 2--
-    // bit twiddle hack to determine next greatest power of 2 from:
-    // http://graphics.stanford.edu/~seander/bithacks.html#RoundUpPowerOf2
-    memlimit--;
-    memlimit |= memlimit >> 1;
-    memlimit |= memlimit >> 2;
-    memlimit |= memlimit >> 4;
-    memlimit |= memlimit >> 8;
-    memlimit |= memlimit >> 16;
-    memlimit++;
-
-    // double that for safety's sake
-    memlimit <<= 1;
-}
+XzCompress::XzCompress()
+    : SWCompress()
+{ setLevel(3); }
 
 
 /******************************************************************************
