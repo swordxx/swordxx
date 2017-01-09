@@ -54,7 +54,7 @@ SWCompress::~SWCompress() {
     std::free(buf);
 }
 
-void SWCompress::reset() {
+void SWCompress::reset() noexcept {
     std::free(buf);
     buf = nullptr;
     std::free(zbuf);

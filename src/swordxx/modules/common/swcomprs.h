@@ -46,7 +46,7 @@ public: /* Methods: */
 
 private: /* Methods: */
 
-    void reset();
+    void reset() noexcept;
     void cycleStream();
 
 protected: /* Fields: */
