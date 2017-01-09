@@ -43,32 +43,26 @@ bool SWConfig::reload() {
         std::string section;
         std::string line;
         std::ifstream inFile(m_filename);
-        try {
-            inFile.exceptions(std::ios_base::badbit | std::ios_base::failbit);
-            while (std::getline(inFile, line)) {
-                if (line.empty() || (*line.begin()) == '#')
-                    continue;
-                if (*line.begin() == '[') {
-                    if (line.size() < 3
-                            || line.find(']', 1u) != line.size() - 1u)
-                        return false;
-                    section.assign(line, 1u, line.size() - 2u);
-                } else {
-                    auto it(std::find(line.begin(), line.end(), '='));
-                    if (it == line.begin() || it == line.end())
-                        return false;
-                    std::string key(line.begin(), it);
-                    std::string value(++it, line.end());
-                    trimString(value);
-                    data[section].emplace(std::move(key), std::move(value));
-                }
+        while (std::getline(inFile, line)) {
+            if (line.empty() || (*line.begin()) == '#')
+                continue;
+            if (*line.begin() == '[') {
+                if (line.size() < 3
+                        || line.find(']', 1u) != line.size() - 1u)
+                    return false;
+                section.assign(line, 1u, line.size() - 2u);
+            } else {
+                auto it(std::find(line.begin(), line.end(), '='));
+                if (it == line.begin() || it == line.end())
+                    return false;
+                std::string key(line.begin(), it);
+                std::string value(++it, line.end());
+                trimString(value);
+                data[section].emplace(std::move(key), std::move(value));
             }
-        } catch (std::ios_base::failure const &) {
-            if (!inFile.eof())
-                return false;
         }
-
-        assert(inFile.eof());
+        if (!inFile.eof())
+            return false;
     }
 
     m_sections = data;
@@ -81,25 +75,20 @@ bool SWConfig::save() {
     /// \todo Add proper error handling, perhaps even rollback.
     std::ofstream outFile(m_filename,
                           std::ios_base::out | std::ios_base::trunc);
-    try {
-        outFile.exceptions(std::ios_base::badbit | std::ios_base::failbit);
-        bool start = true;
-        for (auto const & sp : m_sections) {
-            if (sp.second.empty())
-                continue;
-            if (!start) {
-                outFile << "\n[" << sp.first << "]\n";
-                start = true;
-            } else {
-                outFile << '[' << sp.first << "]\n";
-            }
-            for (auto const & ep : sp.second)
-                outFile << ep.first << '=' << ep.second << '\n';
+    bool start = true;
+    for (auto const & sp : m_sections) {
+        if (sp.second.empty())
+            continue;
+        if (!start) {
+            outFile << "\n[" << sp.first << "]\n";
+            start = true;
+        } else {
+            outFile << '[' << sp.first << "]\n";
         }
-    } catch (std::ios_base::failure const &) {
-        return false;
+        for (auto const & ep : sp.second)
+            outFile << ep.first << '=' << ep.second << '\n';
     }
-    return true;
+    return outFile.good();
 }
 
 void SWConfig::augment(SWConfig const & addFrom) {
