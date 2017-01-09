@@ -69,9 +69,10 @@ void SWCompress::reset() {
 char * SWCompress::Buf(const char * ibuf, unsigned long * len) {
     // setting an uncompressed buffer
     if (ibuf) {
-        auto const newBuffer = saferCalloc(slen + 1, 1);
+        std::size_t const newLength = len ? *len : std::strlen(ibuf);
+        auto const newBuffer = saferCalloc(newLength + 1, 1);
         reset();
-        slen = (len) ? *len : std::strlen(ibuf);
+        slen = newLength;
         buf = newBuffer;
         std::memcpy(buf, ibuf, slen);
     }
