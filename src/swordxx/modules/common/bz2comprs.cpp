@@ -61,15 +61,13 @@ Bzip2Compress::~Bzip2Compress() {
 
 void Bzip2Compress::Encode(void)
 {
-    direction = ENCODE;    // set direction needed by parent [Get|Send]Chars()
-
     // get buffer
     char chunk[1024];
     char *buf = (char *)calloc(1, 1024);
     char *chunkbuf = buf;
     unsigned long chunklen;
     unsigned long len = 0;
-    while((chunklen = GetChars(chunk, 1023))) {
+    while((chunklen = GetChars(chunk, 1023, ENCODE))) {
         memcpy(chunkbuf, chunk, chunklen);
         len += chunklen;
         if (chunklen < 1023)
@@ -89,7 +87,7 @@ void Bzip2Compress::Encode(void)
             printf("ERROR in compression\n");
         }
         else {
-            SendChars(zbuf, zlen);
+            SendChars(zbuf, zlen, ENCODE);
         }
     }
     else
@@ -111,15 +109,13 @@ void Bzip2Compress::Encode(void)
 
 void Bzip2Compress::Decode(void)
 {
-    direction = DECODE;    // set direction needed by parent [Get|Send]Chars()
-
     // get buffer
     char chunk[1024];
     char *zbuf = (char *)calloc(1, 1024);
     char *chunkbuf = zbuf;
     int chunklen;
     unsigned long zlen = 0;
-    while((chunklen = GetChars(chunk, 1023))) {
+    while((chunklen = GetChars(chunk, 1023, DECODE))) {
         memcpy(chunkbuf, chunk, chunklen);
         zlen += chunklen;
         if (chunklen < 1023)
@@ -135,7 +131,7 @@ void Bzip2Compress::Decode(void)
         //printf("Doing decompress {%s}\n", zbuf);
         slen = 0;
         switch (BZ2_bzBuffToBuffDecompress(buf, &blen, zbuf, zlen, 0, 0)){
-            case BZ_OK: SendChars(buf, blen); slen = blen; break;
+            case BZ_OK: SendChars(buf, blen, DECODE); slen = blen; break;
             case BZ_MEM_ERROR: fprintf(stderr, "ERROR: not enough memory during decompression.\n"); break;
             case BZ_OUTBUFF_FULL: fprintf(stderr, "ERROR: not enough room in the out buffer during decompression.\n"); break;
             case BZ_DATA_ERROR: fprintf(stderr, "ERROR: corrupt data during decompression.\n"); break;

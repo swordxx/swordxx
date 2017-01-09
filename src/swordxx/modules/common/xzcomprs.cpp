@@ -62,15 +62,13 @@ XzCompress::~XzCompress() {
 
 void XzCompress::Encode(void)
 {
-    direction = ENCODE;    // set direction needed by parent [Get|Send]Chars()
-
     // get buffer
     char chunk[1024];
     char *buf = (char *)calloc(1, 1024);
     char *chunkbuf = buf;
     unsigned long chunklen;
     unsigned long len = 0;
-    while((chunklen = GetChars(chunk, 1023))) {
+    while((chunklen = GetChars(chunk, 1023, ENCODE))) {
         memcpy(chunkbuf, chunk, chunklen);
         len += chunklen;
         if (chunklen < 1023)
@@ -87,7 +85,7 @@ void XzCompress::Encode(void)
     {
         //printf("Doing compress\n");
         switch (lzma_easy_buffer_encode(level | LZMA_PRESET_EXTREME, LZMA_CHECK_CRC64, nullptr, (const uint8_t*)buf, (size_t)len, (uint8_t*)zbuf, &zpos, (size_t)zlen)) {
-                case LZMA_OK: SendChars(zbuf, zpos);  break;
+                case LZMA_OK: SendChars(zbuf, zpos, ENCODE);  break;
             case LZMA_BUF_ERROR: fprintf(stderr, "ERROR: not enough room in the out buffer during compression.\n"); break;
             case LZMA_UNSUPPORTED_CHECK: fprintf(stderr, "ERROR: unsupported_check error encountered during decompression.\n"); break;
             case LZMA_OPTIONS_ERROR: fprintf(stderr, "ERROR: options error encountered during decompression.\n"); break;
@@ -116,15 +114,13 @@ void XzCompress::Encode(void)
 
 void XzCompress::Decode(void)
 {
-    direction = DECODE;    // set direction needed by parent [Get|Send]Chars()
-
     // get buffer
     char chunk[1024];
     char *zbuf = (char *)calloc(1, 1024);
     char *chunkbuf = zbuf;
     int chunklen;
     unsigned long zlen = 0;
-    while((chunklen = GetChars(chunk, 1023))) {
+    while((chunklen = GetChars(chunk, 1023, DECODE))) {
         memcpy(chunkbuf, chunk, chunklen);
         zlen += chunklen;
         if (chunklen < 1023)
@@ -143,7 +139,7 @@ void XzCompress::Decode(void)
         size_t bpos = 0;
 
         switch (lzma_stream_buffer_decode((uint64_t *)&memlimit, 0, nullptr, (const uint8_t*)zbuf, &zpos, (size_t)zlen, (uint8_t*)buf, &bpos, (size_t)&blen)){
-            case LZMA_OK: SendChars(buf, bpos); slen = bpos; break;
+            case LZMA_OK: SendChars(buf, bpos, DECODE); slen = bpos; break;
             case LZMA_FORMAT_ERROR: fprintf(stderr, "ERROR: format error encountered during decompression.\n"); break;
             case LZMA_OPTIONS_ERROR: fprintf(stderr, "ERROR: options error encountered during decompression.\n"); break;
             case LZMA_DATA_ERROR: fprintf(stderr, "ERROR: corrupt data during decompression.\n"); break;

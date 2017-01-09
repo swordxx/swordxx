@@ -79,7 +79,6 @@ ZEXTERN int ZEXPORT compress2 OF((Bytef *dest,   uLongf *destLen,
    memory, Z_BUF_ERROR if there was not enough room in the output buffer,
    Z_STREAM_ERROR if the level parameter is invalid.
 */
-    direction = ENCODE;    // set direction needed by parent [Get|Send]Chars()
 
     // get buffer
     char chunk[1024];
@@ -87,7 +86,7 @@ ZEXTERN int ZEXPORT compress2 OF((Bytef *dest,   uLongf *destLen,
     char *chunkbuf = buf;
     unsigned long chunklen;
     unsigned long len = 0;
-    while((chunklen = GetChars(chunk, 1023))) {
+    while((chunklen = GetChars(chunk, 1023, ENCODE))) {
         memcpy(chunkbuf, chunk, chunklen);
         len += chunklen;
         if (chunklen < 1023)
@@ -107,7 +106,7 @@ ZEXTERN int ZEXPORT compress2 OF((Bytef *dest,   uLongf *destLen,
             printf("ERROR in compression\n");
         }
         else {
-            SendChars(zbuf, zlen);
+            SendChars(zbuf, zlen, ENCODE);
         }
     }
     else
@@ -146,7 +145,6 @@ ZEXTERN int ZEXPORT uncompress OF((Bytef *dest,   uLongf *destLen,
    enough memory, Z_BUF_ERROR if there was not enough room in the output
    buffer, or Z_DATA_ERROR if the input data was corrupted.
 */
-    direction = DECODE;    // set direction needed by parent [Get|Send]Chars()
 
     // get buffer
     char chunk[1024];
@@ -154,7 +152,7 @@ ZEXTERN int ZEXPORT uncompress OF((Bytef *dest,   uLongf *destLen,
     char *chunkbuf = zbuf;
     int chunklen;
     unsigned long zlen = 0;
-    while((chunklen = GetChars(chunk, 1023))) {
+    while((chunklen = GetChars(chunk, 1023, DECODE))) {
         memcpy(chunkbuf, chunk, chunklen);
         zlen += chunklen;
         if (chunklen < 1023)
@@ -170,7 +168,7 @@ ZEXTERN int ZEXPORT uncompress OF((Bytef *dest,   uLongf *destLen,
         //printf("Doing decompress {%s}\n", zbuf);
         slen = 0;
         switch (uncompress((Bytef*)buf, &blen, (Bytef*)zbuf, zlen)){
-            case Z_OK: SendChars(buf, blen); slen = blen; break;
+            case Z_OK: SendChars(buf, blen, DECODE); slen = blen; break;
             case Z_MEM_ERROR: fprintf(stderr, "ERROR: not enough memory during decompression.\n"); break;
             case Z_BUF_ERROR: fprintf(stderr, "ERROR: not enough room in the out buffer during decompression.\n"); break;
             case Z_DATA_ERROR: fprintf(stderr, "ERROR: corrupt data during decompression.\n"); break;

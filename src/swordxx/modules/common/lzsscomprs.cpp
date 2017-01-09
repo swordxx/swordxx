@@ -381,7 +381,6 @@ void LZSSCompress::Encode(void)
     // Start with a clean tree.
 
     p->InitTree();
-    direction = ENCODE;    // set direction needed by parent [Get|Send]Chars()
 
     // code_buf[0] works as eight flags.  A "1" represents that the
     // unit is an unencoded letter (1 byte), and a "0" represents
@@ -423,7 +422,7 @@ void LZSSCompress::Encode(void)
     // This function loads the buffer with X characters and returns
     // the actual amount loaded.
 
-    len = GetChars((char *) &(p->m_ring_buffer[r]), F);
+    len = GetChars((char *) &(p->m_ring_buffer[r]), F, ENCODE);
 
     // Make sure there is something to be compressed.
 
@@ -493,7 +492,7 @@ void LZSSCompress::Encode(void)
             // code_buf is the buffer of characters to be output.
             // code_buf_pos is the number of characters it contains.
 
-            SendChars((char *) code_buf, code_buf_pos);
+            SendChars((char *) code_buf, code_buf_pos, ENCODE);
 
             // Reset for next buffer...
 
@@ -509,7 +508,7 @@ void LZSSCompress::Encode(void)
         for (i = 0; i < last_match_length; i++) {
             // Get next character...
 
-            if (GetChars((char *) &c, 1) != 1)
+            if (GetChars((char *) &c, 1, ENCODE) != 1)
                 break;
 
             // Delete "old strings"
@@ -593,7 +592,7 @@ void LZSSCompress::Encode(void)
         // code_buf is the encoded string to send.
         // code_buf_ptr is the number of characters.
 
-        SendChars((char *) code_buf, code_buf_pos);
+        SendChars((char *) code_buf, code_buf_pos, ENCODE);
     }
 
 
@@ -621,8 +620,6 @@ void LZSSCompress::Decode(void)
     short int len;                      // number of chars in ring buffer
     unsigned long totalLen = 0;
 
-    direction = DECODE;    // set direction needed by parent [Get|Send]Chars()
-
     // Initialize the ring buffer with a common string.
     //
     // Note that the last F bytes of the ring buffer are not filled.
@@ -649,7 +646,7 @@ void LZSSCompress::Decode(void)
         else {
             // Next byte must be a flag.
 
-            if (GetChars((char *) &flags, 1) != 1)
+            if (GetChars((char *) &flags, 1, DECODE) != 1)
                 break;
 
             // Set the flag counter.  While at first it might appear
@@ -664,10 +661,10 @@ void LZSSCompress::Decode(void)
         // that the next byte is a single, unencoded character.
 
         if (flags & 1) {
-            if (GetChars((char *) c, 1) != 1)
+            if (GetChars((char *) c, 1, DECODE) != 1)
                 break;
 
-            if (SendChars((char *) c, 1) != 1) {
+            if (SendChars((char *) c, 1, DECODE) != 1) {
                 break;
             }
             totalLen++;
@@ -695,7 +692,7 @@ void LZSSCompress::Decode(void)
             // have changed the variable names to something more
             // obvious.
 
-            if (GetChars((char *) c, 2) != 2)
+            if (GetChars((char *) c, 2, DECODE) != 2)
                 break;
 
             // Convert these two characters into the position and
@@ -722,7 +719,7 @@ void LZSSCompress::Decode(void)
 
             // Add the "len" :characters to the output stream.
 
-            if (SendChars((char *) c, len) != (unsigned int)len) {
+            if (SendChars((char *) c, len, DECODE) != (unsigned int)len) {
                 break;
             }
             totalLen += len;

@@ -31,7 +31,7 @@ namespace swordxx {
 
 class SWDLLEXPORT SWCompress {
 
-protected: /* Types: */
+public: /* Types: */
 
     enum Direction { ENCODE, DECODE };
 
@@ -41,8 +41,8 @@ public: /* Methods: */
     virtual ~ SWCompress();
     virtual char * Buf(char const * buf = nullptr, unsigned long * len = nullptr);
     virtual char * zBuf(unsigned long * len, char * buf = nullptr);
-    virtual unsigned long GetChars(char * buf, unsigned long len);
-    virtual unsigned long SendChars(char * buf, unsigned long len);
+    virtual unsigned long GetChars(char * buf, unsigned long len, Direction dir);
+    virtual unsigned long SendChars(char * buf, unsigned long len, Direction dir);
     virtual void Encode();
     virtual void Decode();
     virtual void setLevel(int l) { level = l; }
@@ -51,13 +51,12 @@ public: /* Methods: */
 private: /* Methods: */
 
     void reset() noexcept;
-    void cycleStream();
+    void cycleStream(Direction dir);
 
 protected: /* Fields: */
 
     char * buf = nullptr;
     char * zbuf = nullptr;
-    Direction direction = ENCODE;
     unsigned long zlen = 0;
     unsigned long zpos = 0;
     unsigned long pos = 0;
