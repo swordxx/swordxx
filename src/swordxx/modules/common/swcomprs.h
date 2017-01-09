@@ -39,8 +39,8 @@ public: /* Methods: */
 
     SWCompress();
     virtual ~ SWCompress();
-    virtual char * Buf(char const * buf = nullptr, unsigned long * len = nullptr);
-    virtual char * zBuf(unsigned long * len, char * buf = nullptr);
+    char * Buf(char const * buf = nullptr, unsigned long * len = nullptr);
+    char * zBuf(unsigned long * len, char * buf = nullptr);
     virtual unsigned long GetChars(char * buf, unsigned long len, Direction dir);
     virtual unsigned long SendChars(char * buf, unsigned long len, Direction dir);
     virtual void Encode();
