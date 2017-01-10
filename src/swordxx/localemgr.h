@@ -54,7 +54,7 @@ private:
     char *defaultLocaleName;
     LocaleMgr(const LocaleMgr &);
 protected:
-    LocaleMap *locales;
+    LocaleMap m_locales;
     static std::unique_ptr<LocaleMgr> systemLocaleMgr;
 
 public:

@@ -50,12 +50,11 @@ LocaleMgr *LocaleMgr::getSystemLocaleMgr() {
 void LocaleMgr::setSystemLocaleMgr(LocaleMgr *newLocaleMgr) {
     systemLocaleMgr.reset(newLocaleMgr);
     SWLocale * locale = new SWLocale(nullptr);
-    systemLocaleMgr->locales->insert(LocaleMap::value_type(locale->getName(), locale));
+    systemLocaleMgr->m_locales.insert(LocaleMap::value_type(locale->getName(), locale));
 }
 
 
 LocaleMgr::LocaleMgr(const char *iConfigPath) {
-    locales = new LocaleMap();
     std::string prefixPath;
     std::string configPath;
     SWConfig * sysConf = nullptr;
@@ -128,7 +127,6 @@ LocaleMgr::LocaleMgr(const char *iConfigPath) {
 LocaleMgr::~LocaleMgr() {
     delete[] defaultLocaleName;
     deleteLocales();
-    delete locales;
 }
 
 
@@ -165,12 +163,12 @@ void LocaleMgr::loadConfigDir(const char *ipath) {
                         continue;
                     }
 
-                    it = locales->find(localeName);
-                    if (it != locales->end()) { // already present
+                    it = m_locales.find(localeName);
+                    if (it != m_locales.end()) { // already present
                         *((*it).second) += *locale;
                         delete locale;
                     }
-                    else locales->insert(LocaleMap::value_type(localeName, locale));
+                    else m_locales.insert(LocaleMap::value_type(localeName, locale));
                 }
                 else    delete locale;
             }
@@ -181,36 +179,29 @@ void LocaleMgr::loadConfigDir(const char *ipath) {
 
 
 void LocaleMgr::deleteLocales() {
-
-    LocaleMap::iterator it;
-
-    for (it = locales->begin(); it != locales->end(); it++)
-        delete (*it).second;
-
-    locales->erase(locales->begin(), locales->end());
+    for (auto const & lp : m_locales)
+        delete lp.second;
+    m_locales.clear();
 }
 
 
 SWLocale *LocaleMgr::getLocale(const char *name) {
     LocaleMap::iterator it;
 
-    it = locales->find(name);
-    if (it != locales->end())
+    it = m_locales.find(name);
+    if (it != m_locales.end())
         return (*it).second;
 
     SWLog::getSystemLog()->logWarning("LocaleMgr::getLocale failed to find %s\n", name);
-    return (*locales)[SWLocale::DEFAULT_LOCALE_NAME];
+    return m_locales[SWLocale::DEFAULT_LOCALE_NAME];
 }
 
 
 std::list <std::string> LocaleMgr::getAvailableLocales() {
     std::list <std::string> retVal;
-    for (LocaleMap::iterator it = locales->begin(); it != locales->end(); it++) {
-        if (it->second->getName() != "locales") {
-            retVal.push_back((*it).second->getName());
-        }
-    }
-
+    for (auto const & lp: m_locales)
+        if (lp.second->getName() != "locales")
+            retVal.push_back(lp.second->getName());
     return retVal;
 }
 
@@ -243,12 +234,12 @@ void LocaleMgr::setDefaultLocaleName(const char *name) {
     stdstr(&defaultLocaleName, tmplang);
 
     // First check for what we ask for
-    if (locales->find(tmplang) == locales->end()) {
+    if (m_locales.find(tmplang) == m_locales.end()) {
         // check for locale without country
         char * nocntry = nullptr;
         stdstr(&nocntry, tmplang);
         strtok(nocntry, "_");
-        if (locales->find(nocntry) != locales->end()) {
+        if (m_locales.find(nocntry) != m_locales.end()) {
             stdstr(&defaultLocaleName, nocntry);
         }
         delete [] nocntry;
