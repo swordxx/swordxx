@@ -87,7 +87,7 @@ SWKey::~SWKey() {
  * RET:    locale object associated with our name
  */
 
-SWLocale *SWKey::getPrivateLocale() const {
+SWLocale & SWKey::getPrivateLocale() const {
     if (!m_locale) {
         if ((!m_localeCache.name) || (strcmp(m_localeCache.name, m_localeName))) {
             stdstr(&(m_localeCache.name), m_localeName);
@@ -99,7 +99,7 @@ SWLocale *SWKey::getPrivateLocale() const {
         }
         m_locale = m_localeCache.locale;
     }
-    return m_locale;
+    return *m_locale;
 }
 
 

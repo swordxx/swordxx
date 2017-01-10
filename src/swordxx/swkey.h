@@ -80,7 +80,7 @@ protected:
     char m_error;
 
     char * m_localeName;
-    SWLocale *getPrivateLocale() const;
+    SWLocale & getPrivateLocale() const;
 
 
 public:
