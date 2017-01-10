@@ -35,8 +35,9 @@ namespace swordxx {
 
 class SWLocale;
 
-typedef std::list<std::string> StringList;
+using StringList = std::list<std::string>;
 using LocaleMap = std::map<std::string, std::shared_ptr<SWLocale> >;
+
 /**
 * The LocaleMgr class handles all the different locales of Sword++.
 * It provides functions to get a list of all available locales,
@@ -49,25 +50,20 @@ using LocaleMap = std::map<std::string, std::shared_ptr<SWLocale> >;
 * To get a list of availble locales use @see getAvailableLocales
 */
 class SWDLLEXPORT LocaleMgr {
-private:
-    void deleteLocales();
-    char *defaultLocaleName;
-    LocaleMgr(const LocaleMgr &);
-protected:
-    LocaleMap m_locales;
-    static std::unique_ptr<LocaleMgr> systemLocaleMgr;
 
-public:
+public: /* Methods: */
+
+    LocaleMgr(LocaleMgr &&) = delete;
+    LocaleMgr(LocaleMgr const &) = delete;
+    LocaleMgr & operator=(LocaleMgr &&) = delete;
+    LocaleMgr & operator=(LocaleMgr const &) = delete;
 
     /** Default constructor of  LocaleMgr
     * You do normally not need this constructor, use LocaleMgr::getSystemLocaleMgr() instead.
     */
     LocaleMgr(char const * iConfigPath = nullptr);
 
-    /**
-    * Default destructor of LocaleMgr
-    */
-    virtual ~LocaleMgr();
+    virtual ~LocaleMgr() noexcept;
 
     /** Get the locale connected with the name "name".
     *
@@ -89,32 +85,44 @@ public:
     * @param localeName The name of the locale Sword++ should use
     * @return Returns the translated text.
     */
-    virtual char const * translate(char const * text,
-                                   char const * localeName = nullptr);
+    virtual std::string translate(char const * text,
+                                  char const * localeName = nullptr);
 
     /** Get the default locale name. To set it use @see setDefaultLocaleName
     *
     * @return Returns the default locale name
     */
-    virtual const char *getDefaultLocaleName();
+    std::string const & getDefaultLocaleName() const noexcept
+    { return m_defaultLocaleName; }
 
     /** Set the new standard locale of Sword++.
     *
     * @param name The name of the new default locale
     */
-    virtual void setDefaultLocaleName(const char *name);
+    virtual void setDefaultLocaleName(char const * name);
 
     /** The LocaleMgr object used globally in the Sword++ world.
-    * Do not create your own LocaleMgr, use this static object instead.
+      * Do not create your own LocaleMgr, use this static object instead.
     */
-    static LocaleMgr *getSystemLocaleMgr();
-    static void setSystemLocaleMgr(LocaleMgr *newLocaleMgr);
+    static std::shared_ptr<LocaleMgr> getSystemLocaleMgr();
+    static void setSystemLocaleMgr(std::shared_ptr<LocaleMgr> newLocaleMgr);
 
-    /** Augment this localmgr with all locale.conf files in a directory
-    */
-    virtual void loadConfigDir(const char *ipath);
+    /** Augment this localmgr with all locale.conf files in a directory */
+    virtual void loadConfigDir(char const * ipath);
 
-};
+protected: /* Methods: */
+
+    inline LocaleMap & locales() noexcept { return m_locales; }
+    inline LocaleMap const & locales() const noexcept { return m_locales; }
+
+private: /* Fields: */
+
+    std::string m_defaultLocaleName;
+    LocaleMap m_locales;
+    static std::shared_ptr<LocaleMgr> m_systemLocaleMgr;
+
+}; /* class LocaleMgr */
 
 } /* namespace swordxx */
+
 #endif

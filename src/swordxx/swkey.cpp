@@ -64,7 +64,7 @@ void SWKey::init() {
     m_boundSet = false;
     m_locale = nullptr;
     m_localeName = nullptr;
-    setLocale(LocaleMgr::getSystemLocaleMgr()->getDefaultLocaleName());
+    setLocale(LocaleMgr::getSystemLocaleMgr()->getDefaultLocaleName().c_str());
 }
 
 SWKey *SWKey::clone() const

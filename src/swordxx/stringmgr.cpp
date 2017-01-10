@@ -143,7 +143,8 @@ void StringMgr::setSystemStringMgr(StringMgr *newStringMgr) {
    // TODO: this is magic. apparently we have to reset the system localemgr upon changing stringmgr.
    // setting system stringmgr should be set before localemgr and not possible to change.
    // rework this design.
-    LocaleMgr::getSystemLocaleMgr()->setSystemLocaleMgr(new LocaleMgr());
+    LocaleMgr::getSystemLocaleMgr()->setSystemLocaleMgr(
+                std::make_shared<LocaleMgr>());
 }
 
 /** Returns the global StringMgr handle

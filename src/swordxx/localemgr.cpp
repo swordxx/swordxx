@@ -23,11 +23,14 @@
 
 #include "localemgr.h"
 
+#include <cassert>
+#include <cstddef>
 #include <cstdio>
 #include <cstdlib>
 #include <dirent.h>
 #include <fcntl.h>
 #include <sys/stat.h>
+#include <utility>
 #include "filemgr.h"
 #include "stringmgr.h"
 #include "swlog.h"
@@ -38,51 +41,53 @@
 
 namespace swordxx {
 
+std::shared_ptr<LocaleMgr> LocaleMgr::m_systemLocaleMgr;
 
-std::unique_ptr<LocaleMgr> LocaleMgr::systemLocaleMgr;
-
-LocaleMgr *LocaleMgr::getSystemLocaleMgr() {
-    if (!systemLocaleMgr)
-        setSystemLocaleMgr(new LocaleMgr());
-    return systemLocaleMgr.get();
+std::shared_ptr<LocaleMgr> LocaleMgr::getSystemLocaleMgr() {
+    if (!m_systemLocaleMgr)
+        setSystemLocaleMgr(std::make_shared<LocaleMgr>());
+    return m_systemLocaleMgr;
 }
 
-void LocaleMgr::setSystemLocaleMgr(LocaleMgr *newLocaleMgr) {
-    systemLocaleMgr.reset(newLocaleMgr);
+void LocaleMgr::setSystemLocaleMgr(std::shared_ptr<LocaleMgr> newLocaleMgr) {
+    m_systemLocaleMgr = std::move(newLocaleMgr);
     auto locale(std::make_shared<SWLocale>(nullptr));
     auto localeName(locale->getName());
-    systemLocaleMgr->m_locales.emplace(std::move(localeName),
-                                       std::move(locale));
+    m_systemLocaleMgr->m_locales.emplace(std::move(localeName),
+                                         std::move(locale));
 }
 
-
-LocaleMgr::LocaleMgr(const char *iConfigPath) {
+LocaleMgr::LocaleMgr(char const * const iConfigPath)
+    /* Locales will be invalidated if you change the StringMgr. So only use the
+       default hardcoded locale and let the frontends change the locale if they
+       want: */
+    : m_defaultLocaleName(SWLocale::DEFAULT_LOCALE_NAME)
+{
     std::string prefixPath;
     std::string configPath;
-    SWConfig * sysConf = nullptr;
     char configType = 0;
-    std::string path;
     std::list<std::string> augPaths;
-    ConfigEntMap::iterator entry;
-
-    defaultLocaleName = nullptr;
 
     if (!iConfigPath) {
         SWLog::getSystemLog()->logDebug("LOOKING UP LOCALE DIRECTORY...");
+        SWConfig * sysConf = nullptr;
         SWMgr::findConfig(&configType, prefixPath, configPath, &augPaths, &sysConf);
         if (sysConf) {
-            if ((entry = (*sysConf)["Install"].find("LocalePath")) != (*sysConf)["Install"].end()) {
+            auto const & section = (*sysConf)["Install"];
+            auto const entry(section.find("LocalePath"));
+            if (entry != section.end()) {
                 configType = 9;    // our own
                 prefixPath = entry->second;
                 SWLog::getSystemLog()->logDebug("LocalePath provided in sysConfig.");
             }
         }
+        delete sysConf;
         SWLog::getSystemLog()->logDebug("LOOKING UP LOCALE DIRECTORY COMPLETE.");
-    }
-    else {
+    } else {
         loadConfigDir(iConfigPath);
     }
 
+    std::string path;
     if (!prefixPath.empty()) {
         switch (configType) {
         case 2: {
@@ -105,141 +110,103 @@ LocaleMgr::LocaleMgr(const char *iConfigPath) {
         }
     }
 
-    if (augPaths.size() && configType != 9) { //load locale files from all augmented paths
-        std::list<std::string>::iterator it = augPaths.begin();
-        std::list<std::string>::iterator end = augPaths.end();
-
-        for (;it != end; ++it) {
-            if (FileMgr::existsDir((*it).c_str(), "locales.d")) {
-                std::string path = (*it) + "locales.d";
-                loadConfigDir(path.c_str());
-            }
-        }
-    }
-
-    // Locales will be invalidated if you change the StringMgr
-    // So only use the default hardcoded locale and let the
-    // frontends change the locale if they want
-    stdstr(&defaultLocaleName, SWLocale::DEFAULT_LOCALE_NAME);
-
-    delete sysConf;
+    if (augPaths.size() && configType != 9) //load locale files from all augmented paths
+        for (auto const & augPath : augPaths)
+            if (FileMgr::existsDir(augPath.c_str(), "locales.d"))
+                loadConfigDir((augPath + "locales.d").c_str());
 }
 
+LocaleMgr::~LocaleMgr() noexcept {}
 
-LocaleMgr::~LocaleMgr() {
-    delete[] defaultLocaleName;
-    deleteLocales();
-}
+void LocaleMgr::loadConfigDir(char const * ipath) {
+    SWLog::getSystemLog()->logInformation("LocaleMgr::loadConfigDir loading %s",
+                                          ipath);
+    struct DirCloser {
+        void operator()(DIR * const dir) const noexcept { ::closedir(dir); }
+    };
+    if (auto dir = std::unique_ptr<DIR, DirCloser>(::opendir(ipath))) {
+        ::rewinddir(dir.get());
+        while (auto const ent = ::readdir(dir.get())) {
+            if (!strcmp(ent->d_name, ".") || !strcmp(ent->d_name, ".."))
+                continue;
+            auto locale(std::make_shared<SWLocale>(
+                            [&ipath,&ent]{
+                                std::string newmodfile(ipath);
+                                addTrailingDirectorySlash(newmodfile);
+                                newmodfile += ent->d_name;
+                                return newmodfile;
 
-
-void LocaleMgr::loadConfigDir(const char *ipath) {
-    DIR *dir;
-    struct dirent *ent;
-    std::string newmodfile;
-    LocaleMap::iterator it;
-    SWLog::getSystemLog()->logInformation("LocaleMgr::loadConfigDir loading %s", ipath);
-
-    if ((dir = opendir(ipath))) {
-        rewinddir(dir);
-        while ((ent = readdir(dir))) {
-            if ((strcmp(ent->d_name, ".")) && (strcmp(ent->d_name, ".."))) {
-                newmodfile = ipath;
-                if ((ipath[strlen(ipath)-1] != '\\') && (ipath[strlen(ipath)-1] != '/'))
-                    newmodfile += "/";
-                newmodfile += ent->d_name;
-                auto locale(std::make_shared<SWLocale>(newmodfile.c_str()));
-                auto localeName(locale->getName());
-                static_assert(!std::is_reference<decltype(localeName)>::value, "");
-                if (!localeName.empty()) {
-                    bool supported = false;
-                    auto const & localeEncoding = locale->getEncoding();
-                    if (StringMgr::hasUTF8Support()) {
-                        supported = (localeEncoding == "UTF-8" || localeEncoding == "ASCII");
-                    }
-                    else {
-                        supported = localeEncoding.empty() || localeEncoding != "UTF-8"; //exclude UTF-8 locales
-                    }
-
-                    if (!supported)
+                            }().c_str()));
+            auto const & localeName = locale->getName();
+            if (!localeName.empty()) {
+                auto const & localeEncoding = locale->getEncoding();
+                if (StringMgr::hasUTF8Support()) {
+                    if (localeEncoding != "UTF-8" && localeEncoding != "ASCII")
                         continue;
+                } else if (localeEncoding == "UTF-8") { // Exclude UTF-8 locales
+                    continue;
+                }
 
-                    it = m_locales.find(localeName);
-                    if (it != m_locales.end()) { // already present
-                        *((*it).second) += *locale;
-                    } else {
-                        m_locales.emplace(std::move(localeName),
-                                          std::move(locale));
-                    }
+                auto const it(m_locales.find(localeName));
+                if (it != m_locales.end()) { // already present
+                    *(it->second) += *locale;
+                } else {
+                    m_locales.emplace(localeName, std::move(locale));
                 }
             }
         }
-        closedir(dir);
     }
 }
 
-
-void LocaleMgr::deleteLocales() { m_locales.clear(); }
-
-
 std::shared_ptr<SWLocale> LocaleMgr::getLocale(char const * name) {
-    LocaleMap::iterator it;
-
-    it = m_locales.find(name);
+    auto const it = m_locales.find(name);
     if (it != m_locales.end())
-        return (*it).second;
+        return it->second;
 
     SWLog::getSystemLog()->logWarning("LocaleMgr::getLocale failed to find %s\n", name);
     return m_locales[SWLocale::DEFAULT_LOCALE_NAME];
 }
 
-
-std::list <std::string> LocaleMgr::getAvailableLocales() {
-    std::list <std::string> retVal;
+std::list<std::string> LocaleMgr::getAvailableLocales() {
+    std::list<std::string> retVal;
     for (auto const & lp: m_locales)
         if (lp.second->getName() != "locales")
             retVal.push_back(lp.second->getName());
     return retVal;
 }
 
-
-const char *LocaleMgr::translate(const char *text, const char *localeName) {
-    if (!localeName)
-        localeName = getDefaultLocaleName();
-    if (auto target = getLocale(localeName))
-        return target->translate(text).c_str();
+std::string LocaleMgr::translate(char const * text, char const * localeName) {
+    assert(text);
+    if (auto target = getLocale(localeName
+                                ? localeName
+                                : m_defaultLocaleName.c_str()))
+        return target->translate(text);
     return text;
 }
 
-
-const char *LocaleMgr::getDefaultLocaleName() {
-    return defaultLocaleName;
-}
-
-
-void LocaleMgr::setDefaultLocaleName(const char *name) {
-    char * tmplang = nullptr;
-    stdstr(&tmplang, name);
+void LocaleMgr::setDefaultLocaleName(char const * const name) {
+    assert(name);
+    std::string tmplang(name);
+    static auto const stripStartingFromChar =
+            [](std::string & str, char const delim) noexcept {
+                auto const i = str.find(delim);
+                if (i != std::string::npos)
+                    str.resize(i);
+            };
     // discard everything after '.' usually encoding e.g. .UTF-8
-    strtok(tmplang, ".");
+    stripStartingFromChar(tmplang, '.');
     // also discard after '@' so e.g. @euro locales are found
-    strtok(tmplang, "@");
+    stripStartingFromChar(tmplang, '@');
 
-    stdstr(&defaultLocaleName, tmplang);
+    m_defaultLocaleName = tmplang;
 
     // First check for what we ask for
     if (m_locales.find(tmplang) == m_locales.end()) {
         // check for locale without country
-        char * nocntry = nullptr;
-        stdstr(&nocntry, tmplang);
-        strtok(nocntry, "_");
-        if (m_locales.find(nocntry) != m_locales.end()) {
-            stdstr(&defaultLocaleName, nocntry);
-        }
-        delete [] nocntry;
+        stripStartingFromChar(tmplang, '_');
+        if (m_locales.find(tmplang) != m_locales.end())
+            m_defaultLocaleName = std::move(tmplang);
     }
-    delete [] tmplang;
 }
 
-
 } /* namespace swordxx */
-

@@ -33,9 +33,8 @@ int main(int argc, char **argv) {
         exit(-1);
     }
 
-    LocaleMgr *lm = LocaleMgr::getSystemLocaleMgr();
-
-    std::cout << lm->translate(argv[2], argv[1]) << "\n";
+    std::cout << LocaleMgr::getSystemLocaleMgr()->translate(argv[2], argv[1])
+              << "\n";
 
 /*
     VerseKey bla;
