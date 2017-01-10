@@ -58,7 +58,7 @@ class SWDLLEXPORT SWKey {
     class LocaleCache {
     public:
         char * name = nullptr;
-        SWLocale * locale = nullptr;
+        std::shared_ptr<SWLocale> locale;
 
          virtual ~LocaleCache() {
             delete[] name;
@@ -66,7 +66,7 @@ class SWDLLEXPORT SWKey {
     };
     static LocaleCache m_localeCache;
     // for caching; don't use directly, call getPrivateLocale()
-    mutable SWLocale * m_locale;
+    mutable std::shared_ptr<SWLocale> m_locale;
 
 
     long m_index;

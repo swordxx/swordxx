@@ -74,7 +74,7 @@ public:
     * @param name The name of the locale you want to have. For example use getLocale("de") to get the locale for the German language.
     * @return Returns the locale object if the locale with the name given as parameter was found. If it wasn't found return nullptr.
     */
-    virtual SWLocale *getLocale(const char *name);
+    virtual std::shared_ptr<SWLocale> getLocale(char const * name);
 
     /** Get the list of available locales.
     *

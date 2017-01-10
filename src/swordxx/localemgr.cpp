@@ -181,15 +181,15 @@ void LocaleMgr::loadConfigDir(const char *ipath) {
 void LocaleMgr::deleteLocales() { m_locales.clear(); }
 
 
-SWLocale *LocaleMgr::getLocale(const char *name) {
+std::shared_ptr<SWLocale> LocaleMgr::getLocale(char const * name) {
     LocaleMap::iterator it;
 
     it = m_locales.find(name);
     if (it != m_locales.end())
-        return (*it).second.get();
+        return (*it).second;
 
     SWLog::getSystemLog()->logWarning("LocaleMgr::getLocale failed to find %s\n", name);
-    return m_locales[SWLocale::DEFAULT_LOCALE_NAME].get();
+    return m_locales[SWLocale::DEFAULT_LOCALE_NAME];
 }
 
 
