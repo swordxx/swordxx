@@ -207,12 +207,9 @@ std::list <std::string> LocaleMgr::getAvailableLocales() {
 
 
 const char *LocaleMgr::translate(const char *text, const char *localeName) {
-    SWLocale *target;
-    if (!localeName) {
+    if (!localeName)
         localeName = getDefaultLocaleName();
-    }
-    target = getLocale(localeName);
-    if (target)
+    if (auto target = getLocale(localeName))
         return target->translate(text).c_str();
     return text;
 }
