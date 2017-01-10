@@ -57,12 +57,9 @@ class SWDLLEXPORT SWKey {
 
     class LocaleCache {
     public:
-        char *name;
-        SWLocale *locale;
-            LocaleCache() {
-            name = nullptr;
-            locale = nullptr;
-        }
+        char * name = nullptr;
+        SWLocale * locale = nullptr;
+
          virtual ~LocaleCache() {
             delete[] name;
         }
