@@ -50,7 +50,7 @@ LocaleMgr *LocaleMgr::getSystemLocaleMgr() {
 void LocaleMgr::setSystemLocaleMgr(LocaleMgr *newLocaleMgr) {
     systemLocaleMgr.reset(newLocaleMgr);
     SWLocale * locale = new SWLocale(nullptr);
-    systemLocaleMgr->m_locales.insert(LocaleMap::value_type(locale->getName(), locale));
+    systemLocaleMgr->m_locales.emplace(locale->getName(), locale);
 }
 
 
@@ -168,7 +168,7 @@ void LocaleMgr::loadConfigDir(const char *ipath) {
                         *((*it).second) += *locale;
                         delete locale;
                     }
-                    else m_locales.insert(LocaleMap::value_type(localeName, locale));
+                    else m_locales.emplace(localeName, locale);
                 }
                 else    delete locale;
             }
