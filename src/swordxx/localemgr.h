@@ -36,7 +36,7 @@ namespace swordxx {
 class SWLocale;
 
 typedef std::list<std::string> StringList;
-typedef std::map < std::string, SWLocale *, std::less < std::string > > LocaleMap;
+using LocaleMap = std::map<std::string, std::shared_ptr<SWLocale> >;
 /**
 * The LocaleMgr class handles all the different locales of Sword++.
 * It provides functions to get a list of all available locales,

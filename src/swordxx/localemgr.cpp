@@ -49,8 +49,10 @@ LocaleMgr *LocaleMgr::getSystemLocaleMgr() {
 
 void LocaleMgr::setSystemLocaleMgr(LocaleMgr *newLocaleMgr) {
     systemLocaleMgr.reset(newLocaleMgr);
-    SWLocale * locale = new SWLocale(nullptr);
-    systemLocaleMgr->m_locales.emplace(locale->getName(), locale);
+    auto locale(std::make_shared<SWLocale>(nullptr));
+    auto localeName(locale->getName());
+    systemLocaleMgr->m_locales.emplace(std::move(localeName),
+                                       std::move(locale));
 }
 
 
@@ -145,9 +147,9 @@ void LocaleMgr::loadConfigDir(const char *ipath) {
                 if ((ipath[strlen(ipath)-1] != '\\') && (ipath[strlen(ipath)-1] != '/'))
                     newmodfile += "/";
                 newmodfile += ent->d_name;
-                SWLocale *locale = new SWLocale(newmodfile.c_str());
-
-                auto const & localeName = locale->getName();
+                auto locale(std::make_shared<SWLocale>(newmodfile.c_str()));
+                auto localeName(locale->getName());
+                static_assert(!std::is_reference<decltype(localeName)>::value, "");
                 if (!localeName.empty()) {
                     bool supported = false;
                     auto const & localeEncoding = locale->getEncoding();
@@ -158,19 +160,17 @@ void LocaleMgr::loadConfigDir(const char *ipath) {
                         supported = localeEncoding.empty() || localeEncoding != "UTF-8"; //exclude UTF-8 locales
                     }
 
-                    if (!supported) { //not supported
-                        delete locale;
+                    if (!supported)
                         continue;
-                    }
 
                     it = m_locales.find(localeName);
                     if (it != m_locales.end()) { // already present
                         *((*it).second) += *locale;
-                        delete locale;
+                    } else {
+                        m_locales.emplace(std::move(localeName),
+                                          std::move(locale));
                     }
-                    else m_locales.emplace(localeName, locale);
                 }
-                else    delete locale;
             }
         }
         closedir(dir);
@@ -178,11 +178,7 @@ void LocaleMgr::loadConfigDir(const char *ipath) {
 }
 
 
-void LocaleMgr::deleteLocales() {
-    for (auto const & lp : m_locales)
-        delete lp.second;
-    m_locales.clear();
-}
+void LocaleMgr::deleteLocales() { m_locales.clear(); }
 
 
 SWLocale *LocaleMgr::getLocale(const char *name) {
@@ -190,10 +186,10 @@ SWLocale *LocaleMgr::getLocale(const char *name) {
 
     it = m_locales.find(name);
     if (it != m_locales.end())
-        return (*it).second;
+        return (*it).second.get();
 
     SWLog::getSystemLog()->logWarning("LocaleMgr::getLocale failed to find %s\n", name);
-    return m_locales[SWLocale::DEFAULT_LOCALE_NAME];
+    return m_locales[SWLocale::DEFAULT_LOCALE_NAME].get();
 }
 
 
