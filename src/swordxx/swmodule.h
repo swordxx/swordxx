@@ -43,11 +43,7 @@ class SWFilter;
 
 #define SEARCHFLAG_MATCHWHOLEENTRY 4096
 
-typedef std::list < SWFilter * >FilterList;
-typedef std::list < SWOptionFilter * >OptionFilterList;
-typedef std::map < std::string, std::string, std::less < std::string > > AttributeValue;
-typedef std::map < std::string, AttributeValue, std::less < std::string > > AttributeList;
-typedef std::map < std::string, AttributeList, std::less < std::string > > AttributeTypeList;
+using AttributeValue = std::map<std::string, std::string>;
 
 /**
  * The class SWModule is the base class for all modules used in Sword++.
@@ -58,6 +54,13 @@ typedef std::map < std::string, AttributeList, std::less < std::string > > Attri
  * SWModule has also functions to write to the data files.
  */
 class SWDLLEXPORT SWModule {
+
+private: /* Types: */
+
+    using FilterList = std::list<SWFilter *>;
+    using OptionFilterList = std::list<SWOptionFilter *>;
+    using AttributeList = std::map<std::string, AttributeValue>;
+    using AttributeTypeList = std::map<std::string, AttributeList>;
 
 private: /* Fields: */
 
