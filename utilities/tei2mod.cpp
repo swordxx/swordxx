@@ -223,7 +223,7 @@ void linkToEntry(const std::string & /* keyBuf */, const std::string &linkBuf) {
 
 // Return true if the content was handled or is to be ignored.
 //      false if the what has been seen is to be accumulated and considered later.
-bool handleToken(std::string &text, XMLTag *token) {
+bool handleToken(std::string & text, XMLTag & token) {
         // The start token for the current entry;
     static XMLTag startTag;
 
@@ -232,14 +232,14 @@ bool handleToken(std::string &text, XMLTag *token) {
         static bool inEntryFree  = false;
         static bool inSuperEntry = false;
 
-    const char *tokenName = token->getName();
+    const char *tokenName = token.getName();
 
         static char const * splitPtr;
         static char const * splitPtr2 = nullptr;
         static char *splitBuffer    = new char[4096];
     static SWKey tmpKey;
 //-- START TAG -------------------------------------------------------------------------
-    if (!token->isEndTag()) {
+    if (!token.isEndTag()) {
 
         // If we are not in an "entry" and we see one, then enter it.
         if (!inEntry && !inEntryFree && !inSuperEntry) {
@@ -250,14 +250,14 @@ bool handleToken(std::string &text, XMLTag *token) {
 #ifdef DEBUG
                 cout << "Entering " << tokenName << endl;
 #endif
-                startTag    = *token;
+                startTag    = token;
                 text        = "";
 
-                                keyStr = token->getAttribute("n"); // P5 with linking and/or non-URI chars
+                                keyStr = token.getAttribute("n"); // P5 with linking and/or non-URI chars
                                 if (keyStr.empty()) {
-                                    keyStr = token->getAttribute("sortKey"); // P5 otherwise
+                                    keyStr = token.getAttribute("sortKey"); // P5 otherwise
                                     if (keyStr.empty()) {
-                            keyStr = token->getAttribute("key"); // P4
+                            keyStr = token.getAttribute("key"); // P4
                                         }
                                 }
 
@@ -282,7 +282,7 @@ bool handleToken(std::string &text, XMLTag *token) {
             inEntry       = false;
             inEntryFree   = false;
             inSuperEntry  = false;
-            text         += token->toString();
+            text         += token.toString();
 
                         entryCount++;
 #ifdef DEBUG
@@ -546,7 +546,7 @@ int main(int argc, char **argv) {
             token.push_back('>');
 
             XMLTag *t = new XMLTag(token.c_str());
-            if (!handleToken(text, t)) {
+            if (!handleToken(text, *t)) {
                 text.append(*t);
             }
                         delete t;
