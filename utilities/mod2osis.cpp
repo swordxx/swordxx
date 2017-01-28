@@ -85,15 +85,12 @@ int main(int argc, char **argv)
     }
 
     SWMgr mgr(new MarkupFilterMgr(FMT_OSIS));
-    StringList options = mgr.getGlobalOptions();
-    for (StringList::iterator it = options.begin(); it != options.end(); it++) {
-        StringList values = mgr.getGlobalOptionValues(it->c_str());
-        if (find(values.begin(), values.end(), "On") != values.end()) {
-            mgr.setGlobalOption(it->c_str(), "On");
-        }
-        if (find(values.begin(), values.end(), "All Readings") != values.end()) {
-            mgr.setGlobalOption(it->c_str(), "All Readings");
-        }
+    for (auto const & option : mgr.getGlobalOptions()) {
+        auto const values(mgr.getGlobalOptionValues(option.c_str()));
+        if (find(values.begin(), values.end(), "On") != values.end())
+            mgr.setGlobalOption(option.c_str(), "On");
+        if (find(values.begin(), values.end(), "All Readings") != values.end())
+            mgr.setGlobalOption(option.c_str(), "All Readings");
     }
 
 //    mgr.setGlobalOption("Strong's Numbers", "Off");
