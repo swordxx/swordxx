@@ -55,7 +55,7 @@ public:
     */
     static inline bool hasUTF8Support() {
         return getSystemStringMgr()->supportsUnicode();
-    };
+    }
 
     /** Converts the param to an upper case Utf8 string
     * @param text The text encoded in utf8 which should be turned into an upper case string
