@@ -62,7 +62,6 @@ class SWFilterMgr;
 class SWKey;
 
 typedef std::map < std::string, SWModule *, std::less < std::string > >ModMap;
-typedef std::map < std::string, SWFilter * >FilterMap;
 typedef std::list < std::string >StringList;
 typedef std::list < SWFilter* >FilterList;
 typedef std::list < SWOptionFilter* >OptionFilterList;
@@ -78,6 +77,11 @@ class SWOptionFilter;
  * @version $Id$
  */
 class SWDLLEXPORT SWMgr {
+
+private: /* Types: */
+
+    using FilterMap = std::map<std::string, std::shared_ptr<SWFilter> >;
+
 private:
     bool const mgrModeMultiMod;
     bool augmentHome = true;
@@ -92,16 +96,13 @@ protected:
     virtual SWModule *createModule(const char *name, const char *driver, ConfigEntMap &section);
     void DeleteMods();
     char configType = 0;        // 0 = file; 1 = directory
-    std::map<std::string, SWOptionFilter *> optionFilters;
-    std::map<std::string, CipherFilter *> cipherFilters;
-    SWFilter *gbfplain;
-    SWFilter *thmlplain;
-    SWFilter *osisplain;
-    SWFilter *teiplain;
-    SWOptionFilter *transliterator;
-
-    /** List of filters to free during ~SWMgr(). */
-    std::list<std::unique_ptr<SWFilter> > cleanupFilters;
+    std::map<std::string, std::shared_ptr<SWOptionFilter> > m_optionFilters;
+    std::map<std::string, std::shared_ptr<CipherFilter> > m_cipherFilters;
+    std::shared_ptr<SWFilter> m_gbfplain;
+    std::shared_ptr<SWFilter> m_thmlplain;
+    std::shared_ptr<SWFilter> m_osisplain;
+    std::shared_ptr<SWFilter> m_teiplain;
+    std::shared_ptr<SWOptionFilter> transliterator;
 
     FilterMap extraFilters;
     StringList options;

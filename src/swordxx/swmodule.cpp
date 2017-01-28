@@ -773,7 +773,7 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 
     // turn all filters to default values
     StringList filterSettings;
-    for (auto * const filterPtr : optionFilters) {
+    for (auto const & filterPtr : optionFilters) {
         filterSettings.push_back(filterPtr->getOptionValue());
         filterPtr->setOptionValue(filterPtr->getOptionValues().begin()->c_str());
 
@@ -1122,7 +1122,7 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 
     // reset option filters back to original values
     StringList::iterator origVal = filterSettings.begin();
-    for (auto * const filterPtr : optionFilters)
+    for (auto const & filterPtr : optionFilters)
         filterPtr->setOptionValue((origVal++)->c_str());
 
     return 0;
@@ -1137,7 +1137,7 @@ void SWModule::filterBuffer(OptionFilterList const & filters,
                             std::string & buf,
                             SWKey const * key) const
 {
-    for (auto * const filterPtr : filters)
+    for (auto const & filterPtr : filters)
         filterPtr->processText(buf, key, this);
 }
 
@@ -1150,7 +1150,7 @@ void SWModule::filterBuffer(FilterList const & filters,
                             std::string & buf,
                             SWKey const * key) const
 {
-    for (auto * const filterPtr : filters)
+    for (auto const & filterPtr : filters)
         filterPtr->processText(buf, key, this);
 }
 

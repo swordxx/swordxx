@@ -78,19 +78,6 @@ MarkupFilterMgr::MarkupFilterMgr(char mark, TextEncoding enc)
 
 
 /******************************************************************************
- * MarkupFilterMgr Destructor - Cleans up instance of MarkupFilterMgr
- */
-
-MarkupFilterMgr::~MarkupFilterMgr() {
-    delete fromthml;
-    delete fromgbf;
-    delete fromplain;
-    delete fromosis;
-    delete fromtei;
-}
-
-
-/******************************************************************************
  * MarkupFilterMgr::Markup    - sets/gets markup
  *
  * ENT:    mark    - new encoding or 0 to simply get the current markup
@@ -102,103 +89,97 @@ char MarkupFilterMgr::Markup(char mark) {
         markup = mark;
         ModMap::const_iterator module;
 
-        SWFilter *oldplain = fromplain;
-        SWFilter *oldthml  = fromthml;
-        SWFilter *oldgbf   = fromgbf;
-        SWFilter *oldosis  = fromosis;
-        SWFilter *oldtei   = fromtei;
+        std::shared_ptr<SWFilter> oldplain(std::move(m_fromplain));
+        std::shared_ptr<SWFilter> oldthml(std::move(m_fromthml));
+        std::shared_ptr<SWFilter> oldgbf(std::move(m_fromgbf));
+        std::shared_ptr<SWFilter> oldosis(std::move(m_fromosis));
+        std::shared_ptr<SWFilter> oldtei(std::move(m_fromtei));
 
         CreateFilters(markup);
 
         for (module = getParentMgr()->Modules.begin(); module != getParentMgr()->Modules.end(); ++module) {
             switch (module->second->getMarkup()) {
             case FMT_THML:
-                if (oldthml != fromthml) {
+                if (oldthml != m_fromthml) {
                     if (oldthml) {
-                        if (!fromthml) {
+                        if (!m_fromthml) {
                             module->second->removeRenderFilter(oldthml);
                         }
                         else {
-                            module->second->replaceRenderFilter(oldthml, fromthml);
+                            module->second->replaceRenderFilter(oldthml, m_fromthml);
                         }
                     }
-                    else if (fromthml) {
-                        module->second->addRenderFilter(fromthml);
+                    else if (m_fromthml) {
+                        module->second->addRenderFilter(m_fromthml);
                     }
                 }
                 break;
 
             case FMT_GBF:
-                if (oldgbf != fromgbf) {
+                if (oldgbf != m_fromgbf) {
                     if (oldgbf) {
-                        if (!fromgbf) {
+                        if (!m_fromgbf) {
                             module->second->removeRenderFilter(oldgbf);
                         }
                         else {
-                            module->second->replaceRenderFilter(oldgbf, fromgbf);
+                            module->second->replaceRenderFilter(oldgbf, m_fromgbf);
                         }
                     }
-                    else if (fromgbf) {
-                        module->second->addRenderFilter(fromgbf);
+                    else if (m_fromgbf) {
+                        module->second->addRenderFilter(m_fromgbf);
                     }
                 }
                 break;
 
             case FMT_PLAIN:
-                if (oldplain != fromplain) {
+                if (oldplain != m_fromplain) {
                     if (oldplain) {
-                        if (!fromplain) {
+                        if (!m_fromplain) {
                             module->second->removeRenderFilter(oldplain);
                         }
                         else {
-                            module->second->replaceRenderFilter(oldplain, fromplain);
+                            module->second->replaceRenderFilter(oldplain, m_fromplain);
                         }
                     }
-                    else if (fromplain) {
-                        module->second->addRenderFilter(fromplain);
+                    else if (m_fromplain) {
+                        module->second->addRenderFilter(m_fromplain);
                     }
                 }
                 break;
 
             case FMT_OSIS:
-                if (oldosis != fromosis) {
+                if (oldosis != m_fromosis) {
                     if (oldosis) {
-                        if (!fromosis) {
+                        if (!m_fromosis) {
                             module->second->removeRenderFilter(oldosis);
                         }
                         else {
-                            module->second->replaceRenderFilter(oldosis, fromosis);
+                            module->second->replaceRenderFilter(oldosis, m_fromosis);
                         }
                     }
-                    else if (fromosis) {
-                        module->second->addRenderFilter(fromosis);
+                    else if (m_fromosis) {
+                        module->second->addRenderFilter(m_fromosis);
                     }
                 }
                 break;
 
             case FMT_TEI:
-                if (oldtei != fromtei) {
+                if (oldtei != m_fromtei) {
                     if (oldtei) {
-                        if (!fromtei) {
+                        if (!m_fromtei) {
                             module->second->removeRenderFilter(oldtei);
                         }
                         else {
-                            module->second->replaceRenderFilter(oldtei, fromtei);
+                            module->second->replaceRenderFilter(oldtei, m_fromtei);
                         }
                     }
-                    else if (fromtei) {
-                        module->second->addRenderFilter(fromtei);
+                    else if (m_fromtei) {
+                        module->second->addRenderFilter(m_fromtei);
                     }
                 }
                 break;
             }
         }
-
-        delete oldthml;
-        delete oldgbf;
-        delete oldplain;
-        delete oldosis;
-        delete oldtei;
     }
     return markup;
 }
@@ -209,24 +190,24 @@ void MarkupFilterMgr::addRenderFilters(SWModule & module,
 {
     switch (module.getMarkup()) {
     case FMT_THML:
-        if (fromthml)
-            module.addRenderFilter(fromthml);
+        if (m_fromthml)
+            module.addRenderFilter(m_fromthml);
         break;
     case FMT_GBF:
-        if (fromgbf)
-            module.addRenderFilter(fromgbf);
+        if (m_fromgbf)
+            module.addRenderFilter(m_fromgbf);
         break;
     case FMT_PLAIN:
-        if (fromplain)
-            module.addRenderFilter(fromplain);
+        if (m_fromplain)
+            module.addRenderFilter(m_fromplain);
         break;
     case FMT_OSIS:
-        if (fromosis)
-            module.addRenderFilter(fromosis);
+        if (m_fromosis)
+            module.addRenderFilter(m_fromosis);
         break;
     case FMT_TEI:
-        if (fromtei)
-            module.addRenderFilter(fromtei);
+        if (m_fromtei)
+            module.addRenderFilter(m_fromtei);
         break;
     }
 }
@@ -236,91 +217,91 @@ void MarkupFilterMgr::CreateFilters(char markup) {
 
     switch (markup) {
     case FMT_PLAIN:
-        fromplain = nullptr;
-        fromthml  = new ThMLPlain();
-        fromgbf   = new GBFPlain();
-        fromosis  = new OSISPlain();
-        fromtei   = new TEIPlain();
+        m_fromplain.reset();
+        m_fromthml = std::make_shared<ThMLPlain>();
+        m_fromgbf = std::make_shared<GBFPlain>();
+        m_fromosis = std::make_shared<OSISPlain>();
+        m_fromtei = std::make_shared<TEIPlain>();
         break;
 
     case FMT_THML:
-        fromplain = nullptr;
-        fromthml  = nullptr;
-        fromgbf   = new GBFThML();
-        fromosis  = nullptr;
-        fromtei   = nullptr;
+        m_fromplain.reset();
+        m_fromthml.reset();
+        m_fromgbf = std::make_shared<GBFThML>();
+        m_fromosis.reset();
+        m_fromtei.reset();
         break;
 
     case FMT_GBF:
-        fromplain = nullptr;
-        fromthml  = new ThMLGBF();
-        fromgbf   = nullptr;
-        fromosis  = nullptr;
-        fromtei   = nullptr;
+        m_fromplain.reset();
+        m_fromthml = std::make_shared<ThMLGBF>();
+        m_fromgbf.reset();
+        m_fromosis.reset();
+        m_fromtei.reset();
         break;
 
     case FMT_HTML:
-        fromplain = nullptr;
-        fromthml  = new ThMLHTML();
-        fromgbf   = new GBFHTML();
-        fromosis  = nullptr;
-        fromtei   = nullptr;
+        m_fromplain.reset();
+        m_fromthml = std::make_shared<ThMLHTML>();
+        m_fromgbf = std::make_shared<GBFHTML>();
+        m_fromosis.reset();
+        m_fromtei.reset();
         break;
 
     case FMT_HTMLHREF:
-        fromplain = nullptr;
-        fromthml  = new ThMLHTMLHREF();
-        fromgbf   = new GBFHTMLHREF();
-        fromosis  = new OSISHTMLHREF();
-        fromtei   = new TEIHTMLHREF();
+        m_fromplain.reset();
+        m_fromthml = std::make_shared<ThMLHTMLHREF>();
+        m_fromgbf = std::make_shared<GBFHTMLHREF>();
+        m_fromosis = std::make_shared<OSISHTMLHREF>();
+        m_fromtei = std::make_shared<TEIHTMLHREF>();
         break;
 
     case FMT_RTF:
-        fromplain = nullptr;
-        fromthml  = new ThMLRTF();
-        fromgbf   = new GBFRTF();
-        fromosis  = new OSISRTF();
-        fromtei   = new TEIRTF();
+        m_fromplain.reset();
+        m_fromthml = std::make_shared<ThMLRTF>();
+        m_fromgbf = std::make_shared<GBFRTF>();
+        m_fromosis = std::make_shared<OSISRTF>();
+        m_fromtei = std::make_shared<TEIRTF>();
         break;
 
     case FMT_LATEX:
-        fromplain = nullptr;
-        fromthml  = new ThMLLaTeX();
-        fromgbf   = new GBFLaTeX();
-        fromosis  = new OSISLaTeX();
-        fromtei   = new TEILaTeX();
+        m_fromplain.reset();
+        m_fromthml = std::make_shared<ThMLLaTeX>();
+        m_fromgbf = std::make_shared<GBFLaTeX>();
+        m_fromosis = std::make_shared<OSISLaTeX>();
+        m_fromtei = std::make_shared<TEILaTeX>();
         break;
 
     case FMT_OSIS:
-        fromplain = nullptr;
-        fromthml  = new ThMLOSIS();
-        fromgbf   = new GBFOSIS();
-        fromosis  = new OSISOSIS();
-        fromtei   = nullptr;
+        m_fromplain.reset();
+        m_fromthml = std::make_shared<ThMLOSIS>();
+        m_fromgbf = std::make_shared<GBFOSIS>();
+        m_fromosis = std::make_shared<OSISOSIS>();
+        m_fromtei.reset();
         break;
 
     case FMT_WEBIF:
-        fromplain = nullptr;
-        fromthml  = new ThMLWEBIF();
-        fromgbf   = new GBFWEBIF();
-        fromosis  = new OSISWEBIF();
-        fromtei   = nullptr;
+        m_fromplain.reset();
+        m_fromthml = std::make_shared<ThMLWEBIF>();
+        m_fromgbf = std::make_shared<GBFWEBIF>();
+        m_fromosis = std::make_shared<OSISWEBIF>();
+        m_fromtei.reset();
         break;
 
     case FMT_TEI:
-        fromplain = nullptr;
-        fromthml  = nullptr;
-        fromgbf   = nullptr;
-        fromosis  = nullptr;
-        fromtei   = nullptr;
+        m_fromplain.reset();
+        m_fromthml.reset();
+        m_fromgbf.reset();
+        m_fromosis.reset();
+        m_fromtei.reset();
         break;
 
     case FMT_XHTML:
-        fromplain = nullptr;
-        fromthml  = new ThMLXHTML();
-        fromgbf   = new GBFXHTML();
-        fromosis  = new OSISXHTML();
-        fromtei   = new TEIXHTML();
+        m_fromplain.reset();
+        m_fromthml = std::make_shared<ThMLXHTML>();
+        m_fromgbf = std::make_shared<GBFXHTML>();
+        m_fromosis = std::make_shared<OSISXHTML>();
+        m_fromtei = std::make_shared<TEIXHTML>();
         break;
     }
 

@@ -2095,8 +2095,7 @@ int main(int argc, char **argv) {
 
     if (cipherKey.length()) {
         fprintf(stderr, "Adding cipher filter with phrase: %s\n", cipherKey.c_str() );
-        cipherFilter = new CipherFilter(cipherKey.c_str());
-        module->addRawFilter(cipherFilter);
+        module->addRawFilter(std::make_shared<CipherFilter>(cipherKey.c_str()));
     }
 
     if (!module->isWritable()) {

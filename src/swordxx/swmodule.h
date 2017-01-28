@@ -57,8 +57,8 @@ class SWDLLEXPORT SWModule {
 
 private: /* Types: */
 
-    using FilterList = std::list<SWFilter *>;
-    using OptionFilterList = std::list<SWOptionFilter *>;
+    using FilterList = std::list<std::shared_ptr<SWFilter> >;
+    using OptionFilterList = std::list<std::shared_ptr<SWOptionFilter> >;
     using AttributeList = std::map<std::string, AttributeValue>;
     using AttributeTypeList = std::map<std::string, AttributeList>;
 
@@ -322,8 +322,8 @@ public:
      * @param newfilter the filter to add
      * @return *this
      */
-    SWModule & addRenderFilter(SWFilter * newFilter) {
-        renderFilters.push_back(newFilter);
+    SWModule & addRenderFilter(std::shared_ptr<SWFilter> newFilter) {
+        renderFilters.emplace_back(std::move(newFilter));
         return *this;
     }
 
@@ -337,7 +337,7 @@ public:
      * @param oldfilter the filter to remove
      * @return *this
      */
-    SWModule & removeRenderFilter(SWFilter * oldFilter) {
+    SWModule & removeRenderFilter(std::shared_ptr<SWFilter> const & oldFilter) {
         renderFilters.remove(oldFilter);
         return *this;
     }
@@ -347,7 +347,9 @@ public:
      * @param newfilter the filter to add in its place
      * @return *this
      */
-    SWModule & replaceRenderFilter(SWFilter * oldFilter, SWFilter * newFilter) {
+    SWModule & replaceRenderFilter(std::shared_ptr<SWFilter> const & oldFilter,
+                                   std::shared_ptr<SWFilter> newFilter)
+    {
         for (auto & filter : renderFilters)
             if (filter == oldFilter)
                 filter = newFilter;
@@ -369,8 +371,8 @@ public:
      * @param newfilter the filter to add
      * @return *this
      */
-    SWModule & addEncodingFilter(SWFilter * newFilter) {
-        encodingFilters.push_back(newFilter);
+    SWModule & addEncodingFilter(std::shared_ptr<SWFilter> newFilter) {
+        encodingFilters.emplace_back(std::move(newFilter));
         return *this;
     }
 
@@ -378,7 +380,8 @@ public:
      * @param oldfilter the filter to remove
      * @return *this
      */
-    SWModule & removeEncodingFilter(SWFilter * oldFilter) {
+    SWModule & removeEncodingFilter(std::shared_ptr<SWFilter> const & oldFilter)
+    {
         encodingFilters.remove(oldFilter);
         return *this;
     }
@@ -388,7 +391,9 @@ public:
      * @param newfilter the filter to add in its place
      * @return *this
      */
-    SWModule & replaceEncodingFilter(SWFilter * oldFilter, SWFilter * newFilter)
+    SWModule & replaceEncodingFilter(
+            std::shared_ptr<SWFilter> const & oldFilter,
+            std::shared_ptr<SWFilter> newFilter)
     {
         for (auto & filter : encodingFilters)
             if (filter == oldFilter)
@@ -410,8 +415,8 @@ public:
      * @param newfilter the filter to add
      * @return *this
      */
-    SWModule & addStripFilter(SWFilter * newFilter) {
-        stripFilters.push_back(newFilter);
+    SWModule & addStripFilter(std::shared_ptr<SWFilter> newFilter) {
+        stripFilters.emplace_back(std::move(newFilter));
         return *this;
     }
 
@@ -419,8 +424,8 @@ public:
      * @param newFilter the filter to add
      * @return *this
      */
-    SWModule & addRawFilter(SWFilter * newfilter) {
-        rawFilters.push_back(newfilter);
+    SWModule & addRawFilter(std::shared_ptr<SWFilter> newfilter) {
+        rawFilters.emplace_back(std::move(newfilter));
         return *this;
     }
 
@@ -448,8 +453,8 @@ public:
      * @param newfilter the filter to add
      * @return *this
      */
-    SWModule & addOptionFilter(SWOptionFilter * newFilter) {
-        optionFilters.push_back(newFilter);
+    SWModule & addOptionFilter(std::shared_ptr<SWOptionFilter> newFilter) {
+        optionFilters.push_back(std::move(newFilter));
         return *this;
     }
 

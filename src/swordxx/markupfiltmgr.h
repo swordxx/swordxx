@@ -34,11 +34,11 @@ namespace swordxx {
 */
 class SWDLLEXPORT MarkupFilterMgr : public EncodingFilterMgr {
 protected:
-        SWFilter* fromthml;
-        SWFilter* fromgbf;
-        SWFilter* fromplain;
-        SWFilter* fromosis;
-        SWFilter* fromtei;
+    std::shared_ptr<SWFilter> m_fromthml;
+    std::shared_ptr<SWFilter> m_fromgbf;
+    std::shared_ptr<SWFilter> m_fromplain;
+    std::shared_ptr<SWFilter> m_fromosis;
+    std::shared_ptr<SWFilter> m_fromtei;
 
                 /**
                  * current markup value
@@ -53,11 +53,6 @@ public:
      * @param markup The desired markup format.
      */
         MarkupFilterMgr(char markup = FMT_THML, TextEncoding encoding = ENC_UTF8);
-
-    /**
-     * The destructor of SWMarkupMgr.
-     */
-        ~MarkupFilterMgr() override;
 
     /** Markup sets/gets the markup after initialization
      *

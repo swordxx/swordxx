@@ -169,11 +169,9 @@ int main(int argc, char **argv)
         break;
     }
 
-    SWFilter * cipherFilter = nullptr;
-    if (!cipherKey.empty()) {
-        cipherFilter = new CipherFilter(cipherKey.c_str());
-        outModule->addRawFilter(cipherFilter);
-    }
+    if (!cipherKey.empty())
+        outModule->addRawFilter(
+                    std::make_shared<CipherFilter>(cipherKey.c_str()));
 
     string lastBuffer = "Something that would never be first module entry";
     SWKey bufferKey;
@@ -215,6 +213,5 @@ int main(int argc, char **argv)
     }
     delete outModule;
     delete outModuleKey;
-    delete cipherFilter;
 }
 

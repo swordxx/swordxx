@@ -117,12 +117,11 @@ const char *SWMgr::globalConfPath =
 void SWMgr::init() {
     #define ADD_FILTER(mapping,type,...) \
         do { \
-            auto filter(std::make_unique<type>()); \
-            (mapping).emplace(#type, filter.get()); \
+            auto filter(std::make_shared<type>()); \
+            (mapping).emplace(#type, filter); \
             __VA_ARGS__ \
-            cleanupFilters.emplace_back(std::move(filter)); \
         } while(false)
-    #define ADD_OPTION_FILTER(...) ADD_FILTER(optionFilters, __VA_ARGS__)
+    #define ADD_OPTION_FILTER(...) ADD_FILTER(m_optionFilters, __VA_ARGS__)
     #define ADD_EXTRA_FILTER(...) ADD_FILTER(extraFilters, __VA_ARGS__)
 
     ADD_OPTION_FILTER(ThMLVariants,);
@@ -140,7 +139,7 @@ void SWMgr::init() {
     ADD_OPTION_FILTER(OSISRedLetterWords,);
     ADD_OPTION_FILTER(OSISMorphSegmentation,);
     ADD_OPTION_FILTER(OSISGlosses,
-                      optionFilters.emplace("OSISRuby", filter.get()););
+                      m_optionFilters.emplace("OSISRuby", filter););
     ADD_OPTION_FILTER(OSISXlit,);
     ADD_OPTION_FILTER(OSISEnum,);
     ADD_OPTION_FILTER(OSISVariants,);
@@ -160,14 +159,14 @@ void SWMgr::init() {
 // UTF8Transliterator needs to be handled differently because it should always available as an option, for all modules
 #if SWORDXX_HAS_ICU
     ADD_OPTION_FILTER(UTF8Transliterator,
-                      transliterator = filter.get();
+                      transliterator = filter;
                       options.push_back(filter->getOptionName()););
 #endif
 
-    ADD_EXTRA_FILTER(GBFPlain,  gbfplain  = filter.get(););
-    ADD_EXTRA_FILTER(ThMLPlain, thmlplain = filter.get(););
-    ADD_EXTRA_FILTER(OSISPlain, osisplain = filter.get(););
-    ADD_EXTRA_FILTER(TEIPlain,  teiplain  = filter.get(););
+    ADD_EXTRA_FILTER(GBFPlain,  m_gbfplain  = filter;);
+    ADD_EXTRA_FILTER(ThMLPlain, m_thmlplain = filter;);
+    ADD_EXTRA_FILTER(OSISPlain, m_osisplain = filter;);
+    ADD_EXTRA_FILTER(TEIPlain,  m_teiplain  = filter;);
     /* Filters which aren't really used anywhere but which we want available for
        a "FilterName" -> filter mapping (e.g., filterText): */
     ADD_EXTRA_FILTER(RTFHTML,);
@@ -271,8 +270,6 @@ SWMgr::SWMgr(char const * iConfigPath,
 
 SWMgr::~SWMgr() {
     DeleteMods();
-
-    cleanupFilters.clear();
 
     delete homeConfig;
     delete mysysconfig;
@@ -930,7 +927,7 @@ void SWMgr::addGlobalOptions(SWModule & module,
 {
     for (; start != end; ++start) {
         std::string filterName(start->second);
-        decltype(optionFilters)::const_iterator it;
+        decltype(m_optionFilters)::const_iterator it;
 
         // special cases for filters with parameters
         if (hasPrefix(filterName, "OSISReferenceLinks")) {
@@ -944,21 +941,20 @@ void SWMgr::addGlobalOptions(SWModule & module,
             // we'll key off of type and subtype.
             filterName = filterName + "." + optionType + "." + optionSubType;
 
-            it = optionFilters.find(filterName);
-            if (it == optionFilters.end()) {
-                auto filter(std::make_unique<OSISReferenceLinks>(
+            it = m_optionFilters.find(filterName);
+            if (it == m_optionFilters.end()) {
+                auto filter(std::make_shared<OSISReferenceLinks>(
                                 optionName.c_str(),
                                 optionTip.c_str(),
                                 optionType.c_str(),
                                 optionSubType.c_str(),
                                 optionDefaultValue.c_str()));
                 std::tie(it, std::ignore) =
-                        optionFilters.emplace(filterName, filter.get());
-                cleanupFilters.emplace_back(std::move(filter));
+                        m_optionFilters.emplace(filterName, std::move(filter));
             }
         } else {
-            it = optionFilters.find(filterName);
-            if (it == optionFilters.end())
+            it = m_optionFilters.find(filterName);
+            if (it == m_optionFilters.end())
                 continue;
         }
 
@@ -983,7 +979,7 @@ char SWMgr::filterText(const char *filterName, std::string &text, const SWKey *k
 {
     char retVal = -1;
     // why didn't we use find here?
-    for (auto const & ofp : optionFilters) {
+    for (auto const & ofp : m_optionFilters) {
         if (ofp.second->getOptionName()) {
             if (!stricmp(filterName, ofp.second->getOptionName())) {
                 retVal = ofp.second->processText(text, key, module);
@@ -1009,9 +1005,9 @@ void SWMgr::addLocalOptions(SWModule & module,
                             ConfigEntMap::const_iterator end)
 {
     for (; start != end; ++start) {
-        decltype(optionFilters)::iterator const it(
-                    optionFilters.find(start->second));
-        if (it != optionFilters.end())
+        decltype(m_optionFilters)::iterator const it(
+                    m_optionFilters.find(start->second));
+        if (it != m_optionFilters.end())
             module.addOptionFilter(it->second);
     }
 
@@ -1028,9 +1024,9 @@ void SWMgr::addStripFilters(SWModule & module,
                             ConfigEntMap::const_iterator end)
 {
     for (; start != end; ++start) {
-        decltype(optionFilters)::const_iterator const it(
-                    optionFilters.find(start->second));
-        if (it != optionFilters.end())
+        decltype(m_optionFilters)::const_iterator const it(
+                    m_optionFilters.find(start->second));
+        if (it != m_optionFilters.end())
             module.addStripFilter(it->second);
     }
 
@@ -1043,10 +1039,9 @@ void SWMgr::addRawFilters(SWModule & module, ConfigEntMap const & section) {
     std::string cipherKey(
                 (entry != section.end()) ? entry->second : std::string());
     if (!cipherKey.empty()) {
-        auto cipherFilter(std::make_unique<CipherFilter>(cipherKey.c_str()));
-        cipherFilters.emplace(module.getName(), cipherFilter.get());
-        module.addRawFilter(cipherFilter.get());
-        cleanupFilters.emplace_back(std::move(cipherFilter));
+        auto cipherFilter(std::make_shared<CipherFilter>(cipherKey.c_str()));
+        m_cipherFilters.emplace(module.getName(), cipherFilter);
+        module.addRawFilter(std::move(cipherFilter));
     }
 
     if (filterMgr)
@@ -1105,13 +1100,13 @@ void SWMgr::addStripFilters(SWModule & module, ConfigEntMap const & section) {
     }
 
     if (!stricmp(sourceformat.c_str(), "GBF")) {
-        module.addStripFilter(gbfplain);
+        module.addStripFilter(m_gbfplain);
     } else if (!stricmp(sourceformat.c_str(), "ThML")) {
-        module.addStripFilter(thmlplain);
+        module.addStripFilter(m_thmlplain);
     } else if (!stricmp(sourceformat.c_str(), "OSIS")) {
-        module.addStripFilter(osisplain);
+        module.addStripFilter(m_osisplain);
     } else if (!stricmp(sourceformat.c_str(), "TEI")) {
-        module.addStripFilter(teiplain);
+        module.addStripFilter(m_teiplain);
     }
 
     if (filterMgr)
@@ -1258,7 +1253,7 @@ char SWMgr::AddModToConfig(FileDesc *conffd, const char *fname)
 void SWMgr::setGlobalOption(const char * const option,
                             const char * const value)
 {
-    for (auto const & ofp : optionFilters)
+    for (auto const & ofp : m_optionFilters)
         if (ofp.second->getOptionName()
             && !stricmp(option, ofp.second->getOptionName()))
             ofp.second->setOptionValue(value);
@@ -1266,7 +1261,7 @@ void SWMgr::setGlobalOption(const char * const option,
 
 
 const char * SWMgr::getGlobalOption(const char * const option) {
-    for (auto const & ofp : optionFilters)
+    for (auto const & ofp : m_optionFilters)
         if (ofp.second->getOptionName()
             && !stricmp(option, ofp.second->getOptionName()))
             return ofp.second->getOptionValue();
@@ -1275,7 +1270,7 @@ const char * SWMgr::getGlobalOption(const char * const option) {
 
 
 const char * SWMgr::getGlobalOptionTip(const char * const option) {
-    for (auto const & ofp : optionFilters)
+    for (auto const & ofp : m_optionFilters)
         if (ofp.second->getOptionName()
             && !stricmp(option, ofp.second->getOptionName()))
             return ofp.second->getOptionTip();
@@ -1289,7 +1284,7 @@ StringList SWMgr::getGlobalOptions() { return options; }
 StringList SWMgr::getGlobalOptionValues(const char * const option) {
     /* Just find the first one. All option filters with the same option name
        should expect the same values. */
-    for (auto const & ofp : optionFilters)
+    for (auto const & ofp : m_optionFilters)
         if (ofp.second->getOptionName()
             && !stricmp(option, ofp.second->getOptionName()))
             return ofp.second->getOptionValues();
@@ -1299,8 +1294,8 @@ StringList SWMgr::getGlobalOptionValues(const char * const option) {
 
 bool SWMgr::setCipherKey(std::string const & modName, char const * key) {
     { // check for filter that already exists
-        auto const it = cipherFilters.find(modName);
-        if (it != cipherFilters.end()) {
+        auto const it = m_cipherFilters.find(modName);
+        if (it != m_cipherFilters.end()) {
             it->second->getCipher()->setCipherKey(key);
             return true;
         }
@@ -1311,10 +1306,9 @@ bool SWMgr::setCipherKey(std::string const & modName, char const * key) {
     if (it == Modules.end())
         return false;
 
-    auto cipherFilter(std::make_unique<CipherFilter>(key));
-    cipherFilters.emplace(modName, cipherFilter.get());
-    it->second->addRawFilter(cipherFilter.get());
-    cleanupFilters.emplace_back(std::move(cipherFilter));
+    auto cipherFilter(std::make_shared<CipherFilter>(key));
+    m_cipherFilters.emplace(modName, cipherFilter);
+    it->second->addRawFilter(std::move(cipherFilter));
     return true;
 }
 

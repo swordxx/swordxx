@@ -69,10 +69,10 @@ public: /* Methods: */
 
 private: /* Fields: */
 
-    std::unique_ptr<SWFilter> const m_latin1utf8;
-    std::unique_ptr<SWFilter> const m_scsuutf8;
-    std::unique_ptr<SWFilter> const m_utf16utf8;
-    std::unique_ptr<SWFilter> m_targetenc;
+    std::shared_ptr<SWFilter> const m_latin1utf8;
+    std::shared_ptr<SWFilter> const m_scsuutf8;
+    std::shared_ptr<SWFilter> const m_utf16utf8;
+    std::shared_ptr<SWFilter> m_targetenc;
 
     /** Current encoding value: */
     TextEncoding m_encoding;
