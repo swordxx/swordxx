@@ -870,11 +870,10 @@ bool handleToken(std::string &text, XMLTag token) {
                     // transform the verse into a milestone
                     XMLTag t = "<milestone resp=\"v\" />";
                     // copy all the attributes of the verse element to the milestone
-                    StringList attrNames = token.getAttributeNames();
-                    for (StringList::iterator loop = attrNames.begin(); loop != attrNames.end(); loop++) {
-                        const char* attr = (*loop).c_str();
-                        t.setAttribute(attr, token.getAttribute(attr).c_str());
-                    }
+                    for (auto const & attr : token.getAttributeNames())
+                        t.setAttribute(
+                                    attr.c_str(),
+                                    token.getAttribute(attr.c_str()).c_str());
                     text.append(t.toString());
                 }
 
@@ -1074,11 +1073,9 @@ bool handleToken(std::string &text, XMLTag token) {
                 // transform the verse into a milestone
                 XMLTag t = "<milestone resp=\"v\" />";
                 // copy all the attributes of the verse element to the milestone
-                StringList attrNames = token.getAttributeNames();
-                for (StringList::iterator loop = attrNames.begin(); loop != attrNames.end(); loop++) {
-                    const char* attr = (*loop).c_str();
-                    t.setAttribute(attr, token.getAttribute(attr).c_str());
-                }
+                for (auto const & attr : token.getAttributeNames())
+                    t.setAttribute(attr.c_str(),
+                                   token.getAttribute(attr.c_str()).c_str());
                 text.append(t.toString());
             }
 
@@ -1389,13 +1386,12 @@ void usage(char const * app,
     fprintf(stderr, "  -v <v11n>\t\t specify a versification scheme to use (default is KJV)\n");
     fprintf(stderr, "\t\t\t\t Note: The following are valid values for v11n:");
 
-    VersificationMgr *vmgr = VersificationMgr::getSystemVersificationMgr();
-    StringList av11n = vmgr->getVersificationSystems();
-    for (StringList::iterator loop = av11n.begin(); loop != av11n.end(); loop++) {
+    auto const & vmgr = *VersificationMgr::getSystemVersificationMgr();
+    auto const av11n(vmgr.getVersificationSystems());
+    for (auto loop = av11n.begin(); loop != av11n.end(); ++loop) {
         if ((distance(av11n.begin(), loop) % 3) == 0) {
             fprintf(stderr, "\n\t\t\t\t   %-12s", (*loop).c_str());
-        }
-        else {
+        } else {
             fprintf(stderr, "\t%-12s", (*loop).c_str());
         }
     }
