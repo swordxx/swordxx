@@ -15,10 +15,13 @@
 
 #include "onoffoptionfilter.h"
 
+#include <list>
+#include <string>
+
 
 namespace swordxx {
 
-namespace { StringList const onOffValues({"On", "Off"}); }
+namespace { std::list<std::string> const onOffValues({"On", "Off"}); }
 
 OnOffOptionFilter::OnOffOptionFilter()
     : SWOptionFilter("", "", &onOffValues)

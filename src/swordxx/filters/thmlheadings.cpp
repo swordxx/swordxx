@@ -102,10 +102,9 @@ char ThMLHeadings::processText(std::string &text, const SWKey *key, const SWModu
                             }
                         }
 
-                        StringList attributes = startTag.getAttributeNames();
-                        for (StringList::const_iterator it = attributes.begin(); it != attributes.end(); it++) {
-                            module->getEntryAttributes()["Heading"][buf][it->c_str()] = startTag.getAttribute(it->c_str());
-                        }
+                        for (auto const & attr : startTag.getAttributeNames())
+                            module->getEntryAttributes()["Heading"][buf][attr.c_str()] =
+                                    startTag.getAttribute(attr.c_str());
                     }
 
                     hide = false;

@@ -30,7 +30,7 @@ namespace swordxx {
 
 
 SWOptionFilter::SWOptionFilter() {
-    static StringList empty;
+    static std::list<std::string> empty;
     static const char *empty2 = "";
     optName   = empty2;
     optTip    = empty2;
@@ -38,7 +38,10 @@ SWOptionFilter::SWOptionFilter() {
 }
 
 
-SWOptionFilter::SWOptionFilter(const char *oName, const char *oTip, const StringList *oValues) {
+SWOptionFilter::SWOptionFilter(char const * oName,
+                               char const * oTip,
+                               std::list<std::string> const * oValues)
+{
     optName   = oName;
     optTip    = oTip;
     optValues = oValues;
@@ -53,9 +56,9 @@ SWOptionFilter::~SWOptionFilter() {
 
 
 void SWOptionFilter::setOptionValue(const char *ival) {
-    for (StringList::const_iterator loop = optValues->begin(); loop != optValues->end(); loop++) {
-        if (!stricmp(loop->c_str(), ival)) {
-            optionValue = *loop;
+    for (auto const & optValue : *optValues) {
+        if (!stricmp(optValue.c_str(), ival)) {
+            optionValue = optValue;
             option = (!strnicmp(ival, "On", 2));    // convenience for boolean filters
             break;
         }

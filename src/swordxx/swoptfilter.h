@@ -31,12 +31,6 @@
 
 namespace swordxx {
 
-/**
-* The type definitoin for option types
-*/
-typedef std::list < std::string > StringList;
-
-
   /** Base class for all option filters.
   */
 class SWDLLEXPORT SWOptionFilter : public virtual SWFilter {
@@ -44,13 +38,15 @@ protected:
     std::string optionValue;
     const char *optName;
     const char *optTip;
-    const StringList *optValues;
+    const std::list<std::string> *optValues;
     bool option;
     bool isBooleanVal;
 public:
 
     SWOptionFilter();
-    SWOptionFilter(const char *oName, const char *oTip, const StringList *oValues);
+    SWOptionFilter(char const * oName,
+                   char const * oTip,
+                   std::list<std::string> const * oValues);
     virtual ~SWOptionFilter();
 
 
@@ -75,7 +71,7 @@ public:
      *
      * @return list of option values
      */
-    virtual StringList getOptionValues() { return *optValues; }
+    virtual std::list<std::string> getOptionValues() { return *optValues; }
 
     /** @return The value of the current option.
     */

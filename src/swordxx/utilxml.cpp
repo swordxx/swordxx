@@ -181,8 +181,8 @@ XMLTag::~XMLTag() {
 }
 
 
-const StringList XMLTag::getAttributeNames() const {
-    StringList retVal;
+std::list<std::string> XMLTag::getAttributeNames() const {
+    std::list<std::string> retVal;
 
     if (!parsed)
         parse();

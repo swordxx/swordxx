@@ -26,6 +26,8 @@
 #include "../swoptfilter.h"
 
 #include <map>
+#include <list>
+#include <string>
 #include <unicode/translit.h>
 #include <unicode/unistr.h>
 #include "../defs.h"
@@ -66,7 +68,7 @@ private:
 
     static const char optName[];
     static const char optTip[];
-    StringList options;
+    std::list<std::string> options;
 
 #ifdef ICU_CUSTOM_RESOURCE_BUILDING
     static const char SW_RB_RULE_BASED_IDS[];
@@ -94,7 +96,7 @@ public:
     char const * getOptionTip() override { return optTip; }
     void setOptionValue(char const * ival) override;
     char const * getOptionValue() override;
-    StringList getOptionValues() override { return options; }
+    std::list<std::string> getOptionValues() override { return options; }
 
 };
 

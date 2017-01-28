@@ -33,8 +33,6 @@
 
 namespace swordxx {
 
-typedef std::list <std::string>StringList;
-
 struct sbook;
 class TreeKey;
 
@@ -159,7 +157,7 @@ public:
     ~VersificationMgr();
     static VersificationMgr *getSystemVersificationMgr();
     static void setSystemVersificationMgr(VersificationMgr *newVersificationMgr);
-    const StringList getVersificationSystems() const;
+    const std::list<std::string> getVersificationSystems() const;
     const System *getVersificationSystem(const char *name) const;
     void registerVersificationSystem(char const * name,
                                      sbook const * ot,

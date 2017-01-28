@@ -52,8 +52,6 @@
 
 namespace swordxx {
 
-typedef std::list<std::string> StringList;
-
 /******************************************************************************
  * SWModule Constructor - Initializes data for instance of SWModule
  *
@@ -772,7 +770,7 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 
 
     // turn all filters to default values
-    StringList filterSettings;
+    std::list<std::string> filterSettings;
     for (auto const & filterPtr : optionFilters) {
         filterSettings.push_back(filterPtr->getOptionValue());
         filterPtr->setOptionValue(filterPtr->getOptionValues().begin()->c_str());
@@ -1121,7 +1119,7 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
     setProcessEntryAttributes(savePEA);
 
     // reset option filters back to original values
-    StringList::iterator origVal = filterSettings.begin();
+    auto origVal(filterSettings.begin());
     for (auto const & filterPtr : optionFilters)
         filterPtr->setOptionValue((origVal++)->c_str());
 

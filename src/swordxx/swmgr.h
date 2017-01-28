@@ -62,7 +62,6 @@ class SWFilterMgr;
 class SWKey;
 
 typedef std::map < std::string, SWModule *, std::less < std::string > >ModMap;
-typedef std::list < std::string >StringList;
 
 class FileDesc;
 class SWOptionFilter;
@@ -103,7 +102,7 @@ protected:
     std::shared_ptr<SWOptionFilter> transliterator;
 
     FilterMap extraFilters;
-    StringList options;
+    std::list<std::string> options;
     virtual char AddModToConfig(FileDesc *conffd, const char *fname);
     virtual void loadConfigDir(const char *ipath);
 
@@ -118,7 +117,7 @@ protected:
                                  ConfigEntMap const & section,
                                  ConfigEntMap::const_iterator start,
                                  ConfigEntMap::const_iterator end);
-    StringList augPaths;
+    std::list<std::string> augPaths;
 
     /**
       \brief Called to add appropriate Encoding Filters to a module.
@@ -186,7 +185,7 @@ public:
     static void findConfig(char * configType,
                            std::string & prefixPath,
                            std::string & configPath,
-                           StringList * augPaths = nullptr,
+                           std::list<std::string> * augPaths = nullptr,
                            SWConfig ** providedSysConf = nullptr);
 
     SWConfig *config;
@@ -323,14 +322,14 @@ public:
     /** Gets a list of all available option names
      * @return list of option names
      */
-    virtual StringList getGlobalOptions();
+    virtual std::list<std::string> getGlobalOptions();
 
     /** Gets a list of legal values to which a specific option
      *    may be set
      * @param option the name of the option, who's legal values are desired
      * @return a list of legal values for the given option
      */
-    virtual StringList getGlobalOptionValues(const char *option);
+    virtual std::list<std::string> getGlobalOptionValues(const char * option);
 
     /** Filters a buffer thru a named filter
      * @param filterName

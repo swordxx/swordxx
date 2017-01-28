@@ -32,7 +32,6 @@
 namespace swordxx {
 
 typedef std::map<std::string, std::string> StringPairMap;
-typedef std::list<std::string> StringList;
 
 /** Simple XML helper class.
 */
@@ -77,7 +76,7 @@ public:
      */
     bool isEndTag(char const * eID = nullptr) const;
 
-    const StringList getAttributeNames() const;
+    std::list<std::string> getAttributeNames() const;
     int getAttributePartCount(const char *attribName, char partSplit = '|') const;
 
     // return values should not be considered to persist beyond the return of the function.

@@ -117,10 +117,9 @@ char OSISFootnotes::processText(std::string &text, const SWKey *key, const SWMod
                 if (hide && tag.isEndTag()) {
                     if (module->isProcessEntryAttributes() && !strongsMarkup) { //don`t parse strongsMarkup to EntryAttributes as Footnote
                         sprintf(buf, "%i", footnoteNum++);
-                        StringList attributes = startTag.getAttributeNames();
-                        for (StringList::const_iterator it = attributes.begin(); it != attributes.end(); it++) {
-                            module->getEntryAttributes()["Footnote"][buf][it->c_str()] = startTag.getAttribute(it->c_str());
-                        }
+                        for (auto const & attr : startTag.getAttributeNames())
+                            module->getEntryAttributes()["Footnote"][buf][attr.c_str()] =
+                                    startTag.getAttribute(attr.c_str());
                         module->getEntryAttributes()["Footnote"][buf]["body"] = tagText;
                         startTag.setAttribute("swordFootnote", buf);
                         if ((!startTag.getAttribute("type").empty()) && (!strcmp(startTag.getAttribute("type").c_str(), "crossReference"))) {

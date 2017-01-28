@@ -414,8 +414,8 @@ void VersificationMgr::registerVersificationSystem(const char * /* name */, cons
 }
 
 
-const StringList VersificationMgr::getVersificationSystems() const {
-    StringList retVal;
+const std::list<std::string> VersificationMgr::getVersificationSystems() const {
+    std::list<std::string> retVal;
     for (map<std::string, System>::const_iterator it = p->m_systems.begin(); it != p->m_systems.end(); it++) {
         retVal.push_back(it->first);
     }

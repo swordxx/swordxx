@@ -24,6 +24,8 @@
 #include "osisvariants.h"
 
 #include <cstdlib>
+#include <list>
+#include <string>
 #include "../swmodule.h"
 #include "../utilstr.h"
 #include "../utilxml.h"
@@ -37,8 +39,8 @@ namespace {
     static const char oTip[]  = "Switch between Textual Variants modes";
     static const char *choices[4] = { "Primary Reading", "Secondary Reading", "All Readings", "" };
 
-    static const StringList *oValues() {
-        static const StringList oVals(&choices[0], &choices[3]);
+    static const std::list<std::string> *oValues() {
+        static const std::list<std::string> oVals(&choices[0], &choices[3]);
         return &oVals;
     }
 }

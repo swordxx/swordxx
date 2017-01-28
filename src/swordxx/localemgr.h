@@ -35,7 +35,6 @@ namespace swordxx {
 
 class SWLocale;
 
-using StringList = std::list<std::string>;
 using LocaleMap = std::map<std::string, std::shared_ptr<SWLocale> >;
 
 /**
@@ -76,7 +75,7 @@ public: /* Methods: */
     *
     * @return Returns a list of strings, which contains the names of the available locales.
     */
-    virtual StringList getAvailableLocales();
+    virtual std::list<std::string> getAvailableLocales();
 
     /** Returns translated text.
     * This function uses both parameters to return the translated version of the given text.

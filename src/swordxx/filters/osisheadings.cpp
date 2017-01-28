@@ -108,10 +108,9 @@ bool OSISHeadings::handleToken(std::string &buf, const char *token, BasicFilterU
                         else heading = u->heading;
                         u->module->getEntryAttributes()["Heading"][(preverse)?"Preverse":"Interverse"][buf] = heading;
 
-                        StringList attributes = u->currentHeadingTag.getAttributeNames();
-                        for (StringList::const_iterator it = attributes.begin(); it != attributes.end(); it++) {
-                            u->module->getEntryAttributes()["Heading"][buf][it->c_str()] = u->currentHeadingTag.getAttribute(it->c_str());
-                        }
+                        for (auto const & attr : u->currentHeadingTag.getAttributeNames())
+                            u->module->getEntryAttributes()["Heading"][buf][attr.c_str()] =
+                                    u->currentHeadingTag.getAttribute(attr.c_str());
                     }
 
                     // do we want the heading in the body?
