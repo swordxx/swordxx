@@ -60,16 +60,16 @@ int main(int argc, char **argv) {
         const char *testParts="ABC D EF GHIJ";
         cout << "Setting attribute 'multiPart' to: '" << testParts << "'\n";
         x.setAttribute("multiPart", testParts);
-        cout << x << "\n";
+        cout << x.toString() << "\n";
         cout << "Setting part 2 to 'MMM'\n";
         x.setAttribute("multiPart", "MMM", 2, ' ');
-        cout << x << "\n";
+        cout << x.toString() << "\n";
         cout << "Removing part 1\n";
         x.setAttribute("multiPart", nullptr, 1, ' ');
-        cout << x << "\n";
+        cout << x.toString() << "\n";
         cout << "Removing part 2\n";
         x.setAttribute("multiPart", nullptr, 2, ' ');
-        cout << x << "\n";
+        cout << x.toString() << "\n";
     }
 
 }
