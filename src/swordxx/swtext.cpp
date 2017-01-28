@@ -24,7 +24,6 @@
 #include "swtext.h"
 
 #include "keys/listkey.h"
-#include "keys/versekey.h"
 #include "localemgr.h"
 #include "utilstr.h"
 
@@ -51,20 +50,10 @@ VerseKey * staticCreateKey(char const * const versification) {
 
 SWText::SWText(const char *imodname, const char *imoddesc, TextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char* ilang, const char *versification): SWModule(staticCreateKey(versification), imodname, imoddesc, "Biblical Texts", enc, dir, mark, ilang) {
     this->versification = versification;
-    tmpVK1 = (VerseKey *)createKey();
-    tmpVK2 = (VerseKey *)createKey();
+    tmpVK1.setVersificationSystem(versification);
+    tmpVK2.setVersificationSystem(versification);
         tmpSecond = false;
     skipConsecutiveLinks = false;
-}
-
-
-/******************************************************************************
- * SWText Destructor - Cleans up instance of SWText
- */
-
-SWText::~SWText() {
-    delete tmpVK1;
-    delete tmpVK2;
 }
 
 
@@ -106,12 +95,12 @@ VerseKey &SWText::getVerseKey(const SWKey *keyToConvert) const {
                 dynamic_cast<VerseKey *>(lkTest->getElement()))
             return *key;
 
-    VerseKey * retKey = (tmpSecond) ? tmpVK1 : tmpVK2;
+    VerseKey & retKey = (tmpSecond) ? tmpVK1 : tmpVK2;
     tmpSecond = !tmpSecond;
-    retKey->setLocale(
+    retKey.setLocale(
             LocaleMgr::getSystemLocaleMgr()->getDefaultLocaleName().c_str());
-    (*retKey) = *thisKey;
-    return (*retKey);
+    retKey = *thisKey;
+    return retKey;
 }
 
 

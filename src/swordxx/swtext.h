@@ -27,19 +27,18 @@
 #include "swmodule.h"
 
 #include "defs.h"
+#include "keys/versekey.h"
 
 
 namespace swordxx {
-
-class VerseKey;
 
 /** The basis for all text modules
  */
 class SWDLLEXPORT SWText : public SWModule {
 
     // for conversion if we have been set with a different internal key type
-    mutable VerseKey *tmpVK1;
-    mutable VerseKey *tmpVK2;
+    mutable VerseKey tmpVK1;
+    mutable VerseKey tmpVK2;
         mutable bool tmpSecond;
     std::string versification;
 
@@ -55,8 +54,6 @@ public:
            SWTextMarkup markup = FMT_UNKNOWN,
            char const * ilang = nullptr,
            char const * versification = "KJV");
-
-    ~SWText() override;
 
     SWKey * createKey() const override;
 
