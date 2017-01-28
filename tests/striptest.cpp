@@ -25,31 +25,28 @@
 #include <swordxx/swmodule.h>
 
 
-using namespace swordxx;
+int main(int argc, char * argv[]) {
+    std::string const modName((argc > 1) ? argv[2] : "WLC");
+    std::string const keyText((argc > 2) ? argv[3] : "Gen.1.9");
+    std::string const searchText((argc > 3) ? argv[4] : "מתחת");
+    swordxx::SWMgr library;
+    auto * const book = library.getModule(modName.c_str());
+    auto const filters(library.getGlobalOptions());
+    for (auto const & filter : filters)
+        /* Blindly turn off all filters. Some filters don't support "Off", but
+           that's ok, we should just silently fail on those. */
+        library.setGlobalOption(filter.c_str(), "Off");
 
-using std::cout;
-using std::endl;
-
-int main(int argc, char **argv) {
-
-    std::string modName = (argc > 1) ? argv[2] : "WLC";
-    std::string keyText = (argc > 2) ? argv[3] : "Gen.1.9";
-    std::string searchText = (argc > 3) ? argv[4] : "מתחת";
-    SWMgr library;
-    SWModule *book = library.getModule(modName.c_str());
-    StringList filters = library.getGlobalOptions();
-    for (StringList::iterator it = filters.begin(); it != filters.end(); ++it) {
-        // blindly turn off all filters.  Some filters don't support "Off", but that's ok, we should just silently fail on those.
-        library.setGlobalOption(it->c_str(), "Off");
-    }
     book->setKey(keyText.c_str());
-    std::string entryStripped = book->stripText();
-    cout << "Module: " << book->getDescription() << "\t Key: " << book->getKeyText() << "\n";
-    cout << "RawEntry:\n" << book->getRawEntry() << "\n";
-    cout << "StripText:\n" << entryStripped << "\n";
-    cout << "Search Target: " << searchText << "\n";
-    cout << "Search Target StripText: " << book->stripText(searchText.c_str()) << "\n";
-    cout << "Found: " << ((strstr(entryStripped.c_str(), book->stripText(searchText.c_str()).c_str())) ? "true":"false") << endl;
-
-    return 0;
+    std::string const entryStripped(book->stripText());
+    std::cout << "Module: " << book->getDescription() << "\t Key: "
+              << book->getKeyText() << "\nRawEntry:\n" << book->getRawEntry()
+              << "\nStripText:\n" << entryStripped << "\nSearch Target: "
+              << searchText << "\nSearch Target StripText: "
+              << book->stripText(searchText.c_str()) << "\nFound: "
+              << (strstr(entryStripped.c_str(),
+                         book->stripText(searchText.c_str()).c_str())
+                  ? "true"
+                  : "false")
+              << std::endl;
 }
