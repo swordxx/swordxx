@@ -33,7 +33,6 @@ using swordxx::SWMgr;
 using swordxx::VerseKey;
 using swordxx::ListKey;
 using swordxx::SWModule;
-using swordxx::SW_POSITION;
 using swordxx::FMT_PLAIN;
 using swordxx::MarkupFilterMgr;
 using std::cout;
@@ -46,11 +45,11 @@ int main(int argc, char **argv)
     VerseKey parser;
     ListKey result;
 
-    result = parser.parseVerseList(range, parser, true);
+    result = parser.parseVerseList(range, parser.getText(), true);
 
     // let's iterate the key and display
-    for (result = TOP; !result.popError(); ++result) {
-        cout << result << "\n";
+    for (result.positionToTop(); !result.popError(); ++result) {
+        cout << result.getText() << "\n";
     }
     cout << endl;
 
@@ -66,7 +65,7 @@ int main(int argc, char **argv)
     if (!book) return -1;
 
     // now let's iterate the book and display
-    for (result = TOP; !result.popError(); ++result) {
+    for (result.positionToTop(); !result.popError(); ++result) {
         book->setKey(result);
         cout << "*** " << book->getKeyText() << ": " << book->renderText() << "\n";
     }

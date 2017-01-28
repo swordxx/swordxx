@@ -45,13 +45,13 @@ int main(int argc, char **argv) {
 
     SWModule &book = *b;
     book.setProcessEntryAttributes(false);
-    VerseKey *vk = SWDYNAMIC_CAST(VerseKey, book.getKey());
+    VerseKey const * const vk = dynamic_cast<VerseKey *>(book.getKey());
 
     // find the first non-zero entry
-    for (book = TOP; !book.popError() && !book.getRawEntry().size(); book++);
+    for (book.positionToTop(); !book.popError() && !book.getRawEntry().size(); book.increment());
     if (!book.getRawEntry().size()) return -2;     // empty module
 
-    for (;!book.popError(); book++) {
+    for (;!book.popError(); book.increment()) {
 
         cout << "$$$";
         if (vk) cout << vk->getOSISRef();

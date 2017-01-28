@@ -61,7 +61,7 @@ void parallelDisplay(vector<SWModule *>modules, const char *key) {
             //cout << "\n\n====================\nfromKey" << master->getOSISRef();
 
             (*module)->setKey(master);
-            VerseKey slave((*module)->getKey());
+            VerseKey slave((*module)->getKey()->getText());
 
             //cout << "setKey" << (*module)->getName() << slave.getBookName() << slave.getRangeText() << slave.getShortText();
 
@@ -72,7 +72,7 @@ void parallelDisplay(vector<SWModule *>modules, const char *key) {
 
             if (!(*module)->popError()) {
 
-                if(strcmp(slave.getBookName(), master->getBookName())) {
+                if(strcmp(slave.getBookName().c_str(), master->getBookName().c_str())) {
                     if(o) cout << slave.getShortText();
                 }
                 else if(slave.getChapter() != master->getChapter()) {

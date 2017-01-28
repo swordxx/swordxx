@@ -96,17 +96,17 @@ int main(int argc, char **argv)
 
     if (argc > 3) {            // if min / max specified
         SWKey *k = target.getKey();
-        VerseKey *parser = SWDYNAMIC_CAST(VerseKey, k);
+        VerseKey * parser = dynamic_cast<VerseKey *>(k);
         VerseKey kjvParser;
         if (!parser) parser = &kjvParser;    // use standard KJV parsing as fallback
-        scope = parser->parseVerseList(argv[3], *parser, true);
+        scope = parser->parseVerseList(argv[3], parser->getText(), true);
         scope.setPersist(true);
         target.setKey(scope);
     }
 
     std::cerr << "[0=================================50===============================100]\n ";
     char lineLen = 70;
-    listkey = target.search(searchTerm.c_str(), SEARCH_TYPE, /*SEARCHFLAG_MATCHWHOLEENTRY*/ REG_ICASE, 0, 0, &percentUpdate, &lineLen);
+    listkey = target.search(searchTerm.c_str(), SEARCH_TYPE, /*SEARCHFLAG_MATCHWHOLEENTRY*/ REG_ICASE, nullptr, &percentUpdate, &lineLen);
     std::cerr << std::endl;
     if (argc > 4) {            // if min / max specified
         scope = listkey;
@@ -114,13 +114,13 @@ int main(int argc, char **argv)
         target.setKey(scope);
         printed = 0;
         std::cerr << " ";
-        listkey = target.search(argv[4], SEARCH_TYPE, /*SEARCHFLAG_MATCHWHOLEENTRY*/ REG_ICASE, 0, 0, &percentUpdate, &lineLen);
+        listkey = target.search(argv[4], SEARCH_TYPE, /*SEARCHFLAG_MATCHWHOLEENTRY*/ REG_ICASE, nullptr, &percentUpdate, &lineLen);
         std::cerr << std::endl;
     }
 // we don't want to sort by verse if we've been given scores
 //    listkey.sort();
     while (!listkey.popError()) {
-        std::cout << (const char *)listkey;
+        std::cout << listkey.getText();
         if (listkey.getElement()->m_userData) std::cout << " : " << (uint64_t)listkey.getElement()->m_userData << "%";
         std::cout << std::endl;
         ++listkey;

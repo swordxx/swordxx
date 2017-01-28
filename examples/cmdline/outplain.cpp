@@ -58,10 +58,10 @@ int main(int argc, char **argv) {
     if (!b) return -1;
     SWModule &book = *b;
     book.setProcessEntryAttributes(false);
-    VerseKey *vk = SWDYNAMIC_CAST(VerseKey, book.getKey());
-    for (book = TOP; !book.popError() && !book.getRawEntry().size(); book++);
+    VerseKey const * const vk = dynamic_cast<VerseKey *>(book.getKey());
+    for (book.positionToTop(); !book.popError() && !book.getRawEntry().size(); book.increment());
     if (!book.getRawEntry().size()) return -2;     // empty module
-    for (;!book.popError(); book++) {
+    for (;!book.popError(); book.increment()) {
         cout << "$$$";
         if (vk) cout << vk->getOSISRef();
         else    cout << book.getKeyText();
