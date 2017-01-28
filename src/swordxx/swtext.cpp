@@ -33,7 +33,7 @@ namespace swordxx {
 
 namespace {
 
-SWKey * staticCreateKey(char const * const versification) {
+VerseKey * staticCreateKey(char const * const versification) {
     VerseKey * const vk = new VerseKey();
     vk->setVersificationSystem(versification);
     return vk;
