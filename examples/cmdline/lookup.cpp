@@ -38,12 +38,7 @@ using swordxx::FMT_WEBIF;
 using swordxx::FMT_HTMLHREF;
 using swordxx::FMT_RTF;
 using swordxx::FMT_LATEX;
-using swordxx::ModMap;
-using swordxx::AttributeTypeList;
-using swordxx::AttributeList;
-using swordxx::AttributeValue;
 using swordxx::VerseKey;
-using swordxx::FilterList;
 
 
 int main(int argc, char **argv)
@@ -68,9 +63,10 @@ int main(int argc, char **argv)
     target = manager.getModule(argv[1]);
     if (!target) {
         fprintf(stderr, "Could not find module [%s].  Available modules:\n", argv[1]);
-        ModMap::iterator it;
-        for (it = manager.Modules.begin(); it != manager.Modules.end(); ++it) {
-            fprintf(stderr, "[%s]\t - %s\n", (*it).second->getName(), (*it).second->getDescription());
+        for (auto const & mp : manager.modules()) {
+            fprintf(stderr, "[%s]\t - %s\n",
+                    mp.second->getName().c_str(),
+                    mp.second->getDescription().c_str());
         }
         exit(-1);
     }
@@ -105,22 +101,20 @@ int main(int argc, char **argv)
     std::cout << "\n";
     std::cout << "==========================\n";
     std::cout << "Entry Attributes:\n\n";
-    AttributeTypeList::iterator i1;
-    AttributeList::iterator i2;
-    AttributeValue::iterator i3;
     bool heading = false;
     bool preverse = false;
-    for (i1 = target->getEntryAttributes().begin(); i1 != target->getEntryAttributes().end(); ++i1) {
-        std::cout << "[ " << i1->first << " ]\n";
-        heading = (i1->first == "Heading");
-        for (i2 = i1->second.begin(); i2 != i1->second.end(); ++i2) {
-            std::cout << "\t[ " << i2->first << " ]\n";
-            preverse = (heading && i2->first == "Preverse");
-            for (i3 = i2->second.begin(); i3 != i2->second.end(); ++i3) {
-                std::cout << "\t\t" << i3->first << " = " << i3->second << "\n";
-                if (preverse) {
-                    std::cout << "\t\tmodule->renderText(heading[" << i3->first << "]) = " << target->renderText(i3->second.c_str()) << "\n";
-                }
+    for (auto const & vp1 : target->getEntryAttributes()) {
+        std::cout << "[ " << vp1.first << " ]\n";
+        heading = (vp1.first == "Heading");
+        for (auto const & vp2 : vp1.second) {
+            std::cout << "\t[ " << vp2.first << " ]\n";
+            preverse = (heading && vp2.first == "Preverse");
+            for (auto const & vp3 : vp2.second) {
+                std::cout << "\t\t" << vp3.first << " = " << vp3.second << "\n";
+                if (preverse)
+                    std::cout << "\t\tmodule->renderText(heading[" << vp3.first
+                              << "]) = "
+                              << target->renderText(vp3.second.c_str()) << "\n";
             }
         }
     }

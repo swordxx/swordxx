@@ -31,9 +31,7 @@ using namespace swordxx;
 int main(int /* argc */, char ** /* argv */) {
     SWMgr mymgr;
 
-    SWModule *bbe = mymgr.Modules["BBE"];
-
-    if (bbe) {
+    if (SWModule * const bbe = mymgr.getModule("BBE")) {
         VerseKey vk;
         vk.setPersist(true);
         bbe->setKey(vk);

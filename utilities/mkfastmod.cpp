@@ -42,11 +42,11 @@ int main(int argc, char * argv[]) {
     }
 
     swordxx::SWMgr manager;
-    auto const it(manager.Modules.find(argv[1]));
-    if (it == manager.Modules.end()) {
+    auto const it(manager.modules().find(argv[1]));
+    if (it == manager.modules().end()) {
         outErr() << "Could not find module [" << argv[1u]
                  << "].  Available modules:\n";
-        for (auto const & rp : manager.Modules) {
+        for (auto const & rp : manager.modules()) {
             auto const & module = *rp.second;
             std::cerr << '[' << module.getName() << "s]\t - "
                       << module.getDescription() << '\n';

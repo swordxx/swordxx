@@ -56,7 +56,6 @@ void errorOutHelp(char *appName) {
 
 int main(int argc, char **argv)
 {
-    SWModule * inModule = nullptr;
     ThMLOSIS filter;
 
     cerr << "\n\n*** Don't use this utility *** \n\n";
@@ -96,16 +95,16 @@ int main(int argc, char **argv)
 //    mgr.setGlobalOption("Strong's Numbers", "Off");
 //    mgr.setGlobalOption("Morphological Tags", "Off");
 
-    ModMap::iterator it = mgr.Modules.find(argv[1]);
-    if (it == mgr.Modules.end()) {
+    auto const it = mgr.modules().find(argv[1]);
+    if (it == mgr.modules().end()) {
         fprintf(stderr, "error: %s: couldn't find module: %s \n", argv[0], argv[1]);
         exit(-2);
     }
 
-    inModule = it->second;
-//    inModule->AddRenderFilter(&filter);
+    SWModule & inModule = *it->second;
+//    inModule.AddRenderFilter(&filter);
 
-    SWKey *key = inModule->getKey();
+    SWKey *key = inModule.getKey();
     VerseKey *vkey = dynamic_cast<VerseKey *>(key);
 
     char buf[1024];
@@ -123,9 +122,10 @@ int main(int argc, char **argv)
     vkey->setIntros(false);
 
     cout << "<?xml version=\"1.0\" ";
-        if (inModule->getConfigEntry("Encoding")) {
-            if (*(inModule->getConfigEntry("Encoding")))
-                cout << "encoding=\"" << inModule->getConfigEntry("Encoding") << "\" ";
+        if (inModule.getConfigEntry("Encoding")) {
+            if (*(inModule.getConfigEntry("Encoding")))
+                cout << "encoding=\"" << inModule.getConfigEntry("Encoding")
+                     << "\" ";
             else cout << "encoding=\"UTF-8\" ";
         }
         else cout << "encoding=\"UTF-8\" ";
@@ -138,17 +138,18 @@ int main(int argc, char **argv)
         cout << " xsi:schemaLocation=\"http://www.bibletechnologies.net/2003/OSIS/namespace http://www.bibletechnologies.net/osisCore.2.1.1.xsd\">\n\n";
     cout << "<osisText";
         cout << " osisIDWork=\"";
-        cout << inModule->getName() << "\"";
+        cout << inModule.getName() << "\"";
         cout << " osisRefWork=\"defaultReferenceScheme\"";
-        if (!inModule->getLanguage().empty())
-            cout << " xml:lang=\"" << inModule->getLanguage() << "\"";
+        if (!inModule.getLanguage().empty())
+            cout << " xml:lang=\"" << inModule.getLanguage() << "\"";
         cout << ">\n\n";
 
     cout << "\t<header>\n";
     cout << "\t\t<work osisWork=\"";
-    cout << inModule->getName() << "\">\n";
-    cout << "\t\t\t<title>" << inModule->getDescription() << "</title>\n";
-    cout << "\t\t\t<identifier type=\"OSIS\">Bible." << inModule->getName() << "</identifier>\n";
+    cout << inModule.getName() << "\">\n";
+    cout << "\t\t\t<title>" << inModule.getDescription() << "</title>\n";
+    cout << "\t\t\t<identifier type=\"OSIS\">Bible." << inModule.getName()
+         << "</identifier>\n";
     cout << "\t\t\t<refSystem>Bible.KJV</refSystem>\n";
     cout << "\t\t</work>\n";
     cout << "\t\t<work osisWork=\"defaultReferenceScheme\">\n";
@@ -157,24 +158,24 @@ int main(int argc, char **argv)
     cout << "\t</header>\n\n";
 
 
-    inModule->positionToTop();
+    inModule.positionToTop();
 
-    SWKey *p = inModule->createKey();
+    SWKey *p = inModule.createKey();
         VerseKey *tmpKey = dynamic_cast<VerseKey *>(p);
     if (!tmpKey) {
             delete p;
             tmpKey = new VerseKey();
     }
-    *tmpKey = inModule->getKeyText();
+    *tmpKey = inModule.getKeyText();
 
     tmpKey->setIntros(true);
     tmpKey->setAutoNormalize(false);
 
-    for (inModule->positionToTop(); !inModule->popError(); inModule->increment()) {
+    for (inModule.positionToTop(); !inModule.popError(); inModule.increment()) {
         bool newTest = false;
         bool newBook = false;
 
-        if (inModule->renderText().empty()) {
+        if (inModule.renderText().empty()) {
             continue;
         }
 
@@ -219,7 +220,7 @@ int main(int argc, char **argv)
             cout << "" << buf;
             openchap = true;
         }
-        std::string verseText = inModule->getRawEntry();
+        std::string verseText = inModule.getRawEntry();
         sprintf(buf, "\t\t<verse osisID=\"%s\">", vkey->getOSISRef());
         cout << buf << verseText.c_str() << "</verse>\n" << endl;
         lastChap = vkey->getChapter();

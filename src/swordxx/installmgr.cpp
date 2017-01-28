@@ -551,7 +551,7 @@ map<SWModule *, int> InstallMgr::getModuleStatus(const SWMgr &base, const SWMgr 
     bool keyPresent;
     int modStat;
 
-    for (auto const & mp : other.Modules) {
+    for (auto const & mp : other.modules()) {
         modStat = 0;
 
         cipher = false;
@@ -598,7 +598,7 @@ map<SWModule *, int> InstallMgr::getModuleStatus(const SWMgr &base, const SWMgr 
 
         if (cipher) modStat |= MODSTAT_CIPHERED;
         if (keyPresent) modStat |= MODSTAT_CIPHERKEYPRESENT;
-        retVal[mp.second] = modStat;
+        retVal[mp.second.get()] = modStat;
     }
     return retVal;
 }

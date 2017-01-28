@@ -33,7 +33,6 @@
 
 using swordxx::SWMgr;
 using swordxx::VerseKey;
-using swordxx::ModMap;
 using swordxx::SWKey;
 using swordxx::SWModule;
 
@@ -45,15 +44,15 @@ int main(int argc, char **argv) {
 
     SWMgr mgr;
 
-    ModMap::iterator it = mgr.Modules.find(argv[1]);
-    if (it == mgr.Modules.end()) {
+    auto const it = mgr.modules().find(argv[1]);
+    if (it == mgr.modules().end()) {
         fprintf(stderr, "error: %s: couldn't find module: %s \n", argv[0], argv[1]);
         exit(-2);
     }
 
-    SWModule *mod = it->second;
+    SWModule & mod = *it->second;
 
-    SWKey *key = mod->getKey();
+    SWKey *key = mod.getKey();
     VerseKey * vkey = nullptr;
     try {
         vkey = dynamic_cast<VerseKey *>(key);
@@ -67,14 +66,14 @@ int main(int argc, char **argv) {
 
     vkey->setIntros(false);    // turn on mod/testmnt/book/chap headings
 
-    mod->positionToTop();
+    mod.positionToTop();
 
-    while (!mod->popError()) {
+    while (!mod.popError()) {
         if (vkey->getVerse()) {
-            if (!mod->renderText().length()) {
+            if (!mod.renderText().length()) {
                 std::cout << vkey->getText() << std::endl;
             }
-            mod->increment();
+            mod.increment();
         }
     }
 }

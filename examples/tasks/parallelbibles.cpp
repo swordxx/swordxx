@@ -219,10 +219,10 @@ int main(int argc, char **argv) {
         SWModule *bible = library.getModule(argv[i]);
         if (!bible) {
             fprintf(stderr, "Could not find module [%s].  Available modules:\n", argv[i]);
-            ModMap::iterator it;
-            for (it = library.Modules.begin(); it != library.Modules.end(); ++it) {
-                fprintf(stderr, "[%s]\t - %s\n", (*it).second->getName(), (*it).second->getDescription());
-            }
+            for (auto const & mp : library.modules())
+                fprintf(stderr, "[%s]\t - %s\n",
+                        mp.second->getName().c_str(),
+                        mp.second->getDescription().c_str());
             exit(-2);
         }
         modules.push_back(bible);

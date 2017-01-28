@@ -41,23 +41,18 @@ int main(int argc, char **argv) {
     std::cerr << "\n\nprefixPath: " << mymgr.m_prefixPath;
     std::cerr << "\nconfigPath: " << mymgr.m_configPath << "\n\n";
 
-
-
-    ModMap::iterator it;
-
-    for (it = mymgr.Modules.begin(); it != mymgr.Modules.end(); it++) {
-        std::cout << "[" << (*it).second->getName() << "] (Writable: " << (it->second->isWritable()?"Yes":"No") << ") [" << (*it).second->getDescription() << "]\n";
-        std::cout << "AbsoluteDataPath = " << it->second->getConfigEntry("AbsoluteDataPath") << "\n";
-        std::cout << "Has Feature HebrewDef = " << it->second->getConfig().has("Feature", "HebrewDef") << "\n";
-        if ((!strcmp(    (*it).second->getType().c_str()    , "Biblical Texts")) || (!strcmp((*it).second->getType().c_str(), "Commentaries"))) {
-            it->second->setKey("James 1:19");
-            std::cout << (*it).second->renderText() << "\n\n";
+    for (auto const & mp : mymgr.modules()) {
+        auto & module = *mp.second;
+        std::cout << "[" << module.getName() << "] (Writable: " << (module.isWritable()?"Yes":"No") << ") [" << module.getDescription() << "]\n";
+        std::cout << "AbsoluteDataPath = " << module.getConfigEntry("AbsoluteDataPath") << "\n";
+        std::cout << "Has Feature HebrewDef = " << module.getConfig().has("Feature", "HebrewDef") << "\n";
+        if ((!strcmp(    module.getType().c_str()    , "Biblical Texts")) || (!strcmp(module.getType().c_str(), "Commentaries"))) {
+            module.setKey("James 1:19");
+            std::cout << module.renderText() << "\n\n";
         }
     }
 
-    SWModule *mhc = mymgr.Modules["MHC"];
-
-    if (mhc) {
+    if (SWModule * const mhc = mymgr.getModule("MHC")) {
         std::cout << "MHC, Lang = " << mhc->getLanguage() << "\n\n";
         for (mhc->setKey("Gen 1:1"); *mhc->getKey() < (VerseKey) "Gen 1:10"; (*mhc).increment())
             std::cout << mhc->renderText() << "\n";

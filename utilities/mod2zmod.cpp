@@ -73,7 +73,6 @@ int main(int argc, char **argv)
     int compType = 1;
     string cipherKey = "";
     SWCompress * compressor = nullptr;
-    SWModule * inModule     = nullptr;
     SWModule * outModule    = nullptr;
     int compLevel = 0;
 
@@ -100,13 +99,13 @@ int main(int argc, char **argv)
 
     SWMgr mgr;
 
-    ModMap::iterator it = mgr.Modules.find(argv[1]);
-    if (it == mgr.Modules.end()) {
+    auto const it = mgr.modules().find(argv[1]);
+    if (it == mgr.modules().end()) {
         fprintf(stderr, "error: %s: couldn't find module: %s\n", argv[0], argv[1]);
         exit(-2);
     }
 
-    inModule = it->second;
+    SWModule & inModule = *it->second;
 
     // Try to initialize a default set of datafiles and indicies at our
     // datapath location passed to us from the user.
@@ -116,11 +115,11 @@ int main(int argc, char **argv)
 #define COM 3
 
     int modType = 0;
-    if (inModule->getType() == "Biblical Texts") {
+    if (inModule.getType() == "Biblical Texts") {
         modType = BIBLE;
-    } else if (inModule->getType() == "Lexicons / Dictionaries") {
+    } else if (inModule.getType() == "Lexicons / Dictionaries") {
         modType = LEX;
-    } else if (inModule->getType() == "Commentaries") {
+    } else if (inModule.getType() == "Commentaries") {
         modType = COM;
     }
 
@@ -138,7 +137,7 @@ int main(int argc, char **argv)
     switch (modType) {
     case BIBLE:
     case COM: {
-        SWKey *k = inModule->getKey();
+        SWKey *k = inModule.getKey();
         VerseKey *vk = dynamic_cast<VerseKey *>(k);
         result = zText::createModule(argv[2], iType, vk->getVersificationSystem().c_str());
         break;
@@ -156,12 +155,12 @@ int main(int argc, char **argv)
     switch (modType) {
     case BIBLE:
     case COM: {
-        SWKey *k = inModule->getKey();
+        SWKey *k = inModule.getKey();
         VerseKey *vk = dynamic_cast<VerseKey *>(k);
         outModule = new zText(argv[2], nullptr, nullptr, iType, compressor,
             ENC_UNKNOWN, DIRECTION_LTR, FMT_UNKNOWN, nullptr,
             vk->getVersificationSystem().c_str());    // open our datapath with our RawText driver.
-        static_cast<VerseKey *>(inModule->getKey())->setIntros(true);
+        static_cast<VerseKey *>(inModule.getKey())->setIntros(true);
         break;
     }
     case LEX:
@@ -185,19 +184,19 @@ int main(int argc, char **argv)
     }
     outModule->setKey(*outModuleKey);
 
-    inModule->setSkipConsecutiveLinks(false);
-    inModule->positionToTop();
-    while (!inModule->popError()) {
-        bufferKey = *inModule->getKey();
+    inModule.setSkipConsecutiveLinks(false);
+    inModule.positionToTop();
+    while (!inModule.popError()) {
+        bufferKey = *inModule.getKey();
         // pseudo-check for link.  Will get most common links.
-        if ((lastBuffer == inModule->getRawEntry()) &&(lastBuffer.length() > 0)) {
+        if ((lastBuffer == inModule.getRawEntry()) &&(lastBuffer.length() > 0)) {
             *outModuleKey = bufferKey;
             outModule->linkEntry(&lastBufferKey);    // link to last key
         cout << "Adding [" << bufferKey.getText() << "] link to: [" << lastBufferKey.getText() << "]\n";
         }
         else {
-            lastBuffer = inModule->getRawEntry();
-            lastBufferKey = inModule->getKeyText();
+            lastBuffer = inModule.getRawEntry();
+            lastBufferKey = inModule.getKeyText();
             if (lastBuffer.length() > 0) {
                 cout << "Adding [" << bufferKey.getText() << "] new text.\n";
                 *outModuleKey = bufferKey;
@@ -209,7 +208,7 @@ int main(int argc, char **argv)
                     cout << "Skipping [" << bufferKey.getText() << "] no entry in Module.\n";
             }
         }
-        inModule->increment();
+        inModule.increment();
     }
     delete outModule;
     delete outModuleKey;

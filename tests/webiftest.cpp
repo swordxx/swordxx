@@ -53,9 +53,9 @@ int main(int argc, char **argv) {
     mgr.setGlobalOption("Strong's Numbers", "on");
     mgr.setGlobalOption("Morphological Tags", "on");
 
-    SWModule *module = mgr.Modules[modName];
+    SWModule * module = mgr.getModule(modName);
     if (!module) {
-        module = mgr.Modules.begin()->second;
+        module = &*mgr.modules().begin()->second;
     }
     module->setKey(keyName);
     std::cout << module->renderText() << std::endl<< std::endl<< std::endl;
@@ -65,9 +65,9 @@ int main(int argc, char **argv) {
     SWMgr mgr2(nullptr, nullptr, true, new MarkupFilterMgr(FMT_HTMLHREF, ENC_UTF8));
     mgr2.setGlobalOption("Strong's Numbers", "on");
     mgr2.setGlobalOption("Morphological Tags", "on");
-    module = mgr2.Modules[modName];
+    module = mgr2.getModule(modName);
     if (!module) {
-        module = mgr2.Modules.begin()->second;
+        module = &*mgr2.modules().begin()->second;
     }
 
     module->setKey(keyName);

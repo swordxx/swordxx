@@ -87,7 +87,6 @@ MarkupFilterMgr::MarkupFilterMgr(char mark, TextEncoding enc)
 char MarkupFilterMgr::Markup(char mark) {
     if (mark && mark != markup) {
         markup = mark;
-        ModMap::const_iterator module;
 
         std::shared_ptr<SWFilter> oldplain(std::move(m_fromplain));
         std::shared_ptr<SWFilter> oldthml(std::move(m_fromthml));
@@ -97,20 +96,22 @@ char MarkupFilterMgr::Markup(char mark) {
 
         CreateFilters(markup);
 
-        for (module = getParentMgr()->Modules.begin(); module != getParentMgr()->Modules.end(); ++module) {
-            switch (module->second->getMarkup()) {
+        auto const & mods = getParentMgr()->modules();
+        for (auto const & mp : mods) {
+            auto & module = *mp.second;
+            switch (module.getMarkup()) {
             case FMT_THML:
                 if (oldthml != m_fromthml) {
                     if (oldthml) {
                         if (!m_fromthml) {
-                            module->second->removeRenderFilter(oldthml);
+                            module.removeRenderFilter(oldthml);
                         }
                         else {
-                            module->second->replaceRenderFilter(oldthml, m_fromthml);
+                            module.replaceRenderFilter(oldthml, m_fromthml);
                         }
                     }
                     else if (m_fromthml) {
-                        module->second->addRenderFilter(m_fromthml);
+                        module.addRenderFilter(m_fromthml);
                     }
                 }
                 break;
@@ -119,14 +120,14 @@ char MarkupFilterMgr::Markup(char mark) {
                 if (oldgbf != m_fromgbf) {
                     if (oldgbf) {
                         if (!m_fromgbf) {
-                            module->second->removeRenderFilter(oldgbf);
+                            module.removeRenderFilter(oldgbf);
                         }
                         else {
-                            module->second->replaceRenderFilter(oldgbf, m_fromgbf);
+                            module.replaceRenderFilter(oldgbf, m_fromgbf);
                         }
                     }
                     else if (m_fromgbf) {
-                        module->second->addRenderFilter(m_fromgbf);
+                        module.addRenderFilter(m_fromgbf);
                     }
                 }
                 break;
@@ -135,14 +136,14 @@ char MarkupFilterMgr::Markup(char mark) {
                 if (oldplain != m_fromplain) {
                     if (oldplain) {
                         if (!m_fromplain) {
-                            module->second->removeRenderFilter(oldplain);
+                            module.removeRenderFilter(oldplain);
                         }
                         else {
-                            module->second->replaceRenderFilter(oldplain, m_fromplain);
+                            module.replaceRenderFilter(oldplain, m_fromplain);
                         }
                     }
                     else if (m_fromplain) {
-                        module->second->addRenderFilter(m_fromplain);
+                        module.addRenderFilter(m_fromplain);
                     }
                 }
                 break;
@@ -151,14 +152,14 @@ char MarkupFilterMgr::Markup(char mark) {
                 if (oldosis != m_fromosis) {
                     if (oldosis) {
                         if (!m_fromosis) {
-                            module->second->removeRenderFilter(oldosis);
+                            module.removeRenderFilter(oldosis);
                         }
                         else {
-                            module->second->replaceRenderFilter(oldosis, m_fromosis);
+                            module.replaceRenderFilter(oldosis, m_fromosis);
                         }
                     }
                     else if (m_fromosis) {
-                        module->second->addRenderFilter(m_fromosis);
+                        module.addRenderFilter(m_fromosis);
                     }
                 }
                 break;
@@ -167,14 +168,14 @@ char MarkupFilterMgr::Markup(char mark) {
                 if (oldtei != m_fromtei) {
                     if (oldtei) {
                         if (!m_fromtei) {
-                            module->second->removeRenderFilter(oldtei);
+                            module.removeRenderFilter(oldtei);
                         }
                         else {
-                            module->second->replaceRenderFilter(oldtei, m_fromtei);
+                            module.replaceRenderFilter(oldtei, m_fromtei);
                         }
                     }
                     else if (m_fromtei) {
-                        module->second->addRenderFilter(m_fromtei);
+                        module.addRenderFilter(m_fromtei);
                     }
                 }
                 break;

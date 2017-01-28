@@ -40,7 +40,6 @@
 
 using swordxx::SWMgr;
 using swordxx::SWModule;
-using swordxx::ModMap;
 using swordxx::SWKey;
 
 using std::cerr;
@@ -59,23 +58,23 @@ int main(int argc, char **argv)
 
     SWMgr mgr;
 
-    ModMap::iterator it = mgr.Modules.find(argv[1]);
-    if (it == mgr.Modules.end()) {
+    auto const it = mgr.modules().find(argv[1]);
+    if (it == mgr.modules().end()) {
         fprintf(stderr, "error: %s: couldn't find module: %s \n", argv[0], argv[1]);
         exit(-2);
     }
 
-    SWModule *module = it->second;
-    module->setKey(argv[2]);
+    SWModule & module = *it->second;
+    module.setKey(argv[2]);
 
     switch (action) {
     case 0:
         if (strlen(argv[3]))
-            module->setEntry(argv[3]);
-        else module->deleteEntry();
+            module.setEntry(argv[3]);
+        else module.deleteEntry();
         break;
     case 1:
-        module->setEntry(SWKey(argv[3]).getText());
+        module.setEntry(SWKey(argv[3]).getText());
         break;
     default:
         cerr << "Unknown action " << action << "\n";

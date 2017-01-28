@@ -215,14 +215,12 @@ void syncConfig() {
 
 void uninstallModule(const char *modName) {
     init();
-    SWModule *module;
-    ModMap::iterator it = mgr->Modules.find(modName);
-    if (it == mgr->Modules.end()) {
+    auto const it = mgr->modules().find(modName);
+    if (it == mgr->modules().end()) {
         fprintf(stderr, "Couldn't find module [%s] to remove\n", modName);
         finish(-2);
     }
-    module = it->second;
-    installMgr->removeModule(mgr, module->getName().c_str());
+    installMgr->removeModule(mgr, it->second->getName().c_str());
     cout << "Removed module: [" << modName << "]\n";
 }
 
@@ -301,35 +299,33 @@ void remoteInstallModule(const char *sourceName, const char *modName) {
     }
     InstallSource *is = source->second;
     SWMgr *rmgr = is->getMgr();
-    SWModule *module;
-    ModMap::iterator it = rmgr->Modules.find(modName);
-    if (it == rmgr->Modules.end()) {
+    auto const it = rmgr->modules().find(modName);
+    if (it == rmgr->modules().end()) {
         fprintf(stderr, "Remote source [%s] does not make available module [%s]\n", sourceName, modName);
         finish(-4);
     }
-    module = it->second;
+    SWModule const & module = *it->second;
 
-    int error = installMgr->installModule(mgr, nullptr, module->getName().c_str(), is);
+    int error = installMgr->installModule(mgr, nullptr, module.getName().c_str(), is);
     if (error) {
-        cout << "\nError installing module: [" << module->getName() << "] (write permissions?)\n";
-    } else cout << "\nInstalled module: [" << module->getName() << "]\n";
+        cout << "\nError installing module: [" << module.getName() << "] (write permissions?)\n";
+    } else cout << "\nInstalled module: [" << module.getName() << "]\n";
 }
 
 
 void localDirInstallModule(const char *dir, const char *modName) {
     init();
     SWMgr lmgr(dir);
-    SWModule *module;
-    ModMap::iterator it = lmgr.Modules.find(modName);
-    if (it == lmgr.Modules.end()) {
+    auto const it = lmgr.modules().find(modName);
+    if (it == lmgr.modules().end()) {
         fprintf(stderr, "Module [%s] not available at path [%s]\n", modName, dir);
         finish(-4);
     }
-    module = it->second;
-    int error = installMgr->installModule(mgr, dir, module->getName().c_str());
+    SWModule const & module = *it->second;
+    int error = installMgr->installModule(mgr, dir, module.getName().c_str());
     if (error) {
-        cout << "\nError installing module: [" << module->getName() << "] (write permissions?)\n";
-    } else cout << "\nInstalled module: [" << module->getName() << "]\n";
+        cout << "\nError installing module: [" << module.getName() << "] (write permissions?)\n";
+    } else cout << "\nInstalled module: [" << module.getName() << "]\n";
 }
 
 

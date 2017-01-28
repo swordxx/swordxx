@@ -30,10 +30,9 @@ using namespace swordxx;
 
 int main(int argc, char **argv) {
     SWMgr mymgr;
-    ModMap::iterator it;
     if ( argc > 1 ) {
-        SWModule *module = mymgr.Modules[argv[1]];
-        std::cout << module->getBibliography() << "\n";
+        if (SWModule * const module = mymgr.getModule(argv[1]))
+            std::cout << module->getBibliography() << "\n";
         return 0;
     }
     else {

@@ -61,8 +61,6 @@ class SWOptionFilter;
 class SWFilterMgr;
 class SWKey;
 
-typedef std::map < std::string, SWModule *, std::less < std::string > >ModMap;
-
 class FileDesc;
 class SWOptionFilter;
 
@@ -75,11 +73,16 @@ class SWOptionFilter;
  */
 class SWDLLEXPORT SWMgr {
 
+public: /* Types: */
+
+    using ModMap = std::map<std::string, std::unique_ptr<SWModule> >;
+
 private: /* Types: */
 
     using FilterMap = std::map<std::string, std::shared_ptr<SWFilter> >;
 
 private:
+    ModMap m_modules;
     bool const mgrModeMultiMod;
     bool augmentHome = true;
     void init(); // use to initialize before loading modules
@@ -90,7 +93,10 @@ protected:
     SWConfig * mysysconfig = nullptr;
     SWConfig * homeConfig = nullptr;
     void CreateMods(bool multiMod = false);
-    virtual SWModule *createModule(const char *name, const char *driver, ConfigEntMap &section);
+    virtual std::unique_ptr<SWModule> createModule(
+            char const * name,
+            char const * driver,
+            ConfigEntMap & section);
     void DeleteMods();
     char configType = 0;        // 0 = file; 1 = directory
     std::map<std::string, std::shared_ptr<SWOptionFilter> > m_optionFilters;
@@ -199,37 +205,20 @@ public:
      */
     std::string m_configPath;
 
-    /** The map of available modules.
-     *    This map exposes the installed modules.
-     *    Here's an example how to iterate over the map and check the module type of each module.
-     *
-     *@code
-     * for (auto const & mp : Modules) {
-     *      auto const & curMod(*mp.second);
-     *      if (!strcmp(curMod.Type(), "Biblical Texts")) {
-     *           // do something with curMod
-     *      } else if (!strcmp(curMod.Type(), "Commentaries")) {
-     *           // do something with curMod
-     *      } else if (!strcmp(curMod.Type(), "Lexicons / Dictionaries")) {
-     *           // do something with curMod
-     *      }
-     * }
-     * @endcode
-     */
-    ModMap Modules;
+    ModMap const & modules() const noexcept { return m_modules; }
 
     /** Gets a specific module by name.  e.g. SWModule *kjv = myManager.getModule("KJV");
      * @param modName the name of the module to retrieve
      * @return the module, if found, otherwise 0
      */
     SWModule * getModule(char const * modName) {
-        auto const it(Modules.find(modName));
-        return (it != Modules.end()) ? it->second : nullptr;
+        auto const it(m_modules.find(modName));
+        return (it != m_modules.end()) ? it->second.get() : nullptr;
     }
 
     SWModule const * getModule(char const * modName) const {
-        auto const it(Modules.find(modName));
-        return (it != Modules.end()) ? it->second : nullptr;
+        auto const it(m_modules.find(modName));
+        return (it != m_modules.end()) ? it->second.get() : nullptr;
     }
 
 

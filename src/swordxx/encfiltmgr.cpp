@@ -107,11 +107,11 @@ void EncodingFilterMgr::setEncoding(TextEncoding const encoding) {
         std::shared_ptr<SWFilter> const oldfilter(std::move(m_targetenc));
         m_targetenc = makeEncodingFilter(encoding);
         if (!m_targetenc) {
-            for (auto const & mp : getParentMgr()->Modules)
+            for (auto const & mp : getParentMgr()->modules())
                  /// \todo pass as shared_ptr?
                 mp.second->removeRenderFilter(oldfilter);
         } else {
-            for (auto const & mp : getParentMgr()->Modules)
+            for (auto const & mp : getParentMgr()->modules())
                  /// \todo pass as shared_ptr?
                 mp.second->replaceRenderFilter(oldfilter,
                                                m_targetenc);
@@ -119,7 +119,7 @@ void EncodingFilterMgr::setEncoding(TextEncoding const encoding) {
     } else {
         m_targetenc = makeEncodingFilter(encoding);
         if (m_targetenc)
-            for (auto const & mp : getParentMgr()->Modules)
+            for (auto const & mp : getParentMgr()->modules())
                  /// \todo pass as shared_ptr?
                 mp.second->addRenderFilter(m_targetenc);
     }

@@ -702,7 +702,7 @@ signed char SWMgr::Load() {
             }
         }
 // -------------------------------------------------------------------------
-        if (Modules.empty()) // config exists, but no modules
+        if (m_modules.empty()) // config exists, but no modules
             ret = 1;
 
     }
@@ -715,11 +715,12 @@ signed char SWMgr::Load() {
 }
 
 
-SWModule *SWMgr::createModule(const char *name, const char *driver, ConfigEntMap &section)
+std::unique_ptr<SWModule> SWMgr::createModule(char const * name,
+                                              char const * driver,
+                                              ConfigEntMap & section)
 {
     std::string description, datapath, misc1;
     ConfigEntMap::iterator entry;
-    SWModule * newmod = nullptr;
     std::string lang, sourceformat, encoding;
     SWTextDirection direction;
     SWTextMarkup markup;
@@ -786,6 +787,7 @@ SWModule *SWMgr::createModule(const char *name, const char *driver, ConfigEntMap
         direction = DIRECTION_LTR;
     }
 
+    std::unique_ptr<SWModule> newmod;
     if ((!stricmp(driver, "zText")) || (!stricmp(driver, "zCom")) || (!stricmp(driver, "zText4")) || (!stricmp(driver, "zCom4"))) {
         SWCompress * compress = nullptr;
         int blockType = CHAPTERBLOCKS;
@@ -811,58 +813,58 @@ SWModule *SWMgr::createModule(const char *name, const char *driver, ConfigEntMap
 
         if (compress) {
             if (!stricmp(driver, "zText"))
-                newmod = new zText(datapath.c_str(), name, description.c_str(), blockType, compress, enc, direction, markup, lang.c_str(), versification.c_str());
+                newmod = std::make_unique<zText>(datapath.c_str(), name, description.c_str(), blockType, compress, enc, direction, markup, lang.c_str(), versification.c_str());
             else if (!stricmp(driver, "zText4"))
-                newmod = new zText4(datapath.c_str(), name, description.c_str(), blockType, compress, enc, direction, markup, lang.c_str(), versification.c_str());
+                newmod = std::make_unique<zText4>(datapath.c_str(), name, description.c_str(), blockType, compress, enc, direction, markup, lang.c_str(), versification.c_str());
             else if (!stricmp(driver, "zCom4"))
-                newmod = new zCom4(datapath.c_str(), name, description.c_str(), blockType, compress, enc, direction, markup, lang.c_str(), versification.c_str());
+                newmod = std::make_unique<zCom4>(datapath.c_str(), name, description.c_str(), blockType, compress, enc, direction, markup, lang.c_str(), versification.c_str());
             else
-                newmod = new zCom(datapath.c_str(), name, description.c_str(), blockType, compress, enc, direction, markup, lang.c_str(), versification.c_str());
+                newmod = std::make_unique<zCom>(datapath.c_str(), name, description.c_str(), blockType, compress, enc, direction, markup, lang.c_str(), versification.c_str());
         }
     }
 
     if (!stricmp(driver, "RawText")) {
-        newmod = new RawText(datapath.c_str(), name, description.c_str(), enc, direction, markup, lang.c_str(), versification.c_str());
+        newmod = std::make_unique<RawText>(datapath.c_str(), name, description.c_str(), enc, direction, markup, lang.c_str(), versification.c_str());
     }
 
     if (!stricmp(driver, "RawText4")) {
-        newmod = new RawText4(datapath.c_str(), name, description.c_str(), enc, direction, markup, lang.c_str(), versification.c_str());
+        newmod = std::make_unique<RawText4>(datapath.c_str(), name, description.c_str(), enc, direction, markup, lang.c_str(), versification.c_str());
     }
 
     // backward support old drivers
     if (!stricmp(driver, "RawGBF")) {
-        newmod = new RawText(datapath.c_str(), name, description.c_str(), enc, direction, markup, lang.c_str());
+        newmod = std::make_unique<RawText>(datapath.c_str(), name, description.c_str(), enc, direction, markup, lang.c_str());
     }
 
     if (!stricmp(driver, "RawCom")) {
-        newmod = new RawCom(datapath.c_str(), name, description.c_str(), enc, direction, markup, lang.c_str(), versification.c_str());
+        newmod = std::make_unique<RawCom>(datapath.c_str(), name, description.c_str(), enc, direction, markup, lang.c_str(), versification.c_str());
     }
 
     if (!stricmp(driver, "RawCom4")) {
-        newmod = new RawCom4(datapath.c_str(), name, description.c_str(), enc, direction, markup, lang.c_str(), versification.c_str());
+        newmod = std::make_unique<RawCom4>(datapath.c_str(), name, description.c_str(), enc, direction, markup, lang.c_str(), versification.c_str());
     }
 
     if (!stricmp(driver, "RawFiles")) {
-        newmod = new RawFiles(datapath.c_str(), name, description.c_str(), enc, direction, markup, lang.c_str());
+        newmod = std::make_unique<RawFiles>(datapath.c_str(), name, description.c_str(), enc, direction, markup, lang.c_str());
     }
 
     if (!stricmp(driver, "HREFCom")) {
         misc1 = ((entry = section.find("Prefix")) != section.end()) ? (*entry).second : std::string();
-        newmod = new HREFCom(datapath.c_str(), misc1.c_str(), name, description.c_str());
+        newmod = std::make_unique<HREFCom>(datapath.c_str(), misc1.c_str(), name, description.c_str());
     }
 
         int pos = 0;  //used for position of final / in AbsoluteDataPath, but also set to 1 for modules types that need to strip module name
     if (!stricmp(driver, "RawLD")) {
         bool caseSensitive = ((entry = section.find("CaseSensitiveKeys")) != section.end()) ? (*entry).second == "true": false;
         bool strongsPadding = ((entry = section.find("StrongsPadding")) != section.end()) ? (*entry).second == "true": true;
-        newmod = new RawLD(datapath.c_str(), name, description.c_str(), enc, direction, markup, lang.c_str(), caseSensitive, strongsPadding);
+        newmod = std::make_unique<RawLD>(datapath.c_str(), name, description.c_str(), enc, direction, markup, lang.c_str(), caseSensitive, strongsPadding);
                 pos = 1;
         }
 
     if (!stricmp(driver, "RawLD4")) {
         bool caseSensitive = ((entry = section.find("CaseSensitiveKeys")) != section.end()) ? (*entry).second == "true": false;
         bool strongsPadding = ((entry = section.find("StrongsPadding")) != section.end()) ? (*entry).second == "true": true;
-        newmod = new RawLD4(datapath.c_str(), name, description.c_str(), enc, direction, markup, lang.c_str(), caseSensitive, strongsPadding);
+        newmod = std::make_unique<RawLD4>(datapath.c_str(), name, description.c_str(), enc, direction, markup, lang.c_str(), caseSensitive, strongsPadding);
                 pos = 1;
         }
 
@@ -888,14 +890,14 @@ SWModule *SWMgr::createModule(const char *name, const char *driver, ConfigEntMap
             compress = new LZSSCompress();
 
         if (compress) {
-            newmod = new zLD(datapath.c_str(), name, description.c_str(), blockCount, compress, enc, direction, markup, lang.c_str(), caseSensitive, strongsPadding);
+            newmod = std::make_unique<zLD>(datapath.c_str(), name, description.c_str(), blockCount, compress, enc, direction, markup, lang.c_str(), caseSensitive, strongsPadding);
         }
         pos = 1;
     }
 
     if (!stricmp(driver, "RawGenBook")) {
         misc1 = ((entry = section.find("KeyType")) != section.end()) ? (*entry).second : std::string("TreeKey");
-        newmod = new RawGenBook(datapath.c_str(), name, description.c_str(), enc, direction, markup, lang.c_str(), misc1.c_str());
+        newmod = std::make_unique<RawGenBook>(datapath.c_str(), name, description.c_str(), enc, direction, markup, lang.c_str(), misc1.c_str());
         pos = 1;
     }
 
@@ -1118,16 +1120,13 @@ void SWMgr::CreateMods(bool /* multiMod */) {
     ConfigEntMap::iterator start;
     ConfigEntMap::iterator end;
     ConfigEntMap::iterator entry;
-    SWModule *newmod;
     std::string driver;
     for (auto & sp : config->sections()) {
         ConfigEntMap & section = sp.second;
-        newmod = nullptr;
 
         driver = ((entry = section.find("ModDrv")) != section.end()) ? (*entry).second : std::string();
         if (!driver.empty()) {
-            newmod = createModule(sp.first.c_str(), driver.c_str(), section);
-            if (newmod) {
+            if (auto newmod = createModule(sp.first.c_str(), driver.c_str(), section)) {
                 // Filters to add for this module and globally announce as an option to the user
                 // e.g. translit, strongs, redletterwords, etc, so users can turn these on and off globally
                 start = section.lower_bound("GlobalOptionFilter");
@@ -1156,29 +1155,17 @@ void SWMgr::CreateMods(bool /* multiMod */) {
                 addRenderFilters(*newmod, section);
                 addEncodingFilters(*newmod, section);
 
-                delete Modules[newmod->getName()];
-
-                Modules[newmod->getName()] = newmod;
+                m_modules[newmod->getName()] = std::move(newmod);
             }
         }
     }
 }
 
 
-void SWMgr::DeleteMods() {
-    for (auto const & mp : Modules)
-        delete mp.second;
-    Modules.clear();
-}
+void SWMgr::DeleteMods() { m_modules.clear(); }
 
 
-void SWMgr::deleteModule(const char *modName) {
-    ModMap::iterator const it(Modules.find(modName));
-    if (it != Modules.end()) {
-        delete it->second;
-        Modules.erase(it);
-    }
-}
+void SWMgr::deleteModule(const char *modName) { m_modules.erase(modName); }
 
 
 void SWMgr::InstallScan(const char *dirname)
@@ -1302,8 +1289,8 @@ bool SWMgr::setCipherKey(std::string const & modName, char const * key) {
     }
 
     // check if module exists
-    auto const it = Modules.find(modName);
-    if (it == Modules.end())
+    auto const it = m_modules.find(modName);
+    if (it == m_modules.end())
         return false;
 
     auto cipherFilter(std::make_shared<CipherFilter>(key));

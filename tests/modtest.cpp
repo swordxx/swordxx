@@ -30,14 +30,13 @@ using namespace swordxx;
 
 int main(int /* argc */, char ** /* argv */) {
     SWMgr mymgr;
-    ModMap::iterator it;
-    SWModule *module = mymgr.Modules["KJV"];
-    VerseKey parser;
-    ListKey lk = parser.parseVerseList("mal4:6-rev", "", true);
-    lk.setPersist(true);
-    module->setKey(lk);
+    if (SWModule * const module = mymgr.getModule("KJV")) {
+        VerseKey parser;
+        ListKey lk = parser.parseVerseList("mal4:6-rev", "", true);
+        lk.setPersist(true);
+        module->setKey(lk);
 
-    (*module).positionToTop();
-    std::cout << module->getKeyText() << "\n";
-    return 0;
+        (*module).positionToTop();
+        std::cout << module->getKeyText() << "\n";
+    }
 }
