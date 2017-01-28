@@ -26,39 +26,22 @@
 #include <cstdlib>
 #include <cstring>
 #include <string>
-#include "../modules/common/swcipher.h"
 
 
 namespace swordxx {
-
-
-CipherFilter::CipherFilter(const char *key) {
-    cipher = new SWCipher((unsigned char *)key);
-}
-
-
-CipherFilter::~CipherFilter() {
-    delete cipher;
-}
-
-
-SWCipher *CipherFilter::getCipher() {
-    return cipher;
-}
-
 
 char CipherFilter::processText(std::string &text, const SWKey *key, const SWModule *module) {
     (void) module;
     if (text.length() > 2) { //check if it's large enough to substract 2 in the next step.
         unsigned long len = text.length();
         if (!key) {    // hack, using key to determine encipher, or decipher
-            cipher->cipherBuf(&len, &text[0u]); //set buffer to enciphered text
-            std::memcpy(&text[0u], cipher->Buf(), len);
+            m_cipher.cipherBuf(&len, &text[0u]); //set buffer to enciphered text
+            std::memcpy(&text[0u], m_cipher.Buf(), len);
 //            text = cipher->Buf(); //get the deciphered buffer
         }
         else if ((unsigned long)key == 1) {
-            cipher->Buf(&text[0u], len);
-            std::memcpy(&text[0u], cipher->cipherBuf(&len), len);
+            m_cipher.Buf(&text[0u], len);
+            std::memcpy(&text[0u], m_cipher.cipherBuf(&len), len);
 //            text = cipher->cipherBuf(&len);
         }
     }

@@ -25,21 +25,31 @@
 
 #include "../swfilter.h"
 
+#include "../modules/common/swcipher.h"
+
 
 namespace swordxx {
 
-class SWCipher;
-
 class SWDLLEXPORT CipherFilter:public SWFilter {
-    SWCipher *cipher;
-public:
-    CipherFilter(const char *key);
-    ~CipherFilter() override;
+
+public: /* Methods: */
+
+    CipherFilter(const char * const key)
+        : m_cipher((unsigned char *) key)
+    {}
+
     char processText(std::string & text,
                      SWKey const * key = nullptr,
                      SWModule const * = nullptr) override;
-    virtual SWCipher *getCipher();
+
+    virtual SWCipher & getCipher() noexcept { return m_cipher; }
+
+private: /* Fields: */
+
+    SWCipher m_cipher;
+
 };
 
 } /* namespace swordxx */
-#endif
+
+#endif /* CIPHERFIL_H */

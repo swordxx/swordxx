@@ -1296,7 +1296,7 @@ bool SWMgr::setCipherKey(std::string const & modName, char const * key) {
     { // check for filter that already exists
         auto const it = m_cipherFilters.find(modName);
         if (it != m_cipherFilters.end()) {
-            it->second->getCipher()->setCipherKey(key);
+            it->second->getCipher().setCipherKey(key);
             return true;
         }
     }
