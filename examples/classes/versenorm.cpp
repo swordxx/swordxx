@@ -21,9 +21,9 @@
  */
 
 #include <iostream>
-#include <swmgr.h>
-#include <swmodule.h>
-#include <versekey.h>
+#include <swordxx/keys/versekey.h>
+#include <swordxx/swmgr.h>
+#include <swordxx/swmodule.h>
 
 
 using namespace swordxx;
@@ -57,13 +57,13 @@ int main(int argc, char **argv) {
     verseNormalized->setText(keyTextRegular);
 
     // check to see if they are equal
-        cout << *verse << ((*verse) == (*verseNormalized) ? " == " : " != ") << *verseNormalized << endl;
+        cout << verse->getText() << ((*verse) == (*verseNormalized) ? " == " : " != ") << verseNormalized->getText() << endl;
 
     // now do the same for a reference which requires normalization in this module's v11n system
     verse->setText(keyTextNeedsNormalization);
     verseNormalized->setText(keyTextNeedsNormalization);
 
-        cout << *verse << ((*verse) == (*verseNormalized) ? " == " : " != ") << *verseNormalized << endl;
+        cout << verse->getText() << ((*verse) == (*verseNormalized) ? " == " : " != ") << verseNormalized->getText() << endl;
 
     delete verse;
     delete verseNormalized;

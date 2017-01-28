@@ -29,9 +29,8 @@
  */
 
 #include <iostream>
-
-#include <swmgr.h>
-#include <swmodule.h>
+#include <swordxx/swmgr.h>
+#include <swordxx/swmodule.h>
 
 
 using namespace swordxx;
@@ -44,34 +43,31 @@ int main(int argc, char **argv) {
 
     cout << "\nInstalled Modules:\n\n";
 
-    ModMap::iterator modIterator;
-
 // Loop thru all installed modules and print out information
 
-    for (modIterator = manager.Modules.begin(); modIterator != manager.Modules.end(); modIterator++) {
-        std::string   modName  = (*modIterator).first;  // mod.conf section name (stored in module->Name())
-        SWModule *module  = (*modIterator).second;
-
-        cout << modName << "(" << module->getName() << ") | " << module->getType() << "\n";
+    for (auto const & mp : manager.modules()) {
+        std::string const & modName  = mp.first;  // mod.conf section name (stored in module->Name())
+        SWModule const & module  = *mp.second;
+        cout << modName << "(" << module.getName() << ") | " << module.getType() << "\n";
     }
 
 // Print out a verse from the first module:
 
-    cout << "\n" << manager.Modules.begin()->second->getKeyText() << ":\n";
-    cout << manager.Modules.begin()->second->renderText();
-    cout << " (" << manager.Modules.begin()->second->getName() << ")\n";
+    cout << "\n" << manager.modules().begin()->second->getKeyText() << ":\n";
+    cout << manager.modules().begin()->second->renderText();
+    cout << " (" << manager.modules().begin()->second->getName() << ")\n";
 
 // Print out the same verse from the second module (less confusing):
 
-    modIterator = manager.Modules.begin();    // get first module
+    auto modIterator = manager.modules().begin();    // get first module
     modIterator++;                // increment to next module
 
-    SWModule *mod = modIterator->second;
+    SWModule & mod = *modIterator->second;
 
-    cout << "\n" << mod->getKeyText() << ":\n";
+    cout << "\n" << mod.getKeyText() << ":\n";
 //    cout << (const char *)(*mod);        // we could do this, the same as above
-    cout << mod->renderText();
-    cout << " (" << mod->getName() << ")\n\n";
+    cout << mod.renderText();
+    cout << " (" << mod.getName() << ")\n\n";
 
     return 0;
 

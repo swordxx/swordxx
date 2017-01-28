@@ -24,18 +24,18 @@
  *
  */
 
-#include <swmgr.h>
-#include <swmodule.h>
-#include <versekey.h>
 #include <iostream>
+#include <swordxx/keys/versekey.h>
+#include <swordxx/swmgr.h>
+#include <swordxx/swmodule.h>
+#include <swordxx/utilstr.h>
 
 
 using namespace swordxx;
 using namespace std;
 
 
-int main(int argc, char **argv) {
-
+int main() {
     SWMgr library;
 
     SWModule *book = library.getModule("KJV");
@@ -44,8 +44,8 @@ int main(int argc, char **argv) {
     for (;!vk->popError();vk->setChapter(vk->getChapter()+1)) {
         vk->setVerse(vk->getVerseMax());
         std::string text = book->stripText();
-        text = text.trim();
-        if (text.endsWith(",")) {
+        trimString(text);
+        if (!text.empty() && (*text.rbegin()) == ',') {
             cout << vk->getText() << ":\n\n";
             cout << text << endl;
         }

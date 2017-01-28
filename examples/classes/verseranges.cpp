@@ -22,18 +22,16 @@
  */
 
 #include <iostream>
-
-#include <swmgr.h>
-#include <swmodule.h>
-#include <versekey.h>
+#include <swordxx/keys/versekey.h>
+#include <swordxx/swmgr.h>
+#include <swordxx/swmodule.h>
 
 
 using namespace swordxx;
 using namespace std;
 
 
-int main(int argc, char **argv) {
-
+int main() {
     cout << "\n";
 
     const char *modName = "KJVA";
@@ -50,7 +48,7 @@ int main(int argc, char **argv) {
 
     // set a verse range for the whole Bible
     vk->setLowerBound(*vk);    // vk initially points to TOP, so we don't need to set position first
-    vk->setPosition(BOTTOM);
+    vk->positionToBottom();
     vk->setUpperBound(*vk);
     cout << vk->getRangeText() << "\n";
 
@@ -59,11 +57,11 @@ int main(int argc, char **argv) {
 
 
     // Old Testament
-    vk->setPosition(TOP);
+    vk->positionToTop();
     vk->setLowerBound(*vk);
 
     vk->setTestament(2);
-    (*vk)--;
+    vk->decrement();
 
     vk->setUpperBound(*vk);
     cout << vk->getRangeText() << "\n";
@@ -73,10 +71,10 @@ int main(int argc, char **argv) {
 
 
     // New Testament
-    vk->setPosition(TOP);
+    vk->positionToTop();
     vk->setTestament(2);
     vk->setLowerBound(*vk);
-    vk->setPosition(BOTTOM);
+    vk->positionToBottom();
     vk->setUpperBound(*vk);
     cout << vk->getRangeText() << "\n";
 
@@ -97,24 +95,35 @@ int main(int argc, char **argv) {
     // Shorter syntax using the parser and based on book names, and requires intimate knowledge of VersificationMgr
     // You're probably better off using the above code, but this is here for completeness
     //
-    const VersificationMgr::System *refSys = VersificationMgr::getSystemVersificationMgr()->getVersificationSystem(vk->getVersificationSystem());
+    const VersificationMgr::System *refSys = VersificationMgr::getSystemVersificationMgr()->getVersificationSystem(vk->getVersificationSystem().c_str());
 
 
     // whole Bible
-    VerseKey vkBible(refSys->getBook(0)->getOSISName(), refSys->getBook(refSys->getBookCount()-1)->getOSISName(), refSys->getName());
+    VerseKey vkBible(
+                refSys->getBook(0)->getOSISName().c_str(),
+                refSys->getBook(refSys->getBookCount()-1)->getOSISName().c_str(),
+                refSys->getName().c_str());
     cout << vkBible.getRangeText() << "\n";
 
     // OT
-    VerseKey vkOT(refSys->getBook(0)->getOSISName(), refSys->getBook(refSys->getBMAX()[0]-1)->getOSISName(), refSys->getName());
+    VerseKey vkOT(
+                refSys->getBook(0)->getOSISName().c_str(),
+                refSys->getBook(refSys->getBMAX()[0]-1)->getOSISName().c_str(),
+                refSys->getName().c_str());
     cout << vkOT.getRangeText() << "\n";
 
     // NT
-    VerseKey vkNT(refSys->getBook(refSys->getBMAX()[0])->getOSISName(), refSys->getBook(refSys->getBookCount()-1)->getOSISName(), refSys->getName());
+    VerseKey vkNT(
+                refSys->getBook(refSys->getBMAX()[0])->getOSISName().c_str(),
+                refSys->getBook(refSys->getBookCount()-1)->getOSISName().c_str(),
+                refSys->getName().c_str());
     cout << vkNT.getRangeText() << "\n";
 
     // Current Book
     vk->setText("John 3:16");
-    VerseKey vkCurrentBook(vk->getBookName(), vk->getBookName(), refSys->getName());
+    VerseKey vkCurrentBook(vk->getBookName().c_str(),
+                           vk->getBookName().c_str(),
+                           refSys->getName().c_str());
     cout << vkCurrentBook.getRangeText() << "\n";
 
 

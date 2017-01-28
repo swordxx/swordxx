@@ -20,10 +20,10 @@
  *
  */
 
-#include <swmgr.h>
-#include <swmodule.h>
-#include <versekey.h>
 #include <iostream>
+#include <swordxx/keys/versekey.h>
+#include <swordxx/swmgr.h>
+#include <swordxx/swmodule.h>
 
 
 using namespace swordxx;
@@ -37,7 +37,7 @@ int main(int argc, char **argv) {
 
     kjv->setKey(argc > 2 ? argv[2] : "Jn.3.16");
 
-    VerseKey *key = (VerseKey *)kjv->getKey();
+    VerseKey *key = static_cast<VerseKey *>(kjv->getKey());
 
     int curVerse = key->getVerse();
     int curChapter = key->getChapter();
@@ -47,7 +47,7 @@ int main(int argc, char **argv) {
                 (key->getBook()    == curBook)    &&
                 (key->getChapter() == curChapter) &&
                 !kjv->popError();
-                (*kjv)++) {
+                kjv->increment()) {
         if (key->getVerse() == curVerse) cout << "* ";
         cout << key->getVerse() << " " << kjv->stripText() << "\n";
     }

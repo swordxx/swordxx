@@ -21,9 +21,9 @@
  */
 
 #include <iostream>
-#include <swmgr.h>
-#include <swmodule.h>
-#include <versekey.h>
+#include <swordxx/keys/versekey.h>
+#include <swordxx/swmgr.h>
+#include <swordxx/swmodule.h>
 
 
 using namespace swordxx;
@@ -43,9 +43,9 @@ int main(int argc, char **argv) {
 
         key->setIntros(true);
         book->setSkipConsecutiveLinks(true);
-        book->setPosition(TOP);
+        book->positionToTop();
 
-        cout << *key << endl;
+        cout << key->getText() << endl;
 
         return 0;
 }
