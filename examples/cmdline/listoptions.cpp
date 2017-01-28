@@ -28,25 +28,16 @@
 #include <swordxx/swmgr.h>
 
 
-using swordxx::SWMgr;
-using swordxx::StringList;
-using std::cout;
-
-
-int main(int argc, char **argv)
-{
-    SWMgr library;
-
-    StringList options = library.getGlobalOptions();
-    for (StringList::const_iterator it = options.begin(); it != options.end(); ++it) {
-        cout << *it << " (" << library.getGlobalOptionTip(it->c_str()) << ")\n";
-        StringList optionValues = library.getGlobalOptionValues(it->c_str());
-        for (StringList::const_iterator it2 = optionValues.begin(); it2 != optionValues.end(); ++it2) {
-            cout << "\t" << *it2 << "\n";
-        }
+int main() {
+    swordxx::SWMgr library;
+    auto const options(library.getGlobalOptions());
+    for (auto const & option : options) {
+        std::cout << option << " ("
+                  << library.getGlobalOptionTip(option.c_str()) << ")\n";
+        auto const optionValues(library.getGlobalOptionValues(option.c_str()));
+        for (auto const & optionValue : optionValues)
+            std::cout << "\t" << optionValue << "\n";
     }
-
-    return 0;
-
+    std::cout << std::flush;
 }
 
