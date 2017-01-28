@@ -248,8 +248,11 @@ bool OSISPlain::handleToken(std::string &buf, const char *token, BasicFilterUser
                 buf.append("*");
             }
             u->suspendTextPassThru = false;
+        } else if (!strncmp(token, "q", 1)
+                   && !u->tag.getAttribute("marker").empty())
+        {
+            buf.append(u->tag.getAttribute("marker"));
         }
-
                 // <milestone type="line"/>
                 else if (!strncmp(token, "milestone", 9)) {
             const char* type = strstr(token+10, "type=\"");

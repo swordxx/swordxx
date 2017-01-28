@@ -171,7 +171,7 @@ bool TEIXHTML::handleToken(std::string &buf, const char *token, BasicFilterUserD
                 buf += "\">";
             }
             else if (tag.isEndTag()) {
-                buf += "</span>";
+                buf += "</span> ";
             }
         }
 

@@ -133,7 +133,7 @@ bool TEIHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterUs
                 if (n != "") {
                     buf += "<br /><b>";
                     buf += n;
-                    buf += "</b>";
+                    buf += "</b> ";
                 }
             }
         }
