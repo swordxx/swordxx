@@ -54,6 +54,7 @@
 
 #include <swordxx/config.h>
 
+#include <array>
 #include <cstdio>
 #include <fstream>
 #include <iostream>
@@ -236,7 +237,7 @@ bool handleToken(std::string & text, XMLTag & token) {
 
         static char const * splitPtr;
         static char const * splitPtr2 = nullptr;
-        static char *splitBuffer    = new char[4096];
+        static std::array<char, 4096> splitBuffer;
     static SWKey tmpKey;
 //-- START TAG -------------------------------------------------------------------------
     if (!token.isEndTag()) {
@@ -290,11 +291,11 @@ bool handleToken(std::string & text, XMLTag & token) {
 #endif
                         splitPtr = strchr(keyStr.c_str(), '|');
                         if (splitPtr) {
-                                strncpy (splitBuffer, keyStr.c_str(), splitPtr - keyStr.c_str());
+                                strncpy (splitBuffer.data(), keyStr.c_str(), splitPtr - keyStr.c_str());
                                 splitBuffer[splitPtr - keyStr.c_str()] = 0;
-                *currentKey = splitBuffer;
+                *currentKey = splitBuffer.data();
 #ifdef DEBUG
-                cout << "splitBuffer: " << splitBuffer << endl;
+                cout << "splitBuffer: " << splitBuffer.data() << endl;
                 cout << "currentKey: " << currentKey->getText() << endl;
 #endif
                 writeEntry(*currentKey, text);
@@ -304,22 +305,22 @@ bool handleToken(std::string & text, XMLTag & token) {
                                     splitPtr2 = strstr(splitPtr, "|");
                                         entryCount++;
                                         if (splitPtr2) {
-                        strncpy (splitBuffer, splitPtr, splitPtr2 - splitPtr);
+                        strncpy (splitBuffer.data(), splitPtr, splitPtr2 - splitPtr);
                                                 splitBuffer[splitPtr2 - splitPtr] = 0;
 #ifdef DEBUG
-                        cout << "splitBuffer: " << splitBuffer << endl;
+                        cout << "splitBuffer: " << splitBuffer.data() << endl;
                         cout << "currentKey: " << currentKey->getText() << endl;
 #endif
-                        linkToEntry(currentKey->getText(), splitBuffer);
+                        linkToEntry(currentKey->getText(), splitBuffer.data());
                                             splitPtr = splitPtr2;
                                         }
                                         else {
-                        strcpy (splitBuffer, splitPtr);
+                        strcpy (splitBuffer.data(), splitPtr);
 #ifdef DEBUG
-                                      cout << "splitBuffer: " << splitBuffer << endl;
+                                      cout << "splitBuffer: " << splitBuffer.data() << endl;
                         cout << "currentKey: " << currentKey->getText() << endl;
 #endif
-                        linkToEntry(currentKey->getText(), splitBuffer);
+                        linkToEntry(currentKey->getText(), splitBuffer.data());
                                                 splitPtr = nullptr;
                                         }
                                 }
@@ -545,11 +546,9 @@ int main(int argc, char **argv) {
             intoken = false;
             token.push_back('>');
 
-            XMLTag *t = new XMLTag(token.c_str());
-            if (!handleToken(text, *t)) {
-                text.append(*t);
-            }
-                        delete t;
+            XMLTag t(token.c_str());
+            if (!handleToken(text, t))
+                text.append(t);
             continue;
         }
 
