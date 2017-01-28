@@ -82,7 +82,7 @@ char OSISLemma::processText(std::string &text, const SWKey *key, const SWModule 
                             count--;
                         }
                     }
-                    token = wtag;
+                    token = wtag.toString();
                     trimString(token);
                     // drop <>
                     token.erase(0u, 1u);

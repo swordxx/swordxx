@@ -108,7 +108,7 @@ char ThMLFootnotes::processText(std::string &text, const SWKey *key, const SWMod
                     }
                     hide = false;
                     if ((option) || ((!startTag.getAttribute("type").empty() && (!strcmp(startTag.getAttribute("type").c_str(), "crossReference"))))) {    // we want the tag in the text; crossReferences are handled by another filter
-                        text += startTag;
+                        text += startTag.toString();
                         text.append(tagText);
                     }
                     else    continue;

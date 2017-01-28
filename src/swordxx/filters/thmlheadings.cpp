@@ -87,9 +87,9 @@ char ThMLHeadings::processText(std::string &text, const SWKey *key, const SWModu
                             cls = std::string("fromEntryAttributes ") + cls;
                             startTag.setAttribute("class", cls.c_str());
                         }
-                        heading += startTag;
+                        heading += startTag.toString();
                         heading += header;
-                        heading += tag;
+                        heading += tag.toString();
                         if (preverse) {
                             sprintf(buf, "%i", pvHeaderNum++);
                             module->getEntryAttributes()["Heading"]["Preverse"][buf] = heading;
@@ -153,7 +153,7 @@ char ThMLHeadings::processText(std::string &text, const SWKey *key, const SWModu
                     if (hasPrefix(cls, "fromEntryAttributes ")) {
                         cls.erase(0u, std::string("fromEntryAttributes ").size());
                         tag.setAttribute("class", cls.c_str());
-                        token = tag;
+                        token = tag.toString();
                         token.erase(0u, 1u);
                         token.pop_back();
                     }

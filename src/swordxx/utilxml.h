@@ -83,10 +83,9 @@ public:
     // return values should not be considered to persist beyond the return of the function.
     std::string getAttribute(const char *attribName, int partNum = -1, char partSplit = '|') const;
     void setAttribute(const char *attribName, const char *attribValue, int partNum = -1, char partSplit = '|');
-    const char *toString() const;
-    inline operator const char *() const { return toString(); }
+    std::string toString() const;
     inline XMLTag & operator =(const char *tagString) { setText(tagString); return *this; }
-    inline XMLTag & operator =(const XMLTag &other) { setText(other.toString()); return *this; }
+    inline XMLTag & operator =(const XMLTag &other) { setText(other.toString().c_str()); return *this; }
 };
 
 } /* namespace swordxx */

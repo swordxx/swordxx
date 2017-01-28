@@ -67,7 +67,7 @@ char OSISEnum::processText(std::string &text, const SWKey *key, const SWModule *
                     XMLTag wtag(token.c_str());
                     if (!wtag.getAttribute("n").empty()) {
                         wtag.setAttribute("n", nullptr);
-                        token = wtag;
+                        token = wtag.toString();
                         trimString(token);
                         // drop <>
                         token.erase(0u, 1u);

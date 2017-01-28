@@ -25,6 +25,7 @@
 #include <cctype>
 #include <cstdlib>
 #include <stack>
+#include <string>
 #include "../keys/versekey.h"
 #include "../stringmgr.h"
 #include "../swmodule.h"
@@ -41,11 +42,10 @@ namespace {
         bool BiblicalText;
         bool inXRefNote;
         int suspendLevel;
-        std::stack<char *> quoteStack;
+        std::stack<std::string> quoteStack;
         std::string w;
         std::string version;
         MyUserData(const SWModule *module, const SWKey *key);
-        ~MyUserData();
     };
 
 
@@ -58,16 +58,6 @@ namespace {
             BiblicalText = (module->getType() == "Biblical Texts");
         }
         osisQToTick = ((!module->getConfigEntry("OSISqToTick")) || (strcmp(module->getConfigEntry("OSISqToTick"), "false")));
-    }
-
-
-    MyUserData::~MyUserData() {
-        // Just in case the quotes are not well formed
-        while (!quoteStack.empty()) {
-            char *tagData = quoteStack.top();
-            quoteStack.pop();
-            delete [] tagData;
-        }
     }
 
     static inline void outText(const char *t, std::string &o, BasicFilterUserData *u) { if (!u->suspendTextPassThru) o += t; else u->lastSuspendSegment += t; }
@@ -401,11 +391,8 @@ bool OSISRTF::handleToken(std::string &buf, const char *token, BasicFilterUserDa
             // open <q> or <q sID... />
             if ((!tag.isEmpty() && !tag.isEndTag()) || (tag.isEmpty() && !tag.getAttribute("sID").empty())) {
                 // if <q> then remember it for the </q>
-                if (!tag.isEmpty()) {
-                    char * tagData = nullptr;
-                    stdstr(&tagData, tag.toString());
-                    u->quoteStack.push(tagData);
-                }
+                if (!tag.isEmpty())
+                    u->quoteStack.push(tag.toString());
 
                 // Do this first so quote marks are included as WoC
                 if (who == "Jesus")
@@ -422,10 +409,8 @@ bool OSISRTF::handleToken(std::string &buf, const char *token, BasicFilterUserDa
             else if ((tag.isEndTag()) || (!tag.getAttribute("eID").empty())) {
                 // if it is </q> then pop the stack for the attributes
                 if (tag.isEndTag() && !u->quoteStack.empty()) {
-                    char *tagData  = u->quoteStack.top();
+                    XMLTag qTag(u->quoteStack.top().c_str());
                     u->quoteStack.pop();
-                    XMLTag qTag(tagData);
-                    delete [] tagData;
 
                     type    = qTag.getAttribute("type");
                     who     = qTag.getAttribute("who");

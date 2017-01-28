@@ -107,7 +107,7 @@ char ThMLScripref::processText(std::string &text, const SWKey *key, const SWModu
                     }
                     hide = false;
                     if (option) {    // we want the tag in the text
-                        text += startTag;
+                        text += startTag.toString();
                         text.append(tagText);
                     }
                     else    continue;

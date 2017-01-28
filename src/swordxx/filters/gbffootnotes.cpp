@@ -110,7 +110,7 @@ char GBFFootnotes::processText (std::string &text, const SWKey *key, const SWMod
                 }
                 hide = false;
                 if (option) {
-                    text.append(startTag);
+                    text.append(startTag.toString());
                     text.append(tagText);
                 }
                 else    continue;

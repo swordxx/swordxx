@@ -779,11 +779,11 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
                  else if (tag.isEndTag()) {
                     outText("</div>", buf, u);
             }
-            else if (!(type == "colophon")) outText(tag, buf, u);
+            else if (!(type == "colophon")) outText(tag.toString().c_str(), buf, u);
 
         }
         else if (!strcmp(tag.getName(), "span")) {
-            outText(tag, buf, u);
+            outText(tag.toString().c_str(), buf, u);
         }
         else if (!strcmp(tag.getName(), "abbr")) {
             if (!tag.isEndTag()) {
@@ -798,7 +798,7 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
 
         }
         else if (!strcmp(tag.getName(), "br")) {
-            outText( tag, buf, u);
+            outText(tag.toString().c_str(), buf, u);
         }
         else if (!strcmp(tag.getName(), "table")) {
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {

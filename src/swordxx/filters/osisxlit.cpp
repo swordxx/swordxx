@@ -67,7 +67,7 @@ char OSISXlit::processText(std::string &text, const SWKey *key, const SWModule *
                     XMLTag wtag(token.c_str());
                     if (!wtag.getAttribute("xlit").empty()) {
                         wtag.setAttribute("xlit", nullptr);
-                        token = wtag;
+                        token = wtag.toString();
                         trimString(token);
                         // drop <>
                         token.erase(0u, 1u);

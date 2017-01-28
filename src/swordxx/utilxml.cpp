@@ -267,8 +267,8 @@ void XMLTag::setAttribute(const char *attribName, const char *attribValue, int p
 }
 
 
-const char *XMLTag::toString() const {
-    std::string tag = "<";
+std::string XMLTag::toString() const {
+    std::string tag("<");
     if (!parsed)
         parse();
 
@@ -295,7 +295,7 @@ const char *XMLTag::toString() const {
     buf = new char [ tag.length() + 1 ];
     strcpy(buf, tag.c_str());
 
-    return buf;
+    return tag;
 }
 
 

@@ -299,11 +299,11 @@ bool ThMLHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterU
                     buf += "<br /><b><i>";
                 }
                 else {
-                    buf += tag;
+                    buf += tag.toString();
                 }
             }
             else {
-                buf += tag;
+                buf += tag.toString();
             }
         }
         else if (tag.getName() && (!strcmp(tag.getName(), "img") || !strcmp(tag.getName(), "image"))) {

@@ -243,7 +243,7 @@ char OSISStrongs::processText(std::string &text, const SWKey *key, const SWModul
                     if (!savlm.empty()) {
                         wtag.setAttribute("lemma", nullptr);
                         wtag.setAttribute("savlm", savlm.c_str());
-                        token = wtag;
+                        token = wtag.toString();
                         trimString(token);
                         // drop <>
                         token.erase(0u, 1u);

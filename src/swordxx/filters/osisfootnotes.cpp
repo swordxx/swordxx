@@ -131,7 +131,7 @@ char OSISFootnotes::processText(std::string &text, const SWKey *key, const SWMod
                     }
                     hide = false;
                     if (option || (!startTag.getAttribute("type").empty() && !strcmp(startTag.getAttribute("type").c_str(), "crossReference"))) {    // we want the tag in the text; crossReferences are handled by another filter
-                        text.append(startTag);
+                        text.append(startTag.toString());
 //                        text.append(tagText);    // we don't put the body back in because it is retrievable from EntryAttributes["Footnotes"][]["body"].
                     }
                     else    continue;

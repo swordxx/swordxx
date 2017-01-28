@@ -307,11 +307,11 @@ bool ThMLXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
                     buf += "<h2>";
                 }
                 else {
-                    buf += tag;
+                    buf += tag.toString();
                 }
             }
             else {
-                buf += tag;
+                buf += tag.toString();
             }
         }
         else if (tag.getName() && (!strcmp(tag.getName(), "img") || !strcmp(tag.getName(), "image"))) {

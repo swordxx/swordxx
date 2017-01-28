@@ -863,7 +863,7 @@ bool handleToken(std::string &text, XMLTag token) {
 
                 // Include the token if it is not a verse
                 if (tokenName != "verse") {
-                    text.append(token);
+                    text.append(token.toString());
                 }
                 else if (debug & DEBUG_VERSE)
                 {
@@ -875,11 +875,11 @@ bool handleToken(std::string &text, XMLTag token) {
                         const char* attr = (*loop).c_str();
                         t.setAttribute(attr, token.getAttribute(attr).c_str());
                     }
-                    text.append(t);
+                    text.append(t.toString());
                 }
 
                 if (inWOC) {
-                    text.append(wocTag);
+                    text.append(wocTag.toString());
                 }
                 return true;
             }
@@ -928,14 +928,14 @@ bool handleToken(std::string &text, XMLTag token) {
             quoteStack.push(token);
 
             if (debug & DEBUG_QUOTE) {
-                cout << "DEBUG(QUOTE): " << currentOsisID << ": quote top(" << quoteStack.size() << ") " << token << endl;
+                cout << "DEBUG(QUOTE): " << currentOsisID << ": quote top(" << quoteStack.size() << ") " << token.toString() << endl;
             }
 
             if (!token.getAttribute("who").empty() && !strcmp(token.getAttribute("who").c_str(), "Jesus")) {
                 inWOC = true;
 
                 // Output per verse WOC markup.
-                text.append(wocTag);
+                text.append(wocTag.toString());
 
                 // Output the quotation mark if appropriate, inside the WOC.
                 // If there is no marker attribute, let the Sword++ engine manufacture one.
@@ -944,7 +944,7 @@ bool handleToken(std::string &text, XMLTag token) {
                 // And have it within the WOC markup
                 if (token.getAttribute("marker").empty() || token.getAttribute("marker")[0]) {
                     token.setAttribute("who", nullptr); // remove the who="Jesus"
-                    text.append(token);
+                    text.append(token.toString());
                 }
                 return true;
             }
@@ -1002,7 +1002,7 @@ bool handleToken(std::string &text, XMLTag token) {
 
         if (debug & DEBUG_INTERVERSE) {
             if (!inVerse && !inBookIntro && !inChapterIntro) {
-                cout << "DEBUG(INTERVERSE): " << currentOsisID << ": interverse start token " << token << ":" << text.c_str() << endl;
+                cout << "DEBUG(INTERVERSE): " << currentOsisID << ": interverse start token " << token.toString() << ":" << text.c_str() << endl;
             }
         }
 
@@ -1067,7 +1067,7 @@ bool handleToken(std::string &text, XMLTag token) {
 
             // Include the token if it is not a verse
             if (tokenName != "verse") {
-                text.append(token);
+                text.append(token.toString());
             }
             else if (debug & DEBUG_VERSE)
             {
@@ -1079,7 +1079,7 @@ bool handleToken(std::string &text, XMLTag token) {
                     const char* attr = (*loop).c_str();
                     t.setAttribute(attr, token.getAttribute(attr).c_str());
                 }
-                text.append(t);
+                text.append(t.toString());
             }
 
             writeEntry(text);
@@ -1098,7 +1098,7 @@ bool handleToken(std::string &text, XMLTag token) {
             XMLTag topToken = quoteStack.top();
 
             if (debug & DEBUG_QUOTE) {
-                cout << "DEBUG(QUOTE): " << currentOsisID << ": quote pop(" << quoteStack.size() << ") " << topToken << " -- " << token << endl;
+                cout << "DEBUG(QUOTE): " << currentOsisID << ": quote pop(" << quoteStack.size() << ") " << topToken.toString() << " -- " << token.toString() << endl;
             }
 
             quoteStack.pop();
@@ -1108,7 +1108,7 @@ bool handleToken(std::string &text, XMLTag token) {
             if (!token.getAttribute("who").empty() && !strcmp(token.getAttribute("who").c_str(), "Jesus")) {
 
                 if (debug & DEBUG_QUOTE) {
-                    cout << "DEBUG(QUOTE): " << currentOsisID << ": (" << quoteStack.size() << ") " << topToken << " -- " << token << endl;
+                    cout << "DEBUG(QUOTE): " << currentOsisID << ": (" << quoteStack.size() << ") " << topToken.toString() << " -- " << token.toString() << endl;
                 }
 
                 inWOC = false;
@@ -1126,7 +1126,7 @@ bool handleToken(std::string &text, XMLTag token) {
                 // And have it within the WOC markup
                 if (token.getAttribute("marker").empty() || token.getAttribute("marker")[0]) {
                     token.setAttribute("who", nullptr); // remove the who="Jesus"
-                    text.append(token);
+                    text.append(token.toString());
                 }
 
                 // Now close the WOC
@@ -1143,7 +1143,7 @@ bool handleToken(std::string &text, XMLTag token) {
             if ((tokenName == "chapter") ||
                 (tokenName == "div" && eidAttr == sidChapter)
             ) {
-                text.append(token);
+                text.append(token.toString());
                 writeEntry(text);
                 inChapter    = false;
                 sidChapter   = "";
@@ -1154,7 +1154,7 @@ bool handleToken(std::string &text, XMLTag token) {
 
             // Is it the end of a book
             if (tokenName == "div" && eidAttr == sidBook) {
-                text.append(token);
+                text.append(token.toString());
                 writeEntry(text);
                 bookDepth    = 0;
                 chapterDepth = 0;
@@ -1173,7 +1173,7 @@ bool handleToken(std::string &text, XMLTag token) {
 
             // When we are not inPreVerse, the interverse tags get appended to the preceeding verse.
             if (!inPreVerse) {
-                text.append(token);
+                text.append(token.toString());
                 writeEntry(text);
 
                 if (debug & DEBUG_INTERVERSE) {
@@ -1218,7 +1218,7 @@ XMLTag transformBSP(XMLTag t) {
     if (t.isEmpty()) {
 
         if (debug & DEBUG_XFORM) {
-            cout << "DEBUG(XFORM): " << currentOsisID << ": xform empty " << t << endl;
+            cout << "DEBUG(XFORM): " << currentOsisID << ": xform empty " << t.toString() << endl;
         }
 
         return t;
@@ -1259,9 +1259,9 @@ XMLTag transformBSP(XMLTag t) {
         bspTagStack.push(t);
 
         if (debug & DEBUG_XFORM) {
-            cout << "DEBUG(XFORM): " << currentOsisID << ": xform push (" << bspTagStack.size() << ") " << t << " (tagname=" << tagName << ")" << endl;
+            cout << "DEBUG(XFORM): " << currentOsisID << ": xform push (" << bspTagStack.size() << ") " << t.toString() << " (tagname=" << tagName << ")" << endl;
             XMLTag topToken = bspTagStack.top();
-            cout << "DEBUG(XFORM): " << currentOsisID << ": xform top(" << bspTagStack.size() << ") " << topToken << endl;
+            cout << "DEBUG(XFORM): " << currentOsisID << ": xform top(" << bspTagStack.size() << ") " << topToken.toString() << endl;
         }
     }
     else {
@@ -1269,7 +1269,7 @@ XMLTag transformBSP(XMLTag t) {
             XMLTag topToken = bspTagStack.top();
 
             if (debug & DEBUG_XFORM) {
-                cout << "DEBUG(XFORM): " << currentOsisID << ": xform pop(" << bspTagStack.size() << ") " << topToken << endl;
+                cout << "DEBUG(XFORM): " << currentOsisID << ": xform pop(" << bspTagStack.size() << ") " << topToken.toString() << endl;
             }
 
             bspTagStack.pop();
@@ -1815,7 +1815,7 @@ void processOSIS(istream& infile) {
                 XMLTag t = transformBSP(token.c_str());
 
                 if (!handleToken(text, t)) {
-                    text.append(t);
+                    text.append(t.toString());
                 }
             } else {
                 cout << "WARNING(PARSE): malformed token: " << token << endl;

@@ -101,9 +101,9 @@ bool OSISHeadings::handleToken(std::string &buf, const char *token, BasicFilterU
                             XMLTag wrapper = u->currentHeadingTag;
                             if (std::string("x-preverse") == wrapper.getAttribute("subType")) wrapper.setAttribute("subType", nullptr);
                             else if (std::string("x-preverse") == wrapper.getAttribute("subtype")) wrapper.setAttribute("subtype", nullptr);
-                            heading = wrapper;
+                            heading = wrapper.toString();
                             heading += u->heading;
-                            heading += tag;
+                            heading += tag.toString();
                         }
                         else heading = u->heading;
                         u->module->getEntryAttributes()["Heading"][(preverse)?"Preverse":"Interverse"][buf] = heading;
@@ -116,9 +116,9 @@ bool OSISHeadings::handleToken(std::string &buf, const char *token, BasicFilterU
 
                     // do we want the heading in the body?
                     if (!preverse && (option || u->canonical)) {
-                        buf.append(u->currentHeadingTag);
+                        buf.append(u->currentHeadingTag.toString());
                         buf.append(u->heading);
-                        buf.append(tag);
+                        buf.append(tag.toString());
                     }
                     u->suspendTextPassThru = false;
                     u->clear();
@@ -126,7 +126,7 @@ bool OSISHeadings::handleToken(std::string &buf, const char *token, BasicFilterU
             }
             else u->depth++;
         }
-        u->heading.append(tag);
+        u->heading.append(tag.toString());
         return true;
     }
 

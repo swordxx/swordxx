@@ -547,7 +547,7 @@ int main(int argc, char **argv) {
 
             XMLTag t(token.c_str());
             if (!handleToken(text, t))
-                text.append(t);
+                text.append(t.toString());
             continue;
         }
 
