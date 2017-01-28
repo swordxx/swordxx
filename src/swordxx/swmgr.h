@@ -63,8 +63,6 @@ class SWKey;
 
 typedef std::map < std::string, SWModule *, std::less < std::string > >ModMap;
 typedef std::list < std::string >StringList;
-typedef std::list < SWFilter* >FilterList;
-typedef std::list < SWOptionFilter* >OptionFilterList;
 
 class FileDesc;
 class SWOptionFilter;
