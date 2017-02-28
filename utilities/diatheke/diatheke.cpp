@@ -49,8 +49,8 @@ void printsyntax() {
 	fprintf (stderr, "If <book> is \"system\" you may use these system keys: \"modulelist\",\n");
 	fprintf (stderr, "\"modulelistnames\", \"bibliography\", and \"localelist\".");
 	fprintf (stderr, "\n");
-	fprintf (stderr, "Valid search_type values are: phrase (default), regex, multiword,\n");
-	fprintf (stderr, "  attribute, lucene, multilemma.\n");
+	fprintf (stderr, "Valid search_type values are: phrase , regex, multiword, attribute,\n");
+	fprintf (stderr, "  lucene, multilemma.\n");
 	fprintf (stderr, "Valid (output) option_filters values are: n (Strong's numbers),\n");
 	fprintf (stderr, "  f (Footnotes), m (Morphology), h (Section Headings),\n");
 	fprintf (stderr, "  c (Cantillation), v (Hebrew Vowels), a (Greek Accents), p (Arabic Vowels)\n");
