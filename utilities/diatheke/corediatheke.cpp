@@ -361,7 +361,7 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 			// OUTPUT RENDER ENTRY
 			if (outputformat == FMT_HTML || outputformat == FMT_HTMLHREF || outputformat == FMT_XHTML || outputformat == FMT_THML || outputformat == FMT_CGI) {
 				*output << ": <span ";
-				*output << "style=\"font:\""  << font << ";\" ";
+				*output << "style=\"font:"  << font << ";\" ";
 				if (strcmp(modlocale,locale) !=0 ) { *output << "lang=\"" << modlocale << "\"";}
 				*output << ">";
 			}
