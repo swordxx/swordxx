@@ -259,6 +259,9 @@ bool OSISPlain::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 				userData->supressAdjacentWhitespace = true;
         			buf.append('\n');
 			}
+			if (u->tag.getAttribute("marker")) {
+				buf.append(u->tag.getAttribute("marker"));
+			}
                 }
 
 		else {
