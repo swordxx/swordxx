@@ -406,51 +406,52 @@ void zVerse::doLinkEntry(char testmt, long destidxoff, long srcidxoff) {
 
 char zVerse::createModule(const char *ipath, int blockBound, const char *v11n)
 {
-    char * path = nullptr;
-    char *buf = new char [ strlen (ipath) + 20 ];
+    assert(ipath);
+    std::string path(ipath);
+    removeTrailingDirectorySlashes(path);
+
     char retVal = 0;
     FileDesc *fd, *fd2;
     int32_t offset = 0;
     int16_t size = 0;
     VerseKey vk;
 
-    stdstr(&path, ipath);
-
-    if ((path[strlen(path)-1] == '/') || (path[strlen(path)-1] == '\\'))
-        path[strlen(path)-1] = 0;
-
-    sprintf(buf, "%s/ot.%czs", path, uniqueIndexID[blockBound]);
-    FileMgr::removeFile(buf);
-    fd = FileMgr::getSystemFileMgr()->open(buf, FileMgr::CREAT|FileMgr::WRONLY, FileMgr::IREAD|FileMgr::IWRITE);
+    std::string buf(formatted("%s/ot.%czs", path.c_str(), uniqueIndexID[blockBound]));
+    auto const testamentIt(buf.begin() + path.size() + 1);
+    auto const lastCharIt(buf.rbegin());
+    FileMgr::removeFile(buf.c_str());
+    fd = FileMgr::getSystemFileMgr()->open(buf.c_str(), FileMgr::CREAT|FileMgr::WRONLY, FileMgr::IREAD|FileMgr::IWRITE);
     if (fd->getFd() < 1) goto erroropen1;
     FileMgr::getSystemFileMgr()->close(fd);
 
-    sprintf(buf, "%s/nt.%czs", path, uniqueIndexID[blockBound]);
-    FileMgr::removeFile(buf);
-    fd = FileMgr::getSystemFileMgr()->open(buf, FileMgr::CREAT|FileMgr::WRONLY, FileMgr::IREAD|FileMgr::IWRITE);
+    (*testamentIt) = 'n';
+    FileMgr::removeFile(buf.c_str());
+    fd = FileMgr::getSystemFileMgr()->open(buf.c_str(), FileMgr::CREAT|FileMgr::WRONLY, FileMgr::IREAD|FileMgr::IWRITE);
     if (fd->getFd() < 1) goto erroropen1;
     FileMgr::getSystemFileMgr()->close(fd);
 
-    sprintf(buf, "%s/ot.%czz", path, uniqueIndexID[blockBound]);
-    FileMgr::removeFile(buf);
-    fd = FileMgr::getSystemFileMgr()->open(buf, FileMgr::CREAT|FileMgr::WRONLY, FileMgr::IREAD|FileMgr::IWRITE);
+    (*testamentIt) = 'o';
+    (*lastCharIt) = 'z';
+    FileMgr::removeFile(buf.c_str());
+    fd = FileMgr::getSystemFileMgr()->open(buf.c_str(), FileMgr::CREAT|FileMgr::WRONLY, FileMgr::IREAD|FileMgr::IWRITE);
     if (fd->getFd() < 1) goto erroropen1;
     FileMgr::getSystemFileMgr()->close(fd);
 
-    sprintf(buf, "%s/nt.%czz", path, uniqueIndexID[blockBound]);
-    FileMgr::removeFile(buf);
-    fd = FileMgr::getSystemFileMgr()->open(buf, FileMgr::CREAT|FileMgr::WRONLY, FileMgr::IREAD|FileMgr::IWRITE);
+    (*testamentIt) = 'n';
+    FileMgr::removeFile(buf.c_str());
+    fd = FileMgr::getSystemFileMgr()->open(buf.c_str(), FileMgr::CREAT|FileMgr::WRONLY, FileMgr::IREAD|FileMgr::IWRITE);
     if (fd->getFd() < 1) goto erroropen1;
     FileMgr::getSystemFileMgr()->close(fd);
 
-    sprintf(buf, "%s/ot.%czv", path, uniqueIndexID[blockBound]);
-    FileMgr::removeFile(buf);
-    fd = FileMgr::getSystemFileMgr()->open(buf, FileMgr::CREAT|FileMgr::WRONLY, FileMgr::IREAD|FileMgr::IWRITE);
+    (*testamentIt) = 'o';
+    (*lastCharIt) = 'v';
+    FileMgr::removeFile(buf.c_str());
+    fd = FileMgr::getSystemFileMgr()->open(buf.c_str(), FileMgr::CREAT|FileMgr::WRONLY, FileMgr::IREAD|FileMgr::IWRITE);
     if (fd->getFd() < 1) goto erroropen1;
 
-    sprintf(buf, "%s/nt.%czv", path, uniqueIndexID[blockBound]);
-    FileMgr::removeFile(buf);
-    fd2 = FileMgr::getSystemFileMgr()->open(buf, FileMgr::CREAT|FileMgr::WRONLY, FileMgr::IREAD|FileMgr::IWRITE);
+    (*testamentIt) = 'n';
+    FileMgr::removeFile(buf.c_str());
+    fd2 = FileMgr::getSystemFileMgr()->open(buf.c_str(), FileMgr::CREAT|FileMgr::WRONLY, FileMgr::IREAD|FileMgr::IWRITE);
     if (fd2->getFd() < 1) goto erroropen2;
 
     vk.setVersificationSystem(v11n);
@@ -492,9 +493,6 @@ cleanup:
     FileMgr::getSystemFileMgr()->close(fd2);
 cleanup1:
     FileMgr::getSystemFileMgr()->close(fd);
-
-    delete [] path;
-    delete [] buf;
 
     return retVal;
 }
