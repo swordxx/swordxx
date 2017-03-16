@@ -25,6 +25,7 @@
 
 #include "rawstr4.h"
 
+#include <cassert>
 #include <cerrno>
 #include <cstdio>
 #include <cstdlib>
@@ -60,16 +61,15 @@ const int RawStr4::IDXENTRYSIZE = 8;
 
 RawStr4::RawStr4(const char *ipath, int fileMode, bool caseSensitive) : caseSensitive(caseSensitive)
 {
+    assert(ipath);
     lastoff = -1;
-    path = nullptr;
-    stdstr(&path, ipath);
 
     if (fileMode == -1) { // try read/write if possible
         fileMode = FileMgr::RDWR;
     }
 
-    idxfd = FileMgr::getSystemFileMgr()->open(formatted("%s.idx", path).c_str(), fileMode, true);
-    datfd = FileMgr::getSystemFileMgr()->open(formatted("%s.dat", path).c_str(), fileMode, true);
+    idxfd = FileMgr::getSystemFileMgr()->open(formatted("%s.idx", ipath).c_str(), fileMode, true);
+    datfd = FileMgr::getSystemFileMgr()->open(formatted("%s.dat", ipath).c_str(), fileMode, true);
 
     if (!datfd) {
         SWLog::getSystemLog()->logError("%d", errno);
@@ -85,8 +85,6 @@ RawStr4::RawStr4(const char *ipath, int fileMode, bool caseSensitive) : caseSens
 
 RawStr4::~RawStr4()
 {
-    delete[] path;
-
     --instance;
 
     FileMgr::getSystemFileMgr()->close(idxfd);
