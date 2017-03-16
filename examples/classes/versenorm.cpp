@@ -30,7 +30,7 @@ using namespace swordxx;
 using namespace std;
 
 
-int main(int argc, char **argv) {
+int main() {
 
         const char *modName = "RusCARS";
         const char *keyTextRegular = "1Sam1.20";

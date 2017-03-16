@@ -37,7 +37,7 @@ using namespace swordxx;
 using namespace std;
 
 
-int main(int argc, char **argv) {
+int main() {
 
     SWMgr manager;        // create a default manager that looks in the current directory for mods.conf
 
