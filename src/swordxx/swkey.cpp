@@ -134,7 +134,7 @@ void SWKey::setText(const char * const ikey) {
 
 void SWKey::copyFrom(const SWKey &ikey) {
 // not desirable    Persist(ikey.Persist());
-    setLocale(ikey.getLocale());
+    setLocale(ikey.getLocale().c_str());
     setText(ikey.getText());
 }
 

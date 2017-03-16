@@ -179,7 +179,7 @@ void VerseKey::copyFrom(const VerseKey &ikey) {
     m_chapter = ikey.getChapter();
     m_verse = ikey.getVerse();
     m_suffix = ikey.getSuffix();
-    setLocale(ikey.getLocale());
+    setLocale(ikey.getLocale().c_str());
     setVersificationSystem(ikey.getVersificationSystem().c_str());
     if (ikey.isBoundSet()) {
         setLowerBound(ikey.getLowerBound());
@@ -1175,7 +1175,7 @@ void VerseKey::initBounds() const
         m_lowerBoundComponents.verse  = 0;
         m_lowerBoundComponents.suffix = 0;
     } else {
-        m_tmpClone->setLocale(getLocale());
+        m_tmpClone->setLocale(getLocale().c_str());
     }
 }
 

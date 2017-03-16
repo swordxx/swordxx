@@ -180,8 +180,8 @@ public:
      */
     virtual bool isTraversable() const { return false; }
 
-    char const * getLocale() const noexcept
-    { return m_localeName.empty() ? nullptr : m_localeName.c_str(); }
+    std::string const & getLocale() const noexcept
+    { return m_localeName; }
 
     // this will force an on demand lookup of our locale:
     void setLocale(char const * name) {
