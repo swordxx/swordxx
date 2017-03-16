@@ -121,7 +121,7 @@ int main(int argc, char **argv)
 //    listkey.sort();
     while (!listkey.popError()) {
         std::cout << listkey.getText();
-        if (listkey.getElement()->m_userData) std::cout << " : " << (uint64_t)listkey.getElement()->m_userData << "%";
+        if (listkey.getElement()->m_userData) std::cout << " : " << listkey.getElement()->m_userData << "%";
         std::cout << std::endl;
         ++listkey;
     }
