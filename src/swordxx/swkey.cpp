@@ -30,8 +30,15 @@
 
 
 namespace swordxx {
+namespace {
 
-SWKey::LocaleCache   SWKey::m_localeCache;
+struct LocaleCache {
+    std::string name;
+    std::shared_ptr<SWLocale> locale;
+} g_localeCache;
+
+} // anonymous namespace
+
 
 /******************************************************************************
  * SWKey Constructor - initializes instance of SWKey
@@ -52,7 +59,7 @@ SWKey::SWKey(const char *ikey)
 SWKey::SWKey(SWKey const &k)
 {
     init();
-    stdstr(&m_localeName, k.m_localeName);
+    m_localeName = k.m_localeName;
     m_index     = k.m_index;
     m_persist   = k.m_persist;
     m_userData  = k.m_userData;
@@ -63,7 +70,6 @@ SWKey::SWKey(SWKey const &k)
 void SWKey::init() {
     m_boundSet = false;
     m_locale = nullptr;
-    m_localeName = nullptr;
     setLocale(LocaleMgr::getSystemLocaleMgr()->getDefaultLocaleName().c_str());
 }
 
@@ -76,9 +82,7 @@ SWKey *SWKey::clone() const
  * SWKey Destructor - cleans up instance of SWKey
  */
 
-SWKey::~SWKey() {
-    delete [] m_localeName;
-}
+SWKey::~SWKey() {}
 
 
 /******************************************************************************
@@ -89,15 +93,15 @@ SWKey::~SWKey() {
 
 SWLocale & SWKey::getPrivateLocale() const {
     if (!m_locale) {
-        if ((!m_localeCache.name) || (strcmp(m_localeCache.name, m_localeName))) {
-            stdstr(&(m_localeCache.name), m_localeName);
+        if ((!g_localeCache.name.empty()) || (g_localeCache.name != m_localeName)) {
+            g_localeCache.name = m_localeName;
             // this line is the entire bit of work we're trying to avoid with the cache
             // worth it?  compare time examples/cmdline/search KJV "God love world" to
             // same with this method reduced to:
             // if (!local) local = ... (call below); return locale;
-            m_localeCache.locale = LocaleMgr::getSystemLocaleMgr()->getLocale(m_localeName);
+            g_localeCache.locale = LocaleMgr::getSystemLocaleMgr()->getLocale(m_localeName.c_str());
         }
-        m_locale = m_localeCache.locale;
+        m_locale = g_localeCache.locale;
     }
     return *m_locale;
 }

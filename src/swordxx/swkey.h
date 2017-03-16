@@ -55,16 +55,6 @@ class SWLocale;
  */
 class SWDLLEXPORT SWKey {
 
-    class LocaleCache {
-    public:
-        char * name = nullptr;
-        std::shared_ptr<SWLocale> locale;
-
-         virtual ~LocaleCache() {
-            delete[] name;
-        }
-    };
-    static LocaleCache m_localeCache;
     // for caching; don't use directly, call getPrivateLocale()
     mutable std::shared_ptr<SWLocale> m_locale;
 
@@ -79,7 +69,7 @@ protected:
     bool m_persist;
     char m_error;
 
-    char * m_localeName;
+    std::string m_localeName;
     SWLocale & getPrivateLocale() const;
 
 
@@ -190,11 +180,16 @@ public:
      */
     virtual bool isTraversable() const { return false; }
 
-    char const * getLocale() const noexcept { return m_localeName; }
+    char const * getLocale() const noexcept
+    { return m_localeName.empty() ? nullptr : m_localeName.c_str(); }
 
     // this will force an on demand lookup of our locale:
     void setLocale(char const * name) {
-        stdstr(&m_localeName, name);
+        if (name) {
+            m_localeName = name;
+        } else {
+            m_localeName.clear();
+        }
         m_locale = nullptr;
     }
 
