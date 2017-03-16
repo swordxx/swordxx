@@ -60,20 +60,19 @@ const int RawStr::IDXENTRYSIZE = 6;
 
 RawStr::RawStr(const char *ipath, int fileMode, bool caseSensitive) : caseSensitive(caseSensitive)
 {
+    assert(ipath);
     std::string buf;
 
     lastoff = -1;
-    path = nullptr;
-    stdstr(&path, ipath);
 
     if (fileMode == -1) { // try read/write if possible
         fileMode = FileMgr::RDWR;
     }
 
-    buf = formatted("%s.idx", path);
+    buf = formatted("%s.idx", ipath);
     idxfd = FileMgr::getSystemFileMgr()->open(buf.c_str(), fileMode, true);
 
-    buf = formatted("%s.dat", path);
+    buf = formatted("%s.dat", ipath);
     datfd = FileMgr::getSystemFileMgr()->open(buf.c_str(), fileMode, true);
 
     if (!datfd) {
@@ -90,8 +89,6 @@ RawStr::RawStr(const char *ipath, int fileMode, bool caseSensitive) : caseSensit
 
 RawStr::~RawStr()
 {
-    delete [] path;
-
     --instance;
 
     FileMgr::getSystemFileMgr()->close(idxfd);
