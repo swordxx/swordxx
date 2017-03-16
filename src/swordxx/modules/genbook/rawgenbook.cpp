@@ -23,6 +23,7 @@
 
 #include "rawgenbook.h"
 
+#include <cassert>
 #include <cstdint>
 #include <cstdio>
 #include <fcntl.h>
@@ -40,6 +41,7 @@ namespace swordxx {
 namespace {
 
 SWKey * staticCreateKey(char const * const path, bool const verseKey) {
+    assert(path);
     auto tKey(std::make_unique<TreeKeyIdx>(path));
     if (verseKey) {
         SWKey * const vtKey = new VerseTreeKey(*tKey);
@@ -50,11 +52,10 @@ SWKey * staticCreateKey(char const * const path, bool const verseKey) {
 }
 
 SWKey * constructorCreateKey(char const * const ipath, bool const verseKey) {
-    char * path = nullptr;
-    stdstr(&path, ipath);
-    if ((path[strlen(path) - 1] == '/') || (path[strlen(path) - 1] == '\\'))
-        path[strlen(path) - 1] = 0;
-    return staticCreateKey(path, verseKey);
+    assert(ipath);
+    std::string path(ipath);
+    removeTrailingDirectorySlashes(path);
+    return staticCreateKey(path.c_str(), verseKey);
 }
 
 } // anonymous namespace
