@@ -82,7 +82,7 @@ std::string &RawFiles::getRawEntryBuf() const {
 
     entryBuf = "";
     if (size) {
-        std::string tmpbuf = path;
+        std::string tmpbuf(m_path);
         tmpbuf += '/';
         readText(key->getTestament(), start, size, entryBuf);
         tmpbuf += entryBuf;
@@ -121,13 +121,13 @@ void RawFiles::setEntry(const char *inbuf, long len) {
 
     if (size) {
         std::string tmpbuf;
-        entryBuf = path;
+        entryBuf = m_path;
         entryBuf += '/';
         readText(key->getTestament(), start, size, tmpbuf);
         entryBuf += tmpbuf;
     }
     else {
-        entryBuf = path;
+        entryBuf = m_path;
         entryBuf += '/';
         std::string tmpbuf(getNextFilename());
         doSetText(key->getTestament(), key->getTestamentIndex(), tmpbuf.c_str());
@@ -189,7 +189,7 @@ std::string RawFiles::getNextFilename() {
     uint32_t number = 0;
     FileDesc *datafile;
 
-    std::string r(formatted("%s/incfile", path));
+    std::string r(m_path + "/incfile");
     datafile = FileMgr::getSystemFileMgr()->open(r.c_str(), FileMgr::RDONLY);
     if (datafile->getFd() != -1) {
         if (datafile->read(&number, 4) != 4) number = 0;

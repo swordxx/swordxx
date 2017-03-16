@@ -48,7 +48,7 @@ protected: /* Fields: */
     FileDesc * idxfp[2];
     FileDesc * textfp[2];
 
-    char * path;
+    std::string m_path;
 
 public: /* Methods: */
 

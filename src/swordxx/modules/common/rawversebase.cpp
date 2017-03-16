@@ -41,13 +41,10 @@ namespace swordxx {
  */
 RawVerseBase::RawVerseBase(char const * ipath_, int fileMode) {
     assert(ipath_);
-    std::string ipath(ipath_);
-    removeTrailingDirectorySlashes(ipath);
+    m_path = ipath_;
+    removeTrailingDirectorySlashes(m_path);
 
-    std::string buf(ipath + "/ot.vss");
-
-    path = nullptr;
-    stdstr(&path, ipath.c_str());
+    std::string buf(m_path + "/ot.vss");
 
     if (fileMode == -1) { // try read/write if possible
         fileMode = FileMgr::RDWR;
@@ -67,7 +64,6 @@ RawVerseBase::RawVerseBase(char const * ipath_, int fileMode) {
 }
 
 RawVerseBase::~RawVerseBase() noexcept {
-    delete[] path;
     FileMgr::getSystemFileMgr()->close(idxfp[0u]);
     FileMgr::getSystemFileMgr()->close(idxfp[1u]);
     FileMgr::getSystemFileMgr()->close(textfp[0u]);
