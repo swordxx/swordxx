@@ -24,6 +24,7 @@
 
 #include "zstr.h"
 
+#include <cassert>
 #include <cerrno>
 #include <cstdint>
 #include <cstdio>
@@ -58,11 +59,9 @@ const int zStr::ZDXENTRYSIZE = 8;
 
 zStr::zStr(const char *ipath, int fileMode, long blockCount, SWCompress *icomp, bool caseSensitive) : caseSensitive(caseSensitive)
 {
-    std::string buf;
+    assert(ipath);
 
     lastoff = -1;
-    path = nullptr;
-    stdstr(&path, ipath);
 
     compressor = (icomp) ? icomp : new SWCompress();
     this->blockCount = blockCount;
@@ -71,10 +70,10 @@ zStr::zStr(const char *ipath, int fileMode, long blockCount, SWCompress *icomp, 
         fileMode = FileMgr::RDWR;
     }
 
-    idxfd = FileMgr::getSystemFileMgr()->open(formatted("%s.idx", path).c_str(), fileMode, true);
-    datfd = FileMgr::getSystemFileMgr()->open(formatted("%s.dat", path).c_str(), fileMode, true);
-    zdxfd = FileMgr::getSystemFileMgr()->open(formatted("%s.zdx", path).c_str(), fileMode, true);
-    zdtfd = FileMgr::getSystemFileMgr()->open(formatted("%s.zdt", path).c_str(), fileMode, true);
+    idxfd = FileMgr::getSystemFileMgr()->open(formatted("%s.idx", ipath).c_str(), fileMode, true);
+    datfd = FileMgr::getSystemFileMgr()->open(formatted("%s.dat", ipath).c_str(), fileMode, true);
+    zdxfd = FileMgr::getSystemFileMgr()->open(formatted("%s.zdx", ipath).c_str(), fileMode, true);
+    zdtfd = FileMgr::getSystemFileMgr()->open(formatted("%s.zdt", ipath).c_str(), fileMode, true);
 
     if (!datfd) {
         SWLog::getSystemLog()->logError("%d", errno);
@@ -95,8 +94,6 @@ zStr::zStr(const char *ipath, int fileMode, long blockCount, SWCompress *icomp, 
 zStr::~zStr() {
 
     flushCache();
-
-    delete[] path;
 
     --instance;
 

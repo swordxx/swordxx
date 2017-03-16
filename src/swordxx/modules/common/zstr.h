@@ -43,7 +43,6 @@ private:
     mutable EntriesBlock *cacheBlock;
     mutable long cacheBlockIndex;
     mutable bool cacheDirty;
-    char *path;
     bool caseSensitive;
     mutable long lastoff;        // for caching and optimization
     long blockCount;
