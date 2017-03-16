@@ -25,6 +25,7 @@
 
 #include "zverse4.h"
 
+#include <cassert>
 #include <cctype>
 #include <cerrno>
 #include <cstdint>
@@ -61,18 +62,18 @@ const char zVerse4::uniqueIndexID[] = {'X', 'r', 'v', 'c', 'b'};
 
 zVerse4::zVerse4(const char *ipath, int fileMode, int blockType, SWCompress *icomp)
 {
+    assert(ipath);
     // this line, instead of just defaulting, to keep FileMgr out of header
     if (fileMode == -1) fileMode = FileMgr::RDONLY;
 
-    path = nullptr;
     cacheBufIdx = -1;
     cacheTestament = 0;
     cacheBuf = nullptr;
     dirtyCache = false;
-    stdstr(&path, ipath);
 
-    if ((path[strlen(path)-1] == '/') || (path[strlen(path)-1] == '\\'))
-        path[strlen(path)-1] = 0;
+    std::string buf(ipath);
+    removeTrailingDirectorySlashes(buf);
+    auto const * path = buf.c_str();
 
     compressor = (icomp) ? icomp : new SWCompress();
 
@@ -103,8 +104,6 @@ zVerse4::~zVerse4()
         flushCache();
         free(cacheBuf);
     }
-
-    delete[] path;
 
     delete compressor;
 

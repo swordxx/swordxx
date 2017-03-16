@@ -45,7 +45,6 @@ protected:
     FileDesc *idxfp[2];
     FileDesc *textfp[2];
     FileDesc *compfp[2];
-    char *path;
     void doSetText(char testmt, long idxoff, const char *buf, long len = 0);
     void doLinkEntry(char testmt, long destidxoff, long srcidxoff);
     void flushCache() const;
