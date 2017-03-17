@@ -33,6 +33,7 @@
 #include "../../defs.h"
 #include "../../filemgr.h"
 #include "../../keys/versekey.h"
+#include "../../normalizedpath.h"
 #include "../../sysdata.h"
 #include "../../utilstr.h"
 
@@ -48,11 +49,11 @@ protected: /* Fields: */
     FileDesc * idxfp[2];
     FileDesc * textfp[2];
 
-    std::string m_path;
+    NormalizedPath m_path;
 
 public: /* Methods: */
 
-    RawVerseBase(const char *ipath, int fileMode = -1);
+    RawVerseBase(NormalizedPath path, int fileMode = -1);
     virtual ~RawVerseBase() noexcept;
 
     void readText(char testmt,
@@ -156,15 +157,11 @@ public: /* Methods: */
     }
 
     template <typename OffsetType, typename SizeType>
-    static char createModule(char const * ipath, char const * v11n) {
-        assert(ipath);
-        std::string path(ipath);
-        removeTrailingDirectorySlashes(path);
-
-        std::string const otPath(path + "/ot");
-        std::string const ntPath(path + "/nt");
-        std::string const otVssPath(path + "/ot.vss");
-        std::string const ntVssPath(path + "/nt.vss");
+    static char createModule(NormalizedPath const & path, char const * v11n) {
+        std::string const otPath(path.str() + "/ot");
+        std::string const ntPath(path.str() + "/nt");
+        std::string const otVssPath(path.str() + "/ot.vss");
+        std::string const ntVssPath(path.str() + "/nt.vss");
 
         FileMgr & fileMgr = *FileMgr::getSystemFileMgr();
 

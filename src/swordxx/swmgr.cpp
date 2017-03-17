@@ -591,17 +591,13 @@ void SWMgr::loadConfigDir(const char *ipath)
 }
 
 
-void SWMgr::augmentModules(const char *ipath, bool multiMod) {
-    assert(ipath);
-    std::string path(ipath);
-    addTrailingDirectorySlash(path);
-    if (FileMgr::existsDir(path.c_str(), "mods.d")) {
+void SWMgr::augmentModules(NormalizedPath const & path, bool multiMod) {
+    if (FileMgr::existsDir(path, "mods.d")) {
         SWConfig * saveConfig = nullptr;
         std::string savePrefixPath(m_prefixPath);
         m_prefixPath = path;
-        path += "mods.d";
         std::string saveConfigPath(m_configPath);
-        m_configPath = path;
+        m_configPath = path.str() + "/mods.d";
         saveConfig = config;
         config = myconfig = nullptr;
         loadConfigDir(m_configPath.c_str());
@@ -903,7 +899,7 @@ std::unique_ptr<SWModule> SWMgr::createModule(char const * name,
 
     if (pos == 1) {
         std::string &dp = section["AbsoluteDataPath"];
-        dp = FileMgr::getParentDirectory(dp);
+        dp = NormalizedPath(dp).getParentDirectory();
         section["AbsoluteDataPath"] = dp;
 /*
         std::string &rdp = section["RelativeDataPath"];

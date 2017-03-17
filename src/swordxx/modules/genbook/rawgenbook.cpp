@@ -40,22 +40,14 @@ namespace swordxx {
 
 namespace {
 
-SWKey * staticCreateKey(char const * const path, bool const verseKey) {
-    assert(path);
-    auto tKey(std::make_unique<TreeKeyIdx>(path));
+SWKey * staticCreateKey(NormalizedPath const & path, bool const verseKey) {
+    auto tKey(std::make_unique<TreeKeyIdx>(path.c_str()));
     if (verseKey) {
         SWKey * const vtKey = new VerseTreeKey(*tKey);
         tKey.reset();
         return vtKey;
     }
     return tKey.release();
-}
-
-SWKey * constructorCreateKey(char const * const ipath, bool const verseKey) {
-    assert(ipath);
-    std::string path(ipath);
-    removeTrailingDirectorySlashes(path);
-    return staticCreateKey(path.c_str(), verseKey);
 }
 
 } // anonymous namespace
@@ -68,12 +60,10 @@ SWKey * constructorCreateKey(char const * const ipath, bool const verseKey) {
  *    idesc - Name to display to user for module
  */
 
-RawGenBook::RawGenBook(const char *ipath, const char *iname, const char *idesc, TextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char* ilang, const char *keyType)
-        : SWGenBook(constructorCreateKey(ipath, !strcmp("VerseKey", keyType)), iname, idesc, enc, dir, mark, ilang) {
-    assert(ipath);
-    m_path = ipath;
-    removeTrailingDirectorySlashes(m_path);
-
+RawGenBook::RawGenBook(NormalizedPath const & path, const char *iname, const char *idesc, TextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char* ilang, const char *keyType)
+    : SWGenBook(staticCreateKey(path, !strcmp("VerseKey", keyType)), iname, idesc, enc, dir, mark, ilang)
+    , m_path(std::move(path))
+{
     verseKey = !strcmp("VerseKey", keyType);
 
     if (verseKey) setType("Biblical Texts");
@@ -190,15 +180,11 @@ void RawGenBook::deleteEntry() {
 }
 
 
-char RawGenBook::createModule(const char *ipath) {
-    assert(ipath);
-    std::string path(ipath);
-    removeTrailingDirectorySlashes(path);
+char RawGenBook::createModule(NormalizedPath const & path) {
     FileDesc *fd;
     signed char retval;
 
-
-    auto const buf(path + ".bdt");
+    auto const buf(path.str() + ".bdt");
     FileMgr::removeFile(buf.c_str());
     fd = FileMgr::getSystemFileMgr()->open(buf.c_str(), FileMgr::CREAT|FileMgr::WRONLY, FileMgr::IREAD|FileMgr::IWRITE);
     fd->getFd();

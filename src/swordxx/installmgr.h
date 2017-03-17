@@ -28,6 +28,7 @@
 #include <set>
 #include <string>
 #include "defs.h"
+#include "normalizedpath.h"
 #include "remotetrans.h"
 
 
@@ -105,7 +106,7 @@ public:
      *  This will get overridden if a password is required and provided in an indivual
      *  source configuration.
          */
-    InstallMgr(std::string privatePath = "./",
+    InstallMgr(NormalizedPath const & privatePath = "./",
                StatusReporter * statusReporter = nullptr,
                std::string u = "ftp",
                std::string p = "installmgr@user.com");

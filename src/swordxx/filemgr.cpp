@@ -286,18 +286,16 @@ signed char FileMgr::trunc(FileDesc *file) {
 }
 
 
-bool FileMgr::existsFile(char const * ipath, char const * ifileName) {
-    assert(ipath);
-    std::string fullPath(ipath);
-    removeTrailingDirectorySlashes(fullPath);
+bool FileMgr::existsFile(NormalizedPath const & path, char const * ifileName) {
+    std::string buf(std::move(path));
     if (ifileName)
-        fullPath.append("/").append(ifileName);
+        buf.append("/").append(ifileName);
 
-    return isReadable(fullPath);
+    return isReadable(buf);
 }
 
-bool FileMgr::existsDir(const char *ipath, const char *idirName)
-{ return existsFile((assert(ipath), ipath), idirName); }
+bool FileMgr::existsDir(NormalizedPath const & path, const char *idirName)
+{ return existsFile(path, idirName); }
 
 bool FileMgr::exists(std::string const & fullPath) noexcept
 { return !::access(fullPath.c_str(), F_OK); }
@@ -305,27 +303,8 @@ bool FileMgr::exists(std::string const & fullPath) noexcept
 bool FileMgr::isReadable(std::string const & fullPath) noexcept
 { return !::access(fullPath.c_str(), R_OK); }
 
-std::string FileMgr::getParentDirectory(std::string buf) {
-    removeTrailingDirectorySlashes(buf);
-    if (!buf.empty()) {
-        buf.pop_back();
-        while (!buf.empty()) {
-            switch (*buf.rbegin()) {
-                case '/': case '\\':
-                    removeTrailingDirectorySlashes(buf);
-                    return buf;
-                default:
-                    buf.pop_back();
-                    break;
-            }
-        }
-    }
-    return buf;
-}
-
-int FileMgr::createParent(const char *pName) {
-    assert(pName);
-    auto buf(getParentDirectory(pName));
+int FileMgr::createParent(NormalizedPath const & path) {
+    NormalizedPath const buf(path.getParentDirectory());
 
     int retCode = 0;
     if (!buf.empty()) {

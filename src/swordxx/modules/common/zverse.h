@@ -29,6 +29,7 @@
 
 #include <string>
 #include "../../defs.h"
+#include "../../normalizedpath.h"
 
 
 namespace swordxx {
@@ -63,7 +64,7 @@ public:
     static const char uniqueIndexID[];
 
     // fileMode default = RDONLY
-    zVerse(char const * ipath,
+    zVerse(NormalizedPath const & path,
            int fileMode = -1,
            int blockType = CHAPTERBLOCKS,
            SWCompress * icomp = nullptr);
@@ -72,7 +73,7 @@ public:
     void findOffset(char testmt, long idxoff, long *start, unsigned short *size, unsigned long *buffnum) const;
     void zReadText(char testmt, long start, unsigned short size, unsigned long buffnum, std::string &buf) const;
     virtual void rawZFilter(std::string &buf, char direction = 0) const { (void) buf; (void) direction; }
-    static char createModule(const char *path, int blockBound, const char *v11n = "KJV");
+    static char createModule(NormalizedPath const & path, int blockBound, const char *v11n = "KJV");
 };
 
 } /* namespace swordxx */

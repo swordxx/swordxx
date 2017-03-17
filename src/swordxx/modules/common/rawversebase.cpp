@@ -35,16 +35,14 @@ namespace swordxx {
 /******************************************************************************
  * RawVerse Constructor - Initializes data for instance of RawVerse
  *
- * ENT:    ipath - path of the directory where data and index files are located.
+ * ENT:    path - path of the directory where data and index files are located.
  *        be sure to include the trailing separator (e.g. '/' or '\')
  *        (e.g. 'modules/texts/rawtext/webster/')
  */
-RawVerseBase::RawVerseBase(char const * ipath_, int fileMode) {
-    assert(ipath_);
-    m_path = ipath_;
-    removeTrailingDirectorySlashes(m_path);
-
-    std::string buf(m_path + "/ot.vss");
+RawVerseBase::RawVerseBase(NormalizedPath path, int fileMode)
+    : m_path(std::move(path))
+{
+    std::string buf(m_path.str() + "/ot.vss");
 
     if (fileMode == -1) { // try read/write if possible
         fileMode = FileMgr::RDWR;

@@ -59,17 +59,16 @@ const int RawStr4::IDXENTRYSIZE = 8;
  *        (e.g. 'modules/texts/rawtext/webster/')
  */
 
-RawStr4::RawStr4(const char *ipath, int fileMode, bool caseSensitive) : caseSensitive(caseSensitive)
+RawStr4::RawStr4(NormalizedPath const & path, int fileMode, bool caseSensitive) : caseSensitive(caseSensitive)
 {
-    assert(ipath);
     lastoff = -1;
 
     if (fileMode == -1) { // try read/write if possible
         fileMode = FileMgr::RDWR;
     }
 
-    idxfd = FileMgr::getSystemFileMgr()->open(formatted("%s.idx", ipath).c_str(), fileMode, true);
-    datfd = FileMgr::getSystemFileMgr()->open(formatted("%s.dat", ipath).c_str(), fileMode, true);
+    idxfd = FileMgr::getSystemFileMgr()->open((path.str() + ".idx").c_str(), fileMode, true);
+    datfd = FileMgr::getSystemFileMgr()->open((path.str() + ".dat").c_str(), fileMode, true);
 
     if (!datfd) {
         SWLog::getSystemLog()->logError("%d", errno);
@@ -501,7 +500,7 @@ void RawStr4::doLinkEntry(const char *destkey, const char *srckey) {
  * RET: error status
  */
 
-signed char RawStr4::createModule(const char *ipath)
-{ return RawStr::createModule(ipath); }
+signed char RawStr4::createModule(NormalizedPath const & path)
+{ return RawStr::createModule(path); }
 
 } /* namespace swordxx */

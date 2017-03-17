@@ -49,6 +49,7 @@
 #include <list>
 #include <string>
 #include "defs.h"
+#include "normalizedpath.h"
 #include "swconfig.h"
 
 
@@ -270,7 +271,7 @@ public:
      * @param multiMod whether or not to keep multiple copies of the same book if found in different paths
      *        default - false, uses last found version of the book
      */
-    virtual void augmentModules(const char *path, bool multiMod = false);
+    virtual void augmentModules(NormalizedPath const & path, bool multiMod = false);
 
     void deleteModule(const char *);
 

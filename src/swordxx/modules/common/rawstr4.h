@@ -29,6 +29,7 @@
 #include <cstdint>
 #include <string>
 #include "../../defs.h"
+#include "../../normalizedpath.h"
 
 
 namespace swordxx {
@@ -49,7 +50,7 @@ protected:
     void doLinkEntry(const char *destkey, const char *srckey);
 public:
     static const char nl;
-    RawStr4(const char *ipath, int fileMode = -1, bool caseSensitive = false);
+    RawStr4(NormalizedPath const & path, int fileMode = -1, bool caseSensitive = false);
     virtual ~RawStr4();
     void getIDXBuf(long ioffset, char **buf) const;
     void getIDXBufDat(long ioffset, char **buf) const;
@@ -59,7 +60,7 @@ public:
                            long away = 0,
                            uint32_t * idxoff = nullptr) const;
     void readText(uint32_t start, uint32_t *size, char **idxbuf, std::string &buf) const;
-    static signed char createModule(const char *path);
+    static signed char createModule(NormalizedPath const & path);
 };
 
 } /* namespace swordxx */

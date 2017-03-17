@@ -189,7 +189,7 @@ std::string RawFiles::getNextFilename() {
     uint32_t number = 0;
     FileDesc *datafile;
 
-    std::string r(m_path + "/incfile");
+    std::string r(m_path.str() + "/incfile");
     datafile = FileMgr::getSystemFileMgr()->open(r.c_str(), FileMgr::RDONLY);
     if (datafile->getFd() != -1) {
         if (datafile->read(&number, 4) != 4) number = 0;

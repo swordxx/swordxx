@@ -25,6 +25,7 @@
 #define TREEKEYIDX_H
 
 #include <cstdint>
+#include "../normalizedpath.h"
 #include "treekey.h"
 
 
@@ -118,7 +119,7 @@ public:
     void increment(int steps = 1) override;
     bool isTraversable() const override { return true; }
 
-    static signed char create(const char *path);
+    static signed char create(NormalizedPath const & path);
 };
 
 } /* namespace swordxx */

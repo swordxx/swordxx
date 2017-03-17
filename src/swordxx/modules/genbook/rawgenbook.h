@@ -28,6 +28,7 @@
 #include "../../swgenbook.h"
 
 #include "../../defs.h"
+#include "../../normalizedpath.h"
 
 
 namespace swordxx {
@@ -42,7 +43,7 @@ class SWDLLEXPORT RawGenBook : public SWGenBook {
 public:
 
 
-    RawGenBook(char const * ipath,
+    RawGenBook(NormalizedPath const & path,
                char const * iname = nullptr,
                char const * idesc = nullptr,
                TextEncoding encoding = ENC_UNKNOWN,
@@ -54,7 +55,7 @@ public:
 
     std::string & getRawEntryBuf() const override;
     bool isWritable() const override;
-    static char createModule(const char *ipath);
+    static char createModule(NormalizedPath const & path);
     void setEntry(char const * inbuf, long len = -1) override;
     void linkEntry(SWKey const * linkKey) override;
     void deleteEntry() override;

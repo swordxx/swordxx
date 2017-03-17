@@ -58,22 +58,16 @@ const int RawStr::IDXENTRYSIZE = 6;
  *        (e.g. 'modules/texts/rawtext/webster/')
  */
 
-RawStr::RawStr(const char *ipath, int fileMode, bool caseSensitive) : caseSensitive(caseSensitive)
+RawStr::RawStr(NormalizedPath const & path, int fileMode, bool caseSensitive) : caseSensitive(caseSensitive)
 {
-    assert(ipath);
-    std::string buf;
-
     lastoff = -1;
 
     if (fileMode == -1) { // try read/write if possible
         fileMode = FileMgr::RDWR;
     }
 
-    buf = formatted("%s.idx", ipath);
-    idxfd = FileMgr::getSystemFileMgr()->open(buf.c_str(), fileMode, true);
-
-    buf = formatted("%s.dat", ipath);
-    datfd = FileMgr::getSystemFileMgr()->open(buf.c_str(), fileMode, true);
+    idxfd = FileMgr::getSystemFileMgr()->open((path.str() + ".idx").c_str(), fileMode, true);
+    datfd = FileMgr::getSystemFileMgr()->open((path.str() + ".dat").c_str(), fileMode, true);
 
     if (!datfd) {
         SWLog::getSystemLog()->logError("%d", errno);
@@ -496,12 +490,9 @@ void RawStr::doLinkEntry(const char *destkey, const char *srckey) {
  * RET: error status
  */
 
-signed char RawStr::createModule(const char *ipath) {
-    assert(ipath);
-    std::string path(ipath);
-    removeTrailingDirectorySlashes(path); /// \todo is this line needed at all?
-    std::string const datFilename(path + ".dat");
-    std::string const idxFilename(path + ".idx");
+signed char RawStr::createModule(NormalizedPath const & path) {
+    std::string const datFilename(path.str() + ".dat");
+    std::string const idxFilename(path.str() + ".idx");
 
     FileMgr::removeFile(datFilename.c_str());
     FileDesc * const fd =

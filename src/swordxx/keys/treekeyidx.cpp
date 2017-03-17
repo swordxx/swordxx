@@ -283,12 +283,9 @@ void TreeKeyIdx::remove() {
  * RET: error status
  */
 
-signed char TreeKeyIdx::create(const char *ipath) {
-    assert(ipath);
-    std::string path(ipath);
-    removeTrailingDirectorySlashes(path); /// \todo is this line needed at all?
-    std::string const datFilename(path + ".dat");
-    std::string const idxFilename(path + ".idx");
+signed char TreeKeyIdx::create(NormalizedPath const & path) {
+    std::string const datFilename(path.str() + ".dat");
+    std::string const idxFilename(path.str() + ".idx");
 
     FileMgr::removeFile(datFilename.c_str());
     FileDesc * const fd =

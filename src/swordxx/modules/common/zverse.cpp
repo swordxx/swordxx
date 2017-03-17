@@ -60,15 +60,10 @@ const char zVerse::uniqueIndexID[] = {'X', 'r', 'v', 'c', 'b'};
  *        blockType - verse, chapter, book, etc.
  */
 
-zVerse::zVerse(const char *ipath, int fileMode, int blockType, SWCompress *icomp)
+zVerse::zVerse(NormalizedPath const & path, int fileMode, int blockType, SWCompress *icomp)
 {
-    assert(ipath);
     // this line, instead of just defaulting, to keep FileMgr out of header
     if (fileMode == -1) fileMode = FileMgr::RDONLY;
-
-    std::string buf(ipath);
-    removeTrailingDirectorySlashes(buf);
-    auto const * path = buf.c_str();
 
     cacheBufIdx = -1;
     cacheTestament = 0;
@@ -81,12 +76,12 @@ zVerse::zVerse(const char *ipath, int fileMode, int blockType, SWCompress *icomp
         fileMode = FileMgr::RDWR;
     }
 
-    idxfp[0] = FileMgr::getSystemFileMgr()->open(formatted("%s/ot.%czs", path, uniqueIndexID[blockType]).c_str(), fileMode, true);
-    idxfp[1] = FileMgr::getSystemFileMgr()->open(formatted("%s/nt.%czs", path, uniqueIndexID[blockType]).c_str(), fileMode, true);
-    textfp[0] = FileMgr::getSystemFileMgr()->open(formatted("%s/ot.%czz", path, uniqueIndexID[blockType]).c_str(), fileMode, true);
-    textfp[1] = FileMgr::getSystemFileMgr()->open(formatted("%s/nt.%czz", path, uniqueIndexID[blockType]).c_str(), fileMode, true);
-    compfp[0] = FileMgr::getSystemFileMgr()->open(formatted("%s/ot.%czv", path, uniqueIndexID[blockType]).c_str(), fileMode, true);
-    compfp[1] = FileMgr::getSystemFileMgr()->open(formatted("%s/nt.%czv", path, uniqueIndexID[blockType]).c_str(), fileMode, true);
+    idxfp[0] = FileMgr::getSystemFileMgr()->open(formatted("%s/ot.%czs", path.c_str(), uniqueIndexID[blockType]).c_str(), fileMode, true);
+    idxfp[1] = FileMgr::getSystemFileMgr()->open(formatted("%s/nt.%czs", path.c_str(), uniqueIndexID[blockType]).c_str(), fileMode, true);
+    textfp[0] = FileMgr::getSystemFileMgr()->open(formatted("%s/ot.%czz", path.c_str(), uniqueIndexID[blockType]).c_str(), fileMode, true);
+    textfp[1] = FileMgr::getSystemFileMgr()->open(formatted("%s/nt.%czz", path.c_str(), uniqueIndexID[blockType]).c_str(), fileMode, true);
+    compfp[0] = FileMgr::getSystemFileMgr()->open(formatted("%s/ot.%czv", path.c_str(), uniqueIndexID[blockType]).c_str(), fileMode, true);
+    compfp[1] = FileMgr::getSystemFileMgr()->open(formatted("%s/nt.%czv", path.c_str(), uniqueIndexID[blockType]).c_str(), fileMode, true);
 
     instance++;
 }
@@ -404,12 +399,8 @@ void zVerse::doLinkEntry(char testmt, long destidxoff, long srcidxoff) {
  * RET: error status
  */
 
-char zVerse::createModule(const char *ipath, int blockBound, const char *v11n)
+char zVerse::createModule(NormalizedPath const & path, int blockBound, const char *v11n)
 {
-    assert(ipath);
-    std::string path(ipath);
-    removeTrailingDirectorySlashes(path);
-
     char retVal = 0;
     FileDesc *fd, *fd2;
     int32_t offset = 0;

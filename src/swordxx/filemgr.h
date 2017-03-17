@@ -33,6 +33,7 @@
 #endif
 #include <utility>
 #include "defs.h"
+#include "normalizedpath.h"
 
 
 namespace swordxx {
@@ -165,7 +166,7 @@ public:
     * @param ifileName Name of file to check for.
     */
     [[deprecated("Use exists() or isReadable() instead.")]]
-    static bool existsFile(char const * ipath,
+    static bool existsFile(NormalizedPath const & path,
                            char const * ifileName = nullptr);
 
     /** Checks for the existence and readability of a directory.
@@ -173,7 +174,7 @@ public:
     * @param idirName Name of directory to check for.
     */
     [[deprecated("Use exists() or isReadable() instead.")]]
-    static bool existsDir(char const * ipath,
+    static bool existsDir(NormalizedPath const & path,
                           char const * idirName = nullptr);
 
     /** \returns whether the given path exists and is visible to the process. */
@@ -189,9 +190,8 @@ public:
     signed char trunc(FileDesc *file);
 
     static bool isDirectory(char const * path);
-    static int createParent(const char *pName);
+    static int createParent(NormalizedPath const & path);
     static int createPathAndFile(const char *fName);
-    static std::string getParentDirectory(std::string buf);
 
     /** attempts to open a file readonly
      * @param fName filename to open

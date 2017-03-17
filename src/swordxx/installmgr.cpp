@@ -59,15 +59,13 @@ const int InstallMgr::MODSTAT_CIPHERED         = 0x010;
 const int InstallMgr::MODSTAT_CIPHERKEYPRESENT = 0x020;
 
 
-InstallMgr::InstallMgr(std::string privatePath, StatusReporter *sr, std::string u, std::string p) {
+InstallMgr::InstallMgr(NormalizedPath const & privatePath, StatusReporter *sr, std::string u, std::string p) {
     m_userDisclaimerConfirmed = false;
     m_statusReporter = sr;
     this->m_u = u;
     this->m_p = p;
-    removeTrailingDirectorySlashes(privatePath);
-    privatePath.push_back('/');
-    m_confPath = privatePath + "InstallMgr.conf";
-    this->m_privatePath = std::move(privatePath);
+    m_privatePath = privatePath.str() + '/';
+    m_confPath = m_privatePath + "InstallMgr.conf";
     FileMgr::createParent(m_confPath.c_str());
 
     readInstallConf();
@@ -208,18 +206,13 @@ int InstallMgr::removeModule(SWMgr *manager, const char *moduleName) {
         fileBegin = module->second.lower_bound("File");
         fileEnd = module->second.upper_bound("File");
 
-        std::string modFile;
-        std::string modDir;
         entry = module->second.find("AbsoluteDataPath");
-        modDir = entry->second.c_str();
-        removeTrailingDirectorySlashes(modDir);
+        NormalizedPath const modDir(entry->second);
         if (fileBegin != fileEnd) {    // remove each file
             while (fileBegin != fileEnd) {
-                modFile = modDir;
-                modFile += "/";
-                modFile += fileBegin->second.c_str();
                 //remove file
-                FileMgr::removeFile(modFile.c_str());
+                FileMgr::removeFile(
+                            (modDir.str() + '/' + fileBegin->second).c_str());
                 fileBegin++;
             }
         }
@@ -235,7 +228,7 @@ int InstallMgr::removeModule(SWMgr *manager, const char *moduleName) {
                 rewinddir(dir);
                 while ((ent = readdir(dir))) {
                     if ((strcmp(ent->d_name, ".")) && (strcmp(ent->d_name, ".."))) {
-                        modFile = manager->m_configPath;
+                        std::string modFile(manager->m_configPath);
                         removeTrailingDirectorySlashes(modFile);
                         modFile += "/";
                         modFile += ent->d_name;
@@ -511,9 +504,8 @@ int InstallMgr::refreshRemoteSource(InstallSource *is) {
     // assert user disclaimer has been confirmed
     if (!isUserDisclaimerConfirmed()) return -1;
 
-    std::string root(m_privatePath + is->m_uid);
-    removeTrailingDirectorySlashes(root);
-    std::string target = root + "/mods.d";
+    NormalizedPath const root(m_privatePath + is->m_uid);
+    std::string const target(root.str() + "/mods.d");
     int errorCode = -1; //0 means successful
 
     FileMgr::removeDir(target.c_str());
@@ -521,7 +513,7 @@ int InstallMgr::refreshRemoteSource(InstallSource *is) {
     if (!FileMgr::existsDir(target.c_str()))
         FileMgr::createPathAndFile((target+"/globals.conf").c_str());
 
-    std::string archive = root + "/mods.d.tar.gz";
+    std::string archive = target + ".tar.gz";
 
     errorCode = remoteCopy(is, "mods.d.tar.gz", archive.c_str(), false);
     if (!errorCode) { //sucessfully downloaded the tar,gz of module configs
@@ -613,9 +605,8 @@ int InstallMgr::refreshRemoteSourceConfiguration() {
     // assert user disclaimer has been confirmed
     if (!isUserDisclaimerConfirmed()) return -1;
 
-    std::string root(m_privatePath);
-    removeTrailingDirectorySlashes(root);
-    std::string masterRepoListPath = root + "/" + masterRepoList;
+    std::string const masterRepoListPath(
+                NormalizedPath(m_privatePath).str() + "/" + masterRepoList);
     InstallSource is("FTP");
     is.m_source = "ftp.crosswire.org";
     is.m_directory = "/pub/sword";
