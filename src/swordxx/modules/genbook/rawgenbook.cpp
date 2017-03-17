@@ -70,23 +70,15 @@ SWKey * constructorCreateKey(char const * const ipath, bool const verseKey) {
 
 RawGenBook::RawGenBook(const char *ipath, const char *iname, const char *idesc, TextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char* ilang, const char *keyType)
         : SWGenBook(constructorCreateKey(ipath, !strcmp("VerseKey", keyType)), iname, idesc, enc, dir, mark, ilang) {
+    assert(ipath);
+    m_path = ipath;
+    removeTrailingDirectorySlashes(m_path);
 
-    char *buf = new char [ strlen (ipath) + 20 ];
-
-    path = nullptr;
-    stdstr(&path, ipath);
     verseKey = !strcmp("VerseKey", keyType);
 
     if (verseKey) setType("Biblical Texts");
 
-    if ((path[strlen(path)-1] == '/') || (path[strlen(path)-1] == '\\'))
-        path[strlen(path)-1] = 0;
-
-    sprintf(buf, "%s.bdt", path);
-    bdtfd = FileMgr::getSystemFileMgr()->open(buf, FileMgr::RDWR, true);
-
-    delete [] buf;
-
+    bdtfd = FileMgr::getSystemFileMgr()->open((m_path + ".bdt").c_str(), FileMgr::RDWR, true);
 }
 
 
@@ -96,7 +88,6 @@ RawGenBook::RawGenBook(const char *ipath, const char *iname, const char *idesc, 
 
 RawGenBook::~RawGenBook() {
     FileMgr::getSystemFileMgr()->close(bdtfd);
-    delete[] path;
 }
 
 
@@ -200,30 +191,26 @@ void RawGenBook::deleteEntry() {
 
 
 char RawGenBook::createModule(const char *ipath) {
-    char * path = nullptr;
-    char *buf = new char [ strlen (ipath) + 20 ];
+    assert(ipath);
+    std::string path(ipath);
+    removeTrailingDirectorySlashes(path);
     FileDesc *fd;
     signed char retval;
 
-    stdstr(&path, ipath);
 
-    if ((path[strlen(path)-1] == '/') || (path[strlen(path)-1] == '\\'))
-        path[strlen(path)-1] = 0;
-
-    sprintf(buf, "%s.bdt", path);
-    FileMgr::removeFile(buf);
-    fd = FileMgr::getSystemFileMgr()->open(buf, FileMgr::CREAT|FileMgr::WRONLY, FileMgr::IREAD|FileMgr::IWRITE);
+    auto const buf(path + ".bdt");
+    FileMgr::removeFile(buf.c_str());
+    fd = FileMgr::getSystemFileMgr()->open(buf.c_str(), FileMgr::CREAT|FileMgr::WRONLY, FileMgr::IREAD|FileMgr::IWRITE);
     fd->getFd();
     FileMgr::getSystemFileMgr()->close(fd);
 
-    retval = TreeKeyIdx::create(path);
-    delete [] path;
+    retval = TreeKeyIdx::create(path.c_str());
     return retval;
 }
 
 
 SWKey * RawGenBook::createKey() const
-{ return staticCreateKey(path, verseKey); }
+{ return staticCreateKey(m_path.c_str(), verseKey); }
 
 bool RawGenBook::hasEntry(const SWKey *k) const {
     /// \bug remove const_cast:

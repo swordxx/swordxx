@@ -35,7 +35,7 @@ namespace swordxx {
 class FileDesc;
 
 class SWDLLEXPORT RawGenBook : public SWGenBook {
-    char *path;
+    std::string m_path;
     FileDesc *bdtfd;
     bool verseKey;
 
