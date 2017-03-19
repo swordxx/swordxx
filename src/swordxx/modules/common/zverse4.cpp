@@ -48,7 +48,6 @@ namespace swordxx {
 
 int zVerse4::instance = 0;
 
-const char zVerse4::uniqueIndexID[] = {'X', 'r', 'v', 'c', 'b'};
 
 /******************************************************************************
  * zVerse4 Constructor - Initializes data for instance of zVerse4
@@ -60,7 +59,7 @@ const char zVerse4::uniqueIndexID[] = {'X', 'r', 'v', 'c', 'b'};
  *        blockType - verse, chapter, book, etc.
  */
 
-zVerse4::zVerse4(NormalizedPath const & path, int fileMode, int blockType, SWCompress *icomp)
+zVerse4::zVerse4(NormalizedPath const & path, int fileMode, BlockType blockType, SWCompress *icomp)
 {
     // this line, instead of just defaulting, to keep FileMgr out of header
     if (fileMode == -1) fileMode = FileMgr::RDONLY;
@@ -76,12 +75,13 @@ zVerse4::zVerse4(NormalizedPath const & path, int fileMode, int blockType, SWCom
         fileMode = FileMgr::RDWR;
     }
 
-    idxfp[0] = FileMgr::getSystemFileMgr()->open(formatted("%s/ot.%czs", path.c_str(), uniqueIndexID[blockType]).c_str(), fileMode, true);
-    idxfp[1] = FileMgr::getSystemFileMgr()->open(formatted("%s/nt.%czs", path.c_str(), uniqueIndexID[blockType]).c_str(), fileMode, true);
-    textfp[0] = FileMgr::getSystemFileMgr()->open(formatted("%s/ot.%czz", path.c_str(), uniqueIndexID[blockType]).c_str(), fileMode, true);
-    textfp[1] = FileMgr::getSystemFileMgr()->open(formatted("%s/nt.%czz", path.c_str(), uniqueIndexID[blockType]).c_str(), fileMode, true);
-    compfp[0] = FileMgr::getSystemFileMgr()->open(formatted("%s/ot.%czv", path.c_str(), uniqueIndexID[blockType]).c_str(), fileMode, true);
-    compfp[1] = FileMgr::getSystemFileMgr()->open(formatted("%s/nt.%czv", path.c_str(), uniqueIndexID[blockType]).c_str(), fileMode, true);
+    char const blockChar(static_cast<char>(blockType));
+    idxfp[0] = FileMgr::getSystemFileMgr()->open(formatted("%s/ot.%czs", path.c_str(), blockChar).c_str(), fileMode, true);
+    idxfp[1] = FileMgr::getSystemFileMgr()->open(formatted("%s/nt.%czs", path.c_str(), blockChar).c_str(), fileMode, true);
+    textfp[0] = FileMgr::getSystemFileMgr()->open(formatted("%s/ot.%czz", path.c_str(), blockChar).c_str(), fileMode, true);
+    textfp[1] = FileMgr::getSystemFileMgr()->open(formatted("%s/nt.%czz", path.c_str(), blockChar).c_str(), fileMode, true);
+    compfp[0] = FileMgr::getSystemFileMgr()->open(formatted("%s/ot.%czv", path.c_str(), blockChar).c_str(), fileMode, true);
+    compfp[1] = FileMgr::getSystemFileMgr()->open(formatted("%s/nt.%czv", path.c_str(), blockChar).c_str(), fileMode, true);
 
     instance++;
 }
@@ -395,7 +395,7 @@ void zVerse4::doLinkEntry(char testmt, long destidxoff, long srcidxoff) {
  * RET: error status
  */
 
-char zVerse4::createModule(NormalizedPath const & path, int blockBound, const char *v11n)
+char zVerse4::createModule(NormalizedPath const & path, BlockType blockBound, const char *v11n)
 {
     char retVal = 0;
     FileDesc *fd, *fd2;
@@ -403,7 +403,7 @@ char zVerse4::createModule(NormalizedPath const & path, int blockBound, const ch
     int32_t size = 0;
     VerseKey vk;
 
-    std::string buf(formatted("%s/ot.%czs", path.c_str(), uniqueIndexID[blockBound]));
+    std::string buf(formatted("%s/ot.%czs", path.c_str(), static_cast<char>(blockBound)));
     auto const testamentIt(buf.begin() + path.size() + 1);
     assert(*testamentIt == 'o');
     auto const lastCharIt(buf.rbegin());

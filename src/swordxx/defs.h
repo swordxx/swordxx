@@ -100,5 +100,11 @@ enum BibliographyFormat: char {
        BIB_CHICAGO_XHTML */
 };
 
+enum BlockType: char {
+    VERSEBLOCKS = 'v',
+    CHAPTERBLOCKS = 'c',
+    BOOKBLOCKS = 'b'
+};
+
 } /* namespace swordxx */
 #endif //SWORDDEFS_H

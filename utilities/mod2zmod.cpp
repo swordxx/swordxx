@@ -69,7 +69,7 @@ void errorOutHelp(char *appName) {
 
 int main(int argc, char **argv)
 {
-    int iType = 4;
+    BlockType iType = BOOKBLOCKS;
     int compType = 1;
     string cipherKey = "";
     SWCompress * compressor = nullptr;
@@ -81,7 +81,14 @@ int main(int argc, char **argv)
     }
 
     if (argc > 3) {
-        iType = atoi(argv[3]);
+        switch (atoi(argv[3])) {
+        case 2: iType = VERSEBLOCKS; break;
+        case 3: iType = CHAPTERBLOCKS; break;
+        case 4: iType = BOOKBLOCKS; break;
+        default:
+            std::cerr << "Argument 3 must be one of <2|3|4>\n";
+            errorOutHelp(*argv);
+        }
         if (argc > 4) {
             compType = atoi(argv[4]);
             if (argc > 5) {

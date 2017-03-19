@@ -54,7 +54,7 @@ public:
     zText4(char const * ipath,
            char const * iname = nullptr,
            char const * idesc = nullptr,
-           int blockType = CHAPTERBLOCKS,
+           BlockType blockType = CHAPTERBLOCKS,
            SWCompress * icomp = nullptr,
            TextEncoding encoding = ENC_UNKNOWN,
            SWTextDirection dir = DIRECTION_LTR,
@@ -70,7 +70,7 @@ public:
 
     // write interface ----------------------------
     bool isWritable() const override;
-    static char createModule(const char *path, int blockBound, const char *v11n = "KJV") {
+    static char createModule(const char *path, BlockType blockBound, const char *v11n = "KJV") {
         return zVerse4::createModule(path, blockBound, v11n);
     }
 

@@ -57,23 +57,17 @@ protected:
 
 public:
 
-#define    VERSEBLOCKS 2
-#define    CHAPTERBLOCKS 3
-#define    BOOKBLOCKS 4
-
-    static const char uniqueIndexID[];
-
     // fileMode default = RDONLY
     zVerse(NormalizedPath const & path,
            int fileMode = -1,
-           int blockType = CHAPTERBLOCKS,
+           BlockType blockType = CHAPTERBLOCKS,
            SWCompress * icomp = nullptr);
     virtual ~zVerse();
 
     void findOffset(char testmt, long idxoff, long *start, unsigned short *size, unsigned long *buffnum) const;
     void zReadText(char testmt, long start, unsigned short size, unsigned long buffnum, std::string &buf) const;
     virtual void rawZFilter(std::string &buf, char direction = 0) const { (void) buf; (void) direction; }
-    static char createModule(NormalizedPath const & path, int blockBound, const char *v11n = "KJV");
+    static char createModule(NormalizedPath const & path, BlockType blockBound, const char *v11n = "KJV");
 };
 
 } /* namespace swordxx */

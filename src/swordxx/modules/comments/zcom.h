@@ -36,7 +36,7 @@ class SWDLLEXPORT zCom : public zVerse, public SWCom {
 
     VerseKey *lastWriteKey;
     bool sameBlock(VerseKey const & lastWriteKey, VerseKey const & key);
-    int blockType;
+    BlockType blockType;
 
 
 public:
@@ -44,7 +44,7 @@ public:
     zCom(char const * ipath,
          char const * iname = nullptr,
          char const * idesc = nullptr,
-         int blockType = CHAPTERBLOCKS,
+         BlockType blockType = CHAPTERBLOCKS,
          SWCompress * icomp = nullptr,
          TextEncoding encoding = ENC_UNKNOWN,
          SWTextDirection dir = DIRECTION_LTR,
@@ -57,7 +57,7 @@ public:
     void decrement(int steps = 1) override { increment(-steps); }
 
     bool isWritable() const override;
-    static char createModule(const char *path, int blockBound, const char *v11n = "KJV") {
+    static char createModule(const char *path, BlockType blockBound, const char *v11n = "KJV") {
         return zVerse::createModule(path, blockBound, v11n);
     }
     void setEntry(char const * inbuf, long len = -1) override;

@@ -93,7 +93,7 @@ int main(int argc, char **argv) {
 
     bool fourByteSize      = false;
     bool append        = false;
-    int iType          = 4;
+    BlockType iType = BOOKBLOCKS;
     SWCompress * compressor = nullptr;
     std::string compType     = "";
 
@@ -123,8 +123,12 @@ int main(int argc, char **argv) {
         }
         else if (!strcmp(argv[i], "-b")) {
             if (i+1 < argc) {
-                iType = atoi(argv[++i]);
-                if ((iType >= 2) && (iType <= 4)) continue;
+                switch (atoi(argv[++i])) {
+                case 2: iType = VERSEBLOCKS; continue;
+                case 3: iType = CHAPTERBLOCKS; continue;
+                case 4: iType = BOOKBLOCKS; continue;
+                default: break;
+                }
             }
             usage(*argv, "-b requires one of <2|3|4>");
         }

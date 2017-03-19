@@ -43,7 +43,7 @@ namespace swordxx {
  *        icomp - Compressor object
  */
 
-zCom4::zCom4(const char *ipath, const char *iname, const char *idesc, int iblockType, SWCompress *icomp, TextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char *ilang, const char *versification) : zVerse4(ipath, -1, iblockType, icomp), SWCom(iname, idesc, enc, dir, mark, ilang, versification)/*, SWCompress()*/
+zCom4::zCom4(const char *ipath, const char *iname, const char *idesc, BlockType iblockType, SWCompress *icomp, TextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char *ilang, const char *versification) : zVerse4(ipath, -1, iblockType, icomp), SWCom(iname, idesc, enc, dir, mark, ilang, versification)/*, SWCompress()*/
 {
     blockType = iblockType;
     lastWriteKey = nullptr;

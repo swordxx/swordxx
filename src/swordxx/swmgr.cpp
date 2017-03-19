@@ -786,7 +786,7 @@ std::unique_ptr<SWModule> SWMgr::createModule(char const * name,
     std::unique_ptr<SWModule> newmod;
     if ((!stricmp(driver, "zText")) || (!stricmp(driver, "zCom")) || (!stricmp(driver, "zText4")) || (!stricmp(driver, "zCom4"))) {
         SWCompress * compress = nullptr;
-        int blockType = CHAPTERBLOCKS;
+        BlockType blockType = CHAPTERBLOCKS;
         misc1 = ((entry = section.find("BlockType")) != section.end()) ? (*entry).second : std::string("CHAPTER");
         if (!stricmp(misc1.c_str(), "VERSE"))
             blockType = VERSEBLOCKS;
