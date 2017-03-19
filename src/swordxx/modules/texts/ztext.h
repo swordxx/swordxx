@@ -47,7 +47,7 @@ namespace swordxx {
 class SWDLLEXPORT zText:public zVerse, public SWText {
 
     VerseKey *lastWriteKey;
-    bool sameBlock(VerseKey * lastWriteKey, VerseKey * key);
+    bool sameBlock(VerseKey const & lastWriteKey, VerseKey const & key);
     int blockType;
 
 public:

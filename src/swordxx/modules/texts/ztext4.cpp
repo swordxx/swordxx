@@ -76,7 +76,7 @@ std::string &zText4::getRawEntryBuf() const {
     long  start = 0;
     unsigned long size = 0;
     unsigned long buffnum = 0;
-    VerseKey &key = getVerseKey();
+    VerseKey const & key = getVerseKey();
 
     findOffset(key.getTestament(), key.getTestamentIndex(), &start, &size, &buffnum);
     entrySize = size;        // support getEntrySize call
@@ -93,19 +93,19 @@ std::string &zText4::getRawEntryBuf() const {
 }
 
 
-bool zText4::sameBlock(VerseKey *k1, VerseKey *k2) {
-    if (k1->getTestament() != k2->getTestament())
+bool zText4::sameBlock(VerseKey const & k1, VerseKey const & k2) {
+    if (k1.getTestament() != k2.getTestament())
         return false;
 
     switch (blockType) {
     case VERSEBLOCKS:
-        if (k1->getVerse() != k2->getVerse())
+        if (k1.getVerse() != k2.getVerse())
             return false;
     case CHAPTERBLOCKS:
-        if (k1->getChapter() != k2->getChapter())
+        if (k1.getChapter() != k2.getChapter())
             return false;
     case BOOKBLOCKS:
-        if (k1->getBook() != k2->getBook())
+        if (k1.getBook() != k2.getBook())
             return false;
     }
     return true;
@@ -113,11 +113,11 @@ bool zText4::sameBlock(VerseKey *k1, VerseKey *k2) {
 
 
 void zText4::setEntry(const char *inbuf, long len) {
-    VerseKey &key = getVerseKey();
+    VerseKey const & key = getVerseKey();
 
     // see if we've jumped across blocks since last write
     if (lastWriteKey) {
-        if (!sameBlock(lastWriteKey, &key)) {
+        if (!sameBlock(*lastWriteKey, key)) {
             flushCache();
         }
         delete lastWriteKey;
@@ -130,9 +130,9 @@ void zText4::setEntry(const char *inbuf, long len) {
 
 
 void zText4::linkEntry(const SWKey *inkey) {
-    VerseKey &destkey = getVerseKey();
-    const VerseKey *srckey = &getVerseKey(inkey);
-    doLinkEntry(destkey.getTestament(), destkey.getTestamentIndex(), srckey->getTestamentIndex());
+    VerseKey const & destkey = getVerseKey();
+    VerseKey const & srckey = getVerseKey(inkey);
+    doLinkEntry(destkey.getTestament(), destkey.getTestamentIndex(), srckey.getTestamentIndex());
 }
 
 
@@ -142,9 +142,7 @@ void zText4::linkEntry(const SWKey *inkey) {
  */
 
 void zText4::deleteEntry() {
-
-    VerseKey &key = getVerseKey();
-
+    VerseKey const & key = getVerseKey();
     doSetText(key.getTestament(), key.getTestamentIndex(), "");
 }
 
@@ -160,7 +158,7 @@ void zText4::increment(int steps) {
     long start;
     unsigned long size;
     unsigned long buffnum;
-    VerseKey *tmpkey = &getVerseKey();
+    VerseKey const * tmpkey = &getVerseKey();
 
     findOffset(tmpkey->getTestament(), tmpkey->getTestamentIndex(), &start, &size, &buffnum);
 
@@ -199,12 +197,12 @@ bool zText4::isLinked(const SWKey *k1, const SWKey *k2) const {
     long start1, start2;
     unsigned long size1, size2;
     unsigned long buffnum1, buffnum2;
-    VerseKey *vk1 = &getVerseKey(k1);
-    VerseKey *vk2 = &getVerseKey(k2);
-    if (vk1->getTestament() != vk2->getTestament()) return false;
+    VerseKey const & vk1 = getVerseKey(k1);
+    VerseKey const & vk2 = getVerseKey(k2);
+    if (vk1.getTestament() != vk2.getTestament()) return false;
 
-    findOffset(vk1->getTestament(), vk1->getTestamentIndex(), &start1, &size1, &buffnum1);
-    findOffset(vk2->getTestament(), vk2->getTestamentIndex(), &start2, &size2, &buffnum2);
+    findOffset(vk1.getTestament(), vk1.getTestamentIndex(), &start1, &size1, &buffnum1);
+    findOffset(vk2.getTestament(), vk2.getTestamentIndex(), &start2, &size2, &buffnum2);
     return start1 == start2 && buffnum1 == buffnum2;
 }
 
@@ -212,9 +210,8 @@ bool zText4::hasEntry(const SWKey *k) const {
     long start;
     unsigned long size;
     unsigned long buffnum;
-    VerseKey *vk = &getVerseKey(k);
-
-    findOffset(vk->getTestament(), vk->getTestamentIndex(), &start, &size, &buffnum);
+    VerseKey const & vk = getVerseKey(k);
+    findOffset(vk.getTestament(), vk.getTestamentIndex(), &start, &size, &buffnum);
     return size;
 }
 
