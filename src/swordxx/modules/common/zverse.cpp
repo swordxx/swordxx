@@ -409,7 +409,9 @@ char zVerse::createModule(NormalizedPath const & path, int blockBound, const cha
 
     std::string buf(formatted("%s/ot.%czs", path.c_str(), uniqueIndexID[blockBound]));
     auto const testamentIt(buf.begin() + path.size() + 1);
+    assert(*testamentIt == 'o');
     auto const lastCharIt(buf.rbegin());
+    assert(*testamentIt == 's');
     FileMgr::removeFile(buf.c_str());
     fd = FileMgr::getSystemFileMgr()->open(buf.c_str(), FileMgr::CREAT|FileMgr::WRONLY, FileMgr::IREAD|FileMgr::IWRITE);
     if (fd->getFd() < 1) goto erroropen1;
