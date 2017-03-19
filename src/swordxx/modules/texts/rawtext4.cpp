@@ -74,7 +74,7 @@ bool RawText4::isWritable() const {
 std::string &RawText4::getRawEntryBuf() const {
     long  start = 0;
     unsigned long size = 0;
-    VerseKey &key = getVerseKey();
+    VerseKey const & key = getVerseKey();
 
     findOffset(key.getTestament(), key.getTestamentIndex(), &start, &size);
     entrySize = size;        // support getEntrySize call
@@ -93,15 +93,15 @@ std::string &RawText4::getRawEntryBuf() const {
 
 
 void RawText4::setEntry(const char *inbuf, long len) {
-    VerseKey &key = getVerseKey();
+    VerseKey const & key = getVerseKey();
     doSetText(key.getTestament(), key.getTestamentIndex(), inbuf, len);
 }
 
 
 void RawText4::linkEntry(const SWKey *inkey) {
-    VerseKey &destkey = getVerseKey();
-    const VerseKey *srckey = &getVerseKey(inkey);
-    doLinkEntry(destkey.getTestament(), destkey.getTestamentIndex(), srckey->getTestamentIndex());
+    VerseKey const & destkey = getVerseKey();
+    VerseKey const & srckey = getVerseKey(inkey);
+    doLinkEntry(destkey.getTestament(), destkey.getTestamentIndex(), srckey.getTestamentIndex());
 }
 
 
@@ -112,7 +112,7 @@ void RawText4::linkEntry(const SWKey *inkey) {
  */
 
 void RawText4::deleteEntry() {
-    VerseKey &key = getVerseKey();
+    VerseKey const & key = getVerseKey();
     doSetText(key.getTestament(), key.getTestamentIndex(), "");
 }
 
@@ -127,7 +127,7 @@ void RawText4::deleteEntry() {
 void RawText4::increment(int steps) {
     long  start;
     unsigned long size;
-    VerseKey *tmpkey = &getVerseKey();
+    VerseKey const * tmpkey = &getVerseKey();
 
     findOffset(tmpkey->getTestament(), tmpkey->getTestamentIndex(), &start, &size);
 
@@ -160,21 +160,20 @@ void RawText4::increment(int steps) {
 bool RawText4::isLinked(const SWKey *k1, const SWKey *k2) const {
     long start1, start2;
     unsigned long size1, size2;
-    VerseKey *vk1 = &getVerseKey(k1);
-    VerseKey *vk2 = &getVerseKey(k2);
-    if (vk1->getTestament() != vk2->getTestament()) return false;
+    VerseKey const & vk1 = getVerseKey(k1);
+    VerseKey const & vk2 = getVerseKey(k2);
+    if (vk1.getTestament() != vk2.getTestament()) return false;
 
-    findOffset(vk1->getTestament(), vk1->getTestamentIndex(), &start1, &size1);
-    findOffset(vk2->getTestament(), vk2->getTestamentIndex(), &start2, &size2);
+    findOffset(vk1.getTestament(), vk1.getTestamentIndex(), &start1, &size1);
+    findOffset(vk2.getTestament(), vk2.getTestamentIndex(), &start2, &size2);
     return start1 == start2;
 }
 
 bool RawText4::hasEntry(const SWKey *k) const {
     long start;
     unsigned long size;
-    VerseKey *vk = &getVerseKey(k);
-
-    findOffset(vk->getTestament(), vk->getTestamentIndex(), &start, &size);
+    VerseKey const & vk = getVerseKey(k);
+    findOffset(vk.getTestament(), vk.getTestamentIndex(), &start, &size);
     return size;
 }
 
