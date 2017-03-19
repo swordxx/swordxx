@@ -48,16 +48,19 @@ RawVerseBase::RawVerseBase(NormalizedPath path, int fileMode)
         fileMode = FileMgr::RDWR;
     }
 
-    auto const it(buf.rbegin() + 5u);
+    auto testamentIt(buf.rbegin() + 5u);
+    assert(*testamentIt == 'o');
     idxfp[0] = FileMgr::getSystemFileMgr()->open(buf.c_str(), fileMode, true);
 
-    (*it) = 'n';
+    (*testamentIt) = 'n';
     idxfp[1] = FileMgr::getSystemFileMgr()->open(buf.c_str(), fileMode, true);
 
-    buf.resize(buf.size() - 4u);
+    buf.resize(buf.size() - 4u); // might invalidate testamentIt
+    testamentIt = buf.rbegin() + 1;
+    assert(*testamentIt == 'n');
     textfp[1] = FileMgr::getSystemFileMgr()->open(buf.c_str(), fileMode, true);
 
-    (*it) = 'o';
+    (*testamentIt) = 'o';
     textfp[0] = FileMgr::getSystemFileMgr()->open(buf.c_str(), fileMode, true);
 }
 
