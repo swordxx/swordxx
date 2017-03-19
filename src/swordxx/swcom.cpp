@@ -69,19 +69,15 @@ SWCom::~SWCom() {
 SWKey * SWCom::createKey() const { return staticCreateKey(versification.c_str()); }
 
 
-long SWCom::getIndex() const {
-    VerseKey *key = &getVerseKey();
-    entryIndex = key->getIndex();
-    return entryIndex;
-}
+long SWCom::getIndex() const { return getVerseKey().getIndex(); }
 
 void SWCom::setIndex(long iindex) {
-    VerseKey *key = &getVerseKey();
-    key->setTestament(1);
-    key->setIndex(iindex);
+    VerseKey & key = getVerseKey();
+    key.setTestament(1);
+    key.setIndex(iindex);
 
-    if (key != this->key) {
-        this->key->copyFrom(*key);
+    if (&key != this->key) {
+        this->key->copyFrom(key);
     }
 }
 

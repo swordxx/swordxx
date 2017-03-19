@@ -64,21 +64,16 @@ SWText::SWText(const char *imodname, const char *imoddesc, TextEncoding enc, SWT
 SWKey * SWText::createKey() const
 { return staticCreateKey(versification.c_str()); }
 
-long SWText::getIndex() const {
-    VerseKey *key = &getVerseKey();
-    entryIndex = key->getIndex();
-
-    return entryIndex;
-}
+long SWText::getIndex() const { return getVerseKey().getIndex(); }
 
 void SWText::setIndex(long iindex) {
-    VerseKey *key = &getVerseKey();
+    VerseKey & key = getVerseKey();
 
-    key->setTestament(1);
-    key->setIndex(iindex);
+    key.setTestament(1);
+    key.setIndex(iindex);
 
-    if (key != this->key) {
-        this->key->copyFrom(*key);
+    if (&key != this->key) {
+        this->key->copyFrom(key);
     }
 }
 
