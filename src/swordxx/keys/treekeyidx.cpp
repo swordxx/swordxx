@@ -91,20 +91,19 @@ const char *TreeKeyIdx::getUserData(int *size) const {
     m_unsnappedKeyText.clear();
     if (size)
         *size = (int)m_currentNode.dsize;
-    return m_currentNode.userData;
+    return m_currentNode.userData.get();
 }
 
 
 void TreeKeyIdx::setUserData(const char *userData, int size) {
     // this makes sure any unsnapped path exists
     assureKeyPath();
-    delete m_currentNode.userData;
 
     if (!size)
         size = strlen(userData) + 1;
 
-    m_currentNode.userData = new char [ size ];
-    memcpy(m_currentNode.userData, userData, size);
+    m_currentNode.userData.reset(new char[size]);
+    memcpy(m_currentNode.userData.get(), userData, size);
     m_currentNode.dsize = size;
 }
 
@@ -358,9 +357,8 @@ void TreeKeyIdx::getTreeNodeFromDatOffset(long ioffset, TreeNode *node) const {
         node->dsize = swordtoarch16(tmp2);
 
         if (node->dsize) {
-            delete[] node->userData;
-            node->userData = new char [node->dsize];
-            m_datfd->read(node->userData, node->dsize);
+            node->userData.reset(new char [node->dsize]);
+            m_datfd->read(node->userData.get(), node->dsize);
         }
     }
 }
@@ -459,12 +457,14 @@ void TreeKeyIdx::copyFrom(const TreeKeyIdx &ikey) {
     m_currentNode.name = ikey.m_currentNode.name;
     m_currentNode.dsize = ikey.m_currentNode.dsize;
 
-    delete[] m_currentNode.userData;
     if (m_currentNode.dsize) {
-        m_currentNode.userData = new char [ m_currentNode.dsize ];
-        memcpy(m_currentNode.userData, ikey.m_currentNode.userData, m_currentNode.dsize);
+        m_currentNode.userData.reset(new char[m_currentNode.dsize]);
+        memcpy(m_currentNode.userData.get(),
+               ikey.m_currentNode.userData.get(),
+               m_currentNode.dsize);
+    } else {
+        m_currentNode.userData.reset();
     }
-    else m_currentNode.userData = nullptr;
 
     bool newFiles = true;
 
@@ -504,7 +504,7 @@ void TreeKeyIdx::saveTreeNode(TreeNode *node) {
         m_datfd->write(&tmp2, 2);
 
         if (node->dsize) {
-            m_datfd->write(node->userData, node->dsize);
+            m_datfd->write(node->userData.get(), node->dsize);
         }
     }
 }
@@ -633,8 +633,6 @@ const char *TreeKeyIdx::getText() const {
 
 
 TreeKeyIdx::TreeNode::TreeNode() {
-    userData   = nullptr;
-
     clear();
 }
 
@@ -647,16 +645,8 @@ void TreeKeyIdx::TreeNode::clear() {
     dsize      = 0;
 
     name.clear();
-
-    delete[] userData;
-    userData   = nullptr;
+    userData.reset();
 }
-
-
-TreeKeyIdx::TreeNode::~TreeNode() {
-    delete[] userData;
-}
-
 
 SWKey *TreeKeyIdx::clone() const
 {

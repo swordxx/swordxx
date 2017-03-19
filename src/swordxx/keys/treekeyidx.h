@@ -25,6 +25,7 @@
 #define TREEKEYIDX_H
 
 #include <cstdint>
+#include <memory>
 #include "../normalizedpath.h"
 #include "treekey.h"
 
@@ -42,7 +43,6 @@ class SWDLLEXPORT TreeKeyIdx : public TreeKey {
     class TreeNode {
     public:
         TreeNode();
-        ~TreeNode();
         void clear();
         int32_t offset;
         int32_t parent;
@@ -50,7 +50,7 @@ class SWDLLEXPORT TreeKeyIdx : public TreeKey {
         int32_t firstChild;
         std::string name;
         uint16_t dsize;
-        char *userData;
+        std::unique_ptr<char[]> userData;
     } m_currentNode;
 
     char *m_path;
