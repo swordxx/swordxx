@@ -26,6 +26,7 @@
 
 #include <cstdint>
 #include <memory>
+#include <string>
 #include "../normalizedpath.h"
 #include "treekey.h"
 
@@ -53,7 +54,7 @@ class SWDLLEXPORT TreeKeyIdx : public TreeKey {
         std::unique_ptr<char[]> userData;
     } m_currentNode;
 
-    char *m_path;
+    std::string m_path;
 
     FileDesc *m_idxfd;
     FileDesc *m_datfd;

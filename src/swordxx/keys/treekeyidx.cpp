@@ -40,24 +40,20 @@
 namespace swordxx {
 
 TreeKeyIdx::TreeKeyIdx(const TreeKeyIdx &ikey) : m_currentNode() {
-    m_path = nullptr;
     m_idxfd = nullptr;
     m_datfd = nullptr;
     copyFrom(ikey);
 }
 
-TreeKeyIdx::TreeKeyIdx(const char *idxPath, int fileMode) : m_currentNode() {
-    std::string buf;
-
-    m_path = nullptr;
-    stdstr(&m_path, idxPath);
-
+TreeKeyIdx::TreeKeyIdx(const char *idxPath, int fileMode)
+    : m_currentNode()
+    , m_path(idxPath ? idxPath : "")
+{
     if (fileMode == -1) { // try read/write if possible
         fileMode = FileMgr::RDWR;
     }
 
-    buf = m_path;
-    buf += ".idx";
+    std::string buf(m_path + ".idx");
     m_idxfd = FileMgr::getSystemFileMgr()->open(buf.c_str(), fileMode, true);
     buf.resize(buf.size() - 4u);
     buf += ".dat";
@@ -74,8 +70,6 @@ TreeKeyIdx::TreeKeyIdx(const char *idxPath, int fileMode) : m_currentNode() {
 
 
 TreeKeyIdx::~TreeKeyIdx () {
-    delete[] m_path;
-
     FileMgr::getSystemFileMgr()->close(m_idxfd);
     FileMgr::getSystemFileMgr()->close(m_datfd);
 }
@@ -102,7 +96,7 @@ void TreeKeyIdx::setUserData(const char *userData, int size) {
     if (!size)
         size = strlen(userData) + 1;
 
-    m_currentNode.userData.reset(new char[size]);
+    m_currentNode.userData = std::make_unique<char[]>(size);
     memcpy(m_currentNode.userData.get(), userData, size);
     m_currentNode.dsize = size;
 }
@@ -357,7 +351,7 @@ void TreeKeyIdx::getTreeNodeFromDatOffset(long ioffset, TreeNode *node) const {
         node->dsize = swordtoarch16(tmp2);
 
         if (node->dsize) {
-            node->userData.reset(new char [node->dsize]);
+            node->userData = std::make_unique<char[]>(node->dsize);
             m_datfd->read(node->userData.get(), node->dsize);
         }
     }
@@ -458,7 +452,7 @@ void TreeKeyIdx::copyFrom(const TreeKeyIdx &ikey) {
     m_currentNode.dsize = ikey.m_currentNode.dsize;
 
     if (m_currentNode.dsize) {
-        m_currentNode.userData.reset(new char[m_currentNode.dsize]);
+        m_currentNode.userData = std::make_unique<char[]>(m_currentNode.dsize);
         memcpy(m_currentNode.userData.get(),
                ikey.m_currentNode.userData.get(),
                m_currentNode.dsize);
@@ -466,13 +460,8 @@ void TreeKeyIdx::copyFrom(const TreeKeyIdx &ikey) {
         m_currentNode.userData.reset();
     }
 
-    bool newFiles = true;
-
-    if (m_path && ikey.m_path)
-        newFiles = strcmp(m_path, ikey.m_path);
-
-    if (newFiles) {
-        stdstr(&m_path, ikey.m_path);
+    if (m_path != ikey.m_path) {
+        m_path = ikey.m_path;
 
         if (m_idxfd) {
             FileMgr::getSystemFileMgr()->close(m_idxfd);
