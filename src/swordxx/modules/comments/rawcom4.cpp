@@ -68,16 +68,16 @@ bool RawCom4::isWritable() const {
 std::string &RawCom4::getRawEntryBuf() const {
     long  start = 0;
     unsigned long size = 0;
-    VerseKey *key = &getVerseKey();
+    VerseKey const & key = getVerseKey();
 
-    findOffset(key->getTestament(), key->getTestamentIndex(), &start, &size);
+    findOffset(key.getTestament(), key.getTestamentIndex(), &start, &size);
     entrySize = size;        // support getEntrySize call
 
     entryBuf = "";
-    readText(key->getTestament(), start, size, entryBuf);
+    readText(key.getTestament(), start, size, entryBuf);
 
     rawFilter(entryBuf, nullptr);    // hack, decipher
-    rawFilter(entryBuf, key);
+    rawFilter(entryBuf, &key);
 
 //    if (!isUnicode())
         prepText(entryBuf);
@@ -97,7 +97,7 @@ std::string &RawCom4::getRawEntryBuf() const {
 void RawCom4::increment(int steps) {
     long  start;
     unsigned long size;
-    VerseKey *tmpkey = &getVerseKey();
+    VerseKey const * tmpkey = &getVerseKey();
 
     findOffset(tmpkey->getTestament(), tmpkey->getTestamentIndex(), &start, &size);
 
@@ -129,15 +129,17 @@ void RawCom4::increment(int steps) {
 
 
 void RawCom4::setEntry(const char *inbuf, long len) {
-    VerseKey *key = &getVerseKey();
-    doSetText(key->getTestament(), key->getTestamentIndex(), inbuf, len);
+    VerseKey const & key = getVerseKey();
+    doSetText(key.getTestament(), key.getTestamentIndex(), inbuf, len);
 }
 
 
 void RawCom4::linkEntry(const SWKey *inkey) {
-    VerseKey *destkey = &getVerseKey();
-    const VerseKey *srckey = &getVerseKey(inkey);
-    doLinkEntry(destkey->getTestament(), destkey->getTestamentIndex(), srckey->getTestamentIndex());
+    VerseKey const & destkey = getVerseKey();
+    VerseKey const & srckey = getVerseKey(inkey);
+    doLinkEntry(destkey.getTestament(),
+                destkey.getTestamentIndex(),
+                srckey.getTestamentIndex());
 }
 
 
@@ -148,20 +150,19 @@ void RawCom4::linkEntry(const SWKey *inkey) {
  */
 
 void RawCom4::deleteEntry() {
-
-    VerseKey *key = &getVerseKey();
-    doSetText(key->getTestament(), key->getTestamentIndex(), "");
+    VerseKey const & key = getVerseKey();
+    doSetText(key.getTestament(), key.getTestamentIndex(), "");
 }
 
 bool RawCom4::isLinked(const SWKey *k1, const SWKey *k2) const {
     long start1, start2;
     unsigned long size1, size2;
-    VerseKey *vk1 = &getVerseKey(k1);
-    VerseKey *vk2 = &getVerseKey(k2);
-    if (vk1->getTestament() != vk2->getTestament()) return false;
+    VerseKey const & vk1 = getVerseKey(k1);
+    VerseKey const & vk2 = getVerseKey(k2);
+    if (vk1.getTestament() != vk2.getTestament()) return false;
 
-    findOffset(vk1->getTestament(), vk1->getTestamentIndex(), &start1, &size1);
-    findOffset(vk2->getTestament(), vk2->getTestamentIndex(), &start2, &size2);
+    findOffset(vk1.getTestament(), vk1.getTestamentIndex(), &start1, &size1);
+    findOffset(vk2.getTestament(), vk2.getTestamentIndex(), &start2, &size2);
     if (!size1 || !size2) return false;
     return start1 == start2;
 }
@@ -169,9 +170,8 @@ bool RawCom4::isLinked(const SWKey *k1, const SWKey *k2) const {
 bool RawCom4::hasEntry(const SWKey *k) const {
     long start;
     unsigned long size;
-    VerseKey *vk = &getVerseKey(k);
-
-    findOffset(vk->getTestament(), vk->getTestamentIndex(), &start, &size);
+    VerseKey const & vk = getVerseKey(k);
+    findOffset(vk.getTestament(), vk.getTestamentIndex(), &start, &size);
     return size;
 }
 
