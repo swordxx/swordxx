@@ -113,10 +113,12 @@ void VerseKey::setFromOther(const VerseKey &ikey) {
         }
 
         // set values
-        if (m_book > m_BMAX[0])
-            m_book -= m_BMAX[0], m_testament = 2;
-        else
+        if (m_book > m_BMAX[0]) {
+            m_book -= m_BMAX[0];
+            m_testament = 2;
+        } else {
             m_testament = 1;
+        }
 
         //if (map_verse == 0) Headings(1);
 
