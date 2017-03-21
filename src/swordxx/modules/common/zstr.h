@@ -39,7 +39,6 @@ class FileDesc;
 class SWDLLEXPORT zStr {
 
 private:
-    static int instance;        // number of instantiated zStr objects or derivitives
     mutable EntriesBlock *cacheBlock;
     mutable long cacheBlockIndex;
     mutable bool cacheDirty;

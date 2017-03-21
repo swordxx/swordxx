@@ -46,7 +46,6 @@ namespace swordxx {
  * zStr Statics
  */
 
-int zStr::instance = 0;
 const int zStr::IDXENTRYSIZE = 8;
 const int zStr::ZDXENTRYSIZE = 8;
 
@@ -82,8 +81,6 @@ zStr::zStr(const char *ipath, int fileMode, long blockCount, SWCompress *icomp, 
     cacheBlock = nullptr;
     cacheBlockIndex = -1;
     cacheDirty = false;
-
-    instance++;
 }
 
 
@@ -92,10 +89,7 @@ zStr::zStr(const char *ipath, int fileMode, long blockCount, SWCompress *icomp, 
  */
 
 zStr::~zStr() {
-
     flushCache();
-
-    --instance;
 
     FileMgr::getSystemFileMgr()->close(idxfd);
     FileMgr::getSystemFileMgr()->close(datfd);
