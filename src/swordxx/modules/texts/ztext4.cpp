@@ -165,7 +165,7 @@ void zText4::increment(int steps) {
     SWKey lastgood = *tmpkey;
     while (steps) {
         VerseOffsetType laststart = start;
-        unsigned long lastsize = size;
+        VerseSizeType lastsize = size;
         SWKey lasttry = *tmpkey;
         (steps > 0) ? ++(*key) : --(*key);
         tmpkey = &getVerseKey();
