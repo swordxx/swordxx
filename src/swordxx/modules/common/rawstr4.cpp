@@ -46,7 +46,6 @@ namespace swordxx {
  * RawStr Statics
  */
 
-int RawStr4::instance = 0;
 const char RawStr4::nl = '\n';
 const int RawStr4::IDXENTRYSIZE = 8;
 
@@ -73,8 +72,6 @@ RawStr4::RawStr4(NormalizedPath const & path, int fileMode, bool caseSensitive) 
     if (!datfd) {
         SWLog::getSystemLog()->logError("%d", errno);
     }
-
-    instance++;
 }
 
 
@@ -84,8 +81,6 @@ RawStr4::RawStr4(NormalizedPath const & path, int fileMode, bool caseSensitive) 
 
 RawStr4::~RawStr4()
 {
-    --instance;
-
     FileMgr::getSystemFileMgr()->close(idxfd);
     FileMgr::getSystemFileMgr()->close(datfd);
 }

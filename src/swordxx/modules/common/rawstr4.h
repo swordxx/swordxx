@@ -37,7 +37,6 @@ namespace swordxx {
 class FileDesc;
 
 class SWDLLEXPORT RawStr4 {
-    static int instance;        // number of instantiated RawStr4 objects or derivitives
     bool caseSensitive;
     mutable long lastoff;        // for caching and optimizations
 
