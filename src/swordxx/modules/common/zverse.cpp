@@ -43,12 +43,6 @@
 namespace swordxx {
 
 /******************************************************************************
- * zVerse Statics
- */
-
-int zVerse::instance = 0;
-
-/******************************************************************************
  * zVerse Constructor - Initializes data for instance of zVerse
  *
  * ENT:    ipath - path of the directory where data and index files are located.
@@ -81,8 +75,6 @@ zVerse::zVerse(NormalizedPath const & path, int fileMode, BlockType blockType, S
     textfp[1] = FileMgr::getSystemFileMgr()->open(formatted("%s/nt.%czz", path.c_str(), blockChar).c_str(), fileMode, true);
     compfp[0] = FileMgr::getSystemFileMgr()->open(formatted("%s/ot.%czv", path.c_str(), blockChar).c_str(), fileMode, true);
     compfp[1] = FileMgr::getSystemFileMgr()->open(formatted("%s/nt.%czv", path.c_str(), blockChar).c_str(), fileMode, true);
-
-    instance++;
 }
 
 
@@ -100,8 +92,6 @@ zVerse::~zVerse()
     }
 
     delete compressor;
-
-    --instance;
 
     for (loop1 = 0; loop1 < 2; loop1++) {
         FileMgr::getSystemFileMgr()->close(idxfp[loop1]);

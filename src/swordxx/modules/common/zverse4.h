@@ -41,7 +41,6 @@ class SWDLLEXPORT zVerse4 {
     SWCompress *compressor;
 
 protected:
-    static int instance;        // number of instantiated zVerse4 objects or derivitives
 
     FileDesc *idxfp[2];
     FileDesc *textfp[2];
