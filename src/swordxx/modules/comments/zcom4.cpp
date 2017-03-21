@@ -72,9 +72,9 @@ bool zCom4::isWritable() const {
  */
 
 std::string &zCom4::getRawEntryBuf() const {
-    long  start = 0;
-    unsigned long size = 0;
-    unsigned long buffnum = 0;
+    VerseOffsetType start = 0;
+    VerseSizeType size = 0;
+    BufferNumberType buffnum = 0;
     VerseKey const & key = getVerseKey();
 
     findOffset(key.getTestament(), key.getTestamentIndex(), &start, &size, &buffnum);
@@ -158,16 +158,16 @@ void zCom4::deleteEntry() {
  */
 
 void zCom4::increment(int steps) {
-    long  start;
-    unsigned long size;
-    unsigned long buffnum;
+    VerseOffsetType start;
+    VerseSizeType size;
+    BufferNumberType buffnum;
     VerseKey const * tmpkey = &getVerseKey();
 
     findOffset(tmpkey->getTestament(), tmpkey->getTestamentIndex(), &start, &size, &buffnum);
 
     SWKey lastgood = *tmpkey;
     while (steps) {
-        long laststart = start;
+        VerseOffsetType laststart = start;
         unsigned long lastsize = size;
         SWKey lasttry = *tmpkey;
         (steps > 0) ? ++(*key) : --(*key);
@@ -192,9 +192,9 @@ void zCom4::increment(int steps) {
 }
 
 bool zCom4::isLinked(const SWKey *k1, const SWKey *k2) const {
-    long start1, start2;
-    unsigned long size1, size2;
-    unsigned long buffnum1, buffnum2;
+    VerseOffsetType start1, start2;
+    VerseSizeType size1, size2;
+    BufferNumberType buffnum1, buffnum2;
     VerseKey const & vk1 = getVerseKey(k1);
     VerseKey const & vk2 = getVerseKey(k2);
     if (vk1.getTestament() != vk2.getTestament()) return false;
@@ -205,9 +205,9 @@ bool zCom4::isLinked(const SWKey *k1, const SWKey *k2) const {
 }
 
 bool zCom4::hasEntry(const SWKey *k) const {
-    long start;
-    unsigned long size;
-    unsigned long buffnum;
+    VerseOffsetType start;
+    VerseSizeType size;
+    BufferNumberType buffnum;
     VerseKey const & vk = getVerseKey(k);
     findOffset(vk.getTestament(), vk.getTestamentIndex(), &start, &size, &buffnum);
     return size;
