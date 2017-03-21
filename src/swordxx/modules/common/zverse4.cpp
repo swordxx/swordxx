@@ -124,7 +124,7 @@ void zVerse4::findOffset(char testmt, long idxoff, long *start, unsigned long *s
     // set
     *start = *size = *buffnum = 0;
     //fprintf(stderr, "Finding offset %ld\n", idxoff);
-    idxoff *= 12; // TODO: Is this the correct size? (throughout)
+    idxoff *= sizeof(ulBuffNum) + sizeof(ulVerseStart) + sizeof(usVerseSize);
     if (!testmt) {
         testmt = ((idxfp[0]) ? 1:2);
     }
@@ -135,27 +135,27 @@ void zVerse4::findOffset(char testmt, long idxoff, long *start, unsigned long *s
 
     long newOffset = compfp[testmt-1]->seek(idxoff, SEEK_SET);
     if (newOffset == idxoff) {
-        if (compfp[testmt-1]->read(&ulBuffNum, 4) != 4) {
+        if (compfp[testmt-1]->read(&ulBuffNum, sizeof(ulBuffNum)) != sizeof(ulBuffNum)) {
             fprintf(stderr, "Error reading ulBuffNum\n");
             return;
         }
     }
     else return;
 
-    if (compfp[testmt-1]->read(&ulVerseStart, 4) < 4)
+    if (compfp[testmt-1]->read(&ulVerseStart, sizeof(ulVerseStart)) < sizeof(ulVerseStart))
     {
         fprintf(stderr, "Error reading ulVerseStart\n");
         return;
     }
-    if (compfp[testmt-1]->read(&usVerseSize, 4) < 4)
+    if (compfp[testmt-1]->read(&usVerseSize, sizeof(usVerseSize)) < sizeof(usVerseSize))
     {
         fprintf(stderr, "Error reading usVerseSize\n");
         return;
     }
 
-    *buffnum = swordtoarch32(ulBuffNum);
-    *start = swordtoarch32(ulVerseStart);
-    *size = swordtoarch32(usVerseSize);
+    *buffnum = swapToArch(ulBuffNum);
+    *start = swapToArch(ulVerseStart);
+    *size = swapToArch(usVerseSize);
 
 }
 
@@ -192,25 +192,25 @@ void zVerse4::zReadText(char testmt, long start, unsigned long size, unsigned lo
             fprintf(stderr, "Error seeking compressed file index\n");
             return;
         }
-        if (idxfp[testmt-1]->read(&ulCompOffset, 4)<4)
+        if (idxfp[testmt-1]->read(&ulCompOffset, sizeof(ulCompOffset)) < sizeof(ulCompOffset))
         {
             fprintf(stderr, "Error reading ulCompOffset\n");
             return;
         }
-        if (idxfp[testmt-1]->read(&ulCompSize, 4)<4)
+        if (idxfp[testmt-1]->read(&ulCompSize, sizeof(ulCompSize)) < sizeof(ulCompSize))
         {
             fprintf(stderr, "Error reading ulCompSize\n");
             return;
         }
-        if (idxfp[testmt-1]->read(&ulUnCompSize, 4)<4)
+        if (idxfp[testmt-1]->read(&ulUnCompSize, sizeof(ulUnCompSize)) < sizeof(ulUnCompSize))
         {
             fprintf(stderr, "Error reading ulUnCompSize\n");
             return;
         }
 
-        ulCompOffset  = swordtoarch32(ulCompOffset);
-        ulCompSize  = swordtoarch32(ulCompSize);
-        ulUnCompSize  = swordtoarch32(ulUnCompSize);
+        ulCompOffset  = swapToArch(ulCompOffset);
+        ulCompSize  = swapToArch(ulCompSize);
+        ulUnCompSize  = swapToArch(ulUnCompSize);
 
         if (textfp[testmt-1]->seek(ulCompOffset, SEEK_SET)!=(long)ulCompOffset)
         {
@@ -219,7 +219,7 @@ void zVerse4::zReadText(char testmt, long start, unsigned long size, unsigned lo
         }
         std::string pcCompText(ulCompSize + 5u, '\0');
 
-        if (textfp[testmt-1]->read(&pcCompText[0u], ulCompSize)<(long)ulCompSize) {
+        if (textfp[testmt-1]->read(&pcCompText[0u], ulCompSize) < ulCompSize) {
             fprintf(stderr, "Error reading compressed text\n");
             return;
         }
@@ -277,11 +277,11 @@ void zVerse4::doSetText(char testmt, long idxoff, const char *buf, long len) {
 
     dirtyCache = true;
 
+    uint32_t outBufIdx = cacheBufIdx;
     uint32_t start;
     uint32_t size;
-    uint32_t outBufIdx = cacheBufIdx;
 
-    idxoff *= 12;
+    idxoff *= sizeof(outBufIdx) + sizeof(start) + sizeof(size);
     size = len;
 
     start = strlen(cacheBuf);
@@ -289,14 +289,14 @@ void zVerse4::doSetText(char testmt, long idxoff, const char *buf, long len) {
     if (!size)
         start = outBufIdx = 0;
 
-    outBufIdx = archtosword32(outBufIdx);
-    start  = archtosword32(start);
-    size   = archtosword32(size);
+    outBufIdx = swapFromArch(outBufIdx);
+    start  = swapFromArch(start);
+    size   = swapFromArch(size);
 
     compfp[testmt-1]->seek(idxoff, SEEK_SET);
-    compfp[testmt-1]->write(&outBufIdx, 4);
-    compfp[testmt-1]->write(&start, 4);
-    compfp[testmt-1]->write(&size, 4);
+    compfp[testmt-1]->write(&outBufIdx, sizeof(outBufIdx));
+    compfp[testmt-1]->write(&start, sizeof(start));
+    compfp[testmt-1]->write(&size, sizeof(size));
     strcat(cacheBuf, buf);
 }
 
@@ -319,23 +319,23 @@ void zVerse4::flushCache() const {
 
                 std::string buf(zsize + 5u, '\0');
                 /// \bug undefined order of evaluation of arguments:
-                memcpy(&buf[0u], compressor->zBuf(&tmpSize), tmpSize);
+                std::memcpy(&buf[0u], compressor->zBuf(&tmpSize), tmpSize);
                 outzsize = zsize = tmpSize;
                 buf.resize(zsize);
                 rawZFilter(buf, 1); // 1 = encipher
 
                 start = outstart = textfp[cacheTestament-1]->seek(0, SEEK_END);
 
-                outstart  = archtosword32(start);
-                outsize   = archtosword32(size);
-                outzsize  = archtosword32(zsize);
+                outstart  = swapFromArch(start);
+                outsize   = swapFromArch(size);
+                outzsize  = swapFromArch(zsize);
 
                 textfp[cacheTestament-1]->write(buf.c_str(), zsize);
 
                 idxfp[cacheTestament-1]->seek(idxoff, SEEK_SET);
-                idxfp[cacheTestament-1]->write(&outstart, 4);
-                idxfp[cacheTestament-1]->write(&outzsize, 4);
-                idxfp[cacheTestament-1]->write(&outsize, 4);
+                idxfp[cacheTestament-1]->write(&outstart, sizeof(outstart));
+                idxfp[cacheTestament-1]->write(&outzsize, sizeof(outzsize));
+                idxfp[cacheTestament-1]->write(&outsize, sizeof(outsize));
             }
             free(cacheBuf);
             cacheBuf = nullptr;
@@ -357,23 +357,25 @@ void zVerse4::doLinkEntry(char testmt, long destidxoff, long srcidxoff) {
     int32_t start;
     uint32_t size;
 
-    destidxoff *= 12;
-    srcidxoff  *= 12;
+    constexpr auto const entrySize =
+            sizeof(bufidx) + sizeof(start) + sizeof(size);
+    destidxoff *= entrySize;
+    srcidxoff  *= entrySize;
 
     if (!testmt)
         testmt = ((idxfp[1]) ? 1:2);
 
     // get source
     compfp[testmt-1]->seek(srcidxoff, SEEK_SET);
-    compfp[testmt-1]->read(&bufidx, 4);
-    compfp[testmt-1]->read(&start, 4);
-    compfp[testmt-1]->read(&size, 4);
+    compfp[testmt-1]->read(&bufidx, sizeof(bufidx));
+    compfp[testmt-1]->read(&start, sizeof(start));
+    compfp[testmt-1]->read(&size, sizeof(size));
 
     // write dest
     compfp[testmt-1]->seek(destidxoff, SEEK_SET);
-    compfp[testmt-1]->write(&bufidx, 4);
-    compfp[testmt-1]->write(&start, 4);
-    compfp[testmt-1]->write(&size, 4);
+    compfp[testmt-1]->write(&bufidx, sizeof(bufidx));
+    compfp[testmt-1]->write(&start, sizeof(start));
+    compfp[testmt-1]->write(&size, sizeof(size));
 }
 
 
@@ -435,24 +437,24 @@ char zVerse4::createModule(NormalizedPath const & path, BlockType blockBound, co
     vk.setVersificationSystem(v11n);
     vk.setIntros(true);
 
-    offset = archtosword32(offset);
-    size   = archtosword32(size);
+    offset = swapFromArch(offset);
+    size   = swapFromArch(size);
 
     for (vk = Position::Top; !vk.popError(); ++vk) {
         if (vk.getTestament() < 2) {
-            if (fd->write(&offset, 4) != 4) goto writefailure;    //compBufIdxOffset
-            if (fd->write(&offset, 4) != 4) goto writefailure;
-            if (fd->write(&size, 4) != 4) goto writefailure;
+            if (fd->write(&offset, sizeof(offset)) != sizeof(offset)) goto writefailure;    //compBufIdxOffset
+            if (fd->write(&offset, sizeof(offset)) != sizeof(offset)) goto writefailure;
+            if (fd->write(&size, sizeof(size)) != sizeof(size)) goto writefailure;
         }
         else {
-            if (fd2->write(&offset, 4) != 4) goto writefailure;    //compBufIdxOffset
-            if (fd2->write(&offset, 4) != 4) goto writefailure;
-            if (fd2->write(&size, 4) != 4) goto writefailure;
+            if (fd2->write(&offset, sizeof(offset)) != sizeof(offset)) goto writefailure;    //compBufIdxOffset
+            if (fd2->write(&offset, sizeof(offset)) != sizeof(offset)) goto writefailure;
+            if (fd2->write(&size, sizeof(size)) != sizeof(size)) goto writefailure;
         }
     }
-    fd2->write(&offset, 4);    //compBufIdxOffset
-    fd2->write(&offset, 4);
-    fd2->write(&size, 4);
+    fd2->write(&offset, sizeof(offset));    //compBufIdxOffset
+    fd2->write(&offset, sizeof(offset));
+    fd2->write(&size, sizeof(size));
 
     goto cleanup;
 
