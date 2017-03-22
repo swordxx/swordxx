@@ -58,12 +58,7 @@ void RawVerse4::findOffset(char testmt,
  *      len     - length of buffer (0 - null terminated)
  */
 void RawVerse4::doSetText(char testmt, long idxoff, const char *buf, long len)
-{
-    return RawVerseBase::doSetText<StartType, SizeType>(testmt,
-                                                        idxoff,
-                                                        buf,
-                                                        len);
-}
+{ return RawVerseBase::doSetText<SizeType>(testmt, idxoff, buf, len); }
 
 
 /******************************************************************************
@@ -73,11 +68,8 @@ void RawVerse4::doSetText(char testmt, long idxoff, const char *buf, long len)
  *    destidxoff    - dest offset into .vss
  *    srcidxoff        - source offset into .vss
  */
-void RawVerse4::doLinkEntry(char testmt, long destidxoff, long srcidxoff) {
-    return RawVerseBase::doLinkEntry<StartType, SizeType>(testmt,
-                                                          destidxoff,
-                                                          srcidxoff);
-}
+void RawVerse4::doLinkEntry(char testmt, long destidxoff, long srcidxoff)
+{ return RawVerseBase::doLinkEntry<SizeType>(testmt, destidxoff, srcidxoff); }
 
 
 /******************************************************************************
@@ -87,6 +79,6 @@ void RawVerse4::doLinkEntry(char testmt, long destidxoff, long srcidxoff) {
  * RET: error status
  */
 char RawVerse4::createModule(const char *ipath, const char *v11n)
-{ return RawVerseBase::createModule<StartType, SizeType>(ipath, v11n); }
+{ return RawVerseBase::createModule<SizeType>(ipath, v11n); }
 
 } /* namespace swordxx */

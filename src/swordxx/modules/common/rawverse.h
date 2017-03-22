@@ -40,7 +40,6 @@ class SWDLLEXPORT RawVerse: public RawVerseBase {
 
 public: /* Types: */
 
-    using StartType = std::uint32_t;
     using SizeType = std::uint16_t;
 
 protected:

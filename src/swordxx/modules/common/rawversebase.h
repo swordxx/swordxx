@@ -44,6 +44,10 @@ class FileDesc;
 
 class SWDLLEXPORT RawVerseBase {
 
+public: /* Types: */
+
+    using StartType = std::uint32_t;
+
 protected: /* Fields: */
 
     FileDesc * idxfp[2];
@@ -65,7 +69,7 @@ public: /* Methods: */
      *    buf    - buffer to store text
      *
      */
-    template <typename StartType, typename SizeType>
+    template <typename SizeType>
     void readText(char testmt,
                   StartType start,
                   SizeType size,
@@ -90,7 +94,7 @@ public: /* Methods: */
       \param start address to store the starting offset
       \param size address to store the size of the entry
     */
-    template <typename StartType, typename SizeType>
+    template <typename SizeType>
     void findOffset(char testmt,
                     long idxoff,
                     StartType * start,
@@ -116,7 +120,7 @@ public: /* Methods: */
         }
     }
 
-    template <typename StartType, typename SizeType>
+    template <typename SizeType>
     void doSetText(char testmt, long idxoff, char const * buf, long len) {
         StartType start;
         SizeType size;
@@ -149,7 +153,7 @@ public: /* Methods: */
         idxfp[testmt-1]->write(&size, sizeof(size));
     }
 
-    template <typename StartType, typename SizeType>
+    template <typename SizeType>
     void doLinkEntry(char testmt, long destidxoff, long srcidxoff) {
         StartType start;
         SizeType size;
@@ -171,7 +175,7 @@ public: /* Methods: */
         idxfp[testmt-1]->write(&size, sizeof(size));
     }
 
-    template <typename OffsetType, typename SizeType>
+    template <typename SizeType>
     static char createModule(NormalizedPath const & path, char const * v11n) {
         std::string const otPath(path.str() + "/ot");
         std::string const ntPath(path.str() + "/nt");
@@ -209,7 +213,7 @@ public: /* Methods: */
         VerseKey vk;
         vk.setVersificationSystem(v11n);
         vk.setIntros(true);
-        OffsetType offset = 0;
+        StartType offset = 0;
         SizeType size = 0;
         offset = swapFromArch(offset);
         size = swapFromArch(size);
