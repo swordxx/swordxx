@@ -29,6 +29,7 @@
 
 #include "rawversebase.h"
 
+#include <cstdint>
 #include "../../defs.h"
 
 
@@ -38,6 +39,10 @@ class FileDesc;
 
 class SWDLLEXPORT RawVerse4: public RawVerseBase {
 
+public: /* Types: */
+
+    using SizeType = std::uint32_t;
+
 protected:
 
     void doSetText(char testmt, long idxoff, const char *buf, long len = -1);
@@ -46,7 +51,7 @@ protected:
 public:
     RawVerse4(const char *ipath, int fileMode = -1);
 
-    void findOffset(char testmt, long idxoff, long *start,    unsigned long *end) const;
+    void findOffset(char testmt, long idxoff, long * start, SizeType * size) const;
     static char createModule(const char *path, const char *v11n = "KJV");
 };
 

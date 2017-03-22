@@ -38,6 +38,10 @@ class FileDesc;
 
 class SWDLLEXPORT RawVerse: public RawVerseBase {
 
+public: /* Types: */
+
+    using SizeType = std::uint16_t;
+
 protected:
 
     void doSetText(char testmt, long idxoff, const char *buf, long len = -1);
@@ -46,7 +50,7 @@ protected:
 public:
     RawVerse(const char *ipath, int fileMode = -1);
 
-    void findOffset(char testmt, long idxoff, long *start,    unsigned short *end) const;
+    void findOffset(char testmt, long idxoff, long * start, SizeType * end) const;
     static char createModule(const char *path, const char *v11n = "KJV");
 };
 

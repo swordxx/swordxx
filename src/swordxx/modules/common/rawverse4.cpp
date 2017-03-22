@@ -45,12 +45,12 @@ RawVerse4::RawVerse4(char const * ipath, int fileMode)
 void RawVerse4::findOffset(char testmt,
                            long idxoff,
                            long * start,
-                           unsigned long * size) const
+                           SizeType * size) const
 {
-    return RawVerseBase::findOffset<8, 4, uint32_t, uint32_t>(testmt,
-                                                              idxoff,
-                                                              start,
-                                                              size);
+    return RawVerseBase::findOffset<8, 4, SizeType>(testmt,
+                                                    idxoff,
+                                                    start,
+                                                    size);
 }
 
 
@@ -64,7 +64,7 @@ void RawVerse4::findOffset(char testmt,
  */
 void RawVerse4::doSetText(char testmt, long idxoff, const char *buf, long len)
 {
-    return RawVerseBase::doSetText<uint32_t, uint32_t, 8>(testmt,
+    return RawVerseBase::doSetText<uint32_t, SizeType, 8>(testmt,
                                                           idxoff,
                                                           buf,
                                                           len);
@@ -79,7 +79,7 @@ void RawVerse4::doSetText(char testmt, long idxoff, const char *buf, long len)
  *    srcidxoff        - source offset into .vss
  */
 void RawVerse4::doLinkEntry(char testmt, long destidxoff, long srcidxoff) {
-    return RawVerseBase::doLinkEntry<uint32_t, uint32_t, 8>(testmt,
+    return RawVerseBase::doLinkEntry<uint32_t, SizeType, 8>(testmt,
                                                             destidxoff,
                                                             srcidxoff);
 }
@@ -92,6 +92,6 @@ void RawVerse4::doLinkEntry(char testmt, long destidxoff, long srcidxoff) {
  * RET: error status
  */
 char RawVerse4::createModule(const char *ipath, const char *v11n)
-{ return RawVerseBase::createModule<uint32_t, uint32_t>(ipath, v11n); }
+{ return RawVerseBase::createModule<uint32_t, SizeType>(ipath, v11n); }
 
 } /* namespace swordxx */

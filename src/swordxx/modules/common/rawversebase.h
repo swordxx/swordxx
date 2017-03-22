@@ -70,12 +70,11 @@ public: /* Methods: */
     template <int MULTIPLIER,
               long LEN,
               typename StartType,
-              typename SizeType,
-              typename SizeType2>
+              typename SizeType>
     void findOffset(char testmt,
                     long idxoff,
                     long * start,
-                    SizeType2 * size) const
+                    SizeType * size) const
     {
         idxoff *= MULTIPLIER;
         if (!testmt)
@@ -92,7 +91,7 @@ public: /* Methods: */
             *size  = swapToArch(tmpSize);
 
             if (len < LEN) {
-                *size = (SizeType2)((*start) ? (textfp[testmt-1]->seek(0, SEEK_END) - (long)*start) : 0);    // if for some reason we get an error reading size, make size to end of file
+                *size = (SizeType)((*start) ? (textfp[testmt-1]->seek(0, SEEK_END) - (long)*start) : 0);    // if for some reason we get an error reading size, make size to end of file
             }
         }
         else {
