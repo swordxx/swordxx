@@ -1,16 +1,6 @@
 /******************************************************************************
  *
- *  rawverse4.h -    code for class 'RawVerse4'- a module that reads raw
- *            text files:  ot and nt using indexs ??.bks ??.cps
- *            ??.vss and provides lookup and parsing functions based
- *            on class VerseKey
- *
- * $Id$
- *
- * Copyright 2007-2013 CrossWire Bible Society (http://www.crosswire.org)
- *    CrossWire Bible Society
- *    P. O. Box 2528
- *    Tempe, AZ  85280-2528
+ * Copyright 2017 Jaak Ristioja
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -24,36 +14,24 @@
  */
 
 
-#ifndef RAWVERSE4_H
-#define RAWVERSE4_H
+#ifndef SWORDXX_RAWVERSE4_H
+#define SWORDXX_RAWVERSE4_H
 
 #include "rawversebase.h"
 
 #include <cstdint>
-#include "../../defs.h"
 
 
 namespace swordxx {
 
-class FileDesc;
+class SWDLLEXPORT RawVerse4: public RawVerseBaseImpl<std::uint32_t> {
 
-class SWDLLEXPORT RawVerse4: public RawVerseBase {
+public: /* Methods: */
 
-public: /* Types: */
+    using RawVerseBaseImpl::RawVerseBaseImpl;
 
-    using SizeType = std::uint32_t;
-
-protected:
-
-    void doSetText(char testmt, long idxoff, const char *buf, long len = -1);
-    void doLinkEntry(char testmt, long destidxoff, long srcidxoff);
-
-public:
-    RawVerse4(const char *ipath, int fileMode = -1);
-
-    void findOffset(char testmt, long idxoff, StartType * start, SizeType * size) const;
-    static char createModule(const char *path, const char *v11n = "KJV");
 };
 
 } /* namespace swordxx */
-#endif
+
+#endif /* SWORDXX_RAWVERSE4_H */
