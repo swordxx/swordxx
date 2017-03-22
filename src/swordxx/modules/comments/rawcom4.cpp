@@ -66,7 +66,7 @@ bool RawCom4::isWritable() const {
  */
 
 std::string &RawCom4::getRawEntryBuf() const {
-    long  start = 0;
+    StartType start = 0;
     SizeType size = 0;
     VerseKey const & key = getVerseKey();
 
@@ -95,7 +95,7 @@ std::string &RawCom4::getRawEntryBuf() const {
  */
 
 void RawCom4::increment(int steps) {
-    long  start;
+    StartType start;
     SizeType size;
     VerseKey const * tmpkey = &getVerseKey();
 
@@ -103,7 +103,7 @@ void RawCom4::increment(int steps) {
 
     SWKey lastgood = *tmpkey;
     while (steps) {
-        long laststart = start;
+        StartType laststart = start;
         SizeType lastsize = size;
         SWKey lasttry = *tmpkey;
         (steps > 0) ? ++(*key) : --(*key);
@@ -155,7 +155,7 @@ void RawCom4::deleteEntry() {
 }
 
 bool RawCom4::isLinked(const SWKey *k1, const SWKey *k2) const {
-    long start1, start2;
+    StartType start1, start2;
     SizeType size1, size2;
     VerseKey const & vk1 = getVerseKey(k1);
     VerseKey const & vk2 = getVerseKey(k2);
@@ -168,7 +168,7 @@ bool RawCom4::isLinked(const SWKey *k1, const SWKey *k2) const {
 }
 
 bool RawCom4::hasEntry(const SWKey *k) const {
-    long start;
+    StartType start;
     SizeType size;
     VerseKey const & vk = getVerseKey(k);
     findOffset(vk.getTestament(), vk.getTestamentIndex(), &start, &size);

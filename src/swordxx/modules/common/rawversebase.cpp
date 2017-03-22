@@ -71,31 +71,4 @@ RawVerseBase::~RawVerseBase() noexcept {
     FileMgr::getSystemFileMgr()->close(textfp[1u]);
 }
 
-/******************************************************************************
- * RawVerseBase::readtext    - gets text at a given offset
- *
- * ENT:    testmt    - testament file to search in (0 - Old; 1 - New)
- *    start    - starting offset where the text is located in the file
- *    size    - size of text entry + 2 (null)(null)
- *    buf    - buffer to store text
- *
- */
-
-void RawVerseBase::readText(char testmt,
-                            long start,
-                            unsigned short size,
-                            std::string & buf) const
-{
-    buf.clear();
-    buf.resize(size + 1u, '\0');
-    if (!testmt)
-        testmt = ((idxfp[1]) ? 1:2);
-    if (size) {
-        if (textfp[testmt-1]->getFd() >= 0) {
-            textfp[testmt-1]->seek(start, SEEK_SET);
-            textfp[testmt-1]->read(&buf[0u], (int)size);
-        }
-    }
-}
-
 } /* namespace swordxx */

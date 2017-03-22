@@ -65,8 +65,8 @@ HREFCom::~HREFCom() { delete [] prefix; }
  */
 
 std::string &HREFCom::getRawEntryBuf() const {
-    long  start;
-    unsigned short size;
+    StartType start;
+    SizeType size;
     VerseKey * key = nullptr;
 
         key = &getVerseKey();

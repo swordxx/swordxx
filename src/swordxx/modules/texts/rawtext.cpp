@@ -70,7 +70,7 @@ bool RawText::isWritable() const {
  */
 
 std::string &RawText::getRawEntryBuf() const {
-    long  start = 0;
+    StartType start = 0;
     SizeType size = 0;
     VerseKey const & key = getVerseKey();
 
@@ -123,7 +123,7 @@ void RawText::deleteEntry() {
  */
 
 void RawText::increment(int steps) {
-    long  start;
+    StartType start;
     SizeType size;
     VerseKey const * tmpkey = &getVerseKey();
 
@@ -131,7 +131,7 @@ void RawText::increment(int steps) {
 
     SWKey lastgood = *tmpkey;
     while (steps) {
-        long laststart = start;
+        StartType laststart = start;
         SizeType lastsize = size;
         SWKey lasttry = *tmpkey;
         (steps > 0) ? ++(*key) : --(*key);
@@ -157,7 +157,7 @@ void RawText::increment(int steps) {
 
 
 bool RawText::isLinked(const SWKey *k1, const SWKey *k2) const {
-    long start1, start2;
+    StartType start1, start2;
     SizeType size1, size2;
     VerseKey const & vk1 = getVerseKey(k1);
     VerseKey const & vk2 = getVerseKey(k2);
@@ -170,7 +170,7 @@ bool RawText::isLinked(const SWKey *k1, const SWKey *k2) const {
 }
 
 bool RawText::hasEntry(const SWKey *k) const {
-    long start;
+    StartType start;
     SizeType size;
     VerseKey const & vk = getVerseKey(k);
     findOffset(vk.getTestament(), vk.getTestamentIndex(), &start, &size);

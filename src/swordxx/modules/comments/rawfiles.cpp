@@ -74,8 +74,8 @@ bool RawFiles::isWritable() const {
 
 std::string &RawFiles::getRawEntryBuf() const {
     FileDesc *datafile;
-    long  start = 0;
-    unsigned short size = 0;
+    StartType start = 0;
+    SizeType size = 0;
     VerseKey const & key = getVerseKey();
 
     findOffset(key.getTestament(), key.getTestamentIndex(), &start, &size);
@@ -111,8 +111,8 @@ std::string &RawFiles::getRawEntryBuf() const {
 
 void RawFiles::setEntry(const char *inbuf, long len) {
     FileDesc *datafile;
-    long  start;
-    unsigned short size;
+    StartType start;
+    SizeType size;
     VerseKey const & key = getVerseKey();
 
     len = (len<0)?strlen(inbuf):len;
@@ -149,9 +149,8 @@ void RawFiles::setEntry(const char *inbuf, long len) {
  */
 
 void RawFiles::linkEntry(const SWKey *inkey) {
-
-    long  start;
-    unsigned short size;
+    StartType start;
+    SizeType size;
     VerseKey const & key = getVerseKey();
 
     findOffset(key.getTestament(), key.getTestamentIndex(), &start, &size);

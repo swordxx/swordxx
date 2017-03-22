@@ -56,10 +56,33 @@ public: /* Methods: */
     RawVerseBase(NormalizedPath path, int fileMode = -1);
     virtual ~RawVerseBase() noexcept;
 
+    /******************************************************************************
+     * RawVerseBase::readtext    - gets text at a given offset
+     *
+     * ENT:    testmt    - testament file to search in (0 - Old; 1 - New)
+     *    start    - starting offset where the text is located in the file
+     *    size    - size of text entry + 2 (null)(null)
+     *    buf    - buffer to store text
+     *
+     */
+    template <typename StartType, typename SizeType>
     void readText(char testmt,
-                  long start,
-                  unsigned short size,
-                  std::string & buf) const;
+                  StartType start,
+                  SizeType size,
+                  std::string & buf) const
+    {
+        buf.clear();
+        buf.resize(size + 1u, '\0');
+        if (!testmt)
+            testmt = ((idxfp[1]) ? 1:2);
+        if (size) {
+            if (textfp[testmt-1]->getFd() >= 0) {
+                textfp[testmt-1]->seek(start, SEEK_SET);
+                textfp[testmt-1]->read(&buf[0u], (int)size);
+            }
+        }
+    }
+
     /**
       \brief Finds the offset of the key verse from the indexes.
       \param testmt testament to find (0 - Bible/module introduction)
@@ -67,12 +90,10 @@ public: /* Methods: */
       \param start address to store the starting offset
       \param size address to store the size of the entry
     */
-    template <long LEN,
-              typename StartType,
-              typename SizeType>
+    template <typename StartType, typename SizeType>
     void findOffset(char testmt,
                     long idxoff,
-                    long * start,
+                    StartType * start,
                     SizeType * size) const
     {
         idxoff *= sizeof(StartType) + sizeof(SizeType);
@@ -84,14 +105,10 @@ public: /* Methods: */
             StartType tmpStart;
             SizeType tmpSize;
             idxfp[testmt-1]->read(&tmpStart, sizeof(tmpStart));
-            long len = idxfp[testmt-1]->read(&tmpSize, sizeof(tmpSize)); // read size
+            idxfp[testmt-1]->read(&tmpSize, sizeof(tmpSize));
 
             *start = swapToArch(tmpStart);
             *size  = swapToArch(tmpSize);
-
-            if (len < LEN) {
-                *size = (SizeType)((*start) ? (textfp[testmt-1]->seek(0, SEEK_END) - (long)*start) : 0);    // if for some reason we get an error reading size, make size to end of file
-            }
         }
         else {
             *start = 0;

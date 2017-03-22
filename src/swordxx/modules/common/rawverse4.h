@@ -41,6 +41,7 @@ class SWDLLEXPORT RawVerse4: public RawVerseBase {
 
 public: /* Types: */
 
+    using StartType = std::uint32_t;
     using SizeType = std::uint32_t;
 
 protected:
@@ -51,7 +52,7 @@ protected:
 public:
     RawVerse4(const char *ipath, int fileMode = -1);
 
-    void findOffset(char testmt, long idxoff, long * start, SizeType * size) const;
+    void findOffset(char testmt, long idxoff, StartType * start, SizeType * size) const;
     static char createModule(const char *path, const char *v11n = "KJV");
 };
 
