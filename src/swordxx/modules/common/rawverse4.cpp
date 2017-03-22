@@ -46,12 +46,7 @@ void RawVerse4::findOffset(char testmt,
                            long idxoff,
                            long * start,
                            SizeType * size) const
-{
-    return RawVerseBase::findOffset<8, 4, SizeType>(testmt,
-                                                    idxoff,
-                                                    start,
-                                                    size);
-}
+{ return RawVerseBase::findOffset<4, SizeType>(testmt, idxoff, start, size); }
 
 
 /******************************************************************************
@@ -64,10 +59,10 @@ void RawVerse4::findOffset(char testmt,
  */
 void RawVerse4::doSetText(char testmt, long idxoff, const char *buf, long len)
 {
-    return RawVerseBase::doSetText<uint32_t, SizeType, 8>(testmt,
-                                                          idxoff,
-                                                          buf,
-                                                          len);
+    return RawVerseBase::doSetText<uint32_t, SizeType>(testmt,
+                                                       idxoff,
+                                                       buf,
+                                                       len);
 }
 
 
@@ -79,9 +74,9 @@ void RawVerse4::doSetText(char testmt, long idxoff, const char *buf, long len)
  *    srcidxoff        - source offset into .vss
  */
 void RawVerse4::doLinkEntry(char testmt, long destidxoff, long srcidxoff) {
-    return RawVerseBase::doLinkEntry<uint32_t, SizeType, 8>(testmt,
-                                                            destidxoff,
-                                                            srcidxoff);
+    return RawVerseBase::doLinkEntry<uint32_t, SizeType>(testmt,
+                                                         destidxoff,
+                                                         srcidxoff);
 }
 
 

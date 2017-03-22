@@ -67,8 +67,7 @@ public: /* Methods: */
       \param start address to store the starting offset
       \param size address to store the size of the entry
     */
-    template <int MULTIPLIER,
-              long LEN,
+    template <long LEN,
               typename StartType,
               typename SizeType>
     void findOffset(char testmt,
@@ -76,7 +75,7 @@ public: /* Methods: */
                     long * start,
                     SizeType * size) const
     {
-        idxoff *= MULTIPLIER;
+        idxoff *= sizeof(StartType) + sizeof(SizeType);
         if (!testmt)
             testmt = ((idxfp[1]) ? 1:2);
 
@@ -100,12 +99,12 @@ public: /* Methods: */
         }
     }
 
-    template <typename StartType, typename SizeType, int MULTIPLIER>
+    template <typename StartType, typename SizeType>
     void doSetText(char testmt, long idxoff, char const * buf, long len) {
         StartType start;
         SizeType size;
 
-        idxoff *= MULTIPLIER;
+        idxoff *= sizeof(StartType) + sizeof(SizeType);
         if (!testmt)
             testmt = ((idxfp[1]) ? 1:2);
 
@@ -133,13 +132,13 @@ public: /* Methods: */
         idxfp[testmt-1]->write(&size, sizeof(size));
     }
 
-    template <typename StartType, typename SizeType, int MULTIPLIER>
+    template <typename StartType, typename SizeType>
     void doLinkEntry(char testmt, long destidxoff, long srcidxoff) {
         StartType start;
         SizeType size;
 
-        destidxoff *= MULTIPLIER;
-        srcidxoff  *= MULTIPLIER;
+        destidxoff *= sizeof(StartType) + sizeof(SizeType);
+        srcidxoff  *= sizeof(StartType) + sizeof(SizeType);
 
         if (!testmt)
             testmt = ((idxfp[1]) ? 1:2);

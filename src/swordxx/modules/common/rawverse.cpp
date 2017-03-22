@@ -46,10 +46,10 @@ void RawVerse::findOffset(char testmt,
                           long * start,
                           SizeType * size) const
 {
-    return RawVerseBase::findOffset<6, 2, int32_t, SizeType>(testmt,
-                                                             idxoff,
-                                                             start,
-                                                             size);
+    return RawVerseBase::findOffset<2, int32_t, SizeType>(testmt,
+                                                          idxoff,
+                                                          start,
+                                                          size);
 }
 
 
@@ -62,12 +62,7 @@ void RawVerse::findOffset(char testmt,
  *      len     - length of buffer (0 - null terminated)
  */
 void RawVerse::doSetText(char testmt, long idxoff, const char *buf, long len)
-{
-    return RawVerseBase::doSetText<int32_t, SizeType, 6>(testmt,
-                                                         idxoff,
-                                                         buf,
-                                                         len);
-}
+{ return RawVerseBase::doSetText<int32_t, SizeType>(testmt, idxoff, buf, len); }
 
 
 /******************************************************************************
@@ -78,9 +73,9 @@ void RawVerse::doSetText(char testmt, long idxoff, const char *buf, long len)
  *    srcidxoff        - source offset into .vss
  */
 void RawVerse::doLinkEntry(char testmt, long destidxoff, long srcidxoff) {
-    return RawVerseBase::doLinkEntry<int32_t, SizeType, 6>(testmt,
-                                                           destidxoff,
-                                                           srcidxoff);
+    return RawVerseBase::doLinkEntry<int32_t, SizeType>(testmt,
+                                                        destidxoff,
+                                                        srcidxoff);
 }
 
 
