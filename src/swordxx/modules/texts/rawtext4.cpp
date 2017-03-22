@@ -25,8 +25,6 @@
 
 #include <cstdio>
 #include <fcntl.h>
-#include <list>
-#include <map>
 #include <regex.h>    // GNU
 #include "../../filemgr.h"
 #include "../../keys/versekey.h"
@@ -145,11 +143,11 @@ void RawText4::increment(int steps) {
         }
         long index = tmpkey->getTestamentIndex();
         findOffset(tmpkey->getTestament(), index, &start, &size);
-        if (
-            (((laststart != start) || (lastsize != size))    // we're a different entry
-//                && (start > 0)
-                && (size))    // and we actually have a size
-                ||(!skipConsecutiveLinks)) {    // or we don't want to skip consecutive links
+
+        if ((((laststart != start) || (lastsize != size)) // we're a different entry
+             && (size)) // and we actually have a size
+            || !skipConsecutiveLinks) // or we don't want to skip consecutive links
+        {
             steps += (steps < 0) ? 1 : -1;
             lastgood = *tmpkey;
         }

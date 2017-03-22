@@ -32,8 +32,6 @@
 
 namespace swordxx {
 
-class RawStr;
-
 class SWDLLEXPORT RawText : public SWText, public RawVerse {
 
 public:
