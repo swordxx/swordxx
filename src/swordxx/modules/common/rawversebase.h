@@ -85,7 +85,7 @@ public: /* Methods: */
             idxfp[testmt-1]->seek(idxoff, SEEK_SET);
             StartType tmpStart;
             SizeType tmpSize;
-            idxfp[testmt-1]->read(&tmpStart, 4);
+            idxfp[testmt-1]->read(&tmpStart, sizeof(tmpStart));
             long len = idxfp[testmt-1]->read(&tmpSize, sizeof(tmpSize)); // read size
 
             *start = swapToArch(tmpStart);
