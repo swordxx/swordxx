@@ -80,7 +80,6 @@ char zLD::getEntry(long away) const {
 
     if (strongsPadding) strongsPad(buf);
 
-    entryBuf = "";
     if (!(retval = findKeyIndex(buf, &index, away))) {
         getText(index, &idxbuf, &ebuf);
         size = strlen(ebuf) + 1;
@@ -95,6 +94,8 @@ char zLD::getEntry(long away) const {
         stdstr(&entkeytxt, idxbuf);    // set entry key text that module 'snapped' to.
         free(idxbuf);
         free(ebuf);
+    } else {
+        entryBuf.clear();
     }
 
     delete [] buf;

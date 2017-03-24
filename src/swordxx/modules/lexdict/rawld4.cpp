@@ -83,7 +83,6 @@ char RawLD4::getEntry(long away) const
 
     strongsPad(buf);
 
-    entryBuf = "";
     if (!(retval = findOffset(buf, &start, &size, away))) {
         readText(start, &size, &idxbuf, entryBuf);
         rawFilter(entryBuf, nullptr);    // hack, decipher
@@ -94,6 +93,8 @@ char RawLD4::getEntry(long away) const
 
         stdstr(&entkeytxt, idxbuf);    // set entry key text that module 'snapped' to.
         delete [] idxbuf;
+    } else {
+        entryBuf.clear();
     }
 
     delete [] buf;

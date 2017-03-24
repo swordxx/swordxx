@@ -92,9 +92,8 @@ char RawLD::getEntry(long away) const
 
         stdstr(&entkeytxt, idxbuf);    // set entry key text that module 'snapped' to.
         delete [] idxbuf;
-    }
-    else {
-        entryBuf = "";
+    } else {
+        entryBuf.clear();
     }
 
     delete [] buf;
