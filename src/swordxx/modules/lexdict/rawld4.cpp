@@ -81,7 +81,7 @@ char RawLD4::getEntry(long away) const
     char * const buf = new char[strlen(keyText) + 6u];
     strcpy(buf, keyText);
 
-    strongsPad(buf);
+    if (strongsPadding) strongsPad(buf);
 
     if (!(retval = findOffset(buf, &start, &size, away))) {
         readText(start, &size, &idxbuf, entryBuf);
@@ -201,7 +201,7 @@ long RawLD4::getEntryForKey(const char *key) const {
     char *buf = new char [ strlen(key) + 6 ];
     strcpy(buf, key);
 
-    strongsPad(buf);
+    if (strongsPadding) strongsPad(buf);
 
     findOffset(buf, &start, &size, 0, &offset);
 
