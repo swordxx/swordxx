@@ -25,6 +25,7 @@
 
 #include <cctype>
 #include <cstdio>
+#include <cstring>
 #include "keys/strkey.h"
 #include "swkey.h"
 
