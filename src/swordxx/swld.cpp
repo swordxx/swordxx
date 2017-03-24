@@ -113,45 +113,58 @@ bool SWLD::hasEntry(const SWKey *key) const {
  * ENT: buf -    buffer to check and pad
  */
 
-void SWLD::strongsPad(char *buf)
-{
-    char *check;
-    int size = 0;
-    int len = strlen(buf);
-    char subLet = 0;
-    bool bang = false, prefix=false;
-    if ((len < 9) && (len > 0)) {
-        // Handle initial G or H
-        if (*buf == 'G' || *buf == 'H' || *buf == 'g' || *buf == 'h') {
-            buf += 1;
-            len -= 1;
-            prefix = true;
-        }
+void SWLD::strongsPad(char * buf) {
+    std::size_t len = std::strlen(buf);
+    if ((len <= 0) || (len >= 9))
+        return;
 
-        for (check = buf; *(check); check++) {
-            if (!isdigit(*check))
-                break;
-            else size++;
-        }
+    // Handle initial G or H
+    bool prefix;
+    switch (*buf) {
+    case 'G': case 'H': case 'g': case 'h':
+        ++buf;
+        --len;
+        prefix = true;
+        break;
+    default:
+        prefix = false;
+        break;
+    }
 
-        if (size && ((size == len) || (size == len - 1) || (size == (len-2)))) {
-            if (*check == '!') {
-                bang = true;
-                check++;
-            }
-            if (isalpha(*check)) {
-                subLet = toupper(*check);
-                *(check-(bang?1:0)) = 0;
-            }
-            sprintf(buf, prefix?"%.4d":"%.5d", atoi(buf));
-            if (subLet) {
-                check = buf+(strlen(buf));
-                if (bang) {
-                    *check++ = '!';
-                }
-                *check++ = subLet;
-                *check = 0;
-            }
+    static auto const isDigit = [](char const c) {
+        switch (c) {
+        case '0': case '1': case '2': case '3': case '4':
+        case '5': case '6': case '7': case '8': case '9':
+            return true;
+        default:
+            return false;
+        }
+    };
+    std::size_t size = 0u;
+    char * check = buf;
+    for (; isDigit(*check); ++check)
+        ++size;
+
+    if (size && (size >= len) && (size <= (len - 2))) {
+        bool bang;
+        if (*check == '!') {
+            bang = true;
+            ++check;
+        } else {
+            bang = false;
+        }
+        char subLet = 0;
+        if (isalpha(*check)) {
+            subLet = std::toupper(*check);
+            *(check - (bang ? 1 : 0)) = '\0';
+        }
+        std::sprintf(buf, (prefix ? "%.4d" : "%.5d"), atoi(buf));
+        if (subLet) {
+            check = buf + std::strlen(buf);
+            if (bang)
+                *check++ = '!';
+            *check++ = subLet;
+            *check = '\0';
         }
     }
 }
