@@ -75,7 +75,7 @@ char RawLD4::getEntry(long away) const
     uint32_t start  = 0;
     uint32_t size   = 0;
     char * idxbuf = nullptr;
-    char retval  = 0;
+    char retval = 0;
 
     auto const keyText = key->getText();
     char * const buf = new char[strlen(keyText) + 6u];
