@@ -145,7 +145,7 @@ void SWLD::strongsPad(char * buf) {
     for (; isDigit(*check); ++check)
         ++size;
 
-    if (size && (size >= len) && (size <= (len - 2))) {
+    if (size && ((size == len) || (size == len - 1) || (size == (len - 2)))) {
         bool bang;
         if (*check == '!') {
             bang = true;
