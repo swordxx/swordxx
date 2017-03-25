@@ -151,12 +151,12 @@ const char *stristr(const char *s1, const char *s2) {
 
     strcpy(target, s2);
     for (i = 0; i < tLen; i++)
-        target[i] = SW_toupper(target[i]);
+        target[i] = asciiCharToUpper(target[i]);
 
     for (i = 0; i < (cLen - tLen)+1; i++) {
-        if (SW_toupper(s1[i]) == (unsigned char)*target) {
+        if (asciiCharToUpper(s1[i]) == (unsigned char)*target) {
             for (j = 1; j < tLen; j++) {
-                if (SW_toupper(s1[i+j]) != (unsigned char)target[j])
+                if (asciiCharToUpper(s1[i+j]) != (unsigned char)target[j])
                     break;
             }
             if (j == tLen) {
@@ -183,7 +183,7 @@ int strnicmp(const char *s1, const char *s2, int len) {
     char diff;
     int i;
     for (i = 0; ((i < len) && (i < tLen) && (i < cLen)); i++) {
-        if ((diff = SW_toupper(*s1) - SW_toupper(*s2)))
+        if ((diff = asciiCharToUpper(*s1) - asciiCharToUpper(*s2)))
             return diff;
     s1++;
     s2++;

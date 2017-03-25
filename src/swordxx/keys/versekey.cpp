@@ -604,8 +604,8 @@ terminate_range:
                         continue;
                     }
                     else {
-                        if ((SW_toupper(book[loop])=='F')&&(loop)) {
-                            if ((isdigit(book[loop-1])) || (book[loop-1] == ' ') || (SW_toupper(book[loop-1]) == 'F')) {
+                        if ((asciiCharToUpper(book[loop])=='F')&&(loop)) {
+                            if ((isdigit(book[loop-1])) || (book[loop-1] == ' ') || (asciiCharToUpper(book[loop-1]) == 'F')) {
                                 book[loop] = 0;
                                 continue;
                             }
@@ -882,8 +882,8 @@ terminate_range:
                 continue;
             }
             else {
-                if ((SW_toupper(book[loop])=='F')&&(loop)) {
-                    if ((isdigit(book[loop-1])) || (book[loop-1] == ' ') || (SW_toupper(book[loop-1]) == 'F')) {
+                if ((asciiCharToUpper(book[loop])=='F')&&(loop)) {
+                    if ((isdigit(book[loop-1])) || (book[loop-1] == ' ') || (asciiCharToUpper(book[loop-1]) == 'F')) {
                         book[loop] = 0;
                         continue;
                     }

@@ -211,7 +211,7 @@ char * StringMgr::upperLatin1(char * buf, std::size_t maxlen) const {
     bool checkMax = maxlen;
 
     while (*buf && (!checkMax || maxlen--)) {
-        *buf = SW_toupper(*buf);
+        *buf = latin1CharToUpper(*buf);
         buf++;
     }
 
