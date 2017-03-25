@@ -43,18 +43,14 @@ namespace swordxx {
  *    idesc - Name to display to user for module
  */
 
-HREFCom::HREFCom(const char *ipath, const char *iprefix, const char *iname, const char *idesc) : RawVerse(ipath), SWCom(iname, idesc)
-{
-    prefix   = nullptr;
-    stdstr(&prefix, iprefix);
-}
-
-
-/******************************************************************************
- * HREFCom Destructor - Cleans up instance of HREFCom
- */
-
-HREFCom::~HREFCom() { delete [] prefix; }
+HREFCom::HREFCom(char const * ipath,
+                 char const * iprefix,
+                 char const * iname,
+                 char const * idesc)
+    : RawVerse(ipath)
+    , SWCom(iname, idesc)
+    , m_prefix(iprefix)
+{}
 
 
 /******************************************************************************
@@ -64,7 +60,7 @@ HREFCom::~HREFCom() { delete [] prefix; }
  * RET: string buffer with verse
  */
 
-std::string &HREFCom::getRawEntryBuf() const {
+std::string & HREFCom::getRawEntryBuf() const {
     StartType start;
     SizeType size;
     VerseKey * key = nullptr;
@@ -77,8 +73,8 @@ std::string &HREFCom::getRawEntryBuf() const {
     std::string tmpbuf;
 
     readText(key->getTestament(), start, size, tmpbuf);
-    entryBuf = prefix;
-    entryBuf += tmpbuf.c_str();
+    entryBuf = m_prefix;
+    entryBuf += tmpbuf;
     prepText(entryBuf);
 
     if (key != this->key)

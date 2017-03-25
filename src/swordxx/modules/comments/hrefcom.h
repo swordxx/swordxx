@@ -33,19 +33,20 @@
 
 namespace swordxx {
 
-class SWDLLEXPORT HREFCom:public RawVerse, public SWCom {
-    char *prefix;
+class SWDLLEXPORT HREFCom: public RawVerse, public SWCom {
 
-public:
-
+public: /* Methods: */
 
     HREFCom(char const * ipath,
             char const * prefix,
             char const * iname = nullptr,
-            const char * idesc = nullptr);
-    ~HREFCom() override;
+            char const * idesc = nullptr);
 
     std::string & getRawEntryBuf() const override;
+
+private: /* Fields: */
+
+    std::string m_prefix;
 
 };
 
