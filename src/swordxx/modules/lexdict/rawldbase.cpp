@@ -76,12 +76,12 @@ char RawLdBase<Base>::getEntry(long away) const {
     char retval = 0;
 
     auto const keyText = key->getText();
-    char * const buf = new char[strlen(keyText) + 6u];
-    strcpy(buf, keyText);
-
-    if (strongsPadding) strongsPad(buf);
-
-    if (!(retval = this->findOffset(buf, &start, &size, away))) {
+    if (strongsPadding) {
+        retval = this->findOffset(strongsPadBuf(keyText).get(), &start, &size, away);
+    } else {
+        retval = this->findOffset(keyText, &start, &size, away);
+    }
+    if (!retval) {
         this->readText(start, &size, &idxbuf, entryBuf);
         rawFilter(entryBuf, nullptr);    // hack, decipher
         rawFilter(entryBuf, key);
@@ -95,7 +95,6 @@ char RawLdBase<Base>::getEntry(long away) const {
         entryBuf.clear();
     }
 
-    delete [] buf;
     return retval;
 }
 
@@ -144,27 +143,21 @@ void RawLdBase<Base>::increment(int steps) {
 template <typename Base>
 void RawLdBase<Base>::setEntry(char const * inbuf, long len) {
     auto const keyText = key->getText();
-    char * const buf = new char[strlen(keyText) + 6u];
-    strcpy(buf, keyText);
-
-    if (strongsPadding) strongsPad(buf);
-
-    this->doSetText(buf, inbuf, len);
-
-    delete [] buf;
+    if (strongsPadding) {
+        this->doSetText(strongsPadBuf(keyText).get(), inbuf, len);
+    } else {
+        this->doSetText(keyText, inbuf, len);
+    }
 }
 
 template <typename Base>
 void RawLdBase<Base>::linkEntry(SWKey const * inkey) {
     auto const keyText = key->getText();
-    char * const buf = new char[strlen(keyText) + 6u];
-    strcpy(buf, keyText);
-
-    if (strongsPadding) strongsPad(buf);
-
-    this->doLinkEntry(buf, inkey->getText());
-
-    delete [] buf;
+    if (strongsPadding) {
+        this->doLinkEntry(strongsPadBuf(keyText).get(), inkey->getText());
+    } else {
+        this->doLinkEntry(keyText, inkey->getText());
+    }
 }
 
 
@@ -176,14 +169,11 @@ void RawLdBase<Base>::linkEntry(SWKey const * inkey) {
 template <typename Base>
 void RawLdBase<Base>::deleteEntry() {
     auto const keyText = key->getText();
-    char * const buf = new char[strlen(keyText) + 6u];
-    strcpy(buf, keyText);
-
-    if (strongsPadding) strongsPad(buf);
-
-    this->doSetText(buf, "");
-
-    delete [] buf;
+    if (strongsPadding) {
+        this->doSetText(strongsPadBuf(keyText).get(), "");
+    } else {
+        this->doSetText(keyText, "");
+    }
 }
 
 template <typename Base>
@@ -196,15 +186,11 @@ long RawLdBase<Base>::getEntryForKey(char const * key) const {
     IndexOffsetType offset;
     SizeType size;
 
-    char *buf = new char [ strlen(key) + 6 ];
-    strcpy(buf, key);
-
-    if (strongsPadding) strongsPad(buf);
-
-    this->findOffset(buf, &start, &size, 0, &offset);
-
-    delete [] buf;
-
+    if (strongsPadding) {
+        this->findOffset(strongsPadBuf(key).get(), &start, &size, 0, &offset);
+    } else {
+        this->findOffset(key, &start, &size, 0, &offset);
+    }
     return offset / Base::IDXENTRYSIZE;
 }
 

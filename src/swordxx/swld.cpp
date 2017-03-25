@@ -93,16 +93,13 @@ void SWLD::positionToBottom() {
 }
 
 bool SWLD::hasEntry(const SWKey *key) const {
-    const char * const key_str = key->getText();
-    char * const buf = new char[strlen(key_str) + 6u];
-    strcpy(buf, key_str);
-
-    if (strongsPadding) strongsPad(buf);
-
-    bool retVal = !strcmp(buf, getKeyForEntry(getEntryForKey(buf)));
-    delete[] buf;
-
-    return retVal;
+    auto const keyText = key->getText();
+    if (strongsPadding) {
+        auto const buf(strongsPadBuf(keyText));
+        return !strcmp(buf.get(), getKeyForEntry(getEntryForKey(buf.get())));
+    } else {
+        return !strcmp(keyText, getKeyForEntry(getEntryForKey(keyText)));
+    }
 }
 
 
@@ -112,11 +109,13 @@ bool SWLD::hasEntry(const SWKey *key) const {
  *
  * ENT: buf -    buffer to check and pad
  */
-
-void SWLD::strongsPad(char * buf) {
-    std::size_t len = std::strlen(buf);
+std::unique_ptr<char[]> SWLD::strongsPadBuf(char const * inText) {
+    std::size_t len = std::strlen(inText);
+    auto r(std::make_unique<char[]>(len + 6u));
+    std::strcpy(r.get(), inText);
+    char * buf = r.get();
     if ((len <= 0) || (len >= 9))
-        return;
+        return r;
 
     // Handle initial G or H
     bool prefix;
@@ -167,8 +166,8 @@ void SWLD::strongsPad(char * buf) {
             *check = '\0';
         }
     }
+    return r;
 }
-
 
 } /* namespace swordxx */
 

@@ -37,7 +37,7 @@ namespace swordxx {
 class SWDLLEXPORT SWLD : public SWModule {
 protected:
     mutable char *entkeytxt;
-    static void strongsPad(char *buf);
+    static std::unique_ptr<char[]> strongsPadBuf(char const * buf);
     bool strongsPadding;
 public:
     /** Initializes data for instance of SWLD

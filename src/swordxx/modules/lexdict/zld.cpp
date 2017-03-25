@@ -25,6 +25,7 @@
 
 #include <cstdio>
 #include <fcntl.h>
+#include <memory>
 #include <utility>
 #include "../../filemgr.h"
 #include "../../utilstr.h"
@@ -76,12 +77,12 @@ char zLD::getEntry(long away) const {
     long index;
     unsigned long size;
     auto const keyText = key->getText();
-    char * const buf = new char[strlen(keyText) + 6u];
-    strcpy(buf, keyText);
-
-    if (strongsPadding) strongsPad(buf);
-
-    if (!(retval = findKeyIndex(buf, &index, away))) {
+    if (strongsPadding) {
+        retval = findKeyIndex(strongsPadBuf(keyText).get(), &index, away);
+    } else {
+        retval = findKeyIndex(keyText, &index, away);
+    }
+    if (!retval) {
         getText(index, &idxbuf, &ebuf);
         size = strlen(ebuf) + 1;
         entryBuf = ebuf;
@@ -99,7 +100,6 @@ char zLD::getEntry(long away) const {
         entryBuf.clear();
     }
 
-    delete [] buf;
     return retval;
 }
 
@@ -145,27 +145,21 @@ void zLD::increment(int steps) {
 
 void zLD::setEntry(const char *inbuf, long len) {
     auto const keyText = key->getText();
-    char * const buf = new char[strlen(keyText) + 6u];
-    strcpy(buf, keyText);
-
-    if (strongsPadding) strongsPad(buf);
-
-    setText(buf, inbuf, len);
-
-    delete [] buf;
+    if (strongsPadding) {
+        setText(strongsPadBuf(keyText).get(), inbuf, len);
+    } else {
+        setText(keyText, inbuf, len);
+    }
 }
 
 
 void zLD::linkEntry(const SWKey *inkey) {
     auto const keyText = key->getText();
-    char * const buf = new char[strlen(keyText) + 6u];
-    strcpy(buf, keyText);
-
-    if (strongsPadding) strongsPad(buf);
-
-    zStr::linkEntry(buf, inkey->getText());
-
-    delete [] buf;
+    if (strongsPadding) {
+        zStr::linkEntry(strongsPadBuf(keyText).get(), inkey->getText());
+    } else {
+        zStr::linkEntry(keyText, inkey->getText());
+    }
 }
 
 
@@ -177,14 +171,11 @@ void zLD::linkEntry(const SWKey *inkey) {
 
 void zLD::deleteEntry() {
     auto const keyText = key->getText();
-    char * const buf = new char[strlen(keyText) + 6u];
-    strcpy(buf, keyText);
-
-    if (strongsPadding) strongsPad(buf);
-
-    setText(buf, "");
-
-    delete [] buf;
+    if (strongsPadding) {
+        setText(strongsPadBuf(keyText).get(), "");
+    } else {
+        setText(keyText, "");
+    }
 }
 
 
@@ -195,15 +186,11 @@ long zLD::getEntryCount() const
 long zLD::getEntryForKey(const char* key) const
 {
     long offset;
-    char *buf = new char [ strlen(key) + 6 ];
-    strcpy(buf, key);
-
-    if (strongsPadding) strongsPad(buf);
-
-    findKeyIndex(buf, &offset);
-
-    delete [] buf;
-
+    if (strongsPadding) {
+        findKeyIndex(strongsPadBuf(key).get(), &offset);
+    } else {
+        findKeyIndex(key, &offset);
+    }
     return offset/IDXENTRYSIZE;
 }
 
