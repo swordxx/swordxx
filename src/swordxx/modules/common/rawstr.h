@@ -46,7 +46,7 @@ protected:
     FileDesc *datfd;
     void doSetText(const char *key, const char *buf, long len = -1);
     void doLinkEntry(const char *destkey, const char *srckey);
-    static const int IDXENTRYSIZE;
+    static constexpr std::size_t const IDXENTRYSIZE = 6;
 
 public:
     RawStr(NormalizedPath const & path, int fileMode = -1, bool caseSensitive = false);

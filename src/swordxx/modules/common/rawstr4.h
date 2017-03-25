@@ -41,12 +41,12 @@ class SWDLLEXPORT RawStr4 {
     mutable long lastoff;        // for caching and optimizations
 
 protected:
-    static const int IDXENTRYSIZE;
-
     FileDesc *idxfd;
     FileDesc *datfd;
     void doSetText(const char *key, const char *buf, long len = -1);
     void doLinkEntry(const char *destkey, const char *srckey);
+    static constexpr std::size_t const IDXENTRYSIZE = 8;
+
 public:
     RawStr4(NormalizedPath const & path, int fileMode = -1, bool caseSensitive = false);
     virtual ~RawStr4();

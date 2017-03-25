@@ -41,14 +41,6 @@
 namespace swordxx {
 
 /******************************************************************************
- * RawStr Statics
- */
-
-const int RawStr::IDXENTRYSIZE = 6;
-
-
-
-/******************************************************************************
  * RawStr Constructor - Initializes data for instance of RawStr
  *
  * ENT:    ipath - path of the directory where data and index files are located.
