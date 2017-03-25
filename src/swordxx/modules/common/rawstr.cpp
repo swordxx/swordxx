@@ -44,7 +44,6 @@ namespace swordxx {
  * RawStr Statics
  */
 
-const char RawStr::nl = '\n';
 const int RawStr::IDXENTRYSIZE = 6;
 
 
@@ -439,6 +438,7 @@ void RawStr::doSetText(const char *ikey, const char *buf, long len)
         datfd->write(outbuf, (int)size);
 
         // add a new line to make data file easier to read in an editor
+        static char const nl = '\n';
         datfd->write(&nl, 1);
 
         idxfd->write(&outstart, 4);
