@@ -29,6 +29,7 @@
 
 #include <cstddef>
 #include <cstdint>
+#include <memory>
 #include <string>
 #include <utility>
 #include "../../defs.h"
@@ -53,7 +54,7 @@ public: /* Methods: */
     zVerseBase(NormalizedPath const & path,
                int fileMode = -1,
                BlockType blockType = CHAPTERBLOCKS,
-               SWCompress * icomp = nullptr);
+               std::unique_ptr<SWCompress> icomp = nullptr);
     virtual ~zVerseBase();
 
     virtual void rawZFilter(std::string & buf, char direction = 0) const
@@ -90,7 +91,7 @@ protected: /* Methods: */
 
 private: /* Fields: */
 
-    SWCompress *compressor;
+    std::unique_ptr<SWCompress> const compressor;
 
 protected: /* Fields: */
 

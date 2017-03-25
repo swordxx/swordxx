@@ -27,6 +27,7 @@
 #include <cstdio>
 #include <fstream>
 #include <iostream>
+#include <memory>
 #include <string>
 #include <swordxx/modules/lexdict/rawld.h>
 #include <swordxx/modules/lexdict/rawld4.h>
@@ -78,7 +79,6 @@ int main(int argc, char **argv) {
     bool append            = false;
     long blockCount = 30;
     bool caseSensitive = false;
-    SWCompress * compressor = nullptr;
     std::string compType         = "";
     bool fourByteSize      = false;
     bool strongsPadding    = true;
@@ -149,17 +149,18 @@ int main(int argc, char **argv) {
     SWModule * mod = nullptr;
     SWKey *key, *linkKey;
 
+    std::unique_ptr<SWCompress> compressor;
     if (compType == "LZSS") {
-        compressor = new LZSSCompress();
+        compressor = std::make_unique<LZSSCompress>();
     }
     else if (compType == "ZIP") {
-        compressor = new ZipCompress();
+        compressor = std::make_unique<ZipCompress>();
     }
     else if (compType == "BZIP2") {
-        compressor = new Bzip2Compress();
+        compressor = std::make_unique<Bzip2Compress>();
     }
     else if (compType == "XZ") {
-        compressor = new XzCompress();
+        compressor = std::make_unique<XzCompress>();
     }
 
 
@@ -181,7 +182,7 @@ int main(int argc, char **argv) {
     if (compressor) {
         // Create a compressed text module allowing very large entries
         // Taking defaults except for first, fourth, fifth and last argument
-        mod = new zLD(outPath.c_str(), nullptr, nullptr, blockCount, compressor, ENC_UNKNOWN, DIRECTION_LTR, FMT_UNKNOWN, nullptr, caseSensitive, strongsPadding);
+        mod = new zLD(outPath.c_str(), nullptr, nullptr, blockCount, std::move(compressor), ENC_UNKNOWN, DIRECTION_LTR, FMT_UNKNOWN, nullptr, caseSensitive, strongsPadding);
     }
     else {
         mod = (!fourByteSize)

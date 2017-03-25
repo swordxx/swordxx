@@ -31,6 +31,7 @@
 #include <io.h>
 #endif
 #include <iostream>
+#include <memory>
 #include <string>
 #include <swordxx/filters/cipherfil.h>
 #include <swordxx/keys/versekey.h>
@@ -46,6 +47,7 @@
 #ifdef __GNUC__
 #include <unistd.h>
 #endif
+#include <utility>
 
 
 using namespace swordxx;
@@ -72,7 +74,7 @@ int main(int argc, char **argv)
     BlockType iType = BOOKBLOCKS;
     int compType = 1;
     string cipherKey = "";
-    SWCompress * compressor = nullptr;
+    std::unique_ptr<SWCompress> compressor;
     SWModule * outModule    = nullptr;
     int compLevel = 0;
 
@@ -131,10 +133,10 @@ int main(int argc, char **argv)
     }
 
     switch (compType) {    // these are deleted by zText
-    case 1: compressor = new LZSSCompress(); break;
-    case 2: compressor = new ZipCompress(); break;
-    case 3: compressor = new Bzip2Compress(); break;
-    case 4: compressor = new XzCompress(); break;
+    case 1: compressor = std::make_unique<LZSSCompress>(); break;
+    case 2: compressor = std::make_unique<ZipCompress>(); break;
+    case 3: compressor = std::make_unique<Bzip2Compress>(); break;
+    case 4: compressor = std::make_unique<XzCompress>(); break;
     }
     if (compressor && compLevel > 0) {
         compressor->setLevel(compLevel);
@@ -164,14 +166,14 @@ int main(int argc, char **argv)
     case COM: {
         SWKey *k = inModule.getKey();
         VerseKey *vk = dynamic_cast<VerseKey *>(k);
-        outModule = new zText(argv[2], nullptr, nullptr, iType, compressor,
+        outModule = new zText(argv[2], nullptr, nullptr, iType, std::move(compressor),
             ENC_UNKNOWN, DIRECTION_LTR, FMT_UNKNOWN, nullptr,
             vk->getVersificationSystem().c_str());    // open our datapath with our RawText driver.
         static_cast<VerseKey *>(inModule.getKey())->setIntros(true);
         break;
     }
     case LEX:
-        outModule = new zLD(argv[2], nullptr, nullptr, iType, compressor);        // open our datapath with our RawText driver.
+        outModule = new zLD(argv[2], nullptr, nullptr, iType, std::move(compressor));        // open our datapath with our RawText driver.
         break;
     }
 

@@ -26,6 +26,7 @@
 
 #include "../../swtext.h"
 
+#include <memory>
 #include "../../defs.h"
 #include "../common/swcomprs.h"
 #include "../common/zverse.h"
@@ -64,7 +65,7 @@ public:
               char const * iname = nullptr,
               char const * idesc = nullptr,
               BlockType blockType = CHAPTERBLOCKS,
-              SWCompress * icomp = nullptr,
+              std::unique_ptr<SWCompress> icomp = nullptr,
               TextEncoding encoding = ENC_UNKNOWN,
               SWTextDirection dir = DIRECTION_LTR,
               SWTextMarkup markup = FMT_UNKNOWN,
@@ -105,7 +106,7 @@ zTextBase<zVerse>::zTextBase(
         char const * iname = nullptr,
         char const * idesc = nullptr,
         BlockType blockType = CHAPTERBLOCKS,
-        SWCompress * icomp = nullptr,
+        std::unique_ptr<SWCompress> icomp = nullptr,
         TextEncoding encoding = ENC_UNKNOWN,
         SWTextDirection dir = DIRECTION_LTR,
         SWTextMarkup markup = FMT_UNKNOWN,
@@ -117,7 +118,7 @@ zTextBase<zVerse4>::zTextBase(
         char const * iname = nullptr,
         char const * idesc = nullptr,
         BlockType blockType = CHAPTERBLOCKS,
-        SWCompress * icomp = nullptr,
+        std::unique_ptr<SWCompress> icomp = nullptr,
         TextEncoding encoding = ENC_UNKNOWN,
         SWTextDirection dir = DIRECTION_LTR,
         SWTextMarkup markup = FMT_UNKNOWN,

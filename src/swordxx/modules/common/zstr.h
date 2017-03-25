@@ -29,6 +29,9 @@
 #include <string>
 #include "../../defs.h"
 
+#include <memory>
+#include "swcomprs.h"
+
 
 namespace swordxx {
 
@@ -45,7 +48,7 @@ private:
     bool caseSensitive;
     mutable long lastoff;        // for caching and optimization
     long blockCount;
-    SWCompress *compressor;
+    std::unique_ptr<SWCompress> const compressor;
 
 protected:
     FileDesc *idxfd;
@@ -64,7 +67,7 @@ public:
     zStr(char const * ipath,
          int fileMode = -1,
          long blockCount = 100,
-         SWCompress * icomp = nullptr,
+         std::unique_ptr<SWCompress> icomp = nullptr,
          bool caseSensitive = false);
     virtual ~zStr();
     signed char findKeyIndex(const char *ikey, long *idxoff, long away = 0) const;

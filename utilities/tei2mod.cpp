@@ -58,6 +58,7 @@
 #include <cstdio>
 #include <fstream>
 #include <iostream>
+#include <memory>
 #include <string>
 #include <swordxx/filters/cipherfil.h>
 #if SWORDXX_HAS_ICU
@@ -380,7 +381,7 @@ int main(int argc, char **argv) {
     std::string modDrv           = "";
     std::string recommendedPath  = "./modules/lexdict/";
     std::string cipherKey        = "";
-    SWCompress * compressor = nullptr;
+    std::unique_ptr<SWCompress> compressor;
 
     for (int i = 3; i < argc; i++) {
         if (!strcmp(argv[i], "-z")) {
@@ -443,16 +444,16 @@ int main(int argc, char **argv) {
 #endif
 
     if (compType == "LZSS") {
-        compressor = new LZSSCompress();
+        compressor = std::make_unique<LZSSCompress>();
     }
     else if (compType == "ZIP") {
-        compressor = new ZipCompress();
+        compressor = std::make_unique<ZipCompress>();
     }
     else if (compType == "BZIP2") {
-        compressor = new Bzip2Compress();
+        compressor = std::make_unique<Bzip2Compress>();
     }
     else if (compType == "XZ") {
-        compressor = new XzCompress();
+        compressor = std::make_unique<XzCompress>();
     }
 
 #ifdef DEBUG
@@ -480,7 +481,7 @@ int main(int argc, char **argv) {
             fprintf(stderr, "error: %s: couldn't create module at path: %s \n", program.c_str(), modName.c_str());
             exit(-3);
         }
-        module = new zLD(modName.c_str(), nullptr, nullptr, 30, compressor);
+        module = new zLD(modName.c_str(), nullptr, nullptr, 30, std::move(compressor));
     }
     else if (modDrv == "RawLD") {
         if (RawLD::createModule(modName.c_str())) {

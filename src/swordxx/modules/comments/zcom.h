@@ -27,7 +27,9 @@
 #include "../../swcom.h"
 #include "../common/zverse.h"
 
+#include <memory>
 #include "../../defs.h"
+#include "../common/swcomprs.h"
 
 
 namespace swordxx {
@@ -45,7 +47,7 @@ public:
          char const * iname = nullptr,
          char const * idesc = nullptr,
          BlockType blockType = CHAPTERBLOCKS,
-         SWCompress * icomp = nullptr,
+         std::unique_ptr<SWCompress> icomp = nullptr,
          TextEncoding encoding = ENC_UNKNOWN,
          SWTextDirection dir = DIRECTION_LTR,
          SWTextMarkup markup = FMT_UNKNOWN,

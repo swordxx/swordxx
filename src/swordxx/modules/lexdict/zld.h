@@ -41,7 +41,7 @@ public:
         char const * iname = nullptr,
         char const * idesc = nullptr,
         long blockCount = 200,
-        SWCompress * icomp = nullptr,
+        std::unique_ptr<SWCompress> = nullptr,
         TextEncoding encoding = ENC_UNKNOWN,
         SWTextDirection dir = DIRECTION_LTR,
         SWTextMarkup markup = FMT_UNKNOWN,

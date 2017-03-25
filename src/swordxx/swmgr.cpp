@@ -34,6 +34,7 @@
 #include <iterator>
 #include <sys/stat.h>
 #include <tuple>
+#include <utility>
 #include "filemgr.h"
 #include "filters/cipherfil.h"
 #include "filters/gbffootnotes.h"
@@ -785,7 +786,6 @@ std::unique_ptr<SWModule> SWMgr::createModule(char const * name,
 
     std::unique_ptr<SWModule> newmod;
     if ((!stricmp(driver, "zText")) || (!stricmp(driver, "zCom")) || (!stricmp(driver, "zText4")) || (!stricmp(driver, "zCom4"))) {
-        SWCompress * compress = nullptr;
         BlockType blockType = CHAPTERBLOCKS;
         misc1 = ((entry = section.find("BlockType")) != section.end()) ? (*entry).second : std::string("CHAPTER");
         if (!stricmp(misc1.c_str(), "VERSE"))
@@ -796,26 +796,27 @@ std::unique_ptr<SWModule> SWMgr::createModule(char const * name,
             blockType = BOOKBLOCKS;
 
         misc1 = ((entry = section.find("CompressType")) != section.end()) ? (*entry).second : std::string("LZSS");
+        std::unique_ptr<SWCompress> compress;
         if (!stricmp(misc1.c_str(), "ZIP"))
-            compress = new ZipCompress();
+            compress = std::make_unique<ZipCompress>();
         else if (!stricmp(misc1.c_str(), "BZIP2"))
-            compress = new Bzip2Compress();
+            compress = std::make_unique<Bzip2Compress>();
         else
         if (!stricmp(misc1.c_str(), "XZ"))
-            compress = new XzCompress();
+            compress = std::make_unique<XzCompress>();
         else
         if (!stricmp(misc1.c_str(), "LZSS"))
-            compress = new LZSSCompress();
+            compress = std::make_unique<LZSSCompress>();
 
         if (compress) {
             if (!stricmp(driver, "zText"))
-                newmod = std::make_unique<zText>(datapath.c_str(), name, description.c_str(), blockType, compress, enc, direction, markup, lang.c_str(), versification.c_str());
+                newmod = std::make_unique<zText>(datapath.c_str(), name, description.c_str(), blockType, std::move(compress), enc, direction, markup, lang.c_str(), versification.c_str());
             else if (!stricmp(driver, "zText4"))
-                newmod = std::make_unique<zText4>(datapath.c_str(), name, description.c_str(), blockType, compress, enc, direction, markup, lang.c_str(), versification.c_str());
+                newmod = std::make_unique<zText4>(datapath.c_str(), name, description.c_str(), blockType, std::move(compress), enc, direction, markup, lang.c_str(), versification.c_str());
             else if (!stricmp(driver, "zCom4"))
-                newmod = std::make_unique<zCom4>(datapath.c_str(), name, description.c_str(), blockType, compress, enc, direction, markup, lang.c_str(), versification.c_str());
+                newmod = std::make_unique<zCom4>(datapath.c_str(), name, description.c_str(), blockType, std::move(compress), enc, direction, markup, lang.c_str(), versification.c_str());
             else
-                newmod = std::make_unique<zCom>(datapath.c_str(), name, description.c_str(), blockType, compress, enc, direction, markup, lang.c_str(), versification.c_str());
+                newmod = std::make_unique<zCom>(datapath.c_str(), name, description.c_str(), blockType, std::move(compress), enc, direction, markup, lang.c_str(), versification.c_str());
         }
     }
 
@@ -865,7 +866,7 @@ std::unique_ptr<SWModule> SWMgr::createModule(char const * name,
         }
 
     if (!stricmp(driver, "zLD")) {
-        SWCompress * compress = nullptr;
+        std::unique_ptr<SWCompress> compress;
         int blockCount;
         bool caseSensitive = ((entry = section.find("CaseSensitiveKeys")) != section.end()) ? (*entry).second == "true": false;
         bool strongsPadding = ((entry = section.find("StrongsPadding")) != section.end()) ? (*entry).second == "true": true;
@@ -875,18 +876,18 @@ std::unique_ptr<SWModule> SWMgr::createModule(char const * name,
 
         misc1 = ((entry = section.find("CompressType")) != section.end()) ? (*entry).second : std::string("LZSS");
         if (!stricmp(misc1.c_str(), "ZIP"))
-            compress = new ZipCompress();
+            compress = std::make_unique<ZipCompress>();
         else if (!stricmp(misc1.c_str(), "BZIP2"))
-            compress = new Bzip2Compress();
+            compress = std::make_unique<Bzip2Compress>();
         else
         if (!stricmp(misc1.c_str(), "XZ"))
-            compress = new XzCompress();
+            compress = std::make_unique<XzCompress>();
         else
         if (!stricmp(misc1.c_str(), "LZSS"))
-            compress = new LZSSCompress();
+            compress = std::make_unique<LZSSCompress>();
 
         if (compress) {
-            newmod = std::make_unique<zLD>(datapath.c_str(), name, description.c_str(), blockCount, compress, enc, direction, markup, lang.c_str(), caseSensitive, strongsPadding);
+            newmod = std::make_unique<zLD>(datapath.c_str(), name, description.c_str(), blockCount, std::move(compress), enc, direction, markup, lang.c_str(), caseSensitive, strongsPadding);
         }
         pos = 1;
     }

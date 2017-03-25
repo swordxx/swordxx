@@ -26,6 +26,7 @@
 #include <cctype>
 #include <cstdio>
 #include <fcntl.h>
+#include <utility>
 #include "../../filemgr.h"
 #include "../../keys/versekey.h"
 #include "../../sysdata.h"
@@ -44,8 +45,10 @@ namespace swordxx {
  */
 
 template <typename BaseZVerse>
-zTextBase<BaseZVerse>::zTextBase(const char *ipath, const char *iname, const char *idesc, BlockType iblockType, SWCompress *icomp, TextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char *ilang, const char *versification)
-        : BaseZVerse(ipath, FileMgr::RDWR, iblockType, icomp), SWText(iname, idesc, enc, dir, mark, ilang, versification) {
+zTextBase<BaseZVerse>::zTextBase(const char *ipath, const char *iname, const char *idesc, BlockType iblockType, std::unique_ptr<SWCompress> icomp, TextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char *ilang, const char *versification)
+    : BaseZVerse(ipath, FileMgr::RDWR, iblockType, std::move(icomp))
+    , SWText(iname, idesc, enc, dir, mark, ilang, versification)
+{
     blockType = iblockType;
     lastWriteKey = nullptr;
 }
@@ -227,7 +230,7 @@ zTextBase<zVerse>::zTextBase(
         char const * iname = nullptr,
         char const * idesc = nullptr,
         BlockType blockType = CHAPTERBLOCKS,
-        SWCompress * icomp = nullptr,
+        std::unique_ptr<SWCompress> icomp = nullptr,
         TextEncoding encoding = ENC_UNKNOWN,
         SWTextDirection dir = DIRECTION_LTR,
         SWTextMarkup markup = FMT_UNKNOWN,
@@ -239,7 +242,7 @@ zTextBase<zVerse4>::zTextBase(
         char const * iname = nullptr,
         char const * idesc = nullptr,
         BlockType blockType = CHAPTERBLOCKS,
-        SWCompress * icomp = nullptr,
+        std::unique_ptr<SWCompress> icomp = nullptr,
         TextEncoding encoding = ENC_UNKNOWN,
         SWTextDirection dir = DIRECTION_LTR,
         SWTextMarkup markup = FMT_UNKNOWN,

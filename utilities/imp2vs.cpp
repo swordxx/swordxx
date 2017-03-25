@@ -94,7 +94,6 @@ int main(int argc, char **argv) {
     bool fourByteSize      = false;
     bool append        = false;
     BlockType iType = BOOKBLOCKS;
-    SWCompress * compressor = nullptr;
     std::string compType     = "";
 
     for (int i = 2; i < argc; i++) {
@@ -150,17 +149,18 @@ int main(int argc, char **argv) {
     const VersificationMgr::System *v = VersificationMgr::getSystemVersificationMgr()->getVersificationSystem(v11n.c_str());
     if (!v) std::cout << "Warning: Versification " << v11n << " not found. Using KJV versification...\n";
 
+    std::unique_ptr<SWCompress> compressor;
     if (compType == "LZSS") {
-        compressor = new LZSSCompress();
+        compressor = std::make_unique<LZSSCompress>();
     }
     else if (compType == "ZIP") {
-        compressor = new ZipCompress();
+        compressor = std::make_unique<ZipCompress>();
     }
     else if (compType == "BZIP2") {
-        compressor = new Bzip2Compress();
+        compressor = std::make_unique<Bzip2Compress>();
     }
     else if (compType == "XZ") {
-        compressor = new XzCompress();
+        compressor = std::make_unique<XzCompress>();
     }
 
 
@@ -188,7 +188,7 @@ int main(int argc, char **argv) {
                 nullptr,        // iname
                 nullptr,        // idesc
                 iType,        // iblockType
-                compressor,    // icomp
+                std::move(compressor),    // icomp
                 ENC_UNKNOWN,    // enc
                 DIRECTION_LTR,    // dir
                 FMT_UNKNOWN,    // markup

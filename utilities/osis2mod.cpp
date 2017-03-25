@@ -1869,7 +1869,6 @@ int main(int argc, char **argv) {
     BlockType iType = BOOKBLOCKS;
     int entrySize          = 0;
     std::string cipherKey        = "";
-    SWCompress * compressor = nullptr;
     int compLevel      = 0;
 
     for (int i = 3; i < argc; i++) {
@@ -1968,17 +1967,18 @@ int main(int argc, char **argv) {
 
     if (isCommentary) isCommentary = true;  // avoid unused warning for now
 
+    std::unique_ptr<SWCompress> compressor;
     if (compType == "LZSS") {
-        compressor = new LZSSCompress();
+        compressor = std::make_unique<LZSSCompress>();
     }
     else if (compType == "ZIP") {
-        compressor = new ZipCompress();
+        compressor = std::make_unique<ZipCompress>();
     }
     else if (compType == "BZIP2") {
-        compressor = new Bzip2Compress();
+        compressor = std::make_unique<Bzip2Compress>();
     }
     else if (compType == "XZ") {
-        compressor = new XzCompress();
+        compressor = std::make_unique<XzCompress>();
     }
 
     if (compressor && compLevel > 0) {
@@ -2037,7 +2037,7 @@ int main(int argc, char **argv) {
                 nullptr,        // iname
                 nullptr,        // idesc
                 iType,          // iblockType
-                compressor,     // icomp
+                std::move(compressor), // icomp
                 ENC_UNKNOWN,    // enc
                 DIRECTION_LTR,  // dir
                 FMT_UNKNOWN,    // markup
@@ -2053,7 +2053,7 @@ int main(int argc, char **argv) {
                 nullptr,        // iname
                 nullptr,        // idesc
                 iType,          // iblockType
-                compressor,     // icomp
+                std::move(compressor), // icomp
                 ENC_UNKNOWN,    // enc
                 DIRECTION_LTR,  // dir
                 FMT_UNKNOWN,    // markup

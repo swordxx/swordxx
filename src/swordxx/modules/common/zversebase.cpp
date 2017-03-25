@@ -52,7 +52,11 @@ namespace swordxx {
  *        blockType - verse, chapter, book, etc.
  */
 
-zVerseBase::zVerseBase(NormalizedPath const & path, int fileMode, BlockType blockType, SWCompress *icomp)
+zVerseBase::zVerseBase(NormalizedPath const & path,
+                       int fileMode,
+                       BlockType blockType,
+                       std::unique_ptr<SWCompress> icomp)
+    : compressor(icomp ? std::move(icomp) : std::make_unique<SWCompress>())
 {
     // this line, instead of just defaulting, to keep FileMgr out of header
     if (fileMode == -1) fileMode = FileMgr::RDONLY;
@@ -61,8 +65,6 @@ zVerseBase::zVerseBase(NormalizedPath const & path, int fileMode, BlockType bloc
     cacheTestament = 0;
     cacheBuf = nullptr;
     dirtyCache = false;
-
-    compressor = (icomp) ? icomp : new SWCompress();
 
     if (fileMode == -1) { // try read/write if possible
         fileMode = FileMgr::RDWR;
@@ -90,8 +92,6 @@ zVerseBase::~zVerseBase()
         flushCache();
         free(cacheBuf);
     }
-
-    delete compressor;
 
     for (loop1 = 0; loop1 < 2; loop1++) {
         FileMgr::getSystemFileMgr()->close(idxfp[loop1]);

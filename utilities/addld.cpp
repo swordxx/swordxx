@@ -32,6 +32,7 @@
 #ifndef __GNUC__
 #include <io.h>
 #endif
+#include <memory>
 #include <swordxx/modules/common/zipcomprs.h>
 #include <swordxx/modules/lexdict/rawld.h>
 #include <swordxx/modules/lexdict/rawld4.h>
@@ -100,7 +101,7 @@ int main(int argc, char **argv) {
     }
     else if (compress) {
       char buffer[1048576];  //this is the max size of any entry
-      zLD mod(argv[2], nullptr, nullptr, 200, new ZipCompress());    // open our datapath with our RawText driver.
+      zLD mod(argv[2], nullptr, nullptr, 200, std::make_unique<ZipCompress>());    // open our datapath with our RawText driver.
       SWKey* key = mod.createKey();
       key->setPersist(true);      // the magical setting
 

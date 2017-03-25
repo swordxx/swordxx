@@ -27,6 +27,7 @@
 #include <cstdio>
 #include <fcntl.h>
 #include <string>
+#include <utility>
 #include "../../filemgr.h"
 #include "../../keys/versekey.h"
 
@@ -43,7 +44,18 @@ namespace swordxx {
  *        icomp - Compressor object
  */
 
-zCom::zCom(const char *ipath, const char *iname, const char *idesc, BlockType iblockType, SWCompress *icomp, TextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char *ilang, const char *versification) : zVerse(ipath, -1, iblockType, icomp), SWCom(iname, idesc, enc, dir, mark, ilang, versification)/*, SWCompress()*/
+zCom::zCom(const char *ipath,
+           const char *iname,
+           const char *idesc,
+           BlockType iblockType,
+           std::unique_ptr<SWCompress> icomp,
+           TextEncoding enc,
+           SWTextDirection dir,
+           SWTextMarkup mark,
+           const char *ilang,
+           const char *versification)
+    : zVerse(ipath, -1, iblockType, std::move(icomp))
+    , SWCom(iname, idesc, enc, dir, mark, ilang, versification)
 {
     blockType = iblockType;
     lastWriteKey = nullptr;

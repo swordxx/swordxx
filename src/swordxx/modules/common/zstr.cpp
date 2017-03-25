@@ -31,12 +31,12 @@
 #include <cstdlib>
 #include <fcntl.h>
 #include <string>
+#include <utility>
 #include "../../filemgr.h"
 #include "../../stringmgr.h"
 #include "../../swlog.h"
 #include "../../sysdata.h"
 #include "../../utilstr.h"
-#include "swcomprs.h"
 #include "entriesblk.h"
 
 
@@ -56,13 +56,18 @@ const int zStr::ZDXENTRYSIZE = 8;
  * ENT:    ipath - path of the directory where data and index files are located.
  */
 
-zStr::zStr(const char *ipath, int fileMode, long blockCount, SWCompress *icomp, bool caseSensitive) : caseSensitive(caseSensitive)
+zStr::zStr(char const * ipath,
+           int fileMode,
+           long blockCount,
+           std::unique_ptr<SWCompress> icomp,
+           bool caseSensitive)
+    : caseSensitive(caseSensitive)
+    , compressor(icomp ? std::move(icomp) : std::make_unique<SWCompress>())
 {
     assert(ipath);
 
     lastoff = -1;
 
-    compressor = (icomp) ? icomp : new SWCompress();
     this->blockCount = blockCount;
 
     if (fileMode == -1) { // try read/write if possible
@@ -95,8 +100,6 @@ zStr::~zStr() {
     FileMgr::getSystemFileMgr()->close(datfd);
     FileMgr::getSystemFileMgr()->close(zdxfd);
     FileMgr::getSystemFileMgr()->close(zdtfd);
-
-    delete compressor;
 }
 
 
