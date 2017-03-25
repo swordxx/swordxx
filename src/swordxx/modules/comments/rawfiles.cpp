@@ -24,6 +24,7 @@
 
 #include "rawfiles.h"
 
+#include <cassert>
 #include <cctype>
 #include <cstdint>
 #include <cstdio>
@@ -208,18 +209,15 @@ std::string RawFiles::getNextFilename() {
 }
 
 
-char RawFiles::createModule(const char *path) {
-    char *incfile = new char [ strlen (path) + 16 ];
+char RawFiles::createModule(char const * path) {
+    assert(path);
+    static auto const zero = swapFromArch(std::uint32_t(0u));
 
-    uint32_t zero = 0;
-    zero = archtosword32(zero);
-
-    FileDesc *datafile;
-
-    sprintf(incfile, "%s/incfile", path);
-    datafile = FileMgr::getSystemFileMgr()->open(incfile, FileMgr::CREAT|FileMgr::WRONLY|FileMgr::TRUNC);
-    delete [] incfile;
-    datafile->write(&zero, 4);
+    FileDesc * const datafile =
+            FileMgr::getSystemFileMgr()->open(
+                (std::string(path) + "/incfile").c_str(),
+                FileMgr::CREAT|FileMgr::WRONLY|FileMgr::TRUNC);
+    datafile->write(&zero, sizeof(zero));
     FileMgr::getSystemFileMgr()->close(datafile);
 
     return RawVerse::createModule (path);
