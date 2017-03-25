@@ -71,8 +71,8 @@ bool RawLD::isWritable() const {
 
 char RawLD::getEntry(long away) const
 {
-    uint32_t start = 0;
-    uint16_t size = 0;
+    StartType start = 0;
+    SizeType size = 0;
     char * idxbuf = nullptr;
     char retval = 0;
 
@@ -194,8 +194,9 @@ long RawLD::getEntryCount() const
 
 
 long RawLD::getEntryForKey(const char *key) const {
-    uint32_t start, offset;
-    uint16_t size;
+    StartType start;
+    IndexOffsetType offset;
+    SizeType size;
 
     char *buf = new char [ strlen(key) + 6 ];
     strcpy(buf, key);
