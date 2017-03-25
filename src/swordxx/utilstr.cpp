@@ -159,6 +159,20 @@ const char * stristr(std::string const & haystack, std::string const & needle) {
     return haystack.c_str() + std::distance(first, it);
 }
 
+int stricmp(char const * s1, char const * s2) {
+    if (s1 == s2)
+        return 0;
+    int r;
+    while ((r = static_cast<unsigned char>(asciiCharToUpper(*s1))
+                - static_cast<unsigned char>(asciiCharToUpper(*s2))) == 0) {
+        if ((*s1) == '\0')
+            break;
+        ++s1;
+        ++s2;
+    }
+    return r;
+}
+
 /******************************************************************************
  * strnicmp - compares the first n bytes of 2 strings ignoring case
  *
@@ -166,7 +180,6 @@ const char * stristr(std::string const & haystack, std::string const & needle) {
  *
  * RET:    same as strcmp
  */
-
 int strnicmp(char const * s1, char const * s2, std::size_t n) {
     if ((!n) || (s1 == s2))
         return 0;
@@ -179,18 +192,6 @@ int strnicmp(char const * s1, char const * s2, std::size_t n) {
         ++s2;
     }
     return r;
-}
-
-int stricmp(const char *s1, const char *s2) {
-#if defined(__GNUC__)
-    return ::strcasecmp(s1, s2);
-#else
- #if defined(_WIN32_WCE)
-    return ::_stricmp(s1, s2);
- #else
-    return ::stricmp(s1, s2);
- #endif
-#endif
 }
 
 
