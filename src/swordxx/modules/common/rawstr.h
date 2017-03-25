@@ -21,40 +21,11 @@
 
 namespace swordxx {
 
-class FileDesc;
-
-class SWDLLEXPORT RawStr: public RawStrBase {
-
-public: /* Types: */
-
-    using SizeType = std::uint16_t;
-
-protected: /* Constants: */
-
-    static constexpr std::size_t const IDXENTRYSIZE =
-            sizeof(StartType) + sizeof(SizeType);
+class SWDLLEXPORT RawStr: public RawStrBaseImpl<std::uint16_t> {
 
 public: /* Methods: */
 
-    using RawStrBase::RawStrBase;
-
-    template <typename ... Args>
-    signed char findOffset(Args && ... args) const
-    { return RawStrBase::findOffset_<SizeType>(std::forward<Args>(args)...); }
-
-    template <typename ... Args>
-    void readText(Args && ... args) const
-    { return RawStrBase::readText_<SizeType>(std::forward<Args>(args)...); }
-
-protected: /* Methods: */
-
-    template <typename ... Args>
-    void doSetText(Args && ... args)
-    { return RawStrBase::doSetText_<SizeType>(std::forward<Args>(args)...); }
-
-    template <typename ... Args>
-    void doLinkEntry(Args && ... args)
-    { return RawStrBase::doLinkEntry_<SizeType>(std::forward<Args>(args)...); }
+    using RawStrBaseImpl::RawStrBaseImpl;
 
 }; /* class RawStr */
 

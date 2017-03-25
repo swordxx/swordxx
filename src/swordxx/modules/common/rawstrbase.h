@@ -132,6 +132,42 @@ extern template
 void RawStrBase::doLinkEntry_<std::uint32_t>(char const * destkey,
                                              char const * srckey);
 
+template <typename SizeType_>
+class RawStrBaseImpl: public RawStrBase {
+
+public: /* Types: */
+
+    using SizeType = SizeType_;
+
+protected: /* Constants: */
+
+    static constexpr std::size_t const IDXENTRYSIZE =
+            sizeof(StartType) + sizeof(SizeType);
+
+public: /* Methods: */
+
+    using RawStrBase::RawStrBase;
+
+    template <typename ... Args>
+    signed char findOffset(Args && ... args) const
+    { return RawStrBase::findOffset_<SizeType>(std::forward<Args>(args)...); }
+
+    template <typename ... Args>
+    void readText(Args && ... args) const
+    { return RawStrBase::readText_<SizeType>(std::forward<Args>(args)...); }
+
+protected: /* Methods: */
+
+    template <typename ... Args>
+    void doSetText(Args && ... args)
+    { return RawStrBase::doSetText_<SizeType>(std::forward<Args>(args)...); }
+
+    template <typename ... Args>
+    void doLinkEntry(Args && ... args)
+    { return RawStrBase::doLinkEntry_<SizeType>(std::forward<Args>(args)...); }
+
+}; /* class RawStrBaseImpl */
+
 } /* namespace swordxx */
 
 #endif /* SWORDXX_RAWSTRBASE_H */
