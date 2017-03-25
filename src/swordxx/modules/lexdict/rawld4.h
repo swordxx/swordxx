@@ -32,11 +32,10 @@
 
 namespace swordxx {
 
-class SWDLLEXPORT RawLD4 : public RawStr4, public SWLD {
+class SWDLLEXPORT RawLD4 : private RawStr4, public SWLD {
     char getEntry(long away = 0) const;
 
 public:
-
 
     RawLD4(char const * ipath,
            char const * iname = nullptr,
