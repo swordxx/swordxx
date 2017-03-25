@@ -118,7 +118,7 @@ SWDLLEXPORT char *stdstr (char **iistr, const char *istr, unsigned int memPadFac
 SWDLLEXPORT char *strstrip (char *istr);
 SWDLLEXPORT char const * stristr(std::string const & haystack,
                                  std::string const & needle);
-SWDLLEXPORT int strnicmp(const char *s1, const char *s2, int len);
+SWDLLEXPORT int strnicmp(char const * s1, char const * s2, std::size_t len);
 SWDLLEXPORT int stricmp(const char *s1, const char *s2);
 
 constexpr char const latin1CharToUpperTable[256u] = {

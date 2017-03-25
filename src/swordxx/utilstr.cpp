@@ -167,18 +167,18 @@ const char * stristr(std::string const & haystack, std::string const & needle) {
  * RET:    same as strcmp
  */
 
-int strnicmp(const char *s1, const char *s2, int len) {
-    int tLen = strlen(s2);
-    int cLen = strlen(s1);
-    char diff;
-    int i;
-    for (i = 0; ((i < len) && (i < tLen) && (i < cLen)); i++) {
-        if ((diff = asciiCharToUpper(*s1) - asciiCharToUpper(*s2)))
-            return diff;
-    s1++;
-    s2++;
+int strnicmp(char const * s1, char const * s2, std::size_t n) {
+    if ((!n) || (s1 == s2))
+        return 0;
+    int r;
+    while ((r = static_cast<unsigned char>(asciiCharToUpper(*s1))
+                - static_cast<unsigned char>(asciiCharToUpper(*s2))) == 0) {
+        if ((*s1) == '\0' || ((--n) == 0u))
+            break;
+        ++s1;
+        ++s2;
     }
-    return (i < len) ? cLen - tLen : 0;
+    return r;
 }
 
 int stricmp(const char *s1, const char *s2) {
