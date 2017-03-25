@@ -142,25 +142,25 @@ char *strstrip(char *istr) {
  *            If s2 does not occur in s1, returns null.
  */
 
-const char *stristr(const char *s1, const char *s2) {
-    int tLen = strlen(s2);
-    int cLen = strlen(s1);
+const char * stristr(const char * haystack, const char * needle) {
+    int tLen = strlen(needle);
+    int cLen = strlen(haystack);
     char *target = new char [ tLen + 1 ];
     int i, j;
     char const * retVal = nullptr;
 
-    strcpy(target, s2);
+    strcpy(target, needle);
     for (i = 0; i < tLen; i++)
         target[i] = asciiCharToUpper(target[i]);
 
     for (i = 0; i < (cLen - tLen)+1; i++) {
-        if (asciiCharToUpper(s1[i]) == (unsigned char)*target) {
+        if (asciiCharToUpper(haystack[i]) == (unsigned char)*target) {
             for (j = 1; j < tLen; j++) {
-                if (asciiCharToUpper(s1[i+j]) != (unsigned char)target[j])
+                if (asciiCharToUpper(haystack[i+j]) != (unsigned char)target[j])
                     break;
             }
             if (j == tLen) {
-                retVal = s1+i;
+                retVal = haystack+i;
                 break;
             }
         }
