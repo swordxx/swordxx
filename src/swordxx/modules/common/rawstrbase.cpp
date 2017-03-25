@@ -23,7 +23,7 @@
  *
  */
 
-#include "rawstr.h"
+#include "rawstrbase.h"
 
 #include <cassert>
 #include <cerrno>
@@ -48,20 +48,21 @@ namespace swordxx {
  *        (e.g. 'modules/texts/rawtext/webster/')
  */
 
-RawStr::RawStr(NormalizedPath const & path, int fileMode, bool caseSensitive) : caseSensitive(caseSensitive)
+RawStrBase::RawStrBase(NormalizedPath const & path,
+                       int fileMode,
+                       bool caseSensitive)
+    : caseSensitive(caseSensitive)
 {
     lastoff = -1;
 
-    if (fileMode == -1) { // try read/write if possible
+    if (fileMode == -1) // try read/write if possible
         fileMode = FileMgr::RDWR;
-    }
 
     idxfd = FileMgr::getSystemFileMgr()->open((path.str() + ".idx").c_str(), fileMode, true);
     datfd = FileMgr::getSystemFileMgr()->open((path.str() + ".dat").c_str(), fileMode, true);
 
-    if (!datfd) {
+    if (!datfd)
         SWLog::getSystemLog()->logError("%d", errno);
-    }
 }
 
 
@@ -69,8 +70,7 @@ RawStr::RawStr(NormalizedPath const & path, int fileMode, bool caseSensitive) : 
  * RawStr Destructor - Cleans up instance of RawStr
  */
 
-RawStr::~RawStr()
-{
+RawStrBase::~RawStrBase() {
     FileMgr::getSystemFileMgr()->close(idxfd);
     FileMgr::getSystemFileMgr()->close(datfd);
 }
@@ -85,8 +85,7 @@ RawStr::~RawStr()
  *        buf        - address of pointer to allocate for storage of string
  */
 
-void RawStr::getIDXBufDat(long ioffset, char **buf) const
-{
+void RawStrBase::getIDXBufDat(long ioffset, char ** buf) const {
     int size;
     char ch;
     if (datfd) {
@@ -119,15 +118,14 @@ void RawStr::getIDXBufDat(long ioffset, char **buf) const
  *        buf        - address of pointer to allocate for storage of string
  */
 
-void RawStr::getIDXBuf(long ioffset, char **buf) const
-{
-    uint32_t offset;
+void RawStrBase::getIDXBuf(long ioffset, char ** buf) const {
+    IndexOffsetType offset;
 
     if (idxfd) {
         idxfd->seek(ioffset, SEEK_SET);
-        idxfd->read(&offset, 4);
+        idxfd->read(&offset, sizeof(offset));
 
-        offset = swordtoarch32(offset);
+        offset = swapToArch(offset);
 
         getIDXBufDat(offset, buf);
     }
@@ -145,8 +143,12 @@ void RawStr::getIDXBuf(long ioffset, char **buf) const
  *
  * RET: error status -1 general error; -2 new file
  */
-
-signed char RawStr::findOffset(const char *ikey, uint32_t *start, uint16_t *size, long away, uint32_t *idxoff) const
+template <typename SizeType>
+signed char RawStrBase::findOffset_(char const * ikey,
+                                    StartType * start,
+                                    SizeType * size,
+                                    long away,
+                                    IndexOffsetType * idxoff) const
 {
     char * trybuf;
     char * maxbuf;
@@ -157,8 +159,11 @@ signed char RawStr::findOffset(const char *ikey, uint32_t *start, uint16_t *size
     int diff = 0;
     bool awayFromSubstrCheck = false;
 
+    static constexpr auto const entrySize =
+            sizeof(StartType) + sizeof(SizeType);
+
     if (idxfd->getFd() >=0) {
-        tailoff = maxoff = idxfd->seek(0, SEEK_END) - 6;
+        tailoff = maxoff = idxfd->seek(0, SEEK_END) - entrySize;
         retval = (tailoff >= 0) ? 0 : -2;    // if NOT new file
         if (*ikey && retval != -2) {
             headoff = 0;
@@ -166,19 +171,23 @@ signed char RawStr::findOffset(const char *ikey, uint32_t *start, uint16_t *size
             stdstr(&key, ikey, 3);
             if (!caseSensitive) toupperstr_utf8(key, strlen(key)*3);
 
-            int keylen = strlen(key);
+            auto const keylen = strlen(key);
             bool substr = false;
 
             trybuf = maxbuf = nullptr;
             getIDXBuf(maxoff, &maxbuf);
 
             while (headoff < tailoff) {
-                tryoff = (lastoff == -1) ? headoff + ((((tailoff / 6) - (headoff / 6))) / 2) * 6 : lastoff;
+                tryoff = (lastoff == -1) ? headoff + ((((tailoff / entrySize) - (headoff / entrySize))) / 2) * entrySize : lastoff;
                 lastoff = -1;
                 getIDXBuf(tryoff, &trybuf);
 
                 if (!*trybuf && tryoff) {        // In case of extra entry at end of idx (not first entry)
-                    tryoff += (tryoff > (maxoff / 2))?-6:6;
+                    if (tryoff > (maxoff / 2)) {
+                        tryoff -= entrySize;
+                    } else {
+                        tryoff += entrySize;
+                    }
                     retval = -1;
                     break;
                 }
@@ -194,7 +203,7 @@ signed char RawStr::findOffset(const char *ikey, uint32_t *start, uint16_t *size
                     tailoff = (tryoff == headoff) ? headoff : tryoff;
                 else headoff = tryoff;
 
-                if (tailoff == headoff + 6) {
+                if (tailoff == headoff + entrySize) {
                     if (quitflag++)
                         headoff = tailoff;
                 }
@@ -218,25 +227,27 @@ signed char RawStr::findOffset(const char *ikey, uint32_t *start, uint16_t *size
 
         idxfd->seek(tryoff, SEEK_SET);
 
-        uint32_t tmpStart;
-        uint16_t tmpSize;
-        *start = *size = tmpStart = tmpSize = 0;
-        idxfd->read(&tmpStart, 4);
-        idxfd->read(&tmpSize, 2);
+        StartType tmpStart = 0u;
+        SizeType tmpSize = 0u;
+        *start = *size = 0u;
+        idxfd->read(&tmpStart, sizeof(tmpStart));
+        idxfd->read(&tmpSize, sizeof(tmpSize));
         if (idxoff)
             *idxoff = tryoff;
 
-        *start = swordtoarch32(tmpStart);
-        *size  = swordtoarch16(tmpSize);
+        *start = swapToArch(tmpStart);
+        *size  = swapToArch(tmpSize);
 
         while (away) {
-            unsigned long laststart = *start;
-            unsigned short lastsize = *size;
+            StartType const laststart = *start;
+            SizeType const lastsize = *size;
             long lasttry = tryoff;
-            tryoff += (away > 0) ? 6 : -6;
+            // entrySize must be signed for the code following to work properly:
+            int const signedEntrySize = static_cast<int>(entrySize);
+            tryoff += (away > 0) ? signedEntrySize : -signedEntrySize;
 
             bool bad = false;
-            if (((tryoff + (away*6)) < -6) || (tryoff + (away*6) > (maxoff+6)))
+            if (((tryoff + (away*signedEntrySize)) < -signedEntrySize) || (tryoff + (away*signedEntrySize) > (maxoff+signedEntrySize)))
                 bad = true;
             else if (idxfd->seek(tryoff, SEEK_SET) < 0)
                 bad = true;
@@ -250,13 +261,13 @@ signed char RawStr::findOffset(const char *ikey, uint32_t *start, uint16_t *size
                     *idxoff = tryoff;
                 break;
             }
-            idxfd->read(&tmpStart, 4);
-            idxfd->read(&tmpSize, 2);
+            idxfd->read(&tmpStart, sizeof(tmpStart));
+            idxfd->read(&tmpSize, sizeof(tmpSize));
             if (idxoff)
                 *idxoff = tryoff;
 
-            *start = swordtoarch32(tmpStart);
-            *size  = swordtoarch16(tmpSize);
+            *start = swapToArch(tmpStart);
+            *size  = swapToArch(tmpSize);
 
             if (((laststart != *start) || (lastsize != *size)) && (*size))
                 away += (away < 0) ? 1 : -1;
@@ -284,13 +295,16 @@ signed char RawStr::findOffset(const char *ikey, uint32_t *start, uint16_t *size
  *    buf        - buffer to store text
  *
  */
-
-void RawStr::readText(uint32_t istart, uint16_t *isize, char **idxbuf, std::string &buf) const
+template <typename SizeType>
+void RawStrBase::readText_(StartType istart,
+                           SizeType * isize,
+                           char ** idxbuf,
+                           std::string & buf) const
 {
     unsigned int ch;
     char * idxbuflocal = nullptr;
     getIDXBufDat(istart, &idxbuflocal);
-    uint32_t start = istart;
+    StartType start = istart;
 
     do {
         delete[] *idxbuf;
@@ -318,14 +332,14 @@ void RawStr::readText(uint32_t istart, uint16_t *isize, char **idxbuf, std::stri
                     break;
                 }
             }
-            findOffset(buf.c_str() + 6, &start, isize);
+            findOffset_<SizeType>(buf.c_str() + 6, &start, isize);
         }
         else break;
     }
     while (true);    // while we're resolving links
 
     if (idxbuflocal) {
-        int localsize = strlen(idxbuflocal);
+        std::size_t localsize = strlen(idxbuflocal);
         localsize = (localsize < (*isize - 1)) ? localsize : (*isize - 1);
         strncpy(*idxbuf, idxbuflocal, localsize);
         (*idxbuf)[localsize] = 0;
@@ -341,16 +355,12 @@ void RawStr::readText(uint32_t istart, uint16_t *isize, char **idxbuf, std::stri
  *    buf    - buffer to store
  *      len     - length of buffer (0 - null terminated)
  */
-
-void RawStr::doSetText(const char *ikey, const char *buf, long len)
-{
-
-    uint32_t start, outstart;
-    uint32_t idxoff;
-    uint32_t endoff;
-    int32_t shiftSize;
-    uint16_t size;
-    uint16_t outsize;
+template <typename SizeType>
+void RawStrBase::doSetText_(char const * ikey, char const * buf, long len) {
+    StartType start, outstart;
+    IndexOffsetType idxoff;
+    SizeType size;
+    SizeType outsize;
     char * tmpbuf = nullptr;
     char * key = nullptr;
     char * dbKey = nullptr;
@@ -358,19 +368,22 @@ void RawStr::doSetText(const char *ikey, const char *buf, long len)
     char * outbuf = nullptr;
     char * ch = nullptr;
 
-    char errorStatus = findOffset(ikey, &start, &size, 0, &idxoff);
-    stdstr(&key, ikey, 2);
-    if (!caseSensitive) toupperstr_utf8(key, strlen(key)*2);
+    char errorStatus = findOffset_<SizeType>(ikey, &start, &size, 0, &idxoff);
+    stdstr(&key, ikey, 3);
+    if (!caseSensitive) toupperstr_utf8(key, strlen(key)*3);
 
     len = (len < 0) ? strlen(buf) : len;
 
     getIDXBufDat(start, &dbKey);
 
+    static constexpr auto const entrySize =
+            sizeof(StartType) + sizeof(SizeType);
+
     if (strcmp(key, dbKey) < 0) {
     }
     else if (strcmp(key, dbKey) > 0) {
         if (errorStatus != (char)-2)    // not a new file
-            idxoff += 6;
+            idxoff += entrySize;
         else idxoff = 0;
     }
     else if ((!strcmp(key, dbKey)) && (len>0 /*we're not deleting*/)) { // got absolute entry
@@ -386,7 +399,7 @@ void RawStr::doSetText(const char *ikey, const char *buf, long len)
                     break;
                 }
             }
-            memmove(tmpbuf, ch, size - (unsigned short)(ch-tmpbuf));
+            memmove(tmpbuf, ch, size - std::size_t(ch - tmpbuf));
 
             // resolve link
             if (!strncmp(tmpbuf, "@LINK", 5) && (len)) {
@@ -396,16 +409,16 @@ void RawStr::doSetText(const char *ikey, const char *buf, long len)
                         break;
                     }
                 }
-                findOffset(tmpbuf + 6, &start, &size, 0, &idxoff);
+                findOffset_<SizeType>(tmpbuf + entrySize, &start, &size, 0, &idxoff);
             }
             else break;
         }
         while (true);    // while we're resolving links
     }
 
-    endoff = idxfd->seek(0, SEEK_END);
+    auto const endoff = idxfd->seek(0, SEEK_END);
 
-    shiftSize = endoff - idxoff;
+    auto const shiftSize = endoff - idxoff;
 
     if (shiftSize > 0) {
         idxBytes = new char [ shiftSize ];
@@ -421,20 +434,20 @@ void RawStr::doSetText(const char *ikey, const char *buf, long len)
 
     start = outstart = datfd->seek(0, SEEK_END);
 
-    outstart = archtosword32(start);
-    outsize  = archtosword16(size);
+    outstart = swapFromArch(start);
+    outsize  = swapFromArch(size);
 
     idxfd->seek(idxoff, SEEK_SET);
     if (len > 0) {
         datfd->seek(start, SEEK_SET);
-        datfd->write(outbuf, (int)size);
+        datfd->write(outbuf, size);
 
         // add a new line to make data file easier to read in an editor
         static char const nl = '\n';
         datfd->write(&nl, 1);
 
-        idxfd->write(&outstart, 4);
-        idxfd->write(&outsize, 2);
+        idxfd->write(&outstart, sizeof(outstart));
+        idxfd->write(&outsize, sizeof(outsize));
         if (idxBytes) {
             idxfd->write(idxBytes, shiftSize);
             delete [] idxBytes;
@@ -442,7 +455,7 @@ void RawStr::doSetText(const char *ikey, const char *buf, long len)
     }
     else {    // delete entry
         if (idxBytes) {
-            idxfd->write(idxBytes+6, shiftSize-6);
+            idxfd->write(idxBytes+entrySize, shiftSize-entrySize);
             idxfd->seek(-1, SEEK_CUR);    // last valid byte
             FileMgr::getSystemFileMgr()->trunc(idxfd);    // truncate index
             delete [] idxBytes;
@@ -462,11 +475,11 @@ void RawStr::doSetText(const char *ikey, const char *buf, long len)
  *    destidxoff    - dest offset into .vss
  *    srcidxoff        - source offset into .vss
  */
-
-void RawStr::doLinkEntry(const char *destkey, const char *srckey) {
+template <typename SizeType>
+void RawStrBase::doLinkEntry_(char const * destkey, char const * srckey) {
     char *text = new char [ strlen(destkey) + 7 ];
     sprintf(text, "@LINK %s", destkey);
-    doSetText(srckey, text);
+    doSetText_<SizeType>(srckey, text);
     delete [] text;
 }
 
@@ -477,7 +490,7 @@ void RawStr::doLinkEntry(const char *destkey, const char *srckey) {
  * RET: error status
  */
 
-signed char RawStr::createModule(NormalizedPath const & path) {
+signed char RawStrBase::createModule(NormalizedPath const & path) {
     std::string const datFilename(path.str() + ".dat");
     std::string const idxFilename(path.str() + ".idx");
 
@@ -499,5 +512,49 @@ signed char RawStr::createModule(NormalizedPath const & path) {
 
     return 0;
 }
+
+// Explicit instantiations:
+
+template
+signed char RawStrBase::findOffset_<std::uint16_t>(
+        char const * key,
+        StartType * start,
+        std::uint16_t * size,
+        long away = 0,
+        IndexOffsetType * idxoff = nullptr) const;
+template
+signed char RawStrBase::findOffset_<std::uint32_t>(
+        char const * key,
+        StartType * start,
+        std::uint32_t * size,
+        long away = 0,
+        IndexOffsetType * idxoff = nullptr) const;
+
+template
+void RawStrBase::readText_<std::uint16_t>(StartType start,
+                                         std::uint16_t * size,
+                                         char ** idxbuf,
+                                         std::string & buf) const;
+template
+void RawStrBase::readText_<std::uint32_t>(StartType start,
+                                         std::uint32_t * size,
+                                         char ** idxbuf,
+                                         std::string & buf) const;
+
+template
+void RawStrBase::doSetText_<std::uint16_t>(char const * key,
+                                           char const * buf,
+                                           long len = -1);
+template
+void RawStrBase::doSetText_<std::uint32_t>(char const * key,
+                                           char const * buf,
+                                           long len = -1);
+
+template
+void RawStrBase::doLinkEntry_<std::uint16_t>(char const * destkey,
+                                             char const * srckey);
+template
+void RawStrBase::doLinkEntry_<std::uint32_t>(char const * destkey,
+                                             char const * srckey);
 
 } /* namespace swordxx */
