@@ -541,7 +541,9 @@ ListKey &SWModule::search(char const * istr,
                                            : nullptr;
                                 }
                                 else {
-                                    sres = ((flags & REG_ICASE) == REG_ICASE) ? stristr(i3Start->second.c_str(), words[3].c_str()) : strstr(i3Start->second.c_str(), words[3].c_str());
+                                    sres = ((flags & REG_ICASE) == REG_ICASE)
+                                           ? stristr(i3Start->second, words[3])
+                                           : strstr(i3Start->second.c_str(), words[3].c_str());
                                 }
                                 if (sres) {
                                     *resultKey = *getKey();

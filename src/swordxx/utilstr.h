@@ -116,7 +116,8 @@ std::string stripPrefix(std::string & str, char const separator);
 */
 SWDLLEXPORT char *stdstr (char **iistr, const char *istr, unsigned int memPadFactor = 1);
 SWDLLEXPORT char *strstrip (char *istr);
-SWDLLEXPORT char const * stristr(char const * haystack, char const * needle);
+SWDLLEXPORT char const * stristr(std::string const & haystack,
+                                 std::string const & needle);
 SWDLLEXPORT int strnicmp(const char *s1, const char *s2, int len);
 SWDLLEXPORT int stricmp(const char *s1, const char *s2);
 

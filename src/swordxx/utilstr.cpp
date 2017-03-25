@@ -26,6 +26,7 @@
 #include <cassert>
 #include <cctype>
 #include <cstring>
+#include <iterator>
 #include "sysdata.h"
 
 
@@ -136,37 +137,26 @@ char *strstrip(char *istr) {
 /******************************************************************************
  * stristr - Scans a string for the occurrence of a given substring, no case
  *
- * ENT:    scans s1 for the first occurrence of the substring s2, ingnoring case
+ * ENT:    scans haystack for the first occurrence of the substring needle,
+           ingnoring case
  *
- * RET:    a pointer to the element in s1, where s2 begins (points to s2 in s1).
- *            If s2 does not occur in s1, returns null.
+ * RET:    a pointer to the element in haystack, where needle begins (points to
+           needle in haystack).
+ *         If needle does not occur in haystack, returns nullptr.
  */
 
-const char * stristr(const char * haystack, const char * needle) {
-    int tLen = strlen(needle);
-    int cLen = strlen(haystack);
-    char *target = new char [ tLen + 1 ];
-    int i, j;
-    char const * retVal = nullptr;
-
-    strcpy(target, needle);
-    for (i = 0; i < tLen; i++)
-        target[i] = asciiCharToUpper(target[i]);
-
-    for (i = 0; i < (cLen - tLen)+1; i++) {
-        if (asciiCharToUpper(haystack[i]) == (unsigned char)*target) {
-            for (j = 1; j < tLen; j++) {
-                if (asciiCharToUpper(haystack[i+j]) != (unsigned char)target[j])
-                    break;
-            }
-            if (j == tLen) {
-                retVal = haystack+i;
-                break;
-            }
-        }
-    }
-    delete [] target;
-    return retVal;
+const char * stristr(std::string const & haystack, std::string const & needle) {
+    static auto const caseInsensitiveAsciiCompare =
+            [](char const a, char const b) noexcept
+            { return asciiCharToUpper(a) == asciiCharToUpper(b); };
+    auto const first(haystack.begin());
+    auto const last(haystack.end());
+    auto const it(std::search(first, last,
+                              needle.begin(), needle.end(),
+                              caseInsensitiveAsciiCompare));
+    if (it == last)
+        return nullptr;
+    return haystack.c_str() + std::distance(first, it);
 }
 
 /******************************************************************************
