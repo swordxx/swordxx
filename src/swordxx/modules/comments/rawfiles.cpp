@@ -30,6 +30,7 @@
 #include <cstdio>
 #include <cstring>
 #include <fcntl.h>
+#include <memory>
 #include "../../filemgr.h"
 #include "../../keys/versekey.h"
 #include "../../sysdata.h"
@@ -91,12 +92,11 @@ std::string &RawFiles::getRawEntryBuf() const {
         datafile = FileMgr::getSystemFileMgr()->open(tmpbuf.c_str(), FileMgr::RDONLY);
         if (datafile->getFd() > 0) {
             size = datafile->seek(0, SEEK_END);
-            char *tmpBuf = new char [ size + 1 ];
-            memset(tmpBuf, 0, size + 1);
+            auto tmpBuf(std::make_unique<char[]>(size + 1));
+            std::memset(tmpBuf.get(), 0, size + 1);
             datafile->seek(0, SEEK_SET);
-            datafile->read(tmpBuf, size);
-            entryBuf = tmpBuf;
-            delete [] tmpBuf;
+            datafile->read(tmpBuf.get(), size);
+            entryBuf = tmpBuf.get();
 //            preptext(entrybuf);
         }
         FileMgr::getSystemFileMgr()->close(datafile);
