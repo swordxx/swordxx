@@ -101,9 +101,9 @@ char GBFFootnotes::processText (std::string &text, const SWKey *key, const SWMod
                     footnoteNum = (fc.length()) ? atoi(fc.c_str()) : 0;
                     sprintf(buf, "%i", ++footnoteNum);
                     module->getEntryAttributes()["Footnote"]["count"]["value"] = buf;
-                    for (auto const & attr : startTag.getAttributeNames())
+                    for (auto const & attr : startTag.attributeNames())
                         module->getEntryAttributes()["Footnote"][buf][attr.c_str()] =
-                                startTag.getAttribute(attr.c_str());
+                                startTag.attribute(attr.c_str());
                     module->getEntryAttributes()["Footnote"][buf]["body"] = tagText;
                     startTag.setAttribute("swordFootnote", buf);
                 }

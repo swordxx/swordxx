@@ -156,7 +156,7 @@ bool GBFXHTML::handleToken(std::string &buf, const char *token, BasicFilterUserD
             buf += "</a>)</em></small>";
         }
 
-        else if (!strcmp(tag.getName(), "RX")) {
+        else if (tag.getName() == "RX") {
             buf += "<a href=\"";
             for (tok = token + 3; *tok; tok++) {
               if(*tok != '<' && *tok+1 != 'R' && *tok+2 != 'x') {
@@ -168,10 +168,10 @@ bool GBFXHTML::handleToken(std::string &buf, const char *token, BasicFilterUserD
             }
             buf += "\">";
         }
-        else if (!strcmp(tag.getName(), "RF")) {
-            std::string type = tag.getAttribute("type");
-            std::string footnoteNumber = tag.getAttribute("swordFootnote");
-            std::string noteName = tag.getAttribute("n");
+        else if (tag.getName() == "RF") {
+            std::string type = tag.attribute("type");
+            std::string footnoteNumber = tag.attribute("swordFootnote");
+            std::string noteName = tag.attribute("n");
             if (VerseKey const * const vkey =
                     dynamic_cast<VerseKey const *>(u->key))
             {
@@ -185,7 +185,7 @@ bool GBFXHTML::handleToken(std::string &buf, const char *token, BasicFilterUserD
             }
             u->suspendTextPassThru = true;
         }
-        else if (!strcmp(tag.getName(), "Rf")) {
+        else if (tag.getName() == "Rf") {
             u->suspendTextPassThru = false;
         }
 /*

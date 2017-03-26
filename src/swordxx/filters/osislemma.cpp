@@ -66,9 +66,9 @@ char OSISLemma::processText(std::string &text, const SWKey *key, const SWModule 
                 intoken = false;
                 if (hasPrefix(token, "w ")) {    // Word
                     XMLTag wtag(token.c_str());
-                    int count = wtag.getAttributePartCount("lemma", ' ');
+                    int count = wtag.attributePartCount("lemma", ' ');
                     for (int i = 0; i < count; i++) {
-                        std::string a = wtag.getAttribute("lemma", i, ' ');
+                        std::string a = wtag.attribute("lemma", i, ' ');
                         auto const prefixPos(a.find(':'));
                         if (prefixPos == std::string::npos
                             || (prefixPos >= sizeof("lemma.") - 1u

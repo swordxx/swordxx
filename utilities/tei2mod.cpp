@@ -234,7 +234,7 @@ bool handleToken(std::string & text, XMLTag & token) {
         static bool inEntryFree  = false;
         static bool inSuperEntry = false;
 
-    const char *tokenName = token.getName();
+        std::string const &  tokenName = token.getName();
 
         static char const * splitPtr;
         static char const * splitPtr2 = nullptr;
@@ -245,9 +245,9 @@ bool handleToken(std::string & text, XMLTag & token) {
 
         // If we are not in an "entry" and we see one, then enter it.
         if (!inEntry && !inEntryFree && !inSuperEntry) {
-            inEntry      = !strcmp(tokenName, "entry");
-            inEntryFree  = !strcmp(tokenName, "entryFree");
-            inSuperEntry = !strcmp(tokenName, "superentry");
+            inEntry      = (tokenName == "entry");
+            inEntryFree  = (tokenName == "entryFree");
+            inSuperEntry = (tokenName == "superentry");
                         if (inEntry || inEntryFree || inSuperEntry) {
 #ifdef DEBUG
                 cout << "Entering " << tokenName << endl;
@@ -255,11 +255,11 @@ bool handleToken(std::string & text, XMLTag & token) {
                 startTag    = token;
                 text        = "";
 
-                                keyStr = token.getAttribute("n"); // P5 with linking and/or non-URI chars
+                                keyStr = token.attribute("n"); // P5 with linking and/or non-URI chars
                                 if (keyStr.empty()) {
-                                    keyStr = token.getAttribute("sortKey"); // P5 otherwise
+                                    keyStr = token.attribute("sortKey"); // P5 otherwise
                                     if (keyStr.empty()) {
-                            keyStr = token.getAttribute("key"); // P4
+                            keyStr = token.attribute("key"); // P4
                                         }
                                 }
 
@@ -273,9 +273,9 @@ bool handleToken(std::string & text, XMLTag & token) {
 
         // ENTRY end
         // If we see the end of an entry that we are in, then leave it
-        if ((inEntry      && !strcmp(tokenName, "entry"     )) ||
-            (inEntryFree  && !strcmp(tokenName, "entryFree" )) ||
-            (inSuperEntry && !strcmp(tokenName, "superentry"))) {
+        if ((inEntry      && (tokenName == "entry"     )) ||
+            (inEntryFree  && (tokenName == "entryFree" )) ||
+            (inSuperEntry && (tokenName == "superentry"))) {
 #ifdef DEBUG
             cout << "Leaving " << tokenName << endl;
 #endif

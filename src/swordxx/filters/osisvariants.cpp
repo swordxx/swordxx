@@ -89,7 +89,7 @@ char OSISVariants::processText(std::string &text, const SWKey *key, const SWModu
                 if (!strncmp(token.c_str(), "seg", 3)) {
                     tag = token.c_str();
 
-                    if (!tag.getAttribute("type").empty() && !strcmp("x-variant", tag.getAttribute("type").c_str()) && !tag.getAttribute("subType").empty() && !strcmp(variantChoice, tag.getAttribute("subType").c_str())) {
+                    if (!tag.attribute("type").empty() && !strcmp("x-variant", tag.attribute("type").c_str()) && !tag.attribute("subType").empty() && !strcmp(variantChoice, tag.attribute("subType").c_str())) {
                         invar = true;
                         hide = true;
                         continue;

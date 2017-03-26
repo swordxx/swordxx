@@ -68,15 +68,15 @@ bool TEIRTF::handleToken(std::string &buf, const char *token, BasicFilterUserDat
         XMLTag tag(token);
 
         // <p> paragraph tag
-        if (!strcmp(tag.getName(), "p")) {
+        if (tag.getName() == "p") {
             if (!tag.isEndTag()) {    // non-empty start tag
                 buf += "{\\sb100\\fi200\\par}";
             }
         }
 
         // <hi>
-        else if (!strcmp(tag.getName(), "hi") || !strcmp(tag.getName(), "emph")) {
-            std::string rend = tag.getAttribute("rend");
+        else if ((tag.getName() == "hi") || (tag.getName() == "emph")) {
+            std::string rend = tag.attribute("rend");
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {
                 if (rend == "italic" || rend == "ital")
                     buf += "{\\i1 ";
@@ -93,8 +93,8 @@ bool TEIRTF::handleToken(std::string &buf, const char *token, BasicFilterUserDat
         }
 
         // <entryFree>
-        else if (!strcmp(tag.getName(), "entryFree")) {
-            std::string n = tag.getAttribute("n");
+        else if (tag.getName() == "entryFree") {
+            std::string n = tag.attribute("n");
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {
                     if (n != "") {
                                     buf += "{\\b1 ";
@@ -104,8 +104,8 @@ bool TEIRTF::handleToken(std::string &buf, const char *token, BasicFilterUserDat
         }
 
         // <sense>
-        else if (!strcmp(tag.getName(), "sense")) {
-            std::string n = tag.getAttribute("n");
+        else if (tag.getName() == "sense") {
+            std::string n = tag.attribute("n");
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {
                     if (n != "") {
                                     buf += "{\\sb100\\par\\b1 ";
@@ -116,7 +116,7 @@ bool TEIRTF::handleToken(std::string &buf, const char *token, BasicFilterUserDat
         }
 
          // <orth>
-         else if (!strcmp(tag.getName(), "orth")) {
+         else if (tag.getName() == "orth") {
              if ((!tag.isEndTag()) && (!tag.isEmpty())) {
                  buf += "{\\b1 ";
              }
@@ -126,7 +126,7 @@ bool TEIRTF::handleToken(std::string &buf, const char *token, BasicFilterUserDat
          }
 
         // <div>
-        else if (!strcmp(tag.getName(), "div")) {
+        else if (tag.getName() == "div") {
 
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {
                 buf.append("{\\pard\\sa300}");
@@ -136,7 +136,13 @@ bool TEIRTF::handleToken(std::string &buf, const char *token, BasicFilterUserDat
         }
 
         // <pos>, <gen>, <case>, <gram>, <number>, <mood>
-        else if (!strcmp(tag.getName(), "pos") || !strcmp(tag.getName(), "gen") || !strcmp(tag.getName(), "case") || !strcmp(tag.getName(), "gram") || !strcmp(tag.getName(), "number") || !strcmp(tag.getName(), "mood")) {
+        else if ((tag.getName() == "pos")
+                 || (tag.getName() == "gen")
+                 || (tag.getName() == "case")
+                 || (tag.getName() == "gram")
+                 || (tag.getName() == "number")
+                 || (tag.getName() == "mood"))
+        {
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {
                 buf += "{\\i1 ";
             }
@@ -146,7 +152,7 @@ bool TEIRTF::handleToken(std::string &buf, const char *token, BasicFilterUserDat
         }
 
         // <tr>
-        else if (!strcmp(tag.getName(), "tr")) {
+        else if (tag.getName() == "tr") {
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {
                 buf += "{\\i1 ";
             }
@@ -156,7 +162,7 @@ bool TEIRTF::handleToken(std::string &buf, const char *token, BasicFilterUserDat
         }
 
         // <etym>
-        else if (!strcmp(tag.getName(), "etym")) {
+        else if (tag.getName() == "etym") {
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {
                 buf += "[";
             }
@@ -166,12 +172,12 @@ bool TEIRTF::handleToken(std::string &buf, const char *token, BasicFilterUserDat
         }
 
                // <note> tag
-        else if (!strcmp(tag.getName(), "note")) {
+        else if (tag.getName() == "note") {
             if (!tag.isEndTag()) {
                 if (!tag.isEmpty()) {
-                    std::string type = tag.getAttribute("type");
+                    std::string type = tag.attribute("type");
 
-                    std::string footnoteNumber = tag.getAttribute("swordFootnote");
+                    std::string footnoteNumber = tag.attribute("swordFootnote");
                     if (dynamic_cast<VerseKey const *>(u->key)) {
                         buf += formatted("{\\super <a href=\"\">*%s</a>} ", footnoteNumber.c_str());
                     }
@@ -184,14 +190,14 @@ bool TEIRTF::handleToken(std::string &buf, const char *token, BasicFilterUserDat
         }
 
         // <lb/> tag
-        else if (!strcmp(tag.getName(), "lb")) {
+        else if (tag.getName() == "lb") {
             buf += "{\\par}";
             userData->supressAdjacentWhitespace = true;
         }
 
         // <ref> tag
-        else if (!strcmp(tag.getName(), "ref")) {
-            if (!tag.isEndTag() && !tag.getAttribute("osisRef").empty()) {
+        else if (tag.getName() == "ref") {
+            if (!tag.isEndTag() && !tag.attribute("osisRef").empty()) {
                 buf += "{<a href=\"\">";
                 u->inOsisRef = true;
             }
@@ -201,8 +207,8 @@ bool TEIRTF::handleToken(std::string &buf, const char *token, BasicFilterUserDat
             }
         }
 
-        else if (!strcmp(tag.getName(), "graphic")) {
-            auto src(tag.getAttribute("url"));
+        else if (tag.getName() == "graphic") {
+            auto src(tag.attribute("url"));
             if (src.empty())        // assert we have a src attribute
                 return false;
 

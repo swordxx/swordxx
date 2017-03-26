@@ -68,7 +68,7 @@ bool TEIHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterUs
         MyUserData *u = (MyUserData *)userData;
         XMLTag tag(token);
 
-        if (!strcmp(tag.getName(), "p")) {
+        if (tag.getName() == "p") {
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {    // non-empty start tag
                 buf += "<!P><br />";
             }
@@ -83,9 +83,9 @@ bool TEIHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterUs
         }
 
         // <hi>
-        else if (!strcmp(tag.getName(), "hi")) {
+        else if (tag.getName() == "hi") {
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {
-                std::string rend = tag.getAttribute("rend");
+                std::string rend = tag.attribute("rend");
 
                 u->lastHi = rend;
                 if (rend == "italic" || rend == "ital")
@@ -115,9 +115,9 @@ bool TEIHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterUs
         }
 
         // <entryFree>
-        else if (!strcmp(tag.getName(), "entryFree")) {
+        else if (tag.getName() == "entryFree") {
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {
-                std::string n = tag.getAttribute("n");
+                std::string n = tag.attribute("n");
                 if (n != "") {
                     buf += "<b>";
                     buf += n;
@@ -127,9 +127,9 @@ bool TEIHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterUs
         }
 
         // <sense>
-        else if (!strcmp(tag.getName(), "sense")) {
+        else if (tag.getName() == "sense") {
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {
-                std::string n = tag.getAttribute("n");
+                std::string n = tag.attribute("n");
                 if (n != "") {
                     buf += "<br /><b>";
                     buf += n;
@@ -139,7 +139,7 @@ bool TEIHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterUs
         }
 
         // <div>
-        else if (!strcmp(tag.getName(), "div")) {
+        else if (tag.getName() == "div") {
 
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {
                 buf += "<!P>";
@@ -149,18 +149,18 @@ bool TEIHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterUs
         }
 
         // <lb.../>
-        else if (!strcmp(tag.getName(), "lb")) {
+        else if (tag.getName() == "lb") {
             buf += "<br />";
         }
 
         // <pos>, <gen>, <case>, <gram>, <number>, <mood>, <pron>, <def>
-        else if (!strcmp(tag.getName(), "pos") ||
-                 !strcmp(tag.getName(), "gen") ||
-                 !strcmp(tag.getName(), "case") ||
-                 !strcmp(tag.getName(), "gram") ||
-                 !strcmp(tag.getName(), "number") ||
-                 !strcmp(tag.getName(), "pron") /*||
-                 !strcmp(tag.getName(), "def")*/) {
+        else if ((tag.getName() == "pos") ||
+                 (tag.getName() == "gen") ||
+                 (tag.getName() == "case") ||
+                 (tag.getName() == "gram") ||
+                 (tag.getName() == "number") ||
+                 (tag.getName() == "pron") /*||
+                 (tag.getName() == "def")*/) {
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {
                 buf += "<i>";
             }
@@ -170,7 +170,7 @@ bool TEIHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterUs
         }
 
         // <tr>
-        else if (!strcmp(tag.getName(), "tr")) {
+        else if (tag.getName() == "tr") {
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {
                 buf += "<i>";
             }
@@ -180,7 +180,7 @@ bool TEIHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterUs
         }
 
         // orth
-        else if (!strcmp(tag.getName(), "orth")) {
+        else if (tag.getName() == "orth") {
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {
                 buf += "<b>";
             }
@@ -190,11 +190,11 @@ bool TEIHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterUs
         }
 
         // <etym>, <usg>
-        else if (!strcmp(tag.getName(), "etym") ||
-                 !strcmp(tag.getName(), "usg")) {
+        else if ((tag.getName() == "etym") ||
+                 (tag.getName() == "usg")) {
             // do nothing here
         }
-        else if (!strcmp(tag.getName(), "ref")) {
+        else if (tag.getName() == "ref") {
             if (!tag.isEndTag()) {
                 u->suspendTextPassThru = true;
                 std::string target;
@@ -202,13 +202,13 @@ bool TEIHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterUs
                 std::string ref;
 
                 int was_osisref = false;
-                if(!tag.getAttribute("osisRef").empty())
+                if(!tag.attribute("osisRef").empty())
                 {
-                    target += tag.getAttribute("osisRef");
+                    target += tag.attribute("osisRef");
                     was_osisref=true;
                 }
-                else if(!tag.getAttribute("target").empty())
-                    target += tag.getAttribute("target");
+                else if(!tag.attribute("target").empty())
+                    target += tag.attribute("target");
 
                 if(target.size())
                 {
@@ -257,15 +257,15 @@ bool TEIHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterUs
         }
 
            // <note> tag
-        else if (!strcmp(tag.getName(), "note")) {
+        else if (tag.getName() == "note") {
             if (!tag.isEndTag()) {
                 if (!tag.isEmpty()) {
                     u->suspendTextPassThru = true;
                 }
             }
             if (tag.isEndTag()) {
-                std::string footnoteNumber = tag.getAttribute("swordFootnote");
-                std::string noteName = tag.getAttribute("n");
+                std::string footnoteNumber = tag.attribute("swordFootnote");
+                std::string noteName = tag.attribute("n");
 
                 buf += formatted("<a href=\"passagestudy.jsp?action=showNote&type=n&value=%s&module=%s&passage=%s\"><small><sup class=\"n\">*n%s</sup></small></a>",
                     URL::encode(footnoteNumber.c_str()).c_str(),
@@ -277,8 +277,8 @@ bool TEIHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterUs
             }
         }
         // <graphic> image tag
-        else if (!strcmp(tag.getName(), "graphic")) {
-            auto url(tag.getAttribute("url"));
+        else if (tag.getName() == "graphic") {
+            auto url(tag.attribute("url"));
             if (!url.empty()) {        // assert we have a url attribute
                 std::string filepath;
                 if (userData->module) {
@@ -296,7 +296,7 @@ bool TEIHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterUs
             }
         }
         // <table> <row> <cell>
-        else if (!strcmp(tag.getName(), "table")) {
+        else if (tag.getName() == "table") {
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {
                 buf += "<table><tbody>\n";
             }
@@ -306,7 +306,7 @@ bool TEIHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterUs
             }
 
         }
-        else if (!strcmp(tag.getName(), "row")) {
+        else if (tag.getName() == "row") {
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {
                 buf += "\t<tr>";
             }
@@ -314,7 +314,7 @@ bool TEIHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterUs
                 buf += "</tr>\n";
             }
         }
-        else if (!strcmp(tag.getName(), "cell")) {
+        else if (tag.getName() == "cell") {
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {
                 buf += "<td>";
             }

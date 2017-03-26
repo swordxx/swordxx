@@ -55,7 +55,7 @@ bool OSISWEBIF::handleToken(std::string &buf, const char *token, BasicFilterUser
         XMLTag tag(token);
 
         // <w> tag
-        if (!strcmp(tag.getName(), "w")) {
+        if (tag.getName() == "w") {
 
             // start <w> tag
             if ((!tag.isEmpty()) && (!tag.isEndTag())) {
@@ -76,21 +76,21 @@ bool OSISWEBIF::handleToken(std::string &buf, const char *token, BasicFilterUser
 
                 std::string attrib;
                 const char *val;
-                if (!(attrib = tag.getAttribute("xlit")).empty()) {
+                if (!(attrib = tag.attribute("xlit")).empty()) {
                     val = strchr(attrib.c_str(), ':');
                     val = (val) ? (val + 1) : attrib.c_str();
 //                    buf += formatted(" %s", val);
                 }
-                if (!(attrib = tag.getAttribute("gloss")).empty()) {
+                if (!(attrib = tag.attribute("gloss")).empty()) {
                     val = strchr(attrib.c_str(), ':');
                     val = (val) ? (val + 1) : attrib.c_str();
 //                    buf += formatted(" %s", val);
                 }
-                if (!(attrib = tag.getAttribute("lemma")).empty()) {
-                    int count = tag.getAttributePartCount("lemma", ' ');
+                if (!(attrib = tag.attribute("lemma")).empty()) {
+                    int count = tag.attributePartCount("lemma", ' ');
                     int i = (count > 1) ? 0 : -1;        // -1 for whole value cuz it's faster, but does the same thing as 0
                     do {
-                        attrib = tag.getAttribute("lemma", i, ' ');
+                        attrib = tag.attribute("lemma", i, ' ');
                         if (i < 0) i = 0;    // to handle our -1 condition
                         val = strchr(attrib.c_str(), ':');
                         val = (val) ? (val + 1) : attrib.c_str();
@@ -103,15 +103,15 @@ bool OSISWEBIF::handleToken(std::string &buf, const char *token, BasicFilterUser
                             buf += formatted(" <small><em>&lt;<a href=\"%s?showStrong=%s#cv\">%s</a>&gt;</em></small> ", passageStudyURL.c_str(), URL::encode(val2).c_str(), val2);
                     } while (++i < count);
                 }
-                if (!(attrib = tag.getAttribute("morph")).empty() && (show)) {
-                    std::string savelemma = tag.getAttribute("savlm");
+                if (!(attrib = tag.attribute("morph")).empty() && (show)) {
+                    std::string savelemma = tag.attribute("savlm");
                     if ((strstr(savelemma.c_str(), "3588")) && (lastText.length() < 1))
                         show = false;
                     if (show) {
-                        int count = tag.getAttributePartCount("morph", ' ');
+                        int count = tag.attributePartCount("morph", ' ');
                         int i = (count > 1) ? 0 : -1;        // -1 for whole value cuz it's faster, but does the same thing as 0
                         do {
-                            attrib = tag.getAttribute("morph", i, ' ');
+                            attrib = tag.attribute("morph", i, ' ');
                             if (i < 0) i = 0;    // to handle our -1 condition
                             val = strchr(attrib.c_str(), ':');
                             val = (val) ? (val + 1) : attrib.c_str();
@@ -122,7 +122,7 @@ bool OSISWEBIF::handleToken(std::string &buf, const char *token, BasicFilterUser
                         } while (++i < count);
                     }
                 }
-                if (!(attrib = tag.getAttribute("POS")).empty()) {
+                if (!(attrib = tag.attribute("POS")).empty()) {
                     val = strchr(attrib.c_str(), ':');
                     val = (val) ? (val + 1) : attrib.c_str();
                     buf += formatted(" %s", val);
@@ -134,9 +134,9 @@ bool OSISWEBIF::handleToken(std::string &buf, const char *token, BasicFilterUser
         }
 
         // <note> tag
-        else if (!strcmp(tag.getName(), "note")) {
+        else if (tag.getName() == "note") {
             if (!tag.isEndTag()) {
-                                std::string type = tag.getAttribute("type");
+                                std::string type = tag.attribute("type");
                                 bool strongsMarkup = (type == "x-strongsMarkup" || type == "strongsMarkup");    // the latter is deprecated
                                 if (strongsMarkup) {
                                         tag.setEmpty(false);    // handle bug in KJV2003 module where some note open tags were <note ... />
@@ -144,10 +144,10 @@ bool OSISWEBIF::handleToken(std::string &buf, const char *token, BasicFilterUser
 
                 if (!tag.isEmpty()) {
                     if (!strongsMarkup) {    // leave strong's markup notes out, in the future we'll probably have different option filters to turn different note types on or off
-                        std::string footnoteNumber = tag.getAttribute("swordFootnote");
+                        std::string footnoteNumber = tag.attribute("swordFootnote");
                         std::string modName = (u->module) ? u->module->getName() : "";
                         if (dynamic_cast<VerseKey const *>(u->key)) {
-                            char ch = ((!tag.getAttribute("type").empty() && ((!strcmp(tag.getAttribute("type").c_str(), "crossReference")) || (!strcmp(tag.getAttribute("type").c_str(), "x-cross-ref")))) ? 'x':'n');
+                            char ch = ((!tag.attribute("type").empty() && ((!strcmp(tag.attribute("type").c_str(), "crossReference")) || (!strcmp(tag.attribute("type").c_str(), "x-cross-ref")))) ? 'x':'n');
 //                            buf += formatted("<a href=\"noteID=%s.%c.%s\"><small><sup>*%c</sup></small></a> ", vkey->getText(), ch, footnoteNumber.c_str(), ch);
                             buf += formatted("<span class=\"fn\" onclick=\"f(\'%s\',\'%s\',\'%s\');\" >%c</span>", modName.c_str(), u->key->getText(), footnoteNumber.c_str(), ch);
                         }

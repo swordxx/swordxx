@@ -141,7 +141,7 @@ bool OSISRTF::handleToken(std::string &buf, const char *token, BasicFilterUserDa
         XMLTag tag(token);
 
         // <w> tag
-        if (!strcmp(tag.getName(), "w")) {
+        if (tag.getName() == "w") {
 
             // start <w> tag
             if ((!tag.isEmpty()) && (!tag.isEndTag())) {
@@ -163,23 +163,23 @@ bool OSISRTF::handleToken(std::string &buf, const char *token, BasicFilterUserDa
 
                 std::string attrib;
                 const char *val;
-                if (!(attrib = tag.getAttribute("xlit")).empty()) {
+                if (!(attrib = tag.attribute("xlit")).empty()) {
                     val = strchr(attrib.c_str(), ':');
                     val = (val) ? (val + 1) : attrib.c_str();
                     scratch = formatted(" {\\fs15 <%s>}", val);
                     outText(scratch.c_str(), buf, u);
                 }
-                if (!(attrib = tag.getAttribute("gloss")).empty()) {
+                if (!(attrib = tag.attribute("gloss")).empty()) {
                     val = strchr(attrib.c_str(), ':');
                     val = (val) ? (val + 1) : attrib.c_str();
                     scratch = formatted(" {\\fs15 <%s>}", val);
                     outText(scratch.c_str(), buf, u);
                 }
-                if (!(attrib = tag.getAttribute("lemma")).empty()) {
-                    int count = tag.getAttributePartCount("lemma", ' ');
+                if (!(attrib = tag.attribute("lemma")).empty()) {
+                    int count = tag.attributePartCount("lemma", ' ');
                     int i = (count > 1) ? 0 : -1;        // -1 for whole value cuz it's faster, but does the same thing as 0
                     do {
-                        attrib = tag.getAttribute("lemma", i, ' ');
+                        attrib = tag.attribute("lemma", i, ' ');
                         if (i < 0) i = 0;    // to handle our -1 condition
                         val = strchr(attrib.c_str(), ':');
                         val = (val) ? (val + 1) : attrib.c_str();
@@ -194,15 +194,15 @@ bool OSISRTF::handleToken(std::string &buf, const char *token, BasicFilterUserDa
                         }
                     } while (++i < count);
                 }
-                if (!(attrib = tag.getAttribute("morph")).empty() && (show)) {
-                    std::string savelemma = tag.getAttribute("savlm");
+                if (!(attrib = tag.attribute("morph")).empty() && (show)) {
+                    std::string savelemma = tag.attribute("savlm");
                     if ((strstr(savelemma.c_str(), "3588")) && (lastText.length() < 1))
                         show = false;
                     if (show) {
-                        int count = tag.getAttributePartCount("morph", ' ');
+                        int count = tag.attributePartCount("morph", ' ');
                         int i = (count > 1) ? 0 : -1;        // -1 for whole value cuz it's faster, but does the same thing as 0
                         do {
-                            attrib = tag.getAttribute("morph", i, ' ');
+                            attrib = tag.attribute("morph", i, ' ');
                             if (i < 0) i = 0;    // to handle our -1 condition
                             val = strchr(attrib.c_str(), ':');
                             val = (val) ? (val + 1) : attrib.c_str();
@@ -214,7 +214,7 @@ bool OSISRTF::handleToken(std::string &buf, const char *token, BasicFilterUserDa
                         } while (++i < count);
                     }
                 }
-                if (!(attrib = tag.getAttribute("POS")).empty()) {
+                if (!(attrib = tag.attribute("POS")).empty()) {
                     val = strchr(attrib.c_str(), ':');
                     val = (val) ? (val + 1) : attrib.c_str();
                     scratch = formatted(" {\\fs15 <%s>}", val);
@@ -227,15 +227,15 @@ bool OSISRTF::handleToken(std::string &buf, const char *token, BasicFilterUserDa
         }
 
         // <note> tag
-        else if (!strcmp(tag.getName(), "note")) {
+        else if (tag.getName() == "note") {
             if (!tag.isEndTag()) {
                 if (!tag.isEmpty()) {
-                    std::string type = tag.getAttribute("type");
+                    std::string type = tag.attribute("type");
 
                     if ((type != "x-strongsMarkup")            // leave strong's markup notes out, in the future we'll probably have different option filters to turn different note types on or off
                             && (type != "strongsMarkup")    // deprecated
                             ) {
-                        std::string footnoteNumber = tag.getAttribute("swordFootnote");
+                        std::string footnoteNumber = tag.attribute("swordFootnote");
                         if (VerseKey const * const vkey =
                                 dynamic_cast<VerseKey const *>(u->key))
                         {
@@ -255,7 +255,7 @@ bool OSISRTF::handleToken(std::string &buf, const char *token, BasicFilterUserDa
         }
 
         // <p> paragraph and <lg> linegroup tags
-        else if (!strcmp(tag.getName(), "p") || !strcmp(tag.getName(), "lg")) {
+        else if ((tag.getName() == "p") || (tag.getName() == "lg")) {
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {    // non-empty start tag
                 outText("{\\fi200\\par}", buf, u);
             }
@@ -272,20 +272,20 @@ bool OSISRTF::handleToken(std::string &buf, const char *token, BasicFilterUserDa
         // Milestoned paragraphs, created by osis2mod
         // <div type="paragraph" sID.../>
         // <div type="paragraph" eID.../>
-        else if (tag.isEmpty() && !strcmp(tag.getName(), "div") && !tag.getAttribute("type").empty() && (!strcmp(tag.getAttribute("type").c_str(), "x-p") || !strcmp(tag.getAttribute("type").c_str(), "paragraph"))) {
+        else if (tag.isEmpty() && (tag.getName() == "div") && !tag.attribute("type").empty() && (!strcmp(tag.attribute("type").c_str(), "x-p") || !strcmp(tag.attribute("type").c_str(), "paragraph"))) {
             // <div type="paragraph"  sID... />
-            if (!tag.getAttribute("sID").empty()) {    // non-empty start tag
+            if (!tag.attribute("sID").empty()) {    // non-empty start tag
                 outText("{\\fi200\\par}", buf, u);
             }
             // <div type="paragraph"  eID... />
-            else if (!tag.getAttribute("eID").empty()) {
+            else if (!tag.attribute("eID").empty()) {
                 outText("{\\par}", buf, u);
                 userData->supressAdjacentWhitespace = true;
             }
         }
 
         // <reference> tag
-        else if (!strcmp(tag.getName(), "reference")) {
+        else if (tag.getName() == "reference") {
             if (!u->inXRefNote) {    // only show these if we're not in an xref note
                 if ((!tag.isEndTag()) && (!tag.isEmpty())) {
                     outText("{<a href=\"\">", buf, u);
@@ -297,14 +297,14 @@ bool OSISRTF::handleToken(std::string &buf, const char *token, BasicFilterUserDa
         }
 
         // <l> poetry
-        else if (!strcmp(tag.getName(), "l")) {
+        else if (tag.getName() == "l") {
             // end line marker
-            if (!tag.getAttribute("eID").empty()) {
+            if (!tag.attribute("eID").empty()) {
                 outText("{\\par}", buf, u);
             }
             // <l/> without eID or sID
             // Note: this is improper osis. This should be <lb/>
-            else if (tag.isEmpty() && tag.getAttribute("sID").empty()) {
+            else if (tag.isEmpty() && tag.attribute("sID").empty()) {
                 outText("{\\par}", buf, u);
             }
             // end of the line
@@ -314,13 +314,13 @@ bool OSISRTF::handleToken(std::string &buf, const char *token, BasicFilterUserDa
         }
 
         // <milestone type="line"/> or <lb.../>
-        else if ((!strcmp(tag.getName(), "lb") && (tag.getAttribute("type").empty() || strcmp(tag.getAttribute("type").c_str(), "x-optional"))) || ((!strcmp(tag.getName(), "milestone")) && (!tag.getAttribute("type").empty()) && (!strcmp(tag.getAttribute("type").c_str(), "line")))) {
+        else if (((tag.getName() == "lb") && (tag.attribute("type").empty() || strcmp(tag.attribute("type").c_str(), "x-optional"))) || ((tag.getName() == "milestone") && (!tag.attribute("type").empty()) && (!strcmp(tag.attribute("type").c_str(), "line")))) {
             outText("{\\par}", buf, u);
             userData->supressAdjacentWhitespace = true;
         }
 
         // <title>
-        else if (!strcmp(tag.getName(), "title")) {
+        else if (tag.getName() == "title") {
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {
                 outText("{\\par\\i1\\b1 ", buf, u);
             }
@@ -329,7 +329,7 @@ bool OSISRTF::handleToken(std::string &buf, const char *token, BasicFilterUserDa
             }
         }
         // <list>     - how do we support these better in RTF?
-        else if (!strcmp(tag.getName(), "list")) {
+        else if (tag.getName() == "list") {
             if((!tag.isEndTag()) && (!tag.isEmpty())) {
                 outText("\\par\\pard", buf, u);
             }
@@ -339,7 +339,7 @@ bool OSISRTF::handleToken(std::string &buf, const char *token, BasicFilterUserDa
         }
 
         // <item> - support better
-        else if (!strcmp(tag.getName(), "item")) {
+        else if (tag.getName() == "item") {
             if((!tag.isEndTag()) && (!tag.isEmpty())) {
                 outText("* ", buf, u);
             }
@@ -349,7 +349,7 @@ bool OSISRTF::handleToken(std::string &buf, const char *token, BasicFilterUserDa
         }
 
         // <catchWord> & <rdg> tags (italicize)
-        else if (!strcmp(tag.getName(), "rdg") || !strcmp(tag.getName(), "catchWord")) {
+        else if ((tag.getName() == "rdg") || (tag.getName() == "catchWord")) {
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {
                 outText("{\\i1 ", buf, u);
             }
@@ -359,8 +359,8 @@ bool OSISRTF::handleToken(std::string &buf, const char *token, BasicFilterUserDa
         }
 
         // <hi>
-        else if (!strcmp(tag.getName(), "hi")) {
-            std::string type = tag.getAttribute("type");
+        else if (tag.getName() == "hi") {
+            std::string type = tag.attribute("type");
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {
                 if (type == "bold" || type == "b" || type == "x-b")
                     outText("{\\b1 ", buf, u);
@@ -380,16 +380,16 @@ bool OSISRTF::handleToken(std::string &buf, const char *token, BasicFilterUserDa
         // If the tag is </q> then use the pushed <q> for specification
         // If there is a marker attribute, possibly empty, this overrides osisQToTick.
         // If osisQToTick, then output the marker, using level to determine the type of mark.
-        else if (!strcmp(tag.getName(), "q")) {
-            std::string type      = tag.getAttribute("type");
-            std::string who       = tag.getAttribute("who");
-            auto tmp(tag.getAttribute("level"));
+        else if (tag.getName() == "q") {
+            std::string type      = tag.attribute("type");
+            std::string who       = tag.attribute("who");
+            auto tmp(tag.attribute("level"));
             int level       = (!tmp.empty()) ? atoi(tmp.c_str()) : 1;
-            std::string mark(tag.getAttribute("marker"));
+            std::string mark(tag.attribute("marker"));
             bool hasMark = !mark.empty();
 
             // open <q> or <q sID... />
-            if ((!tag.isEmpty() && !tag.isEndTag()) || (tag.isEmpty() && !tag.getAttribute("sID").empty())) {
+            if ((!tag.isEmpty() && !tag.isEndTag()) || (tag.isEmpty() && !tag.attribute("sID").empty())) {
                 // if <q> then remember it for the </q>
                 if (!tag.isEmpty())
                     u->quoteStack.push(tag.toString());
@@ -406,17 +406,17 @@ bool OSISRTF::handleToken(std::string &buf, const char *token, BasicFilterUserDa
                     outText((level % 2) ? '\"' : '\'', buf, u);
             }
             // close </q> or <q eID... />
-            else if ((tag.isEndTag()) || (!tag.getAttribute("eID").empty())) {
+            else if ((tag.isEndTag()) || (!tag.attribute("eID").empty())) {
                 // if it is </q> then pop the stack for the attributes
                 if (tag.isEndTag() && !u->quoteStack.empty()) {
                     XMLTag qTag(u->quoteStack.top().c_str());
                     u->quoteStack.pop();
 
-                    type    = qTag.getAttribute("type");
-                    who     = qTag.getAttribute("who");
-                    tmp     = qTag.getAttribute("level");
+                    type    = qTag.attribute("type");
+                    who     = qTag.attribute("who");
+                    tmp     = qTag.attribute("level");
                     level   = (!tmp.empty()) ? atoi(tmp.c_str()) : 1;
-                    tmp     = qTag.getAttribute("marker");
+                    tmp     = qTag.attribute("marker");
                     hasMark = !tmp.empty();
                     mark    = tmp;
                 }
@@ -436,10 +436,10 @@ bool OSISRTF::handleToken(std::string &buf, const char *token, BasicFilterUserDa
 
 
         // <milestone type="cQuote" marker="x"/>
-        else if (!strcmp(tag.getName(), "milestone") && !tag.getAttribute("type").empty() && !strcmp(tag.getAttribute("type").c_str(), "cQuote")) {
-            auto mark(tag.getAttribute("marker"));
+        else if ((tag.getName() == "milestone") && !tag.attribute("type").empty() && !strcmp(tag.attribute("type").c_str(), "cQuote")) {
+            auto mark(tag.attribute("marker"));
             bool hasMark = !mark.empty();
-            auto tmp(tag.getAttribute("level"));
+            auto tmp(tag.attribute("level"));
             int level = (!tmp.empty()) ? atoi(tmp.c_str()) : 1;
 
             // first check to see if we've been given an explicit mark
@@ -451,8 +451,8 @@ bool OSISRTF::handleToken(std::string &buf, const char *token, BasicFilterUserDa
         }
 
         // <transChange>
-        else if (!strcmp(tag.getName(), "transChange")) {
-            std::string type = tag.getAttribute("type");
+        else if (tag.getName() == "transChange") {
+            std::string type = tag.attribute("type");
 
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {
 
@@ -466,7 +466,7 @@ bool OSISRTF::handleToken(std::string &buf, const char *token, BasicFilterUserDa
         }
 
         // <divineName>
-        else if (!strcmp(tag.getName(), "divineName")) {
+        else if (tag.getName() == "divineName") {
 
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {
                  outText("{\\scaps ", buf, u);
@@ -477,7 +477,7 @@ bool OSISRTF::handleToken(std::string &buf, const char *token, BasicFilterUserDa
         }
 
         // <div>
-        else if (!strcmp(tag.getName(), "div")) {
+        else if (tag.getName() == "div") {
 
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {
                 outText("\\pard ", buf, u);
@@ -488,8 +488,8 @@ bool OSISRTF::handleToken(std::string &buf, const char *token, BasicFilterUserDa
         }
 
         // image
-        else if (!strcmp(tag.getName(), "figure")) {
-            auto const src(tag.getAttribute("src"));
+        else if (tag.getName() == "figure") {
+            auto const src(tag.attribute("src"));
             if (src.empty())        // assert we have a src attribute
                 return false;
 

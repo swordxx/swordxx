@@ -77,7 +77,7 @@ char ThMLScripref::processText(std::string &text, const SWKey *key, const SWModu
             intoken = false;
 
             XMLTag tag(token.c_str());
-            if (!strcmp(tag.getName(), "scripRef")) {
+            if (tag.getName() == "scripRef") {
                 if (!tag.isEndTag()) {
                     if (!tag.isEmpty()) {
                         refs = "";
@@ -93,12 +93,12 @@ char ThMLScripref::processText(std::string &text, const SWKey *key, const SWModu
                         footnoteNum = (fc.length()) ? atoi(fc.c_str()) : 0;
                         sprintf(buf, "%i", ++footnoteNum);
                         module->getEntryAttributes()["Footnote"]["count"]["value"] = buf;
-                        for (auto const & attr : startTag.getAttributeNames())
+                        for (auto const & attr : startTag.attributeNames())
                             module->getEntryAttributes()["Footnote"][buf][attr.c_str()] =
-                                    startTag.getAttribute(attr.c_str());
+                                    startTag.attribute(attr.c_str());
                         module->getEntryAttributes()["Footnote"][buf]["body"] = tagText;
                         startTag.setAttribute("swordFootnote", buf);
-                        std::string passage = startTag.getAttribute("passage");
+                        std::string passage = startTag.attribute("passage");
                         if (passage.length())
                             refs = parser->parseVerseList(passage.c_str(), parser->getText(), true).getRangeText();
                         else    refs = parser->parseVerseList(tagText.c_str(), parser->getText(), true).getRangeText();
@@ -114,8 +114,8 @@ char ThMLScripref::processText(std::string &text, const SWKey *key, const SWModu
             }
 
             // if not a scripRef token, keep token in text
-            if ((!strcmp(tag.getName(), "scripRef")) && (!tag.isEndTag())) {
-                std::string osisRef = tag.getAttribute("passage");
+            if ((tag.getName() == "scripRef") && !tag.isEndTag()) {
+                std::string osisRef = tag.attribute("passage");
                 if (refs.length())
                     refs += "; ";
                 refs += osisRef;

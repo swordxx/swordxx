@@ -141,7 +141,7 @@ char OSISWordJS::processText(std::string &text, const SWKey *key, const SWModule
                         lexName = (defaultHebLex->getName() == "StrongsHebrew")?"H":defaultHebLex->getName();
                     }
 
-                    std::string xlit = wtag.getAttribute("xlit");
+                    std::string xlit = wtag.attribute("xlit");
 
                     if ((lemmaClass != "strong") && (hasPrefix(xlit, "betacode:"))) {
                         lexName = "betacode";

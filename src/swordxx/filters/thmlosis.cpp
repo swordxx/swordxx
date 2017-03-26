@@ -252,7 +252,7 @@ char ThMLOSIS::processText(std::string &text, const SWKey *key, const SWModule *
                 XMLTag tag = token;
                 text.append("<seg type=\"x-variant\"");
                 std::string cls = "x-class:";
-                cls += tag.getAttribute("class");
+                cls += tag.attribute("class");
                 if (cls.length()>8)
                     text += formatted(" subType=\"%s\"", cls.c_str());
 

@@ -102,11 +102,11 @@ bool OSISOSIS::handleToken(std::string &buf, const char *token, BasicFilterUserD
             u->startTag = tag;
 
         // <w> tag
-        if (!strcmp(tag.getName(), "w")) {
+        if (tag.getName() == "w") {
 
             // start <w> tag
             if ((!tag.isEmpty()) && (!tag.isEndTag())) {
-                std::string attr = tag.getAttribute("lemma");
+                std::string attr = tag.attribute("lemma");
                 if (attr.length()) {
                     if (!strncmp(attr.c_str(), "x-Strongs:", 10)) {
                         std::memcpy(&attr[3u], "strong", 6);
@@ -114,7 +114,7 @@ bool OSISOSIS::handleToken(std::string &buf, const char *token, BasicFilterUserD
                         tag.setAttribute("lemma", attr.c_str());
                     }
                 }
-                attr = tag.getAttribute("morph");
+                attr = tag.attribute("morph");
                 if (attr.length()) {
                     if (!strncmp(attr.c_str(), "x-StrongsMorph:", 15)) {
                         memcpy(&attr[3u], "strong", 6);
@@ -135,9 +135,9 @@ bool OSISOSIS::handleToken(std::string &buf, const char *token, BasicFilterUserD
         }
 
         // <note> tag
-        else if (!strcmp(tag.getName(), "note")) {
+        else if (tag.getName() == "note") {
             if (!tag.isEndTag()) {
-                std::string type = tag.getAttribute("type");
+                std::string type = tag.attribute("type");
 
                 bool strongsMarkup = (type == "x-strongsMarkup" || type == "strongsMarkup");    // the latter is deprecated
                 if (strongsMarkup) {
@@ -155,7 +155,7 @@ bool OSISOSIS::handleToken(std::string &buf, const char *token, BasicFilterUserD
 
                 if (u->module) {
                                         XMLTag tag = token;
-                                        std::string swordFootnote = tag.getAttribute("swordFootnote");
+                                        std::string swordFootnote = tag.attribute("swordFootnote");
                                         std::string footnoteBody = u->module->getEntryAttributes()["Footnote"][swordFootnote]["body"];
                                         buf.append(u->module->renderText(footnoteBody.c_str()));
                                 }

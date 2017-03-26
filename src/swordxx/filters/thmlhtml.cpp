@@ -157,9 +157,9 @@ bool ThMLHTML::handleToken(std::string &buf, const char *token, BasicFilterUserD
     if (!substituteToken(buf, token)) { // manually process if it wasn't a simple substitution
         MyUserData *u = (MyUserData *)userData;
         XMLTag tag(token);
-        if (!strcmp(tag.getName(), "sync")) {
-            if (!tag.getAttribute("type").empty() && !tag.getAttribute("value").empty() && !strcmp(tag.getAttribute("type").c_str(), "Strongs")) {
-                auto value(tag.getAttribute("value"));
+        if (tag.getName() == "sync") {
+            if (!tag.attribute("type").empty() && !tag.attribute("value").empty() && !strcmp(tag.attribute("type").c_str(), "Strongs")) {
+                auto value(tag.attribute("value"));
                 if (!value.empty()) {
                     auto const firstChar(*(value.c_str()));
                     if (firstChar == 'H' || firstChar == 'G' || firstChar == 'A') {
@@ -177,34 +177,34 @@ bool ThMLHTML::handleToken(std::string &buf, const char *token, BasicFilterUserD
                     }
                 }
             }
-            else if (!tag.getAttribute("type").empty() && !tag.getAttribute("value").empty() && !strcmp(tag.getAttribute("type").c_str(), "morph")) {
+            else if (!tag.attribute("type").empty() && !tag.attribute("value").empty() && !strcmp(tag.attribute("type").c_str(), "morph")) {
                 buf += "<small><em>";
-                buf += tag.getAttribute("value");
+                buf += tag.attribute("value");
                 buf += "</em></small>";
             }
-            else if (!tag.getAttribute("type").empty() && !tag.getAttribute("value").empty() && !strcmp(tag.getAttribute("type").c_str(), "lemma")) {
+            else if (!tag.attribute("type").empty() && !tag.attribute("value").empty() && !strcmp(tag.attribute("type").c_str(), "lemma")) {
                 buf += "<small><em>(";
-                buf += tag.getAttribute("value");
+                buf += tag.attribute("value");
                 buf += ")</em></small>";
             }
         }
-        else if (!strcmp(tag.getName(), "div")) {
+        else if (tag.getName() == "div") {
             if (tag.isEndTag() && (u->SecHead)) {
                 buf += "</i></b><br />";
                 u->SecHead = false;
             }
-            else if (!tag.getAttribute("class").empty()) {
-                if (!strcmp(tag.getAttribute("class").c_str(), "sechead")) {
+            else if (!tag.attribute("class").empty()) {
+                if (!strcmp(tag.attribute("class").c_str(), "sechead")) {
                     u->SecHead = true;
                     buf += "<br /><b><i>";
                 }
-                else if (!strcmp(tag.getAttribute("class").c_str(), "title")) {
+                else if (!strcmp(tag.attribute("class").c_str(), "title")) {
                     u->SecHead = true;
                     buf += "<br /><b><i>";
                 }
             }
         }
-        else if (!strcmp(tag.getName(), "img")) {
+        else if (tag.getName() == "img") {
             const char *src = strstr(token, "src");
             if (!src)        // assert we have a src attribute
                 return false;
@@ -230,7 +230,7 @@ bool ThMLHTML::handleToken(std::string &buf, const char *token, BasicFilterUserD
             }
             buf += '>';
         }
-        else if (!strcmp(tag.getName(), "scripRef")) { //do nothing with scrip refs, we leave them out
+        else if (tag.getName() == "scripRef") { //do nothing with scrip refs, we leave them out
 
         }
         else {

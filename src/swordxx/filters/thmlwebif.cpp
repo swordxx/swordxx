@@ -42,15 +42,15 @@ bool ThMLWEBIF::handleToken(std::string &buf, const char *token, BasicFilterUser
         MyUserData *u = (MyUserData *)userData;
         XMLTag tag(token);
         std::string url;
-        if (!strcmp(tag.getName(), "sync")) {
-            auto value(tag.getAttribute("value"));
+        if (tag.getName() == "sync") {
+            auto value(tag.attribute("value"));
             url = value;
             if ((url.length() > 1) && strchr("GH", url[0])) {
                 if (isdigit(url[1]))
                     url = url.c_str()+1;
             }
 
-            if(!tag.getAttribute("type").empty() && !strcmp(tag.getAttribute("type").c_str(), "morph")){
+            if(!tag.attribute("type").empty() && !strcmp(tag.attribute("type").c_str(), "morph")){
                 buf += "<small><em> (";
                 buf += formatted("<a href=\"%s?showMorph=%s#cv\">", passageStudyURL.c_str(), URL::encode(url.c_str()).c_str() );
             }
@@ -67,14 +67,14 @@ bool ThMLWEBIF::handleToken(std::string &buf, const char *token, BasicFilterUser
             buf += value;
             buf += "</a>";
 
-            if (!tag.getAttribute("type").empty() && !strcmp(tag.getAttribute("type").c_str(), "morph")) {
+            if (!tag.attribute("type").empty() && !strcmp(tag.attribute("type").c_str(), "morph")) {
                 buf += ") </em></small>";
             }
             else {
                 buf += "&gt; </em></small>";
             }
         }
-        else if (!strcmp(tag.getName(), "scripRef")) {
+        else if (tag.getName() == "scripRef") {
             if (tag.isEndTag()) {
                 if (u->inscriptRef) { // like  "<scripRef passage="John 3:16">John 3:16</scripRef>"
                     u->inscriptRef = false;
@@ -90,10 +90,10 @@ bool ThMLWEBIF::handleToken(std::string &buf, const char *token, BasicFilterUser
                     u->suspendTextPassThru = false;
                 }
             }
-            else if (!tag.getAttribute("passage").empty()) { //passage given
+            else if (!tag.attribute("passage").empty()) { //passage given
                 u->inscriptRef = true;
 
-                buf += formatted("<a href=\"%s?key=%s#cv\">", passageStudyURL.c_str(), URL::encode(tag.getAttribute("passage").c_str()).c_str());
+                buf += formatted("<a href=\"%s?key=%s#cv\">", passageStudyURL.c_str(), URL::encode(tag.attribute("passage").c_str()).c_str());
             }
             else { //no passage given
                 u->inscriptRef = false;

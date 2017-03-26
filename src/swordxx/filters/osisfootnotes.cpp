@@ -98,8 +98,8 @@ char OSISFootnotes::processText(std::string &text, const SWKey *key, const SWMod
                 tag = token.c_str();
 
                 if (!tag.isEndTag()) {
-                    if (!tag.getAttribute("type").empty() && (!strcmp("x-strongsMarkup", tag.getAttribute("type").c_str())
-                                            || !strcmp("strongsMarkup", tag.getAttribute("type").c_str()))    // deprecated
+                    if (!tag.attribute("type").empty() && (!strcmp("x-strongsMarkup", tag.attribute("type").c_str())
+                                            || !strcmp("strongsMarkup", tag.attribute("type").c_str()))    // deprecated
                             ) {
                         tag.setEmpty(false);  // handle bug in KJV2003 module where some note open tags were <note ... />
                         strongsMarkup = true;
@@ -117,19 +117,19 @@ char OSISFootnotes::processText(std::string &text, const SWKey *key, const SWMod
                 if (hide && tag.isEndTag()) {
                     if (module->isProcessEntryAttributes() && !strongsMarkup) { //don`t parse strongsMarkup to EntryAttributes as Footnote
                         sprintf(buf, "%i", footnoteNum++);
-                        for (auto const & attr : startTag.getAttributeNames())
+                        for (auto const & attr : startTag.attributeNames())
                             module->getEntryAttributes()["Footnote"][buf][attr.c_str()] =
-                                    startTag.getAttribute(attr.c_str());
+                                    startTag.attribute(attr.c_str());
                         module->getEntryAttributes()["Footnote"][buf]["body"] = tagText;
                         startTag.setAttribute("swordFootnote", buf);
-                        if ((!startTag.getAttribute("type").empty()) && (!strcmp(startTag.getAttribute("type").c_str(), "crossReference"))) {
+                        if ((!startTag.attribute("type").empty()) && (!strcmp(startTag.attribute("type").c_str(), "crossReference"))) {
                             if (!refs.length())
                                 refs = parser->parseVerseList(tagText.c_str(), parser->getText(), true).getRangeText();
                             module->getEntryAttributes()["Footnote"][buf]["refList"] = refs.c_str();
                         }
                     }
                     hide = false;
-                    if (option || (!startTag.getAttribute("type").empty() && !strcmp(startTag.getAttribute("type").c_str(), "crossReference"))) {    // we want the tag in the text; crossReferences are handled by another filter
+                    if (option || (!startTag.attribute("type").empty() && !strcmp(startTag.attribute("type").c_str(), "crossReference"))) {    // we want the tag in the text; crossReferences are handled by another filter
                         text.append(startTag.toString());
 //                        text.append(tagText);    // we don't put the body back in because it is retrievable from EntryAttributes["Footnotes"][]["body"].
                     }

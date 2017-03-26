@@ -102,24 +102,24 @@ bool OSISPlain::handleToken(std::string &buf, const char *token, BasicFilterUser
 
             std::string attrib;
             const char *val;
-            if (!(attrib = u->tag.getAttribute("xlit")).empty()) {
+            if (!(attrib = u->tag.attribute("xlit")).empty()) {
                 val = strchr(attrib.c_str(), ':');
                 val = (val) ? (val + 1) : attrib.c_str();
                 buf.append(" <");
                 buf.append(val);
                 buf.push_back('>');
             }
-            if (!(attrib = u->tag.getAttribute("gloss")).empty()) {
+            if (!(attrib = u->tag.attribute("gloss")).empty()) {
                 buf.append(" <");
                 buf.append(attrib);
                 buf.push_back('>');
             }
-            if (!(attrib = u->tag.getAttribute("lemma")).empty()) {
-                int count = u->tag.getAttributePartCount("lemma", ' ');
+            if (!(attrib = u->tag.attribute("lemma")).empty()) {
+                int count = u->tag.attributePartCount("lemma", ' ');
                 int i = (count > 1) ? 0 : -1;        // -1 for whole value cuz it's faster, but does the same thing as 0
                 do {
                     char gh;
-                    attrib = u->tag.getAttribute("lemma", i, ' ');
+                    attrib = u->tag.attribute("lemma", i, ' ');
                     if (i < 0) i = 0;    // to handle our -1 condition
                     val = strchr(attrib.c_str(), ':');
                     val = (val) ? (val + 1) : attrib.c_str();
@@ -140,11 +140,11 @@ bool OSISPlain::handleToken(std::string &buf, const char *token, BasicFilterUser
                     }
                 } while (++i < count);
             }
-            if (!(attrib = u->tag.getAttribute("morph")).empty() && (show)) {
-                int count = u->tag.getAttributePartCount("morph", ' ');
+            if (!(attrib = u->tag.attribute("morph")).empty() && (show)) {
+                int count = u->tag.attributePartCount("morph", ' ');
                 int i = (count > 1) ? 0 : -1;        // -1 for whole value cuz it's faster, but does the same thing as 0
                 do {
-                    attrib = u->tag.getAttribute("morph", i, ' ');
+                    attrib = u->tag.attribute("morph", i, ' ');
                     if (i < 0) i = 0;    // to handle our -1 condition
                     val = strchr(attrib.c_str(), ':');
                     val = (val) ? (val + 1) : attrib.c_str();
@@ -155,7 +155,7 @@ bool OSISPlain::handleToken(std::string &buf, const char *token, BasicFilterUser
                     buf.push_back(')');
                 } while (++i < count);
             }
-            if (!(attrib = u->tag.getAttribute("POS")).empty()) {
+            if (!(attrib = u->tag.attribute("POS")).empty()) {
                 val = strchr(attrib.c_str(), ':');
                 val = (val) ? (val + 1) : attrib.c_str();
 
@@ -173,7 +173,7 @@ bool OSISPlain::handleToken(std::string &buf, const char *token, BasicFilterUser
                 else    u->suspendTextPassThru = true;
                 if (u->module) {
                     XMLTag tag = token;
-                    std::string swordFootnote = tag.getAttribute("swordFootnote");
+                    std::string swordFootnote = tag.attribute("swordFootnote");
                     std::string footnoteBody = u->module->getEntryAttributes()["Footnote"][swordFootnote]["body"];
                     buf.append(u->module->renderText(footnoteBody.c_str()));
                 }
@@ -194,8 +194,8 @@ bool OSISPlain::handleToken(std::string &buf, const char *token, BasicFilterUser
         // Milestoned paragraph, created by osis2mod
         // <div type="paragraph"  sID... />
         // <div type="paragraph"  eID... />
-        else if (!strcmp(u->tag.getName(), "div") && !u->tag.getAttribute("type").empty() && (!strcmp(u->tag.getAttribute("type").c_str(), "x-p") || !strcmp(u->tag.getAttribute("type").c_str(), "paragraph")) &&
-            (u->tag.isEmpty() && (!u->tag.getAttribute("sID").empty() || !u->tag.getAttribute("eID").empty()))) {
+        else if ((u->tag.getName() == "div") && !u->tag.attribute("type").empty() && (!strcmp(u->tag.attribute("type").c_str(), "x-p") || !strcmp(u->tag.attribute("type").c_str(), "paragraph")) &&
+            (u->tag.isEmpty() && (!u->tag.attribute("sID").empty() || !u->tag.attribute("eID").empty()))) {
                 userData->supressAdjacentWhitespace = true;
                 buf.push_back('\n');
         }
@@ -249,9 +249,9 @@ bool OSISPlain::handleToken(std::string &buf, const char *token, BasicFilterUser
             }
             u->suspendTextPassThru = false;
         } else if (!strncmp(token, "q", 1)
-                   && !u->tag.getAttribute("marker").empty())
+                   && !u->tag.attribute("marker").empty())
         {
-            buf.append(u->tag.getAttribute("marker"));
+            buf.append(u->tag.attribute("marker"));
         }
                 // <milestone type="line"/>
                 else if (!strncmp(token, "milestone", 9)) {

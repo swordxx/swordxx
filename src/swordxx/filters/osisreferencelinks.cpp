@@ -75,7 +75,7 @@ char OSISReferenceLinks::processText(std::string &text, const SWKey *key, const 
             else {
                 XMLTag tag;
                 tag = token.c_str();
-                if (!tag.isEndTag() && type == tag.getAttribute("type") && (!subType.size() || subType == tag.getAttribute("subType"))) {
+                if (!tag.isEndTag() && type == tag.attribute("type") && (!subType.size() || subType == tag.attribute("subType"))) {
                     stripThisToken = true;
                     continue;
                 }

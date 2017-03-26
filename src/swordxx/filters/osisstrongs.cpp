@@ -71,9 +71,9 @@ char OSISStrongs::processText(std::string &text, const SWKey *key, const SWModul
             // possible page seg --------------------------------
             if (hasPrefix(token, "seg ")) {
                 XMLTag stag(token.c_str());
-                std::string type = stag.getAttribute("type");
+                std::string type = stag.attribute("type");
                 if (type == "page") {
-                    std::string number = stag.getAttribute("subtype");
+                    std::string number = stag.attribute("subtype");
                     if (number.length()) {
                         page = number;
                     }
@@ -99,13 +99,13 @@ char OSISStrongs::processText(std::string &text, const SWKey *key, const SWModul
 
                     // why is morph entry attribute processing done in here?  Well, it's faster.  It makes more local sense to place this code in osismorph.
                     // easier to keep lemma and morph in same wordstr number too maybe.
-                    if (!(attrib = wtag.getAttribute("morph")).empty()) {
-                        int count = wtag.getAttributePartCount("morph", ' ');
+                    if (!(attrib = wtag.attribute("morph")).empty()) {
+                        int count = wtag.attributePartCount("morph", ' ');
                         int i = (count > 1) ? 0 : -1;        // -1 for whole value cuz it's faster, but does the same thing as 0
                         do {
                             std::string mClass = "";
                             std::string mp = "";
-                            attrib = wtag.getAttribute("morph", i, ' ');
+                            attrib = wtag.attribute("morph", i, ' ');
                             if (i < 0) i = 0;    // to handle our -1 condition
 
                             const char *m = strchr(attrib.c_str(), ':');
@@ -130,14 +130,14 @@ char OSISStrongs::processText(std::string &text, const SWKey *key, const SWModul
                         } while (++i < count);
                     }
 
-                    if (!(attrib = wtag.getAttribute("lemma")).empty()) {
-                        int count = wtag.getAttributePartCount("lemma", ' ');
+                    if (!(attrib = wtag.attribute("lemma")).empty()) {
+                        int count = wtag.attributePartCount("lemma", ' ');
                         int i = (count > 1) ? 0 : -1;        // -1 for whole value cuz it's faster, but does the same thing as 0
                         do {
                             gh = 0;
                             std::string lClass = "";
                             std::string l = "";
-                            attrib = wtag.getAttribute("lemma", i, ' ');
+                            attrib = wtag.attribute("lemma", i, ' ');
                             if (i < 0) i = 0;    // to handle our -1 condition
 
                             const char *m = strchr(attrib.c_str(), ':');
@@ -173,12 +173,12 @@ char OSISStrongs::processText(std::string &text, const SWKey *key, const SWModul
                         module->getEntryAttributes()["Word"][wordstr]["PartCount"] = formatted("%d", count);
                     }
 
-                    if (!(attrib = wtag.getAttribute("src")).empty()) {
-                        int count = wtag.getAttributePartCount("src", ' ');
+                    if (!(attrib = wtag.attribute("src")).empty()) {
+                        int count = wtag.attributePartCount("src", ' ');
                         int i = (count > 1) ? 0 : -1;        // -1 for whole value cuz it's faster, but does the same thing as 0
                         do {
                             std::string mp = "";
-                            attrib = wtag.getAttribute("src", i, ' ');
+                            attrib = wtag.attribute("src", i, ' ');
                             if (i < 0) i = 0;    // to handle our -1 condition
 
                             if (i) src += " ";
@@ -239,7 +239,7 @@ char OSISStrongs::processText(std::string &text, const SWKey *key, const SWModul
                     }
 * Instead the codee below just removes the lemma attribute
 *****/
-                    auto savlm(wtag.getAttribute("lemma"));
+                    auto savlm(wtag.attribute("lemma"));
                     if (!savlm.empty()) {
                         wtag.setAttribute("lemma", nullptr);
                         wtag.setAttribute("savlm", savlm.c_str());

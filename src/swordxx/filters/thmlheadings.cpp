@@ -82,7 +82,7 @@ char ThMLHeadings::processText(std::string &text, const SWKey *key, const SWModu
                 if (hide && tag.isEndTag()) {
                     if (module->isProcessEntryAttributes() && (option || (!preverse))) {
                         std::string heading;
-                        std::string cls = startTag.getAttribute("class");
+                        std::string cls = startTag.attribute("class");
                         if (!hasPrefix(cls, "fromEntryAttributes")) {
                             cls = std::string("fromEntryAttributes ") + cls;
                             startTag.setAttribute("class", cls.c_str());
@@ -102,9 +102,9 @@ char ThMLHeadings::processText(std::string &text, const SWKey *key, const SWModu
                             }
                         }
 
-                        for (auto const & attr : startTag.getAttributeNames())
+                        for (auto const & attr : startTag.attributeNames())
                             module->getEntryAttributes()["Heading"][buf][attr.c_str()] =
-                                    startTag.getAttribute(attr.c_str());
+                                    startTag.attribute(attr.c_str());
                     }
 
                     hide = false;
@@ -114,8 +114,8 @@ char ThMLHeadings::processText(std::string &text, const SWKey *key, const SWModu
                     }
                     preverse = false;
                 }
-                if (!tag.getAttribute("class").empty() && ((!stricmp(tag.getAttribute("class").c_str(), "sechead"))
-                                         ||  (!stricmp(tag.getAttribute("class").c_str(), "title")))) {
+                if (!tag.attribute("class").empty() && ((!stricmp(tag.attribute("class").c_str(), "sechead"))
+                                         ||  (!stricmp(tag.attribute("class").c_str(), "title")))) {
 
                     isheader = true;
 
@@ -148,7 +148,7 @@ char ThMLHeadings::processText(std::string &text, const SWKey *key, const SWModu
                 }
                 else {
                     isheader = false;
-                    std::string cls = tag.getAttribute("class");
+                    std::string cls = tag.attribute("class");
                     if (hasPrefix(cls, "fromEntryAttributes ")) {
                         cls.erase(0u, std::string("fromEntryAttributes ").size());
                         tag.setAttribute("class", cls.c_str());

@@ -179,22 +179,22 @@ bool ThMLXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
         if ((!tag.isEndTag()) && (!tag.isEmpty()))
             u->startTag = tag;
 
-        if (tag.getName() && !strcmp(tag.getName(), "sync")) {
-            std::string value = tag.getAttribute("value");
-            if (!tag.getAttribute("type").empty() && !strcmp(tag.getAttribute("type").c_str(), "morph")) { //&gt;
+        if (tag.getName() == "sync") {
+            std::string value = tag.attribute("value");
+            if (!tag.attribute("type").empty() && !strcmp(tag.attribute("type").c_str(), "morph")) { //&gt;
                 if(value.length())
                     buf += formatted("<small><em class=\"morph\">(<a href=\"passagestudy.jsp?action=showMorph&type=Greek&value=%s\" class=\"morph\">%s</a>)</em></small>",
                         URL::encode(value.c_str()).c_str(),
                         value.c_str());
             }
-            else if (!tag.getAttribute("type").empty() && !strcmp(tag.getAttribute("type").c_str(), "lemma")) { //&gt;
+            else if (!tag.attribute("type").empty() && !strcmp(tag.attribute("type").c_str(), "lemma")) { //&gt;
                 if(value.length())
                     // empty "type=" is deliberate.
                     buf += formatted("<small><em class=\"strongs\">&lt;<a href=\"passagestudy.jsp?action=showStrongs&type=&value=%s\" class=\"strongs\">%s</a>&gt;</em></small>",
                         URL::encode(value.c_str()).c_str(),
                         value.c_str());
             }
-            else if (!tag.getAttribute("type").empty() && !strcmp(tag.getAttribute("type").c_str(), "Strongs")) {
+            else if (!tag.attribute("type").empty() && !strcmp(tag.attribute("type").c_str(), "Strongs")) {
                 char const ch = *value.begin();
                 value.erase(0u, 1u);
                 buf += formatted("<small><em class=\"strongs\">&lt;<a href=\"passagestudy.jsp?action=showStrongs&type=%s&value=%s\" class=\"strongs\">",
@@ -203,23 +203,23 @@ bool ThMLXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
                 buf += (value.length()) ? value.c_str() : "";
                 buf += "</a>&gt;</em></small>";
             }
-            else if (!tag.getAttribute("type").empty() && !strcmp(tag.getAttribute("type").c_str(), "Dict")) {
+            else if (!tag.attribute("type").empty() && !strcmp(tag.attribute("type").c_str(), "Dict")) {
                 buf += (tag.isEndTag() ? "</b>" : "<b>");
             }
 
         }
         // <note> tag
-        else if (!strcmp(tag.getName(), "note")) {
+        else if (tag.getName() == "note") {
             if (!tag.isEndTag()) {
                 if (!tag.isEmpty()) {
-                    std::string type = tag.getAttribute("type");
-                    std::string footnoteNumber = tag.getAttribute("swordFootnote");
-                    std::string noteName = tag.getAttribute("n");
+                    std::string type = tag.attribute("type");
+                    std::string footnoteNumber = tag.attribute("swordFootnote");
+                    std::string noteName = tag.attribute("n");
                     if (VerseKey const * const vkey =
                             dynamic_cast<VerseKey const *>(u->key))
                     {
                         // leave this special osis type in for crossReference notes types?  Might thml use this some day? Doesn't hurt.
-                        char ch = ((!tag.getAttribute("type").empty() && ((!strcmp(tag.getAttribute("type").c_str(), "crossReference")) || (!strcmp(tag.getAttribute("type").c_str(), "x-cross-ref")))) ? 'x':'n');
+                        char ch = ((!tag.attribute("type").empty() && ((!strcmp(tag.attribute("type").c_str(), "crossReference")) || (!strcmp(tag.attribute("type").c_str(), "x-cross-ref")))) ? 'x':'n');
                         buf += formatted("<a href=\"passagestudy.jsp?action=showNote&type=%c&value=%s&module=%s&passage=%s\"><small><sup class=\"%c\">*%c%s</sup></small></a>",
                             ch,
                             URL::encode(footnoteNumber.c_str()).c_str(),
@@ -230,7 +230,7 @@ bool ThMLXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
                             (renderNoteNumbers ? noteName.c_str() : ""));
                     }
                     else {
-                        char ch = ((!tag.getAttribute("type").empty() && ((!strcmp(tag.getAttribute("type").c_str(), "crossReference")) || (!strcmp(tag.getAttribute("type").c_str(), "x-cross-ref")))) ? 'x':'n');
+                        char ch = ((!tag.attribute("type").empty() && ((!strcmp(tag.attribute("type").c_str(), "crossReference")) || (!strcmp(tag.attribute("type").c_str(), "x-cross-ref")))) ? 'x':'n');
                         buf += formatted("<a href=\"passagestudy.jsp?action=showNote&type=%c&value=%s&module=%s&passage=%s\"><small><sup class=\"%c\">*%c%s</sup></small></a>",
                             ch,
                             URL::encode(footnoteNumber.c_str()).c_str(),
@@ -247,11 +247,11 @@ bool ThMLXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
                 u->suspendTextPassThru = false;
             }
         }
-        else if (!strcmp(tag.getName(), "scripture")) {
+        else if (tag.getName() == "scripture") {
             buf += (tag.isEndTag() ? "</i>" : "<i>");
         }
         // <scripRef> tag
-        else if (!strcmp(tag.getName(), "scripRef")) {
+        else if (tag.getName() == "scripRef") {
             if (!tag.isEndTag()) {
                 if (!tag.isEmpty()) {
                     u->suspendTextPassThru = true;
@@ -259,10 +259,10 @@ bool ThMLXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
             }
             if (tag.isEndTag()) {    //    </scripRef>
                 if (!u->BiblicalText) {
-                    std::string refList = u->startTag.getAttribute("passage");
+                    std::string refList = u->startTag.attribute("passage");
                     if (!refList.length())
                         refList = u->lastTextNode;
-                    std::string version = tag.getAttribute("version");
+                    std::string version = tag.attribute("version");
 
                     buf += formatted("<a href=\"passagestudy.jsp?action=showRef&type=scripRef&value=%s&module=%s\">",
                         (refList.length()) ? URL::encode(refList.c_str()).c_str() : "",
@@ -271,8 +271,8 @@ bool ThMLXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
                     buf += "</a>";
                 }
                 else {
-                    std::string footnoteNumber = u->startTag.getAttribute("swordFootnote");
-                    std::string noteName = tag.getAttribute("n");
+                    std::string footnoteNumber = u->startTag.attribute("swordFootnote");
+                    std::string noteName = tag.attribute("n");
                     if (VerseKey const * const vkey =
                             dynamic_cast<VerseKey const *>(u->key))
                     {
@@ -290,19 +290,19 @@ bool ThMLXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
                 u->suspendTextPassThru = false;
             }
         }
-        else if (tag.getName() && !strcmp(tag.getName(), "div")) {
+        else if (tag.getName() == "div") {
             if (tag.isEndTag() && u->SecHead) {
                 buf += "</h";
                 buf += u->SecHead;
                 buf += ">";
                 u->SecHead = false;
             }
-            else if (!tag.getAttribute("class").empty()) {
-                if (!stricmp(tag.getAttribute("class").c_str(), "sechead")) {
+            else if (!tag.attribute("class").empty()) {
+                if (!stricmp(tag.attribute("class").c_str(), "sechead")) {
                     u->SecHead = '3';
                     buf += "<h3>";
                 }
-                else if (!stricmp(tag.getAttribute("class").c_str(), "title")) {
+                else if (!stricmp(tag.attribute("class").c_str(), "title")) {
                     u->SecHead = '2';
                     buf += "<h2>";
                 }
@@ -314,7 +314,7 @@ bool ThMLXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
                 buf += tag.toString();
             }
         }
-        else if (tag.getName() && (!strcmp(tag.getName(), "img") || !strcmp(tag.getName(), "image"))) {
+        else if (((tag.getName() == "img") || (tag.getName() == "image"))) {
             const char *src = strstr(token, "src");
             if (!src)        // assert we have a src attribute
                 return false;

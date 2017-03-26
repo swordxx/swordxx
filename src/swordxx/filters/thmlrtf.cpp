@@ -227,12 +227,12 @@ bool ThMLRTF::handleToken(std::string &buf, const char *token, BasicFilterUserDa
         XMLTag tag(token);
         if ((!tag.isEndTag()) && (!tag.isEmpty()))
             u->startTag = tag;
-        if (tag.getName() && !strcmp(tag.getName(), "sync")) {
-            std::string value = tag.getAttribute("value");
-            if (!tag.getAttribute("type").empty() && !strcmp(tag.getAttribute("type").c_str(), "morph")) { //&gt;
+        if (tag.getName() == "sync") {
+            std::string value = tag.attribute("value");
+            if (!tag.attribute("type").empty() && !strcmp(tag.attribute("type").c_str(), "morph")) { //&gt;
                 buf += formatted(" {\\cf4 \\sub (%s)}", value.c_str());
             }
-            else if(!tag.getAttribute("type").empty() && !strcmp(tag.getAttribute("type").c_str(), "Strongs")) {
+            else if(!tag.attribute("type").empty() && !strcmp(tag.attribute("type").c_str(), "Strongs")) {
                 if (value[0] == 'H' || value[0] == 'G' || value[0] == 'A') {
                     value.erase(0u, 1u);
                     buf += formatted(" {\\cf3 \\sub <%s>}", value.c_str());
@@ -242,21 +242,21 @@ bool ThMLRTF::handleToken(std::string &buf, const char *token, BasicFilterUserDa
                     buf += formatted(" {\\cf4 \\sub (%s)}", value.c_str());
                 }
             }
-            else if (!tag.getAttribute("type").empty() && !strcmp(tag.getAttribute("type").c_str(), "Dict")) {
+            else if (!tag.attribute("type").empty() && !strcmp(tag.attribute("type").c_str(), "Dict")) {
                 if (!tag.isEndTag())
                     buf += "{\\b ";
                 else    buf += "}";
             }
         }
         // <note> tag
-        else if (!strcmp(tag.getName(), "note")) {
+        else if (tag.getName() == "note") {
             if (!tag.isEndTag()) {
                 if (!tag.isEmpty()) {
-                    std::string type = tag.getAttribute("type");
-                    std::string footnoteNumber = tag.getAttribute("swordFootnote");
+                    std::string type = tag.attribute("type");
+                    std::string footnoteNumber = tag.attribute("swordFootnote");
                     if (VerseKey const * const vkey = dynamic_cast<VerseKey const *>(u->key)) {
                         // leave this special osis type in for crossReference notes types?  Might thml use this some day? Doesn't hurt.
-                        char ch = ((!tag.getAttribute("type").empty() && ((!strcmp(tag.getAttribute("type").c_str(), "crossReference")) || (!strcmp(tag.getAttribute("type").c_str(), "x-cross-ref")))) ? 'x':'n');
+                        char ch = ((!tag.attribute("type").empty() && ((!strcmp(tag.attribute("type").c_str(), "crossReference")) || (!strcmp(tag.attribute("type").c_str(), "x-cross-ref")))) ? 'x':'n');
                         buf += formatted("{\\super <a href=\"\">*%c%i.%s</a>} ", ch, vkey->getVerse(), footnoteNumber.c_str());
                     }
                     u->suspendTextPassThru = true;
@@ -268,7 +268,7 @@ bool ThMLRTF::handleToken(std::string &buf, const char *token, BasicFilterUserDa
         }
 
 
-        else if (!strcmp(tag.getName(), "scripRef")) {
+        else if (tag.getName() == "scripRef") {
             if (!tag.isEndTag()) {
                 if (!tag.isEmpty()) {
                     u->suspendTextPassThru = true;
@@ -276,17 +276,17 @@ bool ThMLRTF::handleToken(std::string &buf, const char *token, BasicFilterUserDa
             }
             if (tag.isEndTag()) {    //    </scripRef>
                 if (!u->BiblicalText) {
-                    std::string refList = u->startTag.getAttribute("passage");
+                    std::string refList = u->startTag.attribute("passage");
                     if (!refList.length())
                         refList = u->lastTextNode;
-                    std::string version = tag.getAttribute("version");
+                    std::string version = tag.attribute("version");
                     buf += "<a href=\"\">";
                     buf += refList.c_str();
 //                    buf += u->lastTextNode.c_str();
                     buf += "</a>";
                 }
                 else {
-                    std::string footnoteNumber = u->startTag.getAttribute("swordFootnote");
+                    std::string footnoteNumber = u->startTag.attribute("swordFootnote");
                     if (VerseKey const * const vkey = dynamic_cast<VerseKey const *>(u->key)) {
                         // leave this special osis type in for crossReference notes types?  Might thml use this some day? Doesn't hurt.
                         buf += formatted("{\\super <a href=\"\">*x%i.%s</a>} ", vkey->getVerse(), footnoteNumber.c_str());
@@ -298,24 +298,24 @@ bool ThMLRTF::handleToken(std::string &buf, const char *token, BasicFilterUserDa
             }
         }
 
-        else if (tag.getName() && !strcmp(tag.getName(), "div")) {
+        else if (tag.getName() == "div") {
             if (tag.isEndTag() && u->SecHead) {
                 buf += "\\par}";
                 u->SecHead = false;
             }
-            else if (!tag.getAttribute("class").empty()) {
-                if (!stricmp(tag.getAttribute("class").c_str(), "sechead")) {
+            else if (!tag.attribute("class").empty()) {
+                if (!stricmp(tag.attribute("class").c_str(), "sechead")) {
                     u->SecHead = true;
                     buf += "{\\par\\i1\\b1 ";
                 }
-                else if (!stricmp(tag.getAttribute("class").c_str(), "title")) {
+                else if (!stricmp(tag.attribute("class").c_str(), "title")) {
                     u->SecHead = true;
                     buf += "{\\par\\i1\\b1 ";
                 }
             }
         }
-        else if (tag.getName() && (!strcmp(tag.getName(), "img") || !strcmp(tag.getName(), "image"))) {
-            auto const src(tag.getAttribute("src"));
+        else if ((tag.getName() == "img") || (tag.getName() == "image")) {
+            auto const src(tag.attribute("src"));
             if (src.empty())        // assert we have a src attribute
                 return false;
 

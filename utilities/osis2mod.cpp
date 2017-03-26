@@ -664,9 +664,9 @@ bool handleToken(std::string &text, XMLTag token) {
 
     int                       tagDepth        = tagStack.size();
     std::string                     tokenName       = token.getName();
-    bool                      isEndTag        = token.isEndTag() || !token.getAttribute("eID").empty();
-    std::string                     typeAttr        = token.getAttribute("type");
-    std::string                     eidAttr         = token.getAttribute("eID");
+    bool                      isEndTag        = token.isEndTag() || !token.attribute("eID").empty();
+    std::string                     typeAttr        = token.attribute("type");
+    std::string                     eidAttr         = token.attribute("eID");
 
     // process start tags
     if (!isEndTag) {
@@ -699,7 +699,7 @@ bool handleToken(std::string &text, XMLTag token) {
 
         //-- WITH osisID OR annotateRef -------------------------------------------------------------------------
         // Handle Book, Chapter, and Verse (or commentary equivalent)
-        if (!token.getAttribute("osisID").empty() || !token.getAttribute("annotateRef").empty()) {
+        if (!token.attribute("osisID").empty() || !token.attribute("annotateRef").empty()) {
 
             // BOOK START, <div type="book" ...>
             if (tokenName == "div" && typeAttr == "book") {
@@ -717,12 +717,12 @@ bool handleToken(std::string &text, XMLTag token) {
                     currentVerse.setVerse(0);
                     writeEntry(text);
                 }
-                currentVerse = token.getAttribute("osisID").c_str();
+                currentVerse = token.attribute("osisID").c_str();
                 currentVerse.setChapter(0);
                 currentVerse.setVerse(0);
                 strcpy(currentOsisID, currentVerse.getOSISRef());
 
-                sidBook         = token.getAttribute("sID");
+                sidBook         = token.attribute("sID");
                 inChapter       = false;
                 inVerse         = false;
                 inPreVerse      = false;
@@ -737,9 +737,9 @@ bool handleToken(std::string &text, XMLTag token) {
                 chapterDepth    = 0;
                 verseDepth      = 0;
 
-                inCanonicalOSISBook = isOSISAbbrev(token.getAttribute("osisID").c_str());
+                inCanonicalOSISBook = isOSISAbbrev(token.attribute("osisID").c_str());
                 if (!inCanonicalOSISBook) {
-                    cout << "WARNING(V11N): New book is " << token.getAttribute("osisID") << " and is not in " << v11n << " versification, ignoring" << endl;
+                    cout << "WARNING(V11N): New book is " << token.attribute("osisID") << " and is not in " << v11n << " versification, ignoring" << endl;
                 }
                 else if (debug & DEBUG_OTHER) {
                     cout << "DEBUG(FOUND): New book is " << currentVerse.getOSISRef() << endl;
@@ -760,16 +760,16 @@ bool handleToken(std::string &text, XMLTag token) {
                     writeEntry(text);
                 }
 
-                currentVerse = token.getAttribute("osisID").c_str();
+                currentVerse = token.attribute("osisID").c_str();
                 currentVerse.setVerse(0);
 
                 if (debug & DEBUG_OTHER) {
-                    cout << "DEBUG(FOUND): Current chapter is " << currentVerse.getOSISRef() << " (" << token.getAttribute("osisID") << ")" << endl;
+                    cout << "DEBUG(FOUND): Current chapter is " << currentVerse.getOSISRef() << " (" << token.attribute("osisID") << ")" << endl;
                 }
 
                 strcpy(currentOsisID, currentVerse.getOSISRef());
 
-                sidChapter      = token.getAttribute("sID");
+                sidChapter      = token.attribute("sID");
                 inChapter       = true;
                 inVerse         = false;
                 inPreVerse      = false;
@@ -788,7 +788,7 @@ bool handleToken(std::string &text, XMLTag token) {
 
             // VERSE, <verse ...> OR COMMENTARY START, <div annotateType="xxx" ...>
             if ((tokenName == "verse") ||
-                (tokenName == "div" && !token.getAttribute("annotateType").empty())
+                (tokenName == "div" && !token.attribute("annotateType").empty())
             ) {
                 if (debug & DEBUG_OTHER) {
                     cout << "DEBUG(FOUND): Entering verse" << endl;
@@ -816,7 +816,7 @@ bool handleToken(std::string &text, XMLTag token) {
                 }
 
                 // Get osisID for verse or annotateRef for commentary
-                std::string keyVal = token.getAttribute(tokenName == "verse" ? "osisID" : "annotateRef");
+                std::string keyVal = token.attribute(tokenName == "verse" ? "osisID" : "annotateRef");
 
                 // Massage the key into a form that parseVerseList can accept
                 prepareSWVerseKey(keyVal);
@@ -844,7 +844,7 @@ bool handleToken(std::string &text, XMLTag token) {
                     }
                 }
                 else {
-                    cout << "ERROR(REF): Invalid osisID/annotateRef: " << token.getAttribute((tokenName == "verse") ? "osisID" : "annotateRef") << endl;
+                    cout << "ERROR(REF): Invalid osisID/annotateRef: " << token.attribute((tokenName == "verse") ? "osisID" : "annotateRef") << endl;
                 }
 
                 strcpy(currentOsisID, currentVerse.getOSISRef());
@@ -854,7 +854,7 @@ bool handleToken(std::string &text, XMLTag token) {
                     cout << "DEBUG(FOUND): osisID/annotateRef is adjusted to: " << keyVal << endl;
                 }
 
-                sidVerse        = token.getAttribute("sID");
+                sidVerse        = token.attribute("sID");
                 inVerse         = true;
                 inPreVerse      = false;
                 inBookIntro     = false;
@@ -870,10 +870,10 @@ bool handleToken(std::string &text, XMLTag token) {
                     // transform the verse into a milestone
                     XMLTag t = "<milestone resp=\"v\" />";
                     // copy all the attributes of the verse element to the milestone
-                    for (auto const & attr : token.getAttributeNames())
+                    for (auto const & attr : token.attributeNames())
                         t.setAttribute(
                                     attr.c_str(),
-                                    token.getAttribute(attr.c_str()).c_str());
+                                    token.attribute(attr.c_str()).c_str());
                     text.append(t.toString());
                 }
 
@@ -930,7 +930,7 @@ bool handleToken(std::string &text, XMLTag token) {
                 cout << "DEBUG(QUOTE): " << currentOsisID << ": quote top(" << quoteStack.size() << ") " << token.toString() << endl;
             }
 
-            if (!token.getAttribute("who").empty() && !strcmp(token.getAttribute("who").c_str(), "Jesus")) {
+            if (!token.attribute("who").empty() && !strcmp(token.attribute("who").c_str(), "Jesus")) {
                 inWOC = true;
 
                 // Output per verse WOC markup.
@@ -941,7 +941,7 @@ bool handleToken(std::string &text, XMLTag token) {
                 // If there is a marker attribute and it has content, then output that.
                 // If the marker attribute is present and empty, then there is nothing to do.
                 // And have it within the WOC markup
-                if (token.getAttribute("marker").empty() || token.getAttribute("marker")[0]) {
+                if (token.attribute("marker").empty() || token.attribute("marker")[0]) {
                     token.setAttribute("who", nullptr); // remove the who="Jesus"
                     text.append(token.toString());
                 }
@@ -1073,9 +1073,9 @@ bool handleToken(std::string &text, XMLTag token) {
                 // transform the verse into a milestone
                 XMLTag t = "<milestone resp=\"v\" />";
                 // copy all the attributes of the verse element to the milestone
-                for (auto const & attr : token.getAttributeNames())
+                for (auto const & attr : token.attributeNames())
                     t.setAttribute(attr.c_str(),
-                                   token.getAttribute(attr.c_str()).c_str());
+                                   token.attribute(attr.c_str()).c_str());
                 text.append(t.toString());
             }
 
@@ -1102,15 +1102,15 @@ bool handleToken(std::string &text, XMLTag token) {
 
             // If we have found an end tag for a <q who="Jesus"> then we are done with the WOC
             // and we need to terminate the <q who="Jesus" marker=""> that was added earlier in the verse.
-            if (!token.getAttribute("who").empty() && !strcmp(token.getAttribute("who").c_str(), "Jesus")) {
+            if (!token.attribute("who").empty() && !strcmp(token.attribute("who").c_str(), "Jesus")) {
 
                 if (debug & DEBUG_QUOTE) {
                     cout << "DEBUG(QUOTE): " << currentOsisID << ": (" << quoteStack.size() << ") " << topToken.toString() << " -- " << token.toString() << endl;
                 }
 
                 inWOC = false;
-                auto sID(topToken.getAttribute("sID"));
-                auto eID(token.getAttribute("eID"));
+                auto sID(topToken.attribute("sID"));
+                auto eID(token.attribute("eID"));
                 if (sID != eID) {
                     cout << "ERROR(NESTING): improper nesting " << currentOsisID << ": matching (sID,eID) not found. Looking at (" << sID << "," << eID << ")" << endl;
                 }
@@ -1121,7 +1121,7 @@ bool handleToken(std::string &text, XMLTag token) {
                 // If there is a marker attribute and it has content, then output that.
                 // If the marker attribute is present and empty, then there is nothing to do.
                 // And have it within the WOC markup
-                if (token.getAttribute("marker").empty() || token.getAttribute("marker")[0]) {
+                if (token.attribute("marker").empty() || token.attribute("marker")[0]) {
                     token.setAttribute("who", nullptr); // remove the who="Jesus"
                     text.append(token.toString());
                 }
@@ -1209,7 +1209,7 @@ XMLTag transformBSP(XMLTag t) {
     static std::stack<XMLTag> bspTagStack;
     static int sID = 1;
     char buf[11];
-    std::string typeAttr = t.getAttribute("type");
+    std::string typeAttr = t.attribute("type");
 
     // Support simplification transformations
     if (t.isEmpty()) {
@@ -1270,7 +1270,7 @@ XMLTag transformBSP(XMLTag t) {
             }
 
             bspTagStack.pop();
-            std::string topTypeAttr = topToken.getAttribute("type");
+            std::string topTypeAttr = topToken.attribute("type");
 
             // Look for the milestoneable container tags handled above.
             // Have to treat div type="colophon" differently
@@ -1289,7 +1289,7 @@ XMLTag transformBSP(XMLTag t) {
                 // make this a clone of the start tag with sID changed to eID
                 // Note: in the case of </p> the topToken is a <div type="x-p">
                 t = topToken;
-                t.setAttribute("eID", t.getAttribute("sID").c_str());
+                t.setAttribute("eID", t.attribute("sID").c_str());
                 t.setAttribute("sID", nullptr);
             }
         }

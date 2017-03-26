@@ -78,7 +78,7 @@ char ThMLFootnotes::processText(std::string &text, const SWKey *key, const SWMod
             intoken = false;
 
             XMLTag tag(token.c_str());
-            if (!strcmp(tag.getName(), "note")) {
+            if (tag.getName() == "note") {
                 if (!tag.isEndTag()) {
                     if (!tag.isEmpty()) {
                         refs = "";
@@ -94,19 +94,19 @@ char ThMLFootnotes::processText(std::string &text, const SWKey *key, const SWMod
                         footnoteNum = (fc.length()) ? atoi(fc.c_str()) : 0;
                         sprintf(buf, "%i", ++footnoteNum);
                         module->getEntryAttributes()["Footnote"]["count"]["value"] = buf;
-                        for (auto const & attr : startTag.getAttributeNames())
+                        for (auto const & attr : startTag.attributeNames())
                             module->getEntryAttributes()["Footnote"][buf][attr.c_str()] =
-                                    startTag.getAttribute(attr.c_str());
+                                    startTag.attribute(attr.c_str());
                         module->getEntryAttributes()["Footnote"][buf]["body"] = tagText;
                         startTag.setAttribute("swordFootnote", buf);
-                        if ((!startTag.getAttribute("type").empty()) && (!strcmp(startTag.getAttribute("type").c_str(), "crossReference"))) {
+                        if ((!startTag.attribute("type").empty()) && (!strcmp(startTag.attribute("type").c_str(), "crossReference"))) {
                             if (!refs.length())
                                 refs = parser->parseVerseList(tagText.c_str(), parser->getText(), true).getRangeText();
                             module->getEntryAttributes()["Footnote"][buf]["refList"] = refs.c_str();
                         }
                     }
                     hide = false;
-                    if ((option) || ((!startTag.getAttribute("type").empty() && (!strcmp(startTag.getAttribute("type").c_str(), "crossReference"))))) {    // we want the tag in the text; crossReferences are handled by another filter
+                    if ((option) || ((!startTag.attribute("type").empty() && (!strcmp(startTag.attribute("type").c_str(), "crossReference"))))) {    // we want the tag in the text; crossReferences are handled by another filter
                         text += startTag.toString();
                         text.append(tagText);
                     }
@@ -115,8 +115,8 @@ char ThMLFootnotes::processText(std::string &text, const SWKey *key, const SWMod
             }
 
             // if not a note token, keep token in text
-            if ((!strcmp(tag.getName(), "scripRef")) && (!tag.isEndTag())) {
-                std::string osisRef = tag.getAttribute("passage");
+            if ((tag.getName() == "scripRef") && !tag.isEndTag()) {
+                std::string osisRef = tag.attribute("passage");
                 if (refs.length())
                     refs += "; ";
                 refs += osisRef;

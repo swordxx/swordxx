@@ -25,6 +25,7 @@
 
 #include <list>
 #include <map>
+#include <memory>
 #include <string>
 #include "defs.h"
 
@@ -37,8 +38,8 @@ typedef std::map<std::string, std::string> StringPairMap;
 */
 class SWDLLEXPORT XMLTag {
 private:
-    mutable char *buf;
-    char *name;
+    mutable std::unique_ptr<char[]> m_buf;
+    std::string m_name;
     mutable bool parsed;
     mutable bool empty;
     mutable bool endTag;
@@ -51,10 +52,9 @@ private:
 public:
     XMLTag(char const * tagString = nullptr);
     XMLTag(const XMLTag& tag);
-    ~XMLTag();
 
     void setText(const char *tagString);
-    inline const char *getName() const { return (name) ? name : ""; }
+    inline std::string const & getName() const { return m_name; }
 
     inline bool isEmpty() const {
         if (!parsed)
@@ -76,11 +76,11 @@ public:
      */
     bool isEndTag(char const * eID = nullptr) const;
 
-    std::list<std::string> getAttributeNames() const;
-    int getAttributePartCount(const char *attribName, char partSplit = '|') const;
+    std::list<std::string> attributeNames() const;
+    int attributePartCount(const char *attribName, char partSplit = '|') const;
 
     // return values should not be considered to persist beyond the return of the function.
-    std::string getAttribute(const char *attribName, int partNum = -1, char partSplit = '|') const;
+    std::string attribute(const char *attribName, int partNum = -1, char partSplit = '|') const;
     void setAttribute(const char *attribName, const char *attribValue, int partNum = -1, char partSplit = '|');
     std::string toString() const;
     inline XMLTag & operator =(const char *tagString) { setText(tagString); return *this; }
