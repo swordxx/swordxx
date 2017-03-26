@@ -42,7 +42,7 @@ bool ThMLWEBIF::handleToken(std::string &buf, const char *token, BasicFilterUser
         MyUserData *u = (MyUserData *)userData;
         XMLTag tag(token);
         std::string url;
-        if (tag.getName() == "sync") {
+        if (tag.name() == "sync") {
             auto value(tag.attribute("value"));
             url = value;
             if ((url.length() > 1) && strchr("GH", url[0])) {
@@ -74,7 +74,7 @@ bool ThMLWEBIF::handleToken(std::string &buf, const char *token, BasicFilterUser
                 buf += "&gt; </em></small>";
             }
         }
-        else if (tag.getName() == "scripRef") {
+        else if (tag.name() == "scripRef") {
             if (tag.isEndTag()) {
                 if (u->inscriptRef) { // like  "<scripRef passage="John 3:16">John 3:16</scripRef>"
                     u->inscriptRef = false;

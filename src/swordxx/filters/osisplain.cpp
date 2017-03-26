@@ -194,7 +194,7 @@ bool OSISPlain::handleToken(std::string &buf, const char *token, BasicFilterUser
         // Milestoned paragraph, created by osis2mod
         // <div type="paragraph"  sID... />
         // <div type="paragraph"  eID... />
-        else if ((u->tag.getName() == "div") && !u->tag.attribute("type").empty() && (!strcmp(u->tag.attribute("type").c_str(), "x-p") || !strcmp(u->tag.attribute("type").c_str(), "paragraph")) &&
+        else if ((u->tag.name() == "div") && !u->tag.attribute("type").empty() && (!strcmp(u->tag.attribute("type").c_str(), "x-p") || !strcmp(u->tag.attribute("type").c_str(), "paragraph")) &&
             (u->tag.isEmpty() && (!u->tag.attribute("sID").empty() || !u->tag.attribute("eID").empty()))) {
                 userData->supressAdjacentWhitespace = true;
                 buf.push_back('\n');

@@ -663,7 +663,7 @@ bool handleToken(std::string &text, XMLTag token) {
     static int                verseDepth      = 0;
 
     int                       tagDepth        = tagStack.size();
-    std::string                     tokenName       = token.getName();
+    std::string                     tokenName       = token.name();
     bool                      isEndTag        = token.isEndTag() || !token.attribute("eID").empty();
     std::string                     typeAttr        = token.attribute("type");
     std::string                     eidAttr         = token.attribute("eID");
@@ -676,7 +676,7 @@ bool handleToken(std::string &text, XMLTag token) {
             tagStack.push(token);
 
             if (debug & DEBUG_STACK) {
-                cout << "DEBUG(STACK): " << currentOsisID << ": push (" << tagStack.size() << ") " << token.getName() << endl;
+                cout << "DEBUG(STACK): " << currentOsisID << ": push (" << tagStack.size() << ") " << token.name() << endl;
             }
         }
 
@@ -1022,13 +1022,13 @@ bool handleToken(std::string &text, XMLTag token) {
             tagDepth = tagStack.size();
 
             if (debug & DEBUG_STACK) {
-                cout << "DEBUG(STACK): " << currentOsisID << ": pop(" << tagDepth << ") " << topToken.getName() << endl;
+                cout << "DEBUG(STACK): " << currentOsisID << ": pop(" << tagDepth << ") " << topToken.name() << endl;
             }
 
             tagStack.pop();
 
-            if (tokenName != topToken.getName()) {
-                cout << "FATAL(NESTING): " << currentOsisID << ": Expected " << topToken.getName() << " found " << tokenName << endl;
+            if (tokenName != topToken.name()) {
+                cout << "FATAL(NESTING): " << currentOsisID << ": Expected " << topToken.name() << " found " << tokenName << endl;
 //                exit(EXIT_BAD_NESTING); // (OSK) I'm sure this validity check is a good idea, but there's a bug somewhere that's killing the converter here.
                         // So I'm disabling this line. Unvalidated OSIS files shouldn't be run through the converter anyway.
                         // (DM) This has nothing to do with well-form or valid. It checks milestoned elements for proper nesting.
@@ -1221,7 +1221,7 @@ XMLTag transformBSP(XMLTag t) {
         return t;
     }
 
-    std::string tagName = t.getName();
+    std::string tagName = t.name();
     if (!t.isEndTag()) {
         // Transform <p> into <div type="x-p"> and milestone it
         if (tagName == "p") {

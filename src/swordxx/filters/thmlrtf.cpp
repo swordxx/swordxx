@@ -227,7 +227,7 @@ bool ThMLRTF::handleToken(std::string &buf, const char *token, BasicFilterUserDa
         XMLTag tag(token);
         if ((!tag.isEndTag()) && (!tag.isEmpty()))
             u->startTag = tag;
-        if (tag.getName() == "sync") {
+        if (tag.name() == "sync") {
             std::string value = tag.attribute("value");
             if (!tag.attribute("type").empty() && !strcmp(tag.attribute("type").c_str(), "morph")) { //&gt;
                 buf += formatted(" {\\cf4 \\sub (%s)}", value.c_str());
@@ -249,7 +249,7 @@ bool ThMLRTF::handleToken(std::string &buf, const char *token, BasicFilterUserDa
             }
         }
         // <note> tag
-        else if (tag.getName() == "note") {
+        else if (tag.name() == "note") {
             if (!tag.isEndTag()) {
                 if (!tag.isEmpty()) {
                     std::string type = tag.attribute("type");
@@ -268,7 +268,7 @@ bool ThMLRTF::handleToken(std::string &buf, const char *token, BasicFilterUserDa
         }
 
 
-        else if (tag.getName() == "scripRef") {
+        else if (tag.name() == "scripRef") {
             if (!tag.isEndTag()) {
                 if (!tag.isEmpty()) {
                     u->suspendTextPassThru = true;
@@ -298,7 +298,7 @@ bool ThMLRTF::handleToken(std::string &buf, const char *token, BasicFilterUserDa
             }
         }
 
-        else if (tag.getName() == "div") {
+        else if (tag.name() == "div") {
             if (tag.isEndTag() && u->SecHead) {
                 buf += "\\par}";
                 u->SecHead = false;
@@ -314,7 +314,7 @@ bool ThMLRTF::handleToken(std::string &buf, const char *token, BasicFilterUserDa
                 }
             }
         }
-        else if ((tag.getName() == "img") || (tag.getName() == "image")) {
+        else if ((tag.name() == "img") || (tag.name() == "image")) {
             auto const src(tag.attribute("src"));
             if (src.empty())        // assert we have a src attribute
                 return false;

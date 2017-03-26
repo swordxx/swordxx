@@ -179,7 +179,7 @@ bool ThMLXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
         if ((!tag.isEndTag()) && (!tag.isEmpty()))
             u->startTag = tag;
 
-        if (tag.getName() == "sync") {
+        if (tag.name() == "sync") {
             std::string value = tag.attribute("value");
             if (!tag.attribute("type").empty() && !strcmp(tag.attribute("type").c_str(), "morph")) { //&gt;
                 if(value.length())
@@ -209,7 +209,7 @@ bool ThMLXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
 
         }
         // <note> tag
-        else if (tag.getName() == "note") {
+        else if (tag.name() == "note") {
             if (!tag.isEndTag()) {
                 if (!tag.isEmpty()) {
                     std::string type = tag.attribute("type");
@@ -247,11 +247,11 @@ bool ThMLXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
                 u->suspendTextPassThru = false;
             }
         }
-        else if (tag.getName() == "scripture") {
+        else if (tag.name() == "scripture") {
             buf += (tag.isEndTag() ? "</i>" : "<i>");
         }
         // <scripRef> tag
-        else if (tag.getName() == "scripRef") {
+        else if (tag.name() == "scripRef") {
             if (!tag.isEndTag()) {
                 if (!tag.isEmpty()) {
                     u->suspendTextPassThru = true;
@@ -290,7 +290,7 @@ bool ThMLXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
                 u->suspendTextPassThru = false;
             }
         }
-        else if (tag.getName() == "div") {
+        else if (tag.name() == "div") {
             if (tag.isEndTag() && u->SecHead) {
                 buf += "</h";
                 buf += u->SecHead;
@@ -314,7 +314,7 @@ bool ThMLXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
                 buf += tag.toString();
             }
         }
-        else if (((tag.getName() == "img") || (tag.getName() == "image"))) {
+        else if (((tag.name() == "img") || (tag.name() == "image"))) {
             const char *src = strstr(token, "src");
             if (!src)        // assert we have a src attribute
                 return false;

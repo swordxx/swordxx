@@ -68,7 +68,7 @@ bool TEILaTeX::handleToken(std::string &buf, const char *token, BasicFilterUserD
         MyUserData *u = (MyUserData *)userData;
         XMLTag tag(token);
 
-        if (tag.getName() == "p") {
+        if (tag.name() == "p") {
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {    // non-empty start tag
                 buf += "";
             }
@@ -83,7 +83,7 @@ bool TEILaTeX::handleToken(std::string &buf, const char *token, BasicFilterUserD
         }
 
         // <hi>
-        else if (tag.getName() == "hi") {
+        else if (tag.name() == "hi") {
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {
                 std::string rend = tag.attribute("rend");
 
@@ -106,7 +106,7 @@ bool TEILaTeX::handleToken(std::string &buf, const char *token, BasicFilterUserD
         }
 
         // <entryFree>
-        else if (tag.getName() == "entryFree") {
+        else if (tag.name() == "entryFree") {
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {
                 std::string n = tag.attribute("n");
                 if (n != "") {
@@ -118,7 +118,7 @@ bool TEILaTeX::handleToken(std::string &buf, const char *token, BasicFilterUserD
         }
 
         // <sense>
-        else if (tag.getName() == "sense") {
+        else if (tag.name() == "sense") {
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {
                 std::string n = tag.attribute("n");
                 if (n != "") {
@@ -130,7 +130,7 @@ bool TEILaTeX::handleToken(std::string &buf, const char *token, BasicFilterUserD
         }
 
         // <div>
-        else if (tag.getName() == "div") {
+        else if (tag.name() == "div") {
 
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {
                 buf += "";
@@ -140,27 +140,27 @@ bool TEILaTeX::handleToken(std::string &buf, const char *token, BasicFilterUserD
         }
 
         // <lb.../>
-        else if (tag.getName() == "lb") {
+        else if (tag.name() == "lb") {
             buf += "//\n";
         }
 
         // <pos>, <gen>, <case>, <gram>, <number>, <mood>, <pron>, <def>
-        else if ((tag.getName() == "pos") ||
-                 (tag.getName() == "gen") ||
-                 (tag.getName() == "case") ||
-                 (tag.getName() == "gram") ||
-                 (tag.getName() == "number") ||
-                 (tag.getName() == "pron") ||
-                 (tag.getName() == "tr") ||
-                 (tag.getName() == "orth") ||
-                 (tag.getName() == "etym") ||
-                 (tag.getName() == "usg") ||
+        else if ((tag.name() == "pos") ||
+                 (tag.name() == "gen") ||
+                 (tag.name() == "case") ||
+                 (tag.name() == "gram") ||
+                 (tag.name() == "number") ||
+                 (tag.name() == "pron") ||
+                 (tag.name() == "tr") ||
+                 (tag.name() == "orth") ||
+                 (tag.name() == "etym") ||
+                 (tag.name() == "usg") ||
 
 
-                 (tag.getName() == "def")) {
+                 (tag.name() == "def")) {
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {
                 buf += "\\tei";
-                buf += tag.getName();
+                buf += tag.name();
                 buf += "{";
             }
             else if (tag.isEndTag()) {
@@ -168,7 +168,7 @@ bool TEILaTeX::handleToken(std::string &buf, const char *token, BasicFilterUserD
             }
         }
 
-        else if (tag.getName() == "ref") {
+        else if (tag.name() == "ref") {
             if (!tag.isEndTag()) {
                 u->suspendTextPassThru = true;
                 std::string target;
@@ -231,7 +231,7 @@ bool TEILaTeX::handleToken(std::string &buf, const char *token, BasicFilterUserD
         }
 
            // <note> tag
-        else if (tag.getName() == "note") {
+        else if (tag.name() == "note") {
             if (!tag.isEndTag()) {
                 if (!tag.isEmpty()) {
                     u->suspendTextPassThru = true;
@@ -258,7 +258,7 @@ bool TEILaTeX::handleToken(std::string &buf, const char *token, BasicFilterUserD
         }
 
         // <graphic> image tag
-        else if (tag.getName() == "graphic") {
+        else if (tag.name() == "graphic") {
             auto url(tag.attribute("url"));
             if (!url.empty()) {        // assert we have a url attribute
                 std::string filepath;
@@ -277,7 +277,7 @@ bool TEILaTeX::handleToken(std::string &buf, const char *token, BasicFilterUserD
         }
 
         // <table> <row> <cell>
-        else if (tag.getName() == "table") {
+        else if (tag.name() == "table") {
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {
                 buf += "\n\\begin{tabular}";
             }
@@ -288,7 +288,7 @@ bool TEILaTeX::handleToken(std::string &buf, const char *token, BasicFilterUserD
             }
 
         }
-        else if (tag.getName() == "row") {
+        else if (tag.name() == "row") {
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {
                 buf += "\n";
                 u->firstCell = true;
@@ -299,7 +299,7 @@ bool TEILaTeX::handleToken(std::string &buf, const char *token, BasicFilterUserD
             }
 
         }
-        else if (tag.getName() == "cell") {
+        else if (tag.name() == "cell") {
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {
                 if (u->firstCell == false) {
                     buf += " & ";

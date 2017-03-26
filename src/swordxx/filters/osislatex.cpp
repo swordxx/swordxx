@@ -219,7 +219,7 @@ bool OSISLaTeX::handleToken(std::string &buf, const char *token, BasicFilterUser
         XMLTag tag(token);
 
         // <w> tag
-        if (tag.getName() == "w") {
+        if (tag.name() == "w") {
 
             // start <w> tag
             if ((!tag.isEmpty()) && (!tag.isEndTag())) {
@@ -278,7 +278,7 @@ bool OSISLaTeX::handleToken(std::string &buf, const char *token, BasicFilterUser
 
         // <note> tag
 
-        else if (tag.getName() == "note") {
+        else if (tag.name() == "note") {
             if (!tag.isEndTag()) {
                 std::string type = tag.attribute("type");
                 bool strongsMarkup = (type == "x-strongsMarkup" || type == "strongsMarkup");    // the latter is deprecated
@@ -338,7 +338,7 @@ bool OSISLaTeX::handleToken(std::string &buf, const char *token, BasicFilterUser
         }
 
         // <p> paragraph and <lg> linegroup tags
-        else if ((tag.getName() == "p") || (tag.getName() == "lg")) {
+        else if ((tag.name() == "p") || (tag.name() == "lg")) {
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {    // non-empty start tag
                 u->outputNewline(buf);
             }
@@ -353,7 +353,7 @@ bool OSISLaTeX::handleToken(std::string &buf, const char *token, BasicFilterUser
         // Milestoned paragraphs, created by osis2mod
         // <div type="paragraph" sID.../>
         // <div type="paragraph" eID.../>
-        else if (tag.isEmpty() && (tag.getName() == "div") && !tag.attribute("type").empty() && (!strcmp(tag.attribute("type").c_str(), "x-p") || !strcmp(tag.attribute("type").c_str(), "paragraph"))) {
+        else if (tag.isEmpty() && (tag.name() == "div") && !tag.attribute("type").empty() && (!strcmp(tag.attribute("type").c_str(), "x-p") || !strcmp(tag.attribute("type").c_str(), "paragraph"))) {
             // <div type="paragraph"  sID... />
             if (!tag.attribute("sID").empty()) {    // non-empty start tag
                 u->outputNewline(buf);
@@ -365,7 +365,7 @@ bool OSISLaTeX::handleToken(std::string &buf, const char *token, BasicFilterUser
         }
 
         // <reference> tag
-        else if (tag.getName() == "reference") {
+        else if (tag.name() == "reference") {
             if (!u->inXRefNote) {    // only show these if we're not in an xref note
                 if (!tag.isEndTag()) {
                     std::string target;
@@ -417,7 +417,7 @@ bool OSISLaTeX::handleToken(std::string &buf, const char *token, BasicFilterUser
         }
 
         // <l> poetry, etc
-        else if (tag.getName() == "l") {
+        else if (tag.name() == "l") {
             // start line marker
             if (!tag.attribute("sID").empty() || (!tag.isEndTag() && !tag.isEmpty())) {
                 // nested lines plus if the line itself has an x-indent type attribute value
@@ -438,13 +438,13 @@ bool OSISLaTeX::handleToken(std::string &buf, const char *token, BasicFilterUser
         }
 
         // <lb.../>
-        else if ((tag.getName() == "lb") && (tag.attribute("type").empty() || strcmp(tag.attribute("type").c_str(), "x-optional"))) {
+        else if ((tag.name() == "lb") && (tag.attribute("type").empty() || strcmp(tag.attribute("type").c_str(), "x-optional"))) {
                 u->outputNewline(buf);
         }
         // <milestone type="line"/>
         // <milestone type="x-p"/>
         // <milestone type="cQuote" marker="x"/>
-        else if (((tag.getName() == "milestone")) && (!tag.attribute("type").empty())) {
+        else if (((tag.name() == "milestone")) && (!tag.attribute("type").empty())) {
             if (!strcmp(tag.attribute("type").c_str(), "line")) {
                 u->outputNewline(buf);
                 if (!tag.attribute("subType").empty() && !strcmp(tag.attribute("subType").c_str(), "x-PM")) {
@@ -473,7 +473,7 @@ bool OSISLaTeX::handleToken(std::string &buf, const char *token, BasicFilterUser
 
         // <title>
 
-        else if (tag.getName() == "title") {
+        else if (tag.name() == "title") {
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {
                 auto type(tag.attribute("type"));
                 bool hasType = !type.empty();
@@ -495,7 +495,7 @@ bool OSISLaTeX::handleToken(std::string &buf, const char *token, BasicFilterUser
         }
 
         // <list>
-        else if (tag.getName() == "list") {
+        else if (tag.name() == "list") {
             if((!tag.isEndTag()) && (!tag.isEmpty())) {
                 outText("\n\\begin{itemize}", buf, u);
             }
@@ -507,7 +507,7 @@ bool OSISLaTeX::handleToken(std::string &buf, const char *token, BasicFilterUser
         }
 
         // <item>
-        else if (tag.getName() == "item") {
+        else if (tag.name() == "item") {
             if((!tag.isEndTag()) && (!tag.isEmpty())) {
                 outText("\n\\item ", buf, u);
             }
@@ -517,7 +517,7 @@ bool OSISLaTeX::handleToken(std::string &buf, const char *token, BasicFilterUser
             }
         }
         // <catchWord> & <rdg> tags (italicize)
-        else if ((tag.getName() == "rdg") || (tag.getName() == "catchWord")) {
+        else if ((tag.name() == "rdg") || (tag.name() == "catchWord")) {
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {
                 outText("\\emph{", buf, u);
             }
@@ -527,7 +527,7 @@ bool OSISLaTeX::handleToken(std::string &buf, const char *token, BasicFilterUser
         }
 
         // divineName
-        else if (tag.getName() == "divineName") {
+        else if (tag.name() == "divineName") {
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {
                 outText( "\\sworddivinename{", buf, u);
                 u->suspendTextPassThru = (++u->suspendLevel);
@@ -543,7 +543,7 @@ bool OSISLaTeX::handleToken(std::string &buf, const char *token, BasicFilterUser
         }
 
         // <hi> text highlighting
-        else if (tag.getName() == "hi") {
+        else if (tag.name() == "hi") {
             std::string type = tag.attribute("type");
 
             // handle tei rend attribute if type doesn't exist
@@ -587,7 +587,7 @@ bool OSISLaTeX::handleToken(std::string &buf, const char *token, BasicFilterUser
         // If the tag is </q> then use the pushed <q> for specification
         // If there is a marker attribute, possibly empty, this overrides osisQToTick.
         // If osisQToTick, then output the marker, using level to determine the type of mark.
-        else if (tag.getName() == "q") {
+        else if (tag.name() == "q") {
             std::string type      = tag.attribute("type");
             std::string who       = tag.attribute("who");
             auto tmp(tag.attribute("level"));
@@ -642,7 +642,7 @@ bool OSISLaTeX::handleToken(std::string &buf, const char *token, BasicFilterUser
         }
 
         // <transChange>
-        else if (tag.getName() == "transChange") {
+        else if (tag.name() == "transChange") {
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {
                 std::string type = tag.attribute("type");
                 u->lastTransChange = type;
@@ -661,7 +661,7 @@ bool OSISLaTeX::handleToken(std::string &buf, const char *token, BasicFilterUser
         }
 
         // image
-        else if (tag.getName() == "figure") {
+        else if (tag.name() == "figure") {
             auto src(tag.attribute("src"));
             if (!src.empty()) {        // assert we have a src attribute
                 std::string filepath;
@@ -681,7 +681,7 @@ bool OSISLaTeX::handleToken(std::string &buf, const char *token, BasicFilterUser
         }
 
         // ok to leave these in
-        else if (tag.getName() == "div") {
+        else if (tag.name() == "div") {
             std::string type = tag.attribute("type");
             if (type == "module") {
                 u->divLevel = type;
@@ -712,13 +712,13 @@ bool OSISLaTeX::handleToken(std::string &buf, const char *token, BasicFilterUser
                 outText("\n", buf, u);
             }
         }
-        else if (tag.getName() == "span") {
+        else if (tag.name() == "span") {
             outText( "", buf, u);
         }
-        else if (tag.getName() == "br") {
+        else if (tag.name() == "br") {
             outText( "\\", buf, u);
         }
-        else if (tag.getName() == "table") {
+        else if (tag.name() == "table") {
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {
                 outText( "\n\\begin{tabular}", buf, u);
             }
@@ -729,7 +729,7 @@ bool OSISLaTeX::handleToken(std::string &buf, const char *token, BasicFilterUser
             }
 
         }
-        else if (tag.getName() == "row") {
+        else if (tag.name() == "row") {
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {
                 outText( "\n", buf, u);
                 u->firstCell = true;
@@ -740,7 +740,7 @@ bool OSISLaTeX::handleToken(std::string &buf, const char *token, BasicFilterUser
             }
 
         }
-        else if (tag.getName() == "cell") {
+        else if (tag.name() == "cell") {
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {
                 if (u->firstCell == false) {
                     outText( " & ", buf, u);

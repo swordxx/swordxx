@@ -234,7 +234,7 @@ bool handleToken(std::string & text, XMLTag & token) {
         static bool inEntryFree  = false;
         static bool inSuperEntry = false;
 
-        std::string const &  tokenName = token.getName();
+        std::string const &  tokenName = token.name();
 
         static char const * splitPtr;
         static char const * splitPtr2 = nullptr;

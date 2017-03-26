@@ -55,7 +55,7 @@ bool TEIPlain::handleToken(std::string &buf, const char *token, BasicFilterUserD
         XMLTag tag(token);
 
         // <p> paragraph tag
-        if (tag.getName() == "p") {
+        if (tag.name() == "p") {
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {    // non-empty start tag
                 buf += "\n";
             }
@@ -70,7 +70,7 @@ bool TEIPlain::handleToken(std::string &buf, const char *token, BasicFilterUserD
         }
 
         // <entryFree>
-        else if (tag.getName() == "entryFree") {
+        else if (tag.name() == "entryFree") {
             std::string n = tag.attribute("n");
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {
                     if (n != "") {
@@ -81,7 +81,7 @@ bool TEIPlain::handleToken(std::string &buf, const char *token, BasicFilterUserD
         }
 
         // <sense>
-        else if (tag.getName() == "sense") {
+        else if (tag.name() == "sense") {
             std::string n = tag.attribute("n");
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {
                     if (n != "") {
@@ -95,7 +95,7 @@ bool TEIPlain::handleToken(std::string &buf, const char *token, BasicFilterUserD
         }
 
         // <div>
-        else if (tag.getName() == "div") {
+        else if (tag.name() == "div") {
 
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {
                 buf.append("\n\n\n");
@@ -105,7 +105,7 @@ bool TEIPlain::handleToken(std::string &buf, const char *token, BasicFilterUserD
         }
 
         // <etym>
-        else if (tag.getName() == "etym") {
+        else if (tag.name() == "etym") {
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {
                 buf += "[";
             }

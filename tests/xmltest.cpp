@@ -34,7 +34,7 @@ int main(int argc, char * argv[]) {
 
     std::cout << x.toString() << "\n";
     x.setAttribute("addedAttribute", "with a \" quote");
-    std::cout << x.toString() << "\nTag name: [" << x.getName() << "]\n";
+    std::cout << x.toString() << "\nTag name: [" << x.name() << "]\n";
     for (auto const & name : x.attributeNames()) {
         auto const count = x.attributePartCount(name.c_str(), ' ');
         std::cout << " - attribute: [" << name << "] = ["

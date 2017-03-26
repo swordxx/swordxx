@@ -77,7 +77,7 @@ char ThMLScripref::processText(std::string &text, const SWKey *key, const SWModu
             intoken = false;
 
             XMLTag tag(token.c_str());
-            if (tag.getName() == "scripRef") {
+            if (tag.name() == "scripRef") {
                 if (!tag.isEndTag()) {
                     if (!tag.isEmpty()) {
                         refs = "";
@@ -114,7 +114,7 @@ char ThMLScripref::processText(std::string &text, const SWKey *key, const SWModu
             }
 
             // if not a scripRef token, keep token in text
-            if ((tag.getName() == "scripRef") && !tag.isEndTag()) {
+            if ((tag.name() == "scripRef") && !tag.isEndTag()) {
                 std::string osisRef = tag.attribute("passage");
                 if (refs.length())
                     refs += "; ";

@@ -211,7 +211,7 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
         XMLTag tag(token);
 
         // <w> tag
-        if (tag.getName() == "w") {
+        if (tag.name() == "w") {
 
             // start <w> tag
             if ((!tag.isEmpty()) && (!tag.isEndTag())) {
@@ -272,7 +272,7 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
         }
 
         // <note> tag
-        else if (tag.getName() == "note") {
+        else if (tag.name() == "note") {
             if (!tag.isEndTag()) {
                 std::string type = tag.attribute("type");
                 bool strongsMarkup = (type == "x-strongsMarkup" || type == "strongsMarkup");	// the latter is deprecated
@@ -325,7 +325,7 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
         }
 
         // <p> paragraph and <lg> linegroup tags
-        else if ((tag.getName() == "p") || (tag.getName() == "lg")) {
+        else if ((tag.name() == "p") || (tag.name() == "lg")) {
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {	// non-empty start tag
                 u->outputNewline(buf);
             }
@@ -340,7 +340,7 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
         // Milestoned paragraphs, created by osis2mod
         // <div type="paragraph" sID.../>
         // <div type="paragraph" eID.../>
-        else if (tag.isEmpty() && (tag.getName() == "div") && !tag.attribute("type").empty() && (!strcmp(tag.attribute("type").c_str(), "x-p") || !strcmp(tag.attribute("type").c_str(), "paragraph") || !strcmp(tag.attribute("type").c_str(), "colophon"))) {
+        else if (tag.isEmpty() && (tag.name() == "div") && !tag.attribute("type").empty() && (!strcmp(tag.attribute("type").c_str(), "x-p") || !strcmp(tag.attribute("type").c_str(), "paragraph") || !strcmp(tag.attribute("type").c_str(), "colophon"))) {
             // <div type="paragraph"  sID... />
             if (!tag.attribute("sID").empty()) {	// non-empty start tag
                 u->outputNewline(buf);
@@ -362,7 +362,7 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
         }
 
         // <reference> tag
-        else if (tag.getName() == "reference") {
+        else if (tag.name() == "reference") {
             if (!u->inXRefNote) {	// only show these if we're not in an xref note
                 if (!tag.isEndTag()) {
                     std::string work;
@@ -413,7 +413,7 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
         }
 
         // <l> poetry, etc
-        else if (tag.getName() == "l") {
+        else if (tag.name() == "l") {
             // start line marker
             if (!tag.attribute("sID").empty() || (!tag.isEndTag() && !tag.isEmpty())) {
                 std::string type = tag.attribute("type");
@@ -448,13 +448,13 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
         }
 
         // <lb.../>
-        else if ((tag.getName() == "lb") && (tag.attribute("type").empty() || strcmp(tag.attribute("type").c_str(), "x-optional"))) {
+        else if ((tag.name() == "lb") && (tag.attribute("type").empty() || strcmp(tag.attribute("type").c_str(), "x-optional"))) {
                 u->outputNewline(buf);
         }
         // <milestone type="line"/>
         // <milestone type="x-p"/>
         // <milestone type="cQuote" marker="x"/>
-        else if ((tag.getName() == "milestone") && (!tag.attribute("type").empty())) {
+        else if ((tag.name() == "milestone") && (!tag.attribute("type").empty())) {
             // safe because we've verified type is present from if statement above
             auto type(tag.attribute("type"));
             if (!strcmp(type.c_str(), "line")) {
@@ -484,7 +484,7 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
         }
 
         // <title>
-        else if (tag.getName() == "title") {
+        else if (tag.name() == "title") {
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {
                 std::string type = tag.attribute("type");
                 std::string classExtras = "";
@@ -539,7 +539,7 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
         }
 
         // <list>
-        else if (tag.getName() == "list") {
+        else if (tag.name() == "list") {
             if((!tag.isEndTag()) && (!tag.isEmpty())) {
                 outText("<ul>\n", buf, u);
             }
@@ -551,7 +551,7 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
         }
 
         // <item>
-        else if (tag.getName() == "item") {
+        else if (tag.name() == "item") {
             if((!tag.isEndTag()) && (!tag.isEmpty())) {
                 outText("\t<li>", buf, u);
             }
@@ -562,10 +562,10 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
             }
         }
         // <catchWord> & <rdg> tags (italicize)
-        else if ((tag.getName() == "rdg") || (tag.getName() == "catchWord")) {
+        else if ((tag.name() == "rdg") || (tag.name() == "catchWord")) {
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {
                 outText("<span class=\"", buf, u);
-                outText(tag.getName().c_str(), buf, u);
+                outText(tag.name().c_str(), buf, u);
                 outText("\">", buf, u);
             }
             else if (tag.isEndTag()) {
@@ -574,7 +574,7 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
         }
 
         // divineName
-        else if (tag.getName() == "divineName") {
+        else if (tag.name() == "divineName") {
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {
                 u->suspendTextPassThru = (++u->suspendLevel);
             }
@@ -589,7 +589,7 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
         }
 
         // <hi> text highlighting
-        else if (tag.getName() == "hi") {
+        else if (tag.name() == "hi") {
             std::string type = tag.attribute("type");
 
             // handle tei rend attribute if type doesn't exist
@@ -658,7 +658,7 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
         // If the tag is </q> then use the pushed <q> for specification
         // If there is a marker attribute, possibly empty, this overrides osisQToTick.
         // If osisQToTick, then output the marker, using level to determine the type of mark.
-        else if (tag.getName() == "q") {
+        else if (tag.name() == "q") {
             std::string type      = tag.attribute("type");
             std::string who       = tag.attribute("who");
             auto tmp(tag.attribute("level"));
@@ -713,7 +713,7 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
         }
 
         // <transChange>
-        else if (tag.getName() == "transChange") {
+        else if (tag.name() == "transChange") {
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {
                 std::string type = tag.attribute("type");
                 u->lastTransChange = type;
@@ -733,7 +733,7 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
         }
 
         // image
-        else if (tag.getName() == "figure") {
+        else if (tag.name() == "figure") {
             auto src(tag.attribute("src"));
             if (!src.empty()) {		// assert we have a src attribute
                 std::string filepath;
@@ -760,7 +760,7 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
         }
 
         // ok to leave these in
-        else if (tag.getName() == "div") {
+        else if (tag.name() == "div") {
             std::string type = tag.attribute("type");
             if (type == "bookGroup") {
             }
@@ -782,10 +782,10 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
             else if (!(type == "colophon")) outText(tag.toString().c_str(), buf, u);
 
         }
-        else if (tag.getName() == "span") {
+        else if (tag.name() == "span") {
             outText(tag.toString().c_str(), buf, u);
         }
-        else if (tag.getName() == "abbr") {
+        else if (tag.name() == "abbr") {
             if (!tag.isEndTag()) {
                 std::string title = tag.attribute("expansion");
                 outText("<abbr title=\"", buf, u);
@@ -797,10 +797,10 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
             }
 
         }
-        else if (tag.getName() == "br") {
+        else if (tag.name() == "br") {
             outText(tag.toString().c_str(), buf, u);
         }
-        else if (tag.getName() == "table") {
+        else if (tag.name() == "table") {
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {
                 outText( "<table><tbody>\n", buf, u);
             }
@@ -811,7 +811,7 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
             }
 
         }
-        else if (tag.getName() == "row") {
+        else if (tag.name() == "row") {
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {
                 outText( "\t<tr>", buf, u);
             }
@@ -820,7 +820,7 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
             }
 
         }
-        else if (tag.getName() == "cell") {
+        else if (tag.name() == "cell") {
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {
                 outText( "<td>", buf, u);
             }

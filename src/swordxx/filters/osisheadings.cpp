@@ -75,7 +75,7 @@ bool OSISHeadings::handleToken(std::string &buf, const char *token, BasicFilterU
 
     MyUserData *u = (MyUserData *)userData;
     XMLTag tag(token);
-    std::string name = tag.getName();
+    std::string name = tag.name();
 
     // we only care about titles and divs or if we're already in a heading
     //

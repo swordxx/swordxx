@@ -98,7 +98,7 @@ bool TEIXHTML::handleToken(std::string &buf, const char *token, BasicFilterUserD
         MyUserData *u = (MyUserData *)userData;
         XMLTag tag(token);
 
-        if (tag.getName() == "p") {
+        if (tag.name() == "p") {
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {    // non-empty start tag
                 buf += "<!P><br />";
             }
@@ -113,7 +113,7 @@ bool TEIXHTML::handleToken(std::string &buf, const char *token, BasicFilterUserD
         }
 
         // <hi>
-        else if (tag.getName() == "hi") {
+        else if (tag.name() == "hi") {
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {
                 std::string rend = tag.attribute("rend");
 
@@ -146,7 +146,7 @@ bool TEIXHTML::handleToken(std::string &buf, const char *token, BasicFilterUserD
         }
 
         // <entryFree>
-        else if (tag.getName() == "entryFree") {
+        else if (tag.name() == "entryFree") {
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {
                 std::string n = tag.attribute("n");
                 if (n != "") {
@@ -158,7 +158,7 @@ bool TEIXHTML::handleToken(std::string &buf, const char *token, BasicFilterUserD
         }
 
         // <sense>
-        else if (tag.getName() == "sense") {
+        else if (tag.name() == "sense") {
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {
                 std::string n = tag.attribute("n");
                 buf += "<br/><span class=\"sense";
@@ -176,7 +176,7 @@ bool TEIXHTML::handleToken(std::string &buf, const char *token, BasicFilterUserD
         }
 
         // <div>
-        else if (tag.getName() == "div") {
+        else if (tag.name() == "div") {
 
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {
                 buf += "<!P>";
@@ -186,30 +186,30 @@ bool TEIXHTML::handleToken(std::string &buf, const char *token, BasicFilterUserD
         }
 
         // <lb.../>
-        else if (tag.getName() == "lb") {
+        else if (tag.name() == "lb") {
             buf += "<br />";
         }
 
         // <pos>, <gen>, <case>, <gram>, <number>, <mood>, <pron>, <def> <tr> <orth> <etym> <usg>
-        else if ((tag.getName() == "pos") ||
-                 (tag.getName() == "gen") ||
-                 (tag.getName() == "case") ||
-                 (tag.getName() == "gram") ||
-                 (tag.getName() == "number") ||
-                 (tag.getName() == "pron") ||
-                 (tag.getName() == "def") ||
-                 (tag.getName() == "tr") ||
-                 (tag.getName() == "orth") ||
-                 (tag.getName() == "etym") ||
-                 (tag.getName() == "usg") ||
-                 (tag.getName() == "quote")||
-                 (tag.getName() == "cit")||
-                 (tag.getName() == "persName")||
-                 (tag.getName() == "oVar"))
+        else if ((tag.name() == "pos") ||
+                 (tag.name() == "gen") ||
+                 (tag.name() == "case") ||
+                 (tag.name() == "gram") ||
+                 (tag.name() == "number") ||
+                 (tag.name() == "pron") ||
+                 (tag.name() == "def") ||
+                 (tag.name() == "tr") ||
+                 (tag.name() == "orth") ||
+                 (tag.name() == "etym") ||
+                 (tag.name() == "usg") ||
+                 (tag.name() == "quote")||
+                 (tag.name() == "cit")||
+                 (tag.name() == "persName")||
+                 (tag.name() == "oVar"))
                  {
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {
                 buf += "<span class=\"";
-                buf += tag.getName();
+                buf += tag.name();
                 if (!tag.attribute("type").empty()) {
                     buf += "\" type =\"";
                     buf += tag.attribute("type");
@@ -225,7 +225,7 @@ bool TEIXHTML::handleToken(std::string &buf, const char *token, BasicFilterUserD
             }
         }
 
-        else if (tag.getName() == "ref") {
+        else if (tag.name() == "ref") {
             if (!tag.isEndTag()) {
                 u->suspendTextPassThru = true;
                 std::string target;
@@ -288,7 +288,7 @@ bool TEIXHTML::handleToken(std::string &buf, const char *token, BasicFilterUserD
         }
 
            // <note> tag
-        else if (tag.getName() == "note") {
+        else if (tag.name() == "note") {
             if (!tag.isEndTag()) {
                 if (!tag.isEmpty()) {
                     u->suspendTextPassThru = true;
@@ -308,7 +308,7 @@ bool TEIXHTML::handleToken(std::string &buf, const char *token, BasicFilterUserD
             }
         }
         // <graphic> image tag
-        else if (tag.getName() == "graphic") {
+        else if (tag.name() == "graphic") {
             auto const url(tag.attribute("url"));
             if (!url.empty()) {        // assert we have a url attribute
                 std::string filepath;
@@ -326,7 +326,7 @@ bool TEIXHTML::handleToken(std::string &buf, const char *token, BasicFilterUserD
             }
         }
         // <table> <row> <cell>
-        else if (tag.getName() == "table") {
+        else if (tag.name() == "table") {
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {
                 buf += "<table><tbody>\n";
             }
@@ -335,7 +335,7 @@ bool TEIXHTML::handleToken(std::string &buf, const char *token, BasicFilterUserD
                 u->supressAdjacentWhitespace = true;
             }
         }
-        else if (tag.getName() == "row") {
+        else if (tag.name() == "row") {
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {
                 buf += "\t<tr>";
             }
@@ -343,7 +343,7 @@ bool TEIXHTML::handleToken(std::string &buf, const char *token, BasicFilterUserD
                 buf += "</tr>\n";
             }
         }
-        else if (tag.getName() == "cell") {
+        else if (tag.name() == "cell") {
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {
                 buf += "<td>";
             }

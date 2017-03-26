@@ -148,7 +148,7 @@ bool GBFLaTeX::handleToken(std::string &buf, const char *token, BasicFilterUserD
             buf += "}";
         }
 
-        else if (tag.getName() == "RX") {
+        else if (tag.name() == "RX") {
             buf += "\\swordxref{";
             for (tok = token + 3; *tok; tok++) {
               if(*tok != '<' && *tok+1 != 'R' && *tok+2 != 'x') {
@@ -160,7 +160,7 @@ bool GBFLaTeX::handleToken(std::string &buf, const char *token, BasicFilterUserD
             }
             buf += "}";
         }
-        else if (tag.getName() == "RF") {
+        else if (tag.name() == "RF") {
             std::string type = tag.attribute("type");
             std::string footnoteNumber = tag.attribute("swordFootnote");
             std::string noteName = tag.attribute("n");
@@ -174,7 +174,7 @@ bool GBFLaTeX::handleToken(std::string &buf, const char *token, BasicFilterUserD
             }
             u->suspendTextPassThru = false;
         }
-        else if (tag.getName() == "Rf") {
+        else if (tag.name() == "Rf") {
             u->suspendTextPassThru = false;
             buf += "}";
         }

@@ -55,7 +55,7 @@ bool OSISWEBIF::handleToken(std::string &buf, const char *token, BasicFilterUser
         XMLTag tag(token);
 
         // <w> tag
-        if (tag.getName() == "w") {
+        if (tag.name() == "w") {
 
             // start <w> tag
             if ((!tag.isEmpty()) && (!tag.isEndTag())) {
@@ -134,7 +134,7 @@ bool OSISWEBIF::handleToken(std::string &buf, const char *token, BasicFilterUser
         }
 
         // <note> tag
-        else if (tag.getName() == "note") {
+        else if (tag.name() == "note") {
             if (!tag.isEndTag()) {
                                 std::string type = tag.attribute("type");
                                 bool strongsMarkup = (type == "x-strongsMarkup" || type == "strongsMarkup");    // the latter is deprecated

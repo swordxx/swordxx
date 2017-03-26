@@ -102,7 +102,7 @@ bool OSISOSIS::handleToken(std::string &buf, const char *token, BasicFilterUserD
             u->startTag = tag;
 
         // <w> tag
-        if (tag.getName() == "w") {
+        if (tag.name() == "w") {
 
             // start <w> tag
             if ((!tag.isEmpty()) && (!tag.isEndTag())) {
@@ -135,7 +135,7 @@ bool OSISOSIS::handleToken(std::string &buf, const char *token, BasicFilterUserD
         }
 
         // <note> tag
-        else if (tag.getName() == "note") {
+        else if (tag.name() == "note") {
             if (!tag.isEndTag()) {
                 std::string type = tag.attribute("type");
 

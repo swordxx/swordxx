@@ -68,7 +68,7 @@ bool TEIHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterUs
         MyUserData *u = (MyUserData *)userData;
         XMLTag tag(token);
 
-        if (tag.getName() == "p") {
+        if (tag.name() == "p") {
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {    // non-empty start tag
                 buf += "<!P><br />";
             }
@@ -83,7 +83,7 @@ bool TEIHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterUs
         }
 
         // <hi>
-        else if (tag.getName() == "hi") {
+        else if (tag.name() == "hi") {
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {
                 std::string rend = tag.attribute("rend");
 
@@ -115,7 +115,7 @@ bool TEIHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterUs
         }
 
         // <entryFree>
-        else if (tag.getName() == "entryFree") {
+        else if (tag.name() == "entryFree") {
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {
                 std::string n = tag.attribute("n");
                 if (n != "") {
@@ -127,7 +127,7 @@ bool TEIHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterUs
         }
 
         // <sense>
-        else if (tag.getName() == "sense") {
+        else if (tag.name() == "sense") {
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {
                 std::string n = tag.attribute("n");
                 if (n != "") {
@@ -139,7 +139,7 @@ bool TEIHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterUs
         }
 
         // <div>
-        else if (tag.getName() == "div") {
+        else if (tag.name() == "div") {
 
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {
                 buf += "<!P>";
@@ -149,17 +149,17 @@ bool TEIHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterUs
         }
 
         // <lb.../>
-        else if (tag.getName() == "lb") {
+        else if (tag.name() == "lb") {
             buf += "<br />";
         }
 
         // <pos>, <gen>, <case>, <gram>, <number>, <mood>, <pron>, <def>
-        else if ((tag.getName() == "pos") ||
-                 (tag.getName() == "gen") ||
-                 (tag.getName() == "case") ||
-                 (tag.getName() == "gram") ||
-                 (tag.getName() == "number") ||
-                 (tag.getName() == "pron") /*||
+        else if ((tag.name() == "pos") ||
+                 (tag.name() == "gen") ||
+                 (tag.name() == "case") ||
+                 (tag.name() == "gram") ||
+                 (tag.name() == "number") ||
+                 (tag.name() == "pron") /*||
                  (tag.getName() == "def")*/) {
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {
                 buf += "<i>";
@@ -170,7 +170,7 @@ bool TEIHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterUs
         }
 
         // <tr>
-        else if (tag.getName() == "tr") {
+        else if (tag.name() == "tr") {
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {
                 buf += "<i>";
             }
@@ -180,7 +180,7 @@ bool TEIHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterUs
         }
 
         // orth
-        else if (tag.getName() == "orth") {
+        else if (tag.name() == "orth") {
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {
                 buf += "<b>";
             }
@@ -190,11 +190,11 @@ bool TEIHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterUs
         }
 
         // <etym>, <usg>
-        else if ((tag.getName() == "etym") ||
-                 (tag.getName() == "usg")) {
+        else if ((tag.name() == "etym") ||
+                 (tag.name() == "usg")) {
             // do nothing here
         }
-        else if (tag.getName() == "ref") {
+        else if (tag.name() == "ref") {
             if (!tag.isEndTag()) {
                 u->suspendTextPassThru = true;
                 std::string target;
@@ -257,7 +257,7 @@ bool TEIHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterUs
         }
 
            // <note> tag
-        else if (tag.getName() == "note") {
+        else if (tag.name() == "note") {
             if (!tag.isEndTag()) {
                 if (!tag.isEmpty()) {
                     u->suspendTextPassThru = true;
@@ -277,7 +277,7 @@ bool TEIHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterUs
             }
         }
         // <graphic> image tag
-        else if (tag.getName() == "graphic") {
+        else if (tag.name() == "graphic") {
             auto url(tag.attribute("url"));
             if (!url.empty()) {        // assert we have a url attribute
                 std::string filepath;
@@ -296,7 +296,7 @@ bool TEIHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterUs
             }
         }
         // <table> <row> <cell>
-        else if (tag.getName() == "table") {
+        else if (tag.name() == "table") {
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {
                 buf += "<table><tbody>\n";
             }
@@ -306,7 +306,7 @@ bool TEIHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterUs
             }
 
         }
-        else if (tag.getName() == "row") {
+        else if (tag.name() == "row") {
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {
                 buf += "\t<tr>";
             }
@@ -314,7 +314,7 @@ bool TEIHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterUs
                 buf += "</tr>\n";
             }
         }
-        else if (tag.getName() == "cell") {
+        else if (tag.name() == "cell") {
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {
                 buf += "<td>";
             }

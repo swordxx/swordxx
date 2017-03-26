@@ -54,7 +54,7 @@ public:
     XMLTag(const XMLTag& tag);
 
     void setText(const char *tagString);
-    inline std::string const & getName() const { return m_name; }
+    inline std::string const & name() const { return m_name; }
 
     inline bool isEmpty() const {
         if (!parsed)

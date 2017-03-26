@@ -68,14 +68,14 @@ bool TEIRTF::handleToken(std::string &buf, const char *token, BasicFilterUserDat
         XMLTag tag(token);
 
         // <p> paragraph tag
-        if (tag.getName() == "p") {
+        if (tag.name() == "p") {
             if (!tag.isEndTag()) {    // non-empty start tag
                 buf += "{\\sb100\\fi200\\par}";
             }
         }
 
         // <hi>
-        else if ((tag.getName() == "hi") || (tag.getName() == "emph")) {
+        else if ((tag.name() == "hi") || (tag.name() == "emph")) {
             std::string rend = tag.attribute("rend");
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {
                 if (rend == "italic" || rend == "ital")
@@ -93,7 +93,7 @@ bool TEIRTF::handleToken(std::string &buf, const char *token, BasicFilterUserDat
         }
 
         // <entryFree>
-        else if (tag.getName() == "entryFree") {
+        else if (tag.name() == "entryFree") {
             std::string n = tag.attribute("n");
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {
                     if (n != "") {
@@ -104,7 +104,7 @@ bool TEIRTF::handleToken(std::string &buf, const char *token, BasicFilterUserDat
         }
 
         // <sense>
-        else if (tag.getName() == "sense") {
+        else if (tag.name() == "sense") {
             std::string n = tag.attribute("n");
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {
                     if (n != "") {
@@ -116,7 +116,7 @@ bool TEIRTF::handleToken(std::string &buf, const char *token, BasicFilterUserDat
         }
 
          // <orth>
-         else if (tag.getName() == "orth") {
+         else if (tag.name() == "orth") {
              if ((!tag.isEndTag()) && (!tag.isEmpty())) {
                  buf += "{\\b1 ";
              }
@@ -126,7 +126,7 @@ bool TEIRTF::handleToken(std::string &buf, const char *token, BasicFilterUserDat
          }
 
         // <div>
-        else if (tag.getName() == "div") {
+        else if (tag.name() == "div") {
 
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {
                 buf.append("{\\pard\\sa300}");
@@ -136,12 +136,12 @@ bool TEIRTF::handleToken(std::string &buf, const char *token, BasicFilterUserDat
         }
 
         // <pos>, <gen>, <case>, <gram>, <number>, <mood>
-        else if ((tag.getName() == "pos")
-                 || (tag.getName() == "gen")
-                 || (tag.getName() == "case")
-                 || (tag.getName() == "gram")
-                 || (tag.getName() == "number")
-                 || (tag.getName() == "mood"))
+        else if ((tag.name() == "pos")
+                 || (tag.name() == "gen")
+                 || (tag.name() == "case")
+                 || (tag.name() == "gram")
+                 || (tag.name() == "number")
+                 || (tag.name() == "mood"))
         {
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {
                 buf += "{\\i1 ";
@@ -152,7 +152,7 @@ bool TEIRTF::handleToken(std::string &buf, const char *token, BasicFilterUserDat
         }
 
         // <tr>
-        else if (tag.getName() == "tr") {
+        else if (tag.name() == "tr") {
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {
                 buf += "{\\i1 ";
             }
@@ -162,7 +162,7 @@ bool TEIRTF::handleToken(std::string &buf, const char *token, BasicFilterUserDat
         }
 
         // <etym>
-        else if (tag.getName() == "etym") {
+        else if (tag.name() == "etym") {
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {
                 buf += "[";
             }
@@ -172,7 +172,7 @@ bool TEIRTF::handleToken(std::string &buf, const char *token, BasicFilterUserDat
         }
 
                // <note> tag
-        else if (tag.getName() == "note") {
+        else if (tag.name() == "note") {
             if (!tag.isEndTag()) {
                 if (!tag.isEmpty()) {
                     std::string type = tag.attribute("type");
@@ -190,13 +190,13 @@ bool TEIRTF::handleToken(std::string &buf, const char *token, BasicFilterUserDat
         }
 
         // <lb/> tag
-        else if (tag.getName() == "lb") {
+        else if (tag.name() == "lb") {
             buf += "{\\par}";
             userData->supressAdjacentWhitespace = true;
         }
 
         // <ref> tag
-        else if (tag.getName() == "ref") {
+        else if (tag.name() == "ref") {
             if (!tag.isEndTag() && !tag.attribute("osisRef").empty()) {
                 buf += "{<a href=\"\">";
                 u->inOsisRef = true;
@@ -207,7 +207,7 @@ bool TEIRTF::handleToken(std::string &buf, const char *token, BasicFilterUserDat
             }
         }
 
-        else if (tag.getName() == "graphic") {
+        else if (tag.name() == "graphic") {
             auto src(tag.attribute("url"));
             if (src.empty())        // assert we have a src attribute
                 return false;

@@ -261,7 +261,7 @@ std::string XMLTag::toString() const {
     if (isEndTag())
         tag.push_back('/');
 
-    tag.append(getName());
+    tag.append(name());
     for (StringPairMap::iterator it = attributes.begin(); it != attributes.end(); it++) {
         //tag.appendFormatted(" %s=\"%s\"", it->first.c_str(), it->second.c_str());
         tag.push_back(' ');

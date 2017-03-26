@@ -78,7 +78,7 @@ char ThMLFootnotes::processText(std::string &text, const SWKey *key, const SWMod
             intoken = false;
 
             XMLTag tag(token.c_str());
-            if (tag.getName() == "note") {
+            if (tag.name() == "note") {
                 if (!tag.isEndTag()) {
                     if (!tag.isEmpty()) {
                         refs = "";
@@ -115,7 +115,7 @@ char ThMLFootnotes::processText(std::string &text, const SWKey *key, const SWMod
             }
 
             // if not a note token, keep token in text
-            if ((tag.getName() == "scripRef") && !tag.isEndTag()) {
+            if ((tag.name() == "scripRef") && !tag.isEndTag()) {
                 std::string osisRef = tag.attribute("passage");
                 if (refs.length())
                     refs += "; ";

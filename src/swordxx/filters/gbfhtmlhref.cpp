@@ -217,7 +217,7 @@ bool GBFHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterUs
             buf += "</a>)</em></small>";
         }
 
-        else if (tag.getName() == "RX") {
+        else if (tag.name() == "RX") {
             buf += "<a href=\"";
             for (tok = token + 3; *tok; tok++) {
               if(*tok != '<' && *tok+1 != 'R' && *tok+2 != 'x') {
@@ -229,7 +229,7 @@ bool GBFHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterUs
             }
             buf += "\">";
         }
-        else if (tag.getName() == "RF") {
+        else if (tag.name() == "RF") {
             std::string type = tag.attribute("type");
             std::string footnoteNumber = tag.attribute("swordFootnote");
             std::string noteName = tag.attribute("n");
@@ -246,7 +246,7 @@ bool GBFHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterUs
             }
             u->suspendTextPassThru = true;
         }
-        else if (tag.getName() == "Rf") {
+        else if (tag.name() == "Rf") {
             u->suspendTextPassThru = false;
         }
 /*
