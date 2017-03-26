@@ -122,17 +122,17 @@ typedef struct {
 } SectionLevelInfo;
 
 void readVersion(int fd, Version *versionRecord);
-void readHeaderControlWordAreaText(int fd, char **buf);
+void readHeaderControlWordAreaText(int fd);
 void readViewableHeader(int fd, ViewableHeader *viewableHeaderRecord);
 void readVSyncHeader(int fd, VSyncHeader *vSyncHeaderRecord);
 void readVSyncBooksInfo(int fd, VSyncHeader *, VSyncBooksInfo **vSyncBooksInfo);
 void readViewableBlock(int fd, ViewableBlock *vb);
-void readViewableBlockText(int fd, ViewableBlock *vb, char **buf);
+std::string readViewableBlockText(int fd, ViewableBlock *vb);
 void readSectionsHeader(int fd, SectionsHeader *sectionsHeaderRecord);
 void readSectionLevelInfo(int fd, SectionLevelInfo *sli);
-void readSectionName(int fd, SectionLevelInfo *sli, char **name);
+std::string readSectionName(int fd, SectionLevelInfo *sli);
 void displayBook(int fdbook, int fdviewable, int fdvsync, int fdsections, VSyncBooksInfo *vSyncBooksInfo);
-void extractVerseText(int fdviewable, int fdbook, SectionLevelInfo *sectionLevelInfo, char **verseText);
+std::string extractVerseText(int fdviewable, int fdbook, SectionLevelInfo *sectionLevelInfo);
 void cleanBuf(char *buf);
 
 SWCompress * compress = nullptr;
@@ -140,7 +140,6 @@ SWCompress * compress = nullptr;
 int main(int argc, char **argv) {
 
     compress = new LZSSCompress();
-    char *buf;
     Version versionRecord;
     VSyncHeader vSyncHeaderRecord;
     VSyncBooksInfo *vSyncBooksInfo;
@@ -170,15 +169,12 @@ int main(int argc, char **argv) {
 
     try {
         readVersion(fdbook, &versionRecord);
-        readHeaderControlWordAreaText(fdbook, &buf);
+        readHeaderControlWordAreaText(fdbook);
     }
     catch (std::runtime_error &e) {
         std::cout << e.what () << '\n';
         exit (-3);
     }
-    delete [] buf;
-    buf = nullptr;
-
 
     fileName = bookpath + "Viewable.idx";
     int fdviewable = FileMgr::openFileReadOnly(fileName.c_str());
@@ -247,8 +243,8 @@ int main(int argc, char **argv) {
 
 
 void readVersion(int fd, Version *versionRecord) {
-
     string readError = "Error reading Version Record.";
+    string seekError = "Error seeking Version Record.";
     int rtn = read(fd, &(versionRecord->versionRecordSize), 2);
     if (rtn <= 0) throw runtime_error(readError);
     rtn = read(fd, &(versionRecord->publisherID), 2);
@@ -274,18 +270,15 @@ void readVersion(int fd, Version *versionRecord) {
 
     int skip = versionRecord->versionRecordSize - 16/*sizeof(struct Version*/;
 
-    if (skip) {
-        char *skipbuf = new char[skip];
-        rtn = read(fd, skipbuf, skip);
-        delete [] skipbuf;
-        if (rtn <= 0) throw runtime_error(readError);
-    }
+    if (skip && (lseek(fd, skip, SEEK_CUR) < 0))
+        throw runtime_error(seekError);
 }
 
 
 void readSectionsHeader(int fd, SectionsHeader *sectionsHeaderRecord) {
 
     string readError = "Error reading Section Header.";
+    string seekError = "Error seeking Section Header.";
     int rtn = read(fd, &(sectionsHeaderRecord->sectionsHeaderRecordSize), 2);
     if (rtn <= 0) throw runtime_error(readError);
     rtn = read(fd, &(sectionsHeaderRecord->levelEntriesCount), 4);
@@ -299,18 +292,15 @@ void readSectionsHeader(int fd, SectionsHeader *sectionsHeaderRecord) {
 
     int skip = sectionsHeaderRecord->sectionsHeaderRecordSize - 16/*sizeof(struct ViewableHeader)*/;
 
-    if (skip) {
-        char *skipbuf = new char[skip];
-        rtn = read(fd, skipbuf, skip);
-        delete [] skipbuf;
-        if (rtn <= 0) throw runtime_error(readError);
-    }
+    if (skip && (lseek(fd, skip, SEEK_CUR) < 0))
+        throw runtime_error(seekError);
 }
 
 
 void readViewableHeader(int fd, ViewableHeader *viewableHeaderRecord) {
 
     string readError = "Error reading Viewable Header.";
+    string seekError = "Error seeking Viewable Header.";
     int rtn = read(fd, &(viewableHeaderRecord->viewableHeaderRecordSize), 2);
     if (rtn <= 0) throw runtime_error(readError);
     rtn = read(fd, &(viewableHeaderRecord->viewableBlocksCount), 4);
@@ -328,18 +318,15 @@ void readViewableHeader(int fd, ViewableHeader *viewableHeaderRecord) {
 
     int skip = viewableHeaderRecord->viewableHeaderRecordSize - 16/*sizeof(struct ViewableHeader)*/;
 
-    if (skip) {
-        char *skipbuf = new char[skip];
-        rtn = read(fd, skipbuf, skip);
-        delete [] skipbuf;
-        if (rtn <= 0) throw runtime_error(readError);
-    }
+    if (skip && (lseek(fd, skip, SEEK_CUR) < 0))
+        throw runtime_error(seekError);
 }
 
 
 void readVSyncHeader(int fd, VSyncHeader *vSyncHeaderRecord) {
 
     string readError = "Error reading VSync Header.";
+    string seekError = "Error seeking VSync Header.";
     int rtn = read(fd, &(vSyncHeaderRecord->vSyncHeaderRecordSize), 2);
     if (rtn <= 0) throw runtime_error(readError);
     rtn = read(fd, &(vSyncHeaderRecord->startBookNumber), 2);
@@ -357,26 +344,24 @@ void readVSyncHeader(int fd, VSyncHeader *vSyncHeaderRecord) {
 
     int skip = vSyncHeaderRecord->vSyncHeaderRecordSize - 16/*sizeof(VSyncHeader)*/;
 
-    if (skip) {
-        char *skipbuf = new char[skip];
-        rtn = read(fd, skipbuf, skip);
-        delete [] skipbuf;
-        if (rtn <= 0) throw runtime_error(readError);
-    }
+    if (skip && (lseek(fd, skip, SEEK_CUR) < 0))
+        throw runtime_error(seekError);
 }
 
 
-void readViewableBlockText(int fd, ViewableBlock *vb, char **buf) {
+std::string readViewableBlockText(int fd, ViewableBlock *vb) {
     string readError = "Error reading Viewable Block Text.";
     unsigned long size = vb->size;
 
-    *buf = new char [ ((vb->size > vb->uncompressedSize) ? vb->size : vb->uncompressedSize) + 1 ];
+    auto buf(std::make_unique<char[]>(((vb->size > vb->uncompressedSize)
+                                       ? vb->size
+                                       : vb->uncompressedSize) + 1u));
     lseek(fd, vb->offset, SEEK_SET);
-    int rtn = read(fd, *buf, vb->size);
+    int rtn = read(fd, buf.get(), vb->size);
     if (rtn <= 0) throw runtime_error(readError);
 
-    compress->zBuf(&size, *buf);
-    strcpy(*buf, compress->Buf());
+    compress->zBuf(&size, buf.get());
+    return compress->Buf();
 }
 
 
@@ -392,18 +377,16 @@ void readViewableBlock(int fd, ViewableBlock *vb) {
 }
 
 
-void readHeaderControlWordAreaText(int fd, char **buf) {
+void readHeaderControlWordAreaText(int fd) {
     string readError = "Error reading Control Word Area Text.";
     long headerControlWordAreaSize;
     int rtn = read(fd, &headerControlWordAreaSize, 4);
     if (rtn <= 0) throw runtime_error(readError);
 
-    *buf = new char [headerControlWordAreaSize + 1];
+    auto const buf(std::make_unique<char[]>(headerControlWordAreaSize + 1));
 
-    rtn = read(fd, *buf, headerControlWordAreaSize);
+    rtn = read(fd, buf.get(), headerControlWordAreaSize);
     if (rtn <= 0) throw runtime_error(readError);
-    (*buf)[headerControlWordAreaSize] = 0;
-
 }
 
 void readVSyncBooksInfo(int fd, VSyncHeader *vSyncHeaderRecord, VSyncBooksInfo **vSyncBooksInfo) {
@@ -428,8 +411,6 @@ void displayBook(int fdbook, int fdviewable, int fdvsync, int fdsections, VSyncB
     for (int i = 0; i < vSyncBooksInfo->count; i++) {
 
         SectionLevelInfo sectionLevelInfo;
-        char *sectionName;
-        char *verseText;
 
         int rtn = read(fdvsync, &(vSyncPoint.chapter), 2);
         if (rtn <= 0) throw runtime_error(readError);
@@ -440,65 +421,54 @@ void displayBook(int fdbook, int fdviewable, int fdvsync, int fdsections, VSyncB
         vSyncPoint.offset = SECTIONSLEVELSTART + (vSyncPoint.offset * SECTIONSLEVELSIZE);
         lseek(fdsections, vSyncPoint.offset, SEEK_SET);
         readSectionLevelInfo(fdsections, &sectionLevelInfo);
-        readSectionName(fdsections, &sectionLevelInfo, &sectionName);
-        cout << sectionName << " ";
-        delete [] sectionName;
-        extractVerseText(fdviewable, fdbook, &sectionLevelInfo, &verseText);
-        cleanBuf(verseText);
+        cout << readSectionName(fdsections, &sectionLevelInfo) << " ";
+        std::string verseText(extractVerseText(fdviewable, fdbook, &sectionLevelInfo));
+        cleanBuf(std::addressof(verseText[0u]));
         cout << verseText << "\n";
-        delete [] verseText;
     }
 }
 
 
-void extractVerseText(int fdviewable, int fdbook, SectionLevelInfo *sectionLevelInfo, char **verseText) {
+std::string extractVerseText(int fdviewable, int fdbook, SectionLevelInfo *sectionLevelInfo) {
     char numberBuf[16];
     string startToken;
     ViewableBlock vb;
     int len = 0;
     static long lastEntryOffset = -1;
-    static class FreeCachedEntryText {
-    public:
-        char *entryText;
-        FreeCachedEntryText() { entryText = nullptr; }
-        ~FreeCachedEntryText() { delete[] entryText; }
-    } _freeCachedEntryText;
+    std::string cachedEntryText;
 
     if (sectionLevelInfo->viewableOffset != lastEntryOffset) {
-        delete[] _freeCachedEntryText.entryText;
-
         lseek(fdviewable, sectionLevelInfo->viewableOffset, SEEK_SET);
         readViewableBlock(fdviewable, &vb);
-        readViewableBlockText(fdbook, &vb, &(_freeCachedEntryText.entryText));
+        cachedEntryText = readViewableBlockText(fdbook, &vb);
         lastEntryOffset = sectionLevelInfo->viewableOffset;
     }
     sprintf(numberBuf, "%d", sectionLevelInfo->startLevel);
     startToken = "\\stepstartlevel";
     startToken += numberBuf;
-    char *start = strstr(_freeCachedEntryText.entryText, startToken.c_str());
+    char const * start = strstr(cachedEntryText.c_str(), startToken.c_str());
     if (start) {
         start += strlen(startToken.c_str());
-        char *end = strstr(start, "\\stepstartlevel");
+        char const * end = strstr(start, "\\stepstartlevel");
         if (end)
             len = end - start;
         else len = strlen(start);
     }
-    *verseText = new char [ len + 1 ];
-    strncpy(*verseText, start, len);
-    (*verseText)[len] = 0;
+    return std::string(start, len);
 }
 
 
-void readSectionName(int fd, SectionLevelInfo *sli, char **name) {
+std::string readSectionName(int fd, SectionLevelInfo *sli) {
     string readError = "Error reading Section Name.";
     short size;
     lseek(fd, sli->nameOffset, SEEK_SET);
     int rtn = read(fd, &size, 2);
     if (rtn <= 0) throw runtime_error(readError);
-    *name = new char [ size + 1 ];
-    rtn = read(fd, *name, size);
+    std::string name;
+    name.resize(size);
+    rtn = read(fd, std::addressof(name[0u]), size);
     if (rtn <= 0) throw runtime_error(readError);
-    (*name)[size] = 0;
+    return name;
 }
 
 void readSectionLevelInfo(int fd, SectionLevelInfo *sli) {
