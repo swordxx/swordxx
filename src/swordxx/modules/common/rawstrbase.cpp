@@ -152,7 +152,6 @@ signed char RawStrBase::findOffset_(char const * ikey,
 {
     char * trybuf;
     char * maxbuf;
-    char * key = nullptr;
     char quitflag = 0;
     signed char retval = -1;
     long headoff, tailoff, tryoff = 0, maxoff = 0;
@@ -168,10 +167,18 @@ signed char RawStrBase::findOffset_(char const * ikey,
         if (*ikey && retval != -2) {
             headoff = 0;
 
-            stdstr(&key, ikey, 3);
-            if (!caseSensitive) toupperstr_utf8(key, strlen(key)*3);
+            auto const ikeyLen(std::strlen(ikey));
+            auto const keyBufLen((ikeyLen + 1u) * 3u);
+            auto const key(std::make_unique<char[]>(keyBufLen));
+            std::strcpy(key.get(), ikey);
+            std::size_t keylen;
+            if (!caseSensitive) {
+                toupperstr_utf8(key.get(), ikeyLen * 3u);
+                keylen = std::strlen(key.get());
+            } else {
+                keylen = ikeyLen;
+            }
 
-            auto const keylen = strlen(key);
             bool substr = false;
 
             trybuf = maxbuf = nullptr;
@@ -192,12 +199,12 @@ signed char RawStrBase::findOffset_(char const * ikey,
                     break;
                 }
 
-                diff = strcmp(key, trybuf);
+                diff = strcmp(key.get(), trybuf);
 
                 if (!diff)
                     break;
 
-                if (!strncmp(trybuf, key, keylen)) substr = true;
+                if (!strncmp(trybuf, key.get(), keylen)) substr = true;
 
                 if (diff < 0)
                     tailoff = (tryoff == headoff) ? headoff : tryoff;
@@ -212,16 +219,13 @@ signed char RawStrBase::findOffset_(char const * ikey,
             // didn't find exact match
             if (headoff >= tailoff) {
                 tryoff = headoff;
-                if (!substr && ((tryoff != maxoff)||(strncmp(key, maxbuf, keylen)<0))) {
+                if (!substr && ((tryoff != maxoff)||(strncmp(key.get(), maxbuf, keylen)<0))) {
                     awayFromSubstrCheck = true;
                     away--;    // if our entry doesn't startwith our key, prefer the previous entry over the next
                 }
             }
-            if (trybuf)
-                free(trybuf);
-            delete [] key;
-                        if (maxbuf)
-                            free(maxbuf);
+            free(trybuf);
+            free(maxbuf);
         }
         else    tryoff = 0;
 
@@ -362,15 +366,16 @@ void RawStrBase::doSetText_(char const * ikey, char const * buf, long len) {
     SizeType size;
     SizeType outsize;
     char * tmpbuf = nullptr;
-    char * key = nullptr;
     char * dbKey = nullptr;
-    char * idxBytes = nullptr;
-    char * outbuf = nullptr;
     char * ch = nullptr;
 
     char errorStatus = findOffset_<SizeType>(ikey, &start, &size, 0, &idxoff);
-    stdstr(&key, ikey, 3);
-    if (!caseSensitive) toupperstr_utf8(key, strlen(key)*3);
+    auto const ikeyLen(std::strlen(ikey));
+    auto const keyBufLen((ikeyLen + 1u) * 3u);
+    auto const key(std::make_unique<char[]>(keyBufLen));
+    std::strcpy(key.get(), ikey);
+    if (!caseSensitive)
+        toupperstr_utf8(key.get(), ikeyLen * 3u);
 
     len = (len < 0) ? strlen(buf) : len;
 
@@ -379,14 +384,14 @@ void RawStrBase::doSetText_(char const * ikey, char const * buf, long len) {
     static constexpr auto const entrySize =
             sizeof(StartType) + sizeof(SizeType);
 
-    if (strcmp(key, dbKey) < 0) {
+    if (strcmp(key.get(), dbKey) < 0) {
     }
-    else if (strcmp(key, dbKey) > 0) {
+    else if (strcmp(key.get(), dbKey) > 0) {
         if (errorStatus != (char)-2)    // not a new file
             idxoff += entrySize;
         else idxoff = 0;
     }
-    else if ((!strcmp(key, dbKey)) && (len>0 /*we're not deleting*/)) { // got absolute entry
+    else if ((!strcmp(key.get(), dbKey)) && (len>0 /*we're not deleting*/)) { // got absolute entry
         do {
             tmpbuf = new char [ size + 2 ];
             memset(tmpbuf, 0, size + 2);
@@ -420,16 +425,17 @@ void RawStrBase::doSetText_(char const * ikey, char const * buf, long len) {
 
     auto const shiftSize = endoff - idxoff;
 
+    std::unique_ptr<char[]> idxBytes;
     if (shiftSize > 0) {
-        idxBytes = new char [ shiftSize ];
+        idxBytes = std::make_unique<char[]>(shiftSize);
         idxfd->seek(idxoff, SEEK_SET);
-        idxfd->read(idxBytes, shiftSize);
+        idxfd->read(idxBytes.get(), shiftSize);
     }
 
-    outbuf = new char [ len + strlen(key) + 5 ];
-    sprintf(outbuf, "%s%c%c", key, 13, 10);
-    size = strlen(outbuf);
-    memcpy(outbuf + size, buf, len);
+    auto const outbuf(std::make_unique<char[]>(len + strlen(key.get()) + 5));
+    std::sprintf(outbuf.get(), "%s%c%c", key.get(), 13, 10);
+    size = std::strlen(outbuf.get());
+    std::memcpy(outbuf.get() + size, buf, len);
     size = outsize = size + (len);
 
     start = outstart = datfd->seek(0, SEEK_END);
@@ -440,7 +446,7 @@ void RawStrBase::doSetText_(char const * ikey, char const * buf, long len) {
     idxfd->seek(idxoff, SEEK_SET);
     if (len > 0) {
         datfd->seek(start, SEEK_SET);
-        datfd->write(outbuf, size);
+        datfd->write(outbuf.get(), size);
 
         // add a new line to make data file easier to read in an editor
         static char const nl = '\n';
@@ -448,22 +454,17 @@ void RawStrBase::doSetText_(char const * ikey, char const * buf, long len) {
 
         idxfd->write(&outstart, sizeof(outstart));
         idxfd->write(&outsize, sizeof(outsize));
-        if (idxBytes) {
-            idxfd->write(idxBytes, shiftSize);
-            delete [] idxBytes;
-        }
+        if (idxBytes)
+            idxfd->write(idxBytes.get(), shiftSize);
     }
     else {    // delete entry
         if (idxBytes) {
-            idxfd->write(idxBytes+entrySize, shiftSize-entrySize);
+            idxfd->write(idxBytes.get() + entrySize, shiftSize - entrySize);
             idxfd->seek(-1, SEEK_CUR);    // last valid byte
             FileMgr::getSystemFileMgr()->trunc(idxfd);    // truncate index
-            delete [] idxBytes;
         }
     }
 
-    delete [] key;
-    delete [] outbuf;
     free(dbKey);
 }
 
@@ -476,12 +477,8 @@ void RawStrBase::doSetText_(char const * ikey, char const * buf, long len) {
  *    srcidxoff        - source offset into .vss
  */
 template <typename SizeType>
-void RawStrBase::doLinkEntry_(char const * destkey, char const * srckey) {
-    char *text = new char [ strlen(destkey) + 7 ];
-    sprintf(text, "@LINK %s", destkey);
-    doSetText_<SizeType>(srckey, text);
-    delete [] text;
-}
+void RawStrBase::doLinkEntry_(char const * destkey, char const * srckey)
+{ doSetText_<SizeType>(srckey, (std::string("@LINK ") + destkey).c_str()); }
 
 /******************************************************************************
  * RawLD::CreateModule    - Creates new module files
