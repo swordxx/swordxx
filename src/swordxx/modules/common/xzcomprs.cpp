@@ -28,6 +28,8 @@
 #include <cstring>
 #define LZMA_API_STATIC
 #include <lzma.h>
+#include <memory>
+#include <vector>
 
 
 namespace swordxx {
@@ -64,28 +66,30 @@ void XzCompress::Encode(void)
 {
     // get buffer
     char chunk[1024];
-    char *buf = (char *)calloc(1, 1024);
-    char *chunkbuf = buf;
+    std::vector<char> buf(1024, '\0');
+    char *chunkbuf = buf.data();
     unsigned long chunklen;
     unsigned long len = 0;
     while((chunklen = GetChars(chunk, 1023, ENCODE))) {
         memcpy(chunkbuf, chunk, chunklen);
         len += chunklen;
-        if (chunklen < 1023)
+        if (chunklen < 1023) {
             break;
-        else    buf = (char *)realloc(buf, len + 1024);
-        chunkbuf = buf+len;
+        } else {
+            buf.resize(len + 1024);
+        }
+        chunkbuf = buf.data() + len;
     }
 
     zlen = (long)lzma_stream_buffer_bound(len);
-    char *zbuf = new char[zlen+1];
+    auto zbuf(std::make_unique<char[]>(zlen + 1));
     size_t zpos = 0;
 
     if (len)
     {
         //printf("Doing compress\n");
-        switch (lzma_easy_buffer_encode(level | LZMA_PRESET_EXTREME, LZMA_CHECK_CRC64, nullptr, (const uint8_t*)buf, (size_t)len, (uint8_t*)zbuf, &zpos, (size_t)zlen)) {
-                case LZMA_OK: SendChars(zbuf, zpos, ENCODE);  break;
+        switch (lzma_easy_buffer_encode(level | LZMA_PRESET_EXTREME, LZMA_CHECK_CRC64, nullptr, (const uint8_t*)buf.data(), (size_t)len, (uint8_t*)zbuf.get(), &zpos, (size_t)zlen)) {
+                case LZMA_OK: SendChars(zbuf.get(), zpos, ENCODE);  break;
             case LZMA_BUF_ERROR: fprintf(stderr, "ERROR: not enough room in the out buffer during compression.\n"); break;
             case LZMA_UNSUPPORTED_CHECK: fprintf(stderr, "ERROR: unsupported_check error encountered during decompression.\n"); break;
             case LZMA_OPTIONS_ERROR: fprintf(stderr, "ERROR: options error encountered during decompression.\n"); break;
@@ -99,8 +103,6 @@ void XzCompress::Encode(void)
     {
         fprintf(stderr, "ERROR: no buffer to compress\n");
     }
-    delete [] zbuf;
-    free (buf);
 }
 
 
@@ -116,30 +118,32 @@ void XzCompress::Decode(void)
 {
     // get buffer
     char chunk[1024];
-    char *zbuf = (char *)calloc(1, 1024);
-    char *chunkbuf = zbuf;
+    std::vector<char> zbuf(1024, '\0');
+    char *chunkbuf = zbuf.data();
     int chunklen;
     unsigned long zlen = 0;
     while((chunklen = GetChars(chunk, 1023, DECODE))) {
         memcpy(chunkbuf, chunk, chunklen);
         zlen += chunklen;
-        if (chunklen < 1023)
+        if (chunklen < 1023) {
             break;
-        else    zbuf = (char *)realloc(zbuf, zlen + 1024);
-        chunkbuf = zbuf + zlen;
+        } else {
+            zbuf.resize(zlen + 1024);
+        }
+        chunkbuf = zbuf.data() + zlen;
     }
 
     //printf("Decoding complength{%ld} uncomp{%ld}\n", zlen, blen);
     if (zlen) {
         unsigned long blen = zlen*20;    // trust compression is less than 2000%
-        char *buf = new char[blen];
+        auto buf(std::make_unique<char[]>(blen));
         //printf("Doing decompress {%s}\n", zbuf);
         slen = 0;
         size_t zpos = 0;
         size_t bpos = 0;
 
-        switch (lzma_stream_buffer_decode((uint64_t *)&memlimit, 0, nullptr, (const uint8_t*)zbuf, &zpos, (size_t)zlen, (uint8_t*)buf, &bpos, (size_t)&blen)){
-            case LZMA_OK: SendChars(buf, bpos, DECODE); slen = bpos; break;
+        switch (lzma_stream_buffer_decode((uint64_t *)&memlimit, 0, nullptr, (const uint8_t*)zbuf.data(), &zpos, (size_t)zlen, (uint8_t*)buf.get(), &bpos, (size_t)&blen)){
+            case LZMA_OK: SendChars(buf.get(), bpos, DECODE); slen = bpos; break;
             case LZMA_FORMAT_ERROR: fprintf(stderr, "ERROR: format error encountered during decompression.\n"); break;
             case LZMA_OPTIONS_ERROR: fprintf(stderr, "ERROR: options error encountered during decompression.\n"); break;
             case LZMA_DATA_ERROR: fprintf(stderr, "ERROR: corrupt data during decompression.\n"); break;
@@ -151,13 +155,11 @@ void XzCompress::Decode(void)
             case LZMA_PROG_ERROR: fprintf(stderr, "ERROR: program error encountered during decompression.\n"); break;
             default: fprintf(stderr, "ERROR: an unknown error occured during decompression.\n"); break;
         }
-        delete [] buf;
     }
     else {
         fprintf(stderr, "ERROR: no buffer to decompress!\n");
     }
     //printf("Finished decoding\n");
-    free (zbuf);
 }
 
 
