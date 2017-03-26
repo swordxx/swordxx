@@ -37,170 +37,64 @@
 
 namespace swordxx {
 
-
-typedef std::map<std::string, std::string> DualStringMap;
-typedef std::set<std::string> StringSet;
-
-
-// I hate bridge patterns but this isolates std::map from a ton of filters
-class SWBasicFilter::Private {
-public:
-    DualStringMap tokenSubMap;
-    DualStringMap escSubMap;
-    StringSet escPassSet;
-};
-
-
-const char SWBasicFilter::INITIALIZE = 1;
-const char SWBasicFilter::PRECHAR    = 2;
-const char SWBasicFilter::POSTCHAR   = 4;
-const char SWBasicFilter::FINALIZE   = 8;
-
-
-SWBasicFilter::SWBasicFilter() {
-
-    p = new Private;
-
-    processStages = 0;
-    tokenStart    = nullptr;
-    tokenEnd      = nullptr;
-    escStart      = nullptr;
-    escEnd        = nullptr;
-
-    setTokenStart("<");
-    setTokenEnd(">");
-    setEscapeStart("&");
-    setEscapeEnd(";");
-
-    escStringCaseSensitive = false;
-    tokenCaseSensitive     = false;
-    passThruUnknownToken   = false;
-    passThruUnknownEsc     = false;
-    passThruNumericEsc     = false;
-}
-
-
-SWBasicFilter::~SWBasicFilter() {
-    delete[] tokenStart;
-    delete[] tokenEnd;
-    delete[] escStart;
-    delete[] escEnd;
-    delete p;
-}
-
-
-void SWBasicFilter::setPassThruUnknownToken(bool val) {
-    passThruUnknownToken = val;
-}
-
-
-void SWBasicFilter::setPassThruUnknownEscapeString(bool val) {
-    passThruUnknownEsc = val;
-}
-
-
-void SWBasicFilter::setPassThruNumericEscapeString(bool val) {
-    passThruUnknownEsc = val;
-}
-
-
-void SWBasicFilter::setTokenCaseSensitive(bool val) {
-    tokenCaseSensitive = val;
-}
-
-
-void SWBasicFilter::setEscapeStringCaseSensitive(bool val) {
-    escStringCaseSensitive = val;
-}
-
-
-void SWBasicFilter::addTokenSubstitute(const char *findString, const char *replaceString) {
-    if (!tokenCaseSensitive) {
+void SWBasicFilter::addTokenSubstitute(char const * findString,
+                                       char const * replaceString)
+{
+    if (!m_tokenCaseSensitive) {
         std::string buf(findString);
         toupperstr(buf);
-        p->tokenSubMap[buf] = replaceString;
-    }
-    else p->tokenSubMap[findString] = replaceString;
-}
-
-
-void SWBasicFilter::removeTokenSubstitute(const char *findString) {
-    if (p->tokenSubMap.find(findString) != p->tokenSubMap.end()) {
-        p->tokenSubMap.erase( p->tokenSubMap.find(findString) );
+        m_tokenSubMap[buf] = replaceString;
+    } else {
+        m_tokenSubMap[findString] = replaceString;
     }
 }
 
-
-void SWBasicFilter::addAllowedEscapeString(const char *findString) {
-    if (!escStringCaseSensitive) {
-        std::string buf(findString);
+void SWBasicFilter::addAllowedEscapeString(char const * findString) {
+    std::string buf(findString);
+    if (!m_escStringCaseSensitive)
         toupperstr(buf);
-        p->escPassSet.insert(StringSet::value_type(std::move(buf)));
-    }
-    else p->escPassSet.insert(StringSet::value_type(findString));
+    m_escPassSet.emplace(std::move(buf));
 }
 
-
-void SWBasicFilter::removeAllowedEscapeString(const char *findString) {
-    if (p->escPassSet.find(findString) != p->escPassSet.end()) {
-        p->escPassSet.erase( p->escPassSet.find(findString) );
-    }
-}
-
-
-void SWBasicFilter::addEscapeStringSubstitute(const char *findString, const char *replaceString) {
-    if (!escStringCaseSensitive) {
-        std::string buf(findString);
+void SWBasicFilter::addEscapeStringSubstitute(char const * findString,
+                                              char const * replaceString)
+{
+    std::string buf(findString);
+    if (!m_escStringCaseSensitive)
         toupperstr(buf);
-        p->escSubMap.insert(DualStringMap::value_type(std::move(buf), replaceString));
-    }
-    else p->escSubMap.insert(DualStringMap::value_type(findString, replaceString));
+    m_escSubMap.emplace(std::move(buf), replaceString);
 }
 
-
-void SWBasicFilter::removeEscapeStringSubstitute(const char *findString) {
-    if (p->escSubMap.find(findString) != p->escSubMap.end()) {
-        p->escSubMap.erase( p->escSubMap.find(findString) );
-    }
-}
-
-
-bool SWBasicFilter::substituteToken(std::string &buf, const char *token) {
-    DualStringMap::iterator it;
-
-    if (!tokenCaseSensitive) {
+bool SWBasicFilter::substituteToken(std::string & buf, char const * token) {
+    decltype(m_tokenSubMap)::iterator it;
+    if (!m_tokenCaseSensitive) {
         std::string tmp(token);
         toupperstr(tmp);
-        it = p->tokenSubMap.find(std::move(tmp));
-    } else
-    it = p->tokenSubMap.find(token);
+        it = m_tokenSubMap.find(std::move(tmp));
+    } else {
+        it = m_tokenSubMap.find(token);
+    }
 
-    if (it != p->tokenSubMap.end()) {
+    if (it != m_tokenSubMap.end()) {
         buf += it->second;
         return true;
     }
     return false;
 }
 
-
-void SWBasicFilter::appendEscapeString(std::string &buf, const char *escString) {
-    buf += escStart;
-    buf += escString;
-    buf += escEnd;
-}
-
-
-bool SWBasicFilter::passAllowedEscapeString(std::string &buf, const char *escString) {
-    StringSet::iterator it;
-
-    if (!escStringCaseSensitive) {
+bool SWBasicFilter::passAllowedEscapeString(std::string & buf,
+                                            char const * escString)
+{
+    decltype(m_escPassSet)::iterator it;
+    if (!m_escStringCaseSensitive) {
         std::string tmp(escString);
         toupperstr(tmp);
-        it = p->escPassSet.find(std::move(tmp));
-    } else
-        it = p->escPassSet.find(escString);
+        it = m_escPassSet.find(std::move(tmp));
+    } else {
+        it = m_escPassSet.find(escString);
+    }
 
-    if (it != p->escPassSet.end()) {
+    if (it != m_escPassSet.end()) {
         appendEscapeString(buf, escString);
         return true;
     }
@@ -208,84 +102,63 @@ bool SWBasicFilter::passAllowedEscapeString(std::string &buf, const char *escStr
     return false;
 }
 
-
-bool SWBasicFilter::handleNumericEscapeString(std::string &buf, const char *escString) {
-    if (passThruNumericEsc) {
+bool SWBasicFilter::handleNumericEscapeString(std::string & buf,
+                                              char const * escString)
+{
+    if (m_passThruNumericEsc) {
         appendEscapeString(buf, escString);
         return true;
     }
     return false;
 }
 
-
-bool SWBasicFilter::substituteEscapeString(std::string &buf, const char *escString) {
-    DualStringMap::iterator it;
-
-    if (*escString == '#') {
+bool SWBasicFilter::substituteEscapeString(std::string & buf,
+                                           char const * escString)
+{
+    if (*escString == '#')
         return handleNumericEscapeString(buf, escString);
-    }
-
-    if (passAllowedEscapeString(buf, escString)) {
+    if (passAllowedEscapeString(buf, escString))
         return true;
-    }
 
-    if (!escStringCaseSensitive) {
+    decltype(m_escSubMap)::iterator it;
+    if (!m_escStringCaseSensitive) {
         std::string tmp(escString);
         toupperstr(tmp);
-        it = p->escSubMap.find(tmp);
-    } else
-    it = p->escSubMap.find(escString);
+        it = m_escSubMap.find(std::move(tmp));
+    } else {
+        it = m_escSubMap.find(escString);
+    }
 
-    if (it != p->escSubMap.end()) {
+    if (it != m_escSubMap.end()) {
         buf += it->second;
         return true;
     }
     return false;
 }
 
+bool SWBasicFilter::handleToken(std::string & buf,
+                                char const * token,
+                                BasicFilterUserData * /* userData */)
+{ return substituteToken(buf, token); }
 
-bool SWBasicFilter::handleToken(std::string &buf, const char *token, BasicFilterUserData * /* userData */) {
-    return substituteToken(buf, token);
-}
+bool SWBasicFilter::handleEscapeString(std::string & buf,
+                                       char const * escString,
+                                       BasicFilterUserData * /* userData */)
+{ return substituteEscapeString(buf, escString); }
 
-
-bool SWBasicFilter::handleEscapeString(std::string &buf, const char *escString, BasicFilterUserData * /* userData */) {
-    return substituteEscapeString(buf, escString);
-}
-
-
-void SWBasicFilter::setEscapeStart(const char *escStart) {
-    stdstr(&(this->escStart), escStart);
-    escStartLen = strlen(escStart);
-}
-
-
-void SWBasicFilter::setEscapeEnd(const char *escEnd) {
-    stdstr(&(this->escEnd), escEnd);
-    escEndLen   = strlen(escEnd);
-}
-
-
-void SWBasicFilter::setTokenStart(const char *tokenStart) {
-    stdstr(&(this->tokenStart), tokenStart);
-    tokenStartLen = strlen(tokenStart);
-}
-
-
-void SWBasicFilter::setTokenEnd(const char *tokenEnd) {
-    stdstr(&(this->tokenEnd), tokenEnd);
-    tokenEndLen   = strlen(tokenEnd);
-}
-
-
-char SWBasicFilter::processText(std::string &text, const SWKey *key, const SWModule *module) {
-    char *from;
-    char token[4096];
-    int tokpos = 0;
+char SWBasicFilter::processText(std::string & text,
+                                SWKey const * key,
+                                SWModule const * module)
+{
+    char * from;
+    char token[4096u];
+    std::size_t tokpos = 0u;
     bool intoken = false;
     bool inEsc = false;
-    int escStartPos = 0, escEndPos = 0;
-    int tokenStartPos = 0, tokenEndPos = 0;
+    std::size_t escStartPos = 0u;
+    std::size_t escEndPos = 0u;
+    std::size_t tokenStartPos = 0u;
+    std::size_t tokenEndPos = 0u;
     std::string lastTextNode;
     std::unique_ptr<BasicFilterUserData> userData(createUserData(module, key));
 
@@ -293,18 +166,19 @@ char SWBasicFilter::processText(std::string &text, const SWKey *key, const SWMod
     from = &orig[0u];
     text = "";
 
-    if ((processStages & INITIALIZE)
-        && processStage(INITIALIZE, text, from, userData.get())) // processStage handled it all
+    // Check if processStage handled it all:
+    if ((m_processStages & INITIALIZE)
+        && processStage(INITIALIZE, text, from, userData.get()))
         return 0;
 
     for (;*from; from++) {
         // If processStage handled this char:
-        if ((processStages & PRECHAR)
+        if ((m_processStages & PRECHAR)
             && processStage(PRECHAR, text, from, userData.get()))
             continue;
 
-        if (*from == tokenStart[tokenStartPos]) {
-            if (tokenStartPos == (tokenStartLen - 1)) {
+        if (*from == m_tokenStart[tokenStartPos]) {
+            if (tokenStartPos == (m_tokenStart.size() - 1u)) {
                 intoken = true;
                 tokpos = 0;
                 token[0] = 0;
@@ -316,8 +190,8 @@ char SWBasicFilter::processText(std::string &text, const SWKey *key, const SWMod
             continue;
         }
 
-        if (*from == escStart[escStartPos]) {
-            if (escStartPos == (escStartLen - 1)) {
+        if (*from == m_escStart[escStartPos]) {
+            if (escStartPos == (m_escStart.size() - 1u)) {
                 intoken = true;
                 tokpos = 0;
                 token[0] = 0;
@@ -330,15 +204,15 @@ char SWBasicFilter::processText(std::string &text, const SWKey *key, const SWMod
         }
 
         if (inEsc) {
-            if (*from == escEnd[escEndPos]) {
-                if (escEndPos == (escEndLen - 1)) {
+            if (*from == m_escEnd[escEndPos]) {
+                if (escEndPos == (m_escEnd.size() - 1u)) {
                     intoken = inEsc = false;
                     userData->lastTextNode = lastTextNode;
 
                     // If text through is disabled no tokens should pass, too:
                     if (!userData->suspendTextPassThru
                         && !handleEscapeString(text, token, userData.get())
-                        && passThruUnknownEsc)
+                        && m_passThruUnknownEsc)
                         appendEscapeString(text, token);
                     escEndPos = escStartPos = tokenEndPos = tokenStartPos = 0;
                     lastTextNode = "";
@@ -348,16 +222,16 @@ char SWBasicFilter::processText(std::string &text, const SWKey *key, const SWMod
         }
 
         if (!inEsc) {
-            if (*from == tokenEnd[tokenEndPos]) {
-                if (tokenEndPos == (tokenEndLen - 1)) {
+            if (*from == m_tokenEnd[tokenEndPos]) {
+                if (tokenEndPos == (m_tokenEnd.size() - 1u)) {
                     intoken = false;
                     userData->lastTextNode = lastTextNode;
                     if (!handleToken(text, token, userData.get())
-                        && passThruUnknownToken)
+                        && m_passThruUnknownToken)
                     {
-                        text += tokenStart;
+                        text += m_tokenStart;
                         text += token;
-                        text += tokenEnd;
+                        text += m_tokenEnd;
                     }
                     escEndPos = escStartPos = tokenEndPos = tokenStartPos = 0;
                     lastTextNode = "";
@@ -384,16 +258,14 @@ char SWBasicFilter::processText(std::string &text, const SWKey *key, const SWMod
             userData->supressAdjacentWhitespace = false;
         }
 
-        if (processStages & POSTCHAR)
+        if (m_processStages & POSTCHAR)
             processStage(POSTCHAR, text, from, userData.get());
 
     }
 
-    if (processStages & FINALIZE)
+    if (m_processStages & FINALIZE)
         processStage(FINALIZE, text, from, userData.get());
-
     return 0;
 }
-
 
 } /* namespace swordxx */
