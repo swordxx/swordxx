@@ -26,6 +26,8 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
+#include <memory>
+#include <vector>
 #include <zlib.h>
 
 
@@ -82,39 +84,39 @@ ZEXTERN int ZEXPORT compress2 OF((Bytef *dest,   uLongf *destLen,
 
     // get buffer
     char chunk[1024];
-    char *buf = (char *)calloc(1, 1024);
-    char *chunkbuf = buf;
+    std::vector<char> buf(1024, '\0');
+    char *chunkbuf = buf.data();
     unsigned long chunklen;
     unsigned long len = 0;
     while((chunklen = GetChars(chunk, 1023, ENCODE))) {
         memcpy(chunkbuf, chunk, chunklen);
         len += chunklen;
-        if (chunklen < 1023)
+        if (chunklen < 1023) {
             break;
-        else    buf = (char *)realloc(buf, len + 1024);
-        chunkbuf = buf+len;
+        }else {
+            buf.resize(len + 1024);
+        }
+        chunkbuf = buf.data() + len;
     }
 
 
     zlen = (long) (len*1.001)+15;
-    char *zbuf = new char[zlen+1];
+    auto zbuf(std::make_unique<char[]>(zlen + 1));
     if (len)
     {
         //printf("Doing compress\n");
-        if (compress2((Bytef*)zbuf, &zlen, (const Bytef*)buf, len, level) != Z_OK)
+        if (compress2((Bytef*)zbuf.get(), &zlen, (const Bytef*)buf.data(), len, level) != Z_OK)
         {
             printf("ERROR in compression\n");
         }
         else {
-            SendChars(zbuf, zlen, ENCODE);
+            SendChars(zbuf.get(), zlen, ENCODE);
         }
     }
     else
     {
         fprintf(stderr, "ERROR: no buffer to compress\n");
     }
-    delete [] zbuf;
-    free (buf);
 }
 
 
@@ -148,39 +150,39 @@ ZEXTERN int ZEXPORT uncompress OF((Bytef *dest,   uLongf *destLen,
 
     // get buffer
     char chunk[1024];
-    char *zbuf = (char *)calloc(1, 1024);
-    char *chunkbuf = zbuf;
+    std::vector<char> zbuf(1024, '\0');
+    char *chunkbuf = zbuf.data();
     int chunklen;
     unsigned long zlen = 0;
     while((chunklen = GetChars(chunk, 1023, DECODE))) {
         memcpy(chunkbuf, chunk, chunklen);
         zlen += chunklen;
-        if (chunklen < 1023)
+        if (chunklen < 1023) {
             break;
-        else    zbuf = (char *)realloc(zbuf, zlen + 1024);
-        chunkbuf = zbuf + zlen;
+        } else {
+            zbuf.resize(zlen + 1024);
+        }
+        chunkbuf = zbuf.data() + zlen;
     }
 
     //printf("Decoding complength{%ld} uncomp{%ld}\n", zlen, blen);
     if (zlen) {
         unsigned long blen = zlen*20;    // trust compression is less than 1000%
-        char *buf = new char[blen];
+        auto buf(std::make_unique<char[]>(blen));
         //printf("Doing decompress {%s}\n", zbuf);
         slen = 0;
-        switch (uncompress((Bytef*)buf, &blen, (Bytef*)zbuf, zlen)){
-            case Z_OK: SendChars(buf, blen, DECODE); slen = blen; break;
+        switch (uncompress((Bytef*)buf.get(), &blen, (Bytef*)zbuf.data(), zlen)){
+            case Z_OK: SendChars(buf.get(), blen, DECODE); slen = blen; break;
             case Z_MEM_ERROR: fprintf(stderr, "ERROR: not enough memory during decompression.\n"); break;
             case Z_BUF_ERROR: fprintf(stderr, "ERROR: not enough room in the out buffer during decompression.\n"); break;
             case Z_DATA_ERROR: fprintf(stderr, "ERROR: corrupt data during decompression.\n"); break;
             default: fprintf(stderr, "ERROR: an unknown error occured during decompression.\n"); break;
         }
-        delete [] buf;
     }
     else {
         fprintf(stderr, "ERROR: no buffer to decompress!\n");
     }
     //printf("Finished decoding\n");
-    free (zbuf);
 }
 
 } /* namespace swordxx */
