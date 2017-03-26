@@ -34,8 +34,7 @@ namespace swordxx {
 void XMLTag::parse() const {
     int i;
     int start;
-    char * name = nullptr;
-    char * value = nullptr;
+    std::string name;
     attributes.clear();
 
     if (!m_buf)
@@ -53,12 +52,8 @@ void XMLTag::parse() const {
                 // Should be: for (; (buf[i] && buf[i] != '='; i++);
                 for (; ((m_buf[i]) && (!strchr(" =", m_buf[i]))); i++);
 
-                if (i-start) {
-                    delete[] name;
-                    name = new char [ (i-start) + 1 ];
-                    std::strncpy(name, m_buf.get() + start, i - start);
-                    name[i-start] = 0;
-                }
+                if (i-start)
+                    name.assign(m_buf.get() + start, i - start);
 
                 // The following does not allow for empty attributes
                 //for (; ((buf[i]) && (strchr(" =\"\'", buf[i]))); i++);
@@ -87,13 +82,7 @@ void XMLTag::parse() const {
                         ++i;
 
                     // Allow for empty quotes
-                    delete[] value;
-                    value = new char [ (i-start) + 1 ];
-                    if (i-start) {
-                        std::strncpy(value, m_buf.get() + start, i - start);
-                    }
-                    value[i-start] = 0;
-                    attributes[name] = value;
+                    attributes[name] = std::string(m_buf.get() + start, i - start);
                 }
             }
         }
@@ -111,8 +100,6 @@ void XMLTag::parse() const {
     }
 
     parsed = true;
-    delete[] name;
-    delete[] value;
 }
 
 
