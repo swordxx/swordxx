@@ -236,28 +236,18 @@ char * ICUStringMgr::upperUTF8(char * buf, std::size_t const maxlen) const {
     if (!max)
         return ret;
 
-    UChar *lowerStr = new UChar[max+10];
-    UChar *upperStr = new UChar[max+10];
+    auto const lowerStr(std::make_unique<UChar[]>(max+10));
+    auto const upperStr(std::make_unique<UChar[]>(max+10));
 
-    u_strFromUTF8(lowerStr, max+9, nullptr, buf, -1, &err);
-    if (err != U_ZERO_ERROR) {
-        delete [] lowerStr;
-        delete [] upperStr;
+    u_strFromUTF8(lowerStr.get(), max + 9, nullptr, buf, -1, &err);
+    if (err != U_ZERO_ERROR)
         return ret;
-    }
 
-    u_strToUpper(upperStr, max+9, lowerStr, -1, nullptr, &err);
-    if (err != U_ZERO_ERROR) {
-        delete [] lowerStr;
-        delete [] upperStr;
+    u_strToUpper(upperStr.get(), max + 9, lowerStr.get(), -1, nullptr, &err);
+    if (err != U_ZERO_ERROR)
         return ret;
-    }
 
-    ret = u_strToUTF8(ret, max, nullptr, upperStr, -1, &err);
-
-    delete [] lowerStr;
-    delete [] upperStr;
-    return ret;
+    return u_strToUTF8(ret, max, nullptr, upperStr.get(), -1, &err);
 }
 
 #endif
