@@ -102,12 +102,10 @@ inline char * toupperstr_utf8(char * t, std::size_t const max = 0u)
  * @return b for convenience
  */
 inline std::string &toupperstr(std::string & b) {
-    char * utf8 = nullptr;
-    stdstr(&utf8, b.c_str(), 2);
-    toupperstr(utf8, strlen(utf8) * 2u);
-    b = utf8;
-    delete [] utf8;
-    return b;
+    auto const utf8(std::make_unique<char[]>((b.size() + 1u) * 2u));
+    std::strcpy(utf8.get(), b.c_str());
+    toupperstr(utf8.get(), b.size() * 2u);
+    return b = utf8.get();
 }
 
 } /* namespace swordxx */
