@@ -52,17 +52,36 @@ public:
 SWLocale::SWLocale(const char *ifilename) {
     m_p = new Private;
 
-    m_bookAbbrevs    = nullptr;
     m_bookLongNames  = nullptr;
     m_bookPrefAbbrev = nullptr;
     if (ifilename) {
         m_localeSource   = new SWConfig(ifilename);
+
+        // Assure all english abbrevs are present
+        for (int j = 0; builtin_abbrevs[j].osis[0]; j++) {
+            m_p->mergedAbbrevs[builtin_abbrevs[j].ab] = builtin_abbrevs[j].osis;
+        }
+        ConfigEntMap::iterator it = m_localeSource->sections()["Book Abbrevs"].begin();
+        ConfigEntMap::iterator end = m_localeSource->sections()["Book Abbrevs"].end();
+        for (; it != end; it++) {
+            m_p->mergedAbbrevs[it->first.c_str()] = it->second.c_str();
+        }
+        auto const size = m_p->mergedAbbrevs.size();
+        m_bookAbbrevs = std::make_unique<struct abbrev[]>(size + 1);
+        int i = 0;
+        for (LookupMap::iterator it = m_p->mergedAbbrevs.begin(); it != m_p->mergedAbbrevs.end(); it++, i++) {
+            m_bookAbbrevs[i].ab = it->first.c_str();
+            m_bookAbbrevs[i].osis = it->second.c_str();
+        }
+
+        m_bookAbbrevs[i].ab = "";
+        m_bookAbbrevs[i].osis = "";
+        m_abbrevsCnt = size;
     }
     else {
         m_localeSource   = new SWConfig();
         (*m_localeSource)["Meta"]["Name"] = DEFAULT_LOCALE_NAME;
         (*m_localeSource)["Meta"]["Description"] = "English (US)";
-        m_bookAbbrevs = (struct abbrev *)builtin_abbrevs;
         for (m_abbrevsCnt = 0; builtin_abbrevs[m_abbrevsCnt].osis[0]; m_abbrevsCnt++);
     }
 
@@ -84,12 +103,7 @@ SWLocale::SWLocale(const char *ifilename) {
 
 
 SWLocale::~SWLocale() {
-
     delete m_localeSource;
-
-    if (m_bookAbbrevs != builtin_abbrevs)
-        delete [] m_bookAbbrevs;
-
     delete m_p;
 }
 
@@ -136,36 +150,10 @@ void SWLocale::augment(SWLocale &addFrom) {
     m_localeSource->augment(*addFrom.m_localeSource);
 }
 
-
-const struct abbrev *SWLocale::getBookAbbrevs(int *retSize) {
-    static const char *nullstr = "";
-    if (!m_bookAbbrevs) {
-        // Assure all english abbrevs are present
-        for (int j = 0; builtin_abbrevs[j].osis[0]; j++) {
-            m_p->mergedAbbrevs[builtin_abbrevs[j].ab] = builtin_abbrevs[j].osis;
-        }
-        ConfigEntMap::iterator it = m_localeSource->sections()["Book Abbrevs"].begin();
-        ConfigEntMap::iterator end = m_localeSource->sections()["Book Abbrevs"].end();
-        for (; it != end; it++) {
-            m_p->mergedAbbrevs[it->first.c_str()] = it->second.c_str();
-        }
-        int size = m_p->mergedAbbrevs.size();
-        m_bookAbbrevs = new struct abbrev[size + 1];
-        int i = 0;
-        for (LookupMap::iterator it = m_p->mergedAbbrevs.begin(); it != m_p->mergedAbbrevs.end(); it++, i++) {
-            m_bookAbbrevs[i].ab = it->first.c_str();
-            m_bookAbbrevs[i].osis = it->second.c_str();
-        }
-
-        m_bookAbbrevs[i].ab = nullstr;
-        m_bookAbbrevs[i].osis = nullstr;
-        m_abbrevsCnt = size;
-    }
-
-    *retSize = m_abbrevsCnt;
-    return m_bookAbbrevs;
+struct abbrev const * SWLocale::getBookAbbrevs(std::size_t * retSize) {
+    if (retSize)
+        (*retSize) = m_abbrevsCnt;
+    return m_bookAbbrevs ? m_bookAbbrevs.get() : builtin_abbrevs;
 }
 
-
 } /* namespace swordxx */
-

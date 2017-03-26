@@ -24,6 +24,7 @@
 #ifndef SWLOCALE_H
 #define SWLOCALE_H
 
+#include <memory>
 #include <string>
 #include "defs.h"
 
@@ -50,8 +51,8 @@ class Private;
     std::string m_name;
     std::string m_description;
     std::string m_encoding;
-    struct abbrev * m_bookAbbrevs;
-    int m_abbrevsCnt;
+    std::unique_ptr<struct abbrev[]> m_bookAbbrevs;
+    std::size_t m_abbrevsCnt;
     const char ** m_bookLongNames;
     const char ** m_bookPrefAbbrev;
 
@@ -72,7 +73,7 @@ public:
     std::string const & translate(const char *text);
     void augment(SWLocale &addFrom);
     SWLocale & operator +=(SWLocale &addFrom) { augment(addFrom); return *this; }
-    const struct abbrev *getBookAbbrevs(int *retSize);
+    struct abbrev const * getBookAbbrevs(std::size_t * retSize);
     static const char *DEFAULT_LOCALE_NAME;
 };
 

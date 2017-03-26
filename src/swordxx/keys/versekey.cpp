@@ -353,7 +353,7 @@ int VerseKey::getBookFromAbbrev(const char *iabbr) const
 
     char * abbr = nullptr;
 
-    int abbrevsCnt;
+    std::size_t abbrevsCnt;
 
     const struct abbrev *abbrevs = getPrivateLocale().getBookAbbrevs(&abbrevsCnt);
 
