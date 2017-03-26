@@ -175,7 +175,6 @@ signed char zStr::findKeyIndex(const char *ikey, long *idxoff, long away) const
 {
     char * maxbuf = nullptr;
     char * trybuf = nullptr;
-    char * key = nullptr;
     char quitflag = 0;
     signed char retval = 0;
     int32_t headoff, tailoff, tryoff = 0, maxoff = 0;
@@ -187,10 +186,18 @@ signed char zStr::findKeyIndex(const char *ikey, long *idxoff, long away) const
         tailoff = maxoff = idxfd->seek(0, SEEK_END) - IDXENTRYSIZE;
         if (*ikey) {
             headoff = 0;
-            stdstr(&key, ikey, 3);
-            if (!caseSensitive) toupperstr_utf8(key, strlen(key)*3);
+            auto const ikeyLen = std::strlen(ikey);
+            auto const keyBufLen = (ikeyLen + 1u) * 3u;
+            auto const key(std::make_unique<char[]>(keyBufLen));
+            std::strcpy(key.get(), ikey);
+            std::size_t keylen;
+            if (!caseSensitive) {
+                toupperstr_utf8(key.get(), keyBufLen);
+                keylen = std::strlen(key.get());
+            } else {
+                keylen = ikeyLen;
+            }
 
-            int keylen = strlen(key);
             bool substr = false;
 
             getKeyFromIdxOffset(maxoff, &maxbuf);
@@ -207,12 +214,12 @@ signed char zStr::findKeyIndex(const char *ikey, long *idxoff, long away) const
                     break;
                 }
 
-                diff = strcmp(key, trybuf);
+                diff = strcmp(key.get(), trybuf);
 
                 if (!diff)
                     break;
 
-                if (!strncmp(trybuf, key, keylen)) substr = true;
+                if (!strncmp(trybuf, key.get(), keylen)) substr = true;
 
                 if (diff < 0)
                     tailoff = (tryoff == headoff) ? headoff : tryoff;
@@ -227,16 +234,13 @@ signed char zStr::findKeyIndex(const char *ikey, long *idxoff, long away) const
             // didn't find exact match
             if (headoff >= tailoff) {
                 tryoff = headoff;
-                if (!substr && ((tryoff != maxoff)||(strncmp(key, maxbuf, keylen)<0))) {
+                if (!substr && ((tryoff != maxoff)||(strncmp(key.get(), maxbuf, keylen)<0))) {
                     awayFromSubstrCheck = true;
                     away--;    // if our entry doesn't startwith our key, prefer the previous entry over the next
                 }
             }
-            if (trybuf)
-                free(trybuf);
-            delete [] key;
-                        if (maxbuf)
-                            free(maxbuf);
+            free(trybuf);
+            free(maxbuf);
         }
         else    { tryoff = 0; }
 
@@ -424,21 +428,20 @@ void zStr::setText(const char *ikey, const char *buf, long len) {
     int32_t endoff;
     long idxoff = 0;
     int32_t shiftSize;
-    char * tmpbuf = nullptr;
-    char * key = nullptr;
     char * dbKey = nullptr;
-    char * idxBytes = nullptr;
-    char * outbuf = nullptr;
     char * ch = nullptr;
 
     len = (len < 0) ? strlen(buf) : len;
-    stdstr(&key, ikey, 3);
-    if (!caseSensitive) toupperstr_utf8(key, strlen(key)*3);
+    auto const keyBufLen((std::strlen(ikey) + 1u) * 3u);
+    auto key(std::make_unique<char[]>(keyBufLen));
+    std::strcpy(key.get(), ikey);
+    if (!caseSensitive)
+        toupperstr_utf8(key.get(), std::strlen(key.get()) * 3u);
 
     char notFound = findKeyIndex(ikey, &idxoff, 0);
     if (!notFound) {
         getKeyFromIdxOffset(idxoff, &dbKey);
-        int diff = strcmp(key, dbKey);
+        int diff = std::strcmp(key.get(), dbKey);
         if (diff < 0) {
         }
         else if (diff > 0) {
@@ -452,29 +455,28 @@ void zStr::setText(const char *ikey, const char *buf, long len) {
                 start = swordtoarch32(start);
                 size = swordtoarch32(size);
 
-                tmpbuf = new char [ size + 2 ];
-                memset(tmpbuf, 0, size + 2);
+                auto const tmpbuf(std::make_unique<char[]>(size + 2));
+                std::memset(tmpbuf.get(), 0, size + 2);
                 datfd->seek(start, SEEK_SET);
-                datfd->read(tmpbuf, size);
+                datfd->read(tmpbuf.get(), size);
 
-                for (ch = tmpbuf; *ch; ch++) {        // skip over index string
+                for (ch = tmpbuf.get(); *ch; ch++) {        // skip over index string
                     if (*ch == 10) {
                         ch++;
                         break;
                     }
                 }
-                memmove(tmpbuf, ch, size - (unsigned long)(ch-tmpbuf));
+                memmove(tmpbuf.get(), ch, size - (unsigned long)(ch-tmpbuf.get()));
 
                 // resolve link
-                if (!strncmp(tmpbuf, "@LINK", 5) && (len)) {
-                    for (ch = tmpbuf; *ch; ch++) {        // null before nl
+                if (!strncmp(tmpbuf.get(), "@LINK", 5) && (len)) {
+                    for (ch = tmpbuf.get(); *ch; ch++) {        // null before nl
                         if (*ch == 10) {
                             *ch = 0;
                             break;
                         }
                     }
-                    findKeyIndex(tmpbuf + IDXENTRYSIZE, &idxoff);
-                    delete [] tmpbuf;
+                    findKeyIndex(tmpbuf.get() + IDXENTRYSIZE, &idxoff);
                 }
                 else break;
             }
@@ -486,15 +488,16 @@ void zStr::setText(const char *ikey, const char *buf, long len) {
 
     shiftSize = endoff - idxoff;
 
+    std::unique_ptr<char[]> idxBytes;
     if (shiftSize > 0) {
-            idxBytes = new char [ shiftSize ];
+        idxBytes = std::make_unique<char[]>(shiftSize);
         idxfd->seek(idxoff, SEEK_SET);
-        idxfd->read(idxBytes, shiftSize);
+        idxfd->read(idxBytes.get(), shiftSize);
     }
 
-    outbuf = new char [ len + strlen(key) + 5 ];
-    sprintf(outbuf, "%s%c%c", key, 13, 10);
-    size = strlen(outbuf);
+    auto outbuf(std::make_unique<char[]>(len + std::strlen(key.get()) + 5));
+    std::sprintf(outbuf.get(), "%s%c%c", key.get(), 13, 10);
+    size = std::strlen(outbuf.get());
     if (len > 0) {    // NOT a link
         if (!cacheBlock) {
             flushCache();
@@ -510,12 +513,12 @@ void zStr::setText(const char *ikey, const char *buf, long len) {
         cacheDirty = true;
         outstart = archtosword32(cacheBlockIndex);
         outsize = archtosword32(entry);
-        memcpy (outbuf + size, &outstart, sizeof(uint32_t));
-        memcpy (outbuf + size + sizeof(uint32_t), &outsize, sizeof(uint32_t));
+        std::memcpy(outbuf.get() + size, &outstart, sizeof(uint32_t));
+        std::memcpy(outbuf.get() + size + sizeof(uint32_t), &outsize, sizeof(uint32_t));
         size += (sizeof(uint32_t) * 2);
     }
     else {    // link
-        memcpy(outbuf + size, buf, len);
+        std::memcpy(outbuf.get() + size, buf, len);
         size += len;
     }
 
@@ -527,7 +530,7 @@ void zStr::setText(const char *ikey, const char *buf, long len) {
     idxfd->seek(idxoff, SEEK_SET);
     if (len > 0) {
         datfd->seek(start, SEEK_SET);
-        datfd->write(outbuf, size);
+        datfd->write(outbuf.get(), size);
 
         // add a new line to make data file easier to read in an editor
         datfd->write(&nl, 2);
@@ -535,20 +538,17 @@ void zStr::setText(const char *ikey, const char *buf, long len) {
         idxfd->write(&outstart, 4);
         idxfd->write(&outsize, 4);
         if (idxBytes) {
-            idxfd->write(idxBytes, shiftSize);
+            idxfd->write(idxBytes.get(), shiftSize);
         }
     }
     else {    // delete entry
         if (idxBytes) {
-            idxfd->write(idxBytes+IDXENTRYSIZE, shiftSize-IDXENTRYSIZE);
+            idxfd->write(idxBytes.get() + IDXENTRYSIZE, shiftSize - IDXENTRYSIZE);
             idxfd->seek(-1, SEEK_CUR);    // last valid byte
             FileMgr::getSystemFileMgr()->trunc(idxfd);    // truncate index
         }
     }
 
-    delete[] idxBytes;
-    delete[] key;
-    delete[] outbuf;
     free(dbKey);
 }
 
@@ -562,10 +562,8 @@ void zStr::setText(const char *ikey, const char *buf, long len) {
  */
 
 void zStr::linkEntry(const char *destkey, const char *srckey) {
-    char *text = new char [ strlen(destkey) + 7 ];
-    sprintf(text, "@LINK %s", destkey);
-    setText(srckey, text);
-    delete [] text;
+    assert(destkey);
+    setText(srckey, (std::string("@LINK ") + destkey).c_str());
 }
 
 
@@ -642,41 +640,36 @@ void zStr::flushCache() const {
  * RET: error status
  */
 
-signed char zStr::createModule(const char *ipath) {
-    char * path = nullptr;
-    char *buf = new char [ strlen (ipath) + 20 ];
+signed char zStr::createModule(const char * ipath) {
+    assert(ipath);
+    std::string path(ipath);
+    removeTrailingDirectorySlashes(path);
+    auto const extensionPos(path.size() + 1u);
+    path.append(".dat");
     FileDesc *fd, *fd2;
 
-    stdstr(&path, ipath);
-
-    if ((path[strlen(path)-1] == '/') || (path[strlen(path)-1] == '\\'))
-        path[strlen(path)-1] = 0;
-
-    sprintf(buf, "%s.dat", path);
-    FileMgr::removeFile(buf);
-    fd = FileMgr::getSystemFileMgr()->open(buf, FileMgr::CREAT|FileMgr::WRONLY, FileMgr::IREAD|FileMgr::IWRITE);
+    FileMgr::removeFile(path.c_str());
+    fd = FileMgr::getSystemFileMgr()->open(path.c_str(), FileMgr::CREAT|FileMgr::WRONLY, FileMgr::IREAD|FileMgr::IWRITE);
     fd->getFd();
     FileMgr::getSystemFileMgr()->close(fd);
 
-    sprintf(buf, "%s.idx", path);
-    FileMgr::removeFile(buf);
-    fd2 = FileMgr::getSystemFileMgr()->open(buf, FileMgr::CREAT|FileMgr::WRONLY, FileMgr::IREAD|FileMgr::IWRITE);
+    path.replace(extensionPos, 3u, "idx");
+    FileMgr::removeFile(path.c_str());
+    fd2 = FileMgr::getSystemFileMgr()->open(path.c_str(), FileMgr::CREAT|FileMgr::WRONLY, FileMgr::IREAD|FileMgr::IWRITE);
     fd2->getFd();
     FileMgr::getSystemFileMgr()->close(fd2);
 
-    sprintf(buf, "%s.zdt", path);
-    FileMgr::removeFile(buf);
-    fd2 = FileMgr::getSystemFileMgr()->open(buf, FileMgr::CREAT|FileMgr::WRONLY, FileMgr::IREAD|FileMgr::IWRITE);
+    path.replace(extensionPos, 3u, "zdt");
+    FileMgr::removeFile(path.c_str());
+    fd2 = FileMgr::getSystemFileMgr()->open(path.c_str(), FileMgr::CREAT|FileMgr::WRONLY, FileMgr::IREAD|FileMgr::IWRITE);
     fd2->getFd();
     FileMgr::getSystemFileMgr()->close(fd2);
 
-    sprintf(buf, "%s.zdx", path);
-    FileMgr::removeFile(buf);
-    fd2 = FileMgr::getSystemFileMgr()->open(buf, FileMgr::CREAT|FileMgr::WRONLY, FileMgr::IREAD|FileMgr::IWRITE);
+    path.replace(extensionPos, 3u, "zdx");
+    FileMgr::removeFile(path.c_str());
+    fd2 = FileMgr::getSystemFileMgr()->open(path.c_str(), FileMgr::CREAT|FileMgr::WRONLY, FileMgr::IREAD|FileMgr::IWRITE);
     fd2->getFd();
     FileMgr::getSystemFileMgr()->close(fd2);
-
-    delete [] path;
 
     return 0;
 }
