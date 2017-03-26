@@ -20,8 +20,9 @@
  *
  */
 
-#include <iostream>
 #include <cstring>
+#include <iostream>
+#include <memory>
 #include <unicode/translit.h>
 #include <unicode/ucnv.h>     /* C   Converter API    */
 #include <unicode/ustring.h>  /* some more string fcns*/
@@ -31,28 +32,19 @@
 using namespace std;
 
 int main() {
-
-  UChar * uBuf;
-  UChar * target;
-  UConverter *conv;
   UErrorCode status = U_ZERO_ERROR;
-  int32_t uBufSize = 0, uLength = 0;
 
-  const char * samplestring = "If this compiles and runs without errors, apparently ICU is working.";
+  static char const * const samplestring = "If this compiles and runs without "
+                                           "errors, apparently ICU is working.";
 
-  uLength = strlen(samplestring);
-  conv = ucnv_open("utf-8", &status);
-  uBufSize = (uLength/ucnv_getMinCharSize(conv));
-  uBuf = new UChar[uBufSize];
+  auto const uLength = std::strlen(samplestring);
+  auto const conv = ucnv_open("utf-8", &status);
+  auto const uBufSize = uLength / ucnv_getMinCharSize(conv);
+  auto const uBuf(std::make_unique<UChar[]>(uBufSize));
 
-  target = uBuf;
-
-  ucnv_toUChars(conv, target, uLength,
+  ucnv_toUChars(conv, uBuf.get(), uLength,
         samplestring, uLength, &status);
 
   cout << samplestring << endl;
-
-  delete [] uBuf;
-
   return 0;
 }
