@@ -25,6 +25,7 @@
 
 #include "utf8nfkd.h"
 
+#include <memory>
 #include <string>
 
 
@@ -48,21 +49,18 @@ char UTF8NFKD::processText(std::string &text, const SWKey *key, const SWModule *
         return -1;
 
     int32_t len =  5 + text.length() * 5;
-        source = new UChar[len + 1]; //each char could become a surrogate pair
+        auto const source(std::make_unique<UChar[]>(len + 1)); //each char could become a surrogate pair
 
     // Convert UTF-8 string to UTF-16 (UChars)
-        int32_t ulen = ucnv_toUChars(conv, source, len, text.c_str(), -1, &err);
-        target = new UChar[len + 1];
+        int32_t ulen = ucnv_toUChars(conv, source.get(), len, text.c_str(), -1, &err);
+        auto const target(std::make_unique<UChar[]>(len + 1));
 
         //compatability decomposition
-        ulen = unorm_normalize(source, ulen, UNORM_NFKD, 0, target, len, &err);
+        ulen = unorm_normalize(source.get(), ulen, UNORM_NFKD, 0, target.get(), len, &err);
 
        text.resize(len, '\0');
-       len = ucnv_fromUChars(conv, &text[0u], len, target, ulen, &err);
+       len = ucnv_fromUChars(conv, &text[0u], len, target.get(), ulen, &err);
        text.resize(len, '\0');
-
-       delete [] source;
-       delete [] target;
 
     return 0;
 }

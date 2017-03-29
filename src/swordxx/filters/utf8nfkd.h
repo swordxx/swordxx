@@ -36,7 +36,6 @@ namespace swordxx {
 class SWDLLEXPORT UTF8NFKD : public SWFilter {
 private:
     UConverter* conv;
-    UChar *source, *target;
     UErrorCode err;
 public:
     UTF8NFKD();
