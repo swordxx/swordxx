@@ -70,17 +70,6 @@ private:
     static const char optTip[];
     std::list<std::string> options;
 
-#ifdef ICU_CUSTOM_RESOURCE_BUILDING
-    static const char SW_RB_RULE_BASED_IDS[];
-    static const char SW_RB_RULE[];
-    static const char SW_RESDATA[];
-    static SWTransMap transMap;
-    UErrorCode utf8status;
-
-    void Load(UErrorCode &status);
-    void registerTrans(const UnicodeString& ID, const UnicodeString& resource, UTransDirection dir, UErrorCode &status);
-    bool checkTrans(const UnicodeString& ID, UErrorCode &status);
-#endif
     bool addTrans(const char* newTrans, std::string* transList);
     Transliterator *createTrans(const UnicodeString& ID, UTransDirection dir, UErrorCode &status);
 
