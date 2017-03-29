@@ -20,7 +20,7 @@
  *
  */
 
-#ifndef GBFSREDLETTERWORDS_H
+#ifndef GBFREDLETTERWORDS_H
 #define GBFREDLETTERWORDS_H
 
 #include <swoptfilter.h>
