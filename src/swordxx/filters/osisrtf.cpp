@@ -493,14 +493,15 @@ bool OSISRTF::handleToken(std::string &buf, const char *token, BasicFilterUserDa
             if (src.empty())        // assert we have a src attribute
                 return false;
 
-            char* filepath = new char[strlen(u->module->getConfigEntry("AbsoluteDataPath")) + strlen(token)];
-            *filepath = 0;
-            strcpy(filepath, userData->module->getConfigEntry("AbsoluteDataPath"));
-            strcat(filepath, src.c_str());
+            char const * const absoluteDataPath =
+                    userData->module->getConfigEntry("AbsoluteDataPath");
+            auto const filepath(
+                        std::string(absoluteDataPath ? absoluteDataPath : "")
+                        + src);
 
 // we do this because BibleCS looks for this EXACT format for an image tag
             outText("<img src=\"", buf, u);
-            outText(filepath, buf, u);
+            outText(filepath.c_str(), buf, u);
             outText("\" />", buf, u);
 /*
             char imgc;
@@ -526,7 +527,6 @@ bool OSISRTF::handleToken(std::string &buf, const char *token, BasicFilterUserDa
                           outText("}}", buf, u);
                     }
 */
-            delete [] filepath;
         }
         else {
             return false;  // we still didn't handle token
