@@ -26,6 +26,7 @@
 #include "utf8arshaping.h"
 
 #include <cstdlib>
+#include <memory>
 #include <string>
 #include "../utilstr.h"
 
@@ -43,25 +44,22 @@ UTF8arShaping::~UTF8arShaping() {
 char UTF8arShaping::processText(std::string &text, const SWKey *key, const SWModule *module)
 {
     (void) module;
-        UChar *ustr, *ustr2;
      if ((unsigned long)key < 2)    // hack, we're en(1)/de(0)ciphering
         return -1;
 
-        int32_t len = text.length();
-        ustr = new UChar[len];
-        ustr2 = new UChar[len];
+        auto const textSize(text.size());
+        auto const ustr(std::make_unique<UChar[]>(textSize));
+        auto const ustr2(std::make_unique<UChar[]>(textSize));
 
     // Convert UTF-8 string to UTF-16 (UChars)
-        len = ucnv_toUChars(conv, ustr, len, text.c_str(), -1, &err);
+        int32_t len = textSize;
+        len = ucnv_toUChars(conv, ustr.get(), len, text.c_str(), -1, &err);
 
-        len = u_shapeArabic(ustr, len, ustr2, len, U_SHAPE_LETTERS_SHAPE | U_SHAPE_DIGITS_EN2AN, &err);
+        len = u_shapeArabic(ustr.get(), len, ustr2.get(), len, U_SHAPE_LETTERS_SHAPE | U_SHAPE_DIGITS_EN2AN, &err);
 
-       text.resize(text.size() * 2u, '\0');
-       len = ucnv_fromUChars(conv, &text[0u], text.size(), ustr2, len, &err);
+       text.resize(textSize * 2u, '\0');
+       len = ucnv_fromUChars(conv, &text[0u], text.size(), ustr2.get(), len, &err);
        text.resize(len, '\0');
-
-        delete [] ustr2;
-        delete [] ustr;
     return 0;
 }
 
