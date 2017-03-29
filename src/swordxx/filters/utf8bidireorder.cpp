@@ -27,6 +27,7 @@
 #include "utf8bidireorder.h"
 
 #include <cstdlib>
+#include <memory>
 #include <string>
 #include "../utilstr.h"
 
@@ -49,20 +50,20 @@ UTF8BiDiReorder::~UTF8BiDiReorder() {
 char UTF8BiDiReorder::processText(std::string &text, const SWKey *key, const SWModule *module)
 {
     (void) module;
-        UChar *ustr, *ustr2;
     if ((unsigned long)key < 2)    // hack, we're en(1)/de(0)ciphering
         return -1;
 
-        int32_t len = text.length();
-        ustr = new UChar[len]; //each char could become a surrogate pair
+        auto const textSize(text.size());
+        auto const ustr(std::make_unique<UChar[]>(textSize)); //each char could become a surrogate pair
 
     // Convert UTF-8 string to UTF-16 (UChars)
-        len = ucnv_toUChars(conv, ustr, len, text.c_str(), -1, &err);
-        ustr2 = new UChar[len];
+        int32_t len = textSize;
+        len = ucnv_toUChars(conv, ustr.get(), len, text.c_str(), -1, &err);
+        auto const ustr2(std::make_unique<UChar[]>(len));
 
         UBiDi* bidi = ubidi_openSized(len + 1, 0, &err);
-        ubidi_setPara(bidi, ustr, len, UBIDI_DEFAULT_RTL, nullptr, &err);
-        len = ubidi_writeReordered(bidi, ustr2, len,
+        ubidi_setPara(bidi, ustr.get(), len, UBIDI_DEFAULT_RTL, nullptr, &err);
+        len = ubidi_writeReordered(bidi, ustr2.get(), len,
                 UBIDI_DO_MIRRORING | UBIDI_REMOVE_BIDI_CONTROLS, &err);
         ubidi_close(bidi);
 
@@ -70,11 +71,8 @@ char UTF8BiDiReorder::processText(std::string &text, const SWKey *key, const SWM
 //                UBIDI_DO_MIRRORING | UBIDI_REMOVE_BIDI_CONTROLS, &err);
 
        text.resize(text.size() * 2u, '\0');
-       len = ucnv_fromUChars(conv, &text[0u], text.size(), ustr2, len, &err);
+       len = ucnv_fromUChars(conv, &text[0u], text.size(), ustr2.get(), len, &err);
        text.resize(len, '\0');
-
-        delete [] ustr2;
-        delete [] ustr;
     return 0;
 }
 
