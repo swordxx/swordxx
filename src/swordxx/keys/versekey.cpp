@@ -30,6 +30,7 @@
 #include <cctype>
 #include <fcntl.h>
 #include <memory>
+#include <sstream>
 #include "../roman.h"
 #include "../stringmgr.h"
 #include "../swlocale.h"
@@ -1195,19 +1196,21 @@ const char *VerseKey::getText() const {
 
 
 std::string VerseKey::getShortText() const {
-    static char * stext = nullptr;
-    char buf[2047];
     freshtext();
     if (m_book < 1) {
-        if (m_testament < 1)
-            sprintf(buf, "[ Module Heading ]");
-        else sprintf(buf, "[ Testament %d Heading ]", (int)m_testament);
+        if (m_testament < 1) {
+            return "[ Module Heading ]";
+        } else {
+            std::ostringstream oss;
+            oss << "[ Testament " << static_cast<int>(m_testament)
+                << " Heading ]";
+            return oss.str();
+        }
+    } else {
+        std::ostringstream oss;
+        oss << getBookAbbrev() << ' ' << m_chapter << ':' << m_verse;
+        return oss.str();
     }
-    else {
-        sprintf(buf, "%s %d:%d", getBookAbbrev().c_str(), m_chapter, m_verse);
-    }
-    stdstr(&stext, buf);
-    return stext;
 }
 
 
