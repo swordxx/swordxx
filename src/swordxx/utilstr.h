@@ -112,7 +112,6 @@ inline std::pair<bool, std::size_t> getPrefixSize(std::string const & buf,
 
 std::string stripPrefix(std::string & str, char const separator);
 
-SWDLLEXPORT char *strstrip (char *istr);
 SWDLLEXPORT char const * stristr(std::string const & haystack,
                                  std::string const & needle);
 SWDLLEXPORT int stricmp(char const * s1, char const * s2);

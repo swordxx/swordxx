@@ -87,32 +87,6 @@ std::string stripPrefix(std::string & str, char const separator) {
 
 
 /******************************************************************************
- * strstrip - Removes leading and trailing spaces from a string
- *
- * ENT:    istr    - string pointer to strip
- *
- * RET:    *istr
- */
-
-char *strstrip(char *istr) {
-    char *tmp = istr;
-    char *rtmp;
-
-    int len = strlen(istr);
-    if (len < 1)
-        return istr;
-    rtmp = istr + (len - 1);
-
-    while ((rtmp > istr)&&((*rtmp == ' ')||(*rtmp == '\t')||(*rtmp == 10)||(*rtmp == 13))) *(rtmp--) = 0;
-    while ((*tmp == ' ')||(*tmp == '\t')||(*tmp == 10)||(*tmp == 13)) tmp++;
-    memmove(istr, tmp, (rtmp - tmp) + 1);
-    istr[(rtmp - tmp) + 1] = 0;
-
-    return istr;
-}
-
-
-/******************************************************************************
  * stristr - Scans a string for the occurrence of a given substring, no case
  *
  * ENT:    scans haystack for the first occurrence of the substring needle,
