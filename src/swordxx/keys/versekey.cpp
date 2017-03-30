@@ -23,6 +23,7 @@
 
 #include "versekey.h"
 
+#include <cassert>
 #include <cstdint>
 #include <cstdio>
 #include <cstdlib>
@@ -349,9 +350,11 @@ void VerseKey::freshtext() const
 
 int VerseKey::getBookFromAbbrev(const char *iabbr) const
 {
-    int diff, abLen, min, max, target, retVal = -1;
+    assert(iabbr);
+    if (!*iabbr)
+        return -1;
+    int diff, min, max, target;
 
-    char * abbr = nullptr;
 
     std::size_t abbrevsCnt;
 
@@ -367,28 +370,26 @@ int VerseKey::getBookFromAbbrev(const char *iabbr) const
     // on a system that doesn't properly support
     // a true Unicode-toupper function (!hasUTF8Support)
     for (int i = 0; i < 2; i++) {
-        stdstr(&abbr, iabbr, 2);
-        strstrip(abbr);
+        std::string abbr(iabbr);
+        trimString(abbr);
 
         if (!i) {
             if (hasUTF8Support) { //we have support for UTF-8 handling; we expect UTF-8 encoded locales
-                stringMgr->upperUTF8(abbr, std::strlen(abbr) * 2u);
+                stringMgr->upperUTF8(abbr);
             }
             else {
                 stringMgr->upperLatin1(abbr);
             }
         }
 
-        abLen = strlen(abbr);
-
-        if (abLen) {
+        if (!abbr.empty()) {
             min = 0;
             max = abbrevsCnt;
 
             // binary search for a match
             while(1) {
                 target = min + ((max - min) / 2);
-                diff = strncmp(abbr, abbrevs[target].ab, abLen);
+                diff = strncmp(abbr.c_str(), abbrevs[target].ab, abbr.size());
                 if ((!diff)||(target >= max)||(target <= min))
                     break;
                 if (diff > 0)
@@ -398,25 +399,27 @@ int VerseKey::getBookFromAbbrev(const char *iabbr) const
 
             // lets keep backing up till we find the 'first' valid match
             for (; target > 0; target--) {
-                if (strncmp(abbr, abbrevs[target-1].ab, abLen))
+                if (strncmp(abbr.c_str(), abbrevs[target-1].ab, abbr.size()))
                     break;
             }
 
             if (!diff) {
                 // lets keep moving forward till we find an abbrev in our refSys
-                retVal = m_refSys->getBookNumberByOSISName(abbrevs[target].osis);
-                while ((retVal < 0)  && (target < max) && (!strncmp(abbr, abbrevs[target+1].ab, abLen))) {
-                    target++;
-                    retVal = m_refSys->getBookNumberByOSISName(abbrevs[target].osis);
+                for (;;) {
+                    auto retVal = m_refSys->getBookNumberByOSISName(abbrevs[target].osis);
+                    if (retVal >= 0) {
+                        return retVal;
+                    }
+                    if (target >= max)
+                        break;
+                    ++target;
+                    if (strncmp(abbr.c_str(), abbrevs[target].ab, abbr.size()))
+                        break;
                 }
             }
-            else retVal = -1;
         }
-        if (retVal > 0)
-            break;
     }
-    delete [] abbr;
-    return retVal;
+    return -1;
 }
 
 
@@ -427,23 +430,21 @@ int VerseKey::getBookFromAbbrev(const char *iabbr) const
 void VerseKey::validateCurrentLocale() const {
     if (SWLog::getSystemLog()->getLogLevel() >= SWLog::LOG_DEBUG) { //make sure log is wanted, this loop stuff costs a lot of time
         for (int i = 0; i < m_refSys->getBookCount(); i++) {
-            const int bn = getBookFromAbbrev(getPrivateLocale().translate(m_refSys->getBook(i)->getLongName().c_str()).c_str());
+            std::string abbr(getPrivateLocale().translate(m_refSys->getBook(i)->getLongName().c_str()));
+            trimString(abbr);
+            const int bn = getBookFromAbbrev(abbr.c_str());
             if (bn != i+1) {
-                char * abbr = nullptr;
-                stdstr(&abbr, getPrivateLocale().translate(m_refSys->getBook(i)->getLongName().c_str()).c_str(), 2);
-                strstrip(abbr);
-                SWLog::getSystemLog()->logDebug("VerseKey::Book: %s does not have a matching toupper abbrevs entry! book number returned was: %d, should be %d. Required entry to add to locale:", abbr, bn, i);
+                SWLog::getSystemLog()->logDebug("VerseKey::Book: %s does not have a matching toupper abbrevs entry! book number returned was: %d, should be %d. Required entry to add to locale:", abbr.c_str(), bn, i);
 
                 StringMgr* stringMgr = StringMgr::getSystemStringMgr();
                 const bool hasUTF8Support = StringMgr::hasUTF8Support();
                 if (hasUTF8Support) { //we have support for UTF-8 handling; we expect UTF-8 encoded locales
-                    stringMgr->upperUTF8(abbr, std::strlen(abbr) * 2u);
+                    stringMgr->upperUTF8(abbr);
                 }
                 else {
                     stringMgr->upperLatin1(abbr);
                 }
-                SWLog::getSystemLog()->logDebug("%s=%s\n", abbr, m_refSys->getBook(i)->getOSISName().c_str());
-                delete [] abbr;
+                SWLog::getSystemLog()->logDebug("%s=%s\n", abbr.c_str(), m_refSys->getBook(i)->getOSISName().c_str());
             }
         }
     }

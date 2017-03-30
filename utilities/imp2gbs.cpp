@@ -133,12 +133,8 @@ void writeEntry(SWModule *book, std::string keyBuffer, std::string entBuffer) {
         greekAccentsFilter.processText(keyBuffer);
     }
 
-    if (toUpper) {
-        /// \todo Check overflow:
-        std::size_t const size = (keyBuffer.size() + 5u) * 3u;
-        keyBuffer.resize(size, '\0');
-        StringMgr::getSystemStringMgr()->upperUTF8(&keyBuffer[0u], size - 2u);
-    }
+    if (toUpper)
+        StringMgr::getSystemStringMgr()->upperUTF8(keyBuffer);
 
 // Added for Hesychius, but this stuff should be pushed back into new StringMgr
 // functionality

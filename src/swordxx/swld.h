@@ -60,7 +60,7 @@ public:
 
     virtual long getEntryCount() const = 0;
     virtual long getEntryForKey(const char *key) const = 0;
-    virtual char *getKeyForEntry(long entry) const = 0;
+    virtual std::string getKeyForEntry(long entry) const = 0;
 
     bool hasEntry(SWKey const * k) const override;
 

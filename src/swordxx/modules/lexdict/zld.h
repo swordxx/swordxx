@@ -73,7 +73,7 @@ public:
 
     long getEntryCount() const override;
     long getEntryForKey(char const * key) const override;
-    char * getKeyForEntry(long entry) const override;
+    std::string getKeyForEntry(long entry) const override;
 
 };
 

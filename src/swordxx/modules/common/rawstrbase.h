@@ -51,9 +51,7 @@ public: /* Methods: */
 
     virtual ~RawStrBase();
 
-    void getIDXBuf(long ioffset, char ** buf) const;
-
-    void getIDXBufDat(long ioffset, char ** buf) const;
+    std::string getIDXBuf(long ioffset) const;
 
     static signed char createModule(NormalizedPath const & path);
 
@@ -77,6 +75,10 @@ protected: /* Methods: */
 
     template <typename SizeType>
     void doLinkEntry_(char const * destkey, char const * srckey);
+
+private: /* Methods: */
+
+    std::string getIDXBufDat(long ioffset) const;
 
 protected: /* Fields: */
 

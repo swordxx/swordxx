@@ -60,8 +60,8 @@ protected:
 
     void getCompressedText(long block, long entry, char **buf) const;
     void flushCache() const;
-    void getKeyFromDatOffset(long ioffset, char **buf) const;
-    void getKeyFromIdxOffset(long ioffset, char **buf) const;
+    std::string getKeyFromDatOffset(long ioffset) const;
+    std::string getKeyFromIdxOffset(long ioffset) const;
 
 public:
     zStr(char const * ipath,

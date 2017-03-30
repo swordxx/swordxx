@@ -66,7 +66,7 @@ public: /* Methods: */
     void deleteEntry() override;
     long getEntryCount() const override;
     long getEntryForKey(char const * key) const override;
-    char * getKeyForEntry(long entry) const override;
+    std::string getKeyForEntry(long entry) const override;
 
 private: /* Methods: */
 
@@ -121,8 +121,8 @@ extern template long RawLdBase<RawStr4>::getEntryCount() const;
 extern template long RawLdBase<RawStr>::getEntryForKey(char const * key) const;
 extern template long RawLdBase<RawStr4>::getEntryForKey(char const * key) const;
 
-extern template char * RawLdBase<RawStr>::getKeyForEntry(long entry) const;
-extern template char * RawLdBase<RawStr4>::getKeyForEntry(long entry) const;
+extern template std::string RawLdBase<RawStr>::getKeyForEntry(long entry) const;
+extern template std::string RawLdBase<RawStr4>::getKeyForEntry(long entry) const;
 
 extern template char RawLdBase<RawStr>::getEntry(long away = 0) const;
 extern template char RawLdBase<RawStr4>::getEntry(long away = 0) const;

@@ -85,26 +85,27 @@ RawStrBase::~RawStrBase() {
  *        buf        - address of pointer to allocate for storage of string
  */
 
-void RawStrBase::getIDXBufDat(long ioffset, char ** buf) const {
-    int size;
-    char ch;
+std::string RawStrBase::getIDXBufDat(long ioffset) const {
     if (datfd) {
         datfd->seek(ioffset, SEEK_SET);
+        std::size_t size;
+        char ch;
         for (size = 0; datfd->read(&ch, 1) == 1; size++) {
             if ((ch == '\\') || (ch == 10) || (ch == 13))
                 break;
         }
-        *buf = (*buf) ? (char *)realloc(*buf, size*2 + 1) : (char *)malloc(size*2 + 1);
+
+        auto const buf(std::make_unique<char[]>(size));
         if (size) {
             datfd->seek(ioffset, SEEK_SET);
-            datfd->read(*buf, size);
+            datfd->read(buf.get(), size);
         }
-        (*buf)[size] = 0;
-        if (!caseSensitive) toupperstr_utf8(*buf, size*2);
-    }
-    else {
-        *buf = (*buf) ? (char *)realloc(*buf, 1) : (char *)malloc(1);
-        **buf = 0;
+        std::string r(buf.get(), size);
+        if (!caseSensitive)
+            toupperstr_utf8(r);
+        return r;
+    } else {
+        return "";
     }
 }
 
@@ -118,7 +119,7 @@ void RawStrBase::getIDXBufDat(long ioffset, char ** buf) const {
  *        buf        - address of pointer to allocate for storage of string
  */
 
-void RawStrBase::getIDXBuf(long ioffset, char ** buf) const {
+std::string RawStrBase::getIDXBuf(long ioffset) const {
     IndexOffsetType offset;
 
     if (idxfd) {
@@ -127,8 +128,9 @@ void RawStrBase::getIDXBuf(long ioffset, char ** buf) const {
 
         offset = swapToArch(offset);
 
-        getIDXBufDat(offset, buf);
+        return getIDXBufDat(offset);
     }
+    return "";
 }
 
 
@@ -150,8 +152,6 @@ signed char RawStrBase::findOffset_(char const * ikey,
                                     long away,
                                     IndexOffsetType * idxoff) const
 {
-    char * trybuf;
-    char * maxbuf;
     char quitflag = 0;
     signed char retval = -1;
     long headoff, tailoff, tryoff = 0, maxoff = 0;
@@ -167,29 +167,20 @@ signed char RawStrBase::findOffset_(char const * ikey,
         if (*ikey && retval != -2) {
             headoff = 0;
 
-            auto const ikeyLen(std::strlen(ikey));
-            auto const keyBufLen((ikeyLen + 1u) * 3u);
-            auto const key(std::make_unique<char[]>(keyBufLen));
-            std::strcpy(key.get(), ikey);
-            std::size_t keylen;
-            if (!caseSensitive) {
-                toupperstr_utf8(key.get(), ikeyLen * 3u);
-                keylen = std::strlen(key.get());
-            } else {
-                keylen = ikeyLen;
-            }
+            std::string key(ikey);
+            if (!caseSensitive)
+                toupperstr_utf8(key);
 
             bool substr = false;
 
-            trybuf = maxbuf = nullptr;
-            getIDXBuf(maxoff, &maxbuf);
+            std::string maxbuf(getIDXBuf(maxoff));
 
             while (headoff < tailoff) {
                 tryoff = (lastoff == -1) ? headoff + ((((tailoff / entrySize) - (headoff / entrySize))) / 2) * entrySize : lastoff;
                 lastoff = -1;
-                getIDXBuf(tryoff, &trybuf);
+                auto trybuf(getIDXBuf(tryoff));
 
-                if (!*trybuf && tryoff) {        // In case of extra entry at end of idx (not first entry)
+                if (trybuf.empty() && tryoff) {        // In case of extra entry at end of idx (not first entry)
                     if (tryoff > (maxoff / 2)) {
                         tryoff -= entrySize;
                     } else {
@@ -199,12 +190,12 @@ signed char RawStrBase::findOffset_(char const * ikey,
                     break;
                 }
 
-                diff = strcmp(key.get(), trybuf);
+                diff = strcmp(key.c_str(), trybuf.c_str());
 
                 if (!diff)
                     break;
 
-                if (!strncmp(trybuf, key.get(), keylen)) substr = true;
+                if (!strncmp(trybuf.c_str(), key.c_str(), key.size())) substr = true;
 
                 if (diff < 0)
                     tailoff = (tryoff == headoff) ? headoff : tryoff;
@@ -219,13 +210,11 @@ signed char RawStrBase::findOffset_(char const * ikey,
             // didn't find exact match
             if (headoff >= tailoff) {
                 tryoff = headoff;
-                if (!substr && ((tryoff != maxoff)||(strncmp(key.get(), maxbuf, keylen)<0))) {
+                if (!substr && ((tryoff != maxoff)||(strncmp(key.c_str(), maxbuf.c_str(), key.size())<0))) {
                     awayFromSubstrCheck = true;
                     away--;    // if our entry doesn't startwith our key, prefer the previous entry over the next
                 }
             }
-            free(trybuf);
-            free(maxbuf);
         }
         else    tryoff = 0;
 
@@ -306,8 +295,7 @@ void RawStrBase::readText_(StartType istart,
                            std::string & buf) const
 {
     unsigned int ch;
-    char * idxbuflocal = nullptr;
-    getIDXBufDat(istart, &idxbuflocal);
+    auto const idxbuflocal(getIDXBufDat(istart));
     StartType start = istart;
 
     do {
@@ -342,13 +330,10 @@ void RawStrBase::readText_(StartType istart,
     }
     while (true);    // while we're resolving links
 
-    if (idxbuflocal) {
-        std::size_t localsize = strlen(idxbuflocal);
-        localsize = (localsize < (*isize - 1)) ? localsize : (*isize - 1);
-        strncpy(*idxbuf, idxbuflocal, localsize);
-        (*idxbuf)[localsize] = 0;
-        free(idxbuflocal);
-    }
+    auto localsize = idxbuflocal.size();
+    localsize = (localsize < (*isize - 1)) ? localsize : (*isize - 1);
+    strncpy(*idxbuf, idxbuflocal.c_str(), localsize);
+    (*idxbuf)[localsize] = 0;
 }
 
 
@@ -366,32 +351,28 @@ void RawStrBase::doSetText_(char const * ikey, char const * buf, long len) {
     SizeType size;
     SizeType outsize;
     char * tmpbuf = nullptr;
-    char * dbKey = nullptr;
     char * ch = nullptr;
 
     char errorStatus = findOffset_<SizeType>(ikey, &start, &size, 0, &idxoff);
-    auto const ikeyLen(std::strlen(ikey));
-    auto const keyBufLen((ikeyLen + 1u) * 3u);
-    auto const key(std::make_unique<char[]>(keyBufLen));
-    std::strcpy(key.get(), ikey);
+    std::string key(ikey);
     if (!caseSensitive)
-        toupperstr_utf8(key.get(), ikeyLen * 3u);
+        toupperstr_utf8(key);
 
     len = (len < 0) ? strlen(buf) : len;
 
-    getIDXBufDat(start, &dbKey);
+    auto const dbKey(getIDXBufDat(start));
 
     static constexpr auto const entrySize =
             sizeof(StartType) + sizeof(SizeType);
 
-    if (strcmp(key.get(), dbKey) < 0) {
+    if (strcmp(key.c_str(), dbKey.c_str()) < 0) {
     }
-    else if (strcmp(key.get(), dbKey) > 0) {
+    else if (strcmp(key.c_str(), dbKey.c_str()) > 0) {
         if (errorStatus != (char)-2)    // not a new file
             idxoff += entrySize;
         else idxoff = 0;
     }
-    else if ((!strcmp(key.get(), dbKey)) && (len>0 /*we're not deleting*/)) { // got absolute entry
+    else if ((!strcmp(key.c_str(), dbKey.c_str())) && (len>0 /*we're not deleting*/)) { // got absolute entry
         do {
             tmpbuf = new char [ size + 2 ];
             memset(tmpbuf, 0, size + 2);
@@ -432,8 +413,8 @@ void RawStrBase::doSetText_(char const * ikey, char const * buf, long len) {
         idxfd->read(idxBytes.get(), shiftSize);
     }
 
-    auto const outbuf(std::make_unique<char[]>(len + strlen(key.get()) + 5));
-    std::sprintf(outbuf.get(), "%s%c%c", key.get(), 13, 10);
+    auto const outbuf(std::make_unique<char[]>(len + key.size() + 5));
+    std::sprintf(outbuf.get(), "%s%c%c", key.c_str(), 13, 10);
     size = std::strlen(outbuf.get());
     std::memcpy(outbuf.get() + size, buf, len);
     size = outsize = size + (len);
@@ -464,8 +445,6 @@ void RawStrBase::doSetText_(char const * ikey, char const * buf, long len) {
             FileMgr::getSystemFileMgr()->trunc(idxfd);    // truncate index
         }
     }
-
-    free(dbKey);
 }
 
 

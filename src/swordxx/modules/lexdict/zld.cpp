@@ -195,12 +195,8 @@ long zLD::getEntryForKey(const char* key) const
 }
 
 
-char *zLD::getKeyForEntry(long entry) const
-{
-    char * key = nullptr;
-    getKeyFromIdxOffset(entry * IDXENTRYSIZE, &key);
-    return key;
-}
+std::string zLD::getKeyForEntry(long entry) const
+{ return getKeyFromIdxOffset(entry * IDXENTRYSIZE); }
 
 
 } /* namespace swordxx */

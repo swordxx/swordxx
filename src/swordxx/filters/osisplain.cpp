@@ -22,6 +22,7 @@
 
 #include "osisplain.h"
 
+#include <cassert>
 #include <cctype>
 #include <cstdlib>
 #include "../keys/versekey.h"
@@ -211,9 +212,12 @@ bool OSISPlain::handleToken(std::string &buf, const char *token, BasicFilterUser
         }
         else if (!strncmp(token, "/divineName", 11)) {
             // Get the end portion of the string, and upper case it
-            char* end = &buf[0u];
-            end += buf.size() - u->lastTextNode.size();
+            assert(buf.size() >= u->lastTextNode.size());
+            auto const endPos(buf.size() - u->lastTextNode.size());
+            auto end(buf.substr(endPos));
+            auto const endSize(end.size());
             toupperstr(end);
+            buf.replace(endPos, endSize, end);
         }
         else if (!strncmp(token, "hi", 2)) {
 

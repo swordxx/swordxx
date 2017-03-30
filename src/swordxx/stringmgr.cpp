@@ -22,6 +22,8 @@
 
 #include "stringmgr.h"
 
+#include <cassert>
+#include <limits>
 #if SWORDXX_HAS_ICU
 #include <unicode/locid.h>
 #include <unicode/translit.h>
@@ -115,7 +117,7 @@ namespace {
 //here comes our ICUStringMgr reimplementation
 class ICUStringMgr : public StringMgr {
 public:
-    char * upperUTF8(char *, std::size_t const max = 0u) const override;
+    void upperUTF8(std::string & str) const override;
 
 protected:
     bool supportsUnicode() const override { return true; }
@@ -174,7 +176,7 @@ StringMgr* StringMgr::getSystemStringMgr() {
  * @param t - The text encoded in utf8 which should be turned into an upper case string
  *
  */
-char * StringMgr::upperUTF8(char * t, std::size_t const /* max */) const {
+void StringMgr::upperUTF8(std::string & str) const {
     // try to decide if it's worth trying to toupper.  Do we have more
     // characters which are probably lower latin than not?
     // we still don't use isValidUTF8 optimally. what if we have 1 unicode
@@ -182,20 +184,15 @@ char * StringMgr::upperUTF8(char * t, std::size_t const /* max */) const {
     // dunno.  Best solution is to upper all other characters. Don't have
     // time to write that before release.
     long performOp = 0;
-    if (!isValidUTF8((unsigned char *)t)) {
+    if (!isValidUTF8((unsigned char *) str.c_str())) {
         performOp = 1;
-    }
-    else {
-        for (const char *ch = t; *ch; ch++) {
-            performOp += (*ch > 0) ? 1 : -1;
-        }
+    } else {
+        for (auto const ch : str)
+            performOp += (ch > 0) ? 1 : -1;
     }
 
-    if (performOp > 0) {
-        return upperLatin1(t);
-    }
-
-    return t;
+    if (performOp > 0)
+        return upperLatin1(str);
 }
 
 
@@ -203,19 +200,9 @@ char * StringMgr::upperUTF8(char * t, std::size_t const /* max */) const {
  * Converts the param to an uppercase latin1 string
  * @param The text encoded in latin1 which should be turned into an upper case string
  */
-char * StringMgr::upperLatin1(char * buf, std::size_t maxlen) const {
-    if (!buf)
-        return nullptr;
-
-    char *ret = buf;
-    bool checkMax = maxlen;
-
-    while (*buf && (!checkMax || maxlen--)) {
-        *buf = latin1CharToUpper(*buf);
-        buf++;
-    }
-
-    return ret;
+void StringMgr::upperLatin1(std::string & str) const {
+    for (auto & ch : str)
+        ch = latin1CharToUpper(ch);
 }
 
 bool StringMgr::supportsUnicode() const {
@@ -225,29 +212,54 @@ bool StringMgr::supportsUnicode() const {
 
 #if SWORDXX_HAS_ICU
 
-char * ICUStringMgr::upperUTF8(char * buf, std::size_t const maxlen) const {
-    if (!buf)
-        return nullptr;
-    char *ret = buf;
-    std::size_t const max = maxlen ? maxlen : std::strlen(buf);
+void ICUStringMgr::upperUTF8(std::string & str) const {
+    if (str.empty())
+        return;
 
+    static_assert(std::numeric_limits<int32_t>::max()
+                  <= std::numeric_limits<std::size_t>::max(), "");
+
+    int32_t lcSizeInUtf16 = 0;
     UErrorCode err = U_ZERO_ERROR;
+    u_strFromUTF8(nullptr, 0, &lcSizeInUtf16, str.c_str(), str.size(), &err);
+    if ((err != U_BUFFER_OVERFLOW_ERROR) && (err != U_ZERO_ERROR))
+        return;
+    assert(lcSizeInUtf16 >= 0);
+    auto lcInUTF16(std::make_unique<UChar[]>(
+                       static_cast<std::size_t>(lcSizeInUtf16)));
+    err = U_ZERO_ERROR;
+    u_strFromUTF8(lcInUTF16.get(), lcSizeInUtf16, nullptr, str.c_str(), str.size(), &err);
+    if ((err != U_STRING_NOT_TERMINATED_WARNING) && (err != U_ZERO_ERROR))
+        return;
 
-    if (!max)
-        return ret;
+    err = U_ZERO_ERROR;
+    auto const ucSizeInUtf16 =
+            u_strToUpper(nullptr, 0, lcInUTF16.get(), lcSizeInUtf16, nullptr, &err);
+    if ((err != U_BUFFER_OVERFLOW_ERROR) && (err != U_ZERO_ERROR))
+        return;
+    assert(ucSizeInUtf16 >= 0);
+    auto ucInUTF16(std::make_unique<UChar[]>(
+                       static_cast<std::size_t>(ucSizeInUtf16)));
+    err = U_ZERO_ERROR;
+    u_strToUpper(ucInUTF16.get(), ucSizeInUtf16, lcInUTF16.get(), lcSizeInUtf16, nullptr, &err);
+    if ((err != U_STRING_NOT_TERMINATED_WARNING) && (err != U_ZERO_ERROR))
+        return;
+    lcInUTF16.reset();
 
-    auto const lowerStr(std::make_unique<UChar[]>(max+10));
-    auto const upperStr(std::make_unique<UChar[]>(max+10));
+    int32_t lcSizeInUtf8 = 0;
+    err = U_ZERO_ERROR;
+    u_strToUTF8(nullptr, 0, &lcSizeInUtf8, ucInUTF16.get(), ucSizeInUtf16, &err);
+    if ((err != U_BUFFER_OVERFLOW_ERROR) && (err != U_ZERO_ERROR))
+        return;
+    auto lcInUTF8(std::make_unique<char>(
+                      static_cast<std::size_t>(lcSizeInUtf8)));
 
-    u_strFromUTF8(lowerStr.get(), max + 9, nullptr, buf, -1, &err);
-    if (err != U_ZERO_ERROR)
-        return ret;
-
-    u_strToUpper(upperStr.get(), max + 9, lowerStr.get(), -1, nullptr, &err);
-    if (err != U_ZERO_ERROR)
-        return ret;
-
-    return u_strToUTF8(ret, max, nullptr, upperStr.get(), -1, &err);
+    err = U_ZERO_ERROR;
+    u_strToUTF8(lcInUTF8.get(), lcSizeInUtf8, nullptr, ucInUTF16.get(), ucSizeInUtf16, &err);
+    if ((err != U_STRING_NOT_TERMINATED_WARNING) && (err != U_ZERO_ERROR))
+        return;
+    ucInUTF16.reset();
+    str.assign(lcInUTF8.get(), static_cast<std::size_t>(lcSizeInUtf8));
 }
 
 #endif

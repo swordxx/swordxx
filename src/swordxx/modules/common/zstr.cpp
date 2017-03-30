@@ -112,27 +112,27 @@ zStr::~zStr() {
  *        buf        - address of pointer to allocate for storage of string
  */
 
-void zStr::getKeyFromDatOffset(long ioffset, char **buf) const
+std::string zStr::getKeyFromDatOffset(long ioffset) const
 {
-    int size;
-    char ch;
     if (datfd) {
         datfd->seek(ioffset, SEEK_SET);
+        std::size_t size;
+        char ch;
         for (size = 0; datfd->read(&ch, 1) == 1; size++) {
             if ((ch == '\\') || (ch == 10) || (ch == 13))
                 break;
         }
-        *buf = (*buf) ? (char *)realloc(*buf, size*2 + 1) : (char *)malloc(size*2 + 1);
+        auto const buf(std::make_unique<char[]>(size));
         if (size) {
             datfd->seek(ioffset, SEEK_SET);
-            datfd->read(*buf, size);
+            datfd->read(buf.get(), size);
         }
-        (*buf)[size] = 0;
-        if (!caseSensitive) toupperstr_utf8(*buf, size*2);
-    }
-    else {
-        *buf = (*buf) ? (char *)realloc(*buf, 1) : (char *)malloc(1);
-        **buf = 0;
+        std::string r(buf.get(), size);
+        if (!caseSensitive)
+            toupperstr_utf8(r);
+        return r;
+    } else {
+        return "";
     }
 }
 
@@ -146,7 +146,7 @@ void zStr::getKeyFromDatOffset(long ioffset, char **buf) const
  *        buf        - address of pointer to allocate for storage of string
  */
 
-void zStr::getKeyFromIdxOffset(long ioffset, char **buf) const
+std::string zStr::getKeyFromIdxOffset(long ioffset) const
 {
     uint32_t offset;
 
@@ -154,8 +154,9 @@ void zStr::getKeyFromIdxOffset(long ioffset, char **buf) const
         idxfd->seek(ioffset, SEEK_SET);
         idxfd->read(&offset, 4);
         offset = swordtoarch32(offset);
-        getKeyFromDatOffset(offset, buf);
+        return getKeyFromDatOffset(offset);
     }
+    return "";
 }
 
 
@@ -173,8 +174,6 @@ void zStr::getKeyFromIdxOffset(long ioffset, char **buf) const
 
 signed char zStr::findKeyIndex(const char *ikey, long *idxoff, long away) const
 {
-    char * maxbuf = nullptr;
-    char * trybuf = nullptr;
     char quitflag = 0;
     signed char retval = 0;
     int32_t headoff, tailoff, tryoff = 0, maxoff = 0;
@@ -186,40 +185,32 @@ signed char zStr::findKeyIndex(const char *ikey, long *idxoff, long away) const
         tailoff = maxoff = idxfd->seek(0, SEEK_END) - IDXENTRYSIZE;
         if (*ikey) {
             headoff = 0;
-            auto const ikeyLen = std::strlen(ikey);
-            auto const keyBufLen = (ikeyLen + 1u) * 3u;
-            auto const key(std::make_unique<char[]>(keyBufLen));
-            std::strcpy(key.get(), ikey);
-            std::size_t keylen;
-            if (!caseSensitive) {
-                toupperstr_utf8(key.get(), keyBufLen);
-                keylen = std::strlen(key.get());
-            } else {
-                keylen = ikeyLen;
-            }
+            std::string key(ikey);
+            if (!caseSensitive)
+                toupperstr_utf8(key);
 
             bool substr = false;
 
-            getKeyFromIdxOffset(maxoff, &maxbuf);
+            auto const maxbuf(getKeyFromIdxOffset(maxoff));
 
             while (headoff < tailoff) {
                 tryoff = (lastoff == -1) ? headoff + (((((tailoff / IDXENTRYSIZE) - (headoff / IDXENTRYSIZE))) / 2) * IDXENTRYSIZE) : lastoff;
                 lastoff = -1;
 
-                getKeyFromIdxOffset(tryoff, &trybuf);
+                auto const trybuf(getKeyFromIdxOffset(tryoff));
 
-                if (!*trybuf && tryoff) {        // In case of extra entry at end of idx (not first entry)
+                if (trybuf.empty() && tryoff) {        // In case of extra entry at end of idx (not first entry)
                     tryoff += (tryoff > (maxoff / 2))?-IDXENTRYSIZE:IDXENTRYSIZE;
                     retval = -1;
                     break;
                 }
 
-                diff = strcmp(key.get(), trybuf);
+                diff = strcmp(key.c_str(), trybuf.c_str());
 
                 if (!diff)
                     break;
 
-                if (!strncmp(trybuf, key.get(), keylen)) substr = true;
+                if (!std::strncmp(trybuf.c_str(), key.c_str(), key.size())) substr = true;
 
                 if (diff < 0)
                     tailoff = (tryoff == headoff) ? headoff : tryoff;
@@ -234,13 +225,11 @@ signed char zStr::findKeyIndex(const char *ikey, long *idxoff, long away) const
             // didn't find exact match
             if (headoff >= tailoff) {
                 tryoff = headoff;
-                if (!substr && ((tryoff != maxoff)||(strncmp(key.get(), maxbuf, keylen)<0))) {
+                if (!substr && ((tryoff != maxoff)||(strncmp(key.c_str(), maxbuf.c_str(), key.size())<0))) {
                     awayFromSubstrCheck = true;
                     away--;    // if our entry doesn't startwith our key, prefer the previous entry over the next
                 }
             }
-            free(trybuf);
-            free(maxbuf);
         }
         else    { tryoff = 0; }
 
@@ -314,8 +303,7 @@ signed char zStr::findKeyIndex(const char *ikey, long *idxoff, long away) const
 
 void zStr::getText(long offset, char **idxbuf, char **buf) const {
     char *ch;
-    char * idxbuflocal = nullptr;
-    getKeyFromIdxOffset(offset, &idxbuflocal);
+    auto const idxbuflocal(getKeyFromIdxOffset(offset));
     uint32_t start;
     uint32_t size;
 
@@ -355,13 +343,11 @@ void zStr::getText(long offset, char **idxbuf, char **buf) const {
     }
     while (true);    // while we're resolving links
 
-    if (idxbuflocal) {
-        uint32_t localsize = strlen(idxbuflocal);
-        localsize = (localsize < (size - 1)) ? localsize : (size - 1);
-        strncpy(*idxbuf, idxbuflocal, localsize);
-        (*idxbuf)[localsize] = 0;
-        free(idxbuflocal);
-    }
+    auto localsize = idxbuflocal.size();
+    localsize = (localsize < (size - 1)) ? localsize : (size - 1);
+    strncpy(*idxbuf, idxbuflocal.c_str(), localsize);
+    (*idxbuf)[localsize] = 0;
+
     uint32_t block = 0;
     uint32_t entry = 0;
     memmove(&block, *buf, sizeof(uint32_t));
@@ -432,16 +418,14 @@ void zStr::setText(const char *ikey, const char *buf, long len) {
     char * ch = nullptr;
 
     len = (len < 0) ? strlen(buf) : len;
-    auto const keyBufLen((std::strlen(ikey) + 1u) * 3u);
-    auto key(std::make_unique<char[]>(keyBufLen));
-    std::strcpy(key.get(), ikey);
+    std::string key(ikey);
     if (!caseSensitive)
-        toupperstr_utf8(key.get(), std::strlen(key.get()) * 3u);
+        toupperstr_utf8(key);
 
     char notFound = findKeyIndex(ikey, &idxoff, 0);
     if (!notFound) {
-        getKeyFromIdxOffset(idxoff, &dbKey);
-        int diff = std::strcmp(key.get(), dbKey);
+        auto const dbKey(getKeyFromIdxOffset(idxoff));
+        int diff = std::strcmp(key.c_str(), dbKey.c_str());
         if (diff < 0) {
         }
         else if (diff > 0) {
@@ -495,8 +479,8 @@ void zStr::setText(const char *ikey, const char *buf, long len) {
         idxfd->read(idxBytes.get(), shiftSize);
     }
 
-    auto outbuf(std::make_unique<char[]>(len + std::strlen(key.get()) + 5));
-    std::sprintf(outbuf.get(), "%s%c%c", key.get(), 13, 10);
+    auto outbuf(std::make_unique<char[]>(len + key.size() + 5));
+    std::sprintf(outbuf.get(), "%s%c%c", key.c_str(), 13, 10);
     size = std::strlen(outbuf.get());
     if (len > 0) {    // NOT a link
         if (!cacheBlock) {

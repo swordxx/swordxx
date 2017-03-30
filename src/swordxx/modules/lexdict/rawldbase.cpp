@@ -195,11 +195,8 @@ long RawLdBase<Base>::getEntryForKey(char const * key) const {
 }
 
 template <typename Base>
-char * RawLdBase<Base>::getKeyForEntry(long entry) const {
-    char * key = nullptr;
-    this->getIDXBuf(entry * Base::IDXENTRYSIZE, &key);
-    return key;
-}
+std::string RawLdBase<Base>::getKeyForEntry(long entry) const
+{ return this->getIDXBuf(entry * Base::IDXENTRYSIZE); }
 
 // Explicit instantiations:
 
@@ -249,8 +246,8 @@ template long RawLdBase<RawStr4>::getEntryCount() const;
 template long RawLdBase<RawStr>::getEntryForKey(char const * key) const;
 template long RawLdBase<RawStr4>::getEntryForKey(char const * key) const;
 
-template char * RawLdBase<RawStr>::getKeyForEntry(long entry) const;
-template char * RawLdBase<RawStr4>::getKeyForEntry(long entry) const;
+template std::string RawLdBase<RawStr>::getKeyForEntry(long entry) const;
+template std::string RawLdBase<RawStr4>::getKeyForEntry(long entry) const;
 
 template char RawLdBase<RawStr>::getEntry(long away = 0) const;
 template char RawLdBase<RawStr4>::getEntry(long away = 0) const;
