@@ -289,38 +289,33 @@ signed char RawStrBase::findOffset_(char const * ikey,
  *
  */
 template <typename SizeType>
-void RawStrBase::readText_(StartType istart,
-                           SizeType * isize,
-                           char ** idxbuf,
-                           std::string & buf) const
+std::string RawStrBase::readText_(StartType istart,
+                                  SizeType * isize,
+                                  std::string & buf) const
 {
-    unsigned int ch;
     auto const idxbuflocal(getIDXBufDat(istart));
     StartType start = istart;
 
     do {
-        delete[] *idxbuf;
-
         buf.clear();
         buf.resize(++(*isize), '\0');
-
-        *idxbuf = new char [ (*isize) ];
 
         datfd->seek(start, SEEK_SET);
         datfd->read(&buf[0u], (int)((*isize) - 1));
 
-        for (ch = 0; buf[ch]; ch++) {        // skip over index string
-            if (buf[ch] == 10) {
-                ch++;
-                break;
+        {
+            std::size_t ch = buf.find_first_of(10);
+            if (ch == std::string::npos) {
+                buf.clear();
+            } else {
+                buf.erase(0u, ++ch);
             }
         }
-        buf = std::string(buf.c_str()+ch);
         // resolve link
         if (!strncmp(buf.c_str(), "@LINK", 5)) {
-            for (ch = 0; buf[ch]; ch++) {        // null before nl
-                if (buf[ch] == 10) {
-                    buf[ch] = 0;
+            for (std::size_t ch = 5; buf[ch]; ++ch) {        // null before nl
+                if (buf[ch] == '\n') {
+                    buf[ch] = '\0';
                     break;
                 }
             }
@@ -332,8 +327,7 @@ void RawStrBase::readText_(StartType istart,
 
     auto localsize = idxbuflocal.size();
     localsize = (localsize < (*isize - 1)) ? localsize : (*isize - 1);
-    strncpy(*idxbuf, idxbuflocal.c_str(), localsize);
-    (*idxbuf)[localsize] = 0;
+    return std::string(idxbuflocal.c_str(), localsize);
 }
 
 
@@ -507,15 +501,13 @@ signed char RawStrBase::findOffset_<std::uint32_t>(
         IndexOffsetType * idxoff = nullptr) const;
 
 template
-void RawStrBase::readText_<std::uint16_t>(StartType start,
-                                         std::uint16_t * size,
-                                         char ** idxbuf,
-                                         std::string & buf) const;
+std::string RawStrBase::readText_<std::uint16_t>(StartType start,
+                                                 std::uint16_t * size,
+                                                 std::string & buf) const;
 template
-void RawStrBase::readText_<std::uint32_t>(StartType start,
-                                         std::uint32_t * size,
-                                         char ** idxbuf,
-                                         std::string & buf) const;
+std::string RawStrBase::readText_<std::uint32_t>(StartType start,
+                                                 std::uint32_t * size,
+                                                 std::string & buf) const;
 
 template
 void RawStrBase::doSetText_<std::uint16_t>(char const * key,

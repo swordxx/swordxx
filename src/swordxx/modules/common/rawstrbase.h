@@ -65,10 +65,9 @@ protected: /* Methods: */
                             IndexOffsetType * idxoff = nullptr) const;
 
     template <typename SizeType>
-    void readText_(StartType start,
-                   SizeType * size,
-                   char ** idxbuf,
-                   std::string & buf) const;
+    std::string readText_(StartType start,
+                          SizeType * size,
+                          std::string & buf) const;
 
     template <typename SizeType>
     void doSetText_(char const * key, char const * buf, long len = -1);
@@ -108,15 +107,13 @@ signed char RawStrBase::findOffset_<std::uint32_t>(
         IndexOffsetType * idxoff = nullptr) const;
 
 extern template
-void RawStrBase::readText_<std::uint16_t>(StartType start,
-                                         std::uint16_t * size,
-                                         char ** idxbuf,
-                                         std::string & buf) const;
+std::string RawStrBase::readText_<std::uint16_t>(StartType start,
+                                                 std::uint16_t * size,
+                                                 std::string & buf) const;
 extern template
-void RawStrBase::readText_<std::uint32_t>(StartType start,
-                                         std::uint32_t * size,
-                                         char ** idxbuf,
-                                         std::string & buf) const;
+std::string RawStrBase::readText_<std::uint32_t>(StartType start,
+                                                 std::uint32_t * size,
+                                                 std::string & buf) const;
 
 extern template
 void RawStrBase::doSetText_<std::uint16_t>(char const * key,
@@ -155,7 +152,7 @@ public: /* Methods: */
     { return RawStrBase::findOffset_<SizeType>(std::forward<Args>(args)...); }
 
     template <typename ... Args>
-    void readText(Args && ... args) const
+    std::string readText(Args && ... args) const
     { return RawStrBase::readText_<SizeType>(std::forward<Args>(args)...); }
 
 protected: /* Methods: */

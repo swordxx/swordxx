@@ -72,7 +72,6 @@ template <typename Base>
 char RawLdBase<Base>::getEntry(long away) const {
     StartType start = 0;
     SizeType size = 0;
-    char * idxbuf = nullptr;
     char retval = 0;
 
     auto const keyText = key->getText();
@@ -82,15 +81,14 @@ char RawLdBase<Base>::getEntry(long away) const {
         retval = this->findOffset(keyText, &start, &size, away);
     }
     if (!retval) {
-        this->readText(start, &size, &idxbuf, entryBuf);
+        auto const idxbuf(this->readText(start, &size, entryBuf));
         rawFilter(entryBuf, nullptr);    // hack, decipher
         rawFilter(entryBuf, key);
         entrySize = size;        // support getEntrySize call
         if (!key->isPersist())            // If we have our own key
-            *key = idxbuf;                // reset it to entry index buffer
+            *key = idxbuf.c_str();                // reset it to entry index buffer
 
-        stdstr(&entkeytxt, idxbuf);    // set entry key text that module 'snapped' to.
-        delete [] idxbuf;
+        stdstr(&entkeytxt, idxbuf.c_str());    // set entry key text that module 'snapped' to.
     } else {
         entryBuf.clear();
     }
