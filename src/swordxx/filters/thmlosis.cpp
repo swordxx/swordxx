@@ -55,6 +55,12 @@ char ThMLOSIS::processText(std::string &text, const SWKey *key, const SWModule *
 
     bool lastspace = false;
     char val[128];
+    static auto const strstrip =
+            [](char * const v) {
+                std::string s(v);
+                trimString(s);
+                std::strcpy(v, s.c_str());
+            };
     std::string buf;
     char *valto;
     char *ch;
