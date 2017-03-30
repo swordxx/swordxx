@@ -328,7 +328,7 @@ const char *ListKey::getText() const {
     return m_array[m_arrayPos]->getText();
 }
 
-const char *ListKey::getShortText() const {
+std::string ListKey::getShortText() const {
     if (m_array.empty() || m_arrayPos >= m_array.size())
         return SWKey::getText();
     return m_array[m_arrayPos]->getShortText();

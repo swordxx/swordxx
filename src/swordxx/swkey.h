@@ -139,7 +139,7 @@ public:
     /** returns string representation of this key
      */
     virtual const char *getText() const;
-    virtual const char *getShortText() const { return getText(); }
+    virtual std::string getShortText() const { return getText(); }
     virtual std::string getRangeText() const;
     virtual std::string getOSISRefRangeText() const;
 

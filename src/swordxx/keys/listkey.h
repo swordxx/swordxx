@@ -135,7 +135,7 @@ public:
     long getIndex() const override;
     std::string getRangeText() const override;
     std::string getOSISRefRangeText() const override;
-    char const * getShortText() const override;
+    std::string getShortText() const override;
 
     /**
      * Returns the index for the new one given as as parameter.

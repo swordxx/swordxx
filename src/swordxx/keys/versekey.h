@@ -184,7 +184,7 @@ public:
     * a (char *) is requested
     */
     char const * getText() const override;
-    char const * getShortText() const override;
+    std::string getShortText() const override;
 
     void setText(char const * ikey, bool checkNormalize)
     { SWKey::setText(ikey); parse(checkNormalize); }

@@ -1194,7 +1194,7 @@ const char *VerseKey::getText() const {
 }
 
 
-const char *VerseKey::getShortText() const {
+std::string VerseKey::getShortText() const {
     static char * stext = nullptr;
     char buf[2047];
     freshtext();
