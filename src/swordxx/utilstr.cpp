@@ -87,28 +87,6 @@ std::string stripPrefix(std::string & str, char const separator) {
 
 
 /******************************************************************************
- * stdstr - clones a string
- *
- * ENT:    ipstr    - pointer to a string pointer to set if necessary
- *    istr    - string to set to *ipstr
- *            0 - only get
- *
- * RET:    *ipstr
- */
-
-char *stdstr(char **ipstr, const char *istr, unsigned int memPadFactor) {
-    delete[] *ipstr;
-    if (istr) {
-        int len = strlen(istr) + 1;
-        *ipstr = new char [ len * memPadFactor ];
-        memcpy(*ipstr, istr, len);
-    }
-    else *ipstr = nullptr;
-    return *ipstr;
-}
-
-
-/******************************************************************************
  * strstrip - Removes leading and trailing spaces from a string
  *
  * ENT:    istr    - string pointer to strip

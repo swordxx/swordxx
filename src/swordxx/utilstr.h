@@ -112,9 +112,6 @@ inline std::pair<bool, std::size_t> getPrefixSize(std::string const & buf,
 
 std::string stripPrefix(std::string & str, char const separator);
 
-/** stdstr - clone a string
-*/
-SWDLLEXPORT char *stdstr (char **iistr, const char *istr, unsigned int memPadFactor = 1);
 SWDLLEXPORT char *strstrip (char *istr);
 SWDLLEXPORT char const * stristr(std::string const & haystack,
                                  std::string const & needle);
