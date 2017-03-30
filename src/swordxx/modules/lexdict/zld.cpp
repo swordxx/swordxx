@@ -93,7 +93,7 @@ char zLD::getEntry(long away) const {
         if (!key->isPersist())            // If we have our own key
             *key = idxbuf;                // reset it to entry index buffer
 
-        stdstr(&entkeytxt, idxbuf);    // set entry key text that module 'snapped' to.
+        m_entkeytxt.assign(idxbuf); // set entry key text that module 'snapped' to.
         free(idxbuf);
         free(ebuf);
     } else {
@@ -139,7 +139,7 @@ void zLD::increment(int steps) {
 
     tmperror = (getEntry(steps)) ? KEYERR_OUTOFBOUNDS : 0;
     error = (error)?error:tmperror;
-    *key = entkeytxt;
+    *key = m_entkeytxt.c_str();
 }
 
 

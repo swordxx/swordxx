@@ -36,7 +36,7 @@ namespace swordxx {
   */
 class SWDLLEXPORT SWLD : public SWModule {
 protected:
-    mutable char *entkeytxt;
+    mutable std::string m_entkeytxt;
     static std::unique_ptr<char[]> strongsPadBuf(char const * buf);
     bool strongsPadding;
 public:
@@ -49,8 +49,6 @@ public:
          SWTextMarkup markup = FMT_UNKNOWN,
          char const * ilang = nullptr,
          bool strongsPadding = true);
-
-    ~SWLD() override;
 
     SWKey * createKey() const override;
 

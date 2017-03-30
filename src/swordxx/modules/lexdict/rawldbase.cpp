@@ -88,7 +88,7 @@ char RawLdBase<Base>::getEntry(long away) const {
         if (!key->isPersist())            // If we have our own key
             *key = idxbuf.c_str();                // reset it to entry index buffer
 
-        stdstr(&entkeytxt, idxbuf.c_str());    // set entry key text that module 'snapped' to.
+        m_entkeytxt = idxbuf; // set entry key text that module 'snapped' to.
     } else {
         entryBuf.clear();
     }
@@ -135,7 +135,7 @@ void RawLdBase<Base>::increment(int steps) {
 
     tmperror = (getEntry(steps)) ? KEYERR_OUTOFBOUNDS : 0;
     error = (error)?error:tmperror;
-    *key = entkeytxt;
+    *key = m_entkeytxt.c_str();
 }
 
 template <typename Base>

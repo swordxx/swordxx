@@ -41,18 +41,7 @@ namespace swordxx {
  */
 
 SWLD::SWLD(const char *imodname, const char *imoddesc, TextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char* ilang, bool strongsPadding) : SWModule(createKey(), imodname, imoddesc, (char *)"Lexicons / Dictionaries", enc, dir, mark, ilang), strongsPadding(strongsPadding)
-{
-    entkeytxt = new char [1];
-    *entkeytxt = 0;
-}
-
-
-/******************************************************************************
- * SWLD Destructor - Cleans up instance of SWLD
- */
-
-SWLD::~SWLD() { delete [] entkeytxt; }
-
+{}
 
 SWKey *SWLD::createKey() const { return new StrKey(); }
 
@@ -71,7 +60,7 @@ const char *SWLD::getKeyText() const {
     if (key->isPersist()) {
         getRawEntryBuf();    // force module key to snap to entry
     }
-    return entkeytxt;
+    return m_entkeytxt.c_str();
 }
 
 void SWLD::positionToTop() {
