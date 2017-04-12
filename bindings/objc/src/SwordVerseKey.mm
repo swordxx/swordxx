@@ -130,8 +130,8 @@
     ((sword::VerseKey *)sk)->setChapter(val);
 }
 
-- (void)setVerse:(int)val {
-    ((sword::VerseKey *)sk)->setVerse(val);
+- (void)setVerse:(long)val {
+    ((sword::VerseKey *)sk)->setVerse((int)val);
 }
 
 - (NSString *)bookName {

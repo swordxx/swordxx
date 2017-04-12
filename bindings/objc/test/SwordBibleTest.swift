@@ -16,13 +16,13 @@ class SwordBibleTest: XCTestCase {
     override func setUp() {
         super.setUp()
     
-        Configuration.configWithImpl(OSXConfiguration())
+        Configuration.config(withImpl: OSXConfiguration())
         FilterProviderFactory().initWithImpl(DefaultFilterProvider())
         mgr = SwordManager(path:Configuration.config().defaultModulePath())
     }
     
     func testGetBible() {
-        let bibleMod = mgr?.moduleWithName("GerNeUe")
+        let bibleMod = mgr?.module(withName: "GerNeUe")
         XCTAssertNotNil(bibleMod);
     }
 }

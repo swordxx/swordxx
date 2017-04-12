@@ -1320,6 +1320,9 @@
 		A9A7EEAF14D5D4C300B76B6A /* libsword.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A954ABC313EE9AB00094E3FE /* libsword.dylib */; };
 		A9A7EEBE14D5D64C00B76B6A /* osis2mod.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A975EDB111C7925C007C1532 /* osis2mod.cpp */; };
 		A9A7EEBF14D5D65900B76B6A /* libsword.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A954ABC313EE9AB00094E3FE /* libsword.dylib */; settings = {ATTRIBUTES = (Required, ); }; };
+		A9A94A381DCB21AB00F69260 /* canon_calvin.h in Headers */ = {isa = PBXBuildFile; fileRef = A9A94A351DCB21AB00F69260 /* canon_calvin.h */; };
+		A9A94A391DCB21AB00F69260 /* canon_darbyfr.h in Headers */ = {isa = PBXBuildFile; fileRef = A9A94A361DCB21AB00F69260 /* canon_darbyfr.h */; };
+		A9A94A3A1DCB21AB00F69260 /* canon_segond.h in Headers */ = {isa = PBXBuildFile; fileRef = A9A94A371DCB21AB00F69260 /* canon_segond.h */; };
 		A9BB67771C6BCDD700EB1A49 /* adler32.c in Sources */ = {isa = PBXBuildFile; fileRef = A9BB67401C6BCD9600EB1A49 /* adler32.c */; };
 		A9BB67781C6BCDD700EB1A49 /* compress.c in Sources */ = {isa = PBXBuildFile; fileRef = A9BB67411C6BCD9600EB1A49 /* compress.c */; };
 		A9BB67791C6BCDD700EB1A49 /* crc32.c in Sources */ = {isa = PBXBuildFile; fileRef = A9BB67421C6BCD9600EB1A49 /* crc32.c */; };
@@ -3104,8 +3107,10 @@
 		A9A129DA19DF144D005BCBC1 /* zverse4.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zverse4.h; sourceTree = "<group>"; };
 		A9A2C17C118D9D3D0002873D /* Notifications.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Notifications.h; path = src/Notifications.h; sourceTree = "<group>"; };
 		A9A7EEB414D5D61700B76B6A /* osis2mod */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = osis2mod; sourceTree = BUILT_PRODUCTS_DIR; };
+		A9A94A351DCB21AB00F69260 /* canon_calvin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = canon_calvin.h; sourceTree = "<group>"; };
+		A9A94A361DCB21AB00F69260 /* canon_darbyfr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = canon_darbyfr.h; sourceTree = "<group>"; };
+		A9A94A371DCB21AB00F69260 /* canon_segond.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = canon_segond.h; sourceTree = "<group>"; };
 		A9B77D4319A3BB3B00F34557 /* liblzma.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = liblzma.dylib; path = usr/lib/liblzma.dylib; sourceTree = SDKROOT; };
-		A9B77D4519A3BB8000F34557 /* xzcomprs.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = xzcomprs.cpp; sourceTree = "<group>"; };
 		A9BB67401C6BCD9600EB1A49 /* adler32.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = adler32.c; sourceTree = "<group>"; };
 		A9BB67411C6BCD9600EB1A49 /* compress.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = compress.c; sourceTree = "<group>"; };
 		A9BB67421C6BCD9600EB1A49 /* crc32.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = crc32.c; sourceTree = "<group>"; };
@@ -4496,7 +4501,6 @@
 		A954A84313EE98B30094E3FE /* common */ = {
 			isa = PBXGroup;
 			children = (
-				A9B77D4519A3BB8000F34557 /* xzcomprs.cpp */,
 				A999FF3917951C8900E65919 /* bz2comprs.cpp */,
 				A954A84513EE98B30094E3FE /* entriesblk.cpp */,
 				A954A84613EE98B30094E3FE /* lzsscomprs.cpp */,
@@ -5098,6 +5102,9 @@
 		A9A1291B19DF144D005BCBC1 /* include */ = {
 			isa = PBXGroup;
 			children = (
+				A9A94A351DCB21AB00F69260 /* canon_calvin.h */,
+				A9A94A361DCB21AB00F69260 /* canon_darbyfr.h */,
+				A9A94A371DCB21AB00F69260 /* canon_segond.h */,
 				A9A1291C19DF144D005BCBC1 /* bz2comprs.h */,
 				A9A1291D19DF144D005BCBC1 /* canon.h */,
 				A9A1291E19DF144D005BCBC1 /* canon_abbrevs.h */,
@@ -5434,6 +5441,7 @@
 				A9A12A7D19DF145B005BCBC1 /* utf8cantillation.h in Headers */,
 				A9A12A5F19DF1456005BCBC1 /* teilatex.h in Headers */,
 				A9A129FE19DF144E005BCBC1 /* gbfhtmlhref.h in Headers */,
+				A9A94A3A1DCB21AB00F69260 /* canon_segond.h in Headers */,
 				A9A129F319DF144D005BCBC1 /* encfiltmgr.h in Headers */,
 				A9A12A6F19DF1459005BCBC1 /* thmlstrongs.h in Headers */,
 				A9A12A2B19DF1451005BCBC1 /* osiswordjs.h in Headers */,
@@ -5527,6 +5535,7 @@
 				A9A12A3219DF1451005BCBC1 /* rawgenbook.h in Headers */,
 				A9A12A8519DF145D005BCBC1 /* utf8transliterator.h in Headers */,
 				A9A12A0F19DF144F005BCBC1 /* latin1utf16.h in Headers */,
+				A9A94A381DCB21AB00F69260 /* canon_calvin.h in Headers */,
 				A9A12A8319DF145C005BCBC1 /* utf8nfkd.h in Headers */,
 				A9A12A9019DF145F005BCBC1 /* zipcomprs.h in Headers */,
 				A9A12A0519DF144E005BCBC1 /* gbfstrongs.h in Headers */,
@@ -5591,6 +5600,7 @@
 				A9A12A7719DF145A005BCBC1 /* untgz.h in Headers */,
 				A9A12A3919DF1452005BCBC1 /* rawverse.h in Headers */,
 				A9A12A7319DF1459005BCBC1 /* thmlxhtml.h in Headers */,
+				A9A94A391DCB21AB00F69260 /* canon_darbyfr.h in Headers */,
 				A94EAC11117B28920018B06F /* SwordBibleTextEntry.h in Headers */,
 				A94EAC13117B28920018B06F /* SwordBook.h in Headers */,
 				A94EAC15117B28920018B06F /* SwordCommentary.h in Headers */,
@@ -6324,7 +6334,7 @@
 			attributes = {
 				LastSwiftUpdateCheck = 0720;
 				LastTestingUpgradeCheck = 0610;
-				LastUpgradeCheck = 0800;
+				LastUpgradeCheck = 0810;
 				TargetAttributes = {
 					8DC2EF4F0486A6940098B216 = {
 						DevelopmentTeam = 27XS5W9C3J;
@@ -6343,7 +6353,7 @@
 						ProvisioningStyle = Automatic;
 					};
 					A9BFB0A113EDF51000032679 = {
-						LastSwiftMigration = 0800;
+						LastSwiftMigration = 0830;
 					};
 					A9D2714414D717D800DA8926 = {
 						DevelopmentTeam = 27XS5W9C3J;
@@ -7611,7 +7621,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "Mac Developer";
+				CODE_SIGN_IDENTITY = "";
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				DEVELOPMENT_TEAM = 27XS5W9C3J;
@@ -8060,7 +8070,7 @@
 				SDKROOT = macosx;
 				SWIFT_OBJC_BRIDGING_HEADER = "test/Tests-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 2.3;
+				SWIFT_VERSION = 3.0;
 				SYMROOT = "$(PROJECT_DIR)/Build/Products";
 				VALID_ARCHS = x86_64;
 			};
@@ -8095,7 +8105,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SWIFT_OBJC_BRIDGING_HEADER = "test/Tests-Bridging-Header.h";
-				SWIFT_VERSION = 2.3;
+				SWIFT_VERSION = 3.0;
 				SYMROOT = "$(PROJECT_DIR)/Build/Products";
 				VALID_ARCHS = x86_64;
 			};

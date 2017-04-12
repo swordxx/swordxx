@@ -25,11 +25,11 @@
 
     [[FilterProviderFactory providerFactory] initWithImpl:[[DefaultFilterProvider alloc] init]];
     
-    mgr = [SwordManager managerWithPath:[[Configuration config] defaultModulePath]];
-    mod = [mgr moduleWithName:@"GerNeUe"];
+    mgr = [SwordManager managerWithPath:[[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:@"TestModules"]];
+    mod = [mgr moduleWithName:@"KJV"];
 }
 
-- (void)testModuleIntroduction {
+- (void)testModuleIntroductionGer {
     SwordBible *bible = (SwordBible *)[mgr moduleWithName:@"GerNeUe"];
 
     NSString *modIntro = [bible moduleIntroduction];
@@ -146,7 +146,7 @@
 }
 
 - (void)testPreverseHeading {
-    SwordBible *bible = (SwordBible *)[mgr moduleWithName:@"GerNeUe"];
+    SwordBible *bible = (SwordBible *)[mgr moduleWithName:@"KJV"];
 
     [mgr setGlobalOption:SW_OPTION_HEADINGS value:SW_ON];
     SwordBibleTextEntry *text = (SwordBibleTextEntry *) [bible renderedTextEntryForRef:@"Numbers 1:47"];
@@ -168,7 +168,7 @@
 }
 
 - (void)testLoopRenderedVerses {
-    SwordBible *bible = (SwordBible *)[mgr moduleWithName:@"GerSch"];
+    SwordBible *bible = (SwordBible *)[mgr moduleWithName:@"KJV"];
     XCTAssertNotNil(bible, @"Module is nil");
 
     NSArray *verses = [bible renderedTextEntriesForRef:@"Gen"];
@@ -177,7 +177,7 @@
 }
 
 - (void)testRenderedVerseText {
-    SwordBible *bible = (SwordBible *)[mgr moduleWithName:@"GerSch"];
+    SwordBible *bible = (SwordBible *)[mgr moduleWithName:@"KJV"];
     XCTAssertNotNil(bible, @"Module is nil");
     
     SwordModuleTextEntry *text = [bible renderedTextEntryForRef:@"gen1.1"];

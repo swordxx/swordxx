@@ -19,10 +19,10 @@ class SwordLocaleManagerTest: XCTestCase {
     }
 
     func testDefaultLocalSetup() {
-        let locMgr = SwordLocaleManager.defaultManager()
-        locMgr.initLocale()
+        let locMgr = SwordLocaleManager.default()
+        locMgr?.initLocale()
         
-        let defaultLocName = locMgr.getDefaultLocaleName()
+        let defaultLocName = locMgr?.getDefaultLocaleName()
         print(defaultLocName)
         XCTAssert(defaultLocName != nil)
         XCTAssert(defaultLocName == "de")
