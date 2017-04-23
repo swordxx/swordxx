@@ -98,7 +98,6 @@ int processXML(const char* filename, char* modname, bool longnames, bool exportf
     outfile.open(modname);
   }
 
-  TreeKeyIdx * treeKey;
   RawGenBook * book = nullptr;
 
   std::string divs[32];
@@ -116,9 +115,10 @@ int processXML(const char* filename, char* modname, bool longnames, bool exportf
   if (!exportfile) {
     // Do some initialization stuff
     TreeKeyIdx::create(modname);
-    treeKey = new TreeKeyIdx(modname);
-    RawGenBook::createModule(modname);
-    delete treeKey;
+    {
+        auto const treeKey(std::make_unique<TreeKeyIdx>(modname));
+        RawGenBook::createModule(modname);
+    }
     book = new RawGenBook(modname);
   }
 
