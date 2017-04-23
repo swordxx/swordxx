@@ -607,7 +607,7 @@ void linkToEntry(VerseKey &linkKey, VerseKey &dest) {
     currentVerse = linkKey;
 
     cout << "INFO(LINK): Linking " << currentVerse.getOSISRef() << " to " << dest.getOSISRef() << "\n";
-    module->linkEntry(&dest);
+    module->linkEntry(dest);
 
     currentVerse = saveKey;
 }

@@ -55,7 +55,7 @@ public:
     bool isWritable() const override;
     static char createModule(const char *path, const char *v11n = "KJV") { return RawVerse4::createModule(path, v11n); }
     void setEntry(char const * inbuf, long len = -1) override;
-    void linkEntry(SWKey const * linkKey) override;
+    void linkEntry(SWKey const & linkKey) override;
     void deleteEntry() override;
     bool isLinked(SWKey const * k1, SWKey const * k2) const override;
     bool hasEntry(SWKey const * k) const override;

@@ -62,7 +62,7 @@ public: /* Methods: */
     static char createModule(const char *path) { return Base::createModule(path); }
 
     void setEntry(char const * inbuf, long len = -1) override;
-    void linkEntry(SWKey const * linkKey) override;
+    void linkEntry(SWKey const & linkKey) override;
     void deleteEntry() override;
     long getEntryCount() const override;
     long getEntryForKey(char const * key) const override;
@@ -109,8 +109,8 @@ void RawLdBase<RawStr>::setEntry(char const * inbuf, long len = -1);
 extern template
 void RawLdBase<RawStr4>::setEntry(char const * inbuf, long len = -1);
 
-extern template void RawLdBase<RawStr>::linkEntry(SWKey const * linkKey);
-extern template void RawLdBase<RawStr4>::linkEntry(SWKey const * linkKey);
+extern template void RawLdBase<RawStr>::linkEntry(SWKey const & linkKey);
+extern template void RawLdBase<RawStr4>::linkEntry(SWKey const & linkKey);
 
 extern template void RawLdBase<RawStr>::deleteEntry();
 extern template void RawLdBase<RawStr4>::deleteEntry();

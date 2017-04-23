@@ -139,13 +139,13 @@ void zCom::setEntry(const char *inbuf, long len) {
 }
 
 
-void zCom::linkEntry(const SWKey *inkey) {
+void zCom::linkEntry(SWKey const & inkey) {
     VerseKey const & destkey = getVerseKey();
-    VerseKey & srckey = getVerseKey(inkey);
+    VerseKey & srckey = getVerseKey(&inkey);
 
     doLinkEntry(destkey.getTestament(), destkey.getTestamentIndex(), srckey.getTestamentIndex());
 
-    if (inkey != &srckey) // free our key if we created a VerseKey
+    if (&inkey != &srckey) // free our key if we created a VerseKey
         delete &srckey;
 }
 

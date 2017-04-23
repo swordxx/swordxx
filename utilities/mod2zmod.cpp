@@ -200,7 +200,7 @@ int main(int argc, char **argv)
         // pseudo-check for link.  Will get most common links.
         if ((lastBuffer == inModule.getRawEntry()) &&(lastBuffer.length() > 0)) {
             *outModuleKey = bufferKey;
-            outModule->linkEntry(&lastBufferKey);    // link to last key
+            outModule->linkEntry(lastBufferKey);    // link to last key
         cout << "Adding [" << bufferKey.getText() << "] link to: [" << lastBufferKey.getText() << "]\n";
         }
         else {

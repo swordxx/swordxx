@@ -150,7 +150,7 @@ int main(int argc, char **argv) {
       *key = argv[3];
      mod.setKey(*key);
       SWKey tmpkey = argv[4];
-      mod.linkEntry(&tmpkey);
+      mod.linkEntry(tmpkey);
     }
     else if (compress) {
       zLD mod(argv[2]);    // open our datapath with our RawText driver.
@@ -161,7 +161,7 @@ int main(int argc, char **argv) {
      mod.setKey(*key);
 
       SWKey tmpkey = argv[4];
-      mod.linkEntry(&tmpkey);
+      mod.linkEntry(tmpkey);
     }
     else {
       RawLD mod(argv[2]);    // open our datapath with our RawText driver.
@@ -172,7 +172,7 @@ int main(int argc, char **argv) {
      mod.setKey(*key);
 
       SWKey tmpkey = argv[4];
-      mod.linkEntry(&tmpkey);
+      mod.linkEntry(tmpkey);
     }
   }
   else if ((mode == 'd') && argc == 4) {

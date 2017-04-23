@@ -149,7 +149,7 @@ void RawFiles::setEntry(const char *inbuf, long len) {
  * RET: *this
  */
 
-void RawFiles::linkEntry(const SWKey *inkey) {
+void RawFiles::linkEntry(SWKey const & inkey) {
     StartType start;
     SizeType size;
     VerseKey const & key = getVerseKey();
@@ -160,7 +160,7 @@ void RawFiles::linkEntry(const SWKey *inkey) {
         std::string tmpbuf;
         readText(key.getTestament(), start, size + 2, tmpbuf);
 
-        VerseKey const & key2 = getVerseKey(inkey);
+        VerseKey const & key2 = getVerseKey(&inkey);
         doSetText(key2.getTestament(), key2.getTestamentIndex(), tmpbuf.c_str());
     }
 }

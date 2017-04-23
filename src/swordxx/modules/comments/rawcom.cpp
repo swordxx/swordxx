@@ -134,13 +134,13 @@ void RawCom::setEntry(const char *inbuf, long len) {
 }
 
 
-void RawCom::linkEntry(const SWKey *inkey) {
+void RawCom::linkEntry(SWKey const & inkey) {
     VerseKey const & destkey = getVerseKey();
-    VerseKey const & srckey = getVerseKey(inkey);
+    VerseKey const & srckey = getVerseKey(&inkey);
 
     doLinkEntry(destkey.getTestament(), destkey.getTestamentIndex(), srckey.getTestamentIndex());
 
-    if (inkey != &srckey) // free our key if we created a VerseKey
+    if (&inkey != &srckey) // free our key if we created a VerseKey
         delete &srckey;
 }
 

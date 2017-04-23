@@ -123,14 +123,14 @@ int main(int argc, char **argv) {
       }
       while (*mod->getKey() <= finalkey) {
         std::cout << mod->getKeyText() << std::endl;
-        mod->linkEntry(&firstverse);
+        mod->linkEntry(firstverse);
         mod->increment();
       }
     }
     else {
       if (havefirst) {
         mod->setKey(*listkey.getElement(i));
-        mod->linkEntry(&firstverse);
+        mod->linkEntry(firstverse);
         std::cout << mod->getKeyText() << std::endl;
       }
       else {
@@ -161,7 +161,7 @@ int main(int argc, char **argv) {
 
    mod->setKey(argv[4]);    // set key from argument
    SWKey tmpkey = (SWKey) argv[3];
-   mod->linkEntry(&tmpkey);
+   mod->linkEntry(tmpkey);
    delete mod;
  }
 

@@ -54,7 +54,7 @@ public:
 
     static char createModule(char const *);
     void setEntry(char const * inbuf, long len = -1) override;
-    void linkEntry(SWKey const * linkKey) override;
+    void linkEntry(SWKey const & linkKey) override;
     void deleteEntry() override;
 
 };

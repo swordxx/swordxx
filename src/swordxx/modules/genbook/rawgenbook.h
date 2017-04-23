@@ -57,7 +57,7 @@ public:
     bool isWritable() const override;
     static char createModule(NormalizedPath const & path);
     void setEntry(char const * inbuf, long len = -1) override;
-    void linkEntry(SWKey const * linkKey) override;
+    void linkEntry(SWKey const & linkKey) override;
     void deleteEntry() override;
     std::unique_ptr<SWKey> createKey() const override;
 

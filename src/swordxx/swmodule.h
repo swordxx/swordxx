@@ -278,9 +278,7 @@ public:
     /** Link the current module entry to another module entry - only if
      *    module isWritable()
      */
-    virtual void linkEntry(SWKey const * sourceKey) { (void) sourceKey; }
-
-    void linkEntry(SWKey const & sourceKey) { return linkEntry(&sourceKey); }
+    virtual void linkEntry(SWKey const & sourceKey) { (void) sourceKey; }
 
     /** Delete current module entry - only if module isWritable() */
     virtual void deleteEntry() {}

@@ -148,22 +148,22 @@ void RawGenBook::setEntry(const char *inbuf, long len) {
 }
 
 
-void RawGenBook::linkEntry(const SWKey *inkey) {
+void RawGenBook::linkEntry(SWKey const & inkey) {
     TreeKeyIdx *key = ((TreeKeyIdx *)&(getTreeKey()));
     // see if we have a VerseKey * or decendant
     /// \bug Remove const_cast:
     TreeKeyIdx * srckey =
-            const_cast<TreeKeyIdx *>(dynamic_cast<TreeKeyIdx const *>(inkey));
+            const_cast<TreeKeyIdx *>(dynamic_cast<TreeKeyIdx const *>(&inkey));
     // if we don't have a VerseKey * decendant, create our own
     if (!srckey) {
         srckey = static_cast<TreeKeyIdx *>(createKey().release());
-        (*srckey) = *inkey;
+        (*srckey) = inkey;
     }
 
     key->setUserData(srckey->getUserData(), 8);
     key->save();
 
-    if (inkey != srckey) // free our key if we created a VerseKey
+    if (&inkey != srckey) // free our key if we created a VerseKey
         delete srckey;
 }
 

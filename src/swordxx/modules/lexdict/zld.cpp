@@ -153,12 +153,12 @@ void zLD::setEntry(const char *inbuf, long len) {
 }
 
 
-void zLD::linkEntry(const SWKey *inkey) {
+void zLD::linkEntry(SWKey const & inkey) {
     auto const keyText = key->getText();
     if (strongsPadding) {
-        zStr::linkEntry(strongsPadBuf(keyText).get(), inkey->getText());
+        zStr::linkEntry(strongsPadBuf(keyText).get(), inkey.getText());
     } else {
-        zStr::linkEntry(keyText, inkey->getText());
+        zStr::linkEntry(keyText, inkey.getText());
     }
 }
 

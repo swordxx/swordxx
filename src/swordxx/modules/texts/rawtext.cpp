@@ -96,9 +96,9 @@ void RawText::setEntry(const char *inbuf, long len) {
 }
 
 
-void RawText::linkEntry(const SWKey *inkey) {
+void RawText::linkEntry(SWKey const & inkey) {
     VerseKey const & destkey = getVerseKey();
-    VerseKey const & srckey = getVerseKey(inkey);
+    VerseKey const & srckey = getVerseKey(&inkey);
     doLinkEntry(destkey.getTestament(), destkey.getTestamentIndex(), srckey.getTestamentIndex());
 }
 

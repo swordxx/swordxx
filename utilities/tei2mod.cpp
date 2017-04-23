@@ -216,8 +216,8 @@ void writeEntry(SWKey &key, std::string &text) {
 }
 
 void linkToEntry(const std::string & /* keyBuf */, const std::string &linkBuf) {
-           SWKey tmpkey = linkBuf.c_str();
-    module->linkEntry(&tmpkey);
+    SWKey tmpkey(linkBuf.c_str());
+    module->linkEntry(tmpkey);
 #ifdef DEBUG
     cout << "(" << entryCount << ") " << "Linking: " << linkBuf << endl;
 #endif

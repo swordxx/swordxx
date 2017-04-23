@@ -135,9 +135,9 @@ void zTextBase<BaseZVerse>::setEntry(const char *inbuf, long len) {
 }
 
 template <typename BaseZVerse>
-void zTextBase<BaseZVerse>::linkEntry(const SWKey *inkey) {
+void zTextBase<BaseZVerse>::linkEntry(SWKey const & inkey) {
     VerseKey const & destkey = getVerseKey();
-    VerseKey const & srckey = getVerseKey(inkey);
+    VerseKey const & srckey = getVerseKey(&inkey);
     this->doLinkEntry(destkey.getTestament(), destkey.getTestamentIndex(), srckey.getTestamentIndex());
 }
 
@@ -273,9 +273,9 @@ template
 void zTextBase<zVerse4>::setEntry(char const * inbuf, long len = -1);
 
 template
-void zTextBase<zVerse>::linkEntry(SWKey const * linkKey);
+void zTextBase<zVerse>::linkEntry(SWKey const & linkKey);
 template
-void zTextBase<zVerse4>::linkEntry(SWKey const * linkKey);
+void zTextBase<zVerse4>::linkEntry(SWKey const & linkKey);
 
 template
 void zTextBase<zVerse>::deleteEntry();

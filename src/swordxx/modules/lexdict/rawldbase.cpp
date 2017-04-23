@@ -149,12 +149,12 @@ void RawLdBase<Base>::setEntry(char const * inbuf, long len) {
 }
 
 template <typename Base>
-void RawLdBase<Base>::linkEntry(SWKey const * inkey) {
+void RawLdBase<Base>::linkEntry(SWKey const & inkey) {
     auto const keyText = key->getText();
     if (strongsPadding) {
-        this->doLinkEntry(strongsPadBuf(keyText).get(), inkey->getText());
+        this->doLinkEntry(strongsPadBuf(keyText).get(), inkey.getText());
     } else {
-        this->doLinkEntry(keyText, inkey->getText());
+        this->doLinkEntry(keyText, inkey.getText());
     }
 }
 
@@ -232,8 +232,8 @@ template bool RawLdBase<RawStr4>::isWritable() const;
 template void RawLdBase<RawStr>::setEntry(char const * inbuf, long len = -1);
 template void RawLdBase<RawStr4>::setEntry(char const * inbuf, long len = -1);
 
-template void RawLdBase<RawStr>::linkEntry(SWKey const * linkKey);
-template void RawLdBase<RawStr4>::linkEntry(SWKey const * linkKey);
+template void RawLdBase<RawStr>::linkEntry(SWKey const & linkKey);
+template void RawLdBase<RawStr4>::linkEntry(SWKey const & linkKey);
 
 template void RawLdBase<RawStr>::deleteEntry();
 template void RawLdBase<RawStr4>::deleteEntry();

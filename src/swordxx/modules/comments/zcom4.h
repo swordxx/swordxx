@@ -64,7 +64,7 @@ public:
         return zVerse4::createModule(path, blockBound, v11n);
     }
     void setEntry(char const * inbuf, long len = -1) override;
-    void linkEntry(SWKey const * linkKey) override;
+    void linkEntry(SWKey const & linkKey) override;
     void deleteEntry() override;
 
     void rawZFilter(std::string & buf, char direction = 0) const override {
