@@ -61,8 +61,8 @@ SWText::SWText(const char *imodname, const char *imoddesc, TextEncoding enc, SWT
  * SWText createKey - Create the correct key (VerseKey) for use with SWText
  */
 
-SWKey * SWText::createKey() const
-{ return staticCreateKey(versification.c_str()); }
+std::unique_ptr<SWKey> SWText::createKey() const
+{ return std::unique_ptr<SWKey>(staticCreateKey(versification.c_str())); }
 
 long SWText::getIndex() const { return getVerseKey().getIndex(); }
 

@@ -50,8 +50,8 @@ SWKey * staticCreateKey(char const * const versification) {
 
 SWCom::SWCom(const char *imodname, const char *imoddesc, TextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char *ilang, const char *versification): SWModule(staticCreateKey(versification), imodname, imoddesc, "Commentaries", enc, dir, mark, ilang) {
     this->versification = versification;
-    tmpVK1 = (VerseKey *)createKey();
-    tmpVK2 = (VerseKey *)createKey();
+    tmpVK1 = static_cast<VerseKey *>(createKey().release());
+    tmpVK2 = static_cast<VerseKey *>(createKey().release());
         tmpSecond = false;
 }
 
@@ -66,7 +66,8 @@ SWCom::~SWCom() {
 }
 
 
-SWKey * SWCom::createKey() const { return staticCreateKey(versification.c_str()); }
+std::unique_ptr<SWKey> SWCom::createKey() const
+{ return std::unique_ptr<SWKey>(staticCreateKey(versification.c_str())); }
 
 
 long SWCom::getIndex() const { return getVerseKey().getIndex(); }

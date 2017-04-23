@@ -132,7 +132,7 @@ char SWModule::setKey(const SWKey *ikey) {
     }
 
     if (!ikey->isPersist()) {        // if we are to keep our own copy
-         key = createKey();
+         key = createKey().release();
         *key = *ikey;
     }
     else     key = (SWKey *)ikey;        // if we are to just point to an external key
@@ -216,9 +216,8 @@ ListKey &SWModule::search(char const * istr,
     bool includeComponents = false;    // for entryAttrib e.g., /Lemma.1/
 
     SWKey * saveKey   = nullptr;
-    SWKey * searchKey = nullptr;
-    SWKey *resultKey = createKey();
-    SWKey *lastKey   = createKey();
+    auto resultKey(createKey());
+    auto lastKey(createKey());
     std::string lastBuf = "";
 
 #ifdef USECXX11REGEX
@@ -246,14 +245,17 @@ ListKey &SWModule::search(char const * istr,
 
 
     if (!key->isPersist()) {
-        saveKey = createKey();
+        saveKey = createKey().release();
         *saveKey = *key;
     }
     else    saveKey = key;
 
-    searchKey = scope
-                ? scope->clone()
-                : (key->isPersist() ? key->clone() : nullptr);
+    std::unique_ptr<SWKey> searchKey;
+    if (scope) {
+        searchKey = scope->clone();
+    } else if (key->isPersist()) {
+        searchKey = key->clone();
+    }
     if (searchKey) {
         searchKey->setPersist(true);
         setKey(*searchKey);
@@ -582,9 +584,9 @@ ListKey &SWModule::search(char const * istr,
     if (!saveKey->isPersist())
         delete saveKey;
 
-    delete searchKey;
-    delete resultKey;
-    delete lastKey;
+    searchKey.reset();
+    resultKey.reset();
+    lastKey.reset();
 
     listKey = Position::Top;
     setProcessEntryAttributes(savePEA);
@@ -683,7 +685,7 @@ std::string SWModule::renderText(const SWKey *tmpKey) {
     SWKey *saveKey;
 
     if (!key->isPersist()) {
-        saveKey = createKey();
+        saveKey = createKey().release();
         *saveKey = *key;
     }
     else    saveKey = key;
@@ -713,7 +715,7 @@ std::string SWModule::stripText(const SWKey *tmpKey) {
     SWKey *saveKey;
 
     if (!key->isPersist()) {
-        saveKey = createKey();
+        saveKey = createKey().release();
         *saveKey = *key;
     }
     else    saveKey = key;
@@ -768,7 +770,6 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
     if (status) return -1;
 
     SWKey * saveKey = nullptr;
-    SWKey * searchKey = nullptr;
 
 
     // turn all filters to default values
@@ -792,13 +793,14 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
     // save key information so as not to disrupt original
     // module position
     if (!key->isPersist()) {
-        saveKey = createKey();
+        saveKey = createKey().release();
         *saveKey = *key;
     }
     else    saveKey = key;
 
-    searchKey = key->isPersist() ? key->clone() : nullptr;
-    if (searchKey) {
+    std::unique_ptr<SWKey> searchKey;
+    if (key->isPersist()) {
+        searchKey = key->clone();
         searchKey->setPersist(1);
         setKey(*searchKey);
     }
@@ -816,8 +818,9 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 
     char perc = 1;
     VerseKey *vkcheck = dynamic_cast<VerseKey *>(key);
-    VerseKey * chapMax = nullptr;
-    if (vkcheck) chapMax = (VerseKey *)vkcheck->clone();
+    std::unique_ptr<VerseKey> chapMax;
+    if (vkcheck)
+        chapMax.reset(static_cast<VerseKey *>(vkcheck->clone().release()));
 
     TreeKeyIdx *tkcheck = dynamic_cast<TreeKeyIdx *>(key);
 
@@ -1115,8 +1118,8 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
     if (!saveKey->isPersist())
         delete saveKey;
 
-    delete searchKey;
-    delete chapMax;
+    searchKey.reset();
+    chapMax.reset();
 
     setProcessEntryAttributes(savePEA);
 

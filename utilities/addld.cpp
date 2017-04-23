@@ -83,7 +83,7 @@ int main(int argc, char **argv) {
     if (fourbyte) {
       char buffer[1048576];  //this is the max size of any entry
       RawLD4 mod(argv[2]);    // open our datapath with our RawText driver.
-      SWKey* key = mod.createKey();
+      auto const key(mod.createKey());
       key->setPersist(true);      // the magical setting
 
       // Set our VerseKey
@@ -102,7 +102,7 @@ int main(int argc, char **argv) {
     else if (compress) {
       char buffer[1048576];  //this is the max size of any entry
       zLD mod(argv[2], nullptr, nullptr, 200, std::make_unique<ZipCompress>());    // open our datapath with our RawText driver.
-      SWKey* key = mod.createKey();
+      auto const key(mod.createKey());
       key->setPersist(true);      // the magical setting
 
       // Set our VerseKey
@@ -121,7 +121,7 @@ int main(int argc, char **argv) {
     else {
       char buffer[65536];  //this is the max size of any entry
       RawLD mod(argv[2]);    // open our datapath with our RawText driver.
-      SWKey* key = mod.createKey();
+      auto const key(mod.createKey());
       key->setPersist(true);      // the magical setting
 
       // Set our VerseKey
@@ -144,7 +144,7 @@ int main(int argc, char **argv) {
     // Do some initialization stuff
     if (fourbyte) {
       RawLD4 mod(argv[2]);    // open our datapath with our RawText driver.
-      SWKey* key = mod.createKey();
+      auto const key(mod.createKey());
       key->setPersist(true);      // the magical setting
 
       *key = argv[3];
@@ -154,7 +154,7 @@ int main(int argc, char **argv) {
     }
     else if (compress) {
       zLD mod(argv[2]);    // open our datapath with our RawText driver.
-      SWKey* key = mod.createKey();
+      auto const key(mod.createKey());
       key->setPersist(true);      // the magical setting
 
       *key = argv[3];
@@ -165,7 +165,7 @@ int main(int argc, char **argv) {
     }
     else {
       RawLD mod(argv[2]);    // open our datapath with our RawText driver.
-      SWKey* key = mod.createKey();
+      auto const key(mod.createKey());
       key->setPersist(true);      // the magical setting
 
       *key = argv[3];

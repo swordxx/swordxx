@@ -156,7 +156,7 @@ void RawGenBook::linkEntry(const SWKey *inkey) {
             const_cast<TreeKeyIdx *>(dynamic_cast<TreeKeyIdx const *>(inkey));
     // if we don't have a VerseKey * decendant, create our own
     if (!srckey) {
-        srckey = (TreeKeyIdx *)createKey();
+        srckey = static_cast<TreeKeyIdx *>(createKey().release());
         (*srckey) = *inkey;
     }
 
@@ -194,9 +194,8 @@ char RawGenBook::createModule(NormalizedPath const & path) {
     return retval;
 }
 
-
-SWKey * RawGenBook::createKey() const
-{ return staticCreateKey(m_path.c_str(), verseKey); }
+std::unique_ptr<SWKey> RawGenBook::createKey() const
+{ return std::unique_ptr<SWKey>(staticCreateKey(m_path.c_str(), verseKey)); }
 
 bool RawGenBook::hasEntry(const SWKey *k) const {
     /// \bug remove const_cast:

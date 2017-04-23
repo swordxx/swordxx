@@ -56,12 +56,19 @@ char ThMLScripref::processText(std::string &text, const SWKey *key, const SWModu
     std::string refs = "";
     int footnoteNum = 1;
     char buf[254];
-    SWKey *p = (module) ? module->createKey() : (key) ? key->clone() : new VerseKey();
-        VerseKey * parser = dynamic_cast<VerseKey *>(p);
-        if (!parser) {
-            delete p;
-                parser = new VerseKey();
+    std::unique_ptr<VerseKey> parser;
+    {
+        std::unique_ptr<SWKey> p(
+                    module
+                    ? module->createKey()
+                    : (key ? key->clone() : std::make_unique<VerseKey>()));
+        if (auto * const vk = dynamic_cast<VerseKey *>(p.get())) {
+            parser.reset(vk);
+            p.release();
+        } else {
+            parser = std::make_unique<VerseKey>();
         }
+    }
     *parser = key->getText();
 
     std::string orig = text;
@@ -140,7 +147,6 @@ char ThMLScripref::processText(std::string &text, const SWKey *key, const SWModu
         }
         else tagText += *from;
     }
-        delete parser;
     return 0;
 }
 

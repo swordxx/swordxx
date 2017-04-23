@@ -55,7 +55,7 @@ public:
            char const * ilang = nullptr,
            char const * versification = "KJV");
 
-    SWKey * createKey() const override;
+    std::unique_ptr<SWKey> createKey() const override;
 
     long getIndex() const override;
     void setIndex(long iindex) override;

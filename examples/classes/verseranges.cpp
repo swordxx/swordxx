@@ -42,7 +42,8 @@ int main() {
         exit(-1);
     }
 
-    VerseKey *vk = (VerseKey *)bible->createKey();
+    std::unique_ptr<VerseKey> vk(
+                static_cast<VerseKey *>(bible->createKey().release()));
 
     // let's set verse ranges for a variety of different contiguous regions
 
@@ -124,12 +125,7 @@ int main() {
     VerseKey vkCurrentBook(vk->getBookName().c_str(),
                            vk->getBookName().c_str(),
                            refSys->getName().c_str());
-    cout << vkCurrentBook.getRangeText() << "\n";
-
-
-    delete vk;
-
-    cout << endl;
+    cout << vkCurrentBook.getRangeText() << "\n" << endl;
 
     return 0;
 }

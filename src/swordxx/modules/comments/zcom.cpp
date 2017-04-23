@@ -135,7 +135,7 @@ void zCom::setEntry(const char *inbuf, long len) {
 
     doSetText(key.getTestament(), key.getTestamentIndex(), inbuf, len);
 
-    lastWriteKey = (VerseKey *)key.clone();    // must delete
+    lastWriteKey = static_cast<VerseKey *>(key.clone().release()); // must delete
 }
 
 

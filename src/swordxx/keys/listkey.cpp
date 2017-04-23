@@ -55,8 +55,7 @@ ListKey::ListKey(ListKey const & copy)
         std::transform(copy.m_array.cbegin(),
                        copy.m_array.cend(),
                        m_array.begin(),
-                       [](auto const & key)
-                       { return std::unique_ptr<SWKey>(key->clone()); });
+                       [](auto const & key) { return key->clone(); });
     } catch (...) {
         clear();
         throw;
@@ -64,7 +63,8 @@ ListKey::ListKey(ListKey const & copy)
     m_boundSet = true;
 }
 
-SWKey * ListKey::clone() const { return new ListKey(*this); }
+std::unique_ptr<SWKey> ListKey::clone() const
+{ return std::make_unique<ListKey>(*this); }
 
 /******************************************************************************
  * ListKey Destructor - cleans up instance of ListKey

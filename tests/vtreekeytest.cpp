@@ -40,7 +40,8 @@ int main(int /* argc */, char ** /* argv */) {
     SWMgr mgr;
     SWModule *mod = mgr.getModule("KJVgb");
 
-    VerseKey *key1 = (VerseKey *)mod->createKey();
+    std::unique_ptr<VerseKey> key1(
+                static_cast<VerseKey *>(mod->createKey().release()));
 
     key1->setTestament(2);
     key1->setBook(4);
@@ -88,8 +89,6 @@ int main(int /* argc */, char ** /* argv */) {
     for ((*mod).positionToTop(); !mod->popError(); (*mod).increment()) {
         cout << "\n" << mod->getKeyText() << ":\n" << endl;
     }
-
-    delete key1;
 
     return 0;
 }

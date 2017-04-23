@@ -637,9 +637,7 @@ void TreeKeyIdx::TreeNode::clear() {
     userData.reset();
 }
 
-SWKey *TreeKeyIdx::clone() const
-{
-    return new TreeKeyIdx(*this);
-}
+std::unique_ptr<SWKey> TreeKeyIdx::clone() const
+{ return std::make_unique<TreeKeyIdx>(*this); }
 
 } /* namespace swordxx */

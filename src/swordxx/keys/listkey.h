@@ -60,7 +60,7 @@ public:
      */
     ~ListKey() override;
 
-    SWKey * clone() const override;
+    std::unique_ptr<SWKey> clone() const override;
 
     /** Clears out elements of list
      */

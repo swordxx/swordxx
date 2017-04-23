@@ -184,8 +184,8 @@ int main(int argc, char **argv)
     string lastBuffer = "Something that would never be first module entry";
     SWKey bufferKey;
     SWKey lastBufferKey;
-    SWKey *outModuleKey = outModule->createKey();
-    VerseKey *vkey = dynamic_cast<VerseKey *>(outModuleKey);
+    auto const outModuleKey(outModule->createKey());
+    VerseKey *vkey = dynamic_cast<VerseKey *>(outModuleKey.get());
     outModuleKey->setPersist(true);
     if (vkey) {
         vkey->setIntros(true);
@@ -220,6 +220,5 @@ int main(int argc, char **argv)
         inModule.increment();
     }
     delete outModule;
-    delete outModuleKey;
 }
 

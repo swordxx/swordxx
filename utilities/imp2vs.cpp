@@ -210,7 +210,8 @@ int main(int argc, char **argv) {
 
     // setup module key to allow full range of possible values, and then some
 
-    VerseKey *vkey = (VerseKey *)module->createKey();
+    std::unique_ptr<VerseKey> vkey(
+                static_cast<VerseKey *>(module->createKey().release()));
     vkey->setIntros(true);
     vkey->setAutoNormalize(false);
     vkey->setPersist(true);
@@ -247,7 +248,6 @@ int main(int argc, char **argv) {
     }
 
     delete module;
-    delete vkey;
 
     FileMgr::getSystemFileMgr()->close(fd);
 
@@ -259,7 +259,8 @@ void writeEntry(SWModule *module, const std::string &key, const std::string &ent
     if (key.size() && entry.size()) {
         std::cout << "from file: " << key << std::endl;
         VerseKey *vkey = (VerseKey *)module->getKey();
-        VerseKey *linkMaster = (VerseKey *)module->createKey();
+        std::unique_ptr<VerseKey> linkMaster(
+                    static_cast<VerseKey *>(module->createKey().release()));
 
         ListKey listKey = vkey->parseVerseList(key.c_str(), "Gen1:1", true);
 
@@ -277,10 +278,8 @@ void writeEntry(SWModule *module, const std::string &key, const std::string &ent
             }
             else {
                 std::cout << "linking entry: " << vkey->getText() << " to " << linkMaster->getText() << std::endl;
-                module->linkEntry(linkMaster);
+                module->linkEntry(*linkMaster);
             }
         }
-
-        delete linkMaster;
     }
 }

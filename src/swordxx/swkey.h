@@ -94,11 +94,10 @@ public:
      */
     virtual ~SWKey();
 
-    /** Returns a new exact clone of this SWKey object.  This allocates
-     * a new SWKey which must be deleted by the caller
+    /** Returns a new exact clone of this SWKey object.
      * @return new clone of this key
      */
-    virtual SWKey *clone() const;
+    virtual std::unique_ptr<SWKey> clone() const;
 
 
     /** Gets whether this key should persist in any module to which it is set

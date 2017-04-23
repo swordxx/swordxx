@@ -47,7 +47,7 @@ public:
   */
   virtual ~ StrKey ();
 
-  SWKey * clone() const noexcept override;
+  std::unique_ptr<SWKey> clone() const noexcept override;
 
   SWKEY_OPERATORS(StrKey)
 

@@ -90,7 +90,7 @@ public:
 
     ~VerseTreeKey() override;
 
-    SWKey * clone() const override;
+    std::unique_ptr<SWKey> clone() const override;
 
     bool isTraversable() const override { return true; }
 

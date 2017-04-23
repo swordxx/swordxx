@@ -73,10 +73,8 @@ void SWKey::init() {
     setLocale(LocaleMgr::getSystemLocaleMgr()->getDefaultLocaleName().c_str());
 }
 
-SWKey *SWKey::clone() const
-{
-    return new SWKey(*this);
-}
+std::unique_ptr<SWKey> SWKey::clone() const
+{ return std::make_unique<SWKey>(*this); }
 
 /******************************************************************************
  * SWKey Destructor - cleans up instance of SWKey

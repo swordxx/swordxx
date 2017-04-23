@@ -91,7 +91,7 @@ int converted = 0;
 #define DEBUG
 
 SWLD  * module       = nullptr;
-SWKey * currentKey   = nullptr;
+std::unique_ptr<SWKey> currentKey;
 bool   normalize    = true;
 std::string keyStr;
 
@@ -567,7 +567,7 @@ int main(int argc, char **argv) {
     //writeEntry(*currentKey, text);
 
     delete module;
-    delete currentKey;
+    currentKey.release();
     delete cipherFilter;
     infile.close();
 

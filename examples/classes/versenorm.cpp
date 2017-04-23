@@ -46,8 +46,10 @@ int main() {
 
 
     // get two VerseKey objects for a module
-        VerseKey *verse = ((VerseKey *)book->createKey());
-        VerseKey *verseNormalized = ((VerseKey *)book->createKey());
+    std::unique_ptr<VerseKey> verse(
+                static_cast<VerseKey *>(book->createKey().release()));
+    std::unique_ptr<VerseKey> verseNormalized(
+                static_cast<VerseKey *>(book->createKey().release()));
 
     // turn off autonormalization for one VerseKey reference
         verse->setAutoNormalize(false);
@@ -65,8 +67,5 @@ int main() {
 
         cout << verse->getText() << ((*verse) == (*verseNormalized) ? " == " : " != ") << verseNormalized->getText() << endl;
 
-    delete verse;
-    delete verseNormalized;
-
-        return 0;
+    return 0;
 }

@@ -40,7 +40,8 @@ void parallelDisplay(vector<SWModule *>modules, const char *key) {
     //cout << "Start key:" << key;
 
     // We'll use the first module's key as our master key to position all other modules.
-    VerseKey *master = (VerseKey *)modules[0]->createKey();
+    std::unique_ptr<VerseKey> master(
+                static_cast<VerseKey *>(modules[0]->createKey().release()));
 
     master->setText(key);
 
@@ -60,7 +61,7 @@ void parallelDisplay(vector<SWModule *>modules, const char *key) {
         for (vector<SWModule *>::iterator module = modules.begin(); module != modules.end(); ++module) {
             //cout << "\n\n====================\nfromKey" << master->getOSISRef();
 
-            (*module)->setKey(master);
+            (*module)->setKey(*master);
             VerseKey slave((*module)->getKey()->getText());
 
             //cout << "setKey" << (*module)->getName() << slave.getBookName() << slave.getRangeText() << slave.getShortText();
@@ -116,7 +117,6 @@ void parallelDisplay(vector<SWModule *>modules, const char *key) {
         }
         if(o) cout << "</tr>";
     }
-    delete master;
 }
 
 

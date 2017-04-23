@@ -74,16 +74,14 @@ VerseTreeKey::VerseTreeKey(TreeKey const & treeKey,
 
 
 void VerseTreeKey::init(TreeKey const & treeKey) {
-    this->m_treeKey = static_cast<TreeKey *>(treeKey.clone());
+    this->m_treeKey = static_cast<TreeKey *>(treeKey.clone().release());
     this->m_treeKey->setPositionChangeListener(this);
     m_internalPosChange = false;
 }
 
 
-SWKey *VerseTreeKey::clone() const
-{
-    return new VerseTreeKey(*this);
-}
+std::unique_ptr<SWKey> VerseTreeKey::clone() const
+{ return std::make_unique<VerseTreeKey>(*this); }
 
 
 int VerseTreeKey::getBookFromAbbrev(const char *iabbr) const

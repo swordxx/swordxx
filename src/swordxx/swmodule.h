@@ -259,9 +259,9 @@ public:
      * which support special.  This functions returns a SWKey object which works with the current
      * implementation of SWModule. For example for the SWText class it returns a VerseKey object.
      * @see VerseKey, ListKey, SWText, SWLD, SWCom
-     * @return pointer to allocated key. Caller is responsible for deleting the object
+     * @return pointer to allocated key.
      */
-    virtual SWKey *createKey() const = 0;
+    virtual std::unique_ptr<SWKey> createKey() const = 0;
 
     std::string const & getRawEntry() const { return getRawEntryBuf(); }
 
@@ -279,6 +279,8 @@ public:
      *    module isWritable()
      */
     virtual void linkEntry(SWKey const * sourceKey) { (void) sourceKey; }
+
+    void linkEntry(SWKey const & sourceKey) { return linkEntry(&sourceKey); }
 
     /** Delete current module entry - only if module isWritable() */
     virtual void deleteEntry() {}

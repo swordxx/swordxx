@@ -178,7 +178,7 @@ public:
     /** Creates a new SWKey based on the current VerseKey
     * see also the Copy Constructor
     */
-    SWKey * clone() const override;
+    std::unique_ptr<SWKey> clone() const override;
 
     /** refreshes keytext before returning if cast to
     * a (char *) is requested

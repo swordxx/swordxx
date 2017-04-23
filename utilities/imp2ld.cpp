@@ -160,9 +160,7 @@ int main(int argc, char **argv) {
         compressor = std::make_unique<XzCompress>();
     }
 
-    SWKey *key;
     std::unique_ptr<SWModule> mod;
-    SWKey *linkKey;
 
     // setup module
     if (!append) {
@@ -189,10 +187,10 @@ int main(int argc, char **argv) {
         mod = std::make_unique<RawLD>(outPath.c_str(), nullptr, nullptr, ENC_UNKNOWN, DIRECTION_LTR, FMT_UNKNOWN, nullptr, caseSensitive, strongsPadding);
     }
 
-    key = mod->createKey();
-    linkKey = mod->createKey();
+    auto const key(mod->createKey());
+    auto const linkKey(mod->createKey());
     key->setPersist(true);
-    mod->setKey(key);
+    mod->setKey(*key);
 
     while (!infile.eof()) {
         std::getline(infile, linebuffer);
@@ -205,7 +203,7 @@ int main(int argc, char **argv) {
                 for (i = 0; i < links; i++) {
                     std::cout << "Linking: " << linkbuffer[i] << std::endl;
                     *linkKey = linkbuffer[i].c_str();
-                    mod->linkEntry(linkKey);
+                    mod->linkEntry(*linkKey);
                 }
             }
             if (linebuffer.size() > 3)
@@ -233,14 +231,10 @@ int main(int argc, char **argv) {
         for (i = 0; i < links; i++) {
             std::cout << "Linking: " << linkbuffer[i] << std::endl;
             *linkKey = linkbuffer[i].c_str();
-            mod->linkEntry(linkKey);
+            mod->linkEntry(*linkKey);
         }
     }
 
     infile.close();
-
-    delete linkKey;
-    delete key;
-
     return 0;
 }

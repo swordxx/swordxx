@@ -549,7 +549,8 @@ char ThMLOSIS::processText(std::string &text, const SWKey *key, const SWModule *
             text = ref + text;
 
             if (vkey->getVerse()) {
-                VerseKey *tmp = (VerseKey *)vkey->clone();
+                std::unique_ptr<VerseKey> tmp(
+                            static_cast<VerseKey *>(vkey->clone().release()));
                 *tmp = *vkey;
                 tmp->setAutoNormalize(false);
                 tmp->setIntros(true);
@@ -570,7 +571,6 @@ char ThMLOSIS::processText(std::string &text, const SWKey *key, const SWModule *
 //                        pushString(&to, ref);
                     }
                 }
-                                delete tmp;
             }
 //            else if (vkey->getChapter()) {
 //                sprintf(ref, "\t<div type=\"chapter\" osisID=\"%s\">", vkey->getOSISRef());

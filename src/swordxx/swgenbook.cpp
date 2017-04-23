@@ -68,7 +68,7 @@ TreeKey & SWGenBook::getTreeKey(SWKey * k) const {
             return *key;
 
     delete tmpTreeKey;
-    tmpTreeKey = (TreeKey *)createKey();
+    tmpTreeKey = static_cast<TreeKey *>(createKey().release());
     (*tmpTreeKey) = *(thiskey);
     return (*tmpTreeKey);
 }

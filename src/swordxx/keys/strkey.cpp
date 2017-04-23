@@ -38,8 +38,8 @@ namespace swordxx {
 StrKey::StrKey(const char *ikey) : SWKey(ikey)
 {}
 
-SWKey * StrKey::clone() const noexcept
-{ return new StrKey(getText()); }
+std::unique_ptr<SWKey> StrKey::clone() const noexcept
+{ return std::make_unique<StrKey>(getText()); }
 
 
 /******************************************************************************

@@ -234,10 +234,8 @@ VerseKey::VerseKey(const char *min, const char *max, const char *v11n) : SWKey()
 }
 
 
-SWKey *VerseKey::clone() const
-{
-    return new VerseKey(*this);
-}
+std::unique_ptr<SWKey> VerseKey::clone() const
+{ return std::make_unique<VerseKey>(*this); }
 
 
 /******************************************************************************
@@ -499,8 +497,10 @@ ListKey VerseKey::parseVerseList(const char *buf, const char *defaultKey, bool e
     // assert we have a buffer
     if (!buf) return internalListKey;
 
-    std::unique_ptr<VerseKey> const curKey(static_cast<VerseKey *>(clone()));
-    std::unique_ptr<VerseKey> const lastKey(static_cast<VerseKey *>(clone()));
+    std::unique_ptr<VerseKey> const curKey(
+                static_cast<VerseKey *>(clone().release()));
+    std::unique_ptr<VerseKey> const lastKey(
+                static_cast<VerseKey *>(clone().release()));
     lastKey->clearBounds();
     curKey->clearBounds();
 
@@ -1158,7 +1158,7 @@ void VerseKey::clearBounds()
 void VerseKey::initBounds() const
 {
     if (!m_tmpClone) {
-        m_tmpClone.reset(static_cast<VerseKey *>(clone()));
+        m_tmpClone.reset(static_cast<VerseKey *>(clone().release()));
         m_tmpClone->setAutoNormalize(false);
         m_tmpClone->setIntros(true);
         m_tmpClone->setTestament(m_BMAX[1] ? 2 : 1);
