@@ -73,9 +73,8 @@ char readline(int fd, char **buf) {
 
     int size = (lseek(fd, 0, SEEK_CUR) - index) - 1;
 
-    *buf = new char [ size + 1 ];
-
     if (size > 0) {
+        *buf = new char [ size + 1 ];
         lseek(fd, index, SEEK_SET);
         read(fd, *buf, size);
         read(fd, &ch, 1);   //pop terminating char
