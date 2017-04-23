@@ -126,7 +126,7 @@ void parseParams(int argc, char **argv) {
 }
 
 
-void writeEntry(SWModule *book, std::string keyBuffer, std::string entBuffer) {
+void writeEntry(SWModule & book, std::string keyBuffer, std::string entBuffer) {
 
 
     if (greekFilter) {
@@ -147,67 +147,55 @@ void writeEntry(SWModule *book, std::string keyBuffer, std::string entBuffer) {
         UErrorCode err = U_ZERO_ERROR;
 
         int max = (size+5)*3;
-        UChar *ubuffer = new UChar[max+10];
+        auto const ubuffer(std::make_unique<UChar[]>(max + 10u));
         int32_t len;
 
-        u_strFromUTF8(ubuffer, max+9, &len, keyBuffer.c_str(), -1, &err);
+        u_strFromUTF8(ubuffer.get(), max+9, &len, keyBuffer.c_str(), -1, &err);
         if (err == U_ZERO_ERROR) {
-            UChar *upper = new UChar[(lexLevels+1)*3];
-            memcpy(upper, ubuffer, lexLevels*sizeof(UChar));
-            upper[lexLevels] = 0;
-            len = u_strToUpper(upper, (lexLevels+1)*3, upper, -1, nullptr, &err);
-            memmove(ubuffer+len+1, ubuffer, (max-len)*sizeof(UChar));
-            memcpy(ubuffer, upper, len*sizeof(UChar));
-            ubuffer[len] = '/';
-            delete [] upper;
+            {
+                auto const upper(
+                            std::make_unique<UChar[]>((lexLevels + 1u) * 3u));
+                memcpy(upper.get(), ubuffer.get(), lexLevels*sizeof(UChar));
+                upper[lexLevels] = 0;
+                len = u_strToUpper(upper.get(),
+                                   (lexLevels + 1u) * 3u,
+                                   upper.get(),
+                                   -1,
+                                   nullptr,
+                                   &err);
+                memmove(ubuffer.get() + len + 1u,
+                        ubuffer.get(),
+                        (max - len) * sizeof(UChar));
+                memcpy(ubuffer.get(), upper.get(), len * sizeof(UChar));
+                ubuffer[len] = '/';
+            }
 
             int totalShift = 0;
             for (int i = lexLevels-1; i; i--) {
                 int shift = (i < len)? i : len;
-                memmove(ubuffer+(shift+1), ubuffer, (max-shift)*sizeof(UChar));
+                memmove(ubuffer.get() + shift + 1,
+                        ubuffer.get(),
+                        (max - shift) * sizeof(UChar));
                 ubuffer[shift] = '/';
                 totalShift += (shift+1);
             }
-            u_strToUTF8(&keyBuffer[0u], max, nullptr, ubuffer, -1, &err);
+            u_strToUTF8(&keyBuffer[0u], max, nullptr, ubuffer.get(), -1, &err);
         }
-
-/*
-        u_strFromUTF8(ubuffer, max+9, &len, keyBuffer.c_str(), -1, &err);
-        if (err == U_ZERO_ERROR) {
-            int totalShift = 0;
-            for (int i = lexLevels; i; i--) {
-                int shift = (i < len)? i : len;
-                memmove(ubuffer+(shift+1), ubuffer, (max-shift)*sizeof(UChar));
-                ubuffer[shift] = '/';
-                totalShift += (shift+1);
-            }
-            UChar *upper = new UChar[(totalShift+1)*3];
-            memcpy(upper, ubuffer, totalShift*sizeof(UChar));
-            upper[totalShift] = 0;
-            len = u_strToUpper(upper, (totalShift+1)*3, upper, -1, 0, &err);
-            memmove(ubuffer+len, ubuffer+totalShift, (max-totalShift)*sizeof(UChar));
-            memcpy(ubuffer, upper, len*sizeof(UChar));
-            delete [] upper;
-            u_strToUTF8(keyBuffer.getRawData(), max, 0, ubuffer, -1, &err);
-        }
-*/
-
-        delete [] ubuffer;
     }
 #endif /* SWORDXX_HAS_ICU */
 
     std::cout << keyBuffer << std::endl;
 
-    book->setKey(keyBuffer.c_str());
+    book.setKey(keyBuffer.c_str());
 
     // check to see if we already have an entry
-    for (int i = 2; book->getKey()->popError() != KEYERR_OUTOFBOUNDS; i++) {
+    for (int i = 2; book.getKey()->popError() != KEYERR_OUTOFBOUNDS; ++i) {
         std::string key(formatted("%s {%d}", keyBuffer.c_str(), i));
         std::cout << "dup key, trying: " << key << std::endl;
-        book->setKey(key.c_str());
+        book.setKey(key.c_str());
     }
 
-    book->setEntry(entBuffer.c_str());
+    book.setEntry(entBuffer.c_str());
 }
 
 
@@ -222,40 +210,38 @@ int main(int argc, char **argv) {
         exit(-2);
     }
 
-    RawGenBook *book;
-
     // Do some initialization stuff
     if (!augMod) {
         RawGenBook::createModule(outPath.c_str());
     }
-    book = new RawGenBook(outPath.c_str());
+    {
+        RawGenBook book(outPath.c_str());
 
-    std::string lineBuffer;
-    std::string keyBuffer;
-    std::string entBuffer;
+        std::string lineBuffer;
+        std::string keyBuffer;
+        std::string entBuffer;
 
-    while (!(lineBuffer = FileMgr::getLine(fd)).empty()) {
-        if (hasPrefix(lineBuffer, "$$$")) {
-            if ((keyBuffer.size()) && (entBuffer.size())) {
-                writeEntry(book, keyBuffer, entBuffer);
+        while (!(lineBuffer = FileMgr::getLine(fd)).empty()) {
+            if (hasPrefix(lineBuffer, "$$$")) {
+                if ((keyBuffer.size()) && (entBuffer.size())) {
+                    writeEntry(book, keyBuffer, entBuffer);
+                }
+                keyBuffer = lineBuffer;
+                keyBuffer.erase(0u, 3u);
+                trimString(keyBuffer);
+                entBuffer.clear();
             }
-            keyBuffer = lineBuffer;
-            keyBuffer.erase(0u, 3u);
-            trimString(keyBuffer);
-            entBuffer.clear();
+            else {
+                if (keyBuffer.size()) {
+                    entBuffer += lineBuffer;
+                    entBuffer += "\n";
+                }
+            }
         }
-        else {
-            if (keyBuffer.size()) {
-                entBuffer += lineBuffer;
-                entBuffer += "\n";
-            }
+        if ((keyBuffer.size()) && (entBuffer.size())) {
+            writeEntry(book, keyBuffer, entBuffer);
         }
     }
-    if ((keyBuffer.size()) && (entBuffer.size())) {
-        writeEntry(book, keyBuffer, entBuffer);
-    }
-
-    delete book;
 
     FileMgr::getSystemFileMgr()->close(fd);
 
