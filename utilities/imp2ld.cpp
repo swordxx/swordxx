@@ -146,9 +146,6 @@ int main(int argc, char **argv) {
         exit(-2);
     }
 
-    SWModule * mod = nullptr;
-    SWKey *key, *linkKey;
-
     std::unique_ptr<SWCompress> compressor;
     if (compType == "LZSS") {
         compressor = std::make_unique<LZSSCompress>();
@@ -163,6 +160,9 @@ int main(int argc, char **argv) {
         compressor = std::make_unique<XzCompress>();
     }
 
+    SWKey *key;
+    std::unique_ptr<SWModule> mod;
+    SWKey *linkKey;
 
     // setup module
     if (!append) {
@@ -182,16 +182,12 @@ int main(int argc, char **argv) {
     if (compressor) {
         // Create a compressed text module allowing very large entries
         // Taking defaults except for first, fourth, fifth and last argument
-        mod = new zLD(outPath.c_str(), nullptr, nullptr, blockCount, std::move(compressor), ENC_UNKNOWN, DIRECTION_LTR, FMT_UNKNOWN, nullptr, caseSensitive, strongsPadding);
+        mod = std::make_unique<zLD>(outPath.c_str(), nullptr, nullptr, blockCount, std::move(compressor), ENC_UNKNOWN, DIRECTION_LTR, FMT_UNKNOWN, nullptr, caseSensitive, strongsPadding);
+    } else if (fourByteSize) {
+        mod = std::make_unique<RawLD4>(outPath.c_str(), nullptr, nullptr, ENC_UNKNOWN, DIRECTION_LTR, FMT_UNKNOWN, nullptr, caseSensitive, strongsPadding);
+    } else {
+        mod = std::make_unique<RawLD>(outPath.c_str(), nullptr, nullptr, ENC_UNKNOWN, DIRECTION_LTR, FMT_UNKNOWN, nullptr, caseSensitive, strongsPadding);
     }
-    else {
-        mod = (!fourByteSize)
-            ? (SWModule *)new RawLD (outPath.c_str(), nullptr, nullptr, ENC_UNKNOWN, DIRECTION_LTR, FMT_UNKNOWN, nullptr, caseSensitive, strongsPadding)
-            : (SWModule *)new RawLD4(outPath.c_str(), nullptr, nullptr, ENC_UNKNOWN, DIRECTION_LTR, FMT_UNKNOWN, nullptr, caseSensitive, strongsPadding);
-    }
-
-
-
 
     key = mod->createKey();
     linkKey = mod->createKey();
@@ -244,7 +240,6 @@ int main(int argc, char **argv) {
     infile.close();
 
     delete linkKey;
-    delete mod;
     delete key;
 
     return 0;
