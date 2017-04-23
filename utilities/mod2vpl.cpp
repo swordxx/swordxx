@@ -53,8 +53,6 @@ void cleanbuf(char *buf) {
 }
 
 int main(int argc, char **argv) {
-    char * buffer = nullptr;
-
     if (argc < 2) {
         fprintf(stderr, "usage: %s <Mod Name> [0|1 - prepend verse reference to each line]\n", argv[0]);
         exit(-1);
@@ -91,19 +89,19 @@ int main(int argc, char **argv) {
 
     mod.positionToTop();
 
+    std::vector<char> buffer;
     while (!mod.popError()) {
-        buffer = new char[mod.renderText().length() + 1];
-        std::strcpy(buffer, mod.renderText().c_str());
-        cleanbuf(buffer);
+        buffer.resize(mod.renderText().length() + 1u);
+        std::strcpy(buffer.data(), mod.renderText().c_str());
+        cleanbuf(buffer.data());
         if (vref) {
-            if ((strlen(buffer) > 0) && (vref)) {
+            if ((strlen(buffer.data()) > 0) && (vref)) {
                 std::cout << vkey->getText() << " ";
-                std::cout << buffer << std::endl;
+                std::cout << buffer.data() << std::endl;
             }
         }
-        else std::cout << buffer << std::endl;
+        else std::cout << buffer.data() << std::endl;
 
-        delete [] buffer;
         mod.increment();
     }
 }
