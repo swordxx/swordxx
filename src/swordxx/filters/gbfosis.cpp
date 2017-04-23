@@ -32,7 +32,6 @@
 
 namespace swordxx {
 
-
 GBFOSIS::GBFOSIS() {
 }
 
@@ -47,8 +46,6 @@ char GBFOSIS::processText(std::string &text, const SWKey *key, const SWModule *m
     int tokpos = 0;
     bool intoken = false;
     bool keepToken = false;
-
-//    static QuoteStack quoteStack;
 
     std::string orig = text;
     std::string tmp;
@@ -321,7 +318,6 @@ char GBFOSIS::processText(std::string &text, const SWKey *key, const SWModule *m
             case '\'':
             case '\"':
             case '`':
-//                quoteStack.handleQuote(fromStart, from, &to);
                 text += *from;
                 //from++; //this line removes chars after an apostrophe! Needs fixing.
                 break;
@@ -373,12 +369,6 @@ char GBFOSIS::processText(std::string &text, const SWKey *key, const SWModule *m
                         tmp->setVerse(0);
 //                        sprintf(ref, "\t</div>");
 //                        pushString(&to, ref);
-/*
-                        if (!quoteStack.empty()) {
-                            SWLog::getSystemLog()->logError("popping unclosed quote at end of book");
-                            quoteStack.clear();
-                        }
-*/
                     }
                 }
                                 delete tmp;
@@ -390,45 +380,6 @@ char GBFOSIS::processText(std::string &text, const SWKey *key, const SWModule *m
         }
     }
     return 0;
-}
-
-
-QuoteStack::QuoteStack() {
-    clear();
-}
-
-
-void QuoteStack::clear() {
-    while (!quotes.empty()) quotes.pop();
-}
-
-
-QuoteStack::~QuoteStack() {
-    clear();
-}
-
-
-void QuoteStack::handleQuote(char * /* buf */, char *quotePos, std::string &text) {
-//QuoteInstance(char startChar = '\"', char level = 1, string uniqueID = "", char continueCount = 0) {
-    if (!quotes.empty()) {
-        QuoteInstance last = quotes.top();
-        if (last.startChar == *quotePos) {
-            text += "</quote>";
-            quotes.pop();
-        }
-        else {
-            quotes.push(QuoteInstance(*quotePos, last.level+1));
-            quotes.top().pushStartStream(text);
-        }
-    }
-    else {
-        quotes.push(QuoteInstance(*quotePos));
-        quotes.top().pushStartStream(text);
-    }
-}
-
-void QuoteStack::QuoteInstance::pushStartStream(std::string &text) {
-    text += formatted("<quote level=\"%d\">", level);
 }
 
 } /* namespace swordxx */

@@ -31,34 +31,6 @@
 
 namespace swordxx {
 
-
-class SWDLLEXPORT QuoteStack {
-private:
-    class QuoteInstance {
-    public:
-        char startChar;
-        char level;
-        std::string uniqueID;
-        char continueCount;
-        QuoteInstance(char startChar = '\"', char level = 1, std::string uniqueID = "", char continueCount = 0) {
-            this->startChar     = startChar;
-            this->level         = level;
-            this->uniqueID      = uniqueID;
-            this->continueCount = continueCount;
-        }
-        void pushStartStream(std::string &text);
-    };
-
-    typedef std::stack<QuoteInstance> QuoteInstanceStack;
-    QuoteInstanceStack quotes;
-public:
-    QuoteStack();
-    virtual ~QuoteStack();
-    void handleQuote(char *buf, char *quotePos, std::string &text);
-    void clear();
-    bool empty() { return quotes.empty(); }
-};
-
 /** this filter converts GBF text to OSIS text
  */
 class SWDLLEXPORT GBFOSIS : public SWFilter {

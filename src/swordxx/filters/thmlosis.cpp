@@ -50,9 +50,6 @@ char ThMLOSIS::processText(std::string &text, const SWKey *key, const SWModule *
     bool intoken = false;
     bool keepToken = false;
     bool ampersand = false;
-
-//    static QuoteStack quoteStack;
-
     bool lastspace = false;
     char val[128];
     static auto const strstrip =
@@ -520,7 +517,6 @@ char ThMLOSIS::processText(std::string &text, const SWKey *key, const SWModule *
             case '\'':
             case '\"':
             case '`':
-//                quoteStack.handleQuote(fromStart, from, &to);
                 text += *from;
                 //from++; //this line removes chars after an apostrophe! Needs fixing.
                 break;
@@ -572,12 +568,6 @@ char ThMLOSIS::processText(std::string &text, const SWKey *key, const SWModule *
                         tmp->setVerse(0);
 //                        sprintf(ref, "\t</div>");
 //                        pushString(&to, ref);
-/*
-                        if (!quoteStack.empty()) {
-                            SWLog::getSystemLog()->logError("popping unclosed quote at end of book");
-                            quoteStack.clear();
-                        }
-*/
                     }
                 }
                                 delete tmp;
@@ -590,6 +580,5 @@ char ThMLOSIS::processText(std::string &text, const SWKey *key, const SWModule *
     }
     return 0;
 }
-
 
 } /* namespace swordxx */
