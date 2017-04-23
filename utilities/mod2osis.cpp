@@ -160,11 +160,15 @@ int main(int argc, char **argv)
 
     inModule.positionToTop();
 
-    SWKey *p = inModule.createKey();
-        VerseKey *tmpKey = dynamic_cast<VerseKey *>(p);
-    if (!tmpKey) {
-            delete p;
-            tmpKey = new VerseKey();
+    std::unique_ptr<VerseKey> tmpKey;
+    {
+        std::unique_ptr<SWKey> p(inModule.createKey());
+        if (auto * const vk = dynamic_cast<VerseKey *>(p.get())) {
+            tmpKey.reset(vk);
+            p.release();
+        } else {
+            tmpKey = std::make_unique<VerseKey>();
+        }
     }
     *tmpKey = inModule.getKeyText();
 
