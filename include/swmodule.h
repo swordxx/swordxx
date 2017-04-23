@@ -386,7 +386,7 @@ public:
 	 *
 	 * @param istr string for which to search
 	 * @param searchType type of search to perform
-	 *			>=0 - regex
+	 *			>=0 - regex; (for backward compat, if > 0 then used as additional REGEX FLAGS)
 	 *			-1  - phrase
 	 *			-2  - multiword
 	 *			-3  - entryAttrib (eg. Word//Lemma./G1234/)	 (Lemma with dot means check components (Lemma.[1-9]) also)

@@ -365,7 +365,7 @@ void SWModule::decrement(int steps) {
  *
  * ENT:	istr		- string for which to search
  * 	searchType	- type of search to perform
- *				>=0 - regex
+ *				>=0 - regex; (for backward compat, if > 0 then used as additional REGEX FLAGS)
  *				-1  - phrase
  *				-2  - multiword
  *				-3  - entryAttrib (eg. Word//Lemma./G1234/)	 (Lemma with dot means check components (Lemma.[1-9]) also)
@@ -460,10 +460,14 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 	*this = TOP;
 	if (searchType >= 0) {
 #ifdef USECXX11REGEX
-		preg = std::regex((SWBuf(".*")+istr+".*").c_str(), std::regex_constants::extended & flags);
+		preg = std::regex((SWBuf(".*")+istr+".*").c_str(), std::regex_constants::extended | searchType | flags);
 #else
 		flags |=searchType|REG_NOSUB|REG_EXTENDED;
-		regcomp(&preg, istr, flags);
+		int err = regcomp(&preg, istr, flags);
+		if (err) {
+			SWLog::getSystemLog()->logError("Error compiling Regex: %d", err);
+			return listKey;
+		}
 #endif
 	}
 
