@@ -33,6 +33,7 @@
 #ifndef __GNUC__
 #include <io.h>
 #endif
+#include <memory>
 #include <string>
 #include <swordxx/filemgr.h>
 #include <swordxx/keys/versekey.h>
@@ -42,6 +43,7 @@
 #ifdef __GNUC__
 #include <unistd.h>
 #endif
+#include <utility>
 
 
 using swordxx::FileMgr;
@@ -50,10 +52,8 @@ using swordxx::RawText;
 using swordxx::VerseKey;
 
 
-char readline(int fd, char **buf) {
+std::pair<bool, std::unique_ptr<char[]>> readline(int fd) {
     char ch;
-    delete[] *buf;
-    *buf = nullptr;
     int len;
 
 
@@ -74,21 +74,21 @@ char readline(int fd, char **buf) {
     int size = (lseek(fd, 0, SEEK_CUR) - index) - 1;
 
     if (size > 0) {
-        *buf = new char [ size + 1 ];
+        auto buf(std::make_unique<char[]>(size + 1u));
         lseek(fd, index, SEEK_SET);
-        read(fd, *buf, size);
+        read(fd, buf.get(), size);
         read(fd, &ch, 1);   //pop terminating char
-        (*buf)[size] = 0;
+        buf[size] = 0;
 
         // clean up any trailing junk on buf
-        for (char *it = *buf+(strlen(*buf)-1); it > *buf; it--) {
+        for (char *it = buf.get() + (strlen(buf.get()) - 1u); it > buf.get(); it--) {
             if ((*it != 10) && (*it != 13) && (*it != ' ') && (*it != '\t'))
                 break;
             else *it = 0;
         }
+        return {!len, std::move(buf)};
     }
-    else **buf = 0;
-    return !len;
+    return {!len, nullptr};
 }
 
 
@@ -209,7 +209,6 @@ int main(int argc, char **argv) {
                 ntonly = (argv[4][0] == '0') ? false : true;
 
     // Do some initialization stuff
-    char * buffer = nullptr;
     RawText mod(argv[2]);    // open our datapath with our RawText driver.
     VerseKey vk;
     vk.setAutoNormalize(false);
@@ -224,24 +223,28 @@ int main(int argc, char **argv) {
     if (ntonly) vk = "Matthew 1:1";
 
     int successive = 0;  //part of hack below
-    while ((!mod.popError()) && (!readline(fd, &buffer))) {
-        if (*buffer == '|')    // comments, ignore line
+    while ((!mod.popError())) {
+        auto r(readline(fd));
+        if (!r.first)
+            break;
+        auto const & buffer = r.second;
+        if (buffer[0u] == '|')    // comments, ignore line
             continue;
         if (vref) {
-            const char *verseText = parseVReg(buffer);
+            const char *verseText = parseVReg(buffer.get());
             if (!verseText) {    // if we didn't find a valid verse ref
-                std::cerr << "No valid verse ref found on line: " << buffer << "\n";
+                std::cerr << "No valid verse ref found on line: " << buffer.get() << "\n";
                 exit(-4);
             }
 
-            vk = buffer;
+            vk = buffer.get();
             if (vk.popError()) {
-                std::cerr << "Error parsing key: " << buffer << "\n";
+                std::cerr << "Error parsing key: " << buffer.get() << "\n";
                 exit(-5);
             }
             std::string orig = mod.getRawEntry();
 
-            if (!isKJVRef(buffer)) {
+            if (!isKJVRef(buffer.get())) {
                 VerseKey origVK = vk;
                 /* This block is functioning improperly -- problem with AutoNormalize???
                 do {
@@ -273,12 +276,9 @@ int main(int argc, char **argv) {
             mod.setEntry(verseText);    // save text to module at current position
         }
         else {
-            fixText(buffer);
-            mod.setEntry(buffer);    // save text to module at current position
+            fixText(buffer.get());
+            mod.setEntry(buffer.get());    // save text to module at current position
             mod.increment();    // increment module position
         }
     }
-
-    // clear up our buffer that readline might have allocated
-    delete[] buffer;
 }
