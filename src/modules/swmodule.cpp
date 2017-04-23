@@ -39,11 +39,13 @@
 #include <iostream>
 #endif
 
-#ifdef USECXX11REGEX
+#if defined(USECXX11REGEX)
 #include <regex>
 #ifndef REG_ICASE
 #define REG_ICASE std::regex::icase
 #endif
+#elif defined(USEICUREGEX)
+#include <unicode/regex.h>
 #else
 #include <regex.h>	// GNU
 #endif
@@ -786,6 +788,7 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 				}
 				break;
 			}
+			// NOT DONE
 			case -5:
 				AttributeList &words = getEntryAttributes()["Word"];
 				SWBuf kjvWord = "";

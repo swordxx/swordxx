@@ -389,20 +389,20 @@ public:
 	 *			>=0 - regex
 	 *			-1  - phrase
 	 *			-2  - multiword
-	 *			-3  - entryAttrib (eg. Word//Strongs/G1234/)
+	 *			-3  - entryAttrib (eg. Word//Lemma./G1234/)	 (Lemma with dot means check components (Lemma.[1-9]) also)
 	 *			-4  - Lucene
+	 *			-5  - multilemma window; set 'flags' param to window size (NOT DONE)
 	 * @param flags options flags for search
 	 * @param scope Key containing the scope. VerseKey or ListKey are useful here.
-	 * @param justCheckIfSupported if set, don't search,
-	 * only tell if this function supports requested search.
+	 * @param justCheckIfSupported If set, don't search but instead set this variable to true/false if the requested search is supported,
 	 * @param percent Callback function to get the current search status in %.
-	 * @param percentUserData User data that is given to the callback function as parameter.
+	 * @param percentUserData Anything that you might want to send to the precent callback function.
 	 *
 	 * @return ListKey set to verses that contain istr
 	 */
 	virtual ListKey &search(const char *istr, int searchType = 0, int flags = 0,
-			SWKey * scope = 0,
-			bool * justCheckIfSupported = 0,
+			SWKey *scope = 0,
+			bool *justCheckIfSupported = 0,
 			void (*percent) (char, void *) = &nullPercent,
 			void *percentUserData = 0);
 
