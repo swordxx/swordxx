@@ -27,6 +27,7 @@
 #include <cstdio>
 #include <iostream>
 #include <map>
+#include <memory>
 #include <swordxx/keys/versekey.h>
 #include <swordxx/markupfiltmgr.h>
 #include <swordxx/swmgr.h>
@@ -86,16 +87,16 @@ int main(int argc, char **argv)
     }
     // -----------------------------------------------------
 
-    MarkupFilterMgr * markupMgr = nullptr;
-    if       (renderForm == "HTMLHREF") markupMgr = new MarkupFilterMgr(swordxx::FMT_HTMLHREF);
-    else if  (renderForm == "OSIS")     markupMgr = new MarkupFilterMgr(swordxx::FMT_OSIS);
-    else if  (renderForm == "RTF")      markupMgr = new MarkupFilterMgr(swordxx::FMT_RTF);
-    else if  (renderForm == "LATEX")    markupMgr = new MarkupFilterMgr(swordxx::FMT_LATEX);
-    else if  (renderForm == "XHTML")    markupMgr = new MarkupFilterMgr(swordxx::FMT_XHTML);
+    std::shared_ptr<MarkupFilterMgr> markupMgr;
+    if       (renderForm == "HTMLHREF") markupMgr = std::make_shared<MarkupFilterMgr>(swordxx::FMT_HTMLHREF);
+    else if  (renderForm == "OSIS")     markupMgr = std::make_shared<MarkupFilterMgr>(swordxx::FMT_OSIS);
+    else if  (renderForm == "RTF")      markupMgr = std::make_shared<MarkupFilterMgr>(swordxx::FMT_RTF);
+    else if  (renderForm == "LATEX")    markupMgr = std::make_shared<MarkupFilterMgr>(swordxx::FMT_LATEX);
+    else if  (renderForm == "XHTML")    markupMgr = std::make_shared<MarkupFilterMgr>(swordxx::FMT_XHTML);
 
     else if  (renderForm.length())      usage(progName, (((std::string) "Unknown output_format for -r (")+renderForm+")").c_str());
 
-    SWMgr *mgr = (markupMgr) ? new SWMgr(markupMgr) : new SWMgr();
+    SWMgr *mgr = (markupMgr) ? new SWMgr(std::move(markupMgr)) : new SWMgr();
 
     // set any options filters passed with -f
     for (map<std::string, std::string>::iterator it = options.begin(); it != options.end(); it++) {

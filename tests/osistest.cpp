@@ -21,6 +21,7 @@
  */
 
 #include <iostream>
+#include <memory>
 #include <swordxx/keys/versekey.h>
 #include <swordxx/markupfiltmgr.h>
 #include <swordxx/swmgr.h>
@@ -63,7 +64,7 @@ int main(int argc, char **argv) {
         exit(-1);
     }
 
-    SWMgr library(new MarkupFilterMgr(FMT_XHTML));
+    SWMgr library(std::make_shared<MarkupFilterMgr>(FMT_XHTML));
     library.setGlobalOption("Headings", "On");
 
     SWModule *module = library.getModule(argv[1]);

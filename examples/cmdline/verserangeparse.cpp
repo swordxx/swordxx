@@ -22,6 +22,7 @@
  */
 
 #include <iostream>
+#include <memory>
 #include <swordxx/keys/listkey.h>
 #include <swordxx/keys/versekey.h>
 #include <swordxx/markupfiltmgr.h>
@@ -56,7 +57,7 @@ int main(int argc, char **argv)
     // Now let's output a module with the entries from the result
 
     // we'll initialize our library of books
-    SWMgr library(new MarkupFilterMgr(FMT_PLAIN));    // render plain without fancy markup
+    SWMgr library(std::make_shared<MarkupFilterMgr>(FMT_PLAIN));    // render plain without fancy markup
 
     // Let's get a book;
     SWModule *book = library.getModule("KJV");

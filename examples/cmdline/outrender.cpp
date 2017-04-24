@@ -24,6 +24,7 @@
  */
 
 #include <iostream>
+#include <memory>
 #include <swordxx/keys/versekey.h>
 #include <swordxx/markupfiltmgr.h>
 #include <swordxx/swmgr.h>
@@ -36,7 +37,7 @@ using namespace std;
 
 int main(int argc, char **argv) {
 
-    SWMgr manager(new MarkupFilterMgr(swordxx::FMT_HTMLHREF, swordxx::ENC_UTF16));
+    SWMgr manager(std::make_shared<MarkupFilterMgr>(swordxx::FMT_HTMLHREF, swordxx::ENC_UTF16));
 
     const char *bookName = (argc > 1) ? argv[1] : "WLC";
 

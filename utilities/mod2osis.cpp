@@ -29,6 +29,7 @@
 #include <fcntl.h>
 #include <fstream>
 #include <iostream>
+#include <memory>
 #include <string>
 #include <swordxx/filters/thmlosis.h>
 #include <swordxx/keys/versekey.h>
@@ -83,7 +84,7 @@ int main(int argc, char **argv)
         errorOutHelp(argv[0]);
     }
 
-    SWMgr mgr(new MarkupFilterMgr(FMT_OSIS));
+    SWMgr mgr(std::make_shared<MarkupFilterMgr>(FMT_OSIS));
     for (auto const & option : mgr.getGlobalOptions()) {
         auto const values(mgr.getGlobalOptionValues(option.c_str()));
         if (find(values.begin(), values.end(), "On") != values.end())

@@ -23,6 +23,7 @@
 
 #include <cstdio>
 #include <iostream>
+#include <memory>
 #include <swordxx/keys/versekey.h>
 #include <swordxx/markupfiltmgr.h>
 #include <swordxx/swmgr.h>
@@ -206,7 +207,7 @@ void outputFooter(vector<SWModule *>modules) {
 
 int main(int argc, char **argv) {
 
-    SWMgr library(new MarkupFilterMgr(FMT_XHTML));
+    SWMgr library(std::make_shared<MarkupFilterMgr>(FMT_XHTML));
 
     if (argc < 3) {
         fprintf(stderr, "\nusage: %s <modname> [modname ...] <\"key\">\n"

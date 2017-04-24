@@ -22,8 +22,9 @@
  */
 
 #include <cstdio>
-#include <iostream>
 #include <cstdlib>
+#include <iostream>
+#include <memory>
 #include <swordxx/keys/versekey.h>
 #include <swordxx/markupfiltmgr.h>
 #include <swordxx/swfilter.h>
@@ -48,7 +49,7 @@ int main(int argc, char **argv)
 //    WebMgr manager((const char *)0);
 //    manager.setJavascript(true);
 //
-    SWMgr manager(new MarkupFilterMgr(FMT_HTMLHREF));
+    SWMgr manager(std::make_shared<MarkupFilterMgr>(FMT_HTMLHREF));
 //    SWMgr manager(new MarkupFilterMgr(FMT_WEBIF));
 
     SWModule *target;

@@ -191,17 +191,17 @@ std::string SWMgr::getHomeDir() {
     return homeDir;
 }
 
-SWMgr::SWMgr(SWFilterMgr * filterMgr, bool multiMod)
-    : SWMgr(nullptr, nullptr, true, filterMgr, multiMod)
+SWMgr::SWMgr(std::shared_ptr<SWFilterMgr> filterMgr, bool multiMod)
+    : SWMgr(nullptr, nullptr, true, std::move(filterMgr), multiMod)
 {}
 
 SWMgr::SWMgr(SWConfig * iconfig,
              SWConfig * isysconfig,
              bool autoload,
-             SWFilterMgr * filterMgr_,
+             std::shared_ptr<SWFilterMgr> filterMgr_,
              bool multiMod)
     : mgrModeMultiMod(multiMod)
-    , filterMgr(filterMgr_)
+    , filterMgr(std::move(filterMgr_))
 {
     init();
 
@@ -225,12 +225,12 @@ SWMgr::SWMgr(SWConfig * iconfig,
 
 SWMgr::SWMgr(char const * iConfigPath,
              bool autoload,
-             SWFilterMgr * filterMgr_,
+             std::shared_ptr<SWFilterMgr> filterMgr_,
              bool multiMod,
              bool augmentHome_)
     : mgrModeMultiMod(multiMod)
     , augmentHome(augmentHome_)
-    , filterMgr(filterMgr_)
+    , filterMgr(std::move(filterMgr_))
 {
     init();
 
@@ -275,7 +275,6 @@ SWMgr::~SWMgr() {
     delete homeConfig;
     delete mysysconfig;
     delete myconfig;
-    delete filterMgr;
 }
 
 

@@ -89,7 +89,7 @@ private:
     void init(); // use to initialize before loading modules
 
 protected:
-    SWFilterMgr *filterMgr;        //made protected because because BibleTime needs it
+    std::shared_ptr<SWFilterMgr> const filterMgr; // Made protected because because BibleTime needs it
     SWConfig * myconfig = nullptr; // made protected because because BibleTime needs it
     SWConfig * mysysconfig = nullptr;
     SWConfig * homeConfig = nullptr;
@@ -241,12 +241,12 @@ public:
     SWMgr(SWConfig * iconfig = nullptr,
           SWConfig * isysconfig = nullptr,
           bool autoload = true,
-          SWFilterMgr * filterMgr = nullptr,
+          std::shared_ptr<SWFilterMgr> filterMgr = nullptr,
           bool multiMod = false);
 
     /**
      */
-    SWMgr(SWFilterMgr *filterMgr, bool multiMod = false);
+    SWMgr(std::shared_ptr<SWFilterMgr> filterMgr, bool multiMod = false);
 
     /**
      * @param iConfigPath provide a custom path to use for module set location, instead of
@@ -254,7 +254,7 @@ public:
      */
     SWMgr(char const * iConfigPath,
           bool autoload = true,
-          SWFilterMgr * filterMgr = nullptr,
+          std::shared_ptr<SWFilterMgr> filterMgr = nullptr,
           bool multiMod = false,
           bool augmentHome = true);
 
