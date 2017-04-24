@@ -97,7 +97,9 @@ std::string stripPrefix(std::string & str, char const separator) {
  *         If needle does not occur in haystack, returns nullptr.
  */
 
-const char * stristr(std::string const & haystack, std::string const & needle) {
+const char * stristr(std::string const & haystack, std::string const & needle)
+        noexcept
+{
     static auto const caseInsensitiveAsciiCompare =
             [](char const a, char const b) noexcept
             { return asciiCharToUpper(a) == asciiCharToUpper(b); };
@@ -111,7 +113,7 @@ const char * stristr(std::string const & haystack, std::string const & needle) {
     return haystack.c_str() + std::distance(first, it);
 }
 
-int stricmp(char const * s1, char const * s2) {
+int stricmp(char const * s1, char const * s2) noexcept {
     if (s1 == s2)
         return 0;
     int r;
@@ -132,7 +134,7 @@ int stricmp(char const * s1, char const * s2) {
  *
  * RET:    same as strcmp
  */
-int strnicmp(char const * s1, char const * s2, std::size_t n) {
+int strnicmp(char const * s1, char const * s2, std::size_t n) noexcept {
     if ((!n) || (s1 == s2))
         return 0;
     int r;

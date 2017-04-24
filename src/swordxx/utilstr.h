@@ -113,9 +113,10 @@ inline std::pair<bool, std::size_t> getPrefixSize(std::string const & buf,
 std::string stripPrefix(std::string & str, char const separator);
 
 SWDLLEXPORT char const * stristr(std::string const & haystack,
-                                 std::string const & needle);
-SWDLLEXPORT int stricmp(char const * s1, char const * s2);
-SWDLLEXPORT int strnicmp(char const * s1, char const * s2, std::size_t len);
+                                 std::string const & needle) noexcept;
+SWDLLEXPORT int stricmp(char const * s1, char const * s2) noexcept;
+SWDLLEXPORT int strnicmp(char const * s1, char const * s2, std::size_t len)
+        noexcept;
 
 constexpr char const latin1CharToUpperTable[256u] = {
     0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
