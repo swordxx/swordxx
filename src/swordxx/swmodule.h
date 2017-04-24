@@ -30,6 +30,7 @@
 #endif
 #include <list>
 #include <map>
+#include <type_traits>
 #include "defs.h"
 #include "keys/listkey.h"
 #include "swconfig.h"
@@ -79,14 +80,12 @@ private: /* Fields: */
     /** filters to be executed to decode text for display */
     FilterList encodingFilters;
 
-    ConfigEntMap ownConfig;
-
     std::string modname;
     std::string moddesc;
     std::string modtype;
     std::string modlang;
 
-    ConfigEntMap * config{&ownConfig};
+    ConfigEntMap config;
     mutable AttributeTypeList entryAttributes;
     mutable bool procEntAttr = true;
 
@@ -151,8 +150,11 @@ public:
     // These methods are useful for modules that come from a standard Sword++ install (most do).
     // SWMgr will call setConfig.  The user may use getConfig and getConfigEntry (if they
     // are not comfortable with, or don't wish to use  stl maps).
-    void setConfig(ConfigEntMap * conf) { config = conf; }
-    const ConfigEntMap &getConfig() const { return *config; }
+    void setConfig(ConfigEntMap conf) noexcept {
+        static_assert(std::is_nothrow_move_assignable<ConfigEntMap>::value, "");
+        config = std::move(conf);
+    }
+    const ConfigEntMap &getConfig() const noexcept { return config; }
 
     /**
      * Gets a configuration property about a module.  These entries are primarily

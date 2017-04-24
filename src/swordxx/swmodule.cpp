@@ -752,8 +752,8 @@ std::string SWModule::getBibliography(BibliographyFormat format) const {
 }
 
 const char *SWModule::getConfigEntry(const char *key) const {
-    ConfigEntMap::iterator it = config->find(key);
-    return (it != config->end()) ? it->second.c_str() : nullptr;
+    ConfigEntMap::const_iterator const it(config.find(key));
+    return (it != config.end()) ? it->second.c_str() : nullptr;
 }
 
 bool SWModule::hasSearchIndex()

@@ -97,7 +97,7 @@ protected:
     virtual std::unique_ptr<SWModule> createModule(
             char const * name,
             char const * driver,
-            ConfigEntMap & section);
+            ConfigEntMap section);
     void DeleteMods();
     char configType = 0;        // 0 = file; 1 = directory
     std::map<std::string, std::shared_ptr<SWOptionFilter> > m_optionFilters;

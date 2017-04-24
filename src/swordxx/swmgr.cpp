@@ -714,10 +714,10 @@ signed char SWMgr::Load() {
 
 std::unique_ptr<SWModule> SWMgr::createModule(char const * name,
                                               char const * driver,
-                                              ConfigEntMap & section)
+                                              ConfigEntMap section)
 {
     std::string description, datapath, misc1;
-    ConfigEntMap::iterator entry;
+    ConfigEntMap::const_iterator entry;
     std::string lang, sourceformat, encoding;
     SWTextDirection direction;
     SWTextMarkup markup;
@@ -913,7 +913,7 @@ std::unique_ptr<SWModule> SWMgr::createModule(char const * name,
         if ((entry = section.find("Type")) != section.end())
             newmod->setType(entry->second.c_str());
 
-        newmod->setConfig(&section);
+        newmod->setConfig(std::move(section));
     }
 
     return newmod;
