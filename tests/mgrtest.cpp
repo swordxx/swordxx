@@ -46,7 +46,7 @@ int main(int argc, char **argv) {
         std::cout << "[" << module.getName() << "] (Writable: " << (module.isWritable()?"Yes":"No") << ") [" << module.getDescription() << "]\n";
         std::cout << "AbsoluteDataPath = " << module.getConfigEntry("AbsoluteDataPath") << "\n";
         std::cout << "Has Feature HebrewDef = " << module.getConfig().has("Feature", "HebrewDef") << "\n";
-        if ((!strcmp(    module.getType().c_str()    , "Biblical Texts")) || (!strcmp(module.getType().c_str(), "Commentaries"))) {
+        if ((module.getType() == "Biblical Texts") || (module.getType() == "Commentaries")) {
             module.setKey("James 1:19");
             std::cout << module.renderText() << "\n\n";
         }
