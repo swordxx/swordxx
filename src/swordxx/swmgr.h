@@ -93,7 +93,7 @@ protected:
     SWConfig * myconfig = nullptr; // made protected because because BibleTime needs it
     SWConfig * mysysconfig = nullptr;
     SWConfig * homeConfig = nullptr;
-    void CreateMods(bool multiMod = false);
+    void createMods();
     virtual std::unique_ptr<SWModule> createModule(
             std::string const & name,
             std::string const & driver,

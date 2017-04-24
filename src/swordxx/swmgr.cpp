@@ -627,7 +627,7 @@ void SWMgr::augmentModules(NormalizedPath const & path, bool multiMod) {
             }
         }
 
-        CreateMods(multiMod);
+        createMods();
 
         m_prefixPath = std::move(savePrefixPath);
         m_configPath = std::move(saveConfigPath);
@@ -682,7 +682,7 @@ signed char SWMgr::Load() {
         }
         else    config->reload();
 
-        CreateMods(mgrModeMultiMod);
+        createMods();
 
         for (auto const & augPath : augPaths)
             augmentModules(augPath.c_str(), mgrModeMultiMod);
@@ -1089,7 +1089,7 @@ void SWMgr::addStripFilters(SWModule & module, ConfigEntMap const & section) {
 }
 
 
-void SWMgr::CreateMods(bool /* multiMod */) {
+void SWMgr::createMods() {
     ConfigEntMap::iterator start;
     ConfigEntMap::iterator end;
     ConfigEntMap::iterator entry;
