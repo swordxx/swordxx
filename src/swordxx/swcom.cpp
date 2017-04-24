@@ -97,8 +97,7 @@ VerseKey &SWCom::getVerseKey(const SWKey *keyToConvert) const {
 
     VerseKey * retKey = (tmpSecond) ? tmpVK1 : tmpVK2;
     tmpSecond = !tmpSecond;
-    retKey->setLocale(
-            LocaleMgr::getSystemLocaleMgr()->getDefaultLocaleName().c_str());
+    retKey->setLocale(LocaleMgr::getSystemLocaleMgr()->getDefaultLocaleName());
     (*retKey) = *thisKey;
     return (*retKey);
 }

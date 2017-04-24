@@ -183,12 +183,8 @@ public:
     { return m_localeName; }
 
     // this will force an on demand lookup of our locale:
-    void setLocale(char const * name) {
-        if (name) {
-            m_localeName = name;
-        } else {
-            m_localeName.clear();
-        }
+    void setLocale(std::string const & name) {
+        m_localeName = name;
         m_locale = nullptr;
     }
 

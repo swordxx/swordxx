@@ -70,7 +70,7 @@ SWKey::SWKey(SWKey const &k)
 void SWKey::init() {
     m_boundSet = false;
     m_locale = nullptr;
-    setLocale(LocaleMgr::getSystemLocaleMgr()->getDefaultLocaleName().c_str());
+    setLocale(LocaleMgr::getSystemLocaleMgr()->getDefaultLocaleName());
 }
 
 std::unique_ptr<SWKey> SWKey::clone() const
@@ -132,7 +132,7 @@ void SWKey::setText(const char * const ikey) {
 
 void SWKey::copyFrom(const SWKey &ikey) {
 // not desirable    Persist(ikey.Persist());
-    setLocale(ikey.getLocale().c_str());
+    setLocale(ikey.getLocale());
     setText(ikey.getText());
 }
 
