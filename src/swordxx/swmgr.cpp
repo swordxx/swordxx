@@ -712,8 +712,8 @@ signed char SWMgr::Load() {
 }
 
 
-std::unique_ptr<SWModule> SWMgr::createModule(char const * name,
-                                              char const * driver,
+std::unique_ptr<SWModule> SWMgr::createModule(char const * const name,
+                                              char const * const driver,
                                               ConfigEntMap section)
 {
     std::string description, datapath, misc1;
@@ -820,52 +820,35 @@ std::unique_ptr<SWModule> SWMgr::createModule(char const * name,
         }
     }
 
+    /* Used for position of final / in AbsoluteDataPath, but also set to true
+       for modules types that need to strip module name: */
+    bool pos = false;
     if (!stricmp(driver, "RawText")) {
         newmod = std::make_unique<RawText>(datapath.c_str(), name, description.c_str(), enc, direction, markup, lang.c_str(), versification.c_str());
-    }
-
-    if (!stricmp(driver, "RawText4")) {
+    } else if (!stricmp(driver, "RawText4")) {
         newmod = std::make_unique<RawText4>(datapath.c_str(), name, description.c_str(), enc, direction, markup, lang.c_str(), versification.c_str());
-    }
-
-    // backward support old drivers
-    if (!stricmp(driver, "RawGBF")) {
+    } else if (!stricmp(driver, "RawGBF")) { // backward support old drivers
         newmod = std::make_unique<RawText>(datapath.c_str(), name, description.c_str(), enc, direction, markup, lang.c_str());
-    }
-
-    if (!stricmp(driver, "RawCom")) {
+    } else if (!stricmp(driver, "RawCom")) {
         newmod = std::make_unique<RawCom>(datapath.c_str(), name, description.c_str(), enc, direction, markup, lang.c_str(), versification.c_str());
-    }
-
-    if (!stricmp(driver, "RawCom4")) {
+    } else if (!stricmp(driver, "RawCom4")) {
         newmod = std::make_unique<RawCom4>(datapath.c_str(), name, description.c_str(), enc, direction, markup, lang.c_str(), versification.c_str());
-    }
-
-    if (!stricmp(driver, "RawFiles")) {
+    } else if (!stricmp(driver, "RawFiles")) {
         newmod = std::make_unique<RawFiles>(datapath.c_str(), name, description.c_str(), enc, direction, markup, lang.c_str());
-    }
-
-    if (!stricmp(driver, "HREFCom")) {
+    } else if (!stricmp(driver, "HREFCom")) {
         misc1 = ((entry = section.find("Prefix")) != section.end()) ? (*entry).second : std::string();
         newmod = std::make_unique<HREFCom>(datapath.c_str(), misc1.c_str(), name, description.c_str());
-    }
-
-        int pos = 0;  //used for position of final / in AbsoluteDataPath, but also set to 1 for modules types that need to strip module name
-    if (!stricmp(driver, "RawLD")) {
+    } else if (!stricmp(driver, "RawLD")) {
         bool caseSensitive = ((entry = section.find("CaseSensitiveKeys")) != section.end()) ? (*entry).second == "true": false;
         bool strongsPadding = ((entry = section.find("StrongsPadding")) != section.end()) ? (*entry).second == "true": true;
         newmod = std::make_unique<RawLD>(datapath.c_str(), name, description.c_str(), enc, direction, markup, lang.c_str(), caseSensitive, strongsPadding);
-                pos = 1;
-        }
-
-    if (!stricmp(driver, "RawLD4")) {
+        pos = true;
+    } else if (!stricmp(driver, "RawLD4")) {
         bool caseSensitive = ((entry = section.find("CaseSensitiveKeys")) != section.end()) ? (*entry).second == "true": false;
         bool strongsPadding = ((entry = section.find("StrongsPadding")) != section.end()) ? (*entry).second == "true": true;
         newmod = std::make_unique<RawLD4>(datapath.c_str(), name, description.c_str(), enc, direction, markup, lang.c_str(), caseSensitive, strongsPadding);
-                pos = 1;
-        }
-
-    if (!stricmp(driver, "zLD")) {
+        pos = true;
+    } else if (!stricmp(driver, "zLD")) {
         std::unique_ptr<SWCompress> compress;
         int blockCount;
         bool caseSensitive = ((entry = section.find("CaseSensitiveKeys")) != section.end()) ? (*entry).second == "true": false;
@@ -889,26 +872,19 @@ std::unique_ptr<SWModule> SWMgr::createModule(char const * name,
         if (compress) {
             newmod = std::make_unique<zLD>(datapath.c_str(), name, description.c_str(), blockCount, std::move(compress), enc, direction, markup, lang.c_str(), caseSensitive, strongsPadding);
         }
-        pos = 1;
-    }
-
-    if (!stricmp(driver, "RawGenBook")) {
+        pos = true;
+    } else if (!stricmp(driver, "RawGenBook")) {
         misc1 = ((entry = section.find("KeyType")) != section.end()) ? (*entry).second : std::string("TreeKey");
         newmod = std::make_unique<RawGenBook>(datapath.c_str(), name, description.c_str(), enc, direction, markup, lang.c_str(), misc1.c_str());
-        pos = 1;
-    }
-
-    if (pos == 1) {
-        std::string &dp = section["AbsoluteDataPath"];
-        dp = NormalizedPath(dp).getParentDirectory();
-        section["AbsoluteDataPath"] = dp;
-/*
-        std::string &rdp = section["RelativeDataPath"];
-        removeTrailingDirectorySlashes(rdp);
-*/
+        pos = true;
     }
 
     if (newmod) {
+        if (pos)
+            section["AbsoluteDataPath"] =
+                    NormalizedPath(section["AbsoluteDataPath"])
+                            .getParentDirectory();
+
         // if a specific module type is set in the config, use this
         if ((entry = section.find("Type")) != section.end())
             newmod->setType(entry->second);
