@@ -1,5 +1,8 @@
 API ChangeLog
 
+24-Apr-2017	Troy A. Griffitts <scribe@crosswire.org>
+	Branching 1.8.x
+
 16-Apr-2016	Troy A. Griffitts <scribe@crosswire.org>
 	Added working --chapter --verse decrementors across Testament
 	Added handling of more odd double colon verse reference texts
