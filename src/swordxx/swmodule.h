@@ -211,8 +211,9 @@ public:
     std::string const & getDescription() const { return moddesc; }
     std::string const & getType() const { return modtype; }
 
-    void setType(char const * imodtype)
-    { modtype = (imodtype ? imodtype : ""); }
+    void setType(std::string imodtype)
+            noexcept(std::is_nothrow_move_assignable<std::string>::value)
+    { modtype = std::move(imodtype); }
 
     inline SWTextDirection getDirection() const noexcept { return direction; }
 

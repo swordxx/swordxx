@@ -911,7 +911,7 @@ std::unique_ptr<SWModule> SWMgr::createModule(char const * name,
     if (newmod) {
         // if a specific module type is set in the config, use this
         if ((entry = section.find("Type")) != section.end())
-            newmod->setType(entry->second.c_str());
+            newmod->setType(entry->second);
 
         newmod->setConfig(std::move(section));
     }
