@@ -38,7 +38,7 @@ using namespace sword;
 
 // FROM swmodule.h
 	/*
-	 *			>=0 - regex
+	 *			>=0 - regex; (for backward compat, if > 0 then used as additional REGEX FLAGS)
 	 *			-1  - phrase
 	 *			-2  - multiword
 	 *			-3  - entryAttrib (eg. Word//Lemma./G1234/)	 (Lemma with dot means check components (Lemma.[1-9]) also)
@@ -46,7 +46,13 @@ using namespace sword;
 	 *			-5  - multilemma window; set 'flags' param to window size (NOT DONE)
 	 */
 
-char SEARCH_TYPE=-2;
+char SEARCH_TYPE=0;
+int flags = 0
+// for case insensitivity
+| REG_ICASE
+// for use with entryAttrib search type to match whole entry to value, e.g., G1234 and not G12345
+//| SEARCHFLAG_MATCHWHOLEENTRY
+;
 
 char printed = 0;
 void percentUpdate(char percent, void *userData) {
@@ -110,13 +116,13 @@ int main(int argc, char **argv)
 
 	std::cerr << "[0=================================50===============================100]\n ";
 	char lineLen = 70;
-	listkey = target->search(searchTerm.c_str(), SEARCH_TYPE, /*SEARCHFLAG_MATCHWHOLEENTRY*/ REG_ICASE, scope, 0, &percentUpdate, &lineLen);
+	listkey = target->search(searchTerm.c_str(), SEARCH_TYPE, flags, scope, 0, &percentUpdate, &lineLen);
 	std::cerr << std::endl;
 	if (argc > 4) {			// example: if a second search term is supplied, search again for a second search term, limiting to previous results
 		scope = &listkey;
 		printed = 0;
 		std::cerr << " ";
-		listkey = target->search(argv[4], SEARCH_TYPE, /*SEARCHFLAG_MATCHWHOLEENTRY*/ REG_ICASE, scope, 0, &percentUpdate, &lineLen);
+		listkey = target->search(argv[4], SEARCH_TYPE, flags, scope, 0, &percentUpdate, &lineLen);
 		std::cerr << std::endl;
 	}
 // we don't want to sort by verse if we've been given scores

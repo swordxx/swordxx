@@ -33,6 +33,7 @@
 
 SWORD_NAMESPACE_START
 
+
 static const char *classes[] = {"TreeKeyIdx", "TreeKey", "SWKey", "SWObject", 0};
 SWClass TreeKeyIdx::classdef(classes);
 
@@ -305,7 +306,6 @@ signed char TreeKeyIdx::create(const char *ipath) {
 	fd2 = FileMgr::getSystemFileMgr()->open(buf, FileMgr::CREAT|FileMgr::WRONLY, FileMgr::IREAD|FileMgr::IWRITE);
 	fd2->getFd();
 	FileMgr::getSystemFileMgr()->close(fd2);
-
 	TreeKeyIdx newTree(path);
 	TreeKeyIdx::TreeNode root;
 	stdstr(&(root.name), "");
@@ -588,7 +588,7 @@ void TreeKeyIdx::decrement(int steps) {
 void TreeKeyIdx::increment(int steps) {
 	error = getTreeNodeFromIdxOffset(currentNode.offset + (4*steps), &currentNode);
 	if (error) {
-//		SWLog::getSystemLog()->logError("error: %d", error);
+		SWLog::getSystemLog(); // strange fix for android // ->logError("error: %d", error);
 	}
 	positionChanged();
 
@@ -610,7 +610,6 @@ void TreeKeyIdx::increment(int steps) {
 	}
 */
 }
-
 
 
 const char *TreeKeyIdx::getText() const {
@@ -654,6 +653,7 @@ void TreeKeyIdx::TreeNode::clear() {
 		delete [] userData;
 	userData   = 0;
 }
+
 
 
 TreeKeyIdx::TreeNode::~TreeNode() {

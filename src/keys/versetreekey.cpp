@@ -24,6 +24,7 @@
 
 #include <versetreekey.h>
 #include <ctype.h>
+#include <swlog.h>
 
 SWORD_NAMESPACE_START
 
@@ -92,6 +93,7 @@ int VerseTreeKey::getBookFromAbbrev(const char *iabbr) const
 {
 	int bookno = VerseKey::getBookFromAbbrev(iabbr);
 	if (bookno < 0) {
+		SWLog::getSystemLog();  // TODO fix for odd android bug
 /*
 		vector<struct sbook>::iterator it = find(books, iabbr);
 		if (it == books.end()) {
