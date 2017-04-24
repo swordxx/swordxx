@@ -164,6 +164,7 @@ bool RawText4::isLinked(const SWKey *k1, const SWKey *k2) const {
 
 	findOffset(vk1->getTestament(), vk1->getTestamentIndex(), &start1, &size1);
 	findOffset(vk2->getTestament(), vk2->getTestamentIndex(), &start2, &size2);
+	if (!size1 || !size2) return false;
 	return start1 == start2;
 }
 
