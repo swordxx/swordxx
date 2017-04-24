@@ -95,8 +95,8 @@ protected:
     SWConfig * homeConfig = nullptr;
     void CreateMods(bool multiMod = false);
     virtual std::unique_ptr<SWModule> createModule(
-            char const * name,
-            char const * driver,
+            std::string const & name,
+            std::string const & driver,
             ConfigEntMap section);
     void DeleteMods();
     char configType = 0;        // 0 = file; 1 = directory
