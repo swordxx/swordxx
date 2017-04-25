@@ -199,55 +199,7 @@ std::string RawLdBase<Base>::getKeyForEntry(long entry) const
 // Explicit instantiations:
 
 
-template
-RawLdBase<RawStr>::RawLdBase(char const * ipath,
-                             char const * iname = nullptr,
-                             char const * idesc = nullptr,
-                             TextEncoding encoding = ENC_UNKNOWN,
-                             SWTextDirection dir = DIRECTION_LTR,
-                             SWTextMarkup markup = FMT_UNKNOWN,
-                             char const * ilang = nullptr,
-                             bool caseSensitive = false,
-                             bool strongsPadding = true);
-template
-RawLdBase<RawStr4>::RawLdBase(char const * ipath,
-                              char const * iname = nullptr,
-                              char const * idesc = nullptr,
-                              TextEncoding encoding = ENC_UNKNOWN,
-                              SWTextDirection dir = DIRECTION_LTR,
-                              SWTextMarkup markup = FMT_UNKNOWN,
-                              char const * ilang = nullptr,
-                              bool caseSensitive = false,
-                              bool strongsPadding = true);
-
-template std::string & RawLdBase<RawStr>::getRawEntryBuf() const;
-template std::string & RawLdBase<RawStr4>::getRawEntryBuf() const;
-
-template void RawLdBase<RawStr>::increment(int steps = 1);
-template void RawLdBase<RawStr4>::increment(int steps = 1);
-
-template bool RawLdBase<RawStr>::isWritable() const;
-template bool RawLdBase<RawStr4>::isWritable() const;
-
-template void RawLdBase<RawStr>::setEntry(char const * inbuf, long len = -1);
-template void RawLdBase<RawStr4>::setEntry(char const * inbuf, long len = -1);
-
-template void RawLdBase<RawStr>::linkEntry(SWKey const & linkKey);
-template void RawLdBase<RawStr4>::linkEntry(SWKey const & linkKey);
-
-template void RawLdBase<RawStr>::deleteEntry();
-template void RawLdBase<RawStr4>::deleteEntry();
-
-template long RawLdBase<RawStr>::getEntryCount() const;
-template long RawLdBase<RawStr4>::getEntryCount() const;
-
-template long RawLdBase<RawStr>::getEntryForKey(char const * key) const;
-template long RawLdBase<RawStr4>::getEntryForKey(char const * key) const;
-
-template std::string RawLdBase<RawStr>::getKeyForEntry(long entry) const;
-template std::string RawLdBase<RawStr4>::getKeyForEntry(long entry) const;
-
-template char RawLdBase<RawStr>::getEntry(long away = 0) const;
-template char RawLdBase<RawStr4>::getEntry(long away = 0) const;
+template class RawLdBase<RawStr>;
+template class RawLdBase<RawStr4>;
 
 } /* namespace swordxx */

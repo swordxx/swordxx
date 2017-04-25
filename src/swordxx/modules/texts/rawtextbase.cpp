@@ -199,59 +199,7 @@ bool RawTextBase<BaseRawVerse>::hasEntry(const SWKey *k) const {
     return size;
 }
 
-template
-RawTextBase<RawVerse>::RawTextBase(char const * ipath,
-                                   char const * iname = nullptr,
-                                   char const * idesc = nullptr,
-                                   TextEncoding encoding = ENC_UNKNOWN,
-                                   SWTextDirection dir = DIRECTION_LTR,
-                                   SWTextMarkup markup = FMT_UNKNOWN,
-                                   char const * ilang = nullptr,
-                                   char const * versification = "KJV");
-template
-RawTextBase<RawVerse4>::RawTextBase(char const * ipath,
-                                    char const * iname = nullptr,
-                                    char const * idesc = nullptr,
-                                    TextEncoding encoding = ENC_UNKNOWN,
-                                    SWTextDirection dir = DIRECTION_LTR,
-                                    SWTextMarkup markup = FMT_UNKNOWN,
-                                    char const * ilang = nullptr,
-                                    char const * versification = "KJV");
-
-template RawTextBase<RawVerse>::~RawTextBase();
-template RawTextBase<RawVerse4>::~RawTextBase();
-
-template std::string & RawTextBase<RawVerse>::getRawEntryBuf() const;
-template std::string & RawTextBase<RawVerse4>::getRawEntryBuf() const;
-
-template void RawTextBase<RawVerse>::increment(int steps = 1);
-template void RawTextBase<RawVerse4>::increment(int steps = 1);
-
-template bool RawTextBase<RawVerse>::isWritable() const;
-template bool RawTextBase<RawVerse4>::isWritable() const;
-
-template char RawTextBase<RawVerse>::createModule(char const * path,
-                                                  char const * v11n = "KJV");
-template char RawTextBase<RawVerse4>::createModule(char const * path,
-                                                   char const * v11n = "KJV");
-
-template void RawTextBase<RawVerse>::setEntry(char const * inbuf,
-                                              long len = -1);
-template void RawTextBase<RawVerse4>::setEntry(char const * inbuf,
-                                               long len = -1);
-
-template void RawTextBase<RawVerse>::linkEntry(SWKey const & linkKey);
-template void RawTextBase<RawVerse4>::linkEntry(SWKey const & linkKey);
-
-template void RawTextBase<RawVerse>::deleteEntry();
-template void RawTextBase<RawVerse4>::deleteEntry();
-
-template bool RawTextBase<RawVerse>::isLinked(SWKey const * k1,
-                                              SWKey const * k2) const;
-template bool RawTextBase<RawVerse4>::isLinked(SWKey const * k1,
-                                               SWKey const * k2) const;
-
-template bool RawTextBase<RawVerse>::hasEntry(SWKey const * k) const;
-template bool RawTextBase<RawVerse4>::hasEntry(SWKey const * k) const;
+template class RawTextBase<RawVerse>;
+template class RawTextBase<RawVerse4>;
 
 } /* namespace swordxx */

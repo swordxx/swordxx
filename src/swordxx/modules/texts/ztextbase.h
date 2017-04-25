@@ -100,73 +100,8 @@ public:
 
 }; /* class zTextBase */
 
-extern template
-zTextBase<zVerse>::zTextBase(
-        char const * ipath,
-        char const * iname = nullptr,
-        char const * idesc = nullptr,
-        BlockType blockType = CHAPTERBLOCKS,
-        std::unique_ptr<SWCompress> icomp = nullptr,
-        TextEncoding encoding = ENC_UNKNOWN,
-        SWTextDirection dir = DIRECTION_LTR,
-        SWTextMarkup markup = FMT_UNKNOWN,
-        char const * ilang = nullptr,
-        char const * versification = "KJV");
-extern template
-zTextBase<zVerse4>::zTextBase(
-        char const * ipath,
-        char const * iname = nullptr,
-        char const * idesc = nullptr,
-        BlockType blockType = CHAPTERBLOCKS,
-        std::unique_ptr<SWCompress> icomp = nullptr,
-        TextEncoding encoding = ENC_UNKNOWN,
-        SWTextDirection dir = DIRECTION_LTR,
-        SWTextMarkup markup = FMT_UNKNOWN,
-        char const * ilang = nullptr,
-        char const * versification = "KJV");
-
-extern template zTextBase<zVerse>::~zTextBase();
-extern template zTextBase<zVerse4>::~zTextBase();
-
-extern template
-std::string & zTextBase<zVerse>::getRawEntryBuf() const;
-extern template
-std::string & zTextBase<zVerse4>::getRawEntryBuf() const;
-
-extern template
-void zTextBase<zVerse>::increment(int steps = 1);
-extern template
-void zTextBase<zVerse4>::increment(int steps = 1);
-
-extern template
-bool zTextBase<zVerse>::isWritable() const;
-extern template
-bool zTextBase<zVerse4>::isWritable() const;
-
-extern template
-void zTextBase<zVerse>::setEntry(char const * inbuf, long len = -1);
-extern template
-void zTextBase<zVerse4>::setEntry(char const * inbuf, long len = -1);
-
-extern template
-void zTextBase<zVerse>::linkEntry(SWKey const & linkKey);
-extern template
-void zTextBase<zVerse4>::linkEntry(SWKey const & linkKey);
-
-extern template
-void zTextBase<zVerse>::deleteEntry();
-extern template
-void zTextBase<zVerse4>::deleteEntry();
-
-extern template
-bool zTextBase<zVerse>::isLinked(SWKey const * k1, SWKey const * k2) const;
-extern template
-bool zTextBase<zVerse4>::isLinked(SWKey const * k1, SWKey const * k2) const;
-
-extern template
-bool zTextBase<zVerse>::hasEntry(SWKey const * k) const;
-extern template
-bool zTextBase<zVerse4>::hasEntry(SWKey const * k) const;
+extern template class zTextBase<zVerse>;
+extern template class zTextBase<zVerse4>;
 
 } /* namespace swordxx */
 

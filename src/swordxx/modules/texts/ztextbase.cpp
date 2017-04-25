@@ -224,72 +224,7 @@ bool zTextBase<BaseZVerse>::hasEntry(const SWKey *k) const {
 
 // Explicit instantions:
 
-template
-zTextBase<zVerse>::zTextBase(
-        char const * ipath,
-        char const * iname = nullptr,
-        char const * idesc = nullptr,
-        BlockType blockType = CHAPTERBLOCKS,
-        std::unique_ptr<SWCompress> icomp = nullptr,
-        TextEncoding encoding = ENC_UNKNOWN,
-        SWTextDirection dir = DIRECTION_LTR,
-        SWTextMarkup markup = FMT_UNKNOWN,
-        char const * ilang = nullptr,
-        char const * versification = "KJV");
-template
-zTextBase<zVerse4>::zTextBase(
-        char const * ipath,
-        char const * iname = nullptr,
-        char const * idesc = nullptr,
-        BlockType blockType = CHAPTERBLOCKS,
-        std::unique_ptr<SWCompress> icomp = nullptr,
-        TextEncoding encoding = ENC_UNKNOWN,
-        SWTextDirection dir = DIRECTION_LTR,
-        SWTextMarkup markup = FMT_UNKNOWN,
-        char const * ilang = nullptr,
-        char const * versification = "KJV");
-
-template zTextBase<zVerse>::~zTextBase();
-template zTextBase<zVerse4>::~zTextBase();
-
-template
-std::string & zTextBase<zVerse>::getRawEntryBuf() const;
-template
-std::string & zTextBase<zVerse4>::getRawEntryBuf() const;
-
-template
-void zTextBase<zVerse>::increment(int steps = 1);
-template
-void zTextBase<zVerse4>::increment(int steps = 1);
-
-template
-bool zTextBase<zVerse>::isWritable() const;
-template
-bool zTextBase<zVerse4>::isWritable() const;
-
-template
-void zTextBase<zVerse>::setEntry(char const * inbuf, long len = -1);
-template
-void zTextBase<zVerse4>::setEntry(char const * inbuf, long len = -1);
-
-template
-void zTextBase<zVerse>::linkEntry(SWKey const & linkKey);
-template
-void zTextBase<zVerse4>::linkEntry(SWKey const & linkKey);
-
-template
-void zTextBase<zVerse>::deleteEntry();
-template
-void zTextBase<zVerse4>::deleteEntry();
-
-template
-bool zTextBase<zVerse>::isLinked(SWKey const * k1, SWKey const * k2) const;
-template
-bool zTextBase<zVerse4>::isLinked(SWKey const * k1, SWKey const * k2) const;
-
-template
-bool zTextBase<zVerse>::hasEntry(SWKey const * k) const;
-template
-bool zTextBase<zVerse4>::hasEntry(SWKey const * k) const;
+template class zTextBase<zVerse>;
+template class zTextBase<zVerse4>;
 
 } /* namespace swordxx */
