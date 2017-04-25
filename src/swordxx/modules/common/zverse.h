@@ -24,11 +24,11 @@
 namespace swordxx {
 
 
-class SWDLLEXPORT zVerse: public zVerseBaseImpl<std::uint16_t> {
+class SWDLLEXPORT zVerse: public zVerseBase<std::uint16_t> {
 
 public: /* Methods: */
 
-    using zVerseBaseImpl::zVerseBaseImpl;
+    using zVerseBase::zVerseBase;
 
 };
 

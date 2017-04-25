@@ -36,12 +36,19 @@ namespace swordxx {
 
 class FileDesc;
 
+template <typename SizeType_>
 class RawStrBase {
 
 public: /* Types: */
 
     using StartType = std::uint32_t;
+    using SizeType = SizeType_;
     using IndexOffsetType = std::uint32_t;
+
+protected: /* Constants: */
+
+    static constexpr std::size_t const IDXENTRYSIZE =
+            sizeof(StartType) + sizeof(SizeType);
 
 public: /* Methods: */
 
@@ -57,23 +64,19 @@ public: /* Methods: */
 
 protected: /* Methods: */
 
-    template <typename SizeType>
-    signed char findOffset_(char const * key,
-                            StartType * start,
-                            SizeType * size,
-                            long away = 0,
-                            IndexOffsetType * idxoff = nullptr) const;
+    signed char findOffset(char const * key,
+                           StartType * start,
+                           SizeType * size,
+                           long away = 0,
+                           IndexOffsetType * idxoff = nullptr) const;
 
-    template <typename SizeType>
-    std::string readText_(StartType start,
-                          SizeType * size,
-                          std::string & buf) const;
+    std::string readText(StartType start,
+                         SizeType * size,
+                         std::string & buf) const;
 
-    template <typename SizeType>
-    void doSetText_(char const * key, char const * buf, long len = -1);
+    void doSetText(char const * key, char const * buf, long len = -1);
 
-    template <typename SizeType>
-    void doLinkEntry_(char const * destkey, char const * srckey);
+    void doLinkEntry(char const * destkey, char const * srckey);
 
 private: /* Methods: */
 
@@ -91,81 +94,8 @@ private: /* Fields: */
 
 }; /* class RawStrBase */
 
-extern template
-signed char RawStrBase::findOffset_<std::uint16_t>(
-        char const * key,
-        StartType * start,
-        std::uint16_t * size,
-        long away = 0,
-        IndexOffsetType * idxoff = nullptr) const;
-extern template
-signed char RawStrBase::findOffset_<std::uint32_t>(
-        char const * key,
-        StartType * start,
-        std::uint32_t * size,
-        long away = 0,
-        IndexOffsetType * idxoff = nullptr) const;
-
-extern template
-std::string RawStrBase::readText_<std::uint16_t>(StartType start,
-                                                 std::uint16_t * size,
-                                                 std::string & buf) const;
-extern template
-std::string RawStrBase::readText_<std::uint32_t>(StartType start,
-                                                 std::uint32_t * size,
-                                                 std::string & buf) const;
-
-extern template
-void RawStrBase::doSetText_<std::uint16_t>(char const * key,
-                                           char const * buf,
-                                           long len = -1);
-extern template
-void RawStrBase::doSetText_<std::uint32_t>(char const * key,
-                                           char const * buf,
-                                           long len = -1);
-
-extern template
-void RawStrBase::doLinkEntry_<std::uint16_t>(char const * destkey,
-                                             char const * srckey);
-extern template
-void RawStrBase::doLinkEntry_<std::uint32_t>(char const * destkey,
-                                             char const * srckey);
-
-template <typename SizeType_>
-class RawStrBaseImpl: public RawStrBase {
-
-public: /* Types: */
-
-    using SizeType = SizeType_;
-
-protected: /* Constants: */
-
-    static constexpr std::size_t const IDXENTRYSIZE =
-            sizeof(StartType) + sizeof(SizeType);
-
-public: /* Methods: */
-
-    using RawStrBase::RawStrBase;
-
-    template <typename ... Args>
-    signed char findOffset(Args && ... args) const
-    { return RawStrBase::findOffset_<SizeType>(std::forward<Args>(args)...); }
-
-    template <typename ... Args>
-    std::string readText(Args && ... args) const
-    { return RawStrBase::readText_<SizeType>(std::forward<Args>(args)...); }
-
-protected: /* Methods: */
-
-    template <typename ... Args>
-    void doSetText(Args && ... args)
-    { return RawStrBase::doSetText_<SizeType>(std::forward<Args>(args)...); }
-
-    template <typename ... Args>
-    void doLinkEntry(Args && ... args)
-    { return RawStrBase::doLinkEntry_<SizeType>(std::forward<Args>(args)...); }
-
-}; /* class RawStrBaseImpl */
+extern template class RawStrBase<std::uint16_t>;
+extern template class RawStrBase<std::uint32_t>;
 
 } /* namespace swordxx */
 

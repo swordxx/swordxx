@@ -43,7 +43,8 @@ namespace swordxx {
  *        be sure to include the trailing separator (e.g. '/' or '\')
  *        (e.g. 'modules/texts/rawtext/webster/')
  */
-RawVerseBase::RawVerseBase(NormalizedPath path, int fileMode)
+template <typename SizeType_>
+RawVerseBase<SizeType_>::RawVerseBase(NormalizedPath path, int fileMode)
     : m_path(std::move(path))
 {
     std::string buf(m_path.str() + "/ot.vss");
@@ -68,7 +69,8 @@ RawVerseBase::RawVerseBase(NormalizedPath path, int fileMode)
     textfp[0] = FileMgr::getSystemFileMgr()->open(buf.c_str(), fileMode, true);
 }
 
-RawVerseBase::~RawVerseBase() noexcept {
+template <typename SizeType_>
+RawVerseBase<SizeType_>::~RawVerseBase() noexcept {
     FileMgr::getSystemFileMgr()->close(idxfp[0u]);
     FileMgr::getSystemFileMgr()->close(idxfp[1u]);
     FileMgr::getSystemFileMgr()->close(textfp[0u]);
@@ -85,11 +87,11 @@ RawVerseBase::~RawVerseBase() noexcept {
  *    buf    - buffer to store text
  *
  */
-template <typename SizeType>
-void RawVerseBase::readText_(char testmt,
-                             StartType start,
-                             SizeType size,
-                             std::string & buf) const
+template <typename SizeType_>
+void RawVerseBase<SizeType_>::readText(char testmt,
+                                       StartType start,
+                                       SizeType size,
+                                       std::string & buf) const
 {
     buf.clear();
     buf.resize(size + 1u, '\0');
@@ -103,11 +105,11 @@ void RawVerseBase::readText_(char testmt,
     }
 }
 
-template <typename SizeType>
-void RawVerseBase::findOffset_(char testmt,
-                               long idxoff,
-                               StartType * start,
-                               SizeType * size) const
+template <typename SizeType_>
+void RawVerseBase<SizeType_>::findOffset(char testmt,
+                                         long idxoff,
+                                         StartType * start,
+                                         SizeType * size) const
 {
     idxoff *= sizeof(StartType) + sizeof(SizeType);
     if (!testmt)
@@ -129,11 +131,11 @@ void RawVerseBase::findOffset_(char testmt,
     }
 }
 
-template <typename SizeType>
-void RawVerseBase::doSetText_(char testmt,
-                              long idxoff,
-                              char const * buf,
-                              long len)
+template <typename SizeType_>
+void RawVerseBase<SizeType_>::doSetText(char testmt,
+                                        long idxoff,
+                                        char const * buf,
+                                        long len)
 {
     StartType start;
     SizeType size;
@@ -166,8 +168,11 @@ void RawVerseBase::doSetText_(char testmt,
     idxfp[testmt-1]->write(&size, sizeof(size));
 }
 
-template <typename SizeType>
-void RawVerseBase::doLinkEntry_(char testmt, long destidxoff, long srcidxoff) {
+template <typename SizeType_>
+void RawVerseBase<SizeType_>::doLinkEntry(char testmt,
+                                          long destidxoff,
+                                          long srcidxoff)
+{
     StartType start;
     SizeType size;
 
@@ -188,9 +193,9 @@ void RawVerseBase::doLinkEntry_(char testmt, long destidxoff, long srcidxoff) {
     idxfp[testmt-1]->write(&size, sizeof(size));
 }
 
-template <typename SizeType>
-char RawVerseBase::createModule_(NormalizedPath const & path,
-                                 char const * v11n)
+template <typename SizeType_>
+char RawVerseBase<SizeType_>::createModule(NormalizedPath const & path,
+                                           char const * v11n)
 {
     std::string const otPath(path.str() + "/ot");
     std::string const ntPath(path.str() + "/nt");
@@ -252,57 +257,7 @@ char RawVerseBase::createModule_(NormalizedPath const & path,
 }
 
 // Explicit instantiations:
-
-
-template
-void RawVerseBase::readText_<std::uint16_t>(char testmt,
-                                            StartType start,
-                                            std::uint16_t size,
-                                            std::string & buf) const;
-template
-void RawVerseBase::readText_<std::uint32_t>(char testmt,
-                                            StartType start,
-                                            std::uint32_t size,
-                                            std::string & buf) const;
-
-template
-void RawVerseBase::findOffset_<std::uint16_t>(char testmt,
-                                              long idxoff,
-                                              StartType * start,
-                                              std::uint16_t * size) const;
-template
-void RawVerseBase::findOffset_<std::uint32_t>(char testmt,
-                                              long idxoff,
-                                              StartType * start,
-                                              std::uint32_t * size) const;
-
-template
-void RawVerseBase::doSetText_<std::uint16_t>(char testmt,
-                                             long idxoff,
-                                             char const * buf,
-                                             long len);
-template
-void RawVerseBase::doSetText_<std::uint32_t>(char testmt,
-                                             long idxoff,
-                                             char const * buf,
-                                             long len);
-
-template
-void RawVerseBase::doLinkEntry_<std::uint16_t>(char testmt,
-                                               long destidxoff,
-                                               long srcidxoff);
-template
-void RawVerseBase::doLinkEntry_<std::uint32_t>(char testmt,
-                                               long destidxoff,
-                                               long srcidxoff);
-
-template
-char RawVerseBase::createModule_<std::uint16_t>(
-        NormalizedPath const & path,
-        char const * v11n);
-template
-char RawVerseBase::createModule_<std::uint32_t>(
-        NormalizedPath const & path,
-        char const * v11n);
+template class RawVerseBase<std::uint16_t>;
+template class RawVerseBase<std::uint32_t>;
 
 } /* namespace swordxx */

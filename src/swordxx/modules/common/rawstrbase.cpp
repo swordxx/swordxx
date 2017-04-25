@@ -48,9 +48,10 @@ namespace swordxx {
  *        (e.g. 'modules/texts/rawtext/webster/')
  */
 
-RawStrBase::RawStrBase(NormalizedPath const & path,
-                       int fileMode,
-                       bool caseSensitive)
+template <typename SizeType_>
+RawStrBase<SizeType_>::RawStrBase(NormalizedPath const & path,
+                                  int fileMode,
+                                  bool caseSensitive)
     : caseSensitive(caseSensitive)
 {
     lastoff = -1;
@@ -69,8 +70,8 @@ RawStrBase::RawStrBase(NormalizedPath const & path,
 /******************************************************************************
  * RawStr Destructor - Cleans up instance of RawStr
  */
-
-RawStrBase::~RawStrBase() {
+template <typename SizeType_>
+RawStrBase<SizeType_>::~RawStrBase() {
     FileMgr::getSystemFileMgr()->close(idxfd);
     FileMgr::getSystemFileMgr()->close(datfd);
 }
@@ -84,8 +85,8 @@ RawStrBase::~RawStrBase() {
  * ENT:    ioffset    - offset in dat file to lookup
  *        buf        - address of pointer to allocate for storage of string
  */
-
-std::string RawStrBase::getIDXBufDat(long ioffset) const {
+template <typename SizeType_>
+std::string RawStrBase<SizeType_>::getIDXBufDat(long ioffset) const {
     if (datfd) {
         datfd->seek(ioffset, SEEK_SET);
         std::size_t size;
@@ -118,8 +119,8 @@ std::string RawStrBase::getIDXBufDat(long ioffset) const {
  * ENT:    ioffset    - offset in idx file to lookup
  *        buf        - address of pointer to allocate for storage of string
  */
-
-std::string RawStrBase::getIDXBuf(long ioffset) const {
+template <typename SizeType_>
+std::string RawStrBase<SizeType_>::getIDXBuf(long ioffset) const {
     IndexOffsetType offset;
 
     if (idxfd) {
@@ -145,12 +146,12 @@ std::string RawStrBase::getIDXBuf(long ioffset) const {
  *
  * RET: error status -1 general error; -2 new file
  */
-template <typename SizeType>
-signed char RawStrBase::findOffset_(char const * ikey,
-                                    StartType * start,
-                                    SizeType * size,
-                                    long away,
-                                    IndexOffsetType * idxoff) const
+template <typename SizeType_>
+signed char RawStrBase<SizeType_>::findOffset(char const * ikey,
+                                              StartType * start,
+                                              SizeType * size,
+                                              long away,
+                                              IndexOffsetType * idxoff) const
 {
     char quitflag = 0;
     signed char retval = -1;
@@ -288,10 +289,10 @@ signed char RawStrBase::findOffset_(char const * ikey,
  *    buf        - buffer to store text
  *
  */
-template <typename SizeType>
-std::string RawStrBase::readText_(StartType istart,
-                                  SizeType * isize,
-                                  std::string & buf) const
+template <typename SizeType_>
+std::string RawStrBase<SizeType_>::readText(StartType istart,
+                                            SizeType * isize,
+                                            std::string & buf) const
 {
     auto const idxbuflocal(getIDXBufDat(istart));
     StartType start = istart;
@@ -319,7 +320,7 @@ std::string RawStrBase::readText_(StartType istart,
                     break;
                 }
             }
-            findOffset_<SizeType>(buf.c_str() + 6, &start, isize);
+            findOffset(buf.c_str() + 6, &start, isize);
         }
         else break;
     }
@@ -338,8 +339,11 @@ std::string RawStrBase::readText_(StartType istart,
  *    buf    - buffer to store
  *      len     - length of buffer (0 - null terminated)
  */
-template <typename SizeType>
-void RawStrBase::doSetText_(char const * ikey, char const * buf, long len) {
+template <typename SizeType_>
+void RawStrBase<SizeType_>::doSetText(char const * ikey,
+                                      char const * buf,
+                                      long len)
+{
     StartType start, outstart;
     IndexOffsetType idxoff;
     SizeType size;
@@ -347,7 +351,7 @@ void RawStrBase::doSetText_(char const * ikey, char const * buf, long len) {
     char * tmpbuf = nullptr;
     char * ch = nullptr;
 
-    char errorStatus = findOffset_<SizeType>(ikey, &start, &size, 0, &idxoff);
+    char errorStatus = findOffset(ikey, &start, &size, 0, &idxoff);
     std::string key(ikey);
     if (!caseSensitive)
         toupperstr_utf8(key);
@@ -389,7 +393,7 @@ void RawStrBase::doSetText_(char const * ikey, char const * buf, long len) {
                         break;
                     }
                 }
-                findOffset_<SizeType>(tmpbuf + entrySize, &start, &size, 0, &idxoff);
+                findOffset(tmpbuf + entrySize, &start, &size, 0, &idxoff);
             }
             else break;
         }
@@ -449,9 +453,10 @@ void RawStrBase::doSetText_(char const * ikey, char const * buf, long len) {
  *    destidxoff    - dest offset into .vss
  *    srcidxoff        - source offset into .vss
  */
-template <typename SizeType>
-void RawStrBase::doLinkEntry_(char const * destkey, char const * srckey)
-{ doSetText_<SizeType>(srckey, (std::string("@LINK ") + destkey).c_str()); }
+template <typename SizeType_>
+void RawStrBase<SizeType_>::doLinkEntry(char const * destkey,
+                                        char const * srckey)
+{ doSetText(srckey, (std::string("@LINK ") + destkey).c_str()); }
 
 /******************************************************************************
  * RawLD::CreateModule    - Creates new module files
@@ -459,8 +464,8 @@ void RawStrBase::doLinkEntry_(char const * destkey, char const * srckey)
  * ENT: path    - directory to store module files
  * RET: error status
  */
-
-signed char RawStrBase::createModule(NormalizedPath const & path) {
+template <typename SizeType_>
+signed char RawStrBase<SizeType_>::createModule(NormalizedPath const & path) {
     std::string const datFilename(path.str() + ".dat");
     std::string const idxFilename(path.str() + ".idx");
 
@@ -485,44 +490,7 @@ signed char RawStrBase::createModule(NormalizedPath const & path) {
 
 // Explicit instantiations:
 
-template
-signed char RawStrBase::findOffset_<std::uint16_t>(
-        char const * key,
-        StartType * start,
-        std::uint16_t * size,
-        long away = 0,
-        IndexOffsetType * idxoff = nullptr) const;
-template
-signed char RawStrBase::findOffset_<std::uint32_t>(
-        char const * key,
-        StartType * start,
-        std::uint32_t * size,
-        long away = 0,
-        IndexOffsetType * idxoff = nullptr) const;
-
-template
-std::string RawStrBase::readText_<std::uint16_t>(StartType start,
-                                                 std::uint16_t * size,
-                                                 std::string & buf) const;
-template
-std::string RawStrBase::readText_<std::uint32_t>(StartType start,
-                                                 std::uint32_t * size,
-                                                 std::string & buf) const;
-
-template
-void RawStrBase::doSetText_<std::uint16_t>(char const * key,
-                                           char const * buf,
-                                           long len = -1);
-template
-void RawStrBase::doSetText_<std::uint32_t>(char const * key,
-                                           char const * buf,
-                                           long len = -1);
-
-template
-void RawStrBase::doLinkEntry_<std::uint16_t>(char const * destkey,
-                                             char const * srckey);
-template
-void RawStrBase::doLinkEntry_<std::uint32_t>(char const * destkey,
-                                             char const * srckey);
+template class RawStrBase<std::uint16_t>;
+template class RawStrBase<std::uint32_t>;
 
 } /* namespace swordxx */

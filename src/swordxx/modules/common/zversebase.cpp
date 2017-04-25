@@ -51,11 +51,11 @@ namespace swordxx {
  *        fileMode - open mode for the files (FileMgr::RDONLY, etc.)
  *        blockType - verse, chapter, book, etc.
  */
-
-zVerseBase::zVerseBase(NormalizedPath const & path,
-                       int fileMode,
-                       BlockType blockType,
-                       std::unique_ptr<SWCompress> icomp)
+template <typename VerseSizeType_>
+zVerseBase<VerseSizeType_>::zVerseBase(NormalizedPath const & path,
+                                       int fileMode,
+                                       BlockType blockType,
+                                       std::unique_ptr<SWCompress> icomp)
     : compressor(icomp ? std::move(icomp) : std::make_unique<SWCompress>())
 {
     // this line, instead of just defaulting, to keep FileMgr out of header
@@ -79,13 +79,11 @@ zVerseBase::zVerseBase(NormalizedPath const & path,
     compfp[1] = FileMgr::getSystemFileMgr()->open(formatted("%s/nt.%czv", path.c_str(), blockChar).c_str(), fileMode, true);
 }
 
-
 /******************************************************************************
  * zVerse Destructor - Cleans up instance of zVerse
  */
-
-zVerseBase::~zVerseBase()
-{
+template <typename VerseSizeType_>
+zVerseBase<VerseSizeType_>::~zVerseBase() {
     int loop1;
 
     if (cacheBuf) {
@@ -100,7 +98,6 @@ zVerseBase::~zVerseBase()
     }
 }
 
-
 /******************************************************************************
  * zVerseBase::findoffset    - Finds the offset of the key verse from the indexes
  *
@@ -113,12 +110,12 @@ zVerseBase::~zVerseBase()
  *    start    - address to store the starting offset
  *    size    - address to store the size of the entry
  */
-template <typename VerseSizeType>
-void zVerseBase::findOffset_(char testmt,
-                             long idxoff,
-                             VerseOffsetType * start,
-                             VerseSizeType * size,
-                             BufferNumberType * buffnum) const
+template <typename VerseSizeType_>
+void zVerseBase<VerseSizeType_>::findOffset(char testmt,
+                                            long idxoff,
+                                            VerseOffsetType * start,
+                                            VerseSizeType * size,
+                                            BufferNumberType * buffnum) const
 {
     BufferNumberType ulBuffNum    = 0;              // buffer number
     uint32_t ulVerseStart = 0;           // verse offset within buffer
@@ -160,9 +157,7 @@ void zVerseBase::findOffset_(char testmt,
     *buffnum = swapToArch(ulBuffNum);
     *start = swapToArch(ulVerseStart);
     *size = swapToArch(usVerseSize);
-
 }
-
 
 /******************************************************************************
  * zVerseBase::zreadtext    - gets text at a given offset
@@ -173,13 +168,12 @@ void zVerseBase::findOffset_(char testmt,
  *    buf    - buffer to store text
  *
  */
-
-template <typename VerseSizeType>
-void zVerseBase::zReadText_(char testmt,
-                            VerseOffsetType start,
-                            VerseSizeType size,
-                            BufferNumberType ulBuffNum,
-                            std::string &inBuf) const
+template <typename VerseSizeType_>
+void zVerseBase<VerseSizeType_>::zReadText(char testmt,
+                                           VerseOffsetType start,
+                                           VerseSizeType size,
+                                           BufferNumberType ulBuffNum,
+                                           std::string &inBuf) const
 {
     uint32_t ulCompOffset = 0;           // compressed buffer start
     uint32_t ulCompSize   = 0;                 // buffer size compressed
@@ -261,7 +255,6 @@ void zVerseBase::zReadText_(char testmt,
     }
 }
 
-
 /******************************************************************************
  * zVerseBase::doSetText_ - Sets text for current offset
  *
@@ -270,9 +263,12 @@ void zVerseBase::zReadText_(char testmt,
  *    buf    - buffer to store
  *      len     - length of buffer (0 - null terminated)
  */
-template <typename VerseSizeType>
-void zVerseBase::doSetText_(char testmt, long idxoff, const char *buf, long len) {
-
+template <typename VerseSizeType_>
+void zVerseBase<VerseSizeType_>::doSetText(char testmt,
+                                           long idxoff,
+                                           const char * buf,
+                                           long len)
+{
     len = (len < 0) ? strlen(buf) : len;
     if (!testmt)
         testmt = ((idxfp[0]) ? 1:2);
@@ -310,8 +306,8 @@ void zVerseBase::doSetText_(char testmt, long idxoff, const char *buf, long len)
     strcat(cacheBuf, buf);
 }
 
-
-void zVerseBase::flushCache() const {
+template <typename VerseSizeType_>
+void zVerseBase<VerseSizeType_>::flushCache() const {
     if (dirtyCache) {
         uint32_t idxoff;
         uint32_t start, outstart;
@@ -361,8 +357,11 @@ void zVerseBase::flushCache() const {
  *    destidxoff    - dest offset into .vss
  *    srcidxoff        - source offset into .vss
  */
-template <typename VerseSizeType>
-void zVerseBase::doLinkEntry_(char testmt, long destidxoff, long srcidxoff) {
+template <typename VerseSizeType_>
+void zVerseBase<VerseSizeType_>::doLinkEntry(char testmt,
+                                             long destidxoff,
+                                             long srcidxoff)
+{
     int32_t bufidx;
     int32_t start;
     VerseSizeType size;
@@ -388,15 +387,16 @@ void zVerseBase::doLinkEntry_(char testmt, long destidxoff, long srcidxoff) {
     compfp[testmt-1]->write(&size, sizeof(size));
 }
 
-
 /******************************************************************************
  * zVerseBase::createModule - Creates new module files
  *
  * ENT: path    - directory to store module files
  * RET: error status
  */
-template <typename VerseSizeType>
-char zVerseBase::createModule_(NormalizedPath const & path, BlockType blockBound, const char *v11n)
+template <typename VerseSizeType_>
+char zVerseBase<VerseSizeType_>::createModule(NormalizedPath const & path,
+                                              BlockType blockBound,
+                                              const char * v11n)
 {
     char retVal = 0;
     FileDesc *fd, *fd2;
@@ -488,60 +488,7 @@ cleanup1:
 }
 
 // Explicit instantions:
-
-template
-void zVerseBase::findOffset_<std::uint16_t>(char testmt,
-                                            long idxoff,
-                                            VerseOffsetType * start,
-                                            std::uint16_t * size,
-                                            BufferNumberType * buffnum) const;
-template
-void zVerseBase::findOffset_<std::uint32_t>(char testmt,
-                                            long idxoff,
-                                            VerseOffsetType * start,
-                                            std::uint32_t * size,
-                                            BufferNumberType * buffnum) const;
-
-template
-void zVerseBase::zReadText_<std::uint16_t>(char testmt,
-                                           VerseOffsetType start,
-                                           std::uint16_t size,
-                                           BufferNumberType buffnum,
-                                           std::string & buf) const;
-template
-void zVerseBase::zReadText_<std::uint32_t>(char testmt,
-                                           VerseOffsetType start,
-                                           std::uint32_t size,
-                                           BufferNumberType buffnum,
-                                           std::string & buf) const;
-
-template
-char zVerseBase::createModule_<std::uint16_t>(NormalizedPath const & path,
-                                              BlockType blockBound,
-                                              char const * v11n = "KJV");
-template
-char zVerseBase::createModule_<std::uint32_t>(NormalizedPath const & path,
-                                              BlockType blockBound,
-                                              char const * v11n = "KJV");
-
-template
-void zVerseBase::doSetText_<std::uint16_t>(char testmt,
-                                           long idxoff,
-                                           char const * buf,
-                                           long len = 0);
-template
-void zVerseBase::doSetText_<std::uint32_t>(char testmt,
-                                           long idxoff,
-                                           char const * buf,
-                                           long len = 0);
-
-template
-void zVerseBase::doLinkEntry_<std::uint16_t>(char testmt,
-                                             long destidxoff,
-                                             long srcidxoff);
-template
-void zVerseBase::doLinkEntry_<std::uint32_t>(char testmt,
-                                             long destidxoff,
-                                             long srcidxoff);
+template class zVerseBase<std::uint16_t>;
+template class zVerseBase<std::uint32_t>;
 
 } /* namespace swordxx */

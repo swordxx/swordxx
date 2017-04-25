@@ -24,11 +24,11 @@
 
 namespace swordxx {
 
-class SWDLLEXPORT RawVerse: public RawVerseBaseImpl<std::uint16_t> {
+class SWDLLEXPORT RawVerse: public RawVerseBase<std::uint16_t> {
 
 public: /* Methods: */
 
-    using RawVerseBaseImpl::RawVerseBaseImpl;
+    using RawVerseBase::RawVerseBase;
 
 };
 

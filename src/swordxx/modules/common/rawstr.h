@@ -21,11 +21,11 @@
 
 namespace swordxx {
 
-class SWDLLEXPORT RawStr: public RawStrBaseImpl<std::uint16_t> {
+class SWDLLEXPORT RawStr: public RawStrBase<std::uint16_t> {
 
 public: /* Methods: */
 
-    using RawStrBaseImpl::RawStrBaseImpl;
+    using RawStrBase::RawStrBase;
 
 }; /* class RawStr */
 
