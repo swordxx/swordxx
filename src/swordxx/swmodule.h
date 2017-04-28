@@ -238,15 +238,15 @@ public:
      *
      * @param istr string for which to search
      * @param searchType type of search to perform
-     *            >=0 - regex
+     *            >=0 - regex; (for backward compat, if > 0 then used as additional REGEX FLAGS)
      *            -1  - phrase
      *            -2  - multiword
-     *            -3  - entryAttrib (eg. Word//Strongs/G1234/)
+     *            -3  - entryAttrib (eg. Word//Lemma./G1234/)      (Lemma with dot means check components (Lemma.[1-9]) also)
      *            -4  - Lucene
      * @param flags options flags for search
      * @param scope Key containing the scope. VerseKey or ListKey are useful here.
      * @param percent Callback function to get the current search status in %.
-     * @param percentUserData User data that is given to the callback function as parameter.
+     * @param percentUserData Anything that you might want to send to the precent callback function.
      *
      * @return ListKey set to verses that contain istr
      */

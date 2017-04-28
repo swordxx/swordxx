@@ -36,15 +36,20 @@
 
 using namespace swordxx;
 
+// FROM swmodule.h
 /*
- *            >=0 - regex
+ *            >=0 - regex (for backward compat, if > 0 then used as additional REGEX FLAGS)
  *            -1  - phrase
  *            -2  - multiword
- *            -3  - entryAttrib (eg. Word//Lemma/G1234/)
+ *            -3  - entryAttrib (eg. Word//Lemma/G1234/) (Lemma with dot means check components (Lemma.[1-9]) also)
  *            -4  - Lucene
  */
 
-char SEARCH_TYPE=-4;
+char SEARCH_TYPE = 0;
+int flags = REG_ICASE; // for case insensitivity
+       // | SEARCHFLAG_MATCHWHOLEENTRY // for use with entryAttrib search type
+                                       // to match whole entry to value, e.g.,
+                                       // G1234 and not G12345
 
 char printed = 0;
 void percentUpdate(char percent, void *userData) {
@@ -67,7 +72,7 @@ int main(int argc, char **argv)
 //    SWMgr manager(0, 0, true, new MarkupFilterMgr(FMT_RTF, ENC_RTF));
     SWMgr manager;
     ListKey listkey;
-    ListKey scope;
+    ListKey * scope;
     if ((argc < 3) || (argc > 5)) {
         fprintf(stderr, "\nusage: %s <modname> <\"search string\"> [\"search_scope\"] [\"search again for string in previous result set\"]\n"
                              "\tExample: search KJV \"swift hear slow speak\"\n\n", argv[0]);
@@ -94,27 +99,25 @@ int main(int argc, char **argv)
 
     SWModule & target = *it->second;
 
+    ListKey maybeScope;
     if (argc > 3) {            // if min / max specified
         SWKey *k = target.getKey();
         VerseKey * parser = dynamic_cast<VerseKey *>(k);
         VerseKey kjvParser;
         if (!parser) parser = &kjvParser;    // use standard KJV parsing as fallback
-        scope = parser->parseVerseList(argv[3], parser->getText(), true);
-        scope.setPersist(true);
-        target.setKey(scope);
+        maybeScope = parser->parseVerseList(argv[3], parser->getText(), true);
+        scope = &maybeScope;
     }
 
     std::cerr << "[0=================================50===============================100]\n ";
     char lineLen = 70;
-    listkey = target.search(searchTerm.c_str(), SEARCH_TYPE, /*SEARCHFLAG_MATCHWHOLEENTRY*/ REG_ICASE, nullptr, &percentUpdate, &lineLen);
+    listkey = target.search(searchTerm.c_str(), SEARCH_TYPE, flags, scope, &percentUpdate, &lineLen);
     std::cerr << std::endl;
-    if (argc > 4) {            // if min / max specified
-        scope = listkey;
-        scope.setPersist(true);
-        target.setKey(scope);
+    if (argc > 4) { // example: if a second search term is supplied, search again for a second search term, limiting to previous results
+        scope = &listkey;
         printed = 0;
         std::cerr << " ";
-        listkey = target.search(argv[4], SEARCH_TYPE, /*SEARCHFLAG_MATCHWHOLEENTRY*/ REG_ICASE, nullptr, &percentUpdate, &lineLen);
+        listkey = target.search(argv[4], SEARCH_TYPE, flags, scope, &percentUpdate, &lineLen);
         std::cerr << std::endl;
     }
 // we don't want to sort by verse if we've been given scores

@@ -264,6 +264,9 @@ bool OSISPlain::handleToken(std::string &buf, const char *token, BasicFilterUser
                 userData->supressAdjacentWhitespace = true;
                     buf.push_back('\n');
             }
+            if (!u->tag.attribute("marker").empty()) {
+                buf.append(u->tag.attribute("marker"));
+            }
                 }
 
         else {

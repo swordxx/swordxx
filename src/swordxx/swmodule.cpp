@@ -40,6 +40,7 @@
 #include "keys/versekey.h"   // KLUDGE for Search
 #include "stringmgr.h"
 #include "swfilter.h"
+#include "swlog.h"
 #include "swoptfilter.h"
 #include "sysdata.h"
 #include "utilstr.h"
@@ -270,10 +271,13 @@ ListKey &SWModule::search(char const * istr,
     positionToTop();
     if (searchType >= 0) {
 #ifdef USECXX11REGEX
-        preg = std::regex((std::string(".*")+istr+".*").c_str(), std::regex_constants::extended & flags);
+        preg = std::regex((std::string(".*")+istr+".*").c_str(), std::regex_constants::extended | searchType | flags);
 #else
         flags |=searchType|REG_NOSUB|REG_EXTENDED;
-        regcomp(&preg, istr, flags);
+        if (int const err = ::regcomp(&preg, istr, flags)) {
+            SWLog::getSystemLog()->logError("Error compiling Regex: %d", err);
+            return listKey;
+        }
 #endif
     }
 
