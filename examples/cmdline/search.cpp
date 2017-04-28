@@ -72,7 +72,7 @@ int main(int argc, char **argv)
 //    SWMgr manager(0, 0, true, new MarkupFilterMgr(FMT_RTF, ENC_RTF));
     SWMgr manager;
     ListKey listkey;
-    ListKey * scope;
+    ListKey * scope = nullptr;
     if ((argc < 3) || (argc > 5)) {
         fprintf(stderr, "\nusage: %s <modname> <\"search string\"> [\"search_scope\"] [\"search again for string in previous result set\"]\n"
                              "\tExample: search KJV \"swift hear slow speak\"\n\n", argv[0]);
