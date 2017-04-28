@@ -29,6 +29,7 @@
 #ifndef _MSC_VER
 #include <iostream>
 #endif
+#include <memory>
 #ifdef USECXX11REGEX
 #include <regex>
 #else
@@ -275,7 +276,12 @@ ListKey &SWModule::search(char const * istr,
 #else
         flags |=searchType|REG_NOSUB|REG_EXTENDED;
         if (int const err = ::regcomp(&preg, istr, flags)) {
-            SWLog::getSystemLog()->logError("Error compiling Regex: %d", err);
+            auto const errorMessageSize = ::regerror(err, &preg, nullptr, 0u);
+            auto const errorMessage(std::make_unique<char[]>(errorMessageSize));
+            ::regerror(err, &preg, errorMessage.get(), errorMessageSize);
+            SWLog::getSystemLog()->logError(
+                        "Failed to compile regular expression: %s",
+                        errorMessage.get());
             return listKey;
         }
 #endif
