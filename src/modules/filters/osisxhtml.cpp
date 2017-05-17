@@ -173,7 +173,7 @@ OSISXHTML::MyUserData::MyUserData(const SWModule *module, const SWKey *key) : Ba
 	suspendLevel = 0;
 	wordsOfChristStart = "<span class=\"wordsOfJesus\"> ";
 	wordsOfChristEnd   = "</span> ";
-	interModuleLinkStart = "<a href=\"sword://%s/%s\">";
+	interModuleLinkStart = "<a class=\"%s\" href=\"sword://%s/%s\">";
 	interModuleLinkEnd = "</a>";
 	if (module) {
 		osisQToTick = ((!module->getConfigEntry("OSISqToTick")) || (strcmp(module->getConfigEntry("OSISqToTick"), "false")));
@@ -382,10 +382,18 @@ bool OSISXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 					SWBuf target;
 					SWBuf work;
 					SWBuf ref;
+					SWBuf type;
+					SWBuf classes = "";
+					
 					bool is_scripRef = false;
 
 					target = tag.getAttribute("osisRef");
 					const char* the_ref = strchr(target, ':');
+					type = tag.getAttribute("type");
+					
+					if (type.size()) {
+						classes.append(type);
+					}
 					
 					if(!the_ref) {
 						// No work
@@ -407,7 +415,8 @@ bool OSISXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 
 					if(is_scripRef)
 					{
-						buf.appendFormatted("<a href=\"passagestudy.jsp?action=showRef&type=scripRef&value=%s&module=\">",
+						buf.appendFormatted("<a class=\"%s\" href=\"passagestudy.jsp?action=showRef&type=scripRef&value=%s&module=\">",
+							classes.c_str(),
 							URL::encode(ref.c_str()).c_str()
 //							(work.size()) ? URL::encode(work.c_str()).c_str() : "")
 							);
@@ -415,7 +424,8 @@ bool OSISXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 					else
 					{
 						// Dictionary link, or something
-						buf.appendFormatted(u->interModuleLinkStart, 
+						buf.appendFormatted(u->interModuleLinkStart,
+							classes.c_str(), 
 							URL::encode(work.c_str()).c_str(),
 							URL::encode(ref.c_str()).c_str()
 							);
