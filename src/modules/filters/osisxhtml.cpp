@@ -90,7 +90,7 @@ void processLemma(bool suspendTextPassThru, XMLTag &tag, SWBuf &buf) {
 			//	show = false;
 			//else {
 				if (!suspendTextPassThru) {
-					buf.appendFormatted("<small><em class=\"strongs\">&lt;<a href=\"passagestudy.jsp?action=showStrongs&type=%s&value=%s\" class=\"strongs\">%s</a>&gt;</em></small>",
+					buf.appendFormatted("<small><em class=\"strongs\">&lt;<a class=\"strongs\" href=\"passagestudy.jsp?action=showStrongs&type=%s&value=%s\" class=\"strongs\">%s</a>&gt;</em></small>",
 							(gh.length()) ? gh.c_str() : "", 
 							URL::encode(val2).c_str(),
 							val2);
@@ -122,7 +122,7 @@ void processMorph(bool suspendTextPassThru, XMLTag &tag, SWBuf &buf) {
 				if ((*val == 'T') && (strchr("GH", val[1])) && (isdigit(val[2])))
 					val2+=2;
 				if (!suspendTextPassThru) {
-					buf.appendFormatted("<small><em class=\"morph\">(<a href=\"passagestudy.jsp?action=showMorph&type=%s&value=%s\" class=\"morph\">%s</a>)</em></small>",
+					buf.appendFormatted("<small><em class=\"morph\">(<a class=\"morph\" href=\"passagestudy.jsp?action=showMorph&type=%s&value=%s\" class=\"morph\">%s</a>)</em></small>",
 							URL::encode(tag.getAttribute("morph")).c_str(),
 							URL::encode(val).c_str(), 
 							val2);
@@ -273,6 +273,16 @@ bool OSISXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 		else if (!strcmp(tag.getName(), "note")) {
 			if (!tag.isEndTag()) {
 				SWBuf type = tag.getAttribute("type");
+				SWBuf subType = tag.getAttribute("subType");
+				SWBuf classExtras = "";
+
+				if (type.size()) {
+					classExtras.append(" ").append(type);
+				}
+				if (subType.size()) {
+                                        classExtras.append(" ").append(subType);
+                                }
+
 				bool strongsMarkup = (type == "x-strongsMarkup" || type == "strongsMarkup");	// the latter is deprecated
 				if (strongsMarkup) {
 					tag.setEmpty(false);	// handle bug in KJV2003 module where some note open tags were <note ... />
@@ -296,7 +306,8 @@ bool OSISXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 						SWCATCH ( ... ) {	}
 						if (vkey) {
 							//printf("URL = %s\n",URL::encode(vkey->getText()).c_str());
-							buf.appendFormatted("<a href=\"passagestudy.jsp?action=showNote&type=%c&value=%s&module=%s&passage=%s\"><small><sup class=\"%c\">*%c%s</sup></small></a>",
+							buf.appendFormatted("<a class=\"%s\" href=\"passagestudy.jsp?action=showNote&type=%c&value=%s&module=%s&passage=%s\"><small><sup class=\"%c\">*%c%s</sup></small></a>",
+								classExtras.c_str(),
 								ch, 
 								URL::encode(footnoteNumber.c_str()).c_str(), 
 								URL::encode(u->version.c_str()).c_str(), 
@@ -306,7 +317,8 @@ bool OSISXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 								(renderNoteNumbers ? noteName.c_str() : ""));
 						}
 						else {
-							buf.appendFormatted("<a href=\"passagestudy.jsp?action=showNote&type=%c&value=%s&module=%s&passage=%s\"><small><sup class=\"%c\">*%c%s</sup></small></a>",
+							buf.appendFormatted("<a class=\"%s\" href=\"passagestudy.jsp?action=showNote&type=%c&value=%s&module=%s&passage=%s\"><small><sup class=\"%c\">*%c%s</sup></small></a>",
+								classExtras.c_str(),
 								ch, 
 								URL::encode(footnoteNumber.c_str()).c_str(), 
 								URL::encode(u->version.c_str()).c_str(), 
@@ -491,10 +503,16 @@ bool OSISXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 		else if (!strcmp(tag.getName(), "title")) {
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
 				SWBuf type = tag.getAttribute("type");
+				SWBuf canonical = tag.getAttribute("canonical");
+				
 				SWBuf classExtras = "";
+
 				if (type.size()) {
 					classExtras.append(" ").append(type);
 				}
+				if (canonical.size() && !strcmp(canonical,"true")) {
+					classExtras.append(" canonical");
+				} 
 				VerseKey *vkey = SWDYNAMIC_CAST(VerseKey, u->key);
 				if (vkey && !vkey->getVerse()) {
 					if (!vkey->getChapter()) {

@@ -7,7 +7,7 @@ Raw:
 <div sID="gen12" type="section"/> <title canonical="true" type="psalm">A Psalm of David, when he fled from Absalom his son.</title> <div sID="gen13" type="x-p"/> <lg sID="gen14"/> 
 -------
 Rendered Header:
- <h3 class="title psalm">A Psalm of David, when he fled from Absalom his son.</h3>
+ <h3 class="title psalm canonical">A Psalm of David, when he fled from Absalom his son.</h3>
 
 <br />
  
