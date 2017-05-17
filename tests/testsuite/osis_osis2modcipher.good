@@ -32,6 +32,7 @@ CSS:
 		.colophon {font-style: italic; font-size=small; display:block;}
 		.rdg { font-style: italic;}
 		.catchWord {font-style: bold;}
+		.x-p-indent {text-indent: 10px;}
 	
 -------
 RenderText:
@@ -76,6 +77,7 @@ CSS:
 		.colophon {font-style: italic; font-size=small; display:block;}
 		.rdg { font-style: italic;}
 		.catchWord {font-style: bold;}
+		.x-p-indent {text-indent: 10px;}
 	
 -------
 RenderText:

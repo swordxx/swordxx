@@ -54,6 +54,7 @@ const char *OSISXHTML::getHeader() const {
 		.colophon {font-style: italic; font-size=small; display:block;}\n\
 		.rdg { font-style: italic;}\n\
 		.catchWord {font-style: bold;}\n\
+		.x-p-indent {text-indent: 10px;}\n\
 	";
 	// Acrostic for things like the titles in Psalm 119
 	return header;
@@ -506,6 +507,15 @@ bool OSISXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 				// finally, alternate " and ', if config says we should supply a mark
 				else if (u->osisQToTick)
 					outText((level % 2) ? '\"' : '\'', buf, u);
+			}
+			else if (!strcmp(type, "x-importer")) {
+				//drop tag as not relevant
+			} 
+			
+			
+			else {
+				SWBuf type = tag.getAttribute("type");
+				outText(SWBuf("<span class=\"") + type + "\"/>", buf,u);
 			}
 		}
 
