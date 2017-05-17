@@ -70,15 +70,14 @@ static inline void outText(const char *t, std::string &o, BasicFilterUserData *u
 static inline void outText(char t, std::string &o, BasicFilterUserData *u) { if (!u->suspendTextPassThru) o += t; else u->lastSuspendSegment += t; }
 
 void processLemma(bool suspendTextPassThru, XMLTag &tag, std::string &buf) {
-    std::string attrib;
-    const char *val;
-    if (!(attrib = tag.attribute("lemma")).empty()) {
+    auto attrib(tag.attribute("lemma"));
+    if (!attrib.empty()) {
         int count = tag.attributePartCount("lemma", ' ');
         int i = (count > 1) ? 0 : -1;        // -1 for whole value cuz it's faster, but does the same thing as 0
         do {
             attrib = tag.attribute("lemma", i, ' ');
             if (i < 0) i = 0;    // to handle our -1 condition
-            val = strchr(attrib.c_str(), ':');
+            const char * val = strchr(attrib.c_str(), ':');
             val = (val) ? (val + 1) : attrib.c_str();
             std::string gh;
             if(*val == 'G')
@@ -98,7 +97,6 @@ void processLemma(bool suspendTextPassThru, XMLTag &tag, std::string &buf) {
                             val2);
                 }
             //}
-
         } while (++i < count);
     }
 }
@@ -106,10 +104,9 @@ void processLemma(bool suspendTextPassThru, XMLTag &tag, std::string &buf) {
 
 
 void processMorph(bool suspendTextPassThru, XMLTag &tag, std::string &buf) {
-    std::string attrib;
-    const char *val;
-    if (!(attrib = tag.attribute("morph")).empty()) { // && (show)) {
-        std::string savelemma = tag.attribute("savlm");
+    auto attrib(tag.attribute("morph"));
+    if (!attrib.empty()) { // && (show)) {
+        //std::string savelemma = tag.attribute("savlm");
         //if ((strstr(savelemma.c_str(), "3588")) && (lastText.length() < 1))
         //    show = false;
         //if (show) {
@@ -118,7 +115,7 @@ void processMorph(bool suspendTextPassThru, XMLTag &tag, std::string &buf) {
             do {
                 attrib = tag.attribute("morph", i, ' ');
                 if (i < 0) i = 0;    // to handle our -1 condition
-                val = strchr(attrib.c_str(), ':');
+                const char * val = strchr(attrib.c_str(), ':');
                 val = (val) ? (val + 1) : attrib.c_str();
                 const char *val2 = val;
                 if ((*val == 'T') && (strchr("GH", val[1])) && (isdigit(val[2])))
@@ -381,9 +378,11 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
 
                     std::string target(tag.attribute("osisRef"));
                     const char* the_ref = std::strchr(target.c_str(), ':');
-                    auto const type(tag.attribute("type"));
-                    if (!type.empty())
-                        classes.append(type);
+                    {
+                        auto const type(tag.attribute("type"));
+                        if (!type.empty())
+                            classes.append(type);
+                    }
 
                     if(!the_ref) {
                         // No work
@@ -453,7 +452,8 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
                     outText("</span>", buf, u);
                     u->outputNewline(buf);
                 }
-                if (u->lineStack->size()) u->lineStack->pop();
+                if (!u->lineStack->empty())
+                    u->lineStack->pop();
             }
             // <l/> without eID or sID
             // Note: this is improper osis. This should be <lb/>
@@ -501,14 +501,14 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
         // <title>
         else if (tag.name() == "title") {
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {
-                std::string type = tag.attribute("type");
-                auto const canonical(tag.attribute("canonical"));
 
                 std::string classExtras;
-
-                if (!type.empty())
-                    classExtras.append(1, ' ').append(type);
-                if (canonical == "true")
+                {
+                    auto const type(tag.attribute("type"));
+                    if (!type.empty())
+                        classExtras.append(1, ' ').append(type);
+                }
+                if (tag.attribute("canonical") == "true")
                     classExtras.append(" canonical");
                 VerseKey const * const vkey =
                         dynamic_cast<VerseKey const *>(u->key);
@@ -543,9 +543,10 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
             else if (tag.isEndTag()) {
                 if (!u->titleStack->empty()) {
                     XMLTag tag(u->titleStack->top().c_str());
-                    if (u->titleStack->size()) u->titleStack->pop();
+                    if (!u->titleStack->empty())
+                        u->titleStack->pop();
                     std::string pushed = tag.attribute("pushed");
-                    if (pushed.size()) {
+                    if (!pushed.empty()) {
                         outText((std::string("</") + pushed + ">\n\n").c_str(), buf, u);
                     }
                     else {
@@ -600,7 +601,7 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
             else if (tag.isEndTag()) {
                 std::string lastText = u->lastSuspendSegment.c_str();
                 u->suspendTextPassThru = (--u->suspendLevel);
-                if (lastText.size()) {
+                if (!lastText.empty()) {
                     scratch = formatted("<span class=\"divineName\">%s</span>", lastText.c_str());
                     outText(scratch.c_str(), buf, u);
                 }
@@ -645,7 +646,8 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
                 std::string type = "";
                 if (!u->hiStack->empty()) {
                     XMLTag tag(u->hiStack->top().c_str());
-                    if (u->hiStack->size()) u->hiStack->pop();
+                    if (!u->hiStack->empty())
+                        u->hiStack->pop();
                     type = tag.attribute("type");
                     if (!type.length()) type = tag.attribute("rend");
                 }
@@ -708,7 +710,8 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
                 // if it is </q> then pop the stack for the attributes
                 if (tag.isEndTag() && !u->quoteStack->empty()) {
                     XMLTag qTag(u->quoteStack->top().c_str());
-                    if (u->quoteStack->size()) u->quoteStack->pop();
+                    if (!u->quoteStack->empty())
+                        u->quoteStack->pop();
 
                     type    = qTag.attribute("type");
                     who     = qTag.attribute("who");
@@ -758,7 +761,7 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
                 std::string filepath;
                 if (userData->module) {
                     filepath = userData->module->getConfigEntry("AbsoluteDataPath");
-                    if ((filepath.size()) && (filepath[filepath.size()-1] != '/') && (src[0] != '/'))
+                    if ((!filepath.empty()) && (filepath[filepath.size()-1] != '/') && (src[0] != '/'))
                         filepath += '/';
                 }
                 filepath += src;
