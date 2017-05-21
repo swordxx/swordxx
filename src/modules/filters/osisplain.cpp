@@ -240,9 +240,9 @@ bool OSISPlain::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 				}
 			}
 			else {
-				buf.append("*");
+				buf.append("* ");
 				buf.append(u->lastSuspendSegment);
-				buf.append("*");
+				buf.append(" *");
 			}
 			u->suspendTextPassThru = false;
 		}

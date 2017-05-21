@@ -13,6 +13,7 @@ BlockType=BOOK
 CompressType=ZIP
 SourceType=OSIS
 Lang=en
+GlobalOptionFilter=OSISLemma
 GlobalOptionFilter=OSISStrongs
 GlobalOptionFilter=OSISMorph
 GlobalOptionFilter=OSISFootnotes
@@ -23,4 +24,12 @@ Feature=StrongsNumbers
 
 ../../utilities/osis2mod tmp/osis_basic/modules/ osisReference.xml -z 2>&1 | grep -v \$Rev
 
-cd tmp/osis_basic && ../../../osistest OSISReference
+cd tmp/osis_basic
+../../../osistest OSISReference
+
+echo
+echo ** Plain output
+../../../../utilities/diatheke/diatheke -b OSISReference -f plain -k Acts 2:19-20
+echo
+echo ** RTF output
+../../../../utilities/diatheke/diatheke -b OSISReference -f RTF -k Acts 2:19-20

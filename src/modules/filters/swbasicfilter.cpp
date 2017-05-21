@@ -383,6 +383,9 @@ char SWBasicFilter::processText(SWBuf &text, const SWKey *key, const SWModule *m
 					}
 					escEndPos = escStartPos = tokenEndPos = tokenStartPos = 0;
 					lastTextNode = "";
+					if (!userData->suspendTextPassThru) {
+						userData->lastSuspendSegment.size(0);
+					}
 					continue;
 				}
 			}
@@ -398,7 +401,6 @@ char SWBasicFilter::processText(SWBuf &text, const SWKey *key, const SWModule *m
  			if ((!userData->supressAdjacentWhitespace) || (*from != ' ')) {
 				if (!userData->suspendTextPassThru) {
 					text.append(*from);
-					userData->lastSuspendSegment.size(0);
 				}
 				else	userData->lastSuspendSegment.append(*from);
 				lastTextNode.append(*from);
