@@ -120,7 +120,14 @@ else
 fi
 
 AM_CFLAGS="$AM_CFLAGS -fPIC"
-AM_CXXFLAGS="$AM_CXXFLAGS -fPIC -ftemplate-depth=100"
+AM_CXXFLAGS="$AM_CXXFLAGS -fPIC"
+
+#stupid check for old or new g++ compiler param syntax for this compiler option
+saved_CXXFLAGS="$CXXFLAGS"
+CXXFLAGS="$CXXFLAGS -ftemplate-depth=100"
+AC_LANG_PUSH([C++])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])],,[CXXFLAGS="$saved_CXXFLAGS -ftemplate-depth-100";])
+AC_LANG_POP([C++])
 
 # ---------------------------------------------------------------------
 # Check libraries
