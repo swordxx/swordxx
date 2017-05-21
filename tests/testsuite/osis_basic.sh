@@ -28,8 +28,8 @@ cd tmp/osis_basic
 ../../../osistest OSISReference
 
 echo
-echo ** Plain output
-../../../../utilities/diatheke/diatheke -b OSISReference -f plain -k Acts 2:19-20
+echo "-- Plain output"
+../../../../utilities/diatheke/diatheke -b OSISReference -f plain -k Acts 2:19-20 | grep -v OSISReference
 echo
-echo ** RTF output
-../../../../utilities/diatheke/diatheke -b OSISReference -f RTF -k Acts 2:19-20
+echo "-- RTF output"
+../../../../utilities/diatheke/diatheke -b OSISReference -f RTF -k Acts 2:19-20 | grep -v OSISReference

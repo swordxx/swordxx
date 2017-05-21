@@ -36,6 +36,7 @@ BlockType=BOOK
 CompressType=ZIP
 SourceType=OSIS
 Lang=en
+GlobalOptionFilter=OSISLemma
 GlobalOptionFilter=OSISStrongs
 GlobalOptionFilter=OSISMorph
 GlobalOptionFilter=OSISFootnotes
@@ -50,3 +51,10 @@ cp osis_basic.good osis_mod2zmod.good
 cd tmp/osis_mod2zmod
 ../../../../utilities/mod2zmod OSISReference zmodules/ 4 2 0 abc123 > /dev/null 2>&1
 ../../../osistest zOSISReference
+
+echo
+echo "-- Plain output"
+../../../../utilities/diatheke/diatheke -b zOSISReference -f plain -k Acts 2:19-20 | grep -v zOSISReference
+echo
+echo "-- RTF output"
+../../../../utilities/diatheke/diatheke -b zOSISReference -f RTF -k Acts 2:19-20 | grep -v zOSISReference

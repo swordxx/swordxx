@@ -125,7 +125,7 @@ Tables work like this: <table><tbody>
 
 [ Genesis 1:2 ] Text of verse 2.
 
-mods.d modules Plain output
+-- Plain output
 Acts 2:19: ‘* And I will grant wonders in the sky above *
 * And signs on the earth below *,
 * Blood, and fire, and vapor of smoke *.
@@ -134,10 +134,8 @@ Acts 2:20: ‘* The sun will be turned into darkness *
 * And the moon into blood *,
 * Before the great and glorious day of the Lord shall come *.
  
-(OSISReference)
 
-mods.d modules RTF output
+-- RTF output
 {\rtf1\ansi{\fonttbl{\f0\froman\fcharset0\fprq2 Times New Roman;}{\f1\fdecor\fprq2 Gentium;}{\f7\froman\fcharset2\fprq2 Symbol;}}Acts 2:19: {\f1 ‘{\i1 {And I will grant} {wonders} {in the sky} {above}}{\par} {\i1 {And signs} {on the earth} {below}},{\par} {\i1 {Blood}, {and fire}, {and vapor} {of smoke}}.{\par}}\par 
 Acts 2:20: {\f1 ‘{\i1 {The sun} {will be turned} {into darkness}}{\par} {\i1 {And the moon} {into blood}},{\par} {\i1 {Before} {the great} {and glorious} {day} {of the Lord} {shall come}}.{\par} }\par 
-(OSISReference)
 }
