@@ -89,7 +89,7 @@ int main(int argc, char **argv)
 
 	SWBuf searchTerm = argv[2];
 	manager.setGlobalOption("Greek Accents", "Off");
-	manager.setGlobalOption("Strong's Numbers", "On");
+	manager.setGlobalOption("Strong's Numbers", "Off");
 	manager.setGlobalOption("Hebrew Vowel Points", "Off");
 	manager.filterText("Greek Accents", searchTerm);
 

@@ -46,6 +46,9 @@
 #endif
 #elif defined(USEICUREGEX)
 #include <unicode/regex.h>
+#ifndef REG_ICASE
+#define REG_ICASE UREGEX_CASE_INSENSITIVE
+#endif
 #else
 #include <regex.h>	// GNU
 #endif
@@ -418,6 +421,8 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 	std::locale::global(std::locale("en_US.UTF-8"));
 
 	std::regex preg;
+#elif defined(USEICUREGEX)
+	RegexMatcher *matcher = 0;
 #else
 	regex_t preg;
 #endif
@@ -461,6 +466,14 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 	if (searchType >= 0) {
 #ifdef USECXX11REGEX
 		preg = std::regex((SWBuf(".*")+istr+".*").c_str(), std::regex_constants::extended | searchType | flags);
+#elif defined(USEICUREGEX)
+		UErrorCode        status    = U_ZERO_ERROR;
+		matcher = new RegexMatcher(istr, searchType | flags, status);
+		if (U_FAILURE(status)) {
+			SWLog::getSystemLog()->logError("Error compiling Regex: %d", status);
+			return listKey;
+		}
+
 #else
 		flags |=searchType|REG_NOSUB|REG_EXTENDED;
 		int err = regcomp(&preg, istr, flags);
@@ -648,6 +661,11 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 			SWBuf textBuf = stripText();
 #ifdef USECXX11REGEX
 			if (std::regex_match(std::string(textBuf.c_str()), preg)) {
+#elif defined(USEICUREGEX)
+			UnicodeString stringToTest = textBuf.c_str();
+			matcher->reset(stringToTest);
+
+			if (matcher->find()) {
 #else
 			if (!regexec(&preg, textBuf, 0, 0, 0)) {
 #endif
@@ -658,6 +676,12 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 			}
 #ifdef USECXX11REGEX
 			else if (std::regex_match(std::string((lastBuf + ' ' + textBuf).c_str()), preg)) {
+#elif defined(USEICUREGEX)
+			else {
+				stringToTest = (lastBuf + ' ' + textBuf).c_str();
+				matcher->reset(stringToTest);
+
+				if (matcher->find()) {
 #else
 			else if (!regexec(&preg, lastBuf + ' ' + textBuf, 0, 0, 0)) {
 #endif
@@ -668,6 +692,9 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 			else {
 				lastBuf = textBuf;
 			}
+#if defined(USEICUREGEX)
+			}
+#endif
 		}
 
 		// phrase
@@ -851,6 +878,8 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 	if (searchType >= 0) {
 #ifdef USECXX11REGEX
 		std::locale::global(oldLocale);
+#elif defined(USEICUREGEX)
+		delete matcher;
 #else
 		regfree(&preg);
 #endif

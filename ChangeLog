@@ -1,5 +1,8 @@
 API ChangeLog
 
+21-May-2017	Troy A. Griffitts <scribe@crosswire.org>
+	Added --with-icuregex option to use ICU regex engine
+
 24-Apr-2017	Troy A. Griffitts <scribe@crosswire.org>
 	Branching 1.8.x
 

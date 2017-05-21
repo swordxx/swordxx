@@ -35,6 +35,7 @@ OPTIONS="--enable-debug $OPTIONS"
 #OPTIONS="--enable-profile $OPTIONS"
 
 #OPTIONS="--with-cxx11regex $OPTIONS"
+OPTIONS="--with-icuregex $OPTIONS"
 #OPTIONS="--with-icusword $OPTIONS"
 #OPTIONS="--without-icu $OPTIONS"
 #OPTIONS="--without-clucene $OPTIONS"

@@ -72,6 +72,8 @@ AC_ARG_WITH(curl_sftp,
 #	AC_HELP_STRING([--with-lucene],[include lucene support for searching (default=no)]),,with_lucene=no)
 AC_ARG_WITH([internalregex],
 	AS_HELP_STRING([--with-internalregex], [Compile using SWORDs internal copy of regex]))
+AC_ARG_WITH([icuregex],
+	AS_HELP_STRING([--with-icuregex], [use ICU regex engine]))
 AC_ARG_WITH(xapian,
 	AC_HELP_STRING([--with-xapian],[use xapian search engine (default=yes)]),,with_xapian=yes)
 
@@ -306,11 +308,22 @@ else
 fi
 fi
 
-if test x$with_xapian  = xyes; then
+if test x$with_xapian = xyes; then
 	AC_LANG_CPLUSPLUS
 	AC_CHECK_LIB(xapian,main,,with_xapian="no")
 else
 	with_xapian="no"
+fi
+
+if test x$with_icuregex = xyes; then
+	if test x$with_icu = xno; then
+		with_icuregex="requested; but using ICU not enabled"
+	else
+		AM_CFLAGS="$AM_CFLAGS -DUSEICUREGEX"
+		AM_CXXFLAGS="$AM_CXXFLAGS -DUSEICUREGEX"
+	fi
+else
+	with_icuregex="no"
 fi
 
 if test x$with_xapian = xyes; then
@@ -425,6 +438,7 @@ AM_CONDITIONAL(USELUCENE, test "x$with_clucene" != xno)
 AM_CONDITIONAL(SHAREDLIB, test x$enable_shared = xyes)
 AM_CONDITIONAL(INSTCONF, test x$with_conf = xyes)
 AM_CONDITIONAL(USECXX11REGEX, test x$with_cxx11regex = xyes)
+AM_CONDITIONAL(USEICUREGEX, test x$with_icuregex = xyes)
 AM_CONDITIONAL(WITHCURL, test x$with_curl = xyes)
 AM_CONDITIONAL(WITHCURLSFTP, test x$with_curl_sftp = xyes)
 AM_CONDITIONAL(INTERNALFTPLIB, test x$with_internalftplib = xyes)
@@ -465,7 +479,8 @@ echo     "     LIBCURL SFTP:         $with_curl_sftp"
 echo     "     BZIP2:                $with_bzip2"
 echo     "     XZ:                   $with_xz"
 echo     "     ICUSWORD:             $with_icusword"
-echo     "     CXX11REGEX:           $with_cxx11regex"
+echo     "     CXX11-REGEX:          $with_cxx11regex"
+echo     "     ICU-REGEX:            $with_icuregex"
 echo     "     XAPIAN-CORE:          $with_xapian"
 
 
