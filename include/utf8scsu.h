@@ -28,6 +28,7 @@
 #include <unicode/utypes.h>
 #include <unicode/ucnv.h>
 #include <unicode/uchar.h>
+#include <unicode/unistr.h>
 
 SWORD_NAMESPACE_START
 

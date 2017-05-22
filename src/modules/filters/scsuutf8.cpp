@@ -31,6 +31,10 @@
 
 #include <scsuutf8.h>
 #include <swbuf.h>
+#ifdef _ICU_
+#include <unicode/unistr.h>
+#endif
+
 
 
 SWORD_NAMESPACE_START
