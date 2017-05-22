@@ -3,6 +3,11 @@
 echo 
 echo "*** Autogening main sword engine build system"
 echo 
+
+# quick test to see if we're at the base and cd to scripts folder
+cd scripts 2> /dev/null
+
+# rest of script assumes we're in the scripts folder
 (cd ..;./autogen.sh)
 
 REV=`cd ..;basename \`pwd ..\`|cut -d\- -f2`
@@ -22,7 +27,7 @@ if [ "$REV" = "$SWORDVER" ]; then
 	echo 
 	echo "*** Tarring up" sword-$REV.tar.gz
 	echo 
-	cd ..; tar -v -c -p -s -z --exclude sword-$REV/bin --exclude sword-$REV/autom4te.cache --exclude sword-$REV/bindings/swig/package/autom4te.cache -X sword-$REV/distignore -f sword-$REV.tar.gz sword-$REV/*
+	cd ..; tar -v -c -p -z --exclude sword-$REV/bin --exclude sword-$REV/autom4te.cache --exclude sword-$REV/bindings/swig/package/autom4te.cache -X sword-$REV/distignore -f sword-$REV.tar.gz sword-$REV/*
 
 else
 	echo $"Directory version is $REV, but configure.ac has $SWORDVER"
