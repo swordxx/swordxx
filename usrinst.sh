@@ -49,6 +49,25 @@ OPTIONS="--with-icuregex $OPTIONS"
 #LIBS="-no-undefined"
 #OPTIONS="lt_cv_deplibs_check_method=pass_all $OPTIONS"
 
+# These are for experimental purposes, review,
+# may not be available on all platforms, are unsupported,
+# and no modules should be released which depend on them. 
+# If significant gains in size and speed are achieved,
+# we should discuss the portability of these libraries
+# and decide if we should make the switch to prefer one
+# of these compression systems over zlib.
+# That's not to say that support for these is not appreciated
+# (chrislit)-- on the contrary, this is the R in R&D, we just
+# need to consider portability: ios, android-ndk, and
+# windows support, before implying modules can be made with them.
+# I am all for switching to one, by policy, if we observe appreciable
+# gains and confirm portability.  I only see support disadvantages to
+# expanding compression options, otherwise.
+
+#OPTIONS="--with-bzip2 $OPTIONS"
+#OPTIONS="--with-xz $OPTIONS"
+
+
 LIBS="$LIBS" ./configure $OPTIONS $*
 
 

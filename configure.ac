@@ -53,9 +53,9 @@ fi
 AC_ARG_WITH(zlib,
 	AC_HELP_STRING([--with-zlib],[allow zlib compressed modules (default=yes)]),,with_zlib=yes)
 AC_ARG_WITH(bzip2,
-	AC_HELP_STRING([--with-bzip2],[allow bzip2 compressed modules (default=yes)]),,with_bzip2=yes)
+	AC_HELP_STRING([--with-bzip2],[allow bzip2 compressed modules (default=no)]),,with_bzip2=no)
 AC_ARG_WITH(xz,
-	AC_HELP_STRING([--with-xz],[allow xz compressed modules (default=yes)]),,with_xz=yes)
+	AC_HELP_STRING([--with-xz],[allow xz compressed modules (default=no)]),,with_xz=no)
 AC_ARG_WITH(icu,
 	AC_HELP_STRING([--with-icu],[use ICU for unicode (default=yes)]),,with_icu=yes)
 AC_ARG_WITH(icusword,
