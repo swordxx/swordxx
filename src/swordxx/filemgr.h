@@ -189,7 +189,7 @@ public:
     */
     signed char trunc(FileDesc *file);
 
-    static bool isDirectory(char const * path);
+    static bool isDirectory(std::string const & path);
     static int createParent(NormalizedPath const & path);
     static int createPathAndFile(const char *fName);
 

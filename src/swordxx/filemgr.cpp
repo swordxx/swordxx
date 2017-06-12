@@ -433,9 +433,9 @@ std::string FileMgr::getLine(FileDesc *fDesc) {
 }
 
 
-bool FileMgr::isDirectory(char const * path) {
+bool FileMgr::isDirectory(std::string const & path) {
     struct ::stat stats;
-    if (::stat(path, &stats))
+    if (::stat(path.c_str(), &stats))
         return false;
     return (stats.st_mode & S_IFDIR) == S_IFDIR;
 }
@@ -454,7 +454,7 @@ int FileMgr::copyDir(const char *srcDir, const char *destDir) {
                 if ((strcmp(ent->d_name, ".")) && (strcmp(ent->d_name, ".."))) {
                     std::string const srcPath(sDir + ent->d_name);
                     std::string const destPath(dDir + ent->d_name);
-                    if (!isDirectory(srcPath.c_str())) {
+                    if (!isDirectory(srcPath)) {
                         retVal = copyFile(srcPath.c_str(), destPath.c_str());
                     }
                     else {
@@ -480,7 +480,7 @@ int FileMgr::removeDir(const char *targetDir) {
         while ((ent = readdir(dir))) {
             if ((strcmp(ent->d_name, ".")) && (strcmp(ent->d_name, ".."))) {
                 std::string targetPath(std::string(targetDir) + '/' + ent->d_name);
-                if (!isDirectory(targetPath.c_str())) {
+                if (!isDirectory(targetPath)) {
                     FileMgr::removeFile(targetPath.c_str());
                 }
                 else {
