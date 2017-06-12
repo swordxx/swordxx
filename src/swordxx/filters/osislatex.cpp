@@ -398,7 +398,7 @@ bool OSISLaTeX::handleToken(std::string &buf, const char *token, BasicFilterUser
                     {
                         buf += formatted("\\swordxref{%s}{",
                             ref.c_str()
-//                            (work.size()) ? URL::encode(work.c_str()).c_str() : "")
+//                            (work.size()) ? URL::encode(work).c_str() : "")
                             );
                     }
                     else

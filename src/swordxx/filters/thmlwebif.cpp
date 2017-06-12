@@ -52,7 +52,7 @@ bool ThMLWEBIF::handleToken(std::string &buf, const char *token, BasicFilterUser
 
             if (tag.attribute("type") == "morph") {
                 buf += "<small><em> (";
-                buf += formatted("<a href=\"%s?showMorph=%s#cv\">", passageStudyURL.c_str(), URL::encode(url.c_str()).c_str() );
+                buf += formatted("<a href=\"%s?showMorph=%s#cv\">", passageStudyURL.c_str(), URL::encode(url).c_str() );
             }
             else {
                 if (!value.empty()) {
@@ -61,7 +61,7 @@ bool ThMLWEBIF::handleToken(std::string &buf, const char *token, BasicFilterUser
                 }
 
                 buf += "<small><em> &lt;";
-                buf += formatted("<a href=\"%s?showStrong=%s#cv\">", passageStudyURL.c_str(), URL::encode(url.c_str()).c_str() );
+                buf += formatted("<a href=\"%s?showStrong=%s#cv\">", passageStudyURL.c_str(), URL::encode(url).c_str() );
             }
 
             buf += value;
@@ -82,7 +82,7 @@ bool ThMLWEBIF::handleToken(std::string &buf, const char *token, BasicFilterUser
                 }
                 else { // end of scripRef like "<scripRef>John 3:16</scripRef>"
                     url = u->lastTextNode;
-                    buf += formatted("<a href=\"%s?key=%s#cv\">", passageStudyURL.c_str(), URL::encode(url.c_str()).c_str());
+                    buf += formatted("<a href=\"%s?key=%s#cv\">", passageStudyURL.c_str(), URL::encode(url).c_str());
                     buf += u->lastTextNode.c_str();
                     buf += "</a>";
 
@@ -93,7 +93,7 @@ bool ThMLWEBIF::handleToken(std::string &buf, const char *token, BasicFilterUser
             else if (!tag.attribute("passage").empty()) { //passage given
                 u->inscriptRef = true;
 
-                buf += formatted("<a href=\"%s?key=%s#cv\">", passageStudyURL.c_str(), URL::encode(tag.attribute("passage").c_str()).c_str());
+                buf += formatted("<a href=\"%s?key=%s#cv\">", passageStudyURL.c_str(), URL::encode(tag.attribute("passage")).c_str());
             }
             else { //no passage given
                 u->inscriptRef = false;

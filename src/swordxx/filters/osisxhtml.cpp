@@ -123,7 +123,7 @@ void processMorph(bool suspendTextPassThru, XMLTag &tag, std::string &buf) {
                     val2+=2;
                 if (!suspendTextPassThru) {
                     buf += formatted("<small><em class=\"morph\">(<a class=\"morph\" href=\"passagestudy.jsp?action=showMorph&type=%s&value=%s\" class=\"morph\">%s</a>)</em></small>",
-                            URL::encode(tag.attribute("morph").c_str()).c_str(),
+                            URL::encode(tag.attribute("morph")).c_str(),
                             URL::encode(val).c_str(),
                             val2);
                 }
@@ -302,8 +302,8 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
                             buf += formatted("<a class=\"%s\" href=\"passagestudy.jsp?action=showNote&type=%c&value=%s&module=%s&passage=%s\"><small><sup class=\"%c\">*%c%s</sup></small></a>",
                                 classExtras.c_str(),
                                 ch,
-                                URL::encode(footnoteNumber.c_str()).c_str(),
-                                URL::encode(u->version.c_str()).c_str(),
+                                URL::encode(footnoteNumber).c_str(),
+                                URL::encode(u->version).c_str(),
                                 URL::encode(vkey->getText()).c_str(),
                                 ch,
                                 ch,
@@ -313,8 +313,8 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
                             buf += formatted("<a class=\"%s\" href=\"passagestudy.jsp?action=showNote&type=%c&value=%s&module=%s&passage=%s\"><small><sup class=\"%c\">*%c%s</sup></small></a>",
                                 classExtras.c_str(),
                                 ch,
-                                URL::encode(footnoteNumber.c_str()).c_str(),
-                                URL::encode(u->version.c_str()).c_str(),
+                                URL::encode(footnoteNumber).c_str(),
+                                URL::encode(u->version).c_str(),
                                 URL::encode(u->key->getText()).c_str(),
                                 ch,
                                 ch,
@@ -407,8 +407,8 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
                     {
                         buf += formatted("<a class=\"%s\" href=\"passagestudy.jsp?action=showRef&type=scripRef&value=%s&module=\">",
                             classes.c_str(),
-                            URL::encode(ref.c_str()).c_str()
-//							(work.size()) ? URL::encode(work.c_str()).c_str() : "")
+                            URL::encode(ref).c_str()
+//							(work.size()) ? URL::encode(work).c_str() : "")
                             );
                     }
                     else
@@ -416,8 +416,8 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
                         // Dictionary link, or something
                         buf += formatted(u->interModuleLinkStart.c_str(),
                             classes.c_str(),
-                            URL::encode(work.c_str()).c_str(),
-                            URL::encode(ref.c_str()).c_str()
+                            URL::encode(work).c_str(),
+                            URL::encode(ref).c_str()
                             );
                     }
                 }
@@ -777,9 +777,9 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
 
                 // images become clickable, if the UI supports showImage.
                 outText("<a href=\"passagestudy.jsp?action=showImage&value=", buf, u);
-                outText(URL::encode(filepath.c_str()).c_str(), buf, u);
+                outText(URL::encode(filepath).c_str(), buf, u);
                 outText("&module=", buf, u);
-                outText(URL::encode(u->version.c_str()).c_str(), buf, u);
+                outText(URL::encode(u->version).c_str(), buf, u);
                 outText("\">", buf, u);
 
                 outText("<img src=\"file:", buf, u);
