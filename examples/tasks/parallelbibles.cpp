@@ -74,7 +74,7 @@ void parallelDisplay(vector<SWModule *>modules, const char *key) {
 
             if (!(*module)->popError()) {
 
-                if(strcmp(slave.getBookName().c_str(), master->getBookName().c_str())) {
+                if (slave.getBookName() != master->getBookName()) {
                     if(o) cout << slave.getShortText();
                 }
                 else if(slave.getChapter() != master->getChapter()) {

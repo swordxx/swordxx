@@ -229,10 +229,10 @@ bool ThMLRTF::handleToken(std::string &buf, const char *token, BasicFilterUserDa
             u->startTag = tag;
         if (tag.name() == "sync") {
             std::string value = tag.attribute("value");
-            if (!tag.attribute("type").empty() && !strcmp(tag.attribute("type").c_str(), "morph")) { //&gt;
+            if (tag.attribute("type") == "morph") { //&gt;
                 buf += formatted(" {\\cf4 \\sub (%s)}", value.c_str());
             }
-            else if(!tag.attribute("type").empty() && !strcmp(tag.attribute("type").c_str(), "Strongs")) {
+            else if (tag.attribute("type") == "Strongs") {
                 if (value[0] == 'H' || value[0] == 'G' || value[0] == 'A') {
                     value.erase(0u, 1u);
                     buf += formatted(" {\\cf3 \\sub <%s>}", value.c_str());
@@ -242,7 +242,7 @@ bool ThMLRTF::handleToken(std::string &buf, const char *token, BasicFilterUserDa
                     buf += formatted(" {\\cf4 \\sub (%s)}", value.c_str());
                 }
             }
-            else if (!tag.attribute("type").empty() && !strcmp(tag.attribute("type").c_str(), "Dict")) {
+            else if (tag.attribute("type") == "Dict") {
                 if (!tag.isEndTag())
                     buf += "{\\b ";
                 else    buf += "}";
@@ -256,7 +256,7 @@ bool ThMLRTF::handleToken(std::string &buf, const char *token, BasicFilterUserDa
                     std::string footnoteNumber = tag.attribute("swordFootnote");
                     if (VerseKey const * const vkey = dynamic_cast<VerseKey const *>(u->key)) {
                         // leave this special osis type in for crossReference notes types?  Might thml use this some day? Doesn't hurt.
-                        char ch = ((!tag.attribute("type").empty() && ((!strcmp(tag.attribute("type").c_str(), "crossReference")) || (!strcmp(tag.attribute("type").c_str(), "x-cross-ref")))) ? 'x':'n');
+                        char const ch = ((tag.attribute("type") == "crossReference") || (tag.attribute("type") == "x-cross-ref")) ? 'x' : 'n';
                         buf += formatted("{\\super <a href=\"\">*%c%i.%s</a>} ", ch, vkey->getVerse(), footnoteNumber.c_str());
                     }
                     u->suspendTextPassThru = true;

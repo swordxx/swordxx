@@ -73,9 +73,10 @@ char OSISMorphSegmentation::processText(std::string &text, const SWKey * /*key*/
             if (!strncmp(token.c_str(), "seg ", 4) || !strncmp(token.c_str(), "/seg", 4)) {
                 tag = token.c_str();
 
-                if (!tag.isEndTag() && !tag.attribute("type").empty() &&
-                    (  !strcmp("morph", tag.attribute("type").c_str())
-                    || !strcmp("x-morph", tag.attribute("type").c_str()))) {  //<seg type="morph"> start tag
+                if (!tag.isEndTag()
+                    && ((tag.attribute("type") == "morph")
+                        || (tag.attribute("type") == "x-morph")))
+                {  //<seg type="morph"> start tag
                     hide = !option; //only hide if option is Off
                     tagText = "";
                     inMorpheme = true;

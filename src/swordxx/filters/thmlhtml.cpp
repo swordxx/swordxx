@@ -158,7 +158,7 @@ bool ThMLHTML::handleToken(std::string &buf, const char *token, BasicFilterUserD
         MyUserData *u = (MyUserData *)userData;
         XMLTag tag(token);
         if (tag.name() == "sync") {
-            if (!tag.attribute("type").empty() && !tag.attribute("value").empty() && !strcmp(tag.attribute("type").c_str(), "Strongs")) {
+            if (!tag.attribute("value").empty() && (tag.attribute("type") == "Strongs")) {
                 auto value(tag.attribute("value"));
                 if (!value.empty()) {
                     auto const firstChar(*(value.c_str()));
@@ -177,12 +177,12 @@ bool ThMLHTML::handleToken(std::string &buf, const char *token, BasicFilterUserD
                     }
                 }
             }
-            else if (!tag.attribute("type").empty() && !tag.attribute("value").empty() && !strcmp(tag.attribute("type").c_str(), "morph")) {
+            else if (!tag.attribute("value").empty() && (tag.attribute("type") == "morph")) {
                 buf += "<small><em>";
                 buf += tag.attribute("value");
                 buf += "</em></small>";
             }
-            else if (!tag.attribute("type").empty() && !tag.attribute("value").empty() && !strcmp(tag.attribute("type").c_str(), "lemma")) {
+            else if (!tag.attribute("value").empty() && (tag.attribute("type") == "lemma")) {
                 buf += "<small><em>(";
                 buf += tag.attribute("value");
                 buf += ")</em></small>";
@@ -192,16 +192,12 @@ bool ThMLHTML::handleToken(std::string &buf, const char *token, BasicFilterUserD
             if (tag.isEndTag() && (u->SecHead)) {
                 buf += "</i></b><br />";
                 u->SecHead = false;
-            }
-            else if (!tag.attribute("class").empty()) {
-                if (!strcmp(tag.attribute("class").c_str(), "sechead")) {
-                    u->SecHead = true;
-                    buf += "<br /><b><i>";
-                }
-                else if (!strcmp(tag.attribute("class").c_str(), "title")) {
-                    u->SecHead = true;
-                    buf += "<br /><b><i>";
-                }
+            } else if (tag.attribute("class") == "sechead") {
+                u->SecHead = true;
+                buf += "<br /><b><i>";
+            } else if (tag.attribute("class") == "title") {
+                u->SecHead = true;
+                buf += "<br /><b><i>";
             }
         }
         else if (tag.name() == "img") {

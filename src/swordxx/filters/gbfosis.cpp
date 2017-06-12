@@ -226,7 +226,7 @@ char GBFOSIS::processText(std::string &text, const SWKey *key, const SWModule *m
                     text.insert(attStart - text.c_str(), buf);
                 }
                 else { //wordStart doesn't point to an existing <w> attribute!
-                    if (!strcmp(value.c_str(), "H03068")) {    //divineName
+                    if (value == "H03068") {    //divineName
                         buf = formatted("<divineName><w lemma=\"strong:%s\">", value.c_str());
 
                         divineName = true;

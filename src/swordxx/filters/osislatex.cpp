@@ -353,7 +353,7 @@ bool OSISLaTeX::handleToken(std::string &buf, const char *token, BasicFilterUser
         // Milestoned paragraphs, created by osis2mod
         // <div type="paragraph" sID.../>
         // <div type="paragraph" eID.../>
-        else if (tag.isEmpty() && (tag.name() == "div") && !tag.attribute("type").empty() && (!strcmp(tag.attribute("type").c_str(), "x-p") || !strcmp(tag.attribute("type").c_str(), "paragraph"))) {
+        else if (tag.isEmpty() && (tag.name() == "div") && ((tag.attribute("type") == "x-p") || (tag.attribute("type") == "paragraph"))) {
             // <div type="paragraph"  sID... />
             if (!tag.attribute("sID").empty()) {    // non-empty start tag
                 u->outputNewline(buf);
@@ -438,25 +438,24 @@ bool OSISLaTeX::handleToken(std::string &buf, const char *token, BasicFilterUser
         }
 
         // <lb.../>
-        else if ((tag.name() == "lb") && (tag.attribute("type").empty() || strcmp(tag.attribute("type").c_str(), "x-optional"))) {
+        else if ((tag.name() == "lb") && (tag.attribute("type").empty() || (tag.attribute("type") != "x-optional"))) {
                 u->outputNewline(buf);
         }
         // <milestone type="line"/>
         // <milestone type="x-p"/>
         // <milestone type="cQuote" marker="x"/>
-        else if (((tag.name() == "milestone")) && (!tag.attribute("type").empty())) {
-            if (!strcmp(tag.attribute("type").c_str(), "line")) {
+        else if ((tag.name() == "milestone") && !tag.attribute("type").empty()) {
+            if (tag.attribute("type") == "line") {
                 u->outputNewline(buf);
-                if (!tag.attribute("subType").empty() && !strcmp(tag.attribute("subType").c_str(), "x-PM")) {
+                if (tag.attribute("subType") == "x-PM")
                     u->outputNewline(buf);
-                }
             }
-            else if (!strcmp(tag.attribute("type").c_str(),"x-p"))  {
+            else if (tag.attribute("type") == "x-p") {
                 if (!tag.attribute("marker").empty())
                     outText(tag.attribute("marker").c_str(), buf, u);
                 else outText("<!p>", buf, u);
             }
-            else if (!strcmp(tag.attribute("type").c_str(), "cQuote")) {
+            else if (tag.attribute("type") == "cQuote") {
                 auto mark(tag.attribute("marker"));
                 bool hasMark = !mark.empty();
                 auto tmp(tag.attribute("level"));

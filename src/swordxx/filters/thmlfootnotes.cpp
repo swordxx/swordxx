@@ -106,14 +106,14 @@ char ThMLFootnotes::processText(std::string &text, const SWKey *key, const SWMod
                                     startTag.attribute(attr.c_str());
                         module->getEntryAttributes()["Footnote"][buf]["body"] = tagText;
                         startTag.setAttribute("swordFootnote", buf);
-                        if ((!startTag.attribute("type").empty()) && (!strcmp(startTag.attribute("type").c_str(), "crossReference"))) {
+                        if (startTag.attribute("type") == "crossReference") {
                             if (!refs.length())
                                 refs = parser->parseVerseList(tagText.c_str(), parser->getText(), true).getRangeText();
                             module->getEntryAttributes()["Footnote"][buf]["refList"] = refs.c_str();
                         }
                     }
                     hide = false;
-                    if ((option) || ((!startTag.attribute("type").empty() && (!strcmp(startTag.attribute("type").c_str(), "crossReference"))))) {    // we want the tag in the text; crossReferences are handled by another filter
+                    if (option || (startTag.attribute("type") == "crossReference")) {    // we want the tag in the text; crossReferences are handled by another filter
                         text += startTag.toString();
                         text.append(tagText);
                     }

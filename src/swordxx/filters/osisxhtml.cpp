@@ -290,7 +290,7 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
                     if (!strongsMarkup) {	// leave strong's markup notes out, in the future we'll probably have different option filters to turn different note types on or off
                         std::string footnoteNumber = tag.attribute("swordFootnote");
                         std::string noteName = tag.attribute("n");
-                        char ch = ((!tag.attribute("type").empty() && ((!strcmp(tag.attribute("type").c_str(), "crossReference")) || (!strcmp(tag.attribute("type").c_str(), "x-cross-ref")))) ? 'x':'n');
+                        char ch = ((!tag.attribute("type").empty() && ((tag.attribute("type") == "crossReference") || (tag.attribute("type") == "x-cross-ref"))) ? 'x':'n');
 
                         u->inXRefNote = true; // Why this change? Ben Morgan: Any note can have references in, so we need to set this to true for all notes
 //						u->inXRefNote = (ch == 'x');
@@ -347,12 +347,12 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
         // Milestoned paragraphs, created by osis2mod
         // <div type="paragraph" sID.../>
         // <div type="paragraph" eID.../>
-        else if (tag.isEmpty() && (tag.name() == "div") && !tag.attribute("type").empty() && (!strcmp(tag.attribute("type").c_str(), "x-p") || !strcmp(tag.attribute("type").c_str(), "paragraph") || !strcmp(tag.attribute("type").c_str(), "colophon"))) {
+        else if (tag.isEmpty() && (tag.name() == "div") && ((tag.attribute("type") == "x-p") || (tag.attribute("type") == "paragraph") || (tag.attribute("type") == "colophon"))) {
             // <div type="paragraph"  sID... />
             if (!tag.attribute("sID").empty()) {	// non-empty start tag
                 u->outputNewline(buf);
                 // safe because we've verified type is present from if statement above
-                if (!strcmp(tag.attribute("type").c_str(), "colophon")) {
+                if (tag.attribute("type") == "colophon") {
                     outText("<div class=\"colophon\">", buf, u);
                 }
 
@@ -361,7 +361,7 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
             else if (!tag.attribute("eID").empty()) {
                 u->outputNewline(buf);
                 // safe because we've verified type is present from if statement above
-                if (!strcmp(tag.attribute("type").c_str(), "colophon")) {
+                if (tag.attribute("type") == "colophon") {
                     outText("</div>", buf, u);
                 }
 
@@ -464,7 +464,7 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
         }
 
         // <lb.../>
-        else if ((tag.name() == "lb") && (tag.attribute("type").empty() || strcmp(tag.attribute("type").c_str(), "x-optional"))) {
+        else if ((tag.name() == "lb") && (tag.attribute("type").empty() || (tag.attribute("type") != "x-optional"))) {
                 u->outputNewline(buf);
         }
         // <milestone type="line"/>
@@ -473,18 +473,18 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
         else if ((tag.name() == "milestone") && (!tag.attribute("type").empty())) {
             // safe because we've verified type is present from if statement above
             auto type(tag.attribute("type"));
-            if (!strcmp(type.c_str(), "line")) {
+            if (type == "line") {
                 u->outputNewline(buf);
-                if (!tag.attribute("subType").empty() && !strcmp(tag.attribute("subType").c_str(), "x-PM")) {
+                if (!tag.attribute("subType").empty() && (tag.attribute("subType") == "x-PM")) {
                     u->outputNewline(buf);
                 }
             }
-            else if (!strcmp(type.c_str(), "x-p"))  {
+            else if (type == "x-p")  {
                 if (!tag.attribute("marker").empty())
                     outText(tag.attribute("marker").c_str(), buf, u);
                 else outText("<!p>", buf, u);
             }
-            else if (!strcmp(type.c_str(), "cQuote")) {
+            else if (type == "cQuote") {
                 std::string mark(tag.attribute("marker"));
                 bool hasMark = !mark.empty();
                 auto tmp(tag.attribute("level"));
@@ -496,7 +496,7 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
                 // finally, alternate " and ', if config says we should supply a mark
                 else if (u->osisQToTick)
                     outText((level % 2) ? '\"' : '\'', buf, u);
-            } else if (!strcmp(type.c_str(), "x-importer")) {
+            } else if (type == "x-importer") {
                 //drop tag as not relevant
             } else {
                 outText(("<span class=\""

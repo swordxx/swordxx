@@ -930,7 +930,7 @@ bool handleToken(std::string &text, XMLTag token) {
                 cout << "DEBUG(QUOTE): " << currentOsisID << ": quote top(" << quoteStack.size() << ") " << token.toString() << endl;
             }
 
-            if (!token.attribute("who").empty() && !strcmp(token.attribute("who").c_str(), "Jesus")) {
+            if (token.attribute("who") == "Jesus") {
                 inWOC = true;
 
                 // Output per verse WOC markup.
@@ -1102,7 +1102,7 @@ bool handleToken(std::string &text, XMLTag token) {
 
             // If we have found an end tag for a <q who="Jesus"> then we are done with the WOC
             // and we need to terminate the <q who="Jesus" marker=""> that was added earlier in the verse.
-            if (!token.attribute("who").empty() && !strcmp(token.attribute("who").c_str(), "Jesus")) {
+            if (token.attribute("who") == "Jesus") {
 
                 if (debug & DEBUG_QUOTE) {
                     cout << "DEBUG(QUOTE): " << currentOsisID << ": (" << quoteStack.size() << ") " << topToken.toString() << " -- " << token.toString() << endl;
@@ -1617,15 +1617,15 @@ void processOSIS(istream& infile) {
                     }
                     break;
                     case ET_CHAR :
-                    if (strcmp(entityToken.c_str(), "&amp;")  &&
-                            strcmp(entityToken.c_str(), "&lt;")   &&
-                            strcmp(entityToken.c_str(), "&gt;")   &&
-                            strcmp(entityToken.c_str(), "&quot;") &&
-                            strcmp(entityToken.c_str(), "&apos;")) {
+                    if ((entityToken != "&amp;")  &&
+                        (entityToken != "&lt;")   &&
+                        (entityToken != "&gt;")   &&
+                        (entityToken != "&quot;") &&
+                        (entityToken != "&apos;")) {
                         cout << "WARNING(PARSE): XML only supports 5 Character entities &amp;, &lt;, &gt;, &quot; and &apos;, found " << entityToken << endl;
                     }
                     else
-                    if (!strcmp(entityToken.c_str(), "&apos;")) {
+                    if (entityToken == "&apos;") {
                         cout << "WARNING(PARSE): While valid for XML, XHTML does not support &apos;." << endl;
                         if (!inattribute) {
                             cout << "WARNING(PARSE): &apos; is unnecessary outside of attribute values. Replacing with '. " << endl;
@@ -1644,7 +1644,7 @@ void processOSIS(istream& infile) {
                         }
                     }
                     else
-                    if (!strcmp(entityToken.c_str(), "&quot;")) {
+                    if (entityToken == "&quot;") {
                         cout << "WARNING(PARSE): While valid for XML, &quot; is only needed within double quoted attribute values" << endl;
                         if (!inattribute) {
                             cout << "WARNING(PARSE): &quot; is unnecessary outside of attribute values. Replace with \"." << endl;

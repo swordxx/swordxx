@@ -73,7 +73,7 @@ char OSISScripref::processText(std::string &text, const SWKey *key, const SWModu
             if (!strncmp(token.c_str(), "note", 4) || !strncmp(token.c_str(), "/note", 5)) {
                 if (!tag.isEndTag() && !tag.isEmpty()) {
                     startTag = tag;
-                    if ((!tag.attribute("type").empty()) && (!strcmp(tag.attribute("type").c_str(), "crossReference"))) {
+                    if (tag.attribute("type") == "crossReference") {
                         hide = true;
                         tagText = "";
                         if (option) {    // we want the tag in the text

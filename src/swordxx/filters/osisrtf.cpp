@@ -239,7 +239,7 @@ bool OSISRTF::handleToken(std::string &buf, const char *token, BasicFilterUserDa
                         if (VerseKey const * const vkey =
                                 dynamic_cast<VerseKey const *>(u->key))
                         {
-                            char ch = ((!strcmp(type.c_str(), "crossReference")) || (!strcmp(type.c_str(), "x-cross-ref"))) ? 'x':'n';
+                            char const ch = ((type == "crossReference") || (type == "x-cross-ref")) ? 'x':'n';
                             scratch = formatted("{\\super <a href=\"\">*%c%i.%s</a>} ", ch, vkey->getVerse(), footnoteNumber.c_str());
                             outText(scratch.c_str(), buf, u);
                             u->inXRefNote = (ch == 'x');
@@ -272,7 +272,7 @@ bool OSISRTF::handleToken(std::string &buf, const char *token, BasicFilterUserDa
         // Milestoned paragraphs, created by osis2mod
         // <div type="paragraph" sID.../>
         // <div type="paragraph" eID.../>
-        else if (tag.isEmpty() && (tag.name() == "div") && !tag.attribute("type").empty() && (!strcmp(tag.attribute("type").c_str(), "x-p") || !strcmp(tag.attribute("type").c_str(), "paragraph"))) {
+        else if (tag.isEmpty() && (tag.name() == "div") && ((tag.attribute("type") == "x-p") || (tag.attribute("type") == "paragraph"))) {
             // <div type="paragraph"  sID... />
             if (!tag.attribute("sID").empty()) {    // non-empty start tag
                 outText("{\\fi200\\par}", buf, u);
@@ -314,7 +314,7 @@ bool OSISRTF::handleToken(std::string &buf, const char *token, BasicFilterUserDa
         }
 
         // <milestone type="line"/> or <lb.../>
-        else if (((tag.name() == "lb") && (tag.attribute("type").empty() || strcmp(tag.attribute("type").c_str(), "x-optional"))) || ((tag.name() == "milestone") && (!tag.attribute("type").empty()) && (!strcmp(tag.attribute("type").c_str(), "line")))) {
+        else if (((tag.name() == "lb") && (tag.attribute("type").empty() || (tag.attribute("type") != "x-optional"))) || ((tag.name() == "milestone") && (tag.attribute("type") == "line"))) {
             outText("{\\par}", buf, u);
             userData->supressAdjacentWhitespace = true;
         }
@@ -436,7 +436,7 @@ bool OSISRTF::handleToken(std::string &buf, const char *token, BasicFilterUserDa
 
 
         // <milestone type="cQuote" marker="x"/>
-        else if ((tag.name() == "milestone") && !tag.attribute("type").empty() && !strcmp(tag.attribute("type").c_str(), "cQuote")) {
+        else if ((tag.name() == "milestone") && (tag.attribute("type") == "cQuote")) {
             auto mark(tag.attribute("marker"));
             bool hasMark = !mark.empty();
             auto tmp(tag.attribute("level"));

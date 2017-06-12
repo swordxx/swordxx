@@ -147,7 +147,7 @@ bool OSISWEBIF::handleToken(std::string &buf, const char *token, BasicFilterUser
                         std::string footnoteNumber = tag.attribute("swordFootnote");
                         std::string modName = (u->module) ? u->module->getName() : "";
                         if (dynamic_cast<VerseKey const *>(u->key)) {
-                            char ch = ((!tag.attribute("type").empty() && ((!strcmp(tag.attribute("type").c_str(), "crossReference")) || (!strcmp(tag.attribute("type").c_str(), "x-cross-ref")))) ? 'x':'n');
+                            char const ch = ((tag.attribute("type") == "crossReference") || (tag.attribute("type") == "x-cross-ref")) ? 'x':'n';
 //                            buf += formatted("<a href=\"noteID=%s.%c.%s\"><small><sup>*%c</sup></small></a> ", vkey->getText(), ch, footnoteNumber.c_str(), ch);
                             buf += formatted("<span class=\"fn\" onclick=\"f(\'%s\',\'%s\',\'%s\');\" >%c</span>", modName.c_str(), u->key->getText(), footnoteNumber.c_str(), ch);
                         }

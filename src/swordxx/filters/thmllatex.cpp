@@ -181,16 +181,16 @@ bool ThMLLaTeX::handleToken(std::string &buf, const char *token, BasicFilterUser
 
         if (tag.name() == "sync") {
             std::string value = tag.attribute("value");
-            if (!tag.attribute("type").empty() && !strcmp(tag.attribute("type").c_str(), "morph")) { //&gt;
+            if (tag.attribute("type") == "morph") { //&gt;
                 if (value.length())
                     buf += formatted("\\swordmorph[Greek]{%s}", value.c_str());
             }
-            else if (!tag.attribute("type").empty() && !strcmp(tag.attribute("type").c_str(), "lemma")) { //&gt;
+            else if (tag.attribute("type") == "lemma") { //&gt;
                 if (value.length())
                     // empty "type=" is deliberate.
                     buf += formatted("\\swordmorph[lemma]{%s}", value.c_str());
             }
-            else if (!tag.attribute("type").empty() && !strcmp(tag.attribute("type").c_str(), "Strongs")) {
+            else if (tag.attribute("type") == "Strongs") {
                 if (!tag.isEndTag()) {
                         char const ch = *value.begin();
                         value.erase(0u, 1u);
@@ -201,7 +201,7 @@ bool ThMLLaTeX::handleToken(std::string &buf, const char *token, BasicFilterUser
                                 else {     buf += "}"; }
                         }
 
-            else if (!tag.attribute("type").empty() && !strcmp(tag.attribute("type").c_str(), "Dict")) {
+            else if (tag.attribute("type") == "Dict") {
                 if (!tag.isEndTag()) {
                         buf += formatted("\\sworddict{%s}{",
                             value.c_str());
@@ -225,7 +225,7 @@ bool ThMLLaTeX::handleToken(std::string &buf, const char *token, BasicFilterUser
                             dynamic_cast<VerseKey const *>(u->key))
                     {
                         // leave this special osis type in for crossReference notes types?  Might thml use this some day? Doesn't hurt.
-                        char ch = ((!tag.attribute("type").empty() && ((!strcmp(tag.attribute("type").c_str(), "crossReference")) || (!strcmp(tag.attribute("type").c_str(), "x-cross-ref")))) ? 'x':'n');
+                        char const ch = ((tag.attribute("type") == "crossReference") || (tag.attribute("type") == "x-cross-ref")) ? 'x': 'n';
                         buf += formatted("\\swordfootnote[%c]{%s}{%s}{%s}{%s}{",
                             ch,
                             footnoteNumber.c_str(),
@@ -234,7 +234,7 @@ bool ThMLLaTeX::handleToken(std::string &buf, const char *token, BasicFilterUser
                             noteName.c_str());
                     }
                     else {
-                        char ch = ((!tag.attribute("type").empty() && ((!strcmp(tag.attribute("type").c_str(), "crossReference")) || (!strcmp(tag.attribute("type").c_str(), "x-cross-ref")))) ? 'x':'n');
+                        char const ch = ((tag.attribute("type") == "crossReference") || (tag.attribute("type") == "x-cross-ref")) ? 'x': 'n';
                         buf += formatted("\\swordfootnote[%c]{%s}{%s}{%s}{%s}{",
                             ch,
                             footnoteNumber.c_str(),
@@ -288,7 +288,7 @@ bool ThMLLaTeX::handleToken(std::string &buf, const char *token, BasicFilterUser
                     {
                         // leave this special osis type in for crossReference notes types?  Might thml use this some day? Doesn't hurt.
                         //buf.appendFormatted("<a href=\"noteID=%s.x.%s\"><small><sup>*x</sup></small></a> ", vkey->getText(), footnoteNumber.c_str());
-                        // char ch = ((tag.getAttribute("type") && ((!strcmp(tag.getAttribute("type"), "crossReference")) || (!strcmp(tag.getAttribute("type"), "x-cross-ref")))) ? 'x':'n');
+                        // char const ch = ((tag.attribute("type") == "crossReference") || (tag.attribute("type") == "x-cross-ref")) ? 'x': 'n';
                         char ch = 'x';
                         buf += formatted("\\swordfootnote[%c]{%s}{%s}{%s}{%s}{",
                             ch,

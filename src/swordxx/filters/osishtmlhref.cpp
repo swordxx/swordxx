@@ -243,7 +243,7 @@ bool OSISHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterU
                     if (!strongsMarkup) {    // leave strong's markup notes out, in the future we'll probably have different option filters to turn different note types on or off
                         std::string footnoteNumber = tag.attribute("swordFootnote");
                         std::string noteName = tag.attribute("n");
-                        char ch = ((!tag.attribute("type").empty() && ((!strcmp(tag.attribute("type").c_str(), "crossReference")) || (!strcmp(tag.attribute("type").c_str(), "x-cross-ref")))) ? 'x':'n');
+                        char const ch = ((tag.attribute("type") == "crossReference") || (tag.attribute("type") == "x-cross-ref")) ? 'x':'n';
 
                         u->inXRefNote = true; // Why this change? Ben Morgan: Any note can have references in, so we need to set this to true for all notes
 //                        u->inXRefNote = (ch == 'x');
@@ -288,7 +288,7 @@ bool OSISHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterU
         // Milestoned paragraphs, created by osis2mod
         // <div type="paragraph" sID.../>
         // <div type="paragraph" eID.../>
-        else if (tag.isEmpty() && (tag.name() == "div") && !tag.attribute("type").empty() && (!strcmp(tag.attribute("type").c_str(), "x-p") || !strcmp(tag.attribute("type").c_str(), "paragraph"))) {
+        else if (tag.isEmpty() && (tag.name() == "div") && ((tag.attribute("type") == "x-p") || (tag.attribute("type") == "paragraph"))) {
             // <div type="paragraph"  sID... />
             if (!tag.attribute("sID").empty()) {    // non-empty start tag
                 outText("<!P><br />", buf, u);
@@ -369,27 +369,27 @@ bool OSISHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterU
         }
 
         // <lb.../>
-        else if ((tag.name() == "lb") && (tag.attribute("type").empty() || strcmp(tag.attribute("type").c_str(), "x-optional"))) {
+        else if ((tag.name() == "lb") && (tag.attribute("type").empty() || (tag.attribute("type") != "x-optional"))) {
             outText("<br />", buf, u);
             userData->supressAdjacentWhitespace = true;
         }
         // <milestone type="line"/>
         // <milestone type="x-p"/>
         // <milestone type="cQuote" marker="x"/>
-        else if (((tag.name() == "milestone")) && (!tag.attribute("type").empty())) {
-            if (!strcmp(tag.attribute("type").c_str(), "line")) {
+        else if ((tag.name() == "milestone") && !tag.attribute("type").empty()) {
+            if (tag.attribute("type") == "line") {
                 outText("<br />", buf, u);
-                if (!tag.attribute("subType").empty() && !strcmp(tag.attribute("subType").c_str(), "x-PM")) {
+                if (tag.attribute("subType") == "x-PM") {
                     outText("<br />", buf, u);
                 }
                 userData->supressAdjacentWhitespace = true;
             }
-            else if (!strcmp(tag.attribute("type").c_str(),"x-p"))  {
+            else if (tag.attribute("type") == "x-p") {
                 if (!tag.attribute("marker").empty())
                     outText(tag.attribute("marker").c_str(), buf, u);
                 else outText("<!p>", buf, u);
             }
-            else if (!strcmp(tag.attribute("type").c_str(), "cQuote")) {
+            else if (tag.attribute("type") == "cQuote") {
                 auto mark(tag.attribute("marker"));
                 bool hasMark = !mark.empty();
                 auto tmp(tag.attribute("level"));

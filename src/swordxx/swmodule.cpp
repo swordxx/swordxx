@@ -547,7 +547,7 @@ ListKey &SWModule::search(char const * istr,
                                     if (key != words[2]) continue;
                                 }
                                 if (flags & SEARCHFLAG_MATCHWHOLEENTRY) {
-                                    bool found = !(((flags & REG_ICASE) == REG_ICASE) ? swordxx::stricmp(i3Start->second.c_str(), words[3].c_str()) : strcmp(i3Start->second.c_str(), words[3].c_str()));
+                                    bool found = !(((flags & REG_ICASE) == REG_ICASE) ? swordxx::stricmp(i3Start->second.c_str(), words[3].c_str()) : (i3Start->second != words[3]));
                                     sres = found
                                            ? i3Start->second.c_str()
                                            : nullptr;

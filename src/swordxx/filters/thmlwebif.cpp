@@ -50,7 +50,7 @@ bool ThMLWEBIF::handleToken(std::string &buf, const char *token, BasicFilterUser
                     url = url.c_str()+1;
             }
 
-            if(!tag.attribute("type").empty() && !strcmp(tag.attribute("type").c_str(), "morph")){
+            if (tag.attribute("type") == "morph") {
                 buf += "<small><em> (";
                 buf += formatted("<a href=\"%s?showMorph=%s#cv\">", passageStudyURL.c_str(), URL::encode(url.c_str()).c_str() );
             }
@@ -67,7 +67,7 @@ bool ThMLWEBIF::handleToken(std::string &buf, const char *token, BasicFilterUser
             buf += value;
             buf += "</a>";
 
-            if (!tag.attribute("type").empty() && !strcmp(tag.attribute("type").c_str(), "morph")) {
+            if (tag.attribute("type") == "morph") {
                 buf += ") </em></small>";
             }
             else {

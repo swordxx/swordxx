@@ -86,9 +86,9 @@ bool SWLD::hasEntry(const SWKey *key) const {
     auto const keyText = key->getText();
     if (strongsPadding) {
         auto const buf(strongsPadBuf(keyText));
-        return !strcmp(buf.get(), getKeyForEntry(getEntryForKey(buf.get())).c_str());
+        return buf.get() == getKeyForEntry(getEntryForKey(buf.get()));
     } else {
-        return !strcmp(keyText, getKeyForEntry(getEntryForKey(keyText)).c_str());
+        return keyText == getKeyForEntry(getEntryForKey(keyText));
     }
 }
 
