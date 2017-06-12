@@ -32,6 +32,9 @@
 #include "scsuutf8.h"
 
 #include <string>
+#ifdef _ICU_
+#include <unicode/unistr.h>
+#endif
 
 
 namespace swordxx {

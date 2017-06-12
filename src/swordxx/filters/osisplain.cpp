@@ -247,9 +247,9 @@ bool OSISPlain::handleToken(std::string &buf, const char *token, BasicFilterUser
                 }
             }
             else {
-                buf.append("*");
+                buf.append("* ");
                 buf.append(u->lastSuspendSegment);
-                buf.append("*");
+                buf.append(" *");
             }
             u->suspendTextPassThru = false;
         } else if (!strncmp(token, "q", 1)

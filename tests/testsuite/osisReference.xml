@@ -178,6 +178,11 @@ And He was in the wilderness forty days being tempted by Satan; and He was with 
    </div>
   <chapter eID="Mark.1"/>
  </div>
+ <div type="book" osisID="Acts">
+  <chapter sID="Acts.2" osisID="Acts.2"/>
+    <verse sID="Acts.2.19" osisID="Acts.2.19"/><l level="1">‘<hi type="small-caps"><w lemma="strong:G1325">And I will grant</w> <w lemma="strong:G5059">wonders</w> <w lemma="strong:G3772">in the sky</w> <w lemma="strong:G0507">above</w></hi></l><l level="1"> <hi type="small-caps"><w lemma="strong:G4592">And signs</w> <w lemma="strong:G1093">on the earth</w> <w lemma="strong:G2736">below</w></hi>,</l><l level="1"> <hi type="small-caps"><w lemma="strong:G0129">Blood</w>, <w lemma="strong:G4442">and fire</w>, <w lemma="strong:G0822">and vapor</w> <w lemma="strong:G2586">of smoke</w></hi>.</l><verse eID="Acts.2.19"/>
+    <verse sID="Acts.2.20" osisID="Acts.2.20"/><l level="1">‘<hi type="small-caps"><w lemma="strong:G2246">The sun</w> <w lemma="strong:G3344">will be turned</w> <w lemma="strong:G4655">into darkness</w></hi></l><l level="1"> <hi type="small-caps"><w lemma="strong:G4582">And the moon</w> <w lemma="strong:G0129">into blood</w></hi>,</l><l level="1"> <hi type="small-caps"><w lemma="strong:G4250">Before</w> <w lemma="strong:G3173">the great</w> <w lemma="strong:G2016">and glorious</w> <w lemma="strong:G2250">day</w> <w lemma="strong:G2962">of the Lord</w> <w lemma="strong:G2064">shall come</w></hi>.</l><verse eID="Acts.2.20"/>
+  <chapter eID="Acts.2"/>
 </div>
 </osisText>
 </osis>

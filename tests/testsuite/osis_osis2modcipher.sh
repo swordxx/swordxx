@@ -14,6 +14,7 @@ BlockType=BOOK
 CompressType=ZIP
 SourceType=OSIS
 Lang=en
+GlobalOptionFilter=OSISLemma
 GlobalOptionFilter=OSISStrongs
 GlobalOptionFilter=OSISMorph
 GlobalOptionFilter=OSISFootnotes

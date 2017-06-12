@@ -235,6 +235,8 @@ char SWBasicFilter::processText(std::string & text,
                     }
                     escEndPos = escStartPos = tokenEndPos = tokenStartPos = 0;
                     lastTextNode = "";
+                    if (!userData->suspendTextPassThru)
+                           userData->lastSuspendSegment.clear();
                     continue;
                 }
             }
@@ -248,10 +250,8 @@ char SWBasicFilter::processText(std::string & text,
         }
         else {
              if ((!userData->supressAdjacentWhitespace) || (*from != ' ')) {
-                if (!userData->suspendTextPassThru) {
+                if (!userData->suspendTextPassThru)
                     text.push_back(*from);
-                    userData->lastSuspendSegment.clear();
-                }
                 else    userData->lastSuspendSegment.push_back(*from);
                 lastTextNode.push_back(*from);
              }
