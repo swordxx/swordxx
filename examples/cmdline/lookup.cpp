@@ -37,6 +37,7 @@ using sword::MarkupFilterMgr;
 using sword::SWModule;
 using sword::FMT_WEBIF;
 using sword::FMT_HTMLHREF;
+using sword::FMT_XHTML;
 using sword::FMT_RTF;
 using sword::FMT_LATEX;
 using sword::ModMap;
@@ -54,7 +55,7 @@ int main(int argc, char **argv)
 //	WebMgr manager((const char *)0);
 //	manager.setJavascript(true);
 //
-	SWMgr manager(new MarkupFilterMgr(FMT_HTMLHREF));
+	SWMgr manager(new MarkupFilterMgr(FMT_XHTML));
 //	SWMgr manager(new MarkupFilterMgr(FMT_WEBIF));
 
 	SWModule *target;
@@ -78,7 +79,7 @@ int main(int argc, char **argv)
 
 	// turn all filters to default values
 	manager.setGlobalOption("Headings", "On");
-	manager.setGlobalOption("Strong's Numbers", "On");
+	manager.setGlobalOption("Strong's Numbers", "Off");
 	manager.setGlobalOption("Lemmas", "Off");
 //	manager.setGlobalOption("Greek Accents", "Off");
 

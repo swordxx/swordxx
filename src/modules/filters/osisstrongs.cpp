@@ -88,6 +88,15 @@ char OSISStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *mod
 
 			if (token.startsWith("w ")) {	// Word
 				XMLTag wtag(token);
+
+				// always save off lemma if we haven't yet
+				if (!wtag.getAttribute("savlm")) {
+					const char *l = wtag.getAttribute("lemma");
+					if (l) {
+						wtag.setAttribute("savlm", l);
+					}
+				}
+
 				if (module->isProcessEntryAttributes()) {
 					wordStart = from+1;
 					char gh = 0;
@@ -138,14 +147,14 @@ char OSISStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *mod
 						} while (++i < count);
 					}
 
-					if ((attrib = wtag.getAttribute("lemma"))) {
-						int count = wtag.getAttributePartCount("lemma", ' ');
+					if ((attrib = wtag.getAttribute("savlm"))) {
+						int count = wtag.getAttributePartCount("savlm", ' ');
 						int i = (count > 1) ? 0 : -1;		// -1 for whole value cuz it's faster, but does the same thing as 0
 						do {
 							gh = 0;
 							SWBuf lClass = "";
 							SWBuf l = "";
-							attrib = wtag.getAttribute("lemma", i, ' ');
+							attrib = wtag.getAttribute("savlm", i, ' ');
 							if (i < 0) i = 0;	// to handle our -1 condition
 
 							const char *m = strchr(attrib, ':');
@@ -232,35 +241,27 @@ char OSISStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *mod
 					wordNum++;
 				}
 
+				// if we won't want strongs, then lets get them out of lemma
 				if (!option) {
-/*
- * Code which handles multiple lemma types.  Kindof works but breaks at least WEBIF filters for strongs.
- *
 					int count = wtag.getAttributePartCount("lemma", ' ');
-					for (int i = 0; i < count; i++) {
+					for (int i = 0; i < count; ++i) {
 						SWBuf a = wtag.getAttribute("lemma", i, ' ');
 						const char *prefix = a.stripPrefix(':');
 						if ((prefix) && (!strcmp(prefix, "x-Strongs") || !strcmp(prefix, "strong") || !strcmp(prefix, "Strong"))) {
 							// remove attribute part
 							wtag.setAttribute("lemma", 0, i, ' ');
-							i--;
-							count--;
+							--i;
+							--count;
 						}
 					}
-* Instead the codee below just removes the lemma attribute
-*****/
-					const char *l = wtag.getAttribute("lemma");
-					if (l) {
-						SWBuf savlm = l;
-						wtag.setAttribute("lemma", 0);
-						wtag.setAttribute("savlm", savlm);
-						token = wtag;
-						token.trim();
-						// drop <>
-						token << 1;
-						token--;
-					}
+
+
 				}
+				token = wtag;
+				token.trim();
+				// drop <>
+				token << 1;
+				token--;
 			}
 			if (token.startsWith("/w")) {	// Word End
 				if (module->isProcessEntryAttributes()) {

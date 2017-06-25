@@ -67,6 +67,15 @@ char OSISLemma::processText(SWBuf &text, const SWKey *key, const SWModule *modul
 				intoken = false;
 				if (token.startsWith("w ")) {	// Word
 					XMLTag wtag(token);
+
+					// always save off lemma if we haven't yet
+					if (!wtag.getAttribute("savlm")) {
+						const char *l = wtag.getAttribute("lemma");
+						if (l) {
+							wtag.setAttribute("savlm", l);
+						}
+					}
+
 					int count = wtag.getAttributePartCount("lemma", ' ');
 					for (int i = 0; i < count; i++) {
 						SWBuf a = wtag.getAttribute("lemma", i, ' ');
@@ -78,6 +87,7 @@ char OSISLemma::processText(SWBuf &text, const SWKey *key, const SWModule *modul
 							count--;
 						}
 					}
+
 					token = wtag;
 					token.trim();
 					// drop <>

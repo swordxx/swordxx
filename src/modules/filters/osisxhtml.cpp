@@ -76,14 +76,19 @@ void processLemma(bool suspendTextPassThru, XMLTag &tag, SWBuf &buf) {
 		int i = (count > 1) ? 0 : -1;		// -1 for whole value cuz it's faster, but does the same thing as 0
 		do {
 			attrib = tag.getAttribute("lemma", i, ' ');
+			SWBuf at = attrib;
+			const char *prefix = at.stripPrefix(':');
 			if (i < 0) i = 0;	// to handle our -1 condition
 			val = strchr(attrib, ':');
 			val = (val) ? (val + 1) : attrib;
 			SWBuf gh;
-			if(*val == 'G')
+			if (*val == 'G') {
 				gh = "Greek";
-			if(*val == 'H')
+			}
+			else if (*val == 'H') {
 				gh = "Hebrew";
+			}
+			else if (prefix) gh = prefix;
 			const char *val2 = val;
 			if ((strchr("GH", *val)) && (isdigit(val[1])))
 				val2++;
