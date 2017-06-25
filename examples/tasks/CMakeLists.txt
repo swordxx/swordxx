@@ -6,6 +6,8 @@
 MESSAGE(STATUS "\n-- CONFIGURING LIBRARY EXAMPLES")
 SET(example_PROGRAMS
 	parallelbibles
+	simpleverselookup
+	listbiblebooknames
 )
 
 FOREACH(DEMO ${example_PROGRAMS})

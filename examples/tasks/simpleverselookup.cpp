@@ -34,6 +34,10 @@
  *
  */
 
+// Simple example to show James 1:19 from KJV,
+// if argv[1] is passed then use this instead of KJV
+// if argv[2] is passed then use this instead of James 1:19
+
 #include <swmgr.h>
 #include <swmodule.h>
 #include <iostream>
@@ -44,10 +48,17 @@ using std::cout;
 
 
 int main(int argc, char **argv) {
+	// instantiate a SWORD Manager to give access to the installed library of books (modules)
 	SWMgr library;
-	SWModule *darby = library.getModule("Darby");
-	darby->setKey("James 1:19");
-	cout << darby->RenderText();
+
+	// try to retrieve a reference to an installed book (module)
+	SWModule *book = library.getModule((argc > 1) ? argv[1] : "KJV");
+
+	// set that book's reference key to our desired verse
+	book->setKey((argc > 2) ? argv[2] : "James 1:19");
+
+	// ask the book to render the current text
+	cout << book->renderText() << "\n";
 
 	return 0;
 }
