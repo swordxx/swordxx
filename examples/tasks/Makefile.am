@@ -5,7 +5,7 @@ AM_CPPFLAGS += -I$(top_srcdir)/include/internal/regex
 endif
 LDADD = $(top_builddir)/lib/libsword.la
 
-noinst_PROGRAMS = parallelbibles
+noinst_PROGRAMS = parallelbibles listbiblebooknames
 
 parallelbibles_SOURCES = parallelbibles.cpp
-
+listbiblebooknames_SOURCES = listbiblebooknames.cpp
