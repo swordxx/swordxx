@@ -1,4 +1,4 @@
-TARGETS= ciphercng swmgrex verseranges lastVerseInChapter verseposition simplechapter flatapilookup flatapiparsekey flatapisearch versenorm
+TARGETS= ciphercng swmgrex verseranges lastVerseInChapter verseposition simplechapter flatapilookup flatapiparsekey flatapisearch versenorm flatapiinstallmgr
 all: $(TARGETS)
 
 clean:
