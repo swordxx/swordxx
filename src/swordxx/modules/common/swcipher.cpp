@@ -26,6 +26,8 @@
 #include <cassert>
 #include <cstdlib>
 #include <cstring>
+#include <limits>
+#include <new>
 
 
 namespace swordxx {
@@ -64,7 +66,11 @@ char *SWCipher::Buf(const char *ibuf, unsigned long ilen)
         }
         else len = ilen;
 
-        buf = (char *) malloc(ilen);
+        static_assert(std::numeric_limits<unsigned long>::max()
+                      <= std::numeric_limits<std::size_t>::max(), "");
+        buf = static_cast<char *>(malloc(ilen));
+        if (!buf)
+            throw std::bad_alloc();
         memcpy(buf, ibuf, ilen);
         cipher = false;
     }
@@ -82,7 +88,14 @@ char *SWCipher::cipherBuf(unsigned long *ilen, const char *ibuf)
         if (buf)
             free(buf);
 
-        buf = (char *) malloc(*ilen+1);
+        static_assert(std::numeric_limits<unsigned long>::max()
+                      <= std::numeric_limits<std::size_t>::max(), "");
+        std::size_t const bufSize = std::size_t(*ilen) + 1u;
+        if (!bufSize)
+            throw std::bad_alloc();
+        buf = static_cast<char *>(malloc(bufSize));
+        if (!buf)
+            throw std::bad_alloc();
         memcpy(buf, ibuf, *ilen);
         len = *ilen;
         cipher = true;
