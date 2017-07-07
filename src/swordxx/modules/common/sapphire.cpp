@@ -103,13 +103,14 @@ void sapphire::initialize(unsigned char *key, unsigned char keysize)
     toswap = 0;
     keypos = 0;         // Start with first byte of user key.
     rsum = 0;
-    for (int i = 255; i >= 0; i--)
-        {
-        toswap = keyrand(static_cast<unsigned>(i), key, keysize, &rsum, &keypos);
+    for (unsigned i = 255u;; --i) {
+        toswap = keyrand(i, key, keysize, &rsum, &keypos);
         swaptemp = cards[i];
         cards[i] = cards[toswap];
         cards[toswap] = swaptemp;
-        }
+        if (i == 0u)
+            break;
+    }
 
     // Initialize the indices and data dependencies.
     // Indices are set to different values instead of all 0
