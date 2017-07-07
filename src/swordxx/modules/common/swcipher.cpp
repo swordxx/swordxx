@@ -120,8 +120,12 @@ void SWCipher::Encode(void)
 {
     if (!cipher) {
         work = master;
-        for (unsigned long i = 0; i < len; i++)
-            buf[i] = work.encrypt(buf[i]);
+        for (unsigned long i = 0; i < len; i++) {
+            unsigned char c;
+            std::memcpy(&c, buf + i, 1u);
+            c = work.encrypt(c);
+            std::memcpy(buf + i, &c, 1u);
+        }
         cipher = true;
     }
 }
@@ -140,8 +144,12 @@ void SWCipher::Decode(void)
     if (cipher) {
         work = master;
         unsigned long i;
-        for (i = 0; i < len; i++)
-            buf[i] = work.decrypt(buf[i]);
+        for (i = 0; i < len; i++) {
+            unsigned char c;
+            std::memcpy(&c, buf + i, 1u);
+            c = work.decrypt(c);
+            std::memcpy(buf + i, &c, 1u);
+        }
         buf[i] = 0;
         cipher = false;
     }
