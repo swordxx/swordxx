@@ -38,6 +38,7 @@
  * & 0xFF or % 0x100, whichever is faster.
  */
 
+#include <array>
 #include "../../defs.h"
 
 
@@ -47,7 +48,7 @@ namespace swordxx {
 {
 
     // These variables comprise the state of the state machine.
-  unsigned char cards[256];    // A permutation of 0-255.
+  std::array<unsigned char, 256u> cards;    // A permutation of 0-255.
   unsigned char rotor,        // Index that rotates smoothly
     ratchet,            // Index that moves erratically
     avalanche,            // Index heavily data dependent
