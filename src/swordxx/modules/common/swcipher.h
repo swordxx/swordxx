@@ -42,7 +42,7 @@ class SWDLLEXPORT SWCipher
   unsigned long len;
 protected:
 public:
-    SWCipher (unsigned char *key);
+    SWCipher(char const * key);
   virtual void setCipherKey (const char *key);
     virtual ~ SWCipher ();
   virtual char * Buf(char const * buf = nullptr, unsigned long len = 0u);

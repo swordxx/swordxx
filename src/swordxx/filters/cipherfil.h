@@ -35,7 +35,7 @@ class SWDLLEXPORT CipherFilter:public SWFilter {
 public: /* Methods: */
 
     CipherFilter(const char * const key)
-        : m_cipher((unsigned char *) key)
+        : m_cipher(key)
     {}
 
     char processText(std::string & text,

@@ -35,10 +35,9 @@ namespace swordxx {
  *
  */
 
-SWCipher::SWCipher(unsigned char *key) {
-    master.initialize(key, strlen((char *)key));
-    buf = nullptr;
-}
+SWCipher::SWCipher(char const * key)
+    : buf(nullptr)
+{ SWCipher::setCipherKey(key); }
 
 
 /******************************************************************************
