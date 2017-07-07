@@ -23,6 +23,7 @@
 
 #include "swcipher.h"
 
+#include <cassert>
 #include <cstdlib>
 #include <cstring>
 
@@ -141,8 +142,11 @@ void SWCipher::Decode(void)
  */
 
 void SWCipher::setCipherKey(const char *ikey) {
-    unsigned char *key = (unsigned char *)ikey;
-    master.initialize(key, strlen((char *)key));
+    auto const keySize = std::strlen(ikey);
+    assert(keySize <= 255u); /// \todo Throw exception instead!?
+    unsigned char key[255u];
+    std::memcpy(key, ikey, keySize);
+    master.initialize(key, static_cast<unsigned char>(keySize));
 }
 
 } /* namespace swordxx */
