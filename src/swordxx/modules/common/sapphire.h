@@ -56,7 +56,7 @@ namespace swordxx {
 
     // This function is used by initialize(), which is called by the
     // constructor.
-  unsigned char keyrand (int limit, unsigned char *user_key,
+  unsigned char keyrand (unsigned limit, unsigned char *user_key,
               unsigned char keysize, unsigned char *rsum,
 unsigned *keypos); public:sapphire (unsigned char
                       *key = nullptr,    // Calls initialize if a real

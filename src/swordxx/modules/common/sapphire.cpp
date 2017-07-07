@@ -41,7 +41,7 @@
 
 namespace swordxx {
 
-unsigned char sapphire::keyrand(int limit,
+unsigned char sapphire::keyrand(unsigned limit,
                                 unsigned char *user_key,
                                 unsigned char keysize,
                                 unsigned char *rsum,
@@ -54,7 +54,7 @@ unsigned char sapphire::keyrand(int limit,
     if (!limit) return 0;   // Avoid divide by zero error.
     retry_limiter = 0;
     mask = 1;               // Fill mask with enough bits to cover
-    while (mask < (unsigned)limit)    // the desired range.
+    while (mask < limit)    // the desired range.
         mask = (mask << 1) + 1;
     do
         {
@@ -68,8 +68,8 @@ unsigned char sapphire::keyrand(int limit,
         if (++retry_limiter > 11)
             u %= limit;     // Prevent very rare long loops.
         }
-    while (u > (unsigned)limit);
-    return u;
+    while (u > limit);
+    return static_cast<unsigned char>(u);
     }
 
 void sapphire::initialize(unsigned char *key, unsigned char keysize)
@@ -82,7 +82,6 @@ void sapphire::initialize(unsigned char *key, unsigned char keysize)
     // of from 4 to 16 bytes are recommended, depending on how
     // secure you want this to be.
 
-    int i;
     unsigned char toswap, swaptemp, rsum;
     unsigned keypos;
 
@@ -96,17 +95,17 @@ void sapphire::initialize(unsigned char *key, unsigned char keysize)
 
     // Start with cards all in order, one of each.
 
-    for (i=0;i<256;i++)
-        cards[i] = i;
+    for (unsigned i=0;i<256;i++)
+        cards[i] = static_cast<unsigned char>(i);
 
     // Swap the card at each position with some other card.
 
     toswap = 0;
     keypos = 0;         // Start with first byte of user key.
     rsum = 0;
-    for (i=255;i>=0;i--)
+    for (int i = 255; i >= 0; i--)
         {
-        toswap = keyrand(i, key, keysize, &rsum, &keypos);
+        toswap = keyrand(static_cast<unsigned>(i), key, keysize, &rsum, &keypos);
         swaptemp = cards[i];
         cards[i] = cards[toswap];
         cards[toswap] = swaptemp;
@@ -132,8 +131,6 @@ void sapphire::hash_init(void)
     // This function is used to initialize non-keyed hash
     // computation.
 
-    int i, j;
-
     // Initialize the indices and data dependencies.
 
     rotor = 1;
@@ -143,9 +140,8 @@ void sapphire::hash_init(void)
     last_cipher = 11;
 
     // Start with cards all in inverse order.
-
-    for (i=0, j=255;i<256;i++,j--)
-        cards[i] = (unsigned char) j;
+    for (unsigned i = 0u; i < 256u; ++i)
+        cards[i] = static_cast<unsigned char>(255u - i);
     }
 
 sapphire::sapphire(unsigned char *key, unsigned char keysize)
@@ -225,11 +221,9 @@ unsigned char sapphire::decrypt(unsigned char b)
 void sapphire::hash_final(unsigned char *hash,      // Destination
                           unsigned char hashlength) // Size of hash.
     {
-    int i;
-
-    for (i=255;i>=0;i--)
-        encrypt((unsigned char) i);
-    for (i=0;i<hashlength;i++)
+    for (int i = 255; i >= 0; --i)
+        encrypt(static_cast<unsigned char>(i));
+    for (int i = 0; i < hashlength; ++i)
         hash[i] = encrypt(0);
     }
 
