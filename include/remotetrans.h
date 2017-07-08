@@ -53,6 +53,7 @@ protected:
 	StatusReporter *statusReporter;
 	bool passive;
 	bool term;
+	bool unverifiedPeerAllowed;
 	SWBuf host;
 	SWBuf u;
 	SWBuf p;
@@ -73,8 +74,11 @@ public:
 
 	virtual std::vector<struct DirEntry> getDirList(const char *dirURL);
 	void setPassive(bool passive) { this->passive = passive; }
+	bool isPassive() { return passive; }
 	void setUser(const char *user) { u = user; }
 	void setPasswd(const char *passwd) { p = passwd; }
+	void setUnverifiedPeerAllowed(bool val) { this->unverifiedPeerAllowed = val; }
+	bool isUnverifiedPeerAllowed() { return unverifiedPeerAllowed; }
 	void terminate() { term = true; }
 };
 

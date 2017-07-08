@@ -48,6 +48,7 @@ SWBuf baseDir;
 SWBuf confPath;
 
 bool isConfirmed;
+bool isUnvPeerAllowed;
 
 void usage(const char *progName = 0, const char *error = 0);
 
@@ -89,6 +90,30 @@ virtual bool isUserDisclaimerConfirmed() const {
 }
 
 };
+
+bool isUnverifiedPeerAllowed() {
+	static bool allowed = false;
+	
+	if (isUnvPeerAllowed) { 
+		allowed = true;
+	}
+        if (!allowed) {
+		cout << "\n\n";
+		cout << "While connecting to an encrypted install source, SWORD can allow\n";
+		cout << "unverified peers, i.e., self signed certificates. While this is\n";
+		cout << "generally considered safe because SWORD only retrieves Bible content\n";
+		cout << "and does not send any data to the server, it could still possibly\n";
+		cout << "allow a malicious actor to sit between you and the server, as with\n";
+		cout << "unencrypted sources.  Type no to turn this off.\n\n";
+		cout << "Would you like to allow unverified peers? [yes] ";
+
+		char prompt[10];
+		fgets(prompt, 9, stdin);
+		allowed = (strcmp(prompt, "no\n"));
+		cout << "\n";
+	}
+	return allowed;
+}
 
 class MyStatusReporter : public StatusReporter {
 	int last;
@@ -153,7 +178,7 @@ void finish(int status) {
 }
 
 
-void createBasicConfig(bool enableRemote, bool addCrossWire) {
+void createBasicConfig(bool enableRemote, bool addCrossWire, bool unverifiedPeerAllowed) {
 
 	FileMgr::createParent(confPath.c_str());
 	remove(confPath.c_str());
@@ -165,6 +190,7 @@ void createBasicConfig(bool enableRemote, bool addCrossWire) {
 
 	SWConfig config(confPath.c_str());
 	config["General"]["PassiveFTP"] = "true";
+	config["General"]["UnverifiedPeerAllowed"] = (unverifiedPeerAllowed) ? "true" : "false";
 	if (enableRemote) {
 		config["Sources"]["FTPSource"] = is.getConfEnt();
 	}
@@ -176,11 +202,13 @@ void initConfig() {
 	init();
 
 	bool enable = installMgr->isUserDisclaimerConfirmed();
+	bool allowed = isUnverifiedPeerAllowed();
 
-	createBasicConfig(enable, true);
+	createBasicConfig(enable, true, allowed);
 
 	cout << "\n\nInitialized basic config file at [" << confPath << "]\n";
 	cout << "with remote source features " << ((enable) ? "ENABLED" : "DISABLED") << "\n";
+	cout << "with unverified peers " << ((allowed) ? "ALLOWED" : "DISALLOWED") << "\n";
 }
 
 
@@ -194,7 +222,7 @@ void syncConfig() {
 
 	// be sure we have at least some config file already out there
 	if (!FileMgr::existsFile(confPath.c_str())) {
-		createBasicConfig(true, false);
+		createBasicConfig(true, false, false);
 		finish(1); // cleanup and don't exit
 		init();    // re-init with InstallMgr which uses our new config
 	}
@@ -358,6 +386,7 @@ void usage(const char *progName, const char *error) {
 int main(int argc, char **argv) {
 	
 	isConfirmed = false;
+	isUnvPeerAllowed = false;
 	
 	if (argc < 2) usage(*argv);
 
@@ -367,6 +396,9 @@ int main(int argc, char **argv) {
 		}
 		else if (!strcmp(argv[i], "--allow-internet-access-and-risk-tracing-and-jail-or-martyrdom")) {
 			isConfirmed = true;
+		}
+		else if (!strcmp(argv[i], "--allow-unverified-tls-peer")) {
+			isUnvPeerAllowed = true;
 		}
 		else if (!strcmp(argv[i], "-init")) {
 			initConfig();

@@ -65,6 +65,8 @@ RemoteTransport::RemoteTransport(const char *host, StatusReporter *statusReporte
 	u = "ftp";
 	p = "installmgr@user.com";
 	term = false;
+	passive = true;
+	unverifiedPeerAllowed = true;
 }
 
 

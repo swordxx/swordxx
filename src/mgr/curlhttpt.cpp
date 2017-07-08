@@ -141,7 +141,9 @@ char CURLHTTPTransport::getURL(const char *destPath, const char *sourceURL, SWBu
 		curl_easy_setopt(session, CURLOPT_CONNECTTIMEOUT, 45);
 		
 		/* Disable checking host certificate */
-		curl_easy_setopt(session, CURLOPT_SSL_VERIFYPEER, false);
+		if (isUnverifiedPeerAllowed()) {
+			curl_easy_setopt(session, CURLOPT_SSL_VERIFYPEER, false);
+		}
 
 		/* FTP connection settings */
 

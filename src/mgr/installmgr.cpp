@@ -101,6 +101,8 @@ RemoteTransport *InstallMgr::createHTTPTransport(const char *host, StatusReporte
 
 InstallMgr::InstallMgr(const char *privatePath, StatusReporter *sr, SWBuf u, SWBuf p) {
 	userDisclaimerConfirmed = false;
+	passive=true;
+	unverifiedPeerAllowed=true;
 	statusReporter = sr;
 	this->u = u;
 	this->p = p;
@@ -145,6 +147,7 @@ void InstallMgr::readInstallConf() {
 	clearSources();
 	
 	setFTPPassive(stricmp((*installConf)["General"]["PassiveFTP"].c_str(), "false") != 0);
+	setUnverifiedPeerAllowed(stricmp((*installConf)["General"]["UnverifiedPeerAllowed"].c_str(), "false") != 0);
 
 	SectionMap::iterator confSection = installConf->Sections.find("Sources");
 	ConfigEntMap::iterator sourceBegin;
@@ -227,6 +230,7 @@ void InstallMgr::saveInstallConf() {
 		}
 	}
 	(*installConf)["General"]["PassiveFTP"] = (isFTPPassive()) ? "true" : "false";
+	(*installConf)["General"]["UnverifiedPeerAllowed"] = (isUnverifiedPeerAllowed()) ? "true" : "false";
 
 	installConf->Save();
 }
@@ -331,6 +335,8 @@ SWLog::getSystemLog()->logDebug("remoteCopy: %s, %s, %s, %c, %s", (is?is->source
 		trans->setUser(u);
 		trans->setPasswd(p);
 	}
+
+	trans->setUnverifiedPeerAllowed(unverifiedPeerAllowed);
 
 	SWBuf urlPrefix;
 	if (is->type == "HTTP") {

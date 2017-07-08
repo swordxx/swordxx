@@ -76,6 +76,7 @@ protected:
 	StatusReporter *statusReporter;
 	bool passive;
 	SWBuf u, p;
+	bool unverifiedPeerAllowed;
 
 	/** override this method and provide your own custom RemoteTransport subclass
          */
@@ -236,7 +237,8 @@ A sample implementation, roughly taken from the windows installmgr:
 	return false;
 }
 	*/
-		virtual bool getCipherCode(const char *modName, SWConfig *config) { (void) modName; (void) config; return false; }
+
+	virtual bool getCipherCode(const char *modName, SWConfig *config) { (void) modName; (void) config; return false; }
 
 
 
@@ -244,6 +246,9 @@ A sample implementation, roughly taken from the windows installmgr:
          */
 	void setFTPPassive(bool passive) { this->passive = passive; }
 	bool isFTPPassive() { return passive; }
+
+	void setUnverifiedPeerAllowed(bool allowed) { this->unverifiedPeerAllowed = allowed; }
+	bool isUnverifiedPeerAllowed() { return unverifiedPeerAllowed; }
 
         /** call from another thread to terminate the installation process
          */
