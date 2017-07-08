@@ -100,7 +100,7 @@ bool isUnverifiedPeerAllowed() {
         if (!allowed) {
 		cout << "\n\n";
 		cout << "While connecting to an encrypted install source, SWORD can allow\n";
-		cout << "unverified peers, i.e., self signed certificates. While this is\n";
+		cout << "unverified peers, e.g., self-signed certificates. While this is\n";
 		cout << "generally considered safe because SWORD only retrieves Bible content\n";
 		cout << "and does not send any data to the server, it could still possibly\n";
 		cout << "allow a malicious actor to sit between you and the server, as with\n";
@@ -363,6 +363,9 @@ void usage(const char *progName, const char *error) {
 		"  In many places this may well be a risky or even foolish undertaking.\n"
 		"  Please take special care before you use this option in scripts, particularly in scripts you want to offer for public download.\n" 
 		"  What may appear to be safe for you, may well not be safe for someone else, who uses your scripts. \n"
+		"\n\t --allow-unverified-tls-peer \n"
+		"\n  This option will allow the program to connect to unverified peers\n"
+		"  (e.g., hosts using self-signed certificates) without asking for user confirmation.\n"
 		"\n  Commands (run in order they are passed):\n\n"
 		"\t-init\t\t\t\tcreate a basic user config file.\n"
 		"\t\t\t\t\t\tWARNING: overwrites existing.\n"
