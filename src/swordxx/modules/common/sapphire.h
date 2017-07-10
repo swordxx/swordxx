@@ -61,11 +61,13 @@ public: /* Methods: */
     /// Decrypts a byte.
     std::uint8_t decrypt(std::uint8_t b);
 
+#if 0
     /** Copy has value to hash
         \param hash destination
         \param[in] hashlength Hash length (16-32)
     */
-    void hash_final(std::uint8_t * hash, std::uint8_t hashlength = 20);
+    void hash_final(std::uint8_t * hash, std::size_t hashlength = 20);
+#endif
 
     /// Destroys cipher state information.
     void burn();

@@ -98,7 +98,9 @@ std::uint8_t sapphire::keyrand(unsigned limit,
                                std::uint8_t * rsum,
                                unsigned * keypos)
 {
+    assert(user_key);
     assert(keysize < 256u);
+    assert(rsum);
     unsigned u; // Value from 0 to limit to return.
     unsigned retry_limiter; // No infinite loops allowed.
     unsigned mask; // Select just enough bits.
@@ -130,6 +132,8 @@ void sapphire::initialize(std::uint8_t * key, std::size_t keysize) {
     // generated randomly may be used. For random keys, lengths
     // of from 4 to 16 bytes are recommended, depending on how
     // secure you want this to be.
+
+    assert(key);
     assert(keysize < 256u);
 
     // If we have been given no key, assume the default hash setup.
@@ -239,11 +243,17 @@ std::uint8_t sapphire::decrypt(std::uint8_t b) {
     return last_plain;
 }
 
-void sapphire::hash_final(std::uint8_t *hash, std::uint8_t hashlength) {
-    for (int i = 255; i >= 0; --i)
-        encrypt(static_cast<std::uint8_t>(i));
-    for (int i = 0; i < hashlength; ++i)
-        hash[i] = encrypt(0);
+#if 0
+void sapphire::hash_final(std::uint8_t * hash, std::size_t hashlength) {
+    assert(hash);
+    for (std::uint8_t i = 255u;; --i) {
+        encrypt(i);
+        if (i <= 0u)
+            break;
+    }
+    for (std::size_t i = 0u; i < hashlength; ++i)
+        hash[i] = encrypt(0u);
 }
+#endif
 
 } /* namespace swordxx */
