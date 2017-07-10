@@ -32,49 +32,64 @@
  * Made index variable initialization key-dependent,
  * made the output function more resistant to cryptanalysis,
  * and renamed to Sapphire II Stream Cipher 2 January 1995.
- *
- * unsigned char is assumed to be 8 bits.  If it is not, the
- * results of assignments need to be reduced to 8 bits with
- * & 0xFF or % 0x100, whichever is faster.
  */
 
 #include <array>
+#include <cstddef>
+#include <cstdint>
 #include "../../defs.h"
 
 
 namespace swordxx {
 
-  class sapphire
-{
+class sapphire {
 
-    // These variables comprise the state of the state machine.
-  std::array<unsigned char, 256u> cards;    // A permutation of 0-255.
-  unsigned char rotor,        // Index that rotates smoothly
-    ratchet,            // Index that moves erratically
-    avalanche,            // Index heavily data dependent
-    last_plain,            // Last plain text byte
-    last_cipher;        // Last cipher text byte
+public: /* Methods: */
+
+    /** Calls initialize(9 if a real key is provided. Otherwise, initialize() is
+        called before encrypt() or decrypt(). */
+    sapphire(std::uint8_t * key = nullptr, std::size_t keysize = 0);
+    ~sapphire();
+
+    void initialize(std::uint8_t * key, std::size_t keysize);
+
+    void hash_init();
+
+    /// Encrypts a byte or returns a random byte.
+    std::uint8_t encrypt(std::uint8_t b = 0);
+
+    /// Decrypts a byte.
+    std::uint8_t decrypt(std::uint8_t b);
+
+    /** Copy has value to hash
+        \param hash destination
+        \param[in] hashlength Hash length (16-32)
+    */
+    void hash_final(std::uint8_t * hash, std::uint8_t hashlength = 20);
+
+    /// Destroys cipher state information.
+    void burn();
+
+private: /* Methods: */
 
     // This function is used by initialize(), which is called by the
     // constructor.
-  unsigned char keyrand (unsigned limit, unsigned char *user_key,
-              unsigned char keysize, unsigned char *rsum,
-unsigned *keypos); public:sapphire (unsigned char
-                      *key = nullptr,    // Calls initialize if a real
-                      unsigned char keysize = 0);    // key is provided.  If none
-  // is provided, call initialize
-  // before encrypt or decrypt.
-  ~sapphire ();            // Destroy cipher state information.
-  void initialize (unsigned char *key,    // User key is used to set
-           unsigned char keysize);    // up state information.
-  void hash_init (void);    // Set up default hash.
-  unsigned char encrypt (unsigned char b = 0);    // Encrypt byte
-  // or get a random byte.
-  unsigned char decrypt (unsigned char b);    // Decrypt byte.
-  void hash_final (unsigned char *hash,    // Copy hash value to hash
-           unsigned char hashlength = 20);    // Hash length (16-32)
-  void burn (void);        // Destroy cipher state information.
-};
+    std::uint8_t keyrand(unsigned limit,
+                         std::uint8_t * user_key,
+                         std::size_t keysize,
+                         std::uint8_t * rsum,
+                         unsigned * keypos);
 
+private: /* Fields: */
+
+    // These variables comprise the state of the state machine.
+    std::array<std::uint8_t, 256u> cards;    // A permutation of 0-255.
+    std::uint8_t rotor; // Index that rotates smoothly
+    std::uint8_t ratchet; // Index that moves erratically
+    std::uint8_t avalanche; // Index heavily data dependent
+    std::uint8_t last_plain; // Last plain text byte
+    std::uint8_t last_cipher; // Last cipher text byte
+
+};
 
 } /* namespace swordxx */

@@ -121,7 +121,8 @@ void SWCipher::Encode(void)
     if (!cipher) {
         work = master;
         for (unsigned long i = 0; i < len; i++) {
-            unsigned char c;
+            std::uint8_t c;
+            static_assert(sizeof(char) == sizeof(std::uint8_t), "");
             std::memcpy(&c, buf + i, 1u);
             c = work.encrypt(c);
             std::memcpy(buf + i, &c, 1u);
@@ -145,7 +146,8 @@ void SWCipher::Decode(void)
         work = master;
         unsigned long i;
         for (i = 0; i < len; i++) {
-            unsigned char c;
+            std::uint8_t c;
+            static_assert(sizeof(char) == sizeof(std::uint8_t), "");
             std::memcpy(&c, buf + i, 1u);
             c = work.decrypt(c);
             std::memcpy(buf + i, &c, 1u);
@@ -163,8 +165,11 @@ void SWCipher::Decode(void)
 
 void SWCipher::setCipherKey(const char *ikey) {
     auto const keySize = std::strlen(ikey);
-    assert(keySize <= 255u); /// \todo Throw exception instead!?
-    unsigned char key[255u];
+    assert(keySize < 256u); /// \todo Throw exception instead!?
+    static_assert(sizeof(char) == sizeof(std::uint8_t), "");
+    static_assert(alignof(char) == sizeof(char), "");
+    static_assert(alignof(char) == alignof(std::uint8_t), "");
+    std::uint8_t key[255u];
     std::memcpy(key, ikey, keySize);
     master.initialize(key, static_cast<unsigned char>(keySize));
 }
