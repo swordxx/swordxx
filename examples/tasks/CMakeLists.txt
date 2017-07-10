@@ -5,11 +5,12 @@
 #
 
 SET(example_PROGRAMS
+    listbiblebooknames
     parallelbibles
+    simpleverselookup
 )
 
 FOREACH(DEMO ${example_PROGRAMS})
     ADD_EXECUTABLE("${DEMO}" "${SWORDXX_EXAMPLES_EXCLUDE}" "${DEMO}.cpp")
     TARGET_LINK_LIBRARIES("${DEMO}" swordxx)
 ENDFOREACH(DEMO ${example_PROGRAMS})
-

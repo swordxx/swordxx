@@ -77,14 +77,19 @@ void processLemma(bool suspendTextPassThru, XMLTag &tag, std::string &buf) {
         int i = (count > 1) ? 0 : -1;        // -1 for whole value cuz it's faster, but does the same thing as 0
         do {
             attrib = tag.attribute("lemma", i, ' ');
+            auto at(attrib);
+            auto const prefix(stripPrefix(at, ':'));
             if (i < 0) i = 0;    // to handle our -1 condition
             const char * val = strchr(attrib.c_str(), ':');
             val = (val) ? (val + 1) : attrib.c_str();
             std::string gh;
-            if(*val == 'G')
+            if (*val == 'G') {
                 gh = "Greek";
-            if(*val == 'H')
+            } else if (*val == 'H') {
                 gh = "Hebrew";
+            } else if (!prefix.empty()) {
+                gh = std::move(prefix);
+            }
             const char *val2 = val;
             if ((strchr("GH", *val)) && (isdigit(val[1])))
                 val2++;

@@ -66,6 +66,14 @@ char OSISLemma::processText(std::string &text, const SWKey *key, const SWModule 
                 intoken = false;
                 if (hasPrefix(token, "w ")) {    // Word
                     XMLTag wtag(token.c_str());
+
+                    // Always save off lemma if we haven't yet:
+                    if (!wtag.attribute("savlm").empty()) {
+                        auto const lemma(wtag.attribute("lemma"));
+                        if (!lemma.empty())
+                            wtag.setAttribute("savlm", lemma.c_str());
+                    }
+
                     int count = wtag.attributePartCount("lemma", ' ');
                     for (int i = 0; i < count; i++) {
                         std::string a = wtag.attribute("lemma", i, ' ');
@@ -82,6 +90,7 @@ char OSISLemma::processText(std::string &text, const SWKey *key, const SWModule 
                             count--;
                         }
                     }
+
                     token = wtag.toString();
                     trimString(token);
                     // drop <>

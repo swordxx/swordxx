@@ -23,6 +23,7 @@
 
 #include "osisstrongs.h"
 
+#include <cassert>
 #include <cctype>
 #include <cstdio>
 #include <cstdlib>
@@ -83,6 +84,14 @@ char OSISStrongs::processText(std::string &text, const SWKey *key, const SWModul
 
             if (hasPrefix(token, "w ")) {    // Word
                 XMLTag wtag(token.c_str());
+
+                // Always save off lemma if we haven't yet:
+                if (!wtag.attribute("savlm").empty()) {
+                    auto const lemma(wtag.attribute("lemma"));
+                    if (!lemma.empty())
+                        wtag.setAttribute("savlm", lemma.c_str());
+                }
+
                 if (module->isProcessEntryAttributes()) {
                     wordStart = from+1;
                     char gh = 0;
@@ -130,14 +139,14 @@ char OSISStrongs::processText(std::string &text, const SWKey *key, const SWModul
                         } while (++i < count);
                     }
 
-                    if (!(attrib = wtag.attribute("lemma")).empty()) {
-                        int count = wtag.attributePartCount("lemma", ' ');
+                    if (!(attrib = wtag.attribute("savlm")).empty()) {
+                        int count = wtag.attributePartCount("savlm", ' ');
                         int i = (count > 1) ? 0 : -1;        // -1 for whole value cuz it's faster, but does the same thing as 0
                         do {
                             gh = 0;
                             std::string lClass = "";
                             std::string l = "";
-                            attrib = wtag.attribute("lemma", i, ' ');
+                            attrib = wtag.attribute("savlm", i, ' ');
                             if (i < 0) i = 0;    // to handle our -1 condition
 
                             const char *m = strchr(attrib.c_str(), ':');
@@ -222,34 +231,28 @@ char OSISStrongs::processText(std::string &text, const SWKey *key, const SWModul
                     wordNum++;
                 }
 
+                // If we won't want strongs, then lets get them out of lemma:
                 if (!option) {
-/*
- * Code which handles multiple lemma types.  Kindof works but breaks at least WEBIF filters for strongs.
- *
-                    int count = wtag.getAttributePartCount("lemma", ' ');
-                    for (int i = 0; i < count; i++) {
-                        std::string a = wtag.getAttribute("lemma", i, ' ');
-                        const char *prefix = a.stripPrefix(':');
-                        if ((prefix) && (!strcmp(prefix, "x-Strongs") || !strcmp(prefix, "strong") || !strcmp(prefix, "Strong"))) {
+                    int count = wtag.attributePartCount("lemma", ' ');
+                    for (int i = 0; i < count; ++i) {
+                        auto a(wtag.attribute("lemma", i, ' '));
+                        auto const prefix(stripPrefix(a, ':'));
+                        if (!prefix.empty() && ((prefix == "x-Strongs") || (prefix == "strong") || (prefix == "Strong"))) {
                             // remove attribute part
-                            wtag.setAttribute("lemma", 0, i, ' ');
-                            i--;
-                            count--;
+                            wtag.setAttribute("lemma", nullptr, i, ' ');
+                            --i;
+                            --count;
                         }
                     }
-* Instead the codee below just removes the lemma attribute
-*****/
-                    auto savlm(wtag.attribute("lemma"));
-                    if (!savlm.empty()) {
-                        wtag.setAttribute("lemma", nullptr);
-                        wtag.setAttribute("savlm", savlm.c_str());
-                        token = wtag.toString();
-                        trimString(token);
-                        // drop <>
-                        token.erase(0u, 1u);
-                        token.pop_back();
-                    }
                 }
+                token = wtag.toString();
+                trimString(token);
+                // drop <>:
+                assert(token.size() >= 2u);
+                assert((*token.begin()) == '<');
+                assert((*token.rbegin()) == '>');
+                token.pop_back();
+                token.erase(0, 1u);
             }
             if (hasPrefix(token, "/w")) {    // Word End
                 if (module->isProcessEntryAttributes()) {
