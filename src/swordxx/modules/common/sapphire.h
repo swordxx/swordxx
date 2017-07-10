@@ -42,14 +42,14 @@
 
 namespace swordxx {
 
-class sapphire {
+class Sapphire {
 
 public: /* Methods: */
 
     /** Calls initialize(9 if a real key is provided. Otherwise, initialize() is
         called before encrypt() or decrypt(). */
-    sapphire(std::uint8_t * key = nullptr, std::size_t keysize = 0);
-    ~sapphire();
+    Sapphire(std::uint8_t * key = nullptr, std::size_t keysize = 0);
+    ~Sapphire();
 
     void initialize(std::uint8_t * key, std::size_t keysize);
 

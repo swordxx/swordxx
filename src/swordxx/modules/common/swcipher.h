@@ -34,8 +34,8 @@ namespace swordxx {
 class SWDLLEXPORT SWCipher
 {
 
-  sapphire master;
-  sapphire work;
+  Sapphire master;
+  Sapphire work;
 
   char *buf;
   bool cipher;

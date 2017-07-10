@@ -92,7 +92,7 @@ std::array<std::uint8_t, 256u> const inverse{{
 
 } // anonymous namespace
 
-std::uint8_t sapphire::keyrand(unsigned limit,
+std::uint8_t Sapphire::keyrand(unsigned limit,
                                std::uint8_t * user_key,
                                std::size_t keysize,
                                std::uint8_t * rsum,
@@ -124,7 +124,7 @@ std::uint8_t sapphire::keyrand(unsigned limit,
     return static_cast<std::uint8_t>(u);
 }
 
-void sapphire::initialize(std::uint8_t * key, std::size_t keysize) {
+void Sapphire::initialize(std::uint8_t * key, std::size_t keysize) {
     // Key size may be up to 256 bytes.
     // Pass phrases may be used directly, with longer length
     // compensating for the low entropy expected in such keys.
@@ -169,7 +169,7 @@ void sapphire::initialize(std::uint8_t * key, std::size_t keysize) {
     last_cipher = cards[rsum];
 }
 
-void sapphire::hash_init() {
+void Sapphire::hash_init() {
     // This function is used to initialize non-keyed hash
     // computation.
 
@@ -184,20 +184,20 @@ void sapphire::hash_init() {
     cards = inverse;
 }
 
-sapphire::sapphire(std::uint8_t * key, std::size_t keysize) {
+Sapphire::Sapphire(std::uint8_t * key, std::size_t keysize) {
     if (key && keysize)
         initialize(key, keysize);
 }
 
-void sapphire::burn(void) {
+void Sapphire::burn(void) {
     // Destroy the key and state information in RAM.
     std::memset(cards.data(), 0u, cards.size());
     rotor = ratchet = avalanche = last_plain = last_cipher = 0u;
 }
 
-sapphire::~sapphire() { burn(); }
+Sapphire::~Sapphire() { burn(); }
 
-std::uint8_t sapphire::encrypt(std::uint8_t b) {
+std::uint8_t Sapphire::encrypt(std::uint8_t b) {
     // Picture a single enigma rotor with 256 positions, rewired
     // on the fly by card-shuffling.
 
@@ -223,7 +223,7 @@ std::uint8_t sapphire::encrypt(std::uint8_t b) {
     return last_cipher;
 }
 
-std::uint8_t sapphire::decrypt(std::uint8_t b) {
+std::uint8_t Sapphire::decrypt(std::uint8_t b) {
     // Shuffle the deck a little more.
     ratchet += cards[rotor++];
     auto const swaptemp = cards[last_cipher];
@@ -244,7 +244,7 @@ std::uint8_t sapphire::decrypt(std::uint8_t b) {
 }
 
 #if 0
-void sapphire::hash_final(std::uint8_t * hash, std::size_t hashlength) {
+void Sapphire::hash_final(std::uint8_t * hash, std::size_t hashlength) {
     assert(hash);
     for (std::uint8_t i = 255u;; --i) {
         encrypt(i);
