@@ -138,7 +138,15 @@ void Sapphire::initialize(std::uint8_t * key, std::size_t keysize) {
 
     // If we have been given no key, assume the default hash setup.
     if (keysize < 1) {
-        hash_init();
+        // Initialize the indices and data dependencies.
+        rotor = 1u;
+        ratchet = 3u;
+        avalanche = 5u;
+        last_plain = 7u;
+        last_cipher = 11u;
+
+        // Start with cards all in inverse order.
+        cards = inverse;
         return;
     }
 
@@ -167,21 +175,6 @@ void Sapphire::initialize(std::uint8_t * key, std::size_t keysize) {
     avalanche = cards[5];
     last_plain = cards[7];
     last_cipher = cards[rsum];
-}
-
-void Sapphire::hash_init() {
-    // This function is used to initialize non-keyed hash
-    // computation.
-
-    // Initialize the indices and data dependencies.
-    rotor = 1u;
-    ratchet = 3u;
-    avalanche = 5u;
-    last_plain = 7u;
-    last_cipher = 11u;
-
-    // Start with cards all in inverse order.
-    cards = inverse;
 }
 
 Sapphire::Sapphire(std::uint8_t * key, std::size_t keysize) {

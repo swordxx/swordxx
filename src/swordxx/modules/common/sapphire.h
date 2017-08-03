@@ -53,8 +53,6 @@ public: /* Methods: */
 
     void initialize(std::uint8_t * key, std::size_t keysize);
 
-    void hash_init();
-
     /// Encrypts a byte or returns a random byte.
     std::uint8_t encrypt(std::uint8_t b = 0);
 
