@@ -182,13 +182,11 @@ Sapphire::Sapphire(std::uint8_t * key, std::size_t keysize) {
         initialize(key, keysize);
 }
 
-void Sapphire::burn(void) {
+Sapphire::~Sapphire() {
     // Destroy the key and state information in RAM.
     std::memset(cards.data(), 0u, cards.size());
     rotor = ratchet = avalanche = last_plain = last_cipher = 0u;
 }
-
-Sapphire::~Sapphire() { burn(); }
 
 std::uint8_t Sapphire::encrypt(std::uint8_t b) {
     // Picture a single enigma rotor with 256 positions, rewired

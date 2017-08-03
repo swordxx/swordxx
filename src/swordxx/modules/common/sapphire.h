@@ -59,9 +59,6 @@ public: /* Methods: */
     /// Decrypts a byte.
     std::uint8_t decrypt(std::uint8_t b);
 
-    /// Destroys cipher state information.
-    void burn();
-
 private: /* Methods: */
 
     // This function is used by initialize(), which is called by the
