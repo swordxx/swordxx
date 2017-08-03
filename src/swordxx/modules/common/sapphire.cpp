@@ -37,8 +37,12 @@
 
 #include "sapphire.h"
 
+#include <array>
 #include <cassert>
 #include <cstring>
+#include <sys/mman.h>
+#include <type_traits>
+#include <utility>
 
 
 namespace swordxx {
@@ -92,39 +96,84 @@ std::array<std::uint8_t, 256u> const inverse{{
 
 } // anonymous namespace
 
-std::uint8_t Sapphire::keyrand(unsigned limit,
-                               std::uint8_t * user_key,
-                               std::size_t keysize,
-                               std::uint8_t * rsum,
-                               unsigned * keypos)
-{
-    assert(user_key);
-    assert(keysize < 256u);
-    assert(rsum);
-    unsigned u; // Value from 0 to limit to return.
-    unsigned retry_limiter; // No infinite loops allowed.
-    unsigned mask; // Select just enough bits.
+struct __attribute__ ((visibility("internal"))) Sapphire::State {
 
-    if (!limit)
-        return 0;   // Avoid divide by zero error.
-    retry_limiter = 0;
-    mask = 1;               // Fill mask with enough bits to cover
-    while (mask < limit)    // the desired range.
-        mask = (mask << 1) + 1;
-    do {
-        *rsum = cards[*rsum] + user_key[(*keypos)++];
-        if (*keypos >= keysize) {
-            *keypos = 0;            // Recycle the user key.
-            *rsum += keysize;   // key "aaaa" != key "aaaaaaaa"
-        }
-        u = mask & *rsum;
-        if (++retry_limiter > 11)
-            u %= limit;     // Prevent very rare long loops.
-    } while (u > limit);
-    return static_cast<std::uint8_t>(u);
+/* Methods: */
+
+    State(NoInitialization const);
+    State();
+    State(State &&);
+    State(State const &);
+    State(std::uint8_t * key, std::size_t keysize);
+
+    ~State() noexcept;
+
+    State & operator=(State &&) noexcept;
+    State & operator=(State const &) noexcept;
+
+    void defaultInitialize();
+    void initialize(std::uint8_t * key, std::size_t keysize);
+    std::uint8_t keyrand(unsigned limit,
+                         std::uint8_t * user_key,
+                         std::size_t keysize,
+                         std::uint8_t * rsum,
+                         unsigned * keypos);
+    std::uint8_t encrypt(std::uint8_t b = 0);
+    std::uint8_t decrypt(std::uint8_t b);
+
+/* Fields: */
+
+    std::array<std::uint8_t, 256u> cards; // A permutation of 0-255.
+    std::uint8_t rotor; // Index that rotates smoothly
+    std::uint8_t ratchet; // Index that moves erratically
+    std::uint8_t avalanche; // Index heavily data dependent
+    std::uint8_t last_plain; // Last plain text byte
+    std::uint8_t last_cipher; // Last cipher text byte
+
+}; /* class Sapphire::State */
+
+Sapphire::State::State(NoInitialization const) {
+    // Prevent paging of cryptographic state to swap:
+    while (::mlock(this, sizeof(State)) != 0) {
+        if (errno != EINTR)
+            throw std::bad_alloc();
+    }
 }
 
-void Sapphire::initialize(std::uint8_t * key, std::size_t keysize) {
+Sapphire::State::State()
+    : State(DontInitialize)
+{ defaultInitialize(); }
+
+Sapphire::State::State(State && move)
+    : State(DontInitialize)
+{ (*this) = std::move(move); }
+
+Sapphire::State::State(State const & copy)
+    : State(DontInitialize)
+{ (*this) = copy; }
+
+Sapphire::State::State(std::uint8_t * key, std::size_t keysize)
+    : State(DontInitialize)
+{ initialize(key, keysize); }
+
+Sapphire::State::~State() noexcept { std::memset(this, 0, sizeof(*this)); }
+
+Sapphire::State & Sapphire::State::operator=(State &&) noexcept = default;
+Sapphire::State & Sapphire::State::operator=(State const &) noexcept = default;
+
+void Sapphire::State::defaultInitialize() {
+    // Start with cards all in inverse order.
+    cards = inverse;
+
+    // Initialize the indices and data dependencies.
+    rotor = 1u;
+    ratchet = 3u;
+    avalanche = 5u;
+    last_plain = 7u;
+    last_cipher = 11u;
+}
+
+void Sapphire::State::initialize(std::uint8_t * key, std::size_t keysize) {
     // Key size may be up to 256 bytes.
     // Pass phrases may be used directly, with longer length
     // compensating for the low entropy expected in such keys.
@@ -133,20 +182,11 @@ void Sapphire::initialize(std::uint8_t * key, std::size_t keysize) {
     // of from 4 to 16 bytes are recommended, depending on how
     // secure you want this to be.
 
-    assert(key);
     assert(keysize < 256u);
 
     // If we have been given no key, assume the default hash setup.
-    if (keysize < 1) {
-        // Initialize the indices and data dependencies.
-        rotor = 1u;
-        ratchet = 3u;
-        avalanche = 5u;
-        last_plain = 7u;
-        last_cipher = 11u;
-
-        // Start with cards all in inverse order.
-        cards = inverse;
+    if (!key || (keysize == 0u)) {
+        defaultInitialize();
         return;
     }
 
@@ -177,18 +217,39 @@ void Sapphire::initialize(std::uint8_t * key, std::size_t keysize) {
     last_cipher = cards[rsum];
 }
 
-Sapphire::Sapphire(std::uint8_t * key, std::size_t keysize) {
-    if (key && keysize)
-        initialize(key, keysize);
+std::uint8_t Sapphire::State::keyrand(unsigned limit,
+                                      std::uint8_t * user_key,
+                                      std::size_t keysize,
+                                      std::uint8_t * rsum,
+                                      unsigned * keypos)
+{
+    assert(user_key);
+    assert(keysize < 256u);
+    assert(rsum);
+    unsigned u; // Value from 0 to limit to return.
+    unsigned retry_limiter; // No infinite loops allowed.
+    unsigned mask; // Select just enough bits.
+
+    if (!limit)
+        return 0;   // Avoid divide by zero error.
+    retry_limiter = 0;
+    mask = 1;               // Fill mask with enough bits to cover
+    while (mask < limit)    // the desired range.
+        mask = (mask << 1) + 1;
+    do {
+        *rsum = cards[*rsum] + user_key[(*keypos)++];
+        if (*keypos >= keysize) {
+            *keypos = 0;            // Recycle the user key.
+            *rsum += keysize;   // key "aaaa" != key "aaaaaaaa"
+        }
+        u = mask & *rsum;
+        if (++retry_limiter > 11)
+            u %= limit;     // Prevent very rare long loops.
+    } while (u > limit);
+    return static_cast<std::uint8_t>(u);
 }
 
-Sapphire::~Sapphire() {
-    // Destroy the key and state information in RAM.
-    std::memset(cards.data(), 0u, cards.size());
-    rotor = ratchet = avalanche = last_plain = last_cipher = 0u;
-}
-
-std::uint8_t Sapphire::encrypt(std::uint8_t b) {
+std::uint8_t Sapphire::State::encrypt(std::uint8_t b) {
     // Picture a single enigma rotor with 256 positions, rewired
     // on the fly by card-shuffling.
 
@@ -214,7 +275,7 @@ std::uint8_t Sapphire::encrypt(std::uint8_t b) {
     return last_cipher;
 }
 
-std::uint8_t Sapphire::decrypt(std::uint8_t b) {
+std::uint8_t Sapphire::State::decrypt(std::uint8_t b) {
     // Shuffle the deck a little more.
     ratchet += cards[rotor++];
     auto const swaptemp = cards[last_cipher];
@@ -232,6 +293,62 @@ std::uint8_t Sapphire::decrypt(std::uint8_t b) {
                                   + cards[avalanche]) & 0xFF]];
     last_cipher = b;
     return last_plain;
+}
+
+Sapphire::Sapphire(NoInitialization const dontInitialize)
+    : m_state(new State(dontInitialize))
+{}
+
+Sapphire::Sapphire()
+    : m_state(new State())
+{}
+
+Sapphire::Sapphire(Sapphire && move) noexcept
+    : m_state(move.m_state)
+{ move.m_state = nullptr; }
+
+Sapphire::Sapphire(Sapphire const & copy)
+    : m_state(new State(*copy.m_state))
+{}
+
+Sapphire::Sapphire(std::uint8_t * key, std::size_t keysize)
+    : m_state(new State(key, keysize))
+{}
+
+Sapphire::~Sapphire() noexcept { delete m_state; }
+
+Sapphire & Sapphire::operator=(Sapphire && move) noexcept {
+    delete m_state;
+    m_state = move.m_state;
+    move.m_state = nullptr;
+    return *this;
+}
+
+Sapphire & Sapphire::operator=(Sapphire const & copy) noexcept {
+    assert(m_state);
+    assert(copy.m_state);
+    (*m_state) = *(copy.m_state);
+    return *this;
+}
+
+void Sapphire::defaultInitialize() {
+    assert(m_state);
+    m_state->defaultInitialize();
+}
+
+void Sapphire::initialize(std::uint8_t * key, std::size_t keysize) {
+    assert(m_state);
+    m_state->initialize(key, keysize);
+}
+
+std::uint8_t Sapphire::encrypt(std::uint8_t b) {
+    assert(m_state);
+    return m_state->encrypt(b);
+}
+
+std::uint8_t Sapphire::decrypt(std::uint8_t b) {
+    assert(m_state);
+    return m_state->decrypt(b);
 }
 
 } /* namespace swordxx */

@@ -171,7 +171,7 @@ void SWCipher::setCipherKey(const char *ikey) {
     static_assert(alignof(char) == alignof(std::uint8_t), "");
     std::uint8_t key[255u];
     std::memcpy(key, ikey, keySize);
-    master.initialize(key, static_cast<unsigned char>(keySize));
+    master.initialize(key, keySize);
 }
 
 } /* namespace swordxx */

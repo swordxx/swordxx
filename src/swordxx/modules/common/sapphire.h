@@ -34,7 +34,6 @@
  * and renamed to Sapphire II Stream Cipher 2 January 1995.
  */
 
-#include <array>
 #include <cstddef>
 #include <cstdint>
 #include "../../defs.h"
@@ -44,13 +43,31 @@ namespace swordxx {
 
 class Sapphire {
 
+public: /* Types: */
+
+    enum NoInitialization { DontInitialize };
+
+private: /* Types: */
+
+    struct State;
+
 public: /* Methods: */
 
-    /** Calls initialize(9 if a real key is provided. Otherwise, initialize() is
-        called before encrypt() or decrypt(). */
-    Sapphire(std::uint8_t * key = nullptr, std::size_t keysize = 0);
-    ~Sapphire();
+    Sapphire(NoInitialization const);
+    Sapphire();
+    Sapphire(Sapphire &&) noexcept;
+    Sapphire(Sapphire const &);
+    Sapphire(std::uint8_t * key, std::size_t keysize);
 
+    virtual ~Sapphire() noexcept;
+
+    Sapphire & operator=(Sapphire &&) noexcept;
+    Sapphire & operator=(Sapphire const &) noexcept;
+
+    /** Default-initializes or re-default-initializes the cipher state. */
+    void defaultInitialize();
+
+    /** Initializes or re-initializes the cipher state. */
     void initialize(std::uint8_t * key, std::size_t keysize);
 
     /// Encrypts a byte or returns a random byte.
@@ -59,25 +76,9 @@ public: /* Methods: */
     /// Decrypts a byte.
     std::uint8_t decrypt(std::uint8_t b);
 
-private: /* Methods: */
-
-    // This function is used by initialize(), which is called by the
-    // constructor.
-    std::uint8_t keyrand(unsigned limit,
-                         std::uint8_t * user_key,
-                         std::size_t keysize,
-                         std::uint8_t * rsum,
-                         unsigned * keypos);
-
 private: /* Fields: */
 
-    // These variables comprise the state of the state machine.
-    std::array<std::uint8_t, 256u> cards;    // A permutation of 0-255.
-    std::uint8_t rotor; // Index that rotates smoothly
-    std::uint8_t ratchet; // Index that moves erratically
-    std::uint8_t avalanche; // Index heavily data dependent
-    std::uint8_t last_plain; // Last plain text byte
-    std::uint8_t last_cipher; // Last cipher text byte
+    State * m_state;
 
 };
 
