@@ -243,17 +243,4 @@ std::uint8_t Sapphire::decrypt(std::uint8_t b) {
     return last_plain;
 }
 
-#if 0
-void Sapphire::hash_final(std::uint8_t * hash, std::size_t hashlength) {
-    assert(hash);
-    for (std::uint8_t i = 255u;; --i) {
-        encrypt(i);
-        if (i <= 0u)
-            break;
-    }
-    for (std::size_t i = 0u; i < hashlength; ++i)
-        hash[i] = encrypt(0u);
-}
-#endif
-
 } /* namespace swordxx */
