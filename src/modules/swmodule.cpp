@@ -303,7 +303,7 @@ char SWModule::setKey(const SWKey *ikey) {
 	if (oldKey)
 		delete oldKey;
 
-	return error = key->popError();
+	return error = key->getError();
 }
 
 

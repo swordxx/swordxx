@@ -159,6 +159,7 @@ public:
 	 */
 	SWDEPRECATED char Error() { return popError(); }
 	virtual char popError();
+	virtual char getError() { return error; }
 	virtual void setError(char err) { error = err; }
 
 	/** Sets this SWKey with a character string
