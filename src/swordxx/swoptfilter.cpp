@@ -57,7 +57,7 @@ SWOptionFilter::~SWOptionFilter() {
 
 void SWOptionFilter::setOptionValue(const char *ival) {
     for (auto const & optValue : *optValues) {
-        if (!stricmp(optValue.c_str(), ival)) {
+        if (caseInsensitiveEquals(optValue, ival)) {
             optionValue = optValue;
             option = (!strnicmp(ival, "On", 2));    // convenience for boolean filters
             break;

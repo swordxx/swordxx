@@ -301,13 +301,13 @@ char ThMLOSIS::processText(std::string &text, const SWKey *key, const SWModule *
 //                of italicized text
 //                        if (!strcmp(module->Type(), "Biblical Texts")) {
 //                    // Italics assume transchange for Biblical texts
-//                    if (!stricmp(token, "i")) {
+//                    if (caseInsensitiveEquals(token, "i")) {
 //                        pushString(&to, "<transChange type=\"added\">");
 //                        newText = true;
 //                        lastspace = false;
 //                        handled = true;
 //                    }
-//                    else    if (!stricmp(token, "/i")) {
+//                    else    if (caseInsensitiveEquals(token, "/i")) {
 //                        pushString(&to, "</transChange>");
 //                        lastspace = false;
 //                        handled = true;
@@ -316,14 +316,14 @@ char ThMLOSIS::processText(std::string &text, const SWKey *key, const SWModule *
 //                        else {
 //                            // otherwise, italics are just italics
 //-- end italics for transchange
-                    if (!stricmp(token, "i")) {
+                    if (caseInsensitiveEquals(token, "i")) {
 //                         pushString(&to, "<hi type=\"i\">");
                     text.append("<hi type=\"i\">");
                         newText = true;
                      lastspace = false;
                         handled = true;
                     }
-                    else    if (!stricmp(token, "/i")) {
+                    else    if (caseInsensitiveEquals(token, "/i")) {
 //                         pushString(&to, "</hi>");
                     text.append("</hi>");
                         lastspace = false;

@@ -290,11 +290,11 @@ bool ThMLHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterU
                 u->SecHead = false;
             }
             else if (!tag.attribute("class").empty()) {
-                if (!stricmp(tag.attribute("class").c_str(), "sechead")) {
+                if (caseInsensitiveEquals(tag.attribute("class"), "sechead")) {
                     u->SecHead = true;
                     buf += "<br /><b><i>";
                 }
-                else if (!stricmp(tag.attribute("class").c_str(), "title")) {
+                else if (caseInsensitiveEquals(tag.attribute("class"), "title")) {
                     u->SecHead = true;
                     buf += "<br /><b><i>";
                 }

@@ -114,8 +114,8 @@ char ThMLHeadings::processText(std::string &text, const SWKey *key, const SWModu
                     }
                     preverse = false;
                 }
-                if (!tag.attribute("class").empty() && ((!stricmp(tag.attribute("class").c_str(), "sechead"))
-                                         ||  (!stricmp(tag.attribute("class").c_str(), "title")))) {
+                if (!tag.attribute("class").empty() && ((caseInsensitiveEquals(tag.attribute("class"), "sechead"))
+                                         ||  (caseInsensitiveEquals(tag.attribute("class"), "title")))) {
 
                     isheader = true;
 
@@ -125,7 +125,7 @@ char ThMLHeadings::processText(std::string &text, const SWKey *key, const SWModu
 
 /* how do we tell a ThML preverse title from one that should be in the text?  probably if any text is before the title...  just assuming all are preverse for now
                     }
-                    if (tag.getAttribute("subtype") && !stricmp(tag.getAttribute("subtype"), "x-preverse")) {
+                    if (!tag.attribute("subtype").empty() && caseInsensitiveEquals(tag.attribute("subtype"), "x-preverse")) {
 */
                         hide = true;
                         preverse = true;

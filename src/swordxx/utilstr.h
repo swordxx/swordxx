@@ -112,9 +112,11 @@ inline std::pair<bool, std::size_t> getPrefixSize(std::string const & buf,
 
 std::string stripPrefix(std::string & str, char const separator);
 
+bool caseInsensitiveEquals(std::string const & a,
+                           std::string const & b) noexcept;
+
 SWDLLEXPORT char const * stristr(std::string const & haystack,
                                  std::string const & needle) noexcept;
-SWDLLEXPORT int stricmp(char const * s1, char const * s2) noexcept;
 SWDLLEXPORT int strnicmp(char const * s1, char const * s2, std::size_t len)
         noexcept;
 

@@ -74,14 +74,14 @@ void EncodingFilterMgr::addRawFilters(SWModule & module,
     if (entry == section.end() || entry->second.empty()) {
         module.addRawFilter(m_latin1utf8); /// \todo pass as shared_ptr?
     } else {
-        char const * const rawEncodingStr = entry->second.c_str();
-        if (!stricmp(rawEncodingStr, "Latin-1")) {
+        auto const & rawEncodingStr = entry->second;
+        if (caseInsensitiveEquals(rawEncodingStr, "Latin-1")) {
             /// \todo pass as shared_ptr?
             module.addRawFilter(m_latin1utf8);
-        } else if (!stricmp(rawEncodingStr, "SCSU")) {
+        } else if (caseInsensitiveEquals(rawEncodingStr, "SCSU")) {
             /// \todo pass as shared_ptr?
             module.addRawFilter(m_scsuutf8);
-        } else if (!stricmp(rawEncodingStr, "UTF-16")) {
+        } else if (caseInsensitiveEquals(rawEncodingStr, "UTF-16")) {
             /// \todo pass as shared_ptr?
             module.addRawFilter(m_utf16utf8);
         }

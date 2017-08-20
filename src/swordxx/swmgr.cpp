@@ -748,24 +748,24 @@ std::unique_ptr<SWModule> SWMgr::createModule(std::string const & name,
 
     section["AbsoluteDataPath"] = datapath;
 
-    if (!stricmp(sourceformat.c_str(), "GBF"))
+    if (caseInsensitiveEquals(sourceformat, "GBF"))
         markup = FMT_GBF;
-    else if (!stricmp(sourceformat.c_str(), "ThML"))
+    else if (caseInsensitiveEquals(sourceformat, "ThML"))
         markup = FMT_THML;
-    else if (!stricmp(sourceformat.c_str(), "OSIS"))
+    else if (caseInsensitiveEquals(sourceformat, "OSIS"))
         markup = FMT_OSIS;
-    else if (!stricmp(sourceformat.c_str(), "TEI"))
+    else if (caseInsensitiveEquals(sourceformat, "TEI"))
         markup = FMT_TEI;
     else
         markup = FMT_GBF;
 
-    if (!stricmp(encoding.c_str(), "UTF-8")) {
+    if (caseInsensitiveEquals(encoding, "UTF-8")) {
         enc = ENC_UTF8;
     }
-    else if (!stricmp(encoding.c_str(), "SCSU")) {
+    else if (caseInsensitiveEquals(encoding, "SCSU")) {
         enc = ENC_SCSU;
     }
-    else if (!stricmp(encoding.c_str(), "UTF-16")) {
+    else if (caseInsensitiveEquals(encoding, "UTF-16")) {
         enc = ENC_UTF16;
     }
     else enc = ENC_LATIN1;
@@ -773,10 +773,10 @@ std::unique_ptr<SWModule> SWMgr::createModule(std::string const & name,
     if ((entry = section.find("Direction")) == section.end()) {
         direction = DIRECTION_LTR;
     }
-    else if (!stricmp((*entry).second.c_str(), "rtol")) {
+    else if (caseInsensitiveEquals((*entry).second, "rtol")) {
         direction = DIRECTION_RTL;
     }
-    else if (!stricmp((*entry).second.c_str(), "bidi")) {
+    else if (caseInsensitiveEquals((*entry).second, "bidi")) {
         direction = DIRECTION_BIDI;
     }
     else {
@@ -784,35 +784,39 @@ std::unique_ptr<SWModule> SWMgr::createModule(std::string const & name,
     }
 
     std::unique_ptr<SWModule> newmod;
-    if ((!stricmp(driver.c_str(), "zText")) || (!stricmp(driver.c_str(), "zCom")) || (!stricmp(driver.c_str(), "zText4")) || (!stricmp(driver.c_str(), "zCom4"))) {
+    if (caseInsensitiveEquals(driver, "zText")
+        || caseInsensitiveEquals(driver, "zCom")
+        || caseInsensitiveEquals(driver, "zText4")
+        || caseInsensitiveEquals(driver, "zCom4"))
+    {
         BlockType blockType = CHAPTERBLOCKS;
         misc1 = ((entry = section.find("BlockType")) != section.end()) ? (*entry).second : std::string("CHAPTER");
-        if (!stricmp(misc1.c_str(), "VERSE"))
+        if (caseInsensitiveEquals(misc1, "VERSE"))
             blockType = VERSEBLOCKS;
-        else if (!stricmp(misc1.c_str(), "CHAPTER"))
+        else if (caseInsensitiveEquals(misc1, "CHAPTER"))
             blockType = CHAPTERBLOCKS;
-        else if (!stricmp(misc1.c_str(), "BOOK"))
+        else if (caseInsensitiveEquals(misc1, "BOOK"))
             blockType = BOOKBLOCKS;
 
         misc1 = ((entry = section.find("CompressType")) != section.end()) ? (*entry).second : std::string("LZSS");
         std::unique_ptr<SWCompress> compress;
-        if (!stricmp(misc1.c_str(), "ZIP"))
+        if (caseInsensitiveEquals(misc1, "ZIP"))
             compress = std::make_unique<ZipCompress>();
-        else if (!stricmp(misc1.c_str(), "BZIP2"))
+        else if (caseInsensitiveEquals(misc1, "BZIP2"))
             compress = std::make_unique<Bzip2Compress>();
         else
-        if (!stricmp(misc1.c_str(), "XZ"))
+        if (caseInsensitiveEquals(misc1, "XZ"))
             compress = std::make_unique<XzCompress>();
         else
-        if (!stricmp(misc1.c_str(), "LZSS"))
+        if (caseInsensitiveEquals(misc1, "LZSS"))
             compress = std::make_unique<LZSSCompress>();
 
         if (compress) {
-            if (!stricmp(driver.c_str(), "zText"))
+            if (caseInsensitiveEquals(driver, "zText"))
                 newmod = std::make_unique<zText>(datapath.c_str(), name.c_str(), description.c_str(), blockType, std::move(compress), enc, direction, markup, lang.c_str(), versification.c_str());
-            else if (!stricmp(driver.c_str(), "zText4"))
+            else if (caseInsensitiveEquals(driver, "zText4"))
                 newmod = std::make_unique<zText4>(datapath.c_str(), name.c_str(), description.c_str(), blockType, std::move(compress), enc, direction, markup, lang.c_str(), versification.c_str());
-            else if (!stricmp(driver.c_str(), "zCom4"))
+            else if (caseInsensitiveEquals(driver, "zCom4"))
                 newmod = std::make_unique<zCom4>(datapath.c_str(), name.c_str(), description.c_str(), blockType, std::move(compress), enc, direction, markup, lang.c_str(), versification.c_str());
             else
                 newmod = std::make_unique<zCom>(datapath.c_str(), name.c_str(), description.c_str(), blockType, std::move(compress), enc, direction, markup, lang.c_str(), versification.c_str());
@@ -822,32 +826,32 @@ std::unique_ptr<SWModule> SWMgr::createModule(std::string const & name,
     /* Used for position of final / in AbsoluteDataPath, but also set to true
        for modules types that need to strip module name: */
     bool pos = false;
-    if (!stricmp(driver.c_str(), "RawText")) {
+    if (caseInsensitiveEquals(driver, "RawText")) {
         newmod = std::make_unique<RawText>(datapath.c_str(), name.c_str(), description.c_str(), enc, direction, markup, lang.c_str(), versification.c_str());
-    } else if (!stricmp(driver.c_str(), "RawText4")) {
+    } else if (caseInsensitiveEquals(driver, "RawText4")) {
         newmod = std::make_unique<RawText4>(datapath.c_str(), name.c_str(), description.c_str(), enc, direction, markup, lang.c_str(), versification.c_str());
-    } else if (!stricmp(driver.c_str(), "RawGBF")) { // backward support old drivers
+    } else if (caseInsensitiveEquals(driver, "RawGBF")) { // backward support old drivers
         newmod = std::make_unique<RawText>(datapath.c_str(), name.c_str(), description.c_str(), enc, direction, markup, lang.c_str());
-    } else if (!stricmp(driver.c_str(), "RawCom")) {
+    } else if (caseInsensitiveEquals(driver, "RawCom")) {
         newmod = std::make_unique<RawCom>(datapath.c_str(), name.c_str(), description.c_str(), enc, direction, markup, lang.c_str(), versification.c_str());
-    } else if (!stricmp(driver.c_str(), "RawCom4")) {
+    } else if (caseInsensitiveEquals(driver, "RawCom4")) {
         newmod = std::make_unique<RawCom4>(datapath.c_str(), name.c_str(), description.c_str(), enc, direction, markup, lang.c_str(), versification.c_str());
-    } else if (!stricmp(driver.c_str(), "RawFiles")) {
+    } else if (caseInsensitiveEquals(driver, "RawFiles")) {
         newmod = std::make_unique<RawFiles>(datapath.c_str(), name.c_str(), description.c_str(), enc, direction, markup, lang.c_str());
-    } else if (!stricmp(driver.c_str(), "HREFCom")) {
+    } else if (caseInsensitiveEquals(driver, "HREFCom")) {
         misc1 = ((entry = section.find("Prefix")) != section.end()) ? (*entry).second : std::string();
         newmod = std::make_unique<HREFCom>(datapath.c_str(), misc1.c_str(), name.c_str(), description.c_str());
-    } else if (!stricmp(driver.c_str(), "RawLD")) {
+    } else if (caseInsensitiveEquals(driver, "RawLD")) {
         bool caseSensitive = ((entry = section.find("CaseSensitiveKeys")) != section.end()) ? (*entry).second == "true": false;
         bool strongsPadding = ((entry = section.find("StrongsPadding")) != section.end()) ? (*entry).second == "true": true;
         newmod = std::make_unique<RawLD>(datapath.c_str(), name.c_str(), description.c_str(), enc, direction, markup, lang.c_str(), caseSensitive, strongsPadding);
         pos = true;
-    } else if (!stricmp(driver.c_str(), "RawLD4")) {
+    } else if (caseInsensitiveEquals(driver, "RawLD4")) {
         bool caseSensitive = ((entry = section.find("CaseSensitiveKeys")) != section.end()) ? (*entry).second == "true": false;
         bool strongsPadding = ((entry = section.find("StrongsPadding")) != section.end()) ? (*entry).second == "true": true;
         newmod = std::make_unique<RawLD4>(datapath.c_str(), name.c_str(), description.c_str(), enc, direction, markup, lang.c_str(), caseSensitive, strongsPadding);
         pos = true;
-    } else if (!stricmp(driver.c_str(), "zLD")) {
+    } else if (caseInsensitiveEquals(driver, "zLD")) {
         std::unique_ptr<SWCompress> compress;
         int blockCount;
         bool caseSensitive = ((entry = section.find("CaseSensitiveKeys")) != section.end()) ? (*entry).second == "true": false;
@@ -857,22 +861,22 @@ std::unique_ptr<SWModule> SWMgr::createModule(std::string const & name,
         blockCount = (blockCount) ? blockCount : 200;
 
         misc1 = ((entry = section.find("CompressType")) != section.end()) ? (*entry).second : std::string("LZSS");
-        if (!stricmp(misc1.c_str(), "ZIP"))
+        if (caseInsensitiveEquals(misc1, "ZIP"))
             compress = std::make_unique<ZipCompress>();
-        else if (!stricmp(misc1.c_str(), "BZIP2"))
+        else if (caseInsensitiveEquals(misc1, "BZIP2"))
             compress = std::make_unique<Bzip2Compress>();
         else
-        if (!stricmp(misc1.c_str(), "XZ"))
+        if (caseInsensitiveEquals(misc1, "XZ"))
             compress = std::make_unique<XzCompress>();
         else
-        if (!stricmp(misc1.c_str(), "LZSS"))
+        if (caseInsensitiveEquals(misc1, "LZSS"))
             compress = std::make_unique<LZSSCompress>();
 
         if (compress) {
             newmod = std::make_unique<zLD>(datapath.c_str(), name.c_str(), description.c_str(), blockCount, std::move(compress), enc, direction, markup, lang.c_str(), caseSensitive, strongsPadding);
             pos = true;
         }
-    } else if (!stricmp(driver.c_str(), "RawGenBook")) {
+    } else if (caseInsensitiveEquals(driver, "RawGenBook")) {
         misc1 = ((entry = section.find("KeyType")) != section.end()) ? (*entry).second : std::string("TreeKey");
         newmod = std::make_unique<RawGenBook>(datapath.c_str(), name.c_str(), description.c_str(), enc, direction, markup, lang.c_str(), misc1.c_str());
         pos = true;
@@ -955,7 +959,7 @@ char SWMgr::filterText(const char *filterName, std::string &text, const SWKey *k
     // why didn't we use find here?
     for (auto const & ofp : m_optionFilters) {
         if (ofp.second->getOptionName()) {
-            if (!stricmp(filterName, ofp.second->getOptionName())) {
+            if (caseInsensitiveEquals(filterName, ofp.second->getOptionName())) {
                 retVal = ofp.second->processText(text, key, module);
                 break;
             }
@@ -1043,7 +1047,7 @@ void SWMgr::addRenderFilters(SWModule & module, ConfigEntMap const & section) {
         if (entry != section.end())
             sourceformat = entry->second;
 
-        if (!stricmp(sourceformat.c_str(), "RawGBF")) {
+        if (caseInsensitiveEquals(sourceformat, "RawGBF")) {
             sourceformat = "GBF";
         } else {
             sourceformat.clear();
@@ -1051,7 +1055,7 @@ void SWMgr::addRenderFilters(SWModule & module, ConfigEntMap const & section) {
     }
 
 // process module    - eg. follows
-//    if (!stricmp(sourceformat.c_str(), "GBF")) {
+//    if (caseInsensitiveEquals(sourceformat, "GBF")) {
 //        module->AddRenderFilter(gbftortf);
 //    }
 
@@ -1068,18 +1072,18 @@ void SWMgr::addStripFilters(SWModule & module, ConfigEntMap const & section) {
     if (sourceformat.empty()) {
         entry = section.find("ModDrv");
         sourceformat = (entry != section.end()) ? entry->second : std::string();
-        if (!stricmp(sourceformat.c_str(), "RawGBF"))
+        if (caseInsensitiveEquals(sourceformat, "RawGBF"))
             sourceformat = "GBF";
         else sourceformat = "";
     }
 
-    if (!stricmp(sourceformat.c_str(), "GBF")) {
+    if (caseInsensitiveEquals(sourceformat, "GBF")) {
         module.addStripFilter(m_gbfplain);
-    } else if (!stricmp(sourceformat.c_str(), "ThML")) {
+    } else if (caseInsensitiveEquals(sourceformat, "ThML")) {
         module.addStripFilter(m_thmlplain);
-    } else if (!stricmp(sourceformat.c_str(), "OSIS")) {
+    } else if (caseInsensitiveEquals(sourceformat, "OSIS")) {
         module.addStripFilter(m_osisplain);
-    } else if (!stricmp(sourceformat.c_str(), "TEI")) {
+    } else if (caseInsensitiveEquals(sourceformat, "TEI")) {
         module.addStripFilter(m_teiplain);
     }
 
@@ -1214,7 +1218,7 @@ void SWMgr::setGlobalOption(const char * const option,
 {
     for (auto const & ofp : m_optionFilters)
         if (ofp.second->getOptionName()
-            && !stricmp(option, ofp.second->getOptionName()))
+            && caseInsensitiveEquals(option, ofp.second->getOptionName()))
             ofp.second->setOptionValue(value);
 }
 
@@ -1222,7 +1226,7 @@ void SWMgr::setGlobalOption(const char * const option,
 const char * SWMgr::getGlobalOption(const char * const option) {
     for (auto const & ofp : m_optionFilters)
         if (ofp.second->getOptionName()
-            && !stricmp(option, ofp.second->getOptionName()))
+            && caseInsensitiveEquals(option, ofp.second->getOptionName()))
             return ofp.second->getOptionValue();
     return nullptr;
 }
@@ -1231,7 +1235,7 @@ const char * SWMgr::getGlobalOption(const char * const option) {
 const char * SWMgr::getGlobalOptionTip(const char * const option) {
     for (auto const & ofp : m_optionFilters)
         if (ofp.second->getOptionName()
-            && !stricmp(option, ofp.second->getOptionName()))
+            && caseInsensitiveEquals(option, ofp.second->getOptionName()))
             return ofp.second->getOptionTip();
     return nullptr;
 }
@@ -1245,7 +1249,7 @@ std::list<std::string> SWMgr::getGlobalOptionValues(const char * const option) {
        should expect the same values. */
     for (auto const & ofp : m_optionFilters)
         if (ofp.second->getOptionName()
-            && !stricmp(option, ofp.second->getOptionName()))
+            && caseInsensitiveEquals(option, ofp.second->getOptionName()))
             return ofp.second->getOptionValues();
     return std::list<std::string>();
 }

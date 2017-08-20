@@ -123,7 +123,7 @@ Transliterator * UTF8Transliterator::createTrans(const UnicodeString& ID, UTrans
 void UTF8Transliterator::setOptionValue(const char *ival)
 {
     unsigned char i = option = NUMTARGETSCRIPTS;
-    while (i && stricmp(ival, optionstring[i])) {
+    while (i && !caseInsensitiveEquals(ival, optionstring[i])) {
         i--;
         option = i;
     }

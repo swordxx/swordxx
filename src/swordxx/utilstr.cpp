@@ -85,6 +85,16 @@ std::string stripPrefix(std::string & str, char const separator) {
     return r;
 }
 
+bool caseInsensitiveEquals(std::string const & a,
+                           std::string const & b) noexcept
+{
+    if (a.size() != b.size())
+        return false;
+    return std::equal(a.begin(), a.end(), b.begin(),
+                      [](char const ac, char const bc) noexcept
+                      { return asciiCharToUpper(ac) == asciiCharToUpper(bc); });
+}
+
 
 /******************************************************************************
  * stristr - Scans a string for the occurrence of a given substring, no case
@@ -111,20 +121,6 @@ const char * stristr(std::string const & haystack, std::string const & needle)
     if (it == last)
         return nullptr;
     return haystack.c_str() + std::distance(first, it);
-}
-
-int stricmp(char const * s1, char const * s2) noexcept {
-    if (s1 == s2)
-        return 0;
-    int r;
-    while ((r = static_cast<unsigned char>(asciiCharToUpper(*s1))
-                - static_cast<unsigned char>(asciiCharToUpper(*s2))) == 0) {
-        if ((*s1) == '\0')
-            break;
-        ++s1;
-        ++s2;
-    }
-    return r;
 }
 
 /******************************************************************************

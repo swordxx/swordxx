@@ -647,14 +647,14 @@ terminate_range:
                     }
                 }
 
-                if ((!stricmp(book, "V")) || (!stricmp(book, "VER"))) {    // Verse abbrev
+                if (caseInsensitiveEquals(book, "V") || caseInsensitiveEquals(book, "VER")) {    // Verse abbrev
                     if (verse == -1) {
                         verse = chap;
                         chap = lastKey->getChapter();
                         *book = 0;
                     }
                 }
-                if ((!stricmp(book, "ch")) || (!stricmp(book, "chap"))) {    // Verse abbrev
+                if (caseInsensitiveEquals(book, "ch") || caseInsensitiveEquals(book, "chap")) {    // Verse abbrev
                     strcpy(book, lastKey->getBookName().c_str());
                 }
                 bookno = getBookFromAbbrev(book);
@@ -927,7 +927,7 @@ terminate_range:
             }
         }
 
-        if ((!stricmp(book, "V")) || (!stricmp(book, "VER"))) {    // Verse abbrev.
+        if (caseInsensitiveEquals(book, "V") || caseInsensitiveEquals(book, "VER")) {    // Verse abbrev.
             if (verse == -1) {
                 verse = chap;
                 chap = lastKey->getChapter();
@@ -935,7 +935,7 @@ terminate_range:
             }
         }
 
-        if ((!stricmp(book, "ch")) || (!stricmp(book, "chap"))) {    // Verse abbrev
+        if (caseInsensitiveEquals(book, "ch") || caseInsensitiveEquals(book, "chap")) {    // Verse abbrev
             strcpy(book, lastKey->getBookName().c_str());
         }
         bookno = getBookFromAbbrev(book);

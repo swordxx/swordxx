@@ -508,7 +508,7 @@ bool OSISRTF::handleToken(std::string &buf, const char *token, BasicFilterUserDa
             for (c = filepath + strlen(filepath); c > filepath && *c != '.'; c--);
             c++;
             FILE* imgfile;
-                    if (stricmp(c, "jpg") || stricmp(c, "jpeg")) {
+                    if (!caseInsensitiveEquals(c, "jpg") || !caseInsensitiveEquals(c, "jpeg")) {
                           imgfile = fopen(filepath, "r");
                           if (imgfile != nullptr) {
                                 outText("{\\nonshppict {\\pict\\jpegblip ", buf, u);
@@ -521,7 +521,7 @@ bool OSISRTF::handleToken(std::string &buf, const char *token, BasicFilterUserDa
                                 outText("}}", buf, u);
                           }
                     }
-                    else if (stricmp(c, "png")) {
+                    else if (!caseInsensitiveEquals(c, "png")) {
                           outText("{\\*\\shppict {\\pict\\pngblip ", buf, u);
 
                           outText("}}", buf, u);

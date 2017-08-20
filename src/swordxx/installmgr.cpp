@@ -90,7 +90,7 @@ void InstallMgr::readInstallConf() {
 
     clearSources();
 
-    setFTPPassive(stricmp((*installConf)["General"]["PassiveFTP"].c_str(), "false") != 0);
+    setFTPPassive(!caseInsensitiveEquals((*installConf)["General"]["PassiveFTP"].c_str(), "false") != 0);
 
     SectionMap::iterator confSection = installConf->sections().find("Sources");
     ConfigEntMap::iterator sourceBegin;
