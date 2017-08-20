@@ -223,30 +223,22 @@ int main(int argc, char **argv) {
 
         while (!(lineBuffer = FileMgr::getLine(fd)).empty()) {
             if (hasPrefix(lineBuffer, "$$$")) {
-                if ((keyBuffer.size()) && (entBuffer.size())) {
+                if (!keyBuffer.empty() && !entBuffer.empty())
                     writeEntry(book, keyBuffer, entBuffer);
-                }
                 keyBuffer = lineBuffer;
                 keyBuffer.erase(0u, 3u);
                 trimString(keyBuffer);
                 entBuffer.clear();
-            }
-            else {
-                if (keyBuffer.size()) {
+            } else {
+                if (!keyBuffer.empty()) {
                     entBuffer += lineBuffer;
                     entBuffer += "\n";
                 }
             }
         }
-        if ((keyBuffer.size()) && (entBuffer.size())) {
+        if (!keyBuffer.empty() && !entBuffer.empty())
             writeEntry(book, keyBuffer, entBuffer);
-        }
     }
 
     FileMgr::getSystemFileMgr()->close(fd);
-
-    return 0;
 }
-
-
-
