@@ -122,6 +122,7 @@ public:
         return r;
     }
 
+    inline char getError() noexcept { return m_error; }
     inline void setError(char const err) noexcept { m_error = err; }
 
     /** Sets this SWKey with a character string

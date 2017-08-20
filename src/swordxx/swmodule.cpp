@@ -141,7 +141,7 @@ char SWModule::setKey(const SWKey *ikey) {
 
     delete oldKey;
 
-    return error = key->popError();
+    return error = key->getError();
 }
 
 void SWModule::positionToTop() {
