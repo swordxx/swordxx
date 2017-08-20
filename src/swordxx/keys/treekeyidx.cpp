@@ -443,22 +443,7 @@ void TreeKeyIdx::copyFrom(const TreeKeyIdx &ikey) {
     m_unsnappedKeyText.clear();
 
     SWKey::copyFrom(ikey);
-
-    m_currentNode.offset = ikey.m_currentNode.offset;
-    m_currentNode.parent = ikey.m_currentNode.parent;
-    m_currentNode.next = ikey.m_currentNode.next;
-    m_currentNode.firstChild = ikey.m_currentNode.firstChild;
-    m_currentNode.name = ikey.m_currentNode.name;
-    m_currentNode.dsize = ikey.m_currentNode.dsize;
-
-    if (m_currentNode.dsize) {
-        m_currentNode.userData = std::make_unique<char[]>(m_currentNode.dsize);
-        memcpy(m_currentNode.userData.get(),
-               ikey.m_currentNode.userData.get(),
-               m_currentNode.dsize);
-    } else {
-        m_currentNode.userData.reset();
-    }
+    m_currentNode = ikey.m_currentNode;
 
     if (m_path != ikey.m_path) {
         m_path = ikey.m_path;
@@ -476,11 +461,10 @@ void TreeKeyIdx::copyFrom(const TreeKeyIdx &ikey) {
 
 void TreeKeyIdx::saveTreeNode(TreeNode *node) {
     long datOffset = 0;
-    int32_t tmp;
     if (m_idxfd) {
         m_idxfd->seek(node->offset, SEEK_SET);
         datOffset = m_datfd->seek(0, SEEK_END);
-        tmp = archtosword32(datOffset);
+        int32_t const tmp = archtosword32(datOffset);
         m_idxfd->write(&tmp, sizeof(tmp));
 
         saveTreeNodeOffsets(node);
@@ -489,12 +473,11 @@ void TreeKeyIdx::saveTreeNode(TreeNode *node) {
         char const null = '\0';
         m_datfd->write(&null, sizeof(null));
 
-        uint16_t tmp2 = archtosword16(node->dsize);
+        uint16_t const tmp2 = archtosword16(node->dsize);
         m_datfd->write(&tmp2, sizeof(tmp2));
 
-        if (node->dsize) {
+        if (node->dsize)
             m_datfd->write(node->userData.get(), node->dsize);
-        }
     }
 }
 
@@ -618,6 +601,22 @@ const char *TreeKeyIdx::getText() const {
     // we've snapped; clear our unsnapped text holder
     m_unsnappedKeyText.clear();
     return fullPath.c_str();
+}
+
+TreeKeyIdx::TreeNode & TreeKeyIdx::TreeNode::operator=(TreeNode const & copy) {
+    offset = copy.offset;
+    parent = copy.parent;
+    next = copy.next;
+    firstChild = copy.firstChild;
+    name = copy.name;
+    dsize = copy.dsize;
+    if (dsize) {
+        userData = std::make_unique<char[]>(dsize);
+        std::memcpy(userData.get(), copy.userData.get(), dsize);
+    } else {
+        userData.reset();
+    }
+    return *this;
 }
 
 void TreeKeyIdx::TreeNode::clear() {

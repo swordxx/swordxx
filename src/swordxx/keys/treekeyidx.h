@@ -43,6 +43,9 @@ class SWDLLEXPORT TreeKeyIdx : public TreeKey {
 
     class TreeNode {
     public:
+
+        TreeNode & operator=(TreeNode const & copy);
+
         void clear();
         int32_t offset = 0;
         int32_t parent = -1;
