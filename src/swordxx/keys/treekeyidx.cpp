@@ -620,20 +620,13 @@ const char *TreeKeyIdx::getText() const {
     return fullPath.c_str();
 }
 
-
-TreeKeyIdx::TreeNode::TreeNode() {
-    clear();
-}
-
-
 void TreeKeyIdx::TreeNode::clear() {
-    offset     = 0;
-    parent     = -1;
-    next       = -1;
+    offset = 0;
+    parent = -1;
+    next = -1;
     firstChild = -1;
-    dsize      = 0;
-
     name.clear();
+    dsize = 0;
     userData.reset();
 }
 
