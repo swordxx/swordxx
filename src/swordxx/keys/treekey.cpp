@@ -40,8 +40,19 @@ void TreeKey::assureKeyPath(const char *keyBuffer) {
 
     root();
 
-    std::string tok(stripPrefix(keyBuf, '/'));
-    for (;; tok = stripPrefix(keyBuf, '/')) {
+    auto const getNextNonEmptyToken = // strtok
+            [](std::string & str) {
+                for (;;) {
+                    auto r(stripPrefix(str, '/'));
+                    if (!r.empty())
+                        return r;
+                    if (str.empty())
+                        return r;
+                }
+            };
+
+    std::string tok(getNextNonEmptyToken(keyBuf));
+    for (;; tok = getNextNonEmptyToken(keyBuf)) {
         trimString(tok);
         if (tok.empty())
             break;
