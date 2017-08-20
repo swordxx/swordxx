@@ -322,19 +322,19 @@ void TreeKeyIdx::getTreeNodeFromDatOffset(long ioffset, TreeNode *node) const {
 
         m_datfd->seek(ioffset, SEEK_SET);
 
-        m_datfd->read(&tmp, 4);
+        m_datfd->read(&tmp, sizeof(tmp));
         node->parent = swordtoarch32(tmp);
 
-        m_datfd->read(&tmp, 4);
+        m_datfd->read(&tmp, sizeof(tmp));
         node->next = swordtoarch32(tmp);
 
-        m_datfd->read(&tmp, 4);
+        m_datfd->read(&tmp, sizeof(tmp));
         node->firstChild = swordtoarch32(tmp);
 
         std::string name;
         for (;;) {
             char ch;
-            auto const r = m_datfd->read(&ch, 1u);
+            auto const r = m_datfd->read(&ch, sizeof(ch));
             assert(r <= 1);
             if (r < 0) {
                 assert(r == -1);
@@ -347,7 +347,7 @@ void TreeKeyIdx::getTreeNodeFromDatOffset(long ioffset, TreeNode *node) const {
 
         node->name = name;
 
-        m_datfd->read(&tmp2, 2);
+        m_datfd->read(&tmp2, sizeof(tmp2));
         node->dsize = swordtoarch16(tmp2);
 
         if (node->dsize) {
@@ -381,14 +381,14 @@ char TreeKeyIdx::getTreeNodeFromIdxOffset(long ioffset, TreeNode *node) const {
     if (m_idxfd) {
         if (m_idxfd->getFd() > 0) {
             m_idxfd->seek(ioffset, SEEK_SET);
-            if (m_idxfd->read(&offset, 4) == 4) {
+            if (m_idxfd->read(&offset, sizeof(offset)) == sizeof(offset)) {
                 offset = swordtoarch32(offset);
                 error = (error == 77) ? KEYERR_OUTOFBOUNDS : 0;
                 getTreeNodeFromDatOffset(offset, node);
             }
             else {
-                m_idxfd->seek(-4, SEEK_END);
-                if (m_idxfd->read(&offset, 4) == 4) {
+                m_idxfd->seek(-sizeof(offset), SEEK_END);
+                if (m_idxfd->read(&offset, sizeof(offset)) == sizeof(offset)) {
                     offset = swordtoarch32(offset);
                     getTreeNodeFromDatOffset(offset, node);
                 }
@@ -539,7 +539,7 @@ void TreeKeyIdx::positionToTop() {
 }
 
 void TreeKeyIdx::positionToBottom() {
-    m_error = getTreeNodeFromIdxOffset(m_idxfd->seek(-4, SEEK_END), &m_currentNode);
+    m_error = getTreeNodeFromIdxOffset(m_idxfd->seek(-sizeof(uint32_t), SEEK_END), &m_currentNode);
     positionChanged();
     popError();    // clear error from normalize
 }
