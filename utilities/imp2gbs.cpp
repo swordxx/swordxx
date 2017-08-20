@@ -117,11 +117,11 @@ void parseParams(int argc, char **argv) {
             if (!lexLevels) usage(*argv);
         }
     }
-    if (!outPath.size()) {
+    if (outPath.empty()) {
         outPath = inFile;
-        unsigned int i;
-        for (i = 0; (i < outPath.size() && outPath[i] != '.'); i++);
-        outPath.resize(i);
+        auto const lastPointIndex = outPath.rfind('.');
+        if (lastPointIndex != std::string::npos)
+            outPath.resize(lastPointIndex);
     }
 }
 
