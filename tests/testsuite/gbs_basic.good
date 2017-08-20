@@ -17,13 +17,6 @@ Chapter 7/Section 1/Subsection 1/Paragraph 1
 Chapter 7/Section 1/Subsection 1/Paragraph 1/Sentence 1
 Chapter 8
 
--- Plain output
-/Chapter 7: Text of chapter 7.
-
--- RTF output
-{\rtf1\ansi{\fonttbl{\f0\froman\fcharset0\fprq2 Times New Roman;}{\f1\fdecor\fprq2 Gentium;}{\f7\froman\fcharset2\fprq2 Symbol;}}/Chapter 8: {\f1 Text of chapter 8.}\par 
-}
-
 -- imp dump
 $$$
 

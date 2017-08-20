@@ -20,11 +20,5 @@ cd tmp/gbs_basic
 #../../../gbstest GBSReference
 
 echo
-echo "-- Plain output"
-../../../../utilities/diatheke/diatheke -b GBSReference -f plain -k "Chapter 7" | grep -v GBSReference
-echo
-echo "-- RTF output"
-../../../../utilities/diatheke/diatheke -b GBSReference -f RTF -k "Chapter 8" | grep -v GBSReference
-echo
 echo "-- imp dump"
 ../../../../utilities/mod2imp GBSReference
