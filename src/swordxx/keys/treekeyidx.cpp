@@ -417,10 +417,10 @@ void TreeKeyIdx::saveTreeNodeOffsets(TreeNode *node) {
 
     if (m_idxfd) {
         m_idxfd->seek(node->offset, SEEK_SET);
-        if (m_idxfd->read(&tmp, 4) != 4) {
+        if (m_idxfd->read(&tmp, sizeof(tmp)) != sizeof(tmp)) {
             datOffset = m_datfd->seek(0, SEEK_END);
             tmp = archtosword32(datOffset);
-            m_idxfd->write(&tmp, 4);
+            m_idxfd->write(&tmp, sizeof(tmp));
         }
         else {
             datOffset = swordtoarch32(tmp);
@@ -428,13 +428,13 @@ void TreeKeyIdx::saveTreeNodeOffsets(TreeNode *node) {
         }
 
         tmp = archtosword32(node->parent);
-        m_datfd->write(&tmp, 4);
+        m_datfd->write(&tmp, sizeof(tmp));
 
         tmp = archtosword32(node->next);
-        m_datfd->write(&tmp, 4);
+        m_datfd->write(&tmp, sizeof(tmp));
 
         tmp = archtosword32(node->firstChild);
-        m_datfd->write(&tmp, 4);
+        m_datfd->write(&tmp, sizeof(tmp));
     }
 }
 
@@ -481,16 +481,16 @@ void TreeKeyIdx::saveTreeNode(TreeNode *node) {
         m_idxfd->seek(node->offset, SEEK_SET);
         datOffset = m_datfd->seek(0, SEEK_END);
         tmp = archtosword32(datOffset);
-        m_idxfd->write(&tmp, 4);
+        m_idxfd->write(&tmp, sizeof(tmp));
 
         saveTreeNodeOffsets(node);
 
         m_datfd->write(node->name.c_str(), node->name.size());
-        char null = 0;
-        m_datfd->write(&null, 1);
+        char const null = '\0';
+        m_datfd->write(&null, sizeof(null));
 
         uint16_t tmp2 = archtosword16(node->dsize);
-        m_datfd->write(&tmp2, 2);
+        m_datfd->write(&tmp2, sizeof(tmp2));
 
         if (node->dsize) {
             m_datfd->write(node->userData.get(), node->dsize);
