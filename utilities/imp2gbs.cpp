@@ -24,6 +24,7 @@
     #pragma warning( disable: 4251 )
 #endif
 
+#include <cassert>
 #include <cctype>
 #include <cerrno>
 #include <cstdio>
@@ -56,65 +57,70 @@ bool  toUpper     = false;
 bool  greekFilter = false;
 bool  augMod      = false;
 bool  augEnt      = true;
-int   lexLevels   = 0;
+std::size_t lexLevels   = 0;
 UTF8GreekAccents greekAccentsFilter;
 
 
-void usage(const char *app) {
-    fprintf(stderr, "imp2gbs 1.0 General Book module creation tool for the Sword++Project\n\n");
-    fprintf(stderr, "usage: %s <inFile> [OPTIONS]\n", app);
-    fprintf(stderr, "\t-o <outPath>\n\t\tSpecify an output Path other than inFile location.\n");
-    fprintf(stderr, "\t-a\n\t\tAugment Module [default: create new]\n");
-    fprintf(stderr, "\t-O\n\t\tOverwrite entries of same key [default: append to]\n");
-    fprintf(stderr, "\t-U\n\t\tKey filter: Convert toUpper\n");
-    fprintf(stderr, "\t-g\n\t\tKey filter: Strip Greek diacritics\n");
-    fprintf(stderr, "\t-l <levels>\n\t\tKey filter: Pseudo-Lexicon n-level generation using first character\n");
-    fprintf(stderr, "\t\te.g. -l 2 \"Abbey\" -> \"A/AB/Abbey\"\n");
-    fprintf(stderr, "\n");
-    exit (-1);
+[[noreturn]] void usage(char const * const app) {
+    std::cerr <<
+            "imp2gbs 1.0 General Book module creation tool for the Sword++ "
+                "project\n\n"
+            "usage: " << app << " <inFile> [OPTIONS]\n"
+            "\t-o <outPath>\n\t\tSpecify an output Path other than inFile "
+                "location.\n"
+            "\t-a\n\t\tAugment Module [default: create new]\n"
+            "\t-O\n\t\tOverwrite entries of same key [default: append to]\n"
+            "\t-U\n\t\tKey filter: Convert toUpper\n"
+            "\t-g\n\t\tKey filter: Strip Greek diacritics\n"
+            "\t-l <levels>\n"
+                "\t\tKey filter: Pseudo-Lexicon n-level generation using first "
+                "character\n"
+            "\t\te.g. -l 2 \"Abbey\" -> \"A/AB/Abbey\"\n\n" << std::flush;
+    std::exit(EXIT_FAILURE);
 }
 
 
-void parseParams(int argc, char **argv) {
-
-    if (argc < 2) {
+void parseParams(int argc, char * argv[]) {
+    if (argc < 2)
         usage(*argv);
-    }
 
     inFile = argv[1];
 
     for (int i = 2; i < argc; i++) {
         if (!strcmp(argv[i], "-o")) {
-            if ((i+1 < argc) && (argv[i+1][0] != '-')) {
+            if ((i + 1 < argc) && (argv[i + 1][0] != '-')) {
                 outPath = argv[i+1];
                 i++;
             }
             else usage(*argv);
-        }
-        else if (!strcmp(argv[i], "-U")) {
+        } else if (!strcmp(argv[i], "-U")) {
             if (StringMgr::hasUTF8Support()) {
                 toUpper = true;
-            }
-            else {
-                fprintf(stderr, "Error: %s.  Cannot reliably toUpper without UTF8 support\n\t(recompile with ICU enabled)\n\n", *argv);
+            } else {
+                std::cerr << "Error: " << *argv
+                          << ". Cannot reliably toUpper without UTF8 support\n"
+                             "\t(recompile with ICU enabled)\n\n";
                 usage(*argv);
             }
-        }
-        else if (!strcmp(argv[i], "-g")) {
+        } else if (!strcmp(argv[i], "-g")) {
             greekFilter = true;
-        }
-        else if (!strcmp(argv[i], "-O")) {
+        } else if (!strcmp(argv[i], "-O")) {
             augEnt = false;
-        }
-        else if (!strcmp(argv[i], "-a")) {
+        } else if (!strcmp(argv[i], "-a")) {
             augMod = true;
-        }
-        else if (!strcmp(argv[i], "-l")) {
-            if (i+1 < argc) {
-                lexLevels = atoi(argv[i+1]);
+        } else if (!strcmp(argv[i], "-l")) {
+            int arg = 0;
+            if (i + 1 < argc) {
+                arg = atoi(argv[i + 1]);
+                static_assert(std::numeric_limits<int>::max()
+                              <= std::numeric_limits<std::size_t>::max(), "");
+                if (arg <= 0)
+                    usage(*argv);
+                lexLevels = static_cast<std::size_t>(arg);
                 i++;
+            } else {
+                usage(*argv);
             }
-            if (!lexLevels) usage(*argv);
         }
     }
     if (outPath.empty()) {
@@ -125,14 +131,12 @@ void parseParams(int argc, char **argv) {
     }
 }
 
-
-void writeEntry(SWModule & book, std::string keyBuffer, std::string entBuffer) {
-
-
-    if (greekFilter) {
+void writeEntry(SWModule & book,
+                std::string keyBuffer,
+                std::string const & entBuffer)
+{
+    if (greekFilter)
         greekAccentsFilter.processText(keyBuffer);
-    }
-
     if (toUpper)
         StringMgr::getSystemStringMgr()->upperUTF8(keyBuffer);
 
@@ -141,21 +145,30 @@ void writeEntry(SWModule & book, std::string keyBuffer, std::string entBuffer) {
 #if SWORDXX_HAS_ICU
 //    if (lexLevels) {
     if (lexLevels && !hasPrefix(keyBuffer, "/Intro")) {
-        unsigned size = (keyBuffer.size()+(lexLevels*2));
+        auto const size = (keyBuffer.size() + (lexLevels * 2));
         keyBuffer.resize(size, '\0');
 
         UErrorCode err = U_ZERO_ERROR;
 
-        int max = (size+5)*3;
+        auto const max = (size + 5u) * 3u;
         auto const ubuffer(std::make_unique<UChar[]>(max + 10u));
         int32_t len;
 
-        u_strFromUTF8(ubuffer.get(), max+9, &len, keyBuffer.c_str(), -1, &err);
+        u_strFromUTF8(ubuffer.get(),
+                      max + 9u,
+                      &len,
+                      keyBuffer.c_str(),
+                      -1,
+                      &err);
+        assert(len >= 0);
+        static_assert(std::numeric_limits<std::size_t>::max()
+                      >= std::numeric_limits<std::int32_t>::max(), "");
+        auto const ulen = static_cast<std::size_t>(len);
         if (err == U_ZERO_ERROR) {
             {
                 auto const upper(
                             std::make_unique<UChar[]>((lexLevels + 1u) * 3u));
-                memcpy(upper.get(), ubuffer.get(), lexLevels*sizeof(UChar));
+                memcpy(upper.get(), ubuffer.get(), lexLevels * sizeof(UChar));
                 upper[lexLevels] = 0;
                 len = u_strToUpper(upper.get(),
                                    (lexLevels + 1u) * 3u,
@@ -165,14 +178,14 @@ void writeEntry(SWModule & book, std::string keyBuffer, std::string entBuffer) {
                                    &err);
                 memmove(ubuffer.get() + len + 1u,
                         ubuffer.get(),
-                        (max - len) * sizeof(UChar));
-                memcpy(ubuffer.get(), upper.get(), len * sizeof(UChar));
-                ubuffer[len] = '/';
+                        (max - ulen) * sizeof(UChar));
+                memcpy(ubuffer.get(), upper.get(), ulen * sizeof(UChar));
+                ubuffer[ulen] = '/';
             }
 
             int totalShift = 0;
-            for (int i = lexLevels-1; i; i--) {
-                int shift = (i < len)? i : len;
+            for (std::size_t i = lexLevels - 1u; i; --i) {
+                auto const shift = (i < ulen)? i : ulen;
                 memmove(ubuffer.get() + shift + 1,
                         ubuffer.get(),
                         (max - shift) * sizeof(UChar));
@@ -199,21 +212,22 @@ void writeEntry(SWModule & book, std::string keyBuffer, std::string entBuffer) {
 }
 
 
-int main(int argc, char **argv) {
-    greekAccentsFilter.setOptionValue("Off");        // off = accents off
+int main(int argc, char * argv[]) {
+    greekAccentsFilter.setOptionValue("Off"); // off = accents off
     parseParams(argc, argv);
 
     // Let's see if we can open our input file
-    FileDesc *fd = FileMgr::getSystemFileMgr()->open(inFile.c_str(), FileMgr::RDONLY);
+    FileDesc * const fd =
+            FileMgr::getSystemFileMgr()->open(inFile.c_str(), FileMgr::RDONLY);
     if (fd->getFd() < 0) {
-        fprintf(stderr, "error: %s: couldn't open input file: %s \n", argv[0], inFile.c_str());
-        exit(-2);
+        std::cerr << "Error: " << argv[0] << ": couldn't open input file: "
+                  << inFile << " \n";
+        std::exit(EXIT_FAILURE);
     }
 
     // Do some initialization stuff
-    if (!augMod) {
+    if (!augMod)
         RawGenBook::createModule(outPath.c_str());
-    }
     {
         RawGenBook book(outPath.c_str());
 
