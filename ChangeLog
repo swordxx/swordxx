@@ -1,5 +1,10 @@
 API ChangeLog
 
+
+01-Sep-2017	Troy A. Griffitts <scribe@crosswire.org>
+	Adding French mapping data.
+		Patch submitted by domcox <dominique@corbex.org>
+
 21-May-2017	Troy A. Griffitts <scribe@crosswire.org>
 	Added --with-icuregex option to use ICU regex engine
 

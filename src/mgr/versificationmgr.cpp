@@ -76,9 +76,9 @@ VersificationMgr *VersificationMgr::getSystemVersificationMgr() {
 		systemVersificationMgr->registerVersificationSystem("Catholic2", otbooks_catholic2, ntbooks, vm_catholic2);
 		systemVersificationMgr->registerVersificationSystem("LXX", otbooks_lxx, ntbooks, vm_lxx);
 		systemVersificationMgr->registerVersificationSystem("Orthodox", otbooks_orthodox, ntbooks, vm_orthodox);
-		systemVersificationMgr->registerVersificationSystem("Calvin", otbooks, ntbooks, vm_calvin);
-		systemVersificationMgr->registerVersificationSystem("DarbyFr", otbooks, ntbooks, vm_darbyfr);
-		systemVersificationMgr->registerVersificationSystem("Segond", otbooks, ntbooks, vm_segond);
+		systemVersificationMgr->registerVersificationSystem("Calvin", otbooks, ntbooks, vm_calvin, mappings_calvin);
+		systemVersificationMgr->registerVersificationSystem("DarbyFr", otbooks, ntbooks, vm_darbyfr, mappings_darbyfr);
+		systemVersificationMgr->registerVersificationSystem("Segond", otbooks, ntbooks, vm_segond, mappings_segond);
 	}
 	return systemVersificationMgr;
 }
