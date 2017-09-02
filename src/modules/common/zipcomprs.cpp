@@ -173,7 +173,7 @@ ZEXTERN int ZEXPORT uncompress OF((Bytef *dest,   uLongf *destLen,
 			case Z_MEM_ERROR: fprintf(stderr, "ERROR: not enough memory during decompression.\n"); break;
 			case Z_BUF_ERROR: fprintf(stderr, "ERROR: not enough room in the out buffer during decompression.\n"); break;
 			case Z_DATA_ERROR: fprintf(stderr, "ERROR: corrupt data during decompression.\n"); break;
-			default: fprintf(stderr, "ERROR: an unknown error occured during decompression.\n"); break;
+			default: fprintf(stderr, "ERROR: an unknown error occurred during decompression.\n"); break;
 		}
 		delete [] buf;
 	}

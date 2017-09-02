@@ -169,7 +169,7 @@ void XzCompress::Decode(void)
 			case LZMA_MEM_ERROR: fprintf(stderr, "ERROR: not enough memory during decompression.\n"); break;
 			case LZMA_BUF_ERROR: fprintf(stderr, "ERROR: not enough room in the out buffer during decompression.\n"); break;
 			case LZMA_PROG_ERROR: fprintf(stderr, "ERROR: program error encountered during decompression.\n"); break;
-			default: fprintf(stderr, "ERROR: an unknown error occured during decompression.\n"); break;
+			default: fprintf(stderr, "ERROR: an unknown error occurred during decompression.\n"); break;
 		}
 		delete [] buf;
 	}

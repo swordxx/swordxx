@@ -72,7 +72,7 @@ int main(int argc, char **argv)
 	cerr << "In fact, you should never export SWORD modules.\n";
 	cerr << "Many CrossWire modules are licensed for use from publishers\n";
 	cerr << "and you will need to obtain your own permissions.\n";
-	cerr << "We also do not encourage propogating encoding errors\n";
+	cerr << "We also do not encourage propagating encoding errors\n";
 	cerr << "which you will avoid by obtaining text data from the source.\n\n";
 	cerr << "Please see the TextSource entry in the module's .conf file\n";
 	cerr << "for information where to obtain module data from our source.\n\n";

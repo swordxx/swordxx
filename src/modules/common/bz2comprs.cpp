@@ -138,7 +138,7 @@ void Bzip2Compress::Decode(void)
 			case BZ_MEM_ERROR: fprintf(stderr, "ERROR: not enough memory during decompression.\n"); break;
 			case BZ_OUTBUFF_FULL: fprintf(stderr, "ERROR: not enough room in the out buffer during decompression.\n"); break;
 			case BZ_DATA_ERROR: fprintf(stderr, "ERROR: corrupt data during decompression.\n"); break;
-			default: fprintf(stderr, "ERROR: an unknown error occured during decompression.\n"); break;
+			default: fprintf(stderr, "ERROR: an unknown error occurred during decompression.\n"); break;
 		}
 		delete [] buf;
 	}
