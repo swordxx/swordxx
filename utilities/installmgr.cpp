@@ -314,7 +314,7 @@ void remoteDescribeModule(const char *sourceName, const char *modName) {
 	}
 	SWMgr *mgr = source->second->getMgr();
 	SWModule *m = mgr->getModule(modName);
-	if (source == installMgr->sources.end()) {
+	if (!m) {
 		fprintf(stderr, "Couldn't find module [%s] in source [%s]\n", modName, sourceName);
 		finish(-3);
 	}
