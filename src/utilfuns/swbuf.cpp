@@ -32,38 +32,6 @@ SWORD_NAMESPACE_START
 
 char *SWBuf::nullStr = (char *)"";
 
-/******************************************************************************
-* SWBuf Constructor - Creates an empty SWBuf object or an SWBuf initialized
-* 		to a value from a const char *
-*
-*/
-SWBuf::SWBuf(const char *initVal, unsigned long initSize) {
-	init(initSize);
-	if (initVal)
-		set(initVal);
-}
-
-/******************************************************************************
-* SWBuf Constructor - Creates an SWBuf initialized
-* 		to a value from another SWBuf
-*
-*/
-SWBuf::SWBuf(const SWBuf &other, unsigned long initSize) {
-	init(initSize);
-	set(other);
-}
-
-/******************************************************************************
-* SWBuf Constructor - Creates an SWBuf initialized
-* 		to a value from a char
-*
-*/
-SWBuf::SWBuf(char initVal, unsigned long initSize) {
-	init(initSize+1);
-	*buf = initVal;
-	end = buf+1;
-	*end = 0;
-}
 
 /*
 SWBuf::SWBuf(unsigned long initSize) {
@@ -94,33 +62,6 @@ SWBuf &SWBuf::setFormatted(const char *format, ...) {
 	end = vsprintf(buf, format, argptr) + buf;
 	va_end(argptr);
 	return *this;
-}
-
-/******************************************************************************
-* SWBuf::append - appends a value to the current value of this SWBuf
-* 
-*/
-SWBuf &SWBuf::append(const char *str, long max) {
-//	if (!str) //A null string was passed
-//		return;
-	if (max < 0)
-		max = strlen(str);
-	assureMore(max+1);
-	for (;((max)&&(*str));max--)
-		*end++ = *str++;
-	*end = 0;
-	return *this;
-}
-
-/******************************************************************************
-* SWBuf::setSize - Size this buffer to a specific length
-*/
-void SWBuf::setSize(unsigned long len) {
-	assureSize(len+1);
-	if ((unsigned)(end - buf) < len)
-		memset(end, fillByte, len - (end-buf));
-	end = buf + len;
-	*end = 0;
 }
 
 /******************************************************************************

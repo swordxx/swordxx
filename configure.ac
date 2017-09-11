@@ -115,8 +115,8 @@ if test x$enable_debug = xyes; then
     AM_CXXFLAGS="-O0 -Wall -Werror -Woverloaded-virtual"
   fi
 else
-  AM_CFLAGS="-O3"
-  AM_CXXFLAGS="-O3"
+  AM_CFLAGS="-Ofast"
+  AM_CXXFLAGS="-Ofast"
 fi
 
 AM_CFLAGS="$AM_CFLAGS -fPIC"

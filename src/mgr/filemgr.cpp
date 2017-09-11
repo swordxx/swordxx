@@ -131,15 +131,6 @@ FileDesc::~FileDesc() {
 }
 
 
-int FileDesc::getFd() {
-	if (fd == -77)
-		fd = parent->sysOpen(this);
-//	if ((fd < -1) && (fd != -77))  // kludge to hand ce
-//		return 777;
-	return fd;
-}
-
-
 long FileDesc::seek(long offset, int whence) {
 	return lseek(getFd(), offset, whence);
 }

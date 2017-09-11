@@ -67,28 +67,6 @@ const unsigned char SW_toupper_array[256] = {
 };
 
 
-/******************************************************************************
- * stdstr - clones a string
- *
- * ENT:	ipstr	- pointer to a string pointer to set if necessary
- *	istr	- string to set to *ipstr
- *			0 - only get
- *
- * RET:	*ipstr
- */
-
-char *stdstr(char **ipstr, const char *istr, unsigned int memPadFactor) {
-	if (*ipstr)
-		delete [] *ipstr;
-	if (istr) {
-		int len = (int)strlen(istr) + 1;
-		*ipstr = new char [ len * memPadFactor ];
-		memcpy(*ipstr, istr, len);
-	}
-	else *ipstr = 0;
-	return *ipstr;
-}
-
 
 /******************************************************************************
  * strstrip - Removes leading and trailing spaces from a string
@@ -187,163 +165,6 @@ int stricmp(const char *s1, const char *s2) {
 }
 
 
-/******************************************************************************
- * getUniCharFromUTF8 - retrieves the next Unicode codepoint from a UTF8 string
- * 					and increments buf to start of next codepoint
- *
- * ENT:	buf - address of a utf8 buffer
- *
- * RET:	buf - incremented past last byte used in computing the current codepoint
- * 		unicode codepoint value (0 with buf incremented is invalid UTF8 byte
- */
-
-__u32 getUniCharFromUTF8(const unsigned char **buf) {
-	__u32 ch = 0;
-	unsigned char multibuf[7];
-
-	//case: We're at the end
-	if (!(**buf)) {
-		return ch;
-	}
-
-	//case: ANSI
-	if (!(**buf & 128)) {
-		ch = **buf;
-		(*buf)++;
-		return ch;
-	}
-
-	//case: Invalid UTF-8 (illegal continuing byte in initial position)
-	if ((**buf & 128) && (!(**buf & 64))) {
-		(*buf)++;
-		return ch;
-	}
-
-	//case: 2+ byte codepoint
-	multibuf[0] = **buf;
-	multibuf[0] <<= 1;
-	int subsequent;
-	for (subsequent = 1; (multibuf[0] & 128) && (subsequent < 7); subsequent++) {
-		multibuf[0] <<= 1;
-		multibuf[subsequent] = (*buf)[subsequent];
-		multibuf[subsequent] &= 63;
-		// subsequent byte did not begin with 10XXXXXX
-		// move our buffer to here and error out
-		if (((*buf)[subsequent] - multibuf[subsequent]) != 128) {
-			*buf += subsequent;
-			return 0;
-		}
-		ch <<= 6;
-		ch |= multibuf[subsequent];
-	}
-	subsequent--;
-	multibuf[0] <<= 1;
-	char significantFirstBits = 8 - (2+subsequent);
-	
-	ch |= (((__s16)multibuf[0]) << (((6*subsequent)+significantFirstBits)-8));
-	*buf += (subsequent+1);
-	return ch;
-}
-
-
-SWBuf getUTF8FromUniChar(__u32 uchar) {
-	SWBuf retVal("", 7);
-	unsigned int i;
-
-	if (uchar < 0x80) {
-		retVal.append((unsigned char)uchar);
-		retVal.setSize(1);
-	}
-	else if (uchar < 0x800) {
-		retVal.setSize(2);
-		i = uchar & 0x3f;
-		retVal[1] = (unsigned char)(0x80 | i);
-		uchar >>= 6;
-
-		i = uchar & 0x1f;
-		retVal[0] = (unsigned char)(0xc0 | i);
-	}
-	else if (uchar < 0x10000) {
-		retVal.setSize(3);
-		i = uchar & 0x3f;
-		retVal[2] = (unsigned char)(0x80 | i);
-		uchar >>= 6;
-
-		i = uchar & 0x3f;
-		retVal[1] = (unsigned char)(0x80 | i);
-		uchar >>= 6;
-
-		i = uchar & 0x0f;
-		retVal[0] = (unsigned char)(0xe0 | i);
-	}
-	else if (uchar < 0x200000) {
-		retVal.setSize(4);
-		i = uchar & 0x3f;
-		retVal[3] = (unsigned char)(0x80 | i);
-		uchar >>= 6;
-
-		i = uchar & 0x3f;
-		retVal[2] = (unsigned char)(0x80 | i);
-		uchar >>= 6;
-
-		i = uchar & 0x3f;
-		retVal[1] = (unsigned char)(0x80 | i);
-		uchar >>= 6;
-
-		i = uchar & 0x07;
-		retVal[0] = (unsigned char)(0xf0 | i);
-	}
-	else if (uchar < 0x4000000) {
-		retVal.setSize(5);
-		i = uchar & 0x3f;
-		retVal[4] = (unsigned char)(0x80 | i);
-		uchar >>= 6;
-
-		i = uchar & 0x3f;
-		retVal[3] = (unsigned char)(0x80 | i);
-		uchar >>= 6;
-
-		i = uchar & 0x3f;
-		retVal[2] = (unsigned char)(0x80 | i);
-		uchar >>= 6;
-
-		i = uchar & 0x3f;
-		retVal[1] = (unsigned char)(0x80 | i);
-		uchar >>= 6;
-
-		i = uchar & 0x03;
-		retVal[0] = (unsigned char)(0xf8 | i);
-	}
-	else if (uchar < 0x80000000) {
-		retVal.setSize(6);
-		i = uchar & 0x3f;
-		retVal[5] = (unsigned char)(0x80 | i);
-		uchar >>= 6;
-
-		i = uchar & 0x3f;
-		retVal[4] = (unsigned char)(0x80 | i);
-		uchar >>= 6;
-
-		i = uchar & 0x3f;
-		retVal[3] = (unsigned char)(0x80 | i);
-		uchar >>= 6;
-
-		i = uchar & 0x3f;
-		retVal[2] = (unsigned char)(0x80 | i);
-		uchar >>= 6;
-
-		i = uchar & 0x3f;
-		retVal[1] = (unsigned char)(0x80 | i);
-		uchar >>= 6;
-
-		i = uchar & 0x01;
-		retVal[0] = (unsigned char)(0xfc | i);
-	}
-
-	return retVal;
-}
-
-
 SWBuf assureValidUTF8(const char *buf) {
 
 	SWBuf myCopy = buf;
@@ -404,7 +225,7 @@ SWBuf wcharToUTF8(const wchar_t *buf) {
 
 	SWBuf utf8Buf;
 	while (*buf) {
-		utf8Buf.append(getUTF8FromUniChar(*buf++));
+		getUTF8FromUniChar(*buf++, &utf8Buf);
 	}
 	return utf8Buf;
 }

@@ -55,7 +55,7 @@ char RTFHTML::processText(SWBuf &text, const SWKey *key, const SWModule *module)
 				num.append(from, end-from);
 				__s16 n = atoi(num.c_str());
 				__u32 u = (__u16)n;
-				text.append(getUTF8FromUniChar(u));
+				getUTF8FromUniChar(u, &text);
 				from += (end-from);
 				continue;
 			}

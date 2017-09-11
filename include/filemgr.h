@@ -32,50 +32,13 @@
 
 SWORD_NAMESPACE_START
 
-class SWDLLEXPORT FileMgr;
+class SWDLLEXPORT FileDesc;
 
 struct SWDLLEXPORT DirEntry {
 public:
 	SWBuf name;
 	unsigned long size;
 	bool isDirectory;
-};
-/**
-* This class represents one file. It works with the FileMgr object.
-*/
-class SWDLLEXPORT FileDesc {
-
-	friend class FileMgr;
-
-	long offset;
-	int fd;			// -77 closed;
-	FileMgr *parent;
-	FileDesc *next;
-
-	FileDesc(FileMgr * parent, const char *path, int mode, int perms, bool tryDowngrade);
-	virtual ~FileDesc();
-
-public:
-	/** @return File handle.
-	*/
-	int getFd();
-
-	long seek(long offset, int whence);
-	long read(void *buf, long count);
-	long write(const void *buf, long count);
-
-	/** Path to file.
-	*/
-	char *path;
-	/** File access mode.
-	*/
-	int mode;
-	/** File permissions.
-	*/
-	int perms;
-	/**
-	*/
-	bool tryDowngrade;
 };
 
 /**
@@ -184,6 +147,51 @@ public:
 	static int removeFile(const char *fName);
 	static char getLine(FileDesc *fDesc, SWBuf &line);
 
+};
+
+/**
+* This class represents one file. It works with the FileMgr object.
+*/
+class SWDLLEXPORT FileDesc {
+
+	friend class FileMgr;
+
+	long offset;
+	int fd;			// -77 closed;
+	FileMgr *parent;
+	FileDesc *next;
+
+	FileDesc(FileMgr * parent, const char *path, int mode, int perms, bool tryDowngrade);
+	virtual ~FileDesc();
+
+public:
+	/** @return File handle.
+	 * NOTE: magic file descriptor -77 = closed to avoid os limits
+	*/
+	inline int getFd() {
+		if (fd == -77)
+			fd = parent->sysOpen(this);
+//		if ((fd < -1) && (fd != -77))  // kludge to handle ce
+//			return 777;
+		return fd;
+	}
+
+	long seek(long offset, int whence);
+	long read(void *buf, long count);
+	long write(const void *buf, long count);
+
+	/** Path to file.
+	*/
+	char *path;
+	/** File access mode.
+	*/
+	int mode;
+	/** File permissions.
+	*/
+	int perms;
+	/**
+	*/
+	bool tryDowngrade;
 };
 
 
