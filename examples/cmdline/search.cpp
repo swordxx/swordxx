@@ -46,7 +46,7 @@ using namespace sword;
 	 *			-5  - multilemma window; set 'flags' param to window size (NOT DONE)
 	 */
 
-char SEARCH_TYPE=0;
+char SEARCH_TYPE=-2;
 int flags = 0
 // for case insensitivity
 | REG_ICASE
