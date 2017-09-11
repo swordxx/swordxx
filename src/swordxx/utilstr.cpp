@@ -27,6 +27,7 @@
 #include <cctype>
 #include <cstring>
 #include <iterator>
+#include <type_traits>
 #include "sysdata.h"
 
 
@@ -155,14 +156,12 @@ int strnicmp(char const * s1, char const * s2, std::size_t n) noexcept {
  *         unicode codepoint value (0 with buf incremented is invalid UTF8 byte
  */
 
-uint32_t getUniCharFromUTF8(const unsigned char **buf) {
-    uint32_t ch = 0;
-    unsigned char multibuf[7];
+uint32_t getUniCharFromUTF8(unsigned char const ** buf, ConvertFlags flags) {
+    std::uint32_t ch = 0;
 
     //case: We're at the end
-    if (!(**buf)) {
+    if (!(**buf))
         return ch;
-    }
 
     //case: ANSI
     if (!(**buf & 128)) {
@@ -172,134 +171,91 @@ uint32_t getUniCharFromUTF8(const unsigned char **buf) {
     }
 
     //case: Invalid UTF-8 (illegal continuing byte in initial position)
-    if ((**buf & 128) && (!(**buf & 64))) {
+    if ((**buf >> 6) == 2) {
         (*buf)++;
         return ch;
     }
 
     //case: 2+ byte codepoint
-    multibuf[0] = **buf;
-    multibuf[0] <<= 1;
-    int subsequent;
-    for (subsequent = 1; (multibuf[0] & 128) && (subsequent < 7); subsequent++) {
-        multibuf[0] <<= 1;
-        multibuf[subsequent] = (*buf)[subsequent];
-        multibuf[subsequent] &= 63;
+    int subsequent = 1;
+    if ((**buf & 32) == 0) { subsequent = 1; }
+    else if ((**buf & 16) == 0) { subsequent = 2; }
+    else if ((**buf &  8) == 0) { subsequent = 3; }
+    else if ((**buf &  4) == 0) { subsequent = 4; }
+    else if ((**buf &  2) == 0) { subsequent = 5; }
+    else if ((**buf &  1) == 0) { subsequent = 6; }
+    else subsequent = 7; // is this legal?
+
+    ch = **buf & (0xFF>>(subsequent + 1));
+
+    for (int i = 1; i <= subsequent; ++i) {
         // subsequent byte did not begin with 10XXXXXX
         // move our buffer to here and error out
-        if (((*buf)[subsequent] - multibuf[subsequent]) != 128) {
-            *buf += subsequent;
+        // this also catches our null if we hit the string terminator
+        if (((*buf)[i] >> 6) != 2) {
+            *buf += i;
             return 0;
         }
         ch <<= 6;
-        ch |= multibuf[subsequent];
+        ch |= (*buf)[i] & 63;
     }
-    subsequent--;
-    multibuf[0] <<= 1;
-    char significantFirstBits = 8 - (2+subsequent);
-
-    ch |= (((int16_t)multibuf[0]) << (((6*subsequent)+significantFirstBits)-8));
     *buf += (subsequent+1);
+
+    using U = std::underlying_type<ConvertFlags>::type;
+    if (!(static_cast<U>(flags) & static_cast<U>(ConvertFlags::SkipValidation)))
+    {
+        // I THINK THIS IS STUPID BUT THE SPEC SAYS NO MORE THAN 4 BYTES
+        if (subsequent > 3) ch = 0;
+        // AGAIN stupid, but spec says UTF-8 can't use more than 21 bits
+        if (ch > 0x1FFFFF) ch = 0;
+        // This would be out of Unicode bounds
+        if (ch > 0x10FFFF) ch = 0;
+        // these would be values which could be represented in less bytes
+        if (ch < 0x80 && subsequent > 0) ch = 0;
+        if (ch < 0x800 && subsequent > 1) ch = 0;
+        if (ch < 0x10000 && subsequent > 2) ch = 0;
+        if (ch < 0x200000 && subsequent > 3) ch = 0;
+    }
+
     return ch;
 }
 
 
 std::string getUTF8FromUniChar(uint32_t uchar) {
-    std::string retVal;
-    retVal.reserve(7u);
-    unsigned int i;
-
+    // This would be out of Unicode bounds
+    if (uchar > 0x10FFFF)
+        uchar = 0xFFFD;
+#define C(...) static_cast<char>(static_cast<unsigned char>(__VA_ARGS__))
     if (uchar < 0x80) {
-        retVal.push_back((unsigned char)uchar);
-        retVal.resize(1);
+        auto const c = C(uchar);
+        return std::string(&c, 1u);
     }
-    else if (uchar < 0x800) {
-        retVal.resize(2);
-        i = uchar & 0x3f;
-        retVal[1] = (unsigned char)(0x80 | i);
-        uchar >>= 6;
-
-        i = uchar & 0x1f;
-        retVal[0] = (unsigned char)(0xc0 | i);
+    auto const uchar6 = uchar >> 6;
+    if (uchar < 0x800) {
+        char const cs[] = {
+            C(0xc0 | (uchar6 & 0x1f)),
+            C(0x80 | (uchar  & 0x3f))
+        };
+        return std::string(cs, 2u);
     }
-    else if (uchar < 0x10000) {
-        retVal.resize(3);
-        i = uchar & 0x3f;
-        retVal[2] = (unsigned char)(0x80 | i);
-        uchar >>= 6;
-
-        i = uchar & 0x3f;
-        retVal[1] = (unsigned char)(0x80 | i);
-        uchar >>= 6;
-
-        i = uchar & 0x0f;
-        retVal[0] = (unsigned char)(0xe0 | i);
+    auto const uchar12 = uchar6 >> 6;
+    if (uchar < 0x10000) {
+        char const cs[] = {
+            C(0xe0 | (uchar12 & 0x0f)),
+            C(0x80 | (uchar6  & 0x3f)),
+            C(0x80 | (uchar   & 0x3f))
+        };
+        return std::string(cs, 3u);
     }
-    else if (uchar < 0x200000) {
-        retVal.resize(4);
-        i = uchar & 0x3f;
-        retVal[3] = (unsigned char)(0x80 | i);
-        uchar >>= 6;
-
-        i = uchar & 0x3f;
-        retVal[2] = (unsigned char)(0x80 | i);
-        uchar >>= 6;
-
-        i = uchar & 0x3f;
-        retVal[1] = (unsigned char)(0x80 | i);
-        uchar >>= 6;
-
-        i = uchar & 0x07;
-        retVal[0] = (unsigned char)(0xf0 | i);
-    }
-    else if (uchar < 0x4000000) {
-        retVal.resize(5);
-        i = uchar & 0x3f;
-        retVal[4] = (unsigned char)(0x80 | i);
-        uchar >>= 6;
-
-        i = uchar & 0x3f;
-        retVal[3] = (unsigned char)(0x80 | i);
-        uchar >>= 6;
-
-        i = uchar & 0x3f;
-        retVal[2] = (unsigned char)(0x80 | i);
-        uchar >>= 6;
-
-        i = uchar & 0x3f;
-        retVal[1] = (unsigned char)(0x80 | i);
-        uchar >>= 6;
-
-        i = uchar & 0x03;
-        retVal[0] = (unsigned char)(0xf8 | i);
-    }
-    else if (uchar < 0x80000000) {
-        retVal.resize(6);
-        i = uchar & 0x3f;
-        retVal[5] = (unsigned char)(0x80 | i);
-        uchar >>= 6;
-
-        i = uchar & 0x3f;
-        retVal[4] = (unsigned char)(0x80 | i);
-        uchar >>= 6;
-
-        i = uchar & 0x3f;
-        retVal[3] = (unsigned char)(0x80 | i);
-        uchar >>= 6;
-
-        i = uchar & 0x3f;
-        retVal[2] = (unsigned char)(0x80 | i);
-        uchar >>= 6;
-
-        i = uchar & 0x3f;
-        retVal[1] = (unsigned char)(0x80 | i);
-        uchar >>= 6;
-
-        i = uchar & 0x01;
-        retVal[0] = (unsigned char)(0xfc | i);
-    }
-
-    return retVal;
+    auto const uchar18 = uchar12 >> 6;
+    char const cs[] = {
+        C(0xf0 | (uchar18 & 0x07)),
+        C(0x80 | (uchar12 & 0x3f)),
+        C(0x80 | (uchar6  & 0x3f)),
+        C(0x80 | (uchar   & 0x3f))
+    };
+#undef C
+    return std::string(cs, 4u);
 }
 
 

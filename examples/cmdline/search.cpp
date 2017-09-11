@@ -45,7 +45,7 @@ using namespace swordxx;
  *            -4  - Lucene
  */
 
-char SEARCH_TYPE = 0;
+char SEARCH_TYPE = -2;
 int flags = REG_ICASE; // for case insensitivity
        // | SEARCHFLAG_MATCHWHOLEENTRY // for use with entryAttrib search type
                                        // to match whole entry to value, e.g.,

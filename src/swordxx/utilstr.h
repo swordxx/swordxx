@@ -194,6 +194,8 @@ constexpr char const asciiCharToUpperTable[256u] = {
 constexpr char asciiCharToUpper(char const c) noexcept
 { return asciiCharToUpperTable[static_cast<unsigned char>(c)]; }
 
+enum class ConvertFlags : unsigned { None = 0x0, SkipValidation = 0x1 };
+
 /******************************************************************************
  * getUniCharFromUTF8 - retrieves the next Unicode codepoint from a UTF8 string
  *                     and increments buf to start of next codepoint
@@ -203,8 +205,8 @@ constexpr char asciiCharToUpper(char const c) noexcept
  * RET:    buf - incremented past last byte used in computing the current codepoint
  *         unicode codepoint value (0 with buf incremented is invalid UTF8 byte
  */
-
-uint32_t getUniCharFromUTF8(const unsigned char **buf);
+uint32_t getUniCharFromUTF8(unsigned char const ** buf,
+                            ConvertFlags flags = ConvertFlags::None);
 
 
 /******************************************************************************
