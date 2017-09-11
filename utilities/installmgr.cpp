@@ -283,6 +283,28 @@ void remoteListModules(const char *sourceName, bool onlyNewAndUpdated = false) {
 }
 
 
+void remoteDescribeModule(char const * const sourceName,
+                          char const * const modName)
+{
+    init();
+    auto const source(installMgr->sources.find(sourceName));
+    if (source == installMgr->sources.end()) {
+        std::cerr << "Couldn't find remote source [" << sourceName << ']'
+                  << std::endl;
+        finish(-3);
+    }
+    auto * const m = source->second->getMgr()->getModule(modName);
+    if (!m) {
+        std::cerr << "Couldn't find module [" << modName << "] in source ["
+                  << sourceName << ']' << std::endl;
+        finish(-3);
+    }
+    cout << "Module Description\n\n";
+    for (auto const & vp : m->getConfig())
+        cout << "[" << vp.first << "]:" << vp.second << "\n";
+}
+
+
 void localDirListModules(const char *dir) {
     cout << "Available Modules:\n\n";
     SWMgr mgr(dir);
@@ -348,6 +370,7 @@ void usage(const char *progName, const char *error) {
         "\t-r  <remoteSrcName>\t\trefresh remote source\n"
         "\t-rl <remoteSrcName>\t\tlist available modules from remote source\n"
         "\t-rd <remoteSrcName>\t\tlist new/updated modules from remote source\n"
+        "\t-rdesc <remoteSrcName> <modName>\tdescribe module from remote source\n"
         "\t-ri <remoteSrcName> <modName>\tinstall module from remote source\n"
         "\t-l\t\t\t\tlist installed modules\n"
         "\t-u <modName>\t\t\tuninstall module\n"
@@ -412,6 +435,15 @@ int main(int argc, char **argv) {
         else if (!strcmp(argv[i], "-rd")) {    // list differences between remote source and installed modules
             if (i+1 < argc) remoteListModules(argv[++i], true);
             else usage(*argv, "-rd requires <remoteSrcName>");
+        }
+        else if (!strcmp(argv[i], "-rdesc")) { // describe remove module
+            if (i + 2 < argc) {
+                char const * const source = argv[++i];
+                char const * const modName = argv[++i];
+                remoteDescribeModule(source, modName);
+            } else {
+                usage(*argv, "-rdesc requires <remoteSrcName> <modName>");
+            }
         }
         else if (!strcmp(argv[i], "-ri")) {    // install from remote directory
             if (i+2 < argc) {
