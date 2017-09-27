@@ -89,7 +89,7 @@ std::unique_ptr<FileMgr> FileMgr::systemFileMgr;
 
 FileMgr *FileMgr::getSystemFileMgr() {
     if (!systemFileMgr)
-        systemFileMgr.reset(new FileMgr());
+        systemFileMgr = std::make_unique<FileMgr>();
 
     return systemFileMgr.get();
 }
