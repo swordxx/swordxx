@@ -9,30 +9,29 @@ before_install:
 script: ./travis.sh || exit 1
 matrix:
   include:
-    - env: CXX=g++-5 CC=gcc-5
-      addons: &gcc5addons
+    - env: CXX=g++-7 CC=gcc-7
+      addons: &gcc7addons
         apt:
           sources: &toolchainSources
             - ubuntu-toolchain-r-test
-          packages: &gcc5deps
-            - &baseDependencies [libbz2-dev, xz-utils, liblzma-dev, libcurl4-openssl-dev, zlib1g-dev, cmake, libclucene-dev, curl]
-            - gcc-5
-            - g++-5
-    - env: CXX=g++-5 CC=gcc-5 CMAKE_VERSION=3.6.2
-      addons: *gcc5addons
-    - env: CXX=g++-5 CC=gcc-5 CMAKE_VERSION=3.3.0
-      addons: *gcc5addons
+          packages:
+            - &baseDeps [libbz2-dev, xz-utils, liblzma-dev, libcurl4-openssl-dev, zlib1g-dev, libclucene-dev, curl]
+            - [gcc-7, g++-7]
+    - env: CXX=g++-7 CC=gcc-7 CMAKE_VERSION=3.6.2
+      addons: *gcc7addons
+    - env: CXX=g++-7 CC=gcc-7 CMAKE_VERSION=3.3.0
+      addons: *gcc7addons
     - env: CXX=g++-6 CC=gcc-6
       addons:
         apt:
           sources: *toolchainSources
-          packages: [*baseDependencies, gcc-6, g++-6]
-    - env: CXX=g++-7 CC=gcc-7
+          packages: [*baseDeps, gcc-6, g++-6]
+    - env: CXX=g++-5 CC=gcc-5
       addons:
         apt:
           sources: *toolchainSources
-          packages: &gcc7deps [*baseDependencies, gcc-7, g++-7]
+          packages: [*baseDeps, gcc-5, g++-5]
     - env: CXX=clang++ CC=clang
-      addons: { apt: { packages: *gcc7deps } }
+      addons: *gcc7addons
 notifications:
   irc: "chat.freenode.net#sword++"
