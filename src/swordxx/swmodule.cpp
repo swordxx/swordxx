@@ -65,7 +65,7 @@ namespace swordxx {
  *    unicode  - if this module is unicode
  */
 
-SWModule::SWModule(SWKey * key_,
+SWModule::SWModule(std::unique_ptr<SWKey> key_,
                    const char * imodname,
                    const char * imoddesc,
                    const char * imodtype,
@@ -77,8 +77,8 @@ SWModule::SWModule(SWKey * key_,
     , moddesc(imoddesc ? imoddesc : "")
     , modtype(imodtype ? imodtype : "")
     , modlang(imodlang ? imodlang : "")
+    , key(key_.release())
 {
-    key       = key_;
     this->encoding = encoding;
     this->direction = direction;
     this->markup  = markup;

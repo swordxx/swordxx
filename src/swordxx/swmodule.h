@@ -112,6 +112,7 @@ protected:
 
 public:
 
+    class X;
     /**
      * @param key_ the default key.
      * @param imodname Internal name for module; see also getName()
@@ -122,7 +123,7 @@ public:
      * @param markup Source Markup of the module (e.g. OSIS)
      * @param modlang Language of the module (e.g. en)
      */
-    SWModule(SWKey * key_,
+    SWModule(std::unique_ptr<SWKey> key_,
              char const * imodname = nullptr,
              char const * imoddesc = nullptr,
              char const * imodtype = nullptr,

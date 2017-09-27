@@ -32,8 +32,8 @@ namespace swordxx {
 
 namespace {
 
-SWKey * staticCreateKey(char const * const versification) {
-    VerseKey * const vk = new VerseKey();
+std::unique_ptr<SWKey> staticCreateKey(char const * const versification) {
+    auto vk(std::make_unique<VerseKey>());
     vk->setVersificationSystem(versification);
     return vk;
 }
@@ -67,7 +67,7 @@ SWCom::~SWCom() {
 
 
 std::unique_ptr<SWKey> SWCom::createKey() const
-{ return std::unique_ptr<SWKey>(staticCreateKey(versification.c_str())); }
+{ return staticCreateKey(versification.c_str()); }
 
 
 long SWCom::getIndex() const { return getVerseKey().getIndex(); }

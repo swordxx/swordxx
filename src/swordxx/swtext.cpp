@@ -32,8 +32,8 @@ namespace swordxx {
 
 namespace {
 
-VerseKey * staticCreateKey(char const * const versification) {
-    VerseKey * const vk = new VerseKey();
+std::unique_ptr<VerseKey> staticCreateKey(char const * const versification) {
+    auto vk(std::make_unique<VerseKey>());
     vk->setVersificationSystem(versification);
     return vk;
 }
@@ -62,7 +62,7 @@ SWText::SWText(const char *imodname, const char *imoddesc, TextEncoding enc, SWT
  */
 
 std::unique_ptr<SWKey> SWText::createKey() const
-{ return std::unique_ptr<SWKey>(staticCreateKey(versification.c_str())); }
+{ return staticCreateKey(versification.c_str()); }
 
 long SWText::getIndex() const { return getVerseKey().getIndex(); }
 

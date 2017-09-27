@@ -34,9 +34,22 @@ namespace swordxx {
  *    imoddesc - Name to display to user for module
  */
 
-SWGenBook::SWGenBook(SWKey * key_, const char *imodname, const char *imoddesc, TextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char* ilang) : SWModule(key_, imodname, imoddesc, (char *)"Generic Books", enc, dir, mark, ilang) {
-    tmpTreeKey = nullptr;
-}
+SWGenBook::SWGenBook(std::unique_ptr<SWKey> key_,
+                     char const * imodname,
+                     char const * imoddesc,
+                     TextEncoding enc,
+                     SWTextDirection dir,
+                     SWTextMarkup mark,
+                     char const * ilang)
+    : SWModule(std::move(key_),
+               imodname,
+               imoddesc,
+               "Generic Books",
+               enc,
+               dir,
+               mark,
+               ilang)
+{ tmpTreeKey = nullptr; }
 
 
 /******************************************************************************

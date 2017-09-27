@@ -42,7 +42,7 @@ protected:
 public:
     /** Initializes data for instance of SWGenBook
     */
-    SWGenBook(SWKey * key_,
+    SWGenBook(std::unique_ptr<SWKey> key_,
               char const * imodname = nullptr,
               char const * imoddesc = nullptr,
               TextEncoding encoding = ENC_UNKNOWN,

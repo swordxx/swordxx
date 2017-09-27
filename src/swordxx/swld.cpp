@@ -40,7 +40,22 @@ namespace swordxx {
  *    imoddesc - Name to display to user for module
  */
 
-SWLD::SWLD(const char *imodname, const char *imoddesc, TextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char* ilang, bool strongsPadding) : SWModule(createKey().release(), imodname, imoddesc, (char *)"Lexicons / Dictionaries", enc, dir, mark, ilang), strongsPadding(strongsPadding)
+SWLD::SWLD(const char * imodname,
+           const char * imoddesc,
+           TextEncoding enc,
+           SWTextDirection dir,
+           SWTextMarkup mark,
+           const char * ilang,
+           bool strongsPadding)
+    : SWModule(createKey(),
+               imodname,
+               imoddesc,
+               "Lexicons / Dictionaries",
+               enc,
+               dir,
+               mark,
+               ilang)
+    , strongsPadding(strongsPadding)
 {}
 
 std::unique_ptr<SWKey> SWLD::createKey() const

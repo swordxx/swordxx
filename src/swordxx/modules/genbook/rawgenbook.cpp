@@ -40,14 +40,13 @@ namespace swordxx {
 
 namespace {
 
-SWKey * staticCreateKey(NormalizedPath const & path, bool const verseKey) {
+std::unique_ptr<SWKey> staticCreateKey(NormalizedPath const & path, bool const verseKey) {
     auto tKey(std::make_unique<TreeKeyIdx>(path.c_str()));
-    if (verseKey) {
-        SWKey * const vtKey = new VerseTreeKey(*tKey);
-        tKey.reset();
-        return vtKey;
-    }
-    return tKey.release();
+    if (!verseKey)
+        return tKey;
+    auto vtKey(std::make_unique<VerseTreeKey>(*tKey));
+    tKey.reset();
+    return vtKey;
 }
 
 } // anonymous namespace
@@ -195,7 +194,7 @@ char RawGenBook::createModule(NormalizedPath const & path) {
 }
 
 std::unique_ptr<SWKey> RawGenBook::createKey() const
-{ return std::unique_ptr<SWKey>(staticCreateKey(m_path.c_str(), verseKey)); }
+{ return staticCreateKey(m_path.c_str(), verseKey); }
 
 bool RawGenBook::hasEntry(const SWKey *k) const {
     /// \bug remove const_cast:
