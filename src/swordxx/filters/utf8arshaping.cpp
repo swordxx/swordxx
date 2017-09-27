@@ -44,22 +44,22 @@ UTF8arShaping::~UTF8arShaping() {
 char UTF8arShaping::processText(std::string &text, const SWKey *key, const SWModule *module)
 {
     (void) module;
-     if ((unsigned long)key < 2)    // hack, we're en(1)/de(0)ciphering
+    if ((unsigned long)key < 2)    // hack, we're en(1)/de(0)ciphering
         return -1;
 
-        auto const textSize(text.size());
-        auto const ustr(std::make_unique<UChar[]>(textSize));
-        auto const ustr2(std::make_unique<UChar[]>(textSize));
+    auto const textSize(text.size());
+    auto const ustr(std::make_unique<UChar[]>(textSize));
+    auto const ustr2(std::make_unique<UChar[]>(textSize));
 
     // Convert UTF-8 string to UTF-16 (UChars)
-        int32_t len = textSize;
-        len = ucnv_toUChars(conv, ustr.get(), len, text.c_str(), -1, &err);
+    int32_t len = textSize;
+    len = ucnv_toUChars(conv, ustr.get(), len, text.c_str(), -1, &err);
 
-        len = u_shapeArabic(ustr.get(), len, ustr2.get(), len, U_SHAPE_LETTERS_SHAPE | U_SHAPE_DIGITS_EN2AN, &err);
+    len = u_shapeArabic(ustr.get(), len, ustr2.get(), len, U_SHAPE_LETTERS_SHAPE | U_SHAPE_DIGITS_EN2AN, &err);
 
-       text.resize(textSize * 2u, '\0');
-       len = ucnv_fromUChars(conv, &text[0u], text.size(), ustr2.get(), len, &err);
-       text.resize(len, '\0');
+    text.resize(textSize * 2u, '\0');
+    len = ucnv_fromUChars(conv, &text[0u], text.size(), ustr2.get(), len, &err);
+    text.resize(len, '\0');
     return 0;
 }
 
