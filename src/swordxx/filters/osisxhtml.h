@@ -25,6 +25,9 @@
 
 #include "../swbasicfilter.h"
 
+#include <stack>
+#include <string>
+
 
 namespace swordxx {
 
@@ -36,8 +39,6 @@ private:
     bool renderNoteNumbers;
 protected:
 
-    class TagStack;
-
     BasicFilterUserData * createUserData(SWModule const * module,
                                          SWKey const * key) override;
 
@@ -47,7 +48,19 @@ protected:
 
     // used by derived classes so we have it in the header
     class MyUserData : public BasicFilterUserData {
-    public:
+
+    public: /* Types: */
+
+        using TagStack = std::stack<std::string>;
+
+    public: /* Methods: */
+
+        MyUserData(SWModule const * module, SWKey const * key);
+        ~MyUserData();
+        void outputNewline(std::string &buf);
+
+    public: /* Fields: */
+
         bool osisQToTick;
         bool inXRefNote;
         bool BiblicalText;
@@ -56,19 +69,16 @@ protected:
         std::string wordsOfChristEnd;
         std::string interModuleLinkStart;
         std::string interModuleLinkEnd;
-        TagStack *quoteStack;
-        TagStack *hiStack;
-        TagStack *titleStack;
-        TagStack *lineStack;
+        TagStack quoteStack;
+        TagStack hiStack;
+        TagStack titleStack;
+        TagStack lineStack;
         int consecutiveNewlines;
         std::string lastTransChange;
         std::string w;
         std::string fn;
         std::string version;
 
-        MyUserData(const SWModule *module, const SWKey *key);
-        ~MyUserData();
-        void outputNewline(std::string &buf);
     };
 public:
     OSISXHTML();

@@ -170,10 +170,9 @@ OSISXHTML::OSISXHTML() {
     renderNoteNumbers = false;
 }
 
-class OSISXHTML::TagStack : public std::stack<std::string> {
-};
-
-OSISXHTML::MyUserData::MyUserData(const SWModule *module, const SWKey *key) : BasicFilterUserData(module, key), quoteStack(new TagStack()), hiStack(new TagStack()), titleStack(new TagStack()), lineStack(new TagStack()) {
+OSISXHTML::MyUserData::MyUserData(SWModule const * module, SWKey const * key)
+    : BasicFilterUserData(module, key)
+{
     inXRefNote    = false;
     suspendLevel = 0;
     wordsOfChristStart = "<span class=\"wordsOfJesus\"> ";
@@ -192,12 +191,7 @@ OSISXHTML::MyUserData::MyUserData(const SWModule *module, const SWKey *key) : Ba
     consecutiveNewlines = 0;
 }
 
-OSISXHTML::MyUserData::~MyUserData() {
-    delete quoteStack;
-    delete hiStack;
-    delete titleStack;
-    delete lineStack;
-}
+OSISXHTML::MyUserData::~MyUserData() {}
 
 void OSISXHTML::MyUserData::outputNewline(std::string &buf) {
     if (++consecutiveNewlines <= 2) {
@@ -441,15 +435,15 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
                     outText("<p class=\"selah\">", buf, u);
                 } else {
                     // nested lines plus if the line itself has an x-indent type attribute value
-                    outText(formatted("<span class=\"line indent%d\">", u->lineStack->size() + (std::string("x-indent") == tag.attribute("type").c_str()?1:0)).c_str(), buf, u);
+                    outText(formatted("<span class=\"line indent%d\">", u->lineStack.size() + (std::string("x-indent") == tag.attribute("type").c_str()?1:0)).c_str(), buf, u);
                 }
-                u->lineStack->push(tag.toString());
+                u->lineStack.push(tag.toString());
             }
             // end line marker
             else if (!tag.attribute("eID").empty() || tag.isEndTag()) {
                 std::string type = "";
-                if (!u->lineStack->empty()) {
-                    XMLTag startTag(u->lineStack->top().c_str());
+                if (!u->lineStack.empty()) {
+                    XMLTag startTag(u->lineStack.top().c_str());
                     type = startTag.attribute("type");
                 }
                 if (type == "selah") {
@@ -458,8 +452,8 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
                     outText("</span>", buf, u);
                     u->outputNewline(buf);
                 }
-                if (!u->lineStack->empty())
-                    u->lineStack->pop();
+                if (!u->lineStack.empty())
+                    u->lineStack.pop();
             }
             // <l/> without eID or sID
             // Note: this is improper osis. This should be <lb/>
@@ -552,13 +546,13 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
                     outText((std::string("<h3 class=\"title") + classExtras + "\">").c_str(), buf, u);
                     tag.setAttribute("pushed", "h3");
                 }
-                u->titleStack->push(tag.toString());
+                u->titleStack.push(tag.toString());
             }
             else if (tag.isEndTag()) {
-                if (!u->titleStack->empty()) {
-                    XMLTag tag(u->titleStack->top().c_str());
-                    if (!u->titleStack->empty())
-                        u->titleStack->pop();
+                if (!u->titleStack.empty()) {
+                    XMLTag tag(u->titleStack.top().c_str());
+                    if (!u->titleStack.empty())
+                        u->titleStack.pop();
                     std::string pushed = tag.attribute("pushed");
                     if (!pushed.empty()) {
                         outText((std::string("</") + pushed + ">\n\n").c_str(), buf, u);
@@ -654,14 +648,14 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
                 } else {	// all other types
                     outText((std::string("<span class=\"") + type + "\">").c_str(), buf, u);
                 }
-                u->hiStack->push(tag.toString());
+                u->hiStack.push(tag.toString());
             }
             else if (tag.isEndTag()) {
                 std::string type = "";
-                if (!u->hiStack->empty()) {
-                    XMLTag tag(u->hiStack->top().c_str());
-                    if (!u->hiStack->empty())
-                        u->hiStack->pop();
+                if (!u->hiStack.empty()) {
+                    XMLTag tag(u->hiStack.top().c_str());
+                    if (!u->hiStack.empty())
+                        u->hiStack.pop();
                     type = tag.attribute("type");
                     if (!type.length()) type = tag.attribute("rend");
                 }
@@ -705,7 +699,7 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
             if ((!tag.isEmpty() && !tag.isEndTag()) || (tag.isEmpty() && !tag.attribute("sID").empty())) {
                 // if <q> then remember it for the </q>
                 if (!tag.isEmpty()) {
-                    u->quoteStack->push(tag.toString());
+                    u->quoteStack.push(tag.toString());
                 }
 
                 // Do this first so quote marks are included as WoC
@@ -722,10 +716,10 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
             // close </q> or <q eID... />
             else if ((tag.isEndTag()) || (tag.isEmpty() && !tag.attribute("eID").empty())) {
                 // if it is </q> then pop the stack for the attributes
-                if (tag.isEndTag() && !u->quoteStack->empty()) {
-                    XMLTag qTag(u->quoteStack->top().c_str());
-                    if (!u->quoteStack->empty())
-                        u->quoteStack->pop();
+                if (tag.isEndTag() && !u->quoteStack.empty()) {
+                    XMLTag qTag(u->quoteStack.top().c_str());
+                    if (!u->quoteStack.empty())
+                        u->quoteStack.pop();
 
                     type    = qTag.attribute("type");
                     who     = qTag.attribute("who");
