@@ -25,6 +25,9 @@
 
 #include "../swbasicfilter.h"
 
+#include <stack>
+#include <string>
+
 
 namespace swordxx {
 
@@ -35,8 +38,12 @@ private:
     bool morphFirst;
     bool renderNoteNumbers;
 protected:
+    using TagStack = std::stack<std::string>;
     // used by derived classes so we have it in the header
-    class TagStacks;
+    struct TagStacks {
+        TagStack quoteStack;
+        TagStack hiStack;
+    };
     class SWDLLEXPORT MyUserData : public BasicFilterUserData {
     public:
         bool osisQToTick;
@@ -46,8 +53,7 @@ protected:
         int suspendLevel;
         std::string wordsOfChristStart;
         std::string wordsOfChristEnd;
-                TagStacks *tagStacks;    // TODO: modified to wrap all TagStacks necessary for this filter until 1.7.x
-//                TagStack *hiStack;    // TODO: commented out for binary compat for 1.6.x     wrapped in tagStacks until 1.7.x
+        TagStacks tagStacks;
         std::string lastTransChange;
         std::string w;
         std::string fn;

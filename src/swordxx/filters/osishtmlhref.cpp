@@ -36,7 +36,6 @@
 namespace swordxx {
 
 namespace {
-    typedef std::stack<std::string> TagStack;
 // though this might be slightly slower, possibly causing an extra bool check, this is a renderFilter
 // so speed isn't the absolute highest priority, and this is a very minor possible hit
 static inline void outText(const char *t, std::string &o, BasicFilterUserData *u) { if (!u->suspendTextPassThru) o += t; else u->lastSuspendSegment += t; }
@@ -106,17 +105,9 @@ void processMorph(bool suspendTextPassThru, XMLTag &tag, std::string &buf) {
 }
 }    // end anonymous namespace
 
-// TODO: this bridge pattern is to preserve binary compat on 1.6.x
-class OSISHTMLHREF::TagStacks {
-public:
-    TagStack quoteStack;
-    TagStack hiStack;
-};
-
 OSISHTMLHREF::MyUserData::MyUserData(const SWModule *module, const SWKey *key) : BasicFilterUserData(module, key) {
     inXRefNote    = false;
     suspendLevel = 0;
-    tagStacks = new TagStacks();
     wordsOfChristStart = "<font color=\"red\"> ";
     wordsOfChristEnd   = "</font> ";
     if (module) {
@@ -130,9 +121,7 @@ OSISHTMLHREF::MyUserData::MyUserData(const SWModule *module, const SWKey *key) :
     }
 }
 
-OSISHTMLHREF::MyUserData::~MyUserData() {
-    delete tagStacks;
-}
+OSISHTMLHREF::MyUserData::~MyUserData() {}
 
 OSISHTMLHREF::OSISHTMLHREF() {
     setTokenStart("<");
@@ -490,13 +479,13 @@ bool OSISHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterU
                 else {    // all other types
                     outText("<i>", buf, u);
                 }
-                u->tagStacks->hiStack.push(tag.toString());
+                u->tagStacks.hiStack.push(tag.toString());
             }
             else if (tag.isEndTag()) {
                 std::string type = "";
-                if (!u->tagStacks->hiStack.empty()) {
-                    XMLTag tag(u->tagStacks->hiStack.top().c_str());
-                    u->tagStacks->hiStack.pop();
+                if (!u->tagStacks.hiStack.empty()) {
+                    XMLTag tag(u->tagStacks.hiStack.top().c_str());
+                    u->tagStacks.hiStack.pop();
                     type = tag.attribute("type");
                     if (!type.length()) type = tag.attribute("rend");
                 }
@@ -538,7 +527,7 @@ bool OSISHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterU
             if ((!tag.isEmpty() && !tag.isEndTag()) || (tag.isEmpty() && !tag.attribute("sID").empty())) {
                 // if <q> then remember it for the </q>
                 if (!tag.isEmpty()) {
-                    u->tagStacks->quoteStack.push(tag.toString());
+                    u->tagStacks.quoteStack.push(tag.toString());
                 }
 
                 // Do this first so quote marks are included as WoC
@@ -555,9 +544,9 @@ bool OSISHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterU
             // close </q> or <q eID... />
             else if ((tag.isEndTag()) || (tag.isEmpty() && !tag.attribute("eID").empty())) {
                 // if it is </q> then pop the stack for the attributes
-                if (tag.isEndTag() && !u->tagStacks->quoteStack.empty()) {
-                    XMLTag qTag(u->tagStacks->quoteStack.top().c_str());
-                    u->tagStacks->quoteStack.pop();
+                if (tag.isEndTag() && !u->tagStacks.quoteStack.empty()) {
+                    XMLTag qTag(u->tagStacks.quoteStack.top().c_str());
+                    u->tagStacks.quoteStack.pop();
 
                     type    = qTag.attribute("type");
                     who     = qTag.attribute("who");
