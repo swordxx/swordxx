@@ -56,7 +56,7 @@ char ThMLStrongs::processText(std::string &text, const SWKey *key, const SWModul
     bool lastspace = false;
     int word = 1;
     char val[128];
-    char wordstr[5];
+    char wordstr[11u];
     char *valto;
     char *ch;
     unsigned int textStart = 0, textEnd = 0;

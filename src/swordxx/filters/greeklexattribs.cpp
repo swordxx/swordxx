@@ -47,7 +47,7 @@ char GreekLexAttribs::processText(std::string &text, const SWKey *key, const SWM
         string phrase;
         string freq;
         char val[128], *valto;
-        char wordstr[7];
+        char wordstr[11u];
         char const * currentPhrase = nullptr;
         char const * currentPhraseEnd = nullptr;
         int number = 0;

@@ -61,7 +61,7 @@ char OSISWordJS::processText(std::string &text, const SWKey *key, const SWModule
         int tokpos = 0;
         bool intoken = false;
         int wordNum = 1;
-        char wordstr[5];
+        char wordstr[11u];
         std::string modName = (module)?module->getName():"";
         // add TR to w src in KJV then remove this next line
         std::string wordSrcPrefix = (modName == "KJV")?std::string("TR"):modName;
