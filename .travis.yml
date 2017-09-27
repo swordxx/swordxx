@@ -5,11 +5,12 @@ language: generic
 before_install:
   - curl -sSL https://cmake.org/files/v3.3/cmake-3.3.0-Linux-x86_64.tar.gz | sudo tar -xzC /opt
   - curl -sSL https://cmake.org/files/v3.6/cmake-3.6.2-Linux-x86_64.tar.gz | sudo tar -xzC /opt
+  - curl -sSL https://cmake.org/files/v3.9/cmake-3.9.3-Linux-x86_64.tar.gz | sudo tar -xzC /opt
 script: ./travis.sh || exit 1
 matrix:
   include:
-    - env: CXX=g++-5 CC=gcc-5 CMAKE_VERSION=3.3.0
-      addons:
+    - env: CXX=g++-5 CC=gcc-5
+      addons: &gcc5addons
         apt:
           sources: &toolchainSources
             - ubuntu-toolchain-r-test
@@ -18,23 +19,20 @@ matrix:
             - gcc-5
             - g++-5
     - env: CXX=g++-5 CC=gcc-5 CMAKE_VERSION=3.6.2
-      addons:
-        apt:
-          sources: *toolchainSources
-          packages: *gcc5deps
-    - env: CXX=g++-6 CC=gcc-6 CMAKE_VERSION=3.6.2
+      addons: *gcc5addons
+    - env: CXX=g++-5 CC=gcc-5 CMAKE_VERSION=3.3.0
+      addons: *gcc5addons
+    - env: CXX=g++-6 CC=gcc-6
       addons:
         apt:
           sources: *toolchainSources
           packages: [*baseDependencies, gcc-6, g++-6]
-    - env: CXX=g++-7 CC=gcc-7 CMAKE_VERSION=3.6.2
+    - env: CXX=g++-7 CC=gcc-7
       addons:
         apt:
           sources: *toolchainSources
           packages: &gcc7deps [*baseDependencies, gcc-7, g++-7]
-    - env: CXX=clang++ CC=clang CMAKE_VERSION=3.3.0
-      addons: { apt: { packages: *gcc7deps } }
-    - env: CXX=clang++ CC=clang CMAKE_VERSION=3.6.2
+    - env: CXX=clang++ CC=clang
       addons: { apt: { packages: *gcc7deps } }
 notifications:
   irc: "chat.freenode.net#sword++"
