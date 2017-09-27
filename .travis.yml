@@ -31,10 +31,10 @@ matrix:
       addons:
         apt:
           sources: *toolchainSources
-          packages: [*baseDependencies, gcc-7, g++-7]
+          packages: &gcc7deps [*baseDependencies, gcc-7, g++-7]
     - env: CXX=clang++ CC=clang CMAKE_VERSION=3.3.0
-      addons: { apt: { packages: *baseDependencies } }
+      addons: { apt: { packages: *gcc7deps } }
     - env: CXX=clang++ CC=clang CMAKE_VERSION=3.6.2
-      addons: { apt: { packages: *baseDependencies } }
+      addons: { apt: { packages: *gcc7deps } }
 notifications:
   irc: "chat.freenode.net#sword++"
