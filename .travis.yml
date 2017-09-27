@@ -24,7 +24,15 @@ matrix:
             - curl
             - gcc-5
             - g++-5
+            - gcc-6
+            - g++-6
+            - gcc-7
+            - g++-7
     - env: CXX=g++-5 CC=gcc-5 CMAKE_VERSION=3.6.2
+      addons: *addons
+    - env: CXX=g++-6 CC=gcc-6 CMAKE_VERSION=3.6.2
+      addons: *addons
+    - env: CXX=g++-7 CC=gcc-7 CMAKE_VERSION=3.6.2
       addons: *addons
     - env: CXX=clang++-3.9 CC=clang-3.9 CMAKE_VERSION=3.3.0
       addons: *addons
