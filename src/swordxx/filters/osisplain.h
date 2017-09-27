@@ -36,8 +36,9 @@ class SWDLLEXPORT OSISPlain : public SWBasicFilter {
 public:
 protected:
 
-    BasicFilterUserData * createUserData(SWModule const * module,
-                                         SWKey const * key) override;
+    std::unique_ptr<BasicFilterUserData> createUserData(
+            SWModule const * module,
+            SWKey const * key) override;
 
     bool handleToken(std::string & buf,
                      char const * token,

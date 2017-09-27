@@ -47,6 +47,10 @@ TEIPlain::TEIPlain() {
     setTokenCaseSensitive(true);
 }
 
+std::unique_ptr<BasicFilterUserData> TEIPlain::createUserData(
+        SWModule const * module,
+        SWKey const * key)
+{ return std::make_unique<MyUserData>(module, key); }
 
 bool TEIPlain::handleToken(std::string &buf, const char *token, BasicFilterUserData *userData) {
   // manually process if it wasn't a simple substitution

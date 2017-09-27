@@ -152,6 +152,10 @@ ThMLHTML::ThMLHTML() {
     addTokenSubstitute("/note", ")</small></font> ");
 }
 
+std::unique_ptr<BasicFilterUserData> ThMLHTML::createUserData(
+        SWModule const * module,
+        SWKey const * key)
+{ return std::make_unique<MyUserData>(module, key); }
 
 bool ThMLHTML::handleToken(std::string &buf, const char *token, BasicFilterUserData *userData) {
     if (!substituteToken(buf, token)) { // manually process if it wasn't a simple substitution

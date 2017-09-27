@@ -40,8 +40,9 @@ private:
 protected:
     // used by derived classes so we have it in the header
 
-    BasicFilterUserData * createUserData(SWModule const * module,
-                                         SWKey const * key) override;
+    std::unique_ptr<BasicFilterUserData> createUserData(
+            SWModule const * module,
+            SWKey const * key) override;
 
     bool handleToken(std::string & buf,
                      char const * token,

@@ -160,7 +160,7 @@ char SWBasicFilter::processText(std::string & text,
     std::size_t tokenStartPos = 0u;
     std::size_t tokenEndPos = 0u;
     std::string lastTextNode;
-    std::unique_ptr<BasicFilterUserData> userData(createUserData(module, key));
+    auto const userData(createUserData(module, key));
 
     std::string orig = text;
     from = &orig[0u];
@@ -267,5 +267,10 @@ char SWBasicFilter::processText(std::string & text,
         processStage(FINALIZE, text, from, userData.get());
     return 0;
 }
+
+std::unique_ptr<BasicFilterUserData> SWBasicFilter::createUserData(
+        SWModule const * const module,
+        SWKey const * const key)
+{ return std::make_unique<BasicFilterUserData>(module, key); }
 
 } /* namespace swordxx */

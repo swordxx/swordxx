@@ -170,6 +170,10 @@ ThMLLaTeX::ThMLLaTeX() {
     renderNoteNumbers = false;
 }
 
+std::unique_ptr<BasicFilterUserData> ThMLLaTeX::createUserData(
+        SWModule const * module,
+        SWKey const * key)
+{ return std::make_unique<MyUserData>(module, key); }
 
 bool ThMLLaTeX::handleToken(std::string &buf, const char *token, BasicFilterUserData *userData) {
     if (!substituteToken(buf, token)) { // manually process if it wasn't a simple substitution

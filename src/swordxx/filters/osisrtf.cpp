@@ -86,11 +86,10 @@ OSISRTF::OSISRTF() {
     setTokenCaseSensitive(true);
 }
 
-
-BasicFilterUserData *OSISRTF::createUserData(const SWModule *module, const SWKey *key) {
-    return new MyUserData(module, key);
-}
-
+std::unique_ptr<BasicFilterUserData> OSISRTF::createUserData(
+        SWModule const * module,
+        SWKey const * key)
+{ return std::make_unique<MyUserData>(module, key); }
 
 char OSISRTF::processText(std::string &text, const SWKey *key, const SWModule *module) {
 

@@ -62,6 +62,11 @@ TEIHTMLHREF::TEIHTMLHREF() {
     renderNoteNumbers = false;
 }
 
+std::unique_ptr<BasicFilterUserData> TEIHTMLHREF::createUserData(
+        SWModule const * module,
+        SWKey const * key)
+{ return std::make_unique<MyUserData>(module, key); }
+
 bool TEIHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterUserData *userData) {
   // manually process if it wasn't a simple substitution
     if (!substituteToken(buf, token)) {

@@ -37,9 +37,13 @@ namespace swordxx {
 OSISWEBIF::OSISWEBIF() : baseURL(""), passageStudyURL(baseURL + "passagestudy.jsp"), javascript(false) {
 }
 
-
-BasicFilterUserData *OSISWEBIF::createUserData(const SWModule *module, const SWKey *key) {
-    MyUserData *u = (MyUserData *)OSISXHTML::createUserData(module, key);
+std::unique_ptr<BasicFilterUserData> OSISWEBIF::createUserData(
+        SWModule const * module,
+        SWKey const * key)
+{
+    std::unique_ptr<MyUserData> u(
+                static_cast<MyUserData *>(
+                    OSISXHTML::createUserData(module, key).release()));
     u->interModuleLinkStart = "<a href=\"#\" onclick=\"return im('%s', '%s');\">";
     u->interModuleLinkEnd = "</a>";
     return u;

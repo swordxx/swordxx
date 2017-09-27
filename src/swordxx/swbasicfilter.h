@@ -27,6 +27,7 @@
 #define SWBASICFILTER_H
 
 #include <map>
+#include <memory>
 #include <set>
 #include <string>
 #include "swfilter.h"
@@ -79,9 +80,9 @@ public: /* Methods: */
 
 protected: /* Methods: */
 
-    virtual BasicFilterUserData *createUserData(SWModule const * const module,
-                                                SWKey const * const key)
-    { return new BasicFilterUserData(module, key); }
+    virtual std::unique_ptr<BasicFilterUserData> createUserData(
+            SWModule const * const module,
+            SWKey const * const key);
 
     enum StageFlags: char {
         INITIALIZE = 1, // indicates processing before char loop

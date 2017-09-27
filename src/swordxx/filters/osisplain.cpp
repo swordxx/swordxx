@@ -71,14 +71,16 @@ OSISPlain::OSISPlain() {
        addTokenSubstitute("/lg", "\n");
 }
 
-BasicFilterUserData *OSISPlain::createUserData(const SWModule *module, const SWKey *key) {
-    MyUserData *u = new MyUserData(module, key);
+std::unique_ptr<BasicFilterUserData> OSISPlain::createUserData(
+        SWModule const * module,
+        SWKey const * key)
+{
+    auto u(std::make_unique<MyUserData>(module, key));
     /// \bug Remove const_cast:
     u->vk = const_cast<VerseKey *>(dynamic_cast<VerseKey const *>(u->key));
     u->testament = (u->vk) ? u->vk->getTestament() : 2;    // default to NT
     return u;
 }
-
 
 bool OSISPlain::handleToken(std::string &buf, const char *token, BasicFilterUserData *userData) {
        // manually process if it wasn't a simple substitution

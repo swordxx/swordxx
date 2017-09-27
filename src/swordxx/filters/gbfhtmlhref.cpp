@@ -77,6 +77,10 @@ GBFHTMLHREF::GBFHTMLHREF() {
     renderNoteNumbers = false;
 }
 
+std::unique_ptr<BasicFilterUserData> GBFHTMLHREF::createUserData(
+        SWModule const * module,
+        SWKey const * key)
+{ return std::make_unique<MyUserData>(module, key); }
 
 bool GBFHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterUserData *userData) {
     const char *tok;

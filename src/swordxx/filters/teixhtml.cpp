@@ -92,6 +92,11 @@ TEIXHTML::TEIXHTML() {
     renderNoteNumbers = false;
 }
 
+std::unique_ptr<BasicFilterUserData> TEIXHTML::createUserData(
+        SWModule const * module,
+        SWKey const * key)
+{ return std::make_unique<MyUserData>(module, key); }
+
 bool TEIXHTML::handleToken(std::string &buf, const char *token, BasicFilterUserData *userData) {
   // manually process if it wasn't a simple substitution
     if (!substituteToken(buf, token)) {

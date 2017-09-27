@@ -35,8 +35,9 @@ class SWDLLEXPORT OSISHeadings: public OffOnOptionFilter, public SWBasicFilter {
 public:
     OSISHeadings();
 
-    BasicFilterUserData * createUserData(SWModule const * module,
-                                         SWKey const * key) override;
+    std::unique_ptr<BasicFilterUserData> createUserData(
+            SWModule const * module,
+            SWKey const * key) override;
 
     bool handleToken(std::string & buf,
                      char const * token,

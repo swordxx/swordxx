@@ -153,10 +153,10 @@ void processMorph(bool suspendTextPassThru, XMLTag &tag, std::string &buf) {
 
 }    // end anonymous namespace
 
-BasicFilterUserData *OSISLaTeX::createUserData(const SWModule *module, const SWKey *key) {
-    return new MyUserData(module, key);
-}
-
+std::unique_ptr<BasicFilterUserData> OSISLaTeX::createUserData(
+        SWModule const * module,
+        SWKey const * key)
+{ return std::make_unique<MyUserData>(module, key); }
 
 OSISLaTeX::OSISLaTeX() {
     setTokenStart("<");

@@ -37,8 +37,9 @@ class SWDLLEXPORT OSISWEBIF : public OSISXHTML {
 
 protected:
 
-    BasicFilterUserData * createUserData(SWModule const * module,
-                                         SWKey const * key) override;
+    std::unique_ptr<BasicFilterUserData> createUserData(
+            SWModule const * module,
+            SWKey const * key) override;
 
     bool handleToken(std::string & buf,
                      char const * token,

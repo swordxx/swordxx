@@ -140,10 +140,10 @@ void processMorph(bool suspendTextPassThru, XMLTag &tag, std::string &buf) {
 
 }    // end anonymous namespace
 
-BasicFilterUserData *OSISXHTML::createUserData(const SWModule *module, const SWKey *key) {
-    return new MyUserData(module, key);
-}
-
+std::unique_ptr<BasicFilterUserData> OSISXHTML::createUserData(
+        SWModule const * module,
+        SWKey const * key)
+{ return std::make_unique<MyUserData>(module, key); }
 
 OSISXHTML::OSISXHTML() {
     setTokenStart("<");

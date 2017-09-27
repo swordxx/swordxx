@@ -81,6 +81,10 @@ GBFLaTeX::GBFLaTeX() {
     renderNoteNumbers = false;
 }
 
+std::unique_ptr<BasicFilterUserData> GBFLaTeX::createUserData(
+        SWModule const * module,
+        SWKey const * key)
+{ return std::make_unique<MyUserData>(module, key); }
 
 bool GBFLaTeX::handleToken(std::string &buf, const char *token, BasicFilterUserData *userData) {
     const char *tok;

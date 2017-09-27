@@ -85,6 +85,10 @@ GBFXHTML::GBFXHTML() {
     renderNoteNumbers = false;
 }
 
+std::unique_ptr<BasicFilterUserData> GBFXHTML::createUserData(
+        SWModule const * module,
+        SWKey const * key)
+{ return std::make_unique<MyUserData>(module, key); }
 
 bool GBFXHTML::handleToken(std::string &buf, const char *token, BasicFilterUserData *userData) {
     const char *tok;

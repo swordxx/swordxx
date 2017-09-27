@@ -66,6 +66,10 @@ GBFHTML::GBFHTML() {
 
 }
 
+std::unique_ptr<BasicFilterUserData> GBFHTML::createUserData(
+        SWModule const * module,
+        SWKey const * key)
+{ return std::make_unique<MyUserData>(module, key); }
 
 bool GBFHTML::handleToken(std::string &buf, const char *token, BasicFilterUserData *userData) {
     const char *tok;

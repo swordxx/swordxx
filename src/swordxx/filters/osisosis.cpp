@@ -54,6 +54,10 @@ OSISOSIS::OSISOSIS() {
     setTokenCaseSensitive(true);
 }
 
+std::unique_ptr<BasicFilterUserData> OSISOSIS::createUserData(
+        SWModule const * module,
+        SWKey const * key)
+{ return std::make_unique<MyUserData>(module, key); }
 
 char OSISOSIS::processText(std::string &text, const SWKey *key, const SWModule *module) {
     char status = SWBasicFilter::processText(text, key, module);

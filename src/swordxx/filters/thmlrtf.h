@@ -43,9 +43,9 @@ protected:
         XMLTag startTag;
     };
 
-    BasicFilterUserData * createUserData(SWModule const * module,
-                                         SWKey const * key) override
-    { return new MyUserData(module, key); }
+    std::unique_ptr<BasicFilterUserData> createUserData(
+            SWModule const * module,
+            SWKey const * key) override;
 
     bool handleToken(std::string & buf,
                      char const * token,

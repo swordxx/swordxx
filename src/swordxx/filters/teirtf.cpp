@@ -60,6 +60,10 @@ TEIRTF::TEIRTF() {
     setTokenCaseSensitive(true);
 }
 
+std::unique_ptr<BasicFilterUserData> TEIRTF::createUserData(
+        SWModule const * module,
+        SWKey const * key)
+{ return std::make_unique<MyUserData>(module, key); }
 
 bool TEIRTF::handleToken(std::string &buf, const char *token, BasicFilterUserData *userData) {
   // manually process if it wasn't a simple substitution

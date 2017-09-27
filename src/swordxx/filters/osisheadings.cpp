@@ -62,10 +62,10 @@ namespace {
     };
 }
 
-
-BasicFilterUserData *OSISHeadings::createUserData(const SWModule *module, const SWKey *key) {
-    return new MyUserData(module, key);
-}
+std::unique_ptr<BasicFilterUserData> OSISHeadings::createUserData(
+        SWModule const * module,
+        SWKey const * key)
+{ return std::make_unique<MyUserData>(module, key); }
 
 OSISHeadings::OSISHeadings()
     : OffOnOptionFilter(oName, oTip)

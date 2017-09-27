@@ -148,6 +148,10 @@ OSISHTMLHREF::OSISHTMLHREF() {
     renderNoteNumbers = false;
 }
 
+std::unique_ptr<BasicFilterUserData> OSISHTMLHREF::createUserData(
+        SWModule const * module,
+        SWKey const * key)
+{ return std::make_unique<MyUserData>(module, key); }
 
 bool OSISHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterUserData *userData) {
     MyUserData *u = (MyUserData *)userData;
