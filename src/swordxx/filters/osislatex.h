@@ -25,6 +25,9 @@
 
 #include "../swbasicfilter.h"
 
+#include <stack>
+#include <string>
+
 
 namespace swordxx {
 
@@ -35,8 +38,6 @@ private:
     bool morphFirst;
     bool renderNoteNumbers;
 protected:
-
-    class TagStack;
     // used by derived classes so we have it in the header
 
     BasicFilterUserData * createUserData(SWModule const * module,
@@ -46,8 +47,20 @@ protected:
                      char const * token,
                      BasicFilterUserData * userData) override;
 
-    class MyUserData : public BasicFilterUserData {
-    public:
+    class MyUserData: public BasicFilterUserData {
+
+    public: /* Types: */
+
+        using TagStack = std::stack<std::string>;
+
+    public: /* Methods: */
+
+        MyUserData(SWModule const * module, SWKey const * key);
+        ~MyUserData();
+        void outputNewline(std::string &buf);
+
+    public: /* Fields: */
+
         bool osisQToTick;
         bool inXRefNote;
         bool BiblicalText;
@@ -57,19 +70,16 @@ protected:
         std::string wordsOfChristEnd;
         std::string divLevel;  // divLevel "module", "testament, "bookgroup", "book", "majorsection", "section", "paragraph" , ignore others.
 
-        TagStack *quoteStack;
-        TagStack *hiStack;
-        TagStack *titleStack;
-        TagStack *lineStack;
+        TagStack quoteStack;
+        TagStack hiStack;
+        TagStack titleStack;
+        TagStack lineStack;
         int consecutiveNewlines;
         std::string lastTransChange;
         std::string w;
         std::string fn;
         std::string version;
 
-        MyUserData(const SWModule *module, const SWKey *key);
-        ~MyUserData();
-        void outputNewline(std::string &buf);
     };
 public:
     OSISLaTeX();

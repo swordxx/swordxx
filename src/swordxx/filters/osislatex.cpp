@@ -183,10 +183,9 @@ OSISLaTeX::OSISLaTeX() {
     renderNoteNumbers = false;
 }
 
-class OSISLaTeX::TagStack : public std::stack<std::string> {
-};
-
-OSISLaTeX::MyUserData::MyUserData(const SWModule *module, const SWKey *key) : BasicFilterUserData(module, key), quoteStack(new TagStack()), hiStack(new TagStack()), titleStack(new TagStack()), lineStack(new TagStack()) {
+OSISLaTeX::MyUserData::MyUserData(SWModule const * module, SWKey const * key)
+    : BasicFilterUserData(module, key)
+{
     inXRefNote    = false;
     suspendLevel = 0;
     divLevel = "module";
@@ -196,12 +195,7 @@ OSISLaTeX::MyUserData::MyUserData(const SWModule *module, const SWKey *key) : Ba
     firstCell = false;
 }
 
-OSISLaTeX::MyUserData::~MyUserData() {
-    delete quoteStack;
-    delete hiStack;
-    delete titleStack;
-    delete lineStack;
-}
+OSISLaTeX::MyUserData::~MyUserData() {}
 
 void OSISLaTeX::MyUserData::outputNewline(std::string &buf) {
     if (++consecutiveNewlines <= 2) {
@@ -422,13 +416,13 @@ bool OSISLaTeX::handleToken(std::string &buf, const char *token, BasicFilterUser
             if (!tag.attribute("sID").empty() || (!tag.isEndTag() && !tag.isEmpty())) {
                 // nested lines plus if the line itself has an x-indent type attribute value
                 outText("\\swordpoetryline{", buf, u);
-                u->lineStack->push(tag.toString());
+                u->lineStack.push(tag.toString());
             }
             // end line marker
             else if (!tag.attribute("eID").empty() || tag.isEndTag()) {
                 outText("}", buf, u);
                 u->outputNewline(buf);
-                if (u->lineStack->size()) u->lineStack->pop();
+                if (u->lineStack.size()) u->lineStack.pop();
             }
             // <l/> without eID or sID
             // Note: this is improper osis. This should be <lb/>
@@ -571,7 +565,7 @@ bool OSISLaTeX::handleToken(std::string &buf, const char *token, BasicFilterUser
                 else {    // all other types
                     outText("\\emph {", buf, u);
                 }
-                u->hiStack->push(tag.toString());
+                u->hiStack.push(tag.toString());
             }
             else if (tag.isEndTag()) {
                 outText("}", buf, u);
@@ -598,7 +592,7 @@ bool OSISLaTeX::handleToken(std::string &buf, const char *token, BasicFilterUser
             if ((!tag.isEmpty() && !tag.isEndTag()) || (tag.isEmpty() && !tag.attribute("sID").empty())) {
                 // if <q> then remember it for the </q>
                 if (!tag.isEmpty()) {
-                    u->quoteStack->push(tag.toString());
+                    u->quoteStack.push(tag.toString());
                 }
 
                 // Do this first so quote marks are included as WoC
@@ -615,9 +609,9 @@ bool OSISLaTeX::handleToken(std::string &buf, const char *token, BasicFilterUser
             // close </q> or <q eID... />
             else if ((tag.isEndTag()) || (tag.isEmpty() && !tag.attribute("eID").empty())) {
                 // if it is </q> then pop the stack for the attributes
-                if (tag.isEndTag() && !u->quoteStack->empty()) {
-                    XMLTag qTag(u->quoteStack->top().c_str());
-                    if (u->quoteStack->size()) u->quoteStack->pop();
+                if (tag.isEndTag() && !u->quoteStack.empty()) {
+                    XMLTag qTag(u->quoteStack.top().c_str());
+                    if (u->quoteStack.size()) u->quoteStack.pop();
 
                     type    = qTag.attribute("type");
                     who     = qTag.attribute("who");
