@@ -237,7 +237,6 @@ char ThMLPlain::processText(std::string &text, const SWKey *key, const SWModule 
                         text += *from;
                 }
         }
-        text += (char)0;
 
     return 0;
 }

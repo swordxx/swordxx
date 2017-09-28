@@ -109,7 +109,6 @@ char OSISRTF::processText(std::string &text, const SWKey *key, const SWModule *m
             text += *from;
         }
     }
-    text += (char)0;
 
     SWBasicFilter::processText(text, key, module);  //handle tokens as usual
 
@@ -126,7 +125,6 @@ char OSISRTF::processText(std::string &text, const SWKey *key, const SWModule *m
             text += *from;
         }
     }
-    text += (char)0;    // probably not needed, but don't want to remove without investigating (same as above)
     return 0;
 }
 

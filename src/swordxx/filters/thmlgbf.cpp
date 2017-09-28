@@ -295,7 +295,6 @@ char ThMLGBF::processText(std::string &text, const SWKey *key, const SWModule *m
                         text += *from;
                 }
         }
-        text += (char)0;
 
     return 0;
 }
