@@ -75,7 +75,7 @@ char UTF8HTML::processText(std::string &text, const SWKey *key, const SWModule *
           from += subsequent;
           text += '&';
           text += '#';
-      sprintf(digit, "%ld", ch);
+      sprintf(digit, "%lu", ch);
         for (char *dig = digit; *dig; dig++)
             text += *dig;
         text += ';';
