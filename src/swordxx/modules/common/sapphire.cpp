@@ -39,6 +39,7 @@
 
 #include <array>
 #include <cassert>
+#include <cerrno>
 #include <cstring>
 #include <sys/mman.h>
 #include <type_traits>
