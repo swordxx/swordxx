@@ -10,6 +10,8 @@ all:
 	javap -s -classpath classes/ org.crosswire.android.sword.SWModule.SearchHit > SearchHit.txt
 	javap -s -classpath classes/ org.crosswire.android.sword.SWModule.SearchProgressReporter > SearchProgressReporter.txt
 	javap -s -classpath classes/ org.crosswire.android.sword.InstallMgr > InstallMgr.txt
-	cp src/org/crosswire/android/sword/*.java /home/scribe/src/bishop/src/org/crosswire/android/sword/
+	cp src/org/crosswire/android/sword/*.java ../Android/SWORD/app/src/main/java/org/crosswire/android/sword/
 
 
+clean:
+	rm -rf classes jni/org_crosswire_android_sword_*.h *.txt

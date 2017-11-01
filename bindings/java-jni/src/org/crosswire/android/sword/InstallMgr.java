@@ -2,7 +2,7 @@
  *
  *  InstallMgr.java -	
  *
- * $Id$
+ * $Id: InstallMgr.java 3229 2014-05-09 09:32:36Z scribe $
  *
  * Copyright 2009-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society

@@ -2,7 +2,7 @@
  *
  *  SWModule.java -	
  *
- * $Id$
+ * $Id: SWModule.java 3237 2014-05-22 08:02:06Z scribe $
  *
  * Copyright 2009-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society

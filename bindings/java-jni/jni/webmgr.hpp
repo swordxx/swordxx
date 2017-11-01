@@ -41,14 +41,17 @@ class WebMgr : public SWMgr {
 	SWModule *defaultHebLex;
 	SWModule *defaultGreekParse;
 	SWModule *defaultHebParse;
+	char *extraConf;
 
 public:
 //	WebMgr(SWConfig *sysConf) : SWMgr(0, sysConf, false, new MarkupFilterMgr(FMT_WEBIF)) {
-	WebMgr(const char *path) : SWMgr(path, false, new MarkupFilterMgr(FMT_WEBIF)) {
+	WebMgr(const char *path, const char *extraConfPath) : extraConf(0), SWMgr(path, false, new MarkupFilterMgr(FMT_XHTML)) {
 		defaultGreekLex   = 0;
 		defaultHebLex     = 0;
 		defaultGreekParse = 0;
 		defaultHebParse   = 0;
+
+		stdstr(&extraConf, extraConfPath);
 
 		osisWordJS = new OSISWordJS();
 		thmlWordJS = new ThMLWordJS();
@@ -67,8 +70,20 @@ public:
 		delete osisWordJS;
 		delete thmlWordJS;
 		delete gbfWordJS;
+		delete extraConf;
 	}
 
+	void createAllModules(bool multiMod) {
+
+		if (extraConf) {
+			bool exists = FileMgr::existsFile(extraConf);
+			if (exists) {
+				SWConfig addConfig(extraConf);
+				this->config->augment(addConfig);
+			}
+		}
+		SWMgr::createAllModules(multiMod);
+	}
 
 	void AddGlobalOptions(SWModule *module, ConfigEntMap &section, ConfigEntMap::iterator start, ConfigEntMap::iterator end) {
 

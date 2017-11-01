@@ -38,8 +38,8 @@
 #include <treekeyidx.h>
 #include <installmgr.h>
 #include <remotetrans.h>
+//#include <android/native_activity.h>
 
-#define BIBLESYNC
 
 #ifdef BIBLESYNC
 #include <biblesync.hh>
@@ -63,9 +63,14 @@ InstallMgr *installMgr = 0;
 
 #ifdef BIBLESYNC
 BibleSync *bibleSync = 0;
-#endif
+using std::string;
 jobject bibleSyncListener = 0;
 JNIEnv *bibleSyncListenerEnv = 0;
+#endif
+static SWBuf STORAGE_BASE;
+static char *SWORD_PATH = "/sdcard/sword";
+static char *AND_BIBLE_MODULES_PATH = "/sdcard/Android/data/net.bible.android.activity/files";
+//ANativeActivity *_activity;
 
 class InstallStatusReporter : public StatusReporter {
 public:
@@ -154,28 +159,48 @@ public:
 };
 
 
-static void init() {
+static void init(JNIEnv *env) {
 	if (!mgr) {
 		SWLog::setSystemLog(new AndroidLogger());
 		SWLog::getSystemLog()->setLogLevel(SWLog::LOG_DEBUG);
-		SWBuf baseDir  = "/sdcard/sword";
+SWLog::getSystemLog()->logDebug("libsword: init() begin");
+		SWBuf baseDir  = SWORD_PATH;
 		SWBuf confPath = baseDir + "/mods.d/globals.conf";
 		// be sure we have at least some config file already out there
 		if (!FileMgr::existsFile(confPath.c_str())) {
+			SWLog::getSystemLog()->logDebug("libsword: init() sword config not found, attempting to create parent of: %s", confPath.c_str());
 			FileMgr::createParent(confPath.c_str());
 			remove(confPath.c_str());
 
+			SWLog::getSystemLog()->logDebug("libsword: init() saving basic: %s", confPath.c_str());
 			SWConfig config(confPath.c_str());
 			config["Globals"]["HiAndroid"] = "weeee";
-			config.Save();
+			config.save();
 		}
-		mgr = new WebMgr("/sdcard/sword");
+		if (!FileMgr::existsFile(confPath.c_str())) {
+			baseDir = STORAGE_BASE;
+			confPath = baseDir + "/mods.d/globals.conf";
+SWLog::getSystemLog()->logDebug("libsword: init() sword config STILL not found, attempting to create parent of: %s", confPath.c_str());
+			FileMgr::createParent(confPath.c_str());
+			remove(confPath.c_str());
 
+SWLog::getSystemLog()->logDebug("libsword: init() saving basic: %s", confPath.c_str());
+			SWConfig config(confPath.c_str());
+			config["Globals"]["HiAndroid"] = "weeee";
+			config.save();
+		}
+		confPath = STORAGE_BASE + "/extraConfig.conf";
+		bool exists = FileMgr::existsFile(confPath.c_str());
+SWLog::getSystemLog()->logDebug("libsword: extraConfig %s at path: %s", exists?"Exists":"Absent", confPath.c_str());
+
+SWLog::getSystemLog()->logDebug("libsword: init() creating WebMgr using path: %s", baseDir.c_str());
+		mgr = new WebMgr(baseDir, exists?confPath.c_str():0);
+
+SWLog::getSystemLog()->logDebug("libsword: init() augmenting modules from: %s", AND_BIBLE_MODULES_PATH);
 		// for And Bible modules
-		mgr->augmentModules("/sdcard/Android/data/net.bible.android.activity/files", true);
+		mgr->augmentModules(AND_BIBLE_MODULES_PATH, true);
 	}
 }
-
 
 static void initInstall() {
 
@@ -184,16 +209,26 @@ static void initInstall() {
 	}
 	if (!installMgr) {
 SWLog::getSystemLog()->logDebug("initInstall: installMgr is null");
-		SWBuf baseDir  = "/sdcard/sword/InstallMgr";
+		SWBuf baseDir  = SWORD_PATH;
+		baseDir += "/InstallMgr";
 		SWBuf confPath = baseDir + "/InstallMgr.conf";
 		// be sure we have at least some config file already out there
 SWLog::getSystemLog()->logDebug("initInstall: confPath: %s", confPath.c_str());
 		if (!FileMgr::existsFile(confPath.c_str())) {
-SWLog::getSystemLog()->logDebug("initInstall: file doesn't exist: %s", confPath.c_str());
+			SWLog::getSystemLog()->logDebug("initInstall: file doesn't exist: %s", confPath.c_str());
 			FileMgr::createParent(confPath.c_str());
 			SWConfig config(confPath.c_str());
 			config["General"]["PassiveFTP"] = "true";
-			config.Save();
+			config.save();
+		}
+		if (!FileMgr::existsFile(confPath.c_str())) {
+			baseDir = STORAGE_BASE;
+			confPath = baseDir + "/InstallMgr.conf";
+			SWLog::getSystemLog()->logDebug("initInstall: file STILL doesn't exist, attempting to create parent of: %s", confPath.c_str());
+			FileMgr::createParent(confPath.c_str());
+			SWConfig config(confPath.c_str());
+			config["General"]["PassiveFTP"] = "true";
+			config.save();
 		}
 		installMgr = new InstallMgr(baseDir, installStatusReporter);
 		if (disclaimerConfirmed) installMgr->setUserDisclaimerConfirmed(true);
@@ -238,6 +273,7 @@ SWLog::getSystemLog()->logDebug("bibleSync listener deleting local ref to cls");
 }
 #endif
 
+
 static void initBibleSync() {
 #ifdef BIBLESYNC
 	if (!bibleSync) {
@@ -255,7 +291,7 @@ SWLog::getSystemLog()->logDebug("bibleSync initializing setMode");
 JNIEXPORT jstring JNICALL Java_org_crosswire_android_sword_SWMgr_version
   (JNIEnv *env, jobject me) {
 
-	init();
+	init(env);
 
 	SWVersion v;
 	return env->NewStringUTF(v.currentVersion);
@@ -268,7 +304,15 @@ JNIEXPORT jstring JNICALL Java_org_crosswire_android_sword_SWMgr_version
  * Signature: ()V
  */
 JNIEXPORT void JNICALL Java_org_crosswire_android_sword_SWMgr_reInit
-  (JNIEnv *, jobject) {
+  (JNIEnv *env, jobject me) {
+
+	jclass swmgrClass = env->GetObjectClass(me);
+	jmethodID getStorageBasePath = env->GetMethodID(swmgrClass, "getStorageBasePath", "()Ljava/lang/String;");
+	jstring basePathJS = (jstring)env->CallObjectMethod(me, getStorageBasePath, NULL);
+
+	const char *basePath = (basePathJS?env->GetStringUTFChars(basePathJS, NULL):0);
+	STORAGE_BASE = basePath;
+	SWLog::getSystemLog()->logDebug("setting STORAGE_BASE to: %s", STORAGE_BASE.c_str());
 
 	delete mgr;
 	mgr = 0;
@@ -278,7 +322,7 @@ JNIEXPORT void JNICALL Java_org_crosswire_android_sword_SWMgr_reInit
 JNIEXPORT jstring JNICALL Java_org_crosswire_android_sword_SWMgr_getPrefixPath
   (JNIEnv *env, jobject me) {
 
-	init();
+	init(env);
 
 	return env->NewStringUTF(mgr->prefixPath);
 }
@@ -286,7 +330,7 @@ JNIEXPORT jstring JNICALL Java_org_crosswire_android_sword_SWMgr_getPrefixPath
 JNIEXPORT jstring JNICALL Java_org_crosswire_android_sword_SWMgr_getConfigPath
   (JNIEnv *env, jobject me) {
 
-	init();
+	init(env);
 
 	return env->NewStringUTF(mgr->configPath);
 }
@@ -295,7 +339,7 @@ JNIEXPORT jstring JNICALL Java_org_crosswire_android_sword_SWMgr_getConfigPath
 JNIEXPORT jobjectArray JNICALL Java_org_crosswire_android_sword_SWMgr_getModInfoList
   (JNIEnv *env, jobject) {
 
-	init();
+	init(env);
 
 	int size = 0;
 	for (sword::ModMap::iterator it = mgr->Modules.begin(); it != mgr->Modules.end(); ++it) {
@@ -352,7 +396,7 @@ SWLog::getSystemLog()->logDebug("getModInfoList returning %d length array\n", si
 JNIEXPORT jobject JNICALL Java_org_crosswire_android_sword_SWMgr_getModuleByName
   (JNIEnv *env, jobject me, jstring modNameJS) {
 
-	init();
+	init(env);
 
 	jobject retVal = 0;
 
@@ -383,7 +427,7 @@ JNIEXPORT jobject JNICALL Java_org_crosswire_android_sword_SWMgr_getModuleByName
 JNIEXPORT void JNICALL Java_org_crosswire_android_sword_SWMgr_setGlobalOption
   (JNIEnv *env, jobject me, jstring optionJS, jstring valueJS) {
 
-	init();
+	init(env);
 
      const char *option = env->GetStringUTFChars(optionJS, NULL);
      const char *value  = env->GetStringUTFChars(valueJS, NULL);
@@ -403,7 +447,7 @@ JNIEXPORT void JNICALL Java_org_crosswire_android_sword_SWMgr_setGlobalOption
 JNIEXPORT jstring JNICALL Java_org_crosswire_android_sword_SWMgr_getGlobalOption
   (JNIEnv *env, jobject me, jstring optionJS) {
 
-	init();
+	init(env);
 
      const char *option = env->GetStringUTFChars(optionJS, NULL);
 
@@ -423,7 +467,7 @@ JNIEXPORT jstring JNICALL Java_org_crosswire_android_sword_SWMgr_getGlobalOption
 JNIEXPORT jstring JNICALL Java_org_crosswire_android_sword_SWMgr_getGlobalOptionTip
   (JNIEnv *env, jobject me, jstring optionJS) {
 
-	init();
+	init(env);
 
      const char *option = env->GetStringUTFChars(optionJS, NULL);
 
@@ -443,7 +487,7 @@ JNIEXPORT jstring JNICALL Java_org_crosswire_android_sword_SWMgr_getGlobalOption
 JNIEXPORT jstring JNICALL Java_org_crosswire_android_sword_SWMgr_filterText
   (JNIEnv *env, jobject me, jstring filterNameJS, jstring textJS) {
 
-	init();
+	init(env);
 
      const char *filterName = env->GetStringUTFChars(filterNameJS, NULL);
      const char *text  = env->GetStringUTFChars(textJS, NULL);
@@ -466,9 +510,9 @@ JNIEXPORT jstring JNICALL Java_org_crosswire_android_sword_SWMgr_filterText
  * Signature: ()[Ljava/lang/String;
  */
 JNIEXPORT jobjectArray JNICALL Java_org_crosswire_android_sword_SWMgr_getGlobalOptions
-  (JNIEnv *env, jobject me) {
+		(JNIEnv *env, jobject me) {
 
-	init();
+	init(env);
 
 	sword::StringList options = mgr->getGlobalOptions();
 	int count = 0;
@@ -490,13 +534,233 @@ JNIEXPORT jobjectArray JNICALL Java_org_crosswire_android_sword_SWMgr_getGlobalO
 
 /*
  * Class:     org_crosswire_android_sword_SWMgr
+ * Method:    getExtraConfigSections
+ * Signature: ()[Ljava/lang/String;
+ */
+JNIEXPORT jobjectArray JNICALL Java_org_crosswire_android_sword_SWMgr_getExtraConfigSections
+		(JNIEnv *env, jobject me) {
+
+	init(env);
+
+	SWBuf baseDir = STORAGE_BASE;
+	SWBuf confPath = baseDir + "/extraConfig.conf";
+	int count = 0;
+	bool exists = FileMgr::existsFile(confPath.c_str());
+	jclass clazzString = env->FindClass("java/lang/String");
+	jobjectArray ret;
+	SWLog::getSystemLog()->logDebug("libsword: extraConfig %s at path: %s", exists?"Exists":"Absent", confPath.c_str());
+	if (exists) {
+		SWConfig config(confPath.c_str());
+		SectionMap::const_iterator sit;
+		for (sit = config.getSections().begin(); sit != config.getSections().end(); ++sit) {
+			count++;
+		}
+		SWLog::getSystemLog()->logDebug("libsword: %d sections found in extraConfig", count);
+		ret = (jobjectArray) env->NewObjectArray(count, clazzString, NULL);
+		count = 0;
+		for (sit = config.getSections().begin(); sit != config.getSections().end(); ++sit) {
+			env->SetObjectArrayElement(ret, count++, env->NewStringUTF(assureValidUTF8(sit->first.c_str())));
+		}
+	}
+	else {
+		ret = (jobjectArray) env->NewObjectArray(0, clazzString, NULL);
+	}
+
+	return ret;
+}
+
+
+/*
+ * Class:     org_crosswire_android_sword_SWMgr
+ * Method:    getExtraConfigKeys
+ * Signature: (Ljava/lang/String;)[Ljava/lang/String;
+ */
+JNIEXPORT jobjectArray JNICALL Java_org_crosswire_android_sword_SWMgr_getExtraConfigKeys
+		(JNIEnv *env, jobject me, jstring section) {
+
+	init(env);
+
+	const char *s = env->GetStringUTFChars(section, NULL);
+
+	SWBuf mySection = s;
+
+	env->ReleaseStringUTFChars(section, s);
+
+	SWBuf baseDir = STORAGE_BASE;
+	SWBuf confPath = baseDir + "/extraConfig.conf";
+	int count = 0;
+	bool exists = FileMgr::existsFile(confPath.c_str());
+	jclass clazzString = env->FindClass("java/lang/String");
+	jobjectArray ret;
+	if (exists) {
+		SWConfig config(confPath.c_str());
+		SectionMap::const_iterator sit = config.getSections().find(mySection.c_str());
+		if (sit != config.getSections().end()) {
+			ConfigEntMap::const_iterator it;
+			for (it = sit->second.begin(); it != sit->second.end(); ++it) {
+				count++;
+			}
+			ret = (jobjectArray) env->NewObjectArray(count, clazzString, NULL);
+			count = 0;
+			for (it = sit->second.begin(); it != sit->second.end(); ++it) {
+				env->SetObjectArrayElement(ret, count++,
+				                           env->NewStringUTF(assureValidUTF8(it->first.c_str())));
+			}
+		}
+		else {
+			ret = (jobjectArray) env->NewObjectArray(0, clazzString, NULL);
+		}
+	}
+	else {
+		ret = (jobjectArray) env->NewObjectArray(0, clazzString, NULL);
+	}
+
+	return ret;
+}
+
+
+/*
+ * Class:     org_crosswire_android_sword_SWMgr
+ * Method:    getExtraConfigValue
+ * Signature: (Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+ */
+JNIEXPORT jstring JNICALL Java_org_crosswire_android_sword_SWMgr_getExtraConfigValue
+		(JNIEnv *env, jobject me, jstring section, jstring key) {
+
+	init(env);
+
+	const char *s = env->GetStringUTFChars(section, NULL);
+
+	SWBuf mySection = s;
+
+	env->ReleaseStringUTFChars(section, s);
+
+	const char *k = env->GetStringUTFChars(key, NULL);
+
+	SWBuf myKey = k;
+
+	env->ReleaseStringUTFChars(key, k);
+
+	jstring ret = 0;
+
+	SWBuf baseDir = STORAGE_BASE;
+	SWBuf confPath = baseDir + "/extraConfig.conf";
+	bool exists = FileMgr::existsFile(confPath.c_str());
+	if (exists) {
+		SWConfig config(confPath.c_str());
+		SectionMap::const_iterator sit = config.getSections().find(mySection.c_str());
+		if (sit != config.getSections().end()) {
+			ConfigEntMap::const_iterator it = sit->second.find(myKey.c_str());
+			if (it != sit->second.end()) {
+				ret = env->NewStringUTF(assureValidUTF8(it->second.c_str()));
+			}
+		}
+	}
+
+	return ret;
+}
+
+
+/*
+ * Class:     org_crosswire_android_sword_SWMgr
+ * Method:    setExtraConfigValue
+ * Signature: (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+ */
+JNIEXPORT void JNICALL Java_org_crosswire_android_sword_SWMgr_setExtraConfigValue
+		(JNIEnv *env, jobject me, jstring section, jstring key, jstring value) {
+
+	init(env);
+
+	const char *s = env->GetStringUTFChars(section, NULL);
+
+	SWBuf mySection = s;
+
+	env->ReleaseStringUTFChars(section, s);
+
+	const char *k = env->GetStringUTFChars(key, NULL);
+
+	SWBuf myKey = k;
+
+	env->ReleaseStringUTFChars(key, k);
+
+	const char *v = env->GetStringUTFChars(value, NULL);
+
+	SWBuf myValue = v;
+
+	env->ReleaseStringUTFChars(value, v);
+
+	SWBuf baseDir = STORAGE_BASE;
+	SWBuf confPath = baseDir + "/extraConfig.conf";
+	SWConfig config(confPath.c_str());
+	config[mySection][myKey] = myValue;
+	config.save();
+
+	Java_org_crosswire_android_sword_SWMgr_reInit(env, me);
+
+}
+
+
+/*
+ * Class:     org_crosswire_android_sword_SWMgr
+ * Method:    addExtraConfig
+ * Signature: (Ljava/lang/String;)[Ljava/lang/String;
+ */
+JNIEXPORT jobjectArray JNICALL Java_org_crosswire_android_sword_SWMgr_addExtraConfig
+		(JNIEnv *env, jobject me, jstring blob) {
+
+	init(env);
+
+	const char *b = env->GetStringUTFChars(blob, NULL);
+
+	SWBuf myBlob = b;
+
+	env->ReleaseStringUTFChars(blob, b);
+
+	jobjectArray ret;
+
+	int count = 0;
+	jclass clazzString = env->FindClass("java/lang/String");
+
+	SWBuf baseDir = STORAGE_BASE;
+	SWBuf tmpConfPath = baseDir + "/tmpConfig.conf";
+	FileMgr::removeFile(tmpConfPath.c_str());
+	FileDesc *fd = FileMgr::getSystemFileMgr()->open(tmpConfPath.c_str(), FileMgr::CREAT|FileMgr::WRONLY, FileMgr::IREAD|FileMgr::IWRITE);
+	fd->getFd();
+	fd->write(myBlob.c_str(), myBlob.size());
+	FileMgr::getSystemFileMgr()->close(fd);
+
+	SWConfig newConfig(tmpConfPath.c_str());
+	FileMgr::removeFile(tmpConfPath.c_str());
+	SectionMap::const_iterator sit;
+	for (sit = newConfig.getSections().begin(); sit != newConfig.getSections().end(); ++sit) {
+		count++;
+	}
+	ret = (jobjectArray) env->NewObjectArray(count, clazzString, NULL);
+	count = 0;
+	for (sit = newConfig.getSections().begin(); sit != newConfig.getSections().end(); ++sit) {
+		env->SetObjectArrayElement(ret, count++, env->NewStringUTF(assureValidUTF8(sit->first.c_str())));
+	}
+
+	SWBuf confPath = baseDir + "/extraConfig.conf";
+	SWConfig config(confPath.c_str());
+	config.augment(newConfig);
+	config.save();
+
+	Java_org_crosswire_android_sword_SWMgr_reInit(env, me);
+
+	return ret;
+}
+
+
+/*
+ * Class:     org_crosswire_android_sword_SWMgr
  * Method:    getGlobalOptionValues
  * Signature: (Ljava/lang/String;)[Ljava/lang/String;
  */
 JNIEXPORT jobjectArray JNICALL Java_org_crosswire_android_sword_SWMgr_getGlobalOptionValues
   (JNIEnv *env, jobject me, jstring optionJS) {
 
-	init();
+	init(env);
 
      const char *option = env->GetStringUTFChars(optionJS, NULL);
 
@@ -528,7 +792,7 @@ JNIEXPORT jobjectArray JNICALL Java_org_crosswire_android_sword_SWMgr_getGlobalO
 JNIEXPORT void JNICALL Java_org_crosswire_android_sword_SWMgr_setCipherKey
   (JNIEnv *env, jobject me , jstring modNameJS, jstring keyJS) {
 
-	init();
+	init(env);
 
      const char *modName = env->GetStringUTFChars(modNameJS, NULL);
      const char *key     = env->GetStringUTFChars(keyJS, NULL);
@@ -548,7 +812,7 @@ JNIEXPORT void JNICALL Java_org_crosswire_android_sword_SWMgr_setCipherKey
 JNIEXPORT void JNICALL Java_org_crosswire_android_sword_SWMgr_setJavascript
   (JNIEnv *env, jobject me, jboolean val) {
 
-	init();
+	init(env);
 
 	mgr->setJavascript(val == JNI_TRUE);
 }
@@ -562,7 +826,7 @@ JNIEXPORT void JNICALL Java_org_crosswire_android_sword_SWMgr_setJavascript
 JNIEXPORT jobjectArray JNICALL Java_org_crosswire_android_sword_SWMgr_getAvailableLocales
   (JNIEnv *env, jobject me) {
 
-	init();
+	init(env);
 
 	sword::StringList localeNames = LocaleMgr::getSystemLocaleMgr()->getAvailableLocales();
 	int count = 0;
@@ -589,7 +853,7 @@ JNIEXPORT jobjectArray JNICALL Java_org_crosswire_android_sword_SWMgr_getAvailab
 JNIEXPORT void JNICALL Java_org_crosswire_android_sword_SWMgr_setDefaultLocale
   (JNIEnv *env, jobject me, jstring localeNameJS) {
 
-	init();
+	init(env);
 
      const char *localeName = env->GetStringUTFChars(localeNameJS, NULL);
 
@@ -605,7 +869,7 @@ JNIEXPORT void JNICALL Java_org_crosswire_android_sword_SWMgr_setDefaultLocale
 
 SWModule *getModule(JNIEnv *env, jobject me) {
 
-	init(); 
+	init(env);
 
 	SWModule *module = 0;
 	jclass clazzSWModule = env->FindClass("org/crosswire/android/sword/SWModule");
@@ -637,7 +901,7 @@ SWModule *getModule(JNIEnv *env, jobject me) {
 JNIEXPORT void JNICALL Java_org_crosswire_android_sword_SWModule_setKeyText
   (JNIEnv *env, jobject me, jstring keyTextJS) {
 
-	init();
+	init(env);
 
 	SWModule *module = getModule(env, me);
 
@@ -675,7 +939,7 @@ SWLog::getSystemLog()->logDebug("setting book to %d", newBook);
 JNIEXPORT jstring JNICALL Java_org_crosswire_android_sword_SWModule_getKeyText
   (JNIEnv *env, jobject me) {
 
-	init();
+	init(env);
 
 	SWModule *module = getModule(env, me);
 
@@ -695,7 +959,7 @@ JNIEXPORT jstring JNICALL Java_org_crosswire_android_sword_SWModule_getKeyText
 JNIEXPORT jstring JNICALL Java_org_crosswire_android_sword_SWModule_getRenderText
   (JNIEnv *env, jobject me) {
 
-	init();
+	init(env);
 
 	SWModule *module = getModule(env, me);
 
@@ -715,7 +979,7 @@ JNIEXPORT jstring JNICALL Java_org_crosswire_android_sword_SWModule_getRenderTex
 JNIEXPORT jstring JNICALL Java_org_crosswire_android_sword_SWModule_getRenderHeader
   (JNIEnv *env, jobject me) {
 
-	init();
+	init(env);
 
 	SWModule *module = getModule(env, me);
 
@@ -735,7 +999,7 @@ JNIEXPORT jstring JNICALL Java_org_crosswire_android_sword_SWModule_getRenderHea
 JNIEXPORT void JNICALL Java_org_crosswire_android_sword_SWModule_terminateSearch
   (JNIEnv *env, jobject me) {
 
-	init(); 
+	init(env);
 
 	SWModule *module = getModule(env, me);
 
@@ -753,7 +1017,7 @@ JNIEXPORT void JNICALL Java_org_crosswire_android_sword_SWModule_terminateSearch
 JNIEXPORT jchar JNICALL Java_org_crosswire_android_sword_SWModule_error
   (JNIEnv *env, jobject me) {
 
-	init(); 
+	init(env);
 
 	SWModule *module = getModule(env, me);
 	
@@ -770,7 +1034,7 @@ JNIEXPORT jchar JNICALL Java_org_crosswire_android_sword_SWModule_error
 JNIEXPORT jlong JNICALL Java_org_crosswire_android_sword_SWModule_getEntrySize
   (JNIEnv *env, jobject me) {
 
-	init(); 
+	init(env);
 
 	SWModule *module = getModule(env, me);
 
@@ -786,7 +1050,7 @@ JNIEXPORT jlong JNICALL Java_org_crosswire_android_sword_SWModule_getEntrySize
 JNIEXPORT jobjectArray JNICALL Java_org_crosswire_android_sword_SWModule_getEntryAttribute
   (JNIEnv *env, jobject me, jstring level1JS, jstring level2JS, jstring level3JS, jboolean filteredJS) {
 
-	init(); 
+	init(env);
 
 	const char *level1 = env->GetStringUTFChars(level1JS, NULL);
 	const char *level2 = env->GetStringUTFChars(level2JS, NULL);
@@ -895,7 +1159,7 @@ SWLog::getSystemLog()->logDebug("getEntryAttributes: size returned: %d", results
 JNIEXPORT jobjectArray JNICALL Java_org_crosswire_android_sword_SWModule_parseKeyList
   (JNIEnv *env, jobject me, jstring keyListTextJS) {
 
-	init(); 
+	init(env);
 
 	const char *keyListText = env->GetStringUTFChars(keyListTextJS, NULL);
 
@@ -940,7 +1204,7 @@ JNIEXPORT jobjectArray JNICALL Java_org_crosswire_android_sword_SWModule_parseKe
 JNIEXPORT jboolean JNICALL Java_org_crosswire_android_sword_SWModule_hasKeyChildren
   (JNIEnv *env, jobject me) {
 
-	init(); 
+	init(env);
 
 
 	SWModule *module = getModule(env, me);
@@ -965,7 +1229,7 @@ JNIEXPORT jboolean JNICALL Java_org_crosswire_android_sword_SWModule_hasKeyChild
 JNIEXPORT jobjectArray JNICALL Java_org_crosswire_android_sword_SWModule_getKeyChildren
   (JNIEnv *env, jobject me) {
 
-	init(); 
+	init(env);
 
 
 	jclass clazzString = env->FindClass("java/lang/String");
@@ -1024,8 +1288,8 @@ JNIEXPORT jobjectArray JNICALL Java_org_crosswire_android_sword_SWModule_getKeyC
 				}
 			}
 		}
-		return ret;
 	}
+	return ret;
 }
 
 
@@ -1037,7 +1301,7 @@ JNIEXPORT jobjectArray JNICALL Java_org_crosswire_android_sword_SWModule_getKeyC
 JNIEXPORT jstring JNICALL Java_org_crosswire_android_sword_SWModule_getKeyParent
   (JNIEnv *env, jobject me) {
 
-	init(); 
+	init(env);
 
 
 	SWBuf retVal = "";
@@ -1067,7 +1331,7 @@ JNIEXPORT jstring JNICALL Java_org_crosswire_android_sword_SWModule_getKeyParent
 JNIEXPORT void JNICALL Java_org_crosswire_android_sword_SWModule_previous
   (JNIEnv *env, jobject me) {
 
-	init(); 
+	init(env);
 
 
 	SWModule *module = getModule(env, me);
@@ -1086,7 +1350,7 @@ JNIEXPORT void JNICALL Java_org_crosswire_android_sword_SWModule_previous
 JNIEXPORT void JNICALL Java_org_crosswire_android_sword_SWModule_next
   (JNIEnv *env, jobject me) {
 
-	init(); 
+	init(env);
 
 
 	SWModule *module = getModule(env, me);
@@ -1105,7 +1369,7 @@ JNIEXPORT void JNICALL Java_org_crosswire_android_sword_SWModule_next
 JNIEXPORT void JNICALL Java_org_crosswire_android_sword_SWModule_begin
   (JNIEnv *env, jobject me) {
 
-	init(); 
+	init(env);
 
 
 	SWModule *module = getModule(env, me);
@@ -1124,7 +1388,7 @@ JNIEXPORT void JNICALL Java_org_crosswire_android_sword_SWModule_begin
 JNIEXPORT jstring JNICALL Java_org_crosswire_android_sword_SWModule_getStripText
   (JNIEnv *env, jobject me) {
 
-	init(); 
+	init(env);
 
 
 	SWBuf retVal = "";
@@ -1147,7 +1411,7 @@ JNIEXPORT jstring JNICALL Java_org_crosswire_android_sword_SWModule_getStripText
 JNIEXPORT jstring JNICALL Java_org_crosswire_android_sword_SWModule_getRawEntry
   (JNIEnv *env, jobject me) {
 
-	init(); 
+	init(env);
 
 
 	SWBuf retVal = "";
@@ -1170,7 +1434,7 @@ JNIEXPORT jstring JNICALL Java_org_crosswire_android_sword_SWModule_getRawEntry
 JNIEXPORT void JNICALL Java_org_crosswire_android_sword_SWModule_setRawEntry
   (JNIEnv *env, jobject me, jstring newEntryTextJS) {
 
-	init(); 
+	init(env);
 
 
 	const char *newEntryText = env->GetStringUTFChars(newEntryTextJS, NULL);
@@ -1212,7 +1476,7 @@ SWLog::getSystemLog()->logDebug("newBigString: returning");
 JNIEXPORT jstring JNICALL Java_org_crosswire_android_sword_SWModule_getConfigEntry
   (JNIEnv *env, jobject me, jstring configKeyJS) {
 
-	init(); 
+	init(env);
 
 
 	jstring retVal = 0;
@@ -1242,7 +1506,7 @@ SWLog::getSystemLog()->logDebug("getConfigEntry(%s)\n", configKey);
 JNIEXPORT void JNICALL Java_org_crosswire_android_sword_SWModule_deleteSearchFramework
   (JNIEnv *env, jobject me) {
 
-	init(); 
+	init(env);
 
 
 	SWModule *module = getModule(env, me);
@@ -1261,7 +1525,7 @@ JNIEXPORT void JNICALL Java_org_crosswire_android_sword_SWModule_deleteSearchFra
 JNIEXPORT jboolean JNICALL Java_org_crosswire_android_sword_SWModule_hasSearchFramework
   (JNIEnv *env, jobject me) {
 
-	init(); 
+	init(env);
 
 
 	SWModule *module = getModule(env, me);
@@ -1304,7 +1568,7 @@ void percentUpdate(char percent, void *userData) {
 JNIEXPORT jobjectArray JNICALL Java_org_crosswire_android_sword_SWModule_search
   (JNIEnv *env, jobject me, jstring expressionJS, jint srchType, jlong flags, jstring scopeJS, jobject progressReporter) {
 
-	init(); 
+	init(env);
 
 	const int MAX_RETURN_COUNT = 999999;
 
@@ -1417,7 +1681,7 @@ JNIEXPORT jint JNICALL Java_org_crosswire_android_sword_InstallMgr_syncConfig
 JNIEXPORT jint JNICALL Java_org_crosswire_android_sword_InstallMgr_uninstallModule
   (JNIEnv *env, jobject me, jstring modNameJS) {
 
-	init();
+	init(env);
 	initInstall();
 
 	const char *modName = env->GetStringUTFChars(modNameJS, NULL);
@@ -1498,7 +1762,7 @@ JNIEXPORT jobjectArray JNICALL Java_org_crosswire_android_sword_InstallMgr_getRe
   (JNIEnv *env, jobject me, jstring sourceNameJS) {
 
 SWLog::getSystemLog()->logDebug("getRemoteModInfoList\n");
-	init();
+	init(env);
 	initInstall();
 
 	const char *sourceName = env->GetStringUTFChars(sourceNameJS, NULL);
@@ -1571,7 +1835,7 @@ SWLog::getSystemLog()->logDebug("remoteListModules returning %d length array\n",
 JNIEXPORT jint JNICALL Java_org_crosswire_android_sword_InstallMgr_remoteInstallModule
   (JNIEnv *env, jobject me, jstring sourceNameJS, jstring modNameJS, jobject progressReporter) {
 
-	init();
+	init(env);
 	initInstall();
 
 	installStatusReporter->init(env, progressReporter);
@@ -1704,12 +1968,13 @@ JNIEXPORT void JNICALL Java_org_crosswire_android_sword_SWMgr_sendBibleSyncMessa
  */
 JNIEXPORT void JNICALL Java_org_crosswire_android_sword_SWMgr_registerBibleSyncListener
   (JNIEnv *env, jobject me, jobject bibleSyncListener) {
+
+#ifdef BIBLESYNC
 SWLog::getSystemLog()->logDebug("registerBibleSyncListener");
 	::bibleSyncListener = bibleSyncListener;
 	::bibleSyncListenerEnv = env;
 SWLog::getSystemLog()->logDebug("registerBibleSyncListener - calling init");
 	initBibleSync();
-#ifdef BIBLESYNC
 SWLog::getSystemLog()->logDebug("registerBibleSyncListener - starting while listener");
 	while(::bibleSyncListener) {
 SWLog::getSystemLog()->logDebug("bibleSyncListener - while loop iteration");
