@@ -46,6 +46,7 @@ SET(TRIAL_LIBRARY_PATHS
 	/opt/local/lib${LIB_SUFFIX}
 	/usr/lib${LIB_SUFFIX}
 	/usr/lib64
+	${LIB_INSTALL_DIR}
 	/sw/lib${LIB_SUFFIX}
 	/usr/pkg/lib${LIB_SUFFIX}
 	${WIN_CLUCENE_SEARCH_PATH}
