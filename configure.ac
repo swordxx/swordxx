@@ -76,6 +76,8 @@ AC_ARG_WITH([icuregex],
 	AS_HELP_STRING([--with-icuregex], [use ICU regex engine]))
 AC_ARG_WITH(xapian,
 	AC_HELP_STRING([--with-xapian],[use xapian search engine (default=yes)]),,with_xapian=yes)
+AC_ARG_WITH([gapi],
+	AS_HELP_STRING([--with-gapi], [build SWORD with support for google apis]),,with_gapi=no)
 
 
 # ---------------------------------------------------------------------
@@ -447,6 +449,7 @@ AM_CONDITIONAL(INSTCONF, test x$with_conf = xyes)
 AM_CONDITIONAL(USECXX11REGEX, test x$with_cxx11regex = xyes)
 AM_CONDITIONAL(USEICUREGEX, test x$with_icuregex = xyes)
 AM_CONDITIONAL(WITHCURL, test x$with_curl = xyes)
+AM_CONDITIONAL(WITHGAPI, test x$with_gapi = xyes)
 AM_CONDITIONAL(WITHCURLSFTP, test x$with_curl_sftp = xyes)
 AM_CONDITIONAL(INTERNALFTPLIB, test x$with_internalftplib = xyes)
 AM_CONDITIONAL(USE_INTERNAL_REGEX, test x$with_internalregex = xyes)
@@ -489,5 +492,6 @@ echo     "     ICUSWORD:             $with_icusword"
 echo     "     CXX11-REGEX:          $with_cxx11regex"
 echo     "     ICU-REGEX:            $with_icuregex"
 echo     "     XAPIAN-CORE:          $with_xapian"
+echo     "     GAPI:                 $with_gapi"
 
 
