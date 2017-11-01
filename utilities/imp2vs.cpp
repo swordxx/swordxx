@@ -44,6 +44,7 @@
 #include <xzcomprs.h>
 #endif
 #include <localemgr.h>
+#include <cipherfil.h>
 
 #ifndef NO_SWORD_NAMESPACE
 using namespace sword;
@@ -72,6 +73,8 @@ void usage(const char *progName, const char *error = 0) {
 		fprintf(stderr, "\t\t\t\t\t%s\n", (*loop).c_str());
 	}
 	fprintf(stderr, "  -l <locale>\t\t specify a locale scheme to use (default is en)\n");
+	fprintf(stderr, "  -c <cipher_key>\t encipher module using supplied key\n");
+	fprintf(stderr, "\t\t\t\t (default no enciphering)\n");
 	fprintf(stderr, "\n");
 	fprintf(stderr, "'imp' format is a simple standard for importing data into SWORD modules.\n"
 		"Required is a plain text file containing $$$key lines followed by content.\n\n"
@@ -104,6 +107,7 @@ int main(int argc, char **argv) {
 	bool fourByteSize      = false;
 	bool append	    = false;
 	int iType	      = 4;
+	SWBuf cipherKey        = "";
 	SWCompress *compressor = 0;
 	SWBuf compType	 = "";
 
@@ -149,6 +153,10 @@ int main(int argc, char **argv) {
 		else if (!strcmp(argv[i], "-l")) {
 			if (i+1 < argc) locale = argv[++i];
 			else usage(progName, "-l requires <locale>");
+		}
+		else if (!strcmp(argv[i], "-c")) {
+			if (i+1 < argc) cipherKey = argv[++i];
+			else usage(*argv, "-c requires <cipher_key>");
 		}
 		else usage(progName, (((SWBuf)"Unknown argument: ")+ argv[i]).c_str());
 	}
@@ -220,6 +228,14 @@ int main(int argc, char **argv) {
 			? (SWModule *)new RawText(outPath, 0, 0, 0, ENC_UNKNOWN, DIRECTION_LTR, FMT_UNKNOWN, 0, v11n)
 			: (SWModule *)new RawText4(outPath, 0, 0, 0, ENC_UNKNOWN, DIRECTION_LTR, FMT_UNKNOWN, 0, v11n);
 	}
+
+	SWFilter *cipherFilter = 0;
+
+	if (cipherKey.length()) {
+		fprintf(stderr, "Adding cipher filter with phrase: %s\n", cipherKey.c_str() );
+		cipherFilter = new CipherFilter(cipherKey.c_str());
+		module->addRawFilter(cipherFilter);
+	}
 	// -----------------------------------------------------
 	
 	// setup locale manager
@@ -268,6 +284,8 @@ int main(int argc, char **argv) {
 	}
 
 	delete module;
+	if (cipherFilter)
+		delete cipherFilter;
 	delete vkey;
 
 	FileMgr::getSystemFileMgr()->close(fd);
