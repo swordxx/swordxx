@@ -66,7 +66,7 @@ char OSISWordJS::processText(SWBuf &text, const SWKey *key, const SWModule *modu
 		int tokpos = 0;
 		bool intoken = false;
 		int wordNum = 1;
-		char wordstr[5];
+		char wordstr[11];
 		SWBuf modName = (module)?module->getName():"";
 		// add TR to w src in KJV then remove this next line
 		SWBuf wordSrcPrefix = (modName == "KJV")?SWBuf("TR"):modName;

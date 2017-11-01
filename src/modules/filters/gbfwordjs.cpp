@@ -137,7 +137,7 @@ char GBFWordJS::processText(SWBuf &text, const SWKey *key, const SWModule *modul
 				text += token;
 				text += '>';
 				if (needWordOut) {
-					char wstr[10];
+					char wstr[11];
 					sprintf(wstr, "%03d", word-2);
 					AttributeValue *wAttrs = &(module->getEntryAttributes()["Word"][wstr]);
 					needWordOut = false;
@@ -234,7 +234,7 @@ char GBFWordJS::processText(SWBuf &text, const SWKey *key, const SWModule *modul
 			}
 		}
 
-		char wstr[10];
+		char wstr[11];
 		sprintf(wstr, "%03d", word-1);
 		AttributeValue *wAttrs = &(module->getEntryAttributes()["Word"][wstr]);
 		needWordOut = false;

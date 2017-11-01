@@ -68,7 +68,7 @@ char ThMLWordJS::processText(SWBuf &text, const SWKey *key, const SWModule *modu
 		char val[128];
 		char *valto;
 		char *ch;
-		char wordstr[5];
+		char wordstr[11];
 		unsigned int textStart = 0, lastAppendLen = 0, textEnd = 0;
 		SWBuf tmp;
 		bool newText = false;
@@ -151,7 +151,7 @@ char ThMLWordJS::processText(SWBuf &text, const SWKey *key, const SWModule *modu
 				text += token;
 				text += '>';
 				if (needWordOut) {
-					char wstr[10];
+					char wstr[11];
 					sprintf(wstr, "%03d", word-2);
 					AttributeValue *wAttrs = &(module->getEntryAttributes()["Word"][wstr]);
 					needWordOut = false;
@@ -248,7 +248,7 @@ char ThMLWordJS::processText(SWBuf &text, const SWKey *key, const SWModule *modu
 			}
 		}
 
-		char wstr[10];
+		char wstr[11];
 		sprintf(wstr, "%03d", word-1);
 		AttributeValue *wAttrs = &(module->getEntryAttributes()["Word"][wstr]);
 		needWordOut = false;

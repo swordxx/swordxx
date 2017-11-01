@@ -57,7 +57,7 @@ char OSISStrongs::processText(SWBuf &text, const SWKey *key, const SWModule *mod
 	SWBuf token;
 	bool intoken = false;
 	int wordNum = 1;
-	char wordstr[5];
+	char wordstr[11];
 	const char *wordStart = 0;
 	SWBuf page = "";		// some modules include <seg> page info, so we add these to the words
 

@@ -44,7 +44,7 @@ char GreekLexAttribs::processText(SWBuf &text, const SWKey *key, const SWModule 
 		string phrase;
 		string freq;
 		char val[128], *valto;
-		char wordstr[7];
+		char wordstr[11];
 		const char *currentPhrase = 0;
 		const char *currentPhraseEnd = 0;
 		int number = 0;
