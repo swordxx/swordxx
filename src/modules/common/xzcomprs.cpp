@@ -110,7 +110,7 @@ void XzCompress::Encode(void)
 			case LZMA_MEM_ERROR: fprintf(stderr, "ERROR: not enough memory during compression.\n"); break;
 			case LZMA_DATA_ERROR: fprintf(stderr, "ERROR: corrupt data during compression.\n"); break;
 			case LZMA_PROG_ERROR: fprintf(stderr, "ERROR: program error encountered during decompression.\n"); break;
-			default: fprintf(stderr, "ERROR: an unknown error occured during compression.\n"); break;
+			default: fprintf(stderr, "ERROR: an unknown error occurred during compression.\n"); break;
 		}
 	}
 	else
