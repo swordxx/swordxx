@@ -125,12 +125,12 @@ void SWConfig::save() const {
 	cfile = FileMgr::getSystemFileMgr()->open(getFileName().c_str(), FileMgr::RDWR|FileMgr::CREAT|FileMgr::TRUNC);
 	if (cfile->getFd() > 0) {
 		
-		for (sit = getSections().begin(); sit != getSections().end(); sit++) {
+		for (sit = getSections().begin(); sit != getSections().end(); ++sit) {
 			buf =  "\n[";
 			buf += (*sit).first.c_str();
 			buf += "]\n";
 			cfile->write(buf.c_str(), buf.length());
-			for (entry = (*sit).second.begin(); entry != (*sit).second.end(); entry++) {
+			for (entry = (*sit).second.begin(); entry != (*sit).second.end(); ++entry) {
 				buf = (*entry).first.c_str();
 				buf += "=";
 				buf += (*entry).second.c_str();
@@ -150,14 +150,14 @@ void SWConfig::augment(SWConfig &addFrom) {
 	SectionMap::iterator section;
 	ConfigEntMap::iterator entry, start, end;
 
-	for (section = addFrom.getSections().begin(); section != addFrom.getSections().end(); section++) {
-		for (entry = (*section).second.begin(); entry != (*section).second.end(); entry++) {
+	for (section = addFrom.getSections().begin(); section != addFrom.getSections().end(); ++section) {
+		for (entry = (*section).second.begin(); entry != (*section).second.end(); ++entry) {
 			start = getSections()[section->first].lower_bound(entry->first);
 			end   = getSections()[section->first].upper_bound(entry->first);
 			if (start != end) {
 				if (((++start) != end)
 						|| ((++(addFrom.getSections()[section->first].lower_bound(entry->first))) != addFrom.getSections()[section->first].upper_bound(entry->first))) {
-					for (--start; start != end; start++) {
+					for (--start; start != end; ++start) {
 						if (!strcmp(start->second.c_str(), entry->second.c_str()))
 							break;
 					}
