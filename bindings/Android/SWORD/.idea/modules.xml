@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file:///data/home/scribe/src/sword/bindings/Android/SWORD/SWORD.iml" filepath="/data/home/scribe/src/sword/bindings/Android/SWORD/SWORD.iml" />
+      <module fileurl="file:///data/home/scribe/src/sword/bindings/Android/SWORD/app/app.iml" filepath="/data/home/scribe/src/sword/bindings/Android/SWORD/app/app.iml" />
+    </modules>
+  </component>
+</project>
