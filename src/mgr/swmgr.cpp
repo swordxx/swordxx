@@ -447,7 +447,7 @@ void SWMgr::findConfig(char *configType, char **prefixPath, char **configPath, s
 			SWLog::getSystemLog()->logDebug("Overriding any systemwide or ~/.sword/ sword.conf with one found in current directory.");
 			sysConfPath = "./sword.conf";
 			sysConf = new SWConfig(sysConfPath);
-			if ((entry = sysConf->Sections["Install"].find("DataPath")) != sysConf->Sections["Install"].end()) {
+			if ((entry = sysConf->getSection("Install").find("DataPath")) != sysConf->getSection("Install").end()) {
 				sysConfDataPath = (*entry).second;
 			}
 			if (providedSysConf) {
@@ -559,7 +559,7 @@ void SWMgr::findConfig(char *configType, char **prefixPath, char **configPath, s
 	}
 
 	if (sysConf) {
-		if ((entry = sysConf->Sections["Install"].find("DataPath")) != sysConf->Sections["Install"].end()) {
+		if ((entry = sysConf->getSection("Install").find("DataPath")) != sysConf->getSection("Install").end()) {
 			sysConfDataPath = (*entry).second;
 		}
 		if (sysConfDataPath.size()) {
@@ -594,8 +594,8 @@ void SWMgr::findConfig(char *configType, char **prefixPath, char **configPath, s
 	if (sysConf) {
 		if (augPaths) {
 			augPaths->clear();
-			entry     = sysConf->Sections["Install"].lower_bound("AugmentPath");
-			lastEntry = sysConf->Sections["Install"].upper_bound("AugmentPath");
+			entry     = sysConf->getSection("Install").lower_bound("AugmentPath");
+			lastEntry = sysConf->getSection("Install").upper_bound("AugmentPath");
 			for (;entry != lastEntry; entry++) {
 				path = entry->second;
 				if ((entry->second.c_str()[strlen(entry->second.c_str())-1] != '\\') && (entry->second.c_str()[strlen(entry->second.c_str())-1] != '/'))
@@ -762,8 +762,8 @@ void SWMgr::augmentModules(const char *ipath, bool multiMod) {
 			// fix config's Section names to rename modules which are available more than once
 			// find out which sections are in both config objects
 			// inserting all configs first is not good because that overwrites old keys and new modules would share the same config
-			for (SectionMap::iterator it = config->Sections.begin(); it != config->Sections.end();) {
-				if (saveConfig->Sections.find( (*it).first ) != saveConfig->Sections.end()) { //if the new section is already present rename it
+			for (SectionMap::iterator it = config->getSections().begin(); it != config->getSections().end();) {
+				if (saveConfig->getSections().find((*it).first) != saveConfig->getSections().end()) { //if the new section is already present rename it
 					ConfigEntMap entMap((*it).second);
 					
 					SWBuf name;
@@ -771,11 +771,11 @@ void SWMgr::augmentModules(const char *ipath, bool multiMod) {
 					do { //module name already used?
 						name.setFormatted("%s_%d", (*it).first.c_str(), i);
 						i++;
-					} while (config->Sections.find(name) != config->Sections.end());
+					} while (config->getSections().find(name) != config->getSections().end());
 					
-					config->Sections.insert(SectionMap::value_type(name, entMap) );
+					config->getSections().insert(SectionMap::value_type(name, entMap) );
 					SectionMap::iterator toErase = it++;
-					config->Sections.erase(toErase);
+					config->getSections().erase(toErase);
 				}
 				else ++it;
 			}
@@ -827,7 +827,7 @@ signed char SWMgr::Load() {
 
 		DeleteMods();
 
-		for (Sectloop = config->Sections.lower_bound("Globals"), Sectend = config->Sections.upper_bound("Globals"); Sectloop != Sectend; Sectloop++) {		// scan thru all 'Globals' sections
+		for (Sectloop = config->getSections().lower_bound("Globals"), Sectend = config->getSections().upper_bound("Globals"); Sectloop != Sectend; Sectloop++) {		// scan thru all 'Globals' sections
 			for (Entryloop = (*Sectloop).second.lower_bound("AutoInstall"), Entryend = (*Sectloop).second.upper_bound("AutoInstall"); Entryloop != Entryend; Entryloop++)	// scan thru all AutoInstall entries
 				InstallScan((*Entryloop).second.c_str());		// Scan AutoInstall entry directory for new modules and install
 		}		
@@ -836,7 +836,7 @@ signed char SWMgr::Load() {
 			config = myconfig = 0;
 			loadConfigDir(configPath);
 		}
-		else	config->Load();
+		else	config->load();
 
 		CreateMods(mgrModeMultiMod);
 
@@ -1290,7 +1290,7 @@ void SWMgr::CreateMods(bool multiMod) {
 	ConfigEntMap::iterator entry;
 	SWModule *newmod;
 	SWBuf driver, misc1;
-	for (it = config->Sections.begin(); it != config->Sections.end(); it++) {
+	for (it = config->getSections().begin(); it != config->getSections().end(); it++) {
 		ConfigEntMap &section = (*it).second;
 		newmod = 0;
 		
@@ -1390,7 +1390,7 @@ void SWMgr::InstallScan(const char *dirname)
 					// mods.conf
 					else {
 						if (!conffd) {
-							conffd = FileMgr::getSystemFileMgr()->open(config->filename.c_str(), FileMgr::WRONLY|FileMgr::APPEND);
+							conffd = FileMgr::getSystemFileMgr()->open(config->getFileName().c_str(), FileMgr::WRONLY|FileMgr::APPEND);
 							if (conffd > 0)
 								conffd->seek(0L, SEEK_END);
 							else {

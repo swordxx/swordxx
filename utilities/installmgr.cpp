@@ -194,7 +194,7 @@ void createBasicConfig(bool enableRemote, bool addCrossWire, bool unverifiedPeer
 	if (enableRemote) {
 		config["Sources"]["FTPSource"] = is.getConfEnt();
 	}
-	config.Save();
+	config.save();
 }
 
 

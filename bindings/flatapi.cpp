@@ -956,7 +956,7 @@ SWHANDLE SWDLLEXPORT org_crosswire_sword_SWMgr_newWithPath(const char *path) {
 		FileMgr::createParent(modsd.c_str());
 		SWConfig config(modsd.c_str());
 		config["Globals"]["HiAndroid"] = "weeee";
-		config.Save();
+		config.save();
 	}
 	return (SWHANDLE) new HandleSWMgr(new WebMgr(confPath.c_str()));
 }
@@ -1283,7 +1283,7 @@ SWHANDLE SWDLLEXPORT org_crosswire_sword_InstallMgr_new
 
 		SWConfig config(confPath.c_str());
 		config["General"]["PassiveFTP"] = "true";
-		config.Save();
+		config.save();
 	}
 	HandleInstMgr *hinstmgr = new HandleInstMgr();
 	hinstmgr->statusReporter.init(statusReporter);

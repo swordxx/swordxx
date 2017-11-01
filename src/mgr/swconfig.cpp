@@ -29,14 +29,18 @@
 
 SWORD_NAMESPACE_START
 
+#if defined(__GNUC__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
 
 SWConfig::SWConfig() {
 }
 
 
-SWConfig::SWConfig(const char * ifilename) {
+SWConfig::SWConfig(const char *ifilename) {
 	filename = ifilename;
-	Load();
+	load();
 }
 
 
@@ -44,9 +48,13 @@ SWConfig::~SWConfig() {
 }
 
 
-void SWConfig::Load() {
+#if defined(__GNUC__)
+#pragma GCC diagnostic pop
+#endif
 
-	if (!filename.size()) return;	// assert we have a filename
+void SWConfig::load() {
+
+	if (!getFileName().size()) return;	// assert we have a filename
 
 	FileDesc *cfile;
 	char *buf, *data;
@@ -55,9 +63,9 @@ void SWConfig::Load() {
 	SWBuf sectname;
 	bool first = true;
 	
-	Sections.erase(Sections.begin(), Sections.end());
+	getSections().erase(getSections().begin(), getSections().end());
 	
-	cfile = FileMgr::getSystemFileMgr()->open(filename.c_str(), FileMgr::RDONLY);
+	cfile = FileMgr::getSystemFileMgr()->open(getFileName().c_str(), FileMgr::RDONLY);
 	if (cfile->getFd() > 0) {
 		bool goodLine = FileMgr::getLine(cfile, line);
 
@@ -76,7 +84,7 @@ void SWConfig::Load() {
 				strcpy(buf, line.c_str());
 				if (*strstrip(buf) == '[') {
 					if (!first)
-						Sections.insert(SectionMap::value_type(sectname, cursect));
+						getSections().insert(SectionMap::value_type(sectname, cursect));
 					else first = false;
 					
 					cursect.erase(cursect.begin(), cursect.end());
@@ -97,27 +105,27 @@ void SWConfig::Load() {
 			goodLine = FileMgr::getLine(cfile, line);
 		}
 		if (!first)
-			Sections.insert(SectionMap::value_type(sectname, cursect));
+			getSections().insert(SectionMap::value_type(sectname, cursect));
 
 		FileMgr::getSystemFileMgr()->close(cfile);
 	}
 }
 
 
-void SWConfig::Save() {
+void SWConfig::save() const {
 
-	if (!filename.size()) return;	// assert we have a filename
+	if (!getFileName().size()) return;	// assert we have a filename
 
 	FileDesc *cfile;
 	SWBuf buf;
-	SectionMap::iterator sit;
-	ConfigEntMap::iterator entry;
+	SectionMap::const_iterator sit;
+	ConfigEntMap::const_iterator entry;
 	SWBuf sectname;
 	
-	cfile = FileMgr::getSystemFileMgr()->open(filename.c_str(), FileMgr::RDWR|FileMgr::CREAT|FileMgr::TRUNC);
+	cfile = FileMgr::getSystemFileMgr()->open(getFileName().c_str(), FileMgr::RDWR|FileMgr::CREAT|FileMgr::TRUNC);
 	if (cfile->getFd() > 0) {
 		
-		for (sit = Sections.begin(); sit != Sections.end(); sit++) {
+		for (sit = getSections().begin(); sit != getSections().end(); sit++) {
 			buf =  "\n[";
 			buf += (*sit).first.c_str();
 			buf += "]\n";
@@ -142,32 +150,45 @@ void SWConfig::augment(SWConfig &addFrom) {
 	SectionMap::iterator section;
 	ConfigEntMap::iterator entry, start, end;
 
-	for (section = addFrom.Sections.begin(); section != addFrom.Sections.end(); section++) {
+	for (section = addFrom.getSections().begin(); section != addFrom.getSections().end(); section++) {
 		for (entry = (*section).second.begin(); entry != (*section).second.end(); entry++) {
-			start = Sections[section->first].lower_bound(entry->first);
-			end   = Sections[section->first].upper_bound(entry->first);
+			start = getSections()[section->first].lower_bound(entry->first);
+			end   = getSections()[section->first].upper_bound(entry->first);
 			if (start != end) {
 				if (((++start) != end)
-						|| ((++(addFrom.Sections[section->first].lower_bound(entry->first))) != addFrom.Sections[section->first].upper_bound(entry->first))) {
+						|| ((++(addFrom.getSections()[section->first].lower_bound(entry->first))) != addFrom.getSections()[section->first].upper_bound(entry->first))) {
 					for (--start; start != end; start++) {
 						if (!strcmp(start->second.c_str(), entry->second.c_str()))
 							break;
 					}
 					if (start == end)
-						Sections[(*section).first].insert(ConfigEntMap::value_type((*entry).first, (*entry).second));
+						getSections()[(*section).first].insert(ConfigEntMap::value_type((*entry).first, (*entry).second));
 				}
-				else	Sections[section->first][entry->first.c_str()] = entry->second.c_str();
+				else	getSections()[section->first][entry->first.c_str()] = entry->second.c_str();
 			}		
-			else	Sections[section->first][entry->first.c_str()] = entry->second.c_str();
+			else	getSections()[section->first][entry->first.c_str()] = entry->second.c_str();
 		}
 	}
 }
 
 
-ConfigEntMap & SWConfig::operator [] (const char *section) {
-    return Sections[section];
-}
+#if defined(__GNUC__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
 
+// TODO: use deprecated public 'Sections' property for now until we remove deprecation
+// and store in private property
+SectionMap &SWConfig::getSections() { return Sections; }
+
+// TODO: use deprecated public 'filename' property for now until we remove deprecation
+// and store in private property
+	
+SWBuf SWConfig::getFileName() const { return filename; }
+
+#if defined(__GNUC__)
+#pragma GCC diagnostic pop
+#endif
 
 SWORD_NAMESPACE_END
 

@@ -85,7 +85,7 @@ LocaleMgr::LocaleMgr(const char *iConfigPath) {
 		SWLog::getSystemLog()->logDebug("LOOKING UP LOCALE DIRECTORY...");
 		SWMgr::findConfig(&configType, &prefixPath, &configPath, &augPaths, &sysConf);
 		if (sysConf) {
-			if ((entry = sysConf->Sections["Install"].find("LocalePath")) != sysConf->Sections["Install"].end()) {
+			if ((entry = sysConf->getSection("Install").find("LocalePath")) != sysConf->getSection("Install").end()) {
 				configType = 9;	// our own
 				stdstr(&prefixPath, (char *)entry->second.c_str());
 				SWLog::getSystemLog()->logDebug("LocalePath provided in sysConfig.");
