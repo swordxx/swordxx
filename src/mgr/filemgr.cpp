@@ -24,6 +24,7 @@
 #include <filemgr.h>
 #include <utilstr.h>
 
+#include <stdlib.h>
 #include <dirent.h>
 #include <fcntl.h>
 #include <sys/stat.h>
@@ -571,6 +572,24 @@ long FileMgr::resourceConsumption() {
 		}
 	}
 	return count;
+}
+
+
+SWBuf FileMgr::getHomeDir() {
+
+	// figure out 'home' directory for app data
+	SWBuf homeDir = getenv("HOME");
+	if (!homeDir.length()) {
+		// silly windows
+		homeDir = getenv("APPDATA");
+	}
+	if (homeDir.length()) {
+		if ((homeDir[homeDir.length()-1] != '\\') && (homeDir[homeDir.length()-1] != '/')) {
+			homeDir += "/";
+		}
+	}
+
+	return homeDir;
 }
 
 

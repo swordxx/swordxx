@@ -42,10 +42,21 @@ public:
 };
 
 /**
-*	This class ist used make file access operations easier.
-* It keeps a list of all open files internally and closes them
-* when the destructor is called.
-*/
+ * This class isolates all file io for SWORD, making OS
+ * level quirks easier to fix.  This class is typically
+ * copied and replaced if necessary to get SWORD to run on
+ * a specific platform (e.g., Windows Mobile), but in
+ * the future, statics should be removed to make possible to
+ * instead simply subclass and override necessary methods.
+ *
+ * This class also provides many convenience methods which
+ * make working with data storage easier.
+ *
+ * Conceptually, this factory exposes an interface which
+ * allows SWORD to 'open' every file it wants, without
+ * worrying about OS limits, and takes care of opening and
+ * closing the actual file descriptors when necessary.
+ */
 class SWDLLEXPORT FileMgr : public SWCacher {
 
 	friend class FileDesc;
@@ -146,6 +157,18 @@ public:
 	static int removeDir(const char *targetDir);
 	static int removeFile(const char *fName);
 	static char getLine(FileDesc *fDesc, SWBuf &line);
+
+	/**
+	 * Determines where SWORD looks for the user's home folder.  This is
+	 * typically used as a place to find any additional personal SWORD
+	 * modules which a user might wish to be added to a system-wide
+	 * library (e.g., added from ~/.sword/mods.d/ or ~/sword/mods.d/)
+	 *
+	 * or if a user or UI wishes to override SWORD system configuration
+	 * settings (e.g., /etc/sword.conf) with a custom configuration
+	 * (e.g., ~/.sword/sword.conf)
+	 */
+	SWBuf getHomeDir();
 
 };
 
