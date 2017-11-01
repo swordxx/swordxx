@@ -54,7 +54,7 @@ public:
 		osisWordJS = new OSISWordJS();
 		thmlWordJS = new ThMLWordJS();
 		gbfWordJS = new GBFWordJS();
-		Load();
+		load();
 		osisWordJS->setDefaultModules(defaultGreekLex, defaultHebLex, defaultGreekParse, defaultHebParse);
 		thmlWordJS->setDefaultModules(defaultGreekLex, defaultHebLex, defaultGreekParse, defaultHebParse);
 		gbfWordJS->setDefaultModules(defaultGreekLex, defaultHebLex, defaultGreekParse, defaultHebParse);
@@ -71,7 +71,7 @@ public:
 	}
 
 
-	void AddGlobalOptions(SWModule *module, ConfigEntMap &section, ConfigEntMap::iterator start, ConfigEntMap::iterator end) {
+	void addGlobalOptionFilters(SWModule *module, ConfigEntMap &section) {
 
 		// ThML word stuff needs to process before strongs strip
 		if (module->getMarkup() == FMT_THML) {
@@ -83,7 +83,7 @@ public:
 		}
 
 		// add other module filters
-		SWMgr::AddGlobalOptions(module, section, start, end);
+		SWMgr::addGlobalOptionFilters(module, section);
 
 		// add our special filters
 		if (module->getConfig().has("Feature", "GreekDef")) {
