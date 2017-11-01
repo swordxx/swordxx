@@ -10,9 +10,10 @@
 %ignore sword::VerseTreeKey::operator const char *;
 %ignore sword::XMLTag::operator const char *;
 
-%ignore sword::StatusReporter::statusUpdate;
 
 %ignore sword::SWDisplay::Display(SWModule&);
+
+%ignore sword::StatusReporter::statusUpdate(double ,double);
 
 %ignore sword::SWKey::Error();
 %ignore sword::SWKey::Persist() const;
@@ -60,3 +61,20 @@
 %ignore sword::VerseKey::TestamentIndex() const;
 %ignore sword::VerseKey::UpperBound;
 %ignore sword::VerseKey::Verse;
+
+%ignore sword::SWMgr::CreateMods(bool);
+%ignore sword::SWMgr::DeleteMods();
+%ignore sword::SWMgr::AddGlobalOptions(SWModule *, ConfigEntMap &, ConfigEntMap::iterator, ConfigEntMap::iterator);
+%ignore sword::SWMgr::AddLocalOptions(SWModule *, ConfigEntMap &, ConfigEntMap::iterator, ConfigEntMap::iterator);
+%ignore sword::SWMgr::AddEncodingFilters(SWModule *, ConfigEntMap &);
+%ignore sword::SWMgr::AddRenderFilters(SWModule *, ConfigEntMap &);
+%ignore sword::SWMgr::AddStripFilters(SWModule *, ConfigEntMap &);
+%ignore sword::SWMgr::AddStripFilters(SWModule *, ConfigEntMap &, ConfigEntMap::iterator, ConfigEntMap::iterator);
+%ignore sword::SWMgr::AddRawFilters(SWModule *, ConfigEntMap &);
+%ignore sword::SWMgr::getHomeDir();
+%ignore sword::SWMgr::Load();
+
+%ignore sword::SWConfig::Sections;
+%ignore sword::SWConfig::filename;
+%ignore sword::SWConfig::Load();
+%ignore sword::SWConfig::Save();
