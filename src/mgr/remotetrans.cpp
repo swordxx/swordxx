@@ -76,14 +76,22 @@ RemoteTransport::~RemoteTransport() {
 
 // override this method in your real transport class
 char RemoteTransport::getURL(const char *destPath, const char *sourceURL, SWBuf *destBuf) {
-	char retVal = 0;
+	SWLog::getSystemLog()->logWarning("RemoteTransport::getURL called but unsupported");
+	char retVal = -1;
+	return retVal;
+}
+
+// override this method in your real transport class
+char RemoteTransport::putURL(const char *destURL, const char *sourcePath, SWBuf *sourceBuf) {
+	SWLog::getSystemLog()->logWarning("RemoteTransport::putURL called but unsupported");
+	char retVal = -1;
 	return retVal;
 }
 
 
 vector<struct DirEntry> RemoteTransport::getDirList(const char *dirURL) {
 
-SWLog::getSystemLog()->logDebug("RemoteTransport::getDirList(%s)", dirURL);
+	SWLog::getSystemLog()->logDebug("RemoteTransport::getDirList(%s)", dirURL);
 	vector<struct DirEntry> dirList;
 	
 	SWBuf dirBuf;

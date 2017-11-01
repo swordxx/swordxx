@@ -15,6 +15,9 @@ FTP_SOURCES += $(mgrdir)/curlhttpt.cpp
 else
 FTP_SOURCES = $(mgrdir)/ftplibftpt.cpp
 endif
+if WITHGAPI
+FTP_SOURCES += $(mgrdir)/rtranspgdrive.cpp
+endif
 
 libsword_la_SOURCES += $(FTP_SOURCES)
 libsword_la_SOURCES += $(mgrdir)/swconfig.cpp

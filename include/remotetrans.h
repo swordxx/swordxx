@@ -69,6 +69,13 @@ public:
 	 */
 	virtual char getURL(const char *destPath, const char *sourceURL, SWBuf *destBuf = 0);
 
+	/***********
+	 * override this method in your real impl
+	 *
+	 * if sourceBuf then read from buffer instead of file
+	 */
+	virtual char putURL(const char *destURL, const char *sourcePath, SWBuf *sourceBuf = 0);
+
 
 	int copyDirectory(const char *urlPrefix, const char *dir, const char *dest, const char *suffix);
 
