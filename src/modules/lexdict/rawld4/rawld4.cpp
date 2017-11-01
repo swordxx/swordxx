@@ -187,7 +187,7 @@ void RawLD4::deleteEntry() {
 
 
 long RawLD4::getEntryCount() const {
-	if (idxfd < 0) return 0;
+	if (!idxfd || idxfd->getFd() < 0) return 0;
 	return idxfd->seek(0, SEEK_END) / IDXENTRYSIZE;
 }
 

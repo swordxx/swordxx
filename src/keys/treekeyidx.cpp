@@ -62,7 +62,7 @@ TreeKeyIdx::TreeKeyIdx(const char *idxPath, int fileMode) : currentNode() {
 	buf.setFormatted("%s.dat", path);
 	datfd = FileMgr::getSystemFileMgr()->open(buf, fileMode, true);
 
-	if (datfd <= 0) {
+	if (!datfd || datfd->getFd() < 0) {
 		SWLog::getSystemLog()->logError("%d", errno);
 		error = errno;
 	}
@@ -332,7 +332,7 @@ void TreeKeyIdx::getTreeNodeFromDatOffset(long ioffset, TreeNode *node) const {
 	__s32  tmp;
 	__u16  tmp2;
 
-	if (datfd > 0) {
+	if (datfd && datfd->getFd() >= 0) {
 
 		datfd->seek(ioffset, SEEK_SET);
 
@@ -386,20 +386,18 @@ char TreeKeyIdx::getTreeNodeFromIdxOffset(long ioffset, TreeNode *node) const {
 	}
 
 	node->offset = (__s32)ioffset;
-	if (idxfd > 0) {
-		if (idxfd->getFd() > 0) {
-			idxfd->seek(ioffset, SEEK_SET);
+	if (idxfd && idxfd->getFd() >= 0) {
+		idxfd->seek(ioffset, SEEK_SET);
+		if (idxfd->read(&offset, 4) == 4) {
+			offset = swordtoarch32(offset);
+			error = (error == 77) ? KEYERR_OUTOFBOUNDS : 0;
+			getTreeNodeFromDatOffset(offset, node);
+		}
+		else {
+			idxfd->seek(-4, SEEK_END);
 			if (idxfd->read(&offset, 4) == 4) {
 				offset = swordtoarch32(offset);
-				error = (error == 77) ? KEYERR_OUTOFBOUNDS : 0;
 				getTreeNodeFromDatOffset(offset, node);
-			}
-			else {
-				idxfd->seek(-4, SEEK_END);
-				if (idxfd->read(&offset, 4) == 4) {
-					offset = swordtoarch32(offset);
-					getTreeNodeFromDatOffset(offset, node);
-				}
 			}
 		}
 	}
@@ -423,7 +421,7 @@ void TreeKeyIdx::saveTreeNodeOffsets(TreeNode *node) {
 	long datOffset = 0;
 	__s32 tmp;
 
-	if (idxfd > 0) {
+	if (idxfd && idxfd->getFd() >= 0) {
 		idxfd->seek(node->offset, SEEK_SET);
 		if (idxfd->read(&tmp, 4) != 4) {
 			datOffset = datfd->seek(0, SEEK_END);
@@ -489,7 +487,7 @@ void TreeKeyIdx::copyFrom(const TreeKeyIdx &ikey) {
 void TreeKeyIdx::saveTreeNode(TreeNode *node) {
 	long datOffset = 0;
 	__s32 tmp;
-	if (idxfd > 0) {
+	if (idxfd && idxfd->getFd() >= 0) {
 
 		idxfd->seek(node->offset, SEEK_SET);
 		datOffset = datfd->seek(0, SEEK_END);

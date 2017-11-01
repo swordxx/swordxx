@@ -74,7 +74,7 @@ RawStr::RawStr(const char *ipath, int fileMode, bool caseSensitive) : caseSensit
 	buf.setFormatted("%s.dat", path);
 	datfd = FileMgr::getSystemFileMgr()->open(buf, fileMode, true);
 
-	if (datfd < 0) {
+	if (!datfd || datfd->getFd() < 0) {
 		SWLog::getSystemLog()->logError("%d", errno);
 	}
 
@@ -111,7 +111,7 @@ void RawStr::getIDXBufDat(long ioffset, char **buf) const
 {
 	int size;
 	char ch;
-	if (datfd > 0) {
+	if (datfd && datfd->getFd() >= 0) {
 		datfd->seek(ioffset, SEEK_SET);
 		for (size = 0; datfd->read(&ch, 1) == 1; size++) {
 			if ((ch == '\\') || (ch == 10) || (ch == 13))
@@ -145,7 +145,7 @@ void RawStr::getIDXBuf(long ioffset, char **buf) const
 {
 	__u32 offset;
 	
-	if (idxfd > 0) {
+	if (idxfd && idxfd->getFd() >= 0) {
 		idxfd->seek(ioffset, SEEK_SET);
 		idxfd->read(&offset, 4);
 
