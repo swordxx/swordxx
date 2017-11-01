@@ -4,7 +4,7 @@ To run a test:
 
 ./runtest.sh test
 
-This will run test.sh > test.try and compair test.try to test.good and report any differences (failures)
+This will run test.sh > test.try and compare test.try to test.good and report any differences (failures)
 
 To run all tests:
 
