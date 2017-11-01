@@ -152,7 +152,7 @@ void init() {
 		if (!mgr->config)
 			usage(0, "ERROR: SWORD configuration not found.  Please configure SWORD before using this program.");
 
-		SWBuf baseDir = mgr->getHomeDir();
+		SWBuf baseDir = FileMgr::getSystemFileMgr()->getHomeDir();
 		if (baseDir.length() < 1) baseDir = ".";
 		baseDir += "/.sword/InstallMgr";
 		confPath = baseDir + "/InstallMgr.conf";

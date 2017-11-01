@@ -38,9 +38,9 @@ class DiathekeMgr : public SWMgr {
 #endif
 
 protected:
-	virtual void AddRenderFilters(SWModule *module, ConfigEntMap &section);
-	virtual signed char Load ();
-	virtual void AddGlobalOptions (SWModule * module, ConfigEntMap & section, ConfigEntMap::iterator start, ConfigEntMap::iterator end);
+	virtual void addRenderFilters(SWModule *module, ConfigEntMap &section);
+	virtual signed char load();
+	virtual void addGlobalOptionFilters(SWModule * module, ConfigEntMap & section);
 
 public:
 	bool shape;

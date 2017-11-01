@@ -47,7 +47,7 @@ DiathekeMgr::DiathekeMgr (SWConfig * iconfig, SWConfig * isysconfig, bool autolo
 	bidireorder = new UTF8BiDiReorder();
 	transliterator = new UTF8Transliterator();
 #endif
-	Load();
+	load();
 
 #ifdef WIN32
 	OSVERSIONINFO osvi;
@@ -73,7 +73,7 @@ DiathekeMgr::~DiathekeMgr()
 }
 
 
-void DiathekeMgr::AddRenderFilters(SWModule *module, ConfigEntMap &section)
+void DiathekeMgr::addRenderFilters(SWModule *module, ConfigEntMap &section)
 {
 	SWBuf lang;
 	ConfigEntMap::iterator entry;
@@ -91,11 +91,11 @@ void DiathekeMgr::AddRenderFilters(SWModule *module, ConfigEntMap &section)
 		module->addRenderFilter(bidireorder);
 	}
 #endif
-	SWMgr::AddRenderFilters(module, section);
+	SWMgr::addRenderFilters(module, section);
 }
 
-signed char DiathekeMgr::Load () {
-	signed char retval =  SWMgr::Load();
+signed char DiathekeMgr::load() {
+	signed char retval =  SWMgr::load();
 #ifdef _ICU_
 	optionFilters["UTF8Transliterator"] = transliterator;
 	options.push_back(transliterator->getOptionName());
@@ -103,11 +103,9 @@ signed char DiathekeMgr::Load () {
 	return retval;
 };
 
-void DiathekeMgr::AddGlobalOptions (SWModule * module, ConfigEntMap & section,
-                                   ConfigEntMap::iterator start,
-                                   ConfigEntMap::iterator end) {
+void DiathekeMgr::addGlobalOptionFilters(SWModule *module, ConfigEntMap &section) {
 
-        SWMgr::AddGlobalOptions(module, section, start, end);
+        SWMgr::addGlobalOptionFilters(module, section);
 #ifdef _ICU_
         module->addOptionFilter(transliterator);
 #endif
