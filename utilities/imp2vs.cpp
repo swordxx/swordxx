@@ -28,6 +28,7 @@
 #include <iostream>
 #include <string>
 #include <swordxx/filemgr.h>
+#include <swordxx/filters/cipherfil.h>
 #include <swordxx/keys/versekey.h>
 #include <swordxx/localemgr.h>
 #include <swordxx/modules/common/bz2comprs.h>
@@ -62,6 +63,8 @@ void usage(char const * progName, char const * error = nullptr) {
     for (auto const & vs : vmgr.getVersificationSystems())
         fprintf(stderr, "\t\t\t\t\t%s\n", vs.c_str());
     fprintf(stderr, "  -l <locale>\t\t specify a locale scheme to use (default is en)\n");
+    fprintf(stderr, "  -c <cipher_key>\t encipher module using supplied key\n");
+    fprintf(stderr, "\t\t\t\t (default no enciphering)\n");
     fprintf(stderr, "\n");
     fprintf(stderr, "'imp' format is a simple standard for importing data into Sword++ modules.\n"
         "Required is a plain text file containing $$$key lines followed by content.\n\n"
@@ -80,8 +83,6 @@ void usage(char const * progName, char const * error = nullptr) {
 
 
 int main(int argc, char **argv) {
-
-
     // handle options
     if (argc < 2) usage(*argv);
 
@@ -94,7 +95,8 @@ int main(int argc, char **argv) {
     bool fourByteSize      = false;
     bool append        = false;
     BlockType iType = BOOKBLOCKS;
-    std::string compType     = "";
+    std::string cipherKey;
+    std::string compType;
 
     for (int i = 2; i < argc; i++) {
         if (!strcmp(argv[i], "-a")) {
@@ -142,6 +144,10 @@ int main(int argc, char **argv) {
         else if (!strcmp(argv[i], "-l")) {
             if (i+1 < argc) locale = argv[++i];
             else usage(progName, "-l requires <locale>");
+        }
+        else if (!strcmp(argv[i], "-c")) {
+            if (i+1 < argc) cipherKey = argv[++i];
+            else usage(*argv, "-c requires <cipher_key>");
         }
         else usage(progName, (((std::string)"Unknown argument: ")+ argv[i]).c_str());
     }
@@ -202,6 +208,11 @@ int main(int argc, char **argv) {
             : (SWModule *)new RawText4(outPath.c_str(), nullptr, nullptr, ENC_UNKNOWN, DIRECTION_LTR, FMT_UNKNOWN, nullptr, v11n.c_str());
     }
     // -----------------------------------------------------
+
+    if (!cipherKey.empty()) {
+       fprintf(stderr, "Adding cipher filter with phrase: %s\n", cipherKey.c_str());
+       module->addRawFilter(std::make_shared<CipherFilter>(cipherKey.c_str()));
+    }
 
     // setup locale manager
 
