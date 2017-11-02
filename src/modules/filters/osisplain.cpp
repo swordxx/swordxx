@@ -60,19 +60,33 @@ OSISPlain::OSISPlain() {
 	addEscapeStringSubstitute("gt", ">");
 	addEscapeStringSubstitute("quot", "\"");
 
-	   setTokenCaseSensitive(true);
-	   addTokenSubstitute("title", "\n");
-	   addTokenSubstitute("/title", "\n");
-	   addTokenSubstitute("/l", "\n");
-	   addTokenSubstitute("lg", "\n");
-	   addTokenSubstitute("/lg", "\n");
+	setTokenCaseSensitive(true);
+	addTokenSubstitute("title", "\n");
+	addTokenSubstitute("/title", "\n");
+	addTokenSubstitute("/l", "\n");
+	addTokenSubstitute("lg", "\n");
+	addTokenSubstitute("/lg", "\n");
+
+	setStageProcessing(PRECHAR);
 }
+
 
 BasicFilterUserData *OSISPlain::createUserData(const SWModule *module, const SWKey *key) {
 	MyUserData *u = new MyUserData(module, key);
 	u->vk = SWDYNAMIC_CAST(VerseKey, u->key);
 	u->testament = (u->vk) ? u->vk->getTestament() : 2;	// default to NT
 	return u;
+}
+
+
+bool OSISPlain::processStage(char stage, SWBuf &text, char *&from, BasicFilterUserData *userData) {
+	// this is a strip filter so we want to do this as optimized as possible.  Avoid calling
+	// getUniCharFromUTF8 for slight speed improvement
+		
+	if (stage == PRECHAR) {
+		if (from[0] == 0xC2 && from[1] == 0xAD) return true;	// skip soft hyphens
+	}
+	return false;
 }
 
 

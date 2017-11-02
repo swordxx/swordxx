@@ -35,6 +35,7 @@ public:
 protected:
 	virtual BasicFilterUserData *createUserData(const SWModule *module, const SWKey *key);
 	virtual bool handleToken(SWBuf &buf, const char *token, BasicFilterUserData *userData);
+	virtual bool processStage(char stage, SWBuf &text, char *&from, BasicFilterUserData *userData);
 public:
 	OSISPlain();
 };
