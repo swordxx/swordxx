@@ -69,6 +69,8 @@ OSISPlain::OSISPlain() {
        addTokenSubstitute("/l", "\n");
        addTokenSubstitute("lg", "\n");
        addTokenSubstitute("/lg", "\n");
+
+    setStageProcessing(PRECHAR);
 }
 
 std::unique_ptr<BasicFilterUserData> OSISPlain::createUserData(
@@ -278,5 +280,16 @@ bool OSISPlain::handleToken(std::string &buf, const char *token, BasicFilterUser
     return true;
 }
 
+bool OSISPlain::processStage(char stage,
+                             std::string &,
+                             char *& from,
+                             BasicFilterUserData *)
+{
+    // this is a strip filter so we want to do this as optimized as possible.
+    // Avoid calling getUniCharFromUTF8 for slight speed improvement
+
+    // skip soft hyphens:
+    return (stage == PRECHAR) && (from[0] == '\xC2') && (from[1] == '\xAD');
+}
 
 } /* namespace swordxx */

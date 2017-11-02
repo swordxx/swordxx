@@ -220,7 +220,7 @@ SWMgr::SWMgr(SWConfig * iconfig,
     else sysConfig = nullptr;
 
     if (autoload)
-        Load();
+        load();
 }
 
 SWMgr::SWMgr(char const * iConfigPath,
@@ -266,11 +266,11 @@ SWMgr::SWMgr(char const * iConfigPath,
     sysConfig = nullptr;
 
     if (autoload && !m_configPath.empty())
-        Load();
+        load();
 }
 
 SWMgr::~SWMgr() {
-    DeleteMods();
+    deleteAllModules();
 
     delete homeConfig;
     delete mysysconfig;
@@ -626,7 +626,7 @@ void SWMgr::augmentModules(NormalizedPath const & path, bool multiMod) {
             }
         }
 
-        createMods();
+        createAllModules();
 
         m_prefixPath = std::move(savePrefixPath);
         m_configPath = std::move(saveConfigPath);
@@ -640,13 +640,13 @@ void SWMgr::augmentModules(NormalizedPath const & path, bool multiMod) {
 
 
 /***********************************************************************
- * SWMgr::Load - loads actual modules
+ * SWMgr::load - loads actual modules
  *
  * RET: status - 0 = ok; -1 no config found; 1 = no modules installed
  *
  */
 
-signed char SWMgr::Load() {
+signed char SWMgr::load() {
     signed char ret = 0;
 
     if (!config) {    // If we weren't passed a config object at construction, find a config file
@@ -668,7 +668,7 @@ signed char SWMgr::Load() {
         SectionMap::iterator Sectloop, Sectend;
         ConfigEntMap::iterator Entryloop, Entryend;
 
-        DeleteMods();
+        deleteAllModules();
 
         for (Sectloop = config->sections().lower_bound("Globals"), Sectend = config->sections().upper_bound("Globals"); Sectloop != Sectend; Sectloop++) {        // scan thru all 'Globals' sections
             for (Entryloop = (*Sectloop).second.lower_bound("AutoInstall"), Entryend = (*Sectloop).second.upper_bound("AutoInstall"); Entryloop != Entryend; Entryloop++)    // scan thru all AutoInstall entries
@@ -681,7 +681,7 @@ signed char SWMgr::Load() {
         }
         else    config->reload();
 
-        createMods();
+        createAllModules();
 
         for (auto const & augPath : augPaths)
             augmentModules(augPath.c_str(), mgrModeMultiMod);
@@ -898,11 +898,11 @@ std::unique_ptr<SWModule> SWMgr::createModule(std::string const & name,
     return newmod;
 }
 
-void SWMgr::addGlobalOptions(SWModule & module,
-                             ConfigEntMap const & section,
-                             ConfigEntMap::const_iterator start,
-                             ConfigEntMap::const_iterator end)
+void SWMgr::addGlobalOptionFilters(SWModule & module,
+                                   ConfigEntMap const & section)
 {
+    auto start(section.lower_bound("GlobalOptionFilter"));
+    auto const end(section.upper_bound("GlobalOptionFilter"));
     for (; start != end; ++start) {
         std::string filterName(start->second);
         decltype(m_optionFilters)::const_iterator it;
@@ -977,11 +977,11 @@ char SWMgr::filterText(const char *filterName, std::string &text, const SWKey *k
 }
 
 
-void SWMgr::addLocalOptions(SWModule & module,
-                            ConfigEntMap const & section,
-                            ConfigEntMap::const_iterator start,
-                            ConfigEntMap::const_iterator end)
+void SWMgr::addLocalOptionFilters(SWModule & module,
+                                  ConfigEntMap const & section)
 {
+    auto start(section.lower_bound("LocalOptionFilter"));
+    auto const end(section.upper_bound("LocalOptionFilter"));
     for (; start != end; ++start) {
         decltype(m_optionFilters)::iterator const it(
                     m_optionFilters.find(start->second));
@@ -996,11 +996,11 @@ void SWMgr::addLocalOptions(SWModule & module,
 
 
 // manually specified StripFilters for special cases, like Papyri marks and such
-void SWMgr::addStripFilters(SWModule & module,
-                            ConfigEntMap const &,
-                            ConfigEntMap::const_iterator start,
-                            ConfigEntMap::const_iterator end)
+void SWMgr::addLocalStripFilters(SWModule & module,
+                                 ConfigEntMap const & section)
 {
+    auto start(section.lower_bound("LocalStripFilter"));
+    auto const end(section.upper_bound("LocalStripFilter"));
     for (; start != end; ++start) {
         decltype(m_optionFilters)::const_iterator const it(
                     m_optionFilters.find(start->second));
@@ -1092,9 +1092,7 @@ void SWMgr::addStripFilters(SWModule & module, ConfigEntMap const & section) {
 }
 
 
-void SWMgr::createMods() {
-    ConfigEntMap::iterator start;
-    ConfigEntMap::iterator end;
+void SWMgr::createAllModules() {
     ConfigEntMap::iterator entry;
     std::string driver;
     for (auto & sp : config->sections()) {
@@ -1105,32 +1103,29 @@ void SWMgr::createMods() {
             if (auto newmod = createModule(sp.first, driver, section)) {
                 // Filters to add for this module and globally announce as an option to the user
                 // e.g. translit, strongs, redletterwords, etc, so users can turn these on and off globally
-                start = section.lower_bound("GlobalOptionFilter");
-                end   = section.upper_bound("GlobalOptionFilter");
-                addGlobalOptions(*newmod, section, start, end);
+                addGlobalOptionFilters(*newmod, section);
 
                 // Only add the option to the module, don't announce it's availability
                 // These are useful for like: filters that parse special entryAttribs in a text
                 // or whatever you might want to happen on entry lookup
-                start = section.lower_bound("LocalOptionFilter");
-                end   = section.upper_bound("LocalOptionFilter");
-                addLocalOptions(*newmod, section, start, end);
+                addLocalOptionFilters(*newmod, section);
 
                 //STRIP FILTERS
 
-                // add all basic ones for for the modtype
+                // add all basic strip filters for the modtype
                 addStripFilters(*newmod, section);
 
-                // Any special processing for this module when searching:
-                // e.g. for papyri, removed all [](). notation
-                start = section.lower_bound("LocalStripFilter");
-                end   = section.upper_bound("LocalStripFilter");
-                addStripFilters(*newmod, section, start, end);
+                // Any module-specific processing specified in module config as
+                // entries LocalStripFilter= e.g. for papyri, removed all []().
+                // notation
+                addLocalStripFilters(*newmod, section);
 
                 addRawFilters(*newmod, section);
                 addRenderFilters(*newmod, section);
                 addEncodingFilters(*newmod, section);
 
+                // place our module in module container, removing first if one
+                // already exists by our same name:
                 m_modules[newmod->getName()] = std::move(newmod);
             }
         }
@@ -1138,7 +1133,7 @@ void SWMgr::createMods() {
 }
 
 
-void SWMgr::DeleteMods() { m_modules.clear(); }
+void SWMgr::deleteAllModules() { m_modules.clear(); }
 
 
 void SWMgr::deleteModule(const char *modName) { m_modules.erase(modName); }
@@ -1175,7 +1170,7 @@ void SWMgr::InstallScan(const char *dirname)
                     else {
                         if (!conffd) {
                             conffd = FileMgr::getSystemFileMgr()->open(config->filename().c_str(), FileMgr::WRONLY|FileMgr::APPEND);
-                            if (conffd)
+                            if (conffd && conffd->getFd() >= 0)
                                 conffd->seek(0L, SEEK_END);
                             else {
                                 FileMgr::getSystemFileMgr()->close(conffd);

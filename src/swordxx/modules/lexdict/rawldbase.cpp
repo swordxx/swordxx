@@ -175,8 +175,11 @@ void RawLdBase<Base>::deleteEntry() {
 }
 
 template <typename Base>
-long RawLdBase<Base>::getEntryCount() const
-{ return this->idxfd ? (this->idxfd->seek(0, SEEK_END) / Base::IDXENTRYSIZE) : 0; }
+long RawLdBase<Base>::getEntryCount() const {
+    if (!this->idxfd || this->idxfd->getFd() < 0)
+        return 0;
+    return this->idxfd->seek(0, SEEK_END) / Base::IDXENTRYSIZE;
+}
 
 template <typename Base>
 long RawLdBase<Base>::getEntryForKey(char const * key) const {

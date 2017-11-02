@@ -79,7 +79,7 @@ zStr::zStr(char const * ipath,
     zdxfd = FileMgr::getSystemFileMgr()->open(formatted("%s.zdx", ipath).c_str(), fileMode, true);
     zdtfd = FileMgr::getSystemFileMgr()->open(formatted("%s.zdt", ipath).c_str(), fileMode, true);
 
-    if (!datfd) {
+    if (!datfd || datfd->getFd() < 0) {
         SWLog::getSystemLog()->logError("%d", errno);
     }
 
@@ -114,7 +114,7 @@ zStr::~zStr() {
 
 std::string zStr::getKeyFromDatOffset(long ioffset) const
 {
-    if (datfd) {
+    if (datfd && datfd->getFd() >= 0) {
         datfd->seek(ioffset, SEEK_SET);
         std::size_t size;
         char ch;
@@ -150,7 +150,7 @@ std::string zStr::getKeyFromIdxOffset(long ioffset) const
 {
     uint32_t offset;
 
-    if (idxfd) {
+    if (idxfd && idxfd->getFd() > 0) {
         idxfd->seek(ioffset, SEEK_SET);
         idxfd->read(&offset, 4);
         offset = swordtoarch32(offset);

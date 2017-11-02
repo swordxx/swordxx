@@ -135,7 +135,7 @@ void init() {
                   "ERROR: Sword++ configuration not found.  Please configure "
                   "Sword++ before using this program.");
 
-        std::string baseDir = mgr->getHomeDir();
+        std::string baseDir = SWMgr::getHomeDir();
         if (baseDir.length() < 1) baseDir = ".";
         baseDir += "/.swordxx/InstallMgr";
         confPath = baseDir + "/InstallMgr.conf";

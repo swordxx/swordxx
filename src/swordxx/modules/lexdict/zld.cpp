@@ -179,8 +179,11 @@ void zLD::deleteEntry() {
 }
 
 
-long zLD::getEntryCount() const
-{ return idxfd ? (idxfd->seek(0, SEEK_END) / IDXENTRYSIZE) : 0; }
+long zLD::getEntryCount() const {
+    if (!idxfd || idxfd->getFd() < 0)
+        return 0;
+    return idxfd->seek(0, SEEK_END) / IDXENTRYSIZE;
+}
 
 
 long zLD::getEntryForKey(const char* key) const

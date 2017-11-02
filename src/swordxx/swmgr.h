@@ -93,12 +93,12 @@ protected:
     SWConfig * myconfig = nullptr; // made protected because because BibleTime needs it
     SWConfig * mysysconfig = nullptr;
     SWConfig * homeConfig = nullptr;
-    void createMods();
-    virtual std::unique_ptr<SWModule> createModule(
+    void createAllModules();
+    std::unique_ptr<SWModule> createModule(
             std::string const & name,
             std::string const & driver,
             ConfigEntMap section);
-    void DeleteMods();
+    void deleteAllModules();
     char configType = 0;        // 0 = file; 1 = directory
     std::map<std::string, std::shared_ptr<SWOptionFilter> > m_optionFilters;
     std::map<std::string, std::shared_ptr<CipherFilter> > m_cipherFilters;
@@ -113,89 +113,139 @@ protected:
     virtual char AddModToConfig(FileDesc *conffd, const char *fname);
     virtual void loadConfigDir(const char *ipath);
 
-    /// \todo Does this really need to be virtual?
-    virtual void addGlobalOptions(SWModule & module,
-                                  ConfigEntMap const & section,
-                                  ConfigEntMap::const_iterator start,
-                                  ConfigEntMap::const_iterator end);
+    /**
+      Adds appropriate global option filters to a module. Global option filters
+      typically update SourceType markup to turn on and off specific features
+      of a text when a user has optionally chosen to show or hide that feature,
+      e.g. Strongs, Footnotes, Headings, etc. Global options can also have more
+      than On and Off values, but these are the most common. A set of all
+      global options included from an entire library of installed modules can
+      be obtained from getGlobalOptions and presented to the user.  Values to
+      which each global option may be set can be obtain from
+      getGlobalOptionValues, and similar.  See that family of methods for more
+      information.
+      See the module.conf GlobalOptionFilter= entries.
+      \param module module to which to add encoding filters
+      \param section configuration information for module
+     */
+    virtual void addGlobalOptionFilters(SWModule & module,
+                                        ConfigEntMap const & section);
 
-    /// \todo Does this really need to be virtual?
-    virtual void addLocalOptions(SWModule & module,
-                                 ConfigEntMap const & section,
-                                 ConfigEntMap::const_iterator start,
-                                 ConfigEntMap::const_iterator end);
+    /**
+      Adds appropriate local option filters to a module. Local options are
+      similar to global options in that they may be toggled on or off or set to
+      some value from a range of choices but local option.
+      See the module.conf LocalOptionFilter= entries.
+      \param module module to which to add encoding filters
+      \param section configuration information for module
+    */
+    virtual void addLocalOptionFilters(SWModule & module,
+                                       ConfigEntMap const & section);
     std::list<std::string> augPaths;
 
     /**
-      \brief Called to add appropriate Encoding Filters to a module.
+      \brief Adds appropriate encoding filters to a module.
 
-      Override this to do special actions, if desired. See the module.conf
-      Encoding= entry.
-      \param module module to which to add Encoding Filters.
-      \param section configuration information from module.conf.
-      \todo Does this really need to be virtual?
+      See the module.conf Encoding= entry.
+      \param module module to which to add encoding filters
+      \param section configuration information for module
     */
+
     virtual void addEncodingFilters(SWModule & module,
                                     ConfigEntMap const & section);
 
     /**
-      \brief Called to add appropriate Render Filters to a module.
+      \brief Add appropriate render filters to a module.
 
-       Override to do special actions, if desired. See the module.conf
-       SourceType= entry.
-       \param module module to which to add Render Filters.
-       \param section configuration information from module.conf.
-       \todo Does this really need to be virtual?
-     */
+      Render filters are used for preparing a text for display and typically
+      convert markup from SourceType to desired display markup.
+      See the module.conf SourceType= entry.
+      \param module module to which to add render filters
+      \param section configuration information for module
+    */
     virtual void addRenderFilters(SWModule & module,
                                   ConfigEntMap const & section);
 
     /**
-      \brief Called to add appropriate Strip Filters to a module.
+      \brief Adds appropriate strip filters to a module.
 
-      Override to do special actions, if desired. See the module.conf
-      SourceType= entry.
-      \param module module to which to add Strip Filters.
-      \param section configuration information from module.conf.
-      \todo Does this really need to be virtual?
-     */
+      Strip filters are used for preparing text for searching and typically
+      strip out all markup and leave only searchable words.
+      See the module.conf SourceType= entry.
+      \param module module to which to add strip filters
+      \param section configuration information for module
+    */
     virtual void addStripFilters(SWModule & module,
                                  ConfigEntMap const & section);
 
     // ones manually specified in .conf file
-    /// \todo Does this really need to be virtual?
-    virtual void addStripFilters(SWModule & module,
-                                 ConfigEntMap const & section,
-                                 ConfigEntMap::const_iterator start,
-                                 ConfigEntMap::const_iterator end);
 
     /**
-      \brief Called to add appropriate Raw Filters to a module.
+      \brief Adds manually specified strip filters specified in module
+             configuration as LocalStripFilters.
 
-      Override to do special actions, if desired. See the module.conf
-      CipherKey= entry.
-      \param module module to which to add Raw Filters.
-      \param section configuration information from module.conf.
+      These might take care of special cases of preparation for searching, e.g.,
+      removing ()[] and underdot symbols from manuscript modules.
+      \param module module to which to add local strip filters
+      \param section configuration information for module
       \todo Does this really need to be virtual?
-     */
+    */
+    virtual void addLocalStripFilters(SWModule & module,
+                                      ConfigEntMap const & section);
+
+    /**
+      \brief Add appropriate raw filters to a module.
+
+      Raw filters are used to manipulate a buffer immediately after it has been
+      read from storage.  For example, any decryption that might need to be
+      done.
+      See the module.conf CipherKey= entry.
+      \param module module to which to add raw filters
+      \param section configuration information for module
+    */
     virtual void addRawFilters(SWModule & module, ConfigEntMap const & section);
 
 
 public:
 
     static const char *globalConfPath;
+
+    /**
+     * Determines where SWORD looks for the user's home folder.  This is
+     * typically used as a place to find any additional personal SWORD
+     * modules which a user might wish to be added to a system-wide
+     * library (e.g., added from ~/.sword/mods.d/ or ~/sword/mods.d/)
+     *
+     * or if a user or UI wishes to override SWORD system configuration
+     * settings (e.g., /etc/sword.conf) with a custom configuration
+     * (e.g., ~/.sword/sword.conf)
+     */
     static std::string getHomeDir();
 
     /**
-     *
-     */
+      Performs all the logic to discover a SWORD configuration and libraries on
+      a system.
+    */
     static void findConfig(char * configType,
                            std::string & prefixPath,
                            std::string & configPath,
                            std::list<std::string> * augPaths = nullptr,
                            SWConfig ** providedSysConf = nullptr);
 
+    /**
+       The configuration of a loaded library of SWORD modules
+       e.g., from /usr/share/sword/mods.d/
+            augmented with ~/.sword/mods.d/
+
+       This represents all discovered modules and their configuration
+       compiled into a single SWConfig object with each [section]
+       representing each module. e.g. [KJV]
+    */
     SWConfig *config;
+
+    /**
+       The configuration file for SWORD e.g., /etc/sword.conf
+    */
     SWConfig *sysConfig;
 
     /** The path to main module set and locales
@@ -206,6 +256,7 @@ public:
      */
     std::string m_configPath;
 
+    /** \returns The map of available modules. */
     ModMap const & modules() const noexcept { return m_modules; }
 
     /** Gets a specific module by name.  e.g. SWModule *kjv = myManager.getModule("KJV");
@@ -229,7 +280,7 @@ public:
      *    using a complex hierarchical search.  See README for detailed specifics.
      * @param isysconfig
      * @param autoload whether or not to immediately load modules on construction of this SWMgr.
-     *    If you reimplemented SWMgr you can set this to false and call SWMgr::Load() after you have
+     *    If you reimplemented SWMgr you can set this to false and call SWMgr::load() after you have
      *    completed the contruction and setup of your SWMgr subclass.
      * @param filterMgr an SWFilterMgr subclass to use to manager filters on modules
      *    SWMgr TAKES OWNERSHIP FOR DELETING THIS OBJECT
@@ -282,12 +333,17 @@ public:
      */
     virtual void InstallScan(const char *dir);
 
-    /** Load all modules.  Should only be manually called if SWMgr was constructed
-     *    without autoload; otherwise, this will be called on SWMgr construction
-     * Reimplement this function to supply special functionality when modules are
-     * initially loaded.
-     */
-    virtual signed char Load();
+    /**
+      \brief Loads installed library of SWORD modules.
+
+      Should only be manually called if SWMgr was constructed without autoload;
+      otherwise, this will be called on SWMgr construction Reimplement this
+      function to supply special functionality when modules are initially
+      loaded. This includes discovery of config path with SWMgr::fileconfig,
+      loading of composite SWMgr::config,
+      and construction of all modules from config using SWMgr::createAllModules
+    */
+    virtual signed char load();
 
     /** Change the values of global options (e.g. Footnotes, Strong's Number, etc.)
      * @param option The name of the option, for which you want to change the
@@ -336,34 +392,54 @@ public:
     /**
      * Sets the cipher key for the given module. This function updates the key
      * at runtime, but it does not write to the config file.
-     * To write the new unlock key to the config file use code like this:
+     * This method is NOT the recommended means for applying a CipherKey
+     * to a module.
+     *
+     * Typically CipherKey entries and other per module user configuration
+     * settings are all saved in a separate localConfig.conf that is updated
+     * by a UI or other client of the library. e.g.,
+     *
+     *
+     * [KJV]
+     * Font=Arial
+     * LocalOptionFilter=SomeSpecialFilterMyUIAppliesToTheKJV
+     *
+     * [ISV]
+     * CipherKey=xyzzy
+     *
+     * [StrongsGreek]
+     * SomeUISetting=false
+     *
+     *
+     * Then these extra config settings in this separate file are applied
+     * just before module creation by overriding SWMgr::createAllModules and
+     * augmenting SWMgr::config with code like this:
+
      *
      * @code
-     * if (auto dir = opendir(configPath)) { // Find and update .conf file
-     *   rewinddir(dir);
-     *   struct dirent * ent;
-     *   while ((ent = readdir(dir))) {
-     *     if ((strcmp(ent->d_name, ".")) && (strcmp(ent->d_name, ".."))) {
-     *       std::string modFile(m_backend->configPath);
-     *       modFile.push_back('/');
-     *       modFile.append(ent->d_name);
-     *       auto myConfig(std::make_unique<SWConfig>(modFile));
-     *       auto section(myConfig->Sections.find(m_module->Name()));
-     *       if (section != myConfig->Sections.end()) {
-     *         auto entry(section->second.find("CipherKey"));
-     *         if (entry != section->second.end()) {
-     *           entry->second = unlockKey; // Set cipher key
-     *           myConfig->Save(); // Save config file
-     *         }
-     *       }
-     *     }
-     *   }
-     *   closedir(dir);
+     * void createAllModules(bool multiMod) {
+     *
+     *      // after SWMgr::config is loaded
+     *      // see if we have our own local settings
+     *      SWBuf myExtraConf = "~/.myapp/localConf.conf";
+     *      bool exists = FileMgr::existsFile(extraConf);
+     *      if (exists) {
+     *              SWConfig addConfig(extraConf);
+     *              this->config->augment(addConfig);
+     *      }
+     *
+     *      // now that we've augmented SWMgr::config with our own custom
+     *      // settings, proceed on with creating modules
+     *
+     *      SWMgr::createAllModules(multiMod);
+     *
      * }
      * @endcode
      *
+     * The above convention is preferred to using this setCipherKey method
+     *
      * @param modName For this module we change the unlockKey
-     * @param key This is the new unlck key we use for te module.
+     * @param key This is the new unlock key we use for the module.
      */
     virtual bool setCipherKey(std::string const & modName,
                               char const * key);

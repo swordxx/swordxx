@@ -62,7 +62,7 @@ RawStrBase<SizeType_>::RawStrBase(NormalizedPath const & path,
     idxfd = FileMgr::getSystemFileMgr()->open((path.str() + ".idx").c_str(), fileMode, true);
     datfd = FileMgr::getSystemFileMgr()->open((path.str() + ".dat").c_str(), fileMode, true);
 
-    if (!datfd)
+    if (!datfd || datfd->getFd() < 0)
         SWLog::getSystemLog()->logError("%d", errno);
 }
 
@@ -87,7 +87,7 @@ RawStrBase<SizeType_>::~RawStrBase() {
  */
 template <typename SizeType_>
 std::string RawStrBase<SizeType_>::getIDXBufDat(long ioffset) const {
-    if (datfd) {
+    if (datfd && datfd->getFd() >= 0) {
         datfd->seek(ioffset, SEEK_SET);
         std::size_t size;
         char ch;
@@ -123,7 +123,7 @@ template <typename SizeType_>
 std::string RawStrBase<SizeType_>::getIDXBuf(long ioffset) const {
     IndexOffsetType offset;
 
-    if (idxfd) {
+    if (idxfd && idxfd->getFd() > 0) {
         idxfd->seek(ioffset, SEEK_SET);
         idxfd->read(&offset, sizeof(offset));
 

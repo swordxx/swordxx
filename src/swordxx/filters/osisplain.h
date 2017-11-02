@@ -44,6 +44,11 @@ protected:
                      char const * token,
                      BasicFilterUserData * userData) override;
 
+    bool processStage(char stage,
+                      std::string & text,
+                      char *& from,
+                      BasicFilterUserData * userData) override;
+
 public:
     OSISPlain();
 };

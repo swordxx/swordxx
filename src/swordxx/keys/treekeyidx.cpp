@@ -59,7 +59,7 @@ TreeKeyIdx::TreeKeyIdx(const char *idxPath, int fileMode)
     buf += ".dat";
     m_datfd = FileMgr::getSystemFileMgr()->open(buf.c_str(), fileMode, true);
 
-    if (!m_datfd) {
+    if (!m_datfd || m_datfd->getFd() < 0) {
         SWLog::getSystemLog()->logError("%d", errno);
         m_error = errno;
     }
@@ -318,7 +318,7 @@ void TreeKeyIdx::getTreeNodeFromDatOffset(long ioffset, TreeNode *node) const {
     int32_t  tmp;
     uint16_t  tmp2;
 
-    if (m_datfd) {
+    if (m_datfd && m_datfd->getFd() >= 0) {
 
         m_datfd->seek(ioffset, SEEK_SET);
 
@@ -378,20 +378,18 @@ char TreeKeyIdx::getTreeNodeFromIdxOffset(long ioffset, TreeNode *node) const {
     }
 
     node->offset = ioffset;
-    if (m_idxfd) {
-        if (m_idxfd->getFd() > 0) {
-            m_idxfd->seek(ioffset, SEEK_SET);
+    if (m_idxfd && m_idxfd->getFd() >= 0) {
+        m_idxfd->seek(ioffset, SEEK_SET);
+        if (m_idxfd->read(&offset, sizeof(offset)) == sizeof(offset)) {
+            offset = swordtoarch32(offset);
+            error = (error == 77) ? KEYERR_OUTOFBOUNDS : 0;
+            getTreeNodeFromDatOffset(offset, node);
+        }
+        else {
+            m_idxfd->seek(-sizeof(offset), SEEK_END);
             if (m_idxfd->read(&offset, sizeof(offset)) == sizeof(offset)) {
                 offset = swordtoarch32(offset);
-                error = (error == 77) ? KEYERR_OUTOFBOUNDS : 0;
                 getTreeNodeFromDatOffset(offset, node);
-            }
-            else {
-                m_idxfd->seek(-sizeof(offset), SEEK_END);
-                if (m_idxfd->read(&offset, sizeof(offset)) == sizeof(offset)) {
-                    offset = swordtoarch32(offset);
-                    getTreeNodeFromDatOffset(offset, node);
-                }
             }
         }
     }
@@ -415,7 +413,7 @@ void TreeKeyIdx::saveTreeNodeOffsets(TreeNode *node) {
     long datOffset = 0;
     int32_t tmp;
 
-    if (m_idxfd) {
+    if (m_idxfd && m_idxfd->getFd() >= 0) {
         m_idxfd->seek(node->offset, SEEK_SET);
         if (m_idxfd->read(&tmp, sizeof(tmp)) != sizeof(tmp)) {
             datOffset = m_datfd->seek(0, SEEK_END);
@@ -461,7 +459,7 @@ void TreeKeyIdx::copyFrom(const TreeKeyIdx &ikey) {
 
 void TreeKeyIdx::saveTreeNode(TreeNode *node) {
     long datOffset = 0;
-    if (m_idxfd) {
+    if (m_idxfd && m_idxfd->getFd() >= 0) {
         m_idxfd->seek(node->offset, SEEK_SET);
         datOffset = m_datfd->seek(0, SEEK_END);
         int32_t const tmp = archtosword32(datOffset);
