@@ -83,8 +83,10 @@ zStr::zStr(const char *ipath, int fileMode, long blockCount, SWCompress *icomp, 
 	buf.setFormatted("%s.zdt", path);
 	zdtfd = FileMgr::getSystemFileMgr()->open(buf, fileMode, true);
 
-	if (!datfd || datfd->getFd() < 0) {
-		SWLog::getSystemLog()->logError("%d", errno);
+	if (!zdtfd || zdtfd->getFd() < 0) {
+		// couldn't find datafile but this might be fine if we're
+		// merely instantiating a remote InstallMgr SWMgr
+		SWLog::getSystemLog()->logDebug("Couldn't open file: %s. errno: %d", buf.c_str(), errno);
 	}
 
 	cacheBlock = 0;
