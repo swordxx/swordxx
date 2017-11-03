@@ -132,6 +132,32 @@ const char *SWMgr::MODTYPE_LEXDICTS = "Lexicons / Dictionaries";
 const char *SWMgr::MODTYPE_GENBOOKS = "Generic Books";
 const char *SWMgr::MODTYPE_DAILYDEVOS = "Daily Devotional";
 
+namespace {
+	void setSystemLogLevel(SWConfig *sysConf, const char *logLevel = 0) {
+		SWBuf logLevelString = logLevel;
+		// kindof cheese. we should probably pass this in.
+		SWBuf logLocation = (sysConf ? "[SWORD] section of sword.conf" : "SWORD_LOGLEVEL");
+		if (sysConf) {
+			ConfigEntMap::iterator entry;
+			if ((entry = sysConf->getSection("SWORD").find("LogLevel")) != sysConf->getSection("SWORD").end()) {
+				logLevelString = entry->second;
+			}
+		}
+		if (logLevelString.length()) {
+			int logLevel =  logLevelString == "ERROR"     ? SWLog::LOG_ERROR:
+					logLevelString == "WARN"      ? SWLog::LOG_WARN:
+					logLevelString == "INFO"      ? SWLog::LOG_INFO:
+					logLevelString == "TIMEDINFO" ? SWLog::LOG_TIMEDINFO:
+					logLevelString == "DEBUG"     ? SWLog::LOG_DEBUG:
+					-1;
+			if (logLevel < 0) SWLog::getSystemLog()->logError("Invalid LogLevel found in %s: LogLevel: %s", logLocation.c_str(), logLevelString.c_str());
+			else {
+				SWLog::getSystemLog()->setLogLevel(logLevel);
+				SWLog::getSystemLog()->logInformation("Setting log level from %s to %s", logLocation.c_str(), logLevelString.c_str());
+			}
+		}
+	}
+}
 
 void SWMgr::init() {
 	SWOptionFilter *tmpFilter = 0;
@@ -418,10 +444,19 @@ SWMgr::~SWMgr() {
 
 
 void SWMgr::findConfig(char *configType, char **prefixPath, char **configPath, std::list<SWBuf> *augPaths, SWConfig **providedSysConf) {
+	static bool setLogLevel = false;
 	SWBuf path;
 	SWBuf sysConfPath;
 	ConfigEntMap::iterator entry;
 	ConfigEntMap::iterator lastEntry;
+
+	if (!setLogLevel) {
+		SWBuf envLogLevel = getenv("SWORD_LOGLEVEL");
+		if (envLogLevel.length()) {
+			setSystemLogLevel(0, envLogLevel);
+			setLogLevel = true;
+		}
+	}
 
 	SWConfig *sysConf = 0;
 	SWBuf sysConfDataPath = "";
@@ -435,6 +470,7 @@ void SWMgr::findConfig(char *configType, char **prefixPath, char **configPath, s
 	if (providedSysConf && *providedSysConf) {
 		sysConf = *providedSysConf;
 		SWLog::getSystemLog()->logDebug("found.");
+		if (!setLogLevel) { setSystemLogLevel(sysConf); setLogLevel = true; }
 	}
 
 	// if we haven't been given our datapath in a sysconf, we need to track it down
@@ -448,6 +484,7 @@ void SWMgr::findConfig(char *configType, char **prefixPath, char **configPath, s
 			if ((entry = sysConf->getSection("Install").find("DataPath")) != sysConf->getSection("Install").end()) {
 				sysConfDataPath = (*entry).second;
 			}
+			if (!setLogLevel) { setSystemLogLevel(sysConf); setLogLevel = true; }
 			if (providedSysConf) {
 				*providedSysConf = sysConf;
 			}
@@ -557,6 +594,7 @@ void SWMgr::findConfig(char *configType, char **prefixPath, char **configPath, s
 	}
 
 	if (sysConf) {
+		if (!setLogLevel) { setSystemLogLevel(sysConf); setLogLevel = true; }
 		if ((entry = sysConf->getSection("Install").find("DataPath")) != sysConf->getSection("Install").end()) {
 			sysConfDataPath = (*entry).second;
 		}
@@ -590,6 +628,7 @@ void SWMgr::findConfig(char *configType, char **prefixPath, char **configPath, s
 
 	// do some extra processing of sysConf if we have one
 	if (sysConf) {
+		if (!setLogLevel) { setSystemLogLevel(sysConf); setLogLevel = true; }
 		if (augPaths) {
 			augPaths->clear();
 			entry     = sysConf->getSection("Install").lower_bound("AugmentPath");
