@@ -47,11 +47,13 @@ bool SWConfig::reload() {
             if (line.empty() || (*line.begin()) == '#')
                 continue;
             if (*line.begin() == '[') {
-                if (line.size() < 3
-                        || line.find(']', 1u) != line.size() - 1u)
+                rightTrimString(line);
+                if ((*line.rbegin()) != ']')
                     return false;
                 section.assign(line, 1u, line.size() - 2u);
                 trimString(section);
+                if (section.empty())
+                    return false;
             } else {
                 trimString(line);
                 auto it(std::find(line.begin(), line.end(), '='));
