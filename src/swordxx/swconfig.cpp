@@ -51,13 +51,16 @@ bool SWConfig::reload() {
                         || line.find(']', 1u) != line.size() - 1u)
                     return false;
                 section.assign(line, 1u, line.size() - 2u);
+                trimString(section);
             } else {
+                trimString(line);
                 auto it(std::find(line.begin(), line.end(), '='));
                 if (it == line.begin() || it == line.end())
                     return false;
                 std::string key(line.begin(), it);
+                rightTrimString(key);
                 std::string value(++it, line.end());
-                trimString(value);
+                leftTrimString(value);
                 data[section].emplace(std::move(key), std::move(value));
             }
         }
