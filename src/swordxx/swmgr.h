@@ -225,9 +225,9 @@ public:
     /**
       Performs all the logic to discover a SWORD configuration and libraries on
       a system.
+      \returns the type of configuration found.
     */
-    static void findConfig(char * configType,
-                           std::string & prefixPath,
+    static char findConfig(std::string & prefixPath,
                            std::string & configPath,
                            std::list<std::string> * augPaths = nullptr,
                            SWConfig ** providedSysConf = nullptr);

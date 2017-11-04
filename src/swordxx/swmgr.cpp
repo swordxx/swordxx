@@ -312,7 +312,9 @@ SWMgr::~SWMgr() {
 }
 
 
-void SWMgr::findConfig(char *configType, std::string & prefixPath, std::string & configPath, std::list<std::string> *augPaths, SWConfig **providedSysConf) {
+char SWMgr::findConfig(std::string & prefixPath, std::string & configPath, std::list<std::string> *augPaths, SWConfig **providedSysConf) {
+    char configType = 0;
+
     static bool setLogLevel = false;
     std::string path;
     std::string sysConfPath;
@@ -330,8 +332,6 @@ void SWMgr::findConfig(char *configType, std::string & prefixPath, std::string &
 
     SWConfig * sysConf = nullptr;
     std::string sysConfDataPath = "";
-
-    *configType = 0;
 
     std::string homeDir = getHomeDir();
 
@@ -369,7 +369,7 @@ void SWMgr::findConfig(char *configType, std::string & prefixPath, std::string &
                 SWLog::getSystemLog()->logDebug("found.");
                 prefixPath = "./";
                 configPath = "./mods.conf";
-                return;
+                return configType;
             }
 
             SWLog::getSystemLog()->logDebug("Checking working directory for mods.d...");
@@ -377,8 +377,7 @@ void SWMgr::findConfig(char *configType, std::string & prefixPath, std::string &
                 SWLog::getSystemLog()->logDebug("found.");
                 prefixPath = "./";
                 configPath = "./mods.d";
-                *configType = 1;
-                return;
+                return 1;
             }
 
             // check working directory ../library/
@@ -387,8 +386,7 @@ void SWMgr::findConfig(char *configType, std::string & prefixPath, std::string &
                 SWLog::getSystemLog()->logDebug("found.");
                 prefixPath = "../library/";
                 configPath = "../library/mods.d";
-                *configType = 1;
-                return;
+                return 1;
             }
 
             // check environment variable SWORDXX_PATH
@@ -407,7 +405,7 @@ void SWMgr::findConfig(char *configType, std::string & prefixPath, std::string &
                     prefixPath = path;
                     path += "mods.conf";
                     configPath = std::move(path);
-                    return;
+                    return configType;
                 }
 
                 SWLog::getSystemLog()->logDebug("Checking $SWORDXX_PATH for mods.d...");
@@ -416,8 +414,7 @@ void SWMgr::findConfig(char *configType, std::string & prefixPath, std::string &
                     prefixPath = path;
                     path += "mods.d";
                     configPath = std::move(path);
-                    *configType = 1;
-                    return;
+                    return 1;
                 }
             }
 
@@ -478,7 +475,7 @@ void SWMgr::findConfig(char *configType, std::string & prefixPath, std::string &
                 prefixPath = path;
                 path += "mods.conf";
                 configPath = path;
-                *configType = 1;
+                configType = 1;
             }
 
             SWLog::getSystemLog()->logDebug("Checking for mods.d in DataPath...");
@@ -488,7 +485,7 @@ void SWMgr::findConfig(char *configType, std::string & prefixPath, std::string &
                 prefixPath = path;
                 path += "mods.d";
                 configPath = path;
-                *configType = 1;
+                configType = 1;
             }
         }
     }
@@ -512,8 +509,8 @@ void SWMgr::findConfig(char *configType, std::string & prefixPath, std::string &
         else delete sysConf;
     }
 
-    if (*configType)
-        return;
+    if (configType)
+        return configType;
 
     // WE STILL HAVEN'T FOUND A CONFIGURATION.  LET'S LOOK IN SOME OS SPECIFIC
     // LOCATIONS
@@ -536,8 +533,7 @@ void SWMgr::findConfig(char *configType, std::string & prefixPath, std::string &
             prefixPath = path;
             path += "mods.d";
             configPath = std::move(path);
-            *configType = 1;
-            return;
+            return 1;
         }
     }
 
@@ -558,8 +554,7 @@ void SWMgr::findConfig(char *configType, std::string & prefixPath, std::string &
             prefixPath = path;
             path += "mods.d";
             configPath = std::move(path);
-            *configType = 1;
-            return;
+            return 1;
         }
     }
 
@@ -577,7 +572,7 @@ void SWMgr::findConfig(char *configType, std::string & prefixPath, std::string &
             prefixPath = path;
             path += "mods.conf";
             configPath = std::move(path);
-            return;
+            return configType;
         }
 
         SWLog::getSystemLog()->logDebug("  Checking for %smods.d...", path.c_str());
@@ -586,8 +581,7 @@ void SWMgr::findConfig(char *configType, std::string & prefixPath, std::string &
             prefixPath = path;
             path += "mods.d";
             configPath = std::move(path);
-            *configType = 2;
-            return;
+            return 2;
         }
 
         path = homeDir;
@@ -598,8 +592,7 @@ void SWMgr::findConfig(char *configType, std::string & prefixPath, std::string &
             prefixPath = path;
             path += "mods.d";
             configPath = std::move(path);
-            *configType = 2;
-            return;
+            return 2;
         }
     }
 }
@@ -701,7 +694,7 @@ signed char SWMgr::load() {
         if (m_configPath.empty()) {    // If we weren't passed a config path at construction...
             SWLog::getSystemLog()->logDebug("LOOKING UP MODULE CONFIGURATION...");
             SWConfig *externalSysConf = sysConfig;    // if we have a sysConf before findConfig, then we were provided one from an external source.
-            findConfig(&configType, m_prefixPath, m_configPath, &augPaths, &sysConfig);
+            configType = findConfig(m_prefixPath, m_configPath, &augPaths, &sysConfig);
             if (!externalSysConf) mysysconfig = sysConfig;    // remind us to delete our own sysConfig in d-tor
             SWLog::getSystemLog()->logDebug("LOOKING UP MODULE CONFIGURATION COMPLETE.");
         }

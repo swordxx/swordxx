@@ -71,7 +71,7 @@ LocaleMgr::LocaleMgr(char const * const iConfigPath)
     if (!iConfigPath) {
         SWLog::getSystemLog()->logDebug("LOOKING UP LOCALE DIRECTORY...");
         SWConfig * sysConf = nullptr;
-        SWMgr::findConfig(&configType, prefixPath, configPath, &augPaths, &sysConf);
+        configType = SWMgr::findConfig(prefixPath, configPath, &augPaths, &sysConf);
         if (sysConf) {
             auto const & section = (*sysConf)["Install"];
             auto const entry(section.find("LocalePath"));
