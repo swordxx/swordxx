@@ -79,8 +79,12 @@ zStr::zStr(char const * ipath,
     zdxfd = FileMgr::getSystemFileMgr()->open(formatted("%s.zdx", ipath).c_str(), fileMode, true);
     zdtfd = FileMgr::getSystemFileMgr()->open(formatted("%s.zdt", ipath).c_str(), fileMode, true);
 
-    if (!datfd || datfd->getFd() < 0) {
-        SWLog::getSystemLog()->logError("%d", errno);
+    if (!zdtfd || zdtfd->getFd() < 0) {
+        // couldn't find datafile but this might be fine if we're
+        // merely instantiating a remote InstallMgr SWMgr
+        SWLog::getSystemLog()->logDebug("Couldn't open file: %s. errno: %d",
+                                        formatted("%s.zdt", ipath).c_str(),
+                                        errno);
     }
 
     cacheBlock = nullptr;

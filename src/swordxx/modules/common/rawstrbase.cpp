@@ -62,8 +62,13 @@ RawStrBase<SizeType_>::RawStrBase(NormalizedPath const & path,
     idxfd = FileMgr::getSystemFileMgr()->open((path.str() + ".idx").c_str(), fileMode, true);
     datfd = FileMgr::getSystemFileMgr()->open((path.str() + ".dat").c_str(), fileMode, true);
 
-    if (!datfd || datfd->getFd() < 0)
-        SWLog::getSystemLog()->logError("%d", errno);
+    if (!datfd || datfd->getFd() < 0) {
+        // couldn't find datafile but this might be fine if we're
+        // merely instantiating a remote InstallMgr SWMgr
+        SWLog::getSystemLog()->logDebug("Couldn't open file: %s. errno: %d",
+                                        (path.str() + ".dat").c_str(),
+                                        errno);
+    }
 }
 
 

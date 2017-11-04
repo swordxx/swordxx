@@ -60,7 +60,11 @@ TreeKeyIdx::TreeKeyIdx(const char *idxPath, int fileMode)
     m_datfd = FileMgr::getSystemFileMgr()->open(buf.c_str(), fileMode, true);
 
     if (!m_datfd || m_datfd->getFd() < 0) {
-        SWLog::getSystemLog()->logError("%d", errno);
+        // couldn't find datafile but this might be fine if we're
+        // merely instantiating a remote InstallMgr SWMgr
+        SWLog::getSystemLog()->logDebug("Couldn't open file: %s. errno: %d",
+                                        buf.c_str(),
+                                        errno);
         m_error = errno;
     }
     else {

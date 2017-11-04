@@ -102,8 +102,42 @@
 
 
 namespace swordxx {
-
 namespace {
+
+void setSystemLogLevel(SWConfig * sysConf,
+                       std::string logLevelString = std::string())
+{
+    // kindof cheese. we should probably pass this in.
+    std::string logLocation(sysConf
+                            ? "[SWORD] section of sword.conf"
+                            : "SWORD_LOGLEVEL");
+    if (sysConf) {
+        auto const & section = sysConf->sections()["SWORD"];
+        auto const entry(section.find("LogLevel"));
+        if (entry != section.end())
+            logLevelString = entry->second;
+    }
+    if (!logLevelString.empty()) {
+        int const logLevel =
+                logLevelString == "ERROR"     ? SWLog::LOG_ERROR :
+                logLevelString == "WARN"      ? SWLog::LOG_WARN :
+                logLevelString == "INFO"      ? SWLog::LOG_INFO :
+                logLevelString == "TIMEDINFO" ? SWLog::LOG_TIMEDINFO :
+                logLevelString == "DEBUG"     ? SWLog::LOG_DEBUG :
+                -1;
+        auto & logger = *SWLog::getSystemLog();
+        if (logLevel < 0) {
+            logger.logError("Invalid LogLevel found in %s: LogLevel: %s",
+                            logLocation.c_str(),
+                            logLevelString.c_str());
+        } else {
+            logger.setLogLevel(logLevel);
+            logger.logInformation("Setting log level from %s to %s",
+                                  logLocation.c_str(),
+                                  logLevelString.c_str());
+        }
+    }
+}
 
 std::string getEnvironmentVariable(char const * const key) {
     auto const value(::getenv(key));
@@ -279,10 +313,20 @@ SWMgr::~SWMgr() {
 
 
 void SWMgr::findConfig(char *configType, std::string & prefixPath, std::string & configPath, std::list<std::string> *augPaths, SWConfig **providedSysConf) {
+    static bool setLogLevel = false;
     std::string path;
     std::string sysConfPath;
     ConfigEntMap::iterator entry;
     ConfigEntMap::iterator lastEntry;
+
+    if (!setLogLevel) {
+        auto const envVar(::getenv("SWORD_LOGLEVEL"));
+        std::string envLogLevel(envVar ? envVar : "");
+        if (!envLogLevel.empty()) {
+            setSystemLogLevel(nullptr, envLogLevel);
+            setLogLevel = true;
+        }
+    }
 
     SWConfig * sysConf = nullptr;
     std::string sysConfDataPath = "";
@@ -296,6 +340,7 @@ void SWMgr::findConfig(char *configType, std::string & prefixPath, std::string &
     if (providedSysConf && *providedSysConf) {
         sysConf = *providedSysConf;
         SWLog::getSystemLog()->logDebug("found.");
+        if (!setLogLevel) { setSystemLogLevel(sysConf); setLogLevel = true; }
     }
 
     // if we haven't been given our datapath in a sysconf, we need to track it down
@@ -309,6 +354,7 @@ void SWMgr::findConfig(char *configType, std::string & prefixPath, std::string &
             if ((entry = sysConf->sections()["Install"].find("DataPath")) != sysConf->sections()["Install"].end()) {
                 sysConfDataPath = (*entry).second;
             }
+            if (!setLogLevel) { setSystemLogLevel(sysConf); setLogLevel = true; }
             if (providedSysConf) {
                 *providedSysConf = sysConf;
             }
@@ -416,6 +462,7 @@ void SWMgr::findConfig(char *configType, std::string & prefixPath, std::string &
     }
 
     if (sysConf) {
+        if (!setLogLevel) { setSystemLogLevel(sysConf); setLogLevel = true; }
         if ((entry = sysConf->sections()["Install"].find("DataPath")) != sysConf->sections()["Install"].end()) {
             sysConfDataPath = (*entry).second;
         }
@@ -448,6 +495,7 @@ void SWMgr::findConfig(char *configType, std::string & prefixPath, std::string &
 
     // do some extra processing of sysConf if we have one
     if (sysConf) {
+        if (!setLogLevel) { setSystemLogLevel(sysConf); setLogLevel = true; }
         if (augPaths) {
             augPaths->clear();
             entry     = sysConf->sections()["Install"].lower_bound("AugmentPath");
