@@ -68,7 +68,7 @@ bool SWConfig::reload() {
             return false;
     }
 
-    m_sections = data;
+    m_sections = std::move(data);
     return true;
 }
 
