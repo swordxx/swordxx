@@ -84,14 +84,17 @@ bool SWConfig::save() {
     for (auto const & sp : m_sections) {
         if (sp.second.empty())
             continue;
+        assert(!sp.first.empty());
         if (!start) {
             outFile << "\n[" << sp.first << "]\n";
             start = true;
         } else {
             outFile << '[' << sp.first << "]\n";
         }
-        for (auto const & ep : sp.second)
+        for (auto const & ep : sp.second) {
+            assert(!ep.first.empty());
             outFile << ep.first << '=' << ep.second << '\n';
+        }
     }
     return outFile.good();
 }
