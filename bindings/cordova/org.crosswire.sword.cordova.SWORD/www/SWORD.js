@@ -255,12 +255,12 @@ function SWMgr() {
 
 
 SWMgr.prototype.getModInfoList = function(callback) {
-	var retVal = [];
-	exec(callback?callback:function(m) { if (m && m.length > 0) retVal = m; },
+	if (!this.hasOwnProperty('_lastModInfoList')) this._lastModInfoList = [];
+	exec(function(m) { if (m && m.length > 0) this._lastModInfoList = m; if (callback) callback(m); },
 		function(err) { utils.alert('[ERROR] problem: ' + err); },
 		"SWORD", "SWMgr.getModInfoList", []
 	);
-	return retVal;
+	return this._lastModInfoList;
 }
 
 SWMgr.prototype.getModuleByName = function(modName, callback) {
