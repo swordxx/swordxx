@@ -1085,7 +1085,8 @@ JNIEXPORT jobjectArray JNICALL Java_org_crosswire_android_sword_SWModule_getEntr
 						results.push_back(i2Start->first);
 					}
 					else {
-						if (level3 && *level3 && *level3 != '-') {
+						// allow '-' to get all keys; allow '*' to get all key=value
+						if (level3 && *level3 && *level3 != '-' && *level3 != '*') {
 							i3Start = i2Start->second.find(level3);
 							i3End = i3Start;
 							if (i3End != i2Start->second.end())
@@ -1098,6 +1099,9 @@ JNIEXPORT jobjectArray JNICALL Java_org_crosswire_android_sword_SWModule_getEntr
 						for (;i3Start != i3End; ++i3Start) {
 							if (level3 && *level3 && *level3 == '-') {
 								results.push_back(i3Start->first);
+							}
+							else if (level3 && *level3 && *level3 == '*') {
+								results.push_back(i3Start->first + "=" + i3Start->second);
 							}
 							else {
 								results.push_back(i3Start->second);
