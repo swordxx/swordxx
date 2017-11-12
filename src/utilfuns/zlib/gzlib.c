@@ -15,6 +15,14 @@
 #endif
 #endif
 
+#if !defined(__GNUC__) && !defined(_WIN32_WCE)
+#include <io.h>
+#include <direct.h>
+#else
+#include <unistd.h>
+#endif
+
+
 /* Local functions */
 local void gz_reset OF((gz_statep));
 local gzFile gz_open OF((const void *, int, const char *));
