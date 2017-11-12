@@ -92,18 +92,18 @@
         </js-module>
     </platform>
  -->
-    <!-- ios
+    <!-- ios -->
     <platform name="ios">
         <config-file target="config.xml" parent="/*">
-            <feature name="Device">
-                <param name="ios-package" value="CDVDevice"/>
+            <feature name="SWORD">
+                <param name="ios-package" value="SWORD"/>
             </feature>
         </config-file>
 
-        <header-file src="src/ios/CDVDevice.h" />
-        <source-file src="src/ios/CDVDevice.m" />
+        <header-file src="src/ios/SWORD.swift" />
+<!--	<source-file src="lib/ios/libSWORD.a" framework="true" /> -->
     </platform>
- -->
+
     <!-- blackberry10
     <platform name="blackberry10">
         <source-file src="src/blackberry10/index.js" target-dir="Device" />

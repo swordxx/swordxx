@@ -88,7 +88,7 @@ public class SWORD extends CordovaPlugin {
 	* @return                  True if the action was valid, false if not.
 	*/
 	public boolean execute(String action, JSONArray args, final CallbackContext callbackContext) throws JSONException {
-		if (action.equals("init")) {
+		if (action.equals("initSWORD")) {
 			JSONObject r = new JSONObject();
 			r.put("version", mgr.version());
 			callbackContext.success(r);
@@ -96,11 +96,11 @@ public class SWORD extends CordovaPlugin {
 		else if (action.equals("echo")) {
 			echo(callbackContext, args.getString(0));
 		}
-		else if (action.equals("InstallMgr.setUserDisclaimerConfirmed")) {
+		else if (action.equals("InstallMgr_setUserDisclaimerConfirmed")) {
 			installMgr.setUserDisclaimerConfirmed();
 			callbackContext.success();
 		}
-		else if (action.equals("InstallMgr.syncConfig")) {
+		else if (action.equals("InstallMgr_syncConfig")) {
 			cordova.getThreadPool().execute(new Runnable() {
 				@Override
 				public void run() {
@@ -110,7 +110,7 @@ public class SWORD extends CordovaPlugin {
 				}
 			});
 		}
-		else if (action.equals("InstallMgr.getRemoteSources")) {
+		else if (action.equals("InstallMgr_getRemoteSources")) {
 			JSONArray r = new JSONArray();
 			String sources[] = installMgr.getRemoteSources();
 			for (String s : sources) {
@@ -118,7 +118,7 @@ public class SWORD extends CordovaPlugin {
 			}
 			callbackContext.success(r);
 		}
-		else if (action.equals("InstallMgr.refreshRemoteSource")) {
+		else if (action.equals("InstallMgr_refreshRemoteSource")) {
 			final String repo = args.getString(0);
 			cordova.getThreadPool().execute(new Runnable() {
 				@Override
@@ -128,7 +128,7 @@ public class SWORD extends CordovaPlugin {
 				}
 			});
 		}
-		else if (action.equals("InstallMgr.getRemoteModInfoList")) {
+		else if (action.equals("InstallMgr_getRemoteModInfoList")) {
 			JSONArray r = new JSONArray();
 			for (SWMgr.ModInfo mi : installMgr.getRemoteModInfoList(args.getString(0))) {
 				JSONObject m = new JSONObject();
@@ -142,7 +142,7 @@ public class SWORD extends CordovaPlugin {
 			}
 			callbackContext.success(r);
 		}
-		else if (action.equals("InstallMgr.remoteInstallModule")) {
+		else if (action.equals("InstallMgr_remoteInstallModule")) {
 			this.installReporterContext = callbackContext;
 			final String repo = args.getString(0);
 			final String modName = args.getString(1);
@@ -199,39 +199,39 @@ public class SWORD extends CordovaPlugin {
 			result.setKeepCallback(true);
 			callbackContext.sendPluginResult(result);
 		}
-		else if (action.equals("InstallMgr.uninstallModule")) {
+		else if (action.equals("InstallMgr_uninstallModule")) {
 			installMgr.uninstallModule(args.getString(0));
 			callbackContext.success();
 		}
-		else if (action.equals("SWMgr.getExtraConfigSections")) {
+		else if (action.equals("SWMgr_getExtraConfigSections")) {
 			JSONArray r = new JSONArray();
 			for (String s : mgr.getExtraConfigSections()) {
 				r.put(s);
 			}
 			callbackContext.success(r);
 		}
-		else if (action.equals("SWMgr.getExtraConfigKeys")) {
+		else if (action.equals("SWMgr_getExtraConfigKeys")) {
 			JSONArray r = new JSONArray();
 			for (String s : mgr.getExtraConfigKeys(args.getString(0))) {
 				r.put(s);
 			}
 			callbackContext.success(r);
 		}
-		else if (action.equals("SWMgr.getExtraConfigValue")) {
+		else if (action.equals("SWMgr_getExtraConfigValue")) {
 			callbackContext.success(mgr.getExtraConfigValue(args.getString(0), args.getString(1)));
 		}
-		else if (action.equals("SWMgr.setExtraConfigValue")) {
+		else if (action.equals("SWMgr_setExtraConfigValue")) {
 			mgr.setExtraConfigValue(args.getString(0), args.getString(1), args.getString(2));
 			callbackContext.success();
 		}
-		else if (action.equals("SWMgr.addExtraConfig")) {
+		else if (action.equals("SWMgr_addExtraConfig")) {
 			JSONArray r = new JSONArray();
 			for (String s : mgr.addExtraConfig(args.getString(0))) {
 				r.put(s);
 			}
 			callbackContext.success(r);
 		}
-		else if (action.equals("SWMgr.getModInfoList")) {
+		else if (action.equals("SWMgr_getModInfoList")) {
 			JSONArray r = new JSONArray();
 			for (SWMgr.ModInfo mi : mgr.getModInfoList()) {
 				JSONObject m = new JSONObject();
@@ -245,7 +245,7 @@ public class SWORD extends CordovaPlugin {
 			}
 			callbackContext.success(r);
 		}
-		else if (action.equals("SWMgr.getModuleByName")) {
+		else if (action.equals("SWMgr_getModuleByName")) {
 			SWModule mod = mgr.getModuleByName(args.getString(0));
 			// didn't find module is not an error
 			if (mod == null) { callbackContext.success(); return true; }
@@ -261,18 +261,18 @@ public class SWORD extends CordovaPlugin {
 			m.put("shortPromo", mod.getConfigEntry("ShortPromo"));
 			callbackContext.success(m);
 		}
-		else if (action.equals("SWModule.setKeyText")) {
+		else if (action.equals("SWModule_setKeyText")) {
 			SWModule mod = mgr.getModuleByName(args.getString(0));
 			if (mod == null) { callbackContext.error("couldn't find module: " + args.getString(0)); return true; }
 			mod.setKeyText(args.getString(1));
 			callbackContext.success();
 		}
-		else if (action.equals("SWModule.getKeyText")) {
+		else if (action.equals("SWModule_getKeyText")) {
 			SWModule mod = mgr.getModuleByName(args.getString(0));
 			if (mod == null) { callbackContext.error("couldn't find module: " + args.getString(0)); return true; }
 			callbackContext.success(mod.getKeyText());
 		}
-		else if (action.equals("SWModule.search")) {
+		else if (action.equals("SWModule_search")) {
 			this.searchReporterContext = callbackContext;
 			final SWModule mod = mgr.getModuleByName(args.getString(0));
 			final String expression = args.getString(1);
@@ -325,7 +325,7 @@ public class SWORD extends CordovaPlugin {
 			result.setKeepCallback(true);
 			callbackContext.sendPluginResult(result);
 		}
-		else if (action.equals("SWModule.getRenderChapter")) {
+		else if (action.equals("SWModule_getRenderChapter")) {
 			this.renderChapterContext = callbackContext;
 
 			final SWModule masterMod = mgr.getModuleByName(args.getString(0));
@@ -354,7 +354,7 @@ public class SWORD extends CordovaPlugin {
 			result.setKeepCallback(true);
 			callbackContext.sendPluginResult(result);
 		}
-		else if (action.equals("SWMgr.registerBibleSyncListener")) {
+		else if (action.equals("SWMgr_registerBibleSyncListener")) {
 			final CallbackContext bibleSyncListener = callbackContext;
 
 			cordova.getThreadPool().execute(new Runnable() {
@@ -374,17 +374,17 @@ public class SWORD extends CordovaPlugin {
 			result.setKeepCallback(true);
 			callbackContext.sendPluginResult(result);
 		}
-		else if (action.equals("SWMgr.sendBibleSyncMessage")) {
+		else if (action.equals("SWMgr_sendBibleSyncMessage")) {
 			String osisRef = args.getString(0);
 			mgr.sendBibleSyncMessage(osisRef);
 			callbackContext.success();
 		}
-		else if (action.equals("SWModule.getRenderText")) {
+		else if (action.equals("SWModule_getRenderText")) {
 			SWModule mod = mgr.getModuleByName(args.getString(0));
 			if (mod == null) { callbackContext.error("couldn't find module: " + args.getString(0)); return true; }
 			callbackContext.success(mod.getRenderText());
 		}
-		else if (action.equals("SWModule.sendText")) {
+		else if (action.equals("SWModule_sendText")) {
 			SWModule mod = mgr.getModuleByName(args.getString(0));
 			if (mod == null) { callbackContext.error("couldn't find module: " + args.getString(0)); return true; }
 			this.sendContext = callbackContext;
@@ -393,12 +393,12 @@ public class SWORD extends CordovaPlugin {
 			result.setKeepCallback(true);
 			callbackContext.sendPluginResult(result);
 		}
-		else if (action.equals("SWModule.getRenderHeader")) {
+		else if (action.equals("SWModule_getRenderHeader")) {
 			SWModule mod = mgr.getModuleByName(args.getString(0));
 			if (mod == null) { callbackContext.error("couldn't find module: " + args.getString(0)); return true; }
 			callbackContext.success(mod.getRenderHeader());
 		}
-		else if (action.equals("SWModule.getKeyChildren")) {
+		else if (action.equals("SWModule_getKeyChildren")) {
 			SWModule mod = mgr.getModuleByName(args.getString(0));
 			if (mod == null) { callbackContext.error("couldn't find module: " + args.getString(0)); return true; }
 			JSONArray r = new JSONArray();
@@ -407,12 +407,12 @@ public class SWORD extends CordovaPlugin {
 			}
 			callbackContext.success(r);
 		}
-		else if (action.equals("SWModule.getConfigEntry")) {
+		else if (action.equals("SWModule_getConfigEntry")) {
 			SWModule mod = mgr.getModuleByName(args.getString(0));
 			if (mod == null) { callbackContext.error("couldn't find module: " + args.getString(0)); return true; }
 			callbackContext.success(mod.getConfigEntry(args.getString(1)));
 		}
-		else if (action.equals("SWModule.getEntryAttribute")) {
+		else if (action.equals("SWModule_getEntryAttribute")) {
 			SWModule mod = mgr.getModuleByName(args.getString(0));
 			if (mod == null) { callbackContext.error("couldn't find module: " + args.getString(0)); return true; }
 			JSONArray r = new JSONArray();
@@ -421,35 +421,35 @@ public class SWORD extends CordovaPlugin {
 			}
 			callbackContext.success(r);
 		}
-		else if (action.equals("SWModule.popError")) {
+		else if (action.equals("SWModule_popError")) {
 			SWModule mod = mgr.getModuleByName(args.getString(0));
 			if (mod == null) { callbackContext.error("couldn't find module: " + args.getString(0)); return true; }
 			callbackContext.success((int)mod.error());
 		}
-		else if (action.equals("SWModule.next")) {
+		else if (action.equals("SWModule_next")) {
 			SWModule mod = mgr.getModuleByName(args.getString(0));
 			if (mod == null) { callbackContext.error("couldn't find module: " + args.getString(0)); return true; }
 			mod.next();
 			callbackContext.success();
 		}
-		else if (action.equals("SWModule.previous")) {
+		else if (action.equals("SWModule_previous")) {
 			SWModule mod = mgr.getModuleByName(args.getString(0));
 			if (mod == null) { callbackContext.error("couldn't find module: " + args.getString(0)); return true; }
 			mod.previous();
 			callbackContext.success();
 		}
-		else if (action.equals("SWModule.begin")) {
+		else if (action.equals("SWModule_begin")) {
 			SWModule mod = mgr.getModuleByName(args.getString(0));
 			if (mod == null) { callbackContext.error("couldn't find module: " + args.getString(0)); return true; }
 			mod.begin();
 			callbackContext.success();
 		}
-		else if (action.equals("SWModule.getVerseKey")) {
+		else if (action.equals("SWModule_getVerseKey")) {
 			SWModule mod = mgr.getModuleByName(args.getString(0));
 			if (mod == null) { callbackContext.error("couldn't find module: " + args.getString(0)); return true; }
 			callbackContext.success(getVerseKey(mod.getKeyChildren()));
 		}
-		else if (action.equals("SWModule.getBookNames")) {
+		else if (action.equals("SWModule_getBookNames")) {
 			SWModule mod = mgr.getModuleByName(args.getString(0));
 			if (mod == null) { callbackContext.error("couldn't find module: " + args.getString(0)); return true; }
 			JSONArray r = new JSONArray();
@@ -458,7 +458,7 @@ public class SWORD extends CordovaPlugin {
 			}
 			callbackContext.success(r);
 		}
-		else if (action.equals("HTTPUtils.makeRequest")) {
+		else if (action.equals("HTTPUtils_makeRequest")) {
 			final CallbackContext makeRequestContext = callbackContext;
 
 			final String url      = args.getString(0);

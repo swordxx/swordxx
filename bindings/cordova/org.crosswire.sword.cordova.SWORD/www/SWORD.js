@@ -16,7 +16,7 @@ InstallMgr.prototype.setUserDisclaimerConfirmed = function(callback) {
 	var retVal = null;
 	exec(callback?callback:function(r) { retVal = r; },
 		function(err) { utils.alert('[ERROR] problem: ' + err); },
-		"SWORD", "InstallMgr.setUserDisclaimerConfirmed", []
+		"SWORD", "InstallMgr_setUserDisclaimerConfirmed", []
 	);
 	return retVal;
 }
@@ -25,7 +25,7 @@ InstallMgr.prototype.syncConfig = function(callback, progressNotify) {
 	var retVal = null;
 	exec(callback?callback:function(r) { retVal = r; },
 		function(err) { utils.alert('[ERROR] problem: ' + err); },
-		"SWORD", "InstallMgr.syncConfig", [progressNotify]
+		"SWORD", "InstallMgr_syncConfig", [progressNotify]
 	);
 	return retVal;
 }
@@ -35,7 +35,7 @@ InstallMgr.prototype.getRemoteSources = function(callback) {
 	var retVal = [];
 	exec(callback?callback:function(r) { retVal = r; },
 		function(err) { utils.alert('[ERROR] problem: ' + err); },
-		"SWORD", "InstallMgr.getRemoteSources", []
+		"SWORD", "InstallMgr_getRemoteSources", []
 	);
 	return retVal;
 }
@@ -45,7 +45,7 @@ InstallMgr.prototype.refreshRemoteSource = function(sourceName, callback) {
 	var retVal = null;
 	exec(callback?callback:function(r) { retVal = r; },
 		function(err) { utils.alert('[ERROR] problem: ' + err); },
-		"SWORD", "InstallMgr.refreshRemoteSource", [sourceName]
+		"SWORD", "InstallMgr_refreshRemoteSource", [sourceName]
 	);
 	return retVal;
 }
@@ -54,7 +54,7 @@ InstallMgr.prototype.getRemoteModInfoList = function(sourceName, callback) {
 	var retVal = [];
 	exec(callback?callback:function(r) { retVal = r; },
 		function(err) { utils.alert('[ERROR] problem: ' + err); },
-		"SWORD", "InstallMgr.getRemoteModInfoList", [sourceName]
+		"SWORD", "InstallMgr_getRemoteModInfoList", [sourceName]
 	);
 	return retVal;
 }
@@ -64,7 +64,7 @@ InstallMgr.prototype.remoteInstallModule = function(sourceName, modName, callbac
 	var retVal = null;
 	exec(callback?callback:function(r) { retVal = r; },
 		function(err) { utils.alert('[ERROR] problem: ' + err); },
-		"SWORD", "InstallMgr.remoteInstallModule", [sourceName, modName]
+		"SWORD", "InstallMgr_remoteInstallModule", [sourceName, modName]
 	);
 	return retVal;
 }
@@ -73,7 +73,7 @@ InstallMgr.prototype.uninstallModule = function(modName, callback) {
 	var retVal = null;
 	exec(callback?callback:function(r) { retVal = r; },
 		function(err) { utils.alert('[ERROR] problem: ' + err); },
-		"SWORD", "InstallMgr.uninstallModule", [modName]
+		"SWORD", "InstallMgr_uninstallModule", [modName]
 	);
 	return retVal;
 }
@@ -102,7 +102,7 @@ SWModule.prototype.setKeyText = function(keyText, callback) {
 	var retVal = null;
 	exec(callback?callback:function(r) { retVal = r; },
 		function(err) { utils.alert('[ERROR] problem: ' + err); },
-		"SWORD", "SWModule.setKeyText", [this.name, keyText]
+		"SWORD", "SWModule_setKeyText", [this.name, keyText]
 	);
 	return retVal;
 }
@@ -111,7 +111,7 @@ SWModule.prototype.search = function(expression, searchType, flags, scope, callb
 	var retVal = null;
 	exec(callback?callback:function(r) { retVal = r; },
 		function(err) { utils.alert('[ERROR] problem: ' + err); },
-		"SWORD", "SWModule.search", [this.name, expression, searchType, flags, scope]
+		"SWORD", "SWModule_search", [this.name, expression, searchType, flags, scope]
 	);
 	return retVal;
 }
@@ -120,7 +120,7 @@ SWModule.prototype.getKeyText = function(callback) {
 	var retVal = null;
 	exec(callback?callback:function(m) { retVal = m; },
 		function(err) { utils.alert('[ERROR] problem: ' + err); },
-		"SWORD", "SWModule.getKeyText", [this.name]
+		"SWORD", "SWModule_getKeyText", [this.name]
 	);
 	return retVal;
 }
@@ -129,7 +129,7 @@ SWModule.prototype.getRenderText = function(callback) {
 	var retVal = null;
 	exec(callback?callback:function(m) { retVal = m; },
 		function(err) { utils.alert('[ERROR] problem: ' + err); },
-		"SWORD", "SWModule.getRenderText", [this.name]
+		"SWORD", "SWModule_getRenderText", [this.name]
 	);
 	return retVal;
 }
@@ -138,7 +138,7 @@ SWModule.prototype.shareVerse = function(callback) {
 	var retVal = null;
 	exec(callback?callback:function(m) { retVal = m; },
 		function(err) { utils.alert('[ERROR] problem: ' + err); },
-		"SWORD", "SWModule.sendText", [this.name]
+		"SWORD", "SWModule_sendText", [this.name]
 	);
 	return retVal;
 }
@@ -154,7 +154,7 @@ SWModule.prototype.getRenderChapter = function(masterMod, callback) {
 	if (!masterMod) masterMod = this;
 	exec(callback?callback:function(m) { retVal = m; },
 		function(err) { utils.alert('[ERROR] problem: ' + err); },
-		"SWORD", "SWModule.getRenderChapter", [masterMod.name, this.name]
+		"SWORD", "SWModule_getRenderChapter", [masterMod.name, this.name]
 	);
 	return retVal;
 }
@@ -163,7 +163,7 @@ SWModule.prototype.getRenderHeader = function(callback) {
 	var retVal = null;
 	exec(callback?callback:function(m) { retVal = m; },
 		function(err) { utils.alert('[ERROR] problem: ' + err); },
-		"SWORD", "SWModule.getRenderHeader", [this.name]
+		"SWORD", "SWModule_getRenderHeader", [this.name]
 	);
 	return retVal;
 }
@@ -172,7 +172,7 @@ SWModule.prototype.getKeyChildren = function(callback) {
 	var retVal = [];
 	exec(callback?callback:function(r) { retVal = r; },
 		function(err) { utils.alert('[ERROR] problem: ' + err); },
-		"SWORD", "SWModule.getKeyChildren", [this.name]
+		"SWORD", "SWModule_getKeyChildren", [this.name]
 	);
 	return retVal;
 }
@@ -181,7 +181,7 @@ SWModule.prototype.getVerseKey = function(callback) {
 	var retVal = {};
 	exec(callback?callback:function(r) { retVal = r; },
 		function(err) { utils.alert('[ERROR] problem: ' + err); },
-		"SWORD", "SWModule.getVerseKey", [this.name]
+		"SWORD", "SWModule_getVerseKey", [this.name]
 	);
 	return retVal;
 }
@@ -190,7 +190,7 @@ SWModule.prototype.getConfigEntry = function(key, callback) {
 	var retVal = '';
 	exec(callback?callback:function(m) { if (m) retVal = m; },
 		function(err) { utils.alert('[ERROR] problem: ' + err); },
-		"SWORD", "SWModule.getConfigEntry", [this.name, key]
+		"SWORD", "SWModule_getConfigEntry", [this.name, key]
 	);
 	return retVal;
 }
@@ -200,7 +200,7 @@ SWModule.prototype.popError = function(callback) {
 	var retVal = 0;
 	exec(callback?callback:function(m) { retVal = m; },
 		function(err) { utils.alert('[ERROR] problem: ' + err); },
-		"SWORD", "SWModule.popError", [this.name]
+		"SWORD", "SWModule_popError", [this.name]
 	);
 	return retVal;
 }
@@ -209,7 +209,7 @@ SWModule.prototype.getEntryAttribute = function(level1Key, level2Key, level3Key,
 	var retVal = [];
 	exec(callback?callback:function(r) { retVal = r; },
 		function(err) { utils.alert('[ERROR] problem: ' + err); },
-		"SWORD", "SWModule.getEntryAttribute", [this.name, level1Key, level2Key, level3Key, isFiltered]
+		"SWORD", "SWModule_getEntryAttribute", [this.name, level1Key, level2Key, level3Key, isFiltered]
 	);
 	return retVal;
 }
@@ -218,7 +218,7 @@ SWModule.prototype.next = function(callback) {
 	var retVal = null;
 	exec(callback?callback:function(r) { retVal = r; },
 		function(err) { utils.alert('[ERROR] problem: ' + err); },
-		"SWORD", "SWModule.next", [this.name]
+		"SWORD", "SWModule_next", [this.name]
 	);
 	return retVal;
 }
@@ -227,7 +227,7 @@ SWModule.prototype.previous = function(callback) {
 	var retVal = null;
 	exec(callback?callback:function(r) { retVal = r; },
 		function(err) { utils.alert('[ERROR] problem: ' + err); },
-		"SWORD", "SWModule.previous", [this.name]
+		"SWORD", "SWModule_previous", [this.name]
 	);
 	return retVal;
 }
@@ -236,7 +236,7 @@ SWModule.prototype.begin = function(callback) {
 	var retVal = null;
 	exec(callback?callback:function(r) { retVal = r; },
 		function(err) { utils.alert('[ERROR] problem: ' + err); },
-		"SWORD", "SWModule.begin", [this.name]
+		"SWORD", "SWModule_begin", [this.name]
 	);
 	return retVal;
 }
@@ -245,7 +245,7 @@ SWModule.prototype.getBookNames = function(callback) {
 	var retVal = [];
 	exec(callback?callback:function(r) { retVal = r; },
 		function(err) { utils.alert('[ERROR] problem: ' + err); },
-		"SWORD", "SWModule.getBookNames", [this.name]
+		"SWORD", "SWModule_getBookNames", [this.name]
 	);
 	return retVal;
 }
@@ -258,7 +258,7 @@ SWMgr.prototype.getModInfoList = function(callback) {
 	if (!this.hasOwnProperty('_lastModInfoList')) this._lastModInfoList = [];
 	exec(function(m) { if (m && m.length > 0) this._lastModInfoList = m; if (callback) callback(m); },
 		function(err) { utils.alert('[ERROR] problem: ' + err); },
-		"SWORD", "SWMgr.getModInfoList", []
+		"SWORD", "SWMgr_getModInfoList", []
 	);
 	return this._lastModInfoList;
 }
@@ -267,7 +267,7 @@ SWMgr.prototype.getModuleByName = function(modName, callback) {
 	var mod = null;
 	exec(function(m) { if (m.name) mod = new SWModule(m); if (callback) callback(mod); },
 		function(err) { utils.alert('[ERROR] problem: ' + err); },
-		"SWORD", "SWMgr.getModuleByName", [modName]
+		"SWORD", "SWMgr_getModuleByName", [modName]
 	);
 	return mod;
 }
@@ -276,7 +276,7 @@ SWMgr.prototype.getExtraConfigSections = function(callback) {
 	var retVal = [];
 	exec(callback?callback:function(r) { retVal = r; },
 		function(err) { utils.alert('[ERROR] problem: ' + err); },
-		"SWORD", "SWMgr.getExtraConfigSections", []
+		"SWORD", "SWMgr_getExtraConfigSections", []
 	);
 	return retVal;
 }
@@ -285,7 +285,7 @@ SWMgr.prototype.getExtraConfigKeys = function(section, callback) {
 	var retVal = [];
 	exec(callback?callback:function(r) { retVal = r; },
 		function(err) { utils.alert('[ERROR] problem: ' + err); },
-		"SWORD", "SWMgr.getExtraConfigKeys", [section]
+		"SWORD", "SWMgr_getExtraConfigKeys", [section]
 	);
 	return retVal;
 }
@@ -294,7 +294,7 @@ SWMgr.prototype.getExtraConfigValue = function(section, key, callback) {
 	var retVal = null;
 	exec(callback?callback:function(r) { retVal = r; },
 		function(err) { utils.alert('[ERROR] problem: ' + err); },
-		"SWORD", "SWMgr.getExtraConfigValue", [section, key]
+		"SWORD", "SWMgr_getExtraConfigValue", [section, key]
 	);
 	return retVal;
 }
@@ -302,7 +302,7 @@ SWMgr.prototype.getExtraConfigValue = function(section, key, callback) {
 SWMgr.prototype.setExtraConfigValue = function(section, key, value, callback) {
 	exec(callback?callback:function() {},
 		function(err) { utils.alert('[ERROR] problem: ' + err); },
-		"SWORD", "SWMgr.setExtraConfigValue", [section, key, value]
+		"SWORD", "SWMgr_setExtraConfigValue", [section, key, value]
 	);
 }
 
@@ -310,7 +310,7 @@ SWMgr.prototype.addExtraConfig = function(confBlob, callback) {
 	var retVal = null;
 	exec(callback?callback:function(r) { retVal = r; },
 		function(err) { utils.alert('[ERROR] problem: ' + err); },
-		"SWORD", "SWMgr.addExtraConfig", [confBlob]
+		"SWORD", "SWMgr_addExtraConfig", [confBlob]
 	);
 	return retVal;
 }
@@ -318,14 +318,14 @@ SWMgr.prototype.addExtraConfig = function(confBlob, callback) {
 SWMgr.prototype.registerBibleSyncListener = function(callback) {
 	exec(callback,
 		function(err) { utils.alert('[ERROR] problem: ' + err); },
-		"SWORD", "SWMgr.registerBibleSyncListener", []
+		"SWORD", "SWMgr_registerBibleSyncListener", []
 	);
 }
 
 SWMgr.prototype.sendBibleSyncMessage = function(osisRef, callback) {
 	exec(callback?callback:function() {},
 		function(err) { utils.alert('[ERROR] problem: ' + err); },
-		"SWORD", "SWMgr.sendBibleSyncMessage", [osisRef]
+		"SWORD", "SWMgr_sendBibleSyncMessage", [osisRef]
 	);
 }
 
@@ -339,7 +339,7 @@ HTTPUtils.prototype.makeRequest = function(url, postData, callback, method) {
 	if (!method) method = this.METHOD_POST;
 	exec(callback?callback:function(r) { if (r && r.length > 0) result = r; },
 		function(err) { utils.alert('[ERROR] problem: ' + err); },
-		"SWORD", "HTTPUtils.makeRequest", [url, postData, method]
+		"SWORD", "HTTPUtils_makeRequest", [url, postData, method]
 	);
 	return result;
 }
@@ -398,7 +398,7 @@ SWORD.prototype.CATEGORY_DAILYDEVOS   = "Daily Devotional";
 
 
 SWORD.prototype.init = function(successCallback, errorCallback) {
-	exec(successCallback, errorCallback, "SWORD", "init", []);
+	exec(successCallback, errorCallback, "SWORD", "initSWORD", []);
 };
 
 
