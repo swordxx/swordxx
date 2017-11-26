@@ -46,7 +46,6 @@ class WebMgr : public SWMgr {
 public:
 	WebMgr(const char *path, const char *extraConfPath = 0) : extraConf(0), SWMgr(path, false, new MarkupFilterMgr(FMT_WEBIF)) { if (extraConfPath) stdstr(&extraConf, extraConfPath); init(); }
 	WebMgr(SWConfig *sysConf) : SWMgr(0, sysConf, false, new MarkupFilterMgr(FMT_WEBIF)) { init(); }
-	WebMgr(const char *path, const char *extraConfPath) : extraConf(0), SWMgr(path, false, new MarkupFilterMgr(FMT_WEBIF)) {
 	void init() {
 		defaultGreekLex   = 0;
 		defaultHebLex     = 0;
