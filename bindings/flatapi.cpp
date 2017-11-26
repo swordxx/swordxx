@@ -33,6 +33,7 @@
 #include <treekeyidx.h>
 #include <filemgr.h>
 #include <swbuf.h>
+#include <swlog.h>
 #include <localemgr.h>
 #include <utilstr.h>
 #include "corba/orbitcpp/webmgr.hpp"
@@ -91,51 +92,43 @@ void clearModInfoArray(org_crosswire_sword_ModInfo **modInfo) {
 
 struct pu {
 	char last;
-	SWHANDLE progressReporter;
-
-	void init(SWHANDLE pr) { progressReporter = pr; last = 0; }
-/*
-	pu(JNIEnv *env, jobject pr) : env(env), progressReporter(pr), last(0) {}
-	JNIEnv *env;
-	jobject progressReporter;
-*/
+	org_crosswire_sword_SWModule_SearchCallback progressReporter;
+	void init(org_crosswire_sword_SWModule_SearchCallback pr) { progressReporter = pr; last = 0; }
 };
 void percentUpdate(char percent, void *userData) {
 	struct pu *p = (struct pu *)userData;
 
 	if (percent != p->last) {
+		p->progressReporter((int)percent);
 		p->last = percent;
-/*
-		jclass cls = p->env->GetObjectClass(p->progressReporter);
-		jmethodID mid = p->env->GetMethodID(cls, "progressReport", "(I)V");
-		if (mid != 0) {
-			p->env->CallVoidMethod(p->progressReporter, mid, (jint)percent);
-		}
-*/
 	}
 }
 
+    
 class MyStatusReporter : public StatusReporter {
 public:
-	int last;
-	SWHANDLE statusReporter;
+	unsigned long last;
+	org_crosswire_sword_InstallMgr_StatusCallback statusReporter;
 	MyStatusReporter() : last(0), statusReporter(0) {}
-	void init(SWHANDLE sr) { statusReporter = sr; last = 0; }
-        virtual void update(unsigned long totalBytes, unsigned long completedBytes) {
-		int p = (totalBytes > 0) ? (int)(74.0 * ((double)completedBytes / (double)totalBytes)) : 0;
-		for (;last < p; ++last) {
-			if (!last) {
-				SWBuf output;
-				output.setFormatted("[ File Bytes: %ld", totalBytes);
-				while (output.size() < 75) output += " ";
-				output += "]";
-//				cout << output.c_str() << "\n ";
-			}
-//			cout << "-";
-		}
-//		cout.flush();
+	void init(org_crosswire_sword_InstallMgr_StatusCallback sr) { statusReporter = sr; last = 0xffffffff; }
+
+    virtual void update(unsigned long totalBytes, unsigned long completedBytes) {
+
+		if (!statusReporter) return;
+
+		if (completedBytes != last) {
+			statusReporter("update", totalBytes, completedBytes);
+			last = completedBytes;
+        }
 	}
-        virtual void preStatus(long totalBytes, long completedBytes, const char *message) {
+    
+    
+    virtual void preStatus(long totalBytes, long completedBytes, const char *message) {
+
+		if (!statusReporter) return;
+
+		statusReporter(message, totalBytes, completedBytes);
+/*
 		SWBuf output;
 		output.setFormatted("[ Total Bytes: %ld; Completed Bytes: %ld", totalBytes, completedBytes);
 		while (output.size() < 75) output += " ";
@@ -145,6 +138,7 @@ public:
 //		for (int i = 0; i < p; ++i) { cout << "="; }
 //		cout << "\n\n" << message << "\n";
 		last = 0;
+*/
 	}
 };      
 
@@ -157,15 +151,12 @@ public:
 	char *rawEntry;
 	char *configEntry;
 	struct pu peeuuu;
-	// making searchHits cache static saves memory only having a single
-	// outstanding copy, but also is not threadsafe.  Remove static here
-	// and fix compiling bugs and add clearSearchHits() to d-tor to change
-	static org_crosswire_sword_SearchHit *searchHits;
-	static const char **entryAttributes;
-	static const char **parseKeyList;
-	static const char **keyChildren;
+	org_crosswire_sword_SearchHit *searchHits;
+	const char **entryAttributes;
+	const char **parseKeyList;
+	const char **keyChildren;
 
-	HandleSWModule(SWModule *mod) {
+	HandleSWModule(SWModule *mod) : searchHits(0), entryAttributes(0), parseKeyList(0), keyChildren(0) {
 		this->mod = mod;
 		this->renderBuf = 0;
 		this->stripBuf = 0;
@@ -179,9 +170,13 @@ public:
 		delete [] renderHeader;
 		delete [] rawEntry;
 		delete [] configEntry;
+		clearSearchHits();
+		clearEntryAttributes();
+		clearParseKeyList();
+		clearKeyChildren();
 	}
 
-	static void clearSearchHits() {
+	void clearSearchHits() {
 		if (searchHits) {
 			for (int i = 0; true; ++i) {
 				if (searchHits[i].modName) {
@@ -193,13 +188,13 @@ public:
 			searchHits = 0;
 		}
 	}
-	static void clearEntryAttributes() {
+	void clearEntryAttributes() {
 		clearStringArray(&entryAttributes);
 	}
-	static void clearParseKeyList() {
+	void clearParseKeyList() {
 		clearStringArray(&parseKeyList);
 	}
-	static void clearKeyChildren() {
+	void clearKeyChildren() {
 		clearStringArray(&keyChildren);
 	}
 };
@@ -264,7 +259,7 @@ public:
 	MyStatusReporter statusReporter;
 	HandleInstMgr() : installMgr(0), modInfo(0) {}
 	HandleInstMgr(InstallMgr *mgr) {
-		this->installMgr = installMgr;
+		this->installMgr = mgr;
 		this->modInfo = 0;
 	}
 
@@ -294,10 +289,6 @@ public:
 };
 
 
-org_crosswire_sword_SearchHit *HandleSWModule::searchHits = 0;
-const char **HandleSWModule::entryAttributes = 0;
-const char **HandleSWModule::parseKeyList = 0;
-const char **HandleSWModule::keyChildren = 0;
 
 const char **HandleSWMgr::globalOptions = 0;
 const char **HandleSWMgr::globalOptionValues = 0;
@@ -308,11 +299,6 @@ const char **HandleInstMgr::remoteSources = 0;
 class InitStatics {
 public:
 	InitStatics() {
-// these are redundant with the static declarations above, but ??? doesn't hurt
-		HandleSWModule::searchHits = 0;
-		HandleSWModule::entryAttributes = 0;
-		HandleSWModule::parseKeyList = 0;
-		HandleSWModule::keyChildren = 0;
 
 		HandleSWMgr::globalOptions = 0;
 		HandleSWMgr::globalOptionValues = 0;
@@ -321,10 +307,6 @@ public:
 		HandleInstMgr::remoteSources = 0;
 	}
 	~InitStatics() {
-		HandleSWModule::clearSearchHits();
-		HandleSWModule::clearEntryAttributes();
-		HandleSWModule::clearParseKeyList();
-		HandleSWModule::clearKeyChildren();
 
 		HandleSWMgr::clearGlobalOptions();
 		HandleSWMgr::clearGlobalOptionValues();
@@ -337,7 +319,30 @@ public:
 
 }
 
+//
+// SWLog methods
+//
+//
 
+void SWDLLEXPORT org_crosswire_sword_SWlog_logError(const char *msg) {
+	SWLog::getSystemLog()->logError(msg);
+}
+
+void SWDLLEXPORT org_crosswire_sword_SWlog_logDebug(const char *msg) {
+	SWLog::getSystemLog()->logDebug(msg);
+}
+
+void SWDLLEXPORT org_crosswire_sword_SWlog_logWarning(const char *msg) {
+	SWLog::getSystemLog()->logWarning(msg);
+}
+
+void SWDLLEXPORT org_crosswire_sword_SWlog_logInformation(const char *msg) {
+	SWLog::getSystemLog()->logInformation(msg);
+}
+
+void SWDLLEXPORT org_crosswire_sword_SWlog_logTimedInformation(const char *msg) {
+	SWLog::getSystemLog()->logTimedInformation(msg);
+}
 
 
 //
@@ -364,7 +369,7 @@ void SWDLLEXPORT org_crosswire_sword_SWModule_terminateSearch
  * Signature: (Ljava/lang/String;IJLjava/lang/String;Lorg/crosswire/android/sword/SWModule/SearchProgressReporter;)[Lorg/crosswire/android/sword/SWModule/SearchHit;
  */
 const struct org_crosswire_sword_SearchHit * SWDLLEXPORT org_crosswire_sword_SWModule_search
-  (SWHANDLE hSWModule, const char *searchString, int searchType, long flags, const char *scope, SWHANDLE progressReporter) {
+  (SWHANDLE hSWModule, const char *searchString, int searchType, long flags, const char *scope, org_crosswire_sword_SWModule_SearchCallback progressReporter) {
 
 	GETSWMODULE(hSWModule, 0);
 
@@ -458,7 +463,7 @@ const char ** SWDLLEXPORT org_crosswire_sword_SWModule_getEntryAttribute
 	sword::AttributeList::iterator i2Start, i2End;
 	sword::AttributeValue::iterator i3Start, i3End;
 
-	if ((level1) && (*level1)) {
+	if ((level1) && (*level1) && *level1 != '-') {
 		i1Start = entryAttribs.find(level1);
 		i1End = i1Start;
 		if (i1End != entryAttribs.end())
@@ -469,35 +474,54 @@ const char ** SWDLLEXPORT org_crosswire_sword_SWModule_getEntryAttribute
 		i1End   = entryAttribs.end();
 	}
 	for (;i1Start != i1End; ++i1Start) {
-		if ((level2) && (*level2)) {
-			i2Start = i1Start->second.find(level2);
-			i2End = i2Start;
-			if (i2End != i1Start->second.end())
-				++i2End;
+		if (level1 && *level1 && *level1 == '-') {
+			results.push_back(i1Start->first);
 		}
 		else {
-			i2Start = i1Start->second.begin();
-			i2End   = i1Start->second.end();
-		}
-		for (;i2Start != i2End; ++i2Start) {
-			if ((level3) && (*level3)) {
-				i3Start = i2Start->second.find(level3);
-				i3End = i3Start;
-				if (i3End != i2Start->second.end())
-					++i3End;
+			if (level2 && *level2 && *level2 != '-') {
+				i2Start = i1Start->second.find(level2);
+				i2End = i2Start;
+				if (i2End != i1Start->second.end())
+					++i2End;
 			}
 			else {
-				i3Start = i2Start->second.begin();
-				i3End   = i2Start->second.end();
+				i2Start = i1Start->second.begin();
+				i2End   = i1Start->second.end();
 			}
-			for (;i3Start != i3End; ++i3Start) {
-				results.push_back(i3Start->second);
+			for (;i2Start != i2End; ++i2Start) {
+				if (level2 && *level2 && *level2 == '-') {
+					results.push_back(i2Start->first);
+				}
+				else {
+					// allow '-' to get all keys; allow '*' to get all key=value
+					if (level3 && *level3 && *level3 != '-' && *level3 != '*') {
+						i3Start = i2Start->second.find(level3);
+						i3End = i3Start;
+						if (i3End != i2Start->second.end())
+							++i3End;
+					}
+					else {
+						i3Start = i2Start->second.begin();
+						i3End   = i2Start->second.end();
+					}
+					for (;i3Start != i3End; ++i3Start) {
+						if (level3 && *level3 && *level3 == '-') {
+							results.push_back(i3Start->first);
+						}
+						else if (level3 && *level3 && *level3 == '*') {
+							results.push_back(i3Start->first + "=" + i3Start->second);
+						}
+						else {
+							results.push_back(i3Start->second);
+						}
+					}
+					if (i3Start != i3End)
+						break;
+				}
 			}
-			if (i3Start != i3End)
+			if (i2Start != i2End)
 				break;
 		}
-		if (i2Start != i2End)
-			break;
 	}
 
 	const char **retVal = (const char **)calloc(results.size()+1, sizeof(const char *));
@@ -644,7 +668,7 @@ const char ** SWDLLEXPORT org_crosswire_sword_SWModule_getKeyChildren
 
 	sword::VerseKey *vkey = SWDYNAMIC_CAST(VerseKey, key);
 	if (vkey) {
-		retVal = (const char **)calloc(9, sizeof(const char *));
+		retVal = (const char **)calloc(11, sizeof(const char *));
 		SWBuf num;
 		num.appendFormatted("%d", vkey->getTestament());
 		stdstr((char **)&(retVal[0]), num.c_str());
@@ -665,6 +689,8 @@ const char ** SWDLLEXPORT org_crosswire_sword_SWModule_getKeyChildren
 		stdstr((char **)&(retVal[5]), num.c_str());
 		stdstr((char **)&(retVal[6]), vkey->getBookName());
 		stdstr((char **)&(retVal[7]), vkey->getOSISRef());
+		stdstr((char **)&(retVal[8]), vkey->getShortText());
+		stdstr((char **)&(retVal[9]), vkey->getBookAbbrev());
 	}
 	else {
 		TreeKeyIdx *tkey = SWDYNAMIC_CAST(TreeKeyIdx, key);
@@ -1016,10 +1042,10 @@ const struct org_crosswire_sword_ModInfo * SWDLLEXPORT org_crosswire_sword_SWMgr
 			stdstr(&(milist[i].name), assureValidUTF8(module->getName()));
 			stdstr(&(milist[i].description), assureValidUTF8(module->getDescription()));
 			stdstr(&(milist[i].category), assureValidUTF8(type.c_str()));
-			stdstr(&(milist[i++].language), assureValidUTF8(module->getLanguage()));
-			stdstr(&(milist[i++].version), assureValidUTF8(version.c_str()));
-			stdstr(&(milist[i++].delta), "");
-			if (i >= size) break;
+			stdstr(&(milist[i].language), assureValidUTF8(module->getLanguage()));
+			stdstr(&(milist[i].version), assureValidUTF8(version.c_str()));
+			stdstr(&(milist[i].delta), "");
+			if (++i >= size) break;
 		}
 	}
 	hmgr->modInfo = milist;
@@ -1274,7 +1300,7 @@ const char * SWDLLEXPORT org_crosswire_sword_SWMgr_translate
  * Signature: (Ljava/lang/String;Lorg/crosswire/android/sword/SWModule/SearchProgressReporter;)V
  */
 SWHANDLE SWDLLEXPORT org_crosswire_sword_InstallMgr_new
-  (const char *baseDir, SWHANDLE statusReporter) {
+  (const char *baseDir, org_crosswire_sword_InstallMgr_StatusCallback statusReporter) {
 	SWBuf confPath = SWBuf(baseDir) + "/InstallMgr.conf";
 	// be sure we have at least some config file already out there
 	if (!FileMgr::existsFile(confPath.c_str())) {
