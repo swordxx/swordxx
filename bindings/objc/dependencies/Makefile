@@ -1,4 +1,4 @@
-LIBCURLVERSION=7.44.0
+LIBCURLVERSION=7.57.0
 ICUVERSION=53.1
 CLUCENEVERSION=9.21b
 
@@ -6,8 +6,8 @@ all: curl/unpacked icu/unpacked clucene/unpacked
 
 clean: curlclean icuclean cluceneclean
 
-libcurl-ios-dist.tar.bz2:
-	wget http://crosswire.org/ftpmirror/pub/sword/dependencies/apple/libcurl-${LIBCURLVERSION}/libcurl-ios-dist.tar.bz2
+libcurl_src.tar.gz:
+	wget http://crosswire.org/ftpmirror/pub/sword/dependencies/apple/libcurl-${LIBCURLVERSION}/libcurl_src.tar.gz
 
 clucene_src.tar.gz:
 	wget http://crosswire.org/ftpmirror/pub/sword/dependencies/apple/clucene-${CLUCENEVERSION}/clucene_src.tar.gz
@@ -16,9 +16,8 @@ icu_src.tar.gz:
 	wget http://crosswire.org/ftpmirror/pub/sword/dependencies/apple/icu-${ICUVERSION}/icu_src.tar.gz
 
 
-curl/unpacked: libcurl-ios-dist.tar.bz2
-	tar xjfv libcurl-ios-dist.tar.bz2
-	mv libcurl-ios-dist curl
+curl/unpacked: libcurl_src.tar.gz
+	tar xjfv libcurl_src.tar.gz
 	touch curl/unpacked
 
 icu/unpacked: icu_src.tar.gz
