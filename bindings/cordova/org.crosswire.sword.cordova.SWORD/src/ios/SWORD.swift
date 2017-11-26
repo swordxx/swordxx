@@ -376,7 +376,8 @@ debugPrint("libswordVersion: " + libswordVersion)
         initMgr()
         let mod = getModule(command: command)
         if (mod != 0) {
-            let retVal = String(cString: org_crosswire_sword_SWModule_getConfigEntry(mod, command.arguments[1] as? String ?? ""))
+            let val = org_crosswire_sword_SWModule_getConfigEntry(mod, command.arguments[1] as? String ?? "")
+            let retVal = val == nil ? nil : String(cString: val!)
             self.commandDelegate!.send(CDVPluginResult(status: CDVCommandStatus_OK, messageAs: retVal), callbackId: command.callbackId)
         }
         else {
@@ -783,6 +784,14 @@ debugPrint("libswordVersion: " + libswordVersion)
         initInstall()
         org_crosswire_sword_InstallMgr_setUserDisclaimerConfirmed(installMgr)
         self.commandDelegate!.send(CDVPluginResult(status: CDVCommandStatus_OK, messageAs: "InstallMgr_setUserDisclaimerConfirmed"), callbackId: command.callbackId)
+    }
+    
+
+    @objc(SWMgr_setJavascript:)
+    func SWMgr_setJavascript(command: CDVInvokedUrlCommand) {
+        initMgr()
+        org_crosswire_sword_SWMgr_setJavascript(mgr, command.arguments[0] as? Bool ?? true ? 1 : 0)
+        self.commandDelegate!.send(CDVPluginResult(status: CDVCommandStatus_OK, messageAs: "SWMgr_setJavascript"), callbackId: command.callbackId)
     }
     
     @objc(SWMgr_getModInfoList:)
