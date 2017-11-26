@@ -374,6 +374,11 @@ public class SWORD extends CordovaPlugin {
 			result.setKeepCallback(true);
 			callbackContext.sendPluginResult(result);
 		}
+		else if (action.equals("SWMgr_setJavascript")) {
+			boolean val = args.getBoolean(0);
+			mgr.setJavascript(val);
+			callbackContext.success();
+		}
 		else if (action.equals("SWMgr_sendBibleSyncMessage")) {
 			String osisRef = args.getString(0);
 			mgr.sendBibleSyncMessage(osisRef);

@@ -1,4 +1,5 @@
 all:
+	cp ../corba/orbitcpp/webmgr.hpp jni/
 	mkdir -p classes
 	javac -d classes src/org/crosswire/android/sword/*.java
 	javah -d jni -classpath classes -jni org.crosswire.android.sword.SWMgr

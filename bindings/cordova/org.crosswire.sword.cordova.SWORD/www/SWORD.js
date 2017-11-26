@@ -329,6 +329,13 @@ SWMgr.prototype.sendBibleSyncMessage = function(osisRef, callback) {
 	);
 }
 
+SWMgr.prototype.setJavascript = function(val, callback) {
+	exec(callback?callback:function() {},
+		function(err) { utils.alert('[ERROR] problem: ' + err); },
+		"SWORD", "SWMgr_setJavascript", [val]
+	);
+}
+
 function HTTPUtils() {}
 
 HTTPUtils.prototype.METHOD_GET  =  0;
