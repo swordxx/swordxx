@@ -93,16 +93,25 @@
     </platform>
  -->
     <!-- ios -->
-    <platform name="ios">
-        <config-file target="config.xml" parent="/*">
-            <feature name="SWORD">
-                <param name="ios-package" value="SWORD"/>
-            </feature>
-        </config-file>
+	<platform name="ios">
+		<config-file target="config.xml" parent="/*">
+			<feature name="SWORD">
+				<param name="ios-package" value="SWORD" />
+			</feature>
+		</config-file>
+		<header-file src="src/ios/flatapi.h" />
+		<header-file src="src/ios/defs.h" />
+		<header-file src="src/ios/SWORD-Bridging-Header.h" />
+		<source-file src="src/ios/SWORD.swift" />
+		<source-file src="libs/ios/libSWORD.a" framework="true" />
+		<source-file src="libs/ios/libcurl.a" framework="true" />
+		<framework src="libstdc++.dylib" />
+		<framework src="libcurl.dylib" />
 
-        <header-file src="src/ios/SWORD.swift" />
+		<dependency id="cordova-plugin-add-swift-support" />
+
 <!--	<source-file src="lib/ios/libSWORD.a" framework="true" /> -->
-    </platform>
+	</platform>
 
     <!-- blackberry10
     <platform name="blackberry10">

@@ -6,7 +6,8 @@
     "id": "org.crosswire.sword.cordova.SWORD",
     "platforms": [
       "android",
-      "amazon-fireos"
+      "amazon-fireos",
+      "ios"
     ]
   },
   "repository": {
@@ -19,6 +20,7 @@
     "Bible",
     "ecosystem:cordova",
     "cordova-android",
+    "cordova-ios",
     "cordova-amazon-fireos"
   ],
   "author": "CrossWire Bible Society",
