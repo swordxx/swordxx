@@ -44,9 +44,10 @@ class WebMgr : public SWMgr {
 	char *extraConf;
 
 public:
-	WebMgr(const char *path, const char *extraConfPath = 0) : extraConf(0), SWMgr(path, false, new MarkupFilterMgr(FMT_WEBIF)) { if (extraConfPath) stdstr(&extraConf, extraConfPath); init(); }
+	WebMgr(const char *path, const char *extraConfPath = 0) : extraConf(0), SWMgr(path, false, new MarkupFilterMgr(FMT_WEBIF)) { init(); if (extraConfPath) stdstr(&extraConf, extraConfPath); }
 	WebMgr(SWConfig *sysConf) : SWMgr(0, sysConf, false, new MarkupFilterMgr(FMT_WEBIF)) { init(); }
 	void init() {
+		extraConf         = 0;
 		defaultGreekLex   = 0;
 		defaultHebLex     = 0;
 		defaultGreekParse = 0;
