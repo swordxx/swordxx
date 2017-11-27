@@ -280,7 +280,7 @@ debugPrint("libswordVersion: " + libswordVersion)
         var retVal = [String]()
         org_crosswire_sword_SWModule_begin(mod)
         while (org_crosswire_sword_SWModule_popError(mod) == 0) {
-            retVal.append(getStringArray(buffer: org_crosswire_sword_SWModule_getKeyChildren(mod))[VERSEKEY_BOOKNAME])
+            retVal.append(getStringArray(buffer: org_crosswire_sword_SWModule_getKeyChildren(mod))[VERSEKEY_BOOKABBREV])
             org_crosswire_sword_SWModule_setKeyText(mod, "+book")
         }
         self.commandDelegate!.send(CDVPluginResult(status: CDVCommandStatus_OK, messageAs: retVal), callbackId: command.callbackId)
@@ -493,7 +493,6 @@ debugPrint("libswordVersion: " + libswordVersion)
 */
     }
 
-    var VERSEKEY_BOOKABBREV = Int(org_crosswire_sword_SWModule_VERSEKEY_BOOKABBREV);
     var VERSEKEY_BOOK = Int(org_crosswire_sword_SWModule_VERSEKEY_BOOK);
     var VERSEKEY_CHAPTER = Int(org_crosswire_sword_SWModule_VERSEKEY_CHAPTER);
     var VERSEKEY_VERSE = Int(org_crosswire_sword_SWModule_VERSEKEY_VERSE);
@@ -503,7 +502,8 @@ debugPrint("libswordVersion: " + libswordVersion)
     var VERSEKEY_VERSEMAX = Int(org_crosswire_sword_SWModule_VERSEKEY_VERSEMAX);
     var VERSEKEY_BOOKNAME = Int(org_crosswire_sword_SWModule_VERSEKEY_BOOKNAME);
     var VERSEKEY_SHORTTEXT = Int(org_crosswire_sword_SWModule_VERSEKEY_SHORTTEXT);
-    
+    var VERSEKEY_BOOKABBREV = Int(org_crosswire_sword_SWModule_VERSEKEY_BOOKABBREV);
+
     func renderChapter(masterMod: Int, mod: Int) -> [[String: Any]] {
         let saveMasterKey = String(cString: org_crosswire_sword_SWModule_getKeyText(masterMod))
         let saveKey = String(cString: org_crosswire_sword_SWModule_getKeyText(mod))
