@@ -354,7 +354,7 @@ public:
 	 *
 	 * @param iconfig manually supply a configuration.  If not supplied, SWMgr will look on the system
 	 *	using a complex hierarchical search.  See README for detailed specifics.
-	 * @param isysconfig
+	 * @param isysconfig manually supply a an isysconfig (e.g. /etc/sword.conf)
 	 * @param autoload whether or not to immediately load modules on construction of this SWMgr.
 	 *	If you reimplemented SWMgr you can set this to false and call SWMgr::load() after you have
 	 *	completed the contruction and setup of your SWMgr subclass.

@@ -295,7 +295,7 @@ public:
 	* If the allocated memory is not enough, it will be resized accordingly.
 	* NOTE: This is dangerous, as wchar_t is currently different sizes on different
 	* platforms (stupid windoze; stupid c++ spec for not mandating 4byte).
-	* @param ch Append this.
+	* @param wch Append this.
 	*/
 	inline SWBuf &append(wchar_t wch) {
 		assureMore(sizeof(wchar_t)*2);

@@ -101,7 +101,7 @@ RTransportGDrive::~RTransportGDrive() {
 
 
 char RTransportGDrive::putURL(const char *destURL, const char *sourcePath, SWBuf *sourceBuf) {
-	return RemoteTransport::putURL();
+	return RemoteTransport::putURL(destURL, sourcePath, sourceBuf);
 }
 char RTransportGDrive::getURL(const char *destPath, const char *sourceURL, SWBuf *destBuf) {
 	signed char retVal = 0;

@@ -349,31 +349,27 @@ public:
 
 	/** Sets/gets module direction
 	 *
-	 * @param newdir Value which to set direction; [-1]-only get
 	 * @return new direction
 	 */
 	virtual char getDirection() const;
 	SWDEPRECATED char Direction(signed char newdir = -1) { char retVal = getDirection(); if (newdir != -1) return direction = newdir; return retVal; }
 
-	/** Sets/gets module encoding
+	/** Gets module encoding
 	 *
-	 * @param enc Value which to set encoding; [-1]-only get
 	 * @return Encoding
 	 */
 	char getEncoding() const { return encoding; }
 	SWDEPRECATED char Encoding(signed char enc = -1) { char retVal = getEncoding(); if (enc != -1) encoding = enc; return retVal; }
 
-	/** Sets/gets module markup
+	/** Gets module markup
 	 *
-	 * @param markup Value which to set markup; [-1]-only get
 	 * @return Markup
 	 */
 	char getMarkup() const { return markup; }
 	SWDEPRECATED char Markup(signed char imarkup = -1) { char retVal = getMarkup(); if (imarkup != -1) markup = imarkup; return retVal; }
 
-	/** Sets/gets module language
+	/** Gets module language
 	 *
-	 * @param imodlang Value which to set modlang; [0]-only get
 	 * @return pointer to modlang
 	 */
 	const char *getLanguage() const { return modlang; }
@@ -487,7 +483,7 @@ public:
 	/** Adds a RenderFilter to this module's renderFilters queue.
 	 *	Render Filters are called when the module is asked to produce
 	 *	renderable text.
-	 * @param newfilter the filter to add
+	 * @param newFilter the filter to add
 	 * @return *this
 	 */
 	virtual SWModule &addRenderFilter(SWFilter *newFilter) {
@@ -505,7 +501,7 @@ public:
 	}
 
 	/** Removes a RenderFilter from this module's renderFilters queue
-	 * @param oldfilter the filter to remove
+	 * @param oldFilter the filter to remove
 	 * @return *this
 	 */
 	virtual SWModule &removeRenderFilter(SWFilter *oldFilter) {
@@ -515,8 +511,8 @@ public:
 	SWDEPRECATED SWModule &RemoveRenderFilter(SWFilter *oldFilter) {	return removeRenderFilter(oldFilter); }
 
 	/** Replaces a RenderFilter in this module's renderfilters queue
-	 * @param oldfilter the filter to remove
-	 * @param newfilter the filter to add in its place
+	 * @param oldFilter the filter to remove
+	 * @param newFilter the filter to add in its place
 	 * @return *this
 	 */
 	virtual SWModule &replaceRenderFilter(SWFilter *oldFilter, SWFilter *newFilter) {
@@ -541,7 +537,7 @@ public:
 	 *	Encoding Filters are called immediately when the module is read
 	 *	from data source, to assure we have desired internal data stream
 	 *	(e.g. UTF-8 for text modules)
-	 * @param newfilter the filter to add
+	 * @param newFilter the filter to add
 	 * @return *this
 	 */
 	virtual SWModule &addEncodingFilter(SWFilter *newFilter) {
@@ -551,7 +547,7 @@ public:
 	SWDEPRECATED SWModule &AddEncodingFilter(SWFilter *newFilter) { return addEncodingFilter(newFilter); }
 
 	/** Removes an EncodingFilter from this module's encodingFilters queue
-	 * @param oldfilter the filter to remove
+	 * @param oldFilter the filter to remove
 	 * @return *this
 	 */
 	virtual SWModule &removeEncodingFilter(SWFilter *oldFilter) {
@@ -561,8 +557,8 @@ public:
 	SWDEPRECATED SWModule &RemoveEncodingFilter(SWFilter *oldFilter) { return removeEncodingFilter(oldFilter); }
 
 	/** Replaces an EncodingFilter in this module's encodingfilters queue
-	 * @param oldfilter the filter to remove
-	 * @param newfilter the filter to add in its place
+	 * @param oldFilter the filter to remove
+	 * @param newFilter the filter to add in its place
 	 * @return *this
 	 */
 	virtual SWModule &replaceEncodingFilter(SWFilter *oldFilter, SWFilter *newFilter) {
@@ -586,7 +582,7 @@ public:
 	/** Adds a StripFilter to this module's stripFilters queue.
 	 *	Strip filters are called when a module is asked to render
 	 *	an entry without any markup (like when searching).
-	 * @param newfilter the filter to add
+	 * @param newFilter the filter to add
 	 * @return *this
 	 */
 	virtual SWModule &addStripFilter(SWFilter *newFilter) {
@@ -599,8 +595,8 @@ public:
 	 * @param newFilter the filter to add
 	 * @return *this
 	 */
-	virtual SWModule &addRawFilter(SWFilter *newfilter) {
-		rawFilters->push_back(newfilter);
+	virtual SWModule &addRawFilter(SWFilter *newFilter) {
+		rawFilters->push_back(newFilter);
 		return *this;
 	}
 	SWDEPRECATED SWModule &AddRawFilter(SWFilter *newFilter) { return addRawFilter(newFilter); }
@@ -626,7 +622,7 @@ public:
 	 *	Option Filters are used to turn options in the text on
 	 *	or off, or so some other state (e.g. Strong's Number,
 	 *	Footnotes, Cross References, etc.)
-	 * @param newfilter the filter to add
+	 * @param newFilter the filter to add
 	 * @return *this
 	 */
 	virtual SWModule &addOptionFilter(SWOptionFilter *newFilter) {
@@ -662,8 +658,8 @@ public:
 	 * @param render for internal use
 	 * @return result buffer
 	 */
-	SWBuf renderText();
 	SWBuf renderText(const char *buf, int len = -1, bool render = true) const;
+    SWBuf renderText();
 	SWDEPRECATED const char *RenderText(const char *buf = 0, int len = -1, bool render = true) { return renderText(buf, len, render); }
 
 	/** Produces any header data which might be useful which is associated with the

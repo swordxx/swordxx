@@ -89,7 +89,7 @@ public:
 	 * @return error status
 	 * deprecated use setToElement
 	 */
-	virtual char setToElement(int ielement, SW_POSITION = TOP);
+	virtual char setToElement(int ielement, SW_POSITION pos = TOP);
 	// deprecated use setToElement
 	SWDEPRECATED virtual char SetToElement(int ielement, SW_POSITION pos = TOP) { return setToElement(ielement, pos); }
 
@@ -122,7 +122,6 @@ public:
 	/** Positions this key
 	 *
 	 * @param pos position
-	 * @return *this
 	 */
 	virtual void setPosition(SW_POSITION pos);
 	
