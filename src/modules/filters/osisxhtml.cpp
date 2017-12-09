@@ -37,24 +37,25 @@ const char *OSISXHTML::getHeader() const {
 	const static char *header = "\
 		.divineName { font-variant: small-caps; }\n\
 		.wordsOfJesus { color: red; }\n\
-		.transChange { font-style: italic;}\n\
-		.transChange.transChange-supplied { font-style: italic;}\n\
-		.transChange.transChange-added { font-style: italic;}\n\
-		.transChange.transChange-tenseChange::before { content: '*';}\n\
-		.transChange:lang(zh) { font-style: normal; text-decoration : dotted underline;}\n\
-		.overline        { text-decoration: overline; }\n\
-		.indent1         { margin-left: 10px }\n\
-		.indent2         { margin-left: 20px }\n\
-		.indent3         { margin-left: 30px }\n\
-		.indent4         { margin-left: 40px }\n\
-		abbr { &:hover{ &:before{ content: attr(title) } } }\n\
+		.transChange { font-style: italic; }\n\
+		.transChange.transChange-supplied { font-style: italic; }\n\
+		.transChange.transChange-added { font-style: italic; }\n\
+		.transChange.transChange-tenseChange::before { content: '*'; }\n\
+		.transChange.transChange-tenseChange { font-style: normal; }\n\
+		.transChange:lang(zh) { font-style: normal; text-decoration: dotted underline; }\n\
+		.overline { text-decoration: overline; }\n\
+		.indent1 { margin-left: 1em; }\n\
+		.indent2 { margin-left: 2em; }\n\
+		.indent3 { margin-left: 3em; }\n\
+		.indent4 { margin-left: 4em; }\n\
+		abbr { &:hover{ &:before{ content: attr(title); } } }\n\
 		.small-caps { font-variant: small-caps; }\n\
 		.selah { text-align: right; width: 50%; margin: 0; padding: 0; }\n\
 		.acrostic { text-align: center; }\n\
-		.colophon {font-style: italic; font-size=small; display:block;}\n\
-		.rdg { font-style: italic;}\n\
-		.catchWord {font-style: bold;}\n\
-		.x-p-indent {text-indent: 10px;}\n\
+		.colophon {font-style: italic; font-size: small; display: block; }\n\
+		.rdg { font-style: italic; }\n\
+		.catchWord {font-style: bold; }\n\
+		.x-p-indent {text-indent: 1em; }\n\
 	";
 	// Acrostic for things like the titles in Psalm 119
 	return header;

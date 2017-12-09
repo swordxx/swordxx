@@ -15,24 +15,25 @@ Rendered Header:
 CSS:
 		.divineName { font-variant: small-caps; }
 		.wordsOfJesus { color: red; }
-		.transChange { font-style: italic;}
-		.transChange.transChange-supplied { font-style: italic;}
-		.transChange.transChange-added { font-style: italic;}
-		.transChange.transChange-tenseChange::before { content: '*';}
-		.transChange:lang(zh) { font-style: normal; text-decoration : dotted underline;}
-		.overline        { text-decoration: overline; }
-		.indent1         { margin-left: 10px }
-		.indent2         { margin-left: 20px }
-		.indent3         { margin-left: 30px }
-		.indent4         { margin-left: 40px }
-		abbr { &:hover{ &:before{ content: attr(title) } } }
+		.transChange { font-style: italic; }
+		.transChange.transChange-supplied { font-style: italic; }
+		.transChange.transChange-added { font-style: italic; }
+		.transChange.transChange-tenseChange::before { content: '*'; }
+		.transChange.transChange-tenseChange { font-style: normal; }
+		.transChange:lang(zh) { font-style: normal; text-decoration: dotted underline; }
+		.overline { text-decoration: overline; }
+		.indent1 { margin-left: 1em; }
+		.indent2 { margin-left: 2em; }
+		.indent3 { margin-left: 3em; }
+		.indent4 { margin-left: 4em; }
+		abbr { &:hover{ &:before{ content: attr(title); } } }
 		.small-caps { font-variant: small-caps; }
 		.selah { text-align: right; width: 50%; margin: 0; padding: 0; }
 		.acrostic { text-align: center; }
-		.colophon {font-style: italic; font-size=small; display:block;}
-		.rdg { font-style: italic;}
-		.catchWord {font-style: bold;}
-		.x-p-indent {text-indent: 10px;}
+		.colophon {font-style: italic; font-size: small; display: block; }
+		.rdg { font-style: italic; }
+		.catchWord {font-style: bold; }
+		.x-p-indent {text-indent: 1em; }
 	
 -------
 RenderText:
@@ -60,24 +61,25 @@ Rendered Header:
 CSS:
 		.divineName { font-variant: small-caps; }
 		.wordsOfJesus { color: red; }
-		.transChange { font-style: italic;}
-		.transChange.transChange-supplied { font-style: italic;}
-		.transChange.transChange-added { font-style: italic;}
-		.transChange.transChange-tenseChange::before { content: '*';}
-		.transChange:lang(zh) { font-style: normal; text-decoration : dotted underline;}
-		.overline        { text-decoration: overline; }
-		.indent1         { margin-left: 10px }
-		.indent2         { margin-left: 20px }
-		.indent3         { margin-left: 30px }
-		.indent4         { margin-left: 40px }
-		abbr { &:hover{ &:before{ content: attr(title) } } }
+		.transChange { font-style: italic; }
+		.transChange.transChange-supplied { font-style: italic; }
+		.transChange.transChange-added { font-style: italic; }
+		.transChange.transChange-tenseChange::before { content: '*'; }
+		.transChange.transChange-tenseChange { font-style: normal; }
+		.transChange:lang(zh) { font-style: normal; text-decoration: dotted underline; }
+		.overline { text-decoration: overline; }
+		.indent1 { margin-left: 1em; }
+		.indent2 { margin-left: 2em; }
+		.indent3 { margin-left: 3em; }
+		.indent4 { margin-left: 4em; }
+		abbr { &:hover{ &:before{ content: attr(title); } } }
 		.small-caps { font-variant: small-caps; }
 		.selah { text-align: right; width: 50%; margin: 0; padding: 0; }
 		.acrostic { text-align: center; }
-		.colophon {font-style: italic; font-size=small; display:block;}
-		.rdg { font-style: italic;}
-		.catchWord {font-style: bold;}
-		.x-p-indent {text-indent: 10px;}
+		.colophon {font-style: italic; font-size: small; display: block; }
+		.rdg { font-style: italic; }
+		.catchWord {font-style: bold; }
+		.x-p-indent {text-indent: 1em; }
 	
 -------
 RenderText:
