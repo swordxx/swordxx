@@ -47,7 +47,7 @@ Feature=StrongsNumbers
 
 ../../utilities/osis2mod tmp/osis_mod2zmod/modules/ osisReference.xml 2>&1 | grep -v \$Rev
 
-cp osis_basic.good osis_mod2zmod.good
+sed 's/OSISReference/zOSISReference/' osis_basic.good > osis_mod2zmod.good
 cd tmp/osis_mod2zmod
 ../../../../utilities/mod2zmod OSISReference zmodules/ 4 2 0 abc123 > /dev/null 2>&1
 ../../../osistest zOSISReference

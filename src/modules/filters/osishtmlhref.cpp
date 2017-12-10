@@ -117,14 +117,12 @@ OSISHTMLHREF::MyUserData::MyUserData(const SWModule *module, const SWKey *key) :
 	tagStacks = new TagStacks();
 	wordsOfChristStart = "<font color=\"red\"> ";
 	wordsOfChristEnd   = "</font> ";
+	osisQToTick = true;	// default
+	isBiblicalText = false;
 	if (module) {
 		osisQToTick = ((!module->getConfigEntry("OSISqToTick")) || (strcmp(module->getConfigEntry("OSISqToTick"), "false")));
 		version = module->getName();
-		BiblicalText = (!strcmp(module->getType(), "Biblical Texts"));
-	}
-	else {
-		osisQToTick = true;	// default
-		version = "";
+		isBiblicalText = (!strcmp(module->getType(), "Biblical Texts"));
 	}
 }
 
@@ -241,22 +239,15 @@ bool OSISHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 					if (!strongsMarkup) {	// leave strong's markup notes out, in the future we'll probably have different option filters to turn different note types on or off
 						SWBuf footnoteNumber = tag.getAttribute("swordFootnote");
 						SWBuf noteName = tag.getAttribute("n");
-						VerseKey *vkey = NULL;
 						char ch = ((tag.getAttribute("type") && ((!strcmp(tag.getAttribute("type"), "crossReference")) || (!strcmp(tag.getAttribute("type"), "x-cross-ref")))) ? 'x':'n');
 
 						u->inXRefNote = true; // Why this change? Ben Morgan: Any note can have references in, so we need to set this to true for all notes
 //						u->inXRefNote = (ch == 'x');
-
-						// see if we have a VerseKey * or descendant
-						SWTRY {
-							vkey = SWDYNAMIC_CAST(VerseKey, u->key);
-						}
-						SWCATCH ( ... ) {	}
 						buf.appendFormatted("<a href=\"passagestudy.jsp?action=showNote&type=%c&value=%s&module=%s&passage=%s\"><small><sup class=\"%c\">*%c%s</sup></small></a>",
 						        ch, 
 							URL::encode(footnoteNumber.c_str()).c_str(), 
 							URL::encode(u->version.c_str()).c_str(), 
-							URL::encode(vkey ? vkey->getText() : u->key->getText()).c_str(), 
+							URL::encode(u->vkey ? u->vkey->getText() : u->key->getText()).c_str(), 
 							ch,
 							ch, 
 							(renderNoteNumbers ? noteName.c_str() : ""));

@@ -37,7 +37,6 @@ namespace {
 	public:
 		SWBuf w;
 		XMLTag tag;
-		VerseKey *vk;
 		char testament;
 		SWBuf hiType;
 		MyUserData(const SWModule *module, const SWKey *key) : BasicFilterUserData(module, key) {}
@@ -73,8 +72,7 @@ OSISPlain::OSISPlain() {
 
 BasicFilterUserData *OSISPlain::createUserData(const SWModule *module, const SWKey *key) {
 	MyUserData *u = new MyUserData(module, key);
-	u->vk = SWDYNAMIC_CAST(VerseKey, u->key);
-	u->testament = (u->vk) ? u->vk->getTestament() : 2;	// default to NT
+	u->testament = (u->vkey) ? u->vkey->getTestament() : 2;	// default to NT
 	return u;
 }
 

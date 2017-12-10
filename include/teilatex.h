@@ -36,7 +36,7 @@ private:
 protected:
 	class MyUserData : public BasicFilterUserData {
 	public:
-		bool BiblicalText;
+		bool isBiblicalText;
 		SWBuf lastHi;
 		bool firstCell; // for tables, indicates whether a cell is the first one in a row
 		int consecutiveNewlines;

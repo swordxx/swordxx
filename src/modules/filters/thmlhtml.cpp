@@ -185,17 +185,17 @@ bool ThMLHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *u
 			}
 		}
 		else if (!strcmp(tag.getName(), "div")) {
-			if (tag.isEndTag() && (u->SecHead)) {
+			if (tag.isEndTag() && (u->inSecHead)) {
 				buf += "</i></b><br />";
-				u->SecHead = false;
+				u->inSecHead = false;
 			}
 			else if (tag.getAttribute("class")) {
 				if (!strcmp(tag.getAttribute("class"), "sechead")) {
-					u->SecHead = true;
+					u->inSecHead = true;
 					buf += "<br /><b><i>";
 				}
 				else if (!strcmp(tag.getAttribute("class"), "title")) {
-					u->SecHead = true;
+					u->inSecHead = true;
 					buf += "<br /><b><i>";
 				}
 			}

@@ -182,16 +182,14 @@ OSISXHTML::MyUserData::MyUserData(const SWModule *module, const SWKey *key) : Ba
 	wordsOfChristEnd   = "</span> ";
 	interModuleLinkStart = "<a class=\"%s\" href=\"sword://%s/%s\">";
 	interModuleLinkEnd = "</a>";
+	isBiblicalText = false;
+	osisQToTick = true;	// default
+	consecutiveNewlines = 0;
 	if (module) {
 		osisQToTick = ((!module->getConfigEntry("OSISqToTick")) || (strcmp(module->getConfigEntry("OSISqToTick"), "false")));
 		version = module->getName();
-		BiblicalText = (!strcmp(module->getType(), "Biblical Texts"));
+		isBiblicalText = (!strcmp(module->getType(), "Biblical Texts"));
 	}
-	else {
-		osisQToTick = true;	// default
-		version = "";
-	}
-	consecutiveNewlines = 0;
 }
 
 OSISXHTML::MyUserData::~MyUserData() {
@@ -201,9 +199,17 @@ OSISXHTML::MyUserData::~MyUserData() {
 	delete lineStack;
 }
 
+
 void OSISXHTML::MyUserData::outputNewline(SWBuf &buf) {
 	if (++consecutiveNewlines <= 2) {
-		outText("<br />\n", buf, this);
+		// any newlines at the start of a verse should get appended to a preverse heading
+		// since preverse cause a newline, simply be sure we have a preverse
+		if (!buf.size() && vkey && vkey->getVerse() && module && module->isProcessEntryAttributes()) {
+			module->getEntryAttributes()["Heading"]["Preverse"]["0"] += "<div></div>";
+		}
+		else {
+			outText("<br />\n", buf, this);
+		}
 		supressAdjacentWhitespace = true;
 	}
 }
@@ -300,25 +306,19 @@ bool OSISXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 					if (!strongsMarkup) {	// leave strong's markup notes out, in the future we'll probably have different option filters to turn different note types on or off
 						SWBuf footnoteNumber = tag.getAttribute("swordFootnote");
 						SWBuf noteName = tag.getAttribute("n");
-						VerseKey *vkey = NULL;
 						char ch = ((tag.getAttribute("type") && ((!strcmp(tag.getAttribute("type"), "crossReference")) || (!strcmp(tag.getAttribute("type"), "x-cross-ref")))) ? 'x':'n');
 
 						u->inXRefNote = true; // Why this change? Ben Morgan: Any note can have references in, so we need to set this to true for all notes
 //						u->inXRefNote = (ch == 'x');
 
-						// see if we have a VerseKey * or descendant
-						SWTRY {
-							vkey = SWDYNAMIC_CAST(VerseKey, u->key);
-						}
-						SWCATCH ( ... ) {	}
-						if (vkey) {
-							//printf("URL = %s\n",URL::encode(vkey->getText()).c_str());
+						if (u->vkey) {
+							//printf("URL = %s\n",URL::encode(u->vkey->getText()).c_str());
 							buf.appendFormatted("<a class=\"%s\" href=\"passagestudy.jsp?action=showNote&type=%c&value=%s&module=%s&passage=%s\"><small><sup class=\"%c\">*%c%s</sup></small></a>",
 								classExtras.c_str(),
 								ch, 
 								URL::encode(footnoteNumber.c_str()).c_str(), 
 								URL::encode(u->version.c_str()).c_str(), 
-								URL::encode(vkey->getText()).c_str(), 
+								URL::encode(u->vkey->getText()).c_str(), 
 								ch,
 								ch, 
 								(renderNoteNumbers ? noteName.c_str() : ""));
@@ -345,7 +345,7 @@ bool OSISXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 			}
 		}
 
-		// <p> paragraph and <lg> linegroup tags
+		// <p> paragraph and <lg> linegroup tags except newline at start of verse (immediately after verse number)
 		else if (!strcmp(tag.getName(), "p") || !strcmp(tag.getName(), "lg")) {
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {	// non-empty start tag
 				u->outputNewline(buf);
@@ -539,11 +539,10 @@ bool OSISXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 				if (canonical.size() && !strcmp(canonical,"true")) {
 					classExtras.append(" canonical");
 				} 
-				VerseKey *vkey = SWDYNAMIC_CAST(VerseKey, u->key);
-				if (vkey && !vkey->getVerse()) {
-					if (!vkey->getChapter()) {
-						if (!vkey->getBook()) {
-							if (!vkey->getTestament()) {
+				if (u->vkey && !u->vkey->getVerse()) {
+					if (!u->vkey->getChapter()) {
+						if (!u->vkey->getBook()) {
+							if (!u->vkey->getTestament()) {
 								outText(SWBuf("<h1 class=\"moduleHeader") + classExtras + "\">",  buf, u);
 								tag.setAttribute("pushed", "h1");
 							}

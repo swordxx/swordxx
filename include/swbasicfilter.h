@@ -31,14 +31,16 @@
 
 SWORD_NAMESPACE_START
 
+class VerseKey;
 
 // not a protected inner class because MSVC++ sucks and can't handle it
 class SWDLLEXPORT BasicFilterUserData {
 public:
-	BasicFilterUserData(const SWModule *module, const SWKey *key) { this->module = module; this->key = key; suspendTextPassThru = false; supressAdjacentWhitespace = false; }
+	BasicFilterUserData(const SWModule *module, const SWKey *key);
 	virtual ~BasicFilterUserData() {}
 	const SWModule *module;
 	const SWKey *key;
+	const VerseKey *vkey;
 	SWBuf lastTextNode;
 	SWBuf lastSuspendSegment;
 	bool suspendTextPassThru;

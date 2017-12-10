@@ -35,9 +35,9 @@ protected:
 	class MyUserData : public BasicFilterUserData {
 	public:
 		MyUserData(const SWModule *module, const SWKey *key);
-		bool SecHead;
+		bool inSecHead;
 		SWBuf version;
-		bool BiblicalText;
+		bool isBiblicalText;
 		XMLTag startTag;
 	};
 	virtual BasicFilterUserData *createUserData(const SWModule *module, const SWKey *key) {

@@ -293,24 +293,17 @@ bool OSISLaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 							footnoteBody += u->module->getEntryAttributes()["Footnote"][footnoteNumber]["body"];
 						}
 						SWBuf noteName = tag.getAttribute("n");
-						VerseKey *vkey = NULL;
-
 
 						u->inXRefNote = true; // Why this change? Ben Morgan: Any note can have references in, so we need to set this to true for all notes
 //						u->inXRefNote = (ch == 'x');
 
-						// see if we have a VerseKey * or descendant
-						SWTRY {
-							vkey = SWDYNAMIC_CAST(VerseKey, u->key);
-						}
-						SWCATCH ( ... ) {	}
-						if (vkey) {
-							//printf("URL = %s\n",URL::encode(vkey->getText()).c_str());
+						if (u->vkey) {
+							//printf("URL = %s\n",URL::encode(u->vkey->getText()).c_str());
 							buf.appendFormatted("\\swordfootnote{%s}{%s}{%s}{%s}{%s}{",
 								 
 								footnoteNumber.c_str(), 
 								u->version.c_str(), 
-								vkey->getText(), 
+								u->vkey->getText(), 
 								tag.getAttribute("type"),
 								(renderNoteNumbers ? noteName.c_str() : ""));
 							if (u->module) {

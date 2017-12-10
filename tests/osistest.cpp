@@ -76,6 +76,9 @@ int main(int argc, char **argv) {
 	module->setKey("Ps.3.1");
 	outputCurrentVerse(module);
 
+	module->setKey("Matt.2.6");
+	outputCurrentVerse(module);
+
 	module->setKey("Mark.1.14");
 	outputCurrentVerse(module);
 

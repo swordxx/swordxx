@@ -33,8 +33,8 @@ class SWDLLEXPORT ThMLHTML : public SWBasicFilter {
 protected:
 	class MyUserData : public BasicFilterUserData {
 	public:
-		MyUserData(const SWModule *module, const SWKey *key) : BasicFilterUserData(module, key) {}
-		bool SecHead;
+		MyUserData(const SWModule *module, const SWKey *key) : BasicFilterUserData(module, key), inSecHead(false) {}
+		bool inSecHead;
 	};
 	virtual BasicFilterUserData *createUserData(const SWModule *module, const SWKey *key) {
 		return new MyUserData(module, key);

@@ -35,7 +35,7 @@ private:
 protected:
 	class MyUserData : public BasicFilterUserData {
 	public:
-		bool BiblicalText;
+		bool isBiblicalText;
 		bool inOsisRef;
 		SWBuf w;
 		SWBuf version;

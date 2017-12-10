@@ -38,10 +38,11 @@ const char *ThMLLaTeX::getHeader() const {
 
 
 ThMLLaTeX::MyUserData::MyUserData(const SWModule *module, const SWKey *key) : BasicFilterUserData(module, key) {
+	isBiblicalText = false;
+	inSecHead = false;
 	if (module) {
 		version = module->getName();
-		BiblicalText = (!strcmp(module->getType(), "Biblical Texts"));
-		SecHead = false;
+		isBiblicalText = (!strcmp(module->getType(), "Biblical Texts"));
 	}	
 }
 
@@ -222,20 +223,14 @@ bool ThMLLaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 					if (u->module){
 					        footnoteBody += u->module->getEntryAttributes()["Footnote"][footnoteNumber]["body"];
                                         }
-					VerseKey *vkey = NULL;
-					// see if we have a VerseKey * or descendant
-					SWTRY {
-						vkey = SWDYNAMIC_CAST(VerseKey, u->key);
-					}
-					SWCATCH ( ... ) {	}
-					if (vkey) {
+					if (u->vkey) {
 						// leave this special osis type in for crossReference notes types?  Might thml use this some day? Doesn't hurt.
 						char ch = ((tag.getAttribute("type") && ((!strcmp(tag.getAttribute("type"), "crossReference")) || (!strcmp(tag.getAttribute("type"), "x-cross-ref")))) ? 'x':'n');
 						buf.appendFormatted("\\swordfootnote[%c]{%s}{%s}{%s}{%s}{", 
 							ch, 
 							footnoteNumber.c_str(), 
 							u->version.c_str(), 
-							vkey->getText(),  
+							u->vkey->getText(),  
 							noteName.c_str());  
 					}
 					else {
@@ -269,7 +264,7 @@ bool ThMLLaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 				}
 			}
 			if (!tag.isEndTag()) {	//	</scripRef>
-				if (!u->BiblicalText) {
+				if (!u->isBiblicalText) {
 					SWBuf refList = u->startTag.getAttribute("passage");
 					if (!refList.length())
 						refList = u->lastTextNode;
@@ -288,22 +283,16 @@ bool ThMLLaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 					if (u->module){
 					        footnoteBody += u->module->getEntryAttributes()["Footnote"][footnoteNumber]["body"];
                                         }
-					VerseKey *vkey = NULL;
-					// see if we have a VerseKey * or descendant
-					SWTRY {
-						vkey = SWDYNAMIC_CAST(VerseKey, u->key);
-					}
-					SWCATCH ( ... ) {}
-					if (vkey) {
+					if (u->vkey) {
 						// leave this special osis type in for crossReference notes types?  Might thml use this some day? Doesn't hurt.
-						//buf.appendFormatted("<a href=\"noteID=%s.x.%s\"><small><sup>*x</sup></small></a> ", vkey->getText(), footnoteNumber.c_str());
+						//buf.appendFormatted("<a href=\"noteID=%s.x.%s\"><small><sup>*x</sup></small></a> ", u->vkey->getText(), footnoteNumber.c_str());
 						// char ch = ((tag.getAttribute("type") && ((!strcmp(tag.getAttribute("type"), "crossReference")) || (!strcmp(tag.getAttribute("type"), "x-cross-ref")))) ? 'x':'n');
 						char ch = 'x';
 						buf.appendFormatted("\\swordfootnote[%c]{%s}{%s}{%s}{%s}{",
 							ch,
 							footnoteNumber.c_str(), 
 							u->version.c_str(),
-							vkey->getText(), 
+							u->vkey->getText(), 
 							(renderNoteNumbers ? noteName.c_str() : ""));
 						if (u->module) {
                                                         buf += u->module->renderText(footnoteBody).c_str();
@@ -321,16 +310,14 @@ bool ThMLLaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 		}
 		else if (tag.getName() && !strcmp(tag.getName(), "div")) {
 		                                        
-                        //VerseKey *vkey = SWDYNAMIC_CAST(VerseKey, u->key);
-		                                                                                                         		
-		        //if (!tag.isEndTag() && vkey && !vkey->getChapter())
+		        //if (!tag.isEndTag() && u->vkey && !u->vkey->getChapter())
 		        //        buf += "\\swordsection{book}{";
 		        //}        
 		        
 		        
-			if (!tag.isEndTag() && u->SecHead) {
+			if (!tag.isEndTag() && u->inSecHead) {
 				buf += "\\swordsection{sechead}{";
-				u->SecHead = false;
+				u->inSecHead = false;
 			}
 			
 			else if (!tag.isEndTag() && tag.getAttribute("class")) {

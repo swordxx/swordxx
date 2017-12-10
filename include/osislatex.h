@@ -45,7 +45,7 @@ protected:
 	public:
 		bool osisQToTick;
 		bool inXRefNote;
-		bool BiblicalText;
+		bool isBiblicalText;
 		int suspendLevel;
 		bool firstCell; // for tables, indicates whether a cell is the first one in a row
 		SWBuf wordsOfChristStart;

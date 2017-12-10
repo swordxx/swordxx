@@ -31,11 +31,11 @@ SWORD_NAMESPACE_START
 
 
 TEIRTF::MyUserData::MyUserData(const SWModule *module, const SWKey *key) : BasicFilterUserData(module, key) {
-	BiblicalText = false;
+	isBiblicalText = false;
 	inOsisRef = false;
 	if (module) {
 		version = module->getName();
-		BiblicalText = (!strcmp(module->getType(), "Biblical Texts"));
+		isBiblicalText = (!strcmp(module->getType(), "Biblical Texts"));
 	}
 }
 
@@ -170,13 +170,7 @@ bool TEIRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *use
 					SWBuf type = tag.getAttribute("type");
 
 					SWBuf footnoteNumber = tag.getAttribute("swordFootnote");
-					VerseKey *vkey = 0;
-					// see if we have a VerseKey * or descendant
-					SWTRY {
-						vkey = SWDYNAMIC_CAST(VerseKey, u->key);
-					}
-					SWCATCH ( ... ) {	}
-					if (vkey) {
+					if (u->vkey) {
 						buf.appendFormatted("{\\super <a href=\"\">*%s</a>} ", footnoteNumber.c_str());
 					}
 					u->suspendTextPassThru = true;

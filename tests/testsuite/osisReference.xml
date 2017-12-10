@@ -141,6 +141,16 @@
 </div>
 <div type="bookGroup">
  <title>New Testament</title>
+ <div type="book" osisID="Matt">
+  <chapter osisID="Matt.2"/>
+   <verse osisID="Matt.2.5">
+    <w lemma="strong:G3004">They said</w> to him, <q level="1" marker="“" sID="q.5787"/><note n="A" osisID="Matt.2.5.xref.A" type="crossReference"><reference osisRef="John.7.42">John 7:42</reference></note><w lemma="strong:G965">In Bethlehem</w> <w lemma="strong:G2453">of Judea</w>; <w lemma="strong:G3779">for this</w> <w lemma="strong:G3704">is what</w> <w lemma="strong:G1125">has been written</w> <note n="1" osisID="Matt.2.5.note.1" type="explanation">Or <hi type="italic">through</hi></note><w lemma="strong:G4396">by the prophet</w>:
+   </verse>
+   <verse osisID="Matt.2.6">
+    <lg sID="lg.300"/><l sID="l.20649"/><q level="2" marker="‘" sID="q.5788"/><note n="A" osisID="Matt.2.6.xref.A" type="crossReference"><reference osisRef="Mic.5.2">Mic 5:2</reference>; <reference osisRef="John.7.42">John 7:42</reference></note><hi type="small-caps"><w lemma="strong:G965">And you, Bethlehem</w>, <w lemma="strong:G1093">land</w> <w lemma="strong:G2455">of Judah</w></hi>, <l eID="l.20649"/><l sID="l.20650"/><hi type="small-caps"><w lemma="strong:G3760">Are by no</w> <w lemma="strong:G3760">means</w> <w lemma="strong:G1646">least</w> <w lemma="strong:G1722">among</w> <w lemma="strong:G2233">the leaders</w> <w lemma="strong:G2455">of Judah</w></hi>; <l eID="l.20650"/><l sID="l.20651"/><hi type="small-caps"><w lemma="strong:G1831">For out of you shall come</w> <w lemma="strong:G1831">forth</w> <w lemma="strong:G2233">a Ruler</w></hi> <l eID="l.20651"/><l sID="l.20652"/><hi type="small-caps"><w lemma="strong:G3748">Who</w> will</hi> <note n="B" osisID="Matt.2.6.xref.B" type="crossReference"><reference osisRef="John.21.16">John 21:16</reference></note><hi type="small-caps"><w lemma="strong:G4165">shepherd</w> <w lemma="strong:G2992">My people</w> <w lemma="strong:G2474">Israel</w></hi>.<q eID="q.5788" level="2" marker="’"/><q eID="q.5787" level="1" marker="”"/>  <lb type="x-end-paragraph"/>
+   </verse>
+  </chapter>
+ </div>
  <div type="book" osisID="Mark">
   <title type="main">THE GOSPEL ACCORDING TO <abbr expansion="Saint">ST.</abbr> MARK</title>
   <chapter sID="Mark.1" osisID="Mark.1"/>

@@ -211,11 +211,12 @@ char ThMLRTF::processText(SWBuf &text, const SWKey *key, const SWModule *module)
 
 
 ThMLRTF::MyUserData::MyUserData(const SWModule *module, const SWKey *key) : BasicFilterUserData(module, key) {
-	this->SecHead = false;
+	isBiblicalText = false;
+	inSecHead = false;
 	XMLTag startTag = "";
 	if (module) {
 		version = module->getName();
-		BiblicalText = (!strcmp(module->getType(), "Biblical Texts"));
+		isBiblicalText = (!strcmp(module->getType(), "Biblical Texts"));
 	}	
 }
 
@@ -253,16 +254,10 @@ bool ThMLRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 				if (!tag.isEmpty()) {
 					SWBuf type = tag.getAttribute("type");
 					SWBuf footnoteNumber = tag.getAttribute("swordFootnote");
-					VerseKey *vkey = NULL;
-					// see if we have a VerseKey * or descendant
-					SWTRY {
-						vkey = SWDYNAMIC_CAST(VerseKey, u->key);
-					}
-					SWCATCH ( ... ) {	}
-					if (vkey) {
+					if (u->vkey) {
 						// leave this special osis type in for crossReference notes types?  Might thml use this some day? Doesn't hurt.
 						char ch = ((tag.getAttribute("type") && ((!strcmp(tag.getAttribute("type"), "crossReference")) || (!strcmp(tag.getAttribute("type"), "x-cross-ref")))) ? 'x':'n');
-						buf.appendFormatted("{\\super <a href=\"\">*%c%i.%s</a>} ", ch, vkey->getVerse(), footnoteNumber.c_str());
+						buf.appendFormatted("{\\super <a href=\"\">*%c%i.%s</a>} ", ch, u->vkey->getVerse(), footnoteNumber.c_str());
 					}
 					u->suspendTextPassThru = true;
 				}
@@ -280,7 +275,7 @@ bool ThMLRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 				}
 			}
 			if (tag.isEndTag()) {	//	</scripRef>
-				if (!u->BiblicalText) {
+				if (!u->isBiblicalText) {
 					SWBuf refList = u->startTag.getAttribute("passage");
 					if (!refList.length())
 						refList = u->lastTextNode;
@@ -292,15 +287,9 @@ bool ThMLRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 				}
 				else {
 					SWBuf footnoteNumber = u->startTag.getAttribute("swordFootnote");
-					VerseKey *vkey = NULL;
-					// see if we have a VerseKey * or descendant
-					SWTRY {
-						vkey = SWDYNAMIC_CAST(VerseKey, u->key);
-					}
-					SWCATCH ( ... ) {}
-					if (vkey) {
+					if (u->vkey) {
 						// leave this special osis type in for crossReference notes types?  Might thml use this some day? Doesn't hurt.
-						buf.appendFormatted("{\\super <a href=\"\">*x%i.%s</a>} ", vkey->getVerse(), footnoteNumber.c_str());
+						buf.appendFormatted("{\\super <a href=\"\">*x%i.%s</a>} ", u->vkey->getVerse(), footnoteNumber.c_str());
 					}
 				}
 
@@ -310,17 +299,17 @@ bool ThMLRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *us
 		}
 
 		else if (tag.getName() && !strcmp(tag.getName(), "div")) {
-			if (tag.isEndTag() && u->SecHead) {
+			if (tag.isEndTag() && u->inSecHead) {
 				buf += "\\par}";
-				u->SecHead = false;
+				u->inSecHead = false;
 			}
 			else if (tag.getAttribute("class")) {
 				if (!stricmp(tag.getAttribute("class"), "sechead")) {
-					u->SecHead = true;
+					u->inSecHead = true;
 					buf += "{\\par\\i1\\b1 ";
 				}
 				else if (!stricmp(tag.getAttribute("class"), "title")) {
-					u->SecHead = true;
+					u->inSecHead = true;
 					buf += "{\\par\\i1\\b1 ";
 				}
 			}

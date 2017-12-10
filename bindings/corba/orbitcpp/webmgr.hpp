@@ -25,6 +25,7 @@
 
 #include <swmgr.h>
 #include <swmodule.h>
+#include <filemgr.h>
 #include <swfilter.h>
 #include <markupfiltmgr.h>
 #include <osiswordjs.h>

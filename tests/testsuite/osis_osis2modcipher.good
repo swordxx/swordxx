@@ -44,11 +44,55 @@ RenderText:
 -------
 
 Key:
+Matthew 2:6
+-------
+Preverse Header 0:
+Raw:
+<br />
+
+-------
+Rendered Header:
+<br/> 
+-------
+CSS:
+		.divineName { font-variant: small-caps; }
+		.wordsOfJesus { color: red; }
+		.transChange { font-style: italic; }
+		.transChange.transChange-supplied { font-style: italic; }
+		.transChange.transChange-added { font-style: italic; }
+		.transChange.transChange-tenseChange::before { content: '*'; }
+		.transChange.transChange-tenseChange { font-style: normal; }
+		.transChange:lang(zh) { font-style: normal; text-decoration: dotted underline; }
+		.overline { text-decoration: overline; }
+		.indent1 { margin-left: 1em; }
+		.indent2 { margin-left: 2em; }
+		.indent3 { margin-left: 3em; }
+		.indent4 { margin-left: 4em; }
+		abbr { &:hover{ &:before{ content: attr(title); } } }
+		.small-caps { font-variant: small-caps; }
+		.selah { text-align: right; width: 50%; margin: 0; padding: 0; }
+		.acrostic { text-align: center; }
+		.colophon {font-style: italic; font-size: small; display: block; }
+		.rdg { font-style: italic; }
+		.catchWord {font-style: bold; }
+		.x-p-indent {text-indent: 1em; }
+	
+-------
+RenderText:
+<span class="line indent0">‘<a class=" crossReference" href="passagestudy.jsp?action=showNote&type=x&value=1&module=OSISReference&passage=Matthew+2%3A6"><small><sup class="x">*x</sup></small></a><span class="small-caps">And you, Bethlehem, land of Judah</span>, </span><br />
+<span class="line indent0"><span class="small-caps">Are by no means least among the leaders of Judah</span>; </span><br />
+<span class="line indent0"><span class="small-caps">For out of you shall come forth a Ruler</span> </span><br />
+<span class="line indent0"><span class="small-caps">Who will</span> <a class=" crossReference" href="passagestudy.jsp?action=showNote&type=x&value=2&module=OSISReference&passage=Matthew+2%3A6"><small><sup class="x">*x</sup></small></a><span class="small-caps">shepherd My people Israel</span>.’” <br />
+  
+-------
+-------
+
+Key:
 Mark 1:14
 -------
 Preverse Header 0:
 Raw:
-<div sID="gen22" type="section"/> <title>The Beginning of the Ministry of Jesus</title> <title type="parallel">(<reference osisRef="Matt.4.12-Matt.4.22">Matt 4:12–22</reference>; <reference osisRef="Luke.4.14">Luke 4:14</reference>, <reference osisRef="Luke.4.15">15</reference>; <reference osisRef="Luke.5.1-Luke.5.11">5:1-11</reference>) </title> <div sID="gen23" type="x-p"/> 
+<div sID="gen25" type="section"/> <title>The Beginning of the Ministry of Jesus</title> <title type="parallel">(<reference osisRef="Matt.4.12-Matt.4.22">Matt 4:12–22</reference>; <reference osisRef="Luke.4.14">Luke 4:14</reference>, <reference osisRef="Luke.4.15">15</reference>; <reference osisRef="Luke.5.1-Luke.5.11">5:1-11</reference>) </title> <div sID="gen26" type="x-p"/> 
 -------
 Rendered Header:
  <h3 class="title">The Beginning of the Ministry of Jesus</h3>

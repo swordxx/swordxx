@@ -29,6 +29,7 @@
 #include <stdarg.h>
 #include <utilstr.h>
 #include <stringmgr.h>
+#include <versekey.h>
 #include <map>
 #include <set>
 
@@ -52,6 +53,19 @@ const char SWBasicFilter::INITIALIZE = 1;
 const char SWBasicFilter::PRECHAR    = 2;
 const char SWBasicFilter::POSTCHAR   = 4;
 const char SWBasicFilter::FINALIZE   = 8;
+
+
+BasicFilterUserData::BasicFilterUserData(const SWModule *module, const SWKey *key) {
+	this->module = module;
+	this->key = key;
+	suspendTextPassThru = false;
+	supressAdjacentWhitespace = false;
+	vkey = 0;
+	SWTRY {
+		vkey = SWDYNAMIC_CAST(VerseKey, key);
+	}
+	SWCATCH ( ... ) { }
+}
 
 
 SWBasicFilter::SWBasicFilter() {
