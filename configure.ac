@@ -117,8 +117,20 @@ if test x$enable_debug = xyes; then
     AM_CXXFLAGS="-O0 -Wall -Werror -Woverloaded-virtual"
   fi
 else
-  AM_CFLAGS="-Ofast"
-  AM_CXXFLAGS="-Ofast"
+  my_save_cxxflags="$CXXFLAGS"
+  CXXFLAGS=-Ofast
+  AC_MSG_CHECKING([whether CXX supports -Ofast])
+  AC_LANG_PUSH([C++])
+  AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])],
+      [AC_MSG_RESULT([yes])]
+      [AM_CFLAGS=-Ofast]
+      [AM_CXXFLAGS=-Ofast],
+      [AC_MSG_RESULT([no])]
+      [AM_CFLAGS=-O3]
+      [AM_CXXFLAGS=-O3],
+  )
+  CXXFLAGS="$my_save_cxxflags"
+  AC_LANG_POP([C++])
 fi
 
 AM_CFLAGS="$AM_CFLAGS -fPIC"
