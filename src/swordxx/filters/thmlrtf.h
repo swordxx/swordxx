@@ -37,9 +37,9 @@ protected:
     class MyUserData : public BasicFilterUserData {
     public:
         MyUserData(const SWModule *module, const SWKey *key);
-        bool SecHead;
+        bool isSecHead;
         std::string version;
-        bool BiblicalText;
+        bool isBiblicalText;
         XMLTag startTag;
     };
 

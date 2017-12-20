@@ -64,10 +64,10 @@ const char *TEIXHTML::getHeader() const {
 
 
 TEIXHTML::MyUserData::MyUserData(const SWModule *module, const SWKey *key) : BasicFilterUserData(module, key) {
-    BiblicalText = false;
+    isBiblicalText = false;
     if (module) {
         version = module->getName();
-        BiblicalText = (module->getType() == "Biblical Texts");
+        isBiblicalText = (module->getType() == "Biblical Texts");
     }
 }
 

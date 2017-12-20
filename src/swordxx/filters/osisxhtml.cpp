@@ -182,7 +182,7 @@ OSISXHTML::MyUserData::MyUserData(SWModule const * module, SWKey const * key)
     if (module) {
         osisQToTick = ((!module->getConfigEntry("OSISqToTick")) || (strcmp(module->getConfigEntry("OSISqToTick"), "false")));
         version = module->getName();
-        BiblicalText = (module->getType() == "Biblical Texts");
+        isBiblicalText = (module->getType() == "Biblical Texts");
     }
     else {
         osisQToTick = true;    // default

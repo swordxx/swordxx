@@ -35,7 +35,7 @@ protected:
     class MyUserData : public BasicFilterUserData {
     public:
         MyUserData(const SWModule *module, const SWKey *key) : BasicFilterUserData(module, key) {}
-        bool SecHead;
+        bool isSecHead;
     };
 
     std::unique_ptr<BasicFilterUserData> createUserData(

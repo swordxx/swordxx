@@ -64,7 +64,7 @@ protected:
 
         bool osisQToTick;
         bool inXRefNote;
-        bool BiblicalText;
+        bool isBiblicalText;
         int suspendLevel;
         std::string wordsOfChristStart;
         std::string wordsOfChristEnd;

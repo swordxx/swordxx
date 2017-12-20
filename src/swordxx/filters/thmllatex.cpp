@@ -41,8 +41,8 @@ const char *ThMLLaTeX::getHeader() const {
 ThMLLaTeX::MyUserData::MyUserData(const SWModule *module, const SWKey *key) : BasicFilterUserData(module, key) {
     if (module) {
         version = module->getName();
-        BiblicalText = (module->getType() == "Biblical Texts");
-        SecHead = false;
+        isBiblicalText = (module->getType() == "Biblical Texts");
+        isSecHead = false;
     }
 }
 
@@ -268,7 +268,7 @@ bool ThMLLaTeX::handleToken(std::string &buf, const char *token, BasicFilterUser
                 }
             }
             if (!tag.isEndTag()) {    //    </scripRef>
-                if (!u->BiblicalText) {
+                if (!u->isBiblicalText) {
                     std::string refList = u->startTag.attribute("passage");
                     if (!refList.length())
                         refList = u->lastTextNode;
@@ -323,9 +323,9 @@ bool ThMLLaTeX::handleToken(std::string &buf, const char *token, BasicFilterUser
                 //}
 
 
-            if (!tag.isEndTag() && u->SecHead) {
+            if (!tag.isEndTag() && u->isSecHead) {
                 buf += "\\swordsection{sechead}{";
-                u->SecHead = false;
+                u->isSecHead = false;
             }
 
             else if (!tag.isEndTag() && !tag.attribute("class").empty()) {

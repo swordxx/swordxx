@@ -210,11 +210,11 @@ char ThMLRTF::processText(std::string &text, const SWKey *key, const SWModule *m
 
 
 ThMLRTF::MyUserData::MyUserData(const SWModule *module, const SWKey *key) : BasicFilterUserData(module, key) {
-    this->SecHead = false;
+    this->isSecHead = false;
     XMLTag startTag = "";
     if (module) {
         version = module->getName();
-        BiblicalText = (module->getType() == "Biblical Texts");
+        isBiblicalText = (module->getType() == "Biblical Texts");
     }
 }
 
@@ -277,7 +277,7 @@ bool ThMLRTF::handleToken(std::string &buf, const char *token, BasicFilterUserDa
                 }
             }
             if (tag.isEndTag()) {    //    </scripRef>
-                if (!u->BiblicalText) {
+                if (!u->isBiblicalText) {
                     std::string refList = u->startTag.attribute("passage");
                     if (!refList.length())
                         refList = u->lastTextNode;
@@ -301,17 +301,17 @@ bool ThMLRTF::handleToken(std::string &buf, const char *token, BasicFilterUserDa
         }
 
         else if (tag.name() == "div") {
-            if (tag.isEndTag() && u->SecHead) {
+            if (tag.isEndTag() && u->isSecHead) {
                 buf += "\\par}";
-                u->SecHead = false;
+                u->isSecHead = false;
             }
             else if (!tag.attribute("class").empty()) {
                 if (caseInsensitiveEquals(tag.attribute("class"), "sechead")) {
-                    u->SecHead = true;
+                    u->isSecHead = true;
                     buf += "{\\par\\i1\\b1 ";
                 }
                 else if (caseInsensitiveEquals(tag.attribute("class"), "title")) {
-                    u->SecHead = true;
+                    u->isSecHead = true;
                     buf += "{\\par\\i1\\b1 ";
                 }
             }

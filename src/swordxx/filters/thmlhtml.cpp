@@ -193,14 +193,14 @@ bool ThMLHTML::handleToken(std::string &buf, const char *token, BasicFilterUserD
             }
         }
         else if (tag.name() == "div") {
-            if (tag.isEndTag() && (u->SecHead)) {
+            if (tag.isEndTag() && (u->isSecHead)) {
                 buf += "</i></b><br />";
-                u->SecHead = false;
+                u->isSecHead = false;
             } else if (tag.attribute("class") == "sechead") {
-                u->SecHead = true;
+                u->isSecHead = true;
                 buf += "<br /><b><i>";
             } else if (tag.attribute("class") == "title") {
-                u->SecHead = true;
+                u->isSecHead = true;
                 buf += "<br /><b><i>";
             }
         }

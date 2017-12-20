@@ -49,7 +49,7 @@ protected:
         bool osisQToTick;
         bool inBold;    // TODO: obsolete. left for binary compat for 1.6.x
         bool inXRefNote;
-        bool BiblicalText;
+        bool isBiblicalText;
         int suspendLevel;
         std::string wordsOfChristStart;
         std::string wordsOfChristEnd;

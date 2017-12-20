@@ -37,7 +37,7 @@ private:
 protected:
     class MyUserData : public BasicFilterUserData {
     public:
-        bool BiblicalText;
+        bool isBiblicalText;
         std::string lastHi;
 
         std::string version;

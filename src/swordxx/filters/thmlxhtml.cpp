@@ -41,8 +41,8 @@ const char *ThMLXHTML::getHeader() const {
 ThMLXHTML::MyUserData::MyUserData(const SWModule *module, const SWKey *key) : BasicFilterUserData(module, key) {
     if (module) {
         version = module->getName();
-        BiblicalText = (module->getType() == "Biblical Texts");
-        SecHead = false;
+        isBiblicalText = (module->getType() == "Biblical Texts");
+        sectionHeaderLevel = false;
     }
 }
 
@@ -262,7 +262,7 @@ bool ThMLXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
                 }
             }
             if (tag.isEndTag()) {    //    </scripRef>
-                if (!u->BiblicalText) {
+                if (!u->isBiblicalText) {
                     std::string refList = u->startTag.attribute("passage");
                     if (!refList.length())
                         refList = u->lastTextNode;
@@ -295,19 +295,19 @@ bool ThMLXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
             }
         }
         else if (tag.name() == "div") {
-            if (tag.isEndTag() && u->SecHead) {
+            if (tag.isEndTag() && u->sectionHeaderLevel) {
                 buf += "</h";
-                buf += u->SecHead;
+                buf += u->sectionHeaderLevel;
                 buf += ">";
-                u->SecHead = false;
+                u->sectionHeaderLevel = false;
             }
             else if (!tag.attribute("class").empty()) {
                 if (caseInsensitiveEquals(tag.attribute("class"), "sechead")) {
-                    u->SecHead = '3';
+                    u->sectionHeaderLevel = '3';
                     buf += "<h3>";
                 }
                 else if (caseInsensitiveEquals(tag.attribute("class"), "title")) {
-                    u->SecHead = '2';
+                    u->sectionHeaderLevel = '2';
                     buf += "<h2>";
                 }
                 else {
