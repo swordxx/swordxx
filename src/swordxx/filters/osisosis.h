@@ -38,7 +38,6 @@ protected:
     class MyUserData : public BasicFilterUserData {
     public:
         bool osisQToTick;
-        bool inBold;
         std::string lastTransChange;
         std::string w;
         std::string fn;
