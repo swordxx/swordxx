@@ -323,7 +323,7 @@ public:
     /** Adds a RenderFilter to this module's renderFilters queue.
      *    Render Filters are called when the module is asked to produce
      *    renderable text.
-     * @param newfilter the filter to add
+     * @param newFilter the filter to add
      * @return *this
      */
     SWModule & addRenderFilter(std::shared_ptr<SWFilter> newFilter) {
@@ -338,7 +338,7 @@ public:
     FilterList const & getRenderFilters() const { return renderFilters; }
 
     /** Removes a RenderFilter from this module's renderFilters queue
-     * @param oldfilter the filter to remove
+     * @param oldFilter the filter to remove
      * @return *this
      */
     SWModule & removeRenderFilter(std::shared_ptr<SWFilter> const & oldFilter) {
@@ -347,8 +347,8 @@ public:
     }
 
     /** Replaces a RenderFilter in this module's renderfilters queue
-     * @param oldfilter the filter to remove
-     * @param newfilter the filter to add in its place
+     * @param oldFilter the filter to remove
+     * @param newFilter the filter to add in its place
      * @return *this
      */
     SWModule & replaceRenderFilter(std::shared_ptr<SWFilter> const & oldFilter,
@@ -372,7 +372,7 @@ public:
      *    Encoding Filters are called immediately when the module is read
      *    from data source, to assure we have desired internal data stream
      *    (e.g. UTF-8 for text modules)
-     * @param newfilter the filter to add
+     * @param newFilter the filter to add
      * @return *this
      */
     SWModule & addEncodingFilter(std::shared_ptr<SWFilter> newFilter) {
@@ -381,7 +381,7 @@ public:
     }
 
     /** Removes an EncodingFilter from this module's encodingFilters queue
-     * @param oldfilter the filter to remove
+     * @param oldFilter the filter to remove
      * @return *this
      */
     SWModule & removeEncodingFilter(std::shared_ptr<SWFilter> const & oldFilter)
@@ -391,8 +391,8 @@ public:
     }
 
     /** Replaces an EncodingFilter in this module's encodingfilters queue
-     * @param oldfilter the filter to remove
-     * @param newfilter the filter to add in its place
+     * @param oldFilter the filter to remove
+     * @param newFilter the filter to add in its place
      * @return *this
      */
     SWModule & replaceEncodingFilter(
@@ -416,7 +416,7 @@ public:
     /** Adds a StripFilter to this module's stripFilters queue.
      *    Strip filters are called when a module is asked to render
      *    an entry without any markup (like when searching).
-     * @param newfilter the filter to add
+     * @param newFilter the filter to add
      * @return *this
      */
     SWModule & addStripFilter(std::shared_ptr<SWFilter> newFilter) {
@@ -428,8 +428,8 @@ public:
      * @param newFilter the filter to add
      * @return *this
      */
-    SWModule & addRawFilter(std::shared_ptr<SWFilter> newfilter) {
-        rawFilters.emplace_back(std::move(newfilter));
+    SWModule & addRawFilter(std::shared_ptr<SWFilter> newFilter) {
+        rawFilters.emplace_back(std::move(newFilter));
         return *this;
     }
 
@@ -454,7 +454,7 @@ public:
      *    Option Filters are used to turn options in the text on
      *    or off, or so some other state (e.g. Strong's Number,
      *    Footnotes, Cross References, etc.)
-     * @param newfilter the filter to add
+     * @param newFilter the filter to add
      * @return *this
      */
     SWModule & addOptionFilter(std::shared_ptr<SWOptionFilter> newFilter) {

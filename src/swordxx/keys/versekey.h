@@ -157,7 +157,6 @@ public:
 
     /** sets the upper boundary for this VerseKey
     * @param ub the new upper boundary for this VerseKey
-    * @return the upper boundary the key was set to
     */
     void setUpperBound(const VerseKey &ub);
 
@@ -210,14 +209,12 @@ public:
     /** Decrements key a number of verses
     *
     * @param steps Number of verses to jump backward
-    * @return *this
     */
     void decrement(int steps = 1) override;
 
     /** Increments key a number of verses
     *
     * @param steps Number of verses to jump forward
-    * @return *this
     */
     void increment(int steps = 1) override;
     bool isTraversable() const override { return true; }
@@ -296,7 +293,6 @@ public:
     * Matthew 29:47 = Mark 2:2).    If last verse is
     * exceeded, key is set to last Book CH:VS
     *
-    * @return *this
     */
     void normalize(bool autocheck = false);
 
@@ -304,9 +300,6 @@ public:
     * automatically normalize itself when modified
     *
     * @param iautonorm value which to set autonorm
-    * [std::numeric_limits<char>::max()] - only get
-    * @return if unchanged -> value of autonorm,
-    * if changed -> previous value of autonorm
     */
     void setAutoNormalize(bool iautonorm);
     bool isAutoNormalize() const;
@@ -328,7 +321,6 @@ public:
     /** Sets index based upon current verse
     *
     * @param iindex value to set index to
-    * @return offset
     */
     void setIndex(long iindex) override;
 
@@ -344,7 +336,7 @@ public:
 
     /** Tries to parse a string and convert it into an OSIS reference
      * @param inRef reference string to try to parse
-     * @param defaultKey @see ParseVerseList(..., defaultKey, ...)
+     * @param defaultKey for details @see ParseVerseList(..., defaultKey, ...)
      */
     static std::string convertToOSIS(const char *inRef, const SWKey *defaultKey);
 
