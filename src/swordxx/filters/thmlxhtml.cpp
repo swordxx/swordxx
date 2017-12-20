@@ -42,7 +42,8 @@ ThMLXHTML::MyUserData::MyUserData(const SWModule *module, const SWKey *key) : Ba
     if (module) {
         version = module->getName();
         isBiblicalText = (module->getType() == "Biblical Texts");
-        sectionHeaderLevel = false;
+    } else {
+        isBiblicalText = false;
     }
 }
 
@@ -295,7 +296,7 @@ bool ThMLXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
                 buf += "</h";
                 buf += u->sectionHeaderLevel;
                 buf += ">";
-                u->sectionHeaderLevel = false;
+                u->sectionHeaderLevel = 0;
             }
             else if (!tag.attribute("class").empty()) {
                 if (caseInsensitiveEquals(tag.attribute("class"), "sechead")) {
