@@ -174,23 +174,14 @@ OSISXHTML::OSISXHTML() {
 OSISXHTML::MyUserData::MyUserData(SWModule const * module, SWKey const * key)
     : BasicFilterUserData(module, key)
 {
-    inXRefNote    = false;
-    suspendLevel = 0;
-    wordsOfChristStart = "<span class=\"wordsOfJesus\"> ";
-    wordsOfChristEnd   = "</span> ";
-    interModuleLinkStart = "<a class=\"%s\" href=\"sword://%s/%s\">";
-    interModuleLinkEnd = "</a>";
     if (module) {
         osisQToTick = ((!module->getConfigEntry("OSISqToTick")) || (strcmp(module->getConfigEntry("OSISqToTick"), "false")));
         version = module->getName();
         isBiblicalText = (module->getType() == "Biblical Texts");
-    }
-    else {
-        osisQToTick = true;    // default
+    } else {
+        osisQToTick = true;
         isBiblicalText = false;
-        version = "";
     }
-    consecutiveNewlines = 0;
 }
 
 OSISXHTML::MyUserData::~MyUserData() {}

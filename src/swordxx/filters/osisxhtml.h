@@ -63,18 +63,19 @@ protected:
     public: /* Fields: */
 
         bool osisQToTick;
-        bool inXRefNote;
+        bool inXRefNote = false;
         bool isBiblicalText;
-        int suspendLevel;
-        std::string wordsOfChristStart;
-        std::string wordsOfChristEnd;
-        std::string interModuleLinkStart;
-        std::string interModuleLinkEnd;
+        int suspendLevel = 0;
+        std::string wordsOfChristStart{"<span class=\"wordsOfJesus\"> "};
+        std::string wordsOfChristEnd{"</span> "};
+        std::string interModuleLinkStart{
+            "<a class=\"%s\" href=\"sword://%s/%s\">"};
+        std::string interModuleLinkEnd{"</a>"};
         TagStack quoteStack;
         TagStack hiStack;
         TagStack titleStack;
         TagStack lineStack;
-        int consecutiveNewlines;
+        int consecutiveNewlines = 0;
         std::string lastTransChange;
         std::string w;
         std::string fn;
