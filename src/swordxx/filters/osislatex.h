@@ -64,7 +64,6 @@ protected:
 
         bool osisQToTick;
         bool inXRefNote;
-        bool BiblicalText;
         int suspendLevel;
         bool firstCell; // for tables, indicates whether a cell is the first one in a row
         std::string wordsOfChristStart;
