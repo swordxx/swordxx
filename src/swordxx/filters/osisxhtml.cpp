@@ -187,6 +187,7 @@ OSISXHTML::MyUserData::MyUserData(SWModule const * module, SWKey const * key)
     }
     else {
         osisQToTick = true;    // default
+        isBiblicalText = false;
         version = "";
     }
     consecutiveNewlines = 0;
