@@ -36,7 +36,8 @@ ThMLHTMLHREF::MyUserData::MyUserData(const SWModule *module, const SWKey *key) :
     if (module) {
         version = module->getName();
         isBiblicalText = (module->getType() == "Biblical Texts");
-        isSecHead = false;
+    } else {
+        isBiblicalText = false;
     }
 }
 
