@@ -50,8 +50,8 @@ struct SWDLLEXPORT BasicFilterUserData {
 
 /* Fields: */
 
-    SWModule const * module;
-    SWKey const * key;
+    SWModule const * const module;
+    SWKey const * const key;
     std::string lastTextNode;
     std::string lastSuspendSegment;
     bool suspendTextPassThru = false;
