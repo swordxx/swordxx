@@ -40,7 +40,7 @@ protected:
     public:
         MyUserData(const SWModule *module, const SWKey *key);//: BasicFilterUserData(module, key) {}
         bool inscriptRef;
-        bool isSecHead;
+        bool isSecHead = false;
         bool isBiblicalText;
         std::string version;
         XMLTag startTag;
