@@ -40,8 +40,7 @@ namespace {
     public:
         std::string w;
         XMLTag tag;
-        VerseKey *vk;
-        char testament;
+        char testament = (verseKey) ? verseKey->getTestament() : 2; // default to NT;
         std::string hiType;
         MyUserData(const SWModule *module, const SWKey *key) : BasicFilterUserData(module, key) {}
     };
@@ -76,13 +75,7 @@ OSISPlain::OSISPlain() {
 std::unique_ptr<BasicFilterUserData> OSISPlain::createUserData(
         SWModule const * module,
         SWKey const * key)
-{
-    auto u(std::make_unique<MyUserData>(module, key));
-    /// \bug Remove const_cast:
-    u->vk = const_cast<VerseKey *>(u->verseKey);
-    u->testament = (u->vk) ? u->vk->getTestament() : 2;    // default to NT
-    return u;
-}
+{ return std::make_unique<MyUserData>(module, key); }
 
 bool OSISPlain::handleToken(std::string &buf, const char *token, BasicFilterUserData *userData) {
        // manually process if it wasn't a simple substitution
