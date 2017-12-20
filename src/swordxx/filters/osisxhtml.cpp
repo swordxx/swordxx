@@ -188,7 +188,16 @@ OSISXHTML::MyUserData::~MyUserData() {}
 
 void OSISXHTML::MyUserData::outputNewline(std::string &buf) {
     if (++consecutiveNewlines <= 2) {
-        outText("<br />\n", buf, this);
+        /* Any newlines at the start of a verse should get appended to a
+           preverse heading since preverse cause a newline, simply be sure we
+           have a preverse: */
+        if (buf.empty() && verseKey && verseKey->getVerse() && module
+            && module->isProcessEntryAttributes())
+        {
+            module->getEntryAttributes()["Heading"]["Preverse"]["0"] += '\n';
+        } else {
+            outText("<br />\n", buf, this);
+        }
         supressAdjacentWhitespace = true;
     }
 }
@@ -321,7 +330,8 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
             }
         }
 
-        // <p> paragraph and <lg> linegroup tags
+        /* <p> paragraph and <lg> linegroup tags except newline at start of
+           verse (immediately after verse number): */
         else if ((tag.name() == "p") || (tag.name() == "lg")) {
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {	// non-empty start tag
                 u->outputNewline(buf);

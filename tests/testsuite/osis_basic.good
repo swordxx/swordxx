@@ -4,13 +4,13 @@ Psalms 3:1
 -------
 Preverse Header 0:
 Raw:
-<div sID="gen12" type="section"/> <title canonical="true" type="psalm">A Psalm of David, when he fled from Absalom his son.</title> <div sID="gen13" type="x-p"/> <lg sID="gen14"/>
+<div sID="gen12" type="section"/> <title canonical="true" type="psalm">A Psalm of David, when he fled from Absalom his son.</title> <div sID="gen13" type="x-p"/> <lg sID="gen14"/> 
 -------
 Rendered Header:
  <h3 class="title psalm canonical">A Psalm of David, when he fled from Absalom his son.</h3>
 
 <br />
-
+ 
 -------
 CSS:
 .divineName { font-variant: small-caps; }
@@ -44,11 +44,55 @@ RenderText:
 -------
 
 Key:
+Matthew 2:6
+-------
+Preverse Header 0:
+Raw:
+
+
+-------
+Rendered Header:
+
+-------
+CSS:
+.divineName { font-variant: small-caps; }
+.wordsOfJesus { color: red; }
+.transChange { font-style: italic; }
+.transChange.transChange-supplied { font-style: italic; }
+.transChange.transChange-added { font-style: italic; }
+.transChange.transChange-tenseChange::before { content: '*'; }
+.transChange.transChange-tenseChange { font-style: normal; }
+.transChange:lang(zh) { font-style: normal; text-decoration: dotted underline; }
+.overline { text-decoration: overline; }
+.indent1 { margin-left: 1em; }
+.indent2 { margin-left: 2em; }
+.indent3 { margin-left: 3em; }
+.indent4 { margin-left: 4em; }
+abbr { &:hover { &:before { content: attr(title); } } }
+.small-caps { font-variant: small-caps; }
+.selah { text-align: right; width: 50%; margin: 0; padding: 0; }
+.acrostic { text-align: center; }
+.colophon { font-style: italic; font-size: small; display: block; }
+.rdg { font-style: italic; }
+.catchWord { font-style: bold; }
+.x-p-indent { text-indent: 1em; }
+
+-------
+RenderText:
+<span class="line indent0">‘<a class=" crossReference" href="passagestudy.jsp?action=showNote&type=x&value=1&module=OSISReference&passage=Matthew+2%3A6"><small><sup class="x">*x</sup></small></a><span class="small-caps">And you, Bethlehem, land of Judah</span>, </span><br />
+<span class="line indent0"><span class="small-caps">Are by no means least among the leaders of Judah</span>; </span><br />
+<span class="line indent0"><span class="small-caps">For out of you shall come forth a Ruler</span> </span><br />
+<span class="line indent0"><span class="small-caps">Who will</span> <a class=" crossReference" href="passagestudy.jsp?action=showNote&type=x&value=2&module=OSISReference&passage=Matthew+2%3A6"><small><sup class="x">*x</sup></small></a><span class="small-caps">shepherd My people Israel</span>.’” <br />
+  
+-------
+-------
+
+Key:
 Mark 1:14
 -------
 Preverse Header 0:
 Raw:
-<div sID="gen22" type="section"/> <title>The Beginning of the Ministry of Jesus</title> <title type="parallel">(<reference osisRef="Matt.4.12-Matt.4.22">Matt 4:12–22</reference>; <reference osisRef="Luke.4.14">Luke 4:14</reference>, <reference osisRef="Luke.4.15">15</reference>; <reference osisRef="Luke.5.1-Luke.5.11">5:1-11</reference>) </title> <div sID="gen23" type="x-p"/>
+<div sID="gen25" type="section"/> <title>The Beginning of the Ministry of Jesus</title> <title type="parallel">(<reference osisRef="Matt.4.12-Matt.4.22">Matt 4:12–22</reference>; <reference osisRef="Luke.4.14">Luke 4:14</reference>, <reference osisRef="Luke.4.15">15</reference>; <reference osisRef="Luke.5.1-Luke.5.11">5:1-11</reference>) </title> <div sID="gen26" type="x-p"/> 
 -------
 Rendered Header:
  <h3 class="title">The Beginning of the Ministry of Jesus</h3>
@@ -83,7 +127,7 @@ abbr { &:hover { &:before { content: attr(title); } } }
 
 -------
 RenderText:
- Now after that John was put in prison, Jesus came into Galilee, preaching the gospel of the kingdom of God,
+ Now after that John was put in prison, Jesus came into Galilee, preaching the gospel of the kingdom of God, 
 -------
 -------
 
@@ -101,16 +145,16 @@ Whitespace tests around headings:
 This is the <b>Book of Genesis</b>, the <i>first</i> book in the Bible. It may be outlined as follows: <br />
 <br />
 <ul>
-    <li><sup>1</sup>Creation of Heaven and Earth, 1:1-2:4a</li>
+ 	<li><sup>1</sup>Creation of Heaven and Earth, 1:1-2:4a</li>
 	<li><sup>2</sup>Creation of Man and Woman, 2:4b-25</li>
 	<li><sub>3</sub>Fall, 3:1-24</li>
 	<li>...</li>
 </ul>
  <br />
 Tables work like this: <table><tbody>
-     <tr> <td><b>Column 1 Label</b></td> <td><b>Column 2 Label</b></td> </tr>
-     <tr> <td>Column 1, Row 1</td> <td>Column 2, Row 1</td> </tr>
-     <tr> <td>Column 1, Row 2</td> <td>Column 2, Row 2</td> </tr>
+ 	<tr> <td><b>Column 1 Label</b></td> <td><b>Column 2 Label</b></td> </tr>
+ 	<tr> <td>Column 1, Row 1</td> <td>Column 2, Row 1</td> </tr>
+ 	<tr> <td>Column 1, Row 2</td> <td>Column 2, Row 2</td> </tr>
  </tbody></table>
 <br />
 
