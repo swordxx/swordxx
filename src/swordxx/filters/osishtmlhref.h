@@ -47,12 +47,11 @@ protected:
     class SWDLLEXPORT MyUserData : public BasicFilterUserData {
     public:
         bool osisQToTick;
-        bool inBold;    // TODO: obsolete. left for binary compat for 1.6.x
-        bool inXRefNote;
+        bool inXRefNote = false;
         bool isBiblicalText;
-        int suspendLevel;
-        std::string wordsOfChristStart;
-        std::string wordsOfChristEnd;
+        int suspendLevel = 0;
+        std::string wordsOfChristStart{"<font color=\"red\"> "};
+        std::string wordsOfChristEnd{"</font> "};
         TagStacks tagStacks;
         std::string lastTransChange;
         std::string w;

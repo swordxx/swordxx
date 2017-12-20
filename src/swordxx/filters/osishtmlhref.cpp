@@ -106,19 +106,13 @@ void processMorph(bool suspendTextPassThru, XMLTag &tag, std::string &buf) {
 }    // end anonymous namespace
 
 OSISHTMLHREF::MyUserData::MyUserData(const SWModule *module, const SWKey *key) : BasicFilterUserData(module, key) {
-    inXRefNote    = false;
-    suspendLevel = 0;
-    wordsOfChristStart = "<font color=\"red\"> ";
-    wordsOfChristEnd   = "</font> ";
     if (module) {
         osisQToTick = ((!module->getConfigEntry("OSISqToTick")) || (strcmp(module->getConfigEntry("OSISqToTick"), "false")));
         version = module->getName();
         isBiblicalText = (module->getType() == "Biblical Texts");
-    }
-    else {
+    } else {
         isBiblicalText = false;
         osisQToTick = true;    // default
-        version = "";
     }
 }
 
