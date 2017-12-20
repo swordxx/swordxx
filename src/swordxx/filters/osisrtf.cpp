@@ -56,8 +56,10 @@ namespace {
         if (module) {
             version = module->getName();
             BiblicalText = (module->getType() == "Biblical Texts");
+            osisQToTick = ((!module->getConfigEntry("OSISqToTick")) || (strcmp(module->getConfigEntry("OSISqToTick"), "false")));
+        } else {
+            osisQToTick = true;
         }
-        osisQToTick = ((!module->getConfigEntry("OSISqToTick")) || (strcmp(module->getConfigEntry("OSISqToTick"), "false")));
     }
 
     static inline void outText(const char *t, std::string &o, BasicFilterUserData *u) { if (!u->suspendTextPassThru) o += t; else u->lastSuspendSegment += t; }
