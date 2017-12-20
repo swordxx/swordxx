@@ -39,9 +39,9 @@ namespace {
     class MyUserData : public BasicFilterUserData {
     public:
         bool osisQToTick;
-        bool BiblicalText;
-        bool inXRefNote;
-        int suspendLevel;
+        bool inBiblicalText;
+        bool inXRefNote = false;
+        int suspendLevel = 0;
         std::stack<std::string> quoteStack;
         std::string w;
         std::string version;
@@ -50,14 +50,12 @@ namespace {
 
 
     MyUserData::MyUserData(const SWModule *module, const SWKey *key) : BasicFilterUserData(module, key) {
-        inXRefNote    = false;
-        BiblicalText  = false;
-        suspendLevel  = 0;
         if (module) {
             version = module->getName();
-            BiblicalText = (module->getType() == "Biblical Texts");
+            inBiblicalText = (module->getType() == "Biblical Texts");
             osisQToTick = ((!module->getConfigEntry("OSISqToTick")) || (strcmp(module->getConfigEntry("OSISqToTick"), "false")));
         } else {
+            inBiblicalText = false;
             osisQToTick = true;
         }
     }
