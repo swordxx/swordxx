@@ -116,6 +116,7 @@ OSISHTMLHREF::MyUserData::MyUserData(const SWModule *module, const SWKey *key) :
         isBiblicalText = (module->getType() == "Biblical Texts");
     }
     else {
+        isBiblicalText = false;
         osisQToTick = true;    // default
         version = "";
     }
