@@ -213,9 +213,7 @@ bool ThMLHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterU
                     std::string type = tag.attribute("type");
                     std::string footnoteNumber = tag.attribute("swordFootnote");
                     std::string noteName = tag.attribute("n");
-                    if (VerseKey const * const vkey =
-                            dynamic_cast<VerseKey const *>(u->key))
-                    {
+                    if (auto const * const vkey = u->verseKey) {
                         // leave this special osis type in for crossReference notes types?  Might thml use this some day? Doesn't hurt.
                         char const ch = ((tag.attribute("type") == "crossReference") || (tag.attribute("type") == "x-cross-ref")) ? 'x':'n';
                         buf += formatted("<a href=\"passagestudy.jsp?action=showNote&type=%c&value=%s&module=%s&passage=%s\"><small><sup class=\"%c\">*%c%s</sup></small></a>",
@@ -271,9 +269,7 @@ bool ThMLHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterU
                 else {
                     std::string footnoteNumber = u->startTag.attribute("swordFootnote");
                     std::string noteName = tag.attribute("n");
-                    if (VerseKey const * const vkey =
-                            dynamic_cast<VerseKey const *>(u->key))
-                    {
+                    if (auto const * const vkey = u->verseKey) {
                         // leave this special osis type in for crossReference notes types?  Might thml use this some day? Doesn't hurt.
                         //buf.appendFormatted("<a href=\"noteID=%s.x.%s\"><small><sup>*x</sup></small></a> ", vkey->getText(), footnoteNumber.c_str());
                         buf += formatted("<a href=\"passagestudy.jsp?action=showNote&type=x&value=%s&module=%s&passage=%s\"><small><sup class=\"x\">*x%s</sup></small></a>",

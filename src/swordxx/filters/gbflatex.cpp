@@ -168,9 +168,7 @@ bool GBFLaTeX::handleToken(std::string &buf, const char *token, BasicFilterUserD
             std::string type = tag.attribute("type");
             std::string footnoteNumber = tag.attribute("swordFootnote");
             std::string noteName = tag.attribute("n");
-            if (VerseKey const * const vkey =
-                    dynamic_cast<VerseKey const *>(u->key))
-            {
+            if (auto const * const vkey = u->verseKey) {
                 buf += formatted("\\swordfootnote{%s}{%s}{%s}{",
                     footnoteNumber.c_str(),
                     u->version.c_str(),

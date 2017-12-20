@@ -242,8 +242,7 @@ bool OSISHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterU
 //                        u->inXRefNote = (ch == 'x');
 
                         // see if we have a VerseKey * or descendant
-                        VerseKey const * const vkey =
-                                dynamic_cast<VerseKey const *>(u->key);
+                        auto const * const vkey = u->verseKey;
                         buf += formatted("<a href=\"passagestudy.jsp?action=showNote&type=%c&value=%s&module=%s&passage=%s\"><small><sup class=\"%c\">*%c%s</sup></small></a>",
                                 ch,
                             URL::encode(footnoteNumber).c_str(),

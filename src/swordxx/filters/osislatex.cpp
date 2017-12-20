@@ -293,9 +293,7 @@ bool OSISLaTeX::handleToken(std::string &buf, const char *token, BasicFilterUser
                         u->inXRefNote = true; // Why this change? Ben Morgan: Any note can have references in, so we need to set this to true for all notes
 //                        u->inXRefNote = (ch == 'x');
 
-                        if (VerseKey const * const vkey =
-                                dynamic_cast<VerseKey const *>(u->key))
-                        {
+                        if (auto const * const vkey = u->verseKey) {
                             //printf("URL = %s\n",URL::encode(vkey->getText()).c_str());
                             buf += formatted("\\swordfootnote{%s}{%s}{%s}{%s}{%s}{",
 

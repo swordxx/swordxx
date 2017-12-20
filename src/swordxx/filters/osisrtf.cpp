@@ -233,9 +233,7 @@ bool OSISRTF::handleToken(std::string &buf, const char *token, BasicFilterUserDa
                             && (type != "strongsMarkup")    // deprecated
                             ) {
                         std::string footnoteNumber = tag.attribute("swordFootnote");
-                        if (VerseKey const * const vkey =
-                                dynamic_cast<VerseKey const *>(u->key))
-                        {
+                        if (auto const * const vkey = u->verseKey) {
                             char const ch = ((type == "crossReference") || (type == "x-cross-ref")) ? 'x':'n';
                             scratch = formatted("{\\super <a href=\"\">*%c%i.%s</a>} ", ch, vkey->getVerse(), footnoteNumber.c_str());
                             outText(scratch.c_str(), buf, u);

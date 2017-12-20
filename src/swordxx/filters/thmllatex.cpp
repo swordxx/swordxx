@@ -225,9 +225,7 @@ bool ThMLLaTeX::handleToken(std::string &buf, const char *token, BasicFilterUser
                     if (u->module){
                             footnoteBody += u->module->getEntryAttributes()["Footnote"][footnoteNumber]["body"];
                                         }
-                    if (VerseKey const * const vkey =
-                            dynamic_cast<VerseKey const *>(u->key))
-                    {
+                    if (auto const * const vkey = u->verseKey) {
                         // leave this special osis type in for crossReference notes types?  Might thml use this some day? Doesn't hurt.
                         char const ch = ((tag.attribute("type") == "crossReference") || (tag.attribute("type") == "x-cross-ref")) ? 'x': 'n';
                         buf += formatted("\\swordfootnote[%c]{%s}{%s}{%s}{%s}{",
@@ -287,9 +285,7 @@ bool ThMLLaTeX::handleToken(std::string &buf, const char *token, BasicFilterUser
                     if (u->module){
                             footnoteBody += u->module->getEntryAttributes()["Footnote"][footnoteNumber]["body"];
                                         }
-                    if (VerseKey const * const vkey =
-                            dynamic_cast<VerseKey const *>(u->key))
-                    {
+                    if (auto const * const vkey = u->verseKey) {
                         // leave this special osis type in for crossReference notes types?  Might thml use this some day? Doesn't hurt.
                         //buf.appendFormatted("<a href=\"noteID=%s.x.%s\"><small><sup>*x</sup></small></a> ", vkey->getText(), footnoteNumber.c_str());
                         // char const ch = ((tag.attribute("type") == "crossReference") || (tag.attribute("type") == "x-cross-ref")) ? 'x': 'n';

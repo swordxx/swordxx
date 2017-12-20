@@ -176,9 +176,7 @@ bool GBFXHTML::handleToken(std::string &buf, const char *token, BasicFilterUserD
             std::string type = tag.attribute("type");
             std::string footnoteNumber = tag.attribute("swordFootnote");
             std::string noteName = tag.attribute("n");
-            if (VerseKey const * const vkey =
-                    dynamic_cast<VerseKey const *>(u->key))
-            {
+            if (auto const * const vkey = u->verseKey) {
                 // leave this special osis type in for crossReference notes types?  Might thml use this some day? Doesn't hurt.
                 //char const ch = ((tag.attribute("type") == "crossReference") || (tag.attribute("type") == "x-cross-ref")) ? 'x' : 'n';
                 buf += formatted("<a href=\"passagestudy.jsp?action=showNote&type=n&value=%s&module=%s&passage=%s\"><small><sup class=\"n\">*n%s</sup></small></a> ",

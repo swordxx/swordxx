@@ -79,7 +79,7 @@ std::unique_ptr<BasicFilterUserData> OSISPlain::createUserData(
 {
     auto u(std::make_unique<MyUserData>(module, key));
     /// \bug Remove const_cast:
-    u->vk = const_cast<VerseKey *>(dynamic_cast<VerseKey const *>(u->key));
+    u->vk = const_cast<VerseKey *>(u->verseKey);
     u->testament = (u->vk) ? u->vk->getTestament() : 2;    // default to NT
     return u;
 }

@@ -295,9 +295,7 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
                         u->inXRefNote = true; // Why this change? Ben Morgan: Any note can have references in, so we need to set this to true for all notes
 //						u->inXRefNote = (ch == 'x');
 
-                        if (VerseKey const * const vkey =
-                                dynamic_cast<VerseKey const *>(u->key))
-                        {
+                        if (auto const * const vkey = u->verseKey) {
                             //printf("URL = %s\n",URL::encode(vkey->getText()).c_str());
                             buf += formatted("<a class=\"%s\" href=\"passagestudy.jsp?action=showNote&type=%c&value=%s&module=%s&passage=%s\"><small><sup class=\"%c\">*%c%s</sup></small></a>",
                                 classExtras.c_str(),
@@ -519,8 +517,7 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
                 }
                 if (tag.attribute("canonical") == "true")
                     classExtras.append(" canonical");
-                VerseKey const * const vkey =
-                        dynamic_cast<VerseKey const *>(u->key);
+                auto const * const vkey = u->verseKey;
                 if (vkey && !vkey->getVerse()) {
                     if (!vkey->getChapter()) {
                         if (!vkey->getBook()) {

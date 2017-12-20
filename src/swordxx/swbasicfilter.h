@@ -30,6 +30,7 @@
 #include <memory>
 #include <set>
 #include <string>
+#include "keys/versekey.h"
 #include "swfilter.h"
 
 
@@ -52,6 +53,7 @@ struct SWDLLEXPORT BasicFilterUserData {
 
     SWModule const * const module;
     SWKey const * const key;
+    VerseKey const * const verseKey = dynamic_cast<VerseKey const *>(key);
     std::string lastTextNode;
     std::string lastSuspendSegment;
     bool suspendTextPassThru = false;

@@ -256,7 +256,7 @@ bool ThMLRTF::handleToken(std::string &buf, const char *token, BasicFilterUserDa
                 if (!tag.isEmpty()) {
                     std::string type = tag.attribute("type");
                     std::string footnoteNumber = tag.attribute("swordFootnote");
-                    if (VerseKey const * const vkey = dynamic_cast<VerseKey const *>(u->key)) {
+                    if (auto const * const vkey = u->verseKey) {
                         // leave this special osis type in for crossReference notes types?  Might thml use this some day? Doesn't hurt.
                         char const ch = ((tag.attribute("type") == "crossReference") || (tag.attribute("type") == "x-cross-ref")) ? 'x' : 'n';
                         buf += formatted("{\\super <a href=\"\">*%c%i.%s</a>} ", ch, vkey->getVerse(), footnoteNumber.c_str());
@@ -289,7 +289,7 @@ bool ThMLRTF::handleToken(std::string &buf, const char *token, BasicFilterUserDa
                 }
                 else {
                     std::string footnoteNumber = u->startTag.attribute("swordFootnote");
-                    if (VerseKey const * const vkey = dynamic_cast<VerseKey const *>(u->key)) {
+                    if (auto const * const vkey = u->verseKey) {
                         // leave this special osis type in for crossReference notes types?  Might thml use this some day? Doesn't hurt.
                         buf += formatted("{\\super <a href=\"\">*x%i.%s</a>} ", vkey->getVerse(), footnoteNumber.c_str());
                     }
