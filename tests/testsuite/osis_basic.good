@@ -48,11 +48,10 @@ Matthew 2:6
 -------
 Preverse Header 0:
 Raw:
-
-
+<div></div>
 -------
 Rendered Header:
-
+<div class=""></div>
 -------
 CSS:
 		.divineName { font-variant: small-caps; }
