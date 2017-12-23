@@ -31,8 +31,6 @@ namespace swordxx {
 /** this filter converts ThML text to HTML text with hrefs
  */
 class SWDLLEXPORT ThMLWEBIF : public ThMLXHTML {
-    const std::string baseURL;
-    const std::string passageStudyURL;
 
 protected:
 

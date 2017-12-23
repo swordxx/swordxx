@@ -22,91 +22,91 @@
 
 #include "thmlwebif.h"
 
-#include <cctype>
-#include <cstdlib>
-#include "../swmodule.h"
 #include "../url.h"
+#include "../utilstr.h"
 #include "../utilxml.h"
 
 
 namespace swordxx {
 
+#define PASSAGE_STUDY_URL "passagestudy.jsp"
 
-ThMLWEBIF::ThMLWEBIF() : baseURL(""), passageStudyURL(baseURL + "passagestudy.jsp") {
-}
+ThMLWEBIF::ThMLWEBIF() {}
 
-
-bool ThMLWEBIF::handleToken(std::string &buf, const char *token, BasicFilterUserData *userData) {
-
-    if (!substituteToken(buf, token)) { // manually process if it wasn't a simple substitution
-        MyUserData *u = (MyUserData *)userData;
-        XMLTag tag(token);
-        std::string url;
+bool ThMLWEBIF::handleToken(std::string & buf,
+                            char const * token,
+                            BasicFilterUserData * userData)
+{
+    // manually process if it wasn't a simple substitution
+    if (!substituteToken(buf, token)) {
+        XMLTag const tag(token);
         if (tag.name() == "sync") {
             auto value(tag.attribute("value"));
-            url = value;
-            if ((url.length() > 1) && strchr("GH", url[0])) {
-                if (isdigit(url[1]))
-                    url = url.c_str()+1;
-            }
+
+            auto const url(
+                        URL::encode(
+                            std::string(
+                                ((value.size() > 1u
+                                  && (value[0u] == 'G' || value[0u] == 'H')
+                                  && charIsDigit(value[1u]))
+                                ? ++value.begin()
+                                : value.end()),
+                                value.end())));
 
             if (tag.attribute("type") == "morph") {
-                buf += "<small><em> (";
-                buf += formatted("<a href=\"%s?showMorph=%s#cv\">", passageStudyURL.c_str(), URL::encode(url).c_str() );
-            }
-            else {
+                buf += "<small><em> (<a href=\"" PASSAGE_STUDY_URL
+                       "?showMorph=";
+                buf += url;
+                buf += "#cv\">";
+                buf += value;
+                buf += "</a>) </em></small>";
+            } else {
                 if (!value.empty()) {
                     value.erase(0u, 1u); //skip leading G, H or T
                     //url = value;
                 }
 
-                buf += "<small><em> &lt;";
-                buf += formatted("<a href=\"%s?showStrong=%s#cv\">", passageStudyURL.c_str(), URL::encode(url).c_str() );
+                buf += "<small><em> &lt;<a href=\"" PASSAGE_STUDY_URL
+                       "?showStrong=";
+                buf += url;
+                buf += "#cv\">";
+                buf += value;
+                buf += "</a>&gt; </em></small>";
             }
-
-            buf += value;
-            buf += "</a>";
-
-            if (tag.attribute("type") == "morph") {
-                buf += ") </em></small>";
-            }
-            else {
-                buf += "&gt; </em></small>";
-            }
-        }
-        else if (tag.name() == "scripRef") {
+        } else if (tag.name() == "scripRef") {
+            auto * const u = static_cast<MyUserData *>(userData);
             if (tag.isEndTag()) {
-                if (u->inscriptRef) { // like  "<scripRef passage="John 3:16">John 3:16</scripRef>"
+                if (u->inscriptRef) {
+                    // like "<scripRef passage="John 3:16">John 3:16</scripRef>"
                     u->inscriptRef = false;
                     buf += "</a>";
-                }
-                else { // end of scripRef like "<scripRef>John 3:16</scripRef>"
-                    url = u->lastTextNode;
-                    buf += formatted("<a href=\"%s?key=%s#cv\">", passageStudyURL.c_str(), URL::encode(url).c_str());
-                    buf += u->lastTextNode.c_str();
+                } else {
+                    // end of scripRef like "<scripRef>John 3:16</scripRef>"
+                    buf += "<a href=\"" PASSAGE_STUDY_URL "?key=";
+                    buf += URL::encode(u->lastTextNode);
+                    buf += "#cv\">";
+                    buf += u->lastTextNode;
                     buf += "</a>";
 
                     // let's let text resume to output again
                     u->suspendTextPassThru = false;
                 }
-            }
-            else if (!tag.attribute("passage").empty()) { //passage given
+            } else if (!tag.attribute("passage").empty()) { //passage given
                 u->inscriptRef = true;
 
-                buf += formatted("<a href=\"%s?key=%s#cv\">", passageStudyURL.c_str(), URL::encode(tag.attribute("passage")).c_str());
-            }
-            else { //no passage given
+                buf += "<a href=\"" PASSAGE_STUDY_URL "?key=";
+                buf += URL::encode(tag.attribute("passage"));
+                buf += "#cv\">";
+            } else { //no passage given
                 u->inscriptRef = false;
                 // let's stop text from going to output
                 u->suspendTextPassThru = true;
             }
-        }
-        else {
+        } else {
             return ThMLXHTML::handleToken(buf, token, userData);
         }
     }
     return true;
 }
-
 
 } /* namespace swordxx */
