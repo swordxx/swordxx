@@ -20,7 +20,6 @@
  *
  */
 
-#include <cctype>
 #include <cerrno>
 #include <cstdio>
 #include <cstdlib>

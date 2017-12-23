@@ -22,7 +22,6 @@
 
 #include "curlhttpt.h"
 
-#include <cctype>
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
@@ -75,7 +74,7 @@ std::vector<DirEntry> CURLHTTPTransport::getDirList(const char *dirURL) {
                 break;
             int const possibleNameLength = pBufRes - pBuf;
             possibleName = formatted("%.*s", possibleNameLength, pBuf);
-            if (std::isalnum(possibleName[0])) {
+            if (charIsAlnum(possibleName[0])) {
                 #if 0
                 SWLog::getSystemLog()->logDebug(
                             "getDirListHTTP: Found a file: %s",

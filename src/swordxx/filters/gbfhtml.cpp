@@ -22,9 +22,9 @@
 
 #include "gbfhtml.h"
 
-#include <cctype>
 #include <cstdlib>
 #include <cstring>
+#include "../utilstr.h"
 
 
 namespace swordxx {
@@ -97,9 +97,9 @@ bool GBFHTML::handleToken(std::string &buf, const char *token, BasicFilterUserDa
                 for (num+=17; ((*num) && (*num != '\"')); num++)
                     *valto++ = *num;
                 *valto = 0;
-                if (atoi((!isdigit(*val))?val+1:val) < 5627) {
+                if (atoi((!charIsDigit(*val))?val+1:val) < 5627) {
                     buf += " <small><em>&lt;";
-                    for (tok = (!isdigit(*val))?val+1:val; *tok; tok++)
+                    for (tok = (!charIsDigit(*val))?val+1:val; *tok; tok++)
                             buf += *tok;
                     buf += "&gt;</em></small> ";
                 }
@@ -109,9 +109,9 @@ bool GBFHTML::handleToken(std::string &buf, const char *token, BasicFilterUserDa
                     for (num+=14; ((*num) && (*num != '\"')); num++)
                         *valto++ = *num;
                     *valto = 0;
-                    if (atoi((!isdigit(*val))?val+1:val) < 5627) {
+                    if (atoi((!charIsDigit(*val))?val+1:val) < 5627) {
                         buf += " <small><em>&lt;";
-                        for (tok = (!isdigit(*val))?val+1:val; *tok; tok++)
+                        for (tok = (!charIsDigit(*val))?val+1:val; *tok; tok++)
                                 buf += *tok;
                         buf += "&gt;</em></small> ";
                     }

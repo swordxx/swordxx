@@ -20,7 +20,6 @@
  *
  */
 
-#include <cctype>
 #include <cstdio>
 #include <cstdlib>
 #include <iostream>
@@ -36,7 +35,7 @@ int main(int argc, char **argv) {
     }
     /* I don't think we need to_rom, do we? anyway, it isn't written
     char buf[127];
-    if (isdigit(argv[1][0])) {
+    if (charIsDigit(argv[1][0])) {
         to_rom(atoi(argv[1]), buf);
         std::cout << buf << std::endl;
     }

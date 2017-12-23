@@ -24,7 +24,6 @@
 
 #include "rawcom4.h"
 
-#include <cctype>
 #include <cstdio>
 #include <fcntl.h>
 #include "../../filemgr.h"

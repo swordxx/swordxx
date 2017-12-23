@@ -23,11 +23,11 @@
 
 #include "osiswebif.h"
 
-#include <cctype>
 #include <cstdlib>
 #include "../keys/versekey.h"
 #include "../swmodule.h"
 #include "../url.h"
+#include "../utilstr.h"
 #include "../utilxml.h"
 
 
@@ -99,7 +99,7 @@ bool OSISWEBIF::handleToken(std::string &buf, const char *token, BasicFilterUser
                         val = strchr(attrib.c_str(), ':');
                         val = (val) ? (val + 1) : attrib.c_str();
                         const char *val2 = val;
-                        if ((strchr("GH", *val)) && (isdigit(val[1])))
+                        if ((strchr("GH", *val)) && (charIsDigit(val[1])))
                             val2++;
                         if ((!strcmp(val2, "3588")) && (lastText.length() < 1))
                             show = false;
@@ -120,7 +120,7 @@ bool OSISWEBIF::handleToken(std::string &buf, const char *token, BasicFilterUser
                             val = strchr(attrib.c_str(), ':');
                             val = (val) ? (val + 1) : attrib.c_str();
                             const char *val2 = val;
-                            if ((*val == 'T') && (strchr("GH", val[1])) && (isdigit(val[2])))
+                            if ((*val == 'T') && (strchr("GH", val[1])) && (charIsDigit(val[2])))
                                 val2+=2;
                             buf += formatted(" <small><em>(<a href=\"%s?showMorph=%s#cv\">%s</a>)</em></small> ", passageStudyURL.c_str(), URL::encode(val2).c_str(), val2);
                         } while (++i < count);

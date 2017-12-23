@@ -22,7 +22,6 @@
 
 #include "teiplain.h"
 
-#include <cctype>
 #include <cstdlib>
 #include <cstring>
 

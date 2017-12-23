@@ -23,7 +23,6 @@
 
 #include "thmlstrongs.h"
 
-#include <cctype>
 #include <cstdio>
 #include <cstdlib>
 #include "../swmodule.h"
@@ -84,7 +83,7 @@ char ThMLStrongs::processText(std::string &text, const SWKey *key, const SWModul
                     for (unsigned int i = 27; token[i] != '\"' && i < 150; i++)
                         *valto++ = token[i];
                     *valto = 0;
-                    if (atoi((!isdigit(*val))?val+1:val) < 5627) {
+                    if (atoi((!charIsDigit(*val))?val+1:val) < 5627) {
                         // normal strongs number
                         sprintf(wordstr, "%03d", word);
                         module->getEntryAttributes()["Word"][wordstr]["PartCount"] = "1";

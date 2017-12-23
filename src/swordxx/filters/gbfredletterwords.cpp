@@ -23,7 +23,6 @@
 
 #include "gbfredletterwords.h"
 
-#include <cctype>
 #include <cstdlib>
 #include "../swmodule.h"
 

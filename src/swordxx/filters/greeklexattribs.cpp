@@ -23,11 +23,11 @@
 
 #include "greeklexattribs.h"
 
-#include <cctype>
 #include <cstdio>
 #include <cstdlib>
 #include <string>
 #include "../swmodule.h"
+#include "../utilstr.h"
 
 
 using std::string;
@@ -56,11 +56,11 @@ char GreekLexAttribs::processText(std::string &text, const SWKey *key, const SWM
         for (from = text.c_str(); *from; from++) {
             if (inAV) {
                 if (currentPhrase == nullptr) {
-                    if (isalpha(*from))
+                    if (charIsAlpha(*from))
                         currentPhrase = from;
                 }
                 else {
-                    if ((!isalpha(*from)) && (*from != ' ') && (*from != '+') && (*from !='(') && (*from != ')') && (*from != '\'')) {
+                    if ((!charIsAlpha(*from)) && (*from != ' ') && (*from != '+') && (*from !='(') && (*from != ')') && (*from != '\'')) {
                         if (*from == '<') {
                             if (!currentPhraseEnd)
                                 currentPhraseEnd = from - 1;
@@ -82,7 +82,7 @@ char GreekLexAttribs::processText(std::string &text, const SWKey *key, const SWM
                         phrase = "";
                         phrase.append(currentPhrase, (int)(((currentPhraseEnd>currentPhrase)?currentPhraseEnd:from) - currentPhrase)-1);
                         currentPhrase = from;
-                        while (*from && isdigit(*from)) from++;
+                        while (*from && charIsDigit(*from)) from++;
                         freq = "";
                         freq.append(currentPhrase, (int)(from - currentPhrase));
                         if ((freq.length() > 0) && (phrase.length() > 0)) {

@@ -23,10 +23,10 @@
 
 #include "gbfstrongs.h"
 
-#include <cctype>
 #include <cstdio>
 #include <cstdlib>
 #include "../swmodule.h"
+#include "../utilstr.h"
 
 
 namespace swordxx {
@@ -82,7 +82,7 @@ char GBFStrongs::processText(std::string &text, const SWKey *key, const SWModule
                     for (unsigned int i = 1; ((token[i]) && (i < 150)); i++)
                         *valto++ = token[i];
                     *valto = 0;
-                    if (atoi((!isdigit(*val))?val+1:val) < 5627) {
+                    if (atoi((!charIsDigit(*val))?val+1:val) < 5627) {
                         // normal strongs number
                         sprintf(wordstr, "%03d", word++);
                         module->getEntryAttributes()["Word"][wordstr]["PartsCount"] = "1";

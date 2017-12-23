@@ -23,7 +23,6 @@
 
 #include "gbfwebif.h"
 
-#include <cctype>
 #include <cstdlib>
 #include <cstring>
 #include "../url.h"
@@ -52,19 +51,19 @@ bool GBFWEBIF::handleToken(std::string &buf, const char *token, BasicFilterUserD
                     *valto++ = *num;
                 *valto = 0;
 
-                if (atoi((!isdigit(*val))?val+1:val) < 5627) {
+                if (atoi((!charIsDigit(*val))?val+1:val) < 5627) {
                     buf += " <small><em>&lt;";
                     url = "";
                     for (tok = val; *tok; tok++) {
                         url += *tok;
                     }
                     if ((url.length() > 1) && strchr("GH", url[0])) {
-                        if (isdigit(url[1]))
+                        if (charIsDigit(url[1]))
                             url = url.c_str()+1;
                     }
                     buf += formatted("<a href=\"%s?showStrong=%s#cv\">", passageStudyURL.c_str(), URL::encode(url).c_str());
 
-                    for (tok = (!isdigit(*val))?val+1:val; *tok; tok++) {
+                    for (tok = (!charIsDigit(*val))?val+1:val; *tok; tok++) {
                         buf += *tok;
                     }
                     buf += "</a>&gt;</em></small> ";
@@ -77,19 +76,19 @@ bool GBFWEBIF::handleToken(std::string &buf, const char *token, BasicFilterUserD
                         *valto++ = *num;
                     *valto = 0;
 
-                    if (atoi((!isdigit(*val))?val+1:val) < 5627) {
+                    if (atoi((!charIsDigit(*val))?val+1:val) < 5627) {
                         buf += " <small><em>&lt;";
                         url = "";
                         for (tok = val; *tok; tok++) {
                             url += *tok;
                         }
                         if ((url.length() > 1) && strchr("GH", url[0])) {
-                            if (isdigit(url[1]))
+                            if (charIsDigit(url[1]))
                                 url = url.c_str()+1;
                         }
                         buf += formatted("<a href=\"%s?showStrong=%s#cv\">", passageStudyURL.c_str(), URL::encode(url).c_str());
 
-                        for (tok = (!isdigit(*val))?val+1:val; *tok; tok++) {
+                        for (tok = (!charIsDigit(*val))?val+1:val; *tok; tok++) {
                             buf += *tok;
                         }
                         buf += "</a>&gt;</em></small> ";
@@ -125,7 +124,7 @@ bool GBFWEBIF::handleToken(std::string &buf, const char *token, BasicFilterUserD
                 url += *tok;
             }
             if ((url.length() > 1) && strchr("GH", url[0])) {
-                if (isdigit(url[1]))
+                if (charIsDigit(url[1]))
                     url = url.c_str()+1;
             }
             buf += formatted("<a href=\"%s?showStrong=%s#cv\">", passageStudyURL.c_str(), URL::encode(url).c_str());
@@ -144,7 +143,7 @@ bool GBFWEBIF::handleToken(std::string &buf, const char *token, BasicFilterUserD
                     url += *tok;
             }
             if ((url.length() > 1) && strchr("GH", url[0])) {
-                if (isdigit(url[1]))
+                if (charIsDigit(url[1]))
                     url = url.c_str()+1;
             }
             buf += formatted("<a href=\"%s?showStrong=%s#cv\">", passageStudyURL.c_str(), URL::encode(url).c_str());

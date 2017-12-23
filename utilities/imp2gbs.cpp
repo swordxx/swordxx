@@ -25,7 +25,6 @@
 #endif
 
 #include <cassert>
-#include <cctype>
 #include <cerrno>
 #include <cstdio>
 #include <cstdlib>

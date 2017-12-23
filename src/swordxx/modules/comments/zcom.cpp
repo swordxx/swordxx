@@ -23,7 +23,6 @@
 
 #include "zcom.h"
 
-#include <cctype>
 #include <cstdio>
 #include <fcntl.h>
 #include <string>

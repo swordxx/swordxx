@@ -23,7 +23,6 @@
 
 #include "rtfhtml.h"
 
-#include <cctype>
 #include <cstdint>
 #include <cstdlib>
 #include <string>
@@ -52,10 +51,10 @@ char RTFHTML::processText(std::string &text, const SWKey *key, const SWModule *m
         if (*from == '\\') // a RTF command
         {
             // \u12345?
-            if ( *(from+1) == 'u' && (*(from+2) == '-' || isdigit(*(from+2)))) {
+            if ( *(from+1) == 'u' && (*(from+2) == '-' || charIsDigit(*(from+2)))) {
                 from += 2;
                 const char *end = from;
-                while (isdigit(*++end));
+                while (charIsDigit(*++end));
                 std::string num;
                 num.append(from, end-from);
                 int16_t n = atoi(num.c_str());

@@ -22,7 +22,6 @@
 
 #include "gbfxhtml.h"
 
-#include <cctype>
 #include <cstdlib>
 #include "../keys/versekey.h"
 #include "../swmodule.h"

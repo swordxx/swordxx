@@ -24,7 +24,6 @@
 
 #include "hrefcom.h"
 
-#include <cctype>
 #include <cstdio>
 #include <fcntl.h>
 #include <string>

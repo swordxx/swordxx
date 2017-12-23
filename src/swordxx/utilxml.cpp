@@ -24,7 +24,6 @@
 #include "utilxml.h"
 
 #include <algorithm>
-#include <cctype>
 #include "utilstr.h"
 
 
@@ -39,13 +38,13 @@ void XMLTag::parse() const {
 
     if (!m_buf)
         return;
-    for (i = 0; ((m_buf[i]) && (!isalpha(m_buf[i]))); i++);
+    for (i = 0; ((m_buf[i]) && (!charIsAlpha(m_buf[i]))); i++);
     for (; m_buf[i]; i++) {
         if (strchr("\t\r\n ", m_buf[i])) {
                         // Convert newlines, carriage returns and tabs to spaces
             m_buf[i] = ' ';
 
-            for (; ((m_buf[i]) && (!isalpha(m_buf[i]))); i++);
+            for (; ((m_buf[i]) && (!charIsAlpha(m_buf[i]))); i++);
             if (m_buf[i]) {		// we have an attribute name
                 start = i;
                 // Deprecated: check for following whitespacee
@@ -141,7 +140,7 @@ void XMLTag::setText(const char *tagString) {
     int i;
 
     // skip beginning silliness
-    for (i = 0; ((tagString[i]) && (!isalpha(tagString[i]))); i++) {
+    for (i = 0; ((tagString[i]) && (!charIsAlpha(tagString[i]))); i++) {
         if (tagString[i] == '/')
             endTag = true;
     }

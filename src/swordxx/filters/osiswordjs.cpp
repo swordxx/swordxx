@@ -22,7 +22,6 @@
 
 #include "osiswordjs.h"
 
-#include <cctype>
 #include <cstdio>
 #include <cstdlib>
 #include "../keys/versekey.h"
@@ -159,7 +158,7 @@ char OSISWordJS::processText(std::string &text, const SWKey *key, const SWModule
                     wordID += formatted("_%s", src.c_str());
                     // clean up our word ID for XHTML
                     for (unsigned int i = 0; i < wordID.size(); i++) {
-                        if ((!isdigit(wordID[i])) && (!isalpha(wordID[i]))) {
+                        if ((!charIsDigit(wordID[i])) && (!charIsAlpha(wordID[i]))) {
                             wordID[i] = '_';
                         }
                     }

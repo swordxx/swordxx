@@ -22,7 +22,6 @@
 
 #include "gbfwordjs.h"
 
-#include <cctype>
 #include <cstdio>
 #include <cstdlib>
 #include "../swmodule.h"
@@ -90,7 +89,7 @@ char GBFWordJS::processText(std::string &text, const SWKey *key, const SWModule 
                 intoken = false;
                 if (*token == 'W' && (token[1] == 'G' || token[1] == 'H')) {    // Strongs
                     strcpy(val,token+1);
-                    if (atoi((!isdigit(*val))?val+1:val) < 5627) {
+                    if (atoi((!charIsDigit(*val))?val+1:val) < 5627) {
                         // normal strongs number
                         sprintf(wordstr, "%03d", word++);
                         needWordOut = (word > 2);
@@ -143,7 +142,7 @@ char GBFWordJS::processText(std::string &text, const SWKey *key, const SWModule 
                     std::string textSt = (*wAttrs)["TextStart"];
                     if (strong.size()) {
                         char gh = 0;
-                        gh = isdigit(strong[0]) ? 0:strong[0];
+                        gh = charIsDigit(strong[0]) ? 0:strong[0];
                         if (!gh) {
                             if (vkey) {
                                 gh = vkey->getTestament() ? 'H' : 'G';
@@ -180,7 +179,7 @@ char GBFWordJS::processText(std::string &text, const SWKey *key, const SWModule 
                             wordID = key->getText();
                         }
                         for (unsigned int i = 0; i < wordID.size(); i++) {
-                            if ((!isdigit(wordID[i])) && (!isalpha(wordID[i]))) {
+                            if ((!charIsDigit(wordID[i])) && (!charIsAlpha(wordID[i]))) {
                                 wordID[i] = '_';
                             }
                         }
@@ -241,7 +240,7 @@ char GBFWordJS::processText(std::string &text, const SWKey *key, const SWModule 
         std::string textSt = (*wAttrs)["TextStart"];
         if (strong.size()) {
             char gh = 0;
-            gh = isdigit(strong[0]) ? 0:strong[0];
+            gh = charIsDigit(strong[0]) ? 0:strong[0];
             if (!gh) {
                 if (vkey) {
                     gh = vkey->getTestament() ? 'H' : 'G';
@@ -275,7 +274,7 @@ char GBFWordJS::processText(std::string &text, const SWKey *key, const SWModule 
                 wordID = key->getText();
             }
             for (unsigned int i = 0; i < wordID.size(); i++) {
-                if ((!isdigit(wordID[i])) && (!isalpha(wordID[i]))) {
+                if ((!charIsDigit(wordID[i])) && (!charIsAlpha(wordID[i]))) {
                     wordID[i] = '_';
                 }
             }

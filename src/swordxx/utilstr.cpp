@@ -24,7 +24,6 @@
 
 #include <algorithm>
 #include <cassert>
-#include <cctype>
 #include <cstring>
 #include <iterator>
 #include <type_traits>

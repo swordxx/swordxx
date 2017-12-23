@@ -27,7 +27,6 @@
 #include <cstdint>
 #include <cstdio>
 #include <cstdlib>
-#include <cctype>
 #include <fcntl.h>
 #include <memory>
 #include <sstream>
@@ -516,7 +515,7 @@ ListKey VerseKey::parseVerseList(const char *buf, const char *defaultKey, bool e
         return internalListKey;
     }
     if ((!strncmp(buf, "[ Testament ", 12)) &&
-        (isdigit(buf[12])) &&
+        (charIsDigit(buf[12])) &&
         (!strcmp(buf+13, " Heading ]"))) {
         curKey->setVerse(0);
         curKey->setChapter(0);
@@ -597,17 +596,17 @@ terminate_range:
 
                 for (; loop+1; loop--) { if (book[loop] == ' ') book[loop] = 0; else break; }
 
-                if (loop > 0 && isdigit(book[loop-1]) && book[loop] >= 'a' && book[loop] <= 'z') {
+                if (loop > 0 && charIsDigit(book[loop-1]) && book[loop] >= 'a' && book[loop] <= 'z') {
                     book[loop--] = 0;
                 }
                 for (; loop+1; loop--) {
-                    if ((isdigit(book[loop])) || (book[loop] == ' ')) {
+                    if ((charIsDigit(book[loop])) || (book[loop] == ' ')) {
                         book[loop] = 0;
                         continue;
                     }
                     else {
                         if ((asciiCharToUpper(book[loop])=='F')&&(loop)) {
-                            if ((isdigit(book[loop-1])) || (book[loop-1] == ' ') || (asciiCharToUpper(book[loop-1]) == 'F')) {
+                            if ((charIsDigit(book[loop-1])) || (book[loop-1] == ' ') || (asciiCharToUpper(book[loop-1]) == 'F')) {
                                 book[loop] = 0;
                                 continue;
                             }
@@ -798,10 +797,10 @@ terminate_range:
         case '.':
             if (buf > orig) {            // ignore (break) if preceeding char is not a digit
                 for (notAllDigits = tobook; notAllDigits; notAllDigits--) {
-                    if ((!isdigit(book[notAllDigits-1])) && (!strchr(" .", book[notAllDigits-1])))
+                    if ((!charIsDigit(book[notAllDigits-1])) && (!strchr(" .", book[notAllDigits-1])))
                         break;
                 }
-                if (!notAllDigits && !isdigit(buf[1]))
+                if (!notAllDigits && !charIsDigit(buf[1]))
                     break;
             }
 
@@ -820,7 +819,7 @@ terminate_range:
             break;
 
         default:
-            if (isdigit(*buf)) {
+            if (charIsDigit(*buf)) {
                 number[tonumber++] = *buf;
                 suffix = 0;
                 doubleF = 0;
@@ -873,19 +872,19 @@ terminate_range:
 
         // check if endsWith([0-9][a-z]) and kill the last letter, e.g., ...12a, and chop off the 'a'
         // why?  What's this for? wouldn't this mess up 2t?
-        if (loop > 0 && isdigit(book[loop-1]) && book[loop] >= 'a' && book[loop] <= 'z') {
+        if (loop > 0 && charIsDigit(book[loop-1]) && book[loop] >= 'a' && book[loop] <= 'z') {
             book[loop--] = 0;
         }
 
         // skip trailing spaces and numbers
         for (; loop+1; loop--) {
-            if ((isdigit(book[loop])) || (book[loop] == ' ')) {
+            if ((charIsDigit(book[loop])) || (book[loop] == ' ')) {
                 book[loop] = 0;
                 continue;
             }
             else {
                 if ((asciiCharToUpper(book[loop])=='F')&&(loop)) {
-                    if ((isdigit(book[loop-1])) || (book[loop-1] == ' ') || (asciiCharToUpper(book[loop-1]) == 'F')) {
+                    if ((charIsDigit(book[loop-1])) || (book[loop-1] == ' ') || (asciiCharToUpper(book[loop-1]) == 'F')) {
                         book[loop] = 0;
                         continue;
                     }

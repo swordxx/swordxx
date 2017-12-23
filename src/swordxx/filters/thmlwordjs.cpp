@@ -22,7 +22,6 @@
 
 #include "thmlwordjs.h"
 
-#include <cctype>
 #include <cstdio>
 #include <cstdlib>
 #include "../keys/versekey.h"
@@ -93,7 +92,7 @@ char ThMLWordJS::processText(std::string &text, const SWKey *key, const SWModule
                     for (unsigned int i = 27; token[i] != '\"' && i < 150; i++)
                         *valto++ = token[i];
                     *valto = 0;
-                    if (atoi((!isdigit(*val))?val+1:val) < 5627) {
+                    if (atoi((!charIsDigit(*val))?val+1:val) < 5627) {
                         // normal strongs number
                         sprintf(wordstr, "%03d", word++);
                         needWordOut = (word > 2);
@@ -154,7 +153,7 @@ char ThMLWordJS::processText(std::string &text, const SWKey *key, const SWModule
                     std::string textSt = (*wAttrs)["TextStart"];
                     if (strong.size()) {
                         char gh = 0;
-                        gh = isdigit(strong[0]) ? 0:strong[0];
+                        gh = charIsDigit(strong[0]) ? 0:strong[0];
                         if (!gh) {
                             if (vkey) {
                                 gh = vkey->getTestament() ? 'H' : 'G';
@@ -191,7 +190,7 @@ char ThMLWordJS::processText(std::string &text, const SWKey *key, const SWModule
                             wordID = key->getText();
                         }
                         for (unsigned int i = 0; i < wordID.size(); i++) {
-                            if ((!isdigit(wordID[i])) && (!isalpha(wordID[i]))) {
+                            if ((!charIsDigit(wordID[i])) && (!charIsAlpha(wordID[i]))) {
                                 wordID[i] = '_';
                             }
                         }
@@ -252,7 +251,7 @@ char ThMLWordJS::processText(std::string &text, const SWKey *key, const SWModule
         std::string textSt = (*wAttrs)["TextStart"];
         if (strong.size()) {
             char gh = 0;
-            gh = isdigit(strong[0]) ? 0:strong[0];
+            gh = charIsDigit(strong[0]) ? 0:strong[0];
             if (!gh) {
                 if (vkey) {
                     gh = vkey->getTestament() ? 'H' : 'G';
@@ -286,7 +285,7 @@ char ThMLWordJS::processText(std::string &text, const SWKey *key, const SWModule
                 wordID = key->getText();
             }
             for (unsigned int i = 0; i < wordID.size(); i++) {
-                if ((!isdigit(wordID[i])) && (!isalpha(wordID[i]))) {
+                if ((!charIsDigit(wordID[i])) && (!charIsAlpha(wordID[i]))) {
                     wordID[i] = '_';
                 }
             }

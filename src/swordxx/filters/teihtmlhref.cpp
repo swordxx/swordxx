@@ -22,7 +22,6 @@
 
 #include "teihtmlhref.h"
 
-#include <cctype>
 #include <cstdlib>
 #include <iostream>
 #include "../swmodule.h"

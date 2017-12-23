@@ -22,7 +22,6 @@
 
 #include "teixhtml.h"
 
-#include <cctype>
 #include <cstdlib>
 #include <iostream>
 #include "../swmodule.h"

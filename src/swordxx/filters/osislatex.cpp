@@ -22,7 +22,6 @@
 
 #include "osislatex.h"
 
-#include <cctype>
 #include <cstdlib>
 #include <stack>
 #include "../keys/versekey.h"
@@ -104,7 +103,7 @@ void processLemma(bool suspendTextPassThru, XMLTag &tag, std::string &buf) {
             if(*val == 'H')
                 gh = "Hebrew";
             const char *val2 = val;
-            if ((strchr("GH", *val)) && (isdigit(val[1])))
+            if ((strchr("GH", *val)) && (charIsDigit(val[1])))
                 val2++;
             //if ((!strcmp(val2, "3588")) && (lastText.length() < 1))
             //    show = false;
@@ -138,7 +137,7 @@ void processMorph(bool suspendTextPassThru, XMLTag &tag, std::string &buf) {
                 val = strchr(attrib.c_str(), ':');
                 val = (val) ? (val + 1) : attrib.c_str();
                 const char *val2 = val;
-                if ((*val == 'T') && (strchr("GH", val[1])) && (isdigit(val[2])))
+                if ((*val == 'T') && (strchr("GH", val[1])) && (charIsDigit(val[2])))
                     val2+=2;
                 if (!suspendTextPassThru) {
                     buf += formatted("\\swordmorph{%s}",

@@ -21,7 +21,6 @@
  *
  */
 
-#include <cctype>
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
@@ -31,6 +30,7 @@
 #endif
 #include <swordxx/filemgr.h>
 #include <swordxx/keys/versekey.h>
+#include <swordxx/utilstr.h>
 #ifdef __GNUC__
 #include <unistd.h>
 #endif
@@ -162,12 +162,12 @@ char startchap(char *buf)
     if (buf[2] != 'C')
         return 0;
 /*
-    if (!isdigit(buf[2]))
+    if (!charIsDigit(buf[2]))
         return 0;
     for (loop = 3; loop < 7; loop++) {
         if (buf[loop] == ' ')
             break;
-        if ((!isdigit(buf[loop])) && (buf[loop] != ',') && (buf[loop] != '-'))
+        if ((!charIsDigit(buf[loop])) && (buf[loop] != ',') && (buf[loop] != '-'))
             return 0;
     }
 */
@@ -184,12 +184,12 @@ char startentry(char *buf)
     if (buf[2] != 'V')
         return 0;
 /*
-    if (!isdigit(buf[2]))
+    if (!charIsDigit(buf[2]))
         return 0;
     for (loop = 3; loop < 7; loop++) {
         if (buf[loop] == ' ')
             break;
-        if ((!isdigit(buf[loop])) && (buf[loop] != ',') && (buf[loop] != '-'))
+        if ((!charIsDigit(buf[loop])) && (buf[loop] != ',') && (buf[loop] != '-'))
             return 0;
     }
 */
@@ -214,7 +214,7 @@ char findbreak(int fp, long *offset, int *num1, int *num2, int * /* rangemax */,
             memset(buf, ' ', 3);
             flag = false;
             for (loop = 3; loop < 6; loop++) {
-                if (isdigit(buf[loop]))
+                if (charIsDigit(buf[loop]))
                     flag = true;
                 else {
                     buf[loop] = 0;
@@ -229,7 +229,7 @@ char findbreak(int fp, long *offset, int *num1, int *num2, int * /* rangemax */,
             memset(buf, ' ', 3);
             flag = false;
             for (loop = 3; loop < 6; loop++) {
-                if (isdigit(buf[loop]))
+                if (charIsDigit(buf[loop]))
                     flag = true;
                 else {
                     buf[loop] = 0;

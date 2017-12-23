@@ -23,11 +23,11 @@
 
 #include "swld.h"
 
-#include <cctype>
 #include <cstdio>
 #include <cstring>
 #include "keys/strkey.h"
 #include "swkey.h"
+#include "utilstr.h"
 
 
 namespace swordxx {
@@ -158,7 +158,7 @@ std::unique_ptr<char[]> SWLD::strongsPadBuf(char const * inText) {
             bang = false;
         }
         char subLet = 0;
-        if (isalpha(*check)) {
+        if (charIsAlpha(*check)) {
             subLet = std::toupper(*check);
             *(check - (bang ? 1 : 0)) = '\0';
         }

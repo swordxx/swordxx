@@ -22,7 +22,6 @@
 
 #include "gbfrtf.h"
 
-#include <cctype>
 #include <cstdlib>
 #include <string>
 #include "../utilstr.h"
@@ -84,10 +83,10 @@ char GBFRTF::processText(std::string &text, const SWKey *key, const SWModule *mo
                     for (num+=17; ((*num) && (*num != '\"')); num++)
                         *valto++ = *num;
                     *valto = 0;
-                    if (atoi((!isdigit(*val))?val+1:val) < 5627) {
+                    if (atoi((!charIsDigit(*val))?val+1:val) < 5627) {
                         // normal strongs number
                         strongnum += "{\\cf3 \\sub <";
-                        for (tok = (!isdigit(*val))?val+1:val; *tok; tok++)
+                        for (tok = (!charIsDigit(*val))?val+1:val; *tok; tok++)
                             strongnum += *tok;
                         strongnum += ">}";
                     }
@@ -105,10 +104,10 @@ char GBFRTF::processText(std::string &text, const SWKey *key, const SWModule *mo
                         for (num+=14; ((*num) && (*num != '\"')); num++)
                             *valto++ = *num;
                         *valto = 0;
-                        if (atoi((!isdigit(*val))?val+1:val) < 5627) {
+                        if (atoi((!charIsDigit(*val))?val+1:val) < 5627) {
                             // normal strongs number
                             strongnum += "{\\cf3 \\sub <";
-                            for (tok = (!isdigit(*val))?val+1:val; *tok; tok++)
+                            for (tok = (!charIsDigit(*val))?val+1:val; *tok; tok++)
                                 strongnum += *tok;
                             strongnum += ">}";
                         }
@@ -168,7 +167,7 @@ char GBFRTF::processText(std::string &text, const SWKey *key, const SWModule *mo
                         case 'G':
                         case 'H':
                             for (tok++; *tok; tok++) {
-                                if (isdigit(*tok)) {
+                                if (charIsDigit(*tok)) {
                                     text += *tok;
                                     separate = true;
                                 }

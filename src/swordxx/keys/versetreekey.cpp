@@ -23,9 +23,9 @@
 
 #include "versetreekey.h"
 
-#include <cctype>
 #include <cstdlib>
 #include <cstring>
+#include "../utilstr.h"
 
 
 namespace swordxx {
@@ -202,7 +202,7 @@ void VerseTreeKey::positionChanged() {
         }
         else if ((legs < 2)
             && ((!strncmp(seg[0].c_str(), "[ Testament ", 12)) &&        //"[ Testament n Heading ]";
-                (isdigit(seg[0][12])) &&
+                (charIsDigit(seg[0][12])) &&
                 (!strcmp(seg[0].c_str()+13, " Heading ]")))) {
             m_testament = (seg[0][12]-48);
             m_book      = 0;

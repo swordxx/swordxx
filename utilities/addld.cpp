@@ -24,7 +24,6 @@
     #pragma warning( disable: 4251 )
 #endif
 
-#include <cctype>
 #include <cerrno>
 #include <cstdio>
 #include <cstdlib>

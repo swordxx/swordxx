@@ -23,11 +23,11 @@
 #include "osisplain.h"
 
 #include <cassert>
-#include <cctype>
 #include <cstdlib>
 #include "../keys/versekey.h"
 #include "../stringmgr.h"
 #include "../swmodule.h"
+#include "../utilstr.h"
 #include "../utilxml.h"
 
 
@@ -121,7 +121,7 @@ bool OSISPlain::handleToken(std::string &buf, const char *token, BasicFilterUser
                     if (i < 0) i = 0;    // to handle our -1 condition
                     val = strchr(attrib.c_str(), ':');
                     val = (val) ? (val + 1) : attrib.c_str();
-                    if ((strchr("GH", *val)) && (isdigit(val[1]))) {
+                    if ((strchr("GH", *val)) && (charIsDigit(val[1]))) {
                         gh = *val;
                         val++;
                     }
@@ -146,7 +146,7 @@ bool OSISPlain::handleToken(std::string &buf, const char *token, BasicFilterUser
                     if (i < 0) i = 0;    // to handle our -1 condition
                     val = strchr(attrib.c_str(), ':');
                     val = (val) ? (val + 1) : attrib.c_str();
-                    if ((*val == 'T') && (strchr("GH", val[1])) && (isdigit(val[2])))
+                    if ((*val == 'T') && (strchr("GH", val[1])) && (charIsDigit(val[2])))
                         val+=2;
                     buf.append(" (");
                     buf.append(val);

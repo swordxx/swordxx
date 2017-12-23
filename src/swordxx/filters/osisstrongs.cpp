@@ -24,11 +24,11 @@
 #include "osisstrongs.h"
 
 #include <cassert>
-#include <cctype>
 #include <cstdio>
 #include <cstdlib>
 #include "../keys/versekey.h"
 #include "../swmodule.h"
+#include "../utilstr.h"
 #include "../utilxml.h"
 
 
@@ -156,7 +156,7 @@ char OSISStrongs::processText(std::string &text, const SWKey *key, const SWModul
                                 attrib.erase(0u, len+1);
                             }
                             if ((lClass == "x-Strongs") || (lClass == "strong") || (lClass == "Strong")) {
-                                if (isdigit(attrib[0])) {
+                                if (charIsDigit(attrib[0])) {
                                     if (vkey) {
                                         gh = vkey->getTestament() ? 'H' : 'G';
                                     }

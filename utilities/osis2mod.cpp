@@ -26,7 +26,6 @@
 
 #include <swordxx/config.h>
 
-#include <cctype>
 #include <cerrno>
 #include <cstdio>
 #include <cstdlib>
@@ -1789,7 +1788,7 @@ void processOSIS(istream& infile) {
 
         // Outside of tokens merge adjacent whitespace
         if (!intoken) {
-            seeingSpace = isspace(curChar)!=0;
+            seeingSpace = charIsSpace(curChar)!=0;
             if (seeingSpace) {
                 if (inWhitespace) {
                     continue;
@@ -1804,9 +1803,9 @@ void processOSIS(istream& infile) {
             intoken = false;
             inWhitespace = false;
             token.push_back('>');
-            // take this isalpha if out to check for bugs in text
-            if (isalpha(token[1]) ||
-                (((token[1] == '/') || (token[1] == '?')) && isalpha(token[2]))) {
+            // take this charIsAlpha if out to check for bugs in text
+            if (charIsAlpha(token[1]) ||
+                (((token[1] == '/') || (token[1] == '?')) && charIsAlpha(token[2]))) {
                 //cout << "Handle:" << token.c_str() << endl;
                 XMLTag t = transformBSP(token.c_str());
 

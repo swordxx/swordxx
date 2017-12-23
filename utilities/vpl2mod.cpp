@@ -25,7 +25,6 @@
     #pragma warning( disable: 4996 )
 #endif
 
-#include <cctype>
 #include <cerrno>
 #include <cstdio>
 #include <cstdlib>
@@ -39,6 +38,7 @@
 #include <swordxx/keys/versekey.h>
 #include <swordxx/modules/texts/rawtext.h>
 #include <swordxx/swmgr.h>
+#include <swordxx/utilstr.h>
 #include <sys/stat.h>
 #ifdef __GNUC__
 #include <unistd.h>
@@ -98,11 +98,11 @@ char *parseVReg(char *buf) {
     while (*buf) {
         switch (stage) {
         case 0:
-            if (isalpha(*buf))
+            if (swordxx::charIsAlpha(*buf))
                 stage++;
             break;
         case 1:
-            if (isdigit(*buf))
+            if (swordxx::charIsDigit(*buf))
                 stage++;
             break;
         case 2:
@@ -110,7 +110,7 @@ char *parseVReg(char *buf) {
                 stage++;
             break;
         case 3:
-            if (isdigit(*buf))
+            if (swordxx::charIsDigit(*buf))
                 stage++;
             break;
        case 4:
