@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef _THMLHTMLHREF_H
-#define _THMLHTMLHREF_H
+#ifndef SWORDXX_FILTERS_THMLHTMLHREF_H
+#define SWORDXX_FILTERS_THMLHTMLHREF_H
 
 #include "../swbasicfilter.h"
 
@@ -60,4 +60,5 @@ public:
     void setRenderNoteNumbers(bool val = true) { renderNoteNumbers = val; }
 };
 } /* namespace swordxx */
-#endif /* _THMLHTMLHREF_H */
+
+#endif /* SWORDXX_FILTERS_THMLHTMLHREF_H */

@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef _THMLXHTML_H
-#define _THMLXHTML_H
+#ifndef SWORDXX_FILTERS_THMLXHTML_H
+#define SWORDXX_FILTERS_THMLXHTML_H
 
 #include "../swbasicfilter.h"
 
@@ -64,4 +64,4 @@ public:
 
 } /* namespace swordxx */
 
-#endif
+#endif /* SWORDXX_FILTERS_THMLXHTML_H */

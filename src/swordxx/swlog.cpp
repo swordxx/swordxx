@@ -26,7 +26,6 @@
 #include <cstdio>
 #include <iostream>
 #if SWORDXX_HAS_ICU
-#define _USTDIO_
 #include <unicode/ustdio.h>
 #include <unicode/ustream.h>
 #endif

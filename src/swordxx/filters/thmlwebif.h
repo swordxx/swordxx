@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef _ThMLWEBIF_H
-#define _ThMLWEBIF_H
+#ifndef SWORDXX_FILTERS_ThMLWEBIF_H
+#define SWORDXX_FILTERS_ThMLWEBIF_H
 
 #include "thmlxhtml.h"
 
@@ -44,4 +44,4 @@ public:
 
 } /* namespace swordxx */
 
-#endif
+#endif /* SWORDXX_FILTERS_ThMLWEBIF_H */
