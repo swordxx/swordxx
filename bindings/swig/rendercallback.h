@@ -215,7 +215,7 @@ public:
 	bool osisQToTick;
 	bool inBold;
 	bool inXRefNote;
-	bool BiblicalText;
+	bool isBiblicalText;
 	int suspendLevel;
 	SWBuf wordsOfChristStart;
 	SWBuf wordsOfChristEnd;
@@ -240,8 +240,8 @@ public sword::BasicFilterUserData
 {
 public:
 	SWBuf inscriptRef;
-	bool SecHead;
-	bool BiblicalText;
+	bool inSecHead;
+	bool isBiblicalText;
 	SWBuf version;
 	XMLTag startTag;	
 

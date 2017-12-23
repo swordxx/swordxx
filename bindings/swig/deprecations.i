@@ -14,6 +14,7 @@
 %ignore sword::SWDisplay::Display(SWModule&);
 
 %ignore sword::StatusReporter::statusUpdate(double ,double);
+%feature("nodirector") sword::StatusReporter::statusUpdate(double ,double);
 
 %ignore sword::SWKey::Error();
 %ignore sword::SWKey::Persist() const;

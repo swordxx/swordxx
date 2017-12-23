@@ -1,12 +1,12 @@
 #define SWDLLEXPORT  
 
+%include "deprecations.i"
+
 %module "Sword"
 %module(directors="1") Sword;
 
 /* Ignore warnings about Unknown base class */
 %warnfilter(401);
-
-%include "deprecations.i"
 
 #ifdef SWIGPYTHON
 %include "directors.i"
