@@ -38,6 +38,16 @@ namespace swordxx {
 void addTrailingDirectorySlash(std::string & buf);
 void removeTrailingDirectorySlashes(std::string & buf);
 
+constexpr bool charIsDigit(char const c) noexcept {
+    switch (c) {
+        case '0': case '1': case '2': case '3': case '4':
+        case '5': case '6': case '7': case '8': case '9':
+            return true;
+        default:
+            return false;
+    }
+}
+
 constexpr bool charIsSpace(char const c) noexcept {
     switch (c) {
         case ' ': case '\n': case '\r': case '\t': return true;
