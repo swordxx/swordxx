@@ -38,7 +38,7 @@ namespace swordxx {
 void addTrailingDirectorySlash(std::string & buf);
 void removeTrailingDirectorySlashes(std::string & buf);
 
-inline bool charIsSpace(char const c) noexcept {
+constexpr bool charIsSpace(char const c) noexcept {
     switch (c) {
         case ' ': case '\n': case '\r': case '\t': return true;
         default: return false;
