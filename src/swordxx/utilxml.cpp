@@ -238,6 +238,8 @@ void XMLTag::setAttribute(std::string const & attribName, const char *attribValu
     else    attributes.erase(attribName);
 }
 
+void XMLTag::eraseAttribute(std::string const & attribName) noexcept
+{ attributes.erase(attribName); }
 
 std::string XMLTag::toString() const {
     std::string tag("<");

@@ -66,7 +66,7 @@ char OSISXlit::processText(std::string &text, const SWKey *key, const SWModule *
                 if (hasPrefix(token, "w ")) {    // Word
                     XMLTag wtag(token.c_str());
                     if (!wtag.attribute("xlit").empty()) {
-                        wtag.setAttribute("xlit", nullptr);
+                        wtag.eraseAttribute("xlit");
                         token = wtag.toString();
                         trimString(token);
                         // drop <>

@@ -99,8 +99,13 @@ bool OSISHeadings::handleToken(std::string &buf, const char *token, BasicFilterU
                         std::string heading;
                         if (u->currentHeadingName == "title") {
                             XMLTag wrapper = u->currentHeadingTag;
-                            if (std::string("x-preverse") == wrapper.attribute("subType")) wrapper.setAttribute("subType", nullptr);
-                            else if (std::string("x-preverse") == wrapper.attribute("subtype")) wrapper.setAttribute("subtype", nullptr);
+                            if (wrapper.attribute("subType") == "x-preverse") {
+                                wrapper.eraseAttribute("subType");
+                            } else if (wrapper.attribute("subtype")
+                                       == "x-preverse")
+                            {
+                                wrapper.eraseAttribute("subtype");
+                            }
                             heading = wrapper.toString();
                             heading += u->heading;
                             heading += tag.toString();

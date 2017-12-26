@@ -82,6 +82,7 @@ public:
     // return values should not be considered to persist beyond the return of the function.
     std::string attribute(std::string const & attribName, int partNum = -1, char partSplit = '|') const;
     void setAttribute(std::string const & attribName, const char *attribValue, int partNum = -1, char partSplit = '|');
+    void eraseAttribute(std::string const & attribName) noexcept;
     std::string toString() const;
     inline XMLTag & operator =(const char *tagString) { setText(tagString); return *this; }
     inline XMLTag & operator =(const XMLTag &other) { setText(other.toString().c_str()); return *this; }
