@@ -193,7 +193,8 @@ void OSISXHTML::MyUserData::outputNewline(std::string &buf) {
         if (buf.empty() && verseKey && verseKey->getVerse() && module
             && module->isProcessEntryAttributes())
         {
-            module->getEntryAttributes()["Heading"]["Preverse"]["0"] += '\n';
+            module->getEntryAttributes()["Heading"]["Preverse"]["0"] +=
+                    "<div></div>";
         } else {
             outText("<br />\n", buf, this);
         }
