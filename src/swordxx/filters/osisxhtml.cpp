@@ -67,8 +67,21 @@ namespace {
 
 // though this might be slightly slower, possibly causing an extra bool check, this is a renderFilter
 // so speed isn't the absolute highest priority, and this is a very minor possible hit
-static inline void outText(const char *t, std::string &o, BasicFilterUserData *u) { if (!u->suspendTextPassThru) o += t; else u->lastSuspendSegment += t; }
-static inline void outText(char t, std::string &o, BasicFilterUserData *u) { if (!u->suspendTextPassThru) o += t; else u->lastSuspendSegment += t; }
+inline void outText(const char * t, std::string & o, BasicFilterUserData & u) {
+    if (!u.suspendTextPassThru) {
+        o += t;
+    } else {
+        u.lastSuspendSegment += t;
+    }
+}
+
+inline void outText(char t, std::string & o, BasicFilterUserData & u) {
+    if (!u.suspendTextPassThru) {
+        o += t;
+    } else {
+        u.lastSuspendSegment += t;
+    }
+}
 
 void processLemma(bool suspendTextPassThru, XMLTag &tag, std::string &buf) {
     auto attrib(tag.attribute("lemma"));
@@ -196,15 +209,15 @@ void OSISXHTML::MyUserData::outputNewline(std::string &buf) {
             module->getEntryAttributes()["Heading"]["Preverse"]["0"] +=
                     "<div></div>";
         } else {
-            outText("<br />\n", buf, this);
+            outText("<br />\n", buf, *this);
         }
         supressAdjacentWhitespace = true;
     }
 }
 bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUserData *userData) {
-    MyUserData *u = (MyUserData *)userData;
+    auto & u = *static_cast<MyUserData *>(userData);
     std::string scratch;
-    bool sub = (u->suspendTextPassThru) ? substituteToken(scratch, token) : substituteToken(buf, token);
+    bool sub = (u.suspendTextPassThru) ? substituteToken(scratch, token) : substituteToken(buf, token);
     if (!sub) {
   // manually process if it wasn't a simple substitution
         XMLTag tag(token);
@@ -214,7 +227,7 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
 
             // start <w> tag
             if ((!tag.isEmpty()) && (!tag.isEndTag())) {
-                u->w = token;
+                u.w = token;
             }
 
             // end or empty <w> tag
@@ -224,8 +237,8 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
                 //bool show = true;	// to handle unplaced article in kjv2003-- temporary till combined
 
                 if (endTag) {
-                    tag = u->w.c_str();
-                    lastText = u->lastTextNode.c_str();
+                    tag = u.w.c_str();
+                    lastText = u.lastTextNode.c_str();
                 }
                 else lastText = "stuff";
 
@@ -251,12 +264,12 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
                     outText("</rt><rp>)</rp></ruby>", buf, u);
                 }
                 if (!morphFirst) {
-                    processLemma(u->suspendTextPassThru, tag, buf);
-                    processMorph(u->suspendTextPassThru, tag, buf);
+                    processLemma(u.suspendTextPassThru, tag, buf);
+                    processMorph(u.suspendTextPassThru, tag, buf);
                 }
                 else {
-                    processMorph(u->suspendTextPassThru, tag, buf);
-                    processLemma(u->suspendTextPassThru, tag, buf);
+                    processMorph(u.suspendTextPassThru, tag, buf);
+                    processLemma(u.suspendTextPassThru, tag, buf);
                 }
                 if (!(attrib = tag.attribute("POS")).empty()) {
                     val = strchr(attrib.c_str(), ':');
@@ -293,16 +306,16 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
                         std::string noteName = tag.attribute("n");
                         char ch = ((!tag.attribute("type").empty() && ((tag.attribute("type") == "crossReference") || (tag.attribute("type") == "x-cross-ref"))) ? 'x':'n');
 
-                        u->inXRefNote = true; // Why this change? Ben Morgan: Any note can have references in, so we need to set this to true for all notes
+                        u.inXRefNote = true; // Why this change? Ben Morgan: Any note can have references in, so we need to set this to true for all notes
 //						u->inXRefNote = (ch == 'x');
 
-                        if (auto const * const vkey = u->verseKey) {
+                        if (auto const * const vkey = u.verseKey) {
                             //printf("URL = %s\n",URL::encode(vkey->getText()).c_str());
                             buf += formatted("<a class=\"%s\" href=\"passagestudy.jsp?action=showNote&type=%c&value=%s&module=%s&passage=%s\"><small><sup class=\"%c\">*%c%s</sup></small></a>",
                                 classExtras.c_str(),
                                 ch,
                                 URL::encode(footnoteNumber).c_str(),
-                                URL::encode(u->version).c_str(),
+                                URL::encode(u.version).c_str(),
                                 URL::encode(vkey->getText()).c_str(),
                                 ch,
                                 ch,
@@ -313,20 +326,20 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
                                 classExtras.c_str(),
                                 ch,
                                 URL::encode(footnoteNumber).c_str(),
-                                URL::encode(u->version).c_str(),
-                                URL::encode(u->key->getText()).c_str(),
+                                URL::encode(u.version).c_str(),
+                                URL::encode(u.key->getText()).c_str(),
                                 ch,
                                 ch,
                                 (renderNoteNumbers ? noteName.c_str() : ""));
                         }
                     }
                 }
-                u->suspendTextPassThru = (++u->suspendLevel);
+                u.suspendTextPassThru = (++u.suspendLevel);
             }
             if (tag.isEndTag()) {
-                u->suspendTextPassThru = (--u->suspendLevel);
-                u->inXRefNote = false;
-                u->lastSuspendSegment = ""; // fix/work-around for nasb divineName in note bug
+                u.suspendTextPassThru = (--u.suspendLevel);
+                u.inXRefNote = false;
+                u.lastSuspendSegment = ""; // fix/work-around for nasb divineName in note bug
             }
         }
 
@@ -334,13 +347,13 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
            verse (immediately after verse number): */
         else if ((tag.name() == "p") || (tag.name() == "lg")) {
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {	// non-empty start tag
-                u->outputNewline(buf);
+                u.outputNewline(buf);
             }
             else if (tag.isEndTag()) {	// end tag
-                u->outputNewline(buf);
+                u.outputNewline(buf);
             }
             else {					// empty paragraph break marker
-                u->outputNewline(buf);
+                u.outputNewline(buf);
             }
         }
 
@@ -350,7 +363,7 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
         else if (tag.isEmpty() && (tag.name() == "div") && ((tag.attribute("type") == "x-p") || (tag.attribute("type") == "paragraph") || (tag.attribute("type") == "colophon"))) {
             // <div type="paragraph"  sID... />
             if (!tag.attribute("sID").empty()) {	// non-empty start tag
-                u->outputNewline(buf);
+                u.outputNewline(buf);
                 // safe because we've verified type is present from if statement above
                 if (tag.attribute("type") == "colophon") {
                     outText("<div class=\"colophon\">", buf, u);
@@ -359,7 +372,7 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
             }
             // <div type="paragraph"  eID... />
             else if (!tag.attribute("eID").empty()) {
-                u->outputNewline(buf);
+                u.outputNewline(buf);
                 // safe because we've verified type is present from if statement above
                 if (tag.attribute("type") == "colophon") {
                     outText("</div>", buf, u);
@@ -370,7 +383,7 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
 
         // <reference> tag
         else if (tag.name() == "reference") {
-            if (!u->inXRefNote) {	// only show these if we're not in an xref note
+            if (!u.inXRefNote) {	// only show these if we're not in an xref note
                 if (!tag.isEndTag()) {
                     std::string work;
                     std::string ref;
@@ -394,7 +407,7 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
                         // Compensate for starting :
                         ref = the_ref + 1;
 
-                        int size = target.size() - ref.size() - 1;
+                        auto const size = target.size() - ref.size() - 1u;
                         work.resize(size, '\0');
                         std::strncpy(&work[0u], target.c_str(), size);
 
@@ -414,7 +427,7 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
                     else
                     {
                         // Dictionary link, or something
-                        buf += formatted(u->interModuleLinkStart.c_str(),
+                        buf += formatted(u.interModuleLinkStart.c_str(),
                             classes.c_str(),
                             URL::encode(work).c_str(),
                             URL::encode(ref).c_str()
@@ -422,7 +435,7 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
                     }
                 }
                 else {
-                    outText(u->interModuleLinkEnd.c_str(), buf, u);
+                    outText(u.interModuleLinkEnd.c_str(), buf, u);
                 }
             }
         }
@@ -436,36 +449,36 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
                     outText("<p class=\"selah\">", buf, u);
                 } else {
                     // nested lines plus if the line itself has an x-indent type attribute value
-                    outText(formatted("<span class=\"line indent%d\">", u->lineStack.size() + (std::string("x-indent") == tag.attribute("type").c_str()?1:0)).c_str(), buf, u);
+                    outText(formatted("<span class=\"line indent%d\">", u.lineStack.size() + (std::string("x-indent") == tag.attribute("type").c_str()?1:0)).c_str(), buf, u);
                 }
-                u->lineStack.push(tag.toString());
+                u.lineStack.push(tag.toString());
             }
             // end line marker
             else if (!tag.attribute("eID").empty() || tag.isEndTag()) {
                 std::string type = "";
-                if (!u->lineStack.empty()) {
-                    XMLTag startTag(u->lineStack.top().c_str());
+                if (!u.lineStack.empty()) {
+                    XMLTag startTag(u.lineStack.top().c_str());
                     type = startTag.attribute("type");
                 }
                 if (type == "selah") {
                     outText("</p>", buf, u);
                 } else {
                     outText("</span>", buf, u);
-                    u->outputNewline(buf);
+                    u.outputNewline(buf);
                 }
-                if (!u->lineStack.empty())
-                    u->lineStack.pop();
+                if (!u.lineStack.empty())
+                    u.lineStack.pop();
             }
             // <l/> without eID or sID
             // Note: this is improper osis. This should be <lb/>
             else if (tag.isEmpty() && tag.attribute("sID").empty()) {
-                u->outputNewline(buf);
+                u.outputNewline(buf);
             }
         }
 
         // <lb.../>
         else if ((tag.name() == "lb") && (tag.attribute("type").empty() || (tag.attribute("type") != "x-optional"))) {
-                u->outputNewline(buf);
+                u.outputNewline(buf);
         }
         // <milestone type="line"/>
         // <milestone type="x-p"/>
@@ -474,9 +487,9 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
             // safe because we've verified type is present from if statement above
             auto type(tag.attribute("type"));
             if (type == "line") {
-                u->outputNewline(buf);
+                u.outputNewline(buf);
                 if (!tag.attribute("subType").empty() && (tag.attribute("subType") == "x-PM")) {
-                    u->outputNewline(buf);
+                    u.outputNewline(buf);
                 }
             }
             else if (type == "x-p")  {
@@ -494,7 +507,7 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
                 if (hasMark)
                     outText(mark.c_str(), buf, u);
                 // finally, alternate " and ', if config says we should supply a mark
-                else if (u->osisQToTick)
+                else if (u.osisQToTick)
                     outText((level % 2) ? '\"' : '\'', buf, u);
             } else if (type == "x-importer") {
                 //drop tag as not relevant
@@ -519,7 +532,7 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
                 }
                 if (tag.attribute("canonical") == "true")
                     classExtras.append(" canonical");
-                auto const * const vkey = u->verseKey;
+                auto const * const vkey = u.verseKey;
                 if (vkey && !vkey->getVerse()) {
                     if (!vkey->getChapter()) {
                         if (!vkey->getBook()) {
@@ -546,13 +559,13 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
                     outText((std::string("<h3 class=\"title") + classExtras + "\">").c_str(), buf, u);
                     tag.setAttribute("pushed", "h3");
                 }
-                u->titleStack.push(tag.toString());
+                u.titleStack.push(tag.toString());
             }
             else if (tag.isEndTag()) {
-                if (!u->titleStack.empty()) {
-                    XMLTag tag(u->titleStack.top().c_str());
-                    if (!u->titleStack.empty())
-                        u->titleStack.pop();
+                if (!u.titleStack.empty()) {
+                    XMLTag tag(u.titleStack.top().c_str());
+                    if (!u.titleStack.empty())
+                        u.titleStack.pop();
                     std::string pushed = tag.attribute("pushed");
                     if (!pushed.empty()) {
                         outText((std::string("</") + pushed + ">\n\n").c_str(), buf, u);
@@ -560,8 +573,8 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
                     else {
                         outText( "</h3>\n\n", buf, u);
                     }
-                    ++u->consecutiveNewlines;
-                    u->supressAdjacentWhitespace = true;
+                    ++u.consecutiveNewlines;
+                    u.supressAdjacentWhitespace = true;
                 }
             }
         }
@@ -573,8 +586,8 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
             }
             else if (tag.isEndTag()) {
                 outText("</ul>\n", buf, u);
-                ++u->consecutiveNewlines;
-                u->supressAdjacentWhitespace = true;
+                ++u.consecutiveNewlines;
+                u.supressAdjacentWhitespace = true;
             }
         }
 
@@ -585,8 +598,8 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
             }
             else if (tag.isEndTag()) {
                 outText("</li>\n", buf, u);
-                ++u->consecutiveNewlines;
-                u->supressAdjacentWhitespace = true;
+                ++u.consecutiveNewlines;
+                u.supressAdjacentWhitespace = true;
             }
         }
         // <catchWord> & <rdg> tags (italicize)
@@ -604,11 +617,11 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
         // divineName
         else if (tag.name() == "divineName") {
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {
-                u->suspendTextPassThru = (++u->suspendLevel);
+                u.suspendTextPassThru = (++u.suspendLevel);
             }
             else if (tag.isEndTag()) {
-                std::string lastText = u->lastSuspendSegment.c_str();
-                u->suspendTextPassThru = (--u->suspendLevel);
+                std::string lastText = u.lastSuspendSegment.c_str();
+                u.suspendTextPassThru = (--u.suspendLevel);
                 if (!lastText.empty()) {
                     scratch = formatted("<span class=\"divineName\">%s</span>", lastText.c_str());
                     outText(scratch.c_str(), buf, u);
@@ -648,14 +661,14 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
                 } else {	// all other types
                     outText((std::string("<span class=\"") + type + "\">").c_str(), buf, u);
                 }
-                u->hiStack.push(tag.toString());
+                u.hiStack.push(tag.toString());
             }
             else if (tag.isEndTag()) {
                 std::string type = "";
-                if (!u->hiStack.empty()) {
-                    XMLTag tag(u->hiStack.top().c_str());
-                    if (!u->hiStack.empty())
-                        u->hiStack.pop();
+                if (!u.hiStack.empty()) {
+                    XMLTag tag(u.hiStack.top().c_str());
+                    if (!u.hiStack.empty())
+                        u.hiStack.pop();
                     type = tag.attribute("type");
                     if (!type.length()) type = tag.attribute("rend");
                 }
@@ -699,27 +712,27 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
             if ((!tag.isEmpty() && !tag.isEndTag()) || (tag.isEmpty() && !tag.attribute("sID").empty())) {
                 // if <q> then remember it for the </q>
                 if (!tag.isEmpty()) {
-                    u->quoteStack.push(tag.toString());
+                    u.quoteStack.push(tag.toString());
                 }
 
                 // Do this first so quote marks are included as WoC
                 if (who == "Jesus")
-                    outText(u->wordsOfChristStart.c_str(), buf, u);
+                    outText(u.wordsOfChristStart.c_str(), buf, u);
 
                 // first check to see if we've been given an explicit mark
                 if (hasMark)
                     outText(mark.c_str(), buf, u);
                 //alternate " and '
-                else if (u->osisQToTick)
+                else if (u.osisQToTick)
                     outText((level % 2) ? '\"' : '\'', buf, u);
             }
             // close </q> or <q eID... />
             else if ((tag.isEndTag()) || (tag.isEmpty() && !tag.attribute("eID").empty())) {
                 // if it is </q> then pop the stack for the attributes
-                if (tag.isEndTag() && !u->quoteStack.empty()) {
-                    XMLTag qTag(u->quoteStack.top().c_str());
-                    if (!u->quoteStack.empty())
-                        u->quoteStack.pop();
+                if (tag.isEndTag() && !u.quoteStack.empty()) {
+                    XMLTag qTag(u.quoteStack.top().c_str());
+                    if (!u.quoteStack.empty())
+                        u.quoteStack.pop();
 
                     type    = qTag.attribute("type");
                     who     = qTag.attribute("who");
@@ -733,12 +746,12 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
                 if (hasMark)
                     outText(mark.c_str(), buf, u);
                 // finally, alternate " and ', if config says we should supply a mark
-                else if (u->osisQToTick)
+                else if (u.osisQToTick)
                     outText((level % 2) ? '\"' : '\'', buf, u);
 
                 // Do this last so quote marks are included as WoC
                 if (who == "Jesus")
-                    outText(u->wordsOfChristEnd.c_str(), buf, u);
+                    outText(u.wordsOfChristEnd.c_str(), buf, u);
             }
         }
 
@@ -746,7 +759,7 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
         else if (tag.name() == "transChange") {
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {
                 std::string type = tag.attribute("type");
-                u->lastTransChange = type;
+                u.lastTransChange = type;
 
                 outText("<span class=\"transChange", buf, u);
                 if (type.length()) {
@@ -778,7 +791,7 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
                 outText("<a href=\"passagestudy.jsp?action=showImage&value=", buf, u);
                 outText(URL::encode(filepath).c_str(), buf, u);
                 outText("&module=", buf, u);
-                outText(URL::encode(u->version).c_str(), buf, u);
+                outText(URL::encode(u.version).c_str(), buf, u);
                 outText("\">", buf, u);
 
                 outText("<img src=\"file:", buf, u);
@@ -836,8 +849,8 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
             }
             else if (tag.isEndTag()) {
                 outText( "</tbody></table>\n", buf, u);
-                ++u->consecutiveNewlines;
-                u->supressAdjacentWhitespace = true;
+                ++u.consecutiveNewlines;
+                u.supressAdjacentWhitespace = true;
             }
 
         }
@@ -859,11 +872,13 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
             }
         }
         else {
-            if (!u->supressAdjacentWhitespace) u->consecutiveNewlines = 0;
+            if (!u.supressAdjacentWhitespace)
+                u.consecutiveNewlines = 0;
             return false;  // we still didn't handle token
         }
     }
-    if (!u->supressAdjacentWhitespace) u->consecutiveNewlines = 0;
+    if (!u.supressAdjacentWhitespace)
+        u.consecutiveNewlines = 0;
     return true;
 }
 
