@@ -183,13 +183,13 @@ const char *XMLTag::getPart(const char *buf, int partNum, char partSplit) const 
 }
 
 
-int XMLTag::attributePartCount(const char *attribName, char partSplit) const {
+int XMLTag::attributePartCount(std::string const & attribName, char partSplit) const {
     auto buf(attribute(attribName));
     return std::count(buf.begin(), buf.end(), partSplit)+1;
 }
 
 
-std::string XMLTag::attribute(const char *attribName, int partNum, char partSplit) const {
+std::string XMLTag::attribute(std::string const & attribName, int partNum, char partSplit) const {
     if (!parsed)
         parse();
 
@@ -202,7 +202,7 @@ std::string XMLTag::attribute(const char *attribName, int partNum, char partSpli
 }
 
 
-void XMLTag::setAttribute(const char *attribName, const char *attribValue, int partNum, char partSplit) {
+void XMLTag::setAttribute(std::string const & attribName, const char *attribValue, int partNum, char partSplit) {
     if (!parsed)
         parse();
 
