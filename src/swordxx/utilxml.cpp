@@ -265,6 +265,7 @@ std::string XMLTag::toString() const {
 bool XMLTag::isEndTag(const char *eID) const
 { return eID ? attribute("eID") == eID : endTag; }
 
+XMLTag & XMLTag::operator=(XMLTag const &) = default;
 
 } /* namespace swordxx */
 
