@@ -36,7 +36,7 @@ namespace swordxx {
 */
 class SWDLLEXPORT XMLTag {
 private:
-    mutable std::unique_ptr<char[]> m_buf;
+    mutable std::string m_buf;
     std::string m_name;
     mutable bool parsed;
     mutable bool empty;

@@ -49,70 +49,77 @@ std::string getPart(std::string const & buf, int partNum, char const partSplit)
 
 
 void XMLTag::parse() const {
-    int i;
-    int start;
-    std::string name;
     attributes.clear();
 
-    if (!m_buf)
-        return;
-    for (i = 0; ((m_buf[i]) && (!charIsAlpha(m_buf[i]))); i++);
-    for (; m_buf[i]; i++) {
-        if (strchr("\t\r\n ", m_buf[i])) {
+    auto const bufStart(m_buf.begin());
+    auto const bufEnd(m_buf.end());
+    auto it(bufStart);
+    while ((it != bufEnd) && !charIsAlpha(*it))
+        ++it;
+    for (; it != bufEnd; ++it) {
+        if (strchr("\t\r\n ", *it)) {
                         // Convert newlines, carriage returns and tabs to spaces
-            m_buf[i] = ' ';
+            *it = ' ';
 
-            for (; ((m_buf[i]) && (!charIsAlpha(m_buf[i]))); i++);
-            if (m_buf[i]) {		// we have an attribute name
-                start = i;
-                // Deprecated: check for following whitespacee
-                // Should be: for (; (buf[i] && buf[i] != '='; i++);
-                for (; ((m_buf[i]) && (!strchr(" =", m_buf[i]))); i++);
+            while ((it != bufEnd) && !charIsAlpha(*it))
+                ++it;
+            if (it != bufEnd) {		// we have an attribute name
+                std::string name;
+                {
+                    auto const start(it);
+                    // Deprecated: check for following whitespacee
+                    // Should be: for (; (buf[i] && buf[i] != '='; i++);
+                    while ((it != bufEnd) && (!strchr(" =", *it)))
+                        ++it;
 
-                if (i-start)
-                    name.assign(m_buf.get() + start, i - start);
+                    if (it != start)
+                        name.assign(start, it);
+                }
 
                 // The following does not allow for empty attributes
                 //for (; ((buf[i]) && (strchr(" =\"\'", buf[i]))); i++);
 
                 // skip space preceding the = sign
                 // Deprecated: this is not part of the xml spec
-                for (; m_buf[i] == ' '; i++) ;
+                while (*it == ' ')
+                    ++it;
 
                 // skip the = sign
-                if (m_buf[i])
-                    i++;
+                if (it != bufEnd)
+                    ++it;
 
                 // skip space following the = sign
                 // Deprecated: this is not part of the xml spec
-                for (; m_buf[i] == ' '; i++) ;
+                while (*it == ' ')
+                    ++it;
 
                 // remember and skip the quote sign
-                char quoteChar = m_buf[i];
-                if (quoteChar)
-                    i++;
+                if (it != bufEnd) {
+                    auto const quoteChar(*it);
+                    ++it;
 
-                if (m_buf[i]) {	// we have attribute value
-                    start = i;
-                    // Skip until matching quote character
-                    while ((m_buf[i]) && (m_buf[i] != quoteChar))
-                        ++i;
+                    if (it != bufEnd) {	// we have attribute value
+                        auto const start(it);
+                        // Skip until matching quote character
+                        while ((it != bufEnd) && (*it != quoteChar))
+                            ++it;
 
-                    // Allow for empty quotes
-                    attributes[name] = std::string(m_buf.get() + start, i - start);
+                        // Allow for empty quotes
+                        attributes[name] = std::string(start, it);
+                    }
                 }
             }
         }
 
         // if there are no more characters left then quit
-        if (!m_buf[i])
+        if (it == bufEnd)
             break;
 
     }
-    for (;i;i--) {
-        if (m_buf[i] == '/')
+    for (; it != bufStart; --it) {
+        if (*it == '/')
             empty = true;
-        if (!strchr(" \t\r\n>\t", m_buf[i]))
+        if (!strchr(" \t\r\n>\t", *it))
             break;
     }
 
@@ -125,19 +132,7 @@ XMLTag::XMLTag(const char *tagString) {
 }
 
 
-XMLTag::XMLTag(const XMLTag& t)
-    : m_name(t.m_name)
-    , attributes(t.attributes)
-{
-    parsed = t.parsed;
-    empty = t.empty;
-    endTag = t.endTag;
-    if (t.m_buf) {
-        auto const len(std::strlen(t.m_buf.get()));
-        m_buf = std::make_unique<char[]>(len + 1u);
-        std::memcpy(m_buf.get(), t.m_buf.get(), len + 1);
-    }
-}
+XMLTag::XMLTag(XMLTag const &) = default;
 
 
 void XMLTag::setText(const char *tagString) {
@@ -145,14 +140,12 @@ void XMLTag::setText(const char *tagString) {
     empty  = false;
     endTag = false;
 
-    m_buf.reset();
+    m_buf = "";
 
     if (!tagString)        // assert tagString before proceeding
         return;
 
-    auto const bufLength(std::strlen(tagString) + 1u);
-    m_buf = std::make_unique<char[]>(bufLength);
-    std::memcpy(m_buf.get(), tagString, bufLength);
+    m_buf = tagString;
 
     int start = 0;
     int i;
