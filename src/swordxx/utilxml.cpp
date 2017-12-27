@@ -48,11 +48,45 @@ std::string getPart(std::string const & buf, int partNum, char const partSplit)
 } // anonymous namespace
 
 
-void XMLTag::parse() const {
-    attributes.clear();
+XMLTag::XMLTag(const char *tagString) {
+    setText(tagString);
+}
+
+
+XMLTag::XMLTag(XMLTag const &) = default;
+
+
+void XMLTag::setText(const char *tagString) {
+    empty  = false;
+    endTag = false;
+
+    if (!tagString)        // assert tagString before proceeding
+        return;
+
+    std::string m_buf(tagString);
 
     auto const bufStart(m_buf.begin());
     auto const bufEnd(m_buf.end());
+
+    {
+        auto it(m_buf.begin());
+
+        // skip beginning silliness
+        while ((it != bufEnd) && !charIsAlpha(*it)) {
+            if (*it == '/')
+                endTag = true;
+            ++it;
+        }
+        auto const start(it);
+        while ((it != bufEnd) && !strchr("\t\r\n />", *it))
+            ++it;
+        m_name.assign(start, it);
+        if (*it == '/')
+            empty = true;
+    }
+
+    attributes.clear();
+
     auto it(bufStart);
     while ((it != bufEnd) && !charIsAlpha(*it))
         ++it;
@@ -122,53 +156,10 @@ void XMLTag::parse() const {
         if (!strchr(" \t\r\n>\t", *it))
             break;
     }
-
-    parsed = true;
-}
-
-
-XMLTag::XMLTag(const char *tagString) {
-    setText(tagString);
-}
-
-
-XMLTag::XMLTag(XMLTag const &) = default;
-
-
-void XMLTag::setText(const char *tagString) {
-    parsed = false;
-    empty  = false;
-    endTag = false;
-
-    m_buf = "";
-
-    if (!tagString)        // assert tagString before proceeding
-        return;
-
-    m_buf = tagString;
-
-    int start = 0;
-    int i;
-
-    // skip beginning silliness
-    for (i = 0; ((tagString[i]) && (!charIsAlpha(tagString[i]))); i++) {
-        if (tagString[i] == '/')
-            endTag = true;
-    }
-    start = i;
-    for (; ((tagString[i]) && (!strchr("\t\r\n />", tagString[i]))); i++);
-    if (i-start) {
-        m_name.assign(tagString + start, i - start);
-        if (tagString[i] == '/')
-            empty = true;
-    }
 }
 
 std::list<std::string> XMLTag::attributeNames() const {
     std::list<std::string> retVal;
-
-    if (!parsed)
-        parse();
 
     for (auto const & vp : attributes)
         retVal.push_back(vp.first);
@@ -183,9 +174,6 @@ int XMLTag::attributePartCount(std::string const & attribName, char partSplit) c
 
 
 std::string XMLTag::attribute(std::string const & attribName, int partNum, char partSplit) const {
-    if (!parsed)
-        parse();
-
     auto const it(attributes.find(attribName));
     if (it == attributes.end())
         return std::string();
@@ -196,9 +184,6 @@ std::string XMLTag::attribute(std::string const & attribName, int partNum, char 
 
 
 void XMLTag::setAttribute(std::string const & attribName, const char *attribValue, int partNum, char partSplit) {
-    if (!parsed)
-        parse();
-
     std::string newVal = "";
     // set part of an attribute
     if (partNum > -1) {
@@ -236,9 +221,6 @@ void XMLTag::eraseAttribute(std::string const & attribName) noexcept
 
 std::string XMLTag::toString() const {
     std::string tag("<");
-    if (!parsed)
-        parse();
-
     if (isEndTag())
         tag.push_back('/');
 

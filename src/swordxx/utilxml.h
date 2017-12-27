@@ -36,14 +36,10 @@ namespace swordxx {
 */
 class SWDLLEXPORT XMLTag {
 private:
-    mutable std::string m_buf;
     std::string m_name;
-    mutable bool parsed;
-    mutable bool empty;
-    mutable bool endTag;
-    mutable std::map<std::string, std::string> attributes;
-
-    void parse() const;
+    bool empty;
+    bool endTag;
+    std::map<std::string, std::string> attributes;
 
 public:
     XMLTag(char const * tagString = nullptr);
@@ -52,15 +48,8 @@ public:
     void setText(const char *tagString);
     inline std::string const & name() const { return m_name; }
 
-    inline bool isEmpty() const {
-        if (!parsed)
-            parse();
-
-        return empty;
-    }
-    inline void setEmpty(bool value) {
-        if (!parsed)
-            parse();
+    bool isEmpty() const { return empty; }
+    void setEmpty(bool value) {
         empty = value;
         if (value)
             endTag = false;
