@@ -1224,7 +1224,7 @@ XMLTag transformBSP(XMLTag t) {
     if (!t.isEndTag()) {
         // Transform <p> into <div type="x-p"> and milestone it
         if (tagName == "p") {
-            t.setText("<div type=\"x-p\" />");
+            t = "<div type=\"x-p\" />";
             sprintf(buf, "gen%d", sID++);
             t.setAttribute("sID", buf);
         }
