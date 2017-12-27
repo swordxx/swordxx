@@ -55,11 +55,16 @@ public:
             endTag = false;
     }
 
+    /*
+     * Return if we're a simple XML end </tag>.
+     */
+    bool isEndTag() const noexcept { return endTag; }
+
     /***
      * if an eID is provided, then we check to be sure we have an attribute <tag eID="xxx"/> value xxx equiv to what is given us
      * otherwise, we return if we're a simple XML end </tag>.
      */
-    bool isEndTag(char const * eID = nullptr) const;
+    bool isEndTag(char const * eID) const noexcept;
 
     std::list<std::string> attributeNames() const;
     int attributePartCount(std::string const & attribName, char partSplit = '|') const;

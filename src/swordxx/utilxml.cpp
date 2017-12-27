@@ -241,11 +241,14 @@ std::string XMLTag::toString() const {
     return tag;
 }
 
-
-// if an eID is provided, then we check to be sure we have an attribute <tag eID="xxx"/> value xxx equiv to what is given us
-// otherwise, we return if we're a simple XML end </tag>.
-bool XMLTag::isEndTag(const char *eID) const
-{ return eID ? attribute("eID") == eID : endTag; }
+bool XMLTag::isEndTag(char const * const eID) const noexcept {
+    if (!eID)
+        return endTag;
+    auto const it(attributes.find("eID"));
+    if (it == attributes.end())
+        return !*eID;
+    return it->second == eID;
+}
 
 XMLTag & XMLTag::operator=(XMLTag const &) = default;
 
