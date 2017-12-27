@@ -37,7 +37,8 @@ public: /* Methods: */
 
     XMLTag(char const * tagString = nullptr);
 
-    XMLTag(XMLTag const & tag);
+    XMLTag(XMLTag &&);
+    XMLTag(XMLTag const &);
 
     void setText(char const * tagString);
 
@@ -82,6 +83,7 @@ public: /* Methods: */
 
     std::string toString() const;
 
+    XMLTag & operator=(XMLTag &&);
     XMLTag & operator=(XMLTag const &);
 
 private: /* Fields: */

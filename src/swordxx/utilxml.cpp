@@ -49,6 +49,7 @@ std::string getPart(std::string const & buf, int partNum, char const partSplit)
 
 XMLTag::XMLTag(char const * const tagString) { setText(tagString); }
 
+XMLTag::XMLTag(XMLTag &&) = default;
 XMLTag::XMLTag(XMLTag const &) = default;
 
 void XMLTag::setText(char const * tagString) {
@@ -250,6 +251,7 @@ bool XMLTag::isEndTag(char const * const eID) const noexcept {
     return it->second == eID;
 }
 
+XMLTag & XMLTag::operator=(XMLTag &&) = default;
 XMLTag & XMLTag::operator=(XMLTag const &) = default;
 
 } /* namespace swordxx */
