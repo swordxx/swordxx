@@ -2,8 +2,6 @@
  *
  *  utilxml.h -    definition of class that deal with xml constructs
  *
- * $Id$
- *
  * Copyright 2003-2013 CrossWire Bible Society (http://www.crosswire.org)
  *    CrossWire Bible Society
  *    P. O. Box 2528
@@ -20,8 +18,8 @@
  *
  */
 
-#ifndef UTILXML_H
-#define UTILXML_H
+#ifndef SWORDXX_UTILXML_H
+#define SWORDXX_UTILXML_H
 
 #include <list>
 #include <map>
@@ -32,23 +30,21 @@
 
 namespace swordxx {
 
-/** Simple XML helper class.
-*/
+/** Simple XML helper class. */
 class SWDLLEXPORT XMLTag {
-private:
-    std::string m_name;
-    bool m_isEmpty;
-    bool m_isEndTag;
-    std::map<std::string, std::string> m_attributes;
 
-public:
+public: /* Methods: */
+
     XMLTag(char const * tagString = nullptr);
-    XMLTag(const XMLTag& tag);
 
-    void setText(const char *tagString);
-    inline std::string const & name() const noexcept { return m_name; }
+    XMLTag(XMLTag const & tag);
+
+    void setText(char const * tagString);
+
+    std::string const & name() const noexcept { return m_name; }
 
     bool isEmpty() const noexcept { return m_isEmpty; }
+
     void setEmpty(bool value) {
         m_isEmpty = value;
         if (value)
@@ -61,23 +57,42 @@ public:
     bool isEndTag() const noexcept { return m_isEndTag; }
 
     /***
-     * if an eID is provided, then we check to be sure we have an attribute <tag eID="xxx"/> value xxx equiv to what is given us
-     * otherwise, we return if we're a simple XML end </tag>.
+     * if an eID is provided, then we check to be sure we have an attribute
+     * <tag eID="xxx"/> value xxx equiv to what is given us. Otherwise, we
+     * return if we're a simple XML end </tag>.
      */
     bool isEndTag(char const * eID) const noexcept;
 
     std::list<std::string> attributeNames() const;
-    int attributePartCount(std::string const & attribName, char partSplit = '|') const;
+    int attributePartCount(std::string const & attribName,
+                           char partSplit = '|') const;
 
-    // return values should not be considered to persist beyond the return of the function.
-    std::string attribute(std::string const & attribName, int partNum = -1, char partSplit = '|') const;
-    void setAttribute(std::string const & attribName, const char *attribValue, int partNum = -1, char partSplit = '|');
+    /* return values should not be considered to persist beyond the return of
+     * the function. */
+    std::string attribute(std::string const & attribName,
+                          int partNum = -1,
+                          char partSplit = '|') const;
+
+    void setAttribute(std::string const & attribName,
+                      char const * attribValue,
+                      int partNum = -1,
+                      char partSplit = '|');
+
     void eraseAttribute(std::string const & attribName) noexcept;
+
     std::string toString() const;
+
     XMLTag & operator=(XMLTag const &);
+
+private: /* Fields: */
+
+    std::map<std::string, std::string> m_attributes;
+    std::string m_name;
+    bool m_isEmpty;
+    bool m_isEndTag;
 
 };
 
 } /* namespace swordxx */
-#endif
 
+#endif /* SWORDXX_UTILXML_H */

@@ -47,16 +47,11 @@ std::string getPart(std::string const & buf, int partNum, char const partSplit)
 
 } // anonymous namespace
 
-
-XMLTag::XMLTag(const char *tagString) {
-    setText(tagString);
-}
-
+XMLTag::XMLTag(char const * const tagString) { setText(tagString); }
 
 XMLTag::XMLTag(XMLTag const &) = default;
 
-
-void XMLTag::setText(const char *tagString) {
+void XMLTag::setText(char const * tagString) {
     m_isEmpty  = false;
     m_isEndTag = false;
 
@@ -160,20 +155,22 @@ void XMLTag::setText(const char *tagString) {
 
 std::list<std::string> XMLTag::attributeNames() const {
     std::list<std::string> retVal;
-
     for (auto const & vp : m_attributes)
         retVal.push_back(vp.first);
-
     return retVal;
 }
 
-int XMLTag::attributePartCount(std::string const & attribName, char partSplit) const {
+int XMLTag::attributePartCount(std::string const & attribName,
+                               char partSplit) const
+{
     auto buf(attribute(attribName));
     return std::count(buf.begin(), buf.end(), partSplit)+1;
 }
 
-
-std::string XMLTag::attribute(std::string const & attribName, int partNum, char partSplit) const {
+std::string XMLTag::attribute(std::string const & attribName,
+                              int partNum,
+                              char partSplit) const
+{
     auto const it(m_attributes.find(attribName));
     if (it == m_attributes.end())
         return std::string();
@@ -182,8 +179,11 @@ std::string XMLTag::attribute(std::string const & attribName, int partNum, char 
     return it->second;
 }
 
-
-void XMLTag::setAttribute(std::string const & attribName, const char *attribValue, int partNum, char partSplit) {
+void XMLTag::setAttribute(std::string const & attribName,
+                          char const * attribValue,
+                          int partNum,
+                          char partSplit)
+{
     std::string newVal = "";
     // set part of an attribute
     if (partNum > -1) {
@@ -253,4 +253,3 @@ bool XMLTag::isEndTag(char const * const eID) const noexcept {
 XMLTag & XMLTag::operator=(XMLTag const &) = default;
 
 } /* namespace swordxx */
-
