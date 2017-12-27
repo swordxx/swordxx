@@ -46,9 +46,9 @@ public:
     XMLTag(const XMLTag& tag);
 
     void setText(const char *tagString);
-    inline std::string const & name() const { return m_name; }
+    inline std::string const & name() const noexcept { return m_name; }
 
-    bool isEmpty() const { return empty; }
+    bool isEmpty() const noexcept { return empty; }
     void setEmpty(bool value) {
         empty = value;
         if (value)
