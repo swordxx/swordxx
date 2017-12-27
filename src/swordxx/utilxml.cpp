@@ -29,6 +29,24 @@
 
 namespace swordxx {
 
+namespace {
+
+std::string getPart(std::string const & buf, int partNum, char const partSplit)
+{
+    auto tokenStart(buf.begin());
+    auto const stringEnd(buf.end());
+    for (; partNum; --partNum, ++tokenStart) {
+        tokenStart = std::find(tokenStart, stringEnd, partSplit);
+        if (tokenStart == stringEnd)
+            return std::string();
+    }
+
+    auto const tokenEnd(std::find(tokenStart, stringEnd, partSplit));
+    return std::string(tokenStart, tokenEnd);
+}
+
+} // anonymous namespace
+
 
 void XMLTag::parse() const {
     int i;
@@ -164,24 +182,6 @@ std::list<std::string> XMLTag::attributeNames() const {
 
     return retVal;
 }
-
-
-const char *XMLTag::getPart(const char *buf, int partNum, char partSplit) const {
-    for (; (buf && partNum); partNum--) {
-        buf = strchr(buf, partSplit);
-        if (buf)
-            buf++;
-    }
-    if (buf) {
-        const char *end = strchr(buf, partSplit);
-        junkBuf = buf;
-        if (end)
-            junkBuf.resize(end - buf, '\0');
-        return junkBuf.c_str();
-    }
-    return nullptr;
-}
-
 
 int XMLTag::attributePartCount(std::string const & attribName, char partSplit) const {
     auto buf(attribute(attribName));

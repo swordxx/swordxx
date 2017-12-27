@@ -44,10 +44,8 @@ private:
     mutable bool empty;
     mutable bool endTag;
     mutable StringPairMap attributes;
-    mutable std::string junkBuf;
 
     void parse() const;
-    const char *getPart(const char *buf, int partNum = 0, char partSplit = '|') const;
 
 public:
     XMLTag(char const * tagString = nullptr);
