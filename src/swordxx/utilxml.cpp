@@ -177,8 +177,8 @@ std::list<std::string> XMLTag::attributeNames() const {
     if (!parsed)
         parse();
 
-    for (StringPairMap::const_iterator it = attributes.begin(); it != attributes.end(); it++)
-        retVal.push_back(it->first.c_str());
+    for (auto const & vp : attributes)
+        retVal.push_back(vp.first);
 
     return retVal;
 }
@@ -193,11 +193,11 @@ std::string XMLTag::attribute(std::string const & attribName, int partNum, char 
     if (!parsed)
         parse();
 
-    StringPairMap::const_iterator it = attributes.find(attribName);
+    auto const it(attributes.find(attribName));
     if (it == attributes.end())
         return std::string();
     if (partNum > -1)
-        return getPart(it->second.c_str(), partNum, partSplit);
+        return getPart(it->second, partNum, partSplit);
     return it->second;
 }
 
@@ -250,13 +250,12 @@ std::string XMLTag::toString() const {
         tag.push_back('/');
 
     tag.append(name());
-    for (StringPairMap::iterator it = attributes.begin(); it != attributes.end(); it++) {
-        //tag.appendFormatted(" %s=\"%s\"", it->first.c_str(), it->second.c_str());
+    for (auto const & vp : attributes) {
         tag.push_back(' ');
-        tag.append(it->first.c_str());
-        tag.append((strchr(it->second.c_str(), '\"')) ? "=\'" : "=\"");
-        tag.append(it->second.c_str());
-        tag.push_back((strchr(it->second.c_str(), '\"'))? '\'' : '\"');
+        tag.append(vp.first);
+        tag.append((std::strchr(vp.second.c_str(), '\"')) ? "=\'" : "=\"");
+        tag.append(vp.second);
+        tag.push_back((std::strchr(vp.second.c_str(), '\"'))? '\'' : '\"');
     }
 
     if (isEmpty())
@@ -274,12 +273,8 @@ std::string XMLTag::toString() const {
 
 // if an eID is provided, then we check to be sure we have an attribute <tag eID="xxx"/> value xxx equiv to what is given us
 // otherwise, we return if we're a simple XML end </tag>.
-bool XMLTag::isEndTag(const char *eID) const {
-    if (eID) {
-        return (std::string(eID) == attribute("eID"));
-    }
-    return endTag;
-}
+bool XMLTag::isEndTag(const char *eID) const
+{ return eID ? attribute("eID") == eID : endTag; }
 
 
 } /* namespace swordxx */

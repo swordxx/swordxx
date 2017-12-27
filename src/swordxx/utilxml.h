@@ -32,8 +32,6 @@
 
 namespace swordxx {
 
-typedef std::map<std::string, std::string> StringPairMap;
-
 /** Simple XML helper class.
 */
 class SWDLLEXPORT XMLTag {
@@ -43,7 +41,7 @@ private:
     mutable bool parsed;
     mutable bool empty;
     mutable bool endTag;
-    mutable StringPairMap attributes;
+    mutable std::map<std::string, std::string> attributes;
 
     void parse() const;
 
