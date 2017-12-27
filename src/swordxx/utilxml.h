@@ -37,9 +37,9 @@ namespace swordxx {
 class SWDLLEXPORT XMLTag {
 private:
     std::string m_name;
-    bool empty;
-    bool endTag;
-    std::map<std::string, std::string> attributes;
+    bool m_isEmpty;
+    bool m_isEndTag;
+    std::map<std::string, std::string> m_attributes;
 
 public:
     XMLTag(char const * tagString = nullptr);
@@ -48,17 +48,17 @@ public:
     void setText(const char *tagString);
     inline std::string const & name() const noexcept { return m_name; }
 
-    bool isEmpty() const noexcept { return empty; }
+    bool isEmpty() const noexcept { return m_isEmpty; }
     void setEmpty(bool value) {
-        empty = value;
+        m_isEmpty = value;
         if (value)
-            endTag = false;
+            m_isEndTag = false;
     }
 
     /*
      * Return if we're a simple XML end </tag>.
      */
-    bool isEndTag() const noexcept { return endTag; }
+    bool isEndTag() const noexcept { return m_isEndTag; }
 
     /***
      * if an eID is provided, then we check to be sure we have an attribute <tag eID="xxx"/> value xxx equiv to what is given us
