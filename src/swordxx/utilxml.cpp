@@ -263,10 +263,6 @@ std::string XMLTag::toString() const {
 
     tag.push_back('>');
 
-
-    m_buf = std::make_unique<char[]>(tag.length() + 1);
-    std::strcpy(m_buf.get(), tag.c_str());
-
     return tag;
 }
 
