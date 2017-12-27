@@ -40,8 +40,6 @@ public: /* Methods: */
     XMLTag(XMLTag &&);
     XMLTag(XMLTag const &);
 
-    void setText(char const * tagString);
-
     std::string const & name() const noexcept { return m_name; }
 
     bool isEmpty() const noexcept { return m_isEmpty; }

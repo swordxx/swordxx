@@ -47,12 +47,10 @@ std::string getPart(std::string const & buf, int partNum, char const partSplit)
 
 } // anonymous namespace
 
-XMLTag::XMLTag(char const * const tagString) { setText(tagString); }
-
 XMLTag::XMLTag(XMLTag &&) = default;
 XMLTag::XMLTag(XMLTag const &) = default;
 
-void XMLTag::setText(char const * tagString) {
+XMLTag::XMLTag(char const * const tagString) {
     m_isEmpty  = false;
     m_isEndTag = false;
 
