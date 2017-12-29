@@ -89,12 +89,12 @@ char GBFOSIS::processText(std::string &text, const SWKey *key, const SWModule *m
             handled = false;
 
             while (wordStart < (text.c_str() + text.length())) { //hack
-                if (strchr(";,. :?!()'\"", *wordStart) && wordStart[0] && wordStart[1])
+                if (std::strchr(";,. :?!()'\"", *wordStart) && wordStart[0] && wordStart[1])
                     wordStart++;
                 else break;
             }
             while (wordEnd > wordStart) {
-                if (strchr(" ,;:.?!()'\"", *wordEnd))
+                if (std::strchr(" ,;:.?!()'\"", *wordEnd))
                     wordEnd--;
                 else break;
             }
@@ -286,7 +286,7 @@ char GBFOSIS::processText(std::string &text, const SWKey *key, const SWModule *m
                                 key ? key->getText() : "<unknown>");
 //                    exit(-1);
                 }
-                if (from[1] && strchr(" ,;.:?!()'\"", from[1])) {
+                if (from[1] && std::strchr(" ,;.:?!()'\"", from[1])) {
                     if (lastspace) {
                         text.pop_back();
                     }

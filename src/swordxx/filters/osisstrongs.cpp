@@ -117,7 +117,7 @@ char OSISStrongs::processText(std::string &text, const SWKey *key, const SWModul
                             attrib = wtag.attribute("morph", i, ' ');
                             if (i < 0) i = 0;    // to handle our -1 condition
 
-                            const char *m = strchr(attrib.c_str(), ':');
+                            const char *m = std::strchr(attrib.c_str(), ':');
                             if (m) {
                                 int len = m-attrib.c_str();
                                 mClass.append(attrib.c_str(), len);
@@ -149,7 +149,7 @@ char OSISStrongs::processText(std::string &text, const SWKey *key, const SWModul
                             attrib = wtag.attribute("savlm", i, ' ');
                             if (i < 0) i = 0;    // to handle our -1 condition
 
-                            const char *m = strchr(attrib.c_str(), ':');
+                            const char *m = std::strchr(attrib.c_str(), ':');
                             if (m) {
                                 int len = m-attrib.c_str();
                                 lClass.append(attrib.c_str(), len);
@@ -216,7 +216,7 @@ char OSISStrongs::processText(std::string &text, const SWKey *key, const SWModul
 
                     if (wtag.isEmpty()) {
                         int j;
-                        for (j = token.length()-1; ((j>0) && (strchr(" /", token[j]))); j--);
+                        for (j = token.length()-1; ((j>0) && (std::strchr(" /", token[j]))); j--);
                         token.resize(j + 1, '\0');
                     }
 

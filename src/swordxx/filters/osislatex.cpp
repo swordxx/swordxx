@@ -95,7 +95,7 @@ void processLemma(bool suspendTextPassThru, XMLTag &tag, std::string &buf) {
         do {
             attrib = tag.attribute("lemma", i, ' ');
             if (i < 0) i = 0;    // to handle our -1 condition
-            val = strchr(attrib.c_str(), ':');
+            val = std::strchr(attrib.c_str(), ':');
             val = (val) ? (val + 1) : attrib.c_str();
             std::string gh;
             if(*val == 'G')
@@ -103,7 +103,7 @@ void processLemma(bool suspendTextPassThru, XMLTag &tag, std::string &buf) {
             if(*val == 'H')
                 gh = "Hebrew";
             const char *val2 = val;
-            if ((strchr("GH", *val)) && (charIsDigit(val[1])))
+            if ((std::strchr("GH", *val)) && (charIsDigit(val[1])))
                 val2++;
             //if ((!strcmp(val2, "3588")) && (lastText.length() < 1))
             //    show = false;
@@ -134,10 +134,10 @@ void processMorph(bool suspendTextPassThru, XMLTag &tag, std::string &buf) {
             do {
                 attrib = tag.attribute("morph", i, ' ');
                 if (i < 0) i = 0;    // to handle our -1 condition
-                val = strchr(attrib.c_str(), ':');
+                val = std::strchr(attrib.c_str(), ':');
                 val = (val) ? (val + 1) : attrib.c_str();
                 const char *val2 = val;
-                if ((*val == 'T') && (strchr("GH", val[1])) && (charIsDigit(val[2])))
+                if ((*val == 'T') && (std::strchr("GH", val[1])) && (charIsDigit(val[2])))
                     val2+=2;
                 if (!suspendTextPassThru) {
                     buf += formatted("\\swordmorph{%s}",
@@ -234,7 +234,7 @@ bool OSISLaTeX::handleToken(std::string &buf, const char *token, BasicFilterUser
                 std::string attrib;
                 const char *val;
                 if (!(attrib = tag.attribute("xlit")).empty()) {
-                    val = strchr(attrib.c_str(), ':');
+                    val = std::strchr(attrib.c_str(), ':');
                     val = (val) ? (val + 1) : attrib.c_str();
                     outText(" ", buf, u);
                     outText(val, buf, u);
@@ -259,7 +259,7 @@ bool OSISLaTeX::handleToken(std::string &buf, const char *token, BasicFilterUser
                     processLemma(u->suspendTextPassThru, tag, buf);
                 }
                 if (!(attrib = tag.attribute("POS")).empty()) {
-                    val = strchr(attrib.c_str(), ':');
+                    val = std::strchr(attrib.c_str(), ':');
                     val = (val) ? (val + 1) : attrib.c_str();
                     outText(" ", buf, u);
                     outText(val, buf, u);

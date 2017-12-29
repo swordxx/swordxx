@@ -213,7 +213,7 @@ char ThMLWordJS::processText(std::string &text, const SWKey *key, const SWModule
 */
 
                             // 'p' = 'fillpop' to save bandwidth
-                            const char *m = strchr(morph.c_str(), ':');
+                            const char *m = std::strchr(morph.c_str(), ':');
                             if (m) m++;
                             else m = morph.c_str();
                             spanStart += formatted("<span class=\"clk\" onclick=\"p('%s','%s','%s','%s','','%s');\" >", lexName.c_str(), strong.c_str(), wordID.c_str(), m, modName.c_str());
@@ -295,7 +295,7 @@ char ThMLWordJS::processText(std::string &text, const SWKey *key, const SWModule
                 textStr += lastAppendLen;
                 std::string spanStart = "";
                 // 'p' = 'fillpop' to save bandwidth
-                const char *m = strchr(morph.c_str(), ':');
+                const char *m = std::strchr(morph.c_str(), ':');
                 if (m) m++;
                 else m = morph.c_str();
                 spanStart += formatted("<span class=\"clk\" onclick=\"p('%s','%s','%s','%s','','%s');\" >", lexName.c_str(), strong.c_str(), wordID.c_str(), m, modName.c_str());

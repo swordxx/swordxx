@@ -144,7 +144,7 @@ char OSISWordJS::processText(std::string &text, const SWKey *key, const SWModule
 
                     if ((lemmaClass != "strong") && (hasPrefix(xlit, "betacode:"))) {
                         lexName = "betacode";
-//						const char *m = strchr(xlit.c_str(), ':');
+//						const char *m = std::strchr(xlit.c_str(), ':');
 //						strong = ++m;
                     }
                     std::string wordID;

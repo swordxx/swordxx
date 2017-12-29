@@ -227,8 +227,8 @@ char ThMLPlain::processText(std::string &text, const SWKey *key, const SWModule 
     orig = text;
     from = orig.c_str();
     for (text = ""; *from; from++) {  //loop to remove extra spaces
-                if ((strchr(" \t\n\r", *from))) {
-                        while (*(from+1) && (strchr(" \t\n\r", *(from+1)))) {
+                if ((std::strchr(" \t\n\r", *from))) {
+                        while (*(from+1) && (std::strchr(" \t\n\r", *(from+1)))) {
                                 from++;
                         }
                         text += " ";

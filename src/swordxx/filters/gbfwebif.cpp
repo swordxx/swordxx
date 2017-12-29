@@ -57,7 +57,7 @@ bool GBFWEBIF::handleToken(std::string &buf, const char *token, BasicFilterUserD
                     for (tok = val; *tok; tok++) {
                         url += *tok;
                     }
-                    if ((url.length() > 1) && strchr("GH", url[0])) {
+                    if ((url.length() > 1) && std::strchr("GH", url[0])) {
                         if (charIsDigit(url[1]))
                             url = url.c_str()+1;
                     }
@@ -82,7 +82,7 @@ bool GBFWEBIF::handleToken(std::string &buf, const char *token, BasicFilterUserD
                         for (tok = val; *tok; tok++) {
                             url += *tok;
                         }
-                        if ((url.length() > 1) && strchr("GH", url[0])) {
+                        if ((url.length() > 1) && std::strchr("GH", url[0])) {
                             if (charIsDigit(url[1]))
                                 url = url.c_str()+1;
                         }
@@ -123,7 +123,7 @@ bool GBFWEBIF::handleToken(std::string &buf, const char *token, BasicFilterUserD
             for (tok = token+1; *tok; tok++) {
                 url += *tok;
             }
-            if ((url.length() > 1) && strchr("GH", url[0])) {
+            if ((url.length() > 1) && std::strchr("GH", url[0])) {
                 if (charIsDigit(url[1]))
                     url = url.c_str()+1;
             }
@@ -142,7 +142,7 @@ bool GBFWEBIF::handleToken(std::string &buf, const char *token, BasicFilterUserD
                 if(*tok != '\"')
                     url += *tok;
             }
-            if ((url.length() > 1) && strchr("GH", url[0])) {
+            if ((url.length() > 1) && std::strchr("GH", url[0])) {
                 if (charIsDigit(url[1]))
                     url = url.c_str()+1;
             }

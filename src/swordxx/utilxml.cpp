@@ -70,7 +70,7 @@ XMLTag::XMLTag(char const * const tagString) {
             ++it;
         }
         auto const start(it);
-        while ((it != bufEnd) && !strchr("\t\r\n />", *it))
+        while ((it != bufEnd) && !std::strchr("\t\r\n />", *it))
             ++it;
         m_name.assign(start, it);
         if (*it == '/')
@@ -83,7 +83,7 @@ XMLTag::XMLTag(char const * const tagString) {
     while ((it != bufEnd) && !charIsAlpha(*it))
         ++it;
     for (; it != bufEnd; ++it) {
-        if (strchr("\t\r\n ", *it)) {
+        if (std::strchr("\t\r\n ", *it)) {
             do {
                 ++it;
             } while ((it != bufEnd) && !charIsAlpha(*it));
@@ -93,7 +93,7 @@ XMLTag::XMLTag(char const * const tagString) {
                     auto const start(it);
                     // Deprecated: check for following whitespacee
                     // Should be: for (; (buf[i] && buf[i] != '='; i++);
-                    while ((it != bufEnd) && (!strchr(" =", *it)))
+                    while ((it != bufEnd) && (!std::strchr(" =", *it)))
                         ++it;
 
                     if (it != start)
@@ -101,7 +101,7 @@ XMLTag::XMLTag(char const * const tagString) {
                 }
 
                 // The following does not allow for empty attributes
-                //for (; ((buf[i]) && (strchr(" =\"\'", buf[i]))); i++);
+                //for (; ((buf[i]) && (std::strchr(" =\"\'", buf[i]))); i++);
 
                 // skip space preceding the = sign
                 // Deprecated: this is not part of the xml spec
@@ -143,7 +143,7 @@ XMLTag::XMLTag(char const * const tagString) {
     for (; it != bufStart; --it) {
         if (*it == '/')
             m_isEmpty = true;
-        if (!strchr(" \t\r\n>\t", *it))
+        if (!std::strchr(" \t\r\n>\t", *it))
             break;
     }
 }

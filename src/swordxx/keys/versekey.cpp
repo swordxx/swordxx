@@ -797,7 +797,7 @@ terminate_range:
         case '.':
             if (buf > orig) {            // ignore (break) if preceeding char is not a digit
                 for (notAllDigits = tobook; notAllDigits; notAllDigits--) {
-                    if ((!charIsDigit(book[notAllDigits-1])) && (!strchr(" .", book[notAllDigits-1])))
+                    if ((!charIsDigit(book[notAllDigits-1])) && (!std::strchr(" .", book[notAllDigits-1])))
                         break;
                 }
                 if (!notAllDigits && !charIsDigit(buf[1]))
@@ -1824,14 +1824,14 @@ std::string VerseKey::convertToOSIS(const char *inRef, const SWKey *lastKnownKey
         memset(frag, 0, 800);
         memset(preJunk, 0, 800);
         memset(postJunk, 0, 800);
-        while ((*startFrag) && (strchr(" {}:;,()[].", *startFrag))) {
+        while ((*startFrag) && (std::strchr(" {}:;,()[].", *startFrag))) {
             outRef += *startFrag;
             startFrag++;
         }
         memmove(frag, startFrag, ((const char *)element->m_userData - startFrag) + 1);
         frag[((const char *)element->m_userData - startFrag) + 1] = 0;
         int j;
-        for (j = strlen(frag)-1; j && (strchr(" {}:;,()[].", frag[j])); j--);
+        for (j = strlen(frag)-1; j && (std::strchr(" {}:;,()[].", frag[j])); j--);
         if (frag[j+1])
             strcpy(postJunk, frag+j+1);
         frag[j+1]=0;

@@ -70,7 +70,7 @@ char OSISMorph::processText(std::string &text, const SWKey *key, const SWModule 
 
                 if ((*token == 'w') && (token[1] == ' ')) {
                     start = strstr(token+2, "morph=\""); //we leave out "w " at the start
-                    end = start ? strchr(start+7, '"') : nullptr; //search the end of the morph value
+                    end = start ? std::strchr(start + 7, '"') : nullptr; //search the end of the morph value
 
                     if (start && end) { //start and end of the morph tag found
                         text.push_back('<');

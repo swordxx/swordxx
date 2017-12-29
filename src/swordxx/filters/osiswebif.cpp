@@ -81,12 +81,12 @@ bool OSISWEBIF::handleToken(std::string &buf, const char *token, BasicFilterUser
                 std::string attrib;
                 const char *val;
                 if (!(attrib = tag.attribute("xlit")).empty()) {
-                    val = strchr(attrib.c_str(), ':');
+                    val = std::strchr(attrib.c_str(), ':');
                     val = (val) ? (val + 1) : attrib.c_str();
 //                    buf += formatted(" %s", val);
                 }
                 if (!(attrib = tag.attribute("gloss")).empty()) {
-                    val = strchr(attrib.c_str(), ':');
+                    val = std::strchr(attrib.c_str(), ':');
                     val = (val) ? (val + 1) : attrib.c_str();
 //                    buf += formatted(" %s", val);
                 }
@@ -96,10 +96,10 @@ bool OSISWEBIF::handleToken(std::string &buf, const char *token, BasicFilterUser
                     do {
                         attrib = tag.attribute("lemma", i, ' ');
                         if (i < 0) i = 0;    // to handle our -1 condition
-                        val = strchr(attrib.c_str(), ':');
+                        val = std::strchr(attrib.c_str(), ':');
                         val = (val) ? (val + 1) : attrib.c_str();
                         const char *val2 = val;
-                        if ((strchr("GH", *val)) && (charIsDigit(val[1])))
+                        if ((std::strchr("GH", *val)) && (charIsDigit(val[1])))
                             val2++;
                         if ((!strcmp(val2, "3588")) && (lastText.length() < 1))
                             show = false;
@@ -117,17 +117,17 @@ bool OSISWEBIF::handleToken(std::string &buf, const char *token, BasicFilterUser
                         do {
                             attrib = tag.attribute("morph", i, ' ');
                             if (i < 0) i = 0;    // to handle our -1 condition
-                            val = strchr(attrib.c_str(), ':');
+                            val = std::strchr(attrib.c_str(), ':');
                             val = (val) ? (val + 1) : attrib.c_str();
                             const char *val2 = val;
-                            if ((*val == 'T') && (strchr("GH", val[1])) && (charIsDigit(val[2])))
+                            if ((*val == 'T') && (std::strchr("GH", val[1])) && (charIsDigit(val[2])))
                                 val2+=2;
                             buf += formatted(" <small><em>(<a href=\"%s?showMorph=%s#cv\">%s</a>)</em></small> ", passageStudyURL.c_str(), URL::encode(val2).c_str(), val2);
                         } while (++i < count);
                     }
                 }
                 if (!(attrib = tag.attribute("POS")).empty()) {
-                    val = strchr(attrib.c_str(), ':');
+                    val = std::strchr(attrib.c_str(), ':');
                     val = (val) ? (val + 1) : attrib.c_str();
                     buf += formatted(" %s", val);
                 }

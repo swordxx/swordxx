@@ -239,12 +239,12 @@ char ThMLOSIS::processText(std::string &text, const SWKey *key, const SWModule *
             handled = false;
 
             while (wordStart < (text.c_str() + text.length())) { //hack
-                if (strchr(";,. :?!()'\"", *wordStart) && wordStart[0] && wordStart[1])
+                if (std::strchr(";,. :?!()'\"", *wordStart) && wordStart[0] && wordStart[1])
                     wordStart++;
                 else break;
             }
             while (wordEnd > wordStart) {
-                if (strchr(" ,;:.?!()'\"", *wordEnd))
+                if (std::strchr(" ,;:.?!()'\"", *wordEnd))
                     wordEnd--;
                 else break;
             }
@@ -369,7 +369,7 @@ char ThMLOSIS::processText(std::string &text, const SWKey *key, const SWModule *
                 //pushString(&to, "<figure src=\"");
                 text.append("<figure src=\"");
 
-                const char* end = strchr(src+2, '"'); //start search behind src="
+                const char* end = std::strchr(src+2, '"'); //start search behind src="
 
                 if (end) { //append the path
                     text.append(src+2, end - (src+2));
@@ -484,7 +484,7 @@ char ThMLOSIS::processText(std::string &text, const SWKey *key, const SWModule *
                             key ? key->getText() : "<unknown>");
 //                    exit(-1);
                 }
-                if (from[1] && strchr(" ,;.:?!()'\"", from[1])) {
+                if (from[1] && std::strchr(" ,;.:?!()'\"", from[1])) {
                     if (lastspace) {
                         text.pop_back();
                     }

@@ -290,7 +290,7 @@ bool handleToken(std::string & text, XMLTag & token) {
 #ifdef DEBUG
             cout << "keyStr: " << keyStr << endl;
 #endif
-                        splitPtr = strchr(keyStr.c_str(), '|');
+                        splitPtr = std::strchr(keyStr.c_str(), '|');
                         if (splitPtr) {
                                 strncpy (splitBuffer.data(), keyStr.c_str(), splitPtr - keyStr.c_str());
                                 splitBuffer[splitPtr - keyStr.c_str()] = 0;

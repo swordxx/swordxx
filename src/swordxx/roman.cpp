@@ -32,7 +32,7 @@ namespace swordxx {
 char isroman (const char *str, int maxchars) {
     char *ch = (char*)str;
     for (; *ch && (!maxchars || (ch-str) <= maxchars); ch++)
-        if (!strchr("IVXLCDMivxlcdm ", *ch))
+        if (!std::strchr("IVXLCDMivxlcdm ", *ch))
             return 0;
     return 1;
 }

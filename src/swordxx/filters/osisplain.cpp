@@ -101,7 +101,7 @@ bool OSISPlain::handleToken(std::string &buf, const char *token, BasicFilterUser
             std::string attrib;
             const char *val;
             if (!(attrib = u->tag.attribute("xlit")).empty()) {
-                val = strchr(attrib.c_str(), ':');
+                val = std::strchr(attrib.c_str(), ':');
                 val = (val) ? (val + 1) : attrib.c_str();
                 buf.append(" <");
                 buf.append(val);
@@ -119,9 +119,9 @@ bool OSISPlain::handleToken(std::string &buf, const char *token, BasicFilterUser
                     char gh;
                     attrib = u->tag.attribute("lemma", i, ' ');
                     if (i < 0) i = 0;    // to handle our -1 condition
-                    val = strchr(attrib.c_str(), ':');
+                    val = std::strchr(attrib.c_str(), ':');
                     val = (val) ? (val + 1) : attrib.c_str();
-                    if ((strchr("GH", *val)) && (charIsDigit(val[1]))) {
+                    if ((std::strchr("GH", *val)) && (charIsDigit(val[1]))) {
                         gh = *val;
                         val++;
                     }
@@ -144,9 +144,9 @@ bool OSISPlain::handleToken(std::string &buf, const char *token, BasicFilterUser
                 do {
                     attrib = u->tag.attribute("morph", i, ' ');
                     if (i < 0) i = 0;    // to handle our -1 condition
-                    val = strchr(attrib.c_str(), ':');
+                    val = std::strchr(attrib.c_str(), ':');
                     val = (val) ? (val + 1) : attrib.c_str();
-                    if ((*val == 'T') && (strchr("GH", val[1])) && (charIsDigit(val[2])))
+                    if ((*val == 'T') && (std::strchr("GH", val[1])) && (charIsDigit(val[2])))
                         val+=2;
                     buf.append(" (");
                     buf.append(val);
@@ -154,7 +154,7 @@ bool OSISPlain::handleToken(std::string &buf, const char *token, BasicFilterUser
                 } while (++i < count);
             }
             if (!(attrib = u->tag.attribute("POS")).empty()) {
-                val = strchr(attrib.c_str(), ':');
+                val = std::strchr(attrib.c_str(), ':');
                 val = (val) ? (val + 1) : attrib.c_str();
 
                 buf.append(" <");

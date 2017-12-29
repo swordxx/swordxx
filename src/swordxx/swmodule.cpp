@@ -241,7 +241,7 @@ ListKey &SWModule::search(char const * istr,
             || (getConfig().has("GlobalOptionFilter", "UTF8GreekAccents"))
             || (getConfig().has("GlobalOptionFilter", "UTF8HebrewPoints"))
             || (getConfig().has("GlobalOptionFilter", "UTF8ArabicPoints"))
-            || (strchr(istr, '<')));
+            || (std::strchr(istr, '<')));
 
     setProcessEntryAttributes(searchType == -3);
 

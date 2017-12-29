@@ -51,7 +51,7 @@ char PapyriPlain::processText (std::string &text, const SWKey *key, const SWModu
                 if ((*c == 10) || (*c == 13)) {
                     remove = 1;
                 }
-                if (!strchr(" \t\n", *c)) {
+                if (!std::strchr(" \t\n", *c)) {
                     if (remove) remove++;
                     break;
                 }

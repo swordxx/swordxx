@@ -87,7 +87,7 @@ char GreekLexAttribs::processText(std::string &text, const SWKey *key, const SWM
                         freq.append(currentPhrase, (int)(from - currentPhrase));
                         if ((freq.length() > 0) && (phrase.length() > 0)) {
                             sprintf(wordstr, "%03d", ++number);
-                            if ((strchr(phrase.c_str(), '(') > phrase.c_str()) && (strchr(phrase.c_str(), ')') > phrase.c_str() + 1)) {
+                            if ((std::strchr(phrase.c_str(), '(') > phrase.c_str()) && (std::strchr(phrase.c_str(), ')') > phrase.c_str() + 1)) {
                                 string tmp = phrase.substr(0, phrase.find_first_of("("));
                                 phrase.erase(phrase.find_first_of("("), 1);
                                 phrase.erase(phrase.find_first_of(")"), 1);

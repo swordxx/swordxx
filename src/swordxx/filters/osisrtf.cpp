@@ -114,8 +114,8 @@ char OSISRTF::processText(std::string &text, const SWKey *key, const SWModule *m
     orig = text;
     from = orig.c_str();
     for (text = ""; *from; from++) {  //loop to remove extra spaces
-        if ((strchr(" \t\n\r", *from))) {
-            while (*(from+1) && (strchr(" \t\n\r", *(from+1)))) {
+        if ((std::strchr(" \t\n\r", *from))) {
+            while (*(from+1) && (std::strchr(" \t\n\r", *(from+1)))) {
                 from++;
             }
             text += " ";
@@ -160,13 +160,13 @@ bool OSISRTF::handleToken(std::string &buf, const char *token, BasicFilterUserDa
                 std::string attrib;
                 const char *val;
                 if (!(attrib = tag.attribute("xlit")).empty()) {
-                    val = strchr(attrib.c_str(), ':');
+                    val = std::strchr(attrib.c_str(), ':');
                     val = (val) ? (val + 1) : attrib.c_str();
                     scratch = formatted(" {\\fs15 <%s>}", val);
                     outText(scratch.c_str(), buf, u);
                 }
                 if (!(attrib = tag.attribute("gloss")).empty()) {
-                    val = strchr(attrib.c_str(), ':');
+                    val = std::strchr(attrib.c_str(), ':');
                     val = (val) ? (val + 1) : attrib.c_str();
                     scratch = formatted(" {\\fs15 <%s>}", val);
                     outText(scratch.c_str(), buf, u);
@@ -177,10 +177,10 @@ bool OSISRTF::handleToken(std::string &buf, const char *token, BasicFilterUserDa
                     do {
                         attrib = tag.attribute("lemma", i, ' ');
                         if (i < 0) i = 0;    // to handle our -1 condition
-                        val = strchr(attrib.c_str(), ':');
+                        val = std::strchr(attrib.c_str(), ':');
                         val = (val) ? (val + 1) : attrib.c_str();
                         const char *val2 = val;
-                        if ((strchr("GH", *val)) && (charIsDigit(val[1])))
+                        if ((std::strchr("GH", *val)) && (charIsDigit(val[1])))
                             val2++;
                         if ((!strcmp(val2, "3588")) && (lastText.length() < 1))
                             show = false;
@@ -200,10 +200,10 @@ bool OSISRTF::handleToken(std::string &buf, const char *token, BasicFilterUserDa
                         do {
                             attrib = tag.attribute("morph", i, ' ');
                             if (i < 0) i = 0;    // to handle our -1 condition
-                            val = strchr(attrib.c_str(), ':');
+                            val = std::strchr(attrib.c_str(), ':');
                             val = (val) ? (val + 1) : attrib.c_str();
                             const char *val2 = val;
-                            if ((*val == 'T') && (strchr("GH", val[1])) && (charIsDigit(val[2])))
+                            if ((*val == 'T') && (std::strchr("GH", val[1])) && (charIsDigit(val[2])))
                                 val2+=2;
                             scratch = formatted(" {\\cf4 \\sub (%s)}", val2);
                             outText(scratch.c_str(), buf, u);
@@ -211,7 +211,7 @@ bool OSISRTF::handleToken(std::string &buf, const char *token, BasicFilterUserDa
                     }
                 }
                 if (!(attrib = tag.attribute("POS")).empty()) {
-                    val = strchr(attrib.c_str(), ':');
+                    val = std::strchr(attrib.c_str(), ':');
                     val = (val) ? (val + 1) : attrib.c_str();
                     scratch = formatted(" {\\fs15 <%s>}", val);
                     outText(scratch.c_str(), buf, u);

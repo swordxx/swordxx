@@ -345,8 +345,8 @@ bool ThMLLaTeX::handleToken(std::string &buf, const char *token, BasicFilterUser
                 return false;
 
             const char *c, *d;
-            if (((c = strchr(src + 3u, '"')) == nullptr) ||
-                ((d = strchr(++c , '"')) == nullptr))    // identify endpoints.
+            if (((c = std::strchr(src + 3u, '"')) == nullptr) ||
+                ((d = std::strchr(++c , '"')) == nullptr))    // identify endpoints.
                 return false;            // abandon hope.
 
 
