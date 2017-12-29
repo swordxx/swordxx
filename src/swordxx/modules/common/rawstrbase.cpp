@@ -388,7 +388,7 @@ void RawStrBase<SizeType_>::doSetText(char const * ikey,
                     break;
                 }
             }
-            memmove(tmpbuf, ch, size - std::size_t(ch - tmpbuf));
+            std::memmove(tmpbuf, ch, size - std::size_t(ch - tmpbuf));
 
             // resolve link
             if (!strncmp(tmpbuf, "@LINK", 5) && (len)) {

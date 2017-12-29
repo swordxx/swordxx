@@ -258,7 +258,7 @@ char findbreak(int fp, long *offset, int *num1, int *num2, int * /* rangemax */,
             }
             return 0;
         }
-        memmove(buf, &buf[1], 6);
+        std::memmove(buf, &buf[1], 6);
         if (read(fp, &buf[6], 1) != 1)
             return 1;
     }

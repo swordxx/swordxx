@@ -1828,7 +1828,7 @@ std::string VerseKey::convertToOSIS(const char *inRef, const SWKey *lastKnownKey
             outRef += *startFrag;
             startFrag++;
         }
-        memmove(frag, startFrag, ((const char *)element->m_userData - startFrag) + 1);
+        std::memmove(frag, startFrag, ((const char *)element->m_userData - startFrag) + 1);
         frag[((const char *)element->m_userData - startFrag) + 1] = 0;
         int j;
         for (j = strlen(frag)-1; j && (std::strchr(" {}:;,()[].", frag[j])); j--);

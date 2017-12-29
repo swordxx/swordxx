@@ -124,7 +124,7 @@ int EntriesBlock::addEntry(const char *entry) {
     // new meta entry + new data size + 1 because null
     block = (char *)realloc(block, dataSize + METAENTRYSIZE + len + 1);
     // shift right to make room for new meta entry
-    memmove(block + dataStart + METAENTRYSIZE, block + dataStart, dataSize - dataStart);
+    std::memmove(block + dataStart + METAENTRYSIZE, block + dataStart, dataSize - dataStart);
 
     for (int loop = 0; loop < count; loop++) {
         getMetaEntry(loop, &offset, &size);
@@ -178,7 +178,7 @@ void EntriesBlock::removeEntry(int entryIndex) {
         return;
 
     // shift left to retrieve space used for old entry
-    memmove(block + offset, block + offset + size, dataSize - (offset + size));
+    std::memmove(block + offset, block + offset + size, dataSize - (offset + size));
 
     // fix offset for all entries after our entry that were shifted left
     for (int loop = entryIndex + 1; loop < count; loop++) {

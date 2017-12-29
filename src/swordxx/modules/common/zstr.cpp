@@ -331,7 +331,7 @@ void zStr::getText(long offset, char **idxbuf, char **buf) const {
                 break;
             }
         }
-        memmove(*buf, ch, size - (unsigned long)(ch-*buf));
+        std::memmove(*buf, ch, size - (unsigned long)(ch-*buf));
 
         // resolve link
         if (!strncmp(*buf, "@LINK", 5)) {
@@ -354,8 +354,8 @@ void zStr::getText(long offset, char **idxbuf, char **buf) const {
 
     uint32_t block = 0;
     uint32_t entry = 0;
-    memmove(&block, *buf, sizeof(uint32_t));
-    memmove(&entry, *buf + sizeof(uint32_t), sizeof(uint32_t));
+    std::memmove(&block, *buf, sizeof(uint32_t));
+    std::memmove(&entry, *buf + sizeof(uint32_t), sizeof(uint32_t));
     block = swordtoarch32(block);
     entry = swordtoarch32(entry);
     getCompressedText(block, entry, buf);
@@ -454,7 +454,7 @@ void zStr::setText(const char *ikey, const char *buf, long len) {
                         break;
                     }
                 }
-                memmove(tmpbuf.get(), ch, size - (unsigned long)(ch-tmpbuf.get()));
+                std::memmove(tmpbuf.get(), ch, size - (unsigned long)(ch-tmpbuf.get()));
 
                 // resolve link
                 if (!strncmp(tmpbuf.get(), "@LINK", 5) && (len)) {

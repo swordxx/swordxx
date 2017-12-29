@@ -175,9 +175,9 @@ void writeEntry(SWModule & book,
                                    -1,
                                    nullptr,
                                    &err);
-                memmove(ubuffer.get() + len + 1u,
-                        ubuffer.get(),
-                        (max - ulen) * sizeof(UChar));
+                std::memmove(ubuffer.get() + len + 1u,
+                             ubuffer.get(),
+                             (max - ulen) * sizeof(UChar));
                 std::memcpy(ubuffer.get(), upper.get(), ulen * sizeof(UChar));
                 ubuffer[ulen] = '/';
             }
@@ -185,9 +185,9 @@ void writeEntry(SWModule & book,
             int totalShift = 0;
             for (std::size_t i = lexLevels - 1u; i; --i) {
                 auto const shift = (i < ulen)? i : ulen;
-                memmove(ubuffer.get() + shift + 1,
-                        ubuffer.get(),
-                        (max - shift) * sizeof(UChar));
+                std::memmove(ubuffer.get() + shift + 1,
+                             ubuffer.get(),
+                             (max - shift) * sizeof(UChar));
                 ubuffer[shift] = '/';
                 totalShift += (shift+1);
             }
