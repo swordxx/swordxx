@@ -86,9 +86,6 @@ XMLTag::XMLTag(char const * const tagString) {
         ++it;
     for (; it != bufEnd; ++it) {
         if (strchr("\t\r\n ", *it)) {
-                        // Convert newlines, carriage returns and tabs to spaces
-            *it = ' ';
-
             while ((it != bufEnd) && !charIsAlpha(*it))
                 ++it;
             if (it != bufEnd) {		// we have an attribute name
