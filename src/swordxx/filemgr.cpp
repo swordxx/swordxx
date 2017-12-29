@@ -493,7 +493,7 @@ int FileMgr::removeDir(const char *targetDir) {
 /*
         int status = FileMgr::removeFile(targetDir);
           int stuff = errno;
-          char *err = strerror(errno);
+          char *err = std::strerror(errno);
           int x = stuff;
 */
     }
