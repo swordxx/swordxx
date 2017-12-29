@@ -55,7 +55,7 @@ int main(int argc, char **argv) {
         exit(1);
     }
 
-    tmpbuf = (char*) calloc(std::strlen(argv[1]) + 11,1);
+    tmpbuf = (char*) std::calloc(std::strlen(argv[1]) + 11,1);
     sprintf(tmpbuf, "%s.idx", argv[1]);
     idxfd = open(tmpbuf, O_RDONLY|O_BINARY);
     sprintf(tmpbuf, "%s.dat", argv[1]);

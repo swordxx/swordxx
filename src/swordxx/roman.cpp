@@ -39,7 +39,7 @@ char isroman (const char *str, int maxchars) {
 
 int from_rom(const char* str) {
     int i, n = std::strlen(str);
-    short * num= (short *) calloc(n, sizeof(short));
+    short * num= (short *) std::calloc(n, sizeof(short));
     for (i = 0; str[i]; i++) {
         switch(str[i]) {
         case 'i':

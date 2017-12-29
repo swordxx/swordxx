@@ -239,7 +239,7 @@ void zVerseBase<VerseSizeType_>::zReadText(char testmt,
 
         unsigned long len = 0;
         compressor->Buf(nullptr, &len);
-        cacheBuf = (char *)calloc(len + 1, 1);
+        cacheBuf = (char *)std::calloc(len + 1, 1);
         std::memcpy(cacheBuf, compressor->Buf(), len);
         cacheBufSize = std::strlen(cacheBuf);  // TODO: can we just use len?
         cacheTestament = testmt;
@@ -276,9 +276,9 @@ void zVerseBase<VerseSizeType_>::doSetText(char testmt,
         cacheTestament = testmt;
         if (cacheBuf)
             free(cacheBuf);
-        cacheBuf = (char *)calloc(len + 1, 1);
+        cacheBuf = (char *)std::calloc(len + 1, 1);
     }
-    else cacheBuf = (char *)((cacheBuf)?realloc(cacheBuf, std::strlen(cacheBuf)+(len + 1)):calloc((len + 1), 1));
+    else cacheBuf = (char *)((cacheBuf)?realloc(cacheBuf, std::strlen(cacheBuf)+(len + 1)):std::calloc((len + 1), 1));
 
     dirtyCache = true;
 

@@ -310,7 +310,7 @@ signed char TreeKeyIdx::create(NormalizedPath const & path) {
 
 /******************************************************************************
  * zStr::getidxbufdat    - Gets the index string at the given dat offset
- *                NOTE: buf is calloc'd, or if not null, realloc'd and must
+ *                NOTE: buf is std::calloc'd, or if not null, realloc'd and must
  *                    be free'd by calling function
  *
  * ENT:    ioffset    - offset in dat file to lookup
@@ -364,7 +364,7 @@ void TreeKeyIdx::getTreeNodeFromDatOffset(long ioffset, TreeNode *node) const {
 
 /******************************************************************************
  * zStr::getidxbuf    - Gets the index string at the given idx offset
- *                        NOTE: buf is calloc'd, or if not null, realloc'd
+ *                        NOTE: buf is std::calloc'd, or if not null, realloc'd
  *                            and must be freed by calling function
  *
  * ENT:    ioffset    - offset in idx file to lookup
