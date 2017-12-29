@@ -348,15 +348,15 @@ int main(int argc, char **argv) {
                         }
                 }
                 else if (*filename == 0) {
-                        strncpy (filename, argv[i], 200);
+                        std::strncpy (filename, argv[i], 200);
                 }
                 else if (*modname == 0) {
-                        strncpy (modname, argv[i], 200);
+                        std::strncpy (modname, argv[i], 200);
                 }
         }
   }
   else if (argc > 1) {
-    strncpy (filename, argv[1], 200);
+    std::strncpy (filename, argv[1], 200);
   }
 
   if (!*filename) {

@@ -160,7 +160,7 @@ char UTF8ArabicPoints::processText(std::string &text, const SWKey *, const SWMod
         if (ready_size > 0) {
             // Append the input text before the current mark to the
             // output.
-            // Must use bcopy vs. strncpy because the final
+            // Must use bcopy vs. std::strncpy because the final
             // end_of_output may overtake the original
             // start_of_input.
             std::memmove(end_of_output, start_of_input, ready_size);

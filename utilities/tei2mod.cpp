@@ -292,7 +292,7 @@ bool handleToken(std::string & text, XMLTag & token) {
 #endif
                         splitPtr = std::strchr(keyStr.c_str(), '|');
                         if (splitPtr) {
-                                strncpy (splitBuffer.data(), keyStr.c_str(), splitPtr - keyStr.c_str());
+                                std::strncpy (splitBuffer.data(), keyStr.c_str(), splitPtr - keyStr.c_str());
                                 splitBuffer[splitPtr - keyStr.c_str()] = 0;
                 *currentKey = splitBuffer.data();
 #ifdef DEBUG
@@ -306,7 +306,7 @@ bool handleToken(std::string & text, XMLTag & token) {
                                     splitPtr2 = strstr(splitPtr, "|");
                                         entryCount++;
                                         if (splitPtr2) {
-                        strncpy (splitBuffer.data(), splitPtr, splitPtr2 - splitPtr);
+                        std::strncpy (splitBuffer.data(), splitPtr, splitPtr2 - splitPtr);
                                                 splitBuffer[splitPtr2 - splitPtr] = 0;
 #ifdef DEBUG
                         cout << "splitBuffer: " << splitBuffer.data() << endl;

@@ -349,7 +349,7 @@ void zStr::getText(long offset, char **idxbuf, char **buf) const {
 
     auto localsize = idxbuflocal.size();
     localsize = (localsize < (size - 1)) ? localsize : (size - 1);
-    strncpy(*idxbuf, idxbuflocal.c_str(), localsize);
+    std::strncpy(*idxbuf, idxbuflocal.c_str(), localsize);
     (*idxbuf)[localsize] = 0;
 
     uint32_t block = 0;

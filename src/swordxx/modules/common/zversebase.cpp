@@ -249,7 +249,7 @@ void zVerseBase<VerseSizeType_>::zReadText(char testmt,
     inBuf.clear();
     if ((size > 0) && cacheBuf && ((unsigned)start < cacheBufSize)) {
         inBuf.resize(size + 1u, '\0');
-        strncpy(&inBuf[0u], &(cacheBuf[start]), size);
+        std::strncpy(&inBuf[0u], &(cacheBuf[start]), size);
         inBuf.resize(std::strlen(inBuf.c_str()));
     }
 }

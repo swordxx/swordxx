@@ -202,7 +202,7 @@ bool TEILaTeX::handleToken(std::string &buf, const char *token, BasicFilterUserD
 
                         int size = target.size() - ref.size() - 1;
                         work.resize(size, '\0');
-                        strncpy(&work[0u], target.c_str(), size);
+                        std::strncpy(&work[0u], target.c_str(), size);
                     }
 
                     if(was_osisref)
