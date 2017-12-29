@@ -47,7 +47,7 @@ int main(int argc, char **argv) {
         }
         int repeat = 1;
         if (argc > 2)
-            repeat = atoi(argv[2]);
+            repeat = std::atoi(argv[2]);
         std::string contents;
         char chunk[255];
         ::ssize_t count;

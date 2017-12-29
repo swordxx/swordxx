@@ -83,7 +83,7 @@ char GBFRTF::processText(std::string &text, const SWKey *key, const SWModule *mo
                     for (num+=17; ((*num) && (*num != '\"')); num++)
                         *valto++ = *num;
                     *valto = 0;
-                    if (atoi((!charIsDigit(*val))?val+1:val) < 5627) {
+                    if (std::atoi((!charIsDigit(*val))?val+1:val) < 5627) {
                         // normal strongs number
                         strongnum += "{\\cf3 \\sub <";
                         for (tok = (!charIsDigit(*val))?val+1:val; *tok; tok++)
@@ -104,7 +104,7 @@ char GBFRTF::processText(std::string &text, const SWKey *key, const SWModule *mo
                         for (num+=14; ((*num) && (*num != '\"')); num++)
                             *valto++ = *num;
                         *valto = 0;
-                        if (atoi((!charIsDigit(*val))?val+1:val) < 5627) {
+                        if (std::atoi((!charIsDigit(*val))?val+1:val) < 5627) {
                             // normal strongs number
                             strongnum += "{\\cf3 \\sub <";
                             for (tok = (!charIsDigit(*val))?val+1:val; *tok; tok++)
@@ -264,7 +264,7 @@ char GBFRTF::processText(std::string &text, const SWKey *key, const SWModule *mo
             case 'C':            // special character tags
                 switch(token[1]) {
                 case 'A':               // ASCII value
-                    text += (char)atoi(&token[2]);
+                    text += (char)std::atoi(&token[2]);
                     continue;
                 case 'G':
                     text += '>';

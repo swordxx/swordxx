@@ -539,8 +539,8 @@ ListKey VerseKey::parseVerseList(const char *buf, const char *defaultKey, bool e
                 tonumber = 0;
                 if (*number) {
                     if (chap >= 0)
-                        verse = atoi(number);
-                    else    chap  = atoi(number);
+                        verse = std::atoi(number);
+                    else    chap  = std::atoi(number);
                 }
                 *number = 0;
                 comma = 0;
@@ -584,8 +584,8 @@ terminate_range:
             tonumber = 0;
             if (*number) {
                 if (chap >= 0)
-                    verse = atoi(number);
-                else    chap = atoi(number);
+                    verse = std::atoi(number);
+                else    chap = std::atoi(number);
             }
             *number = 0;
             book[tobook] = 0;
@@ -808,8 +808,8 @@ terminate_range:
             tonumber = 0;
             if (*number) {
                 if (chap >= 0)
-                    verse = atoi(number);
-                else    chap  = atoi(number);
+                    verse = std::atoi(number);
+                else    chap  = std::atoi(number);
                 *number = 0;
             }
             else if (chap == -1 && (tobook < 1 || book[tobook-1] != ' ')) {
@@ -858,8 +858,8 @@ terminate_range:
     tonumber = 0;
     if (*number) {
         if (chap >= 0)
-            verse = atoi(number);
-        else    chap  = atoi(number);
+            verse = std::atoi(number);
+        else    chap  = std::atoi(number);
     }
     *number = 0;
     book[tobook] = 0;

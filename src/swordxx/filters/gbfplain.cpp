@@ -83,7 +83,7 @@ char GBFPlain::processText (std::string &text, const SWKey *key, const SWModule 
             case 'C':
                 switch(token[1]) {
                 case 'A':               // ASCII value
-                    text.push_back((char)atoi(&token[2]));
+                    text.push_back((char)std::atoi(&token[2]));
                     continue;
                 case 'G':
                     text.push_back('>');

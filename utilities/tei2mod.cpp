@@ -408,7 +408,7 @@ int main(int argc, char **argv) {
         else if (!std::strcmp(argv[i], "-s")) {
             if (compType.size()) usage(*argv, "Cannot specify both -s and -z");
             if (i+1 < argc) {
-                int size = atoi(argv[++i]);
+                int size = std::atoi(argv[++i]);
                 if (size == 2) {
                     modDrv           = "RawLD";
                     recommendedPath += "rawld/";

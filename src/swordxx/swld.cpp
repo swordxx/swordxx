@@ -162,7 +162,7 @@ std::unique_ptr<char[]> SWLD::strongsPadBuf(char const * inText) {
             subLet = std::toupper(*check);
             *(check - (bang ? 1 : 0)) = '\0';
         }
-        std::sprintf(buf, (prefix ? "%.4d" : "%.5d"), atoi(buf));
+        std::sprintf(buf, (prefix ? "%.4d" : "%.5d"), std::atoi(buf));
         if (subLet) {
             check = buf + std::strlen(buf);
             if (bang)

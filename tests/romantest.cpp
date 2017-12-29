@@ -36,7 +36,7 @@ int main(int argc, char **argv) {
     /* I don't think we need to_rom, do we? anyway, it isn't written
     char buf[127];
     if (charIsDigit(argv[1][0])) {
-        to_rom(atoi(argv[1]), buf);
+        to_rom(std::atoi(argv[1]), buf);
         std::cout << buf << std::endl;
     }
     */

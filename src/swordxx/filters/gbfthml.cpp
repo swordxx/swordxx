@@ -164,7 +164,7 @@ char GBFThML::processText(std::string &text, const SWKey *key, const SWModule *m
               switch(token[1])
                 {
                 case 'A':               // ASCII value
-                  text += (char)atoi(&token[2]);
+                  text += (char)std::atoi(&token[2]);
                   continue;
                 case 'G':
                   //*to++ = ' ';

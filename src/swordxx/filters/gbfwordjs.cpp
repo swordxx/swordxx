@@ -89,7 +89,7 @@ char GBFWordJS::processText(std::string &text, const SWKey *key, const SWModule 
                 intoken = false;
                 if (*token == 'W' && (token[1] == 'G' || token[1] == 'H')) {    // Strongs
                     std::strcpy(val,token+1);
-                    if (atoi((!charIsDigit(*val))?val+1:val) < 5627) {
+                    if (std::atoi((!charIsDigit(*val))?val+1:val) < 5627) {
                         // normal strongs number
                         sprintf(wordstr, "%03d", word++);
                         needWordOut = (word > 2);
@@ -183,9 +183,9 @@ char GBFWordJS::processText(std::string &text, const SWKey *key, const SWModule 
                                 wordID[i] = '_';
                             }
                         }
-                        wordID += formatted("_%s%d", wordSrcPrefix.c_str(), atoi(wstr));
+                        wordID += formatted("_%s%d", wordSrcPrefix.c_str(), std::atoi(wstr));
                         if (textSt.size()) {
-                            int textStr = atoi(textSt.c_str());
+                            int textStr = std::atoi(textSt.c_str());
                             textStr += lastAppendLen;
                             std::string spanStart = "";
 
@@ -278,9 +278,9 @@ char GBFWordJS::processText(std::string &text, const SWKey *key, const SWModule 
                     wordID[i] = '_';
                 }
             }
-            wordID += formatted("_%s%d", wordSrcPrefix.c_str(), atoi(wstr));
+            wordID += formatted("_%s%d", wordSrcPrefix.c_str(), std::atoi(wstr));
             if (textSt.size()) {
-                int textStr = atoi(textSt.c_str());
+                int textStr = std::atoi(textSt.c_str());
                 textStr += lastAppendLen;
                 std::string spanStart = "";
                 // 'p' = 'fillpop' to save bandwidth

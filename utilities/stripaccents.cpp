@@ -55,7 +55,7 @@ int main(int argc, char **argv)
 		exit(-1);
 	}
 
-        int stripFilters = atoi(argv[1]);
+        int stripFilters = std::atoi(argv[1]);
         
         if ((stripFilters < 1) || (stripFilters > 15)) {
                 usage();

@@ -87,8 +87,8 @@ int main(int /* argc */, char ** /* argv */) {
         if (input.length() > 0) {
             switch (input[0]) {
                 case 'a': addEntry(eb); break;
-                case 'p':    printEntry(eb, atoi(input.c_str()+1)); break;
-                case 'r':    removeEntry(eb, atoi(input.c_str()+1)); break;
+                case 'p':    printEntry(eb, std::atoi(input.c_str()+1)); break;
+                case 'r':    removeEntry(eb, std::atoi(input.c_str()+1)); break;
                 case 's': printSize(eb); break;
                 case 'q': break;
                 case '?':

@@ -92,7 +92,7 @@ char ThMLWordJS::processText(std::string &text, const SWKey *key, const SWModule
                     for (unsigned int i = 27; token[i] != '\"' && i < 150; i++)
                         *valto++ = token[i];
                     *valto = 0;
-                    if (atoi((!charIsDigit(*val))?val+1:val) < 5627) {
+                    if (std::atoi((!charIsDigit(*val))?val+1:val) < 5627) {
                         // normal strongs number
                         sprintf(wordstr, "%03d", word++);
                         needWordOut = (word > 2);
@@ -194,9 +194,9 @@ char ThMLWordJS::processText(std::string &text, const SWKey *key, const SWModule
                                 wordID[i] = '_';
                             }
                         }
-                        wordID += formatted("_%s%d", wordSrcPrefix.c_str(), atoi(wstr));
+                        wordID += formatted("_%s%d", wordSrcPrefix.c_str(), std::atoi(wstr));
                         if (textSt.size()) {
-                            int textStr = atoi(textSt.c_str());
+                            int textStr = std::atoi(textSt.c_str());
                             textStr += lastAppendLen;
                             std::string spanStart = "";
 
@@ -289,9 +289,9 @@ char ThMLWordJS::processText(std::string &text, const SWKey *key, const SWModule
                     wordID[i] = '_';
                 }
             }
-            wordID += formatted("_%s%d", wordSrcPrefix.c_str(), atoi(wstr));
+            wordID += formatted("_%s%d", wordSrcPrefix.c_str(), std::atoi(wstr));
             if (textSt.size()) {
-                int textStr = atoi(textSt.c_str());
+                int textStr = std::atoi(textSt.c_str());
                 textStr += lastAppendLen;
                 std::string spanStart = "";
                 // 'p' = 'fillpop' to save bandwidth

@@ -898,7 +898,7 @@ std::unique_ptr<SWModule> SWMgr::createModule(std::string const & name,
         bool caseSensitive = ((entry = section.find("CaseSensitiveKeys")) != section.end()) ? (*entry).second == "true": false;
         bool strongsPadding = ((entry = section.find("StrongsPadding")) != section.end()) ? (*entry).second == "true": true;
         misc1 = ((entry = section.find("BlockCount")) != section.end()) ? (*entry).second : std::string("200");
-        blockCount = atoi(misc1.c_str());
+        blockCount = std::atoi(misc1.c_str());
         blockCount = (blockCount) ? blockCount : 200;
 
         misc1 = ((entry = section.find("CompressType")) != section.end()) ? (*entry).second : std::string("LZSS");

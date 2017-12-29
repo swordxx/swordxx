@@ -895,7 +895,7 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
             words = getEntryAttributes().find("Word");
             if (words != getEntryAttributes().end()) {
                 for (word = words->second.begin();word != words->second.end(); word++) {
-                    int partCount = atoi(word->second["PartCount"].c_str());
+                    int partCount = std::atoi(word->second["PartCount"].c_str());
                     if (!partCount) partCount = 1;
                     for (int i = 0; i < partCount; i++) {
                         std::string tmp = "Lemma";
@@ -966,7 +966,7 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
                         words = getEntryAttributes().find("Word");
                         if (words != getEntryAttributes().end()) {
                             for (word = words->second.begin();word != words->second.end(); word++) {
-                                int partCount = atoi(word->second["PartCount"].c_str());
+                                int partCount = std::atoi(word->second["PartCount"].c_str());
                                 if (!partCount) partCount = 1;
                                 for (int i = 0; i < partCount; i++) {
                                     std::string tmp = "Lemma";
@@ -1031,7 +1031,7 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
                             words = getEntryAttributes().find("Word");
                             if (words != getEntryAttributes().end()) {
                                 for (word = words->second.begin();word != words->second.end(); word++) {
-                                    int partCount = atoi(word->second["PartCount"].c_str());
+                                    int partCount = std::atoi(word->second["PartCount"].c_str());
                                     if (!partCount) partCount = 1;
                                     for (int i = 0; i < partCount; i++) {
                                         std::string tmp = "Lemma";

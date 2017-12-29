@@ -222,7 +222,7 @@ char findbreak(int fp, long *offset, int *num1, int *num2, int * /* rangemax */,
                 }
             }
             if (flag)
-                *num1 = atoi(buf);
+                *num1 = std::atoi(buf);
             else    (*num1)++;
         }
         if (startentry(buf)) {
@@ -236,7 +236,7 @@ char findbreak(int fp, long *offset, int *num1, int *num2, int * /* rangemax */,
                     break;
                 }
             if (flag)
-                *num2 = atoi(buf);
+                *num2 = std::atoi(buf);
             else    (*num2)++;
             }
             loop++;

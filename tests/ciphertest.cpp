@@ -36,7 +36,7 @@ int main(int argc, char **argv) {
     }
 
 
-    long encipher = atoi(argv[2]);
+    long encipher = std::atoi(argv[2]);
 
     SWFilter *filter = new CipherFilter(argv[1]);
 

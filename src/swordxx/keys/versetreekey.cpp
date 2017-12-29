@@ -211,8 +211,8 @@ void VerseTreeKey::positionChanged() {
         }    //path = "[ Module Heading ]";
         else {
             setBookName(seg[--legs].c_str());
-            m_chapter = (legs > 0) ? atoi(seg[--legs].c_str()) : 0;
-            setVerse((legs > 0) ? atoi(seg[--legs].c_str()) : 0);
+            m_chapter = (legs > 0) ? std::atoi(seg[--legs].c_str()) : 0;
+            setVerse((legs > 0) ? std::atoi(seg[--legs].c_str()) : 0);
         }
 
 //        setText(path);

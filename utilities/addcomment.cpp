@@ -50,7 +50,7 @@ int main(int argc, char **argv)
     mykey.Persist(1);
     personal.setKey(mykey);
 
-    max = (argc < 4) ? 1 : atoi(argv[3]);
+    max = (argc < 4) ? 1 : std::atoi(argv[3]);
 
     for (loop = 0; loop < max; loop++) {
         personal << argv[1];

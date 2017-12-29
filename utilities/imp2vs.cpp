@@ -124,7 +124,7 @@ int main(int argc, char **argv) {
         }
         else if (!std::strcmp(argv[i], "-b")) {
             if (i+1 < argc) {
-                switch (atoi(argv[++i])) {
+                switch (std::atoi(argv[++i])) {
                 case 2: iType = VERSEBLOCKS; continue;
                 case 3: iType = CHAPTERBLOCKS; continue;
                 case 4: iType = BOOKBLOCKS; continue;

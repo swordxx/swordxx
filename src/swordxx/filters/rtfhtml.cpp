@@ -57,7 +57,7 @@ char RTFHTML::processText(std::string &text, const SWKey *key, const SWModule *m
                 while (charIsDigit(*++end));
                 std::string num;
                 num.append(from, end-from);
-                int16_t n = atoi(num.c_str());
+                int16_t n = std::atoi(num.c_str());
                 uint32_t u = (uint16_t)n;
                 text.append(getUTF8FromUniChar(u));
                 from += (end-from);

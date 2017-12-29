@@ -54,7 +54,7 @@ int main(int argc, char **argv)
     }
 
     if (argc > 4)
-        action = atoi(argv[4]);
+        action = std::atoi(argv[4]);
 
     SWMgr mgr;
 

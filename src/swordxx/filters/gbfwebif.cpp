@@ -51,7 +51,7 @@ bool GBFWEBIF::handleToken(std::string &buf, const char *token, BasicFilterUserD
                     *valto++ = *num;
                 *valto = 0;
 
-                if (atoi((!charIsDigit(*val))?val+1:val) < 5627) {
+                if (std::atoi((!charIsDigit(*val))?val+1:val) < 5627) {
                     buf += " <small><em>&lt;";
                     url = "";
                     for (tok = val; *tok; tok++) {
@@ -76,7 +76,7 @@ bool GBFWEBIF::handleToken(std::string &buf, const char *token, BasicFilterUserD
                         *valto++ = *num;
                     *valto = 0;
 
-                    if (atoi((!charIsDigit(*val))?val+1:val) < 5627) {
+                    if (std::atoi((!charIsDigit(*val))?val+1:val) < 5627) {
                         buf += " <small><em>&lt;";
                         url = "";
                         for (tok = val; *tok; tok++) {

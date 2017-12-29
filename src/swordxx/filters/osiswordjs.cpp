@@ -95,7 +95,7 @@ char OSISWordJS::processText(std::string &text, const SWKey *key, const SWModule
                     char gh = 0;
                     page = module->getEntryAttributes()["Word"][wordstr]["Page"].c_str();
                     if (page.length()) page = (std::string)"p:" + page;
-                    int count = atoi(module->getEntryAttributes()["Word"][wordstr]["PartCount"].c_str());
+                    int count = std::atoi(module->getEntryAttributes()["Word"][wordstr]["PartCount"].c_str());
                     for (int i = 0; i < count; i++) {
 
                         // for now, lemma class can just be equal to last lemma class in multi part word

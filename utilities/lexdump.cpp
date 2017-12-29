@@ -62,7 +62,7 @@ int main(int argc, char **argv) {
     datfd = open(tmpbuf, O_RDONLY|O_BINARY);
     free(tmpbuf);
 
-    offset = atoi(argv[2]) * 6;
+    offset = std::atoi(argv[2]) * 6;
     lseek(idxfd, offset, SEEK_SET);
     read(idxfd, &offset, 4);
     read(idxfd, &size, 2);

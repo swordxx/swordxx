@@ -70,7 +70,7 @@ int main(int argc, char **argv)
     std::cout << "\n Headings: " << (bool)bla.isIntros() << "\n";
     std::cout << " (.Index(Index()+1))\n";
 
-    max = (argc < 4) ? 10 : atoi(argv[3]);
+    max = (argc < 4) ? 10 : std::atoi(argv[3]);
 
     for (loop = 0; loop < max; loop++) {
         index = bla.getIndex();

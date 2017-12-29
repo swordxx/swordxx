@@ -110,7 +110,7 @@ void parseParams(int argc, char * argv[]) {
         } else if (!std::strcmp(argv[i], "-l")) {
             int arg = 0;
             if (i + 1 < argc) {
-                arg = atoi(argv[i + 1]);
+                arg = std::atoi(argv[i + 1]);
                 static_assert(std::numeric_limits<int>::max()
                               <= std::numeric_limits<std::size_t>::max(), "");
                 if (arg <= 0)

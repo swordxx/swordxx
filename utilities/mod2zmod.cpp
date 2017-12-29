@@ -83,7 +83,7 @@ int main(int argc, char **argv)
     }
 
     if (argc > 3) {
-        switch (atoi(argv[3])) {
+        switch (std::atoi(argv[3])) {
         case 2: iType = VERSEBLOCKS; break;
         case 3: iType = CHAPTERBLOCKS; break;
         case 4: iType = BOOKBLOCKS; break;
@@ -92,9 +92,9 @@ int main(int argc, char **argv)
             errorOutHelp(*argv);
         }
         if (argc > 4) {
-            compType = atoi(argv[4]);
+            compType = std::atoi(argv[4]);
             if (argc > 5) {
-                compLevel = atoi(argv[5]);
+                compLevel = std::atoi(argv[5]);
                 if (argc > 6) {
                     cipherKey = argv[6];
                 }

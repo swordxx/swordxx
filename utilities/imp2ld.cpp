@@ -117,7 +117,7 @@ int main(int argc, char **argv) {
         }
         else if (!std::strcmp(argv[i], "-b")) {
             if (i+1 < argc) {
-                blockCount = atoi(argv[++i]);
+                blockCount = std::atoi(argv[++i]);
                 if (blockCount > 0) continue;
             }
             usage(*argv, "-b requires in entry count integer > 0");

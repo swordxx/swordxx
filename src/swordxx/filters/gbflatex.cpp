@@ -188,7 +188,7 @@ bool GBFLaTeX::handleToken(std::string &buf, const char *token, BasicFilterUserD
         }
 
         else if (!std::strncmp(token, "CA", 2)) {    // ASCII value
-            buf += (char)atoi(&token[2]);
+            buf += (char)std::atoi(&token[2]);
         }
 
         else {

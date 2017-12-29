@@ -450,7 +450,7 @@ bool OSISLaTeX::handleToken(std::string &buf, const char *token, BasicFilterUser
                 auto mark(tag.attribute("marker"));
                 bool hasMark = !mark.empty();
                 auto tmp(tag.attribute("level"));
-                int level = (!tmp.empty()) ? atoi(tmp.c_str()) : 1;
+                int level = (!tmp.empty()) ? std::atoi(tmp.c_str()) : 1;
 
                 // first check to see if we've been given an explicit mark
                 if (hasMark)
@@ -581,7 +581,7 @@ bool OSISLaTeX::handleToken(std::string &buf, const char *token, BasicFilterUser
             std::string type      = tag.attribute("type");
             std::string who       = tag.attribute("who");
             auto tmp(tag.attribute("level"));
-            int level = (!tmp.empty()) ? atoi(tmp.c_str()) : 1;
+            int level = (!tmp.empty()) ? std::atoi(tmp.c_str()) : 1;
             auto mark(tag.attribute("marker"));
             bool hasMark = !mark.empty();
 
@@ -613,7 +613,7 @@ bool OSISLaTeX::handleToken(std::string &buf, const char *token, BasicFilterUser
                     type    = qTag.attribute("type");
                     who     = qTag.attribute("who");
                     tmp     = qTag.attribute("level");
-                    level   = (!tmp.empty()) ? atoi(tmp.c_str()) : 1;
+                    level   = (!tmp.empty()) ? std::atoi(tmp.c_str()) : 1;
                     mark    = qTag.attribute("marker");
                     hasMark = !mark.empty();
                 }

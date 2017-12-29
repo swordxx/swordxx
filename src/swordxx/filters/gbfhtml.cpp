@@ -97,7 +97,7 @@ bool GBFHTML::handleToken(std::string &buf, const char *token, BasicFilterUserDa
                 for (num+=17; ((*num) && (*num != '\"')); num++)
                     *valto++ = *num;
                 *valto = 0;
-                if (atoi((!charIsDigit(*val))?val+1:val) < 5627) {
+                if (std::atoi((!charIsDigit(*val))?val+1:val) < 5627) {
                     buf += " <small><em>&lt;";
                     for (tok = (!charIsDigit(*val))?val+1:val; *tok; tok++)
                             buf += *tok;
@@ -109,7 +109,7 @@ bool GBFHTML::handleToken(std::string &buf, const char *token, BasicFilterUserDa
                     for (num+=14; ((*num) && (*num != '\"')); num++)
                         *valto++ = *num;
                     *valto = 0;
-                    if (atoi((!charIsDigit(*val))?val+1:val) < 5627) {
+                    if (std::atoi((!charIsDigit(*val))?val+1:val) < 5627) {
                         buf += " <small><em>&lt;";
                         for (tok = (!charIsDigit(*val))?val+1:val; *tok; tok++)
                                 buf += *tok;
@@ -181,7 +181,7 @@ bool GBFHTML::handleToken(std::string &buf, const char *token, BasicFilterUserDa
         }
 
         else if (!std::strncmp(token, "CA", 2)) {    // ASCII value
-            buf += (char)atoi(&token[2]);
+            buf += (char)std::atoi(&token[2]);
         }
 
         else {

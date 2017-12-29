@@ -1891,7 +1891,7 @@ int main(int argc, char **argv) {
         }
         else if (!std::strcmp(argv[i], "-b")) {
             if (i+1 < argc) {
-                switch (atoi(argv[++i])) {
+                switch (std::atoi(argv[++i])) {
                 case 2: iType = VERSEBLOCKS; continue;
                 case 3: iType = CHAPTERBLOCKS; continue;
                 case 4: iType = BOOKBLOCKS; continue;
@@ -1937,7 +1937,7 @@ int main(int argc, char **argv) {
         }
         else if (!std::strcmp(argv[i], "-s")) {
             if (i+1 < argc) {
-                entrySize = atoi(argv[++i]);
+                entrySize = std::atoi(argv[++i]);
                 if (entrySize == 2 || entrySize == 4) {
                     continue;
                 }
@@ -1948,12 +1948,12 @@ int main(int argc, char **argv) {
             isCommentary = true;
         }
         else if (!std::strcmp(argv[i], "-d")) {
-            if (i+1 < argc) debug |= atoi(argv[++i]);
+            if (i+1 < argc) debug |= std::atoi(argv[++i]);
             else usage(*argv, "-d requires <flags>");
         }
         else if (!std::strcmp(argv[i], "-l")) {
             if (i+1 < argc) {
-                compLevel = atoi(argv[++i]);
+                compLevel = std::atoi(argv[++i]);
             }
             else usage(*argv, "-l requires a value from 1-9");
 
