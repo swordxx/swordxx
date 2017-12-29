@@ -24,14 +24,14 @@
     #pragma warning( disable: 4996 )
 #endif
 
-#include <ctype.h>
-#include <stdio.h>
+#include <cctype>
+#include <cerrno>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <sys/types.h>
-#include <errno.h>
-#include <stdlib.h>
-#include <string.h>
 
 #ifndef __GNUC__
 #include <io.h>
