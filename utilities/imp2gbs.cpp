@@ -86,13 +86,13 @@ void parseParams(int argc, char * argv[]) {
     inFile = argv[1];
 
     for (int i = 2; i < argc; i++) {
-        if (!strcmp(argv[i], "-o")) {
+        if (!std::strcmp(argv[i], "-o")) {
             if ((i + 1 < argc) && (argv[i + 1][0] != '-')) {
                 outPath = argv[i+1];
                 i++;
             }
             else usage(*argv);
-        } else if (!strcmp(argv[i], "-U")) {
+        } else if (!std::strcmp(argv[i], "-U")) {
             if (StringMgr::hasUTF8Support()) {
                 toUpper = true;
             } else {
@@ -101,13 +101,13 @@ void parseParams(int argc, char * argv[]) {
                              "\t(recompile with ICU enabled)\n\n";
                 usage(*argv);
             }
-        } else if (!strcmp(argv[i], "-g")) {
+        } else if (!std::strcmp(argv[i], "-g")) {
             greekFilter = true;
-        } else if (!strcmp(argv[i], "-O")) {
+        } else if (!std::strcmp(argv[i], "-O")) {
             augEnt = false;
-        } else if (!strcmp(argv[i], "-a")) {
+        } else if (!std::strcmp(argv[i], "-a")) {
             augMod = true;
-        } else if (!strcmp(argv[i], "-l")) {
+        } else if (!std::strcmp(argv[i], "-l")) {
             int arg = 0;
             if (i + 1 < argc) {
                 arg = atoi(argv[i + 1]);

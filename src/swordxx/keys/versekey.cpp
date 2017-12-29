@@ -504,7 +504,7 @@ ListKey VerseKey::parseVerseList(const char *buf, const char *defaultKey, bool e
     curKey->clearBounds();
 
     // some silly checks for corner cases
-    if (!strcmp(buf, "[ Module Heading ]")) {
+    if (!std::strcmp(buf, "[ Module Heading ]")) {
         curKey->setVerse(0);
         curKey->setChapter(0);
         curKey->setBook(0);
@@ -516,7 +516,7 @@ ListKey VerseKey::parseVerseList(const char *buf, const char *defaultKey, bool e
     }
     if ((!strncmp(buf, "[ Testament ", 12)) &&
         (charIsDigit(buf[12])) &&
-        (!strcmp(buf+13, " Heading ]"))) {
+        (!std::strcmp(buf+13, " Heading ]"))) {
         curKey->setVerse(0);
         curKey->setChapter(0);
         curKey->setBook(0);

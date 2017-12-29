@@ -345,7 +345,7 @@ void ListKey::setText(const char *ikey) {
                 if (!key->popError())
                     break;
             } else {
-                if (!strcmp(key->getText(), ikey))
+                if (!std::strcmp(key->getText(), ikey))
                     break;
             }
         }

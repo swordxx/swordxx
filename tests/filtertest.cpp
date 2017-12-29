@@ -44,7 +44,7 @@ int main(int argc, char **argv) {
 
     std::string lineBuffer = "T\\u12345?his is t<e>xt which has papy-\nri markings in it.\n  L[et's be] sure it gets--\n cleaned up well for s(earching)";
 
-    if (argc > 1 && !strcmp(argv[1], "-v")) {
+    if (argc > 1 && !std::strcmp(argv[1], "-v")) {
         std::cout << "Original:\n\n";
 
         while (!(lineBuffer = FileMgr::getLine(fd)).empty()) {

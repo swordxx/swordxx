@@ -40,7 +40,7 @@ int main(int argc, char **argv) {
         cout << "input / processed:\n" << buf << "\n" << fixed << endl;
     } else {
         std::unique_ptr<SWOptionFilter> filter;
-        if (argc > 1 && !strcmp(argv[1], "-ga")) {
+        if (argc > 1 && !std::strcmp(argv[1], "-ga")) {
             filter = std::make_unique<UTF8GreekAccents>();
             if (filter->isBoolean())
                 filter->setOptionValue("Off");

@@ -788,9 +788,9 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
         filterSettings.push_back(filterPtr->getOptionValue());
         filterPtr->setOptionValue(filterPtr->getOptionValues().begin()->c_str());
 
-        if ( (!strcmp("Greek Accents", filterPtr->getOptionName())) ||
-            (!strcmp("Hebrew Vowel Points", filterPtr->getOptionName())) ||
-            (!strcmp("Arabic Vowel Points", filterPtr->getOptionName()))
+        if ((!std::strcmp("Greek Accents", filterPtr->getOptionName())) ||
+            (!std::strcmp("Hebrew Vowel Points", filterPtr->getOptionName())) ||
+            (!std::strcmp("Arabic Vowel Points", filterPtr->getOptionName()))
            ) {
             filterPtr->setOptionValue("Off");
         }

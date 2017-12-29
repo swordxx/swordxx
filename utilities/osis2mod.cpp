@@ -507,7 +507,7 @@ void writeEntry(std::string &text, bool force = false) {
     saveKey = currentVerse;
 
     // If we have seen a verse and the supplied one is different then we output the collected one.
-    if (*activeOsisID && strcmp(activeOsisID, keyOsisID)) {
+    if (*activeOsisID && std::strcmp(activeOsisID, keyOsisID)) {
 
         if (!isValidRef(lastKey.getText(), "writeEntry")) {
             makeValidRef(lastKey);
@@ -1847,7 +1847,7 @@ int main(int argc, char **argv) {
 
     if (argc > 1) {
         for (int i = 1; i < argc; i++) {
-            if (!strcmp(argv[i], "-h") || !strcmp(argv[i], "--help")) {
+            if (!std::strcmp(argv[i], "-h") || !std::strcmp(argv[i], "--help")) {
                 usage(*argv, "", true);
             }
         }
@@ -1871,10 +1871,10 @@ int main(int argc, char **argv) {
     int compLevel      = 0;
 
     for (int i = 3; i < argc; i++) {
-        if (!strcmp(argv[i], "-a")) {
+        if (!std::strcmp(argv[i], "-a")) {
             append = 1;
         }
-        else if (!strcmp(argv[i], "-z")) {
+        else if (!std::strcmp(argv[i], "-z")) {
             compType = "ZIP";
             if (i+1 < argc && argv[i+1][0] != '-') {
                 switch (argv[++i][0]) {
@@ -1885,11 +1885,11 @@ int main(int argc, char **argv) {
                 }
             }
         }
-        else if (!strcmp(argv[i], "-Z")) {
+        else if (!std::strcmp(argv[i], "-Z")) {
             if (compType.size()) usage(*argv, "Cannot specify both -z and -Z");
             compType = "LZSS";
         }
-        else if (!strcmp(argv[i], "-b")) {
+        else if (!std::strcmp(argv[i], "-b")) {
             if (i+1 < argc) {
                 switch (atoi(argv[++i])) {
                 case 2: iType = VERSEBLOCKS; continue;
@@ -1900,10 +1900,10 @@ int main(int argc, char **argv) {
             }
             usage(*argv, "-b requires one of <2|3|4>");
         }
-        else if (!strcmp(argv[i], "-N")) {
+        else if (!std::strcmp(argv[i], "-N")) {
             normalize = false;
         }
-        else if (!strcmp(argv[i], "-e")) {
+        else if (!std::strcmp(argv[i], "-e")) {
             if (i+1 < argc) {
                 switch (argv[++i][0]) {
                 case '1': // leave as UTF-8
@@ -1927,15 +1927,15 @@ int main(int argc, char **argv) {
                 }
             }
         }
-        else if (!strcmp(argv[i], "-c")) {
+        else if (!std::strcmp(argv[i], "-c")) {
             if (i+1 < argc) cipherKey = argv[++i];
             else usage(*argv, "-c requires <cipher_key>");
         }
-        else if (!strcmp(argv[i], "-v")) {
+        else if (!std::strcmp(argv[i], "-v")) {
             if (i+1 < argc) v11n = argv[++i];
             else usage(*argv, "-v requires <v11n>");
         }
-        else if (!strcmp(argv[i], "-s")) {
+        else if (!std::strcmp(argv[i], "-s")) {
             if (i+1 < argc) {
                 entrySize = atoi(argv[++i]);
                 if (entrySize == 2 || entrySize == 4) {
@@ -1944,14 +1944,14 @@ int main(int argc, char **argv) {
             }
             usage(*argv, "-s requires one of <2|4>");
         }
-        else if (!strcmp(argv[i], "-C")) {
+        else if (!std::strcmp(argv[i], "-C")) {
             isCommentary = true;
         }
-        else if (!strcmp(argv[i], "-d")) {
+        else if (!std::strcmp(argv[i], "-d")) {
             if (i+1 < argc) debug |= atoi(argv[++i]);
             else usage(*argv, "-d requires <flags>");
         }
-        else if (!strcmp(argv[i], "-l")) {
+        else if (!std::strcmp(argv[i], "-l")) {
             if (i+1 < argc) {
                 compLevel = atoi(argv[++i]);
             }
@@ -2104,7 +2104,7 @@ int main(int argc, char **argv) {
 
     // Either read from std::cin (aka stdin), when the argument is a '-'
     // or from a specified file.
-    if (!strcmp(osisDoc, "-")) {
+    if (!std::strcmp(osisDoc, "-")) {
         processOSIS(cin);
     }
     else {

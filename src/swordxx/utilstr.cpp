@@ -128,7 +128,7 @@ const char * stristr(std::string const & haystack, std::string const & needle)
  *
  * ENT:    compares s1 to s2 comparing the first n byte ingnoring case
  *
- * RET:    same as strcmp
+ * RET:    same as std::strcmp
  */
 int strnicmp(char const * s1, char const * s2, std::size_t n) noexcept {
     if ((!n) || (s1 == s2))

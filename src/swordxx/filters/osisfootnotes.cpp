@@ -146,7 +146,7 @@ char OSISFootnotes::processText(std::string &text, const SWKey *key, const SWMod
             }
 
             // if not a heading token, keep token in text
-            //if ((!strcmp(tag.getName(), "reference")) && (!tag.isEndTag())) {
+            //if ((!std::strcmp(tag.getName(), "reference")) && (!tag.isEndTag())) {
             //    std::string osisRef = tag.getAttribute("osisRef");
             if (!std::strncmp(token.c_str(), "reference", 9)) {
                 if (refs.length()) {

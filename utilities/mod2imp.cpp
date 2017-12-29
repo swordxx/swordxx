@@ -69,16 +69,16 @@ int main(int argc, char **argv)
     map<std::string, std::string> options; // optionName, optionValue;
 
     for (int i = 2; i < argc; i++) {
-        if (!strcmp(argv[i], "-r")) {
+        if (!std::strcmp(argv[i], "-r")) {
             if (strip) usage(progName, "-r can't be supplied when using -s");
             if (i+1 < argc) renderForm = argv[++i];
             render = true;
         }
-        else if (!strcmp(argv[i], "-s")) {
+        else if (!std::strcmp(argv[i], "-s")) {
             if (render) usage(progName, "-s can't be supplied when using -r");
             strip = true;
         }
-        else if (!strcmp(argv[i], "-f")) {
+        else if (!std::strcmp(argv[i], "-f")) {
             if (i+1 < argc) optionName          = argv[++i];
             if (i+1 < argc) options[optionName] = argv[++i];
             else usage(progName, "-f requires <option_name> <option_value>");

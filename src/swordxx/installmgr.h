@@ -187,7 +187,7 @@ A sample impl:
 
         char prompt[10];
         fgets(prompt, 9, stdin);
-        confirmed = (!strcmp(prompt, "yes\n"));
+        confirmed = (!std::strcmp(prompt, "yes\n"));
         }
         return confirmed;
 

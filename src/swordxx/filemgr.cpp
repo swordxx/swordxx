@@ -451,7 +451,7 @@ int FileMgr::copyDir(const char *srcDir, const char *destDir) {
             std::string dDir(std::string(destDir) + '/');
             rewinddir(dir);
             while ((ent = readdir(dir)) && !retVal) {
-                if ((strcmp(ent->d_name, ".")) && (strcmp(ent->d_name, ".."))) {
+                if ((std::strcmp(ent->d_name, ".")) && (std::strcmp(ent->d_name, ".."))) {
                     std::string const srcPath(sDir + ent->d_name);
                     std::string const destPath(dDir + ent->d_name);
                     if (!isDirectory(srcPath)) {
@@ -478,7 +478,7 @@ int FileMgr::removeDir(const char *targetDir) {
     if (dir) {
         rewinddir(dir);
         while ((ent = readdir(dir))) {
-            if ((strcmp(ent->d_name, ".")) && (strcmp(ent->d_name, ".."))) {
+            if ((std::strcmp(ent->d_name, ".")) && (std::strcmp(ent->d_name, ".."))) {
                 std::string targetPath(std::string(targetDir) + '/' + ent->d_name);
                 if (!isDirectory(targetPath)) {
                     FileMgr::removeFile(targetPath.c_str());

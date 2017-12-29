@@ -111,7 +111,7 @@ int main(int argc, char **argv)
     }
 
     if (strlen(argv[1]) > 4) {
-        if (!strcmp(&argv[1][strlen(argv[1])-4], ".zzz")) {
+        if (!std::strcmp(&argv[1][strlen(argv[1])-4], ".zzz")) {
             argv[1][strlen(argv[1])-4] = 0;
             decomp = 1;
         }

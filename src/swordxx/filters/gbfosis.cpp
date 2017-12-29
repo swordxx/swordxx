@@ -116,58 +116,58 @@ char GBFOSIS::processText(std::string &text, const SWKey *key, const SWModule *m
             }
 
             // Footnote
-            if (!strcmp(token, "RF") || !strncmp(token, "RF ", 3)) { //the GBFFootnotes filter adds the attribute "swordFootnote", we want to catch that, too
+            if (!std::strcmp(token, "RF") || !strncmp(token, "RF ", 3)) { //the GBFFootnotes filter adds the attribute "swordFootnote", we want to catch that, too
     //            pushString(buf, "<reference work=\"Bible.KJV\" reference=\"");
                 text += "<note type=\"x-StudyNote\">";
                 newText = true;
                 lastspace = false;
                 handled = true;
             }
-            else    if (!strcmp(token, "Rf")) {
+            else    if (!std::strcmp(token, "Rf")) {
                 text += "</note>";
                 lastspace = false;
                 handled = true;
             }
             // hebrew titles
-            if (!strcmp(token, "TH")) {
+            if (!std::strcmp(token, "TH")) {
                 text += "<title type=\"psalm\">";
                 newText = true;
                 lastspace = false;
                 handled = true;
             }
-            else    if (!strcmp(token, "Th")) {
+            else    if (!std::strcmp(token, "Th")) {
                 text += "</title>";
                 lastspace = false;
                 handled = true;
             }
             // Italics assume transchange
-            if (!strcmp(token, "FI")) {
+            if (!std::strcmp(token, "FI")) {
                 text += "<transChange type=\"added\">";
                 newText = true;
                 lastspace = false;
                 handled = true;
             }
-            else    if (!strcmp(token, "Fi")) {
+            else    if (!std::strcmp(token, "Fi")) {
                 text += "</transChange>";
                 lastspace = false;
                 handled = true;
             }
             // less than
-            if (!strcmp(token, "CT")) {
+            if (!std::strcmp(token, "CT")) {
                 text += "&lt;";
                 newText = true;
                 lastspace = false;
                 handled = true;
             }
             // greater than
-            if (!strcmp(token, "CG")) {
+            if (!std::strcmp(token, "CG")) {
                 text += "&gt;";
                 newText = true;
                 lastspace = false;
                 handled = true;
             }
             // Paragraph break.  For now use empty paragraph element
-            if (!strcmp(token, "CM")) {
+            if (!std::strcmp(token, "CM")) {
                 text += "<milestone type=\"x-p\" />";
                 newText = true;
                 lastspace = false;

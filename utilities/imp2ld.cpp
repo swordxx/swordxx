@@ -89,10 +89,10 @@ int main(int argc, char **argv) {
     const char *inFileName = argv[1];
 
     for (int i = 2; i < argc; i++) {
-        if (!strcmp(argv[i], "-a")) {
+        if (!std::strcmp(argv[i], "-a")) {
             append = true;
         }
-        else if (!strcmp(argv[i], "-z")) {
+        else if (!std::strcmp(argv[i], "-z")) {
             if (fourByteSize) usage(*argv, "Cannot specify both -z and -4");
             compType = "ZIP";
             if (i+1 < argc && argv[i+1][0] != '-') {
@@ -104,29 +104,29 @@ int main(int argc, char **argv) {
                 }
             }
         }
-        else if (!strcmp(argv[i], "-Z")) {
+        else if (!std::strcmp(argv[i], "-Z")) {
             if (compType.size()) usage(*argv, "Cannot specify both -z and -Z");
             if (fourByteSize) usage(*argv, "Cannot specify both -Z and -4");
             compType = "LZSS";
         }
-        else if (!strcmp(argv[i], "-4")) {
+        else if (!std::strcmp(argv[i], "-4")) {
             fourByteSize = true;
         }
-        else if (!strcmp(argv[i], "-P")) {
+        else if (!std::strcmp(argv[i], "-P")) {
             strongsPadding = false;
         }
-        else if (!strcmp(argv[i], "-b")) {
+        else if (!std::strcmp(argv[i], "-b")) {
             if (i+1 < argc) {
                 blockCount = atoi(argv[++i]);
                 if (blockCount > 0) continue;
             }
             usage(*argv, "-b requires in entry count integer > 0");
         }
-        else if (!strcmp(argv[i], "-o")) {
+        else if (!std::strcmp(argv[i], "-o")) {
             if (i+1 < argc) outPath = argv[++i];
             else usage(progName, "-o requires <output_path>");
         }
-        else if (!strcmp(argv[i], "-s")) {
+        else if (!std::strcmp(argv[i], "-s")) {
             caseSensitive = true;
         }
         else usage(progName, (((std::string)"Unknown argument: ")+ argv[i]).c_str());

@@ -99,10 +99,10 @@ int main(int argc, char **argv) {
     std::string compType;
 
     for (int i = 2; i < argc; i++) {
-        if (!strcmp(argv[i], "-a")) {
+        if (!std::strcmp(argv[i], "-a")) {
             append = true;
         }
-        else if (!strcmp(argv[i], "-z")) {
+        else if (!std::strcmp(argv[i], "-z")) {
             if (fourByteSize) usage(*argv, "Cannot specify both -z and -4");
             compType = "ZIP";
             if (i+1 < argc && argv[i+1][0] != '-') {
@@ -114,15 +114,15 @@ int main(int argc, char **argv) {
                 }
             }
         }
-        else if (!strcmp(argv[i], "-Z")) {
+        else if (!std::strcmp(argv[i], "-Z")) {
             if (compType.size()) usage(*argv, "Cannot specify both -z and -Z");
             if (fourByteSize) usage(*argv, "Cannot specify both -Z and -4");
             compType = "LZSS";
         }
-        else if (!strcmp(argv[i], "-4")) {
+        else if (!std::strcmp(argv[i], "-4")) {
             fourByteSize = true;
         }
-        else if (!strcmp(argv[i], "-b")) {
+        else if (!std::strcmp(argv[i], "-b")) {
             if (i+1 < argc) {
                 switch (atoi(argv[++i])) {
                 case 2: iType = VERSEBLOCKS; continue;
@@ -133,19 +133,19 @@ int main(int argc, char **argv) {
             }
             usage(*argv, "-b requires one of <2|3|4>");
         }
-        else if (!strcmp(argv[i], "-o")) {
+        else if (!std::strcmp(argv[i], "-o")) {
             if (i+1 < argc) outPath = argv[++i];
             else usage(progName, "-o requires <output_path>");
         }
-        else if (!strcmp(argv[i], "-v")) {
+        else if (!std::strcmp(argv[i], "-v")) {
             if (i+1 < argc) v11n = argv[++i];
             else usage(progName, "-v requires <v11n>");
         }
-        else if (!strcmp(argv[i], "-l")) {
+        else if (!std::strcmp(argv[i], "-l")) {
             if (i+1 < argc) locale = argv[++i];
             else usage(progName, "-l requires <locale>");
         }
-        else if (!strcmp(argv[i], "-c")) {
+        else if (!std::strcmp(argv[i], "-c")) {
             if (i+1 < argc) cipherKey = argv[++i];
             else usage(*argv, "-c requires <cipher_key>");
         }

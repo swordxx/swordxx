@@ -196,7 +196,7 @@ signed char RawStrBase<SizeType_>::findOffset(char const * ikey,
                     break;
                 }
 
-                diff = strcmp(key.c_str(), trybuf.c_str());
+                diff = std::strcmp(key.c_str(), trybuf.c_str());
 
                 if (!diff)
                     break;
@@ -368,14 +368,14 @@ void RawStrBase<SizeType_>::doSetText(char const * ikey,
     static constexpr auto const entrySize =
             sizeof(StartType) + sizeof(SizeType);
 
-    if (strcmp(key.c_str(), dbKey.c_str()) < 0) {
+    if (std::strcmp(key.c_str(), dbKey.c_str()) < 0) {
     }
-    else if (strcmp(key.c_str(), dbKey.c_str()) > 0) {
+    else if (std::strcmp(key.c_str(), dbKey.c_str()) > 0) {
         if (errorStatus != (char)-2)    // not a new file
             idxoff += entrySize;
         else idxoff = 0;
     }
-    else if ((!strcmp(key.c_str(), dbKey.c_str())) && (len>0 /*we're not deleting*/)) { // got absolute entry
+    else if ((!std::strcmp(key.c_str(), dbKey.c_str())) && (len>0 /*we're not deleting*/)) { // got absolute entry
         do {
             tmpbuf = new char [ size + 2 ];
             std::memset(tmpbuf, 0, size + 2);

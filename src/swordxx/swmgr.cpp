@@ -1192,7 +1192,7 @@ void SWMgr::InstallScan(const char *dirname)
         if ((dir = opendir(dirname))) {
             rewinddir(dir);
             while ((ent = readdir(dir))) {
-                if ((strcmp(ent->d_name, ".")) && (strcmp(ent->d_name, ".."))) {
+                if ((std::strcmp(ent->d_name, ".")) && (std::strcmp(ent->d_name, ".."))) {
                     newmodfile = dirname;
                     addTrailingDirectorySlash(newmodfile);
                     newmodfile += ent->d_name;

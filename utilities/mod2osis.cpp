@@ -80,7 +80,7 @@ int main(int argc, char **argv)
         errorOutHelp(argv[0]);
     }
 
-    if ((!strcmp(argv[1], "-h")) || (!strcmp(argv[1], "--help")) || (!strcmp(argv[1], "/?")) || (!strcmp(argv[1], "-?")) || (!strcmp(argv[1], "-help"))) {
+    if ((!std::strcmp(argv[1], "-h")) || (!std::strcmp(argv[1], "--help")) || (!std::strcmp(argv[1], "/?")) || (!std::strcmp(argv[1], "-?")) || (!std::strcmp(argv[1], "-help"))) {
         errorOutHelp(argv[0]);
     }
 

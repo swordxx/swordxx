@@ -127,7 +127,7 @@ void LocaleMgr::loadConfigDir(char const * ipath) {
     if (auto dir = std::unique_ptr<DIR, DirCloser>(::opendir(ipath))) {
         ::rewinddir(dir.get());
         while (auto const ent = ::readdir(dir.get())) {
-            if (!strcmp(ent->d_name, ".") || !strcmp(ent->d_name, ".."))
+            if (!std::strcmp(ent->d_name, ".") || !std::strcmp(ent->d_name, ".."))
                 continue;
             auto locale(std::make_shared<SWLocale>(
                             [&ipath,&ent]{

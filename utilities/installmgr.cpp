@@ -389,24 +389,24 @@ int main(int argc, char **argv) {
     if (argc < 2) usage(*argv);
 
     for (int i = 1; i < argc; i++) {
-        if (!strcmp(argv[i], "-d")) {
+        if (!std::strcmp(argv[i], "-d")) {
             SWLog::getSystemLog()->setLogLevel(SWLog::LOG_DEBUG);
         }
-        else if (!strcmp(argv[i], "--allow-internet-access-and-risk-tracing-and-jail-or-martyrdom")) {
+        else if (!std::strcmp(argv[i], "--allow-internet-access-and-risk-tracing-and-jail-or-martyrdom")) {
             isConfirmed = true;
         }
-        else if (!strcmp(argv[i], "-init")) {
+        else if (!std::strcmp(argv[i], "-init")) {
             initConfig();
         }
-        else if (!strcmp(argv[i], "-l")) {    // list installed modules
+        else if (!std::strcmp(argv[i], "-l")) {    // list installed modules
             cout << "Installed Modules:\n\n";
             listModules();
         }
-        else if (!strcmp(argv[i], "-ll")) {    // list from local directory
+        else if (!std::strcmp(argv[i], "-ll")) {    // list from local directory
             if (i+1 < argc) localDirListModules(argv[++i]);
             else usage(*argv, "-ll requires <path>");
         }
-        else if (!strcmp(argv[i], "-li")) {    // install from local directory
+        else if (!std::strcmp(argv[i], "-li")) {    // install from local directory
             if (i+2 < argc) {
                 const char *path = argv[++i];
                 const char *modName = argv[++i];
@@ -414,29 +414,29 @@ int main(int argc, char **argv) {
             }
             else usage(*argv, "-li requires <path> <modName>");
         }
-        else if (!strcmp(argv[i], "-u")) {    // uninstall module
+        else if (!std::strcmp(argv[i], "-u")) {    // uninstall module
             if (i+1 < argc) uninstallModule(argv[++i]);
             else usage(*argv, "-u requires <modName>");
         }
-        else if (!strcmp(argv[i], "-s")) {    // list sources
+        else if (!std::strcmp(argv[i], "-s")) {    // list sources
             listRemoteSources();
         }
-        else if (!strcmp(argv[i], "-sc")) {    // sync config with master
+        else if (!std::strcmp(argv[i], "-sc")) {    // sync config with master
             syncConfig();
         }
-        else if (!strcmp(argv[i], "-r")) {    // refresh remote source
+        else if (!std::strcmp(argv[i], "-r")) {    // refresh remote source
             if (i+1 < argc) refreshRemoteSource(argv[++i]);
             else usage(*argv, "-r requires <remoteSrcName>");
         }
-        else if (!strcmp(argv[i], "-rl")) {    // list remote modules
+        else if (!std::strcmp(argv[i], "-rl")) {    // list remote modules
             if (i+1 < argc) remoteListModules(argv[++i]);
             else usage(*argv, "-rl requires <remoteSrcName>");
         }
-        else if (!strcmp(argv[i], "-rd")) {    // list differences between remote source and installed modules
+        else if (!std::strcmp(argv[i], "-rd")) {    // list differences between remote source and installed modules
             if (i+1 < argc) remoteListModules(argv[++i], true);
             else usage(*argv, "-rd requires <remoteSrcName>");
         }
-        else if (!strcmp(argv[i], "-rdesc")) { // describe remove module
+        else if (!std::strcmp(argv[i], "-rdesc")) { // describe remove module
             if (i + 2 < argc) {
                 char const * const source = argv[++i];
                 char const * const modName = argv[++i];
@@ -445,7 +445,7 @@ int main(int argc, char **argv) {
                 usage(*argv, "-rdesc requires <remoteSrcName> <modName>");
             }
         }
-        else if (!strcmp(argv[i], "-ri")) {    // install from remote directory
+        else if (!std::strcmp(argv[i], "-ri")) {    // install from remote directory
             if (i+2 < argc) {
                 const char *source = argv[++i];
                 const char *modName = argv[++i];

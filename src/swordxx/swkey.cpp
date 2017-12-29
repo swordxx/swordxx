@@ -171,7 +171,7 @@ std::string SWKey::getOSISRefRangeText() const { return getRangeText(); }
 
 int SWKey::compare(SWKey const & ikey) const noexcept {
     /// \bug Potential null pointer dereference
-    return strcmp(m_keyText->c_str(), ikey.m_keyText->c_str());
+    return std::strcmp(m_keyText->c_str(), ikey.m_keyText->c_str());
 }
 
 void SWKey::positionToTop() {}

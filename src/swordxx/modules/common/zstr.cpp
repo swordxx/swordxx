@@ -209,7 +209,7 @@ signed char zStr::findKeyIndex(const char *ikey, long *idxoff, long away) const
                     break;
                 }
 
-                diff = strcmp(key.c_str(), trybuf.c_str());
+                diff = std::strcmp(key.c_str(), trybuf.c_str());
 
                 if (!diff)
                     break;

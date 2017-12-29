@@ -102,7 +102,7 @@ int main(int argc, char **argv)
         }
     }
 
-    if ((iType < 2) || (compType < 1) || (compType > 4) || compLevel < 0 || compLevel > 9 || (!strcmp(argv[1], "-h")) || (!strcmp(argv[1], "--help")) || (!strcmp(argv[1], "/?")) || (!strcmp(argv[1], "-?")) || (!strcmp(argv[1], "-help"))) {
+    if ((iType < 2) || (compType < 1) || (compType > 4) || compLevel < 0 || compLevel > 9 || (!std::strcmp(argv[1], "-h")) || (!std::strcmp(argv[1], "--help")) || (!std::strcmp(argv[1], "/?")) || (!std::strcmp(argv[1], "-?")) || (!std::strcmp(argv[1], "-help"))) {
         errorOutHelp(argv[0]);
     }
 

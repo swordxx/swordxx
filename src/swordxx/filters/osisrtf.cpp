@@ -52,7 +52,7 @@ namespace {
         if (module) {
             version = module->getName();
             isBiblicalText = (module->getType() == "Biblical Texts");
-            osisQToTick = ((!module->getConfigEntry("OSISqToTick")) || (strcmp(module->getConfigEntry("OSISqToTick"), "false")));
+            osisQToTick = ((!module->getConfigEntry("OSISqToTick")) || (std::strcmp(module->getConfigEntry("OSISqToTick"), "false")));
         } else {
             isBiblicalText = false;
             osisQToTick = true;
@@ -182,7 +182,7 @@ bool OSISRTF::handleToken(std::string &buf, const char *token, BasicFilterUserDa
                         const char *val2 = val;
                         if ((std::strchr("GH", *val)) && (charIsDigit(val[1])))
                             val2++;
-                        if ((!strcmp(val2, "3588")) && (lastText.length() < 1))
+                        if ((!std::strcmp(val2, "3588")) && (lastText.length() < 1))
                             show = false;
                         else    {
                             scratch = formatted(" {\\cf3 \\sub <%s>}", val2);

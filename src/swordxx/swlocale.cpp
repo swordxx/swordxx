@@ -126,7 +126,7 @@ std::string const & SWLocale::translate(const char *text) {
             - If StringHelper not present and UTF-8, no idea what to do. Should't happen
             */
 /*            if (StringHelper::getSystemStringHelper()) {
-                if (!strcmp(encoding, "UTF-8")) {
+                if (!std::strcmp(encoding, "UTF-8")) {
                     p->lookupTable.insert(LookupMap::value_type(text, (*confEntry).second.c_str()));
                 }
                 else { //latin1 expected, convert to UTF-8

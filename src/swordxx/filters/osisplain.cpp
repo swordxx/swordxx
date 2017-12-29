@@ -128,7 +128,7 @@ bool OSISPlain::handleToken(std::string &buf, const char *token, BasicFilterUser
                     else {
                         gh = (u->testament>1) ? 'G' : 'H';
                     }
-                    if ((!strcmp(val, "3588")) && (lastText.length() < 1))
+                    if ((!std::strcmp(val, "3588")) && (lastText.length() < 1))
                         show = false;
                     else    {
                         buf.append(" <");

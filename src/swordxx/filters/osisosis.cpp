@@ -31,7 +31,7 @@ namespace swordxx {
 
 
 OSISOSIS::MyUserData::MyUserData(const SWModule *module, const SWKey *key) : BasicFilterUserData(module, key) {
-    osisQToTick = ((!module->getConfigEntry("OSISqToTick")) || (strcmp(module->getConfigEntry("OSISqToTick"), "false")));
+    osisQToTick = ((!module->getConfigEntry("OSISqToTick")) || (std::strcmp(module->getConfigEntry("OSISqToTick"), "false")));
 }
 
 

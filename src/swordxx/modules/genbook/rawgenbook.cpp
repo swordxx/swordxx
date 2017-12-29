@@ -60,10 +60,10 @@ std::unique_ptr<SWKey> staticCreateKey(NormalizedPath const & path, bool const v
  */
 
 RawGenBook::RawGenBook(NormalizedPath const & path, const char *iname, const char *idesc, TextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char* ilang, const char *keyType)
-    : SWGenBook(staticCreateKey(path, !strcmp("VerseKey", keyType)), iname, idesc, enc, dir, mark, ilang)
+    : SWGenBook(staticCreateKey(path, !std::strcmp("VerseKey", keyType)), iname, idesc, enc, dir, mark, ilang)
     , m_path(std::move(path))
 {
-    verseKey = !strcmp("VerseKey", keyType);
+    verseKey = !std::strcmp("VerseKey", keyType);
 
     if (verseKey) setType("Biblical Texts");
 

@@ -44,12 +44,12 @@ public:
     void testUpperLatin1() {
         StringMgr* mgr = StringMgr::getSystemStringMgr();
 
-        CPPUNIT_ASSERT( !strcmp(mgr->upperLatin1(""), "") );
+        CPPUNIT_ASSERT( !std::strcmp(mgr->upperLatin1(""), "") );
 
         char t[10] = "Test!";
         const char* ret = mgr->upperLatin1(t);
         cout << ret << endl;
-        CPPUNIT_ASSERT( ret && !strcmp(ret, "TEST!") );
+        CPPUNIT_ASSERT( ret && !std::strcmp(ret, "TEST!") );
     }
 
     void testUpperUTF8() {
@@ -57,7 +57,7 @@ public:
         if (mgr->hasUTF8Support()) {
             char t[10] = "hi";
             char* ret = mgr->upperUTF8(t);
-            CPPUNIT_ASSERT( ret && !strcmp(ret, "HI") );
+            CPPUNIT_ASSERT( ret && !std::strcmp(ret, "HI") );
         }
     }
 };

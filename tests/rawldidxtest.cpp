@@ -55,7 +55,7 @@ int main(int argc, char **argv)
     for (long index = 0; index < maxoff; index+=6) {
         auto const trybuf(mod.getIDXBuf(index));
         if (!first) {
-            if (strcmp(trybuf.c_str(), last.c_str()) < 0) {
+            if (std::strcmp(trybuf.c_str(), last.c_str()) < 0) {
                 printf("entry %ld(offset: %ld) (%s) is less than previous entry (%s)\n\n", index/6, index, trybuf.c_str(), last.c_str());
                 exit(-3);
             }

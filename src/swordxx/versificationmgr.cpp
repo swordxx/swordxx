@@ -441,7 +441,7 @@ void VersificationMgr::System::translateVerse(const System *dstSys, const char *
             SWLog::getSystemLog()->logDebug("\tmappingsExtraBooks.size() %i.\n", dstSys->m_p->m_mappingsExtraBooks.size());
             for (int i=0; i<(int)dstSys->m_p->m_mappingsExtraBooks.size(); ++i) {
                 SWLog::getSystemLog()->logDebug("\t%s %s.\n", *book, dstSys->m_p->m_mappingsExtraBooks[i]);
-                if (!strcmp(*book, dstSys->m_p->m_mappingsExtraBooks[i])) {
+                if (!std::strcmp(*book, dstSys->m_p->m_mappingsExtraBooks[i])) {
                     b = m_p->m_books.size()+i-2;
                     break;
                 }

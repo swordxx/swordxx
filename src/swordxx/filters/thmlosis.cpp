@@ -265,7 +265,7 @@ char ThMLOSIS::processText(std::string &text, const SWKey *key, const SWModule *
                 handled = true;
             }
             // section titles
-            if (!strcmp(token, "div class=\"sechead\"")) {
+            if (!std::strcmp(token, "div class=\"sechead\"")) {
 //                 pushString(&to, "<title>");
                 text.append("<title>");
                 divEnd = "</title>";
@@ -273,7 +273,7 @@ char ThMLOSIS::processText(std::string &text, const SWKey *key, const SWModule *
                 lastspace = false;
                 handled = true;
             }
-            else    if (!strcmp(token, "/div")) {
+            else    if (!std::strcmp(token, "/div")) {
                 //pushString(&to, divEnd.c_str());
                 text.append(divEnd);
                 lastspace = false;
@@ -298,7 +298,7 @@ char ThMLOSIS::processText(std::string &text, const SWKey *key, const SWModule *
 //      Usage of italics to represent transChange isn't domaninant;
 //        solution: mark in OSIS instead, assume no semantics other than emphasis
 //                of italicized text
-//                        if (!strcmp(module->Type(), "Biblical Texts")) {
+//                        if (!std::strcmp(module->Type(), "Biblical Texts")) {
 //                    // Italics assume transchange for Biblical texts
 //                    if (caseInsensitiveEquals(token, "i")) {
 //                        pushString(&to, "<transChange type=\"added\">");
@@ -330,14 +330,14 @@ char ThMLOSIS::processText(std::string &text, const SWKey *key, const SWModule *
                     }
 //                        }
 
-                if (!strcmp(token, "b")) {
+                if (!std::strcmp(token, "b")) {
 //                     pushString(&to, "<hi type=\"b\">");
                 text.append("<hi type=\"b\">");
                 newText = true;
                 lastspace = false;
                     handled = true;
                 }
-            else if (!strcmp(token, "/b")) {
+            else if (!std::strcmp(token, "/b")) {
 //                  pushString(&to, "</hi>");
                 text.append("</hi>");
                     lastspace = false;
@@ -352,7 +352,7 @@ char ThMLOSIS::processText(std::string &text, const SWKey *key, const SWModule *
                 lastspace = false;
                 handled = true;
             }
-            else    if (!strcmp(token, "/note")) {
+            else    if (!std::strcmp(token, "/note")) {
                 // pushString(&to, "</note>");
                 text.append("</note>");
                 lastspace = false;

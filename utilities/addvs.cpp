@@ -57,7 +57,7 @@ int main(int argc, char **argv) {
     fprintf(stderr, helptext, argv[0], argv[0], argv[0], argv[0]);
     exit(-1);
   }
- if (!strcmp(argv[1], "-a") && (argc == 4 || argc == 5)) {
+ if (!std::strcmp(argv[1], "-a") && (argc == 4 || argc == 5)) {
 
     // Do some initialization stuff
     char buffer[65536];  //this is the max size of any entry
@@ -154,7 +154,7 @@ int main(int argc, char **argv) {
     delete vkey;
  }
  // Link 2 verses
- else if (!strcmp(argv[1], "-l") && argc == 5) {
+ else if (!std::strcmp(argv[1], "-l") && argc == 5) {
    // Do some initialization stuff
    RawText *mod = new RawText(argv[2]);    // open our datapath with our RawText driver.
 
@@ -164,7 +164,7 @@ int main(int argc, char **argv) {
    delete mod;
  }
 
- else if (!strcmp(argv[1], "-d") && argc == 4) {
+ else if (!std::strcmp(argv[1], "-d") && argc == 4) {
    RawText mod(argv[2]);    // open our datapath with our RawText driver.
    VerseKey *vkey = new VerseKey;
    vkey->setIntros(true);
@@ -194,7 +194,7 @@ int main(int argc, char **argv) {
  }
 
   // Make a new module
-  else if (!strcmp(argv[1], "-c") && argc == 3) {
+  else if (!std::strcmp(argv[1], "-c") && argc == 3) {
     // Try to initialize a default set of datafiles and indicies at our
     // datapath location passed to us from the user.
     if (RawText::createModule(argv[2])) {

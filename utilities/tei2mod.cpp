@@ -384,7 +384,7 @@ int main(int argc, char **argv) {
     std::unique_ptr<SWCompress> compressor;
 
     for (int i = 3; i < argc; i++) {
-        if (!strcmp(argv[i], "-z")) {
+        if (!std::strcmp(argv[i], "-z")) {
             if (modDrv.size()) usage(*argv, "Cannot specify both -z and -s");
             compType = "ZIP";
             if (i+1 < argc && argv[i+1][0] != '-') {
@@ -398,14 +398,14 @@ int main(int argc, char **argv) {
             modDrv = "zLD";
             recommendedPath += "zld/";
         }
-        else if (!strcmp(argv[i], "-Z")) {
+        else if (!std::strcmp(argv[i], "-Z")) {
             if (compType.size()) usage(*argv, "Cannot specify both -z and -Z");
             if (modDrv.size()) usage(*argv, "Cannot specify both -Z and -s");
             compType = "LZSS";
             modDrv = "zLD";
             recommendedPath += "zld/";
         }
-        else if (!strcmp(argv[i], "-s")) {
+        else if (!std::strcmp(argv[i], "-s")) {
             if (compType.size()) usage(*argv, "Cannot specify both -s and -z");
             if (i+1 < argc) {
                 int size = atoi(argv[++i]);
@@ -422,10 +422,10 @@ int main(int argc, char **argv) {
             }
             usage(*argv, "-s requires one of <2|4>");
         }
-        else if (!strcmp(argv[i], "-N")) {
+        else if (!std::strcmp(argv[i], "-N")) {
             normalize = false;
         }
-        else if (!strcmp(argv[i], "-c")) {
+        else if (!std::strcmp(argv[i], "-c")) {
             if (i+1 < argc) cipherKey = argv[++i];
             else usage(*argv, "-c requires <cipher_key>");
         }

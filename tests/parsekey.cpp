@@ -44,9 +44,9 @@ int main(int argc, char **argv) {
 
     const char *context = (argc > 4) ? argv[4] : "gen.1.1";
 
-    bool echo = (argc > 5) && !strcmp(argv[5], "1");
-    bool inSetTest = (argc > 6) && !strcmp(argv[6], "1");
-    bool intros = (argc > 7) && !strcmp(argv[7], "1");
+    bool echo = (argc > 5) && !std::strcmp(argv[5], "1");
+    bool inSetTest = (argc > 6) && !std::strcmp(argv[6], "1");
+    bool intros = (argc > 7) && !std::strcmp(argv[7], "1");
 
     DefaultVSKey.setIntros(intros);
 

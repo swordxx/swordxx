@@ -101,7 +101,7 @@ bool OSISWEBIF::handleToken(std::string &buf, const char *token, BasicFilterUser
                         const char *val2 = val;
                         if ((std::strchr("GH", *val)) && (charIsDigit(val[1])))
                             val2++;
-                        if ((!strcmp(val2, "3588")) && (lastText.length() < 1))
+                        if ((!std::strcmp(val2, "3588")) && (lastText.length() < 1))
                             show = false;
                         else
                             buf += formatted(" <small><em>&lt;<a href=\"%s?showStrong=%s#cv\">%s</a>&gt;</em></small> ", passageStudyURL.c_str(), URL::encode(val2).c_str(), val2);
