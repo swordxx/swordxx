@@ -201,7 +201,7 @@ signed char RawStrBase<SizeType_>::findOffset(char const * ikey,
                 if (!diff)
                     break;
 
-                if (!strncmp(trybuf.c_str(), key.c_str(), key.size())) substr = true;
+                if (!std::strncmp(trybuf.c_str(), key.c_str(), key.size())) substr = true;
 
                 if (diff < 0)
                     tailoff = (tryoff == headoff) ? headoff : tryoff;
@@ -216,7 +216,7 @@ signed char RawStrBase<SizeType_>::findOffset(char const * ikey,
             // didn't find exact match
             if (headoff >= tailoff) {
                 tryoff = headoff;
-                if (!substr && ((tryoff != maxoff)||(strncmp(key.c_str(), maxbuf.c_str(), key.size())<0))) {
+                if (!substr && ((tryoff != maxoff)||(std::strncmp(key.c_str(), maxbuf.c_str(), key.size())<0))) {
                     awayFromSubstrCheck = true;
                     away--;    // if our entry doesn't startwith our key, prefer the previous entry over the next
                 }
@@ -318,7 +318,7 @@ std::string RawStrBase<SizeType_>::readText(StartType istart,
             }
         }
         // resolve link
-        if (!strncmp(buf.c_str(), "@LINK", 5)) {
+        if (!std::strncmp(buf.c_str(), "@LINK", 5)) {
             for (std::size_t ch = 5; buf[ch]; ++ch) {        // null before nl
                 if (buf[ch] == '\n') {
                     buf[ch] = '\0';
@@ -391,7 +391,7 @@ void RawStrBase<SizeType_>::doSetText(char const * ikey,
             std::memmove(tmpbuf, ch, size - std::size_t(ch - tmpbuf));
 
             // resolve link
-            if (!strncmp(tmpbuf, "@LINK", 5) && (len)) {
+            if (!std::strncmp(tmpbuf, "@LINK", 5) && (len)) {
                 for (ch = tmpbuf; *ch; ch++) {        // null before nl
                     if (*ch == 10) {
                         *ch = 0;

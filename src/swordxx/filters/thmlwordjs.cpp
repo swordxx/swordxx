@@ -116,9 +116,9 @@ char ThMLWordJS::processText(std::string &text, const SWKey *key, const SWModule
                     }
 
                 }
-                if (!strncmp(token, "sync type=\"morph\"", 17)) {
+                if (!std::strncmp(token, "sync type=\"morph\"", 17)) {
                     for (ch = token+17; *ch; ch++) {
-                        if (!strncmp(ch, "class=\"", 7)) {
+                        if (!std::strncmp(ch, "class=\"", 7)) {
                             valto = val;
                             for (unsigned int i = 7; ch[i] != '\"' && i < 127; i++)
                                 *valto++ = ch[i];
@@ -126,7 +126,7 @@ char ThMLWordJS::processText(std::string &text, const SWKey *key, const SWModule
                             (*wordAttrs)["MorphClass"] = val;
     //printf("Adding: [\"Word\"][%s][\"MorphClass\"] = %s\n", wordstr, val);
                         }
-                        if (!strncmp(ch, "value=\"", 7)) {
+                        if (!std::strncmp(ch, "value=\"", 7)) {
                             valto = val;
                             for (unsigned int i = 7; ch[i] != '\"' && i < 127; i++)
                                 *valto++ = ch[i];

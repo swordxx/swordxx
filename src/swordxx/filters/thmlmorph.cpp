@@ -61,7 +61,7 @@ char ThMLMorph::processText(std::string &text, const SWKey *key, const SWModule 
             }
             if (*from == '>') {    // process tokens
                 intoken = false;
-                if (!strncmp(token.c_str(), "sync ", 5) && strstr(token.c_str(), "type=\"morph\"")) {    // Morph
+                if (!std::strncmp(token.c_str(), "sync ", 5) && strstr(token.c_str(), "type=\"morph\"")) {    // Morph
                   continue;
                 }
 

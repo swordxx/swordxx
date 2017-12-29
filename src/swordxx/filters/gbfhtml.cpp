@@ -80,16 +80,16 @@ bool GBFHTML::handleToken(std::string &buf, const char *token, BasicFilterUserDa
 
     if (!substituteToken(buf, token)) {
         // deal with OSIS note tags.  Just hide till OSISRTF
-        if (!strncmp(token, "note ", 5)) {
+        if (!std::strncmp(token, "note ", 5)) {
             // let's stop text from going to output
             u->suspendTextPassThru = true;
         }
 
-        else if (!strncmp(token, "/note", 5)) {
+        else if (!std::strncmp(token, "/note", 5)) {
             u->suspendTextPassThru = false;
         }
 
-        else if (!strncmp(token, "w", 1)) {
+        else if (!std::strncmp(token, "w", 1)) {
             // OSIS Word (temporary until OSISRTF is done)
             valto = val;
             num = strstr(token, "lemma=\"x-Strongs:");
@@ -131,14 +131,14 @@ bool GBFHTML::handleToken(std::string &buf, const char *token, BasicFilterUserDa
             }
         }
 
-        else if (!strncmp(token, "WG", 2) || !strncmp(token, "WH", 2)) { // strong's numbers
+        else if (!std::strncmp(token, "WG", 2) || !std::strncmp(token, "WH", 2)) { // strong's numbers
             buf += " <small><em>&lt;";
             for (tok = token + 2; *tok; tok++)
                     buf += *tok;
             buf += "&gt;</em></small> ";
         }
 
-        else if (!strncmp(token, "WTG", 3) || !strncmp(token, "WTH", 3)) { // strong's numbers tense
+        else if (!std::strncmp(token, "WTG", 3) || !std::strncmp(token, "WTH", 3)) { // strong's numbers tense
             buf += " <small><em>&lt;";
             for (tok = token + 3; *tok; tok++)
                 if(*tok != '\"')
@@ -146,7 +146,7 @@ bool GBFHTML::handleToken(std::string &buf, const char *token, BasicFilterUserDa
             buf += ")</em></small> ";
         }
 
-        else if (!strncmp(token, "RX", 2)) {
+        else if (!std::strncmp(token, "RX", 2)) {
             buf += "<i>";
             for (tok = token + 3; *tok; tok++) {
               if(*tok != '<' && *tok+1 != 'R' && *tok+2 != 'x') {
@@ -159,12 +159,12 @@ bool GBFHTML::handleToken(std::string &buf, const char *token, BasicFilterUserDa
             buf += "</i>";
         }
 
-        else if (!strncmp(token, "RB", 2)) {
+        else if (!std::strncmp(token, "RB", 2)) {
             buf += "<i>";
             u->hasFootnotePreTag = true;
         }
 
-        else if (!strncmp(token, "RF", 2)) {
+        else if (!std::strncmp(token, "RF", 2)) {
             if (u->hasFootnotePreTag) {
                 u->hasFootnotePreTag = false;
                 buf += "</i> ";
@@ -172,7 +172,7 @@ bool GBFHTML::handleToken(std::string &buf, const char *token, BasicFilterUserDa
             buf += "<font color=\"#800000\"><small> (";
         }
 
-        else if (!strncmp(token, "FN", 2)) {
+        else if (!std::strncmp(token, "FN", 2)) {
             buf += "<font face=\"";
             for (tok = token + 2; *tok; tok++)
                 if(*tok != '\"')
@@ -180,7 +180,7 @@ bool GBFHTML::handleToken(std::string &buf, const char *token, BasicFilterUserDa
             buf += "\">";
         }
 
-        else if (!strncmp(token, "CA", 2)) {    // ASCII value
+        else if (!std::strncmp(token, "CA", 2)) {    // ASCII value
             buf += (char)atoi(&token[2]);
         }
 

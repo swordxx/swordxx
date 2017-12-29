@@ -229,7 +229,7 @@ signed char zStr::findKeyIndex(const char *ikey, long *idxoff, long away) const
             // didn't find exact match
             if (headoff >= tailoff) {
                 tryoff = headoff;
-                if (!substr && ((tryoff != maxoff)||(strncmp(key.c_str(), maxbuf.c_str(), key.size())<0))) {
+                if (!substr && ((tryoff != maxoff)||(std::strncmp(key.c_str(), maxbuf.c_str(), key.size())<0))) {
                     awayFromSubstrCheck = true;
                     away--;    // if our entry doesn't startwith our key, prefer the previous entry over the next
                 }
@@ -334,7 +334,7 @@ void zStr::getText(long offset, char **idxbuf, char **buf) const {
         std::memmove(*buf, ch, size - (unsigned long)(ch-*buf));
 
         // resolve link
-        if (!strncmp(*buf, "@LINK", 5)) {
+        if (!std::strncmp(*buf, "@LINK", 5)) {
             for (ch = *buf; *ch; ch++) {        // null before nl
                 if (*ch == 10) {
                     *ch = 0;
@@ -457,7 +457,7 @@ void zStr::setText(const char *ikey, const char *buf, long len) {
                 std::memmove(tmpbuf.get(), ch, size - (unsigned long)(ch-tmpbuf.get()));
 
                 // resolve link
-                if (!strncmp(tmpbuf.get(), "@LINK", 5) && (len)) {
+                if (!std::strncmp(tmpbuf.get(), "@LINK", 5) && (len)) {
                     for (ch = tmpbuf.get(); *ch; ch++) {        // null before nl
                         if (*ch == 10) {
                             *ch = 0;

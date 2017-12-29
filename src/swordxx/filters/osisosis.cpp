@@ -112,7 +112,7 @@ bool OSISOSIS::handleToken(std::string &buf, const char *token, BasicFilterUserD
             if ((!tag.isEmpty()) && (!tag.isEndTag())) {
                 std::string attr = tag.attribute("lemma");
                 if (attr.length()) {
-                    if (!strncmp(attr.c_str(), "x-Strongs:", 10)) {
+                    if (!std::strncmp(attr.c_str(), "x-Strongs:", 10)) {
                         std::memcpy(&attr[3u], "strong", 6);
                         attr.erase(0u, 3u);
                         tag.setAttribute("lemma", attr.c_str());
@@ -120,12 +120,12 @@ bool OSISOSIS::handleToken(std::string &buf, const char *token, BasicFilterUserD
                 }
                 attr = tag.attribute("morph");
                 if (attr.length()) {
-                    if (!strncmp(attr.c_str(), "x-StrongsMorph:", 15)) {
+                    if (!std::strncmp(attr.c_str(), "x-StrongsMorph:", 15)) {
                         std::memcpy(&attr[3u], "strong", 6);
                         attr.erase(0u, 3u);
                         tag.setAttribute("lemma", attr.c_str());
                     }
-                    if (!strncmp(attr.c_str(), "x-Robinson:", 11)) {
+                    if (!std::strncmp(attr.c_str(), "x-Robinson:", 11)) {
                         attr[2] = 'r';
                         attr.erase(0u, 2u);
                         tag.setAttribute("lemma", attr.c_str());

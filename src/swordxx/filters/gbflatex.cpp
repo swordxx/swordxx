@@ -92,7 +92,7 @@ bool GBFLaTeX::handleToken(std::string &buf, const char *token, BasicFilterUserD
     if (!substituteToken(buf, token)) {
         XMLTag tag(token);
 
-        if (!strncmp(token, "WG", 2)) { // strong's numbers
+        if (!std::strncmp(token, "WG", 2)) { // strong's numbers
             //buf += " <small><em>&lt;<a href=\"type=Strongs value=";
             buf += " \\swordstrong[Greek]{";
             for (tok = token+2; *tok; tok++)
@@ -104,7 +104,7 @@ bool GBFLaTeX::handleToken(std::string &buf, const char *token, BasicFilterUserD
                     buf += *tok;
             buf += "}";
         }
-        else if (!strncmp(token, "WH", 2)) { // strong's numbers
+        else if (!std::strncmp(token, "WH", 2)) { // strong's numbers
             buf += " \\swordstrong[Hebrew]{";
             for (tok = token+2; *tok; tok++)
                 //if(token[i] != '\"')
@@ -115,7 +115,7 @@ bool GBFLaTeX::handleToken(std::string &buf, const char *token, BasicFilterUserD
                     buf += *tok;
             buf += "}";
         }
-        else if (!strncmp(token, "WTG", 3)) { // strong's numbers tense
+        else if (!std::strncmp(token, "WTG", 3)) { // strong's numbers tense
             buf += " \\swordstrong[Greektense]{";
             for (tok = token + 3; *tok; tok++)
                 if(*tok != '\"')
@@ -126,7 +126,7 @@ bool GBFLaTeX::handleToken(std::string &buf, const char *token, BasicFilterUserD
                     buf += *tok;
             buf += "}";
         }
-        else if (!strncmp(token, "WTH", 3)) { // strong's numbers tense
+        else if (!std::strncmp(token, "WTH", 3)) { // strong's numbers tense
             buf += " \\swordstrong[Hebrewtense]{";
             for (tok = token + 3; *tok; tok++)
                 if(*tok != '\"')
@@ -138,7 +138,7 @@ bool GBFLaTeX::handleToken(std::string &buf, const char *token, BasicFilterUserD
             buf += "}";
         }
 
-        else if (!strncmp(token, "WT", 2) && strncmp(token, "WTH", 3) && strncmp(token, "WTG", 3)) { // morph tags
+        else if (!std::strncmp(token, "WT", 2) && std::strncmp(token, "WTH", 3) && std::strncmp(token, "WTG", 3)) { // morph tags
             buf += " \\swordmorph{";
 
             for (tok = token + 2; *tok; tok++)
@@ -179,7 +179,7 @@ bool GBFLaTeX::handleToken(std::string &buf, const char *token, BasicFilterUserD
             u->suspendTextPassThru = false;
             buf += "}";
         }
-        else if (!strncmp(token, "FN", 2)) {
+        else if (!std::strncmp(token, "FN", 2)) {
             buf += "\\swordfont{";
             for (tok = token + 2; *tok; tok++)
                 if(*tok != '\"')
@@ -187,7 +187,7 @@ bool GBFLaTeX::handleToken(std::string &buf, const char *token, BasicFilterUserD
             buf += "}";
         }
 
-        else if (!strncmp(token, "CA", 2)) {    // ASCII value
+        else if (!std::strncmp(token, "CA", 2)) {    // ASCII value
             buf += (char)atoi(&token[2]);
         }
 

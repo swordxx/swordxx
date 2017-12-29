@@ -387,7 +387,7 @@ int VerseKey::getBookFromAbbrev(const char *iabbr) const
             // binary search for a match
             while(1) {
                 target = min + ((max - min) / 2);
-                diff = strncmp(abbr.c_str(), abbrevs[target].ab, abbr.size());
+                diff = std::strncmp(abbr.c_str(), abbrevs[target].ab, abbr.size());
                 if ((!diff)||(target >= max)||(target <= min))
                     break;
                 if (diff > 0)
@@ -397,7 +397,7 @@ int VerseKey::getBookFromAbbrev(const char *iabbr) const
 
             // lets keep backing up till we find the 'first' valid match
             for (; target > 0; target--) {
-                if (strncmp(abbr.c_str(), abbrevs[target-1].ab, abbr.size()))
+                if (std::strncmp(abbr.c_str(), abbrevs[target-1].ab, abbr.size()))
                     break;
             }
 
@@ -411,7 +411,7 @@ int VerseKey::getBookFromAbbrev(const char *iabbr) const
                     if (target >= max)
                         break;
                     ++target;
-                    if (strncmp(abbr.c_str(), abbrevs[target].ab, abbr.size()))
+                    if (std::strncmp(abbr.c_str(), abbrevs[target].ab, abbr.size()))
                         break;
                 }
             }
@@ -514,7 +514,7 @@ ListKey VerseKey::parseVerseList(const char *buf, const char *defaultKey, bool e
         internalListKey << *lastKey;
         return internalListKey;
     }
-    if ((!strncmp(buf, "[ Testament ", 12)) &&
+    if ((!std::strncmp(buf, "[ Testament ", 12)) &&
         (charIsDigit(buf[12])) &&
         (!std::strcmp(buf+13, " Heading ]"))) {
         curKey->setVerse(0);

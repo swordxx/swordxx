@@ -65,7 +65,7 @@ char GreekLexAttribs::processText(std::string &text, const SWKey *key, const SWM
                             if (!currentPhraseEnd)
                                 currentPhraseEnd = from - 1;
                             for (; *from && *from != '>'; from++) {
-                                if (!strncmp(from, "value=\"", 7)) {
+                                if (!std::strncmp(from, "value=\"", 7)) {
                                     valto = val;
                                     from += 7;
                                     for (unsigned int i = 0; from[i] != '\"' && i < 127; i++)
@@ -107,7 +107,7 @@ char GreekLexAttribs::processText(std::string &text, const SWKey *key, const SWM
                 if (*from == ';') inAV = false;
 
             }
-            else if (!strncmp(from, "AV-", 3)) {
+            else if (!std::strncmp(from, "AV-", 3)) {
                 inAV = true;
                 from+=2;
             }

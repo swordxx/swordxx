@@ -70,7 +70,7 @@ char OSISMorphSegmentation::processText(std::string &text, const SWKey * /*key*/
         if (*from == '>') { // process tokens
             intoken = false;
 
-            if (!strncmp(token.c_str(), "seg ", 4) || !strncmp(token.c_str(), "/seg", 4)) {
+            if (!std::strncmp(token.c_str(), "seg ", 4) || !std::strncmp(token.c_str(), "/seg", 4)) {
                 tag = token.c_str();
 
                 if (!tag.isEndTag()

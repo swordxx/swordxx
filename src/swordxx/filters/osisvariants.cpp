@@ -86,7 +86,7 @@ char OSISVariants::processText(std::string &text, const SWKey *key, const SWModu
             else if (*from == '>') {    // process tokens
                 intoken = false;
 
-                if (!strncmp(token.c_str(), "seg", 3)) {
+                if (!std::strncmp(token.c_str(), "seg", 3)) {
                     tag = token.c_str();
 
                     if ((tag.attribute("type") == "x-variant") && (tag.attribute("subType") == variantChoice)) {
@@ -95,7 +95,7 @@ char OSISVariants::processText(std::string &text, const SWKey *key, const SWModu
                         continue;
                     }
                 }
-                if (!strncmp(token.c_str(), "/seg", 4)) {
+                if (!std::strncmp(token.c_str(), "/seg", 4)) {
                     hide = false;
                     if (invar) {
                         invar = false;

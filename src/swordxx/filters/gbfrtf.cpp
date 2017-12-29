@@ -66,10 +66,10 @@ char GBFRTF::processText(std::string &text, const SWKey *key, const SWModule *mo
             intoken = false;
                         // process desired tokens
             // deal with OSIS note tags.  Just hide till OSISRTF
-            if (!strncmp(token, "note ", 5)) {
+            if (!std::strncmp(token, "note ", 5)) {
                 hideText = true;
             }
-            if (!strncmp(token, "/note", 5)) {
+            if (!std::strncmp(token, "/note", 5)) {
                 hideText = false;
             }
 

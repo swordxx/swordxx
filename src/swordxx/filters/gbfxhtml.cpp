@@ -96,7 +96,7 @@ bool GBFXHTML::handleToken(std::string &buf, const char *token, BasicFilterUserD
     if (!substituteToken(buf, token)) {
         XMLTag tag(token);
 
-        if (!strncmp(token, "WG", 2)) { // strong's numbers
+        if (!std::strncmp(token, "WG", 2)) { // strong's numbers
             //buf += " <small><em>&lt;<a href=\"type=Strongs value=";
             buf += " <small><em class=\"strongs\">&lt;<a href=\"passagestudy.jsp?action=showStrongs&type=Greek&value=";
             for (tok = token+2; *tok; tok++)
@@ -108,7 +108,7 @@ bool GBFXHTML::handleToken(std::string &buf, const char *token, BasicFilterUserD
                     buf += *tok;
             buf += "</a>&gt;</em></small>";
         }
-        else if (!strncmp(token, "WH", 2)) { // strong's numbers
+        else if (!std::strncmp(token, "WH", 2)) { // strong's numbers
             //buf += " <small><em>&lt;<a href=\"type=Strongs value=";
             buf += " <small><em class=\"strongs\">&lt;<a href=\"passagestudy.jsp?action=showStrongs&type=Hebrew&value=";
             for (tok = token+2; *tok; tok++)
@@ -120,7 +120,7 @@ bool GBFXHTML::handleToken(std::string &buf, const char *token, BasicFilterUserD
                     buf += *tok;
             buf += "</a>&gt;</em></small>";
         }
-        else if (!strncmp(token, "WTG", 3)) { // strong's numbers tense
+        else if (!std::strncmp(token, "WTG", 3)) { // strong's numbers tense
             //buf += " <small><em>(<a href=\"type=Strongs value=";
             buf += " <small><em class=\"strongs\">(<a href=\"passagestudy.jsp?action=showStrongs&type=Greek&value=";
             for (tok = token + 3; *tok; tok++)
@@ -132,7 +132,7 @@ bool GBFXHTML::handleToken(std::string &buf, const char *token, BasicFilterUserD
                     buf += *tok;
             buf += "</a>)</em></small>";
         }
-        else if (!strncmp(token, "WTH", 3)) { // strong's numbers tense
+        else if (!std::strncmp(token, "WTH", 3)) { // strong's numbers tense
             //buf += " <small><em>(<a href=\"type=Strongs value=";
             buf += " <small><em class=\"strongs\">(<a href=\"passagestudy.jsp?action=showStrongs&type=Hebrew&value=";
             for (tok = token + 3; *tok; tok++)
@@ -145,7 +145,7 @@ bool GBFXHTML::handleToken(std::string &buf, const char *token, BasicFilterUserD
             buf += "</a>)</em></small>";
         }
 
-        else if (!strncmp(token, "WT", 2) && strncmp(token, "WTH", 3) && strncmp(token, "WTG", 3)) { // morph tags
+        else if (!std::strncmp(token, "WT", 2) && std::strncmp(token, "WTH", 3) && std::strncmp(token, "WTG", 3)) { // morph tags
             //buf += " <small><em>(<a href=\"type=morph class=none value=";
             buf += " <small><em class=\"morph\">(<a href=\"passagestudy.jsp?action=showMorph&type=Greek&value=";
 
@@ -190,12 +190,12 @@ bool GBFXHTML::handleToken(std::string &buf, const char *token, BasicFilterUserD
             u->suspendTextPassThru = false;
         }
 /*
-        else if (!strncmp(token, "RB", 2)) {
+        else if (!std::strncmp(token, "RB", 2)) {
             buf += "<i> ";
             u->hasFootnotePreTag = true;
         }
 
-        else if (!strncmp(token, "Rf", 2)) {
+        else if (!std::strncmp(token, "Rf", 2)) {
             buf += "&nbsp<a href=\"note=";
             buf += u->lastTextNode.c_str();
             buf += "\">";
@@ -204,7 +204,7 @@ bool GBFXHTML::handleToken(std::string &buf, const char *token, BasicFilterUserD
             u->suspendTextPassThru = false;
         }
 
-        else if (!strncmp(token, "RF", 2)) {
+        else if (!std::strncmp(token, "RF", 2)) {
             if (u->hasFootnotePreTag) {
                 u->hasFootnotePreTag = false;
                 buf += "</i> ";
@@ -212,7 +212,7 @@ bool GBFXHTML::handleToken(std::string &buf, const char *token, BasicFilterUserD
             u->suspendTextPassThru = true;
         }
 */
-        else if (!strncmp(token, "FN", 2)) {
+        else if (!std::strncmp(token, "FN", 2)) {
             buf += "<font face=\"";
             for (tok = token + 2; *tok; tok++)
                 if(*tok != '\"')
@@ -220,7 +220,7 @@ bool GBFXHTML::handleToken(std::string &buf, const char *token, BasicFilterUserD
             buf += "\">";
         }
 
-        else if (!strncmp(token, "CA", 2)) {    // ASCII value
+        else if (!std::strncmp(token, "CA", 2)) {    // ASCII value
             buf += (char)atoi(&token[2]);
         }
 

@@ -83,16 +83,16 @@ char ThMLVariants::processText(std::string &text, const SWKey *key, const SWModu
             else if (*from == '>') {    // process tokens
                 intoken = false;
 
-                if ( !strncmp(token.c_str(), variantCompareString, 28)) { //only one of the variants, length of the two strings is 28 in both cases
+                if ( !std::strncmp(token.c_str(), variantCompareString, 28)) { //only one of the variants, length of the two strings is 28 in both cases
                     invar = true;
                     hide = true;
                     continue;
                 }
-                if (!strncmp(token.c_str(), "div type=\"variant\"", 18)) {
+                if (!std::strncmp(token.c_str(), "div type=\"variant\"", 18)) {
                     invar = true;
                     continue;
                 }
-                if (!strncmp(token.c_str(), "/div", 4)) {
+                if (!std::strncmp(token.c_str(), "/div", 4)) {
                     hide = false;
                     if (invar) {
                         invar = false;

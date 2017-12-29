@@ -61,7 +61,7 @@ char ThMLLemma::processText(std::string &text, const SWKey *key, const SWModule 
             }
             if (*from == '>') {    // process tokens
                 intoken = false;
-                if (!strncmp(token.c_str(), "sync ", 5) && strstr(token.c_str(), "type=\"lemma\"")) {    // Lemma
+                if (!std::strncmp(token.c_str(), "sync ", 5) && strstr(token.c_str(), "type=\"lemma\"")) {    // Lemma
                   continue;
                 }
 

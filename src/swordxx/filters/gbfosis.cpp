@@ -100,12 +100,12 @@ char GBFOSIS::processText(std::string &text, const SWKey *key, const SWModule *m
             }
 
             // Scripture Reference
-            if (!strncmp(token, "scripRef", 8)) {
+            if (!std::strncmp(token, "scripRef", 8)) {
                 suspendTextPassThru = true;
                 newText = true;
                 handled = true;
             }
-            else if (!strncmp(token, "/scripRef", 9)) {
+            else if (!std::strncmp(token, "/scripRef", 9)) {
                 tmp = "";
                 tmp.append(textStart, (int)(textEnd - textStart)+1);
                 text += VerseKey::convertToOSIS(tmp.c_str(), key);
@@ -116,7 +116,7 @@ char GBFOSIS::processText(std::string &text, const SWKey *key, const SWModule *m
             }
 
             // Footnote
-            if (!std::strcmp(token, "RF") || !strncmp(token, "RF ", 3)) { //the GBFFootnotes filter adds the attribute "swordFootnote", we want to catch that, too
+            if (!std::strcmp(token, "RF") || !std::strncmp(token, "RF ", 3)) { //the GBFFootnotes filter adds the attribute "swordFootnote", we want to catch that, too
     //            pushString(buf, "<reference work=\"Bible.KJV\" reference=\"");
                 text += "<note type=\"x-StudyNote\">";
                 newText = true;
@@ -175,7 +175,7 @@ char GBFOSIS::processText(std::string &text, const SWKey *key, const SWModule *m
             }
 
             // Figure
-            else    if (!strncmp(token, "img ", 4)) {
+            else    if (!std::strncmp(token, "img ", 4)) {
                 const char *src = strstr(token, "src");
                 if (!src)        // assert we have a src attribute
                     continue;
@@ -210,7 +210,7 @@ char GBFOSIS::processText(std::string &text, const SWKey *key, const SWModule *m
 
                 // normal strongs number
                 //strstrip(val);
-                if (!strncmp(wordStart, "<w ", 3)) {
+                if (!std::strncmp(wordStart, "<w ", 3)) {
                     const char *attStart = strstr(wordStart, "lemma");
                     if (attStart) {
                         attStart += 7;
@@ -255,7 +255,7 @@ char GBFOSIS::processText(std::string &text, const SWKey *key, const SWModule *m
                 }
                 else value = token+1;
 
-                if (!strncmp(wordStart, "<w ", 3)) {
+                if (!std::strncmp(wordStart, "<w ", 3)) {
                     const char *attStart = strstr(wordStart, "morph");
                     if (attStart) { //existing morph attribute, append this one to it
                         attStart += 7;

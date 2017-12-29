@@ -201,7 +201,7 @@ void VerseTreeKey::positionChanged() {
             setVerse(0);
         }
         else if ((legs < 2)
-            && ((!strncmp(seg[0].c_str(), "[ Testament ", 12)) &&        //"[ Testament n Heading ]";
+            && ((!std::strncmp(seg[0].c_str(), "[ Testament ", 12)) &&        //"[ Testament n Heading ]";
                 (charIsDigit(seg[0][12])) &&
                 (!std::strcmp(seg[0].c_str()+13, " Heading ]")))) {
             m_testament = (seg[0][12]-48);

@@ -75,7 +75,7 @@ char GBFFootnotes::processText (std::string &text, const SWKey *key, const SWMod
             intoken = false;
 
             //XMLTag tag(token);
-            if (!strncmp(token.c_str(), "RF",2)) {
+            if (!std::strncmp(token.c_str(), "RF",2)) {
 //                 tag = token;
 
                 refs = "";
@@ -84,7 +84,7 @@ char GBFFootnotes::processText (std::string &text, const SWKey *key, const SWMod
                 tagText = "";
                 continue;
             }
-            else if (!strncmp(token.c_str(), "Rf",2)) {
+            else if (!std::strncmp(token.c_str(), "Rf",2)) {
                 if (module->isProcessEntryAttributes()) {
                     //tag = token;
 

@@ -609,7 +609,7 @@ void SWMgr::loadConfigDir(const char *ipath)
         rewinddir(dir);
         while ((ent = readdir(dir))) {
             //check whether it ends with .conf, if it doesn't skip it!
-            if ((std::strlen(ent->d_name) <= 5) || strncmp(".conf", (ent->d_name + std::strlen(ent->d_name) - 5), 5 )) {
+            if ((std::strlen(ent->d_name) <= 5) || std::strncmp(".conf", (ent->d_name + std::strlen(ent->d_name) - 5), 5 )) {
                 continue;
             }
 
@@ -779,7 +779,7 @@ std::unique_ptr<SWModule> SWMgr::createModule(std::string const & name,
     char const * buf2 = misc1.c_str();
 //    for (; ((*buf2) && ((*buf2 == '.') || (*buf2 == '/') || (*buf2 == '\\'))); buf2++);
     for (; ((*buf2) && ((*buf2 == '/') || (*buf2 == '\\'))); buf2++);
-    if (!strncmp(buf2, "./", 2)) { //remove the leading ./ in the module data path to make it look better
+    if (!std::strncmp(buf2, "./", 2)) { //remove the leading ./ in the module data path to make it look better
         buf2 += 2;
     }
     // PrefixPath - absolute directory path to the repository in which this module was found
