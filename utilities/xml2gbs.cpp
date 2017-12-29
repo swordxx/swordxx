@@ -93,7 +93,7 @@ int processXML(const char* filename, char* modname, bool longnames, bool exportf
   }
   std::ofstream outfile;
   if (exportfile) {
-    strcat (modname, ".imp");
+    std::strcat(modname, ".imp");
     outfile.open(modname);
   }
 

@@ -302,7 +302,7 @@ void zVerseBase<VerseSizeType_>::doSetText(char testmt,
     compfp[testmt-1]->write(&outBufIdx, sizeof(outBufIdx));
     compfp[testmt-1]->write(&start, sizeof(start));
     compfp[testmt-1]->write(&size, sizeof(size));
-    strcat(cacheBuf, buf);
+    std::strcat(cacheBuf, buf);
 }
 
 template <typename VerseSizeType_>
