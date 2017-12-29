@@ -486,11 +486,11 @@ void writeEntry(std::string &text, bool force = false) {
         return;
     }
 
-    strcpy(keyOsisID, currentVerse.getOSISRef());
+    std::strcpy(keyOsisID, currentVerse.getOSISRef());
 
     // set keyOsisID to anything that an osisID cannot be.
     if (force) {
-        strcpy(keyOsisID, "-force");
+        std::strcpy(keyOsisID, "-force");
     }
 
     static VerseKey lastKey;
@@ -587,7 +587,7 @@ void writeEntry(std::string &text, bool force = false) {
 
     currentVerse = saveKey;
     lastKey = currentVerse;
-    strcpy(activeOsisID, keyOsisID);
+    std::strcpy(activeOsisID, keyOsisID);
 }
 
 void linkToEntry(VerseKey &linkKey, VerseKey &dest) {
@@ -719,7 +719,7 @@ bool handleToken(std::string &text, XMLTag token) {
                 currentVerse = token.attribute("osisID").c_str();
                 currentVerse.setChapter(0);
                 currentVerse.setVerse(0);
-                strcpy(currentOsisID, currentVerse.getOSISRef());
+                std::strcpy(currentOsisID, currentVerse.getOSISRef());
 
                 sidBook         = token.attribute("sID");
                 inChapter       = false;
@@ -766,7 +766,7 @@ bool handleToken(std::string &text, XMLTag token) {
                     cout << "DEBUG(FOUND): Current chapter is " << currentVerse.getOSISRef() << " (" << token.attribute("osisID") << ")" << endl;
                 }
 
-                strcpy(currentOsisID, currentVerse.getOSISRef());
+                std::strcpy(currentOsisID, currentVerse.getOSISRef());
 
                 sidChapter      = token.attribute("sID");
                 inChapter       = true;
@@ -846,7 +846,7 @@ bool handleToken(std::string &text, XMLTag token) {
                     cout << "ERROR(REF): Invalid osisID/annotateRef: " << token.attribute((tokenName == "verse") ? "osisID" : "annotateRef") << endl;
                 }
 
-                strcpy(currentOsisID, currentVerse.getOSISRef());
+                std::strcpy(currentOsisID, currentVerse.getOSISRef());
 
                 if (debug & DEBUG_OTHER) {
                     cout << "DEBUG(FOUND): New current verse is " << currentVerse.getOSISRef() << endl;
@@ -899,7 +899,7 @@ bool handleToken(std::string &text, XMLTag token) {
                 cout << "DEBUG(FOUND): majorSection found " << currentVerse.getOSISRef() << endl;
             }
 
-            strcpy(currentOsisID, currentVerse.getOSISRef());
+            std::strcpy(currentOsisID, currentVerse.getOSISRef());
 
 // as a result of the incorrect assumption these flags are set also incorrectly and cause problems in situations where majorSections do not follow the assumptions made during creation of this patch
 
@@ -1443,7 +1443,7 @@ void processOSIS(istream& infile) {
 
     activeOsisID[0] = '\0';
 
-    strcpy(currentOsisID,"N/A");
+    std::strcpy(currentOsisID,"N/A");
 
     currentVerse.setVersificationSystem(v11n.c_str());
     currentVerse.setAutoNormalize(false);

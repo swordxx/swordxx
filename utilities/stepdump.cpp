@@ -284,7 +284,7 @@ void readViewableBlockText(int fd, ViewableBlock * vb) {
     if (rtn <= 0) throw runtime_error(readError);
 
     compress->zBuf(&size, buf.get());
-    strcpy(buf.get(), compress->Buf());
+    std::strcpy(buf.get(), compress->Buf());
     cout << "Viewable Block Text:\n" << buf.get() << "\n\n";
 }
 

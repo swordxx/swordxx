@@ -654,7 +654,7 @@ terminate_range:
                     }
                 }
                 if (caseInsensitiveEquals(book, "ch") || caseInsensitiveEquals(book, "chap")) {    // Verse abbrev
-                    strcpy(book, lastKey->getBookName().c_str());
+                    std::strcpy(book, lastKey->getBookName().c_str());
                 }
                 bookno = getBookFromAbbrev(book);
                 if ((bookno > -1) && (suffix == 'f') && (book[strlen(book)-1] == 'f')) {
@@ -935,7 +935,7 @@ terminate_range:
         }
 
         if (caseInsensitiveEquals(book, "ch") || caseInsensitiveEquals(book, "chap")) {    // Verse abbrev
-            strcpy(book, lastKey->getBookName().c_str());
+            std::strcpy(book, lastKey->getBookName().c_str());
         }
         bookno = getBookFromAbbrev(book);
         if ((bookno > -1) && (suffix == 'f') && (book[strlen(book)-1] == 'f')) {
@@ -1833,7 +1833,7 @@ std::string VerseKey::convertToOSIS(const char *inRef, const SWKey *lastKnownKey
         int j;
         for (j = strlen(frag)-1; j && (std::strchr(" {}:;,()[].", frag[j])); j--);
         if (frag[j+1])
-            strcpy(postJunk, frag+j+1);
+            std::strcpy(postJunk, frag+j+1);
         frag[j+1]=0;
         startFrag += ((const char *)element->m_userData - startFrag) + 1;
         buf = "<reference osisRef=\"";

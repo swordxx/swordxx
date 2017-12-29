@@ -316,7 +316,7 @@ bool handleToken(std::string & text, XMLTag & token) {
                                             splitPtr = splitPtr2;
                                         }
                                         else {
-                        strcpy (splitBuffer.data(), splitPtr);
+                        std::strcpy(splitBuffer.data(), splitPtr);
 #ifdef DEBUG
                                       cout << "splitBuffer: " << splitBuffer.data() << endl;
                         cout << "currentKey: " << currentKey->getText() << endl;

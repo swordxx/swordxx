@@ -397,7 +397,7 @@ void zStr::getCompressedText(long block, long entry, char **buf) const {
     }
     size = cacheBlock->getEntrySize(entry);
     *buf = (*buf) ? (char *)realloc(*buf, size*2 + 1) : (char *)malloc(size*2 + 1);
-    strcpy(*buf, cacheBlock->getEntry(entry));
+    std::strcpy(*buf, cacheBlock->getEntry(entry));
 }
 
 

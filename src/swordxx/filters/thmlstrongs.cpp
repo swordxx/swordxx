@@ -125,7 +125,7 @@ char ThMLStrongs::processText(std::string &text, const SWKey *key, const SWModul
                             *valto = 0;
                             sprintf(wordstr, "%03d", word-1);
                             if ((caseInsensitiveEquals(val, "Robinsons")) || (caseInsensitiveEquals(val, "Robinson"))) {
-                                strcpy(val, "robinson");
+                                std::strcpy(val, "robinson");
                             }
                             module->getEntryAttributes()["Word"][wordstr]["MorphClass"] = val;
                         }

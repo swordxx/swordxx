@@ -88,7 +88,7 @@ char GBFWordJS::processText(std::string &text, const SWKey *key, const SWModule 
             if (*from == '>') {    // process tokens
                 intoken = false;
                 if (*token == 'W' && (token[1] == 'G' || token[1] == 'H')) {    // Strongs
-                    strcpy(val,token+1);
+                    std::strcpy(val,token+1);
                     if (atoi((!charIsDigit(*val))?val+1:val) < 5627) {
                         // normal strongs number
                         sprintf(wordstr, "%03d", word++);
@@ -117,9 +117,9 @@ char GBFWordJS::processText(std::string &text, const SWKey *key, const SWModule 
                 }
                 if (*token == 'W' && token[1] == 'T') {    // Morph
                     if (token[2] == 'G' || token[2] == 'H') {
-                        strcpy(val, token+2);
+                        std::strcpy(val, token+2);
                     }
-                    else strcpy(val, token+1);
+                    else std::strcpy(val, token+1);
                     if (wordAttrs) {
                         (*wordAttrs)["Morph"] = val;
                         (*wordAttrs)["MorphClass"] = "StrongsMorph";
