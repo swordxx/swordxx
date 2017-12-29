@@ -84,8 +84,9 @@ XMLTag::XMLTag(char const * const tagString) {
         ++it;
     for (; it != bufEnd; ++it) {
         if (strchr("\t\r\n ", *it)) {
-            while ((it != bufEnd) && !charIsAlpha(*it))
+            do {
                 ++it;
+            } while ((it != bufEnd) && !charIsAlpha(*it));
             if (it != bufEnd) {		// we have an attribute name
                 std::string name;
                 {
