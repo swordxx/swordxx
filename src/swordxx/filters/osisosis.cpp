@@ -121,7 +121,7 @@ bool OSISOSIS::handleToken(std::string &buf, const char *token, BasicFilterUserD
                 attr = tag.attribute("morph");
                 if (attr.length()) {
                     if (!strncmp(attr.c_str(), "x-StrongsMorph:", 15)) {
-                        memcpy(&attr[3u], "strong", 6);
+                        std::memcpy(&attr[3u], "strong", 6);
                         attr.erase(0u, 3u);
                         tag.setAttribute("lemma", attr.c_str());
                     }

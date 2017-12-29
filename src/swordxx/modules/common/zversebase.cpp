@@ -240,7 +240,7 @@ void zVerseBase<VerseSizeType_>::zReadText(char testmt,
         unsigned long len = 0;
         compressor->Buf(nullptr, &len);
         cacheBuf = (char *)calloc(len + 1, 1);
-        memcpy(cacheBuf, compressor->Buf(), len);
+        std::memcpy(cacheBuf, compressor->Buf(), len);
         cacheBufSize = strlen(cacheBuf);  // TODO: can we just use len?
         cacheTestament = testmt;
         cacheBufIdx = ulBuffNum;

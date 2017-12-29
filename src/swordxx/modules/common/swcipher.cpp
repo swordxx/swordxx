@@ -71,7 +71,7 @@ char *SWCipher::Buf(const char *ibuf, unsigned long ilen)
         buf = static_cast<char *>(malloc(ilen));
         if (!buf)
             throw std::bad_alloc();
-        memcpy(buf, ibuf, ilen);
+        std::memcpy(buf, ibuf, ilen);
         cipher = false;
     }
 
@@ -96,7 +96,7 @@ char *SWCipher::cipherBuf(unsigned long *ilen, const char *ibuf)
         buf = static_cast<char *>(malloc(bufSize));
         if (!buf)
             throw std::bad_alloc();
-        memcpy(buf, ibuf, *ilen);
+        std::memcpy(buf, ibuf, *ilen);
         len = *ilen;
         cipher = true;
     }

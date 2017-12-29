@@ -571,7 +571,7 @@ void zStr::flushCache() const {
 
             std::string buf(size + 5u, '\0');
             /// \bug order of evaluation of function arguments is undefined:
-            memcpy(&buf[0u], compressor->zBuf(&size), size); // 1 = encipher
+            std::memcpy(&buf[0u], compressor->zBuf(&size), size); // 1 = encipher
             buf.resize(size);
             rawZFilter(buf, 1); // 1 = encipher
 

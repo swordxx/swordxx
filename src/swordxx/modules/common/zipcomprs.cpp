@@ -89,7 +89,7 @@ ZEXTERN int ZEXPORT compress2 OF((Bytef *dest,   uLongf *destLen,
     unsigned long chunklen;
     unsigned long len = 0;
     while((chunklen = GetChars(chunk, 1023, ENCODE))) {
-        memcpy(chunkbuf, chunk, chunklen);
+        std::memcpy(chunkbuf, chunk, chunklen);
         len += chunklen;
         if (chunklen < 1023) {
             break;
@@ -155,7 +155,7 @@ ZEXTERN int ZEXPORT uncompress OF((Bytef *dest,   uLongf *destLen,
     int chunklen;
     unsigned long zlen = 0;
     while((chunklen = GetChars(chunk, 1023, DECODE))) {
-        memcpy(chunkbuf, chunk, chunklen);
+        std::memcpy(chunkbuf, chunk, chunklen);
         zlen += chunklen;
         if (chunklen < 1023) {
             break;

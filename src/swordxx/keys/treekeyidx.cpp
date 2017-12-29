@@ -101,7 +101,7 @@ void TreeKeyIdx::setUserData(const char *userData, int size) {
         size = strlen(userData) + 1;
 
     m_currentNode.userData = std::make_unique<char[]>(size);
-    memcpy(m_currentNode.userData.get(), userData, size);
+    std::memcpy(m_currentNode.userData.get(), userData, size);
     m_currentNode.dsize = size;
 }
 

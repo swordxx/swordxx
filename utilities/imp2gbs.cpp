@@ -167,7 +167,7 @@ void writeEntry(SWModule & book,
             {
                 auto const upper(
                             std::make_unique<UChar[]>((lexLevels + 1u) * 3u));
-                memcpy(upper.get(), ubuffer.get(), lexLevels * sizeof(UChar));
+                std::memcpy(upper.get(), ubuffer.get(), lexLevels * sizeof(UChar));
                 upper[lexLevels] = 0;
                 len = u_strToUpper(upper.get(),
                                    (lexLevels + 1u) * 3u,
@@ -178,7 +178,7 @@ void writeEntry(SWModule & book,
                 memmove(ubuffer.get() + len + 1u,
                         ubuffer.get(),
                         (max - ulen) * sizeof(UChar));
-                memcpy(ubuffer.get(), upper.get(), ulen * sizeof(UChar));
+                std::memcpy(ubuffer.get(), upper.get(), ulen * sizeof(UChar));
                 ubuffer[ulen] = '/';
             }
 

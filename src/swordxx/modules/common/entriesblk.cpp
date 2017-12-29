@@ -37,7 +37,7 @@ const int EntriesBlock::METAENTRYSIZE = 8;
 EntriesBlock::EntriesBlock(const char *iBlock, unsigned long size) {
     if (size) {
         block = (char *)calloc(1, size);
-        memcpy(block, iBlock, size);
+        std::memcpy(block, iBlock, size);
     }
     else {
         block = (char *)calloc(1, sizeof(uint32_t));
@@ -57,13 +57,13 @@ EntriesBlock::~EntriesBlock() {
 
 void EntriesBlock::setCount(int count) {
     uint32_t rawCount = archtosword32(count);
-    memcpy(block, &rawCount, sizeof(uint32_t));
+    std::memcpy(block, &rawCount, sizeof(uint32_t));
 }
 
 
 int EntriesBlock::getCount() {
     uint32_t count = 0;
-    memcpy(&count, block, sizeof(uint32_t));
+    std::memcpy(&count, block, sizeof(uint32_t));
     count = swordtoarch32(count);
     return count;
 }
@@ -78,8 +78,8 @@ void EntriesBlock::getMetaEntry(int index, unsigned long *offset, unsigned long 
         return;
 
     // first 4 bytes is count, each 6 bytes after is each meta entry
-    memcpy(&rawOffset, block + METAHEADERSIZE + (index * METAENTRYSIZE), sizeof(rawOffset));
-    memcpy(&rawSize, block + METAHEADERSIZE + (index * METAENTRYSIZE) + sizeof(rawOffset), sizeof(rawSize));
+    std::memcpy(&rawOffset, block + METAHEADERSIZE + (index * METAENTRYSIZE), sizeof(rawOffset));
+    std::memcpy(&rawSize, block + METAHEADERSIZE + (index * METAENTRYSIZE) + sizeof(rawOffset), sizeof(rawSize));
 
     *offset = (unsigned long)swordtoarch32(rawOffset);
     *size   = (unsigned long)swordtoarch32(rawSize);
@@ -94,8 +94,8 @@ void EntriesBlock::setMetaEntry(int index, unsigned long offset, unsigned long s
         return;
 
     // first 4 bytes is count, each 6 bytes after is each meta entry
-    memcpy(block + METAHEADERSIZE + (index * METAENTRYSIZE), &rawOffset, sizeof(rawOffset));
-    memcpy(block + METAHEADERSIZE + (index * METAENTRYSIZE) + sizeof(rawOffset), &rawSize, sizeof(rawSize));
+    std::memcpy(block + METAHEADERSIZE + (index * METAENTRYSIZE), &rawOffset, sizeof(rawOffset));
+    std::memcpy(block + METAHEADERSIZE + (index * METAENTRYSIZE) + sizeof(rawOffset), &rawSize, sizeof(rawSize));
 }
 
 
@@ -137,7 +137,7 @@ int EntriesBlock::addEntry(const char *entry) {
     offset = dataSize;    // original dataSize before realloc
     size = len + 1;
     // add our text to the end
-    memcpy(block + offset + METAENTRYSIZE, entry, size);
+    std::memcpy(block + offset + METAENTRYSIZE, entry, size);
     // increment count
     setCount(count + 1);
     // add our meta entry

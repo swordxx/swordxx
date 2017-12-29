@@ -103,10 +103,10 @@ std::string &RawGenBook::getRawEntryBuf() const {
     key.getUserData(&dsize);
     entryBuf = "";
     if (dsize > 7) {
-        memcpy(&offset, key.getUserData(), 4);
+        std::memcpy(&offset, key.getUserData(), 4);
         offset = swordtoarch32(offset);
 
-        memcpy(&size, key.getUserData() + 4, 4);
+        std::memcpy(&size, key.getUserData() + 4, 4);
         size = swordtoarch32(size);
 
         entrySize = size;        // support getEntrySize call
@@ -140,8 +140,8 @@ void RawGenBook::setEntry(const char *inbuf, long len) {
     bdtfd->write(inbuf, len);
 
     size = archtosword32(len);
-    memcpy(userData, &offset, 4);
-    memcpy(userData+4, &size, 4);
+    std::memcpy(userData, &offset, 4);
+    std::memcpy(userData+4, &size, 4);
     key->setUserData(userData, 8);
     key->save();
 }
