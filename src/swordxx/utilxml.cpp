@@ -57,13 +57,11 @@ XMLTag::XMLTag(char const * const tagString) {
     if (!tagString)        // assert tagString before proceeding
         return;
 
-    std::string m_buf(tagString);
-
-    auto const bufStart(m_buf.begin());
-    auto const bufEnd(m_buf.end());
+    auto const bufStart(tagString);
+    auto const bufEnd(bufStart + std::strlen(bufStart));
 
     {
-        auto it(m_buf.begin());
+        auto it(bufStart);
 
         // skip beginning silliness
         while ((it != bufEnd) && !charIsAlpha(*it)) {
