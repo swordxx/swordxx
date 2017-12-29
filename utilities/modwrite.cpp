@@ -50,7 +50,7 @@ int main(int argc, char **argv)
 
     if ((argc < 4) || (argc > 6)) {
         cerr << "usage: " << argv[0] << " <mod_name> <key> <key|buf|""-delete> [0(deflt) - normal; 1 - link]\n";
-        exit(-1);
+        std::exit(-1);
     }
 
     if (argc > 4)
@@ -61,7 +61,7 @@ int main(int argc, char **argv)
     auto const it = mgr.modules().find(argv[1]);
     if (it == mgr.modules().end()) {
         fprintf(stderr, "error: %s: couldn't find module: %s \n", argv[0], argv[1]);
-        exit(-2);
+        std::exit(-2);
     }
 
     SWModule & module = *it->second;
@@ -78,6 +78,6 @@ int main(int argc, char **argv)
         break;
     default:
         cerr << "Unknown action " << action << "\n";
-        exit(-3);
+        std::exit(-3);
     }
 }

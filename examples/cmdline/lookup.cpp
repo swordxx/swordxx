@@ -58,7 +58,7 @@ int main(int argc, char **argv)
         fprintf(stderr, "\nusage: %s <modname> <\"lookup key\">\n"
                              "\tExample: lookup KJV \"James 1:19\"\n\n", argv[0]);
 
-        exit(-1);
+        std::exit(-1);
     }
 
     target = manager.getModule(argv[1]);
@@ -69,7 +69,7 @@ int main(int argc, char **argv)
                     mp.second->getName().c_str(),
                     mp.second->getDescription().c_str());
         }
-        exit(-1);
+        std::exit(-1);
     }
 
     // turn all filters to default values

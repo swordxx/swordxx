@@ -1012,7 +1012,7 @@ bool handleToken(std::string &text, XMLTag token) {
 
         if (tagStack.empty()) {
             cout << "FATAL(NESTING): " << currentOsisID << ": tag expected" << endl;
-            exit(EXIT_BAD_NESTING);
+            std::exit(EXIT_BAD_NESTING);
         }
 
         // Note: empty end tags have the eID attribute
@@ -1028,7 +1028,7 @@ bool handleToken(std::string &text, XMLTag token) {
 
             if (tokenName != topToken.name()) {
                 cout << "FATAL(NESTING): " << currentOsisID << ": Expected " << topToken.name() << " found " << tokenName << endl;
-//                exit(EXIT_BAD_NESTING); // (OSK) I'm sure this validity check is a good idea, but there's a bug somewhere that's killing the converter here.
+//                std::exit(EXIT_BAD_NESTING); // (OSK) I'm sure this validity check is a good idea, but there's a bug somewhere that's killing the converter here.
                         // So I'm disabling this line. Unvalidated OSIS files shouldn't be run through the converter anyway.
                         // (DM) This has nothing to do with well-form or valid. It checks milestoned elements for proper nesting.
             }
@@ -1419,7 +1419,7 @@ void usage(char const * app,
     fprintf(stderr, "\n");
     fprintf(stderr, "See http://www.crosswire.org/wiki/osis2mod for more details.\n");
     fprintf(stderr, "\n");
-    exit(EXIT_BAD_ARG);
+    std::exit(EXIT_BAD_ARG);
 }
 
 void processOSIS(istream& infile) {
@@ -1581,7 +1581,7 @@ void processOSIS(istream& infile) {
                     break;
                     default:
                     cout << "FATAL(ENTITY): unknown entitytype on entity end: " << entitytype << endl;
-                    exit(EXIT_BAD_NESTING);
+                    std::exit(EXIT_BAD_NESTING);
                 }
             }
 
@@ -1738,7 +1738,7 @@ void processOSIS(istream& infile) {
 
                 default:
                     cout << "FATAL(COMMENTS): unknown commentstate on comment start: " << commentstate << endl;
-                    exit(EXIT_BAD_NESTING);
+                    std::exit(EXIT_BAD_NESTING);
             }
         }
 
@@ -1782,7 +1782,7 @@ void processOSIS(istream& infile) {
 
                 default:
                     cout << "FATAL(COMMENTS): unknown commentstate on comment end: " << commentstate << endl;
-                    exit(EXIT_BAD_NESTING);
+                    std::exit(EXIT_BAD_NESTING);
             }
         }
 
@@ -2002,26 +2002,26 @@ int main(int argc, char **argv) {
             if (entrySize == 4) {
                 if (zText4::createModule(path, iType, v11n.c_str())) {
                     fprintf(stderr, "ERROR: %s: couldn't create module at path: %s \n", program, path);
-                    exit(EXIT_NO_CREATE);
+                    std::exit(EXIT_NO_CREATE);
                 }
             }
             else {
                 if (zText::createModule(path, iType, v11n.c_str())) {
                     fprintf(stderr, "ERROR: %s: couldn't create module at path: %s \n", program, path);
-                    exit(EXIT_NO_CREATE);
+                    std::exit(EXIT_NO_CREATE);
                 }
             }
         }
         else if (entrySize == 4) {
             if (RawText4::createModule(path, v11n.c_str())) {
                 fprintf(stderr, "ERROR: %s: couldn't create module at path: %s \n", program, path);
-                exit(EXIT_NO_CREATE);
+                std::exit(EXIT_NO_CREATE);
             }
         }
         else {
             if (RawText::createModule(path, v11n.c_str())) {
                 fprintf(stderr, "ERROR: %s: couldn't create module at path: %s \n", program, path);
-                exit(EXIT_NO_CREATE);
+                std::exit(EXIT_NO_CREATE);
             }
         }
     }
@@ -2099,7 +2099,7 @@ int main(int argc, char **argv) {
 
     if (!module->isWritable()) {
         fprintf(stderr, "The module is not writable. Writing text to it will not work.\nExiting.\n" );
-        exit(EXIT_NO_WRITE);
+        std::exit(EXIT_NO_WRITE);
     }
 
     // Either read from std::cin (aka stdin), when the argument is a '-'
@@ -2112,7 +2112,7 @@ int main(int argc, char **argv) {
         ifstream infile(osisDoc);
         if (infile.fail()) {
             fprintf(stderr, "ERROR: %s: couldn't open input file: %s \n", program, osisDoc);
-            exit(EXIT_NO_READ);
+            std::exit(EXIT_NO_READ);
         }
         processOSIS(infile);
         infile.close();
@@ -2124,6 +2124,6 @@ int main(int argc, char **argv) {
     delete outputDecoder;
 
     fprintf(stderr, "SUCCESS: %s: has finished its work and will now rest\n", program);
-    exit(0); // success
+    std::exit(0); // success
 }
 

@@ -39,7 +39,7 @@ int main(int argc, char **argv)
 {
     if (argc != 2) {
         fprintf(stderr, "usage: %s <lex path>\n\n", *argv);
-        exit(-1);
+        std::exit(-1);
     }
 
     RawStr mod(argv[1]);
@@ -57,7 +57,7 @@ int main(int argc, char **argv)
         if (!first) {
             if (std::strcmp(trybuf.c_str(), last.c_str()) < 0) {
                 printf("entry %ld(offset: %ld) (%s) is less than previous entry (%s)\n\n", index/6, index, trybuf.c_str(), last.c_str());
-                exit(-3);
+                std::exit(-3);
             }
         }
         else first = false;

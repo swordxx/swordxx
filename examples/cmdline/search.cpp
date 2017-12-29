@@ -77,7 +77,7 @@ int main(int argc, char **argv)
         fprintf(stderr, "\nusage: %s <modname> <\"search string\"> [\"search_scope\"] [\"search again for string in previous result set\"]\n"
                              "\tExample: search KJV \"swift hear slow speak\"\n\n", argv[0]);
 
-        exit(-1);
+        std::exit(-1);
     }
 
 
@@ -94,7 +94,7 @@ int main(int argc, char **argv)
             fprintf(stderr, "[%s]\t - %s\n",
                     mp.second->getName().c_str(),
                     mp.second->getDescription().c_str());
-        exit(-1);
+        std::exit(-1);
     }
 
     SWModule & target = *it->second;

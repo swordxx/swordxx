@@ -79,7 +79,7 @@ int main(int argc, char **argv) {
 
   if (argc < 3) {
     fprintf(stderr, helptext, argv[0]);
-    exit(-1);
+    std::exit(-1);
   }
 
   mode = argv[1][1];
@@ -132,7 +132,7 @@ int main(int argc, char **argv) {
   // Bad arguments, print usage
   else {
     fprintf(stderr, helptext, argv[0]);
-    exit(-1);
+    std::exit(-1);
   }
 
   //DEBUG  printTree(root, treeKey);

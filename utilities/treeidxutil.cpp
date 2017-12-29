@@ -113,7 +113,7 @@ int main(int argc, char **argv) {
 
     if (argc != 2) {
         fprintf(stderr, "usage: %s <tree/key/data/path>\n", *argv);
-        exit(-1);
+        std::exit(-1);
     }
 
     TreeKeyIdx *treeKey = new TreeKeyIdx(argv[1]);

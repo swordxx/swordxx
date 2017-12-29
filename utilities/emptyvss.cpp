@@ -39,7 +39,7 @@ using swordxx::SWModule;
 int main(int argc, char **argv) {
     if (argc < 2) {
         fprintf(stderr, "usage: %s <Mod Name>\n", argv[0]);
-        exit(-1);
+        std::exit(-1);
     }
 
     SWMgr mgr;
@@ -47,7 +47,7 @@ int main(int argc, char **argv) {
     auto const it = mgr.modules().find(argv[1]);
     if (it == mgr.modules().end()) {
         fprintf(stderr, "error: %s: couldn't find module: %s \n", argv[0], argv[1]);
-        exit(-2);
+        std::exit(-2);
     }
 
     SWModule & mod = *it->second;
@@ -61,7 +61,7 @@ int main(int argc, char **argv) {
 
     if (!vkey) {
         fprintf(stderr, "error: %s: %s module is not keyed to verses \n", argv[0], argv[1]);
-        exit(-3);
+        std::exit(-3);
     }
 
     vkey->setIntros(false);    // turn on mod/testmnt/book/chap headings

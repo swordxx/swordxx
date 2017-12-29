@@ -270,25 +270,25 @@ void openfiles(char *fname)
 
     if ((fp = FileMgr::openFileReadOnly(fname)) < 0) {
         fprintf(stderr, "Couldn't open file: %s\n", fname);
-        exit(1);
+        std::exit(1);
     }
 
     std::string buf(formatted("%s.vss", fname));
     if ((vfp = FileMgr::createPathAndFile(buf.c_str())) < 0) {
         fprintf(stderr, "Couldn't open file: %s\n", buf.c_str());
-        exit(1);
+        std::exit(1);
     }
 
     buf = formatted("%s.cps", fname);
     if ((cfp = FileMgr::createPathAndFile(buf.c_str())) < 0) {
         fprintf(stderr, "Couldn't open file: %s\n", buf.c_str());
-        exit(1);
+        std::exit(1);
     }
 
     buf = formatted("%s.bks", fname);
     if ((bfp = FileMgr::createPathAndFile(buf.c_str())) < 0) {
         fprintf(stderr, "Couldn't open file: %s\n", buf.c_str());
-        exit(1);
+        std::exit(1);
     }
 }
 
@@ -297,7 +297,7 @@ void checkparams(int argc, char **argv)
 {
     if (argc < 2) {
         fprintf(stderr, "usage: %s <file to process> [nt - for new testmt file]\n", argv[0]);
-        exit(1);
+        std::exit(1);
     }
     if (argc == 3)
         key1 = key2 = key3 = "Matthew 1:1";

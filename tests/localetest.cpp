@@ -30,7 +30,7 @@ using namespace swordxx;
 int main(int argc, char **argv) {
     if (argc != 3) {
         std::cerr <<  "usage: " << *argv << " <locale_name> <text>\n";
-        exit(-1);
+        std::exit(-1);
     }
 
     std::cout << LocaleMgr::getSystemLocaleMgr()->translate(argv[2], argv[1])

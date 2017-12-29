@@ -52,7 +52,7 @@ int main(int argc, char **argv) {
 
     if (argc != 3) {
         fprintf(stderr, "usage: %s <datapath/datafilebasename> <index>\n", argv[0]);
-        exit(1);
+        std::exit(1);
     }
 
     tmpbuf = (char*) std::calloc(std::strlen(argv[1]) + 11,1);

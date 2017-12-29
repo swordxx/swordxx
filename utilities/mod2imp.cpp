@@ -51,7 +51,7 @@ void usage(const char * progName, const char * error = nullptr) {
         "\t -f <option_name> <option_value> - when rendering (-r, above), option\n"
         "\t\tfilter values can be set with this option.\n\n"
         , progName);
-    exit(-1);
+    std::exit(-1);
 }
 
 

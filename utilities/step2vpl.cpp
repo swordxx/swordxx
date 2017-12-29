@@ -149,7 +149,7 @@ int main(int argc, char **argv) {
 
     if (argc < 2) {
         cerr << "usage: "<< *argv << " <database to step module>\n";
-        exit (-1);
+        std::exit(-1);
     }
 
     string bookpath = argv[1];
@@ -164,7 +164,7 @@ int main(int argc, char **argv) {
 
     if (fdbook < 1) {
         cerr << "error, couldn't open file: " << fileName << "\n";
-        exit (-2);
+        std::exit(-2);
     }
 
     try {
@@ -173,7 +173,7 @@ int main(int argc, char **argv) {
     }
     catch (std::runtime_error &e) {
         std::cout << e.what () << '\n';
-        exit (-3);
+        std::exit(-3);
     }
 
     fileName = bookpath + "Viewable.idx";
@@ -181,7 +181,7 @@ int main(int argc, char **argv) {
 
     if (fdviewable < 1) {
         cerr << "error, couldn't open file: " << fileName << "\n";
-        exit (-4);
+        std::exit(-4);
     }
 
     try {
@@ -190,7 +190,7 @@ int main(int argc, char **argv) {
     }
     catch (std::runtime_error &e) {
         std::cout << e.what () << '\n';
-        exit (-5);
+        std::exit(-5);
     }
 
     VIEWABLEBLOCKSTART = lseek(fdviewable, 0, SEEK_CUR);
@@ -202,7 +202,7 @@ int main(int argc, char **argv) {
 
     if (fdvsync < 1) {
         cerr << "error, couldn't open file: " << fileName << "\n";
-        exit (-6);
+        std::exit(-6);
     }
 
     fileName = bookpath + "Sections.idx";
@@ -210,7 +210,7 @@ int main(int argc, char **argv) {
 
     if (fdsections < 1) {
         cerr << "error, couldn't open file: " << fileName << "\n";
-        exit (-7);
+        std::exit(-7);
     }
 
     try {
@@ -230,7 +230,7 @@ int main(int argc, char **argv) {
     }
     catch (std::runtime_error &e) {
         std::cout << e.what () << '\n';
-        exit (-8);
+        std::exit(-8);
     }
 
     close(fdviewable);

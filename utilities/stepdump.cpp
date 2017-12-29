@@ -91,7 +91,7 @@ int main(int argc, char **argv) {
 
     if (argc < 2) {
         cerr << "usage: "<< *argv << " <database to step module>\n";
-        exit (-1);
+        std::exit(-1);
     }
 
     string bookpath = argv[1];
@@ -106,7 +106,7 @@ int main(int argc, char **argv) {
 
     if (fd < 1) {
         cerr << "error, couldn't open file: " << fileName << "\n";
-        exit (-2);
+        std::exit(-2);
     }
 
     try {
@@ -115,7 +115,7 @@ int main(int argc, char **argv) {
     }
     catch (std::runtime_error &e) {
         std::cout << e.what () << '\n';
-        exit (-3);
+        std::exit(-3);
     }
 
 
@@ -124,7 +124,7 @@ int main(int argc, char **argv) {
 
     if (fdv < 1) {
         cerr << "error, couldn't open file: " << fileName << "\n";
-        exit (-4);
+        std::exit(-4);
     }
 
     try {
@@ -133,7 +133,7 @@ int main(int argc, char **argv) {
     }
     catch (std::runtime_error &e) {
         std::cout << e.what () << '\n';
-        exit (-5);
+        std::exit(-5);
     }
 
     ViewableBlock vb;
@@ -146,7 +146,7 @@ int main(int argc, char **argv) {
     }
     catch (std::runtime_error &e) {
         std::cout << e.what () << '\n';
-        exit (-6);
+        std::exit(-6);
     }
 
     int nonGlossBlocksCount = viewableHeaderRecord.viewableBlocksCount

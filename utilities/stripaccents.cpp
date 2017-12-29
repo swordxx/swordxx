@@ -42,7 +42,7 @@ int usage()
 		fprintf(stderr, "\n n=4 \t strip Hebrew vowel points");
 		fprintf(stderr, "\n n=8 \t strip Hebrew Cantillation marks\n");
 		fprintf(stderr, "\n several of the above filters can be engaged by adding the values\n");
-		exit(0);
+		std::exit(0);
 }        
 
 int main(int argc, char **argv)
@@ -52,14 +52,14 @@ int main(int argc, char **argv)
 
 	if ((argc < 3) || (argc > 3)) {
 	        usage();
-		exit(-1);
+		std::exit(-1);
 	}
 
         int stripFilters = std::atoi(argv[1]);
         
         if ((stripFilters < 1) || (stripFilters > 15)) {
                 usage();
-		exit(-1);
+		std::exit(-1);
         }        
 	std::string stripTerm = argv[2];
 	

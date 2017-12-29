@@ -180,21 +180,21 @@ int main(int argc, char **argv) {
         fprintf(stderr, "\tthat begin with the verse reference for which it is an entry.  e.g.:\n\n");
         fprintf(stderr, "\t\tgen 1:0 CHAPTER 1 HEADER\n");
         fprintf(stderr, "\t\tgen 1:1 In the beginning...\n\n");
-        exit(-1);
+        std::exit(-1);
     }
 
     // Let's see if we can open our input file
     int fd = FileMgr::openFileReadOnly(argv[1]);
     if (fd < 0) {
         fprintf(stderr, "error: %s: couldn't open input file: %s \n", argv[0], argv[1]);
-        exit(-2);
+        std::exit(-2);
     }
 
     // Try to initialize a default set of datafiles and indicies at our
     // datapath location passed to us from the user.
     if (RawText::createModule(argv[2])) {
         fprintf(stderr, "error: %s: couldn't create module at path: %s \n", argv[0], argv[2]);
-        exit(-3);
+        std::exit(-3);
     }
 
     // not used yet, but for future support of a vpl file with each line
@@ -234,13 +234,13 @@ int main(int argc, char **argv) {
             const char *verseText = parseVReg(buffer.get());
             if (!verseText) {    // if we didn't find a valid verse ref
                 std::cerr << "No valid verse ref found on line: " << buffer.get() << "\n";
-                exit(-4);
+                std::exit(-4);
             }
 
             vk = buffer.get();
             if (vk.popError()) {
                 std::cerr << "Error parsing key: " << buffer.get() << "\n";
-                exit(-5);
+                std::exit(-5);
             }
             std::string orig = mod.getRawEntry();
 

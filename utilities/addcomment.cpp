@@ -20,14 +20,14 @@
  *
  */
 
-#include <stdio.h>
+#include <cstdio>
+#include <cstdlib>
 #include <iostream>
 #include <versekey.h>
 #include <rawtext.h>
 #include <zcom.h>
 #include <rawcom.h>
 #include <rawfiles.h>
-#include <stdlib.h>
 
 int main(int argc, char **argv)
 {
@@ -38,7 +38,7 @@ int main(int argc, char **argv)
 
     if (argc < 3) {
         fprintf(stderr, "usage: %s <\"comment\"> <\"verse\"> [count] [disable AutoNormalization]\n", argv[0]);
-        exit(-1);
+        std::exit(-1);
     }
 
     if (argc > 4)

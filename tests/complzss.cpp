@@ -107,7 +107,7 @@ int main(int argc, char **argv)
 
     if (argc != 2) {
         fprintf(stderr, "usage: %s <filename|filename.lzs>\n", argv[0]);
-        exit(1);
+        std::exit(1);
     }
 
     if (std::strlen(argv[1]) > 4) {

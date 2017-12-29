@@ -357,7 +357,7 @@ void usage(char const * app, char const * error = nullptr) {
         fprintf(stderr, "\t\t\t\t  and then normalize to NFC. Note: all UTF-8\n");
     fprintf(stderr, "\t\t\t\t  texts should be normalized to NFC.)\n");
     fprintf(stderr, "\n\tThe options -z and -s are mutually exclusive.\n");
-    exit(-1);
+    std::exit(-1);
 }
 
 int main(int argc, char **argv) {
@@ -460,7 +460,7 @@ int main(int argc, char **argv) {
     // cout << "path: " << path << " teiDoc: " << teiDoc << " compressType: " << compType << " ldType: " << modDrv << " cipherKey: " << cipherKey.c_str() << " normalize: " << normalize << "\n";
     cout << "path: " << path << " teiDoc: " << teiDoc << " compressType: " << compType << " ldType: " << modDrv << " normalize: " << normalize << "\n";
     cout << "";
-//      exit(-3);
+//      std::exit(-3);
 #endif
 
     std::string modName = path;
@@ -479,21 +479,21 @@ int main(int argc, char **argv) {
     if (modDrv == "zLD") {
         if (zLD::createModule(modName.c_str())) {
             fprintf(stderr, "error: %s: couldn't create module at path: %s \n", program.c_str(), modName.c_str());
-            exit(-3);
+            std::exit(-3);
         }
         module = new zLD(modName.c_str(), nullptr, nullptr, 30, std::move(compressor));
     }
     else if (modDrv == "RawLD") {
         if (RawLD::createModule(modName.c_str())) {
             fprintf(stderr, "error: %s: couldn't create module at path: %s \n", program.c_str(), modName.c_str());
-            exit(-3);
+            std::exit(-3);
         }
         module = new RawLD(modName.c_str());
     }
     else {
         if (RawLD4::createModule(modName.c_str())) {
             fprintf(stderr, "error: %s: couldn't create module at path: %s \n", program.c_str(), modName.c_str());
-            exit(-3);
+            std::exit(-3);
         }
         module = new RawLD4(modName.c_str());
     }
@@ -507,14 +507,14 @@ int main(int argc, char **argv) {
 
         if (!module->isWritable()) {
                 fprintf(stderr, "The module is not writable. Writing text to it will not work.\nExiting.\n" );
-                exit(-1);
+                std::exit(-1);
         }
 
     // Let's see if we can open our input file
     ifstream infile(teiDoc);
     if (infile.fail()) {
         fprintf(stderr, "error: %s: couldn't open input file: %s \n", program.c_str(), teiDoc.c_str());
-        exit(-2);
+        std::exit(-2);
     }
 
     currentKey = module->createKey();

@@ -156,7 +156,7 @@ void finish(int status) {
 
     if (status < 1) {
         cout << "\n";
-        exit(status);
+        std::exit(status);
     }
 }
 

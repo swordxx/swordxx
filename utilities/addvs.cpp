@@ -55,7 +55,7 @@ int main(int argc, char **argv) {
 
   if (argc < 3) {
     fprintf(stderr, helptext, argv[0], argv[0], argv[0], argv[0]);
-    exit(-1);
+    std::exit(-1);
   }
  if (!std::strcmp(argv[1], "-a") && (argc == 4 || argc == 5)) {
 
@@ -199,13 +199,13 @@ int main(int argc, char **argv) {
     // datapath location passed to us from the user.
     if (RawText::createModule(argv[2])) {
       fprintf(stderr, "error: %s: couldn't create module at path: %s \n", argv[0], argv[2]);
-      exit(-2);
+      std::exit(-2);
     }
   }
 
   // Bad arguments, print usage
   else {
     fprintf(stderr, helptext, argv[0], argv[0], argv[0], argv[0]);
-    exit(-1);
+    std::exit(-1);
   }
 }

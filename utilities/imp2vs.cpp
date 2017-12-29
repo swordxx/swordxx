@@ -78,7 +78,7 @@ void usage(char const * progName, char const * error = nullptr) {
         "standard Sword++ notation, e.g. $$$Rom.4.0 for intro of Romans chapter 4,\n"
         "$$$Rev.0.0 for intro of the Book of Revelation of John.  $$$[ Module Heading ]\n"
         "for entire module intro.  $$$[ Testament 2 Heading ] for NT intro.\n\n");
-    exit(-1);
+    std::exit(-1);
 }
 
 
@@ -175,7 +175,7 @@ int main(int argc, char **argv) {
         if (compressor) {
             if (zText::createModule(outPath.c_str(), iType, v11n.c_str())) {
                 fprintf(stderr, "ERROR: %s: couldn't create module at path: %s \n", *argv, outPath.c_str());
-                exit(-1);
+                std::exit(-1);
             }
         }
         else {

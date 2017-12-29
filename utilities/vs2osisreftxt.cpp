@@ -36,7 +36,7 @@ using namespace swordxx;
 int main(int argc, char **argv) {
     if ((argc < 2) || (argc > 4)) {
         fprintf(stderr, "usage: %s <\"string to parse\"> [locale_name] [test-in-set-verse]\n", *argv);
-        exit(-1);
+        std::exit(-1);
     }
 
     if (argc > 2)

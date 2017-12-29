@@ -65,7 +65,7 @@ void errorOutHelp(char *appName) {
     cerr << "compressType: (default 1):\n\t1 - LZSS\n\t2 - Zip\n\t3 - bzip2\n\t4 - xz\n";
     cerr << "compressLevel: (default varies by compressType):\n\tA digit from 1-9. Greater values compress more, but require more\n\ttime/memory. Use 0 for the default compression level.\n";
     cerr << "\n\n";
-    exit(-1);
+    std::exit(-1);
 }
 
 
@@ -111,7 +111,7 @@ int main(int argc, char **argv)
     auto const it = mgr.modules().find(argv[1]);
     if (it == mgr.modules().end()) {
         fprintf(stderr, "error: %s: couldn't find module: %s\n", argv[0], argv[1]);
-        exit(-2);
+        std::exit(-2);
     }
 
     SWModule & inModule = *it->second;
@@ -158,7 +158,7 @@ int main(int argc, char **argv)
 
     if (result) {
         fprintf(stderr, "error: %s: couldn't create module at path: %s\n", argv[0], argv[2]);
-        exit(-3);
+        std::exit(-3);
     }
 
     switch (modType) {

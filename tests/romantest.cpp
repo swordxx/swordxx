@@ -31,7 +31,7 @@ using swordxx::from_rom;
 int main(int argc, char **argv) {
     if (argc != 2) {
         fprintf(stderr, "usage: %s <roman_numeral>\n", *argv);
-        exit(-1);
+        std::exit(-1);
     }
     /* I don't think we need to_rom, do we? anyway, it isn't written
     char buf[127];

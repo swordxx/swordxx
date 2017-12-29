@@ -51,7 +51,7 @@ void errorOutHelp(char *appName) {
     cerr << appName << " - a tool to output a Sword++ module in OSIS format\n";
     cerr << "usage: "<< appName << " <modname> \n";
     cerr << "\n\n";
-    exit(-1);
+    std::exit(-1);
 }
 
 
@@ -99,7 +99,7 @@ int main(int argc, char **argv)
     auto const it = mgr.modules().find(argv[1]);
     if (it == mgr.modules().end()) {
         fprintf(stderr, "error: %s: couldn't find module: %s \n", argv[0], argv[1]);
-        exit(-2);
+        std::exit(-2);
     }
 
     SWModule & inModule = *it->second;
@@ -117,7 +117,7 @@ int main(int argc, char **argv)
     int lastChap = 9999;
     if (!vkey) {
         cerr << "Currently mod2osis only works with verse keyed modules\n\n";
-        exit(-1);
+        std::exit(-1);
     }
 
     vkey->setIntros(false);

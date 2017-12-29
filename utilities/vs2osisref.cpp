@@ -42,7 +42,7 @@ int main(int argc, char **argv)
             cerr << argv[0] << " - parse verse reference to OSISRef markup\n";
             cerr << "usage: "<< argv[0] << " <verse ref> [verse context] [locale]\n";
             cerr << "\n\n";
-            exit(-1);
+            std::exit(-1);
         }
 
 

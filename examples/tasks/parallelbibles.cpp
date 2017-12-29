@@ -212,7 +212,7 @@ int main(int argc, char **argv) {
     if (argc < 3) {
         fprintf(stderr, "\nusage: %s <modname> [modname ...] <\"key\">\n"
                              "\tExample: %s KJV ESV \"James 1:19\"\n\n", argv[0], argv[0]);
-        exit(-1);
+        std::exit(-1);
     }
 
     vector<SWModule *> modules;
@@ -224,7 +224,7 @@ int main(int argc, char **argv) {
                 fprintf(stderr, "[%s]\t - %s\n",
                         mp.second->getName().c_str(),
                         mp.second->getDescription().c_str());
-            exit(-2);
+            std::exit(-2);
         }
         modules.push_back(bible);
     }

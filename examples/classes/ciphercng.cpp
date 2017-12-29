@@ -37,14 +37,14 @@ int main(int argc, char **argv) {
 
     if (argc != 2) {
         fprintf(stderr, "usage: %s <modName>\n", *argv);
-        exit(-1);
+        std::exit(-1);
     }
 
     SWMgr manager;        // create a default manager that looks in the current directory for mods.conf
     auto const it = manager.modules().find(argv[1]);
     if (it == manager.modules().end()) {
         fprintf(stderr, "%s: couldn't find module: %s\n", *argv, argv[1]);
-        exit(-1);
+        std::exit(-1);
     }
 
     SWModule & module = *it->second;

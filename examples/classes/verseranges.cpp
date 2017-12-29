@@ -39,7 +39,7 @@ int main() {
     SWModule *bible = manager.getModule(modName);
     if (!bible) {
         cout << modName << " not installed for example.  Please install.\n\n";
-        exit(-1);
+        std::exit(-1);
     }
 
     std::unique_ptr<VerseKey> vk(

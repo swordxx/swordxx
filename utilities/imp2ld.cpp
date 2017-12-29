@@ -63,7 +63,7 @@ void usage(char const * progName, char const * error = nullptr) {
         "He was called by God to leave his country and journey to the land of Canaan...\n"
         "$$$Isaac\n"
         "Isaac was the son of Abraham and Sarah...\n\n");
-    exit(-1);
+    std::exit(-1);
 }
 
 int main(int argc, char **argv) {
@@ -143,7 +143,7 @@ int main(int argc, char **argv) {
     std::ifstream infile(inFileName);
     if (!infile.is_open()) {
         fprintf(stderr, "\nERROR: %s: could not open file for reading: %s\n\n", *argv, inFileName);
-        exit(-2);
+        std::exit(-2);
     }
 
     std::unique_ptr<SWCompress> compressor;
@@ -167,7 +167,7 @@ int main(int argc, char **argv) {
         if (compressor) {
             if (zLD::createModule(outPath.c_str())) {
                 fprintf(stderr, "ERROR: %s: couldn't create module at path: %s \n", *argv, outPath.c_str());
-                exit(-1);
+                std::exit(-1);
             }
         }
         else {

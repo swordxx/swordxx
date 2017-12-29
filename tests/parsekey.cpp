@@ -30,7 +30,7 @@ using namespace swordxx;
 int main(int argc, char **argv) {
     if ((argc < 2) || (argc > 8)) {
         std::cerr << "usage: " << *argv << " <\"string to parse\"> [locale_name] [v11n] [context] [echo params 1|0] [test-in-set-verse 1|0] [intros 1|0]\n";
-        exit(-1);
+        std::exit(-1);
     }
 
     if (argc > 2)

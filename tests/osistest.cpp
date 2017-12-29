@@ -61,7 +61,7 @@ int main(int argc, char **argv) {
 
     if (argc != 2) {
         cerr << "\nusage: " << *argv << " <modName>\n" << endl;
-        exit(-1);
+        std::exit(-1);
     }
 
     SWMgr library(std::make_shared<MarkupFilterMgr>(FMT_XHTML));
@@ -71,7 +71,7 @@ int main(int argc, char **argv) {
 
     if (!module) {
         cerr << "\nCouldn't find module: " << argv[1] << "\n" << endl;
-        exit(-2);
+        std::exit(-2);
     }
 
     module->setKey("Ps.3.1");
