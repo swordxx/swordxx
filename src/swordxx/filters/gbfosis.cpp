@@ -327,7 +327,7 @@ char GBFOSIS::processText(std::string &text, const SWKey *key, const SWModule *m
                     newWord = false;
 
                     //fix this if required?
-                    //memset(to, 0, 10);
+                    //std::memset(to, 0, 10);
 
                 }
 

@@ -63,7 +63,7 @@ char GBFRedLetterWords::processText(std::string &text, const SWKey *key, const S
             if (*from == '<') {
                 intoken = true;
                 tokpos = 0;
-//				memset(token, 0, 4096);
+//				std::memset(token, 0, 4096);
                 token[0] = 0;
                 token[1] = 0;
                 token[2] = 0;

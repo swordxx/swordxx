@@ -206,12 +206,12 @@ char findbreak(int fp, long *offset, int *num1, int *num2, int * /* rangemax */,
     bool flag;
     long chapstart = 0;
 
-    memset(buf, ' ', 7);
+    std::memset(buf, ' ', 7);
 
     while (1) {
         if (startchap(buf)) {
             chapstart = lseek(fp, 0, SEEK_CUR) - 7;
-            memset(buf, ' ', 3);
+            std::memset(buf, ' ', 3);
             flag = false;
             for (loop = 3; loop < 6; loop++) {
                 if (charIsDigit(buf[loop]))
@@ -226,7 +226,7 @@ char findbreak(int fp, long *offset, int *num1, int *num2, int * /* rangemax */,
             else    (*num1)++;
         }
         if (startentry(buf)) {
-            memset(buf, ' ', 3);
+            std::memset(buf, ' ', 3);
             flag = false;
             for (loop = 3; loop < 6; loop++) {
                 if (charIsDigit(buf[loop]))

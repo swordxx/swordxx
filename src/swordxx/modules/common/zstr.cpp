@@ -320,8 +320,8 @@ void zStr::getText(long offset, char **idxbuf, char **buf) const {
 
         *buf = (*buf) ? (char *)realloc(*buf, size*2 + 1) : (char *)malloc(size*2 + 1);
         *idxbuf = (*idxbuf) ? (char *)realloc(*idxbuf, size*2 + 1) : (char *)malloc(size*2 + 1);
-        memset(*buf, 0, size + 1);
-        memset(*idxbuf, 0, size + 1);
+        std::memset(*buf, 0, size + 1);
+        std::memset(*idxbuf, 0, size + 1);
         datfd->seek(start, SEEK_SET);
         datfd->read(*buf, (int)(size));
 

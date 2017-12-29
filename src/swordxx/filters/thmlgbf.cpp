@@ -61,7 +61,7 @@ char ThMLGBF::processText(std::string &text, const SWKey *key, const SWModule *m
         else if (*from == '&') {
             intoken = true;
             tokpos = 0;
-            memset(token, 0, 2048);
+            std::memset(token, 0, 2048);
             ampersand = true;
             continue;
         }

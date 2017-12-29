@@ -59,7 +59,7 @@ char GBFHeadings::processText(std::string &text, const SWKey *key, const SWModul
             if (*from == '<') {
                 intoken = true;
                 tokpos = 0;
-//				memset(token, 0, 2048);
+//				std::memset(token, 0, 2048);
                 token[0] = 0;
                 token[1] = 0;
                 token[2] = 0;

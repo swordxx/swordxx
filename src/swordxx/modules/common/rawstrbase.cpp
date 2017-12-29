@@ -378,7 +378,7 @@ void RawStrBase<SizeType_>::doSetText(char const * ikey,
     else if ((!strcmp(key.c_str(), dbKey.c_str())) && (len>0 /*we're not deleting*/)) { // got absolute entry
         do {
             tmpbuf = new char [ size + 2 ];
-            memset(tmpbuf, 0, size + 2);
+            std::memset(tmpbuf, 0, size + 2);
             datfd->seek(start, SEEK_SET);
             datfd->read(tmpbuf, (int)(size - 1));
 

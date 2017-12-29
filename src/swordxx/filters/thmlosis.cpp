@@ -525,7 +525,7 @@ char ThMLOSIS::processText(std::string &text, const SWKey *key, const SWModule *
                     newWord = false;
 
                     //fix this if required?
-                    //memset(to, 0, 10);
+                    //std::memset(to, 0, 10);
 
                 }
 

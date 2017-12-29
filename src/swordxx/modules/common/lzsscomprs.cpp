@@ -415,7 +415,7 @@ void LZSSCompress::Encode(void)
     // This is because those F bytes will be filled in immediately
     // with bytes from the input stream.
 
-    memset(p->m_ring_buffer, ' ', N - F);
+    std::memset(p->m_ring_buffer, ' ', N - F);
 
     // Read F bytes into the last F bytes of the ring buffer.
     //
@@ -624,7 +624,7 @@ void LZSSCompress::Decode(void)
     //
     // Note that the last F bytes of the ring buffer are not filled.
 
-    memset(p->m_ring_buffer, ' ', N - F);
+    std::memset(p->m_ring_buffer, ' ', N - F);
 
     r = N - F;
 
