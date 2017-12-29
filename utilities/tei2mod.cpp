@@ -603,9 +603,9 @@ int main(int argc, char **argv) {
          * what follows the last / or \
          * or the entire string
          */
-        const char *m = strrchr(suggestedModuleName.c_str(), '/');
+        const char *m = std::strrchr(suggestedModuleName.c_str(), '/');
         if (!m) {
-            m = strrchr(suggestedModuleName.c_str(), '\\');
+            m = std::strrchr(suggestedModuleName.c_str(), '\\');
         }
         if (m) {
             suggestedModuleName = m+1;
