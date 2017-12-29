@@ -84,7 +84,7 @@ char zLD::getEntry(long away) const {
     }
     if (!retval) {
         getText(index, &idxbuf, &ebuf);
-        size = strlen(ebuf) + 1;
+        size = std::strlen(ebuf) + 1;
         entryBuf = ebuf;
 
         rawFilter(entryBuf, key);

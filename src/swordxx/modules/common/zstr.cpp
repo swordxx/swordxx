@@ -421,7 +421,7 @@ void zStr::setText(const char *ikey, const char *buf, long len) {
     char * dbKey = nullptr;
     char * ch = nullptr;
 
-    len = (len < 0) ? strlen(buf) : len;
+    len = (len < 0) ? std::strlen(buf) : len;
     std::string key(ikey);
     if (!caseSensitive)
         toupperstr_utf8(key);

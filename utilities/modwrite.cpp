@@ -69,7 +69,7 @@ int main(int argc, char **argv)
 
     switch (action) {
     case 0:
-        if (strlen(argv[3]))
+        if (std::strlen(argv[3]))
             module.setEntry(argv[3]);
         else module.deleteEntry();
         break;

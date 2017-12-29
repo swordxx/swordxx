@@ -116,7 +116,7 @@ const char *EntriesBlock::getRawData(unsigned long *retSize) {
 int EntriesBlock::addEntry(const char *entry) {
     unsigned long dataSize;
     getRawData(&dataSize);
-    unsigned long  len = strlen(entry);
+    unsigned long  len = std::strlen(entry);
     unsigned long offset;
     unsigned long size;
     int count = getCount();

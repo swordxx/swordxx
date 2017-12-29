@@ -361,7 +361,7 @@ void RawStrBase<SizeType_>::doSetText(char const * ikey,
     if (!caseSensitive)
         toupperstr_utf8(key);
 
-    len = (len < 0) ? strlen(buf) : len;
+    len = (len < 0) ? std::strlen(buf) : len;
 
     auto const dbKey(getIDXBufDat(start));
 

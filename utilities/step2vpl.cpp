@@ -155,8 +155,8 @@ int main(int argc, char **argv) {
     string bookpath = argv[1];
     string fileName;
 
-    if ((argv[1][strlen(argv[1])-1] != '/') &&
-        (argv[1][strlen(argv[1])-1] != '\\'))
+    if ((argv[1][std::strlen(argv[1])-1] != '/') &&
+        (argv[1][std::strlen(argv[1])-1] != '\\'))
         bookpath += "/";
 
     fileName = bookpath + "Book.dat";
@@ -448,11 +448,11 @@ std::string extractVerseText(int fdviewable, int fdbook, SectionLevelInfo *secti
     startToken += numberBuf;
     char const * start = strstr(cachedEntryText.c_str(), startToken.c_str());
     if (start) {
-        start += strlen(startToken.c_str());
+        start += std::strlen(startToken.c_str());
         char const * end = strstr(start, "\\stepstartlevel");
         if (end)
             len = end - start;
-        else len = strlen(start);
+        else len = std::strlen(start);
     }
     return std::string(start, len);
 }

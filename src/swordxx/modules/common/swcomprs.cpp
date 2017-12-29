@@ -81,7 +81,7 @@ char * SWCompress::Buf(const char * ibuf, unsigned long * len) {
         // be sure we at least allocate an empty buf for return:
         buf = saferCalloc(1, 1);
         Decode();
-//        slen = strlen(buf);
+//        slen = std::strlen(buf);
         if (len)
             *len = slen;
     }
@@ -116,7 +116,7 @@ unsigned long SWCompress::GetChars(char * ibuf, unsigned long len, Direction dir
             zpos += len;
         }
     } else {
-//        slen = strlen(buf);
+//        slen = std::strlen(buf);
         len = ((slen - pos) > len) ? len : slen - pos;
         if (len > 0) {
             std::memmove(ibuf, &buf[pos], len);
@@ -130,7 +130,7 @@ unsigned long SWCompress::GetChars(char * ibuf, unsigned long len, Direction dir
 unsigned long SWCompress::SendChars(char *ibuf, unsigned long len, Direction dir) {
     if (dir == DECODE) {
         if (buf) {
-//            slen = strlen(buf);
+//            slen = std::strlen(buf);
             if ((pos + len) > slen) {
                 buf = saferRealloc(buf, pos + len + 1024);
                 std::memset(&buf[pos], 0, len + 1024);

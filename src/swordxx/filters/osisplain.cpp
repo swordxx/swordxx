@@ -87,7 +87,7 @@ bool OSISPlain::handleToken(std::string &buf, const char *token, BasicFilterUser
 
             bool start = false;
             if (*token == 'w') {
-                if (token[strlen(token)-1] != '/') {
+                if (token[std::strlen(token)-1] != '/') {
                     u->w = token;
                     return true;
                 }

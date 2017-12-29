@@ -327,8 +327,8 @@ void VerseKey::freshtext() const
         }
         sprintf(buf, "%s %d:%d", getBookName().c_str(), m_chapter, m_verse);
         if (m_suffix) {
-            buf[strlen(buf)+1] = 0;
-            buf[strlen(buf)] = m_suffix;
+            buf[std::strlen(buf)+1] = 0;
+            buf[std::strlen(buf)] = m_suffix;
         }
     }
 
@@ -592,7 +592,7 @@ terminate_range:
             tobook = 0;
             bookno = -1;
             if (*book) {
-                loop = strlen(book) - 1;
+                loop = std::strlen(book) - 1;
 
                 for (; loop+1; loop--) { if (book[loop] == ' ') book[loop] = 0; else break; }
 
@@ -615,7 +615,7 @@ terminate_range:
                     break;
                 }
 
-                for (loop = strlen(book) - 1; loop+1; loop--) {
+                for (loop = std::strlen(book) - 1; loop+1; loop--) {
                     if (book[loop] == ' ') {
                         // "PS C" is ok, but "II C" is not ok
                         if (isroman(&book[loop+1]) && !isroman(book,loop)) {
@@ -630,14 +630,14 @@ terminate_range:
                 }
 
                 // check for special inscriptio and subscriptio which are saved as book intro and chap 1 intro (for INTF)
-                for (loop = strlen(book) - 1; loop+1; loop--) {
+                for (loop = std::strlen(book) - 1; loop+1; loop--) {
                     if (book[loop] == ' ') {
-                        if (!strnicmp(&book[loop+1], "inscriptio", strlen(&book[loop+1]))) {
+                        if (!strnicmp(&book[loop+1], "inscriptio", std::strlen(&book[loop+1]))) {
                             book[loop] = 0;
                             verse = 0;
                             chap = 0;
                         }
-                        else if (!strnicmp(&book[loop+1], "subscriptio", strlen(&book[loop+1]))) {
+                        else if (!strnicmp(&book[loop+1], "subscriptio", std::strlen(&book[loop+1]))) {
                             book[loop] = 0;
                             verse = 0;
                             chap = 1;
@@ -657,7 +657,7 @@ terminate_range:
                     std::strcpy(book, lastKey->getBookName().c_str());
                 }
                 bookno = getBookFromAbbrev(book);
-                if ((bookno > -1) && (suffix == 'f') && (book[strlen(book)-1] == 'f')) {
+                if ((bookno > -1) && (suffix == 'f') && (book[std::strlen(book)-1] == 'f')) {
                     suffix = 0;
                 }
             }
@@ -865,7 +865,7 @@ terminate_range:
     book[tobook] = 0;
     tobook = 0;
     if (*book) {
-        loop = strlen(book) - 1;
+        loop = std::strlen(book) - 1;
 
         // strip trailing spaces
         for (; loop+1; loop--) { if (book[loop] == ' ') book[loop] = 0; else break; }
@@ -894,7 +894,7 @@ terminate_range:
         }
 
         // check for roman numeral chapter
-        for (loop = strlen(book) - 1; loop+1; loop--) {
+        for (loop = std::strlen(book) - 1; loop+1; loop--) {
             if (book[loop] == ' ') {
                 // "PS C" is ok, but "II C" is not ok
                 if (isroman(&book[loop+1]) && !isroman(book,loop)) {
@@ -908,15 +908,15 @@ terminate_range:
             }
         }
         // check for special inscriptio and subscriptio which are saved as book intro and chap 1 intro (for INTF)
-        for (loop = strlen(book) - 1; loop+1; loop--) {
+        for (loop = std::strlen(book) - 1; loop+1; loop--) {
             if (book[loop] == ' ') {
-                if (!strnicmp(&book[loop+1], "inscriptio", strlen(&book[loop+1]))) {
+                if (!strnicmp(&book[loop+1], "inscriptio", std::strlen(&book[loop+1]))) {
                     book[loop] = 0;
                     verse = 0;
                     chap = 0;
                     suffix = 0;
                 }
-                else if (!strnicmp(&book[loop+1], "subscriptio", strlen(&book[loop+1]))) {
+                else if (!strnicmp(&book[loop+1], "subscriptio", std::strlen(&book[loop+1]))) {
                     book[loop] = 0;
                     verse = 0;
                     chap = 1;
@@ -938,7 +938,7 @@ terminate_range:
             std::strcpy(book, lastKey->getBookName().c_str());
         }
         bookno = getBookFromAbbrev(book);
-        if ((bookno > -1) && (suffix == 'f') && (book[strlen(book)-1] == 'f')) {
+        if ((bookno > -1) && (suffix == 'f') && (book[std::strlen(book)-1] == 'f')) {
             suffix = 0;
         }
     }
@@ -1831,7 +1831,7 @@ std::string VerseKey::convertToOSIS(const char *inRef, const SWKey *lastKnownKey
         std::memmove(frag, startFrag, ((const char *)element->m_userData - startFrag) + 1);
         frag[((const char *)element->m_userData - startFrag) + 1] = 0;
         int j;
-        for (j = strlen(frag)-1; j && (std::strchr(" {}:;,()[].", frag[j])); j--);
+        for (j = std::strlen(frag)-1; j && (std::strchr(" {}:;,()[].", frag[j])); j--);
         if (frag[j+1])
             std::strcpy(postJunk, frag+j+1);
         frag[j+1]=0;
@@ -1846,7 +1846,7 @@ std::string VerseKey::convertToOSIS(const char *inRef, const SWKey *lastKnownKey
         outRef += buf;
 
     }
-    if (startFrag < (inRef + strlen(inRef)))
+    if (startFrag < (inRef + std::strlen(inRef)))
         outRef += startFrag;
     return outRef;
 }

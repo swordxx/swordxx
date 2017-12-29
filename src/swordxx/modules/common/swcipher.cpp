@@ -61,7 +61,7 @@ char *SWCipher::Buf(const char *ibuf, unsigned long ilen)
             free(buf);
 
         if (!ilen) {
-                len = strlen(buf);
+                len = std::strlen(buf);
             ilen = len + 1;
         }
         else len = ilen;

@@ -246,7 +246,7 @@ void VersificationMgr::System::loadFromSBook(const sbook *ot, const sbook *nt, i
     // parse mappings
     if (mappings) {
         const unsigned char *m=mappings;
-        for (; *m != 0; m += strlen((const char*)m)+1) {
+        for (; *m != 0; m += std::strlen((const char*)m)+1) {
             m_p->m_mappingsExtraBooks.push_back((const char*)m);
         }
         m_p->m_mappings.resize(m_p->m_books.size()+m_p->m_mappingsExtraBooks.size());

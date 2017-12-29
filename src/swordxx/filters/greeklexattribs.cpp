@@ -73,7 +73,7 @@ char GreekLexAttribs::processText(std::string &text, const SWKey *key, const SWM
                                     *valto = 0;
                                     sprintf(wordstr, "%03d", number+1);
                                     module->getEntryAttributes()["AVPhrase"][wordstr]["CompoundedWith"] = val;
-                                    from += strlen(val);
+                                    from += std::strlen(val);
                                 }
                             }
                             continue;

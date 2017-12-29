@@ -81,7 +81,7 @@ std::pair<bool, std::unique_ptr<char[]>> readline(int fd) {
         buf[size] = 0;
 
         // clean up any trailing junk on buf
-        for (char *it = buf.get() + (strlen(buf.get()) - 1u); it > buf.get(); it--) {
+        for (char *it = buf.get() + (std::strlen(buf.get()) - 1u); it > buf.get(); it--) {
             if ((*it != 10) && (*it != 13) && (*it != ' ') && (*it != '\t'))
                 break;
             else *it = 0;

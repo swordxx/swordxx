@@ -110,9 +110,9 @@ int main(int argc, char **argv)
         exit(1);
     }
 
-    if (strlen(argv[1]) > 4) {
-        if (!std::strcmp(&argv[1][strlen(argv[1])-4], ".zzz")) {
-            argv[1][strlen(argv[1])-4] = 0;
+    if (std::strlen(argv[1]) > 4) {
+        if (!std::strcmp(&argv[1][std::strlen(argv[1])-4], ".zzz")) {
+            argv[1][std::strlen(argv[1])-4] = 0;
             decomp = 1;
         }
     }

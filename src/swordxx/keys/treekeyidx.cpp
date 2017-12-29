@@ -98,7 +98,7 @@ void TreeKeyIdx::setUserData(const char *userData, int size) {
     assureKeyPath();
 
     if (!size)
-        size = strlen(userData) + 1;
+        size = std::strlen(userData) + 1;
 
     m_currentNode.userData = std::make_unique<char[]>(size);
     std::memcpy(m_currentNode.userData.get(), userData, size);

@@ -241,7 +241,7 @@ void zVerseBase<VerseSizeType_>::zReadText(char testmt,
         compressor->Buf(nullptr, &len);
         cacheBuf = (char *)calloc(len + 1, 1);
         std::memcpy(cacheBuf, compressor->Buf(), len);
-        cacheBufSize = strlen(cacheBuf);  // TODO: can we just use len?
+        cacheBufSize = std::strlen(cacheBuf);  // TODO: can we just use len?
         cacheTestament = testmt;
         cacheBufIdx = ulBuffNum;
     }
@@ -268,7 +268,7 @@ void zVerseBase<VerseSizeType_>::doSetText(char testmt,
                                            const char * buf,
                                            long len)
 {
-    len = (len < 0) ? strlen(buf) : len;
+    len = (len < 0) ? std::strlen(buf) : len;
     if (!testmt)
         testmt = ((idxfp[0]) ? 1:2);
     if ((!dirtyCache) || (cacheBufIdx < 0)) {
@@ -278,7 +278,7 @@ void zVerseBase<VerseSizeType_>::doSetText(char testmt,
             free(cacheBuf);
         cacheBuf = (char *)calloc(len + 1, 1);
     }
-    else cacheBuf = (char *)((cacheBuf)?realloc(cacheBuf, strlen(cacheBuf)+(len + 1)):calloc((len + 1), 1));
+    else cacheBuf = (char *)((cacheBuf)?realloc(cacheBuf, std::strlen(cacheBuf)+(len + 1)):calloc((len + 1), 1));
 
     dirtyCache = true;
 
@@ -289,7 +289,7 @@ void zVerseBase<VerseSizeType_>::doSetText(char testmt,
     idxoff *= sizeof(outBufIdx) + sizeof(start) + sizeof(size);
     size = len;
 
-    start = strlen(cacheBuf);
+    start = std::strlen(cacheBuf);
 
     if (!size)
         start = outBufIdx = 0;
@@ -315,7 +315,7 @@ void zVerseBase<VerseSizeType_>::flushCache() const {
 
         idxoff = cacheBufIdx * 12;
         if (cacheBuf) {
-            size = outsize = zsize = outzsize = strlen(cacheBuf);
+            size = outsize = zsize = outzsize = std::strlen(cacheBuf);
             if (size) {
                 compressor->Buf(cacheBuf);
                 unsigned long tmpSize;

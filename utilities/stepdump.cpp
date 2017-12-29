@@ -97,8 +97,8 @@ int main(int argc, char **argv) {
     string bookpath = argv[1];
     string fileName;
 
-    if ((argv[1][strlen(argv[1])-1] != '/') &&
-        (argv[1][strlen(argv[1])-1] != '\\'))
+    if ((argv[1][std::strlen(argv[1])-1] != '/') &&
+        (argv[1][std::strlen(argv[1])-1] != '\\'))
         bookpath += "/";
 
     fileName = bookpath + "Book.dat";

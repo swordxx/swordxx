@@ -175,7 +175,7 @@ char UTF8ArabicPoints::processText(std::string &text, const SWKey *, const SWMod
     } while (mark_pos && *mark_pos); // No more marks.
 
     // Copy any trailing input text AND always the terminating null.
-    std::memmove(end_of_output, start_of_input, strlen(start_of_input)+1);
+    std::memmove(end_of_output, start_of_input, std::strlen(start_of_input)+1);
     return 0;
 }
 

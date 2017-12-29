@@ -499,7 +499,7 @@ bool OSISRTF::handleToken(std::string &buf, const char *token, BasicFilterUserDa
             outText("\" />", buf, u);
 /*
             char imgc;
-            for (c = filepath + strlen(filepath); c > filepath && *c != '.'; c--);
+            for (c = filepath + std::strlen(filepath); c > filepath && *c != '.'; c--);
             c++;
             FILE* imgfile;
                     if (!caseInsensitiveEquals(c, "jpg") || !caseInsensitiveEquals(c, "jpeg")) {

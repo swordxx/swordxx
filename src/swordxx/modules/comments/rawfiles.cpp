@@ -115,7 +115,7 @@ void RawFiles::setEntry(const char *inbuf, long len) {
     SizeType size;
     VerseKey const & key = getVerseKey();
 
-    len = (len<0)?strlen(inbuf):len;
+    len = (len<0)?std::strlen(inbuf):len;
 
     findOffset(key.getTestament(), key.getTestamentIndex(), &start, &size);
 

@@ -95,7 +95,7 @@ int main(int argc, char **argv) {
         std::strcpy(buffer.data(), mod.renderText().c_str());
         cleanbuf(buffer.data());
         if (vref) {
-            if ((strlen(buffer.data()) > 0) && (vref)) {
+            if ((std::strlen(buffer.data()) > 0) && (vref)) {
                 std::cout << vkey->getText() << " ";
                 std::cout << buffer.data() << std::endl;
             }

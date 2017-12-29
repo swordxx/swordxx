@@ -135,7 +135,7 @@ int main() {
   std::cout << "deleting transliterator 2" << std::endl;
   delete btrans;
   std::cout << "the rest" << std::endl;
-  uLength = strlen(samplestring);
+  uLength = std::strlen(samplestring);
   conv = ucnv_open("utf-8", &status);
   if (U_FAILURE(status))
   {
