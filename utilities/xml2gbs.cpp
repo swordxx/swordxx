@@ -60,13 +60,13 @@ unsigned char detectFormat(char* filename) {
   }
   else {
     while (std::getline(infile, entbuffer) && format == F_AUTODETECT) {
-                if (strstr(entbuffer.c_str(), "<osis")) {
+                if (std::strstr(entbuffer.c_str(), "<osis")) {
                         format = F_OSIS;
                 }
-                else if (strstr(entbuffer.c_str(), "<ThML")) {
+                else if (std::strstr(entbuffer.c_str(), "<ThML")) {
                         format = F_THML;
                 }
-        else if (strstr(entbuffer.c_str(), "<TEI")) {
+        else if (std::strstr(entbuffer.c_str(), "<TEI")) {
                         format = F_TEI;
         }
         }
@@ -209,7 +209,7 @@ int processXML(const char* filename, char* modname, bool longnames, bool exportf
              title = "";
 
           if (format == F_OSIS && longnames == false) {
-                     strtmp = (char*)strstr(keybuffer.c_str(), "osisID=\"");
+                     strtmp = (char*)std::strstr(keybuffer.c_str(), "osisID=\"");
                      if (strtmp) {
                        strtmp += 8;
                        for (;*strtmp != '\"'; strtmp++) {
@@ -227,7 +227,7 @@ int processXML(const char* filename, char* modname, bool longnames, bool exportf
                   keybuffer = title;
           }
           else {
-                     strtmp = (char*)strstr(keybuffer.c_str(), "type=\"");
+                     strtmp = (char*)std::strstr(keybuffer.c_str(), "type=\"");
                      if (strtmp) {
                        strtmp += 6;
                        for (;*strtmp != '\"'; strtmp++) {
@@ -240,7 +240,7 @@ int processXML(const char* filename, char* modname, bool longnames, bool exportf
                        }
                      }
 
-                     strtmp = (char*)strstr(keybuffer.c_str(), "n=\"");
+                     strtmp = (char*)std::strstr(keybuffer.c_str(), "n=\"");
                      if (strtmp) {
                        strtmp += 3;
                        for (;*strtmp != '\"'; strtmp++) {
@@ -254,7 +254,7 @@ int processXML(const char* filename, char* modname, bool longnames, bool exportf
                      }
 
                   if (format == F_OSIS) {
-                             strtmp = (char*)strstr(keybuffer.c_str(), "title=\"");
+                             strtmp = (char*)std::strstr(keybuffer.c_str(), "title=\"");
                       if (strtmp) {
                         strtmp += 7;
                         for (;*strtmp != '\"'; strtmp++) {
@@ -268,7 +268,7 @@ int processXML(const char* filename, char* modname, bool longnames, bool exportf
                       }
                   }
                   else if (format == F_THML) {
-                      strtmp = (char*)strstr(keybuffer.c_str(), "title=\"");
+                      strtmp = (char*)std::strstr(keybuffer.c_str(), "title=\"");
                       if (strtmp) {
                         strtmp += 7;
                         for (;*strtmp != '\"'; strtmp++) {

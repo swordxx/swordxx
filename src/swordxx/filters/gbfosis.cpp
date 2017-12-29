@@ -176,7 +176,7 @@ char GBFOSIS::processText(std::string &text, const SWKey *key, const SWModule *m
 
             // Figure
             else    if (!std::strncmp(token, "img ", 4)) {
-                const char *src = strstr(token, "src");
+                const char *src = std::strstr(token, "src");
                 if (!src)        // assert we have a src attribute
                     continue;
 //                    return false;
@@ -209,9 +209,9 @@ char GBFOSIS::processText(std::string &text, const SWKey *key, const SWModule *m
                 value = token+1;
 
                 // normal strongs number
-                //strstrip(val);
+                //std::strstrip(val);
                 if (!std::strncmp(wordStart, "<w ", 3)) {
-                    const char *attStart = strstr(wordStart, "lemma");
+                    const char *attStart = std::strstr(wordStart, "lemma");
                     if (attStart) {
                         attStart += 7;
 
@@ -256,7 +256,7 @@ char GBFOSIS::processText(std::string &text, const SWKey *key, const SWModule *m
                 else value = token+1;
 
                 if (!std::strncmp(wordStart, "<w ", 3)) {
-                    const char *attStart = strstr(wordStart, "morph");
+                    const char *attStart = std::strstr(wordStart, "morph");
                     if (attStart) { //existing morph attribute, append this one to it
                         attStart += 7;
                         buf = formatted("%s:%s ", "robinson", value.c_str());

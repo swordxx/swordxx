@@ -361,7 +361,7 @@ char ThMLOSIS::processText(std::string &text, const SWKey *key, const SWModule *
 
             // Figure
             else    if (!std::strncmp(token, "img ", 4)) {
-                const char *src = strstr(token, "src");
+                const char *src = std::strstr(token, "src");
                 if (!src)        // assert we have a src attribute
                     continue;
 //                    return false;
@@ -406,7 +406,7 @@ char ThMLOSIS::processText(std::string &text, const SWKey *key, const SWModule *
                     strstrip(val);
 
                     if (!std::strncmp(wordStart, "<w ", 3)) {
-                        const char *attStart = strstr(wordStart, "lemma");
+                        const char *attStart = std::strstr(wordStart, "lemma");
                         if (attStart) { //existing morph attribute, append this one to it
                             attStart += 7;
                             buf = formatted("strong:%s ", val);
@@ -454,7 +454,7 @@ char ThMLOSIS::processText(std::string &text, const SWKey *key, const SWModule *
                     }
                 }
                 if (!std::strncmp(wordStart, "<w ", 3)) {
-                    const char *attStart = strstr(wordStart, "morph");
+                    const char *attStart = std::strstr(wordStart, "morph");
                     if (attStart) { //existing morph attribute, append this one to it
                         attStart += 7;
                         buf = formatted("%s:%s ", ((cls.length())?cls.c_str():"robinson"), morph.c_str());

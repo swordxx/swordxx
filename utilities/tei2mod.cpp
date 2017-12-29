@@ -303,7 +303,7 @@ bool handleToken(std::string & text, XMLTag & token) {
 #if 1
                                 while (splitPtr) {
                                     splitPtr += 1;
-                                    splitPtr2 = strstr(splitPtr, "|");
+                                    splitPtr2 = std::strstr(splitPtr, "|");
                                         entryCount++;
                                         if (splitPtr2) {
                         std::strncpy (splitBuffer.data(), splitPtr, splitPtr2 - splitPtr);

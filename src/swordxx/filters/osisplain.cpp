@@ -165,7 +165,7 @@ bool OSISPlain::handleToken(std::string &buf, const char *token, BasicFilterUser
 
         // <note> tag
         else if (!std::strncmp(token, "note", 4)) {
-                if (!strstr(token, "strongsMarkup")) {    // leave strong's markup notes out, in the future we'll probably have different option filters to turn different note types on or off
+                if (!std::strstr(token, "strongsMarkup")) {    // leave strong's markup notes out, in the future we'll probably have different option filters to turn different note types on or off
                     buf.append(" [");
                 }
                 else    u->suspendTextPassThru = true;
@@ -203,7 +203,7 @@ bool OSISPlain::handleToken(std::string &buf, const char *token, BasicFilterUser
             userData->supressAdjacentWhitespace = true;
             buf.push_back('\n');
         }
-        else if (!std::strncmp(token, "l", 1) && strstr(token, "eID")) {
+        else if (!std::strncmp(token, "l", 1) && std::strstr(token, "eID")) {
             userData->supressAdjacentWhitespace = true;
             buf.push_back('\n');
         }
@@ -224,8 +224,8 @@ bool OSISPlain::handleToken(std::string &buf, const char *token, BasicFilterUser
                 // but we have used "ol" in the past, as well.  Once a valid
                 // OSIS overline attribute is made available, these should all
                 // eventually be deprecated and never documented that they are supported.
-                if (strstr(token, "rend=\"ol\"") || strstr(token, "rend=\"x-overline\"") || strstr(token, "rend=\"overline\"")
-                   || strstr(token, "type=\"ol\"") || strstr(token, "type=\"x-overline\"") || strstr(token, "type=\"overline\"")) {
+                if (std::strstr(token, "rend=\"ol\"") || std::strstr(token, "rend=\"x-overline\"") || std::strstr(token, "rend=\"overline\"")
+                   || std::strstr(token, "type=\"ol\"") || std::strstr(token, "type=\"x-overline\"") || std::strstr(token, "type=\"overline\"")) {
                     u->hiType = "overline";
                 }
                 else u->hiType = "";
@@ -256,7 +256,7 @@ bool OSISPlain::handleToken(std::string &buf, const char *token, BasicFilterUser
         }
                 // <milestone type="line"/>
                 else if (!std::strncmp(token, "milestone", 9)) {
-            const char* type = strstr(token+10, "type=\"");
+            const char* type = std::strstr(token+10, "type=\"");
             if (type && std::strncmp(type+6, "line", 4)) { //we check for type != line
                 userData->supressAdjacentWhitespace = true;
                     buf.push_back('\n');

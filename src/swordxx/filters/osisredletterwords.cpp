@@ -72,7 +72,7 @@ char OSISRedLetterWords::processText(std::string &text, const SWKey *key, const 
             intoken = false;
 
             if ((token[0] == 'q') && (token[1] == ' ')) { //q tag
-                start = strstr(token.c_str(), " who=\"Jesus\"");
+                start = std::strstr(token.c_str(), " who=\"Jesus\"");
                 if (start && (std::strlen(start) >= 12)) { //we found a quote of Jesus Christ
                     end = start+12; //marks the end of the who attribute value
 

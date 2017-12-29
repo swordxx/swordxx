@@ -92,7 +92,7 @@ bool GBFHTML::handleToken(std::string &buf, const char *token, BasicFilterUserDa
         else if (!std::strncmp(token, "w", 1)) {
             // OSIS Word (temporary until OSISRTF is done)
             valto = val;
-            num = strstr(token, "lemma=\"x-Strongs:");
+            num = std::strstr(token, "lemma=\"x-Strongs:");
             if (num) {
                 for (num+=17; ((*num) && (*num != '\"')); num++)
                     *valto++ = *num;
@@ -104,7 +104,7 @@ bool GBFHTML::handleToken(std::string &buf, const char *token, BasicFilterUserDa
                     buf += "&gt;</em></small> ";
                 }
             } else {
-                num = strstr(token, "lemma=\"strong:");
+                num = std::strstr(token, "lemma=\"strong:");
                 if (num) {
                     for (num+=14; ((*num) && (*num != '\"')); num++)
                         *valto++ = *num;
@@ -118,7 +118,7 @@ bool GBFHTML::handleToken(std::string &buf, const char *token, BasicFilterUserDa
                 }
             }
             valto = val;
-            num = strstr(token, "morph=\"x-Robinson:");
+            num = std::strstr(token, "morph=\"x-Robinson:");
             if (num) {
                 for (num+=18; ((*num) && (*num != '\"')); num++)
                     *valto++ = *num;

@@ -153,7 +153,7 @@ char OSISFootnotes::processText(std::string &text, const SWKey *key, const SWMod
                     refs.append("; ");
                 }
 
-                const char* attr = strstr(token.c_str() + 9, "osisRef=\"");
+                const char* attr = std::strstr(token.c_str() + 9, "osisRef=\"");
                 char const * end  = attr ? std::strchr(attr+9, '"') : nullptr;
 
                 if (attr && end) {

@@ -78,7 +78,7 @@ char GBFRTF::processText(std::string &text, const SWKey *key, const SWModule *mo
                 strongnum = "";
                 strongtense = "";
                 valto = val;
-                num = strstr(token, "lemma=\"x-Strongs:");
+                num = std::strstr(token, "lemma=\"x-Strongs:");
                 if (num) {
                     for (num+=17; ((*num) && (*num != '\"')); num++)
                         *valto++ = *num;
@@ -99,7 +99,7 @@ char GBFRTF::processText(std::string &text, const SWKey *key, const SWModule *mo
                     */
                 }
                 else {
-                    num = strstr(token, "lemma=\"strong:");
+                    num = std::strstr(token, "lemma=\"strong:");
                     if (num) {
                         for (num+=14; ((*num) && (*num != '\"')); num++)
                             *valto++ = *num;
@@ -121,7 +121,7 @@ char GBFRTF::processText(std::string &text, const SWKey *key, const SWModule *mo
                     }
                 }
                 valto = val;
-                num = strstr(token, "morph=\"x-Robinson:");
+                num = std::strstr(token, "morph=\"x-Robinson:");
                 if (num) {
                     for (num+=18; ((*num) && (*num != '\"')); num++)
                         *valto++ = *num;

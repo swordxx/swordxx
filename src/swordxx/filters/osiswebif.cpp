@@ -109,7 +109,7 @@ bool OSISWEBIF::handleToken(std::string &buf, const char *token, BasicFilterUser
                 }
                 if (!(attrib = tag.attribute("morph")).empty() && (show)) {
                     std::string savelemma = tag.attribute("savlm");
-                    if ((strstr(savelemma.c_str(), "3588")) && (lastText.length() < 1))
+                    if ((std::strstr(savelemma.c_str(), "3588")) && (lastText.length() < 1))
                         show = false;
                     if (show) {
                         int count = tag.attributePartCount("morph", ' ');

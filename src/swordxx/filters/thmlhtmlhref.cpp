@@ -308,7 +308,7 @@ bool ThMLHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterU
             }
         }
         else if ((tag.name() == "img") || (tag.name() == "image")) {
-            const char *src = strstr(token, "src");
+            const char *src = std::strstr(token, "src");
             if (!src)        // assert we have a src attribute
                 return false;
 

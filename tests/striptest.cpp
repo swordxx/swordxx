@@ -44,8 +44,8 @@ int main(int argc, char * argv[]) {
               << "\nStripText:\n" << entryStripped << "\nSearch Target: "
               << searchText << "\nSearch Target StripText: "
               << book->stripText(searchText.c_str()) << "\nFound: "
-              << (strstr(entryStripped.c_str(),
-                         book->stripText(searchText.c_str()).c_str())
+              << (std::strstr(entryStripped.c_str(),
+                              book->stripText(searchText.c_str()).c_str())
                   ? "true"
                   : "false")
               << std::endl;

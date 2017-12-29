@@ -446,10 +446,10 @@ std::string extractVerseText(int fdviewable, int fdbook, SectionLevelInfo *secti
     sprintf(numberBuf, "%d", sectionLevelInfo->startLevel);
     startToken = "\\stepstartlevel";
     startToken += numberBuf;
-    char const * start = strstr(cachedEntryText.c_str(), startToken.c_str());
+    char const * start = std::strstr(cachedEntryText.c_str(), startToken.c_str());
     if (start) {
         start += std::strlen(startToken.c_str());
-        char const * end = strstr(start, "\\stepstartlevel");
+        char const * end = std::strstr(start, "\\stepstartlevel");
         if (end)
             len = end - start;
         else len = std::strlen(start);

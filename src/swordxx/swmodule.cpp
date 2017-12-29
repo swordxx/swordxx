@@ -454,7 +454,7 @@ ListKey &SWModule::search(char const * istr,
             case -1:
                 textBuf = stripText();
                 if ((flags & REG_ICASE) == REG_ICASE) toupperstr(textBuf);
-                sres = strstr(textBuf.c_str(), term.c_str());
+                sres = std::strstr(textBuf.c_str(), term.c_str());
                 if (sres) { //it's also in the stripText(), so we have a valid search result item now
                     *resultKey = *getKey();
                     resultKey->clearBound();
@@ -472,7 +472,7 @@ ListKey &SWModule::search(char const * istr,
 
                     for (unsigned int i = 0; i < words.size(); i++) {
                         if ((flags & REG_ICASE) == REG_ICASE) toupperstr(textBuf);
-                        sres = strstr(textBuf.c_str(), words[i].c_str());
+                        sres = std::strstr(textBuf.c_str(), words[i].c_str());
                         if (!sres) {
                             break; //for loop
                         }
@@ -555,7 +555,7 @@ ListKey &SWModule::search(char const * istr,
                                 else {
                                     sres = ((flags & REG_ICASE) == REG_ICASE)
                                            ? stristr(i3Start->second, words[3])
-                                           : strstr(i3Start->second.c_str(), words[3].c_str());
+                                           : std::strstr(i3Start->second.c_str(), words[3].c_str());
                                 }
                                 if (sres) {
                                     *resultKey = *getKey();
