@@ -473,8 +473,12 @@ ListKey VerseKey::parseVerseList(const char *buf, const char *defaultKey, bool e
     static_assert(std::numeric_limits<decltype(VerseKey::m_userData)>::max()
                   >= std::numeric_limits<std::size_t>::max(), "");
 
+    // assert we have a buffer
+    if (!buf)
+        return ListKey();
+
     // hold on to our own copy of params, as threads/recursion may change outside values
-    std::string iBuf = buf ? buf : "";
+    std::string iBuf(buf);
     buf = iBuf.c_str();
 
     char book[2048];    // TODO: bad, remove
@@ -497,9 +501,6 @@ ListKey VerseKey::parseVerseList(const char *buf, const char *defaultKey, bool e
     bool inTerm = true;
     int notAllDigits = 0;
     bool doubleF = false;
-
-    // assert we have a buffer
-    if (!buf) return internalListKey;
 
     std::unique_ptr<VerseKey> const curKey(
                 static_cast<VerseKey *>(clone().release()));
