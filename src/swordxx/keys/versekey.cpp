@@ -478,8 +478,9 @@ ListKey VerseKey::parseVerseList(const char *buf, const char *defaultKey, bool e
         return ListKey();
 
     // hold on to our own copy of params, as threads/recursion may change outside values
-    std::string iBuf(buf);
+    std::string const iBuf(buf);
     buf = iBuf.c_str();
+    auto const bufStart = buf;
 
     char book[2048];    // TODO: bad, remove
     char number[2048];    // TODO: bad, remove
@@ -493,7 +494,6 @@ ListKey VerseKey::parseVerseList(const char *buf, const char *defaultKey, bool e
     int loop;
     char comma = 0;
     char dash = 0;
-    const char *orig = buf;
     int q;
     ListKey tmpListKey;
     ListKey internalListKey;
@@ -731,7 +731,7 @@ terminate_range:
                     tmpListKey << *lastKey;
                     ((VerseKey *)tmpListKey.getElement())->setAutoNormalize(isAutoNormalize());
                     tmpListKey.getElement()->m_userData =
-                            static_cast<std::size_t>(buf - iBuf.c_str());
+                            static_cast<std::size_t>(buf - bufStart);
                 }
                 else {
                     if (!dash) {     // if last separator was not a dash just add
@@ -746,8 +746,7 @@ terminate_range:
                             tmpListKey << *lastKey;
                             ((VerseKey *)tmpListKey.getElement())->setAutoNormalize(isAutoNormalize());
                             tmpListKey.getElement()->m_userData =
-                                    static_cast<std::size_t>(
-                                        buf - iBuf.c_str());
+                                    static_cast<std::size_t>(buf - bufStart);
                         }
                         else {
                             bool f = false;
@@ -763,7 +762,7 @@ terminate_range:
                             tmpListKey << *lastKey;
                             ((VerseKey *)tmpListKey.getElement())->setAutoNormalize(isAutoNormalize());
                             tmpListKey.getElement()->m_userData =
-                                    static_cast<std::size_t>(buf - iBuf.c_str());
+                                    static_cast<std::size_t>(buf - bufStart);
                         }
                     }
                     else    if (expandRange) {
@@ -779,8 +778,7 @@ terminate_range:
                             *lastKey = *curKey;
                             *newElement = Position::Top;
                             tmpListKey.getElement()->m_userData =
-                                    static_cast<std::size_t>(
-                                        buf - iBuf.c_str());
+                                    static_cast<std::size_t>(buf - bufStart);
                         }
                     }
                 }
@@ -807,7 +805,7 @@ terminate_range:
         case '}':
             break;
         case '.':
-            if (buf > orig) {            // ignore (break) if preceeding char is not a digit
+            if (buf > bufStart) {            // ignore (break) if preceeding char is not a digit
                 for (notAllDigits = tobook; notAllDigits; notAllDigits--) {
                     if ((!charIsDigit(book[notAllDigits-1])) && (!std::strchr(" .", book[notAllDigits-1])))
                         break;
@@ -1012,7 +1010,7 @@ terminate_range:
             *lastKey = Position::Top;
             tmpListKey << *lastKey;
             tmpListKey.getElement()->m_userData =
-                    static_cast<std::size_t>(buf - iBuf.c_str());
+                    static_cast<std::size_t>(buf - bufStart);
         }
         else {
             if (!dash) {     // if last separator was not a dash just add
@@ -1026,7 +1024,7 @@ terminate_range:
                     *lastKey = Position::Top;
                     tmpListKey << *lastKey;
                     tmpListKey.getElement()->m_userData =
-                            static_cast<std::size_t>(buf - iBuf.c_str());
+                            static_cast<std::size_t>(buf - bufStart);
                 }
                 else {
                     bool f = false;
@@ -1041,7 +1039,7 @@ terminate_range:
                     *lastKey = Position::Top;
                     tmpListKey << *lastKey;
                     tmpListKey.getElement()->m_userData =
-                            static_cast<std::size_t>(buf - iBuf.c_str());
+                            static_cast<std::size_t>(buf - bufStart);
                 }
             }
             else if (expandRange) {
@@ -1055,7 +1053,7 @@ terminate_range:
                     newElement->setUpperBound(*curKey);
                     *newElement = Position::Top;
                     tmpListKey.getElement()->m_userData =
-                            static_cast<std::size_t>(buf - iBuf.c_str());
+                            static_cast<std::size_t>(buf - bufStart);
                 }
             }
         }
