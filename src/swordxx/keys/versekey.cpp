@@ -1806,7 +1806,7 @@ std::string VerseKey::getOSISRefRangeText() const {
 // TODO:  this is static so we have no context.  We can only parse KJV v11n now
 //         possibly add a const char *versification = KJV param?
 std::string VerseKey::convertToOSIS(const char *inRef, const SWKey *lastKnownKey) {
-    std::string outRef;
+    std::ostringstream oss;
 
     VerseKey defLanguage;
     ListKey verses = defLanguage.parseVerseList(inRef,
@@ -1816,7 +1816,6 @@ std::string VerseKey::convertToOSIS(const char *inRef, const SWKey *lastKnownKey
     for (std::size_t i = 0u; i < verses.getCount(); ++i) {
         SWKey *element = verses.getElement(i);
 //        VerseKey *element = SWDYNAMIC_CAST(VerseKey, verses.GetElement(i));
-        std::string buf;
         // TODO: This code really needs to not use fixed size arrays
         char frag[800];
         char preJunk[800];
@@ -1825,7 +1824,7 @@ std::string VerseKey::convertToOSIS(const char *inRef, const SWKey *lastKnownKey
         std::memset(preJunk, 0, 800);
         std::memset(postJunk, 0, 800);
         while ((*startFrag) && (std::strchr(" {}:;,()[].", *startFrag))) {
-            outRef += *startFrag;
+            oss << *startFrag;
             startFrag++;
         }
         std::memmove(frag, startFrag, ((const char *)element->m_userData - startFrag) + 1);
@@ -1836,18 +1835,11 @@ std::string VerseKey::convertToOSIS(const char *inRef, const SWKey *lastKnownKey
             std::strcpy(postJunk, frag+j+1);
         frag[j+1]=0;
         startFrag += ((const char *)element->m_userData - startFrag) + 1;
-        buf = "<reference osisRef=\"";
-        buf += element->getOSISRefRangeText();
-        buf += "\">";
-        buf += frag;
-        buf += "</reference>";
-        buf += postJunk;
-
-        outRef += buf;
-
+        oss << "<reference osisRef=\"" << element->getOSISRefRangeText()
+            << "\">" << frag << "</reference>" << postJunk;
     }
     if (startFrag < (inRef + std::strlen(inRef)))
-        outRef += startFrag;
-    return outRef;
+        oss << startFrag;
+    return oss.str();
 }
 } /* namespace swordxx */
