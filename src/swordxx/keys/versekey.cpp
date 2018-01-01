@@ -1820,9 +1820,7 @@ std::string VerseKey::convertToOSIS(std::string const & inRef,
 //        VerseKey *element = SWDYNAMIC_CAST(VerseKey, verses.GetElement(i));
         // TODO: This code really needs to not use fixed size arrays
         char frag[800];
-        char postJunk[800];
         std::memset(frag, 0, 800);
-        std::memset(postJunk, 0, 800);
         while ((startFrag != inRef.end())
                && *startFrag
                && (std::strchr(" {}:;,()[].", *startFrag)))
@@ -1834,8 +1832,9 @@ std::string VerseKey::convertToOSIS(std::string const & inRef,
         frag[((const char *)element->m_userData - &*startFrag) + 1] = 0;
         int j;
         for (j = std::strlen(frag)-1; j && (std::strchr(" {}:;,()[].", frag[j])); j--);
+        std::string postJunk;
         if (frag[j+1])
-            std::strcpy(postJunk, frag+j+1);
+            postJunk = frag + j + 1u;
         frag[j+1]=0;
         startFrag += ((const char *)element->m_userData - &*startFrag) + 1;
         oss << "<reference osisRef=\"" << element->getOSISRefRangeText()
