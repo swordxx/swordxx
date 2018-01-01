@@ -140,6 +140,7 @@ public:
 		last = 0;
 */
 	}
+
 };      
 
 class HandleSWModule {
@@ -296,6 +297,9 @@ const char **HandleSWMgr::availableLocales = 0;
 
 const char **HandleInstMgr::remoteSources = 0;
 
+const char **tmpStringArrayRetVal = 0;
+char *tmpStringRetVal = 0;
+
 class InitStatics {
 public:
 	InitStatics() {
@@ -312,6 +316,10 @@ public:
 		HandleSWMgr::clearGlobalOptionValues();
 
 		HandleInstMgr::clearRemoteSources();
+
+		clearStringArray(&tmpStringArrayRetVal);
+        sword::stdstr(&tmpStringRetVal, (const char *)0);
+		
 	}
 } _initStatics;
 
@@ -984,7 +992,12 @@ SWHANDLE SWDLLEXPORT org_crosswire_sword_SWMgr_newWithPath(const char *path) {
 		config["Globals"]["HiAndroid"] = "weeee";
 		config.save();
 	}
-	return (SWHANDLE) new HandleSWMgr(new WebMgr(confPath.c_str()));
+	SWBuf extraPath = confPath + "extraConfig.conf";
+	bool exists = FileMgr::existsFile(extraPath.c_str());
+SWLog::getSystemLog()->logDebug("libsword: extraConfig %s at path: %s", exists?"Exists":"Absent", extraPath.c_str());
+
+SWLog::getSystemLog()->logDebug("libsword: init() creating WebMgr using path: %s", path);
+	return (SWHANDLE) new HandleSWMgr(new WebMgr(confPath.c_str(), exists?extraPath.c_str():0));
 }
 
 
@@ -1176,6 +1189,164 @@ const char ** SWDLLEXPORT org_crosswire_sword_SWMgr_getGlobalOptions
 	hmgr->globalOptions = retVal;
 	return retVal;
 }
+
+
+/*
+ * Class:     org_crosswire_sword_SWConfig
+ * Method:    getSections
+ * Signature: ()[Ljava/lang/String;
+ */
+const char ** SWDLLEXPORT org_crosswire_sword_SWConfig_getSections
+		(const char *confPath) {
+
+	clearStringArray(&tmpStringArrayRetVal);
+	int count = 0;
+	const char **retVal = 0;
+	bool exists = FileMgr::existsFile(confPath);
+SWLog::getSystemLog()->logDebug("libsword: getConfigSections %s at path: %s", exists?"Exists":"Absent", confPath);
+	if (exists) {
+		SWConfig config(confPath);
+        SectionMap::const_iterator sit;
+		for (sit = config.getSections().begin(); sit != config.getSections().end(); ++sit) {
+			count++;
+		}
+        SWLog::getSystemLog()->logDebug("libsword: %d sections found in config", count);
+        retVal = (const char **)calloc(count+1, sizeof(const char *));
+		count = 0;
+		for (sit = config.getSections().begin(); sit != config.getSections().end(); ++sit) {
+			stdstr((char **)&(retVal[count++]), assureValidUTF8(sit->first.c_str()));
+		}
+	}
+    else {
+        retVal = (const char **)calloc(1, sizeof(const char *));
+    }
+
+	tmpStringArrayRetVal = retVal;
+	return retVal;
+}
+
+
+
+/*
+ * Class:     org_crosswire_sword_SWConfig
+ * Method:    getSectionKeys
+ * Signature: (Ljava/lang/String;)[Ljava/lang/String;
+ */
+const char ** SWDLLEXPORT org_crosswire_sword_SWConfig_getSectionKeys
+		(const char *confPath, const char *section) {
+
+	clearStringArray(&tmpStringArrayRetVal);
+	int count = 0;
+	const char **retVal = 0;
+	bool exists = FileMgr::existsFile(confPath);
+	if (exists) {
+		SWConfig config(confPath);
+		SectionMap::const_iterator sit = config.getSections().find(section);
+		if (sit != config.getSections().end()) {
+			ConfigEntMap::const_iterator it;
+			for (it = sit->second.begin(); it != sit->second.end(); ++it) {
+				count++;
+			}
+			retVal = (const char **)calloc(count+1, sizeof(const char *));
+			count = 0;
+			for (it = sit->second.begin(); it != sit->second.end(); ++it) {
+				stdstr((char **)&(retVal[count++]), assureValidUTF8(it->first.c_str()));
+			}
+		}
+		else {
+			retVal = (const char **)calloc(1, sizeof(const char *));
+		}
+	}
+	else {
+		retVal = (const char **)calloc(1, sizeof(const char *));
+	}
+
+	tmpStringArrayRetVal = retVal;
+	return retVal;
+}
+
+
+/*
+ * Class:     org_crosswire_sword_SWConfig
+ * Method:    getKeyValue
+ * Signature: (Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+ */
+const char * SWDLLEXPORT org_crosswire_sword_SWConfig_getKeyValue
+		(const char *confPath, const char *section, const char *key) {
+
+	stdstr(&tmpStringRetVal, 0);
+	bool exists = FileMgr::existsFile(confPath);
+	if (exists) {
+		SWConfig config(confPath);
+		SectionMap::const_iterator sit = config.getSections().find(section);
+		if (sit != config.getSections().end()) {
+			ConfigEntMap::const_iterator it = sit->second.find(key);
+			if (it != sit->second.end()) {
+				stdstr(&tmpStringRetVal, assureValidUTF8(it->second.c_str()));
+			}
+		}
+	}
+
+	return tmpStringRetVal;
+}
+
+
+/*
+ * Class:     org_crosswire_sword_SWConfig
+ * Method:    setKeyValue
+ * Signature: (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+ */
+void SWDLLEXPORT org_crosswire_sword_SWConfig_setKeyValue
+		(const char *confPath, const char *section, const char *key, const char *value) {
+
+	SWConfig config(confPath);
+	config[section][key] = value;
+	config.save();
+}
+
+
+/*
+ * Class:     org_crosswire_sword_SWConfig
+ * Method:    augmentConfig
+ * Signature: (Ljava/lang/String;)[Ljava/lang/String;
+ */
+const char ** SWDLLEXPORT org_crosswire_sword_SWConfig_augmentConfig
+		(const char *confPath, const char *configBlob) {
+
+
+	clearStringArray(&tmpStringArrayRetVal);
+	const char **retVal = 0;
+	int count = 0;
+
+	SWBuf myBlob = configBlob;
+
+	SWConfig config(confPath);
+
+	FileMgr::removeFile(confPath);
+	FileDesc *fd = FileMgr::getSystemFileMgr()->open(confPath, FileMgr::CREAT|FileMgr::WRONLY, FileMgr::IREAD|FileMgr::IWRITE);
+	fd->getFd();
+	fd->write(myBlob.c_str(), myBlob.size());
+	FileMgr::getSystemFileMgr()->close(fd);
+
+	SWConfig newConfig(confPath);
+
+	config.augment(newConfig);
+	config.save();
+
+	SectionMap::const_iterator sit;
+	for (sit = newConfig.getSections().begin(); sit != newConfig.getSections().end(); ++sit) {
+		count++;
+	}
+	retVal = (const char **)calloc(count+1, sizeof(const char *));
+	count = 0;
+	for (sit = newConfig.getSections().begin(); sit != newConfig.getSections().end(); ++sit) {
+		stdstr((char **)&(retVal[count++]), assureValidUTF8(sit->first.c_str()));
+	}
+
+	tmpStringArrayRetVal = retVal;
+	return retVal;
+}
+
 
 /*
  * Class:     org_crosswire_sword_SWMgr

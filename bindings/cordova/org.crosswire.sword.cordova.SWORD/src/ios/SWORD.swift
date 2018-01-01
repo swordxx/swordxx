@@ -4,31 +4,33 @@ var mySWORDPlugin:SWORD? = nil
 
 @objc(SWORD) class SWORD : CDVPlugin, MFMessageComposeViewControllerDelegate {
 	var mgr = 0;
-    var installMgr = 0
-    var disclaimerConfirmed = false;
+	var installMgr = 0
+	var disclaimerConfirmed = false;
     
 	@objc(initSWORD:)
 	func initSWORD(command: CDVInvokedUrlCommand) {
-        mgr = 0
-        installMgr = 0
-        disclaimerConfirmed = false
-        mySWORDPlugin = nil
-        VERSEKEY_BOOKABBREV = Int(org_crosswire_sword_SWModule_VERSEKEY_BOOKABBREV);
-        VERSEKEY_BOOK = Int(org_crosswire_sword_SWModule_VERSEKEY_BOOK);
-        VERSEKEY_CHAPTER = Int(org_crosswire_sword_SWModule_VERSEKEY_CHAPTER);
-        VERSEKEY_VERSE = Int(org_crosswire_sword_SWModule_VERSEKEY_VERSE);
-        VERSEKEY_TESTAMENT = Int(org_crosswire_sword_SWModule_VERSEKEY_TESTAMENT);
-        VERSEKEY_OSISREF = Int(org_crosswire_sword_SWModule_VERSEKEY_OSISREF);
-        VERSEKEY_CHAPMAX = Int(org_crosswire_sword_SWModule_VERSEKEY_CHAPMAX);
-        VERSEKEY_VERSEMAX = Int(org_crosswire_sword_SWModule_VERSEKEY_VERSEMAX);
-        VERSEKEY_BOOKNAME = Int(org_crosswire_sword_SWModule_VERSEKEY_BOOKNAME);
-        VERSEKEY_SHORTTEXT = Int(org_crosswire_sword_SWModule_VERSEKEY_SHORTTEXT);
+		mgr = 0
+		installMgr = 0
+		disclaimerConfirmed = false
+		mySWORDPlugin = nil
+		VERSEKEY_BOOKABBREV = Int(org_crosswire_sword_SWModule_VERSEKEY_BOOKABBREV);
+		VERSEKEY_BOOK = Int(org_crosswire_sword_SWModule_VERSEKEY_BOOK);
+		VERSEKEY_CHAPTER = Int(org_crosswire_sword_SWModule_VERSEKEY_CHAPTER);
+		VERSEKEY_VERSE = Int(org_crosswire_sword_SWModule_VERSEKEY_VERSE);
+		VERSEKEY_TESTAMENT = Int(org_crosswire_sword_SWModule_VERSEKEY_TESTAMENT);
+		VERSEKEY_OSISREF = Int(org_crosswire_sword_SWModule_VERSEKEY_OSISREF);
+		VERSEKEY_CHAPMAX = Int(org_crosswire_sword_SWModule_VERSEKEY_CHAPMAX);
+		VERSEKEY_VERSEMAX = Int(org_crosswire_sword_SWModule_VERSEKEY_VERSEMAX);
+		VERSEKEY_BOOKNAME = Int(org_crosswire_sword_SWModule_VERSEKEY_BOOKNAME);
+		VERSEKEY_SHORTTEXT = Int(org_crosswire_sword_SWModule_VERSEKEY_SHORTTEXT);
 
 		initMgr()
-        let libswordVersion = String(cString: org_crosswire_sword_SWMgr_version(mgr))
-debugPrint("libswordVersion: " + libswordVersion)
-        self.commandDelegate!.send(CDVPluginResult(status: CDVCommandStatus_OK, messageAs: "initSWORD; Version: " + libswordVersion), callbackId: command.callbackId)
+
+		let libswordVersion = String(cString: org_crosswire_sword_SWMgr_version(mgr))
+		debugPrint("libswordVersion: " + libswordVersion)
+		self.commandDelegate!.send(CDVPluginResult(status: CDVCommandStatus_OK, messageAs: "initSWORD; Version: " + libswordVersion), callbackId: command.callbackId)
 	}
+
 
 	func myToast(message: String) {
 		let toastController: UIAlertController = UIAlertController(title: "", message: message, preferredStyle: .alert)
@@ -38,21 +40,24 @@ debugPrint("libswordVersion: " + libswordVersion)
 		}
 	}
 
+
 	func initMgr() {
 		if (mgr == 0) {
-            let baseDir = (FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.path)! + "/sword";
-
+			let baseDir = (FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.path)! + "/sword";
 			mgr = org_crosswire_sword_SWMgr_newWithPath(baseDir)
-            debugPrint("initMgr, mgr: " + String(describing: mgr))
+debugPrint("initMgr, mgr: " + String(describing: mgr))
 		}
 	}
-    func reinitMgr() {
-        if (mgr != 0) {
-            org_crosswire_sword_SWMgr_delete(mgr)
-        }
-        mgr = 0
-        initMgr()
-    }
+
+
+	func reinitMgr() {
+		if (mgr != 0) {
+			org_crosswire_sword_SWMgr_delete(mgr)
+		}
+		mgr = 0
+		initMgr()
+	}
+
     
     func reinitInstall() {
         if (installMgr != 0) {
@@ -156,85 +161,55 @@ debugPrint("libswordVersion: " + libswordVersion)
 
 
 
-  @objc(SWMgr_addExtraConfig:)
-  func SWMgr_addExtraConfig(command: CDVInvokedUrlCommand) {
-    var pluginResult = CDVPluginResult(status: CDVCommandStatus_ERROR)
+    @objc(SWMgr_addExtraConfig:)
+    func SWMgr_addExtraConfig(command: CDVInvokedUrlCommand) {
+        let blob = command.arguments[0] as? String ?? ""
+        let baseDir = (FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.path)! + "/sword";
+        let confPath = baseDir + "/extraConfig.conf";
+        let retVal = getStringArray(buffer: org_crosswire_sword_SWConfig_augmentConfig(confPath, blob))
+        self.commandDelegate!.send(CDVPluginResult(status: CDVCommandStatus_OK, messageAs: retVal), callbackId: command.callbackId)
+    }
+    
+    
+    @objc(SWMgr_setExtraConfigValue:)
+    func SWMgr_setExtraConfigValue(command: CDVInvokedUrlCommand) {
+        let section = command.arguments[0] as? String ?? ""
+        let key = command.arguments[1] as? String ?? ""
+        let val = command.arguments[2] as? String ?? ""
+        let baseDir = (FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.path)! + "/sword";
+        let confPath = baseDir + "/extraConfig.conf";
+        org_crosswire_sword_SWConfig_setKeyValue(confPath, section, key, val)
+        self.commandDelegate!.send(CDVPluginResult(status: CDVCommandStatus_OK, messageAs: "SWMgr_setExtraConfigValue"), callbackId: command.callbackId)
+    }
 
-      let toastController: UIAlertController = UIAlertController(title: "", message: "SWMgr_addExtraConfig", preferredStyle: .alert)
-      
-      self.viewController?.present(toastController, animated: true, completion: nil)
+    
+    @objc(SWMgr_getExtraConfigValue:)
+    func SWMgr_getExtraConfigValue(command: CDVInvokedUrlCommand) {
+        let section = command.arguments[0] as? String ?? ""
+        let key = command.arguments[1] as? String ?? ""
+        let baseDir = (FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.path)! + "/sword";
+        let confPath = baseDir + "/extraConfig.conf";
+        let retVal = String(cString:org_crosswire_sword_SWConfig_getKeyValue(confPath, section, key))
+        self.commandDelegate!.send(CDVPluginResult(status: CDVCommandStatus_OK, messageAs: retVal), callbackId: command.callbackId)
+    }
+    
+    
+    @objc(SWMgr_getExtraConfigKeys:)
+    func SWMgr_getExtraConfigKeys(command: CDVInvokedUrlCommand) {
+        let section = command.arguments[0] as? String ?? ""
+        let baseDir = (FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.path)! + "/sword";
+        let confPath = baseDir + "/extraConfig.conf";
+        let retVal = getStringArray(buffer: org_crosswire_sword_SWConfig_getSectionKeys(confPath, section))
+        self.commandDelegate!.send(CDVPluginResult(status: CDVCommandStatus_OK, messageAs: retVal), callbackId: command.callbackId)
+    }
 
-      DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-        toastController.dismiss(animated: true, completion: nil)
-      }
-        
-      pluginResult = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: "SWMgr_addExtraConfig")
-
-    self.commandDelegate!.send(pluginResult, callbackId: command.callbackId)
-  }
-  @objc(SWMgr_setExtraConfigValue:)
-  func SWMgr_setExtraConfigValue(command: CDVInvokedUrlCommand) {
-    var pluginResult = CDVPluginResult(status: CDVCommandStatus_ERROR)
-
-      let toastController: UIAlertController = UIAlertController(title: "", message: "SWMgr_setExtraConfigValue", preferredStyle: .alert)
-      
-      self.viewController?.present(toastController, animated: true, completion: nil)
-
-      DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-        toastController.dismiss(animated: true, completion: nil)
-      }
-        
-      pluginResult = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: "SWMgr_setExtraConfigValue")
-
-    self.commandDelegate!.send(pluginResult, callbackId: command.callbackId)
-  }
-  @objc(SWMgr_getExtraConfigValue:)
-  func SWMgr_getExtraConfigValue(command: CDVInvokedUrlCommand) {
-    var pluginResult = CDVPluginResult(status: CDVCommandStatus_ERROR)
-
-      let toastController: UIAlertController = UIAlertController(title: "", message: "SWMgr_getExtraConfigValue", preferredStyle: .alert)
-      
-      self.viewController?.present(toastController, animated: true, completion: nil)
-
-      DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-        toastController.dismiss(animated: true, completion: nil)
-      }
-        
-      pluginResult = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: "SWMgr_getExtraConfigValue")
-
-    self.commandDelegate!.send(pluginResult, callbackId: command.callbackId)
-  }
-  @objc(SWMgr_getExtraConfigKeys:)
-  func SWMgr_getExtraConfigKeys(command: CDVInvokedUrlCommand) {
-    var pluginResult = CDVPluginResult(status: CDVCommandStatus_ERROR)
-
-      let toastController: UIAlertController = UIAlertController(title: "", message: "SWMgr_getExtraConfigKeys", preferredStyle: .alert)
-      
-      self.viewController?.present(toastController, animated: true, completion: nil)
-
-      DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-        toastController.dismiss(animated: true, completion: nil)
-      }
-        
-      pluginResult = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: "SWMgr_getExtraConfigKeys")
-
-    self.commandDelegate!.send(pluginResult, callbackId: command.callbackId)
-  }
-  @objc(SWMgr_getExtraConfigSections:)
-  func SWMgr_getExtraConfigSections(command: CDVInvokedUrlCommand) {
-    var pluginResult = CDVPluginResult(status: CDVCommandStatus_ERROR)
-
-      let toastController: UIAlertController = UIAlertController(title: "", message: "SWMgr_getExtraConfigSections", preferredStyle: .alert)
-      
-      self.viewController?.present(toastController, animated: true, completion: nil)
-
-      DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-        toastController.dismiss(animated: true, completion: nil)
-      }
-        
-      pluginResult = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: "SWMgr_getExtraConfigSections")
-
-    self.commandDelegate!.send(pluginResult, callbackId: command.callbackId)
+    
+	@objc(SWMgr_getExtraConfigSections:)
+	func SWMgr_getExtraConfigSections(command: CDVInvokedUrlCommand) {
+		let baseDir = (FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.path)! + "/sword";
+		let confPath = baseDir + "/extraConfig.conf";
+        let retVal = getStringArray(buffer: org_crosswire_sword_SWConfig_getSections(confPath))
+        self.commandDelegate!.send(CDVPluginResult(status: CDVCommandStatus_OK, messageAs: retVal), callbackId: command.callbackId)
   }
     
     
