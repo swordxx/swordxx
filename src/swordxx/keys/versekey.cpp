@@ -28,8 +28,10 @@
 #include <cstdio>
 #include <cstdlib>
 #include <fcntl.h>
+#include <limits>
 #include <memory>
 #include <sstream>
+#include <type_traits>
 #include "../roman.h"
 #include "../stringmgr.h"
 #include "../swlocale.h"
@@ -467,8 +469,11 @@ void VerseKey::validateCurrentLocale() const {
 
 ListKey VerseKey::parseVerseList(const char *buf, const char *defaultKey, bool expandRange, bool useChapterAsVerse) {
 
+    static_assert(std::is_unsigned<decltype(VerseKey::m_userData)>::value, "");
+    static_assert(std::numeric_limits<decltype(VerseKey::m_userData)>::max()
+                  >= std::numeric_limits<std::size_t>::max(), "");
+
     // hold on to our own copy of params, as threads/recursion may change outside values
-    const char *bufStart = buf;
     std::string iBuf = buf ? buf : "";
     buf = iBuf.c_str();
 
@@ -724,7 +729,8 @@ terminate_range:
                     lastKey->positionToTop();
                     tmpListKey << *lastKey;
                     ((VerseKey *)tmpListKey.getElement())->setAutoNormalize(isAutoNormalize());
-                    tmpListKey.getElement()->m_userData = (uint64_t)(bufStart+(buf-iBuf.c_str()));
+                    tmpListKey.getElement()->m_userData =
+                            static_cast<std::size_t>(buf - iBuf.c_str());
                 }
                 else {
                     if (!dash) {     // if last separator was not a dash just add
@@ -738,7 +744,9 @@ terminate_range:
                             *lastKey = Position::Top;
                             tmpListKey << *lastKey;
                             ((VerseKey *)tmpListKey.getElement())->setAutoNormalize(isAutoNormalize());
-                            tmpListKey.getElement()->m_userData = (uint64_t)(bufStart+(buf-iBuf.c_str()));
+                            tmpListKey.getElement()->m_userData =
+                                    static_cast<std::size_t>(
+                                        buf - iBuf.c_str());
                         }
                         else {
                             bool f = false;
@@ -753,7 +761,8 @@ terminate_range:
                             *lastKey = Position::Top;
                             tmpListKey << *lastKey;
                             ((VerseKey *)tmpListKey.getElement())->setAutoNormalize(isAutoNormalize());
-                            tmpListKey.getElement()->m_userData = (uint64_t)(bufStart+(buf-iBuf.c_str()));
+                            tmpListKey.getElement()->m_userData =
+                                    static_cast<std::size_t>(buf - iBuf.c_str());
                         }
                     }
                     else    if (expandRange) {
@@ -768,7 +777,9 @@ terminate_range:
                             newElement->setUpperBound(*curKey);
                             *lastKey = *curKey;
                             *newElement = Position::Top;
-                            tmpListKey.getElement()->m_userData = (uint64_t)(bufStart+(buf-iBuf.c_str()));
+                            tmpListKey.getElement()->m_userData =
+                                    static_cast<std::size_t>(
+                                        buf - iBuf.c_str());
                         }
                     }
                 }
@@ -999,7 +1010,8 @@ terminate_range:
             lastKey->setLowerBound(*curKey);
             *lastKey = Position::Top;
             tmpListKey << *lastKey;
-            tmpListKey.getElement()->m_userData = (uint64_t)(bufStart+(buf-iBuf.c_str()));
+            tmpListKey.getElement()->m_userData =
+                    static_cast<std::size_t>(buf - iBuf.c_str());
         }
         else {
             if (!dash) {     // if last separator was not a dash just add
@@ -1012,7 +1024,8 @@ terminate_range:
                     lastKey->setUpperBound(*curKey);
                     *lastKey = Position::Top;
                     tmpListKey << *lastKey;
-                    tmpListKey.getElement()->m_userData = (uint64_t)(bufStart+(buf-iBuf.c_str()));
+                    tmpListKey.getElement()->m_userData =
+                            static_cast<std::size_t>(buf - iBuf.c_str());
                 }
                 else {
                     bool f = false;
@@ -1026,7 +1039,8 @@ terminate_range:
                     lastKey->setUpperBound(*curKey);
                     *lastKey = Position::Top;
                     tmpListKey << *lastKey;
-                    tmpListKey.getElement()->m_userData = (uint64_t)(bufStart+(buf-iBuf.c_str()));
+                    tmpListKey.getElement()->m_userData =
+                            static_cast<std::size_t>(buf - iBuf.c_str());
                 }
             }
             else if (expandRange) {
@@ -1039,7 +1053,8 @@ terminate_range:
                         *curKey = Position::MaxVerse;
                     newElement->setUpperBound(*curKey);
                     *newElement = Position::Top;
-                    tmpListKey.getElement()->m_userData = (uint64_t)(bufStart+(buf-iBuf.c_str()));
+                    tmpListKey.getElement()->m_userData =
+                            static_cast<std::size_t>(buf - iBuf.c_str());
                 }
             }
         }
@@ -1814,22 +1829,24 @@ std::string VerseKey::convertToOSIS(std::string const & inRef,
     ListKey verses = defLanguage.parseVerseList(inRef.c_str(),
                                                 lastKnownKey->getText(),
                                                 true);
-    auto startFrag(inRef.begin());
+    std::size_t startFragIndex = 0u;
     for (std::size_t i = 0u; i < verses.getCount(); ++i) {
         SWKey *element = verses.getElement(i);
 //        VerseKey *element = SWDYNAMIC_CAST(VerseKey, verses.GetElement(i));
         // TODO: This code really needs to not use fixed size arrays
         char frag[800];
         std::memset(frag, 0, 800);
-        while ((startFrag != inRef.end())
-               && *startFrag
-               && (std::strchr(" {}:;,()[].", *startFrag)))
+        while ((startFragIndex != inRef.size())
+               && inRef[startFragIndex]
+               && (std::strchr(" {}:;,()[].", inRef[startFragIndex])))
         {
-            oss << *startFrag;
-            ++startFrag;
+            oss << inRef[startFragIndex];
+            ++startFragIndex;
         }
-        auto const len = ((const char *)element->m_userData - &*startFrag) + 1;
-        std::memmove(frag, &*startFrag, len);
+        auto const len = element->m_userData - startFragIndex + 1u;
+        static_assert(std::numeric_limits<decltype(element->m_userData)>::max()
+                      <= std::numeric_limits<std::size_t>::max(), "");
+        std::memmove(frag, &inRef[startFragIndex], len);
         frag[len] = 0;
         auto j = std::strlen(frag)-1;
         while (j && (std::strchr(" {}:;,()[].", frag[j])))
@@ -1838,12 +1855,12 @@ std::string VerseKey::convertToOSIS(std::string const & inRef,
         if (frag[j + 1u])
             postJunk = frag + j + 1u;
         frag[j + 1u]=0;
-        startFrag += len;
+        startFragIndex += len;
         oss << "<reference osisRef=\"" << element->getOSISRefRangeText()
             << "\">" << frag << "</reference>" << postJunk;
     }
-    if (&*startFrag < (inRef.c_str() + std::strlen(inRef.c_str())))
-        oss << &*startFrag;
+    if (startFragIndex < std::strlen(inRef.c_str()))
+        oss << &inRef[startFragIndex];
     return oss.str();
 }
 } /* namespace swordxx */
