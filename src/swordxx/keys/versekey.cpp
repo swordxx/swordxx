@@ -1831,12 +1831,13 @@ std::string VerseKey::convertToOSIS(std::string const & inRef,
         auto const len = ((const char *)element->m_userData - &*startFrag) + 1;
         std::memmove(frag, &*startFrag, len);
         frag[len] = 0;
-        int j;
-        for (j = std::strlen(frag)-1; j && (std::strchr(" {}:;,()[].", frag[j])); j--);
+        auto j = std::strlen(frag)-1;
+        while (j && (std::strchr(" {}:;,()[].", frag[j])))
+            --j;
         std::string postJunk;
-        if (frag[j+1])
+        if (frag[j + 1u])
             postJunk = frag + j + 1u;
-        frag[j+1]=0;
+        frag[j + 1u]=0;
         startFrag += len;
         oss << "<reference osisRef=\"" << element->getOSISRefRangeText()
             << "\">" << frag << "</reference>" << postJunk;
