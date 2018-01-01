@@ -338,7 +338,8 @@ public:
      * @param inRef reference string to try to parse
      * @param defaultKey for details @see ParseVerseList(..., defaultKey, ...)
      */
-    static std::string convertToOSIS(const char *inRef, const SWKey *defaultKey);
+    static std::string convertToOSIS(std::string const & inRef,
+                                     SWKey const * defaultKey);
 
     /******************************************************************************
      * VerseKey::parseVerseList - Attempts to parse a buffer into separate

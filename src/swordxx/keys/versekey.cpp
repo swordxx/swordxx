@@ -1805,14 +1805,16 @@ std::string VerseKey::getOSISRefRangeText() const {
 
 // TODO:  this is static so we have no context.  We can only parse KJV v11n now
 //         possibly add a const char *versification = KJV param?
-std::string VerseKey::convertToOSIS(const char *inRef, const SWKey *lastKnownKey) {
+std::string VerseKey::convertToOSIS(std::string const & inRef,
+                                    SWKey const * lastKnownKey)
+{
     std::ostringstream oss;
 
     VerseKey defLanguage;
-    ListKey verses = defLanguage.parseVerseList(inRef,
+    ListKey verses = defLanguage.parseVerseList(inRef.c_str(),
                                                 lastKnownKey->getText(),
                                                 true);
-    const char *startFrag = inRef;
+    auto startFrag(inRef.begin());
     for (std::size_t i = 0u; i < verses.getCount(); ++i) {
         SWKey *element = verses.getElement(i);
 //        VerseKey *element = SWDYNAMIC_CAST(VerseKey, verses.GetElement(i));
@@ -1821,23 +1823,26 @@ std::string VerseKey::convertToOSIS(const char *inRef, const SWKey *lastKnownKey
         char postJunk[800];
         std::memset(frag, 0, 800);
         std::memset(postJunk, 0, 800);
-        while ((*startFrag) && (std::strchr(" {}:;,()[].", *startFrag))) {
+        while ((startFrag != inRef.end())
+               && *startFrag
+               && (std::strchr(" {}:;,()[].", *startFrag)))
+        {
             oss << *startFrag;
-            startFrag++;
+            ++startFrag;
         }
-        std::memmove(frag, startFrag, ((const char *)element->m_userData - startFrag) + 1);
-        frag[((const char *)element->m_userData - startFrag) + 1] = 0;
+        std::memmove(frag, &*startFrag, ((const char *)element->m_userData - &*startFrag) + 1);
+        frag[((const char *)element->m_userData - &*startFrag) + 1] = 0;
         int j;
         for (j = std::strlen(frag)-1; j && (std::strchr(" {}:;,()[].", frag[j])); j--);
         if (frag[j+1])
             std::strcpy(postJunk, frag+j+1);
         frag[j+1]=0;
-        startFrag += ((const char *)element->m_userData - startFrag) + 1;
+        startFrag += ((const char *)element->m_userData - &*startFrag) + 1;
         oss << "<reference osisRef=\"" << element->getOSISRefRangeText()
             << "\">" << frag << "</reference>" << postJunk;
     }
-    if (startFrag < (inRef + std::strlen(inRef)))
-        oss << startFrag;
+    if (&*startFrag < (inRef.c_str() + std::strlen(inRef.c_str())))
+        oss << &*startFrag;
     return oss.str();
 }
 } /* namespace swordxx */
