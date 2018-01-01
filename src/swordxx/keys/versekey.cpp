@@ -1818,10 +1818,8 @@ std::string VerseKey::convertToOSIS(const char *inRef, const SWKey *lastKnownKey
 //        VerseKey *element = SWDYNAMIC_CAST(VerseKey, verses.GetElement(i));
         // TODO: This code really needs to not use fixed size arrays
         char frag[800];
-        char preJunk[800];
         char postJunk[800];
         std::memset(frag, 0, 800);
-        std::memset(preJunk, 0, 800);
         std::memset(postJunk, 0, 800);
         while ((*startFrag) && (std::strchr(" {}:;,()[].", *startFrag))) {
             oss << *startFrag;
