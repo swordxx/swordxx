@@ -492,8 +492,8 @@ ListKey VerseKey::parseVerseList(const char *buf, const char *defaultKey, bool e
     int chap = -1, verse = -1;
     int bookno = 0;
     int loop;
-    char comma = 0;
-    char dash = 0;
+    bool comma = false;
+    bool dash = false;
     int q;
     ListKey tmpListKey;
     ListKey internalListKey;
@@ -549,7 +549,7 @@ ListKey VerseKey::parseVerseList(const char *buf, const char *defaultKey, bool e
                     else    chap  = std::atoi(number);
                 }
                 *number = 0;
-                comma = 0;
+                comma = false;
                 break;
             }
             goto terminate_range;
@@ -789,11 +789,11 @@ terminate_range:
             verse = -1;
             suffix = 0;
             if (*buf == ',')
-                comma = 1;
-            else    comma = 0;
+                comma = true;
+            else    comma = false;
             if (*buf == '-')
-                dash = 1;
-            else    dash = 0;
+                dash = true;
+            else    dash = false;
             break;
         case 10:    // ignore these
         case 13:
