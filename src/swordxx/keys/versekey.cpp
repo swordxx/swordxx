@@ -491,7 +491,6 @@ ListKey VerseKey::parseVerseList(const char *buf, const char *defaultKey, bool e
     char suffix = 0;
     int chap = -1, verse = -1;
     int bookno = 0;
-    int loop;
     bool comma = false;
     bool dash = false;
     ListKey tmpListKey;
@@ -599,7 +598,7 @@ terminate_range:
             tobook = 0;
             bookno = -1;
             if (*book) {
-                loop = std::strlen(book) - 1;
+                auto loop = std::strlen(book) - 1u;
 
                 for (; loop+1; loop--) { if (book[loop] == ' ') book[loop] = 0; else break; }
 
@@ -878,7 +877,7 @@ terminate_range:
     book[tobook] = 0;
     tobook = 0;
     if (*book) {
-        loop = std::strlen(book) - 1;
+        auto loop = std::strlen(book) - 1u;
 
         // strip trailing spaces
         for (; loop+1; loop--) { if (book[loop] == ' ') book[loop] = 0; else break; }
