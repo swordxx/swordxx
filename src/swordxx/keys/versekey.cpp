@@ -678,7 +678,7 @@ terminate_range:
                     curKey->setBook(lastKey->getBook());
                 }
                 else {
-                    int t = 1;
+                    char t = 1;
                     if (bookno > m_BMAX[0]) {
                         t++;
                         bookno -= m_BMAX[0];
@@ -965,7 +965,7 @@ terminate_range:
             curKey->setBook(lastKey->getBook());
         }
         else {
-            int t = 1;
+            char t = 1;
             if (bookno > m_BMAX[0]) {
                 t++;
                 bookno -= m_BMAX[0];
