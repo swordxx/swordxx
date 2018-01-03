@@ -494,7 +494,6 @@ ListKey VerseKey::parseVerseList(const char *buf, const char *defaultKey, bool e
     bool comma = false;
     bool dash = false;
     ListKey tmpListKey;
-    ListKey internalListKey;
     char lastPartial = 0;
     bool inTerm = true;
     int notAllDigits = 0;
@@ -515,6 +514,7 @@ ListKey VerseKey::parseVerseList(const char *buf, const char *defaultKey, bool e
         curKey->setTestament(0);
         lastKey->setLowerBound(*curKey);
         lastKey->setUpperBound(*curKey);
+        ListKey internalListKey;
         internalListKey << *lastKey;
         return internalListKey;
     }
@@ -527,6 +527,7 @@ ListKey VerseKey::parseVerseList(const char *buf, const char *defaultKey, bool e
         curKey->setTestament(buf[12]-48);
         lastKey->setLowerBound(*curKey);
         lastKey->setUpperBound(*curKey);
+        ListKey internalListKey;
         internalListKey << *lastKey;
         return internalListKey;
     }
@@ -1062,6 +1063,7 @@ terminate_range:
     }
     *book = 0;
     tmpListKey = Position::Top;
+    ListKey internalListKey;
     internalListKey = tmpListKey;
     internalListKey = Position::Top;    // Align internalListKey to first element before passing back;
 
