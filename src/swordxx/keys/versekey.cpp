@@ -494,7 +494,6 @@ ListKey VerseKey::parseVerseList(const char *buf, const char *defaultKey, bool e
     int loop;
     bool comma = false;
     bool dash = false;
-    int q;
     ListKey tmpListKey;
     ListKey internalListKey;
     char lastPartial = 0;
@@ -558,7 +557,9 @@ ListKey VerseKey::parseVerseList(const char *buf, const char *defaultKey, bool e
             while (true) {
                 if ((!*number) || (chap < 0))
                     break;
-                for (q = 1; ((buf[q]) && (buf[q] != ' ')); q++);
+                decltype(buf-buf) q = 1;
+                while ((buf[q]) && (buf[q] != ' '))
+                    ++q;
                 if (buf[q] == ':')
                     break;
                 inTerm = false;
@@ -723,7 +724,9 @@ terminate_range:
                 }
 
                 // check for '-'
-                for (q = 0; ((buf[q]) && (buf[q] == ' ')); q++);
+                decltype(buf-buf) q = 0;
+                while ((buf[q]) && (buf[q] == ' '))
+                    ++q;
                 if ((buf[q] == '-') && (expandRange)) {    // if this is a dash save lowerBound and wait for upper
                     buf+=q;
                     lastKey->setLowerBound(*curKey);
