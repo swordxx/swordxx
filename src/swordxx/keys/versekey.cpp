@@ -598,7 +598,7 @@ terminate_range:
 
                 for (; loop+1; loop--) { if (book[loop] == ' ') book[loop] = 0; else break; }
 
-                if (loop > 0 && charIsDigit(book[loop-1]) && book[loop] >= 'a' && book[loop] <= 'z') {
+                if (loop > 0 && charIsDigit(book[loop-1]) && charIsLower(book[loop])) {
                     book[loop--] = 0;
                 }
                 for (; loop+1; loop--) {
@@ -837,7 +837,7 @@ terminate_range:
                     break;
                 default:
                     // suffixes (and oddly 'f'-- ff.)
-                    if ((*buf >= 'a' && *buf <= 'z' && (chap >=0 || bookno > -1 || lastKey->isBoundSet()))
+                    if ((charIsLower(*buf) && (chap >=0 || bookno > -1 || lastKey->isBoundSet()))
                             || *buf == 'f') {
                         // if suffix is already an 'f', then we need to mark if we're doubleF.
                         doubleF = (*buf == 'f' && suffix == 'f');
@@ -871,7 +871,7 @@ terminate_range:
 
         // check if endsWith([0-9][a-z]) and kill the last letter, e.g., ...12a, and chop off the 'a'
         // why?  What's this for? wouldn't this mess up 2t?
-        if (loop > 0 && charIsDigit(book[loop-1]) && book[loop] >= 'a' && book[loop] <= 'z') {
+        if (loop > 0 && charIsDigit(book[loop-1]) && charIsLower(book[loop])) {
             book[loop--] = 0;
         }
 
