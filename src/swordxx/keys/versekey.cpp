@@ -482,11 +482,10 @@ ListKey VerseKey::parseVerseList(const char *buf, const char *defaultKey, bool e
     buf = iBuf.c_str();
     auto const bufStart = buf;
 
-    char book[2048];    // TODO: bad, remove
+    std::string book;
+    book.reserve(100u);
     std::string number;
-    number.reserve(10);
-    *book = 0;
-    int tobook = 0;
+    number.reserve(10u);
     char suffix = 0;
     int chap = -1, verse = -1;
     int bookno = 0;
@@ -563,22 +562,24 @@ ListKey VerseKey::parseVerseList(const char *buf, const char *defaultKey, bool e
                 break;
             }
             if (inTerm) {
-                if (tobook < 1 || book[tobook-1] != ' ') {
-                    book[tobook++] = ' ';
+                if (book.empty() || (*book.rbegin()) != ' ') {
+                    book.push_back(' ');
                 }
                 break;
             }
 
         case '-':
             if (chap == -1) {
-                book[tobook] = *buf;
-                book[tobook+1] = *(buf+1);
-                book[tobook+2] = 0;
-                int bookno = getBookFromAbbrev(book);
+                book.push_back(*buf);
+                book.push_back(*(buf + 1u));
+                int bookno = getBookFromAbbrev(book.c_str());
                 if (bookno > -1) {
-                    tobook++;
+                    book.pop_back();
                     buf++;
                     break;
+                } else {
+                    book.pop_back();
+                    book.pop_back();
                 }
             }
         case ',': // on number new verse
@@ -590,26 +591,24 @@ terminate_range:
                 else    chap = std::atoi(number.c_str());
                 number.clear();
             }
-            book[tobook] = 0;
-            tobook = 0;
             bookno = -1;
-            if (*book) {
-                auto loop = std::strlen(book) - 1u;
+            if (!book.empty()) {
+                auto loop = book.size() - 1u;
 
-                for (; loop+1; loop--) { if (book[loop] == ' ') book[loop] = 0; else break; }
+                for (; loop+1; loop--) { if (book[loop] == ' ') book.resize(loop); else break; }
 
                 if (loop > 0 && charIsDigit(book[loop-1]) && charIsLower(book[loop])) {
-                    book[loop--] = 0;
+                    book.resize(loop--);
                 }
                 for (; loop+1; loop--) {
                     if ((charIsDigit(book[loop])) || (book[loop] == ' ')) {
-                        book[loop] = 0;
+                        book.resize(loop);
                         continue;
                     }
                     else {
                         if ((asciiCharToUpper(book[loop])=='F')&&(loop)) {
                             if ((charIsDigit(book[loop-1])) || (book[loop-1] == ' ') || (asciiCharToUpper(book[loop-1]) == 'F')) {
-                                book[loop] = 0;
+                                book.resize(loop);
                                 continue;
                             }
                         }
@@ -617,14 +616,16 @@ terminate_range:
                     break;
                 }
 
-                for (loop = std::strlen(book) - 1; loop+1; loop--) {
+                for (loop = book.size() - 1u; loop+1; loop--) {
                     if (book[loop] == ' ') {
                         // "PS C" is ok, but "II C" is not ok
-                        if (isroman(&book[loop+1]) && !isroman(book,loop)) {
+                        if (isroman(book.c_str() + loop + 1u)
+                            && !isroman(book.c_str(), loop))
+                        {
                             if (verse == -1) {
                                 verse = chap;
-                                chap = from_rom(&book[loop+1]);
-                                book[loop] = 0;
+                                chap = from_rom(book.c_str() + loop + 1u);
+                                book.resize(loop);
                             }
                         }
                             break;
@@ -632,15 +633,15 @@ terminate_range:
                 }
 
                 // check for special inscriptio and subscriptio which are saved as book intro and chap 1 intro (for INTF)
-                for (loop = std::strlen(book) - 1; loop+1; loop--) {
+                for (loop = book.size() - 1u; loop+1; loop--) {
                     if (book[loop] == ' ') {
-                        if (!strnicmp(&book[loop+1], "inscriptio", std::strlen(&book[loop+1]))) {
-                            book[loop] = 0;
+                        if (!strnicmp(book.c_str() + loop + 1u, "inscriptio", book.size() - loop - 1u)) {
+                            book.resize(loop);
                             verse = 0;
                             chap = 0;
                         }
-                        else if (!strnicmp(&book[loop+1], "subscriptio", std::strlen(&book[loop+1]))) {
-                            book[loop] = 0;
+                        else if (!strnicmp(book.c_str() + loop + 1u, "subscriptio", book.size() - loop - 1u)) {
+                            book.resize(loop);
                             verse = 0;
                             chap = 1;
                         }
@@ -652,18 +653,18 @@ terminate_range:
                     if (verse == -1) {
                         verse = chap;
                         chap = lastKey->getChapter();
-                        *book = 0;
+                        book.clear();
                     }
                 }
                 if (caseInsensitiveEquals(book, "ch") || caseInsensitiveEquals(book, "chap")) {    // Verse abbrev
-                    std::strcpy(book, lastKey->getBookName().c_str());
+                    book = lastKey->getBookName();
                 }
-                bookno = getBookFromAbbrev(book);
-                if ((bookno > -1) && (suffix == 'f') && (book[std::strlen(book)-1] == 'f')) {
+                bookno = getBookFromAbbrev(book.c_str());
+                if ((bookno > -1) && (suffix == 'f') && (book[book.size() - 1u] == 'f')) {
                     suffix = 0;
                 }
             }
-            if (((bookno > -1) || (!*book)) && ((*book) || (chap >= 0) || (verse >= 0))) {
+            if (((bookno > -1) || book.empty()) && (!book.empty() || (chap >= 0) || (verse >= 0))) {
                 char partial = 0;
                 curKey->setVerse(1);
                 curKey->setChapter(1);
@@ -782,7 +783,7 @@ terminate_range:
                 }
                 lastPartial = partial;
             }
-            *book = 0;
+            book.clear();
             chap = -1;
             verse = -1;
             suffix = 0;
@@ -804,7 +805,7 @@ terminate_range:
             break;
         case '.':
             if (buf > bufStart) {            // ignore (break) if preceeding char is not a digit
-                for (notAllDigits = tobook; notAllDigits; notAllDigits--) {
+                for (notAllDigits = book.size(); notAllDigits; notAllDigits--) {
                     if ((!charIsDigit(book[notAllDigits-1])) && (!std::strchr(" .", book[notAllDigits-1])))
                         break;
                 }
@@ -818,8 +819,8 @@ terminate_range:
                 else    chap  = std::atoi(number.c_str());
                 number.clear();
             }
-            else if (chap == -1 && (tobook < 1 || book[tobook-1] != ' ')) {
-                book[tobook++] = ' ';
+            else if (chap == -1 && (book.empty() || (*book.rbegin()) != ' ')) {
+                book.push_back(' ');
             }
 
             break;
@@ -851,7 +852,7 @@ terminate_range:
                 }
             }
             if (chap == -1)
-                book[tobook++] = *buf;
+                book.push_back(*buf);
         }
         buf++;
     }
@@ -861,30 +862,28 @@ terminate_range:
         else    chap  = std::atoi(number.c_str());
         number.clear();
     }
-    book[tobook] = 0;
-    tobook = 0;
-    if (*book) {
-        auto loop = std::strlen(book) - 1u;
+    if (!book.empty()) {
+        auto loop = book.size() - 1u;
 
         // strip trailing spaces
-        for (; loop+1; loop--) { if (book[loop] == ' ') book[loop] = 0; else break; }
+        for (; loop+1; loop--) { if (book[loop] == ' ') book.resize(loop); else break; }
 
         // check if endsWith([0-9][a-z]) and kill the last letter, e.g., ...12a, and chop off the 'a'
         // why?  What's this for? wouldn't this mess up 2t?
         if (loop > 0 && charIsDigit(book[loop-1]) && charIsLower(book[loop])) {
-            book[loop--] = 0;
+            book.resize(loop--);
         }
 
         // skip trailing spaces and numbers
         for (; loop+1; loop--) {
             if ((charIsDigit(book[loop])) || (book[loop] == ' ')) {
-                book[loop] = 0;
+                book.resize(loop);
                 continue;
             }
             else {
                 if ((asciiCharToUpper(book[loop])=='F')&&(loop)) {
                     if ((charIsDigit(book[loop-1])) || (book[loop-1] == ' ') || (asciiCharToUpper(book[loop-1]) == 'F')) {
-                        book[loop] = 0;
+                        book.resize(loop);
                         continue;
                     }
                 }
@@ -893,30 +892,30 @@ terminate_range:
         }
 
         // check for roman numeral chapter
-        for (loop = std::strlen(book) - 1; loop+1; loop--) {
+        for (loop = book.size() - 1u; loop+1; loop--) {
             if (book[loop] == ' ') {
                 // "PS C" is ok, but "II C" is not ok
-                if (isroman(&book[loop+1]) && !isroman(book,loop)) {
+                if (isroman(book.c_str() + loop + 1u) && !isroman(book.c_str(), loop)) {
                     if (verse == -1) {
                         verse = chap;
-                        chap = from_rom(&book[loop+1]);
-                        book[loop] = 0;
+                        chap = from_rom(book.c_str() + loop + 1u);
+                        book.resize(loop);
                     }
                 }
                 break;
             }
         }
         // check for special inscriptio and subscriptio which are saved as book intro and chap 1 intro (for INTF)
-        for (loop = std::strlen(book) - 1; loop+1; loop--) {
+        for (loop = book.size() - 1u; loop+1; loop--) {
             if (book[loop] == ' ') {
-                if (!strnicmp(&book[loop+1], "inscriptio", std::strlen(&book[loop+1]))) {
-                    book[loop] = 0;
+                if (!strnicmp(book.c_str() + loop + 1u, "inscriptio", book.size() - loop - 1u)) {
+                    book.resize(loop);
                     verse = 0;
                     chap = 0;
                     suffix = 0;
                 }
-                else if (!strnicmp(&book[loop+1], "subscriptio", std::strlen(&book[loop+1]))) {
-                    book[loop] = 0;
+                else if (!strnicmp(book.c_str() + loop + 1u, "subscriptio", book.size() - loop - 1u)) {
+                    book.resize(loop);
                     verse = 0;
                     chap = 1;
                         suffix = 0;
@@ -929,19 +928,19 @@ terminate_range:
             if (verse == -1) {
                 verse = chap;
                 chap = lastKey->getChapter();
-                *book = 0;
+                book.clear();
             }
         }
 
         if (caseInsensitiveEquals(book, "ch") || caseInsensitiveEquals(book, "chap")) {    // Verse abbrev
-            std::strcpy(book, lastKey->getBookName().c_str());
+            book = lastKey->getBookName();
         }
-        bookno = getBookFromAbbrev(book);
-        if ((bookno > -1) && (suffix == 'f') && (book[std::strlen(book)-1] == 'f')) {
+        bookno = getBookFromAbbrev(book.c_str());
+        if ((bookno > -1) && (suffix == 'f') && (book[book.size()-1] == 'f')) {
             suffix = 0;
         }
     }
-    if (((bookno > -1) || (!*book)) && ((*book) || (chap >= 0) || (verse >= 0))) {
+    if (((bookno > -1) || book.empty()) && (!book.empty() || (chap >= 0) || (verse >= 0))) {
         char partial = 0;
         curKey->setVerse(1);
         curKey->setChapter(1);
@@ -1047,7 +1046,6 @@ terminate_range:
             }
         }
     }
-    *book = 0;
     tmpListKey = Position::Top;
     ListKey internalListKey;
     internalListKey = tmpListKey;
