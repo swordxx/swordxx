@@ -5,7 +5,7 @@
 #
 # NOTES: Defaults to build type of Shared
 #        Forces out-of-source tree build
-#        
+#
 #
 # This file started on 18 January 2010 by Gregory Hellings
 # It is ceded to The SWORD Library developers and CrossWire under the terms
@@ -106,7 +106,7 @@ IF(LIBSWORD_LIBRARY_TYPE MATCHES ".*Static.*" OR NOT LIBSWORD_LIBRARY_TYPE)
 	# same exact name.  In other systems, the .a and .so suffixes suffice
 	# to keep them separate
 	IF(NOT MSVC OR NOT LIBSWORD_LIBRARY_TYPE MATCHES ".*Shared.*")
-		SET_TARGET_PROPERTIES(sword_static PROPERTIES 
+		SET_TARGET_PROPERTIES(sword_static PROPERTIES
 			OUTPUT_NAME "sword")
 		#MESSAGE(STATUS "Building Static library with name sword")
 	ELSE(NOT MSVC OR NOT LIBSWORD_LIBRARY_TYPE MATCHES ".*Shared.*")
@@ -263,7 +263,7 @@ ADD_DEFINITIONS(-D_FTPLIB_NO_COMPAT)
 #############################################################################################
 # Platform-specifc bits that I will eventually refactor out into their own files, once I am happy
 # with the stuff that is here.
-# 
+#
 IF(APPLE OR iPhone)
 	ADD_DEFINITIONS(-Dunix)
 ENDIF(APPLE OR iPhone)
@@ -281,7 +281,7 @@ ENDIF(BUILDING_STATIC)
 
 ##############################################################################################
 # Installing the library, headers, utilies, etc
-# 
+#
 
 INCLUDE("${CMAKE_CURRENT_SOURCE_DIR}/cmake/install.cmake")
 
@@ -295,7 +295,7 @@ ENDIF(NOT SWORD_BINDINGS STREQUAL "" AND SWORD_BINDINGS)
 
 ##############################################################################################
 # Utilities are hawt
-# 
+#
 
 IF(NOT SWORD_BUILD_UTILS STREQUAL "No")
 	ADD_SUBDIRECTORY("${CMAKE_CURRENT_SOURCE_DIR}/utilities")
@@ -303,7 +303,7 @@ ENDIF(NOT SWORD_BUILD_UTILS STREQUAL "No")
 
 ##############################################################################################
 # Demos are also hawt
-# 
+#
 
 IF(SWORD_BUILD_EXAMPLES STREQUAL "Yes")
 	ADD_SUBDIRECTORY("${CMAKE_CURRENT_SOURCE_DIR}/examples/cmdline")
