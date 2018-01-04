@@ -483,11 +483,10 @@ ListKey VerseKey::parseVerseList(const char *buf, const char *defaultKey, bool e
     auto const bufStart = buf;
 
     char book[2048];    // TODO: bad, remove
-    char number[2048];    // TODO: bad, remove
+    std::string number;
+    number.reserve(10);
     *book = 0;
-    *number = 0;
     int tobook = 0;
-    int tonumber = 0;
     char suffix = 0;
     int chap = -1, verse = -1;
     int bookno = 0;
@@ -540,14 +539,12 @@ ListKey VerseKey::parseVerseList(const char *buf, const char *defaultKey, bool e
         switch (*buf) {
         case ':':
             if (buf[1] != ' ') {        // for silly "Mat 1:1: this verse...."
-                number[tonumber] = 0;
-                tonumber = 0;
-                if (*number) {
+                if (!number.empty()) {
                     if (chap >= 0)
-                        verse = std::atoi(number);
-                    else    chap  = std::atoi(number);
+                        verse = std::atoi(number.c_str());
+                    else    chap  = std::atoi(number.c_str());
+                    number.clear();
                 }
-                *number = 0;
                 comma = false;
                 break;
             }
@@ -555,7 +552,7 @@ ListKey VerseKey::parseVerseList(const char *buf, const char *defaultKey, bool e
         case ' ':
             inTerm = true;
             while (true) {
-                if ((!*number) || (chap < 0))
+                if (number.empty() || (chap < 0))
                     break;
                 decltype(buf-buf) q = 1;
                 while ((buf[q]) && (buf[q] != ' '))
@@ -587,14 +584,12 @@ ListKey VerseKey::parseVerseList(const char *buf, const char *defaultKey, bool e
         case ',': // on number new verse
         case ';': // on number new chapter
 terminate_range:
-            number[tonumber] = 0;
-            tonumber = 0;
-            if (*number) {
+            if (!number.empty()) {
                 if (chap >= 0)
-                    verse = std::atoi(number);
-                else    chap = std::atoi(number);
+                    verse = std::atoi(number.c_str());
+                else    chap = std::atoi(number.c_str());
+                number.clear();
             }
-            *number = 0;
             book[tobook] = 0;
             tobook = 0;
             bookno = -1;
@@ -817,13 +812,11 @@ terminate_range:
                     break;
             }
 
-            number[tonumber] = 0;
-            tonumber = 0;
-            if (*number) {
+            if (!number.empty()) {
                 if (chap >= 0)
-                    verse = std::atoi(number);
-                else    chap  = std::atoi(number);
-                *number = 0;
+                    verse = std::atoi(number.c_str());
+                else    chap  = std::atoi(number.c_str());
+                number.clear();
             }
             else if (chap == -1 && (tobook < 1 || book[tobook-1] != ' ')) {
                 book[tobook++] = ' ';
@@ -833,7 +826,7 @@ terminate_range:
 
         default:
             if (charIsDigit(*buf)) {
-                number[tonumber++] = *buf;
+                number.push_back(*buf);
                 suffix = 0;
                 doubleF = 0;
             }
@@ -848,16 +841,11 @@ terminate_range:
                             || *buf == 'f') {
                         // if suffix is already an 'f', then we need to mark if we're doubleF.
                         doubleF = (*buf == 'f' && suffix == 'f');
-                        if (suffix && !doubleF) {
-                            // we've already had a suffix one, so this is another letter, thus any number is not a number, e.g., '2jn'. We're on 'n'
-                            number[tonumber] = 0;
-                            tonumber = 0;
-                        }
+                        if (suffix && !doubleF)
+                            number.clear();
                         suffix = *buf;
-                    }
-                    else {
-                        number[tonumber] = 0;
-                        tonumber = 0;
+                    } else {
+                        number.clear();
                     }
                     break;
                 }
@@ -867,14 +855,12 @@ terminate_range:
         }
         buf++;
     }
-    number[tonumber] = 0;
-    tonumber = 0;
-    if (*number) {
+    if (!number.empty()) {
         if (chap >= 0)
-            verse = std::atoi(number);
-        else    chap  = std::atoi(number);
+            verse = std::atoi(number.c_str());
+        else    chap  = std::atoi(number.c_str());
+        number.clear();
     }
-    *number = 0;
     book[tobook] = 0;
     tobook = 0;
     if (*book) {
