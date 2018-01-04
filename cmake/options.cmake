@@ -22,9 +22,6 @@ macro(_SET_FANCY _var _value _comment)
     endif()
 endmacro(_SET_FANCY)
 
-# A list of the options that the library supports
-SET(SWORD_PYTHON_INSTALL_DIR "" CACHE STRING "Directory where the Python bindings will be installed. Defaults to default Python path.")
-
 # Installation options
 IF(APPLE)
 	SET(SWORD_INSTALL_DIR "/opt/local")
@@ -34,6 +31,7 @@ ELSE(APPLE)
 	SET(SWORD_INSTALL_DIR "/usr/local")
 ENDIF(APPLE)
 
+# A list of the options that the library supports
 _SET_FANCY(CMAKE_INSTALL_PREFIX "${SWORD_INSTALL_DIR}" "Directory into which to install architecture-dependent files. Defaults to ${SWORD_INSTALL_DIR}.")
 
 _SET_FANCY(LIB_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/lib" "Object code library install directory. Defaults to ${SWORD_INSTALL_DIR}/lib")
@@ -45,6 +43,8 @@ SET(BINDIR "${CMAKE_INSTALL_PREFIX}/bin" CACHE STRING "Directory to install bina
 _SET_FANCY(SYSCONF_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/etc" "Directory to install global config files. Defaults to ${SWORD_INSTALL_DIR}/etc.")
 
 _SET_FANCY(SHARE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}/share" "Directory to install global data files. Defaults to ${SWORD_INSTALL_DIR}/share.")
+
+_SET_FANCY(SWORD_PYTHON_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}" CACHE STRING "Directory where the Python bindings will be installed. Defaults to default Python path.")
 
 # Post-processing of variables
 MACRO(PROCESS_VERSION LEVEL VALUE)
