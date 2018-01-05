@@ -37,8 +37,8 @@ namespace swordxx {
 #define KEYERR_OUTOFBOUNDS 1
 
 #define SWKEY_OPERATORS(cn) \
-  cn & operator=(char const * ikey) { setText(ikey); return *this; } \
-  cn & operator=(SWKey const & ikey) { positionFrom(ikey); return *this; } \
+  cn & operator=(char const * ikey) = delete; \
+  cn & operator=(SWKey const & ikey) = delete; \
   cn & operator-=(int steps) { decrement(steps); return *this; } \
   cn & operator+=(int steps) { increment(steps); return *this; } \
   cn & operator++() { increment(1); return *this; } \

@@ -532,7 +532,7 @@ ListKey VerseKey::parseVerseList(const char *buf, const char *defaultKey, bool e
 
     curKey->setAutoNormalize(isAutoNormalize());
     lastKey->setAutoNormalize(false);
-    if (defaultKey) *lastKey = defaultKey;
+    if (defaultKey) lastKey->setText(defaultKey);
 
     while (*buf) {
         switch (*buf) {

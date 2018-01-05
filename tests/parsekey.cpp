@@ -53,7 +53,7 @@ int main(int argc, char **argv) {
     SWLog::getSystemLog()->setLogLevel(SWLog::LOG_DEBUG);
     DefaultVSKey.validateCurrentLocale();
 
-    DefaultVSKey = context;
+    DefaultVSKey.setText(context);
 
     ListKey verses = DefaultVSKey.parseVerseList(argv[1], DefaultVSKey.getText(), true);
 

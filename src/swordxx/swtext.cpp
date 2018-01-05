@@ -93,7 +93,7 @@ VerseKey &SWText::getVerseKey(const SWKey *keyToConvert) const {
     VerseKey & retKey = (tmpSecond) ? tmpVK1 : tmpVK2;
     tmpSecond = !tmpSecond;
     retKey.setLocale(LocaleMgr::getSystemLocaleMgr()->getDefaultLocaleName());
-    retKey = *thisKey;
+    retKey.positionFrom(*thisKey);
     return retKey;
 }
 

@@ -716,7 +716,7 @@ bool handleToken(std::string &text, XMLTag token) {
                     currentVerse.setVerse(0);
                     writeEntry(text);
                 }
-                currentVerse = token.attribute("osisID").c_str();
+                currentVerse.setText(token.attribute("osisID").c_str());
                 currentVerse.setChapter(0);
                 currentVerse.setVerse(0);
                 std::strcpy(currentOsisID, currentVerse.getOSISRef());
@@ -759,7 +759,7 @@ bool handleToken(std::string &text, XMLTag token) {
                     writeEntry(text);
                 }
 
-                currentVerse = token.attribute("osisID").c_str();
+                currentVerse.setText(token.attribute("osisID").c_str());
                 currentVerse.setVerse(0);
 
                 if (debug & DEBUG_OTHER) {
@@ -827,7 +827,7 @@ bool handleToken(std::string &text, XMLTag token) {
                 ListKey verseKeys = currentVerse.parseVerseList(keyVal.c_str(), currentVerse.getText(), true);
                 auto memberKeyCount(verseKeys.getCount());
                 if (memberKeyCount) {
-                    currentVerse = *verseKeys.getElement(0u);
+                    currentVerse.positionFrom(*verseKeys.getElement(0u));
                     // See if this osisID or annotateRef refers to more than one verse.
                     // If it does, save it until all verses have been seen.
                     // At that point we will output links.
@@ -1333,12 +1333,12 @@ void writeLinks()
         ListKey verseKeys = linkedVerses[i];
         verseKeys.positionToTop();
         /// \todo possible null pointer dereference?
-        destKey = *verseKeys.getElement();
+        destKey.positionFrom(*verseKeys.getElement());
         verseKeys.increment(1);
 
         while (!verseKeys.popError()) {
             /// \todo possible null pointer dereference?
-            linkKey = *verseKeys.getElement();
+            linkKey.positionFrom(*verseKeys.getElement());
             linkToEntry(linkKey, destKey);
             verseKeys.increment(1);
         }

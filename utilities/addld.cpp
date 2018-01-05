@@ -86,7 +86,7 @@ int main(int argc, char **argv) {
       key->setPersist(true);      // the magical setting
 
       // Set our VerseKey
-      *key = argv[3];
+      key->setText(argv[3]);
      mod.setKey(*key);
       FILE *infile;
       // case: add from text file
@@ -105,7 +105,7 @@ int main(int argc, char **argv) {
       key->setPersist(true);      // the magical setting
 
       // Set our VerseKey
-      *key = argv[3];
+      key->setText(argv[3]);
      mod.setKey(*key);
       FILE *infile;
       // case: add from text file
@@ -124,7 +124,7 @@ int main(int argc, char **argv) {
       key->setPersist(true);      // the magical setting
 
       // Set our VerseKey
-      *key = argv[3];
+      key->setText(argv[3]);
      mod.setKey(*key);
       FILE *infile;
       // case: add from text file
@@ -146,7 +146,7 @@ int main(int argc, char **argv) {
       auto const key(mod.createKey());
       key->setPersist(true);      // the magical setting
 
-      *key = argv[3];
+      key->setText(argv[3]);
      mod.setKey(*key);
       SWKey tmpkey = argv[4];
       mod.linkEntry(tmpkey);
@@ -156,7 +156,7 @@ int main(int argc, char **argv) {
       auto const key(mod.createKey());
       key->setPersist(true);      // the magical setting
 
-      *key = argv[3];
+      key->setText(argv[3]);
      mod.setKey(*key);
 
       SWKey tmpkey = argv[4];
@@ -167,7 +167,7 @@ int main(int argc, char **argv) {
       auto const key(mod.createKey());
       key->setPersist(true);      // the magical setting
 
-      *key = argv[3];
+      key->setText(argv[3]);
      mod.setKey(*key);
 
       SWKey tmpkey = argv[4];

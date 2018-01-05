@@ -44,7 +44,7 @@ int main(int argc, char **argv) {
 
     VerseKey DefaultVSKey;
 
-    DefaultVSKey = "jas3:1";
+    DefaultVSKey.setText("jas3:1");
 
     ListKey verses = DefaultVSKey.parseVerseList(argv[1], DefaultVSKey.getText(), true);
 

@@ -76,7 +76,7 @@ void gotoPath(TreeKeyIdx *treeKey) {
     fgets(buf, 1000, stdin);
     std::string path = buf;
     trimString(path);
-    (*treeKey) = path.c_str();
+    treeKey->setText(path.c_str());
 }
 
 

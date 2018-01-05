@@ -171,7 +171,7 @@ int main(int argc, char **argv)
             tmpKey = std::make_unique<VerseKey>();
         }
     }
-    *tmpKey = inModule.getKeyText();
+    tmpKey->setText(inModule.getKeyText());
 
     tmpKey->setIntros(true);
     tmpKey->setAutoNormalize(false);

@@ -81,7 +81,7 @@ const char *SWLD::getKeyText() const {
 
 void SWLD::positionToTop() {
     if (!key->isTraversable()) {
-        *key = "";
+        key->setText("");
     } else {
         key->positionToTop();
     }
@@ -90,7 +90,7 @@ void SWLD::positionToTop() {
 
 void SWLD::positionToBottom() {
     if (!key->isTraversable()) {
-        *key = "zzzzzzzzz";
+        key->setText("zzzzzzzzz");
     } else {
         key->positionToBottom();
     }

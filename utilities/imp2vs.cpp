@@ -277,7 +277,7 @@ void writeEntry(SWModule *module, const std::string &key, const std::string &ent
 
         bool first = true;
         for (listKey.positionToTop(); !listKey.popError(); ++listKey) {
-            *vkey = listKey;
+            vkey->positionFrom(listKey);
             if (first) {
                 *linkMaster = *vkey;
                 std::string text = module->getRawEntry();

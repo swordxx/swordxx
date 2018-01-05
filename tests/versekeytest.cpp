@@ -114,7 +114,7 @@ cout << currentVerse << endl;
     ++scope;
 
     VerseKey *x = new VerseKey(); //(VerseKey *)mod->CreateKey();
-    *x = scope;
+    x->positionFrom(scope);
     x->clearBound();
 
     std::cout << "x: " << x->getText() << "\n";
@@ -142,16 +142,16 @@ cout << currentVerse << endl;
      std::cout << "Error: " << (int)boundTest.popError() << ": " << boundTest.getText() << "\n";
 
 
-     *x = "Is.1.13";
-     scope = x->getText();
+     x->setText("Is.1.13");
+     scope.setText(x->getText());
      const std::string T1 = scope.getText();
      const std::string T2 = x->getText();
      if (T1 == T2) std::cout << "Error restricting bounds: " << x->getText() << " is in " << bounds << "\n";
 
      if (!scope.popError()) std::cout << "Error restricting bounds: " << x->getText() << " is in " << bounds << "\n";
 
-     *x = "1Sam.21.1";
-     scope = *x;
+     x->setText("1Sam.21.1");
+     scope.positionFrom(*x);
      if (!scope.popError()) std::cout << "Error restricting bounds: " << x->getText() << " is in " << bounds << "\n";
 
 /*
@@ -178,7 +178,7 @@ cout << currentVerse << endl;
     vk.setAutoNormalize(true);
     vk.setIntros(true);
 
-    vk = "jn3.50";
+    vk.setText("jn3.50");
     cout << "jn.3.50: " << vk.getText() << "\n";
     ++vk;
     cout << "++: " << vk.getText() << "\n";
@@ -198,7 +198,7 @@ cout << currentVerse << endl;
     vk.setAutoNormalize(false);
     vk.setIntros(true);
 
-    vk = "jn3.50";
+    vk.setText("jn3.50");
     cout << "jn.3.50: " << vk.getText() << "\n";
     ++vk;
     cout << "++: " << vk.getText() << "\n";
@@ -218,7 +218,7 @@ cout << currentVerse << endl;
     vk.setAutoNormalize(true);
     vk.setIntros(false);
 
-    vk = "jn3.50";
+    vk.setText("jn3.50");
     cout << "jn.3.50: " << vk.getText() << "\n";
     ++vk;
     cout << "++: " << vk.getText() << "\n";
@@ -238,7 +238,7 @@ cout << currentVerse << endl;
     vk.setAutoNormalize(false);
     vk.setIntros(false);
 
-    vk = "jn3.50";
+    vk.setText("jn3.50");
     cout << "jn.3.50: " << vk.getText() << "\n";
     ++vk;
     cout << "++: " << vk.getText() << "\n";
@@ -269,7 +269,7 @@ cout << currentVerse << endl;
 
     cout << "\nBook math\n\n";
 
-    vkey = "Mark.1.1";
+    vkey.setText("Mark.1.1");
     --vkey;
     cout << "Mark.1.1-- = " << vkey.getText() << "\n";
     ++vkey;
@@ -277,7 +277,7 @@ cout << currentVerse << endl;
     vkey.setChapter(vkey.getChapter() - 1);
     cout << ".setChapter(.getChapter() - 1) = " << vkey.getText() << "\n";
 
-    vkey = "Matthew.1.1";
+    vkey.setText("Matthew.1.1");
     --vkey;
     cout << "Matthew.1.1-- = " << vkey.getText() << "\n";
     ++vkey;
@@ -288,14 +288,14 @@ cout << currentVerse << endl;
     cout << "\nChapter math\n\n";
 
     cout << "Matthew.1.1 - 1 chapter\n";
-    vkey = "Matthew.1.1";
+    vkey.setText("Matthew.1.1");
     vkey.setChapter(vkey.getChapter() - 1);
     cout << ".setChapter(.getChapter() - 1) = " << vkey.getText() << "\n";
 
     cout << "\nVerse math\n\n";
 
     cout << "Matthew.1.1 - 1 verse\n";
-    vkey = "Matthew.1.1";
+    vkey.setText("Matthew.1.1");
     vkey.setVerse(vkey.getVerse() - 1);
     cout << ".setVerse(.getVerse() - 1) = " << vkey.getText() << "\n";
 

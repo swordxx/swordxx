@@ -299,7 +299,11 @@ void checkparams(int argc, char **argv)
         fprintf(stderr, "usage: %s <file to process> [nt - for new testmt file]\n", argv[0]);
         std::exit(1);
     }
-    if (argc == 3)
-        key1 = key2 = key3 = "Matthew 1:1";
-    else    key1 = key2 = key3 = "Genesis 1:1";
+    if (argc == 3) {
+        key3.setText("Matthew 1:1");
+    } else {
+        key3.setText("Genesis 1:1");
+    }
+    key2.positionFrom(key3);
+    key1.positionFrom(key2);
 }

@@ -196,19 +196,19 @@ int main(int argc, char **argv)
     inModule.setSkipConsecutiveLinks(false);
     inModule.positionToTop();
     while (!inModule.popError()) {
-        bufferKey = *inModule.getKey();
+        bufferKey.positionFrom(*inModule.getKey());
         // pseudo-check for link.  Will get most common links.
         if ((lastBuffer == inModule.getRawEntry()) &&(lastBuffer.length() > 0)) {
-            *outModuleKey = bufferKey;
+            outModuleKey->positionFrom(bufferKey);
             outModule->linkEntry(lastBufferKey);    // link to last key
         cout << "Adding [" << bufferKey.getText() << "] link to: [" << lastBufferKey.getText() << "]\n";
         }
         else {
             lastBuffer = inModule.getRawEntry();
-            lastBufferKey = inModule.getKeyText();
+            lastBufferKey.setText(inModule.getKeyText());
             if (lastBuffer.length() > 0) {
                 cout << "Adding [" << bufferKey.getText() << "] new text.\n";
-                *outModuleKey = bufferKey;
+                outModuleKey->positionFrom(bufferKey);
 //                outModule->getRawEntry();    // snap
 //                outModule->setKey(bufferKey);
                 outModule->setEntry(lastBuffer.c_str());    // save new text;

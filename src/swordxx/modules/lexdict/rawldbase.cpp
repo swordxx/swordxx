@@ -86,7 +86,7 @@ char RawLdBase<Base>::getEntry(long away) const {
         rawFilter(entryBuf, key);
         entrySize = size;        // support getEntrySize call
         if (!key->isPersist())            // If we have our own key
-            *key = idxbuf.c_str();                // reset it to entry index buffer
+            key->setText(idxbuf.c_str());                // reset it to entry index buffer
 
         m_entkeytxt = idxbuf; // set entry key text that module 'snapped' to.
     } else {
@@ -135,7 +135,7 @@ void RawLdBase<Base>::increment(int steps) {
 
     tmperror = (getEntry(steps)) ? KEYERR_OUTOFBOUNDS : 0;
     error = (error)?error:tmperror;
-    *key = m_entkeytxt.c_str();
+    key->setText(m_entkeytxt.c_str());
 }
 
 template <typename Base>

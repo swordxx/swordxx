@@ -156,7 +156,7 @@ void RawGenBook::linkEntry(SWKey const & inkey) {
     // if we don't have a VerseKey * decendant, create our own
     if (!srckey) {
         srckey = static_cast<TreeKeyIdx *>(createKey().release());
-        (*srckey) = inkey;
+        srckey->positionFrom(inkey);
     }
 
     key->setUserData(srckey->getUserData(), 8);

@@ -294,7 +294,7 @@ bool handleToken(std::string & text, XMLTag & token) {
                         if (splitPtr) {
                                 std::strncpy (splitBuffer.data(), keyStr.c_str(), splitPtr - keyStr.c_str());
                                 splitBuffer[splitPtr - keyStr.c_str()] = 0;
-                *currentKey = splitBuffer.data();
+                currentKey->setText(splitBuffer.data());
 #ifdef DEBUG
                 cout << "splitBuffer: " << splitBuffer.data() << endl;
                 cout << "currentKey: " << currentKey->getText() << endl;
@@ -328,7 +328,7 @@ bool handleToken(std::string & text, XMLTag & token) {
 #endif
                         }
                         else {
-                *currentKey = keyStr.c_str();
+                currentKey->setText(keyStr.c_str());
                 writeEntry(*currentKey, text);
                         }
 

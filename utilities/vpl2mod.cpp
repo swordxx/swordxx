@@ -133,8 +133,8 @@ bool isKJVRef(const char *buf) {
     vk.setIntros(true);    // turn on mod/testmnt/book/chap headings
     vk.setPersist(true);
     // lets do some tests on the verse --------------
-    vk = buf;
-    test = buf;
+    vk.setText(buf);
+    test.setText(buf);
 
     if (vk.getTestament() && vk.getBook() && vk.getChapter() && vk.getVerse()) { // if we're not a heading
 //        std::cerr << (const char*)vk << " == "  << (const char*)test << std::endl;
@@ -220,7 +220,7 @@ int main(int argc, char **argv) {
     // Loop through module from TOP to BOTTOM and set next line from
     // input file as text for this entry in the module
     mod.positionToTop();
-    if (ntonly) vk = "Matthew 1:1";
+    if (ntonly) vk.setText("Matthew 1:1");
 
     int successive = 0;  //part of hack below
     while ((!mod.popError())) {
@@ -237,7 +237,7 @@ int main(int argc, char **argv) {
                 std::exit(-4);
             }
 
-            vk = buffer.get();
+            vk.setText(buffer.get());
             if (vk.popError()) {
                 std::cerr << "Error parsing key: " << buffer.get() << "\n";
                 std::exit(-5);

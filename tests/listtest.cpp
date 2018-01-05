@@ -35,17 +35,17 @@ int main(int /* argc */, char ** /* argv */)
     // simple bounds check on verse first before we try this with listkey
     SWKey text;
     VerseKey vk("jn 1:1", "jn 1:12");
-    vk = "jas 1:19";
+    vk.setText("jas 1:19");
     cout << "\nError should be set: " << ((vk.popError()) ? "set":"not set");
-    text = vk.getText();
+    text.setText(vk.getText());
     cout << "\nshould be jn 1.12: " << text.getText() << "\n";
-    vk = "mat 1:19";
+    vk.setText("mat 1:19");
     cout << "\nError should be set: " << ((vk.popError()) ? "set":"not set");
-    text = vk.getText();
+    text.setText(vk.getText());
     cout << "\nshould be jn 1.1: " << text.getText() << "\n";
-    vk = "jn 1:7";
+    vk.setText("jn 1:7");
     cout << "\nError should not be set: " << ((vk.popError()) ? "set":"not set");
-    text = vk.getText();
+    text.setText(vk.getText());
     cout << "\nshould be jn 1.7: " << text.getText() << "\n";
 
     // complex listkey in listkey text
@@ -104,14 +104,14 @@ int main(int /* argc */, char ** /* argv */)
     cout << "\nCount should be 1: " << lk.getCount();
 
     lk = vk.parseVerseList("mat;mark;luke", vk.getText(), true);
-    lk = (VerseKey)"mark 3:16";
+    lk.positionFrom(VerseKey("mark 3:16"));
     cout << "\nError should not be set: " << ((lk.popError()) ? "set":"not set");
-    lk = (VerseKey)"john 3:16";
+    lk.positionFrom(VerseKey("john 3:16"));
     cout << "\nError should be set: " << ((lk.popError()) ? "set":"not set");
     lk = vk.parseVerseList("mk 3:16", vk.getText(), true);
-    lk = (VerseKey)"john 3:16";
+    lk.positionFrom(VerseKey("john 3:16"));
     cout << "\nError should be set: " << ((lk.popError()) ? "set":"not set");
-    lk = (VerseKey)"mark 3:16";
+    lk.positionFrom(VerseKey("mark 3:16"));
     cout << "\nError should not be set: " << ((lk.popError()) ? "set":"not set");
 
     cout << "\n\n";

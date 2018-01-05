@@ -63,9 +63,11 @@ int main(int argc, char **argv)
     long index;
 
 
-    if (argc < 2)
-        bla = "James    1:19";
-    else    bla = argv[2];
+    if (argc < 2) {
+        bla.setText("James    1:19");
+    } else {
+        bla.setText(argv[2]);
+    }
 
     std::cout << "\n Headings: " << (bool)bla.isIntros() << "\n";
     std::cout << " (.Index(Index()+1))\n";
@@ -81,9 +83,11 @@ int main(int argc, char **argv)
 
     std::cout << "-----------------\n";
     std::cout << "\n (.Index(Index()-1))\n";
-    if (argc < 2)
-        bla = "James    1:19";
-    else    bla = argv[2];
+    if (argc < 2) {
+        bla.setText("James    1:19");
+    } else {
+        bla.setText(argv[2]);
+    }
 
     for (loop = max; loop; loop--) {
         index = bla.getIndex();
@@ -97,9 +101,11 @@ int main(int argc, char **argv)
     std::cout << "\n Headings: " << (bool)bla.isIntros() << "\n";
     std::cout << " key++\n";
 
-    if (argc < 2)
-        bla = "Matthew  1:5";
-    else    bla = argv[2];
+    if (argc < 2) {
+        bla.setText("Matthew  1:5");
+    } else {
+        bla.setText(argv[2]);
+    }
 
     for (loop = 0; loop < max && !bla.popError(); loop++, ++bla) {
         index = bla.getIndex();
@@ -111,9 +117,11 @@ int main(int argc, char **argv)
     std::cout << "\n Headings: " << (bool)bla.isIntros() << "\n";
     std::cout << " key--\n";
 
-    if (argc < 2)
-        bla = "Matthew  1:5";
-    else    bla = argv[2];
+    if (argc < 2) {
+        bla.setText("Matthew  1:5");
+    } else {
+        bla.setText(argv[2]);
+    }
 
     for (loop = max; loop && !bla.popError(); loop--, --bla) {
         index = bla.getIndex();
@@ -122,9 +130,11 @@ int main(int argc, char **argv)
 
     std::cout << "-----------------\n";
 
-    if (argc < 2)
-        bla = "Genesis  1:5";
-    else    bla = argv[2];
+    if (argc < 2) {
+        bla.setText("Genesis  1:5");
+    } else {
+        bla.setText(argv[2]);
+    }
 
     for (loop = max; loop; loop--, --bla) {
         index = bla.getIndex();
@@ -133,9 +143,11 @@ int main(int argc, char **argv)
 
     std::cout << "-----------------\n";
 
-    if (argc < 2)
-        bla = "Malachi  4:2";
-    else    bla = argv[2];
+    if (argc < 2) {
+        bla.setText("Malachi  4:2");
+    } else {
+        bla.setText(argv[2]);
+    }
 
     for (loop = max; loop; loop--, ++bla) {
         index = bla.getIndex();
@@ -144,9 +156,11 @@ int main(int argc, char **argv)
 
     std::cout << "-----------------\n";
 
-    if (argc < 2)
-        bla = "Revelation of John  22:17";
-    else    bla = argv[2];
+    if (argc < 2) {
+        bla.setText("Revelation of John  22:17");
+    } else {
+        bla.setText(argv[2]);
+    }
 
     for (loop = max; loop; loop--, ++bla) {
         index = bla.getIndex();
@@ -159,9 +173,11 @@ int main(int argc, char **argv)
 
     bla.setIntros(true);
 
-    if (argc < 2)
-        bla = "Matthew  1:5";
-    else    bla = argv[2];
+    if (argc < 2) {
+        bla.setText("Matthew  1:5");
+    } else {
+        bla.setText(argv[2]);
+    }
 
     for (loop = max; loop; loop--, --bla) {
         index = bla.getIndex();
@@ -170,9 +186,11 @@ int main(int argc, char **argv)
 
     std::cout << "-----------------\n";
 
-    if (argc < 2)
-        bla = "Genesis  1:5";
-    else    bla = argv[2];
+    if (argc < 2) {
+        bla.setText("Genesis  1:5");
+    } else {
+        bla.setText(argv[2]);
+    }
 
     for (loop = max; loop; loop--, --bla) {
         index = bla.getIndex();
@@ -181,9 +199,11 @@ int main(int argc, char **argv)
 
     std::cout << "-----------------\n";
 
-    if (argc < 2)
-        bla = "Malachi  4:2";
-    else    bla = argv[2];
+    if (argc < 2) {
+        bla.setText("Malachi  4:2");
+    } else {
+        bla.setText(argv[2]);
+    }
 
     for (loop = max; loop; loop--, ++bla) {
         index = bla.getIndex();
@@ -192,9 +212,11 @@ int main(int argc, char **argv)
 
     std::cout << "-----------------\n";
 
-    if (argc < 2)
-        bla = "Revelation of John  22:17";
-    else    bla = argv[2];
+    if (argc < 2) {
+        bla.setText("Revelation of John  22:17");
+    } else {
+        bla.setText(argv[2]);
+    }
 
     for (loop = max; loop; loop--, ++bla) {
         index = bla.getIndex();
@@ -204,7 +226,7 @@ int main(int argc, char **argv)
     std::cout << "\n\n";
 
     std::cout << "-------- Error Check ------------\n\n";
-    bla = "Revelation of John 23:19";
+    bla.setText("Revelation of John 23:19");
     std::cout << "bla = \"Revelation of John 23:19\"\n";
     std::cout << "bla.getText() = " << bla.getText() << "\n";
     std::cout << "bla.popError() = " << (int)bla.popError() << " \n";

@@ -66,7 +66,7 @@ int main(int argc, char **argv) {
     vkey->setIntros(true);
     vkey->setAutoNormalize(false);
     vkey->setPersist(true);      // the magical setting
-    *vkey = argv[3];
+    vkey->setText(argv[3]);
     // Set our VerseKey
     mod->setKey(*vkey);
     if (!vkey->getChapter()) {
@@ -106,7 +106,7 @@ int main(int argc, char **argv) {
       std::cout << mod->getKeyText() << "-" << finalkey.getText() << std::endl;
       if (!havefirst) {
         havefirst = true;
-        firstverse = *mod->getKey();
+        firstverse.positionFrom(*mod->getKey());
         FILE *infile;
         // case: add from text file
         //Open our data file and read its contents into the buffer
@@ -135,7 +135,7 @@ int main(int argc, char **argv) {
       else {
         mod->setKey(*listkey.getElement(i));
         havefirst = true;
-        firstverse = *mod->getKey();
+        firstverse.positionFrom(*mod->getKey());
         FILE *infile;
         // case: add from text file
         //Open our data file and read its contents into the buffer
@@ -173,7 +173,7 @@ int main(int argc, char **argv) {
 
    // Set our VerseKey
    mod.setKey(*vkey);
-   *vkey = argv[3];
+   vkey->setText(argv[3]);
 
    if (!vkey->getChapter())
      {

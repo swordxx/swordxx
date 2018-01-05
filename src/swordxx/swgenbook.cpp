@@ -82,7 +82,7 @@ TreeKey & SWGenBook::getTreeKey(SWKey * k) const {
 
     delete tmpTreeKey;
     tmpTreeKey = static_cast<TreeKey *>(createKey().release());
-    (*tmpTreeKey) = *(thiskey);
+    tmpTreeKey->positionFrom(*thiskey);
     return (*tmpTreeKey);
 }
 

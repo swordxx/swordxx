@@ -153,7 +153,7 @@ void RawTextBase<BaseRawVerse>::increment(int steps) {
         tmpkey = &getVerseKey();
 
         if ((error = key->popError())) {
-            *key = lastgood;
+            key->positionFrom(lastgood);
             break;
         }
         long index = tmpkey->getTestamentIndex();
@@ -164,7 +164,7 @@ void RawTextBase<BaseRawVerse>::increment(int steps) {
             || !skipConsecutiveLinks) // or we don't want to skip consecutive links
         {
             steps += (steps < 0) ? 1 : -1;
-            lastgood = *tmpkey;
+            lastgood.positionFrom(*tmpkey);
         }
     }
     error = (error) ? KEYERR_OUTOFBOUNDS : 0;

@@ -135,7 +135,7 @@ char SWModule::setKey(const SWKey *ikey) {
 
     if (!ikey->isPersist()) {        // if we are to keep our own copy
          key = createKey().release();
-        *key = *ikey;
+        key->positionFrom(*ikey);
     }
     else     key = (SWKey *)ikey;        // if we are to just point to an external key
 
@@ -248,7 +248,7 @@ ListKey &SWModule::search(char const * istr,
 
     if (!key->isPersist()) {
         saveKey = createKey().release();
-        *saveKey = *key;
+        saveKey->positionFrom(*key);
     }
     else    saveKey = key;
 
@@ -319,12 +319,12 @@ ListKey &SWModule::search(char const * istr,
             for (unsigned long i = 0; i < (unsigned long)h->length(); i++) {
                 lucene::document::Document &doc = h->doc(i);
                 // set a temporary verse key to this module position
-                *resultKey = wcharToUTF8(doc.get(_T("key"))).c_str(); //TODO Does a key always accept utf8?
+                resultKey->setText(wcharToUTF8(doc.get(_T("key"))).c_str()); //TODO Does a key always accept utf8?
                 uint64_t score = (uint64_t)((uint32_t)(h->score(i)*100));
 
                 // check to see if it sets ok (within our bounds) and if not, skip
                 if (checkBounds) {
-                    *getKey() = *resultKey;
+                    getKey()->positionFrom(*resultKey);
                     if (*getKey() != *resultKey) {
                         continue;
                     }
@@ -426,7 +426,7 @@ ListKey &SWModule::search(char const * istr,
 #else
             if (!regexec(&preg, textBuf.c_str(), 0, nullptr, 0)) {
 #endif
-                *resultKey = *getKey();
+                resultKey->positionFrom(*getKey());
                 resultKey->clearBound();
                 listKey << *resultKey;
                 lastBuf = "";
@@ -456,7 +456,7 @@ ListKey &SWModule::search(char const * istr,
                 if ((flags & REG_ICASE) == REG_ICASE) toupperstr(textBuf);
                 sres = std::strstr(textBuf.c_str(), term.c_str());
                 if (sres) { //it's also in the stripText(), so we have a valid search result item now
-                    *resultKey = *getKey();
+                    resultKey->positionFrom(*getKey());
                     resultKey->clearBound();
                     listKey << *resultKey;
                 }
@@ -483,7 +483,7 @@ ListKey &SWModule::search(char const * istr,
                 } while ( (loopCount < 2) && (foundWords == words.size()));
 
                 if ((loopCount == 2) && (foundWords == words.size())) { //we found the right words in both raw and stripped text, which means it's a valid result item
-                    *resultKey = *getKey();
+                    resultKey->positionFrom(*getKey());
                     resultKey->clearBound();
                     listKey << *resultKey;
                 }
@@ -558,7 +558,7 @@ ListKey &SWModule::search(char const * istr,
                                            : std::strstr(i3Start->second.c_str(), words[3].c_str());
                                 }
                                 if (sres) {
-                                    *resultKey = *getKey();
+                                    resultKey->positionFrom(*getKey());
                                     resultKey->clearBound();
                                     listKey << *resultKey;
                                     break;
@@ -575,7 +575,7 @@ ListKey &SWModule::search(char const * istr,
             }
             } // end switch
         }
-        *lastKey = *getKey();
+        lastKey->positionFrom(*getKey());
         increment(1);
     }
 
@@ -696,7 +696,7 @@ std::string SWModule::renderText(const SWKey *tmpKey) {
 
     if (!key->isPersist()) {
         saveKey = createKey().release();
-        *saveKey = *key;
+        saveKey->positionFrom(*key);
     }
     else    saveKey = key;
 
@@ -726,7 +726,7 @@ std::string SWModule::stripText(const SWKey *tmpKey) {
 
     if (!key->isPersist()) {
         saveKey = createKey().release();
-        *saveKey = *key;
+        saveKey->positionFrom(*key);
     }
     else    saveKey = key;
 
@@ -804,7 +804,7 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
     // module position
     if (!key->isPersist()) {
         saveKey = createKey().release();
-        *saveKey = *key;
+        saveKey->positionFrom(*key);
     }
     else    saveKey = key;
 

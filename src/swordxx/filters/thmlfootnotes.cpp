@@ -70,7 +70,7 @@ char ThMLFootnotes::processText(std::string &text, const SWKey *key, const SWMod
             parser = std::make_unique<VerseKey>();
         }
     }
-    *parser = key->getText();
+    parser->setText(key->getText());
 
     std::string orig = text;
     const char *from = orig.c_str();
