@@ -739,9 +739,9 @@ terminate_range:
                             if (partial > 1)
                                 curKey->positionToMaxChapter();
                             if (partial > 0)
-                                *curKey = Position::MaxVerse;
+                                curKey->positionToMaxVerse();
                             lastKey->setUpperBound(*curKey);
-                            *lastKey = Position::Top;
+                            lastKey->positionToTop();
                             tmpListKey << *lastKey;
                             ((VerseKey *)tmpListKey.getElement())->setAutoNormalize(isAutoNormalize());
                             tmpListKey.getElement()->m_userData =
@@ -754,10 +754,10 @@ terminate_range:
                                 f = true;
                             }
                             lastKey->setLowerBound(*curKey);
-                            if (f && doubleF) (*curKey) = Position::MaxVerse;
+                            if (f && doubleF) curKey->positionToMaxVerse();
                             else if (f) ++(*curKey);
                             lastKey->setUpperBound(*curKey);
-                            *lastKey = Position::Top;
+                            lastKey->positionToTop();
                             tmpListKey << *lastKey;
                             ((VerseKey *)tmpListKey.getElement())->setAutoNormalize(isAutoNormalize());
                             tmpListKey.getElement()->m_userData =
@@ -770,12 +770,12 @@ terminate_range:
                                     tmpListKey.getElement());
                         if (newElement) {
                             if (partial > 1)
-                                *curKey = Position::MaxChapter;
+                                curKey->positionToMaxChapter();
                             if (partial > 0)
-                                *curKey = Position::MaxVerse;
+                                curKey->positionToMaxVerse();
                             newElement->setUpperBound(*curKey);
                             *lastKey = *curKey;
-                            *newElement = Position::Top;
+                            newElement->positionToTop();
                             tmpListKey.getElement()->m_userData =
                                     static_cast<std::size_t>(buf - bufStart);
                         }
@@ -995,7 +995,7 @@ terminate_range:
 
         if ((*buf == '-') && (expandRange)) {    // if this is a dash save lowerBound and wait for upper
             lastKey->setLowerBound(*curKey);
-            *lastKey = Position::Top;
+            lastKey->positionToTop();
             tmpListKey << *lastKey;
             tmpListKey.getElement()->m_userData =
                     static_cast<std::size_t>(buf - bufStart);
@@ -1005,11 +1005,11 @@ terminate_range:
                 if (expandRange && partial) {
                     lastKey->setLowerBound(*curKey);
                     if (partial > 1)
-                        *curKey = Position::MaxChapter;
+                        curKey->positionToMaxChapter();
                     if (partial > 0)
-                        *curKey = Position::MaxVerse;
+                        curKey->positionToMaxVerse();
                     lastKey->setUpperBound(*curKey);
-                    *lastKey = Position::Top;
+                    lastKey->positionToTop();
                     tmpListKey << *lastKey;
                     tmpListKey.getElement()->m_userData =
                             static_cast<std::size_t>(buf - bufStart);
@@ -1021,10 +1021,10 @@ terminate_range:
                         f = true;
                     }
                     lastKey->setLowerBound(*curKey);
-                    if (f && doubleF) (*curKey) = Position::MaxVerse;
+                    if (f && doubleF) curKey->positionToMaxVerse();
                     else if (f) ++(*curKey);
                     lastKey->setUpperBound(*curKey);
-                    *lastKey = Position::Top;
+                    lastKey->positionToTop();
                     tmpListKey << *lastKey;
                     tmpListKey.getElement()->m_userData =
                             static_cast<std::size_t>(buf - bufStart);
@@ -1035,21 +1035,21 @@ terminate_range:
                         dynamic_cast<VerseKey *>(tmpListKey.getElement());
                 if (newElement) {
                     if (partial > 1)
-                        *curKey = Position::MaxChapter;
+                        curKey->positionToMaxChapter();
                     if (partial > 0)
-                        *curKey = Position::MaxVerse;
+                        curKey->positionToMaxVerse();
                     newElement->setUpperBound(*curKey);
-                    *newElement = Position::Top;
+                    newElement->positionToTop();
                     tmpListKey.getElement()->m_userData =
                             static_cast<std::size_t>(buf - bufStart);
                 }
             }
         }
     }
-    tmpListKey = Position::Top;
+    tmpListKey.positionToTop();
     ListKey internalListKey;
     internalListKey = tmpListKey;
-    internalListKey = Position::Top;    // Align internalListKey to first element before passing back;
+    internalListKey.positionToTop();    // Align internalListKey to first element before passing back;
 
     return internalListKey;
 }

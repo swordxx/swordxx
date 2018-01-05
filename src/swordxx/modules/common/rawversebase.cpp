@@ -238,7 +238,7 @@ char RawVerseBase<SizeType_>::createModule(NormalizedPath const & path,
     offset = swapFromArch(offset);
     size = swapFromArch(size);
 
-    for (vk = Position::Top; !vk.popError(); ++vk) {
+    for (vk.positionToTop(); !vk.popError(); ++vk) {
         if (vk.getTestament() < 2) {
             fd->write(&offset, sizeof(offset));
             fd->write(&size, sizeof(size));

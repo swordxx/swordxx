@@ -108,7 +108,7 @@ public:
     void positionToBottom() override;
     virtual long NewIndex() const;
 
-    VERSEKEY_OPERATORS(VerseTreeKey)
+    SWKEY_OPERATORS(VerseTreeKey)
 
     SWKey & operator=(VerseKey const & ikey) override {
         copyFrom(ikey);

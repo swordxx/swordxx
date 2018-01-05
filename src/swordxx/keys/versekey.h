@@ -35,13 +35,6 @@
 
 namespace swordxx {
 
-#define VERSEKEY_OPERATORS(cn) \
-    SWKEY_OPERATORS(cn) \
-    cn & operator=(decltype(Position::MaxVerse)) \
-    { positionToMaxVerse(); return *this; } \
-    cn & operator=(decltype(Position::MaxChapter)) \
-    { positionToMaxChapter(); return *this; }
-
 /**
  * Class VerseKey
  * The SWKey implementation used for verse based modules like Bibles or commentaries.
@@ -390,7 +383,7 @@ public:
     // OPERATORS --------------------------------------------------------------------
 
 
-    VERSEKEY_OPERATORS(VerseKey)
+    SWKEY_OPERATORS(VerseKey)
 
     virtual SWKey &operator =(const VerseKey &ikey) { positionFrom(ikey); return *this; }
 };

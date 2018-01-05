@@ -30,7 +30,6 @@
 #include <string>
 #include "defs.h"
 #include "utilstr.h"
-#include "position.h"
 
 
 namespace swordxx {
@@ -40,8 +39,6 @@ namespace swordxx {
 #define SWKEY_OPERATORS(cn) \
   cn & operator=(char const * ikey) { setText(ikey); return *this; } \
   cn & operator=(SWKey const & ikey) { positionFrom(ikey); return *this; } \
-  cn & operator=(decltype(Position::Top)) { positionToTop(); return *this; } \
-  cn & operator=(decltype(Position::Bottom)) { positionToBottom(); return *this; } \
   cn & operator-=(int steps) { decrement(steps); return *this; } \
   cn & operator+=(int steps) { increment(steps); return *this; } \
   cn & operator++() { increment(1); return *this; } \

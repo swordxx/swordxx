@@ -145,7 +145,7 @@ char SWModule::setKey(const SWKey *ikey) {
 }
 
 void SWModule::positionToTop() {
-    *key = Position::Top;
+    key->positionToTop();
     char saveError = key->popError();
     this->increment();
     this->decrement();
@@ -153,7 +153,7 @@ void SWModule::positionToTop() {
 }
 
 void SWModule::positionToBottom() {
-    *key = Position::Bottom;
+    key->positionToBottom();
     char saveError = key->popError();
     this->decrement();
     this->increment();
@@ -598,7 +598,7 @@ ListKey &SWModule::search(char const * istr,
     resultKey.reset();
     lastKey.reset();
 
-    listKey = Position::Top;
+    listKey.positionToTop();
     setProcessEntryAttributes(savePEA);
 
 
@@ -947,7 +947,7 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
             *chapMax = *vkcheck;
             // we're the first verse in a chapter
             if (vkcheck->getVerse() == 1) {
-                *chapMax = Position::MaxVerse;
+                chapMax->positionToMaxVerse();
                 VerseKey saveKey = *vkcheck;
                 while ((!err) && (*vkcheck <= *chapMax)) {
 //printf("building proxBuf from (%s).\nproxBuf.c_str(): %s\n", (const char *)*key, proxBuf.c_str());

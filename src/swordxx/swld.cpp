@@ -83,7 +83,7 @@ void SWLD::positionToTop() {
     if (!key->isTraversable()) {
         *key = "";
     } else {
-        *key = Position::Top;
+        key->positionToTop();
     }
     getRawEntryBuf();
 }
@@ -92,7 +92,7 @@ void SWLD::positionToBottom() {
     if (!key->isTraversable()) {
         *key = "zzzzzzzzz";
     } else {
-        *key = Position::Bottom;
+        key->positionToBottom();
     }
     getRawEntryBuf();
 }

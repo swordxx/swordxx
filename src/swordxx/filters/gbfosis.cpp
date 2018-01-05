@@ -358,13 +358,13 @@ char GBFOSIS::processText(std::string &text, const SWKey *key, const SWModule *m
 
                 text += "</verse>";
 
-                *tmp = Position::MaxVerse;
+                tmp->positionToMaxVerse();
                 if (*vkey == *tmp) {
                     tmp->setVerse(0);
 //                    sprintf(ref, "\t</div>");
 //                    pushString(&to, ref);
-                    *tmp = Position::MaxChapter;
-                    *tmp = Position::MaxVerse;
+                    tmp->positionToMaxChapter();
+                    tmp->positionToMaxVerse();
                     if (*vkey == *tmp) {
                         tmp->setChapter(0);
                         tmp->setVerse(0);
