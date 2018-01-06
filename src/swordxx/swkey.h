@@ -59,9 +59,9 @@ class SWDLLEXPORT SWKey {
     long m_index;
     void init();
 
+    std::unique_ptr<std::string> m_keyText;
 
 protected:
-    std::unique_ptr<std::string> m_keyText;
     bool m_boundSet;
     bool m_persist;
     char m_error;
