@@ -49,7 +49,7 @@ struct LocaleCache {
 SWKey::SWKey(const char *ikey)
     : m_keyText(std::make_unique<std::string>(ikey ? ikey : ""))
 {
-    init();
+    setLocale(LocaleMgr::getSystemLocaleMgr()->getDefaultLocaleName());
     m_index     = 0;
     m_persist   = 0;
     m_error     = 0;
@@ -58,19 +58,13 @@ SWKey::SWKey(const char *ikey)
 
 SWKey::SWKey(SWKey const &k)
 {
-    init();
+    setLocale(LocaleMgr::getSystemLocaleMgr()->getDefaultLocaleName());
     m_localeName = k.m_localeName;
     m_index     = k.m_index;
     m_persist   = k.m_persist;
     m_userData  = k.m_userData;
     m_error     = k.m_error;
     setText(k.getText());
-}
-
-void SWKey::init() {
-    m_boundSet = false;
-    m_locale = nullptr;
-    setLocale(LocaleMgr::getSystemLocaleMgr()->getDefaultLocaleName());
 }
 
 std::unique_ptr<SWKey> SWKey::clone() const
