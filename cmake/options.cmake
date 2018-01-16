@@ -44,7 +44,7 @@ _SET_FANCY(SYSCONF_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/etc" "Directory to insta
 
 _SET_FANCY(SHARE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}/share" "Directory to install global data files. Defaults to ${SWORD_INSTALL_DIR}/share.")
 
-_SET_FANCY(SWORD_PYTHON_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}" CACHE STRING "Directory where the Python bindings will be installed. Defaults to default Python path.")
+_SET_FANCY(SWORD_PYTHON_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}" STRING "Directory where the Python bindings will be installed. Defaults to default Python path.")
 
 # Post-processing of variables
 MACRO(PROCESS_VERSION LEVEL VALUE)
