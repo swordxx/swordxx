@@ -325,7 +325,7 @@ JNIEXPORT jobjectArray JNICALL Java_org_crosswire_android_sword_SWMgr_getModInfo
 
 	int size = 0;
 	for (sword::ModMap::iterator it = mgr->Modules.begin(); it != mgr->Modules.end(); ++it) {
-		if ((!(it->second->getConfigEntry("CipherKey"))) || (*(it->second->getConfigEntry("CipherKey"))))
+//		if ((!(it->second->getConfigEntry("CipherKey"))) || (*(it->second->getConfigEntry("CipherKey"))))
 			size++;
 	}
 
@@ -338,6 +338,7 @@ SWLog::getSystemLog()->logDebug("getModInfoList returning %d length array\n", si
 	jfieldID langID     = env->GetFieldID(clazzModInfo, "language",    "Ljava/lang/String;");
 	jfieldID versionID  = env->GetFieldID(clazzModInfo, "version",     "Ljava/lang/String;");
 	jfieldID deltaID    = env->GetFieldID(clazzModInfo, "delta",       "Ljava/lang/String;");
+	jfieldID cipherKeyID= env->GetFieldID(clazzModInfo, "cipherKey",   "Ljava/lang/String;");
 
 	jobjectArray ret = (jobjectArray) env->NewObjectArray(size, clazzModInfo, NULL);
 
@@ -345,7 +346,7 @@ SWLog::getSystemLog()->logDebug("getModInfoList returning %d length array\n", si
 	for (sword::ModMap::iterator it = mgr->Modules.begin(); it != mgr->Modules.end(); ++it) {
 		SWModule *module = it->second;
 
-		if ((!(module->getConfigEntry("CipherKey"))) || (*(module->getConfigEntry("CipherKey")))) {
+//		if ((!(module->getConfigEntry("CipherKey"))) || (*(module->getConfigEntry("CipherKey")))) {
 			SWBuf type = module->getType();
 			SWBuf cat = module->getConfigEntry("Category");
 			SWBuf version = module->getConfigEntry("Version");
@@ -354,18 +355,23 @@ SWLog::getSystemLog()->logDebug("getModInfoList returning %d length array\n", si
 			jobject modInfo = env->AllocObject(clazzModInfo); 
 
 			jstring val;
-			val = env->NewStringUTF(assureValidUTF8(module->getName()));        env->SetObjectField(modInfo, nameID   , val); env->DeleteLocalRef(val);
-			val = env->NewStringUTF(assureValidUTF8(module->getDescription())); env->SetObjectField(modInfo, descID   , val); env->DeleteLocalRef(val);
-			val = env->NewStringUTF(assureValidUTF8(type.c_str()));          env->SetObjectField(modInfo, catID    , val); env->DeleteLocalRef(val);
-			val = env->NewStringUTF(assureValidUTF8(module->getLanguage()));        env->SetObjectField(modInfo, langID   , val); env->DeleteLocalRef(val);
-			val = env->NewStringUTF(assureValidUTF8(version.c_str()));       env->SetObjectField(modInfo, versionID, val); env->DeleteLocalRef(val);
-			val = env->NewStringUTF(assureValidUTF8(""));                    env->SetObjectField(modInfo, deltaID  , val); env->DeleteLocalRef(val);
+			val = env->NewStringUTF(assureValidUTF8(module->getName()));        env->SetObjectField(modInfo, nameID     , val); env->DeleteLocalRef(val);
+			val = env->NewStringUTF(assureValidUTF8(module->getDescription())); env->SetObjectField(modInfo, descID     , val); env->DeleteLocalRef(val);
+			val = env->NewStringUTF(assureValidUTF8(type.c_str()));             env->SetObjectField(modInfo, catID      , val); env->DeleteLocalRef(val);
+			val = env->NewStringUTF(assureValidUTF8(module->getLanguage()));    env->SetObjectField(modInfo, langID     , val); env->DeleteLocalRef(val);
+			val = env->NewStringUTF(assureValidUTF8(version.c_str()));          env->SetObjectField(modInfo, versionID  , val); env->DeleteLocalRef(val);
+			val = env->NewStringUTF(assureValidUTF8(""));                       env->SetObjectField(modInfo, deltaID    , val); env->DeleteLocalRef(val);
+			const char *cipherKey = module->getConfigEntry("CipherKey");
+			if (cipherKey) {
+				val = env->NewStringUTF(assureValidUTF8(cipherKey));        env->SetObjectField(modInfo, cipherKeyID, val); env->DeleteLocalRef(val);
+			}
+			else                                                                env->SetObjectField(modInfo, cipherKeyID, NULL);
 
 			env->SetObjectArrayElement(ret, i++, modInfo);
 
 			env->DeleteLocalRef(modInfo);
 
-		}
+//		}
 	}
 	return ret;
 }
@@ -1749,6 +1755,7 @@ SWLog::getSystemLog()->logDebug("sourceName: %s\n", sourceName);
 	jfieldID langID     = env->GetFieldID(clazzModInfo, "language",    "Ljava/lang/String;");
 	jfieldID versionID  = env->GetFieldID(clazzModInfo, "version",     "Ljava/lang/String;");
 	jfieldID deltaID    = env->GetFieldID(clazzModInfo, "delta",       "Ljava/lang/String;");
+	jfieldID cipherKeyID= env->GetFieldID(clazzModInfo, "cipherKey",   "Ljava/lang/String;");
 
 	InstallSourceMap::iterator source = installMgr->sources.find(sourceName);
 	if (source == installMgr->sources.end()) {
@@ -1772,7 +1779,7 @@ SWLog::getSystemLog()->logDebug("remoteListModules returning %d length array\n",
 		SWModule *module = it->first;
 		int status = it->second;
 
-		SWBuf version = module->getConfigEntry("Version");
+		SWBuf version   = module->getConfigEntry("Version");
 		SWBuf statusString = " ";
 		if (status & InstallMgr::MODSTAT_NEW) statusString = "*";
 		if (status & InstallMgr::MODSTAT_OLDER) statusString = "-";
@@ -1784,12 +1791,17 @@ SWLog::getSystemLog()->logDebug("remoteListModules returning %d length array\n",
 		jobject modInfo = env->AllocObject(clazzModInfo); 
 
 		jstring val;
-		val = env->NewStringUTF(assureValidUTF8(module->getName()));        env->SetObjectField(modInfo, nameID   , val); env->DeleteLocalRef(val);
-		val = env->NewStringUTF(assureValidUTF8(module->getDescription())); env->SetObjectField(modInfo, descID   , val); env->DeleteLocalRef(val);
-		val = env->NewStringUTF(assureValidUTF8(type.c_str()));          env->SetObjectField(modInfo, catID    , val); env->DeleteLocalRef(val);
-		val = env->NewStringUTF(assureValidUTF8(module->getLanguage()));        env->SetObjectField(modInfo, langID   , val); env->DeleteLocalRef(val);
-		val = env->NewStringUTF(assureValidUTF8(version.c_str()));       env->SetObjectField(modInfo, versionID, val); env->DeleteLocalRef(val);
-		val = env->NewStringUTF(assureValidUTF8(statusString.c_str()));  env->SetObjectField(modInfo, deltaID  , val); env->DeleteLocalRef(val);
+		val = env->NewStringUTF(assureValidUTF8(module->getName()));        env->SetObjectField(modInfo, nameID     , val); env->DeleteLocalRef(val);
+		val = env->NewStringUTF(assureValidUTF8(module->getDescription())); env->SetObjectField(modInfo, descID     , val); env->DeleteLocalRef(val);
+		val = env->NewStringUTF(assureValidUTF8(type.c_str()));             env->SetObjectField(modInfo, catID      , val); env->DeleteLocalRef(val);
+		val = env->NewStringUTF(assureValidUTF8(module->getLanguage()));    env->SetObjectField(modInfo, langID     , val); env->DeleteLocalRef(val);
+		val = env->NewStringUTF(assureValidUTF8(version.c_str()));          env->SetObjectField(modInfo, versionID  , val); env->DeleteLocalRef(val);
+		val = env->NewStringUTF(assureValidUTF8(statusString.c_str()));     env->SetObjectField(modInfo, deltaID    , val); env->DeleteLocalRef(val);
+		const char *cipherKey = module->getConfigEntry("CipherKey");
+		if (cipherKey) {
+			val = env->NewStringUTF(assureValidUTF8(cipherKey));            env->SetObjectField(modInfo, cipherKeyID, val); env->DeleteLocalRef(val);
+		}
+		else                                                                env->SetObjectField(modInfo, cipherKeyID, NULL);
 
 		env->SetObjectArrayElement(ret, i++, modInfo);
 

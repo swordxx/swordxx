@@ -1464,6 +1464,7 @@ StringList SWMgr::getGlobalOptionValues(const char *option)
 // also old deprecated virtuals so client overrides still are called
 
 void SWMgr::createAllModules(bool multiMod) {
+SWLog::getSystemLog()->logDebug("libsword: SWMgr::createAllModules");
 	SectionMap::iterator it;
 	ConfigEntMap::iterator entry;
 	SWModule *newmod;

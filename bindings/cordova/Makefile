@@ -5,7 +5,7 @@ all: srcdeps
 
 srcdeps:
 	mkdir -p org.crosswire.sword.cordova.SWORD/libs/ios/
-	cp ../include/defs.h ../include/flatapi.h org.crosswire.sword.cordova.SWORD/src/ios/
+	cp ../../include/defs.h ../../include/flatapi.h org.crosswire.sword.cordova.SWORD/src/ios/
 
 
 clean:

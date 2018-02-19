@@ -35,6 +35,7 @@ public class SWMgr {
 		public String language;
 		public String version;
 		public String delta;
+		public String cipherKey;
 	}
 
 	public SWMgr() {

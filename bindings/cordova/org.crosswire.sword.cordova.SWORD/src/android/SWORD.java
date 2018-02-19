@@ -138,6 +138,7 @@ public class SWORD extends CordovaPlugin {
 				m.put("language", mi.language);
 				m.put("version", mi.version);
 				m.put("delta", mi.delta);
+				m.put("cipherKey", mi.cipherKey);
 				r.put(m);
 			}
 			callbackContext.success(r);
@@ -241,6 +242,7 @@ public class SWORD extends CordovaPlugin {
 				m.put("language", mi.language);
 				m.put("version", mi.version);
 				m.put("delta", mi.delta);
+				m.put("cipherKey", mi.cipherKey);
 				r.put(m);
 			}
 			callbackContext.success(r);
@@ -259,6 +261,7 @@ public class SWORD extends CordovaPlugin {
 			m.put("font", mod.getConfigEntry("Font"));
 			m.put("shortCopyright", mod.getConfigEntry("ShortCopyright"));
 			m.put("shortPromo", mod.getConfigEntry("ShortPromo"));
+			m.put("cipherKey", mod.getConfigEntry("CipherKey"));
 			callbackContext.success(m);
 		}
 		else if (action.equals("SWModule_setKeyText")) {

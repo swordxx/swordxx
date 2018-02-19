@@ -52,13 +52,15 @@
         <source-file src="src/android/AndroidMgr.java" target-dir="src/org/crosswire/android/sword" />
         <source-file src="src/android/SWModule.java" target-dir="src/org/crosswire/android/sword" />
         <source-file src="src/android/InstallMgr.java" target-dir="src/org/crosswire/android/sword" />
-        <source-file src="libs/android/armeabi/libsword.so" target-dir="libs/armeabi" />
         <source-file src="libs/android/arm64-v8a/libsword.so" target-dir="libs/arm64-v8a" />
+        <source-file src="libs/android/armeabi-v7a/libsword.so" target-dir="libs/armeabi-v7a" />
         <source-file src="libs/android/x86/libsword.so" target-dir="libs/x86" />
+        <source-file src="libs/android/x86_64/libsword.so" target-dir="libs/x86_64" />
+<!-- I think these are old names
+        <source-file src="libs/android/armeabi/libsword.so" target-dir="libs/armeabi" />
         <source-file src="libs/android/mips64/libsword.so" target-dir="libs/mips64" />
         <source-file src="libs/android/mips/libsword.so" target-dir="libs/mips" />
-        <source-file src="libs/android/armeabi-v7a/libsword.so" target-dir="libs/armeabi-v7a" />
-        <source-file src="libs/android/x86_64/libsword.so" target-dir="libs/x86_64" />
+-->
     </platform>
 
     <!-- amazon-fireos -->

@@ -31,6 +31,7 @@
 #include <osiswordjs.h>
 #include <thmlwordjs.h>
 #include <gbfwordjs.h>
+#include <swlog.h>
 
 using namespace sword;
 
@@ -45,10 +46,24 @@ class WebMgr : public SWMgr {
 	char *extraConf;
 
 public:
-	WebMgr(const char *path, const char *extraConfPath = 0) : SWMgr(path, false, new MarkupFilterMgr(FMT_WEBIF)) { init(); if (extraConfPath) stdstr(&extraConf, extraConfPath); }
-	WebMgr(SWConfig *sysConf) : SWMgr(0, sysConf, false, new MarkupFilterMgr(FMT_WEBIF)) { init(); }
-	void init() {
+	WebMgr(const char *path, const char *extraConfPath = 0)
+			: SWMgr(path, false, new MarkupFilterMgr(FMT_WEBIF)) {
+SWLog::getSystemLog()->logDebug("libsword: WebMgr c-tor(path: %s, extraConfPath: %s)", path, extraConfPath?extraConfPath:"NULL");
 		extraConf         = 0;
+		if (extraConfPath) {
+SWLog::getSystemLog()->logDebug("libsword: WebMgr::c-tor extraConfPath supplied: %s)", extraConfPath);
+			stdstr(&extraConf, extraConfPath);
+		}
+		init();
+	}
+	WebMgr(SWConfig *sysConf)
+			: SWMgr(0, sysConf, false, new MarkupFilterMgr(FMT_WEBIF)) {
+		extraConf         = 0;
+SWLog::getSystemLog()->logDebug("libsword: WebMgr c-tor(sysConf)");
+		init();
+	}
+
+	void init() {
 		defaultGreekLex   = 0;
 		defaultHebLex     = 0;
 		defaultGreekParse = 0;
@@ -76,11 +91,17 @@ public:
 
 	void createAllModules(bool multiMod) {
 
+SWLog::getSystemLog()->logDebug("libsword: WebMgr::createAllModules");
 		if (extraConf) {
+SWLog::getSystemLog()->logDebug("libsword: WebMgr::createAllModules extraConfig supplied: %s)", extraConf);
 			bool exists = FileMgr::existsFile(extraConf);
 			if (exists) {
+SWLog::getSystemLog()->logDebug("libsword: WebMgr::createAllModules extraConfig exists. Augmenting modules config");
 				SWConfig addConfig(extraConf);
 				this->config->augment(addConfig);
+			}
+			else {
+SWLog::getSystemLog()->logDebug("libsword: WebMgr::createAllModules extraConfig not found)");
 			}
 		}
 		SWMgr::createAllModules(multiMod);
