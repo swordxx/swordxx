@@ -52,7 +52,7 @@ using namespace sword;
 
 using namespace std;
 
-void writeEntry(SWModule *module, const SWBuf &key, const SWBuf &entry);
+void writeEntry(SWModule *module, const SWBuf &key, const SWBuf &entry, bool replace);
 
 void usage(const char *progName, const char *error = 0) {
 	if (error) fprintf(stderr, "\n%s: %s\n", progName, error);
@@ -106,6 +106,7 @@ int main(int argc, char **argv) {
 	
 	bool fourByteSize      = false;
 	bool append	    = false;
+	bool replace	    = false;
 	int iType	      = 4;
 	SWBuf cipherKey        = "";
 	SWCompress *compressor = 0;
@@ -114,6 +115,9 @@ int main(int argc, char **argv) {
 	for (int i = 2; i < argc; i++) {
 		if (!strcmp(argv[i], "-a")) {
 			append = true;
+		}
+		else if (!strcmp(argv[i], "-r")) {
+			replace = true;
 		}
 		else if (!strcmp(argv[i], "-z")) {
 			if (fourByteSize) usage(*argv, "Cannot specify both -z and -4");
@@ -265,7 +269,7 @@ int main(int argc, char **argv) {
 		more = FileMgr::getLine(fd, lineBuffer)!=0;
 		if (lineBuffer.startsWith("$$$")) {
 			if ((keyBuffer.size()) && (entBuffer.size())) {
-				writeEntry(module, keyBuffer, entBuffer);
+				writeEntry(module, keyBuffer, entBuffer, replace);
 			}
 			keyBuffer = lineBuffer;
 			keyBuffer << 3;
@@ -280,7 +284,7 @@ int main(int argc, char **argv) {
 		}
 	} while (more);
 	if ((keyBuffer.size()) && (entBuffer.size())) {
-		writeEntry(module, keyBuffer, entBuffer);
+		writeEntry(module, keyBuffer, entBuffer, replace);
 	}
 
 	delete module;
@@ -298,7 +302,7 @@ int main(int argc, char **argv) {
 int page = 0;
 
 
-void writeEntry(SWModule *module, const SWBuf &key, const SWBuf &entry)
+void writeEntry(SWModule *module, const SWBuf &key, const SWBuf &entry, bool replace)
 {
 	if (key.size() && entry.size()) {
 		std::cout << "from file: " << key << std::endl;
@@ -312,7 +316,7 @@ void writeEntry(SWModule *module, const SWBuf &key, const SWBuf &entry)
 			*vkey = listKey;
 			if (first) {
 				*linkMaster = *vkey;
-				SWBuf text = module->getRawEntry();
+				SWBuf text = (replace) ? "" : module->getRawEntry();
 				text += entry;
 
 
