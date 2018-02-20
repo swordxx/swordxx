@@ -14,7 +14,7 @@
 # not, then this file is released under the GPLv2 by myself.
 PROJECT(libsword CXX C)
 CMAKE_MINIMUM_REQUIRED(VERSION 2.6.0)
-SET(SWORD_VERSION 1.7.3)
+SET(SWORD_VERSION 1.8.900)
 
 # Make sure it's an out-of-stream build
 IF(${CMAKE_CURRENT_BINARY_DIR} STREQUAL ${CMAKE_CURRENT_SOURCE_DIR})
