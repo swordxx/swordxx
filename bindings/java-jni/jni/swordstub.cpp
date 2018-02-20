@@ -39,7 +39,6 @@
 #include <installmgr.h>
 #include <remotetrans.h>
 #include <rtfhtml.h>
-//#include <android/native_activity.h>
 
 
 #ifdef BIBLESYNC
@@ -219,8 +218,8 @@ SWLog::getSystemLog()->logDebug("initInstall: instantiated InstallMgr with baseD
 }
 
 #ifdef BIBLESYNC
-void bibleSyncCallback(char cmd, string bible, string ref, string alt, string group, string domain, string info, string dump) {
-SWLog::getSystemLog()->logDebug("bibleSync callback msg: %c; bible: %s; ref: %s; alt: %s; group: %s; domain: %s; info: %s; dump: %s", cmd, bible.c_str(), ref.c_str(), alt.c_str(), group.c_str(), domain.c_str(), info.c_str(), dump.c_str());
+void bibleSyncCallback(char cmd, string pkt_uuid, string bible, string ref, string alt, string group, string domain, string info, string dump) {
+SWLog::getSystemLog()->logDebug("bibleSync callback msg: %c; pkt_uuid: %s; bible: %s; ref: %s; alt: %s; group: %s; domain: %s; info: %s; dump: %s", cmd, pkt_uuid.c_str(), bible.c_str(), ref.c_str(), alt.c_str(), group.c_str(), domain.c_str(), info.c_str(), dump.c_str());
 	if (::bibleSyncListener) {
 SWLog::getSystemLog()->logDebug("bibleSync listener is true");
 		jclass cls = bibleSyncListenerEnv->GetObjectClass(::bibleSyncListener);
@@ -1933,6 +1932,7 @@ JNIEXPORT void JNICALL Java_org_crosswire_android_sword_InstallMgr_setUserDiscla
  */
 JNIEXPORT void JNICALL Java_org_crosswire_android_sword_SWMgr_sendBibleSyncMessage
 		(JNIEnv *env, jobject me, jstring osisRefJS) {
+SWLog::getSystemLog()->logDebug("libsword: sendBibleSyncMessage() begin");
 
 	initBibleSync();
 	const char *osisRef = env->GetStringUTFChars(osisRefJS, NULL);
@@ -1954,8 +1954,8 @@ JNIEXPORT void JNICALL Java_org_crosswire_android_sword_SWMgr_sendBibleSyncMessa
 JNIEXPORT void JNICALL Java_org_crosswire_android_sword_SWMgr_registerBibleSyncListener
 		(JNIEnv *env, jobject me, jobject bibleSyncListener) {
 
+SWLog::getSystemLog()->logDebug("registerBibleSyncListener() start");
 #ifdef BIBLESYNC
-SWLog::getSystemLog()->logDebug("registerBibleSyncListener");
 	::bibleSyncListener = bibleSyncListener;
 	::bibleSyncListenerEnv = env;
 SWLog::getSystemLog()->logDebug("registerBibleSyncListener - calling init");
@@ -1967,6 +1967,8 @@ SWLog::getSystemLog()->logDebug("bibleSyncListener - while loop iteration");
 SWLog::getSystemLog()->logDebug("bibleSyncListener - sleeping for 2 seconds");
 		sleep(2);
 	}
+#else
+SWLog::getSystemLog()->logDebug("registerBibleSyncListener: !!! BibleSync disabled in native code.");
 #endif
 }
 

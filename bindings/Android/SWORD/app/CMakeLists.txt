@@ -5,6 +5,7 @@
 
 cmake_minimum_required(VERSION 3.4.1)
 
+SET(CMAKE_C_FLAGS "-DBIBLESYNC ${CMAKE_C_FLAGS}")
 #SET(NDK_DEBUG 0)
 SET(CMAKE_C_FLAGS "-D__unix__ ${CMAKE_C_FLAGS}")
 SET(CMAKE_C_FLAGS "-D_FTPLIB_NO_COMPAT ${CMAKE_C_FLAGS}")
@@ -190,9 +191,18 @@ add_library( # Sets the name of the library.
         ../../../../src/frontend/swlog.cpp
         ../../../../src/utilfuns/zlib/untgz.c
 
+
+        ../../../../../biblesync/src/biblesync.cc
+        ../../../../../biblesync/src/ifaddrs.c
+
              )
 
-include_directories(../../../../include)
+include_directories(
+    ../../../../include
+
+    ../../../../../biblesync/include
+
+    )
 # Searches for a specified prebuilt library and stores the path as a
 # variable. Because CMake includes system libraries in the search path by
 # default, you only need to specify the name of the public NDK library
