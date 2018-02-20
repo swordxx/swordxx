@@ -39,6 +39,7 @@ struct org_crosswire_sword_ModInfo {
 	char *language;
 	char *version;
 	char *delta;
+	char *cipherKey;
 };
 
 

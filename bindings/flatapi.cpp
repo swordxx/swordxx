@@ -36,6 +36,7 @@
 #include <swlog.h>
 #include <localemgr.h>
 #include <utilstr.h>
+#include <rtfhtml.h>
 #include "corba/orbitcpp/webmgr.hpp"
 
 extern "C" {
@@ -81,6 +82,7 @@ void clearModInfoArray(org_crosswire_sword_ModInfo **modInfo) {
 				delete [] (*modInfo)[i].language;
 				delete [] (*modInfo)[i].version;
 				delete [] (*modInfo)[i].delta;
+				delete [] (*modInfo)[i].cipherKey;
 			}
 			else break;
 		}
@@ -924,7 +926,14 @@ const char * SWDLLEXPORT org_crosswire_sword_SWModule_getConfigEntry
 
 	GETSWMODULE(hSWModule, 0);
 
-	stdstr(&(hmod->configEntry), (module->getConfigEntry(key) ? assureValidUTF8(module->getConfigEntry(key)).c_str() : 0));
+	const char *exists = module->getConfigEntry(key);
+	SWBuf confValue = exists;
+	// special processing if we're requesting About-- kindof cheese
+	if (!strcmp("About", key) && exists) {
+		RTFHTML().processText(confValue);
+	}
+	SWBuf assuredBuf = assureValidUTF8(confValue.c_str());
+	stdstr(&(hmod->configEntry), (exists ? assuredBuf.c_str() : 0));
 
 	return hmod->configEntry;
 }
@@ -1047,7 +1056,7 @@ const struct org_crosswire_sword_ModInfo * SWDLLEXPORT org_crosswire_sword_SWMgr
 	int i = 0;
 	for (sword::ModMap::iterator it = mgr->Modules.begin(); it != mgr->Modules.end(); ++it) {
 		module = it->second;
-		if ((!(module->getConfigEntry("CipherKey"))) || (*(module->getConfigEntry("CipherKey")))) {
+//		if ((!(module->getConfigEntry("CipherKey"))) || (*(module->getConfigEntry("CipherKey")))) {
 			SWBuf type = module->getType();
 			SWBuf cat = module->getConfigEntry("Category");
 			SWBuf version = module->getConfigEntry("Version");
@@ -1058,8 +1067,13 @@ const struct org_crosswire_sword_ModInfo * SWDLLEXPORT org_crosswire_sword_SWMgr
 			stdstr(&(milist[i].language), assureValidUTF8(module->getLanguage()));
 			stdstr(&(milist[i].version), assureValidUTF8(version.c_str()));
 			stdstr(&(milist[i].delta), "");
+			const char *cipherKey = module->getConfigEntry("CipherKey");
+			if (cipherKey) {
+				stdstr(&(milist[i].cipherKey), assureValidUTF8(cipherKey));
+			}
+			else	milist[i].cipherKey = 0;
 			if (++i >= size) break;
-		}
+//		}
 	}
 	hmgr->modInfo = milist;
 	return milist;
@@ -1632,6 +1646,7 @@ const struct org_crosswire_sword_ModInfo * SWDLLEXPORT org_crosswire_sword_Insta
 
 		SWBuf type = module->getType();
 		SWBuf cat = module->getConfigEntry("Category");
+		const char *cipherKey = module->getConfigEntry("CipherKey");
 		if (cat.length() > 0) type = cat;
 
 		stdstr(&(retVal[i].name), assureValidUTF8(module->getName()));
@@ -1639,8 +1654,9 @@ const struct org_crosswire_sword_ModInfo * SWDLLEXPORT org_crosswire_sword_Insta
 		stdstr(&(retVal[i].category), assureValidUTF8(type.c_str()));
 		stdstr(&(retVal[i].language), assureValidUTF8(module->getLanguage()));
 		stdstr(&(retVal[i].version), assureValidUTF8(version.c_str()));
-		stdstr(&(retVal[i++].delta), assureValidUTF8(statusString.c_str()));
-		if (i >= size) break;
+		stdstr(&(retVal[i].delta), assureValidUTF8(statusString.c_str()));
+		stdstr(&(retVal[i].cipherKey), cipherKey ? (const char *)assureValidUTF8(cipherKey) : (const char *)0);
+		if (++i >= size) break;
 	}
 	hinstmgr->modInfo = retVal;
 	return retVal;

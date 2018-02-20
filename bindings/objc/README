@@ -1,0 +1,3 @@
+For Universal libsword.a use XCode and compile SWORD/SWORD.xcodeproj
+then if you'd like to add ios support to the ../cordova bindings,
+the Makefile in here will copy the Universal lib and other deps.

@@ -7,6 +7,17 @@
 	objects = {
 
 /* Begin PBXAggregateTarget section */
+		0A59E69F1FCF228B00CD0BD2 /* SWORDUniversal */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 0A59E6A21FCF228C00CD0BD2 /* Build configuration list for PBXAggregateTarget "SWORDUniversal" */;
+			buildPhases = (
+				0A59E6A51FCF254700CD0BD2 /* ShellScript */,
+			);
+			dependencies = (
+			);
+			name = SWORDUniversal;
+			productName = UniversalLib;
+		};
 		A9D271FA14D7193300DA8926 /* Utilities */ = {
 			isa = PBXAggregateTarget;
 			buildConfigurationList = A9D271FB14D7193300DA8926 /* Build configuration list for PBXAggregateTarget "Utilities" */;
@@ -94,8 +105,6 @@
 		0A1F16A41FBB755B00E0AEFA /* SWORD.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A1F16A31FBB755B00E0AEFA /* SWORD.m */; };
 		0A1F16A51FBB755B00E0AEFA /* SWORD.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 0A1F16A21FBB755B00E0AEFA /* SWORD.h */; };
 		0A1F16A91FBB75AB00E0AEFA /* flatapi.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0A1F16991FBB70E200E0AEFA /* flatapi.cpp */; };
-		0A1F16AA1FBB75D600E0AEFA /* swdisp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A954A80113EE98B30094E3FE /* swdisp.cpp */; };
-		0A1F16AB1FBB75D600E0AEFA /* swlog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A954A80213EE98B30094E3FE /* swlog.cpp */; };
 		0A1F16AC1FBB75D600E0AEFA /* listkey.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A954A80913EE98B30094E3FE /* listkey.cpp */; };
 		0A1F16AD1FBB75D600E0AEFA /* strkey.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A954A81013EE98B30094E3FE /* strkey.cpp */; };
 		0A1F16AE1FBB75D600E0AEFA /* swkey.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A954A81113EE98B30094E3FE /* swkey.cpp */; };
@@ -560,6 +569,8 @@
 		0A5888BC1FB44ABF00F7DAA3 /* zverse.h in Headers */ = {isa = PBXBuildFile; fileRef = A9A129D919DF144D005BCBC1 /* zverse.h */; };
 		0A5888BD1FB44ABF00F7DAA3 /* zverse4.h in Headers */ = {isa = PBXBuildFile; fileRef = A9A129DA19DF144D005BCBC1 /* zverse4.h */; };
 		0A5888BE1FB44ACC00F7DAA3 /* regex.h in Headers */ = {isa = PBXBuildFile; fileRef = A9A1295119DF144D005BCBC1 /* regex.h */; };
+		0A59E6A31FCF252800CD0BD2 /* swdisp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A954A80113EE98B30094E3FE /* swdisp.cpp */; };
+		0A59E6A41FCF252800CD0BD2 /* swlog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A954A80213EE98B30094E3FE /* swlog.cpp */; };
 		0AA1DD361FB46FD00082E131 /* sword.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AA1DD341FB46FD00082E131 /* sword.m */; };
 		0AA1DD371FB46FD00082E131 /* sword.h in Headers */ = {isa = PBXBuildFile; fileRef = 0AA1DD351FB46FD00082E131 /* sword.h */; };
 		8C92C31DC92DF0671FCEB5B3 /* SwordFilter.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8C92CC111DC521DE0C054C60 /* SwordFilter.mm */; };
@@ -5597,6 +5608,11 @@
 						DevelopmentTeam = J9J97ZC4K5;
 						ProvisioningStyle = Automatic;
 					};
+					0A59E69F1FCF228B00CD0BD2 = {
+						CreatedOnToolsVersion = 9.1;
+						DevelopmentTeam = J9J97ZC4K5;
+						ProvisioningStyle = Automatic;
+					};
 					8DC2EF4F0486A6940098B216 = {
 						DevelopmentTeam = J9J97ZC4K5;
 						ProvisioningStyle = Automatic;
@@ -5714,6 +5730,7 @@
 				0A011D9D1FB4142500778C2B /* sword */,
 				0A011DA51FB4142500778C2B /* SWORDTests */,
 				0A1F169F1FBB755B00E0AEFA /* SWORD */,
+				0A59E69F1FCF228B00CD0BD2 /* SWORDUniversal */,
 			);
 		};
 /* End PBXProject section */
@@ -5759,6 +5776,22 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		0A59E6A51FCF254700CD0BD2 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# define output folder environment variable\nUNIVERSAL_OUTPUTFOLDER=${BUILD_DIR}/${CONFIGURATION}-universal\n\n# Step 1. Build Device and Simulator versions\nxcodebuild -target ${PROJECT_NAME} ONLY_ACTIVE_ARCH=NO -configuration ${CONFIGURATION} -sdk iphoneos  BUILD_DIR=\"${BUILD_DIR}\" BUILD_ROOT=\"${BUILD_ROOT}\"\nxcodebuild -target ${PROJECT_NAME} -configuration ${CONFIGURATION} -sdk iphonesimulator -arch x86_64 -arch i386 -arch armv7 -arch armv7s -arch arm64 BUILD_DIR=\"${BUILD_DIR}\" BUILD_ROOT=\"${BUILD_ROOT}\"\n\n# make sure the output directory exists\nmkdir -p \"${UNIVERSAL_OUTPUTFOLDER}\"\n\n# Step 2. Create universal binary file using lipo\nlipo -create -output \"${UNIVERSAL_OUTPUTFOLDER}/lib${PROJECT_NAME}.a\" \"${BUILD_DIR}/${CONFIGURATION}-iphoneos/lib${PROJECT_NAME}.a\" \"${BUILD_DIR}/${CONFIGURATION}-iphonesimulator/lib${PROJECT_NAME}.a\"\n\necho \"Universal library can be found here:\"\necho ${UNIVERSAL_OUTPUTFOLDER}/lib${PROJECT_NAME}.a\n\n# Last touch. copy the header files. Just for convenience\ncp -R \"${BUILD_DIR}/${CONFIGURATION}-iphoneos/include\" \"${UNIVERSAL_OUTPUTFOLDER}/\"";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		0A011D991FB4142500778C2B /* Sources */ = {
@@ -5969,6 +6002,7 @@
 				0A1F16B41FBB75D600E0AEFA /* versificationmgr.cpp in Sources */,
 				0A1F17231FBB768100E0AEFA /* thmlmorph.cpp in Sources */,
 				0A1F16D41FBB762D00E0AEFA /* ftplib.c in Sources */,
+				0A59E6A41FCF252800CD0BD2 /* swlog.cpp in Sources */,
 				0A1F17301FBB768100E0AEFA /* utf8arshaping.cpp in Sources */,
 				0A1F171C1FBB768100E0AEFA /* teirtf.cpp in Sources */,
 				0A1F17271FBB768100E0AEFA /* thmlscripref.cpp in Sources */,
@@ -5999,7 +6033,6 @@
 				0A1F17441FBB76A700E0AEFA /* lzsscomprs.cpp in Sources */,
 				0A1F16F61FBB768100E0AEFA /* gbfheadings.cpp in Sources */,
 				0A1F17161FBB768100E0AEFA /* papyriplain.cpp in Sources */,
-				0A1F16AB1FBB75D600E0AEFA /* swlog.cpp in Sources */,
 				0A1F16DC1FBB762D00E0AEFA /* utilxml.cpp in Sources */,
 				0A1F16DD1FBB765A00E0AEFA /* rawgenbook.cpp in Sources */,
 				0A1F17001FBB768100E0AEFA /* gbfwebif.cpp in Sources */,
@@ -6067,6 +6100,7 @@
 				0A1F171D1FBB768100E0AEFA /* thmlfootnotes.cpp in Sources */,
 				0A1F17341FBB768100E0AEFA /* utf8hebrewpoints.cpp in Sources */,
 				0A1F174C1FBB76A700E0AEFA /* zipcomprs.cpp in Sources */,
+				0A59E6A31FCF252800CD0BD2 /* swdisp.cpp in Sources */,
 				0A1F16EB1FBB768100E0AEFA /* gbflatex.cpp in Sources */,
 				0A1F170D1FBB768100E0AEFA /* osisplain.cpp in Sources */,
 				0A1F16F31FBB768100E0AEFA /* teixhtml.cpp in Sources */,
@@ -6114,7 +6148,6 @@
 				0A1F17011FBB768100E0AEFA /* gbfwordjs.cpp in Sources */,
 				0A1F172D1FBB768100E0AEFA /* unicodertf.cpp in Sources */,
 				0A1F17321FBB768100E0AEFA /* utf8cantillation.cpp in Sources */,
-				0A1F16AA1FBB75D600E0AEFA /* swdisp.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6466,7 +6499,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = YES;
-				ONLY_ACTIVE_ARCH = NO;
+				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = org.crosswire.apple.SWORD;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SDKROOT = iphoneos;
@@ -6644,11 +6677,13 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.1;
 				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				VALID_ARCHS = "x86_64 armv7 armv7s arm64";
 			};
 			name = Debug;
 		};
@@ -6677,12 +6712,32 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.1;
 				MTL_ENABLE_DEBUG_INFO = NO;
+				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
+				VALID_ARCHS = "x86_64 armv7 armv7s arm64";
+			};
+			name = Release;
+		};
+		0A59E6A01FCF228C00CD0BD2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = J9J97ZC4K5;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		0A59E6A11FCF228C00CD0BD2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = J9J97ZC4K5;
+				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
 		};
@@ -8462,6 +8517,15 @@
 			buildConfigurations = (
 				0A1F16A71FBB755B00E0AEFA /* Debug */,
 				0A1F16A81FBB755B00E0AEFA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		0A59E6A21FCF228C00CD0BD2 /* Build configuration list for PBXAggregateTarget "SWORDUniversal" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0A59E6A01FCF228C00CD0BD2 /* Debug */,
+				0A59E6A11FCF228C00CD0BD2 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

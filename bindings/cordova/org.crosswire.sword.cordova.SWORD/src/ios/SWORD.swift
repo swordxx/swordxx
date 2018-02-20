@@ -28,7 +28,10 @@ var mySWORDPlugin:SWORD? = nil
 
 		let libswordVersion = String(cString: org_crosswire_sword_SWMgr_version(mgr))
 		debugPrint("libswordVersion: " + libswordVersion)
-		self.commandDelegate!.send(CDVPluginResult(status: CDVCommandStatus_OK, messageAs: "initSWORD; Version: " + libswordVersion), callbackId: command.callbackId)
+        let info = [
+            "version": libswordVersion
+        ] as [AnyHashable : Any]
+		self.commandDelegate!.send(CDVPluginResult(status: CDVCommandStatus_OK, messageAs: info), callbackId: command.callbackId)
 	}
 
 
@@ -140,22 +143,26 @@ debugPrint("initMgr, mgr: " + String(describing: mgr))
         let name = org_crosswire_sword_SWModule_getName(module)
         let description = org_crosswire_sword_SWModule_getDescription(module)
         let category = org_crosswire_sword_SWModule_getCategory(module)
-        let language = org_crosswire_sword_SWModule_getConfigEntry(module, "Lang")
-        let direction = org_crosswire_sword_SWModule_getConfigEntry(module, "Direction")
-        let font = org_crosswire_sword_SWModule_getConfigEntry(module, "Font")
-        let shortCopyright = org_crosswire_sword_SWModule_getConfigEntry(module, "ShortCopyright")
-        let shortPromo = org_crosswire_sword_SWModule_getConfigEntry(module, "ShortPromo")
 
-        let response = [
+        var response = [
             "name": name == nil ? "" : String(cString: name!),
             "description": description == nil ? "" : String(cString: description!),
-            "category": category == nil ? "" : String(cString: category!),
-            "language": language == nil ? "" : String(cString: language!),
-            "direction": direction == nil ? "" : String(cString: direction!),
-            "font": font == nil ? "" : String(cString: font!),
-            "shortCopyright": shortCopyright == nil ? "" : String(cString: shortCopyright!),
-            "shortPromo": shortPromo == nil ? "" : String(cString: shortPromo!)
+            "category": category == nil ? "" : String(cString: category!)
         ]
+        let language = org_crosswire_sword_SWModule_getConfigEntry(module, "Lang")
+        response["language"] =  language == nil ? "" : String(cString: language!)
+        let direction = org_crosswire_sword_SWModule_getConfigEntry(module, "Direction")
+        response["direction"] =  direction == nil ? "" : String(cString: direction!)
+        let font = org_crosswire_sword_SWModule_getConfigEntry(module, "Font")
+        response["font"] =  font == nil ? "" : String(cString: font!)
+        let shortCopyright = org_crosswire_sword_SWModule_getConfigEntry(module, "ShortCopyright")
+        response["shortCopyright"] =  shortCopyright == nil ? "" : String(cString: shortCopyright!)
+        let cipherKey = org_crosswire_sword_SWModule_getConfigEntry(module, "CipherKey")
+        response["cipherKey"] =  cipherKey == nil ? "" : String(cString: cipherKey!)
+        let shortPromo = org_crosswire_sword_SWModule_getConfigEntry(module, "ShortPromo")
+        response["shortPromo"] = shortPromo == nil ? "" : String(cString: shortPromo!)
+
+
 		self.commandDelegate!.send(CDVPluginResult(status: CDVCommandStatus_OK, messageAs: response), callbackId: command.callbackId)
 	}
 
@@ -167,6 +174,7 @@ debugPrint("initMgr, mgr: " + String(describing: mgr))
         let baseDir = (FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.path)! + "/sword";
         let confPath = baseDir + "/extraConfig.conf";
         let retVal = getStringArray(buffer: org_crosswire_sword_SWConfig_augmentConfig(confPath, blob))
+	self.reinitMgr()
         self.commandDelegate!.send(CDVPluginResult(status: CDVCommandStatus_OK, messageAs: retVal), callbackId: command.callbackId)
     }
     
@@ -189,7 +197,8 @@ debugPrint("initMgr, mgr: " + String(describing: mgr))
         let key = command.arguments[1] as? String ?? ""
         let baseDir = (FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.path)! + "/sword";
         let confPath = baseDir + "/extraConfig.conf";
-        let retVal = String(cString:org_crosswire_sword_SWConfig_getKeyValue(confPath, section, key))
+        let keyVal = org_crosswire_sword_SWConfig_getKeyValue(confPath, section, key)
+        let retVal = keyVal == nil ? nil : String(cString:keyVal!)
         self.commandDelegate!.send(CDVPluginResult(status: CDVCommandStatus_OK, messageAs: retVal), callbackId: command.callbackId)
     }
     
@@ -702,6 +711,7 @@ debugPrint("initMgr, mgr: " + String(describing: mgr))
                 "category": String(cString: i.category),
                 "language": String(cString: i.language),
                 "delta": String(cString: i.delta),
+                "cipherKey": i.cipherKey == nil ? nil : String(cString: i.cipherKey),
                 "version": String(cString: i.version)
                 ] as [AnyHashable : Any]
             mods.append(modInfo)
@@ -786,7 +796,7 @@ debugPrint("initMgr, mgr: " + String(describing: mgr))
         
         var mods = [[AnyHashable : Any]]()
         for i in modInfoList {
-            let modInfo = [
+            var modInfo = [
                 "name": String(cString: i.name),
                 "description": String(cString: i.description),
                 "category": String(cString: i.category),
@@ -794,7 +804,12 @@ debugPrint("initMgr, mgr: " + String(describing: mgr))
                 "delta": i.delta == nil ? "" : String(cString: i.delta),
                 "version": i.version == nil ? "" : String(cString: i.version)
             ] as [AnyHashable : Any]
+
+            if (i.cipherKey != nil) {
+                modInfo["cipherKey"] = String(cString: i.cipherKey)
+            }
             mods.append(modInfo)
+
         }
         self.commandDelegate!.send(CDVPluginResult(status: CDVCommandStatus_OK, messageAs: mods), callbackId: command.callbackId)
     }
