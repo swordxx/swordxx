@@ -171,6 +171,12 @@ SWLog::getSystemLog()->logDebug("libsword: init() saving basic: %s", confPath.c_
 		}
 		confPath = STORAGE_BASE + "/extraConfig.conf";
 		bool exists = FileMgr::existsFile(confPath.c_str());
+		if (!exists) {
+			SWConfig config(confPath.c_str());
+			config["Globals"]["HiAndroid"] = "weeee";
+			config.save();
+			exists = true;
+		}
 SWLog::getSystemLog()->logDebug("libsword: extraConfig %s at path: %s", exists?"Exists":"Absent", confPath.c_str());
 
 SWLog::getSystemLog()->logDebug("libsword: init() creating WebMgr using path: %s", baseDir.c_str());
@@ -179,6 +185,7 @@ SWLog::getSystemLog()->logDebug("libsword: init() creating WebMgr using path: %s
 SWLog::getSystemLog()->logDebug("libsword: init() augmenting modules from: %s", AND_BIBLE_MODULES_PATH);
 		// for And Bible modules
 		mgr->augmentModules(AND_BIBLE_MODULES_PATH, true);
+SWLog::getSystemLog()->logDebug("libsword: init() end.");
 	}
 }
 
@@ -219,6 +226,7 @@ SWLog::getSystemLog()->logDebug("initInstall: instantiated InstallMgr with baseD
 
 #ifdef BIBLESYNC
 void bibleSyncCallback(char cmd, string pkt_uuid, string bible, string ref, string alt, string group, string domain, string info, string dump) {
+//void bibleSyncCallback(char cmd, string bible, string ref, string alt, string group, string domain, string info, string dump) {
 SWLog::getSystemLog()->logDebug("bibleSync callback msg: %c; pkt_uuid: %s; bible: %s; ref: %s; alt: %s; group: %s; domain: %s; info: %s; dump: %s", cmd, pkt_uuid.c_str(), bible.c_str(), ref.c_str(), alt.c_str(), group.c_str(), domain.c_str(), info.c_str(), dump.c_str());
 	if (::bibleSyncListener) {
 SWLog::getSystemLog()->logDebug("bibleSync listener is true");
@@ -1938,8 +1946,9 @@ SWLog::getSystemLog()->logDebug("libsword: sendBibleSyncMessage() begin");
 	const char *osisRef = env->GetStringUTFChars(osisRefJS, NULL);
 
 #ifdef BIBLESYNC
-	BibleSync_xmit_status retval = bibleSync->Transmit(BSP_SYNC, "Bible", osisRef);
+	BibleSync_xmit_status result = bibleSync->Transmit(BSP_SYNC, "Bible", osisRef);
 #endif
+SWLog::getSystemLog()->logDebug("libsword: sendBibleSyncMessage() finished with status code: %d", result);
 
 	env->ReleaseStringUTFChars(osisRefJS, osisRef);
 }

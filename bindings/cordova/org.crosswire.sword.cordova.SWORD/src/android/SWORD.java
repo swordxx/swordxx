@@ -519,6 +519,9 @@ Log.d(TAG, "makeRequest(url: " + url + ", postData: " + postData + ", method: " 
 
 		String currentKey[]   = masterMod.getKeyChildren();
 
+		// assert we have a valid location
+		if (currentKey.length <= SWModule.VERSEKEY_BOOKABBREV || currentKey.length <= SWModule.VERSEKEY_CHAPTER) return r;
+
 		masterMod.setKeyText(currentKey[SWModule.VERSEKEY_BOOKABBREV]+"."+currentKey[SWModule.VERSEKEY_CHAPTER]+".1");
 
 		String [] verseKey = masterMod.getKeyChildren();
