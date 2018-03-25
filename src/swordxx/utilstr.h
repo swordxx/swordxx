@@ -173,8 +173,15 @@ inline std::string formatted(const char * const formatString,
 {
     static_assert(OkFormattedTypes<std::decay_t<Args>...>::value,
                   "Invalid arguments!");
+    #ifdef __GNUC__
+    #pragma GCC diagnostic push
+    #pragma GCC diagnostic ignored "-Wformat-nonliteral"
+    #endif
     std::string buf(std::snprintf(nullptr, 0u, formatString, args...), char());
     std::sprintf(&buf[0u], formatString, std::forward<Args>(args)...);
+    #ifdef __GNUC__
+    #pragma GCC diagnostic pop
+    #endif
     return buf;
 }
 
