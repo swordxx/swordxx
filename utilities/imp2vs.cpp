@@ -44,7 +44,10 @@ using namespace swordxx;
 
 using namespace std;
 
-void writeEntry(SWModule *module, const std::string &key, const std::string &entry);
+void writeEntry(SWModule & module,
+                std::string const & key,
+                std::string const & entry,
+                bool const replace);
 
 void usage(char const * progName, char const * error = nullptr) {
     if (error) fprintf(stderr, "\n%s: %s\n", progName, error);
@@ -94,6 +97,7 @@ int main(int argc, char **argv) {
 
     bool fourByteSize      = false;
     bool append        = false;
+    bool replace = false;
     BlockType iType = BOOKBLOCKS;
     std::string cipherKey;
     std::string compType;
@@ -101,8 +105,9 @@ int main(int argc, char **argv) {
     for (int i = 2; i < argc; i++) {
         if (!std::strcmp(argv[i], "-a")) {
             append = true;
-        }
-        else if (!std::strcmp(argv[i], "-z")) {
+        } else if (!std::strcmp(argv[i], "-r")) {
+            replace = true;
+        } else if (!std::strcmp(argv[i], "-z")) {
             if (fourByteSize) usage(*argv, "Cannot specify both -z and -4");
             compType = "ZIP";
             if (i+1 < argc && argv[i+1][0] != '-') {
@@ -240,7 +245,7 @@ int main(int argc, char **argv) {
     while (!(lineBuffer = FileMgr::getLine(fd)).empty()) {
         if (hasPrefix(lineBuffer, "$$$")) {
             if ((keyBuffer.size()) && (entBuffer.size())) {
-                writeEntry(module, keyBuffer, entBuffer);
+                writeEntry(*module, keyBuffer, entBuffer, replace);
             }
             keyBuffer = lineBuffer;
             keyBuffer.erase(0u, 3u);
@@ -255,7 +260,7 @@ int main(int argc, char **argv) {
         }
     };
     if ((keyBuffer.size()) && (entBuffer.size())) {
-        writeEntry(module, keyBuffer, entBuffer);
+        writeEntry(*module, keyBuffer, entBuffer, replace);
     }
 
     delete module;
@@ -265,13 +270,16 @@ int main(int argc, char **argv) {
     return 0;
 }
 
-void writeEntry(SWModule *module, const std::string &key, const std::string &entry)
+void writeEntry(SWModule & module,
+                std::string const & key,
+                std::string const & entry,
+                bool const replace)
 {
     if (key.size() && entry.size()) {
         std::cout << "from file: " << key << std::endl;
-        VerseKey *vkey = (VerseKey *)module->getKey();
+        VerseKey *vkey = (VerseKey *)module.getKey();
         std::unique_ptr<VerseKey> linkMaster(
-                    static_cast<VerseKey *>(module->createKey().release()));
+                    static_cast<VerseKey *>(module.createKey().release()));
 
         ListKey listKey = vkey->parseVerseList(key.c_str(), "Gen1:1", true);
 
@@ -280,16 +288,18 @@ void writeEntry(SWModule *module, const std::string &key, const std::string &ent
             vkey->positionFrom(listKey);
             if (first) {
                 *linkMaster = *vkey;
-                std::string text = module->getRawEntry();
+                std::string text;
+                if (!replace)
+                    text = module.getRawEntry();
                 text += entry;
 
                 std::cout << "adding entry: " << vkey->getText() << " length " << entry.size() << "/" << (unsigned short)text.size() << std::endl;
-                module->setEntry(text.c_str());
+                module.setEntry(text.c_str());
                 first = false;
             }
             else {
                 std::cout << "linking entry: " << vkey->getText() << " to " << linkMaster->getText() << std::endl;
-                module->linkEntry(*linkMaster);
+                module.linkEntry(*linkMaster);
             }
         }
     }
