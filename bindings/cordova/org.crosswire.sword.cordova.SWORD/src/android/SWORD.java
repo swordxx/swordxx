@@ -139,6 +139,7 @@ public class SWORD extends CordovaPlugin {
 				m.put("version", mi.version);
 				m.put("delta", mi.delta);
 				m.put("cipherKey", mi.cipherKey);
+				m.put("features", new JSONArray(mi.features));
 				r.put(m);
 			}
 			callbackContext.success(r);
@@ -243,6 +244,7 @@ public class SWORD extends CordovaPlugin {
 				m.put("version", mi.version);
 				m.put("delta", mi.delta);
 				m.put("cipherKey", mi.cipherKey);
+				m.put("features", new JSONArray(mi.features));
 				r.put(m);
 			}
 			callbackContext.success(r);
@@ -357,13 +359,16 @@ public class SWORD extends CordovaPlugin {
 			result.setKeepCallback(true);
 			callbackContext.sendPluginResult(result);
 		}
-		else if (action.equals("SWMgr_registerBibleSyncListener")) {
+		else if (action.equals("SWMgr_startBibleSync")) {
 			final CallbackContext bibleSyncListener = callbackContext;
+			final String appName = args.getString(0);
+			final String userName = args.getString(1);
+			final String passphrase = args.getString(2);
 
 			cordova.getThreadPool().execute(new Runnable() {
 			    @Override
 			    public void run() {
-				mgr.registerBibleSyncListener(new SWMgr.BibleSyncListener() {
+				mgr.startBibleSync(appName, userName, passphrase, new SWMgr.BibleSyncListener() {
 					public void messageReceived(String message) {
 						PluginResult result = new PluginResult(PluginResult.Status.OK, message);
 						result.setKeepCallback(true);
@@ -376,6 +381,10 @@ public class SWORD extends CordovaPlugin {
 			PluginResult result = new PluginResult(PluginResult.Status.NO_RESULT);
 			result.setKeepCallback(true);
 			callbackContext.sendPluginResult(result);
+		}
+		else if (action.equals("SWMgr_stopBibleSync")) {
+			mgr.stopBibleSync();
+			callbackContext.success();
 		}
 		else if (action.equals("SWMgr_setJavascript")) {
 			boolean val = args.getBoolean(0);

@@ -36,6 +36,7 @@ public class SWMgr {
 		public String version;
 		public String delta;
 		public String cipherKey;
+		public String[] features;
 	}
 
 	public SWMgr() {
@@ -75,11 +76,6 @@ public class SWMgr {
 	public native String[]    getExtraConfigKeys(String section);
 	public native String      getExtraConfigValue(String section, String key);
 
-	public static interface BibleSyncListener {
-		public void messageReceived(String osisRef);
-	}
-	public native void        sendBibleSyncMessage(String osisRef);
-	public native void        registerBibleSyncListener(BibleSyncListener listener);
 	public String             getStorageBasePath() {
 		return ".";
 /*
@@ -87,6 +83,12 @@ public class SWMgr {
 		return context.getFilesDir().getAbsolutePath();
 */
 	}
+	public static interface BibleSyncListener {
+		public void messageReceived(String osisRef);
+	}
+	public native void        startBibleSync(String appName, String userName, String passphrase, BibleSyncListener listener);
+	public native void        stopBibleSync();
+	public native void        sendBibleSyncMessage(String osisRef);
 }
 
 

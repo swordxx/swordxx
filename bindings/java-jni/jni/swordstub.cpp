@@ -262,18 +262,6 @@ SWLog::getSystemLog()->logDebug("bibleSync listener deleting local ref to cls");
 }
 #endif
 
-
-static void initBibleSync() {
-#ifdef BIBLESYNC
-	if (!bibleSync) {
-SWLog::getSystemLog()->logDebug("bibleSync initializing c-tor");
-		bibleSync = new BibleSync("SWORD", (const char *)SWVersion().currentVersion, "SwordUser");
-SWLog::getSystemLog()->logDebug("bibleSync initializing setMode");
-		bibleSync->setMode(BSP_MODE_PERSONAL, bibleSyncCallback, "passphrase");
-	}
-#endif
-}
-
 }
 
 
@@ -301,6 +289,7 @@ JNIEXPORT void JNICALL Java_org_crosswire_android_sword_SWMgr_reInit
 
 	const char *basePath = (basePathJS?env->GetStringUTFChars(basePathJS, NULL):0);
 	STORAGE_BASE = basePath;
+	env->ReleaseStringUTFChars(basePathJS, basePath);
 	SWLog::getSystemLog()->logDebug("setting STORAGE_BASE to: %s", STORAGE_BASE.c_str());
 
 	delete mgr;
@@ -339,6 +328,8 @@ JNIEXPORT jobjectArray JNICALL Java_org_crosswire_android_sword_SWMgr_getModInfo
 SWLog::getSystemLog()->logDebug("getModInfoList returning %d length array\n", size);
 
 	jclass clazzModInfo = env->FindClass("org/crosswire/android/sword/SWMgr$ModInfo");
+	jclass clazzString  = env->FindClass("java/lang/String");
+
 	jfieldID nameID     = env->GetFieldID(clazzModInfo, "name",        "Ljava/lang/String;");
 	jfieldID descID     = env->GetFieldID(clazzModInfo, "description", "Ljava/lang/String;");
 	jfieldID catID      = env->GetFieldID(clazzModInfo, "category",    "Ljava/lang/String;");
@@ -346,6 +337,7 @@ SWLog::getSystemLog()->logDebug("getModInfoList returning %d length array\n", si
 	jfieldID versionID  = env->GetFieldID(clazzModInfo, "version",     "Ljava/lang/String;");
 	jfieldID deltaID    = env->GetFieldID(clazzModInfo, "delta",       "Ljava/lang/String;");
 	jfieldID cipherKeyID= env->GetFieldID(clazzModInfo, "cipherKey",   "Ljava/lang/String;");
+	jfieldID featuresID = env->GetFieldID(clazzModInfo, "features",    "[Ljava/lang/String;");
 
 	jobjectArray ret = (jobjectArray) env->NewObjectArray(size, clazzModInfo, NULL);
 
@@ -353,32 +345,45 @@ SWLog::getSystemLog()->logDebug("getModInfoList returning %d length array\n", si
 	for (sword::ModMap::iterator it = mgr->Modules.begin(); it != mgr->Modules.end(); ++it) {
 		SWModule *module = it->second;
 
-//		if ((!(module->getConfigEntry("CipherKey"))) || (*(module->getConfigEntry("CipherKey")))) {
-			SWBuf type = module->getType();
-			SWBuf cat = module->getConfigEntry("Category");
-			SWBuf version = module->getConfigEntry("Version");
-			if (cat.length() > 0) type = cat;
+		SWBuf type = module->getType();
+		SWBuf cat = module->getConfigEntry("Category");
+		SWBuf version = module->getConfigEntry("Version");
+		if (cat.length() > 0) type = cat;
 
-			jobject modInfo = env->AllocObject(clazzModInfo); 
+		jobject modInfo = env->AllocObject(clazzModInfo); 
 
-			jstring val;
-			val = env->NewStringUTF(assureValidUTF8(module->getName()));        env->SetObjectField(modInfo, nameID     , val); env->DeleteLocalRef(val);
-			val = env->NewStringUTF(assureValidUTF8(module->getDescription())); env->SetObjectField(modInfo, descID     , val); env->DeleteLocalRef(val);
-			val = env->NewStringUTF(assureValidUTF8(type.c_str()));             env->SetObjectField(modInfo, catID      , val); env->DeleteLocalRef(val);
-			val = env->NewStringUTF(assureValidUTF8(module->getLanguage()));    env->SetObjectField(modInfo, langID     , val); env->DeleteLocalRef(val);
-			val = env->NewStringUTF(assureValidUTF8(version.c_str()));          env->SetObjectField(modInfo, versionID  , val); env->DeleteLocalRef(val);
-			val = env->NewStringUTF(assureValidUTF8(""));                       env->SetObjectField(modInfo, deltaID    , val); env->DeleteLocalRef(val);
-			const char *cipherKey = module->getConfigEntry("CipherKey");
-			if (cipherKey) {
-				val = env->NewStringUTF(assureValidUTF8(cipherKey));        env->SetObjectField(modInfo, cipherKeyID, val); env->DeleteLocalRef(val);
-			}
-			else                                                                env->SetObjectField(modInfo, cipherKeyID, NULL);
+		jstring val;
+		val = env->NewStringUTF(assureValidUTF8(module->getName()));        env->SetObjectField(modInfo, nameID     , val); env->DeleteLocalRef(val);
+		val = env->NewStringUTF(assureValidUTF8(module->getDescription())); env->SetObjectField(modInfo, descID     , val); env->DeleteLocalRef(val);
+		val = env->NewStringUTF(assureValidUTF8(type.c_str()));             env->SetObjectField(modInfo, catID      , val); env->DeleteLocalRef(val);
+		val = env->NewStringUTF(assureValidUTF8(module->getLanguage()));    env->SetObjectField(modInfo, langID     , val); env->DeleteLocalRef(val);
+		val = env->NewStringUTF(assureValidUTF8(version.c_str()));          env->SetObjectField(modInfo, versionID  , val); env->DeleteLocalRef(val);
+		val = env->NewStringUTF(assureValidUTF8(""));                       env->SetObjectField(modInfo, deltaID    , val); env->DeleteLocalRef(val);
+		const char *cipherKey = module->getConfigEntry("CipherKey");
+		if (cipherKey) {
+			val = env->NewStringUTF(assureValidUTF8(cipherKey));        env->SetObjectField(modInfo, cipherKeyID, val); env->DeleteLocalRef(val);
+		}
+		else                                                                env->SetObjectField(modInfo, cipherKeyID, NULL);
 
-			env->SetObjectArrayElement(ret, i++, modInfo);
+		ConfigEntMap::const_iterator start = module->getConfig().lower_bound("Feature");
+		ConfigEntMap::const_iterator end   = module->getConfig().upper_bound("Feature");
 
-			env->DeleteLocalRef(modInfo);
+		int featureCount = 0;
+		for (ConfigEntMap::const_iterator it = start; it != end; ++it) {
+			++featureCount;
+		}
+		jobjectArray features = (jobjectArray) env->NewObjectArray(featureCount, clazzString, NULL);
+		featureCount = 0;
+		for (ConfigEntMap::const_iterator it = start; it != end; ++it) {
+			env->SetObjectArrayElement(features, featureCount++, env->NewStringUTF(assureValidUTF8(it->second)));
+		}
+		env->SetObjectField(modInfo, featuresID, features);
+		env->DeleteLocalRef(features);
 
-//		}
+		env->SetObjectArrayElement(ret, i++, modInfo);
+
+		env->DeleteLocalRef(modInfo);
+
 	}
 	return ret;
 }
@@ -1756,6 +1761,8 @@ SWLog::getSystemLog()->logDebug("getRemoteModInfoList\n");
 SWLog::getSystemLog()->logDebug("sourceName: %s\n", sourceName);
 
 	jclass clazzModInfo = env->FindClass("org/crosswire/android/sword/SWMgr$ModInfo");
+	jclass clazzString  = env->FindClass("java/lang/String");
+
 	jfieldID nameID     = env->GetFieldID(clazzModInfo, "name",        "Ljava/lang/String;");
 	jfieldID descID     = env->GetFieldID(clazzModInfo, "description", "Ljava/lang/String;");
 	jfieldID catID      = env->GetFieldID(clazzModInfo, "category",    "Ljava/lang/String;");
@@ -1763,6 +1770,7 @@ SWLog::getSystemLog()->logDebug("sourceName: %s\n", sourceName);
 	jfieldID versionID  = env->GetFieldID(clazzModInfo, "version",     "Ljava/lang/String;");
 	jfieldID deltaID    = env->GetFieldID(clazzModInfo, "delta",       "Ljava/lang/String;");
 	jfieldID cipherKeyID= env->GetFieldID(clazzModInfo, "cipherKey",   "Ljava/lang/String;");
+	jfieldID featuresID = env->GetFieldID(clazzModInfo, "features",    "[Ljava/lang/String;");
 
 	InstallSourceMap::iterator source = installMgr->sources.find(sourceName);
 	if (source == installMgr->sources.end()) {
@@ -1809,6 +1817,21 @@ SWLog::getSystemLog()->logDebug("remoteListModules returning %d length array\n",
 			val = env->NewStringUTF(assureValidUTF8(cipherKey));            env->SetObjectField(modInfo, cipherKeyID, val); env->DeleteLocalRef(val);
 		}
 		else                                                                env->SetObjectField(modInfo, cipherKeyID, NULL);
+
+		ConfigEntMap::const_iterator start = module->getConfig().lower_bound("Feature");
+		ConfigEntMap::const_iterator end   = module->getConfig().upper_bound("Feature");
+
+		int featureCount = 0;
+		for (ConfigEntMap::const_iterator it = start; it != end; ++it) {
+			++featureCount;
+		}
+		jobjectArray features = (jobjectArray) env->NewObjectArray(featureCount, clazzString, NULL);
+		featureCount = 0;
+		for (ConfigEntMap::const_iterator it = start; it != end; ++it) {
+			env->SetObjectArrayElement(features, featureCount++, env->NewStringUTF(assureValidUTF8(it->second)));
+		}
+		env->SetObjectField(modInfo, featuresID, features);
+		env->DeleteLocalRef(features);
 
 		env->SetObjectArrayElement(ret, i++, modInfo);
 
@@ -1942,39 +1965,99 @@ JNIEXPORT void JNICALL Java_org_crosswire_android_sword_SWMgr_sendBibleSyncMessa
 		(JNIEnv *env, jobject me, jstring osisRefJS) {
 SWLog::getSystemLog()->logDebug("libsword: sendBibleSyncMessage() begin");
 
-	initBibleSync();
-	const char *osisRef = env->GetStringUTFChars(osisRefJS, NULL);
+	if (!bibleSync) {
+SWLog::getSystemLog()->logDebug("libsword: sendBibleSyncMessage() bibleSync not active; message not sent.");
+		return;
+	}
+	const char *osisRefString = env->GetStringUTFChars(osisRefJS, NULL);
+	SWBuf modName = "Bible";
+	SWBuf osisRef = osisRefString;
+	const char *modNamePrefix = osisRef.stripPrefix(':');
+	if (modNamePrefix) modName = modNamePrefix;
 
 #ifdef BIBLESYNC
-	BibleSync_xmit_status result = bibleSync->Transmit(BSP_SYNC, "Bible", osisRef);
+	BibleSync_xmit_status result = bibleSync->Transmit(BSP_SYNC, modName.c_str(), osisRef.c_str());
 #endif
 SWLog::getSystemLog()->logDebug("libsword: sendBibleSyncMessage() finished with status code: %d", result);
 
-	env->ReleaseStringUTFChars(osisRefJS, osisRef);
+	env->ReleaseStringUTFChars(osisRefJS, osisRefString);
 }
 
 
 /*
  * NOTE: this method blocks and should be called in a new thread
  * Class:     org_crosswire_android_sword_SWMgr
- * Method:    registerBibleSyncListener
- * Signature: (Ljava/lang/Object;)V
+ * Method:    startBibleSync
+ * Signature: (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lorg/crosswire/android/sword/SWMgr/BibleSyncListener;)V
  */
-JNIEXPORT void JNICALL Java_org_crosswire_android_sword_SWMgr_registerBibleSyncListener
-		(JNIEnv *env, jobject me, jobject bibleSyncListener) {
+JNIEXPORT void JNICALL Java_org_crosswire_android_sword_SWMgr_startBibleSync
+  (JNIEnv *env, jobject me, jstring appNameJS, jstring userNameJS, jstring passphraseJS, jobject bibleSyncListener) {
 
-SWLog::getSystemLog()->logDebug("registerBibleSyncListener() start");
+	SWLog::getSystemLog()->logDebug("startBibleSync() start");
+	// only one thread
+	static bool starting = false;
+	if (starting) return;
+	starting = true;
+	// kill any previous loop
+	if (::bibleSyncListener) bibleSyncListener = 0;
 #ifdef BIBLESYNC
+	const char *paramString = env->GetStringUTFChars(appNameJS, NULL);
+	SWBuf appName = paramString;
+	env->ReleaseStringUTFChars(appNameJS, paramString);
+	paramString = env->GetStringUTFChars(userNameJS, NULL);
+	SWBuf userName = paramString;
+	env->ReleaseStringUTFChars(userNameJS, paramString);
+	paramString = env->GetStringUTFChars(passphraseJS, NULL);
+	SWBuf passphrase = paramString;
+	env->ReleaseStringUTFChars(passphraseJS, paramString);
+
+	// in case we're restarting, wait for our loop to finish for sure
+	if (::bibleSync) {
+SWLog::getSystemLog()->logDebug("startBibleSync() sleeping 3 seconds");
+		sleep(3);
+	}
+
 	::bibleSyncListener = bibleSyncListener;
 	::bibleSyncListenerEnv = env;
-SWLog::getSystemLog()->logDebug("registerBibleSyncListener - calling init");
-	initBibleSync();
-SWLog::getSystemLog()->logDebug("registerBibleSyncListener - starting while listener");
+	SWLog::getSystemLog()->logDebug("startBibleSync - calling init");
+
+	if (!bibleSync) {
+SWLog::getSystemLog()->logDebug("bibleSync initializing c-tor");
+		bibleSync = new BibleSync(appName.c_str(), (const char *)SWVersion().currentVersion, userName.c_str());
+SWLog::getSystemLog()->logDebug("bibleSync initializing setMode");
+		bibleSync->setMode(BSP_MODE_PERSONAL, bibleSyncCallback, passphrase.c_str());
+	}
+	SWLog::getSystemLog()->logDebug("startBibleSync - starting while listener");
+	starting = false;
 	while(::bibleSyncListener) {
-SWLog::getSystemLog()->logDebug("bibleSyncListener - while loop iteration");
+		SWLog::getSystemLog()->logDebug("bibleSyncListener - while loop iteration");
 		BibleSync::Receive(bibleSync);
-SWLog::getSystemLog()->logDebug("bibleSyncListener - sleeping for 2 seconds");
+		SWLog::getSystemLog()->logDebug("bibleSyncListener - sleeping for 2 seconds");
 		sleep(2);
+	}
+	delete bibleSync;
+	bibleSync = 0;
+#else
+	SWLog::getSystemLog()->logDebug("registerBibleSyncListener: !!! BibleSync disabled in native code.");
+#endif
+}
+
+
+/*
+ * Class:     org_crosswire_android_sword_SWMgr
+ * Method:    stopBibleSync
+ * Signature: (V;)V
+ */
+JNIEXPORT void JNICALL Java_org_crosswire_android_sword_SWMgr_stopBibleSync
+		(JNIEnv *env, jobject me) {
+
+SWLog::getSystemLog()->logDebug("stopBibleSync()");
+#ifdef BIBLESYNC
+	// if we have a listen loop going, just break the loop; the bibleSync cleanup will happen there
+	if (::bibleSyncListener) ::bibleSyncListener = 0;
+	else if (bibleSync) {
+		delete bibleSync;
+		bibleSync = 0;
 	}
 #else
 SWLog::getSystemLog()->logDebug("registerBibleSyncListener: !!! BibleSync disabled in native code.");

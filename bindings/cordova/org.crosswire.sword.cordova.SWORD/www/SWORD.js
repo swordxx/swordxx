@@ -315,10 +315,17 @@ SWMgr.prototype.addExtraConfig = function(confBlob, callback) {
 	return retVal;
 }
 
-SWMgr.prototype.registerBibleSyncListener = function(callback) {
+SWMgr.prototype.startBibleSync = function(appName, userName, passphrase, callback) {
 	exec(callback,
 		function(err) { utils.alert('[ERROR] problem: ' + err); },
-		"SWORD", "SWMgr_registerBibleSyncListener", []
+		"SWORD", "SWMgr_startBibleSync", [appName, userName, passphrase]
+	);
+}
+
+SWMgr.prototype.stopBibleSync = function() {
+	exec(function() {},
+		function(err) { utils.alert('[ERROR] problem: ' + err); },
+		"SWORD", "SWMgr_stopBibleSync", []
 	);
 }
 
