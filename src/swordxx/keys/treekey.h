@@ -66,8 +66,8 @@ public:
 //    TreeKey (const char *ikey = 0);
 //    TreeKey (const SWKey * ikey);
 //    TreeKey (TreeKey const &k);
-    TreeKey () { init(); };
-    ~TreeKey () {};
+    TreeKey () { init(); }
+    ~TreeKey () {}
 
 
     virtual std::string const & getLocalName() = 0;
