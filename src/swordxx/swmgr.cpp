@@ -595,6 +595,7 @@ char SWMgr::findConfig(std::string & prefixPath, std::string & configPath, std::
             return 2;
         }
     }
+    return configType;
 }
 
 
