@@ -47,7 +47,7 @@ public:
     static void setSystemLog(SWLog *newLogger);
 
     SWLog() { logLevel = 1;    /*default to show only errors*/}
-    virtual ~SWLog() {};
+    virtual ~SWLog() {}
 
     void setLogLevel(char level) { logLevel = level; }
     char getLogLevel() const { return logLevel; }
