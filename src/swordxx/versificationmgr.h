@@ -149,7 +149,7 @@ public:
                            unsigned char const * mappings = nullptr);
         long getOffsetFromVerse(int book, int chapter, int verse) const;
         char getVerseFromOffset(long offset, int *book, int *chapter, int *verse) const;
-        const int *getBMAX() const { return m_BMAX; };
+        const int *getBMAX() const { return m_BMAX; }
         long getNTStartOffset() const { return m_ntStartOffset; }
         void translateVerse(const System *dstSys, const char **book, int *chapter, int *verse, int *verse_end) const;
     };
