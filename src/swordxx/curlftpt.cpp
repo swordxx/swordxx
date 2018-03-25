@@ -89,7 +89,7 @@ SWLog::getSystemLog()->logDebug("RemoteTransport::getDirList(%s)", dirURL);
             if (status && name != "." && name != "..") {
                 struct DirEntry i;
                 i.name = name;
-                i.size = item.size;
+                i.approximateSizeInBytes = item.size;
                 i.isDirectory = (item.flagtrycwd == 1);
                 dirList.push_back(i);
             }

@@ -94,7 +94,7 @@ int RemoteTransport::copyDirectory(const char * urlPrefix_,
                 dirList.push_back(dirEntry);
             }
         } else {
-            totalBytes += e.size;
+            totalBytes += e.approximateSizeInBytes;
             i++;
         }
     }
@@ -138,7 +138,7 @@ int RemoteTransport::copyDirectory(const char * urlPrefix_,
                         url2.c_str());
             return -2;
         }
-        completedBytes += dirEntry.size;
+        completedBytes += dirEntry.approximateSizeInBytes;
         if (m_term.load(std::memory_order_acquire))
             return -3;
     }

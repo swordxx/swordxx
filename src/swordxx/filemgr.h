@@ -43,7 +43,7 @@ class SWDLLEXPORT FileMgr;
 struct SWDLLEXPORT DirEntry {
 public:
     std::string name;
-    unsigned long size;
+    std::size_t approximateSizeInBytes;
     bool isDirectory;
 };
 /**
