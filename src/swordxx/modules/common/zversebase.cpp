@@ -449,7 +449,7 @@ char zVerseBase<VerseSizeType_>::createModule(NormalizedPath const & path,
     offset = swapFromArch(offset);
     size   = swapFromArch(size);
 
-    for (vk.positionToTop(); !vk.popError(); ++vk) {
+    for (vk.positionToTop(); !vk.popError(); vk.increment()) {
         if (vk.getTestament() < 2) {
             if (fd->write(&offset, sizeof(offset)) != sizeof(offset)) goto writefailure;    //compBufIdxOffset
             if (fd->write(&offset, sizeof(offset)) != sizeof(offset)) goto writefailure;

@@ -220,7 +220,7 @@ void SWModule::positionToBottom() {
  */
 
 void SWModule::increment(int steps) {
-    (*key) += steps;
+    key->increment(steps);
     error = key->popError();
 }
 
@@ -234,7 +234,7 @@ void SWModule::increment(int steps) {
  */
 
 void SWModule::decrement(int steps) {
-    (*key) -= steps;
+    key->decrement(steps);
     error = key->popError();
 }
 

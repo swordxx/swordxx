@@ -124,7 +124,7 @@ void writeidx(VerseKey &key1, VerseKey &key2, VerseKey &key3, long offset, short
     long pos;
     short tmp;
 
-    for (; ((key1 <= key3) && (key1.popError() != KEYERR_OUTOFBOUNDS) && (key1.getTestament() == testmnt)); key1+=1) {
+    for (; ((key1 <= key3) && (key1.popError() != KEYERR_OUTOFBOUNDS) && (key1.getTestament() == testmnt)); key1.increment()) {
         if (key1.getVerse() == 1) {    // new chapter
             if (key1.getChapter() == 1) {    // new book
                 pos = lseek(cfp, 0, SEEK_CUR);

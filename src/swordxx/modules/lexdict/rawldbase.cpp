@@ -125,7 +125,7 @@ void RawLdBase<Base>::increment(int steps) {
     char tmperror;
 
     if (key->isTraversable()) {
-        *key += steps;
+        key->increment(steps);
         error = key->popError();
         steps = 0;
     }

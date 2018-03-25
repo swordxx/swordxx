@@ -755,7 +755,7 @@ terminate_range:
                             }
                             lastKey->setLowerBound(*curKey);
                             if (f && doubleF) curKey->positionToMaxVerse();
-                            else if (f) ++(*curKey);
+                            else if (f) curKey->increment();
                             lastKey->setUpperBound(*curKey);
                             lastKey->positionToTop();
                             tmpListKey << *lastKey;
@@ -1022,7 +1022,7 @@ terminate_range:
                     }
                     lastKey->setLowerBound(*curKey);
                     if (f && doubleF) curKey->positionToMaxVerse();
-                    else if (f) ++(*curKey);
+                    else if (f) curKey->increment();
                     lastKey->setUpperBound(*curKey);
                     lastKey->positionToTop();
                     tmpListKey << *lastKey;
@@ -1331,7 +1331,7 @@ void VerseKey::decrement(int step) {
         ierror = popError();
     }
     if ((ierror) && (!m_intros))
-        ++(*this);
+        increment();
 
     m_error = (ierror) ? ierror : m_error;
 }

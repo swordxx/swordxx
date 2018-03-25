@@ -146,7 +146,11 @@ void RawTextBase<BaseRawVerse>::increment(int steps) {
         StartType laststart = start;
         SizeType lastsize = size;
         SWKey lasttry = *tmpkey;
-        (steps > 0) ? ++(*key) : --(*key);
+        if (steps > 0) {
+            key->increment();
+        } else {
+            key->decrement();
+        }
         tmpkey = &getVerseKey();
 
         if ((error = key->popError())) {

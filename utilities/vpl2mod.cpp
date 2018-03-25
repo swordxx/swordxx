@@ -253,7 +253,7 @@ int main(int argc, char **argv) {
                 while (!vk.popError() && !isKJVRef(vk)); */
                 //hack to replace above:
                 successive++;
-                vk -= successive;
+                vk.decrement(successive);
                 orig = mod.getRawEntry();
 
                 std::cerr << "Not a valid KJV ref: " << origVK.getText() << "\n";

@@ -38,11 +38,7 @@ namespace swordxx {
 
 #define SWKEY_OPERATORS(cn) \
   cn & operator=(char const * ikey) = delete; \
-  cn & operator=(SWKey const & ikey) = delete; \
-  cn & operator-=(int steps) { decrement(steps); return *this; } \
-  cn & operator+=(int steps) { increment(steps); return *this; } \
-  cn & operator++() { increment(1); return *this; } \
-  cn & operator--() { decrement(1); return *this; }
+  cn & operator=(SWKey const & ikey) = delete;
 
 class SWLocale;
 

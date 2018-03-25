@@ -64,7 +64,7 @@ int main(int /* argc */, char ** /* argv */)
     lk2 << lk;
     lk2 << vk2;
     lk2 << "test2";
-    for (lk2.positionToTop(); !lk2.popError(); ++lk2) {
+    for (lk2.positionToTop(); !lk2.popError(); lk2.increment()) {
         cout << lk2.getText() << "\n";
     }
 
@@ -96,7 +96,7 @@ int main(int /* argc */, char ** /* argv */)
 
 */
 
-    for (lk2.positionToTop(); !lk2.popError(); ++lk2)
+    for (lk2.positionToTop(); !lk2.popError(); lk2.increment())
         cout << lk2.getText() << "\n";
 
     lk.clear();

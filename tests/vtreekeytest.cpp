@@ -77,7 +77,7 @@ int main(int /* argc */, char ** /* argv */) {
     cout << "\nListkey persist key iteration test\n\n";
     keys = key1->parseVerseList("mat1", nullptr, true);
 
-    for (keys.positionToTop(); !keys.popError(); ++keys) {
+    for (keys.positionToTop(); !keys.popError(); keys.increment()) {
         cout << "\n" << keys.getText() << ":\n" << endl;
     }
 

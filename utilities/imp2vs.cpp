@@ -284,7 +284,7 @@ void writeEntry(SWModule & module,
         ListKey listKey = vkey->parseVerseList(key.c_str(), "Gen1:1", true);
 
         bool first = true;
-        for (listKey.positionToTop(); !listKey.popError(); ++listKey) {
+        for (listKey.positionToTop(); !listKey.popError(); listKey.increment()) {
             vkey->positionFrom(listKey);
             if (first) {
                 *linkMaster = *vkey;

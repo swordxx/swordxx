@@ -107,7 +107,7 @@ int main(int argc, char **argv)
         bla.setText(argv[2]);
     }
 
-    for (loop = 0; loop < max && !bla.popError(); loop++, ++bla) {
+    for (loop = 0; loop < max && !bla.popError(); loop++, bla.increment()) {
         index = bla.getIndex();
         std::cout << bla.getText() << "(" << index << ")\n";
     }
@@ -123,7 +123,7 @@ int main(int argc, char **argv)
         bla.setText(argv[2]);
     }
 
-    for (loop = max; loop && !bla.popError(); loop--, --bla) {
+    for (loop = max; loop && !bla.popError(); loop--, bla.decrement()) {
         index = bla.getIndex();
         std::cout << bla.getText() << "(" << index << ")\n";
     }
@@ -136,7 +136,7 @@ int main(int argc, char **argv)
         bla.setText(argv[2]);
     }
 
-    for (loop = max; loop; loop--, --bla) {
+    for (loop = max; loop; loop--, bla.decrement()) {
         index = bla.getIndex();
         std::cout << bla.getText() << "(" << index << ")\n";
     }
@@ -149,7 +149,7 @@ int main(int argc, char **argv)
         bla.setText(argv[2]);
     }
 
-    for (loop = max; loop; loop--, ++bla) {
+    for (loop = max; loop; loop--, bla.increment()) {
         index = bla.getIndex();
         std::cout << bla.getText() << "(" << index << ")\n";
     }
@@ -162,7 +162,7 @@ int main(int argc, char **argv)
         bla.setText(argv[2]);
     }
 
-    for (loop = max; loop; loop--, ++bla) {
+    for (loop = max; loop; loop--, bla.increment()) {
         index = bla.getIndex();
         std::cout << bla.getText() << "(" << index << ")\n";
     }
@@ -179,7 +179,7 @@ int main(int argc, char **argv)
         bla.setText(argv[2]);
     }
 
-    for (loop = max; loop; loop--, --bla) {
+    for (loop = max; loop; loop--, bla.decrement()) {
         index = bla.getIndex();
         std::cout << bla.getText() << "(" << index << ")\n";
     }
@@ -192,7 +192,7 @@ int main(int argc, char **argv)
         bla.setText(argv[2]);
     }
 
-    for (loop = max; loop; loop--, --bla) {
+    for (loop = max; loop; loop--, bla.decrement()) {
         index = bla.getIndex();
         std::cout << bla.getText() << "(" << index << ")\n";
     }
@@ -205,7 +205,7 @@ int main(int argc, char **argv)
         bla.setText(argv[2]);
     }
 
-    for (loop = max; loop; loop--, ++bla) {
+    for (loop = max; loop; loop--, bla.increment()) {
         index = bla.getIndex();
         std::cout << bla.getText() << "(" << index << ")\n";
     }
@@ -218,7 +218,7 @@ int main(int argc, char **argv)
         bla.setText(argv[2]);
     }
 
-    for (loop = max; loop; loop--, ++bla) {
+    for (loop = max; loop; loop--, bla.increment()) {
         index = bla.getIndex();
         std::cout << bla.getText() << "(" << index << ")\n";
     }
@@ -231,7 +231,7 @@ int main(int argc, char **argv)
     std::cout << "bla.getText() = " << bla.getText() << "\n";
     std::cout << "bla.popError() = " << (int)bla.popError() << " \n";
     std::cout << "bla++ \n";
-    ++bla;
+    bla.increment();
     std::cout << "bla.popError() = " << (int)bla.popError() << " \n";
 
     bla.setIntros(false);
