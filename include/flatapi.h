@@ -40,6 +40,7 @@ struct org_crosswire_sword_ModInfo {
 	char *version;
 	char *delta;
 	char *cipherKey;
+	const char **features;
 };
 
 
@@ -85,6 +86,8 @@ void SWDLLEXPORT org_crosswire_sword_SWModule_terminateSearch
   (SWHANDLE hSWModule);
 
 typedef void (*org_crosswire_sword_SWModule_SearchCallback)(int);
+
+typedef void (*org_biblesync_MessageReceivedCallback)(const char *);
 
 /*
  * Class:     org_crosswire_sword_SWModule
@@ -573,6 +576,31 @@ int SWDLLEXPORT org_crosswire_sword_InstallMgr_remoteInstallModule
  */
 SWHANDLE SWDLLEXPORT org_crosswire_sword_InstallMgr_getRemoteModuleByName
   (SWHANDLE hInstallMgr, const char *sourceName, const char *modName);
+
+/*
+ * NOTE: this method blocks and should be called in a new thread
+ * Class:     org_crosswire_android_sword_SWMgr
+ * Method:    startBibleSync
+ * Signature: (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lorg/crosswire/android/sword/SWMgr/BibleSyncListener;)V
+ */
+void SWDLLEXPORT org_crosswire_sword_SWMgr_startBibleSync
+  (SWHANDLE hMgr, const char *appNameJS, const char *userNameJS, const char *passphraseJS, org_biblesync_MessageReceivedCallback callback);
+
+/*
+ * Class:     org_crosswire_android_sword_SWMgr
+ * Method:    stopBibleSync
+ * Signature: (V;)V
+ */
+void SWDLLEXPORT org_crosswire_sword_SWMgr_stopBibleSync
+		(SWHANDLE hMgr);
+
+/*
+ * Class:     org_crosswire_android_sword_SWMgr
+ * Method:    sendBibleSyncMessage
+ * Signature: (Ljava/lang/String;)V
+ */
+void SWDLLEXPORT org_crosswire_sword_SWMgr_sendBibleSyncMessage
+		(SWHANDLE hMgr, const char *osisRefRaw);
 
 void SWDLLEXPORT org_crosswire_sword_SWlog_logError(const char *msg);
 void SWDLLEXPORT org_crosswire_sword_SWlog_logDebug(const char *msg);

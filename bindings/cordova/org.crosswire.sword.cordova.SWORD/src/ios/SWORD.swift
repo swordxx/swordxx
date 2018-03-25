@@ -450,10 +450,49 @@ debugPrint("initMgr, mgr: " + String(describing: mgr))
     }
     
     
-    @objc(SWMgr_registerBibleSyncListener:)
-    func SWMgr_registerBibleSyncListener(command: CDVInvokedUrlCommand) {
-        let pluginResult = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: "SWMgr_registerBibleSyncListener")
-        self.commandDelegate!.send(pluginResult, callbackId: command.callbackId)
+    @objc(SWMgr_startBibleSync:)
+    func SWMgr_startBibleSync(command: CDVInvokedUrlCommand) {
+        initMgr()
+        let appName = command.arguments[1] as? String ?? ""
+        let userName = command.arguments[2] as? String ?? ""
+        let passphrase = command.arguments[3] as? String ?? ""
+            bibleSyncCallbackID = command.callbackId
+            DispatchQueue.global().async {
+                mySWORDPlugin = self
+                org_crosswire_sword_SWMgr_startBibleSync(self.mgr, appName, userName, passphrase, { (message: Optional<UnsafePointer<Int8>>) in
+                    let response = String(cString: message!)
+                    if (mySWORDPlugin != nil && mySWORDPlugin!.bibleSyncCallbackID != "") {
+                        let result = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: response)
+                        result?.setKeepCallbackAs(true)
+                        mySWORDPlugin!.commandDelegate!.send(result, callbackId: mySWORDPlugin!.bibleSyncCallbackID)
+                    }
+                });
+                
+                self.bibleSyncCallbackID = ""
+                
+                let result = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: "SWMgr_startBibleSync finished")
+                result?.setKeepCallbackAs(false)
+                self.commandDelegate!.send(result, callbackId: command.callbackId)
+            }
+            
+            let result = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: "SWMgr_startBibleSync")
+            result?.setKeepCallbackAs(true)
+            self.commandDelegate!.send(result, callbackId: command.callbackId)
+    }
+    
+    @objc(SWMgr_stopBibleSync:)
+    func SWMgr_stopBibleSync(command: CDVInvokedUrlCommand) {
+        initMgr()
+        org_crosswire_sword_SWMgr_stopBibleSync(mgr)
+        self.commandDelegate!.send(CDVPluginResult(status: CDVCommandStatus_OK, messageAs: "SWMgr_stopBibleSync"), callbackId: command.callbackId)
+    }
+    
+    @objc(SWMgr_sendBibleSyncMessage:)
+    func SWMgr_sendBibleSyncMessage(command: CDVInvokedUrlCommand) {
+        initMgr()
+        let osisRef = command.arguments[1] as? String ?? ""
+        org_crosswire_sword_SWMgr_sendBibleSyncMessage(mgr, osisRef)
+        self.commandDelegate!.send(CDVPluginResult(status: CDVCommandStatus_OK, messageAs: "SWMgr_sendBibleSyncMessage"), callbackId: command.callbackId)
     }
     
     
@@ -658,6 +697,7 @@ debugPrint("initMgr, mgr: " + String(describing: mgr))
     }
     
     var callbackID:String = ""
+    var bibleSyncCallbackID:String = ""
     @objc(InstallMgr_remoteInstallModule:)
     func InstallMgr_remoteInstallModule(command: CDVInvokedUrlCommand) {
         initInstall()
@@ -712,7 +752,8 @@ debugPrint("initMgr, mgr: " + String(describing: mgr))
                 "language": String(cString: i.language),
                 "delta": String(cString: i.delta),
                 "cipherKey": i.cipherKey == nil ? nil : String(cString: i.cipherKey),
-                "version": String(cString: i.version)
+                "version": String(cString: i.version),
+                "features": getStringArray(buffer: i.features)
                 ] as [AnyHashable : Any]
             mods.append(modInfo)
         }
@@ -802,7 +843,8 @@ debugPrint("initMgr, mgr: " + String(describing: mgr))
                 "category": String(cString: i.category),
                 "language": String(cString: i.language),
                 "delta": i.delta == nil ? "" : String(cString: i.delta),
-                "version": i.version == nil ? "" : String(cString: i.version)
+                "version": i.version == nil ? "" : String(cString: i.version),
+                "features": getStringArray(buffer: i.features)
             ] as [AnyHashable : Any]
 
             if (i.cipherKey != nil) {
@@ -814,7 +856,8 @@ debugPrint("initMgr, mgr: " + String(describing: mgr))
         self.commandDelegate!.send(CDVPluginResult(status: CDVCommandStatus_OK, messageAs: mods), callbackId: command.callbackId)
     }
 /*
-SWMgr_registerBibleSyncListener
+SWMgr_startBibleSync
+SWMgr_stopBibleSync		
 SWMgr_sendBibleSyncMessage		
 */
 }

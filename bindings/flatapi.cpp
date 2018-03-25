@@ -37,6 +37,11 @@
 #include <localemgr.h>
 #include <utilstr.h>
 #include <rtfhtml.h>
+
+#ifdef BIBLESYNC
+#include <biblesync.hh>
+#endif
+
 #include "corba/orbitcpp/webmgr.hpp"
 
 extern "C" {
@@ -83,6 +88,7 @@ void clearModInfoArray(org_crosswire_sword_ModInfo **modInfo) {
 				delete [] (*modInfo)[i].version;
 				delete [] (*modInfo)[i].delta;
 				delete [] (*modInfo)[i].cipherKey;
+				clearStringArray(&((*modInfo)[i].features));
 			}
 			else break;
 		}
@@ -106,6 +112,37 @@ void percentUpdate(char percent, void *userData) {
 	}
 }
 
+#ifdef BIBLESYNC
+
+using std::string;
+BibleSync *bibleSync = 0;
+org_biblesync_MessageReceivedCallback bibleSyncListener = 0;
+
+void bibleSyncCallback(char cmd, string pkt_uuid, string bible, string ref, string alt, string group, string domain, string info, string dump) {
+SWLog::getSystemLog()->logDebug("bibleSync callback msg: %c; pkt_uuid: %s; bible: %s; ref: %s; alt: %s; group: %s; domain: %s; info: %s; dump: %s", cmd, pkt_uuid.c_str(), bible.c_str(), ref.c_str(), alt.c_str(), group.c_str(), domain.c_str(), info.c_str(), dump.c_str());
+	if (bibleSyncListener) {
+SWLog::getSystemLog()->logDebug("bibleSync listener is true");
+		switch(cmd) {
+		// error
+		case 'E':
+		// mismatch
+		case 'M':
+		// new speaker
+		case 'S':
+		// dead speaker
+		case 'D':
+		// announce
+		case 'A':
+			break;
+		// navigation
+		case 'N':
+SWLog::getSystemLog()->logDebug("bibleSync Nav Received: %s", ref.c_str());
+			(*bibleSyncListener)(ref.c_str());
+			break;
+		}
+	}
+}
+#endif
     
 class MyStatusReporter : public StatusReporter {
 public:
@@ -326,7 +363,6 @@ public:
 } _initStatics;
 
 
-
 }
 
 //
@@ -376,7 +412,7 @@ void SWDLLEXPORT org_crosswire_sword_SWModule_terminateSearch
 /*
  * Class:     org_crosswire_sword_SWModule
  * Method:    search
- * Signature: (Ljava/lang/String;IJLjava/lang/String;Lorg/crosswire/android/sword/SWModule/SearchProgressReporter;)[Lorg/crosswire/android/sword/SWModule/SearchHit;
+ * Signature: (Ljava/lang/String;IJLjava/lang/String;Lorg/crosswire/sword/SWModule/SearchProgressReporter;)[Lorg/crosswire/sword/SWModule/SearchHit;
  */
 const struct org_crosswire_sword_SearchHit * SWDLLEXPORT org_crosswire_sword_SWModule_search
   (SWHANDLE hSWModule, const char *searchString, int searchType, long flags, const char *scope, org_crosswire_sword_SWModule_SearchCallback progressReporter) {
@@ -1035,7 +1071,7 @@ const char * SWDLLEXPORT org_crosswire_sword_SWMgr_version
 /*
  * Class:     org_crosswire_sword_SWMgr
  * Method:    getModInfoList
- * Signature: ()[Lorg/crosswire/android/sword/SWMgr/ModInfo;
+ * Signature: ()[Lorg/crosswire/sword/SWMgr/ModInfo;
  */
 const struct org_crosswire_sword_ModInfo * SWDLLEXPORT org_crosswire_sword_SWMgr_getModInfoList
   (SWHANDLE hSWMgr) {
@@ -1056,24 +1092,36 @@ const struct org_crosswire_sword_ModInfo * SWDLLEXPORT org_crosswire_sword_SWMgr
 	int i = 0;
 	for (sword::ModMap::iterator it = mgr->Modules.begin(); it != mgr->Modules.end(); ++it) {
 		module = it->second;
-//		if ((!(module->getConfigEntry("CipherKey"))) || (*(module->getConfigEntry("CipherKey")))) {
-			SWBuf type = module->getType();
-			SWBuf cat = module->getConfigEntry("Category");
-			SWBuf version = module->getConfigEntry("Version");
-			if (cat.length() > 0) type = cat;
-			stdstr(&(milist[i].name), assureValidUTF8(module->getName()));
-			stdstr(&(milist[i].description), assureValidUTF8(module->getDescription()));
-			stdstr(&(milist[i].category), assureValidUTF8(type.c_str()));
-			stdstr(&(milist[i].language), assureValidUTF8(module->getLanguage()));
-			stdstr(&(milist[i].version), assureValidUTF8(version.c_str()));
-			stdstr(&(milist[i].delta), "");
-			const char *cipherKey = module->getConfigEntry("CipherKey");
-			if (cipherKey) {
-				stdstr(&(milist[i].cipherKey), assureValidUTF8(cipherKey));
-			}
-			else	milist[i].cipherKey = 0;
-			if (++i >= size) break;
-//		}
+		SWBuf type = module->getType();
+		SWBuf cat = module->getConfigEntry("Category");
+		SWBuf version = module->getConfigEntry("Version");
+		if (cat.length() > 0) type = cat;
+		stdstr(&(milist[i].name), assureValidUTF8(module->getName()));
+		stdstr(&(milist[i].description), assureValidUTF8(module->getDescription()));
+		stdstr(&(milist[i].category), assureValidUTF8(type.c_str()));
+		stdstr(&(milist[i].language), assureValidUTF8(module->getLanguage()));
+		stdstr(&(milist[i].version), assureValidUTF8(version.c_str()));
+		stdstr(&(milist[i].delta), "");
+		const char *cipherKey = module->getConfigEntry("CipherKey");
+		if (cipherKey) {
+			stdstr(&(milist[i].cipherKey), assureValidUTF8(cipherKey));
+		}
+		else	milist[i].cipherKey = 0;
+
+		ConfigEntMap::const_iterator start = module->getConfig().lower_bound("Feature");
+		ConfigEntMap::const_iterator end   = module->getConfig().upper_bound("Feature");
+
+		int featureCount = 0;
+		for (ConfigEntMap::const_iterator it = start; it != end; ++it) {
+			++featureCount;
+		}
+		milist[i].features = (const char **)calloc(featureCount+1, sizeof(const char *));
+		featureCount = 0;
+		for (ConfigEntMap::const_iterator it = start; it != end; ++it) {
+			stdstr((char **)&(milist[i].features[featureCount++]), assureValidUTF8(it->second));
+		}
+
+		if (++i >= size) break;
 	}
 	hmgr->modInfo = milist;
 	return milist;
@@ -1082,7 +1130,7 @@ const struct org_crosswire_sword_ModInfo * SWDLLEXPORT org_crosswire_sword_SWMgr
 /*
  * Class:     org_crosswire_sword_SWMgr
  * Method:    getModuleByName
- * Signature: (Ljava/lang/String;)Lorg/crosswire/android/sword/SWModule;
+ * Signature: (Ljava/lang/String;)Lorg/crosswire/sword/SWModule;
  */
 SWHANDLE SWDLLEXPORT org_crosswire_sword_SWMgr_getModuleByName
   (SWHANDLE hSWMgr, const char *moduleName) {
@@ -1482,7 +1530,7 @@ const char * SWDLLEXPORT org_crosswire_sword_SWMgr_translate
 /*
  * Class:     org_crosswire_sword_InstallMgr
  * Method:    new
- * Signature: (Ljava/lang/String;Lorg/crosswire/android/sword/SWModule/SearchProgressReporter;)V
+ * Signature: (Ljava/lang/String;Lorg/crosswire/sword/SWModule/SearchProgressReporter;)V
  */
 SWHANDLE SWDLLEXPORT org_crosswire_sword_InstallMgr_new
   (const char *baseDir, org_crosswire_sword_InstallMgr_StatusCallback statusReporter) {
@@ -1542,7 +1590,7 @@ int SWDLLEXPORT org_crosswire_sword_InstallMgr_syncConfig
 /*
  * Class:     org_crosswire_sword_InstallMgr
  * Method:    uninstallModule
- * Signature: (Lorg/crosswire/android/sword/SWMgr;Ljava/lang/String;)I
+ * Signature: (Lorg/crosswire/sword/SWMgr;Ljava/lang/String;)I
  */
 int SWDLLEXPORT org_crosswire_sword_InstallMgr_uninstallModule
   (SWHANDLE hInstallMgr, SWHANDLE hSWMgr_removeFrom, const char *modName) {
@@ -1607,7 +1655,7 @@ int SWDLLEXPORT org_crosswire_sword_InstallMgr_refreshRemoteSource
 /*
  * Class:     org_crosswire_sword_InstallMgr
  * Method:    getRemoteModInfoList
- * Signature: (Lorg/crosswire/android/sword/SWMgr;Ljava/lang/String;)[Lorg/crosswire/android/sword/SWMgr/ModInfo;
+ * Signature: (Lorg/crosswire/sword/SWMgr;Ljava/lang/String;)[Lorg/crosswire/sword/SWMgr/ModInfo;
  */
 const struct org_crosswire_sword_ModInfo * SWDLLEXPORT org_crosswire_sword_InstallMgr_getRemoteModInfoList
   (SWHANDLE hInstallMgr, SWHANDLE hSWMgr_deltaCompareTo, const char *sourceName) {
@@ -1656,6 +1704,19 @@ const struct org_crosswire_sword_ModInfo * SWDLLEXPORT org_crosswire_sword_Insta
 		stdstr(&(retVal[i].version), assureValidUTF8(version.c_str()));
 		stdstr(&(retVal[i].delta), assureValidUTF8(statusString.c_str()));
 		stdstr(&(retVal[i].cipherKey), cipherKey ? (const char *)assureValidUTF8(cipherKey) : (const char *)0);
+
+		ConfigEntMap::const_iterator start = module->getConfig().lower_bound("Feature");
+		ConfigEntMap::const_iterator end   = module->getConfig().upper_bound("Feature");
+
+		int featureCount = 0;
+		for (ConfigEntMap::const_iterator it = start; it != end; ++it) {
+			++featureCount;
+		}
+		retVal[i].features = (const char **)calloc(featureCount+1, sizeof(const char *));
+		featureCount = 0;
+		for (ConfigEntMap::const_iterator it = start; it != end; ++it) {
+			stdstr((char **)&(retVal[i].features[featureCount++]), assureValidUTF8(it->second));
+		}
 		if (++i >= size) break;
 	}
 	hinstmgr->modInfo = retVal;
@@ -1665,7 +1726,7 @@ const struct org_crosswire_sword_ModInfo * SWDLLEXPORT org_crosswire_sword_Insta
 /*
  * Class:     org_crosswire_sword_InstallMgr
  * Method:    remoteInstallModule
- * Signature: (Lorg/crosswire/android/sword/SWMgr;Ljava/lang/String;Ljava/lang/String;)I
+ * Signature: (Lorg/crosswire/sword/SWMgr;Ljava/lang/String;Ljava/lang/String;)I
  */
 int SWDLLEXPORT org_crosswire_sword_InstallMgr_remoteInstallModule
   (SWHANDLE hInstallMgr_from, SWHANDLE hSWMgr_to, const char *sourceName, const char *modName) {
@@ -1699,7 +1760,7 @@ int SWDLLEXPORT org_crosswire_sword_InstallMgr_remoteInstallModule
 /*
  * Class:     org_crosswire_sword_InstallMgr
  * Method:    getRemoteModuleByName
- * Signature: (Ljava/lang/String;Ljava/lang/String;)Lorg/crosswire/android/sword/SWModule;
+ * Signature: (Ljava/lang/String;Ljava/lang/String;)Lorg/crosswire/sword/SWModule;
  */
 SWHANDLE SWDLLEXPORT org_crosswire_sword_InstallMgr_getRemoteModuleByName
   (SWHANDLE hInstallMgr, const char *sourceName, const char *modName) {
@@ -1722,4 +1783,105 @@ SWHANDLE SWDLLEXPORT org_crosswire_sword_InstallMgr_getRemoteModuleByName
 
 	return (SWHANDLE)hinstmgr->getModuleHandle(module);
 
+}
+
+/*
+ * Class:     org_crosswire_sword_SWMgr
+ * Method:    sendBibleSyncMessage
+ * Signature: (Ljava/lang/String;)V
+ */
+void SWDLLEXPORT org_crosswire_sword_SWMgr_sendBibleSyncMessage
+		(SWHANDLE hMgr, const char *osisRefRaw) {
+SWLog::getSystemLog()->logDebug("libsword: sendBibleSyncMessage() begin");
+
+#ifdef BIBLESYNC
+    if (!bibleSync) {
+SWLog::getSystemLog()->logDebug("libsword: sendBibleSyncMessage() bibleSync not active; message not sent.");
+		return;
+	}
+	SWBuf modName = "Bible";
+	SWBuf osisRef = osisRefRaw;
+	const char *modNamePrefix = osisRef.stripPrefix(':');
+	if (modNamePrefix) modName = modNamePrefix;
+
+	BibleSync_xmit_status result = bibleSync->Transmit(BSP_SYNC, modName.c_str(), osisRef.c_str());
+SWLog::getSystemLog()->logDebug("libsword: sendBibleSyncMessage() finished with status code: %d", result);
+#else
+SWLog::getSystemLog()->logDebug("libsword: sendBibleSyncMessage() bibleSync not active; message not sent.");
+#endif
+
+}
+
+
+/*
+ * NOTE: this method blocks and should be called in a new thread
+ * Class:     org_crosswire_sword_SWMgr
+ * Method:    startBibleSync
+ * Signature: (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lorg/crosswire/sword/SWMgr/BibleSyncListener;)V
+ */
+void SWDLLEXPORT org_crosswire_sword_SWMgr_startBibleSync
+  (SWHANDLE hMgr, const char *appNameJS, const char *userNameJS, const char *passphraseJS, org_biblesync_MessageReceivedCallback callback) {
+
+	SWLog::getSystemLog()->logDebug("startBibleSync() start");
+	// only one thread
+	static bool starting = false;
+	if (starting) return;
+	starting = true;
+	// kill any previous loop
+#ifdef BIBLESYNC
+	if (bibleSyncListener) bibleSyncListener = 0;
+	SWBuf appName = appNameJS;
+	SWBuf userName = userNameJS;
+	SWBuf passphrase = passphraseJS;
+
+	// in case we're restarting, wait for our loop to finish for sure
+	if (bibleSync) {
+SWLog::getSystemLog()->logDebug("startBibleSync() sleeping 3 seconds");
+		sleep(3);
+	}
+
+	bibleSyncListener = callback;
+	SWLog::getSystemLog()->logDebug("startBibleSync - calling init");
+
+	if (!bibleSync) {
+SWLog::getSystemLog()->logDebug("bibleSync initializing c-tor");
+		bibleSync = new BibleSync(appName.c_str(), (const char *)SWVersion().currentVersion, userName.c_str());
+SWLog::getSystemLog()->logDebug("bibleSync initializing setMode");
+		bibleSync->setMode(BSP_MODE_PERSONAL, bibleSyncCallback, passphrase.c_str());
+	}
+	SWLog::getSystemLog()->logDebug("startBibleSync - starting while listener");
+	starting = false;
+	while(bibleSyncListener) {
+		SWLog::getSystemLog()->logDebug("bibleSyncListener - while loop iteration");
+		BibleSync::Receive(bibleSync);
+		SWLog::getSystemLog()->logDebug("bibleSyncListener - sleeping for 2 seconds");
+		sleep(2);
+	}
+	delete bibleSync;
+	bibleSync = 0;
+#else
+	SWLog::getSystemLog()->logDebug("registerBibleSyncListener: !!! BibleSync disabled in native code.");
+#endif
+}
+
+
+/*
+ * Class:     org_crosswire_sword_SWMgr
+ * Method:    stopBibleSync
+ * Signature: (V;)V
+ */
+void SWDLLEXPORT org_crosswire_sword_SWMgr_stopBibleSync
+		(SWHANDLE hMgr) {
+
+SWLog::getSystemLog()->logDebug("stopBibleSync()");
+#ifdef BIBLESYNC
+	// if we have a listen loop going, just break the loop; the bibleSync cleanup will happen there
+	if (::bibleSyncListener) ::bibleSyncListener = 0;
+	else if (bibleSync) {
+		delete bibleSync;
+		bibleSync = 0;
+	}
+#else
+SWLog::getSystemLog()->logDebug("registerBibleSyncListener: !!! BibleSync disabled in native code.");
+#endif
 }

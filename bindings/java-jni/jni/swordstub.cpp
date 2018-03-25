@@ -226,7 +226,6 @@ SWLog::getSystemLog()->logDebug("initInstall: instantiated InstallMgr with baseD
 
 #ifdef BIBLESYNC
 void bibleSyncCallback(char cmd, string pkt_uuid, string bible, string ref, string alt, string group, string domain, string info, string dump) {
-//void bibleSyncCallback(char cmd, string bible, string ref, string alt, string group, string domain, string info, string dump) {
 SWLog::getSystemLog()->logDebug("bibleSync callback msg: %c; pkt_uuid: %s; bible: %s; ref: %s; alt: %s; group: %s; domain: %s; info: %s; dump: %s", cmd, pkt_uuid.c_str(), bible.c_str(), ref.c_str(), alt.c_str(), group.c_str(), domain.c_str(), info.c_str(), dump.c_str());
 	if (::bibleSyncListener) {
 SWLog::getSystemLog()->logDebug("bibleSync listener is true");
