@@ -43,9 +43,8 @@ public:
   * @param ikey text key (word, city, name, etc.)
   */
   StrKey(char const * ikey = nullptr);
-  /** cleans up instance of StrKey
-  */
-  virtual ~ StrKey ();
+
+  ~StrKey() override;
 
   std::unique_ptr<SWKey> clone() const noexcept override;
 
