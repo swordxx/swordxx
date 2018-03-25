@@ -29,11 +29,7 @@
 
 namespace swordxx {
 
-void TreeKey::init() {
-    m_unsnappedKeyText = "";
-    m_posChangeListener = nullptr;
-}
-
+TreeKey::TreeKey() = default;
 
 void TreeKey::assureKeyPath(const char *keyBuffer) {
     std::string keyBuf(keyBuffer ? std::string(keyBuffer) : m_unsnappedKeyText);

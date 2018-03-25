@@ -37,7 +37,6 @@ namespace swordxx {
  * The base class for all tree-based key implementations in Sword++.
  */
 class SWDLLEXPORT TreeKey : public SWKey {
-    void init();
 
 protected:
     // hold on to setText until we've done a snap action: getText or navigation
@@ -59,14 +58,14 @@ public:
         virtual void positionChanged() = 0;
         TreeKey *getTreeKey() { return m_treeKey; }
         void setTreeKey(TreeKey *tk) { m_treeKey = tk; }
-    } * m_posChangeListener;
+    } * m_posChangeListener = nullptr;
 
     void setPositionChangeListener(PositionChangeListener *pcl) { m_posChangeListener = pcl; m_posChangeListener->setTreeKey(this); }
 
 //    TreeKey (const char *ikey = 0);
 //    TreeKey (const SWKey * ikey);
 //    TreeKey (TreeKey const &k);
-    TreeKey() { init(); }
+    TreeKey();
     ~TreeKey() override {}
 
 
