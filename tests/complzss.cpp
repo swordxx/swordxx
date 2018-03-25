@@ -44,7 +44,7 @@ class FileCompress: public LZSSCompress {
     int zfd;
 public:
     FileCompress(char *);
-    ~FileCompress();
+    ~FileCompress() override;
     unsigned long GetChars(char *, unsigned long len, Direction) override;
     unsigned long SendChars(char *, unsigned long len, Direction) override;
     void Encode() override;
