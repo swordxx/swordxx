@@ -32,7 +32,7 @@
 #include "scsuutf8.h"
 
 #include <string>
-#ifdef _ICU_
+#if SWORDXX_HAS_ICU
 #include <unicode/unistr.h>
 #endif
 
