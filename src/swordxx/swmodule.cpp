@@ -73,16 +73,15 @@ SWModule::SWModule(std::unique_ptr<SWKey> key_,
                    SWTextDirection direction,
                    SWTextMarkup markup,
                    const char * imodlang)
-    : modname(imodname ? imodname : "")
-    , moddesc(imoddesc ? imoddesc : "")
-    , modtype(imodtype ? imodtype : "")
-    , modlang(imodlang ? imodlang : "")
+    : m_moduleName(imodname ? imodname : "")
+    , m_moduleDescription(imoddesc ? imoddesc : "")
+    , m_moduleType(imodtype ? imodtype : "")
+    , m_moduleLanguageName(imodlang ? imodlang : "")
+    , m_textDirection(direction)
+    , m_textMarkup(markup)
+    , m_textEncoding(encoding)
     , key(key_.release())
-{
-    this->encoding = encoding;
-    this->direction = direction;
-    this->markup  = markup;
-}
+{}
 
 
 /******************************************************************************
@@ -96,7 +95,7 @@ SWModule::~SWModule()
             delete key;
     }
 
-    entryAttributes.clear();
+    m_entryAttributes.clear();
 }
 
 
@@ -213,7 +212,7 @@ ListKey &SWModule::search(char const * istr,
                           void (* percent)(char, void *),
                           void * percentUserData)
 {
-    listKey.clear();
+    m_listKey.clear();
     std::string term = istr;
     bool includeComponents = false;    // for entryAttrib e.g., /Lemma.1/
 
@@ -282,7 +281,7 @@ ListKey &SWModule::search(char const * istr,
             SWLog::getSystemLog()->logError(
                         "Failed to compile regular expression: %s",
                         errorMessage.get());
-            return listKey;
+            return m_listKey;
         }
 #endif
     }
@@ -329,8 +328,8 @@ ListKey &SWModule::search(char const * istr,
                         continue;
                     }
                 }
-                listKey << *resultKey;
-                listKey.getElement()->m_userData = score;
+                m_listKey << *resultKey;
+                m_listKey.getElement()->m_userData = score;
             }
             (*percent)(98, percentUserData);
         }
@@ -428,7 +427,7 @@ ListKey &SWModule::search(char const * istr,
 #endif
                 resultKey->positionFrom(*getKey());
                 resultKey->clearBound();
-                listKey << *resultKey;
+                m_listKey << *resultKey;
                 lastBuf = "";
             }
 #ifdef USECXX11REGEX
@@ -437,7 +436,7 @@ ListKey &SWModule::search(char const * istr,
             else if (!regexec(&preg, (lastBuf + ' ' + textBuf).c_str(), 0, nullptr, 0)) {
 #endif
                 lastKey->clearBound();
-                listKey << *lastKey;
+                m_listKey << *lastKey;
                 lastBuf = textBuf;
             }
             else {
@@ -458,7 +457,7 @@ ListKey &SWModule::search(char const * istr,
                 if (sres) { //it's also in the stripText(), so we have a valid search result item now
                     resultKey->positionFrom(*getKey());
                     resultKey->clearBound();
-                    listKey << *resultKey;
+                    m_listKey << *resultKey;
                 }
                 break;
 
@@ -485,7 +484,7 @@ ListKey &SWModule::search(char const * istr,
                 if ((loopCount == 2) && (foundWords == words.size())) { //we found the right words in both raw and stripped text, which means it's a valid result item
                     resultKey->positionFrom(*getKey());
                     resultKey->clearBound();
-                    listKey << *resultKey;
+                    m_listKey << *resultKey;
                 }
                 }
                 break;
@@ -560,7 +559,7 @@ ListKey &SWModule::search(char const * istr,
                                 if (sres) {
                                     resultKey->positionFrom(*getKey());
                                     resultKey->clearBound();
-                                    listKey << *resultKey;
+                                    m_listKey << *resultKey;
                                     break;
                                 }
                             }
@@ -598,14 +597,14 @@ ListKey &SWModule::search(char const * istr,
     resultKey.reset();
     lastKey.reset();
 
-    listKey.positionToTop();
+    m_listKey.positionToTop();
     setProcessEntryAttributes(savePEA);
 
 
     (*percent)(100, percentUserData);
 
 
-    return listKey;
+    return m_listKey;
 }
 
 
@@ -628,7 +627,7 @@ std::string SWModule::stripText(const char * buf, int len)
  *    containers.
  */
 char const * SWModule::getRenderHeader() const
-{ return renderFilters.empty() ? "" : renderFilters.front()->getHeader(); }
+{ return m_renderFilters.empty() ? "" : m_renderFilters.front()->getHeader(); }
 
 
 /******************************************************************************
@@ -651,7 +650,7 @@ char const * SWModule::getRenderHeader() const
 std::string SWModule::renderText(const char *buf, int len, bool render) const {
     bool savePEA = isProcessEntryAttributes();
     if (!buf) {
-        entryAttributes.clear();
+        m_entryAttributes.clear();
     }
     else {
         setProcessEntryAttributes(false);
@@ -755,15 +754,19 @@ std::string SWModule::getBibliography(BibliographyFormat format) const {
     std::string s;
     switch (format) {
     case BIB_BIBTEX:
-        s.append("@Book {").append(modname).append(", Title = \"").append(moddesc).append("\", Publisher = \"CrossWire Bible Society\"}");
+        s.append("@Book {")
+         .append(m_moduleName)
+         .append(", Title = \"")
+         .append(m_moduleDescription)
+         .append("\", Publisher = \"CrossWire Bible Society\"}");
         break;
     }
     return s;
 }
 
 const char *SWModule::getConfigEntry(const char *key) const {
-    ConfigEntMap::const_iterator const it(config.find(key));
-    return (it != config.end()) ? it->second.c_str() : nullptr;
+    ConfigEntMap::const_iterator const it(m_config.find(key));
+    return (it != m_config.end()) ? it->second.c_str() : nullptr;
 }
 
 bool SWModule::hasSearchIndex()
@@ -784,7 +787,7 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 
     // turn all filters to default values
     std::list<std::string> filterSettings;
-    for (auto const & filterPtr : optionFilters) {
+    for (auto const & filterPtr : m_optionFilters) {
         filterSettings.push_back(filterPtr->getOptionValue());
         filterPtr->setOptionValue(filterPtr->getOptionValues().begin()->c_str());
 
@@ -1135,7 +1138,7 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 
     // reset option filters back to original values
     auto origVal(filterSettings.begin());
-    for (auto const & filterPtr : optionFilters)
+    for (auto const & filterPtr : m_optionFilters)
         filterPtr->setOptionValue((origVal++)->c_str());
 
     return 0;

@@ -66,34 +66,34 @@ private: /* Types: */
 private: /* Fields: */
 
     /** filters to be executed to remove all markup (for searches) */
-    FilterList stripFilters;
+    FilterList m_stripFilters;
 
     /** filters to be executed immediately upon file read */
-    FilterList rawFilters;
+    FilterList m_rawFilters;
 
     /** filters to be executed to format for display */
-    FilterList renderFilters;
+    FilterList m_renderFilters;
 
     /** filters to be executed to change markup to user preferences */
-    OptionFilterList optionFilters;
+    OptionFilterList m_optionFilters;
 
     /** filters to be executed to decode text for display */
-    FilterList encodingFilters;
+    FilterList m_encodingFilters;
 
-    std::string modname;
-    std::string moddesc;
-    std::string modtype;
-    std::string modlang;
+    std::string m_moduleName;
+    std::string m_moduleDescription;
+    std::string m_moduleType;
+    std::string m_moduleLanguageName;
 
-    ConfigEntMap config;
-    mutable AttributeTypeList entryAttributes;
-    mutable bool procEntAttr = true;
+    ConfigEntMap m_config;
+    mutable AttributeTypeList m_entryAttributes;
+    mutable bool m_processEntryAttributes = true;
 
-    ListKey listKey;
+    ListKey m_listKey;
 
-    SWTextDirection direction;
-    SWTextMarkup markup;
-    TextEncoding encoding;
+    SWTextDirection m_textDirection;
+    SWTextMarkup m_textMarkup;
+    TextEncoding m_textEncoding;
 
 protected:
 
@@ -146,16 +146,16 @@ public:
      * @return  True if this module is encoded in Unicode, otherwise returns false.
      */
     bool isUnicode() const
-    { return (encoding == ENC_UTF8 || encoding == ENC_SCSU); }
+    { return (m_textEncoding == ENC_UTF8 || m_textEncoding == ENC_SCSU); }
 
     // These methods are useful for modules that come from a standard Sword++ install (most do).
     // SWMgr will call setConfig.  The user may use getConfig and getConfigEntry (if they
     // are not comfortable with, or don't wish to use  stl maps).
     void setConfig(ConfigEntMap conf) noexcept {
         static_assert(std::is_nothrow_move_assignable<ConfigEntMap>::value, "");
-        config = std::move(conf);
+        m_config = std::move(conf);
     }
-    const ConfigEntMap &getConfig() const noexcept { return config; }
+    const ConfigEntMap &getConfig() const noexcept { return m_config; }
 
     /**
      * Gets a configuration property about a module.  These entries are primarily
@@ -208,21 +208,22 @@ public:
     virtual long getIndex() const { return entryIndex; }
     virtual void setIndex(long iindex) { entryIndex = iindex; }
 
-    std::string const & getName() const { return modname; }
-    std::string const & getDescription() const { return moddesc; }
-    std::string const & getType() const { return modtype; }
+    std::string const & getName() const { return m_moduleName; }
+    std::string const & getDescription() const { return m_moduleDescription; }
+    std::string const & getType() const { return m_moduleType; }
 
     void setType(std::string imodtype)
             noexcept(std::is_nothrow_move_assignable<std::string>::value)
-    { modtype = std::move(imodtype); }
+    { m_moduleType = std::move(imodtype); }
 
-    inline SWTextDirection getDirection() const noexcept { return direction; }
+    inline SWTextDirection getDirection() const noexcept
+    { return m_textDirection; }
 
-    TextEncoding getEncoding() const { return encoding; }
+    TextEncoding getEncoding() const { return m_textEncoding; }
 
-    SWTextMarkup getMarkup() const { return markup; }
+    SWTextMarkup getMarkup() const { return m_textMarkup; }
 
-    std::string const & getLanguage() const { return modlang; }
+    std::string const & getLanguage() const { return m_moduleLanguageName; }
 
 
     // search interface -------------------------------------------------
@@ -327,7 +328,7 @@ public:
      * @return *this
      */
     SWModule & addRenderFilter(std::shared_ptr<SWFilter> newFilter) {
-        renderFilters.emplace_back(std::move(newFilter));
+        m_renderFilters.emplace_back(std::move(newFilter));
         return *this;
     }
 
@@ -335,14 +336,14 @@ public:
      *    module.
      * @return container of render filters
      */
-    FilterList const & getRenderFilters() const { return renderFilters; }
+    FilterList const & getRenderFilters() const { return m_renderFilters; }
 
     /** Removes a RenderFilter from this module's renderFilters queue
      * @param oldFilter the filter to remove
      * @return *this
      */
     SWModule & removeRenderFilter(std::shared_ptr<SWFilter> const & oldFilter) {
-        renderFilters.remove(oldFilter);
+        m_renderFilters.remove(oldFilter);
         return *this;
     }
 
@@ -354,7 +355,7 @@ public:
     SWModule & replaceRenderFilter(std::shared_ptr<SWFilter> const & oldFilter,
                                    std::shared_ptr<SWFilter> newFilter)
     {
-        for (auto & filter : renderFilters)
+        for (auto & filter : m_renderFilters)
             if (filter == oldFilter)
                 filter = newFilter;
         return *this;
@@ -365,7 +366,7 @@ public:
      * @param key key location from where this buffer was extracted
      */
     void renderFilter(std::string & buf, SWKey const * key) const {
-        filterBuffer(renderFilters, buf, key);
+        filterBuffer(m_renderFilters, buf, key);
     }
 
     /** Adds an EncodingFilter to this module's @see encodingFilters queue.
@@ -376,7 +377,7 @@ public:
      * @return *this
      */
     SWModule & addEncodingFilter(std::shared_ptr<SWFilter> newFilter) {
-        encodingFilters.emplace_back(std::move(newFilter));
+        m_encodingFilters.emplace_back(std::move(newFilter));
         return *this;
     }
 
@@ -386,7 +387,7 @@ public:
      */
     SWModule & removeEncodingFilter(std::shared_ptr<SWFilter> const & oldFilter)
     {
-        encodingFilters.remove(oldFilter);
+        m_encodingFilters.remove(oldFilter);
         return *this;
     }
 
@@ -399,7 +400,7 @@ public:
             std::shared_ptr<SWFilter> const & oldFilter,
             std::shared_ptr<SWFilter> newFilter)
     {
-        for (auto & filter : encodingFilters)
+        for (auto & filter : m_encodingFilters)
             if (filter == oldFilter)
                 filter = newFilter;
         return *this;
@@ -410,7 +411,7 @@ public:
      * @param key key location from where this buffer was extracted
      */
     void encodingFilter(std::string & buf, SWKey const * key) const {
-        filterBuffer(encodingFilters, buf, key);
+        filterBuffer(m_encodingFilters, buf, key);
     }
 
     /** Adds a StripFilter to this module's stripFilters queue.
@@ -420,7 +421,7 @@ public:
      * @return *this
      */
     SWModule & addStripFilter(std::shared_ptr<SWFilter> newFilter) {
-        stripFilters.emplace_back(std::move(newFilter));
+        m_stripFilters.emplace_back(std::move(newFilter));
         return *this;
     }
 
@@ -429,7 +430,7 @@ public:
      * @return *this
      */
     SWModule & addRawFilter(std::shared_ptr<SWFilter> newFilter) {
-        rawFilters.emplace_back(std::move(newFilter));
+        m_rawFilters.emplace_back(std::move(newFilter));
         return *this;
     }
 
@@ -438,7 +439,7 @@ public:
      * @param key key location from where this buffer was extracted
      */
     void stripFilter(std::string & buf, SWKey const * key) const {
-        filterBuffer(stripFilters, buf, key);
+        filterBuffer(m_stripFilters, buf, key);
     }
 
 
@@ -447,7 +448,7 @@ public:
      * @param key key location from where this buffer was extracted
      */
     void rawFilter(std::string & buf, SWKey const * key) const {
-        filterBuffer(rawFilters, buf, key);
+        filterBuffer(m_rawFilters, buf, key);
     }
 
     /** Adds an OptionFilter to this module's optionFilters queue.
@@ -458,7 +459,7 @@ public:
      * @return *this
      */
     SWModule & addOptionFilter(std::shared_ptr<SWOptionFilter> newFilter) {
-        optionFilters.push_back(std::move(newFilter));
+        m_optionFilters.push_back(std::move(newFilter));
         return *this;
     }
 
@@ -467,7 +468,7 @@ public:
      * @param key key location from where this buffer was extracted
      */
     void optionFilter(std::string & buf, SWKey const * key) const {
-        filterBuffer(optionFilters, buf, key);
+        filterBuffer(m_optionFilters, buf, key);
     }
 
     /** Produces plain text, without markup, of the current module entry,
@@ -530,17 +531,18 @@ public:
      *    displays this information.  It is also useful as an example of how
      *    to access such.
      */
-    AttributeTypeList & getEntryAttributes() const { return entryAttributes; }
+    AttributeTypeList & getEntryAttributes() const { return m_entryAttributes; }
 
     /** Processing Entry Attributes can be expensive.  This method allows
      * turning the processing off if they are not desired.  Some internal
      * engine processing turns them off (like searching) temporarily for
      * optimization.
      */
-    void setProcessEntryAttributes(bool val) const { procEntAttr = val; }
+    void setProcessEntryAttributes(bool val) const
+    { m_processEntryAttributes = val; }
 
     /** Whether or not we're processing Entry Attributes */
-    bool isProcessEntryAttributes() const { return procEntAttr; }
+    bool isProcessEntryAttributes() const { return m_processEntryAttributes; }
 
 
     // Searching:
