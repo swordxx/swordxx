@@ -1820,9 +1820,6 @@ std::string VerseKey::convertToOSIS(std::string const & inRef,
     for (std::size_t i = 0u; i < verses.getCount(); ++i) {
         SWKey *element = verses.getElement(i);
 //        VerseKey *element = SWDYNAMIC_CAST(VerseKey, verses.GetElement(i));
-        // TODO: This code really needs to not use fixed size arrays
-        char frag[800];
-        std::memset(frag, 0, 800);
         while ((startFragIndex != inRef.size())
                && inRef[startFragIndex]
                && (std::strchr(" {}:;,()[].", inRef[startFragIndex])))
@@ -1833,15 +1830,17 @@ std::string VerseKey::convertToOSIS(std::string const & inRef,
         auto const len = element->m_userData - startFragIndex + 1u;
         static_assert(std::numeric_limits<decltype(element->m_userData)>::max()
                       <= std::numeric_limits<std::size_t>::max(), "");
-        std::memmove(frag, &inRef[startFragIndex], len);
-        frag[len] = 0;
-        auto j = std::strlen(frag)-1;
-        while (j && (std::strchr(" {}:;,()[].", frag[j])))
-            --j;
+        std::string frag(&inRef[startFragIndex], len);
+        while (!frag.empty() && frag.back() == '\0')
+            frag.pop_back();
         std::string postJunk;
-        if (frag[j + 1u])
-            postJunk = frag + j + 1u;
-        frag[j + 1u]=0;
+        auto j = frag.find_last_not_of(" {}:;,()[].");
+        if (j == std::string::npos) {
+            std::swap(frag, postJunk);
+        } else {
+            postJunk.append(frag, j + 1u, std::string::npos);
+            frag.resize(j + 1u);
+        }
         startFragIndex += len;
         oss << "<reference osisRef=\"" << element->getOSISRefRangeText()
             << "\">" << frag << "</reference>" << postJunk;
