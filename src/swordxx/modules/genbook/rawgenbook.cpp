@@ -92,7 +92,7 @@ bool RawGenBook::isWritable() const {
  * RET: string buffer with verse
  */
 
-std::string &RawGenBook::getRawEntryBuf() const {
+std::string RawGenBook::getRawEntry() const {
 
     uint32_t offset = 0;
     uint32_t size = 0;
@@ -101,7 +101,7 @@ std::string &RawGenBook::getRawEntryBuf() const {
 
     int dsize;
     key.getUserData(&dsize);
-    entryBuf = "";
+    std::string entry;
     if (dsize > 7) {
         std::memcpy(&offset, key.getUserData(), 4);
         offset = swordtoarch32(offset);
@@ -111,18 +111,18 @@ std::string &RawGenBook::getRawEntryBuf() const {
 
         entrySize = size;        // support getEntrySize call
 
-        entryBuf.resize(size, '\0');
+        entry.resize(size, '\0');
         bdtfd->seek(offset, SEEK_SET);
-        bdtfd->read(&entryBuf[0u], size);
+        bdtfd->read(&entry[0u], size);
 
-        rawFilter(entryBuf, nullptr);    // hack, decipher
-        rawFilter(entryBuf, &key);
+        rawFilter(entry, nullptr);    // hack, decipher
+        rawFilter(entry, &key);
 
 //           if (!isUnicode())
-            SWModule::prepText(entryBuf);
+            SWModule::prepText(entry);
     }
 
-    return entryBuf;
+    return entry;
 }
 
 

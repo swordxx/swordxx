@@ -656,11 +656,13 @@ std::string SWModule::renderText(const char *buf, int len, bool render) const {
         setProcessEntryAttributes(false);
     }
 
-    std::string local;
-    if (buf)
-        local = buf;
+    std::string tmpbuf;
+    if (buf) {
+        tmpbuf = buf;
+    } else {
+        tmpbuf = getRawEntry();
+    }
 
-    std::string &tmpbuf = (buf) ? local : getRawEntryBuf();
     SWKey * key = nullptr;
 
     unsigned long size = (len < 0) ? ((getEntrySize()<0) ? tmpbuf.size() : getEntrySize()) : len;

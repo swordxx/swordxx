@@ -53,7 +53,7 @@ public:
                char const * keyType = "TreeKey");
     ~RawGenBook() override;
 
-    std::string & getRawEntryBuf() const override;
+    std::string getRawEntry() const override;
     bool isWritable() const override;
     static char createModule(NormalizedPath const & path);
     void setEntry(char const * inbuf, long len = -1) override;

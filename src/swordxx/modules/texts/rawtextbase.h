@@ -52,7 +52,7 @@ public: /* Methods: */
                 char const * ilang = nullptr,
                 char const * versification = "KJV");
     ~RawTextBase() override;
-    std::string & getRawEntryBuf() const override;
+    std::string getRawEntry() const override;
     void increment(int steps = 1) override;
     bool isWritable() const override;
 

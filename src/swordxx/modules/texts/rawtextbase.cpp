@@ -76,7 +76,7 @@ char RawTextBase<BaseRawVerse>::createModule(char const *path,
  * RET: string buffer with verse
  */
 template <typename BaseRawVerse>
-std::string & RawTextBase<BaseRawVerse>::getRawEntryBuf() const {
+std::string RawTextBase<BaseRawVerse>::getRawEntry() const {
     StartType start = 0;
     SizeType size = 0;
     VerseKey const & key = getVerseKey();
@@ -87,16 +87,16 @@ std::string & RawTextBase<BaseRawVerse>::getRawEntryBuf() const {
                      &size);
     entrySize = size;        // support getEntrySize call
 
-    entryBuf = "";
-    this->readText(key.getTestament(), start, size, entryBuf);
+    std::string entry;
+    this->readText(key.getTestament(), start, size, entry);
 
-    rawFilter(entryBuf, nullptr);    // hack, decipher
-    rawFilter(entryBuf, &key);
+    rawFilter(entry, nullptr);    // hack, decipher
+    rawFilter(entry, &key);
 
 //    if (!isUnicode())
-        prepText(entryBuf);
+        prepText(entry);
 
-    return entryBuf;
+    return entry;
 }
 
 template <typename BaseRawVerse>

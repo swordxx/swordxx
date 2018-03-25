@@ -64,7 +64,7 @@ bool RawCom4::isWritable() const {
  * RET: string buffer with verse
  */
 
-std::string &RawCom4::getRawEntryBuf() const {
+std::string RawCom4::getRawEntry() const {
     StartType start = 0;
     SizeType size = 0;
     VerseKey const & key = getVerseKey();
@@ -72,16 +72,16 @@ std::string &RawCom4::getRawEntryBuf() const {
     findOffset(key.getTestament(), key.getTestamentIndex(), &start, &size);
     entrySize = size;        // support getEntrySize call
 
-    entryBuf = "";
-    readText(key.getTestament(), start, size, entryBuf);
+    std::string entry;
+    readText(key.getTestament(), start, size, entry);
 
-    rawFilter(entryBuf, nullptr);    // hack, decipher
-    rawFilter(entryBuf, &key);
+    rawFilter(entry, nullptr);    // hack, decipher
+    rawFilter(entry, &key);
 
 //    if (!isUnicode())
-        prepText(entryBuf);
+        prepText(entry);
 
-    return entryBuf;
+    return entry;
 }
 
 

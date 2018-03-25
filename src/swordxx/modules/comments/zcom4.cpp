@@ -82,7 +82,7 @@ bool zCom4::isWritable() const {
  * RET: buffer with verse
  */
 
-std::string &zCom4::getRawEntryBuf() const {
+std::string zCom4::getRawEntry() const {
     VerseOffsetType start = 0;
     VerseSizeType size = 0;
     BufferNumberType buffnum = 0;
@@ -91,15 +91,15 @@ std::string &zCom4::getRawEntryBuf() const {
     findOffset(key.getTestament(), key.getTestamentIndex(), &start, &size, &buffnum);
     entrySize = size;        // support getEntrySize call
 
-    entryBuf = "";
+    std::string entry;
 
-    zReadText(key.getTestament(), start, size, buffnum, entryBuf);
-    rawFilter(entryBuf, &key);
+    zReadText(key.getTestament(), start, size, buffnum, entry);
+    rawFilter(entry, &key);
 
 //    if (!isUnicode())
-        prepText(entryBuf);
+        prepText(entry);
 
-    return entryBuf;
+    return entry;
 }
 
 

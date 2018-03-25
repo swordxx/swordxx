@@ -103,8 +103,6 @@ protected:
     /** the current key */
     SWKey *key;
 
-    mutable std::string entryBuf;
-
     mutable int entrySize = -1;
     mutable long entryIndex;     // internal common storage for index
 
@@ -268,7 +266,7 @@ public:
      */
     virtual std::unique_ptr<SWKey> createKey() const = 0;
 
-    std::string const & getRawEntry() const { return getRawEntryBuf(); }
+    virtual std::string getRawEntry() const = 0;
 
     // write interface ----------------------------
 
@@ -555,15 +553,6 @@ public:
     void deleteSearchFramework();
 
     bool hasSearchIndex();
-
-protected: /* Methods: */
-
-
-    /** This function is reimplemented by the different kinds
-     * of module objects
-     * @return the raw module text of the current entry
-     */
-    virtual std::string &getRawEntryBuf() const = 0;
 
 private: /* Methods: */
 

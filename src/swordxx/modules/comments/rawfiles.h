@@ -48,7 +48,7 @@ public:
              SWTextMarkup markup = FMT_UNKNOWN,
              char const * ilang = nullptr);
     ~RawFiles() override;
-    std::string & getRawEntryBuf() const override;
+    std::string getRawEntry() const override;
 
     bool isWritable() const override;
 

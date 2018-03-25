@@ -55,7 +55,7 @@ public:
           char const * versification = "KJV");
     ~zCom4() override;
 
-    std::string & getRawEntryBuf() const override;
+    std::string getRawEntry() const override;
     void increment(int steps = 1) override;
     void decrement(int steps = 1) override { increment(-steps); }
 

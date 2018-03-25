@@ -69,7 +69,7 @@ bool RawLdBase<Base>::isWritable() const {
  * RET: error status
  */
 template <typename Base>
-char RawLdBase<Base>::getEntry(long away) const {
+char RawLdBase<Base>::getEntry(std::string & entry, long away) const {
     StartType start = 0;
     SizeType size = 0;
     char retval = 0;
@@ -81,16 +81,16 @@ char RawLdBase<Base>::getEntry(long away) const {
         retval = this->findOffset(keyText, &start, &size, away);
     }
     if (!retval) {
-        auto const idxbuf(this->readText(start, &size, entryBuf));
-        rawFilter(entryBuf, nullptr);    // hack, decipher
-        rawFilter(entryBuf, key);
+        auto const idxbuf(this->readText(start, &size, entry));
+        rawFilter(entry, nullptr);    // hack, decipher
+        rawFilter(entry, key);
         entrySize = size;        // support getEntrySize call
         if (!key->isPersist())            // If we have our own key
             key->setText(idxbuf.c_str());                // reset it to entry index buffer
 
         m_entkeytxt = idxbuf; // set entry key text that module 'snapped' to.
     } else {
-        entryBuf.clear();
+        entry.clear();
     }
 
     return retval;
@@ -104,15 +104,16 @@ char RawLdBase<Base>::getEntry(long away) const {
  * RET: string buffer with entry
  */
 template <typename Base>
-std::string & RawLdBase<Base>::getRawEntryBuf() const {
-    char ret = getEntry();
+std::string RawLdBase<Base>::getRawEntry() const {
+    std::string entry;
+    char ret = getEntry(entry);
     if (!ret) {
 //        if (!isUnicode())
-            prepText(entryBuf);
+            prepText(entry);
     }
     else error = ret;
 
-    return entryBuf;
+    return entry;
 }
 
 
@@ -133,7 +134,8 @@ void RawLdBase<Base>::increment(int steps) {
         steps = 0;
     }
 
-    tmperror = (getEntry(steps)) ? KEYERR_OUTOFBOUNDS : 0;
+    std::string unusedEntry; /// \todo Remove this variable
+    tmperror = (getEntry(unusedEntry, steps)) ? KEYERR_OUTOFBOUNDS : 0;
     error = (error)?error:tmperror;
     key->setText(m_entkeytxt.c_str());
 }

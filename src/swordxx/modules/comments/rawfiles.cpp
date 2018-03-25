@@ -73,7 +73,7 @@ bool RawFiles::isWritable() const {
  * RET: entry contents
  */
 
-std::string &RawFiles::getRawEntryBuf() const {
+std::string RawFiles::getRawEntry() const {
     FileDesc *datafile;
     StartType start = 0;
     SizeType size = 0;
@@ -81,13 +81,13 @@ std::string &RawFiles::getRawEntryBuf() const {
 
     findOffset(key.getTestament(), key.getTestamentIndex(), &start, &size);
 
-    entryBuf = "";
+    std::string entry;
     if (size) {
         std::string tmpbuf(m_path);
         tmpbuf += '/';
-        readText(key.getTestament(), start, size, entryBuf);
-        tmpbuf += entryBuf;
-        entryBuf = "";
+        readText(key.getTestament(), start, size, entry);
+        tmpbuf += entry;
+        entry = "";
         datafile = FileMgr::getSystemFileMgr()->open(tmpbuf.c_str(), FileMgr::RDONLY);
         if (datafile->getFd() > 0) {
             size = datafile->seek(0, SEEK_END);
@@ -95,12 +95,12 @@ std::string &RawFiles::getRawEntryBuf() const {
             std::memset(tmpBuf.get(), 0, size + 1);
             datafile->seek(0, SEEK_SET);
             datafile->read(tmpBuf.get(), size);
-            entryBuf = tmpBuf.get();
+            entry = tmpBuf.get();
 //            preptext(entrybuf);
         }
         FileMgr::getSystemFileMgr()->close(datafile);
     }
-    return entryBuf;
+    return entry;
 }
 
 
@@ -119,21 +119,18 @@ void RawFiles::setEntry(const char *inbuf, long len) {
 
     findOffset(key.getTestament(), key.getTestamentIndex(), &start, &size);
 
+    std::string filename(m_path.str() + '/');
     if (size) {
         std::string tmpbuf;
-        entryBuf = m_path;
-        entryBuf += '/';
         readText(key.getTestament(), start, size, tmpbuf);
-        entryBuf += tmpbuf;
+        filename += tmpbuf;
     }
     else {
-        entryBuf = m_path;
-        entryBuf += '/';
         std::string tmpbuf(getNextFilename());
         doSetText(key.getTestament(), key.getTestamentIndex(), tmpbuf.c_str());
-        entryBuf += tmpbuf;
+        filename += tmpbuf;
     }
-    datafile = FileMgr::getSystemFileMgr()->open(entryBuf.c_str(), FileMgr::CREAT|FileMgr::WRONLY|FileMgr::TRUNC);
+    datafile = FileMgr::getSystemFileMgr()->open(filename.c_str(), FileMgr::CREAT|FileMgr::WRONLY|FileMgr::TRUNC);
     if (datafile->getFd() > 0) {
         datafile->write(inbuf, len);
     }

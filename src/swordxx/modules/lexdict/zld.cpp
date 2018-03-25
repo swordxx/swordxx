@@ -70,7 +70,7 @@ bool zLD::isWritable() const {
  * RET: error status
  */
 
-char zLD::getEntry(long away) const {
+char zLD::getEntry(std::string & entry, long away) const {
     char * idxbuf = nullptr;
     char * ebuf = nullptr;
     char retval = 0;
@@ -85,9 +85,9 @@ char zLD::getEntry(long away) const {
     if (!retval) {
         getText(index, &idxbuf, &ebuf);
         size = std::strlen(ebuf) + 1;
-        entryBuf = ebuf;
+        entry = ebuf;
 
-        rawFilter(entryBuf, key);
+        rawFilter(entry, key);
 
         entrySize = size;        // support getEntrySize call
         if (!key->isPersist())            // If we have our own key
@@ -97,7 +97,7 @@ char zLD::getEntry(long away) const {
         free(idxbuf);
         free(ebuf);
     } else {
-        entryBuf.clear();
+        entry.clear();
     }
 
     return retval;
@@ -111,12 +111,13 @@ char zLD::getEntry(long away) const {
  * RET: string buffer with entry
  */
 
-std::string &zLD::getRawEntryBuf() const {
-    if (!getEntry() /*&& !isUnicode()*/) {
-        prepText(entryBuf);
+std::string zLD::getRawEntry() const {
+    std::string entry;
+    if (!getEntry(entry) /*&& !isUnicode()*/) {
+        prepText(entry);
     }
 
-    return entryBuf;
+    return entry;
 }
 
 
@@ -137,7 +138,8 @@ void zLD::increment(int steps) {
         steps = 0;
     }
 
-    tmperror = (getEntry(steps)) ? KEYERR_OUTOFBOUNDS : 0;
+    std::string unusedEntry; /// \todo remove this variable
+    tmperror = (getEntry(unusedEntry, steps)) ? KEYERR_OUTOFBOUNDS : 0;
     error = (error)?error:tmperror;
     key->setText(m_entkeytxt.c_str());
 }

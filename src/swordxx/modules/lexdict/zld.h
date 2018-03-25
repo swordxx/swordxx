@@ -27,13 +27,14 @@
 #include "../../swld.h"
 #include "../common/zstr.h"
 
+#include <utility>
 #include "../../defs.h"
 
 
 namespace swordxx {
 
 class SWDLLEXPORT zLD : private zStr, public SWLD {
-    char getEntry(long away = 0) const;
+    char getEntry(std::string & entry, long away = 0) const;
 
 public:
 
@@ -50,7 +51,7 @@ public:
         bool strongsPadding = true);
     ~zLD() override;
 
-    std::string & getRawEntryBuf() const override;
+    std::string getRawEntry() const override;
 
     void increment(int steps = 1) override;
     void decrement(int steps = 1) override { increment(-steps); }
