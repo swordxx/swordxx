@@ -83,7 +83,7 @@ std::unique_ptr<BasicFilterUserData> GBFHTMLHREF::createUserData(
 
 bool GBFHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterUserData *userData) {
     const char *tok;
-    MyUserData *u = (MyUserData *)userData;
+    MyUserData * u = static_cast<MyUserData *>(userData);
 
     if (!substituteToken(buf, token)) {
         XMLTag tag(token);

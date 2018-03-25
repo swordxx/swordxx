@@ -130,7 +130,7 @@ char OSISRTF::processText(std::string &text, const SWKey *key, const SWModule *m
 
 bool OSISRTF::handleToken(std::string &buf, const char *token, BasicFilterUserData *userData) {
   // manually process if it wasn't a simple substitution
-    MyUserData *u = (MyUserData *)userData;
+    MyUserData * u = static_cast<MyUserData *>(userData);
     std::string scratch;
     bool sub = (u->suspendTextPassThru) ? substituteToken(scratch, token) : substituteToken(buf, token);
     if (!sub) {

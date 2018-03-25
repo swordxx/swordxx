@@ -80,7 +80,7 @@ std::unique_ptr<BasicFilterUserData> OSISPlain::createUserData(
 bool OSISPlain::handleToken(std::string &buf, const char *token, BasicFilterUserData *userData) {
        // manually process if it wasn't a simple substitution
     if (!substituteToken(buf, token)) {
-        MyUserData *u = (MyUserData *)userData;
+        MyUserData * u = static_cast<MyUserData *>(userData);
         if (((*token == 'w') && (token[1] == ' ')) ||
             ((*token == '/') && (token[1] == 'w') && (!token[2]))) {
                  u->tag = token;

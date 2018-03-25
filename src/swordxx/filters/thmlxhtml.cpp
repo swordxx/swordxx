@@ -178,7 +178,7 @@ std::unique_ptr<BasicFilterUserData> ThMLXHTML::createUserData(
 
 bool ThMLXHTML::handleToken(std::string &buf, const char *token, BasicFilterUserData *userData) {
     if (!substituteToken(buf, token)) { // manually process if it wasn't a simple substitution
-        MyUserData *u = (MyUserData *)userData;
+        MyUserData * u = static_cast<MyUserData *>(userData);
 
         XMLTag tag(token);
         if ((!tag.isEndTag()) && (!tag.isEmpty()))

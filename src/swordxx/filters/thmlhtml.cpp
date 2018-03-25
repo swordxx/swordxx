@@ -159,7 +159,7 @@ std::unique_ptr<BasicFilterUserData> ThMLHTML::createUserData(
 
 bool ThMLHTML::handleToken(std::string &buf, const char *token, BasicFilterUserData *userData) {
     if (!substituteToken(buf, token)) { // manually process if it wasn't a simple substitution
-        MyUserData *u = (MyUserData *)userData;
+        MyUserData * u = static_cast<MyUserData *>(userData);
         XMLTag tag(token);
         if (tag.name() == "sync") {
             if (!tag.attribute("value").empty() && (tag.attribute("type") == "Strongs")) {

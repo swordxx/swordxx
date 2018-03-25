@@ -76,7 +76,7 @@ bool GBFHTML::handleToken(std::string &buf, const char *token, BasicFilterUserDa
     char val[128];
     char *valto;
     const char *num;
-    MyUserData *u = (MyUserData *)userData;
+    MyUserData * u = static_cast<MyUserData *>(userData);
 
     if (!substituteToken(buf, token)) {
         // deal with OSIS note tags.  Just hide till OSISRTF

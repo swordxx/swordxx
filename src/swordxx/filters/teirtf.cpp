@@ -67,7 +67,7 @@ std::unique_ptr<BasicFilterUserData> TEIRTF::createUserData(
 bool TEIRTF::handleToken(std::string &buf, const char *token, BasicFilterUserData *userData) {
   // manually process if it wasn't a simple substitution
     if (!substituteToken(buf, token)) {
-        MyUserData *u = (MyUserData *)userData;
+        MyUserData * u = static_cast<MyUserData *>(userData);
         XMLTag tag(token);
 
         // <p> paragraph tag

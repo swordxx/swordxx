@@ -73,7 +73,7 @@ OSISHeadings::OSISHeadings()
 
 bool OSISHeadings::handleToken(std::string &buf, const char *token, BasicFilterUserData *userData) {
 
-    MyUserData *u = (MyUserData *)userData;
+    MyUserData * u = static_cast<MyUserData *>(userData);
     XMLTag tag(token);
     std::string name = tag.name();
 

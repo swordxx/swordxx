@@ -203,7 +203,7 @@ void OSISLaTeX::MyUserData::outputNewline(std::string &buf) {
     }
 }
 bool OSISLaTeX::handleToken(std::string &buf, const char *token, BasicFilterUserData *userData) {
-    MyUserData *u = (MyUserData *)userData;
+    MyUserData * u = static_cast<MyUserData *>(userData);
     std::string scratch;
 
     bool sub = (u->suspendTextPassThru) ? substituteToken(scratch, token) : substituteToken(buf, token);

@@ -50,7 +50,7 @@ std::unique_ptr<BasicFilterUserData> OSISWEBIF::createUserData(
 }
 
 bool OSISWEBIF::handleToken(std::string &buf, const char *token, BasicFilterUserData *userData) {
-    MyUserData *u = (MyUserData *)userData;
+    MyUserData * u = static_cast<MyUserData *>(userData);
     std::string scratch;
     bool sub = (u->suspendTextPassThru) ? substituteToken(scratch, token) : substituteToken(buf, token);
     if (!sub) {
