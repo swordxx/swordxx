@@ -29,6 +29,8 @@
 
 namespace swordxx {
 
+TreeKey::PositionChangeListener::~PositionChangeListener() noexcept = default;
+
 TreeKey::TreeKey() = default;
 
 void TreeKey::assureKeyPath(const char *keyBuffer) {

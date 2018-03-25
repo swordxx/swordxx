@@ -51,10 +51,9 @@ protected:
 public:
 
     class PositionChangeListener {
-        TreeKey *m_treeKey;
+        TreeKey * m_treeKey = nullptr;
     public:
-        PositionChangeListener() {}
-        virtual ~PositionChangeListener() {}
+        virtual ~PositionChangeListener() noexcept;
         virtual void positionChanged() = 0;
         TreeKey *getTreeKey() { return m_treeKey; }
         void setTreeKey(TreeKey *tk) { m_treeKey = tk; }
