@@ -216,6 +216,7 @@ CHECK_ADD_CXX_COMPILER_FLAG("-Wno-padded")
 CHECK_ADD_CXX_COMPILER_FLAG("-Wsuggest-override")
 CHECK_ADD_CXX_COMPILER_FLAG("-Wzero-as-null-pointer-constant")
 CHECK_ADD_CXX_COMPILER_FLAG("-Werror=format")
+CHECK_ADD_CXX_COMPILER_FLAG("-Werror=extra-semi")
 
 
 ##############################################################################################
