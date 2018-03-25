@@ -42,7 +42,7 @@ class SWModule;
 */
 class SWDLLEXPORT  SWFilter {
 public:
-    virtual ~SWFilter() noexcept {}
+    virtual ~SWFilter() noexcept;
 
     /** This method processes and appropriately modifies the text given it
      *    for a particular filter task
@@ -59,7 +59,7 @@ public:
     /** This method can supply a header associated with the processing done with this filter.
      *    A typical example is a suggested CSS style block for classed containers.
      */
-    virtual const char *getHeader() const { return ""; }
+    virtual char const * getHeader() const;
 };
 
     } /* namespace swordxx */
