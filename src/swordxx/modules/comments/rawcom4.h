@@ -47,8 +47,6 @@ public:
             const char *versification = "KJV");
     ~RawCom4() override;
 
-    std::string getRawEntry() const override;
-
     void increment(int steps = 1) override;
     void decrement(int steps = 1) override { increment(-steps); }
 
@@ -59,6 +57,10 @@ public:
     void deleteEntry() override;
     bool isLinked(SWKey const * k1, SWKey const * k2) const override;
     bool hasEntry(SWKey const * k) const override;
+
+protected: /* Methods: */
+
+    std::string getRawEntryImpl() const override;
 
 };
 

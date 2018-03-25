@@ -42,7 +42,9 @@ public: /* Methods: */
             char const * iname = nullptr,
             char const * idesc = nullptr);
 
-    std::string getRawEntry() const override;
+protected: /* Methods: */
+
+    std::string getRawEntryImpl() const override;
 
 private: /* Fields: */
 

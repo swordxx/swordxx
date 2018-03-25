@@ -64,7 +64,7 @@ bool RawCom::isWritable() const {
  * RET: string buffer with verse
  */
 
-std::string RawCom::getRawEntry() const {
+std::string RawCom::getRawEntryImpl() const {
     StartType start = 0;
     SizeType size = 0;
     VerseKey const & key = getVerseKey();
@@ -77,9 +77,6 @@ std::string RawCom::getRawEntry() const {
 
     rawFilter(entry, nullptr);    // hack, decipher
     rawFilter(entry, &key);
-
-//    if (!isUnicode())
-        prepText(entry);
 
     return entry;
 }

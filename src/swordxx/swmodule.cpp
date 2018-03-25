@@ -51,6 +51,57 @@
 #define REG_ICASE std::regex::icase
 #endif
 
+namespace {
+
+void prepareText(std::string &buf) {
+    decltype(buf.size()) to, from;
+    char space = 0, cr = 0, realdata = 0, nlcnt = 0;
+    for (to = from = 0u; buf[from]; from++) {
+        switch (buf[from]) {
+        case 10:
+            if (!realdata)
+                continue;
+            space = (cr) ? 0 : 1;
+            cr = 0;
+            nlcnt++;
+            if (nlcnt > 1) {
+//                *to++ = nl;
+                buf[to++] = 10;
+//                *to++ = nl[1];
+//                nlcnt = 0;
+            }
+            continue;
+        case 13:
+            if (!realdata)
+                continue;
+//            *to++ = nl[0];
+            buf[to++] = 10;
+            space = 0;
+            cr = 1;
+            continue;
+        }
+        realdata = 1;
+        nlcnt = 0;
+        if (space) {
+            space = 0;
+            if (buf[from] != ' ') {
+                buf[to++] = ' ';
+                from--;
+                continue;
+            }
+        }
+        buf[to++] = buf[from];
+    }
+    buf.resize(to);
+    while (to > 1) {            // remove trailing excess
+        to--;
+        if ((buf[to] == 10) || (buf[to] == ' '))
+            buf.resize(to);
+        else break;
+    }
+}
+
+} // anonymous namespace
 
 namespace swordxx {
 
@@ -605,6 +656,13 @@ ListKey &SWModule::search(char const * istr,
 
 
     return m_listKey;
+}
+
+std::string SWModule::getRawEntry() const {
+    auto r = getRawEntryImpl();
+    if (!r.empty())
+        prepareText(r);
+    return r;
 }
 
 
@@ -1170,63 +1228,6 @@ void SWModule::filterBuffer(FilterList const & filters,
 {
     for (auto const & filterPtr : filters)
         filterPtr->processText(buf, key, this);
-}
-
-
-/******************************************************************************
- * SWModule::prepText    - Prepares the text before returning it to external
- *                    objects
- *
- * ENT:    buf    - buffer where text is stored and where to store the prep'd
- *                text.
- */
-
-void SWModule::prepText(std::string &buf) {
-    decltype(buf.size()) to, from;
-    char space = 0, cr = 0, realdata = 0, nlcnt = 0;
-    for (to = from = 0u; buf[from]; from++) {
-        switch (buf[from]) {
-        case 10:
-            if (!realdata)
-                continue;
-            space = (cr) ? 0 : 1;
-            cr = 0;
-            nlcnt++;
-            if (nlcnt > 1) {
-//                *to++ = nl;
-                buf[to++] = 10;
-//                *to++ = nl[1];
-//                nlcnt = 0;
-            }
-            continue;
-        case 13:
-            if (!realdata)
-                continue;
-//            *to++ = nl[0];
-            buf[to++] = 10;
-            space = 0;
-            cr = 1;
-            continue;
-        }
-        realdata = 1;
-        nlcnt = 0;
-        if (space) {
-            space = 0;
-            if (buf[from] != ' ') {
-                buf[to++] = ' ';
-                from--;
-                continue;
-            }
-        }
-        buf[to++] = buf[from];
-    }
-    buf.resize(to);
-    while (to > 1) {            // remove trailing excess
-        to--;
-        if ((buf[to] == 10) || (buf[to] == ' '))
-            buf.resize(to);
-        else break;
-    }
 }
 
 std::string SWModule::searchIndexPath() {

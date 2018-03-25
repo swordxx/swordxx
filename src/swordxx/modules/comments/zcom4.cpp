@@ -82,7 +82,7 @@ bool zCom4::isWritable() const {
  * RET: buffer with verse
  */
 
-std::string zCom4::getRawEntry() const {
+std::string zCom4::getRawEntryImpl() const {
     VerseOffsetType start = 0;
     VerseSizeType size = 0;
     BufferNumberType buffnum = 0;
@@ -95,10 +95,6 @@ std::string zCom4::getRawEntry() const {
 
     zReadText(key.getTestament(), start, size, buffnum, entry);
     rawFilter(entry, &key);
-
-//    if (!isUnicode())
-        prepText(entry);
-
     return entry;
 }
 

@@ -53,7 +53,6 @@ public:
                char const * keyType = "TreeKey");
     ~RawGenBook() override;
 
-    std::string getRawEntry() const override;
     bool isWritable() const override;
     static char createModule(NormalizedPath const & path);
     void setEntry(char const * inbuf, long len = -1) override;
@@ -62,6 +61,10 @@ public:
     std::unique_ptr<SWKey> createKey() const override;
 
     bool hasEntry(SWKey const * k) const override;
+
+protected: /* Methods: */
+
+    std::string getRawEntryImpl() const override;
 
 };
 

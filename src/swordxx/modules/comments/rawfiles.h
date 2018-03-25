@@ -48,7 +48,6 @@ public:
              SWTextMarkup markup = FMT_UNKNOWN,
              char const * ilang = nullptr);
     ~RawFiles() override;
-    std::string getRawEntry() const override;
 
     bool isWritable() const override;
 
@@ -56,6 +55,10 @@ public:
     void setEntry(char const * inbuf, long len = -1) override;
     void linkEntry(SWKey const & linkKey) override;
     void deleteEntry() override;
+
+protected: /* Methods: */
+
+    std::string getRawEntryImpl() const override;
 
 };
 

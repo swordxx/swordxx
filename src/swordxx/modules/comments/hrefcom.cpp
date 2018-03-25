@@ -59,7 +59,7 @@ HREFCom::HREFCom(char const * ipath,
  * RET: string buffer with verse
  */
 
-std::string HREFCom::getRawEntry() const {
+std::string HREFCom::getRawEntryImpl() const {
     StartType start;
     SizeType size;
     VerseKey * key = nullptr;
@@ -69,16 +69,13 @@ std::string HREFCom::getRawEntry() const {
     findOffset(key->getTestament(), key->getTestamentIndex(), &start, &size);
     entrySize = size;        // support getEntrySize call
 
-    std::string tmpbuf;
-
-    readText(key->getTestament(), start, size, tmpbuf);
-    std::string entry(m_prefix + tmpbuf);
-    prepText(entry);
+    std::string entry;
+    readText(key->getTestament(), start, size, entry);
 
     if (key != this->key)
         delete key;
 
-    return entry;
+    return m_prefix + entry;
 }
 
 } /* namespace swordxx */

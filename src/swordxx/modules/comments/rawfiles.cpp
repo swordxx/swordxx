@@ -73,7 +73,7 @@ bool RawFiles::isWritable() const {
  * RET: entry contents
  */
 
-std::string RawFiles::getRawEntry() const {
+std::string RawFiles::getRawEntryImpl() const {
     FileDesc *datafile;
     StartType start = 0;
     SizeType size = 0;

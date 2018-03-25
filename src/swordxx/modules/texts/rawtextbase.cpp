@@ -76,7 +76,7 @@ char RawTextBase<BaseRawVerse>::createModule(char const *path,
  * RET: string buffer with verse
  */
 template <typename BaseRawVerse>
-std::string RawTextBase<BaseRawVerse>::getRawEntry() const {
+std::string RawTextBase<BaseRawVerse>::getRawEntryImpl() const {
     StartType start = 0;
     SizeType size = 0;
     VerseKey const & key = getVerseKey();
@@ -92,9 +92,6 @@ std::string RawTextBase<BaseRawVerse>::getRawEntry() const {
 
     rawFilter(entry, nullptr);    // hack, decipher
     rawFilter(entry, &key);
-
-//    if (!isUnicode())
-        prepText(entry);
 
     return entry;
 }

@@ -51,8 +51,6 @@ public:
         bool strongsPadding = true);
     ~zLD() override;
 
-    std::string getRawEntry() const override;
-
     void increment(int steps = 1) override;
     void decrement(int steps = 1) override { increment(-steps); }
 
@@ -75,6 +73,10 @@ public:
     long getEntryCount() const override;
     long getEntryForKey(char const * key) const override;
     std::string getKeyForEntry(long entry) const override;
+
+protected: /* Methods: */
+
+    std::string getRawEntryImpl() const override;
 
 };
 

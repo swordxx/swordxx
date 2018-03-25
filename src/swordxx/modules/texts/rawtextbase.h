@@ -52,7 +52,6 @@ public: /* Methods: */
                 char const * ilang = nullptr,
                 char const * versification = "KJV");
     ~RawTextBase() override;
-    std::string getRawEntry() const override;
     void increment(int steps = 1) override;
     bool isWritable() const override;
 
@@ -64,6 +63,10 @@ public: /* Methods: */
 
     bool isLinked(SWKey const * k1, SWKey const * k2) const override;
     bool hasEntry(SWKey const * k) const override;
+
+protected: /* Methods: */
+
+    std::string getRawEntryImpl() const override;
 
 }; /* class RawTextBase */
 

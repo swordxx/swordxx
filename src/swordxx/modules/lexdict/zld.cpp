@@ -111,12 +111,9 @@ char zLD::getEntry(std::string & entry, long away) const {
  * RET: string buffer with entry
  */
 
-std::string zLD::getRawEntry() const {
+std::string zLD::getRawEntryImpl() const {
     std::string entry;
-    if (!getEntry(entry) /*&& !isUnicode()*/) {
-        prepText(entry);
-    }
-
+    getEntry(entry);
     return entry;
 }
 

@@ -77,7 +77,7 @@ bool zTextBase<BaseZVerse>::isWritable() const {
  * RET: buffer with verse
  */
 template <typename BaseZVerse>
-std::string zTextBase<BaseZVerse>::getRawEntry() const {
+std::string zTextBase<BaseZVerse>::getRawEntryImpl() const {
     VerseOffsetType start = 0;
     VerseSizeType size = 0;
     BufferNumberType buffnum = 0;
@@ -90,10 +90,6 @@ std::string zTextBase<BaseZVerse>::getRawEntry() const {
 
     this->zReadText(key.getTestament(), start, size, buffnum, entry);
     rawFilter(entry, &key);
-
-//    if (!isUnicode())
-        prepText(entry);
-
     return entry;
 }
 

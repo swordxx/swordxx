@@ -106,8 +106,6 @@ protected:
     mutable int entrySize = -1;
     mutable long entryIndex;     // internal common storage for index
 
-    static void prepText(std::string &buf);
-
 public:
 
     class X;
@@ -266,7 +264,7 @@ public:
      */
     virtual std::unique_ptr<SWKey> createKey() const = 0;
 
-    virtual std::string getRawEntry() const = 0;
+    std::string getRawEntry() const;
 
     // write interface ----------------------------
 
@@ -553,6 +551,10 @@ public:
     void deleteSearchFramework();
 
     bool hasSearchIndex();
+
+protected: /* Methods: */
+
+    virtual std::string getRawEntryImpl() const = 0;
 
 private: /* Methods: */
 

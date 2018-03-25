@@ -104,15 +104,11 @@ char RawLdBase<Base>::getEntry(std::string & entry, long away) const {
  * RET: string buffer with entry
  */
 template <typename Base>
-std::string RawLdBase<Base>::getRawEntry() const {
+std::string RawLdBase<Base>::getRawEntryImpl() const {
     std::string entry;
     char ret = getEntry(entry);
-    if (!ret) {
-//        if (!isUnicode())
-            prepText(entry);
-    }
-    else error = ret;
-
+    if (ret)
+        error = ret;
     return entry;
 }
 

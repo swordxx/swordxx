@@ -92,7 +92,7 @@ bool RawGenBook::isWritable() const {
  * RET: string buffer with verse
  */
 
-std::string RawGenBook::getRawEntry() const {
+std::string RawGenBook::getRawEntryImpl() const {
 
     uint32_t offset = 0;
     uint32_t size = 0;
@@ -117,9 +117,6 @@ std::string RawGenBook::getRawEntry() const {
 
         rawFilter(entry, nullptr);    // hack, decipher
         rawFilter(entry, &key);
-
-//           if (!isUnicode())
-            SWModule::prepText(entry);
     }
 
     return entry;
