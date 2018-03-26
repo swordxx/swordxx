@@ -22,6 +22,7 @@ import java.util.TimeZone;
 import java.util.Vector;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Arrays;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -139,7 +140,7 @@ public class SWORD extends CordovaPlugin {
 				m.put("version", mi.version);
 				m.put("delta", mi.delta);
 				m.put("cipherKey", mi.cipherKey);
-				m.put("features", new JSONArray(mi.features));
+				m.put("features", new JSONArray(Arrays.asList(mi.features)));
 				r.put(m);
 			}
 			callbackContext.success(r);
@@ -244,7 +245,7 @@ public class SWORD extends CordovaPlugin {
 				m.put("version", mi.version);
 				m.put("delta", mi.delta);
 				m.put("cipherKey", mi.cipherKey);
-				m.put("features", new JSONArray(mi.features));
+				m.put("features", new JSONArray(Arrays.asList(mi.features)));
 				r.put(m);
 			}
 			callbackContext.success(r);
