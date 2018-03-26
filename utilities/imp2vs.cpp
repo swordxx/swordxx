@@ -54,6 +54,7 @@ void usage(char const * progName, char const * error = nullptr) {
     fprintf(stderr, "\n=== imp2vs (Revision $Rev$) Sword++ Bible/Commentary importer.\n");
     fprintf(stderr, "\nusage: %s <imp_file> [options]\n", progName);
     fprintf(stderr, "  -a\t\t\t augment module if exists (default is to create new)\n");
+    fprintf(stderr, "  -r\t\t\t replace existing entries (default is to append)\n");
     fprintf(stderr, "  -z <l|z|b|x>\t\t use compression (default: none):\n");
     fprintf(stderr, "\t\t\t\t l - LZSS; z - ZIP; b - bzip2; x - xz\n");
     fprintf(stderr, "  -o <output_path>\t where to write data files.\n");
