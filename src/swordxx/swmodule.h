@@ -127,7 +127,13 @@ public:
              SWTextMarkup markup = FMT_UNKNOWN,
              char const * modlang = nullptr);
 
+    SWModule(SWModule &&) = delete;
+    SWModule(SWModule const &) = delete;
+
     virtual ~SWModule();
+
+    SWModule & operator=(SWModule &&) = delete;
+    SWModule & operator=(SWModule const &) = delete;
 
     virtual void flush() {}
 
