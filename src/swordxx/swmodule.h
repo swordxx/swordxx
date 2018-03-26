@@ -108,7 +108,6 @@ protected:
 
 public:
 
-    class X;
     /**
      * @param key_ the default key.
      * @param imodname Internal name for module; see also getName()
