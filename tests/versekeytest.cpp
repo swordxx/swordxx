@@ -96,10 +96,10 @@ cout << currentVerse << endl;
     ListKey scope = parser->parseVerseList("amos 2:2", "", true);
 
     static auto const isSingle =
-            [](auto & scope) {
-                auto oldScope(scope);
-                scope.increment();
-                return oldScope == scope;
+            [](auto & scope_) {
+                auto oldScope(scope_);
+                scope_.increment();
+                return oldScope == scope_;
             };
     cout << (isSingle(scope) ? "single" : "multiple") << "\n";
 
