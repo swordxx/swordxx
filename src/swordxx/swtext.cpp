@@ -49,10 +49,10 @@ std::unique_ptr<VerseKey> staticCreateKey(char const * const versification) {
  */
 
 SWText::SWText(const char *imodname, const char *imoddesc, TextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char* ilang, const char *versification): SWModule(staticCreateKey(versification), imodname, imoddesc, "Biblical Texts", enc, dir, mark, ilang) {
-    this->versification = versification;
-    tmpVK1.setVersificationSystem(versification);
-    tmpVK2.setVersificationSystem(versification);
-        tmpSecond = false;
+    this->m_versification = versification;
+    m_tmpVK1.setVersificationSystem(versification);
+    m_tmpVK2.setVersificationSystem(versification);
+        m_tmpSecond = false;
     skipConsecutiveLinks = false;
 }
 
@@ -62,7 +62,7 @@ SWText::SWText(const char *imodname, const char *imoddesc, TextEncoding enc, SWT
  */
 
 std::unique_ptr<SWKey> SWText::createKey() const
-{ return staticCreateKey(versification.c_str()); }
+{ return staticCreateKey(m_versification.c_str()); }
 
 VerseKey &SWText::getVerseKey(const SWKey *keyToConvert) const {
     SWKey const * tmp = keyToConvert ? keyToConvert : this->key;
@@ -76,8 +76,8 @@ VerseKey &SWText::getVerseKey(const SWKey *keyToConvert) const {
                 dynamic_cast<VerseKey *>(lkTest->getElement()))
             return *key;
 
-    VerseKey & retKey = (tmpSecond) ? tmpVK1 : tmpVK2;
-    tmpSecond = !tmpSecond;
+    VerseKey & retKey = (m_tmpSecond) ? m_tmpVK1 : m_tmpVK2;
+    m_tmpSecond = !m_tmpSecond;
     retKey.setLocale(LocaleMgr::getSystemLocaleMgr()->getDefaultLocaleName());
     retKey.positionFrom(*thisKey);
     return retKey;
