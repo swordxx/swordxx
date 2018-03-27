@@ -62,18 +62,18 @@ HREFCom::HREFCom(char const * ipath,
 std::string HREFCom::getRawEntryImpl() const {
     StartType start;
     SizeType size;
-    VerseKey * key = nullptr;
+    VerseKey * key_ = nullptr;
 
-        key = &getVerseKey();
+        key_ = &getVerseKey();
 
-    findOffset(key->getTestament(), key->getTestamentIndex(), &start, &size);
+    findOffset(key_->getTestament(), key_->getTestamentIndex(), &start, &size);
     entrySize = size;        // support getEntrySize call
 
     std::string entry;
-    readText(key->getTestament(), start, size, entry);
+    readText(key_->getTestament(), start, size, entry);
 
-    if (key != this->key)
-        delete key;
+    if (key_ != this->key)
+        delete key_;
 
     return m_prefix + entry;
 }
