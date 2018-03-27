@@ -104,11 +104,14 @@ void processMorph(bool suspendTextPassThru, XMLTag &tag, std::string &buf) {
 }
 }    // end anonymous namespace
 
-OSISHTMLHREF::MyUserData::MyUserData(const SWModule *module, const SWKey *key) : BasicFilterUserData(module, key) {
-    if (module) {
-        osisQToTick = ((!module->getConfigEntry("OSISqToTick")) || (std::strcmp(module->getConfigEntry("OSISqToTick"), "false")));
-        version = module->getName();
-        isBiblicalText = (module->getType() == "Biblical Texts");
+OSISHTMLHREF::MyUserData::MyUserData(SWModule const * module_,
+                                     SWKey const * key_)
+    : BasicFilterUserData(module_, key_)
+{
+    if (module_) {
+        osisQToTick = ((!module_->getConfigEntry("OSISqToTick")) || (std::strcmp(module_->getConfigEntry("OSISqToTick"), "false")));
+        version = module_->getName();
+        isBiblicalText = (module_->getType() == "Biblical Texts");
     } else {
         isBiblicalText = false;
         osisQToTick = true;    // default
