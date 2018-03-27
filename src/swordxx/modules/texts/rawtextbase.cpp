@@ -79,27 +79,27 @@ template <typename BaseRawVerse>
 std::string RawTextBase<BaseRawVerse>::getRawEntryImpl() const {
     StartType start = 0;
     SizeType size = 0;
-    VerseKey const & key = getVerseKey();
+    VerseKey const & key_ = getVerseKey();
 
-    this->findOffset(key.getTestament(),
-                     key.getTestamentIndex(),
+    this->findOffset(key_.getTestament(),
+                     key_.getTestamentIndex(),
                      &start,
                      &size);
     entrySize = size;        // support getEntrySize call
 
     std::string entry;
-    this->readText(key.getTestament(), start, size, entry);
+    this->readText(key_.getTestament(), start, size, entry);
 
     rawFilter(entry, nullptr);    // hack, decipher
-    rawFilter(entry, &key);
+    rawFilter(entry, &key_);
 
     return entry;
 }
 
 template <typename BaseRawVerse>
 void RawTextBase<BaseRawVerse>::setEntry(char const *inbuf, long len) {
-    VerseKey const & key = getVerseKey();
-    this->doSetText(key.getTestament(), key.getTestamentIndex(), inbuf, len);
+    VerseKey const & key_ = getVerseKey();
+    this->doSetText(key_.getTestament(), key_.getTestamentIndex(), inbuf, len);
 }
 
 template <typename BaseRawVerse>
@@ -119,8 +119,8 @@ void RawTextBase<BaseRawVerse>::linkEntry(SWKey const & inkey) {
  */
 template <typename BaseRawVerse>
 void RawTextBase<BaseRawVerse>::deleteEntry() {
-    VerseKey const & key = getVerseKey();
-    this->doSetText(key.getTestament(), key.getTestamentIndex(), "");
+    VerseKey const & key_ = getVerseKey();
+    this->doSetText(key_.getTestament(), key_.getTestamentIndex(), "");
 }
 
 /******************************************************************************
