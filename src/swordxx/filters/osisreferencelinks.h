@@ -32,10 +32,10 @@ namespace swordxx {
 /** This Filter hides reference links with a particular type/subtype in an OSIS text
  */
 class SWDLLEXPORT OSISReferenceLinks : public OnOffOptionFilter {
-    std::string optionName;
-    std::string optionTip;
-    std::string type;
-    std::string subType;
+    std::string m_optionName;
+    std::string m_optionTip;
+    std::string m_type;
+    std::string m_subType;
 public:
 
     /**
@@ -45,10 +45,10 @@ public:
      * @param subType - which reference subTypes to hide (optional)
      * @param defaultValue - default value of option "On" or "Off" (optional)
      */
-    OSISReferenceLinks(char const * optionName,
-                       char const * optionTip,
-                       char const * type,
-                       char const * subType = nullptr,
+    OSISReferenceLinks(char const * m_optionName,
+                       char const * m_optionTip,
+                       char const * m_type,
+                       char const * m_subType = nullptr,
                        char const * defaultValue = "On");
     ~OSISReferenceLinks() override;
 

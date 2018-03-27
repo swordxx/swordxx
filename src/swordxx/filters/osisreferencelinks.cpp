@@ -31,13 +31,13 @@
 namespace swordxx {
 
 OSISReferenceLinks::OSISReferenceLinks(const char *optionName, const char *optionTip, const char *type, const char *subType, const char *defaultValue)
-        : optionName(optionName)
-        , optionTip(optionTip)
-        , type(type)
-        , subType(subType)
+        : m_optionName(optionName)
+        , m_optionTip(optionTip)
+        , m_type(type)
+        , m_subType(subType)
 {
-    optName   = this->optionName.c_str();
-    optTip    = this->optionTip.c_str();
+    optName   = m_optionName.c_str();
+    optTip    = m_optionTip.c_str();
     setOptionValue(defaultValue);
 }
 
@@ -75,7 +75,7 @@ char OSISReferenceLinks::processText(std::string &text, const SWKey *key, const 
             else {
                 XMLTag tag;
                 tag = token.c_str();
-                if (!tag.isEndTag() && type == tag.attribute("type") && (!subType.size() || subType == tag.attribute("subType"))) {
+                if (!tag.isEndTag() && m_type == tag.attribute("type") && (!m_subType.size() || m_subType == tag.attribute("subType"))) {
                     stripThisToken = true;
                     continue;
                 }
