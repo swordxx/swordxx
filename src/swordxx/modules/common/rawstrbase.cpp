@@ -52,9 +52,9 @@ template <typename SizeType_>
 RawStrBase<SizeType_>::RawStrBase(NormalizedPath const & path,
                                   int fileMode,
                                   bool caseSensitive)
-    : caseSensitive(caseSensitive)
+    : m_caseSensitive(caseSensitive)
 {
-    lastoff = -1;
+    m_lastoff = -1;
 
     if (fileMode == -1) // try read/write if possible
         fileMode = FileMgr::RDWR;
@@ -107,7 +107,7 @@ std::string RawStrBase<SizeType_>::getIDXBufDat(long ioffset) const {
             datfd->read(buf.get(), size);
         }
         std::string r(buf.get(), size);
-        if (!caseSensitive)
+        if (!m_caseSensitive)
             toupperstr_utf8(r);
         return r;
     } else {
@@ -174,7 +174,7 @@ signed char RawStrBase<SizeType_>::findOffset(char const * ikey,
             headoff = 0;
 
             std::string key(ikey);
-            if (!caseSensitive)
+            if (!m_caseSensitive)
                 toupperstr_utf8(key);
 
             bool substr = false;
@@ -182,8 +182,8 @@ signed char RawStrBase<SizeType_>::findOffset(char const * ikey,
             std::string maxbuf(getIDXBuf(maxoff));
 
             while (headoff < tailoff) {
-                tryoff = (lastoff == -1) ? headoff + ((((tailoff / entrySize) - (headoff / entrySize))) / 2) * entrySize : lastoff;
-                lastoff = -1;
+                tryoff = (m_lastoff == -1) ? headoff + ((((tailoff / entrySize) - (headoff / entrySize))) / 2) * entrySize : m_lastoff;
+                m_lastoff = -1;
                 auto trybuf(getIDXBuf(tryoff));
 
                 if (trybuf.empty() && tryoff) {        // In case of extra entry at end of idx (not first entry)
@@ -272,7 +272,7 @@ signed char RawStrBase<SizeType_>::findOffset(char const * ikey,
                 away += (away < 0) ? 1 : -1;
         }
 
-        lastoff = tryoff;
+        m_lastoff = tryoff;
     }
     else {
         *start = 0;
@@ -358,7 +358,7 @@ void RawStrBase<SizeType_>::doSetText(char const * ikey,
 
     char errorStatus = findOffset(ikey, &start, &size, 0, &idxoff);
     std::string key(ikey);
-    if (!caseSensitive)
+    if (!m_caseSensitive)
         toupperstr_utf8(key);
 
     len = (len < 0) ? std::strlen(buf) : len;

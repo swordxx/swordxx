@@ -54,7 +54,7 @@ public: /* Methods: */
 
     RawStrBase(NormalizedPath const & path,
                int fileMode = -1,
-               bool caseSensitive = false);
+               bool m_caseSensitive = false);
 
     virtual ~RawStrBase();
 
@@ -89,8 +89,8 @@ protected: /* Fields: */
 
 private: /* Fields: */
 
-    bool caseSensitive;
-    mutable long lastoff; // for caching and optimizing
+    bool m_caseSensitive;
+    mutable long m_lastoff; // for caching and optimizing
 
 }; /* class RawStrBase */
 
