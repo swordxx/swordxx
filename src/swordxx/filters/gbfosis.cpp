@@ -350,24 +350,24 @@ char GBFOSIS::processText(std::string &text, const SWKey *key, const SWModule *m
             text = ref + text;
 
             if (vkey->getVerse()) {
-                std::unique_ptr<VerseKey> tmp(
+                std::unique_ptr<VerseKey> tmp2(
                             static_cast<VerseKey *>(vkey->clone().release()));
-                *tmp = *vkey;
-                tmp->setAutoNormalize(false);
-                tmp->setIntros(true);
+                *tmp2 = *vkey;
+                tmp2->setAutoNormalize(false);
+                tmp2->setIntros(true);
 
                 text += "</verse>";
 
-                tmp->positionToMaxVerse();
-                if (*vkey == *tmp) {
-                    tmp->setVerse(0);
+                tmp2->positionToMaxVerse();
+                if (*vkey == *tmp2) {
+                    tmp2->setVerse(0);
 //                    sprintf(ref, "\t</div>");
 //                    pushString(&to, ref);
-                    tmp->positionToMaxChapter();
-                    tmp->positionToMaxVerse();
-                    if (*vkey == *tmp) {
-                        tmp->setChapter(0);
-                        tmp->setVerse(0);
+                    tmp2->positionToMaxChapter();
+                    tmp2->positionToMaxVerse();
+                    if (*vkey == *tmp2) {
+                        tmp2->setChapter(0);
+                        tmp2->setVerse(0);
 //                        sprintf(ref, "\t</div>");
 //                        pushString(&to, ref);
                     }
