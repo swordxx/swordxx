@@ -42,7 +42,7 @@ namespace {
         XMLTag tag;
         char testament = (verseKey) ? verseKey->getTestament() : 2; // default to NT;
         std::string hiType;
-        MyUserData(const SWModule *module, const SWKey *key) : BasicFilterUserData(module, key) {}
+        using BasicFilterUserData::BasicFilterUserData;
     };
 }
 
