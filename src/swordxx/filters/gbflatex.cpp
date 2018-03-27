@@ -35,9 +35,11 @@ const char *GBFLaTeX::getHeader() const {
     return "\\usepackage{color}";
 }
 
-GBFLaTeX::MyUserData::MyUserData(const SWModule *module, const SWKey *key) : BasicFilterUserData(module, key) {
-    if (module) {
-        version = module->getName();
+GBFLaTeX::MyUserData::MyUserData(SWModule const * module_, SWKey const * key_)
+    : BasicFilterUserData(module_, key_)
+{
+    if (module_) {
+        version = module_->getName();
     }
 }
 
