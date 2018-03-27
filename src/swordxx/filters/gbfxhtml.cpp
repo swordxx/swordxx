@@ -39,9 +39,12 @@ const char *GBFXHTML::getHeader() const {
     ";
 }
 
-GBFXHTML::MyUserData::MyUserData(const SWModule *module, const SWKey *key) : BasicFilterUserData(module, key) {
-    if (module) {
-        version = module->getName();
+GBFXHTML::MyUserData::MyUserData(SWModule const * module_,
+                                 SWKey const * key_)
+    : BasicFilterUserData(module_, key_)
+{
+    if (module_) {
+        version = module_->getName();
     }
 }
 
