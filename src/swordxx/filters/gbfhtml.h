@@ -34,7 +34,7 @@ class SWDLLEXPORT GBFHTML : public SWBasicFilter {
 protected:
     class MyUserData : public BasicFilterUserData {
     public:
-        MyUserData(const SWModule *module, const SWKey *key) : BasicFilterUserData(module, key) {}
+        using BasicFilterUserData::BasicFilterUserData;
         ~MyUserData() noexcept override;
         bool hasFootnotePreTag;
     };
