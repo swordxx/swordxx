@@ -41,11 +41,11 @@ namespace {
 GBFWordJS::GBFWordJS()
     : OffOnOptionFilter(oName, oTip)
 {
-     defaultGreekLex   = nullptr;
-     defaultHebLex     = nullptr;
-     defaultGreekParse = nullptr;
-     defaultHebParse   = nullptr;
-     mgr               = nullptr;
+     m_defaultGreekLex   = nullptr;
+     m_defaultHebLex     = nullptr;
+     m_defaultGreekParse = nullptr;
+     m_defaultHebParse   = nullptr;
+     m_mgr               = nullptr;
 }
 
 GBFWordJS::~GBFWordJS() {
@@ -153,12 +153,12 @@ char GBFWordJS::processText(std::string &text, const SWKey *key, const SWModule 
                         SWModule * sLex = nullptr;
                         SWModule * sMorph = nullptr;
                         if (gh == 'G') {
-                            sLex = defaultGreekLex;
-                            sMorph = defaultGreekParse;
+                            sLex = m_defaultGreekLex;
+                            sMorph = m_defaultGreekParse;
                         }
                         if (gh == 'H') {
-                            sLex = defaultHebLex;
-                            sMorph = defaultHebParse;
+                            sLex = m_defaultHebLex;
+                            sMorph = m_defaultHebParse;
                         }
                         std::string lexName = "";
                         if (sLex) {
@@ -250,10 +250,10 @@ char GBFWordJS::processText(std::string &text, const SWKey *key, const SWModule 
 
             SWModule * sLex = nullptr;
             if (gh == 'G') {
-                sLex = defaultGreekLex;
+                sLex = m_defaultGreekLex;
             }
             if (gh == 'H') {
-                sLex = defaultHebLex;
+                sLex = m_defaultHebLex;
             }
             std::string lexName = "";
             if (sLex) {

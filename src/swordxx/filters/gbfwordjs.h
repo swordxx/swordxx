@@ -32,11 +32,11 @@ class SWMgr;
   /** This Filter shows/hides strong's numbers in a GBF text
   */
 class SWDLLEXPORT GBFWordJS: public OffOnOptionFilter {
-     SWModule *defaultGreekLex;
-     SWModule *defaultHebLex;
-     SWModule *defaultGreekParse;
-     SWModule *defaultHebParse;
-     SWMgr *mgr;
+     SWModule * m_defaultGreekLex;
+     SWModule * m_defaultHebLex;
+     SWModule * m_defaultGreekParse;
+     SWModule * m_defaultHebParse;
+     SWMgr * m_mgr;
 
 public:
     GBFWordJS();
@@ -51,12 +51,12 @@ public:
                            SWModule * defaultGreekParse = nullptr,
                            SWModule * defaultHebParse = nullptr)
     {
-        this->defaultGreekLex   = defaultGreekLex;
-        this->defaultHebLex     = defaultHebLex;
-        this->defaultGreekParse = defaultGreekParse;
-        this->defaultHebParse   = defaultHebParse;
+        this->m_defaultGreekLex   = defaultGreekLex;
+        this->m_defaultHebLex     = defaultHebLex;
+        this->m_defaultGreekParse = defaultGreekParse;
+        this->m_defaultHebParse   = defaultHebParse;
     }
-    void setMgr(SWMgr *mgr) { this->mgr = mgr; }
+    void setMgr(SWMgr *mgr) { this->m_mgr = mgr; }
 };
 
 } /* namespace swordxx */
