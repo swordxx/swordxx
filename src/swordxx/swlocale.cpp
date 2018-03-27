@@ -69,9 +69,9 @@ SWLocale::SWLocale(const char *ifilename) {
         auto const size = m_p->mergedAbbrevs.size();
         m_bookAbbrevs = std::make_unique<struct abbrev[]>(size + 1);
         int i = 0;
-        for (LookupMap::iterator it = m_p->mergedAbbrevs.begin(); it != m_p->mergedAbbrevs.end(); it++, i++) {
-            m_bookAbbrevs[i].ab = it->first.c_str();
-            m_bookAbbrevs[i].osis = it->second.c_str();
+        for (LookupMap::iterator it2 = m_p->mergedAbbrevs.begin(); it2 != m_p->mergedAbbrevs.end(); it2++, i++) {
+            m_bookAbbrevs[i].ab = it2->first.c_str();
+            m_bookAbbrevs[i].osis = it2->second.c_str();
         }
 
         m_bookAbbrevs[i].ab = "";
