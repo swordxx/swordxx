@@ -380,17 +380,17 @@ void zStr::getCompressedText(long block, long entry, char **buf) const {
         start = swordtoarch32(start);
         size = swordtoarch32(size);
 
-        std::string buf(size + 5u, '\0');
+        std::string buf2(size + 5u, '\0');
         zdtfd->seek(start, SEEK_SET);
-        zdtfd->read(&buf[0u], size);
+        zdtfd->read(&buf2[0u], size);
 
         flushCache();
 
         unsigned long len = size;
-        buf.resize(size);
-        rawZFilter(buf, 0); // 0 = decipher
+        buf2.resize(size);
+        rawZFilter(buf2, 0); // 0 = decipher
 
-        compressor->zBuf(&len, &buf[0u]);
+        compressor->zBuf(&len, &buf2[0u]);
         char * rawBuf = compressor->Buf(nullptr, &len);
         cacheBlock = new EntriesBlock(rawBuf, len);
         cacheBlockIndex = block;
@@ -428,8 +428,8 @@ void zStr::setText(const char *ikey, const char *buf, long len) {
 
     char notFound = findKeyIndex(ikey, &idxoff, 0);
     if (!notFound) {
-        auto const dbKey(getKeyFromIdxOffset(idxoff));
-        auto diff = key.compare(dbKey);
+        auto const dbKey2(getKeyFromIdxOffset(idxoff));
+        auto diff = key.compare(dbKey2);
         if (diff < 0) {
         }
         else if (diff > 0) {
