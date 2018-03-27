@@ -48,11 +48,13 @@ namespace {
     };
 
 
-    MyUserData::MyUserData(const SWModule *module, const SWKey *key) : BasicFilterUserData(module, key) {
-        if (module) {
-            version = module->getName();
-            isBiblicalText = (module->getType() == "Biblical Texts");
-            osisQToTick = ((!module->getConfigEntry("OSISqToTick")) || (std::strcmp(module->getConfigEntry("OSISqToTick"), "false")));
+    MyUserData::MyUserData(SWModule const * module_, SWKey const * key_)
+        : BasicFilterUserData(module_, key_)
+    {
+        if (module_) {
+            version = module_->getName();
+            isBiblicalText = (module_->getType() == "Biblical Texts");
+            osisQToTick = ((!module_->getConfigEntry("OSISqToTick")) || (std::strcmp(module_->getConfigEntry("OSISqToTick"), "false")));
         } else {
             isBiblicalText = false;
             osisQToTick = true;
