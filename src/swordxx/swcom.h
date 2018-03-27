@@ -50,10 +50,10 @@ class SWKey;
   */
 class SWDLLEXPORT SWCom : public SWModule {
 
-    mutable VerseKey *tmpVK1;
-    mutable VerseKey *tmpVK2;
-        mutable bool tmpSecond;
-    std::string versification;
+    mutable VerseKey *m_tmpVK1;
+    mutable VerseKey *m_tmpVK2;
+        mutable bool m_tmpSecond;
+    std::string m_versification;
 
 protected:
     VerseKey & getVerseKey(SWKey const * key = nullptr) const;
@@ -67,7 +67,7 @@ public:
           SWTextDirection dir = DIRECTION_LTR,
           SWTextMarkup mark = FMT_UNKNOWN,
           char const * ilang = nullptr,
-          char const * versification = "KJV");
+          char const * m_versification = "KJV");
 
     ~SWCom() override;
     std::unique_ptr<SWKey> createKey() const override;
