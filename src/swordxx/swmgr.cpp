@@ -225,8 +225,8 @@ std::string SWMgr::getHomeDir() {
     return homeDir;
 }
 
-SWMgr::SWMgr(std::shared_ptr<SWFilterMgr> filterMgr, bool multiMod)
-    : SWMgr(nullptr, nullptr, true, std::move(filterMgr), multiMod)
+SWMgr::SWMgr(std::shared_ptr<SWFilterMgr> filterMgr_, bool multiMod)
+    : SWMgr(nullptr, nullptr, true, std::move(filterMgr_), multiMod)
 {}
 
 SWMgr::SWMgr(SWConfig * iconfig,
