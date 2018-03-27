@@ -285,10 +285,10 @@ char VerseKey::parse(bool checkAutoNormalize)
     m_verse     = 1;
 
     int error = 0;
-
-    if (auto const keytext = SWKey::getText()) {
+    auto const keytext = SWKey::getText();
+    if (!keytext.empty()) {
         // pass our own copy of keytext as keytext memory may be freshed during parse
-        ListKey tmpListKey = parseVerseList(keytext);
+        ListKey tmpListKey = parseVerseList(keytext.c_str());
         if (tmpListKey.getCount()) {
             this->positionFrom(*tmpListKey.getElement(0u));
             error = this->m_error;
@@ -1190,7 +1190,7 @@ void VerseKey::initBounds() const
  *                a (char *) is requested
  */
 
-const char *VerseKey::getText() const {
+std::string VerseKey::getText() const {
     freshtext();
     return SWKey::getText();
 }
@@ -1774,18 +1774,9 @@ const char *VerseKey::getOSISRef() const {
 
 std::string VerseKey::getRangeText() const {
     if (isBoundSet() && m_lowerBound != m_upperBound) {
-        auto const lbKey(getLowerBound());
-        auto const ubKey(getUpperBound());
-        char const * const lb = lbKey.getText();
-        char const * const ub = ubKey.getText();
-        std::string r(lb ? lb : "");
-        r.push_back('-');
-        if (ub)
-            r.append(ub);
-        return r;
+        return getLowerBound().getText() + '-' + getUpperBound().getText();
     } else {
-        char const * const text = getText();
-        return std::string(text ? text : "");
+        return getText();
     }
 }
 
@@ -1814,7 +1805,7 @@ std::string VerseKey::convertToOSIS(std::string const & inRef,
 
     VerseKey defLanguage;
     ListKey verses = defLanguage.parseVerseList(inRef.c_str(),
-                                                lastKnownKey->getText(),
+                                                lastKnownKey->getText().c_str(),
                                                 true);
     std::size_t startFragIndex = 0u;
     for (std::size_t i = 0u; i < verses.getCount(); ++i) {

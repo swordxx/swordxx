@@ -509,7 +509,7 @@ void writeEntry(std::string &text, bool force = false) {
     // If we have seen a verse and the supplied one is different then we output the collected one.
     if (*activeOsisID && std::strcmp(activeOsisID, keyOsisID)) {
 
-        if (!isValidRef(lastKey.getText(), "writeEntry")) {
+        if (!isValidRef(lastKey.getText().c_str(), "writeEntry")) {
             makeValidRef(lastKey);
         }
 
@@ -593,7 +593,7 @@ void writeEntry(std::string &text, bool force = false) {
 void linkToEntry(VerseKey &linkKey, VerseKey &dest) {
 
     // Only link verses that are in the versification.
-    if (!isValidRef(linkKey.getText(), "linkToEntry")) {
+    if (!isValidRef(linkKey.getText().c_str(), "linkToEntry")) {
         return;
     }
 
@@ -716,7 +716,7 @@ bool handleToken(std::string &text, XMLTag token) {
                     currentVerse.setVerse(0);
                     writeEntry(text);
                 }
-                currentVerse.setText(token.attribute("osisID").c_str());
+                currentVerse.setText(token.attribute("osisID"));
                 currentVerse.setChapter(0);
                 currentVerse.setVerse(0);
                 std::strcpy(currentOsisID, currentVerse.getOSISRef());
@@ -759,7 +759,7 @@ bool handleToken(std::string &text, XMLTag token) {
                     writeEntry(text);
                 }
 
-                currentVerse.setText(token.attribute("osisID").c_str());
+                currentVerse.setText(token.attribute("osisID"));
                 currentVerse.setVerse(0);
 
                 if (debug & DEBUG_OTHER) {
@@ -824,7 +824,7 @@ bool handleToken(std::string &text, XMLTag token) {
                 // The first or only one is the currentVerse
                 // Use the last verse seen (i.e. the currentVerse) as the basis for recovering from bad parsing.
                 // This should never happen if the references are valid OSIS references
-                ListKey verseKeys = currentVerse.parseVerseList(keyVal.c_str(), currentVerse.getText(), true);
+                ListKey verseKeys = currentVerse.parseVerseList(keyVal.c_str(), currentVerse.getText().c_str(), true);
                 auto memberKeyCount(verseKeys.getCount());
                 if (memberKeyCount) {
                     currentVerse.positionFrom(*verseKeys.getElement(0u));

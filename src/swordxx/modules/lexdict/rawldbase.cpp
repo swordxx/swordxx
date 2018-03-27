@@ -76,9 +76,9 @@ char RawLdBase<Base>::getEntry(std::string & entry, long away) const {
 
     auto const keyText = key->getText();
     if (strongsPadding) {
-        retval = this->findOffset(strongsPadBuf(keyText).get(), &start, &size, away);
+        retval = this->findOffset(strongsPadBuf(keyText.c_str()).get(), &start, &size, away);
     } else {
-        retval = this->findOffset(keyText, &start, &size, away);
+        retval = this->findOffset(keyText.c_str(), &start, &size, away);
     }
     if (!retval) {
         auto const idxbuf(this->readText(start, &size, entry));
@@ -86,7 +86,7 @@ char RawLdBase<Base>::getEntry(std::string & entry, long away) const {
         rawFilter(entry, key);
         entrySize = size;        // support getEntrySize call
         if (!key->isPersist())            // If we have our own key
-            key->setText(idxbuf.c_str());                // reset it to entry index buffer
+            key->setText(idxbuf);                // reset it to entry index buffer
 
         m_entkeytxt = idxbuf; // set entry key text that module 'snapped' to.
     } else {
@@ -133,16 +133,16 @@ void RawLdBase<Base>::increment(int steps) {
     std::string unusedEntry; /// \todo Remove this variable
     tmperror = (getEntry(unusedEntry, steps)) ? KEYERR_OUTOFBOUNDS : 0;
     error = (error)?error:tmperror;
-    key->setText(m_entkeytxt.c_str());
+    key->setText(m_entkeytxt);
 }
 
 template <typename Base>
 void RawLdBase<Base>::setEntry(char const * inbuf, long len) {
     auto const keyText = key->getText();
     if (strongsPadding) {
-        this->doSetText(strongsPadBuf(keyText).get(), inbuf, len);
+        this->doSetText(strongsPadBuf(keyText.c_str()).get(), inbuf, len);
     } else {
-        this->doSetText(keyText, inbuf, len);
+        this->doSetText(keyText.c_str(), inbuf, len);
     }
 }
 
@@ -150,9 +150,9 @@ template <typename Base>
 void RawLdBase<Base>::linkEntry(SWKey const & inkey) {
     auto const keyText = key->getText();
     if (strongsPadding) {
-        this->doLinkEntry(strongsPadBuf(keyText).get(), inkey.getText());
+        this->doLinkEntry(strongsPadBuf(keyText.c_str()).get(), inkey.getText().c_str());
     } else {
-        this->doLinkEntry(keyText, inkey.getText());
+        this->doLinkEntry(keyText.c_str(), inkey.getText().c_str());
     }
 }
 
@@ -166,9 +166,9 @@ template <typename Base>
 void RawLdBase<Base>::deleteEntry() {
     auto const keyText = key->getText();
     if (strongsPadding) {
-        this->doSetText(strongsPadBuf(keyText).get(), "");
+        this->doSetText(strongsPadBuf(keyText.c_str()).get(), "");
     } else {
-        this->doSetText(keyText, "");
+        this->doSetText(keyText.c_str(), "");
     }
 }
 

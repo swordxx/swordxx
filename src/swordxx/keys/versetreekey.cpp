@@ -234,7 +234,7 @@ void VerseTreeKey::syncVerseToTree() {
     else path = formatted("/%s/%d/%d", getOSISBookName().c_str(), getChapter(), getVerse());
     if (getSuffix()) path += getSuffix();
     long bookmark = m_treeKey->getOffset();
-    m_treeKey->setText(path.c_str());
+    m_treeKey->setText(path);
 
     // if our module has jacked inconsistencies, then let's put our tree back to where it was
     if (m_treeKey->popError()) {

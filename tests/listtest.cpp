@@ -103,12 +103,12 @@ int main(int /* argc */, char ** /* argv */)
     lk << "john 3:16";
     cout << "\nCount should be 1: " << lk.getCount();
 
-    lk = vk.parseVerseList("mat;mark;luke", vk.getText(), true);
+    lk = vk.parseVerseList("mat;mark;luke", vk.getText().c_str(), true);
     lk.positionFrom(VerseKey("mark 3:16"));
     cout << "\nError should not be set: " << ((lk.popError()) ? "set":"not set");
     lk.positionFrom(VerseKey("john 3:16"));
     cout << "\nError should be set: " << ((lk.popError()) ? "set":"not set");
-    lk = vk.parseVerseList("mk 3:16", vk.getText(), true);
+    lk = vk.parseVerseList("mk 3:16", vk.getText().c_str(), true);
     lk.positionFrom(VerseKey("john 3:16"));
     cout << "\nError should be set: " << ((lk.popError()) ? "set":"not set");
     lk.positionFrom(VerseKey("mark 3:16"));

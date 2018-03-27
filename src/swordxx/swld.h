@@ -52,7 +52,7 @@ public:
 
     std::unique_ptr<SWKey> createKey() const override;
 
-    char const * getKeyText() const override;
+    std::string getKeyText() const override;
     void positionToTop() override;
     void positionToBottom() override;
 

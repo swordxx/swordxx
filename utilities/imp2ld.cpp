@@ -197,12 +197,12 @@ int main(int argc, char **argv) {
         if (linebuffer.size() > 3 && linebuffer.substr(0,3) == "$$$") {
             if (keybuffer.size() && entbuffer.size()) {
                 std::cout << keybuffer << std::endl;
-                key->setText(keybuffer.c_str());
+                key->setText(keybuffer);
 
                 mod->setEntry(entbuffer.c_str(), entbuffer.size());
                 for (i = 0; i < links; i++) {
                     std::cout << "Linking: " << linkbuffer[i] << std::endl;
-                    linkKey->setText(linkbuffer[i].c_str());
+                    linkKey->setText(linkbuffer[i]);
                     mod->linkEntry(*linkKey);
                 }
             }
@@ -225,12 +225,12 @@ int main(int argc, char **argv) {
     //handle final entry
     if (keybuffer.size() && entbuffer.size()) {
         std::cout << keybuffer << std::endl;
-        key->setText(keybuffer.c_str());
+        key->setText(keybuffer);
 
         mod->setEntry(entbuffer.c_str(), entbuffer.size());
         for (i = 0; i < links; i++) {
             std::cout << "Linking: " << linkbuffer[i] << std::endl;
-            linkKey->setText(linkbuffer[i].c_str());
+            linkKey->setText(linkbuffer[i]);
             mod->linkEntry(*linkKey);
         }
     }

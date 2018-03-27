@@ -72,11 +72,11 @@ std::unique_ptr<SWKey> SWLD::createKey() const
  * RET:    pointer to keytext
  */
 
-const char *SWLD::getKeyText() const {
+std::string SWLD::getKeyText() const {
     if (key->isPersist()) {
         getRawEntry();    // force module key to snap to entry
     }
-    return m_entkeytxt.c_str();
+    return m_entkeytxt;
 }
 
 void SWLD::positionToTop() {
@@ -100,10 +100,10 @@ void SWLD::positionToBottom() {
 bool SWLD::hasEntry(const SWKey *key) const {
     auto const keyText = key->getText();
     if (strongsPadding) {
-        auto const buf(strongsPadBuf(keyText));
+        auto const buf(strongsPadBuf(keyText.c_str()));
         return buf.get() == getKeyForEntry(getEntryForKey(buf.get()));
     } else {
-        return keyText == getKeyForEntry(getEntryForKey(keyText));
+        return keyText == getKeyForEntry(getEntryForKey(keyText.c_str()));
     }
 }
 

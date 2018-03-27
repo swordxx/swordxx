@@ -167,12 +167,14 @@ bool GBFLaTeX::handleToken(std::string &buf, const char *token, BasicFilterUserD
             std::string type = tag.attribute("type");
             std::string footnoteNumber = tag.attribute("swordFootnote");
             std::string noteName = tag.attribute("n");
-            if (auto const * const vkey = u->verseKey) {
-                buf += formatted("\\swordfootnote{%s}{%s}{%s}{",
-                    footnoteNumber.c_str(),
-                    u->version.c_str(),
-                    vkey->getText()).c_str();
-            }
+            if (auto const * const vkey = u->verseKey)
+                buf.append("\\swordfootnote{")
+                   .append(footnoteNumber)
+                   .append("}{")
+                   .append(u->version)
+                   .append("}{")
+                   .append(vkey->getText())
+                   .append("}{");
             u->suspendTextPassThru = false;
         }
         else if (tag.name() == "Rf") {

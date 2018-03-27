@@ -116,8 +116,8 @@ public:
     virtual void setOffset(unsigned long offset) = 0;
     virtual unsigned long getOffset() const = 0;
 
-    void setText(char const * ikey) override = 0;
-    const char *getText() const override = 0;
+    void setText(std::string newText) override = 0;
+    std::string getText() const override = 0;
     void decrement(int steps = 1) override = 0;
     void increment(int steps = 1) override = 0;
     bool isTraversable() const override { return true; }

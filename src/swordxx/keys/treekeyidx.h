@@ -112,10 +112,10 @@ public:
     virtual SWKey &operator = (const TreeKeyIdx &ikey) { copyFrom(ikey); return *this; }
     SWKEY_OPERATORS(TreeKeyIdx)
 
-    void setText(char const * ikey) override;
+    void setText(std::string newText) override;
     void positionToTop() override;
     void positionToBottom() override;
-    char const * getText() const override;
+    std::string getText() const override;
     int _compare(TreeKeyIdx const & ikey) const noexcept;
     int compare(SWKey const & ikey) const noexcept override;
     void decrement(int steps = 1) override;

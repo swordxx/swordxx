@@ -144,8 +144,8 @@ public:
     void setIndex(long index) override
     { setToElementAndTop_(setToElementCheckBounds(index)); }
 
-    char const * getText() const override;
-    void setText(char const * ikey) override;
+    std::string getText() const override;
+    void setText(std::string newText) override;
     virtual void sort();
 
     SWKEY_OPERATORS(ListKey)

@@ -248,15 +248,18 @@ bool TEILaTeX::handleToken(std::string &buf, const char *token, BasicFilterUserD
                 if (u->module){
                     footnoteBody += u->module->getEntryAttributes()["Footnote"][footnoteNumber]["body"];
                 }
-
-                buf += formatted("\\swordfootnote{%s}{%s}{%s}{%s}{",
-                    footnoteNumber.c_str(),
-                    u->version.c_str(),
-                    u->key->getText(),
-                    renderNoteNumbers ? noteName.c_str() : "");
-                    if (u->module) {
-                        buf += u->module->renderText(footnoteBody.c_str()).c_str();
-                    }
+                buf.append("\\swordfootnote{%s}{%s}{%s}{%s}{")
+                   .append(footnoteNumber)
+                   .append("}{")
+                   .append(u->version)
+                   .append("}{")
+                   .append(u->key->getText())
+                   .append("}{")
+                   .append(renderNoteNumbers ? noteName : "")
+                   .append("}{");
+                if (u->module) {
+                    buf.append(u->module->renderText(footnoteBody.c_str()));
+                }
                 u->suspendTextPassThru = false;
             }
         }

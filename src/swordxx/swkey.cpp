@@ -46,8 +46,8 @@ struct LocaleCache {
  * ENT:    ikey - text key
  */
 
-SWKey::SWKey(const char *ikey)
-    : m_keyText(std::make_unique<std::string>(ikey ? ikey : ""))
+SWKey::SWKey(std::string keyText)
+    : m_keyText(std::move(keyText))
 {
     setLocale(LocaleMgr::getSystemLocaleMgr()->getDefaultLocaleName());
     m_index     = 0;
@@ -55,6 +55,10 @@ SWKey::SWKey(const char *ikey)
     m_error     = 0;
     m_userData  = 0;
 }
+
+SWKey::SWKey(const char *ikey)
+    : SWKey(std::string(ikey ? ikey : ""))
+{}
 
 SWKey::SWKey(SWKey const &k)
 {
@@ -105,17 +109,7 @@ SWLocale & SWKey::getPrivateLocale() const {
  * ENT:    ikey - other swkey object
  */
 
-void SWKey::setText(const char * const ikey) {
-    if (m_keyText) {
-        if (ikey) {
-            (*m_keyText) = ikey;
-        } else {
-            m_keyText.reset();
-        }
-    } else if (ikey) {
-        m_keyText = std::make_unique<std::string>(ikey);
-    }
-}
+void SWKey::setText(std::string newText) { m_keyText = std::move(newText); }
 
 
 /******************************************************************************
@@ -135,15 +129,14 @@ void SWKey::copyFrom(const SWKey &ikey) {
  * SWKey::getText - returns text key if (const char *) cast is requested
  */
 
-const char * SWKey::getText() const
-{ return m_keyText ? m_keyText->c_str() : nullptr; }
+std::string SWKey::getText() const { return m_keyText; }
 
 
 /******************************************************************************
  * SWKey::getRangeText - returns parsable range text for this key
  */
 
-std::string SWKey::getRangeText() const { return m_keyText ? *m_keyText : ""; }
+std::string SWKey::getRangeText() const { return m_keyText; }
 
 
 /******************************************************************************
@@ -164,8 +157,7 @@ std::string SWKey::getOSISRefRangeText() const { return getRangeText(); }
  */
 
 int SWKey::compare(SWKey const & ikey) const noexcept {
-    /// \bug Potential null pointer dereference
-    return std::strcmp(m_keyText->c_str(), ikey.m_keyText->c_str());
+    return std::strcmp(m_keyText.c_str(), ikey.m_keyText.c_str());
 }
 
 void SWKey::positionToTop() {}

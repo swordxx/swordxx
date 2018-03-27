@@ -55,7 +55,7 @@ int main(int argc, char **argv) {
 
     DefaultVSKey.setText(context);
 
-    ListKey verses = DefaultVSKey.parseVerseList(argv[1], DefaultVSKey.getText(), true);
+    ListKey verses = DefaultVSKey.parseVerseList(argv[1], DefaultVSKey.getText().c_str(), true);
 
     if (echo) {
         for (int i = 1; i < argc; i++) {

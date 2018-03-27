@@ -484,7 +484,7 @@ void TreeKeyIdx::saveTreeNode(TreeNode *node) {
 }
 
 
-void TreeKeyIdx::setText(const char *ikey) {
+void TreeKeyIdx::setText(std::string newText) {
     static auto const nextTokenBounds =
             [](char const * s) noexcept {
                 assert(s);
@@ -495,7 +495,7 @@ void TreeKeyIdx::setText(const char *ikey) {
                     ++end;
                 return std::make_pair(s, end);
             };
-    auto r = nextTokenBounds(ikey);
+    auto r = nextTokenBounds(newText.c_str());
     std::string leaf(r.first, r.second);
     trimString(leaf);
     root();
@@ -522,7 +522,7 @@ void TreeKeyIdx::setText(const char *ikey) {
     }
     if (leaf.size())
         m_error = KEYERR_OUTOFBOUNDS;
-    m_unsnappedKeyText = ikey;
+    m_unsnappedKeyText = newText;
     positionChanged();
 }
 
@@ -591,10 +591,9 @@ void TreeKeyIdx::increment(int steps) {
 
 
 
-const char *TreeKeyIdx::getText() const {
+std::string TreeKeyIdx::getText() const {
     TreeNode parent;
-    static std::string fullPath;
-    fullPath = m_currentNode.name;
+    std::string fullPath(m_currentNode.name);
     parent.parent = m_currentNode.parent;
     while (parent.parent > -1) {
         getTreeNodeFromIdxOffset(parent.parent, &parent);
@@ -602,7 +601,7 @@ const char *TreeKeyIdx::getText() const {
     }
     // we've snapped; clear our unsnapped text holder
     m_unsnappedKeyText.clear();
-    return fullPath.c_str();
+    return fullPath;
 }
 
 TreeKeyIdx::TreeNode & TreeKeyIdx::TreeNode::operator=(TreeNode const & copy) {

@@ -42,7 +42,13 @@ public:
   *
   * @param ikey text key (word, city, name, etc.)
   */
-  StrKey(char const * ikey = nullptr);
+  StrKey(std::string ikey = "");
+
+  /** initializes instance of StrKey
+  *
+  * @param ikey text key (word, city, name, etc.)
+  */
+  StrKey(char const * ikey);
 
   ~StrKey() override;
 

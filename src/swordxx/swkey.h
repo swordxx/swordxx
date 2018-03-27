@@ -54,7 +54,7 @@ class SWDLLEXPORT SWKey {
 
     long m_index;
 
-    std::unique_ptr<std::string> m_keyText;
+    std::string m_keyText;
 
 protected:
     bool m_boundSet = false;
@@ -75,7 +75,14 @@ public:
      *    to be used to again set the key to the same position
      * @param ikey string to use for initializing this new key
      */
-    SWKey(char const * ikey = nullptr);
+    SWKey(std::string ikey = "");
+
+    /** initializes instance of SWKey from a string
+     * All keys can be reduced to a string representation which should be able
+     *    to be used to again set the key to the same position
+     * @param ikey string to use for initializing this new key
+     */
+    SWKey(char const * ikey);
 
     /** Copy Constructor
      * @param k The SWKey object to copy.
@@ -119,7 +126,7 @@ public:
     /** Sets this SWKey with a character string
      * @param ikey string used to set this key
      */
-    virtual void setText(const char * const ikey);
+    virtual void setText(std::string newText);
 
     /** Copies as much info (position, range, etc.) as possible from another SWKey object
      * @param ikey other SWKey object from which to copy
@@ -129,7 +136,7 @@ public:
 
     /** returns string representation of this key
      */
-    virtual const char *getText() const;
+    virtual std::string getText() const;
     virtual std::string getShortText() const { return getText(); }
     virtual std::string getRangeText() const;
     virtual std::string getOSISRefRangeText() const;

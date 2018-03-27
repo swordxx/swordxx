@@ -175,14 +175,14 @@ public:
     /** refreshes keytext before returning if cast to
     * a (char *) is requested
     */
-    char const * getText() const override;
+    std::string getText() const override;
     std::string getShortText() const override;
 
     void setText(char const * ikey, bool checkNormalize)
     { SWKey::setText(ikey); parse(checkNormalize); }
 
-    void setText(char const * ikey) override
-    { SWKey::setText(ikey); parse(); }
+    void setText(std::string newText) override
+    { SWKey::setText(newText); parse(); }
 
     void copyFrom(SWKey const & ikey) override;
 

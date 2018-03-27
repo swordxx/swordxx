@@ -35,6 +35,9 @@ namespace swordxx {
  * ENT:    ikey - text key (word, city, name, etc.)
  */
 
+StrKey::StrKey(std::string ikey) : SWKey(std::move(ikey))
+{}
+
 StrKey::StrKey(const char *ikey) : SWKey(ikey)
 {}
 

@@ -328,7 +328,7 @@ bool handleToken(std::string & text, XMLTag & token) {
 #endif
                         }
                         else {
-                currentKey->setText(keyStr.c_str());
+                currentKey->setText(keyStr);
                 writeEntry(*currentKey, text);
                         }
 

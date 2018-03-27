@@ -322,7 +322,7 @@ std::string ListKey::getOSISRefRangeText() const {
  * ListKey::getText - returns text key if (const char *) cast is requested
  */
 
-const char *ListKey::getText() const {
+std::string ListKey::getText() const {
     if (m_array.empty() || m_arrayPos >= m_array.size())
         return SWKey::getText();
     return m_array[m_arrayPos]->getText();
@@ -335,18 +335,17 @@ std::string ListKey::getShortText() const {
 }
 
 
-void ListKey::setText(const char *ikey) {
+void ListKey::setText(std::string newText) {
     // at least try to set the current element to this text
     auto const arraySize(m_array.size());
     for (m_arrayPos = 0; m_arrayPos < arraySize; m_arrayPos++) {
         if (auto const & key = m_array[m_arrayPos]) {
             if (key->isTraversable() && key->isBoundSet()) {
-                key->setText(ikey);
+                key->setText(newText);
                 if (!key->popError())
                     break;
-            } else {
-                if (!std::strcmp(key->getText(), ikey))
-                    break;
+            } else if (key->getText() == newText) {
+                break;
             }
         }
     }
@@ -355,7 +354,7 @@ void ListKey::setText(const char *ikey) {
         m_arrayPos = arraySize ? arraySize - 1u : 0u;
     }
 
-    SWKey::setText(ikey);
+    SWKey::setText(newText);
 }
 
 void ListKey::sort() {

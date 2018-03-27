@@ -229,21 +229,31 @@ bool ThMLLaTeX::handleToken(std::string &buf, const char *token, BasicFilterUser
                     if (auto const * const vkey = u->verseKey) {
                         // leave this special osis type in for crossReference notes types?  Might thml use this some day? Doesn't hurt.
                         char const ch = ((tag.attribute("type") == "crossReference") || (tag.attribute("type") == "x-cross-ref")) ? 'x': 'n';
-                        buf += formatted("\\swordfootnote[%c]{%s}{%s}{%s}{%s}{",
-                            ch,
-                            footnoteNumber.c_str(),
-                            u->version.c_str(),
-                            vkey->getText(),
-                            noteName.c_str());
+                        buf.append("\\swordfootnote[")
+                           .append(1u, ch)
+                           .append("]{")
+                           .append(footnoteNumber)
+                           .append("}{")
+                           .append(u->version)
+                           .append("}{")
+                           .append(vkey->getText())
+                           .append("}{")
+                           .append(noteName)
+                           .append("}{");
                     }
                     else {
                         char const ch = ((tag.attribute("type") == "crossReference") || (tag.attribute("type") == "x-cross-ref")) ? 'x': 'n';
-                        buf += formatted("\\swordfootnote[%c]{%s}{%s}{%s}{%s}{",
-                            ch,
-                            footnoteNumber.c_str(),
-                            u->version.c_str(),
-                            u->key->getText(),
-                            noteName.c_str());
+                        buf.append("\\swordfootnote[")
+                           .append(1u, ch)
+                           .append("]{")
+                           .append(footnoteNumber)
+                           .append("}{")
+                           .append(u->version)
+                           .append("}{")
+                           .append(u->key->getText())
+                           .append("}{")
+                           .append(noteName)
+                           .append("}{");
                     }
                     u->suspendTextPassThru = true;
                     if (u->module) {
@@ -291,15 +301,18 @@ bool ThMLLaTeX::handleToken(std::string &buf, const char *token, BasicFilterUser
                         //buf.appendFormatted("<a href=\"noteID=%s.x.%s\"><small><sup>*x</sup></small></a> ", vkey->getText(), footnoteNumber.c_str());
                         // char const ch = ((tag.attribute("type") == "crossReference") || (tag.attribute("type") == "x-cross-ref")) ? 'x': 'n';
                         char ch = 'x';
-                        buf += formatted("\\swordfootnote[%c]{%s}{%s}{%s}{%s}{",
-                            ch,
-                            footnoteNumber.c_str(),
-                            u->version.c_str(),
-                            vkey->getText(),
-                            (renderNoteNumbers ? noteName.c_str() : ""));
+                        buf.append("\\swordfootnote[")
+                           .append(1u, ch)
+                           .append("]{")
+                           .append(footnoteNumber)
+                           .append("}{")
+                           .append(u->version)
+                           .append("}{")
+                           .append(vkey->getText())
+                           .append(renderNoteNumbers ? noteName : "");
                         if (u->module) {
-                                                        buf += u->module->renderText(footnoteBody.c_str()).c_str();
-                                                }
+                            buf.append(u->module->renderText(footnoteBody.c_str()));
+                        }
                     }
                 }
 

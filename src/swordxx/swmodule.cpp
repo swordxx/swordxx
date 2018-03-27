@@ -369,7 +369,7 @@ ListKey &SWModule::search(char const * istr,
             for (unsigned long i = 0; i < (unsigned long)h->length(); i++) {
                 lucene::document::Document &doc = h->doc(i);
                 // set a temporary verse key to this module position
-                resultKey->setText(wcharToUTF8(doc.get(_T("key"))).c_str()); //TODO Does a key always accept utf8?
+                resultKey->setText(wcharToUTF8(doc.get(_T("key")))); //TODO Does a key always accept utf8?
                 uint64_t score = (uint64_t)((uint32_t)(h->score(i)*100));
 
                 // check to see if it sets ok (within our bounds) and if not, skip

@@ -204,7 +204,7 @@ public:
      * gets the key text for the module.
      * do we really need this?
      */
-    virtual const char *getKeyText() const { return getKey()->getText(); }
+    virtual std::string getKeyText() const { return getKey()->getText(); }
 
     virtual long getIndex() const { return entryIndex; }
     virtual void setIndex(long iindex) { entryIndex = iindex; }

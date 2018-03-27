@@ -78,9 +78,9 @@ char zLD::getEntry(std::string & entry, long away) const {
     unsigned long size;
     auto const keyText = key->getText();
     if (strongsPadding) {
-        retval = findKeyIndex(strongsPadBuf(keyText).get(), &index, away);
+        retval = findKeyIndex(strongsPadBuf(keyText.c_str()).get(), &index, away);
     } else {
-        retval = findKeyIndex(keyText, &index, away);
+        retval = findKeyIndex(keyText.c_str(), &index, away);
     }
     if (!retval) {
         getText(index, &idxbuf, &ebuf);
@@ -138,16 +138,16 @@ void zLD::increment(int steps) {
     std::string unusedEntry; /// \todo remove this variable
     tmperror = (getEntry(unusedEntry, steps)) ? KEYERR_OUTOFBOUNDS : 0;
     error = (error)?error:tmperror;
-    key->setText(m_entkeytxt.c_str());
+    key->setText(m_entkeytxt);
 }
 
 
 void zLD::setEntry(const char *inbuf, long len) {
     auto const keyText = key->getText();
     if (strongsPadding) {
-        setText(strongsPadBuf(keyText).get(), inbuf, len);
+        setText(strongsPadBuf(keyText.c_str()).get(), inbuf, len);
     } else {
-        setText(keyText, inbuf, len);
+        setText(keyText.c_str(), inbuf, len);
     }
 }
 
@@ -155,9 +155,9 @@ void zLD::setEntry(const char *inbuf, long len) {
 void zLD::linkEntry(SWKey const & inkey) {
     auto const keyText = key->getText();
     if (strongsPadding) {
-        zStr::linkEntry(strongsPadBuf(keyText).get(), inkey.getText());
+        zStr::linkEntry(strongsPadBuf(keyText.c_str()).get(), inkey.getText().c_str());
     } else {
-        zStr::linkEntry(keyText, inkey.getText());
+        zStr::linkEntry(keyText.c_str(), inkey.getText().c_str());
     }
 }
 
@@ -171,9 +171,9 @@ void zLD::linkEntry(SWKey const & inkey) {
 void zLD::deleteEntry() {
     auto const keyText = key->getText();
     if (strongsPadding) {
-        setText(strongsPadBuf(keyText).get(), "");
+        setText(strongsPadBuf(keyText.c_str()).get(), "");
     } else {
-        setText(keyText, "");
+        setText(keyText.c_str(), "");
     }
 }
 

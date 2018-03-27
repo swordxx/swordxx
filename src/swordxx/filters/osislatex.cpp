@@ -294,24 +294,33 @@ bool OSISLaTeX::handleToken(std::string &buf, const char *token, BasicFilterUser
 
                         if (auto const * const vkey = u->verseKey) {
                             //printf("URL = %s\n",URL::encode(vkey->getText()).c_str());
-                            buf += formatted("\\swordfootnote{%s}{%s}{%s}{%s}{%s}{",
-
-                                footnoteNumber.c_str(),
-                                u->version.c_str(),
-                                vkey->getText(),
-                                tag.attribute("type").c_str(),
-                                (renderNoteNumbers ? noteName.c_str() : ""));
+                            buf.append("\\swordfootnote{")
+                               .append(footnoteNumber)
+                               .append("}{")
+                               .append(u->version)
+                               .append("}{")
+                               .append(vkey->getText())
+                               .append("}{")
+                               .append(tag.attribute("type"))
+                               .append("}{")
+                               .append(renderNoteNumbers ? noteName : "")
+                               .append("}{");
                             if (u->module) {
                                 outText(u->module->renderText(footnoteBody.c_str()).c_str(), buf, u);
                             }
                         }
                         else {
-                            buf += formatted("\\swordfootnote{%s}{%s}{%s}{%s}{%s}{",
-                                footnoteNumber.c_str(),
-                                u->version.c_str(),
-                                u->key->getText(),
-                                tag.attribute("type").c_str(),
-                                (renderNoteNumbers ? noteName.c_str() : ""));
+                            buf.append("\\swordfootnote{")
+                               .append(footnoteNumber)
+                               .append("}{")
+                               .append(u->version)
+                               .append("}{")
+                               .append(u->key->getText())
+                               .append("}{")
+                               .append(tag.attribute("type"))
+                               .append("}{")
+                               .append(renderNoteNumbers ? noteName : "")
+                               .append("}{");
                             if (u->module) {
                                 outText(u->module->renderText(footnoteBody.c_str()).c_str(), buf, u);
                             }

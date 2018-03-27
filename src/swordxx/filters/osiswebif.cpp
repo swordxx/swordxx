@@ -153,7 +153,15 @@ bool OSISWEBIF::handleToken(std::string &buf, const char *token, BasicFilterUser
                         if (auto const * const vkey = u->verseKey) {
                             char const ch = ((tag.attribute("type") == "crossReference") || (tag.attribute("type") == "x-cross-ref")) ? 'x':'n';
 //                            buf += formatted("<a href=\"noteID=%s.%c.%s\"><small><sup>*%c</sup></small></a> ", vkey->getText(), ch, footnoteNumber.c_str(), ch);
-                            buf += formatted("<span class=\"fn\" onclick=\"f(\'%s\',\'%s\',\'%s\');\" >%c</span>", modName.c_str(), vkey->getText(), footnoteNumber.c_str(), ch);
+                            buf.append("<span class=\"fn\" onclick=\"f(\'")
+                               .append(modName)
+                               .append("\',\'")
+                               .append(vkey->getText())
+                               .append("\',\'")
+                               .append(footnoteNumber)
+                               .append("\');\" >")
+                               .append(1u, ch)
+                               .append("</span>");
                         }
                     }
                     u->suspendTextPassThru = (++u->suspendLevel);
