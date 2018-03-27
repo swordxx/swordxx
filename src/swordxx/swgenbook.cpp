@@ -64,21 +64,21 @@ SWGenBook::~SWGenBook() {
 TreeKey & SWGenBook::getTreeKey(SWKey * k) const {
     SWKey * const thiskey = k ? k : this->key;
 
-    if (TreeKey * const key = dynamic_cast<TreeKey *>(thiskey))
-        return *key;
+    if (TreeKey * const key_ = dynamic_cast<TreeKey *>(thiskey))
+        return *key_;
 
     if (ListKey * const lkTest = dynamic_cast<ListKey *>(thiskey)) {
-        if (TreeKey * const key = dynamic_cast<TreeKey *>(lkTest->getElement()))
-            return *key;
+        if (TreeKey * const key_ = dynamic_cast<TreeKey *>(lkTest->getElement()))
+            return *key_;
         if (VerseTreeKey * const tkey =
                 dynamic_cast<VerseTreeKey *>(lkTest->getElement()))
-            if (TreeKey * const key = tkey->getTreeKey())
-                return *key;
+            if (TreeKey * const key_ = tkey->getTreeKey())
+                return *key_;
     }
 
     if (VerseTreeKey * const tkey = dynamic_cast<VerseTreeKey *>(thiskey))
-        if (TreeKey * const key = tkey->getTreeKey())
-            return *key;
+        if (TreeKey * const key_ = tkey->getTreeKey())
+            return *key_;
 
     delete tmpTreeKey;
     tmpTreeKey = static_cast<TreeKey *>(createKey().release());
