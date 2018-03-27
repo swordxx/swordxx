@@ -57,12 +57,12 @@ char ThMLVariants::processText(std::string &text, const SWKey *key, const SWModu
     (void) key;
     (void) module;
 
-    int option = 0;
-    if      (optionValue == choices[0]) option = 0;
-    else if (optionValue == choices[1]) option = 1;
-    else                                option = 2;
+    int option_ = 0;
+    if      (optionValue == choices[0]) option_ = 0;
+    else if (optionValue == choices[1]) option_ = 1;
+    else                                option_ = 2;
 
-    if (option == 0 || option == 1) { //we want primary or variant only
+    if (option_ == 0 || option_ == 1) { //we want primary or variant only
         bool intoken = false;
         bool hide = false;
         bool invar = false;
@@ -72,7 +72,7 @@ char ThMLVariants::processText(std::string &text, const SWKey *key, const SWModu
         const char *from = orig.c_str();
 
         //we use a fixed comparision string to make sure the loop is as fast as the original two blocks with almost the same code
-        const char* variantCompareString = (option == 0) ? "div type=\"variant\" class=\"1\"" : "div type=\"variant\" class=\"2\"";
+        const char* variantCompareString = (option_ == 0) ? "div type=\"variant\" class=\"1\"" : "div type=\"variant\" class=\"2\"";
 
         for (text = ""; *from; from++) {
             if (*from == '<') {
