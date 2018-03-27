@@ -86,15 +86,15 @@ std::string zCom4::getRawEntryImpl() const {
     VerseOffsetType start = 0;
     VerseSizeType size = 0;
     BufferNumberType buffnum = 0;
-    VerseKey const & key = getVerseKey();
+    VerseKey const & key_ = getVerseKey();
 
-    findOffset(key.getTestament(), key.getTestamentIndex(), &start, &size, &buffnum);
+    findOffset(key_.getTestament(), key_.getTestamentIndex(), &start, &size, &buffnum);
     entrySize = size;        // support getEntrySize call
 
     std::string entry;
 
-    zReadText(key.getTestament(), start, size, buffnum, entry);
-    rawFilter(entry, &key);
+    zReadText(key_.getTestament(), start, size, buffnum, entry);
+    rawFilter(entry, &key_);
     return entry;
 }
 
@@ -118,19 +118,19 @@ bool zCom4::sameBlock(VerseKey const & k1, VerseKey const & k2) {
 }
 
 void zCom4::setEntry(const char *inbuf, long len) {
-    VerseKey const & key = getVerseKey();
+    VerseKey const & key_ = getVerseKey();
 
     // see if we've jumped across blocks since last write
     if (lastWriteKey) {
-        if (!sameBlock(*lastWriteKey, key)) {
+        if (!sameBlock(*lastWriteKey, key_)) {
             flushCache();
         }
         delete lastWriteKey;
     }
 
-    doSetText(key.getTestament(), key.getTestamentIndex(), inbuf, len);
+    doSetText(key_.getTestament(), key_.getTestamentIndex(), inbuf, len);
 
-    lastWriteKey = static_cast<VerseKey *>(key.clone().release());
+    lastWriteKey = static_cast<VerseKey *>(key_.clone().release());
 }
 
 
@@ -151,8 +151,8 @@ void zCom4::linkEntry(SWKey const & inkey) {
  */
 
 void zCom4::deleteEntry() {
-    VerseKey const & key = getVerseKey();
-    doSetText(key.getTestament(), key.getTestamentIndex(), "");
+    VerseKey const & key_ = getVerseKey();
+    doSetText(key_.getTestament(), key_.getTestamentIndex(), "");
 }
 
 
