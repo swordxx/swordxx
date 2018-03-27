@@ -39,6 +39,8 @@ namespace swordxx {
 class SWDLLEXPORT StringMgr {
 public:
 
+    virtual ~StringMgr() noexcept;
+
     /** Sets the global StringMgr handle
     * @param newStringMgr The new global StringMgr. This pointer will be deleted by this StringMgr
     */

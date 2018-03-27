@@ -136,6 +136,8 @@ StringMgr::StringMgr() {
 StringMgr::StringMgr(const StringMgr & /* m */) {
 }
 
+StringMgr::~StringMgr() noexcept = default;
+
 /** Sets the global StringMgr handle
 * @param newStringMgr The new global StringMgr. This pointer will be deleted by this StringMgr
 */
