@@ -302,6 +302,9 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 		for (listkey = TOP; !listkey.popError() && maxverses; listkey++) {
 			target->setKey(listkey);
 			VerseKey *vk = SWDYNAMIC_CAST(VerseKey, target->getKey());
+			// Call this before all the pre-verse handling, as it needs to be
+			// executed before the preverse headers are populated
+			SWBuf text = target->renderText();
 			
 			// if we've got a VerseKey (Bible or Commentary)
 			if (vk) {
@@ -375,7 +378,7 @@ void doquery(unsigned long maxverses = -1, unsigned char outputformat = FMT_PLAI
 				*output << ": ";
 			}
 					
-			*output << target->renderText();
+			*output << text;
 			
 	
 			if (outputformat == FMT_HTML || outputformat == FMT_HTMLHREF || outputformat == FMT_XHTML || outputformat == FMT_THML || outputformat == FMT_CGI) {
