@@ -214,9 +214,9 @@ void MarkupFilterMgr::addRenderFilters(SWModule & module,
 }
 
 
-void MarkupFilterMgr::CreateFilters(char markup) {
+void MarkupFilterMgr::CreateFilters(char markup_) {
 
-    switch (markup) {
+    switch (markup_) {
     case FMT_PLAIN:
         m_fromplain.reset();
         m_fromthml = std::make_shared<ThMLPlain>();
