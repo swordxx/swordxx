@@ -62,7 +62,7 @@ typedef std::pair<UnicodeString, SWTransData> SWTransPair;
 class SWDLLEXPORT UTF8Transliterator : public SWOptionFilter {
 private:
 
-    unsigned char option;
+    unsigned char m_utf8TransliteratorOption;
 
     static const char optionstring[NUMTARGETSCRIPTS][16];
 

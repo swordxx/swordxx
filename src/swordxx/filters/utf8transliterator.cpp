@@ -90,7 +90,7 @@ const char UTF8Transliterator::optName[] = "Transliteration";
 const char UTF8Transliterator::optTip[] = "Transliterates between scripts";
 
 UTF8Transliterator::UTF8Transliterator() {
-    option = 0;
+    m_utf8TransliteratorOption = 0;
         unsigned long i;
     for (i = 0; i < NUMTARGETSCRIPTS; i++) {
         options.push_back(optionstring[i]);
@@ -122,20 +122,20 @@ Transliterator * UTF8Transliterator::createTrans(const UnicodeString& ID, UTrans
 
 void UTF8Transliterator::setOptionValue(const char *ival)
 {
-    unsigned char i = option = NUMTARGETSCRIPTS;
+    unsigned char i = m_utf8TransliteratorOption = NUMTARGETSCRIPTS;
     while (i && !caseInsensitiveEquals(ival, optionstring[i])) {
         i--;
-        option = i;
+        m_utf8TransliteratorOption = i;
     }
 }
 
 const char *UTF8Transliterator::getOptionValue()
-{ return (NUMTARGETSCRIPTS > option) ? optionstring[option] : nullptr; }
+{ return (NUMTARGETSCRIPTS > m_utf8TransliteratorOption) ? optionstring[m_utf8TransliteratorOption] : nullptr; }
 
 char UTF8Transliterator::processText(std::string &text, const SWKey *key, const SWModule *module)
 {
     (void) key;
-    if (option) {    // if we want transliteration
+    if (m_utf8TransliteratorOption) {    // if we want transliteration
         unsigned long i, j;
                 UErrorCode err = U_ZERO_ERROR;
                 UConverter * conv = nullptr;
@@ -220,7 +220,7 @@ char UTF8Transliterator::processText(std::string &text, const SWKey *key, const 
                         //default: scripts[SE_LATIN] = true;
             }
         }
-        scripts[option] = false; //turn off the reflexive transliteration
+        scripts[m_utf8TransliteratorOption] = false; //turn off the reflexive transliteration
 
         //return if we have no transliteration to do for this text
                 j = 0;
@@ -242,23 +242,23 @@ char UTF8Transliterator::processText(std::string &text, const SWKey *key, const 
         //Simple X to Latin transliterators
         if (scripts[SE_GREEK]) {
             if (strnicmp(((SWModule*)module)->getLanguage().c_str(), "cop", 3)) {
-                if (option == SE_SBL)
+                if (m_utf8TransliteratorOption == SE_SBL)
                     addTrans("Greek-Latin/SBL", &ID);
-                else if (option == SE_TC)
+                else if (m_utf8TransliteratorOption == SE_TC)
                     addTrans("Greek-Latin/TC", &ID);
-                else if (option == SE_BETA)
+                else if (m_utf8TransliteratorOption == SE_BETA)
                     addTrans("Greek-Latin/Beta", &ID);
-                else if (option == SE_BGREEK)
+                else if (m_utf8TransliteratorOption == SE_BGREEK)
                     addTrans("Greek-Latin/BGreek", &ID);
-                            else if (option == SE_UNGEGN)
+                            else if (m_utf8TransliteratorOption == SE_UNGEGN)
                                 addTrans("Greek-Latin/UNGEGN", &ID);
-                else if (option == SE_ISO)
+                else if (m_utf8TransliteratorOption == SE_ISO)
                                 addTrans("Greek-Latin/ISO", &ID);
-                                else if (option == SE_ALALC)
+                                else if (m_utf8TransliteratorOption == SE_ALALC)
                                 addTrans("Greek-Latin/ALALC", &ID);
-                                else if (option == SE_BGN)
+                                else if (m_utf8TransliteratorOption == SE_BGN)
                                 addTrans("Greek-Latin/BGN", &ID);
-                                else if (option == SE_IPA)
+                                else if (m_utf8TransliteratorOption == SE_IPA)
                                 addTrans("Greek-IPA/Ancient", &ID);
                                 else {
                                 addTrans("Greek-Latin", &ID);
@@ -266,13 +266,13 @@ char UTF8Transliterator::processText(std::string &text, const SWKey *key, const 
                                 }
             }
             else {
-                if (option == SE_SBL)
+                if (m_utf8TransliteratorOption == SE_SBL)
                     addTrans("Coptic-Latin/SBL", &ID);
-                else if (option == SE_TC)
+                else if (m_utf8TransliteratorOption == SE_TC)
                     addTrans("Coptic-Latin/TC", &ID);
-                else if (option == SE_BETA)
+                else if (m_utf8TransliteratorOption == SE_BETA)
                     addTrans("Coptic-Latin/Beta", &ID);
-                                else if (option == SE_IPA)
+                                else if (m_utf8TransliteratorOption == SE_IPA)
                                 addTrans("Coptic-IPA", &ID);
                                 else {
                                 addTrans("Coptic-Latin", &ID);
@@ -281,17 +281,17 @@ char UTF8Transliterator::processText(std::string &text, const SWKey *key, const 
             }
         }
         if (scripts[SE_HEBREW]) {
-                        if (option == SE_SBL)
+                        if (m_utf8TransliteratorOption == SE_SBL)
                                 addTrans("Hebrew-Latin/SBL", &ID);
-                        else if (option == SE_TC)
+                        else if (m_utf8TransliteratorOption == SE_TC)
                                 addTrans("Hebrew-Latin/TC", &ID);
-            else if (option == SE_BETA)
+            else if (m_utf8TransliteratorOption == SE_BETA)
                 addTrans("Hebrew-Latin/Beta", &ID);
-                        else if (option == SE_UNGEGN)
+                        else if (m_utf8TransliteratorOption == SE_UNGEGN)
                                 addTrans("Hebrew-Latin/UNGEGN", &ID);
-                        else if (option == SE_ALALC)
+                        else if (m_utf8TransliteratorOption == SE_ALALC)
                                 addTrans("Hebrew-Latin/ALALC", &ID);
-                        else if (option == SE_SYRIAC)
+                        else if (m_utf8TransliteratorOption == SE_SYRIAC)
                                 addTrans("Hebrew-Syriac", &ID);
             else {
                 addTrans("Hebrew-Latin", &ID);
@@ -299,7 +299,7 @@ char UTF8Transliterator::processText(std::string &text, const SWKey *key, const 
             }
         }
         if (scripts[SE_CYRILLIC]) {
-                    if (option == SE_GLAGOLITIC)
+                    if (m_utf8TransliteratorOption == SE_GLAGOLITIC)
                             addTrans("Cyrillic-Glagolitic", &ID);
                     else {
                 addTrans("Cyrillic-Latin", &ID);
@@ -311,13 +311,13 @@ char UTF8Transliterator::processText(std::string &text, const SWKey *key, const 
             scripts[SE_LATIN] = true;
         }
         if (scripts[SE_SYRIAC]) {
-                        if (option == SE_TC)
+                        if (m_utf8TransliteratorOption == SE_TC)
                                 addTrans("Syriac-Latin/TC", &ID);
-                        else if (option == SE_BETA)
+                        else if (m_utf8TransliteratorOption == SE_BETA)
                     addTrans("Syriac-Latin/Beta", &ID);
-                        else if (option == SE_HUGOYE)
+                        else if (m_utf8TransliteratorOption == SE_HUGOYE)
                     addTrans("Syriac-Latin/Hugoye", &ID);
-                        else if (option == SE_HEBREW)
+                        else if (m_utf8TransliteratorOption == SE_HEBREW)
                                 addTrans("Syriac-Hebrew", &ID);
                         else {
                     addTrans("Syriac-Latin", &ID);
@@ -329,13 +329,13 @@ char UTF8Transliterator::processText(std::string &text, const SWKey *key, const 
             scripts[SE_LATIN] = true;
         }
         if (scripts[SE_GEORGIAN]) {
-                        if (option == SE_ISO)
+                        if (m_utf8TransliteratorOption == SE_ISO)
                     addTrans("Georgian-Latin/ISO", &ID);
-                        else if (option == SE_ALALC)
+                        else if (m_utf8TransliteratorOption == SE_ALALC)
                     addTrans("Georgian-Latin/ALALC", &ID);
-                        else if (option == SE_BGN)
+                        else if (m_utf8TransliteratorOption == SE_BGN)
                     addTrans("Georgian-Latin/BGN", &ID);
-                        else if (option == SE_IPA)
+                        else if (m_utf8TransliteratorOption == SE_IPA)
                     addTrans("Georgian-IPA", &ID);
                         else {
                 addTrans("Georgian-Latin", &ID);
@@ -343,13 +343,13 @@ char UTF8Transliterator::processText(std::string &text, const SWKey *key, const 
                         }
         }
         if (scripts[SE_ARMENIAN]) {
-                        if (option == SE_ISO)
+                        if (m_utf8TransliteratorOption == SE_ISO)
                     addTrans("Armenian-Latin/ISO", &ID);
-                        else if (option == SE_ALALC)
+                        else if (m_utf8TransliteratorOption == SE_ALALC)
                     addTrans("Armenian-Latin/ALALC", &ID);
-                        else if (option == SE_BGN)
+                        else if (m_utf8TransliteratorOption == SE_BGN)
                     addTrans("Armenian-Latin/BGN", &ID);
-                        else if (option == SE_IPA)
+                        else if (m_utf8TransliteratorOption == SE_IPA)
                     addTrans("Armenian-IPA", &ID);
                         else {
                 addTrans("Armenian-Latin", &ID);
@@ -357,13 +357,13 @@ char UTF8Transliterator::processText(std::string &text, const SWKey *key, const 
                     }
         }
         if (scripts[SE_ETHIOPIC]) {
-                        if (option == SE_UNGEGN)
+                        if (m_utf8TransliteratorOption == SE_UNGEGN)
                     addTrans("Ethiopic-Latin/UNGEGN", &ID);
-                        else if (option == SE_ISO)
+                        else if (m_utf8TransliteratorOption == SE_ISO)
                     addTrans("Ethiopic-Latin/ISO", &ID);
-                        else if (option == SE_ALALC)
+                        else if (m_utf8TransliteratorOption == SE_ALALC)
                     addTrans("Ethiopic-Latin/ALALC", &ID);
-                        else if (option == SE_SERA)
+                        else if (m_utf8TransliteratorOption == SE_SERA)
                     addTrans("Ethiopic-Latin/SERA", &ID);
                     else {
                 addTrans("Ethiopic-Latin", &ID);
@@ -371,9 +371,9 @@ char UTF8Transliterator::processText(std::string &text, const SWKey *key, const 
                         }
         }
         if (scripts[SE_GOTHIC]) {
-                        if (option == SE_BASICLATIN)
+                        if (m_utf8TransliteratorOption == SE_BASICLATIN)
                     addTrans("Gothic-Latin/Basic", &ID);
-                        else if (option == SE_IPA)
+                        else if (m_utf8TransliteratorOption == SE_IPA)
                     addTrans("Gothic-IPA", &ID);
                     else {
                 addTrans("Gothic-Latin", &ID);
@@ -381,7 +381,7 @@ char UTF8Transliterator::processText(std::string &text, const SWKey *key, const 
                         }
         }
         if (scripts[SE_UGARITIC]) {
-                    if (option == SE_SBL)
+                    if (m_utf8TransliteratorOption == SE_SBL)
                             addTrans("Ugaritic-Latin/SBL", &ID);
                         else {
                 addTrans("Ugaritic-Latin", &ID);
@@ -409,9 +409,9 @@ char UTF8Transliterator::processText(std::string &text, const SWKey *key, const 
             scripts[SE_LATIN] = true;
         }
         if (scripts[SE_THAANA]) {
-            if (option == SE_ALALC)
+            if (m_utf8TransliteratorOption == SE_ALALC)
                             addTrans("Thaana-Latin/ALALC", &ID);
-            else if (option == SE_BGN)
+            else if (m_utf8TransliteratorOption == SE_BGN)
                             addTrans("Thaana-Latin/BGN", &ID);
             else {
                 addTrans("Thaana-Latin", &ID);
@@ -419,11 +419,11 @@ char UTF8Transliterator::processText(std::string &text, const SWKey *key, const 
                         }
         }
         if (scripts[SE_GLAGOLITIC]) {
-            if (option == SE_ISO)
+            if (m_utf8TransliteratorOption == SE_ISO)
                             addTrans("Glagolitic-Latin/ISO", &ID);
-            else if (option == SE_ALALC)
+            else if (m_utf8TransliteratorOption == SE_ALALC)
                             addTrans("Glagolitic-Latin/ALALC", &ID);
-            else if (option == SE_ALALC)
+            else if (m_utf8TransliteratorOption == SE_ALALC)
                             addTrans("Glagolitic-Cyrillic", &ID);
             else {
                 addTrans("Glagolitic-Latin", &ID);
@@ -454,11 +454,11 @@ char UTF8Transliterator::processText(std::string &text, const SWKey *key, const 
         }
 
                // Inter-Kana and Kana to Latin transliterators
-        if (option == SE_HIRAGANA && scripts[SE_KATAKANA]) {
+        if (m_utf8TransliteratorOption == SE_HIRAGANA && scripts[SE_KATAKANA]) {
             addTrans("Katakana-Hiragana", &ID);
             scripts[SE_HIRAGANA] = true;
         }
-        else if (option == SE_KATAKANA && scripts[SE_HIRAGANA]) {
+        else if (m_utf8TransliteratorOption == SE_KATAKANA && scripts[SE_HIRAGANA]) {
             addTrans("Hiragana-Katakana", &ID);
             scripts[SE_KATAKANA] = true;
         }
@@ -484,7 +484,7 @@ char UTF8Transliterator::processText(std::string &text, const SWKey *key, const 
         }
 
         // Indic-Latin
-        if (option < SE_DEVANAGARI || option > SE_MALAYALAM) {
+        if (m_utf8TransliteratorOption < SE_DEVANAGARI || m_utf8TransliteratorOption > SE_MALAYALAM) {
             // Indic to Latin
             if (scripts[SE_TAMIL]) {
                 addTrans("Tamil-Latin", &ID);
@@ -551,7 +551,7 @@ char UTF8Transliterator::processText(std::string &text, const SWKey *key, const 
                 addTrans("Malayalam-InterIndic", &ID);
             }
 
-            switch(option) {
+            switch(m_utf8TransliteratorOption) {
             case SE_DEVANAGARI:
                 addTrans("InterIndic-Devanagari", &ID);
                 break;
@@ -596,7 +596,7 @@ char UTF8Transliterator::processText(std::string &text, const SWKey *key, const 
 //        }
 
         if (scripts[SE_LATIN]) {
-                switch (option) {
+                switch (m_utf8TransliteratorOption) {
                         case SE_GREEK:
                 addTrans("Latin-Greek", &ID);
                                 break;
@@ -678,7 +678,7 @@ char UTF8Transliterator::processText(std::string &text, const SWKey *key, const 
                         }
                 }
 
-                if (option == SE_BASICLATIN) {
+                if (m_utf8TransliteratorOption == SE_BASICLATIN) {
                         addTrans("Any-Latin1", &ID);
                 }
 
