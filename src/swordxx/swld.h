@@ -38,7 +38,7 @@ class SWDLLEXPORT SWLD : public SWModule {
 protected:
     mutable std::string m_entkeytxt;
     static std::unique_ptr<char[]> strongsPadBuf(char const * buf);
-    bool strongsPadding;
+    bool m_strongsPadding;
 public:
     /** Initializes data for instance of SWLD
     */

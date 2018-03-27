@@ -55,7 +55,7 @@ SWLD::SWLD(const char * imodname,
                dir,
                mark,
                ilang)
-    , strongsPadding(strongsPadding)
+    , m_strongsPadding(strongsPadding)
 {}
 
 std::unique_ptr<SWKey> SWLD::createKey() const
@@ -99,7 +99,7 @@ void SWLD::positionToBottom() {
 
 bool SWLD::hasEntry(const SWKey *key) const {
     auto const keyText = key->getText();
-    if (strongsPadding) {
+    if (m_strongsPadding) {
         auto const buf(strongsPadBuf(keyText.c_str()));
         return buf.get() == getKeyForEntry(getEntryForKey(buf.get()));
     } else {

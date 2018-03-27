@@ -77,7 +77,7 @@ char zLD::getEntry(std::string & entry, long away) const {
     long index;
     unsigned long size;
     auto const keyText = key->getText();
-    if (strongsPadding) {
+    if (this->m_strongsPadding) {
         retval = findKeyIndex(strongsPadBuf(keyText.c_str()).get(), &index, away);
     } else {
         retval = findKeyIndex(keyText.c_str(), &index, away);
@@ -144,7 +144,7 @@ void zLD::increment(int steps) {
 
 void zLD::setEntry(const char *inbuf, long len) {
     auto const keyText = key->getText();
-    if (strongsPadding) {
+    if (this->m_strongsPadding) {
         setText(strongsPadBuf(keyText.c_str()).get(), inbuf, len);
     } else {
         setText(keyText.c_str(), inbuf, len);
@@ -154,7 +154,7 @@ void zLD::setEntry(const char *inbuf, long len) {
 
 void zLD::linkEntry(SWKey const & inkey) {
     auto const keyText = key->getText();
-    if (strongsPadding) {
+    if (this->m_strongsPadding) {
         zStr::linkEntry(strongsPadBuf(keyText.c_str()).get(), inkey.getText().c_str());
     } else {
         zStr::linkEntry(keyText.c_str(), inkey.getText().c_str());
@@ -170,7 +170,7 @@ void zLD::linkEntry(SWKey const & inkey) {
 
 void zLD::deleteEntry() {
     auto const keyText = key->getText();
-    if (strongsPadding) {
+    if (this->m_strongsPadding) {
         setText(strongsPadBuf(keyText.c_str()).get(), "");
     } else {
         setText(keyText.c_str(), "");
@@ -188,7 +188,7 @@ long zLD::getEntryCount() const {
 long zLD::getEntryForKey(const char* key) const
 {
     long offset;
-    if (strongsPadding) {
+    if (this->m_strongsPadding) {
         findKeyIndex(strongsPadBuf(key).get(), &offset);
     } else {
         findKeyIndex(key, &offset);

@@ -75,7 +75,7 @@ char RawLdBase<Base>::getEntry(std::string & entry, long away) const {
     char retval = 0;
 
     auto const keyText = key->getText();
-    if (strongsPadding) {
+    if (this->m_strongsPadding) {
         retval = this->findOffset(strongsPadBuf(keyText.c_str()).get(), &start, &size, away);
     } else {
         retval = this->findOffset(keyText.c_str(), &start, &size, away);
@@ -139,7 +139,7 @@ void RawLdBase<Base>::increment(int steps) {
 template <typename Base>
 void RawLdBase<Base>::setEntry(char const * inbuf, long len) {
     auto const keyText = key->getText();
-    if (strongsPadding) {
+    if (this->m_strongsPadding) {
         this->doSetText(strongsPadBuf(keyText.c_str()).get(), inbuf, len);
     } else {
         this->doSetText(keyText.c_str(), inbuf, len);
@@ -149,7 +149,7 @@ void RawLdBase<Base>::setEntry(char const * inbuf, long len) {
 template <typename Base>
 void RawLdBase<Base>::linkEntry(SWKey const & inkey) {
     auto const keyText = key->getText();
-    if (strongsPadding) {
+    if (this->m_strongsPadding) {
         this->doLinkEntry(strongsPadBuf(keyText.c_str()).get(), inkey.getText().c_str());
     } else {
         this->doLinkEntry(keyText.c_str(), inkey.getText().c_str());
@@ -165,7 +165,7 @@ void RawLdBase<Base>::linkEntry(SWKey const & inkey) {
 template <typename Base>
 void RawLdBase<Base>::deleteEntry() {
     auto const keyText = key->getText();
-    if (strongsPadding) {
+    if (this->m_strongsPadding) {
         this->doSetText(strongsPadBuf(keyText.c_str()).get(), "");
     } else {
         this->doSetText(keyText.c_str(), "");
@@ -185,7 +185,7 @@ long RawLdBase<Base>::getEntryForKey(char const * key) const {
     IndexOffsetType offset;
     SizeType size;
 
-    if (strongsPadding) {
+    if (this->m_strongsPadding) {
         this->findOffset(strongsPadBuf(key).get(), &start, &size, 0, &offset);
     } else {
         this->findOffset(key, &start, &size, 0, &offset);
