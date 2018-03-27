@@ -29,6 +29,8 @@
 
 namespace swordxx {
 
+GBFHTML::MyUserData::~MyUserData() noexcept = default;
+
 GBFHTML::GBFHTML() {
     setTokenStart("<");
     setTokenEnd(">");

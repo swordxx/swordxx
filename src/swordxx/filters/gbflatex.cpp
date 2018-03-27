@@ -41,6 +41,8 @@ GBFLaTeX::MyUserData::MyUserData(const SWModule *module, const SWKey *key) : Bas
     }
 }
 
+GBFLaTeX::MyUserData::~MyUserData() noexcept = default;
+
 GBFLaTeX::GBFLaTeX() {
     setTokenStart("<");
     setTokenEnd(">");

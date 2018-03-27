@@ -27,6 +27,7 @@ class zText4: public zTextBase<zVerse4> {
 public: /* Methods: */
 
     using zTextBase::zTextBase;
+    ~zText4() noexcept override;
 
 };
 

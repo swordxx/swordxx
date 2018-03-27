@@ -38,7 +38,7 @@ class SWDLLEXPORT StatusReporter {
 
 public: /* Methods: */
 
-    virtual ~StatusReporter() noexcept {}
+    virtual ~StatusReporter() noexcept;
 
     /** Messages before stages of a batch download */
     virtual void preStatus(std::size_t totalBytes,

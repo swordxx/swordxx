@@ -39,7 +39,7 @@ class SWDLLEXPORT SWFilterMgr {
 
 public: /* Methods: */
 
-    virtual ~SWFilterMgr() noexcept {}
+    virtual ~SWFilterMgr() noexcept;
 
     void setParentMgr(SWMgr * const parentMgr) noexcept
     { m_parentMgr = parentMgr; }

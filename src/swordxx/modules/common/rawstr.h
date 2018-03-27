@@ -26,6 +26,7 @@ class SWDLLEXPORT RawStr: public RawStrBase<std::uint16_t> {
 public: /* Methods: */
 
     using RawStrBase::RawStrBase;
+    ~RawStr() noexcept override;
 
 }; /* class RawStr */
 

@@ -40,6 +40,7 @@ TEILaTeX::MyUserData::MyUserData(const SWModule *module, const SWKey *key) : Bas
     }
 }
 
+TEILaTeX::MyUserData::~MyUserData() noexcept = default;
 
 TEILaTeX::TEILaTeX() {
     setTokenStart("<");

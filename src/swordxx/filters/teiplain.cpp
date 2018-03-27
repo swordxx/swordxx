@@ -28,6 +28,8 @@
 
 namespace swordxx {
 
+TEIPlain::MyUserData::~MyUserData() noexcept = default;
+
 TEIPlain::TEIPlain() {
     setTokenStart("<");
     setTokenEnd(">");

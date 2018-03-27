@@ -34,6 +34,7 @@ OSISOSIS::MyUserData::MyUserData(const SWModule *module, const SWKey *key) : Bas
     osisQToTick = ((!module->getConfigEntry("OSISqToTick")) || (std::strcmp(module->getConfigEntry("OSISqToTick"), "false")));
 }
 
+OSISOSIS::MyUserData::~MyUserData() noexcept = default;
 
 OSISOSIS::OSISOSIS() {
     setTokenStart("<");

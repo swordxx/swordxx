@@ -47,7 +47,7 @@ struct SWDLLEXPORT BasicFilterUserData {
         , key(key_)
     {}
 
-    virtual ~BasicFilterUserData() {}
+    virtual ~BasicFilterUserData() noexcept;
 
 /* Fields: */
 

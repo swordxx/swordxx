@@ -29,6 +29,7 @@
 
 namespace swordxx {
 
+ThMLHTML::MyUserData::~MyUserData() noexcept = default;
 
 ThMLHTML::ThMLHTML() {
     setTokenStart("<");

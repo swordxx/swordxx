@@ -17,6 +17,7 @@
 #ifndef SWORDXX_RAWVERSE_H
 #define SWORDXX_RAWVERSE_H
 
+#include "../../defs.h"
 #include "rawversebase.h"
 
 #include <cstdint>
@@ -29,6 +30,7 @@ class SWDLLEXPORT RawVerse: public RawVerseBase<std::uint16_t> {
 public: /* Methods: */
 
     using RawVerseBase::RawVerseBase;
+    ~RawVerse() noexcept override;
 
 };
 

@@ -34,6 +34,8 @@
 
 namespace swordxx {
 
+StatusReporter::~StatusReporter() noexcept = default;
+
 RemoteTransport::RemoteTransport(const char *host, StatusReporter *statusReporter)
     : m_term(false)
 {

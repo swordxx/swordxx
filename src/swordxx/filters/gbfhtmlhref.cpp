@@ -37,6 +37,8 @@ GBFHTMLHREF::MyUserData::MyUserData(const SWModule *module, const SWKey *key) : 
     }
 }
 
+GBFHTMLHREF::MyUserData::~MyUserData() noexcept = default;
+
 GBFHTMLHREF::GBFHTMLHREF() {
     setTokenStart("<");
     setTokenEnd(">");

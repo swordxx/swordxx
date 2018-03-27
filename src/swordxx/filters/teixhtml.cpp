@@ -70,6 +70,7 @@ TEIXHTML::MyUserData::MyUserData(const SWModule *module, const SWKey *key) : Bas
     }
 }
 
+TEIXHTML::MyUserData::~MyUserData() noexcept = default;
 
 TEIXHTML::TEIXHTML() {
     setTokenStart("<");

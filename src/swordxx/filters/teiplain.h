@@ -40,6 +40,7 @@ protected:
         std::string w;
         XMLTag tag;
         MyUserData(const SWModule *module, const SWKey *key) : BasicFilterUserData(module, key) {}
+        ~MyUserData() noexcept override;
     };
 
     std::unique_ptr<BasicFilterUserData> createUserData(

@@ -31,4 +31,6 @@ OffOnOptionFilter::OffOnOptionFilter(char const * name, char const * tip)
     : SWOptionFilter(name, tip, &offOnValues)
 {}
 
+OffOnOptionFilter::~OffOnOptionFilter() noexcept = default;
+
 } /* namespace swordxx */

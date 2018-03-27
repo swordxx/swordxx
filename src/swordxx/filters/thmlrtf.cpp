@@ -218,6 +218,8 @@ ThMLRTF::MyUserData::MyUserData(const SWModule *module, const SWKey *key) : Basi
     }
 }
 
+ThMLRTF::MyUserData::~MyUserData() noexcept = default;
+
 std::unique_ptr<BasicFilterUserData> ThMLRTF::createUserData(
         SWModule const * module,
         SWKey const * key)

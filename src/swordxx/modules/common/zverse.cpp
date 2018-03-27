@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- * Copyright 2017 Jaak Ristioja
+ * Copyright 2018 Jaak Ristioja
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -13,26 +13,11 @@
  *
  */
 
-#ifndef SWORDXX_ZVERSE_H
-#define SWORDXX_ZVERSE_H
-
-#include "zversebase.h"
-
-#include <cstdint>
+#include "zverse.h"
 
 
 namespace swordxx {
 
-
-class SWDLLEXPORT zVerse: public zVerseBase<std::uint16_t> {
-
-public: /* Methods: */
-
-    using zVerseBase::zVerseBase;
-    ~zVerse() noexcept override;
-
-};
+zVerse::~zVerse() noexcept = default;
 
 } /* namespace swordxx */
-
-#endif /* SWORDXX_ZVERSE_H */

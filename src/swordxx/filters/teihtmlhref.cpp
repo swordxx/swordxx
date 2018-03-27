@@ -40,6 +40,7 @@ TEIHTMLHREF::MyUserData::MyUserData(const SWModule *module, const SWKey *key) : 
     }
 }
 
+TEIHTMLHREF::MyUserData::~MyUserData() noexcept = default;
 
 TEIHTMLHREF::TEIHTMLHREF() {
     setTokenStart("<");

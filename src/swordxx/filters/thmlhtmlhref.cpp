@@ -41,6 +41,7 @@ ThMLHTMLHREF::MyUserData::MyUserData(const SWModule *module, const SWKey *key) :
     }
 }
 
+ThMLHTMLHREF::MyUserData::~MyUserData() noexcept = default;
 
 ThMLHTMLHREF::ThMLHTMLHREF() {
     setTokenStart("<");

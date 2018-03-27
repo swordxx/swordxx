@@ -40,6 +40,7 @@ TEIRTF::MyUserData::MyUserData(const SWModule *module, const SWKey *key) : Basic
     }
 }
 
+TEIRTF::MyUserData::~MyUserData() noexcept = default;
 
 TEIRTF::TEIRTF() {
     setTokenStart("<");

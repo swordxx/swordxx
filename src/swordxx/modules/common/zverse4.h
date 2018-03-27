@@ -28,6 +28,7 @@ class SWDLLEXPORT zVerse4: public zVerseBase<std::uint32_t> {
 public: /* Methods: */
 
     using zVerseBase::zVerseBase;
+    ~zVerse4() noexcept override;
 
 };
 

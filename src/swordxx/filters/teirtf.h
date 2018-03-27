@@ -41,6 +41,7 @@ protected:
         std::string w;
         std::string version;
         MyUserData(const SWModule *module, const SWKey *key);
+        ~MyUserData() noexcept override;
     };
 
     std::unique_ptr<BasicFilterUserData> createUserData(

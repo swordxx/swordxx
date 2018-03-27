@@ -41,7 +41,7 @@ using std::cerr;
 using std::cin;
 using std::map;
 
-
+namespace {
 SWMgr * mgr = nullptr;
 InstallMgr * installMgr = nullptr;
 StatusReporter * statusReporter = nullptr;
@@ -381,6 +381,7 @@ void usage(const char *progName, const char *error) {
     finish(-1);
 }
 
+} // anonymous namespace
 
 int main(int argc, char **argv) {
 

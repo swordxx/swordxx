@@ -27,6 +27,7 @@ class RawText4: public RawTextBase<RawVerse4> {
 public: /* Methods: */
 
     using RawTextBase::RawTextBase;
+    ~RawText4() noexcept override;
 
 };
 

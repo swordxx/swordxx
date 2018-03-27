@@ -26,6 +26,7 @@ class SWDLLEXPORT RawLD4 : public RawLdBase<RawStr4> {
 public: /* Methods: */
 
     using RawLdBase::RawLdBase;
+    ~RawLD4() noexcept override;
 
 }; /* class RawLD4 */
 

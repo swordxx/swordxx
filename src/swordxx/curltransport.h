@@ -79,6 +79,8 @@ public: /* Methods: */
 
     using RemoteTransport::RemoteTransport;
 
+    ~CurlTransport() noexcept override;
+
 };
 
 } /* namespace swordxx */

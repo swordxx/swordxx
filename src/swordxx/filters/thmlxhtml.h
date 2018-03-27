@@ -39,6 +39,7 @@ protected:
     class MyUserData : public BasicFilterUserData {
     public:
         MyUserData(const SWModule *module, const SWKey *key);//: BasicFilterUserData(module, key) {}
+        ~MyUserData() noexcept override;
         bool inscriptRef;
         char sectionHeaderLevel = 0;
         bool isBiblicalText;

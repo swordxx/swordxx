@@ -47,6 +47,7 @@ ThMLLaTeX::MyUserData::MyUserData(const SWModule *module, const SWKey *key) : Ba
     }
 }
 
+ThMLLaTeX::MyUserData::~MyUserData() noexcept = default;
 
 ThMLLaTeX::ThMLLaTeX() {
     setTokenStart("<");

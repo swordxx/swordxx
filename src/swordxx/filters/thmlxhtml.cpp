@@ -47,6 +47,7 @@ ThMLXHTML::MyUserData::MyUserData(const SWModule *module, const SWKey *key) : Ba
     }
 }
 
+ThMLXHTML::MyUserData::~MyUserData() noexcept = default;
 
 ThMLXHTML::ThMLXHTML() {
     setTokenStart("<");

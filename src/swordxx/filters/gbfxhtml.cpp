@@ -45,6 +45,8 @@ GBFXHTML::MyUserData::MyUserData(const SWModule *module, const SWKey *key) : Bas
     }
 }
 
+GBFXHTML::MyUserData::~MyUserData() noexcept = default;
+
 GBFXHTML::GBFXHTML() {
     setTokenStart("<");
     setTokenEnd(">");

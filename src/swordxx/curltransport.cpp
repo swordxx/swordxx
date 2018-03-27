@@ -108,6 +108,8 @@ std::size_t curlOutWrite(void * const buffer,
 
 } // anonymous namespace
 
+CurlTransport::~CurlTransport() noexcept = default;
+
 CurlTransport::Download::Download(const char * const destPath,
                                   const char * const sourceURL,
                                   std::string * const destBuf,

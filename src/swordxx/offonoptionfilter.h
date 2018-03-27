@@ -27,6 +27,7 @@ public: /* Methods: */
 
     OffOnOptionFilter();
     OffOnOptionFilter(char const * name, char const * tip);
+    ~OffOnOptionFilter() noexcept;
 
 };
 

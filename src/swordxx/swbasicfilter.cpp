@@ -37,6 +37,8 @@
 
 namespace swordxx {
 
+BasicFilterUserData::~BasicFilterUserData() noexcept = default;
+
 void SWBasicFilter::addTokenSubstitute(char const * findString,
                                        char const * replaceString)
 {

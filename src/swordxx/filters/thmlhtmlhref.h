@@ -39,6 +39,7 @@ protected:
     class MyUserData : public BasicFilterUserData {
     public:
         MyUserData(const SWModule *module, const SWKey *key);//: BasicFilterUserData(module, key) {}
+        ~MyUserData() noexcept override;
         bool isSecHead = false;
         bool isBiblicalText;
         std::string version;
