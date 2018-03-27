@@ -69,7 +69,6 @@ void usage(char const * progName, char const * error = nullptr) {
 int main(int argc, char **argv) {
 
     std::vector<string> linkbuffer;
-    signed long i = 0;
     string keybuffer;
     string entbuffer;
     string linebuffer;
@@ -132,7 +131,7 @@ int main(int argc, char **argv) {
         else usage(progName, (((std::string)"Unknown argument: ")+ argv[i]).c_str());
     }
 
-
+    signed long i = 0;
 
     if (outPath.size() < 1) {
         for (i = 0; (i < 16) && (inFileName[i]) && (inFileName[i] != '.'); i++) {
