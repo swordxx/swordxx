@@ -142,8 +142,7 @@ static long getlong(char *buf,int len)
   return u;
 }
 
-int ftpparse(struct ftpparse *fp,char *buf,int len)
-{
+int ftpparse(struct FtpParseData * fp, char * buf, int len) {
   int i;
   int j;
   int state;

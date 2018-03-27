@@ -68,7 +68,7 @@ SWLog::getSystemLog()->logDebug("RemoteTransport::getDirList(%s)", dirURL);
         char *start = &dirBuf[0u];
         char *end = start;
         while (start < ((&dirBuf[0u]) + dirBuf.size())) {
-            struct ftpparse item;
+            FtpParseData item;
             bool looking = true;
             for (end = start; *end; end++) {
                 if (looking) {

@@ -18,7 +18,7 @@ The name is an array of fp.namelen characters stored in fp.name;
 fp.name points somewhere within buf.
 */
 
-struct ftpparse {
+struct FtpParseData {
   char *name; /* not necessarily 0-terminated */
   int namelen;
   int flagtrycwd; /* 0 if cwd is definitely pointless, 1 otherwise */
@@ -49,6 +49,6 @@ time is correct in the local time zone, and gmtime() for REMOTE* times.
 #define FTPPARSE_ID_UNKNOWN 0
 #define FTPPARSE_ID_FULL 1 /* unique identifier for files on this FTP server */
 
-extern int ftpparse(struct ftpparse *,char *,int);
+extern int ftpparse(struct FtpParseData *, char *, int);
 
 #endif
