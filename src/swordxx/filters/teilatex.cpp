@@ -32,11 +32,13 @@
 namespace swordxx {
 
 
-TEILaTeX::MyUserData::MyUserData(const SWModule *module, const SWKey *key) : BasicFilterUserData(module, key) {
+TEILaTeX::MyUserData::MyUserData(SWModule const * module_, SWKey const * key_)
+    : BasicFilterUserData(module_, key_)
+{
     isBiblicalText = false;
-    if (module) {
-        version = module->getName();
-        isBiblicalText = (module->getType() == "Biblical Texts");
+    if (module_) {
+        version = module_->getName();
+        isBiblicalText = (module_->getType() == "Biblical Texts");
     }
 }
 
