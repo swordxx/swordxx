@@ -177,14 +177,14 @@ void SWCompress::Encode() { cycleStream(ENCODE); }
 void SWCompress::Decode() { cycleStream(DECODE); }
 
 void SWCompress::cycleStream(Direction dir) {
-    char buf[1024];
+    char buf_[1024];
     unsigned long len;
     unsigned long totlen = 0;
 
     do {
-        len = GetChars(buf, 1024, dir);
+        len = GetChars(buf_, 1024, dir);
         if (len)
-            totlen += SendChars(buf, len, dir);
+            totlen += SendChars(buf_, len, dir);
     } while (len == 1024);
 
     zlen = slen = totlen;
