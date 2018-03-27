@@ -92,7 +92,7 @@ bool OSISHeadings::handleToken(std::string &buf, const char *token, BasicFilterU
 
                     // do we want to put anything in EntryAttributes?
                     if (u->module->isProcessEntryAttributes() && (option || u->canonical || !preverse)) {
-                        std::string buf(formatted("%i", u->headerNum++));
+                        std::string buf2(formatted("%i", u->headerNum++));
                         // leave the actual <title...> wrapper in if we're part of an old school preverse title
                         // because now frontend have to deal with preverse as a div which may or may not include <title> elements
                         // and they can't simply wrap all preverse material in <h1>, like they probably did previously
@@ -111,10 +111,10 @@ bool OSISHeadings::handleToken(std::string &buf, const char *token, BasicFilterU
                             heading += tag.toString();
                         }
                         else heading = u->heading;
-                        u->module->getEntryAttributes()["Heading"][(preverse)?"Preverse":"Interverse"][buf] = heading;
+                        u->module->getEntryAttributes()["Heading"][(preverse)?"Preverse":"Interverse"][buf2] = heading;
 
                         for (auto const & attr : u->currentHeadingTag.attributeNames())
-                            u->module->getEntryAttributes()["Heading"][buf][attr.c_str()] =
+                            u->module->getEntryAttributes()["Heading"][buf2][attr.c_str()] =
                                     u->currentHeadingTag.attribute(attr.c_str());
                     }
 
