@@ -180,15 +180,15 @@ long RawLdBase<Base>::getEntryCount() const {
 }
 
 template <typename Base>
-long RawLdBase<Base>::getEntryForKey(char const * key) const {
+long RawLdBase<Base>::getEntryForKey(char const * key_) const {
     StartType start;
     IndexOffsetType offset;
     SizeType size;
 
     if (this->m_strongsPadding) {
-        this->findOffset(strongsPadBuf(key).get(), &start, &size, 0, &offset);
+        this->findOffset(strongsPadBuf(key_).get(), &start, &size, 0, &offset);
     } else {
-        this->findOffset(key, &start, &size, 0, &offset);
+        this->findOffset(key_, &start, &size, 0, &offset);
     }
     return offset / Base::IDXENTRYSIZE;
 }
