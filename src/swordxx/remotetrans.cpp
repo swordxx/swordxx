@@ -58,18 +58,18 @@ int RemoteTransport::copyDirectory(const char * urlPrefix_,
     std::string const suffix(suffix_ ? suffix_ : "");
     std::string const url(
                 [&urlPrefix_, &dir_]() {
-                    std::string url(std::string(urlPrefix_ ? urlPrefix_ : "")
-                                    + std::string(dir_ ? dir_ : ""));
-                    removeTrailingDirectorySlashes(url);
-                    url += '/';
-                    return url;
+                    std::string r(std::string(urlPrefix_ ? urlPrefix_ : "")
+                                  + std::string(dir_ ? dir_ : ""));
+                    removeTrailingDirectorySlashes(r);
+                    r += '/';
+                    return r;
                 }());
     std::string const dest(
                 [&dest_](){
-                    std::string dest(dest_ ? dest_ : "");
-                    removeTrailingDirectorySlashes(dest);
-                    dest += "/";
-                    return dest;
+                    std::string r(dest_ ? dest_ : "");
+                    removeTrailingDirectorySlashes(r);
+                    r += "/";
+                    return r;
                 }());
 
     SWLog::getSystemLog()->logDebug("NetTransport: getting dir %s\n",
