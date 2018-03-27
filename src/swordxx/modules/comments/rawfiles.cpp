@@ -77,15 +77,15 @@ std::string RawFiles::getRawEntryImpl() const {
     FileDesc *datafile;
     StartType start = 0;
     SizeType size = 0;
-    VerseKey const & key = getVerseKey();
+    VerseKey const & key_ = getVerseKey();
 
-    findOffset(key.getTestament(), key.getTestamentIndex(), &start, &size);
+    findOffset(key_.getTestament(), key_.getTestamentIndex(), &start, &size);
 
     std::string entry;
     if (size) {
         std::string tmpbuf(m_path);
         tmpbuf += '/';
-        readText(key.getTestament(), start, size, entry);
+        readText(key_.getTestament(), start, size, entry);
         tmpbuf += entry;
         entry = "";
         datafile = FileMgr::getSystemFileMgr()->open(tmpbuf.c_str(), FileMgr::RDONLY);
@@ -113,21 +113,21 @@ void RawFiles::setEntry(const char *inbuf, long len) {
     FileDesc *datafile;
     StartType start;
     SizeType size;
-    VerseKey const & key = getVerseKey();
+    VerseKey const & key_ = getVerseKey();
 
     len = (len<0)?std::strlen(inbuf):len;
 
-    findOffset(key.getTestament(), key.getTestamentIndex(), &start, &size);
+    findOffset(key_.getTestament(), key_.getTestamentIndex(), &start, &size);
 
     std::string filename(m_path.str() + '/');
     if (size) {
         std::string tmpbuf;
-        readText(key.getTestament(), start, size, tmpbuf);
+        readText(key_.getTestament(), start, size, tmpbuf);
         filename += tmpbuf;
     }
     else {
         std::string tmpbuf(getNextFilename());
-        doSetText(key.getTestament(), key.getTestamentIndex(), tmpbuf.c_str());
+        doSetText(key_.getTestament(), key_.getTestamentIndex(), tmpbuf.c_str());
         filename += tmpbuf;
     }
     datafile = FileMgr::getSystemFileMgr()->open(filename.c_str(), FileMgr::CREAT|FileMgr::WRONLY|FileMgr::TRUNC);
@@ -148,13 +148,13 @@ void RawFiles::setEntry(const char *inbuf, long len) {
 void RawFiles::linkEntry(SWKey const & inkey) {
     StartType start;
     SizeType size;
-    VerseKey const & key = getVerseKey();
+    VerseKey const & key_ = getVerseKey();
 
-    findOffset(key.getTestament(), key.getTestamentIndex(), &start, &size);
+    findOffset(key_.getTestament(), key_.getTestamentIndex(), &start, &size);
 
     if (size) {
         std::string tmpbuf;
-        readText(key.getTestament(), start, size + 2, tmpbuf);
+        readText(key_.getTestament(), start, size + 2, tmpbuf);
 
         VerseKey const & key2 = getVerseKey(&inkey);
         doSetText(key2.getTestament(), key2.getTestamentIndex(), tmpbuf.c_str());
@@ -169,8 +169,8 @@ void RawFiles::linkEntry(SWKey const & inkey) {
  */
 
 void RawFiles::deleteEntry() {
-    VerseKey const & key = getVerseKey();
-    doSetText(key.getTestament(), key.getTestamentIndex(), "");
+    VerseKey const & key_ = getVerseKey();
+    doSetText(key_.getTestament(), key_.getTestamentIndex(), "");
 }
 
 
