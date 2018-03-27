@@ -38,17 +38,17 @@
 
 using namespace swordxx;
 
-void writeidx(VerseKey &key1, VerseKey &key2, VerseKey &key3, long offset, short size);
-char findbreak(int fp, long *offset, int *num1, int *num2, int *rangemax, short *size);
+void writeidx(VerseKey &g_key1, VerseKey &g_key2, VerseKey &g_key3, long offset, short size);
+char findbreak(int g_fp, long *offset, int *num1, int *num2, int *rangemax, short *size);
 void openfiles(char *fname);
 void checkparams(int argc, char **argv);
 
 
-VerseKey key1, key2, key3;
-int fp, vfp, cfp, bfp;
-long chapoffset;
-short chapsize;
-char testmnt;
+VerseKey g_key1, g_key2, g_key3;
+int g_fp, g_vfp, g_cfp, g_bfp;
+long g_chapoffset;
+short g_chapsize;
+char g_testmnt;
 
 
 int main(int argc, char **argv)
@@ -62,53 +62,53 @@ int main(int argc, char **argv)
 
     openfiles(argv[1]);
 
-    testmnt = key1.getTestament();
-    num1 = key1.getChapter();
-    num2 = key1.getVerse();
+    g_testmnt = g_key1.getTestament();
+    num1 = g_key1.getChapter();
+    num2 = g_key1.getVerse();
     pos  = 0;
-    write(bfp, &pos, 4);  /* Book    offset for testament intros */
+    write(g_bfp, &pos, 4);  /* Book    offset for testament intros */
     pos = 4;
-    write(cfp, &pos, 4);  /* Chapter offset for testament intro */
+    write(g_cfp, &pos, 4);  /* Chapter offset for testament intro */
 
 
 /*    Right now just zero out intros until parsing correctly */
     pos = 0;
     size = 0;
-    write(vfp, &pos, 4);  /* Module intro */
-    write(vfp, &size, 2);
-    write(vfp, &pos, 4);  /* Testament intro */
-    write(vfp, &size, 2);
+    write(g_vfp, &pos, 4);  /* Module intro */
+    write(g_vfp, &size, 2);
+    write(g_vfp, &pos, 4);  /* Testament intro */
+    write(g_vfp, &size, 2);
 
-    while(!findbreak(fp, &offset, &num1, &num2, &rangemax, &size)) {
+    while(!findbreak(g_fp, &offset, &num1, &num2, &rangemax, &size)) {
         if (!startflag) {
             startflag = 1;
         }
         else {
-            if (num2 < key2.getVerse()) {            // new chapter
-                if (num1 <= key2.getChapter()) { // new book
-                    key2.setVerse(1);
-                    key2.setChapter(1);
-                    key2.setBook(key2.getBook()+1);
+            if (num2 < g_key2.getVerse()) {            // new chapter
+                if (num1 <= g_key2.getChapter()) { // new book
+                    g_key2.setVerse(1);
+                    g_key2.setChapter(1);
+                    g_key2.setBook(g_key2.getBook()+1);
                 }
-                printf("Found Chapter Break: %d ('%s')\n", num1, key2.getText().c_str());
-                chapoffset = offset;
-                chapsize = size;
+                printf("Found Chapter Break: %d ('%s')\n", num1, g_key2.getText().c_str());
+                g_chapoffset = offset;
+                g_chapsize = size;
 //                continue;
             }
         }
-        key2.setVerse(1);
-        key2.setChapter(num1);
-        key2.setVerse(num2);
+        g_key2.setVerse(1);
+        g_key2.setChapter(num1);
+        g_key2.setVerse(num2);
 
-        key3 = key2;
+        g_key3 = g_key2;
 //        key3 += (rangemax - key3.getVerse());
 
-        writeidx(key1, key2, key3, offset, size);
+        writeidx(g_key1, g_key2, g_key3, offset, size);
     }
-    close(vfp);
-    close(cfp);
-    close(bfp);
-    close(fp);
+    close(g_vfp);
+    close(g_cfp);
+    close(g_bfp);
+    close(g_fp);
     return 0;
 }
 
@@ -124,30 +124,30 @@ void writeidx(VerseKey &key1, VerseKey &key2, VerseKey &key3, long offset, short
     long pos;
     short tmp;
 
-    for (; ((key1 <= key3) && (key1.popError() != KEYERR_OUTOFBOUNDS) && (key1.getTestament() == testmnt)); key1.increment()) {
+    for (; ((key1 <= key3) && (key1.popError() != KEYERR_OUTOFBOUNDS) && (key1.getTestament() == g_testmnt)); key1.increment()) {
         if (key1.getVerse() == 1) {    // new chapter
             if (key1.getChapter() == 1) {    // new book
-                pos = lseek(cfp, 0, SEEK_CUR);
-                write(bfp, &pos, 4);
-                pos = lseek(vfp, 0, SEEK_CUR); /* Book intro (cps) */
-                write(cfp, &pos, 4);
-                write(vfp, &chapoffset, 4);  /* Book intro (vss)  set to same as chap for now(it should be chap 1 which usually contains the book into anyway)*/
-                write(vfp, &chapsize, 2);
+                pos = lseek(g_cfp, 0, SEEK_CUR);
+                write(g_bfp, &pos, 4);
+                pos = lseek(g_vfp, 0, SEEK_CUR); /* Book intro (cps) */
+                write(g_cfp, &pos, 4);
+                write(g_vfp, &g_chapoffset, 4);  /* Book intro (vss)  set to same as chap for now(it should be chap 1 which usually contains the book into anyway)*/
+                write(g_vfp, &g_chapsize, 2);
             }
-            pos = lseek(vfp, 0, SEEK_CUR);
-            write(cfp, &pos, 4);
-            write(vfp, &chapoffset, 4);  /* Chapter intro */
-            write(vfp, &chapsize, 2);
+            pos = lseek(g_vfp, 0, SEEK_CUR);
+            write(g_cfp, &pos, 4);
+            write(g_vfp, &g_chapoffset, 4);  /* Chapter intro */
+            write(g_vfp, &g_chapsize, 2);
         }
         if (key1 >= key2) {
-            write(vfp, &offset, 4);
-            write(vfp, &size, 2);
+            write(g_vfp, &offset, 4);
+            write(g_vfp, &size, 2);
         }
         else    {
             pos = 0;
             tmp = 0;
-            write(vfp, &pos, 4);
-            write(vfp, &tmp, 2);
+            write(g_vfp, &pos, 4);
+            write(g_vfp, &tmp, 2);
         }
     }
 }
@@ -268,25 +268,25 @@ char findbreak(int fp, long *offset, int *num1, int *num2, int * /* rangemax */,
 void openfiles(char *fname)
 {
 
-    if ((fp = FileMgr::openFileReadOnly(fname)) < 0) {
+    if ((g_fp = FileMgr::openFileReadOnly(fname)) < 0) {
         fprintf(stderr, "Couldn't open file: %s\n", fname);
         std::exit(1);
     }
 
     std::string buf(formatted("%s.vss", fname));
-    if ((vfp = FileMgr::createPathAndFile(buf.c_str())) < 0) {
+    if ((g_vfp = FileMgr::createPathAndFile(buf.c_str())) < 0) {
         fprintf(stderr, "Couldn't open file: %s\n", buf.c_str());
         std::exit(1);
     }
 
     buf = formatted("%s.cps", fname);
-    if ((cfp = FileMgr::createPathAndFile(buf.c_str())) < 0) {
+    if ((g_cfp = FileMgr::createPathAndFile(buf.c_str())) < 0) {
         fprintf(stderr, "Couldn't open file: %s\n", buf.c_str());
         std::exit(1);
     }
 
     buf = formatted("%s.bks", fname);
-    if ((bfp = FileMgr::createPathAndFile(buf.c_str())) < 0) {
+    if ((g_bfp = FileMgr::createPathAndFile(buf.c_str())) < 0) {
         fprintf(stderr, "Couldn't open file: %s\n", buf.c_str());
         std::exit(1);
     }
@@ -300,10 +300,10 @@ void checkparams(int argc, char **argv)
         std::exit(1);
     }
     if (argc == 3) {
-        key3.setText("Matthew 1:1");
+        g_key3.setText("Matthew 1:1");
     } else {
-        key3.setText("Genesis 1:1");
+        g_key3.setText("Genesis 1:1");
     }
-    key2.positionFrom(key3);
-    key1.positionFrom(key2);
+    g_key2.positionFrom(g_key3);
+    g_key1.positionFrom(g_key2);
 }
