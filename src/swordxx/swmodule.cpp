@@ -588,13 +588,13 @@ ListKey &SWModule::search(char const * istr,
                         for (;i3Start != i3End; i3Start++) {
                             if ((words.size()>3) && (words[3].length())) {
                                 if (includeComponents) {
-                                    std::string key(i3Start->first);
-                                    auto const sepPos = key.find_first_of('.');
+                                    std::string key2(i3Start->first);
+                                    auto const sepPos = key2.find_first_of('.');
                                     if (sepPos != std::string::npos)
-                                        key.resize(sepPos);
+                                        key2.resize(sepPos);
                                     // we're iterating all 3 level keys, so be sure we match our
                                     // prefix (e.g., Lemma, Lemma.1, Lemma.2, etc.)
-                                    if (key != words[2]) continue;
+                                    if (key2 != words[2]) continue;
                                 }
                                 if (flags & SEARCHFLAG_MATCHWHOLEENTRY) {
                                     bool found = !(((flags & REG_ICASE) == REG_ICASE) ? !caseInsensitiveEquals(i3Start->second, words[3]) : (i3Start->second != words[3]));
@@ -721,19 +721,19 @@ std::string SWModule::renderText(const char *buf, int len, bool render) const {
         tmpbuf = getRawEntry();
     }
 
-    SWKey * key = nullptr;
+    SWKey * key2 = nullptr;
 
     unsigned long size = (len < 0) ? ((getEntrySize()<0) ? tmpbuf.size() : getEntrySize()) : len;
     if (size > 0) {
-        key = this->getKey();
+        key2 = this->getKey();
 
-        optionFilter(tmpbuf, key);
+        optionFilter(tmpbuf, key2);
 
         if (render) {
-            renderFilter(tmpbuf, key);
-            encodingFilter(tmpbuf, key);
+            renderFilter(tmpbuf, key2);
+            encodingFilter(tmpbuf, key2);
         }
-        else    stripFilter(tmpbuf, key);
+        else    stripFilter(tmpbuf, key2);
     }
 
     setProcessEntryAttributes(savePEA);
@@ -824,8 +824,8 @@ std::string SWModule::getBibliography(BibliographyFormat format) const {
     return s;
 }
 
-const char *SWModule::getConfigEntry(const char *key) const {
-    ConfigEntMap::const_iterator const it(m_config.find(key));
+const char *SWModule::getConfigEntry(const char *key_) const {
+    ConfigEntMap::const_iterator const it(m_config.find(key_));
     return (it != m_config.end()) ? it->second.c_str() : nullptr;
 }
 
@@ -973,9 +973,9 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
                             strong.append(strongVal->second);
                             morph.append(strongVal->second);
                             morph.push_back('@');
-                            std::string tmp = "Morph";
-                            if (partCount > 1) tmp += formatted(".%d", i+1);
-                            morphVal = word->second.find(tmp);
+                            std::string tmp2("Morph");
+                            if (partCount > 1) tmp2 += formatted(".%d", i+1);
+                            morphVal = word->second.find(tmp2);
                             if (morphVal != word->second.end()) {
                                 morph.append(morphVal->second);
                             }
@@ -1011,7 +1011,7 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
             // we're the first verse in a chapter
             if (vkcheck->getVerse() == 1) {
                 chapMax->positionToMaxVerse();
-                VerseKey saveKey = *vkcheck;
+                VerseKey saveKey2 = *vkcheck;
                 while ((!err) && (*vkcheck <= *chapMax)) {
 //printf("building proxBuf from (%s).\nproxBuf.c_str(): %s\n", (const char *)*key, proxBuf.c_str());
 //printf("building proxBuf from (%s).\n", (const char *)*key);
@@ -1044,9 +1044,9 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
                                         strong.append(strongVal->second);
                                         morph.append(strongVal->second);
                                         morph.push_back('@');
-                                        std::string tmp = "Morph";
-                                        if (partCount > 1) tmp += formatted(".%d", i+1);
-                                        morphVal = word->second.find(tmp);
+                                        std::string tmp2("Morph");
+                                        if (partCount > 1) tmp2 += formatted(".%d", i+1);
+                                        morphVal = word->second.find(tmp2);
                                         if (morphVal != word->second.end()) {
                                             morph.append(morphVal->second);
                                         }
@@ -1069,7 +1069,7 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
                     err = popError();
                 }
                 err = 0;
-                *vkcheck = saveKey;
+                *vkcheck = saveKey2;
             }
         }
 
@@ -1109,9 +1109,9 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
                                             strong.append(strongVal->second);
                                             morph.append(strongVal->second);
                                             morph.push_back('@');
-                                            std::string tmp = "Morph";
-                                            if (partCount > 1) tmp += formatted(".%d", i+1);
-                                            morphVal = word->second.find(tmp);
+                                            std::string tmp2("Morph");
+                                            if (partCount > 1) tmp2 += formatted(".%d", i+1);
+                                            morphVal = word->second.find(tmp2);
                                             if (morphVal != word->second.end()) {
                                                 morph.append(morphVal->second);
                                             }
@@ -1211,10 +1211,10 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
  */
 void SWModule::filterBuffer(OptionFilterList const & filters,
                             std::string & buf,
-                            SWKey const * key) const
+                            SWKey const * key_) const
 {
     for (auto const & filterPtr : filters)
-        filterPtr->processText(buf, key, this);
+        filterPtr->processText(buf, key_, this);
 }
 
 /** FilterBuffer a text buffer
@@ -1224,10 +1224,10 @@ void SWModule::filterBuffer(OptionFilterList const & filters,
  */
 void SWModule::filterBuffer(FilterList const & filters,
                             std::string & buf,
-                            SWKey const * key) const
+                            SWKey const * key_) const
 {
     for (auto const & filterPtr : filters)
-        filterPtr->processText(buf, key, this);
+        filterPtr->processText(buf, key_, this);
 }
 
 std::string SWModule::searchIndexPath() {
