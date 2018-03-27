@@ -47,9 +47,10 @@ namespace {
         int headerNum;
         bool canonical;
 
-        MyUserData(const SWModule *module, const SWKey *key) : BasicFilterUserData(module, key) {
-            clear();
-        }
+        MyUserData(SWModule const * module_, SWKey const * key_)
+            : BasicFilterUserData(module_, key_)
+        { clear(); }
+
         void clear() {
             currentHeadingName = "";
             currentHeadingTag = "";
