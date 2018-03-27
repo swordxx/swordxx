@@ -479,23 +479,23 @@ bool OSISHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterU
                 u->tagStacks.hiStack.push(tag.toString());
             }
             else if (tag.isEndTag()) {
-                std::string type = "";
+                std::string type2 = "";
                 if (!u->tagStacks.hiStack.empty()) {
-                    XMLTag tag(u->tagStacks.hiStack.top().c_str());
+                    XMLTag tag2(u->tagStacks.hiStack.top().c_str());
                     u->tagStacks.hiStack.pop();
-                    type = tag.attribute("type");
-                    if (!type.length()) type = tag.attribute("rend");
+                    type2 = tag2.attribute("type");
+                    if (!type2.length()) type2 = tag2.attribute("rend");
                 }
-                if (type == "bold" || type == "b" || type == "x-b") {
+                if (type2 == "bold" || type2 == "b" || type2 == "x-b") {
                     outText("</b>", buf, u);
                 }
-                else if (type == "ol") {
+                else if (type2 == "ol") {
                     outText("</span>", buf, u);
                 }
-                else if (type == "super") {
+                else if (type2 == "super") {
                     outText("</sup>", buf, u);
                 }
-                else if (type == "sub") {
+                else if (type2 == "sub") {
                     outText("</sub>", buf, u);
                 }
                 else {
