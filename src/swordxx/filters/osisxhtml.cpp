@@ -183,13 +183,13 @@ OSISXHTML::OSISXHTML() {
     renderNoteNumbers = false;
 }
 
-OSISXHTML::MyUserData::MyUserData(SWModule const * module, SWKey const * key)
-    : BasicFilterUserData(module, key)
+OSISXHTML::MyUserData::MyUserData(SWModule const * module_, SWKey const * key_)
+    : BasicFilterUserData(module_, key_)
 {
-    if (module) {
-        osisQToTick = ((!module->getConfigEntry("OSISqToTick")) || (std::strcmp(module->getConfigEntry("OSISqToTick"), "false")));
-        version = module->getName();
-        isBiblicalText = (module->getType() == "Biblical Texts");
+    if (module_) {
+        osisQToTick = ((!module_->getConfigEntry("OSISqToTick")) || (std::strcmp(module_->getConfigEntry("OSISqToTick"), "false")));
+        version = module_->getName();
+        isBiblicalText = (module_->getType() == "Biblical Texts");
     } else {
         osisQToTick = true;
         isBiblicalText = false;
