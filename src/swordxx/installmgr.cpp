@@ -220,7 +220,6 @@ int InstallMgr::removeModule(SWMgr *manager, const char *moduleName) {
 
             DIR *dir;
             struct dirent *ent;
-            ConfigEntMap::iterator entry;
 
             FileMgr::removeDir(modDir.c_str());
 
@@ -427,15 +426,15 @@ int InstallMgr::installModule(SWMgr *destMgr, const char *fromLocation, const ch
         // Copy all files in DataPath directory
         //
         else {
-            ConfigEntMap::iterator entry;
+            ConfigEntMap::iterator entry2;
 
-            entry = module->second.find("AbsoluteDataPath");
-            if (entry != module->second.end()) {
-                std::string absolutePath(entry->second);
+            entry2 = module->second.find("AbsoluteDataPath");
+            if (entry2 != module->second.end()) {
+                std::string absolutePath(entry2->second);
                 std::string relativePath(absolutePath);
-                entry = module->second.find("PrefixPath");
-                if (entry != module->second.end()) {
-                    relativePath.erase(0u, entry->second.size());
+                entry2 = module->second.find("PrefixPath");
+                if (entry2 != module->second.end()) {
+                    relativePath.erase(0u, entry2->second.size());
                 }
                 else {
                     relativePath.erase(0u, mgr.m_prefixPath.size());
@@ -649,9 +648,9 @@ int InstallMgr::refreshRemoteSourceConfiguration() {
                     std::string key(stripPrefix(ap.second, '='));
                     if (key == "FTPSource") {
                         if (ap.second != "REMOVE") {
-                            InstallSource *is = new InstallSource("FTP", ap.second.c_str());
-                            is->m_uid = ap.first;
-                            sources[is->m_caption] = is;
+                            InstallSource *is2 = new InstallSource("FTP", ap.second.c_str());
+                            is2->m_uid = ap.first;
+                            sources[is2->m_caption] = is2;
                         }
                     }
                 }
