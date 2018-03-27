@@ -31,12 +31,14 @@
 namespace swordxx {
 
 
-TEIRTF::MyUserData::MyUserData(const SWModule *module, const SWKey *key) : BasicFilterUserData(module, key) {
+TEIRTF::MyUserData::MyUserData(SWModule const * module_, SWKey const * key_)
+    : BasicFilterUserData(module_, key_)
+{
     isBiblicalText = false;
     inOsisRef = false;
-    if (module) {
-        version = module->getName();
-        isBiblicalText = (module->getType() == "Biblical Texts");
+    if (module_) {
+        version = module_->getName();
+        isBiblicalText = (module_->getType() == "Biblical Texts");
     }
 }
 
