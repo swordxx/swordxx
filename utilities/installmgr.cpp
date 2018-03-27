@@ -135,12 +135,12 @@ void init() {
                   "ERROR: Sword++ configuration not found.  Please configure "
                   "Sword++ before using this program.");
 
-        std::string baseDir = SWMgr::getHomeDir();
-        if (baseDir.length() < 1) baseDir = ".";
-        baseDir += "/.swordxx/InstallMgr";
-        confPath = baseDir + "/InstallMgr.conf";
+        std::string baseDir_ = SWMgr::getHomeDir();
+        if (baseDir_.length() < 1) baseDir_ = ".";
+        baseDir_ += "/.swordxx/InstallMgr";
+        confPath = baseDir_ + "/InstallMgr.conf";
         statusReporter = new MyStatusReporter();
-        installMgr = new MyInstallMgr(baseDir.c_str(), statusReporter);
+        installMgr = new MyInstallMgr(baseDir_.c_str(), statusReporter);
     }
 }
 
@@ -307,8 +307,8 @@ void remoteDescribeModule(char const * const sourceName,
 
 void localDirListModules(const char *dir) {
     cout << "Available Modules:\n\n";
-    SWMgr mgr(dir);
-    listModules(&mgr);
+    SWMgr mgr_(dir);
+    listModules(&mgr_);
 }
 
 
