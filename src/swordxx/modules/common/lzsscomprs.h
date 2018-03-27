@@ -34,9 +34,9 @@ namespace swordxx {
 class SWDLLEXPORT LZSSCompress : public SWCompress
 {
 class Private;
-    Private *p;
+    Private * m_p;
 public:
-    LZSSCompress ();
+    LZSSCompress();
     ~LZSSCompress() override;
     void Encode() override;
     void Decode() override;

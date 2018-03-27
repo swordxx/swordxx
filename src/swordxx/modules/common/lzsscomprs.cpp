@@ -131,9 +131,10 @@ short int LZSSCompress::Private::m_dad[N + 1];
  *
  */
 
-LZSSCompress::LZSSCompress() : SWCompress() {
-    p = new Private();
-}
+LZSSCompress::LZSSCompress()
+    : SWCompress()
+    , m_p(new Private)
+{}
 
 
 /******************************************************************************
@@ -141,7 +142,7 @@ LZSSCompress::LZSSCompress() : SWCompress() {
  */
 
 LZSSCompress::~LZSSCompress() {
-    delete p;
+    delete m_p;
 }
 
 
@@ -380,7 +381,7 @@ void LZSSCompress::Encode(void)
 
     // Start with a clean tree.
 
-    p->InitTree();
+    m_p->InitTree();
 
     // code_buf[0] works as eight flags.  A "1" represents that the
     // unit is an unencoded letter (1 byte), and a "0" represents
@@ -415,14 +416,14 @@ void LZSSCompress::Encode(void)
     // This is because those F bytes will be filled in immediately
     // with bytes from the input stream.
 
-    std::memset(p->m_ring_buffer, ' ', N - F);
+    std::memset(m_p->m_ring_buffer, ' ', N - F);
 
     // Read F bytes into the last F bytes of the ring buffer.
     //
     // This function loads the buffer with X characters and returns
     // the actual amount loaded.
 
-    len = GetChars((char *) &(p->m_ring_buffer[r]), F, ENCODE);
+    len = GetChars((char *) &(m_p->m_ring_buffer[r]), F, ENCODE);
 
     // Make sure there is something to be compressed.
 
@@ -435,13 +436,13 @@ void LZSSCompress::Encode(void)
     // to occur.
 
     for (i = 1; i <= F; i++) {
-        p->InsertNode((short int) (r - i));
+        m_p->InsertNode((short int) (r - i));
     }
 
     // Finally, insert the whole string just read.  The
     // member variables match_length and match_position are set.
 
-    p->InsertNode(r);
+    m_p->InsertNode(r);
 
     // Now that we're preloaded, continue till done.
 
@@ -450,20 +451,20 @@ void LZSSCompress::Encode(void)
         // m_match_length may be spuriously long near the end of
         // text.
 
-        if (p->m_match_length > len) {
-            p->m_match_length = len;
+        if (m_p->m_match_length > len) {
+            m_p->m_match_length = len;
         }
 
         // Is it cheaper to store this as a single character?  If so,
         // make it so.
 
-        if (p->m_match_length < THRESHOLD) {
+        if (m_p->m_match_length < THRESHOLD) {
             // Send one character.  Remember that code_buf[0] is the
             // set of flags for the next eight items.
 
-            p->m_match_length = 1;
+            m_p->m_match_length = 1;
             code_buf[0] |= mask;
-            code_buf[code_buf_pos++] = p->m_ring_buffer[r];
+            code_buf[code_buf_pos++] = m_p->m_ring_buffer[r];
         }
 
         // Otherwise, we do indeed have a string that can be stored
@@ -473,10 +474,10 @@ void LZSSCompress::Encode(void)
             // The next 16 bits need to contain the position (12 bits)
             // and the length (4 bits).
 
-            code_buf[code_buf_pos++] = (unsigned char) p->m_match_position;
+            code_buf[code_buf_pos++] = (unsigned char) m_p->m_match_position;
             code_buf[code_buf_pos++] = (unsigned char) (
-                ((p->m_match_position >> 4) & 0xf0) |
-                (p->m_match_length - THRESHOLD) );
+                ((m_p->m_match_position >> 4) & 0xf0) |
+                (m_p->m_match_length - THRESHOLD) );
         }
 
         // Shift the mask one bit to the left so that it will be ready
@@ -501,7 +502,7 @@ void LZSSCompress::Encode(void)
             mask = 1;
         }
 
-        last_match_length = p->m_match_length;
+        last_match_length = m_p->m_match_length;
 
         // Delete old strings and read new bytes...
 
@@ -513,7 +514,7 @@ void LZSSCompress::Encode(void)
 
             // Delete "old strings"
 
-            p->DeleteNode(s);
+            m_p->DeleteNode(s);
 
             // Put this character into the ring buffer.
             //
@@ -540,10 +541,10 @@ void LZSSCompress::Encode(void)
             //                                         |
             //                  duplicate of front of buffer
 
-            p->m_ring_buffer[s] = c;
+            m_p->m_ring_buffer[s] = c;
 
             if (s < F - 1) {
-                p->m_ring_buffer[s + N] = c;
+                m_p->m_ring_buffer[s + N] = c;
             }
 
             // Increment the position, and wrap around when we're at
@@ -555,7 +556,7 @@ void LZSSCompress::Encode(void)
             // Register the string that is found in
             // m_ring_buffer[r..r+F-1].
 
-            p->InsertNode(r);
+            m_p->InsertNode(r);
         }
 
         // If we didn't quit because we hit the last_match_length,
@@ -563,7 +564,7 @@ void LZSSCompress::Encode(void)
         // to process.
 
         while (i++ < last_match_length) {
-            p->DeleteNode(s);
+            m_p->DeleteNode(s);
 
             s = (short int) ( (s + 1) & (N - 1) );
             r = (short int) ( (r + 1) & (N - 1) );
@@ -576,7 +577,7 @@ void LZSSCompress::Encode(void)
             // short strings).
 
             if (--len) {
-                p->InsertNode(r);       /* buffer may not be empty. */
+                m_p->InsertNode(r);       /* buffer may not be empty. */
             }
         }
 
@@ -624,7 +625,7 @@ void LZSSCompress::Decode(void)
     //
     // Note that the last F bytes of the ring buffer are not filled.
 
-    std::memset(p->m_ring_buffer, ' ', N - F);
+    std::memset(m_p->m_ring_buffer, ' ', N - F);
 
     r = N - F;
 
@@ -671,7 +672,7 @@ void LZSSCompress::Decode(void)
 
             // Add to buffer, and increment to next spot. Wrap at end.
 
-            p->m_ring_buffer[r] = c[0];
+            m_p->m_ring_buffer[r] = c[0];
             r = (short int) ( (r + 1) & (N - 1) );
         }
 
@@ -709,11 +710,11 @@ void LZSSCompress::Decode(void)
             // len is never more than F.
 
             for (k = 0; k < len; k++) {
-                c[k] = p->m_ring_buffer[(pos + k) & (N - 1)];
+                c[k] = m_p->m_ring_buffer[(pos + k) & (N - 1)];
 
                 // Add to buffer, and increment to next spot. Wrap at end.
 
-                p->m_ring_buffer[r] = c[k];
+                m_p->m_ring_buffer[r] = c[k];
                 r = (short int) ( (r + 1) & (N - 1) );
             }
 
