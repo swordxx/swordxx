@@ -97,16 +97,16 @@ std::string RawGenBook::getRawEntryImpl() const {
     uint32_t offset = 0;
     uint32_t size = 0;
 
-    const TreeKey &key = getTreeKey();
+    TreeKey const & key_ = getTreeKey();
 
     int dsize;
-    key.getUserData(&dsize);
+    key_.getUserData(&dsize);
     std::string entry;
     if (dsize > 7) {
-        std::memcpy(&offset, key.getUserData(), 4);
+        std::memcpy(&offset, key_.getUserData(), 4);
         offset = swordtoarch32(offset);
 
-        std::memcpy(&size, key.getUserData() + 4, 4);
+        std::memcpy(&size, key_.getUserData() + 4, 4);
         size = swordtoarch32(size);
 
         entrySize = size;        // support getEntrySize call
@@ -116,7 +116,7 @@ std::string RawGenBook::getRawEntryImpl() const {
         bdtfd->read(&entry[0u], size);
 
         rawFilter(entry, nullptr);    // hack, decipher
-        rawFilter(entry, &key);
+        rawFilter(entry, &key_);
     }
 
     return entry;
@@ -127,7 +127,7 @@ void RawGenBook::setEntry(const char *inbuf, long len) {
 
     uint32_t offset = archtosword32(bdtfd->seek(0, SEEK_END));
     uint32_t size = 0;
-    TreeKeyIdx *key = ((TreeKeyIdx *)&(getTreeKey()));
+    TreeKeyIdx * key_ = ((TreeKeyIdx *)&(getTreeKey()));
 
     char userData[8];
 
@@ -139,13 +139,13 @@ void RawGenBook::setEntry(const char *inbuf, long len) {
     size = archtosword32(len);
     std::memcpy(userData, &offset, 4);
     std::memcpy(userData+4, &size, 4);
-    key->setUserData(userData, 8);
-    key->save();
+    key_->setUserData(userData, 8);
+    key_->save();
 }
 
 
 void RawGenBook::linkEntry(SWKey const & inkey) {
-    TreeKeyIdx *key = ((TreeKeyIdx *)&(getTreeKey()));
+    TreeKeyIdx * key_ = ((TreeKeyIdx *)&(getTreeKey()));
     // see if we have a VerseKey * or decendant
     /// \bug Remove const_cast:
     TreeKeyIdx * srckey =
@@ -156,8 +156,8 @@ void RawGenBook::linkEntry(SWKey const & inkey) {
         srckey->positionFrom(inkey);
     }
 
-    key->setUserData(srckey->getUserData(), 8);
-    key->save();
+    key_->setUserData(srckey->getUserData(), 8);
+    key_->save();
 
     if (&inkey != srckey) // free our key if we created a VerseKey
         delete srckey;
@@ -171,8 +171,8 @@ void RawGenBook::linkEntry(SWKey const & inkey) {
  */
 
 void RawGenBook::deleteEntry() {
-    TreeKeyIdx *key = ((TreeKeyIdx *)&(getTreeKey()));
-    key->remove();
+    TreeKeyIdx * key_ = ((TreeKeyIdx *)&(getTreeKey()));
+    key_->remove();
 }
 
 
@@ -195,11 +195,11 @@ std::unique_ptr<SWKey> RawGenBook::createKey() const
 
 bool RawGenBook::hasEntry(const SWKey *k) const {
     /// \bug remove const_cast:
-    TreeKey &key = getTreeKey(const_cast<SWKey *>(k));
+    TreeKey & key_ = getTreeKey(const_cast<SWKey *>(k));
 
     int dsize;
-    key.getUserData(&dsize);
-    return (dsize > 7) && key.popError() == '\x00';
+    key_.getUserData(&dsize);
+    return (dsize > 7) && key_.popError() == '\x00';
 }
 
 } /* namespace swordxx */
