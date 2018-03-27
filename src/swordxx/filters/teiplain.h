@@ -39,7 +39,7 @@ protected:
     public:
         std::string w;
         XMLTag tag;
-        MyUserData(const SWModule *module, const SWKey *key) : BasicFilterUserData(module, key) {}
+        using BasicFilterUserData::BasicFilterUserData;
         ~MyUserData() noexcept override;
     };
 
