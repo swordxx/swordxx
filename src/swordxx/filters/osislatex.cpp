@@ -182,8 +182,8 @@ OSISLaTeX::OSISLaTeX() {
     renderNoteNumbers = false;
 }
 
-OSISLaTeX::MyUserData::MyUserData(SWModule const * module, SWKey const * key)
-    : BasicFilterUserData(module, key)
+OSISLaTeX::MyUserData::MyUserData(SWModule const * module_, SWKey const * key_)
+    : BasicFilterUserData(module_, key_)
 {
     inXRefNote    = false;
     suspendLevel = 0;
