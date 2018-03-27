@@ -81,15 +81,15 @@ std::string zTextBase<BaseZVerse>::getRawEntryImpl() const {
     VerseOffsetType start = 0;
     VerseSizeType size = 0;
     BufferNumberType buffnum = 0;
-    VerseKey const & key = getVerseKey();
+    VerseKey const & key_ = getVerseKey();
 
-    this->findOffset(key.getTestament(), key.getTestamentIndex(), &start, &size, &buffnum);
+    this->findOffset(key_.getTestament(), key_.getTestamentIndex(), &start, &size, &buffnum);
     entrySize = size;        // support getEntrySize call
 
     std::string entry;
 
-    this->zReadText(key.getTestament(), start, size, buffnum, entry);
-    rawFilter(entry, &key);
+    this->zReadText(key_.getTestament(), start, size, buffnum, entry);
+    rawFilter(entry, &key_);
     return entry;
 }
 
@@ -114,19 +114,19 @@ bool zTextBase<BaseZVerse>::sameBlock(VerseKey const & k1, VerseKey const & k2) 
 
 template <typename BaseZVerse>
 void zTextBase<BaseZVerse>::setEntry(const char *inbuf, long len) {
-    VerseKey const & key = getVerseKey();
+    VerseKey const & key_ = getVerseKey();
 
     // see if we've jumped across blocks since last write
     if (lastWriteKey) {
-        if (!sameBlock(*lastWriteKey, key)) {
+        if (!sameBlock(*lastWriteKey, key_)) {
             this->flushCache();
         }
         delete lastWriteKey;
     }
 
-    this->doSetText(key.getTestament(), key.getTestamentIndex(), inbuf, len);
+    this->doSetText(key_.getTestament(), key_.getTestamentIndex(), inbuf, len);
 
-    lastWriteKey = static_cast<VerseKey *>(key.clone().release()); // must delete
+    lastWriteKey = static_cast<VerseKey *>(key_.clone().release()); // must delete
 }
 
 template <typename BaseZVerse>
@@ -143,8 +143,8 @@ void zTextBase<BaseZVerse>::linkEntry(SWKey const & inkey) {
  */
 template <typename BaseZVerse>
 void zTextBase<BaseZVerse>::deleteEntry() {
-    VerseKey const & key = getVerseKey();
-    this->doSetText(key.getTestament(), key.getTestamentIndex(), "");
+    VerseKey const & key_ = getVerseKey();
+    this->doSetText(key_.getTestament(), key_.getTestamentIndex(), "");
 }
 
 
