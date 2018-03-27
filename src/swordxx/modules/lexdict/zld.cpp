@@ -185,13 +185,12 @@ long zLD::getEntryCount() const {
 }
 
 
-long zLD::getEntryForKey(const char* key) const
-{
+long zLD::getEntryForKey(char const * key_) const {
     long offset;
     if (this->m_strongsPadding) {
-        findKeyIndex(strongsPadBuf(key).get(), &offset);
+        findKeyIndex(strongsPadBuf(key_).get(), &offset);
     } else {
-        findKeyIndex(key, &offset);
+        findKeyIndex(key_, &offset);
     }
     return offset/IDXENTRYSIZE;
 }
