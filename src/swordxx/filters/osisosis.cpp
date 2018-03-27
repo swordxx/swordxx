@@ -159,8 +159,8 @@ bool OSISOSIS::handleToken(std::string &buf, const char *token, BasicFilterUserD
                 }
 
                 if (u->module) {
-                                        XMLTag tag = token;
-                                        std::string swordFootnote = tag.attribute("swordFootnote");
+                                        XMLTag tag2 = token;
+                                        std::string swordFootnote = tag2.attribute("swordFootnote");
                                         std::string footnoteBody = u->module->getEntryAttributes()["Footnote"][swordFootnote]["body"];
                                         buf.append(u->module->renderText(footnoteBody.c_str()));
                                 }
