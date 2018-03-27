@@ -563,10 +563,10 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
             }
             else if (tag.isEndTag()) {
                 if (!u.titleStack.empty()) {
-                    XMLTag tag(u.titleStack.top().c_str());
+                    XMLTag tag2(u.titleStack.top().c_str());
                     if (!u.titleStack.empty())
                         u.titleStack.pop();
-                    std::string pushed = tag.attribute("pushed");
+                    std::string pushed = tag2.attribute("pushed");
                     if (!pushed.empty()) {
                         outText((std::string("</") + pushed + ">\n\n").c_str(), buf, u);
                     }
@@ -664,27 +664,27 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
                 u.hiStack.push(tag.toString());
             }
             else if (tag.isEndTag()) {
-                std::string type = "";
+                std::string type2;
                 if (!u.hiStack.empty()) {
-                    XMLTag tag(u.hiStack.top().c_str());
+                    XMLTag tag2(u.hiStack.top().c_str());
                     if (!u.hiStack.empty())
                         u.hiStack.pop();
-                    type = tag.attribute("type");
-                    if (!type.length()) type = tag.attribute("rend");
+                    type2 = tag2.attribute("type");
+                    if (!type2.length()) type2 = tag2.attribute("rend");
                 }
-                if (type == "bold" || type == "b" || type == "x-b") {
+                if (type2 == "bold" || type2 == "b" || type2 == "x-b") {
                     outText("</b>", buf, u);
                 }
-                else if (type == "ol") {
+                else if (type2 == "ol") {
                     outText("</span>", buf, u);
                 }
-                else if (type == "super") {
+                else if (type2 == "super") {
                     outText("</sup>", buf, u);
                 }
-                else if (type == "sub") {
+                else if (type2 == "sub") {
                     outText("</sub>", buf, u);
                 }
-                else if (type == "i" || type == "italic") {
+                else if (type2 == "i" || type2 == "italic") {
                     outText("</i>", buf, u);
                 } else {
                     outText("</span>", buf, u);
@@ -814,9 +814,9 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
             else if (type == "majorSection") {
             }
             else if ((!tag.isEndTag()) && (!tag.isEmpty())) {
-                std::string type = tag.attribute("type");
+                auto const type2(tag.attribute("type"));
                 outText("<div class=\"", buf, u);
-                outText(type.c_str(), buf, u);
+                outText(type2.c_str(), buf, u);
                 outText("\">", buf, u);
                  }
                  else if (tag.isEndTag()) {
