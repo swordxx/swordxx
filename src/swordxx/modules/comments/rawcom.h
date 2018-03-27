@@ -44,7 +44,7 @@ public:
            SWTextDirection dir = DIRECTION_LTR,
            SWTextMarkup markup = FMT_UNKNOWN,
            char const * ilang = nullptr,
-           const char *versification = "KJV");
+           const char *m_versification = "KJV");
     ~RawCom() override;
 
     void increment(int steps = 1) override;
