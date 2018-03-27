@@ -209,7 +209,7 @@ signed char zStr::findKeyIndex(const char *ikey, long *idxoff, long away) const
                     break;
                 }
 
-                diff = std::strcmp(key.c_str(), trybuf.c_str());
+                diff = key.compare(trybuf);
 
                 if (!diff)
                     break;
@@ -429,7 +429,7 @@ void zStr::setText(const char *ikey, const char *buf, long len) {
     char notFound = findKeyIndex(ikey, &idxoff, 0);
     if (!notFound) {
         auto const dbKey(getKeyFromIdxOffset(idxoff));
-        int diff = std::strcmp(key.c_str(), dbKey.c_str());
+        auto diff = key.compare(dbKey);
         if (diff < 0) {
         }
         else if (diff > 0) {

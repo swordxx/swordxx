@@ -157,7 +157,7 @@ std::string SWKey::getOSISRefRangeText() const { return getRangeText(); }
  */
 
 int SWKey::compare(SWKey const & ikey) const noexcept {
-    return std::strcmp(m_keyText.c_str(), ikey.m_keyText.c_str());
+    return m_keyText.compare(ikey.m_keyText);
 }
 
 void SWKey::positionToTop() {}
