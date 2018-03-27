@@ -43,11 +43,11 @@ OSISWordJS::OSISWordJS()
     : OffOnOptionFilter(oName,
                         oTip)
 {
-     defaultGreekLex   = nullptr;
-     defaultHebLex     = nullptr;
-     defaultGreekParse = nullptr;
-     defaultHebParse   = nullptr;
-     mgr               = nullptr;
+     m_defaultGreekLex   = nullptr;
+     m_defaultHebLex     = nullptr;
+     m_defaultGreekParse = nullptr;
+     m_defaultHebParse   = nullptr;
+     m_mgr               = nullptr;
 }
 
 OSISWordJS::~OSISWordJS() {
@@ -133,11 +133,11 @@ char OSISWordJS::processText(std::string &text, const SWKey *key, const SWModule
                     std::string lexName = "";
                     // we can pass the real lex name in, but we have some
                     // aliases in the javascript to optimize bandwidth
-                    if ((gh == 'G') && (defaultGreekLex)) {
-                        lexName = (defaultGreekLex->getName() == "StrongsGreek")?"G":defaultGreekLex->getName();
+                    if ((gh == 'G') && (m_defaultGreekLex)) {
+                        lexName = (m_defaultGreekLex->getName() == "StrongsGreek")?"G":m_defaultGreekLex->getName();
                     }
-                    else if ((gh == 'H') && (defaultHebLex)) {
-                        lexName = (defaultHebLex->getName() == "StrongsHebrew")?"H":defaultHebLex->getName();
+                    else if ((gh == 'H') && (m_defaultHebLex)) {
+                        lexName = (m_defaultHebLex->getName() == "StrongsHebrew")?"H":m_defaultHebLex->getName();
                     }
 
                     std::string xlit = wtag.attribute("xlit");

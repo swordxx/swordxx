@@ -32,11 +32,11 @@ class SWMgr;
   /** This Filter shows/hides strong's numbers in a OSIS text
   */
 class SWDLLEXPORT OSISWordJS: public OffOnOptionFilter {
-     SWModule *defaultGreekLex;
-     SWModule *defaultHebLex;
-     SWModule *defaultGreekParse;
-     SWModule *defaultHebParse;
-     SWMgr *mgr;
+     SWModule * m_defaultGreekLex;
+     SWModule * m_defaultHebLex;
+     SWModule * m_defaultGreekParse;
+     SWModule * m_defaultHebParse;
+     SWMgr * m_mgr;
 
 public:
     OSISWordJS();
@@ -51,12 +51,12 @@ public:
                            SWModule * defaultGreekParse = nullptr,
                            SWModule * defaultHebParse = nullptr)
     {
-        this->defaultGreekLex   = defaultGreekLex;
-        this->defaultHebLex     = defaultHebLex;
-        this->defaultGreekParse = defaultGreekParse;
-        this->defaultHebParse   = defaultHebParse;
+        m_defaultGreekLex   = defaultGreekLex;
+        m_defaultHebLex     = defaultHebLex;
+        m_defaultGreekParse = defaultGreekParse;
+        m_defaultHebParse   = defaultHebParse;
     }
-    void setMgr(SWMgr *mgr) { this->mgr = mgr; }
+    void setMgr(SWMgr *mgr) { this->m_mgr = mgr; }
 };
 
 } /* namespace swordxx */
