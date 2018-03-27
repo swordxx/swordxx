@@ -444,10 +444,10 @@ char SWMgr::findConfig(std::string & prefixPath, std::string & configPath, std::
                     SWLog::getSystemLog()->logDebug("Overriding any systemwide swordxx.conf with one found in users home directory (%s)", tryPath.c_str());
                     sysConfPath = tryPath;
                 } else {
-                    std::string const tryPath(homeDir + "swordxx/swordxx.conf");
-                    if (FileMgr::existsFile(tryPath.c_str())) {
-                        SWLog::getSystemLog()->logDebug("Overriding any systemwide swordxx.conf with one found in users home directory (%s)", tryPath.c_str());
-                        sysConfPath = tryPath;
+                    std::string const tryPath2(homeDir + "swordxx/swordxx.conf");
+                    if (FileMgr::existsFile(tryPath2.c_str())) {
+                        SWLog::getSystemLog()->logDebug("Overriding any systemwide swordxx.conf with one found in users home directory (%s)", tryPath2.c_str());
+                        sysConfPath = tryPath2;
                     }
                 }
             }
