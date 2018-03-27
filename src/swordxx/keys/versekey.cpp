@@ -572,8 +572,7 @@ ListKey VerseKey::parseVerseList(const char *buf, const char *defaultKey, bool e
             if (chap == -1) {
                 book.push_back(*buf);
                 book.push_back(*(buf + 1u));
-                int bookno = getBookFromAbbrev(book.c_str());
-                if (bookno > -1) {
+                if (getBookFromAbbrev(book.c_str()) > -1) {
                     book.pop_back();
                     buf++;
                     break;
