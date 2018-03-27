@@ -205,7 +205,7 @@ char RawVerseBase<SizeType_>::createModule(NormalizedPath const & path,
     FileMgr & fileMgr = *FileMgr::getSystemFileMgr();
 
     static auto const openFile =
-            [](FileMgr & fileMgr, std::string const & filename) {
+            [&fileMgr](std::string const & filename) {
                 auto * const fd =
                         fileMgr.open(filename.c_str(),
                                      FileMgr::CREAT | FileMgr::WRONLY,
@@ -215,20 +215,20 @@ char RawVerseBase<SizeType_>::createModule(NormalizedPath const & path,
             };
 
     static auto const touchFile =
-            [](FileMgr & fileMgr, std::string const & filename)
-            { return fileMgr.close(openFile(fileMgr, filename.c_str())); };
+            [&fileMgr](std::string const & filename)
+            { return fileMgr.close(openFile(filename.c_str())); };
 
     FileMgr::removeFile(otPath.c_str());
-    touchFile(fileMgr, otPath);
+    touchFile(otPath);
 
     FileMgr::removeFile(ntPath.c_str());
-    touchFile(fileMgr, ntPath);
+    touchFile(ntPath);
 
     FileMgr::removeFile(otVssPath.c_str());
-    FileDesc * const fd = openFile(fileMgr, otVssPath);
+    FileDesc * const fd = openFile(otVssPath);
 
     FileMgr::removeFile(ntVssPath.c_str());
-    FileDesc * const fd2 = openFile(fileMgr, ntVssPath);
+    FileDesc * const fd2 = openFile(ntVssPath);
 
     VerseKey vk;
     vk.setVersificationSystem(v11n);

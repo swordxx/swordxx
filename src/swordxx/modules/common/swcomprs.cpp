@@ -50,19 +50,19 @@ char * saferCalloc(std::size_t const nmemb, std::size_t const size)
 SWCompress::SWCompress() {}
 
 SWCompress::~SWCompress() {
-    std::free(zbuf);
-    std::free(buf);
+    std::free(m_zbuf);
+    std::free(m_buf);
 }
 
 void SWCompress::reset() noexcept {
-    std::free(buf);
-    buf = nullptr;
-    std::free(zbuf);
-    zbuf = nullptr;
-    zlen = 0;
-    zpos = 0;
-    pos = 0;
-    slen = 0;
+    std::free(m_buf);
+    m_buf = nullptr;
+    std::free(m_zbuf);
+    m_zbuf = nullptr;
+    m_zlen = 0;
+    m_zpos = 0;
+    m_pos = 0;
+    m_slen = 0;
 }
 
 char * SWCompress::Buf(const char * ibuf, unsigned long * len) {
@@ -71,21 +71,21 @@ char * SWCompress::Buf(const char * ibuf, unsigned long * len) {
         std::size_t const newLength = len ? *len : std::strlen(ibuf);
         auto const newBuffer = saferCalloc(newLength + 1, 1);
         reset();
-        slen = newLength;
-        buf = newBuffer;
-        std::memcpy(buf, ibuf, slen);
+        m_slen = newLength;
+        m_buf = newBuffer;
+        std::memcpy(m_buf, ibuf, m_slen);
     }
 
     // getting an uncompressed buffer
-    if (!buf) {
+    if (!m_buf) {
         // be sure we at least allocate an empty buf for return:
-        buf = saferCalloc(1, 1);
+        m_buf = saferCalloc(1, 1);
         Decode();
 //        slen = std::strlen(buf);
         if (len)
-            *len = slen;
+            *len = m_slen;
     }
-    return buf;
+    return m_buf;
 }
 
 char * SWCompress::zBuf(unsigned long * len, char * ibuf) {
@@ -93,34 +93,34 @@ char * SWCompress::zBuf(unsigned long * len, char * ibuf) {
     if (ibuf) {
         auto const newBuffer = saferMalloc(*len);
         reset();
-        zbuf = newBuffer;
-        std::memcpy(zbuf, ibuf, *len);
-        zlen = *len;
+        m_zbuf = newBuffer;
+        std::memcpy(m_zbuf, ibuf, *len);
+        m_zlen = *len;
     }
 
     // getting a compressed buffer
-    if (!zbuf) {
+    if (!m_zbuf) {
         Encode();
     }
 
-    *len = zlen;
-    return zbuf;
+    *len = m_zlen;
+    return m_zbuf;
 }
 
 /// \note Override for other than buffer compression
 unsigned long SWCompress::GetChars(char * ibuf, unsigned long len, Direction dir) {
     if (dir == DECODE) {
-        len = ((zlen - zpos) > len) ? len : zlen - zpos;
+        len = ((m_zlen - m_zpos) > len) ? len : m_zlen - m_zpos;
         if (len > 0) {
-            std::memmove(ibuf, &zbuf[zpos], len);
-            zpos += len;
+            std::memmove(ibuf, &m_zbuf[m_zpos], len);
+            m_zpos += len;
         }
     } else {
 //        slen = std::strlen(buf);
-        len = ((slen - pos) > len) ? len : slen - pos;
+        len = ((m_slen - m_pos) > len) ? len : m_slen - m_pos;
         if (len > 0) {
-            std::memmove(ibuf, &buf[pos], len);
-            pos += len;
+            std::memmove(ibuf, &m_buf[m_pos], len);
+            m_pos += len;
         }
     }
     return len;
@@ -129,29 +129,29 @@ unsigned long SWCompress::GetChars(char * ibuf, unsigned long len, Direction dir
 /// \note override for other than buffer compression
 unsigned long SWCompress::SendChars(char *ibuf, unsigned long len, Direction dir) {
     if (dir == DECODE) {
-        if (buf) {
+        if (m_buf) {
 //            slen = std::strlen(buf);
-            if ((pos + len) > slen) {
-                buf = saferRealloc(buf, pos + len + 1024);
-                std::memset(&buf[pos], 0, len + 1024);
+            if ((m_pos + len) > m_slen) {
+                m_buf = saferRealloc(m_buf, m_pos + len + 1024);
+                std::memset(&m_buf[m_pos], 0, len + 1024);
             }
         } else {
-            buf = saferCalloc(1, len + 1024);
+            m_buf = saferCalloc(1, len + 1024);
         }
-        std::memmove(&buf[pos], ibuf, len);
-        pos += len;
+        std::memmove(&m_buf[m_pos], ibuf, len);
+        m_pos += len;
     } else {
-        if (zbuf) {
-            if ((zpos + len) > zlen) {
-                zbuf = saferRealloc(zbuf, zpos + len + 1024);
-                zlen = zpos + len + 1024;
+        if (m_zbuf) {
+            if ((m_zpos + len) > m_zlen) {
+                m_zbuf = saferRealloc(m_zbuf, m_zpos + len + 1024);
+                m_zlen = m_zpos + len + 1024;
             }
         } else {
-            zbuf = saferCalloc(1, len + 1024);
-            zlen = len + 1024;
+            m_zbuf = saferCalloc(1, len + 1024);
+            m_zlen = len + 1024;
         }
-        std::memmove(&zbuf[zpos], ibuf, len);
-        zpos += len;
+        std::memmove(&m_zbuf[m_zpos], ibuf, len);
+        m_zpos += len;
     }
     return len;
 }
@@ -187,7 +187,7 @@ void SWCompress::cycleStream(Direction dir) {
             totlen += SendChars(buf_, len, dir);
     } while (len == 1024);
 
-    zlen = slen = totlen;
+    m_zlen = m_slen = totlen;
 }
 
 } /* namespace swordxx */

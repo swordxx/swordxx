@@ -81,14 +81,14 @@ void XzCompress::Encode(void)
         chunkbuf = buf.data() + len;
     }
 
-    zlen = (long)lzma_stream_buffer_bound(len);
-    auto zbuf(std::make_unique<char[]>(zlen + 1));
+    m_zlen = (long)lzma_stream_buffer_bound(len);
+    auto zbuf(std::make_unique<char[]>(m_zlen + 1));
     std::size_t zpos = 0;
 
     if (len)
     {
         //printf("Doing compress\n");
-        switch (lzma_easy_buffer_encode(level | LZMA_PRESET_EXTREME, LZMA_CHECK_CRC64, nullptr, (const uint8_t*)buf.data(), (std::size_t)len, (uint8_t*)zbuf.get(), &zpos, (std::size_t)zlen)) {
+        switch (lzma_easy_buffer_encode(m_level | LZMA_PRESET_EXTREME, LZMA_CHECK_CRC64, nullptr, (const uint8_t*)buf.data(), (std::size_t)len, (uint8_t*)zbuf.get(), &zpos, (std::size_t)m_zlen)) {
                 case LZMA_OK: SendChars(zbuf.get(), zpos, ENCODE);  break;
             case LZMA_BUF_ERROR: fprintf(stderr, "ERROR: not enough room in the out buffer during compression.\n"); break;
             case LZMA_UNSUPPORTED_CHECK: fprintf(stderr, "ERROR: unsupported_check error encountered during decompression.\n"); break;
@@ -138,12 +138,12 @@ void XzCompress::Decode(void)
         unsigned long blen = zlen*20;    // trust compression is less than 2000%
         auto buf(std::make_unique<char[]>(blen));
         //printf("Doing decompress {%s}\n", zbuf);
-        slen = 0;
+        m_slen = 0;
         std::size_t zpos = 0;
         std::size_t bpos = 0;
 
         switch (lzma_stream_buffer_decode((uint64_t *)&memlimit, 0, nullptr, (const uint8_t*)zbuf.data(), &zpos, (std::size_t)zlen, (uint8_t*)buf.get(), &bpos, (std::size_t)&blen)){
-            case LZMA_OK: SendChars(buf.get(), bpos, DECODE); slen = bpos; break;
+            case LZMA_OK: SendChars(buf.get(), bpos, DECODE); m_slen = bpos; break;
             case LZMA_FORMAT_ERROR: fprintf(stderr, "ERROR: format error encountered during decompression.\n"); break;
             case LZMA_OPTIONS_ERROR: fprintf(stderr, "ERROR: options error encountered during decompression.\n"); break;
             case LZMA_DATA_ERROR: fprintf(stderr, "ERROR: corrupt data during decompression.\n"); break;
@@ -169,13 +169,13 @@ void XzCompress::Decode(void)
  */
 
 void XzCompress::setLevel(int l) {
-    level = l;
+    m_level = l;
 
     // having changed the compression level, we need to adjust our memlimit accordingly,
     // as in the constructor:
 
     // start with the estimated memory usage for our preset
-    memlimit = lzma_easy_decoder_memusage(level | LZMA_PRESET_EXTREME);
+    memlimit = lzma_easy_decoder_memusage(m_level | LZMA_PRESET_EXTREME);
 
     // and round up to a power of 2--
     // bit twiddle hack to determine next greatest power of 2 from:

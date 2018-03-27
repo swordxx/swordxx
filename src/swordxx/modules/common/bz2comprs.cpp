@@ -39,7 +39,7 @@ namespace swordxx {
  */
 
 Bzip2Compress::Bzip2Compress() : SWCompress() {
-    level = 9;
+    m_level = 9;
 }
 
 
@@ -81,17 +81,17 @@ void Bzip2Compress::Encode(void)
     }
 
 
-    zlen = (long) (len*1.01)+600;
-    auto zbuf(std::make_unique<char[]>(zlen + 1));
+    m_zlen = (long) (len*1.01)+600;
+    auto zbuf(std::make_unique<char[]>(m_zlen + 1));
     if (len)
     {
         //printf("Doing compress\n");
-        if (BZ2_bzBuffToBuffCompress(zbuf.get(), (unsigned int*)&zlen, buf.data(), len, level, 0, 0) != BZ_OK)
+        if (BZ2_bzBuffToBuffCompress(zbuf.get(), (unsigned int*)&m_zlen, buf.data(), len, m_level, 0, 0) != BZ_OK)
         {
             printf("ERROR in compression\n");
         }
         else {
-            SendChars(zbuf.get(), zlen, ENCODE);
+            SendChars(zbuf.get(), m_zlen, ENCODE);
         }
     }
     else
@@ -133,9 +133,9 @@ void Bzip2Compress::Decode(void)
         unsigned int blen = zlen*20;    // trust compression is less than 1000%
         auto buf(std::make_unique<char[]>(blen));
         //printf("Doing decompress {%s}\n", zbuf);
-        slen = 0;
+        m_slen = 0;
         switch (BZ2_bzBuffToBuffDecompress(buf.get(), &blen, zbuf.data(), zlen, 0, 0)){
-            case BZ_OK: SendChars(buf.get(), blen, DECODE); slen = blen; break;
+            case BZ_OK: SendChars(buf.get(), blen, DECODE); m_slen = blen; break;
             case BZ_MEM_ERROR: fprintf(stderr, "ERROR: not enough memory during decompression.\n"); break;
             case BZ_OUTBUFF_FULL: fprintf(stderr, "ERROR: not enough room in the out buffer during decompression.\n"); break;
             case BZ_DATA_ERROR: fprintf(stderr, "ERROR: corrupt data during decompression.\n"); break;

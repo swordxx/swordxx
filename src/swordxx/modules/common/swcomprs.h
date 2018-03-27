@@ -39,14 +39,14 @@ public: /* Methods: */
 
     SWCompress();
     virtual ~ SWCompress();
-    char * Buf(char const * buf = nullptr, unsigned long * len = nullptr);
-    char * zBuf(unsigned long * len, char * buf = nullptr);
-    virtual unsigned long GetChars(char * buf, unsigned long len, Direction dir);
-    virtual unsigned long SendChars(char * buf, unsigned long len, Direction dir);
+    char * Buf(char const * m_buf = nullptr, unsigned long * len = nullptr);
+    char * zBuf(unsigned long * len, char * m_buf = nullptr);
+    virtual unsigned long GetChars(char * m_buf, unsigned long len, Direction dir);
+    virtual unsigned long SendChars(char * m_buf, unsigned long len, Direction dir);
     virtual void Encode();
     virtual void Decode();
-    virtual void setLevel(int l) { level = l; }
-    virtual int getLevel() { return level; }
+    virtual void setLevel(int l) { m_level = l; }
+    virtual int getLevel() { return m_level; }
 
 private: /* Methods: */
 
@@ -55,13 +55,13 @@ private: /* Methods: */
 
 protected: /* Fields: */
 
-    char * buf = nullptr;
-    char * zbuf = nullptr;
-    unsigned long zlen = 0;
-    unsigned long zpos = 0;
-    unsigned long pos = 0;
-    unsigned long slen = 0;
-    int level = 6;
+    char * m_buf = nullptr;
+    char * m_zbuf = nullptr;
+    unsigned long m_zlen = 0;
+    unsigned long m_zpos = 0;
+    unsigned long m_pos = 0;
+    unsigned long m_slen = 0;
+    int m_level = 6;
 
 };
 

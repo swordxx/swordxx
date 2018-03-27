@@ -41,7 +41,7 @@ namespace swordxx {
 ZipCompress::ZipCompress() : SWCompress()
 {
 //    fprintf(stderr, "init compress\n");
-    level = Z_DEFAULT_COMPRESSION;
+    m_level = Z_DEFAULT_COMPRESSION;
 }
 
 
@@ -100,17 +100,17 @@ ZEXTERN int ZEXPORT compress2 OF((Bytef *dest,   uLongf *destLen,
     }
 
 
-    zlen = (long) (len*1.001)+15;
-    auto zbuf(std::make_unique<char[]>(zlen + 1));
+    m_zlen = (long) (len*1.001)+15;
+    auto zbuf(std::make_unique<char[]>(m_zlen + 1));
     if (len)
     {
         //printf("Doing compress\n");
-        if (compress2((Bytef*)zbuf.get(), &zlen, (const Bytef*)buf.data(), len, level) != Z_OK)
+        if (compress2((Bytef*)zbuf.get(), &m_zlen, (const Bytef*)buf.data(), len, m_level) != Z_OK)
         {
             printf("ERROR in compression\n");
         }
         else {
-            SendChars(zbuf.get(), zlen, ENCODE);
+            SendChars(zbuf.get(), m_zlen, ENCODE);
         }
     }
     else
@@ -170,9 +170,9 @@ ZEXTERN int ZEXPORT uncompress OF((Bytef *dest,   uLongf *destLen,
         unsigned long blen = zlen*20;    // trust compression is less than 1000%
         auto buf(std::make_unique<char[]>(blen));
         //printf("Doing decompress {%s}\n", zbuf);
-        slen = 0;
+        m_slen = 0;
         switch (uncompress((Bytef*)buf.get(), &blen, (Bytef*)zbuf.data(), zlen)){
-            case Z_OK: SendChars(buf.get(), blen, DECODE); slen = blen; break;
+            case Z_OK: SendChars(buf.get(), blen, DECODE); m_slen = blen; break;
             case Z_MEM_ERROR: fprintf(stderr, "ERROR: not enough memory during decompression.\n"); break;
             case Z_BUF_ERROR: fprintf(stderr, "ERROR: not enough room in the out buffer during decompression.\n"); break;
             case Z_DATA_ERROR: fprintf(stderr, "ERROR: corrupt data during decompression.\n"); break;

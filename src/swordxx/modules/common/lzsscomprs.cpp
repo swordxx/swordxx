@@ -598,7 +598,7 @@ void LZSSCompress::Encode(void)
 
 
     // must set zlen for parent class to know length of compressed buffer
-    zlen = zpos;
+    m_zlen = m_zpos;
 }
 
 
@@ -726,7 +726,7 @@ void LZSSCompress::Decode(void)
             totalLen += len;
         }
     }
-    slen = totalLen;
+    m_slen = totalLen;
 }
 
 } /* namespace swordxx */
