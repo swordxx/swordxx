@@ -104,7 +104,6 @@ protected:
     SWKey *key;
 
     mutable int entrySize = -1;
-    mutable long entryIndex;     // internal common storage for index
 
 public:
 
@@ -205,9 +204,6 @@ public:
      * do we really need this?
      */
     virtual std::string getKeyText() const { return getKey()->getText(); }
-
-    virtual long getIndex() const { return entryIndex; }
-    virtual void setIndex(long iindex) { entryIndex = iindex; }
 
     std::string const & getName() const { return m_moduleName; }
     std::string const & getDescription() const { return m_moduleDescription; }

@@ -69,20 +69,6 @@ SWCom::~SWCom() {
 std::unique_ptr<SWKey> SWCom::createKey() const
 { return staticCreateKey(versification.c_str()); }
 
-
-long SWCom::getIndex() const { return getVerseKey().getIndex(); }
-
-void SWCom::setIndex(long iindex) {
-    VerseKey & key = getVerseKey();
-    key.setTestament(1);
-    key.setIndex(iindex);
-
-    if (&key != this->key) {
-        this->key->copyFrom(key);
-    }
-}
-
-
 VerseKey &SWCom::getVerseKey(const SWKey *keyToConvert) const {
     SWKey const * tmp = keyToConvert ? keyToConvert : this->key;
     /// \bug remove const_cast:

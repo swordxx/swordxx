@@ -64,20 +64,6 @@ SWText::SWText(const char *imodname, const char *imoddesc, TextEncoding enc, SWT
 std::unique_ptr<SWKey> SWText::createKey() const
 { return staticCreateKey(versification.c_str()); }
 
-long SWText::getIndex() const { return getVerseKey().getIndex(); }
-
-void SWText::setIndex(long iindex) {
-    VerseKey & key = getVerseKey();
-
-    key.setTestament(1);
-    key.setIndex(iindex);
-
-    if (&key != this->key) {
-        this->key->copyFrom(key);
-    }
-}
-
-
 VerseKey &SWText::getVerseKey(const SWKey *keyToConvert) const {
     SWKey const * tmp = keyToConvert ? keyToConvert : this->key;
     /// \bug remove const_cast:

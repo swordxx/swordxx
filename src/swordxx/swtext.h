@@ -57,9 +57,6 @@ public:
 
     std::unique_ptr<SWKey> createKey() const override;
 
-    long getIndex() const override;
-    void setIndex(long iindex) override;
-
 };
 
 } /* namespace swordxx */
