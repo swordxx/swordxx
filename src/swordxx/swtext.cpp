@@ -69,12 +69,12 @@ VerseKey &SWText::getVerseKey(const SWKey *keyToConvert) const {
     /// \bug remove const_cast:
     SWKey * thisKey = const_cast<SWKey *>(tmp);
 
-    if (VerseKey * const key = dynamic_cast<VerseKey *>(thisKey))
-        return *key;
+    if (VerseKey * const key_ = dynamic_cast<VerseKey *>(thisKey))
+        return *key_;
     if (ListKey * const lkTest = dynamic_cast<ListKey *>(thisKey))
-        if (VerseKey * const key =
+        if (VerseKey * const key_ =
                 dynamic_cast<VerseKey *>(lkTest->getElement()))
-            return *key;
+            return *key_;
 
     VerseKey & retKey = (m_tmpSecond) ? m_tmpVK1 : m_tmpVK2;
     m_tmpSecond = !m_tmpSecond;
