@@ -97,8 +97,8 @@ void SWLD::positionToBottom() {
     getRawEntry();
 }
 
-bool SWLD::hasEntry(const SWKey *key) const {
-    auto const keyText = key->getText();
+bool SWLD::hasEntry(SWKey const * key_) const {
+    auto const keyText = key_->getText();
     if (m_strongsPadding) {
         auto const buf(strongsPadBuf(keyText.c_str()));
         return buf.get() == getKeyForEntry(getEntryForKey(buf.get()));
