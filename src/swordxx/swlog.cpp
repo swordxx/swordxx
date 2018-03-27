@@ -34,7 +34,7 @@
 namespace swordxx {
 
 
-SWLog * SWLog::systemLog = nullptr;
+std::shared_ptr<SWLog> SWLog::systemLog;
 
 const int SWLog::LOG_ERROR     = 1;
 const int SWLog::LOG_WARN      = 2;
@@ -42,24 +42,16 @@ const int SWLog::LOG_INFO      = 3;
 const int SWLog::LOG_TIMEDINFO = 4;
 const int SWLog::LOG_DEBUG     = 5;
 
-SWLog *SWLog::getSystemLog() {
-    static class __staticSystemLog {
-    SWLog **clear;
-    public:
-        __staticSystemLog(SWLog **clear) { this->clear = clear; }
-        ~__staticSystemLog() { delete *clear; *clear = nullptr; }
-    } _staticSystemLog(&SWLog::systemLog);
-
+std::shared_ptr<SWLog> const & SWLog::getSystemLog() {
     if (!systemLog)
-        systemLog = new SWLog();
+        systemLog = std::make_shared<SWLog>();
 
     return systemLog;
 }
 
 
-void SWLog::setSystemLog(SWLog *newLog) {
-    delete getSystemLog();
-    systemLog = newLog;
+void SWLog::setSystemLog(std::shared_ptr<SWLog> newLogger) {
+    systemLog = std::move(newLogger);
 }
 
 

@@ -25,6 +25,7 @@
 #define swlogH
 //---------------------------------------------------------------------------
 
+#include <memory>
 #include "defs.h"
 
 
@@ -33,7 +34,7 @@ namespace swordxx {
 class SWDLLEXPORT SWLog {
 protected:
     char logLevel;
-    static SWLog *systemLog;
+    static std::shared_ptr<SWLog> systemLog;
 
 public:
 
@@ -43,8 +44,8 @@ public:
     static const int LOG_TIMEDINFO;
     static const int LOG_DEBUG;
 
-    static SWLog *getSystemLog();
-    static void setSystemLog(SWLog *newLogger);
+    static std::shared_ptr<SWLog> const & getSystemLog();
+    static void setSystemLog(std::shared_ptr<SWLog> newLogger);
 
     SWLog() { logLevel = 1;    /*default to show only errors*/}
     virtual ~SWLog() {}
