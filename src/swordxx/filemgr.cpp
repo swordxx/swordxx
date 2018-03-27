@@ -102,42 +102,43 @@ void FileMgr::setSystemFileMgr(FileMgr *newFileMgr) {
 // --------------- end statics --------------
 
 
-FileDesc::FileDesc(FileMgr *parent, const char *path, int mode, int perms, bool tryDowngrade) {
-    this->parent = parent;
-    this->path = path ? path : "";
-    this->mode = mode;
-    this->perms = perms;
-    this->tryDowngrade = tryDowngrade;
-    offset = 0;
-    fd = -77;
-}
+FileDesc::FileDesc(FileMgr * parent,
+                   const char * path_,
+                   int mode_,
+                   int perms_,
+                   bool tryDowngrade_)
+    : m_parent(parent)
+    , path(path_)
+    , mode(mode_)
+    , perms(perms_)
+    , tryDowngrade(tryDowngrade_)
+{}
 
 
 FileDesc::~FileDesc() {
-    if (fd > 0)
-        close(fd);
+    if (m_fd > 0)
+        close(m_fd);
 }
 
 
 int FileDesc::getFd() {
-    if (fd == -77)
-        fd = parent->sysOpen(this);
+    if (m_fd == -77)
+        m_fd = m_parent->sysOpen(this);
 //    if ((fd < -1) && (fd != -77))  // kludge to hand ce
 //        return 777;
-    return fd;
+    return m_fd;
 }
 
-FileMgr::FileMgr(int maxFiles) {
-    this->maxFiles = maxFiles;        // must be at least 2
-    files = nullptr;
-}
+FileMgr::FileMgr(int maxFiles_)
+    : maxFiles(maxFiles_)
+{}
 
 
 FileMgr::~FileMgr() noexcept {
     FileDesc *tmp;
 
     while(files) {
-        tmp = files->next;
+        tmp = files->m_next;
         delete files;
         files = tmp;
     }
@@ -152,13 +153,13 @@ FileDesc *FileMgr::open(const char *path, int mode, bool tryDowngrade) {
 FileDesc *FileMgr::open(const char *path, int mode, int perms, bool tryDowngrade) {
     FileDesc **tmp, *tmp2;
 
-    for (tmp = &files; *tmp; tmp = &((*tmp)->next)) {
-        if ((*tmp)->fd < 0)        // insert as first non-system_open file
+    for (tmp = &files; *tmp; tmp = &((*tmp)->m_next)) {
+        if ((*tmp)->m_fd < 0)        // insert as first non-system_open file
             break;
     }
 
     tmp2 = new FileDesc(this, path, mode, perms, tryDowngrade);
-    tmp2->next = *tmp;
+    tmp2->m_next = *tmp;
     *tmp = tmp2;
 
     return tmp2;
@@ -168,9 +169,9 @@ FileDesc *FileMgr::open(const char *path, int mode, int perms, bool tryDowngrade
 void FileMgr::close(FileDesc *file) {
     FileDesc **loop;
 
-    for (loop = &files; *loop; loop = &((*loop)->next)) {
+    for (loop = &files; *loop; loop = &((*loop)->m_next)) {
         if (*loop == file) {
-            *loop = (*loop)->next;
+            *loop = (*loop)->m_next;
             delete file;
             break;
         }
@@ -182,20 +183,20 @@ int FileMgr::sysOpen(FileDesc *file) {
     FileDesc **loop;
     int openCount = 1;        // because we are presently opening 1 file, and we need to be sure to close files to accomodate, if necessary
 
-    for (loop = &files; *loop; loop = &((*loop)->next)) {
+    for (loop = &files; *loop; loop = &((*loop)->m_next)) {
 
-        if ((*loop)->fd > 0) {
+        if ((*loop)->m_fd > 0) {
             if (++openCount > maxFiles) {
-                (*loop)->offset = lseek((*loop)->fd, 0, SEEK_CUR);
-                ::close((*loop)->fd);
-                (*loop)->fd = -77;
+                (*loop)->m_offset = lseek((*loop)->m_fd, 0, SEEK_CUR);
+                ::close((*loop)->m_fd);
+                (*loop)->m_fd = -77;
             }
         }
 
         if (*loop == file) {
             if (*loop != files) {
-                *loop = (*loop)->next;
-                file->next = files;
+                *loop = (*loop)->m_next;
+                file->m_next = files;
                 files = file;
             }
             if ((!::access(file->path.c_str(), R_OK)) || ((file->mode & O_CREAT) == O_CREAT)) {    // check for at least file exists / read access before we try to open
@@ -205,21 +206,21 @@ int FileMgr::sysOpen(FileDesc *file) {
                         file->mode = (file->mode & ~O_RDWR);    // remove write access
                         file->mode = (file->mode | O_RDONLY);// add read access
                     }
-                    file->fd = ::open(file->path.c_str(), file->mode|O_BINARY, file->perms);
+                    file->m_fd = ::open(file->path.c_str(), file->mode|O_BINARY, file->perms);
 
-                    if (file->fd >= 0)
+                    if (file->m_fd >= 0)
                         break;
                 }
 
-                if (file->fd >= 0)
-                    lseek(file->fd, file->offset, SEEK_SET);
+                if (file->m_fd >= 0)
+                    lseek(file->m_fd, file->m_offset, SEEK_SET);
             }
-            else file->fd = -1;
+            else file->m_fd = -1;
             if (!*loop)
                 break;
         }
     }
-    return file->fd;
+    return file->m_fd;
 }
 
 
@@ -261,10 +262,10 @@ signed char FileMgr::trunc(FileDesc *file) {
         }
         if (size < 1) {
             // zero out the file
-            ::close(file->fd);
-            file->fd = ::open(file->path.c_str(), O_TRUNC, S_IREAD|S_IWRITE|S_IRGRP|S_IROTH);
-            ::close(file->fd);
-            file->fd = -77;    // force file open by filemgr
+            ::close(file->m_fd);
+            file->m_fd = ::open(file->path.c_str(), O_TRUNC, S_IREAD|S_IWRITE|S_IRGRP|S_IROTH);
+            ::close(file->m_fd);
+            file->m_fd = -77;    // force file open by filemgr
             // copy tmp file back (dumb, but must preserve file permissions)
             lseek(fd, 0, SEEK_SET);
             do {
@@ -274,9 +275,9 @@ signed char FileMgr::trunc(FileDesc *file) {
         }
 
         ::close(fd);
-        ::close(file->fd);
+        ::close(file->m_fd);
         removeFile(tmpFileName.c_str()); // remove our tmp file
-        file->fd = -77;    // causes file to be swapped out forcing open on next call to getFd()
+        file->m_fd = -77;    // causes file to be swapped out forcing open on next call to getFd()
     }
     else { // put offset back and return failure
         file->seek(-1, SEEK_CUR);
@@ -504,11 +505,11 @@ int FileMgr::removeDir(const char *targetDir) {
 void FileMgr::flush() noexcept {
     FileDesc **loop;
 
-    for (loop = &files; *loop; loop = &((*loop)->next)) {
-        if ((*loop)->fd > 0) {
-            (*loop)->offset = lseek((*loop)->fd, 0, SEEK_CUR);
-            ::close((*loop)->fd);
-            (*loop)->fd = -77;
+    for (loop = &files; *loop; loop = &((*loop)->m_next)) {
+        if ((*loop)->m_fd > 0) {
+            (*loop)->m_offset = lseek((*loop)->m_fd, 0, SEEK_CUR);
+            ::close((*loop)->m_fd);
+            (*loop)->m_fd = -77;
         }
     }
 }

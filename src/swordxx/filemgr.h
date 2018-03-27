@@ -53,12 +53,16 @@ class SWDLLEXPORT FileDesc {
 
     friend class FileMgr;
 
-    long offset;
-    int fd;            // -77 closed;
-    FileMgr *parent;
-    FileDesc *next;
+    long m_offset = 0;
+    int m_fd = -77;            // -77 closed;
+    FileMgr * m_parent;
+    FileDesc * m_next;
 
-    FileDesc(FileMgr * parent, const char *path, int mode, int perms, bool tryDowngrade);
+    FileDesc(FileMgr * parent,
+             char const * path,
+             int mode,
+             int perms,
+             bool tryDowngrade);
     virtual ~FileDesc();
 
 public:
@@ -112,7 +116,7 @@ class SWDLLEXPORT FileMgr {
 
     friend class FileDesc;
 
-    FileDesc *files;
+    FileDesc * files = nullptr;
     int sysOpen(FileDesc * file);
 protected:
     static std::unique_ptr<FileMgr> systemFileMgr;
@@ -136,9 +140,9 @@ public:
     static void setSystemFileMgr(FileMgr *newFileMgr);
 
     /** Constructor.
-    * @param maxFiles The number of files that this FileMgr may open in parallel, if necessary.
+    * @param maxFiles The number of files that this FileMgr may open in parallel, if necessary. Must be at least 2.
     */
-    FileMgr(int maxFiles = 35);
+    FileMgr(int maxFiles_ = 35);
 
     /**
     * Destructor. Clean things up. Will close all files opened by this FileMgr object.
