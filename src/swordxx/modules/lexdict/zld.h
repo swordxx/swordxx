@@ -41,13 +41,13 @@ public:
     zLD(char const * ipath,
         char const * iname = nullptr,
         char const * idesc = nullptr,
-        long blockCount = 200,
+        long m_blockCount = 200,
         std::unique_ptr<SWCompress> = nullptr,
         TextEncoding encoding = ENC_UNKNOWN,
         SWTextDirection dir = DIRECTION_LTR,
         SWTextMarkup markup = FMT_UNKNOWN,
         char const * ilang = nullptr,
-        bool caseSensitive = false,
+        bool m_caseSensitive = false,
         bool strongsPadding = true);
     ~zLD() override;
 

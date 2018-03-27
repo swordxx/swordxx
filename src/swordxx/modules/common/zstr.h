@@ -42,13 +42,13 @@ class FileDesc;
 class SWDLLEXPORT zStr {
 
 private:
-    mutable EntriesBlock *cacheBlock;
-    mutable long cacheBlockIndex;
-    mutable bool cacheDirty;
-    bool caseSensitive;
-    mutable long lastoff;        // for caching and optimization
-    long blockCount;
-    std::unique_ptr<SWCompress> const compressor;
+    mutable EntriesBlock *m_cacheBlock;
+    mutable long m_cacheBlockIndex;
+    mutable bool m_cacheDirty;
+    bool m_caseSensitive;
+    mutable long m_lastoff;        // for caching and optimization
+    long m_blockCount;
+    std::unique_ptr<SWCompress> const m_compressor;
 
 protected:
     FileDesc *idxfd;
@@ -66,9 +66,9 @@ protected:
 public:
     zStr(char const * ipath,
          int fileMode = -1,
-         long blockCount = 100,
+         long m_blockCount = 100,
          std::unique_ptr<SWCompress> icomp = nullptr,
-         bool caseSensitive = false);
+         bool m_caseSensitive = false);
     virtual ~zStr();
     signed char findKeyIndex(const char *ikey, long *idxoff, long away = 0) const;
     void getText(long index, char **idxbuf, char **buf) const;

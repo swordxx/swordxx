@@ -61,14 +61,14 @@ zStr::zStr(char const * ipath,
            long blockCount,
            std::unique_ptr<SWCompress> icomp,
            bool caseSensitive)
-    : caseSensitive(caseSensitive)
-    , compressor(icomp ? std::move(icomp) : std::make_unique<SWCompress>())
+    : m_caseSensitive(caseSensitive)
+    , m_compressor(icomp ? std::move(icomp) : std::make_unique<SWCompress>())
 {
     assert(ipath);
 
-    lastoff = -1;
+    m_lastoff = -1;
 
-    this->blockCount = blockCount;
+    this->m_blockCount = blockCount;
 
     if (fileMode == -1) { // try read/write if possible
         fileMode = FileMgr::RDWR;
@@ -87,9 +87,9 @@ zStr::zStr(char const * ipath,
                                         errno);
     }
 
-    cacheBlock = nullptr;
-    cacheBlockIndex = -1;
-    cacheDirty = false;
+    m_cacheBlock = nullptr;
+    m_cacheBlockIndex = -1;
+    m_cacheDirty = false;
 }
 
 
@@ -132,7 +132,7 @@ std::string zStr::getKeyFromDatOffset(long ioffset) const
             datfd->read(buf.get(), size);
         }
         std::string r(buf.get(), size);
-        if (!caseSensitive)
+        if (!m_caseSensitive)
             toupperstr_utf8(r);
         return r;
     } else {
@@ -190,7 +190,7 @@ signed char zStr::findKeyIndex(const char *ikey, long *idxoff, long away) const
         if (*ikey) {
             headoff = 0;
             std::string key(ikey);
-            if (!caseSensitive)
+            if (!m_caseSensitive)
                 toupperstr_utf8(key);
 
             bool substr = false;
@@ -198,8 +198,8 @@ signed char zStr::findKeyIndex(const char *ikey, long *idxoff, long away) const
             auto const maxbuf(getKeyFromIdxOffset(maxoff));
 
             while (headoff < tailoff) {
-                tryoff = (lastoff == -1) ? headoff + (((((tailoff / IDXENTRYSIZE) - (headoff / IDXENTRYSIZE))) / 2) * IDXENTRYSIZE) : lastoff;
-                lastoff = -1;
+                tryoff = (m_lastoff == -1) ? headoff + (((((tailoff / IDXENTRYSIZE) - (headoff / IDXENTRYSIZE))) / 2) * IDXENTRYSIZE) : m_lastoff;
+                m_lastoff = -1;
 
                 auto const trybuf(getKeyFromIdxOffset(tryoff));
 
@@ -282,7 +282,7 @@ signed char zStr::findKeyIndex(const char *ikey, long *idxoff, long away) const
                 away += (away < 0) ? 1 : -1;
         }
 
-        lastoff = tryoff;
+        m_lastoff = tryoff;
     }
     else {
         if (idxoff)
@@ -371,7 +371,7 @@ void zStr::getCompressedText(long block, long entry, char **buf) const {
 
     uint32_t size = 0;
 
-    if (cacheBlockIndex != block) {
+    if (m_cacheBlockIndex != block) {
         uint32_t start = 0;
 
         zdxfd->seek(block * ZDXENTRYSIZE, SEEK_SET);
@@ -390,14 +390,14 @@ void zStr::getCompressedText(long block, long entry, char **buf) const {
         buf2.resize(size);
         rawZFilter(buf2, 0); // 0 = decipher
 
-        compressor->zBuf(&len, &buf2[0u]);
-        char * rawBuf = compressor->Buf(nullptr, &len);
-        cacheBlock = new EntriesBlock(rawBuf, len);
-        cacheBlockIndex = block;
+        m_compressor->zBuf(&len, &buf2[0u]);
+        char * rawBuf = m_compressor->Buf(nullptr, &len);
+        m_cacheBlock = new EntriesBlock(rawBuf, len);
+        m_cacheBlockIndex = block;
     }
-    size = cacheBlock->getEntrySize(entry);
+    size = m_cacheBlock->getEntrySize(entry);
     *buf = (*buf) ? (char *)realloc(*buf, size*2 + 1) : (char *)malloc(size*2 + 1);
-    std::strcpy(*buf, cacheBlock->getEntry(entry));
+    std::strcpy(*buf, m_cacheBlock->getEntry(entry));
 }
 
 
@@ -423,7 +423,7 @@ void zStr::setText(const char *ikey, const char *buf, long len) {
 
     len = (len < 0) ? std::strlen(buf) : len;
     std::string key(ikey);
-    if (!caseSensitive)
+    if (!m_caseSensitive)
         toupperstr_utf8(key);
 
     char notFound = findKeyIndex(ikey, &idxoff, 0);
@@ -487,19 +487,19 @@ void zStr::setText(const char *ikey, const char *buf, long len) {
     std::sprintf(outbuf.get(), "%s%c%c", key.c_str(), 13, 10);
     size = std::strlen(outbuf.get());
     if (len > 0) {    // NOT a link
-        if (!cacheBlock) {
+        if (!m_cacheBlock) {
             flushCache();
-            cacheBlock = new EntriesBlock();
-            cacheBlockIndex = (zdxfd->seek(0, SEEK_END) / ZDXENTRYSIZE);
+            m_cacheBlock = new EntriesBlock();
+            m_cacheBlockIndex = (zdxfd->seek(0, SEEK_END) / ZDXENTRYSIZE);
         }
-        else if (cacheBlock->getCount() >= blockCount) {
+        else if (m_cacheBlock->getCount() >= m_blockCount) {
             flushCache();
-            cacheBlock = new EntriesBlock();
-            cacheBlockIndex = (zdxfd->seek(0, SEEK_END) / ZDXENTRYSIZE);
+            m_cacheBlock = new EntriesBlock();
+            m_cacheBlockIndex = (zdxfd->seek(0, SEEK_END) / ZDXENTRYSIZE);
         }
-        uint32_t entry = cacheBlock->addEntry(buf);
-        cacheDirty = true;
-        outstart = archtosword32(cacheBlockIndex);
+        uint32_t entry = m_cacheBlock->addEntry(buf);
+        m_cacheDirty = true;
+        outstart = archtosword32(m_cacheBlockIndex);
         outsize = archtosword32(entry);
         std::memcpy(outbuf.get() + size, &outstart, sizeof(uint32_t));
         std::memcpy(outbuf.get() + size + sizeof(uint32_t), &outsize, sizeof(uint32_t));
@@ -559,30 +559,30 @@ void zStr::flushCache() const {
 
     static const char nl[] = {13, 10};
 
-    if (cacheBlock) {
-        if (cacheDirty) {
+    if (m_cacheBlock) {
+        if (m_cacheDirty) {
             uint32_t start = 0;
             unsigned long size = 0;
             uint32_t outstart = 0, outsize = 0;
 
-            const char *rawBuf = cacheBlock->getRawData(&size);
-            compressor->Buf(rawBuf, &size);
-            compressor->zBuf(&size);
+            const char *rawBuf = m_cacheBlock->getRawData(&size);
+            m_compressor->Buf(rawBuf, &size);
+            m_compressor->zBuf(&size);
 
             std::string buf(size + 5u, '\0');
             /// \bug order of evaluation of function arguments is undefined:
-            std::memcpy(&buf[0u], compressor->zBuf(&size), size); // 1 = encipher
+            std::memcpy(&buf[0u], m_compressor->zBuf(&size), size); // 1 = encipher
             buf.resize(size);
             rawZFilter(buf, 1); // 1 = encipher
 
             long zdxSize = zdxfd->seek(0, SEEK_END);
             unsigned long zdtSize = zdtfd->seek(0, SEEK_END);
 
-            if ((cacheBlockIndex * ZDXENTRYSIZE) > (zdxSize - ZDXENTRYSIZE)) {    // New Block
+            if ((m_cacheBlockIndex * ZDXENTRYSIZE) > (zdxSize - ZDXENTRYSIZE)) {    // New Block
                 start = zdtSize;
             }
             else {
-                zdxfd->seek(cacheBlockIndex * ZDXENTRYSIZE, SEEK_SET);
+                zdxfd->seek(m_cacheBlockIndex * ZDXENTRYSIZE, SEEK_SET);
                 zdxfd->read(&start, 4);
                 zdxfd->read(&outsize, 4);
                 start = swordtoarch32(start);
@@ -603,7 +603,7 @@ void zStr::flushCache() const {
             outstart = archtosword32(start);
             outsize  = archtosword32((uint32_t)size);
 
-            zdxfd->seek(cacheBlockIndex * ZDXENTRYSIZE, SEEK_SET);
+            zdxfd->seek(m_cacheBlockIndex * ZDXENTRYSIZE, SEEK_SET);
             zdtfd->seek(start, SEEK_SET);
             zdtfd->write(buf.c_str(), size);
 
@@ -613,11 +613,11 @@ void zStr::flushCache() const {
             zdxfd->write(&outstart, 4);
             zdxfd->write(&outsize, 4);
         }
-        delete cacheBlock;
-        cacheBlock = nullptr;
+        delete m_cacheBlock;
+        m_cacheBlock = nullptr;
     }
-    cacheBlockIndex = -1;
-    cacheDirty = false;
+    m_cacheBlockIndex = -1;
+    m_cacheDirty = false;
 }
 
 
