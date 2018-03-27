@@ -209,10 +209,13 @@ char ThMLRTF::processText(std::string &text, const SWKey *key, const SWModule *m
 }
 
 
-ThMLRTF::MyUserData::MyUserData(const SWModule *module, const SWKey *key) : BasicFilterUserData(module, key) {
-    if (module) {
-        version = module->getName();
-        isBiblicalText = (module->getType() == "Biblical Texts");
+ThMLRTF::MyUserData::MyUserData(SWModule const * module_,
+                                SWKey const * key_)
+    : BasicFilterUserData(module_, key_)
+{
+    if (module_) {
+        version = module_->getName();
+        isBiblicalText = (module_->getType() == "Biblical Texts");
     } else {
         isBiblicalText = false;
     }
