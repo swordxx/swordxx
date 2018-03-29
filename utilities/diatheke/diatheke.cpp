@@ -37,8 +37,8 @@ using std::cout;
 
 void printsyntax() { 
 	//if we got this far without exiting, something went wrong, so print syntax
-	fprintf (stderr, "Diatheke command-line SWORD frontend Version 4.7\n");
-	fprintf (stderr, "Copyright 1999-2014 by the CrossWire Bible Society\n");
+	fprintf (stderr, "Diatheke command-line SWORD frontend Version 4.8\n");
+	fprintf (stderr, "Copyright 1999-2018 by the CrossWire Bible Society\n");
 	fprintf (stderr, "http://www.crosswire.org/sword/diatheke/\n");
 	fprintf (stderr, "\n");
 	fprintf (stderr, "usage:  diatheke <-b module_name> [-s search_type] [-r search_range]\n");
