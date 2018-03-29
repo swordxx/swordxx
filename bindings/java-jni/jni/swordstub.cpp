@@ -74,13 +74,16 @@ static char *AND_BIBLE_MODULES_PATH = "/sdcard/Android/data/net.bible.android.ac
 
 // this method converts a UTF8 encoded SWBuf to a Java String, avoiding a bug in jni NewStringUTF
 jstring strToUTF8Java(JNIEnv *env, SWBuf str) {
-	int size = 16;
 	jbyteArray array = env->NewByteArray(str.size());
 	env->SetByteArrayRegion(array, 0, str.size(), (const jbyte *)str.c_str());
 	jstring strEncode = env->NewStringUTF("UTF-8");
 	jclass cls = env->FindClass("java/lang/String");
 	jmethodID ctor = env->GetMethodID(cls, "<init>", "([BLjava/lang/String;)V");
 	jstring object = (jstring) env->NewObject(cls, ctor, array, strEncode);
+
+	env->DeleteLocalRef(strEncode);
+	env->DeleteLocalRef(array);
+	env->DeleteLocalRef(cls);
 
 	return object;
 }
@@ -262,7 +265,7 @@ SWLog::getSystemLog()->logDebug("bibleSync listener mid is available");
 			// navigation
 			case 'N':
 SWLog::getSystemLog()->logDebug("bibleSync Nav Received: %s", ref.c_str());
-				jstring msg = bibleSyncListenerEnv->NewStringUTF(ref.c_str());
+				jstring msg = strToUTF8Java(bibleSyncListenerEnv, ref.c_str());
 				bibleSyncListenerEnv->CallVoidMethod(::bibleSyncListener, mid, msg);
 				bibleSyncListenerEnv->DeleteLocalRef(msg);
 				break;
@@ -537,7 +540,9 @@ JNIEXPORT jobjectArray JNICALL Java_org_crosswire_android_sword_SWMgr_getGlobalO
 
 	count = 0;
 	for (sword::StringList::iterator it = options.begin(); it != options.end(); ++it) {
-		env->SetObjectArrayElement(ret, count++, strToUTF8Java(env, assureValidUTF8(*it)));
+		jstring s = strToUTF8Java(env, assureValidUTF8(*it));
+		env->SetObjectArrayElement(ret, count++, s);
+		env->DeleteLocalRef(s);
 	}
 
 	return ret;
@@ -571,7 +576,9 @@ JNIEXPORT jobjectArray JNICALL Java_org_crosswire_android_sword_SWMgr_getExtraCo
 		ret = (jobjectArray) env->NewObjectArray(count, clazzString, NULL);
 		count = 0;
 		for (sit = config.getSections().begin(); sit != config.getSections().end(); ++sit) {
-			env->SetObjectArrayElement(ret, count++, strToUTF8Java(env, assureValidUTF8(sit->first.c_str())));
+			jstring s = strToUTF8Java(env, assureValidUTF8(sit->first.c_str()));
+			env->SetObjectArrayElement(ret, count++, s);
+			env->DeleteLocalRef(s);
 		}
 	}
 	else {
@@ -615,8 +622,9 @@ JNIEXPORT jobjectArray JNICALL Java_org_crosswire_android_sword_SWMgr_getExtraCo
 			ret = (jobjectArray) env->NewObjectArray(count, clazzString, NULL);
 			count = 0;
 			for (it = sit->second.begin(); it != sit->second.end(); ++it) {
-				env->SetObjectArrayElement(ret, count++,
-				                           strToUTF8Java(env, assureValidUTF8(it->first.c_str())));
+			   	jstring s = strToUTF8Java(env, assureValidUTF8(it->first.c_str()));
+				env->SetObjectArrayElement(ret, count++, s);
+				env->DeleteLocalRef(s);
 			}
 		}
 		else {
@@ -750,7 +758,9 @@ JNIEXPORT jobjectArray JNICALL Java_org_crosswire_android_sword_SWMgr_addExtraCo
 	ret = (jobjectArray) env->NewObjectArray(count, clazzString, NULL);
 	count = 0;
 	for (sit = newConfig.getSections().begin(); sit != newConfig.getSections().end(); ++sit) {
-		env->SetObjectArrayElement(ret, count++, strToUTF8Java(env, assureValidUTF8(sit->first.c_str())));
+		jstring s = strToUTF8Java(env, assureValidUTF8(sit->first.c_str()));
+		env->SetObjectArrayElement(ret, count++, s);
+		env->DeleteLocalRef(s);
 	}
 
 	SWBuf confPath = baseDir + "/extraConfig.conf";
@@ -789,7 +799,9 @@ JNIEXPORT jobjectArray JNICALL Java_org_crosswire_android_sword_SWMgr_getGlobalO
 
 	count = 0;
 	for (sword::StringList::iterator it = options.begin(); it != options.end(); ++it) {
-		env->SetObjectArrayElement(ret, count++, strToUTF8Java(env, assureValidUTF8(*it)));
+		jstring s = strToUTF8Java(env, assureValidUTF8(*it));
+		env->SetObjectArrayElement(ret, count++, s);
+		env->DeleteLocalRef(s);
 	}
 
 	return ret;
@@ -851,7 +863,9 @@ JNIEXPORT jobjectArray JNICALL Java_org_crosswire_android_sword_SWMgr_getAvailab
 
 	count = 0;
 	for (sword::StringList::iterator it = localeNames.begin(); it != localeNames.end(); ++it) {
-		env->SetObjectArrayElement(ret, count++, strToUTF8Java(env, assureValidUTF8(*it)));
+		jstring s = strToUTF8Java(env, assureValidUTF8(*it));
+		env->SetObjectArrayElement(ret, count++, s);
+		env->DeleteLocalRef(s);
 	}
 	return ret;
 }
@@ -1151,13 +1165,16 @@ JNIEXPORT jobjectArray JNICALL Java_org_crosswire_android_sword_SWModule_getEntr
 SWLog::getSystemLog()->logDebug("getEntryAttributes: size returned: %d", results.size());
 
 		for (int i = 0; i < results.size(); ++i) {
+			jstring s;
 			if (filtered) {
 				SWBuf rendered = module->renderText(results[i].c_str());
-				env->SetObjectArrayElement(ret, i, strToUTF8Java(env, assureValidUTF8(rendered.c_str())));
+				s = strToUTF8Java(env, assureValidUTF8(rendered.c_str()));
 			}
 			else {
-				env->SetObjectArrayElement(ret, i, strToUTF8Java(env, assureValidUTF8(results[i].c_str())));
+				s = strToUTF8Java(env, assureValidUTF8(results[i].c_str()));
 			}
+			env->SetObjectArrayElement(ret, i, s);
+			env->DeleteLocalRef(s);
 		}
 	}
 
@@ -1199,12 +1216,16 @@ JNIEXPORT jobjectArray JNICALL Java_org_crosswire_android_sword_SWModule_parseKe
 
 			count = 0;
 			for (result = sword::TOP; !result.popError(); result++) {
-				env->SetObjectArrayElement(ret, count++, strToUTF8Java(env, assureValidUTF8((const char *)result)));
+				jstring s = strToUTF8Java(env, assureValidUTF8((const char *)result));
+				env->SetObjectArrayElement(ret, count++, s);
+				env->DeleteLocalRef(s);
 			}
 		}
 		else	{
 			ret = (jobjectArray) env->NewObjectArray(1, clazzString, NULL);
-			env->SetObjectArrayElement(ret, 0, strToUTF8Java(env, assureValidUTF8(keyListText)));
+			jstring s = strToUTF8Java(env, assureValidUTF8(keyListText));
+			env->SetObjectArrayElement(ret, 0, s);
+			env->DeleteLocalRef(s);
 		}
 	}
 
@@ -1299,7 +1320,9 @@ JNIEXPORT jobjectArray JNICALL Java_org_crosswire_android_sword_SWModule_getKeyC
 				count = 0;
 				if (tkey->firstChild()) {
 					do {
-						env->SetObjectArrayElement(ret, count++, strToUTF8Java(env, assureValidUTF8(tkey->getLocalName())));
+						jstring s = strToUTF8Java(env, assureValidUTF8(tkey->getLocalName()));
+						env->SetObjectArrayElement(ret, count++, s);
+						env->DeleteLocalRef(s);
 					}
 					while (tkey->nextSibling());
 					tkey->parent();
@@ -1728,7 +1751,9 @@ SWLog::getSystemLog()->logDebug("getRemoteSources: count: %d\n", count);
 	ret = (jobjectArray) env->NewObjectArray(count, clazzString, NULL);
 	count = 0;
 	for (InstallSourceMap::iterator it = installMgr->sources.begin(); it != installMgr->sources.end(); ++it) {
-		env->SetObjectArrayElement(ret, count++, strToUTF8Java(env, assureValidUTF8(it->second->caption.c_str())));
+		jstring s = strToUTF8Java(env, assureValidUTF8(it->second->caption.c_str()));
+		env->SetObjectArrayElement(ret, count++, s);
+		env->DeleteLocalRef(s);
 	}
 
 	return ret;
@@ -1841,7 +1866,9 @@ SWLog::getSystemLog()->logDebug("remoteListModules returning %d length array\n",
 		jobjectArray features = (jobjectArray) env->NewObjectArray(featureCount, clazzString, NULL);
 		featureCount = 0;
 		for (ConfigEntMap::const_iterator it = start; it != end; ++it) {
-			env->SetObjectArrayElement(features, featureCount++, strToUTF8Java(env, assureValidUTF8(it->second)));
+			val = strToUTF8Java(env, assureValidUTF8(it->second));
+			env->SetObjectArrayElement(features, featureCount++, val);
+			env->DeleteLocalRef(val);
 		}
 		env->SetObjectField(modInfo, featuresID, features);
 		env->DeleteLocalRef(features);
