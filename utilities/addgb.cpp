@@ -93,7 +93,7 @@ int main(int argc, char **argv) {
     RawGenBook::createModule(argv[2]);
   }
   delete treeKey;
-  RawGenBook *book = new RawGenBook(argv[2]);
+  auto const book(std::make_unique<RawGenBook>(argv[2]));
 
   if ((mode == 'a') && (argc == 4 || argc == 5)) {
     char buffer[1048576];  //this is the max size of any entry
@@ -137,6 +137,5 @@ int main(int argc, char **argv) {
 
   //DEBUG  printTree(root, treeKey);
 
-  delete book;
   return 0;
 }
