@@ -85,14 +85,18 @@ int main(int argc, char **argv) {
   mode = argv[1][1];
 
   // Do some initialization stuff
-  TreeKeyIdx *treeKey = new TreeKeyIdx(argv[2]);
-  if (treeKey->popError()) {
-    treeKey->create(argv[2]);
-    delete treeKey;
-    treeKey = new TreeKeyIdx(argv[2]);
-    RawGenBook::createModule(argv[2]);
-  }
-  delete treeKey;
+  [argv]() {
+    {
+        TreeKeyIdx treeKey(argv[2]);
+        if (!treeKey.popError())
+            return;
+        treeKey.create(argv[2]);
+    }
+    {
+        TreeKeyIdx treeKey(argv[2]);
+        RawGenBook::createModule(argv[2]);
+    }
+  }();
   auto const book(std::make_unique<RawGenBook>(argv[2]));
 
   if ((mode == 'a') && (argc == 4 || argc == 5)) {
