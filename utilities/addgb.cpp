@@ -137,7 +137,6 @@ int main(int argc, char **argv) {
 
   //DEBUG  printTree(root, treeKey);
 
-  delete treeKey;
   delete book;
   return 0;
 }
