@@ -61,24 +61,24 @@ int main(int argc, char **argv) {
 
     // Do some initialization stuff
     char buffer[65536];  //this is the max size of any entry
-    RawText * mod = new RawText(argv[2]);    // open our datapath with our RawText driver.
-    VerseKey *vkey = new VerseKey;
-    vkey->setIntros(true);
-    vkey->setAutoNormalize(false);
-    vkey->setPersist(true);      // the magical setting
-    vkey->setText(argv[3]);
+    RawText mod(argv[2]);    // open our datapath with our RawText driver.
+    VerseKey vkey;
+    vkey.setIntros(true);
+    vkey.setAutoNormalize(false);
+    vkey.setPersist(true);      // the magical setting
+    vkey.setText(argv[3]);
     // Set our VerseKey
-    mod->setKey(*vkey);
-    if (!vkey->getChapter()) {
+    mod.setKey(vkey);
+    if (!vkey.getChapter()) {
       // bad hack >>
       // 0:0 is Book intro
       // (chapter):0 is Chapter intro
       //
       // 0:2 is Module intro
       // 0:1 is Testament intro
-      int backstep = vkey->getVerse();
-      vkey->setVerse(0);
-      mod->decrement(backstep);
+      int backstep = vkey.getVerse();
+      vkey.setVerse(0);
+      mod.decrement(backstep);
       // << bad hack
 
       FILE *infile;
@@ -90,10 +90,10 @@ int main(int argc, char **argv) {
 
       entrysize = fread(buffer, sizeof(char), sizeof(buffer), infile);
 
-      mod->setEntry(buffer, entrysize);    // save text to module at current position
+      mod.setEntry(buffer, entrysize);    // save text to module at current position
     }
     else {
-      ListKey listkey = vkey->parseVerseList(argv[3], "Gen1:1", true);
+      ListKey listkey = vkey.parseVerseList(argv[3], "Gen1:1", true);
       std::size_t i;
       bool havefirst = false;
       VerseKey firstverse;
@@ -101,12 +101,12 @@ int main(int argc, char **argv) {
     if (VerseKey const * const element =
         dynamic_cast<VerseKey const *>(listkey.getElement(i)))
     {
-      mod->setKey(element->getLowerBound());
+      mod.setKey(element->getLowerBound());
       VerseKey finalkey = element->getUpperBound();
-      std::cout << mod->getKeyText() << "-" << finalkey.getText() << std::endl;
+      std::cout << mod.getKeyText() << "-" << finalkey.getText() << std::endl;
       if (!havefirst) {
         havefirst = true;
-        firstverse.positionFrom(*mod->getKey());
+        firstverse.positionFrom(*mod.getKey());
         FILE *infile;
         // case: add from text file
         //Open our data file and read its contents into the buffer
@@ -116,26 +116,26 @@ int main(int argc, char **argv) {
 
         entrysize = fread(buffer, sizeof(char), sizeof(buffer), infile);
 
-        mod->setEntry(buffer, entrysize);    // save text to module at current position
+        mod.setEntry(buffer, entrysize);    // save text to module at current position
         std::cout << "f" << firstverse.getText() << std::endl;
-        mod->increment();
+        mod.increment();
       }
-      while (*mod->getKey() <= finalkey) {
-        std::cout << mod->getKeyText() << std::endl;
-        mod->linkEntry(firstverse);
-        mod->increment();
+      while (*mod.getKey() <= finalkey) {
+        std::cout << mod.getKeyText() << std::endl;
+        mod.linkEntry(firstverse);
+        mod.increment();
       }
     }
     else {
       if (havefirst) {
-        mod->setKey(*listkey.getElement(i));
-        mod->linkEntry(firstverse);
-        std::cout << mod->getKeyText() << std::endl;
+        mod.setKey(*listkey.getElement(i));
+        mod.linkEntry(firstverse);
+        std::cout << mod.getKeyText() << std::endl;
       }
       else {
-        mod->setKey(*listkey.getElement(i));
+        mod.setKey(*listkey.getElement(i));
         havefirst = true;
-        firstverse.positionFrom(*mod->getKey());
+        firstverse.positionFrom(*mod.getKey());
         FILE *infile;
         // case: add from text file
         //Open our data file and read its contents into the buffer
@@ -145,37 +145,35 @@ int main(int argc, char **argv) {
 
         entrysize = fread(buffer, sizeof(char), sizeof(buffer), infile);
 
-        mod->setEntry(buffer, entrysize);    // save text to module at current position
+        mod.setEntry(buffer, entrysize);    // save text to module at current position
         std::cout << "f" << firstverse.getText() << std::endl;
       }
     }
       }
     }
-    delete vkey;
  }
  // Link 2 verses
  else if (!std::strcmp(argv[1], "-l") && argc == 5) {
    // Do some initialization stuff
-   RawText *mod = new RawText(argv[2]);    // open our datapath with our RawText driver.
+   RawText mod(argv[2]);    // open our datapath with our RawText driver.
 
-   mod->setKey(argv[4]);    // set key from argument
+   mod.setKey(argv[4]);    // set key from argument
    SWKey tmpkey = (SWKey) argv[3];
-   mod->linkEntry(tmpkey);
-   delete mod;
+   mod.linkEntry(tmpkey);
  }
 
  else if (!std::strcmp(argv[1], "-d") && argc == 4) {
    RawText mod(argv[2]);    // open our datapath with our RawText driver.
-   VerseKey *vkey = new VerseKey;
-   vkey->setIntros(true);
-   vkey->setAutoNormalize(false);
-   vkey->setPersist(true);      // the magical setting
+   VerseKey vkey;
+   vkey.setIntros(true);
+   vkey.setAutoNormalize(false);
+   vkey.setPersist(true);      // the magical setting
 
    // Set our VerseKey
-   mod.setKey(*vkey);
-   vkey->setText(argv[3]);
+   mod.setKey(vkey);
+   vkey.setText(argv[3]);
 
-   if (!vkey->getChapter())
+   if (!vkey.getChapter())
      {
        // bad hack >>
        // 0:0 is Book intro
@@ -183,14 +181,13 @@ int main(int argc, char **argv) {
        //
        // 0:2 is Module intro
        // 0:1 is Testament intro
-       int backstep = vkey->getVerse();
-       vkey->setVerse(0);
+       int backstep = vkey.getVerse();
+       vkey.setVerse(0);
        mod.decrement(backstep);
        // << bad hack
      }
 
    mod.deleteEntry();
-   delete vkey;
  }
 
   // Make a new module
