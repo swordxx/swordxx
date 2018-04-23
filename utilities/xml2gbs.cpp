@@ -97,7 +97,7 @@ int processXML(const char* filename, char* modname, bool longnames, bool exportf
     outfile.open(modname);
   }
 
-  RawGenBook * book = nullptr;
+  std::unique_ptr<RawGenBook> book;
 
   std::string divs[32];
 
@@ -118,7 +118,7 @@ int processXML(const char* filename, char* modname, bool longnames, bool exportf
         auto const treeKey(std::make_unique<TreeKeyIdx>(modname));
         RawGenBook::createModule(modname);
     }
-    book = new RawGenBook(modname);
+    book = std::make_unique<RawGenBook>(modname);
   }
 
 #ifdef DEBUG
@@ -308,7 +308,6 @@ int processXML(const char* filename, char* modname, bool longnames, bool exportf
 //  printTree(root, treeKey);
 #endif
 
-//  delete book;  //causes nasty-bad errors upon execution
     return 0;
 }
 
