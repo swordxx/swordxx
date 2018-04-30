@@ -501,12 +501,12 @@ int InstallMgr::installModule(SWMgr & destMgr,
 }
 
 
-int InstallMgr::refreshRemoteSource(InstallSource *is) {
+int InstallMgr::refreshRemoteSource(InstallSource & is) {
 
     // assert user disclaimer has been confirmed
     if (!isUserDisclaimerConfirmed()) return -1;
 
-    NormalizedPath const root(m_privatePath + is->m_uid);
+    NormalizedPath const root(m_privatePath + is.m_uid);
     std::string const target(root.str() + "/mods.d");
     int errorCode = -1; //0 means successful
 
@@ -517,16 +517,16 @@ int InstallMgr::refreshRemoteSource(InstallSource *is) {
 
     std::string archive = target + ".tar.gz";
 
-    errorCode = remoteCopy(is, "mods.d.tar.gz", archive.c_str(), false);
+    errorCode = remoteCopy(&is, "mods.d.tar.gz", archive.c_str(), false);
     if (!errorCode) { //sucessfully downloaded the tar,gz of module configs
         FileDesc *fd = FileMgr::getSystemFileMgr()->open(archive.c_str(), FileMgr::RDONLY);
         untargz(fd->getFd(), root.c_str());
         FileMgr::getSystemFileMgr()->close(fd);
     }
     else
-    errorCode = remoteCopy(is, "mods.d", target.c_str(), true, ".conf"); //copy the whole directory
+    errorCode = remoteCopy(&is, "mods.d", target.c_str(), true, ".conf"); //copy the whole directory
 
-    is->flush();
+    is.flush();
     return errorCode;
 }
 

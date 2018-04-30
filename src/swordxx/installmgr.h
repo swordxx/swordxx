@@ -141,7 +141,7 @@ public:
 
         /** call to obtain and locally cache the available content list of the remote source
          */
-    virtual int refreshRemoteSource(InstallSource *is);
+    int refreshRemoteSource(InstallSource & is);
 
         /** call to populate installmgr configuration with all known
          *  remote sources from the master list at CrossWire
