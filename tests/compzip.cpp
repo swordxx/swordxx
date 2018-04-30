@@ -100,19 +100,18 @@ void FileCompress::Decode()
 }
 
 
-int main(int argc, char **argv)
-{
-    int decomp = 0;
+int main(int argc, char * argv[]) {
+    bool decomp = false;
 
     if (argc != 2) {
         fprintf(stderr, "usage: %s <filename|filename.zip>\n", argv[0]);
-        std::exit(1);
+        return EXIT_FAILURE;
     }
 
     if (std::strlen(argv[1]) > 4) {
         if (!std::strcmp(&argv[1][std::strlen(argv[1])-4], ".zip")) {
             argv[1][std::strlen(argv[1])-4] = 0;
-            decomp = 1;
+            decomp = true;
         }
     }
 
