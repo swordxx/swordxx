@@ -103,7 +103,6 @@ void FileCompress::Decode()
 int main(int argc, char **argv)
 {
     int decomp = 0;
-    SWCompress *fobj;
 
     if (argc != 2) {
         fprintf(stderr, "usage: %s <filename|filename.lzs>\n", argv[0]);
@@ -117,11 +116,10 @@ int main(int argc, char **argv)
         }
     }
 
-    fobj = new FileCompress(argv[1]);
-
-    if (decomp)
-        fobj->Decode();
-    else fobj->Encode();
-
-    delete fobj;
+    FileCompress fobj(argv[1]);
+    if (decomp) {
+        fobj.Decode();
+    } else {
+        fobj.Encode();
+    }
 }
