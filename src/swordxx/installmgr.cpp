@@ -387,26 +387,25 @@ int InstallMgr::installModule(SWMgr & destMgr,
                     if ((std::strcmp(ent->d_name, ".")) && (std::strcmp(ent->d_name, ".."))) {
                         modFile = confDir;
                         modFile += ent->d_name;
-                        SWConfig *config = new SWConfig(modFile.c_str());
-                        if (config->sections().find(modName) != config->sections().end()) {
+                        SWConfig config(modFile.c_str());
+                        if (config.sections().find(modName) != config.sections().end()) {
                             std::string targetFile = destMgr.m_configPath; //"./mods.d/";
                             removeTrailingDirectorySlashes(targetFile);
                             targetFile += "/";
                             targetFile += ent->d_name;
                             retVal = FileMgr::copyFile(modFile.c_str(), targetFile.c_str());
                             if (cipher) {
-                                if (getCipherCode(modName, config)) {
+                                if (getCipherCode(modName, &config)) {
                                     SWMgr newDest(destMgr.m_prefixPath.c_str());
                                     removeModule(newDest, modName);
                                     aborted = true;
                                 }
                                 else {
-                                    config->save();
+                                    config.save();
                                     retVal = FileMgr::copyFile(modFile.c_str(), targetFile.c_str());
                                 }
                             }
                         }
-                        delete config;
                     }
                 }
                 closedir(dir);
