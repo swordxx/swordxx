@@ -134,10 +134,10 @@ public:
 
         /** call to install a module from a local path (fromLocation) or remote InstallSource (is) (leave the other 0)
          */
-    virtual int installModule(SWMgr * destMgr,
-                              char const * fromLocation,
-                              char const * modName,
-                              InstallSource * is = nullptr);
+    int installModule(SWMgr & destMgr,
+                      char const * fromLocation,
+                      char const * modName,
+                      InstallSource * is = nullptr);
 
         /** call to obtain and locally cache the available content list of the remote source
          */

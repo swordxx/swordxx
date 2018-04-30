@@ -328,7 +328,7 @@ void remoteInstallModule(const char *sourceName, const char *modName) {
     }
     SWModule const & module = *it->second;
 
-    int error = installMgr->installModule(mgr, nullptr, module.getName().c_str(), is);
+    int error = installMgr->installModule(*mgr, nullptr, module.getName().c_str(), is);
     if (error) {
         cout << "\nError installing module: [" << module.getName() << "] (write permissions?)\n";
     } else cout << "\nInstalled module: [" << module.getName() << "]\n";
@@ -344,7 +344,7 @@ void localDirInstallModule(const char *dir, const char *modName) {
         finish(-4);
     }
     SWModule const & module = *it->second;
-    int error = installMgr->installModule(mgr, dir, module.getName().c_str());
+    int error = installMgr->installModule(*mgr, dir, module.getName().c_str());
     if (error) {
         cout << "\nError installing module: [" << module.getName() << "] (write permissions?)\n";
     } else cout << "\nInstalled module: [" << module.getName() << "]\n";

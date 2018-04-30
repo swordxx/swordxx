@@ -337,7 +337,11 @@ SWLog::getSystemLog()->logDebug("remoteCopy: dirTransfer: %s", dir.c_str());
 }
 
 
-int InstallMgr::installModule(SWMgr *destMgr, const char *fromLocation, const char *modName, InstallSource *is) {
+int InstallMgr::installModule(SWMgr & destMgr,
+                              const char * fromLocation,
+                              const char * modName,
+                              InstallSource * is)
+{
     int retVal = 0;
     SectionMap::iterator module, section;
     ConfigEntMap::iterator fileBegin;
@@ -398,7 +402,7 @@ int InstallMgr::installModule(SWMgr *destMgr, const char *fromLocation, const ch
                 while (fileBegin != fileEnd && !retVal) {
                     std::string sourcePath = sourceDir;
                     sourcePath += fileBegin->second.c_str();
-                    std::string dest = destMgr->m_prefixPath;
+                    std::string dest = destMgr.m_prefixPath;
                     removeTrailingDirectorySlashes(dest);
                     dest += '/';
                     dest += fileBegin->second.c_str();
@@ -439,7 +443,7 @@ int InstallMgr::installModule(SWMgr *destMgr, const char *fromLocation, const ch
                     relativePath.erase(0u, mgr.m_prefixPath.size());
                 }
                 SWLog::getSystemLog()->logDebug("***** mgr.prefixPath: %s \n", mgr.m_prefixPath.c_str());
-                SWLog::getSystemLog()->logDebug("***** destMgr->prefixPath: %s \n", destMgr->m_prefixPath.c_str());
+                SWLog::getSystemLog()->logDebug("***** destMgr->prefixPath: %s \n", destMgr.m_prefixPath.c_str());
                 SWLog::getSystemLog()->logDebug("***** absolutePath: %s \n", absolutePath.c_str());
                 SWLog::getSystemLog()->logDebug("***** relativePath: %s \n", relativePath.c_str());
 
@@ -449,7 +453,7 @@ int InstallMgr::installModule(SWMgr *destMgr, const char *fromLocation, const ch
                     }
                 }
                 if (!aborted) {
-                    std::string destPath(std::string(destMgr->m_prefixPath) += relativePath);
+                    std::string destPath(std::string(destMgr.m_prefixPath) += relativePath);
                     retVal = FileMgr::copyDir(absolutePath.c_str(), destPath.c_str());
                 }
                 if (is) {        // delete tmp netCopied files
@@ -468,14 +472,14 @@ int InstallMgr::installModule(SWMgr *destMgr, const char *fromLocation, const ch
                         modFile += ent->d_name;
                         SWConfig *config = new SWConfig(modFile.c_str());
                         if (config->sections().find(modName) != config->sections().end()) {
-                            std::string targetFile = destMgr->m_configPath; //"./mods.d/";
+                            std::string targetFile = destMgr.m_configPath; //"./mods.d/";
                             removeTrailingDirectorySlashes(targetFile);
                             targetFile += "/";
                             targetFile += ent->d_name;
                             retVal = FileMgr::copyFile(modFile.c_str(), targetFile.c_str());
                             if (cipher) {
                                 if (getCipherCode(modName, config)) {
-                                    SWMgr newDest(destMgr->m_prefixPath.c_str());
+                                    SWMgr newDest(destMgr.m_prefixPath.c_str());
                                     removeModule(newDest, modName);
                                     aborted = true;
                                 }
