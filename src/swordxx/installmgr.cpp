@@ -29,6 +29,7 @@
 #include <iostream>
 #include <map>
 #include <regex>
+#include <utility>
 #include "curlftpt.h"
 #include "curlhttpt.h"
 #include "filemgr.h"
@@ -78,11 +79,7 @@ InstallMgr::~InstallMgr() {
 }
 
 
-void InstallMgr::clearSources() {
-    for (auto const & sp : sources)
-        delete sp.second;
-    sources.clear();
-}
+void InstallMgr::clearSources() { sources.clear(); }
 
 
 void InstallMgr::readInstallConf() {
@@ -102,7 +99,9 @@ void InstallMgr::readInstallConf() {
         sourceEnd = confSection->second.upper_bound("FTPSource");
 
         while (sourceBegin != sourceEnd) {
-            InstallSource *is = new InstallSource("FTP", sourceBegin->second.c_str());
+            auto const is(std::make_shared<InstallSource>(
+                              "FTP",
+                              sourceBegin->second.c_str()));
             sources[is->m_caption] = is;
             std::string parent = m_privatePath + is->m_uid + "/file";
             FileMgr::createParent(parent.c_str());
@@ -115,7 +114,9 @@ void InstallMgr::readInstallConf() {
         sourceEnd   = confSection->second.upper_bound("SFTPSource");
 
         while (sourceBegin != sourceEnd) {
-            InstallSource *is = new InstallSource("SFTP", sourceBegin->second.c_str());
+            auto const is(std::make_shared<InstallSource>(
+                              "SFTP",
+                              sourceBegin->second.c_str()));
             sources[is->caption] = is;
             std::string parent = privatePath + is->uid + "/file";
             FileMgr::createParent(parent.c_str());
@@ -128,7 +129,9 @@ void InstallMgr::readInstallConf() {
         sourceEnd = confSection->second.upper_bound("HTTPSource");
 
         while (sourceBegin != sourceEnd) {
-            InstallSource *is = new InstallSource("HTTP", sourceBegin->second.c_str());
+            auto const is(std::make_shared<InstallSource>(
+                              "HTTP",
+                              sourceBegin->second.c_str()));
             sources[is->m_caption] = is;
             std::string parent = m_privatePath + is->m_uid + "/file";
             FileMgr::createParent(parent.c_str());
@@ -140,7 +143,9 @@ void InstallMgr::readInstallConf() {
         sourceEnd   = confSection->second.upper_bound("HTTPSSource");
 
         while (sourceBegin != sourceEnd) {
-            InstallSource *is = new InstallSource("HTTPS", sourceBegin->second.c_str());
+            auto const is(std::make_shared<InstallSource>(
+                              "HTTPS",
+                              sourceBegin->second.c_str()));
             sources[is->m_caption] = is;
             std::string parent = m_privatePath + is->m_uid + "/file";
             FileMgr::createParent(parent.c_str());
@@ -624,8 +629,7 @@ int InstallMgr::refreshRemoteSourceConfiguration() {
                         if (ap.second == "REMOVE") {
                             // be sure to call save/reload after this
                             // or this could be dangerous
-                            delete sp.second;
-                            sp.second = nullptr;
+                            sp.second.reset();
                         }
                         else {
                             std::string key(stripPrefix(ap.second, '='));
@@ -637,8 +641,10 @@ int InstallMgr::refreshRemoteSourceConfiguration() {
                                 // but it seems like we might want to change any
                                 // of the current fields so we don't do this now
                                 // InstallSource i("FTP", actions->second);
-                                delete sp.second;
-                                sp.second = new InstallSource("FTP", ap.second.c_str());
+                                sp.second =
+                                        std::make_shared<InstallSource>(
+                                            "FTP",
+                                            ap.second.c_str());
                                 sp.second->m_uid = ap.first;
                             }
                         }
@@ -650,9 +656,11 @@ int InstallMgr::refreshRemoteSourceConfiguration() {
                     std::string key(stripPrefix(ap.second, '='));
                     if (key == "FTPSource") {
                         if (ap.second != "REMOVE") {
-                            InstallSource *is2 = new InstallSource("FTP", ap.second.c_str());
+                            auto is2(std::make_shared<InstallSource>(
+                                         "FTP",
+                                         ap.second.c_str()));
                             is2->m_uid = ap.first;
-                            sources[is2->m_caption] = is2;
+                            sources[is2->m_caption] = std::move(is2);
                         }
                     }
                 }

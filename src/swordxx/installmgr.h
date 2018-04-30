@@ -65,7 +65,7 @@ public:
 
 /** A standard map of remote install sources.
  */
-typedef std::map<std::string, InstallSource *> InstallSourceMap;
+typedef std::map<std::string, std::shared_ptr<InstallSource> > InstallSourceMap;
 
 /** Class to handle installation and maintenance of a Sword++ library of books.
  */

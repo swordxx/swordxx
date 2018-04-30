@@ -245,7 +245,7 @@ void refreshRemoteSource(const char *sourceName) {
         finish(-3);
     }
 
-    if (!installMgr->refreshRemoteSource(source->second))
+    if (!installMgr->refreshRemoteSource(*source->second))
         cout << "\nRemote Source Refreshed\n";
     else    cerr << "\nError Refreshing Remote Source\n";
 }
@@ -319,8 +319,8 @@ void remoteInstallModule(const char *sourceName, const char *modName) {
         fprintf(stderr, "Couldn't find remote source [%s]\n", sourceName);
         finish(-3);
     }
-    InstallSource *is = source->second;
-    SWMgr *rmgr = is->getMgr();
+    auto & is = *source->second;
+    SWMgr *rmgr = is.getMgr();
     auto const it = rmgr->modules().find(modName);
     if (it == rmgr->modules().end()) {
         fprintf(stderr, "Remote source [%s] does not make available module [%s]\n", sourceName, modName);
@@ -328,7 +328,7 @@ void remoteInstallModule(const char *sourceName, const char *modName) {
     }
     SWModule const & module = *it->second;
 
-    int error = installMgr->installModule(*mgr, nullptr, module.getName().c_str(), is);
+    int error = installMgr->installModule(*mgr, nullptr, module.getName().c_str(), &is);
     if (error) {
         cout << "\nError installing module: [" << module.getName() << "] (write permissions?)\n";
     } else cout << "\nInstalled module: [" << module.getName() << "]\n";
