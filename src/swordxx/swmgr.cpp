@@ -753,7 +753,7 @@ signed char SWMgr::load() {
 }
 
 
-std::unique_ptr<SWModule> SWMgr::createModule(std::string const & name,
+std::shared_ptr<SWModule> SWMgr::createModule(std::string const & name,
                                               std::string const & driver,
                                               ConfigEntMap section)
 {
@@ -825,7 +825,7 @@ std::unique_ptr<SWModule> SWMgr::createModule(std::string const & name,
         direction = DIRECTION_LTR;
     }
 
-    std::unique_ptr<SWModule> newmod;
+    std::shared_ptr<SWModule> newmod;
     if (caseInsensitiveEquals(driver, "zText")
         || caseInsensitiveEquals(driver, "zCom")
         || caseInsensitiveEquals(driver, "zText4")
@@ -855,13 +855,13 @@ std::unique_ptr<SWModule> SWMgr::createModule(std::string const & name,
 
         if (compress) {
             if (caseInsensitiveEquals(driver, "zText"))
-                newmod = std::make_unique<zText>(datapath.c_str(), name.c_str(), description.c_str(), blockType, std::move(compress), enc, direction, markup, lang.c_str(), versification.c_str());
+                newmod = std::make_shared<zText>(datapath.c_str(), name.c_str(), description.c_str(), blockType, std::move(compress), enc, direction, markup, lang.c_str(), versification.c_str());
             else if (caseInsensitiveEquals(driver, "zText4"))
-                newmod = std::make_unique<zText4>(datapath.c_str(), name.c_str(), description.c_str(), blockType, std::move(compress), enc, direction, markup, lang.c_str(), versification.c_str());
+                newmod = std::make_shared<zText4>(datapath.c_str(), name.c_str(), description.c_str(), blockType, std::move(compress), enc, direction, markup, lang.c_str(), versification.c_str());
             else if (caseInsensitiveEquals(driver, "zCom4"))
-                newmod = std::make_unique<zCom4>(datapath.c_str(), name.c_str(), description.c_str(), blockType, std::move(compress), enc, direction, markup, lang.c_str(), versification.c_str());
+                newmod = std::make_shared<zCom4>(datapath.c_str(), name.c_str(), description.c_str(), blockType, std::move(compress), enc, direction, markup, lang.c_str(), versification.c_str());
             else
-                newmod = std::make_unique<zCom>(datapath.c_str(), name.c_str(), description.c_str(), blockType, std::move(compress), enc, direction, markup, lang.c_str(), versification.c_str());
+                newmod = std::make_shared<zCom>(datapath.c_str(), name.c_str(), description.c_str(), blockType, std::move(compress), enc, direction, markup, lang.c_str(), versification.c_str());
         }
     }
 
@@ -869,29 +869,29 @@ std::unique_ptr<SWModule> SWMgr::createModule(std::string const & name,
        for modules types that need to strip module name: */
     bool pos = false;
     if (caseInsensitiveEquals(driver, "RawText")) {
-        newmod = std::make_unique<RawText>(datapath.c_str(), name.c_str(), description.c_str(), enc, direction, markup, lang.c_str(), versification.c_str());
+        newmod = std::make_shared<RawText>(datapath.c_str(), name.c_str(), description.c_str(), enc, direction, markup, lang.c_str(), versification.c_str());
     } else if (caseInsensitiveEquals(driver, "RawText4")) {
-        newmod = std::make_unique<RawText4>(datapath.c_str(), name.c_str(), description.c_str(), enc, direction, markup, lang.c_str(), versification.c_str());
+        newmod = std::make_shared<RawText4>(datapath.c_str(), name.c_str(), description.c_str(), enc, direction, markup, lang.c_str(), versification.c_str());
     } else if (caseInsensitiveEquals(driver, "RawGBF")) { // backward support old drivers
-        newmod = std::make_unique<RawText>(datapath.c_str(), name.c_str(), description.c_str(), enc, direction, markup, lang.c_str());
+        newmod = std::make_shared<RawText>(datapath.c_str(), name.c_str(), description.c_str(), enc, direction, markup, lang.c_str());
     } else if (caseInsensitiveEquals(driver, "RawCom")) {
-        newmod = std::make_unique<RawCom>(datapath.c_str(), name.c_str(), description.c_str(), enc, direction, markup, lang.c_str(), versification.c_str());
+        newmod = std::make_shared<RawCom>(datapath.c_str(), name.c_str(), description.c_str(), enc, direction, markup, lang.c_str(), versification.c_str());
     } else if (caseInsensitiveEquals(driver, "RawCom4")) {
-        newmod = std::make_unique<RawCom4>(datapath.c_str(), name.c_str(), description.c_str(), enc, direction, markup, lang.c_str(), versification.c_str());
+        newmod = std::make_shared<RawCom4>(datapath.c_str(), name.c_str(), description.c_str(), enc, direction, markup, lang.c_str(), versification.c_str());
     } else if (caseInsensitiveEquals(driver, "RawFiles")) {
-        newmod = std::make_unique<RawFiles>(datapath.c_str(), name.c_str(), description.c_str(), enc, direction, markup, lang.c_str());
+        newmod = std::make_shared<RawFiles>(datapath.c_str(), name.c_str(), description.c_str(), enc, direction, markup, lang.c_str());
     } else if (caseInsensitiveEquals(driver, "HREFCom")) {
         misc1 = ((entry = section.find("Prefix")) != section.end()) ? (*entry).second : std::string();
-        newmod = std::make_unique<HREFCom>(datapath.c_str(), misc1.c_str(), name.c_str(), description.c_str());
+        newmod = std::make_shared<HREFCom>(datapath.c_str(), misc1.c_str(), name.c_str(), description.c_str());
     } else if (caseInsensitiveEquals(driver, "RawLD")) {
         bool caseSensitive = ((entry = section.find("CaseSensitiveKeys")) != section.end()) ? (*entry).second == "true": false;
         bool strongsPadding = ((entry = section.find("StrongsPadding")) != section.end()) ? (*entry).second == "true": true;
-        newmod = std::make_unique<RawLD>(datapath.c_str(), name.c_str(), description.c_str(), enc, direction, markup, lang.c_str(), caseSensitive, strongsPadding);
+        newmod = std::make_shared<RawLD>(datapath.c_str(), name.c_str(), description.c_str(), enc, direction, markup, lang.c_str(), caseSensitive, strongsPadding);
         pos = true;
     } else if (caseInsensitiveEquals(driver, "RawLD4")) {
         bool caseSensitive = ((entry = section.find("CaseSensitiveKeys")) != section.end()) ? (*entry).second == "true": false;
         bool strongsPadding = ((entry = section.find("StrongsPadding")) != section.end()) ? (*entry).second == "true": true;
-        newmod = std::make_unique<RawLD4>(datapath.c_str(), name.c_str(), description.c_str(), enc, direction, markup, lang.c_str(), caseSensitive, strongsPadding);
+        newmod = std::make_shared<RawLD4>(datapath.c_str(), name.c_str(), description.c_str(), enc, direction, markup, lang.c_str(), caseSensitive, strongsPadding);
         pos = true;
     } else if (caseInsensitiveEquals(driver, "zLD")) {
         std::unique_ptr<SWCompress> compress;
@@ -915,12 +915,12 @@ std::unique_ptr<SWModule> SWMgr::createModule(std::string const & name,
             compress = std::make_unique<LZSSCompress>();
 
         if (compress) {
-            newmod = std::make_unique<zLD>(datapath.c_str(), name.c_str(), description.c_str(), blockCount, std::move(compress), enc, direction, markup, lang.c_str(), caseSensitive, strongsPadding);
+            newmod = std::make_shared<zLD>(datapath.c_str(), name.c_str(), description.c_str(), blockCount, std::move(compress), enc, direction, markup, lang.c_str(), caseSensitive, strongsPadding);
             pos = true;
         }
     } else if (caseInsensitiveEquals(driver, "RawGenBook")) {
         misc1 = ((entry = section.find("KeyType")) != section.end()) ? (*entry).second : std::string("TreeKey");
-        newmod = std::make_unique<RawGenBook>(datapath.c_str(), name.c_str(), description.c_str(), enc, direction, markup, lang.c_str(), misc1.c_str());
+        newmod = std::make_shared<RawGenBook>(datapath.c_str(), name.c_str(), description.c_str(), enc, direction, markup, lang.c_str(), misc1.c_str());
         pos = true;
     }
 

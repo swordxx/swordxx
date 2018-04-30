@@ -67,7 +67,7 @@ int main(int argc, char **argv) {
     SWMgr library(std::make_shared<MarkupFilterMgr>(FMT_XHTML));
     library.setGlobalOption("Headings", "On");
 
-    SWModule *module = library.getModule(argv[1]);
+    auto const module(library.getModule(argv[1]));
 
     if (!module) {
         cerr << "\nCouldn't find module: " << argv[1] << "\n" << endl;
@@ -75,13 +75,13 @@ int main(int argc, char **argv) {
     }
 
     module->setKey("Ps.3.1");
-    outputCurrentVerse(module);
+    outputCurrentVerse(module.get());
 
     module->setKey("Matt.2.6");
-    outputCurrentVerse(module);
+    outputCurrentVerse(module.get());
 
     module->setKey("Mark.1.14");
-    outputCurrentVerse(module);
+    outputCurrentVerse(module.get());
 
 
     cout << "\nWhitespace tests around headings:\n";

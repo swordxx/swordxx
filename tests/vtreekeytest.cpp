@@ -38,7 +38,7 @@ using std::endl;
 int main(int /* argc */, char ** /* argv */) {
 
     SWMgr mgr;
-    SWModule *mod = mgr.getModule("KJVgb");
+    auto const mod(mgr.getModule("KJVgb"));
 
     std::unique_ptr<VerseKey> key1(
                 static_cast<VerseKey *>(mod->createKey().release()));

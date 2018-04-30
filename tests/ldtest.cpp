@@ -15,7 +15,7 @@ int main(int argc, char **argv) {
     }
 
     SWMgr library;
-    SWModule *module = library.getModule(argv[1]);
+    auto const module(library.getModule(argv[1]));
     if (!module) {
         cerr << "\nCouldn't find module: " << argv[1] << "\n" << endl;
         std::exit(-2);

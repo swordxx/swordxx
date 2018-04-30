@@ -30,7 +30,7 @@ int main(int argc, char * argv[]) {
     std::string const keyText((argc > 2) ? argv[3] : "Gen.1.9");
     std::string const searchText((argc > 3) ? argv[4] : "מתחת");
     swordxx::SWMgr library;
-    auto * const book = library.getModule(modName.c_str());
+    auto const book(library.getModule(modName.c_str()));
     auto const filters(library.getGlobalOptions());
     for (auto const & filter : filters)
         /* Blindly turn off all filters. Some filters don't support "Off", but

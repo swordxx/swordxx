@@ -31,7 +31,7 @@ using namespace swordxx;
 int main(int argc, char **argv) {
     SWMgr mymgr;
     if ( argc > 1 ) {
-        if (SWModule * const module = mymgr.getModule(argv[1]))
+        if (auto const module = mymgr.getModule(argv[1]))
             std::cout << module->getBibliography() << "\n";
         return 0;
     }

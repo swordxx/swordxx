@@ -103,7 +103,7 @@ int main(int argc, char **argv)
         mgr->setGlobalOption(it->first.c_str(), it->second.c_str());
     }
 
-    SWModule *module = mgr->getModule(modName);
+    auto const module(mgr->getModule(modName));
 
     if (!module) usage(progName, (((std::string) "Couldn't find module: ") + modName).c_str());
 

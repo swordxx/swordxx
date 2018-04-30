@@ -30,7 +30,7 @@ using namespace swordxx;
 
 int main(int /* argc */, char ** /* argv */) {
     SWMgr mymgr;
-    if (SWModule * const module = mymgr.getModule("KJV")) {
+    if (auto const module = mymgr.getModule("KJV")) {
         VerseKey parser;
         ListKey lk = parser.parseVerseList("mal4:6-rev", "", true);
         lk.setPersist(true);

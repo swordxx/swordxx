@@ -52,7 +52,7 @@ int main(int argc, char **argv) {
         }
     }
 
-    if (SWModule * const mhc = mymgr.getModule("MHC")) {
+    if (auto const mhc = mymgr.getModule("MHC")) {
         std::cout << "MHC, Lang = " << mhc->getLanguage() << "\n\n";
         for (mhc->setKey("Gen 1:1"); *mhc->getKey() < (VerseKey) "Gen 1:10"; (*mhc).increment())
             std::cout << mhc->renderText() << "\n";

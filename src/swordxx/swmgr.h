@@ -76,7 +76,7 @@ class SWDLLEXPORT SWMgr {
 
 public: /* Types: */
 
-    using ModMap = std::map<std::string, std::unique_ptr<SWModule> >;
+    using ModMap = std::map<std::string, std::shared_ptr<SWModule> >;
 
 private: /* Types: */
 
@@ -94,7 +94,7 @@ protected:
     SWConfig * mysysconfig = nullptr;
     SWConfig * homeConfig = nullptr;
     void createAllModules();
-    std::unique_ptr<SWModule> createModule(
+    std::shared_ptr<SWModule> createModule(
             std::string const & name,
             std::string const & driver,
             ConfigEntMap section);
@@ -263,14 +263,14 @@ public:
      * @param modName the name of the module to retrieve
      * @return the module, if found, otherwise 0
      */
-    SWModule * getModule(char const * modName) {
+    std::shared_ptr<SWModule> getModule(char const * modName) {
         auto const it(m_modules.find(modName));
-        return (it != m_modules.end()) ? it->second.get() : nullptr;
+        return (it != m_modules.end()) ? it->second : nullptr;
     }
 
-    SWModule const * getModule(char const * modName) const {
+    std::shared_ptr<SWModule const> getModule(char const * modName) const {
         auto const it(m_modules.find(modName));
-        return (it != m_modules.end()) ? it->second.get() : nullptr;
+        return (it != m_modules.end()) ? it->second : nullptr;
     }
 
 

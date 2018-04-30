@@ -572,8 +572,7 @@ map<SWModule *, int> InstallMgr::getModuleStatus(const SWMgr &base, const SWMgr 
                            SWORDXX_VERSION);
         #endif
 
-        const SWModule *baseMod = base.getModule(mp.first.c_str());
-        if (baseMod) {
+        if (auto const baseMod = base.getModule(mp.first.c_str())) {
             auto const sourceVersion(
                     getVersion(mp.second->getConfigEntry("Version"), 0x1u));
             auto const targetVersion(

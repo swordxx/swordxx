@@ -293,7 +293,7 @@ void remoteDescribeModule(char const * const sourceName,
                   << std::endl;
         finish(-3);
     }
-    auto * const m = source->second->getMgr()->getModule(modName);
+    auto const m(source->second->getMgr()->getModule(modName));
     if (!m) {
         std::cerr << "Couldn't find module [" << modName << "] in source ["
                   << sourceName << ']' << std::endl;
