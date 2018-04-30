@@ -20,14 +20,8 @@
  *
  */
 
-#include <cerrno>
-#include <cstdio>
 #include <cstdlib>
 #include <cstring>
-#include <fcntl.h>
-#ifndef __GNUC__
-#include <io.h>
-#endif
 #include <swordxx/filemgr.h>
 #include <swordxx/modules/common/swcomprs.h>
 #ifdef __GNUC__
@@ -38,67 +32,45 @@
 using namespace swordxx;
 
 class FileCompress: public SWCompress {
+
+public: /* Methods: */
+
+    FileCompress(std::string const & filename)
+        : ufd(FileMgr::createPathAndFile(filename.c_str()))
+        , zfd(FileMgr::createPathAndFile((filename + ".zzz").c_str()))
+    {}
+
+    ~FileCompress() override {
+        ::close(ufd);
+        ::close(zfd);
+    }
+
+    unsigned long GetChars(char * buf, unsigned long len, Direction) override
+    { return ::read(ifd, buf, len); }
+
+    unsigned long SendChars(char * buf, unsigned long len, Direction) override
+    { return ::write(ofd, buf, len); }
+
+    void Encode() override {
+        ifd = ufd;
+        ofd = zfd;
+        SWCompress::Encode();
+    }
+
+    void Decode() override {
+        ifd = zfd;
+        ofd = ufd;
+        SWCompress::Decode();
+    }
+
+private: /* Fields: */
+
     int ifd;
     int ofd;
     int ufd;
     int zfd;
-public:
-    FileCompress(char *);
-    ~FileCompress() override;
-    unsigned long GetChars(char *, unsigned long len, Direction) override;
-    unsigned long SendChars(char *, unsigned long len, Direction) override;
-    void Encode() override;
-    void Decode() override;
+
 };
-
-
-FileCompress::FileCompress(char *fname)
-{
-    char buf[256];
-
-    ufd  = FileMgr::createPathAndFile(fname);
-
-    sprintf(buf, "%s.zzz", fname);
-    zfd = FileMgr::createPathAndFile(buf);
-}
-
-
-FileCompress::~FileCompress()
-{
-    close(ufd);
-    close(zfd);
-}
-
-
-unsigned long FileCompress::GetChars(char *buf, unsigned long len, Direction)
-{
-    return read(ifd, buf, len);
-}
-
-
-unsigned long FileCompress::SendChars(char *buf, unsigned long len, Direction)
-{
-    return write(ofd, buf, len);
-}
-
-
-void FileCompress::Encode()
-{
-    ifd = ufd;
-    ofd = zfd;
-
-    SWCompress::Encode();
-}
-
-
-void FileCompress::Decode()
-{
-    ifd = zfd;
-    ofd = ufd;
-
-    SWCompress::Decode();
-}
-
 
 int main(int argc, char * argv[]) {
     bool decomp = false;
