@@ -22,6 +22,7 @@
 
 #include "installmgr.h"
 
+#include <atomic>
 #include <cassert>
 #include <cstdio>
 #include <dirent.h>
@@ -185,8 +186,9 @@ void InstallMgr::saveInstallConf() {
 
 
 void InstallMgr::terminate() {
-    std::shared_ptr<RemoteTransport> const transportPtr(m_transport);
-    if (transportPtr)
+    if (auto const transportPtr =
+                std::atomic_load_explicit(&m_transport,
+                                          std::memory_order_acquire))
         transportPtr->terminate();
 }
 
@@ -657,7 +659,10 @@ int InstallMgr::remoteCopy(InstallSource & is,
     else if (is.m_type == "HTTP" || is.m_type == "HTTPS") {
         trans = new CURLHTTPTransport(is.m_source.c_str(), m_statusReporter);
     }
-    m_transport.reset(trans); // set classwide current transport for other thread terminate() call
+
+    // set classwide current transport for other thread terminate() call:
+    std::atomic_store_explicit(&m_transport, std::shared_ptr<RemoteTransport>(trans), std::memory_order_release);
+
     if (is.m_u.length()) {
         trans->setUser(is.m_u.c_str());
         trans->setPasswd(is.m_p.c_str());
@@ -719,7 +724,9 @@ SWLog::getSystemLog()->logDebug("remoteCopy: dirTransfer: %s", dir.c_str());
             retVal = -1;
         }
     }
-    m_transport.reset();
+    std::atomic_store_explicit(&m_transport,
+                               std::shared_ptr<RemoteTransport>(),
+                               std::memory_order_release);
     return retVal;
 }
 
