@@ -279,7 +279,7 @@ void remoteListModules(const char *sourceName, bool onlyNewAndUpdated = false) {
         fprintf(stderr, "Couldn't find remote source [%s]\n", sourceName);
         finish(-3);
     }
-    listModules(source->second->getMgr(), onlyNewAndUpdated);
+    listModules(source->second->getMgr().get(), onlyNewAndUpdated);
 }
 
 
@@ -320,7 +320,7 @@ void remoteInstallModule(const char *sourceName, const char *modName) {
         finish(-3);
     }
     auto & is = *source->second;
-    SWMgr *rmgr = is.getMgr();
+    auto const rmgr(is.getMgr());
     auto const it = rmgr->modules().find(modName);
     if (it == rmgr->modules().end()) {
         fprintf(stderr, "Remote source [%s] does not make available module [%s]\n", sourceName, modName);

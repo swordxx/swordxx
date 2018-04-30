@@ -591,7 +591,6 @@ int InstallMgr::refreshRemoteSourceConfiguration() {
 
 InstallSource::InstallSource(const char *type, const char *confEnt) {
     this->m_type = type;
-    mgr = nullptr;
     m_userData = nullptr;
     if (confEnt) {
         std::string buf = confEnt;
@@ -609,20 +608,20 @@ InstallSource::InstallSource(const char *type, const char *confEnt) {
 }
 
 
-InstallSource::~InstallSource() { delete mgr; }
+InstallSource::~InstallSource() noexcept = default;
 
 
-void InstallSource::flush() {
-    delete mgr;
-    mgr = nullptr;
-}
+void InstallSource::flush() { m_mgr.reset(); }
 
 
-SWMgr *InstallSource::getMgr() {
-    if (!mgr)
-        // ..., false = don't augment ~home directory.
-        mgr = new SWMgr(m_localShadow.c_str(), true, nullptr, false, false);
-    return mgr;
+std::shared_ptr<SWMgr> const & InstallSource::getMgr() {
+    if (!m_mgr)
+        m_mgr = std::make_shared<SWMgr>(m_localShadow.c_str(),
+                                        true,
+                                        nullptr,
+                                        false,
+                                        false); // augmentHome
+    return m_mgr;
 }
 
 

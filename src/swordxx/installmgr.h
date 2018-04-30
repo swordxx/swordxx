@@ -42,10 +42,12 @@ class StatusReporter;
 /** A remote installation source configuration
 */
 class SWDLLEXPORT InstallSource {
-    SWMgr *mgr;
+
+    std::shared_ptr<SWMgr> m_mgr;
+
 public:
     InstallSource(char const * type, char const * confEnt = nullptr);
-    virtual ~InstallSource();
+    virtual ~InstallSource() noexcept;
     std::string getConfEnt() {
         return m_caption +"|" + m_source + "|" + m_directory + "|" + m_u + "|" + m_p + "|" + m_uid;
     }
@@ -59,7 +61,7 @@ public:
     std::string m_type;
     std::string m_localShadow;
     void *m_userData;
-    SWMgr *getMgr();
+    std::shared_ptr<SWMgr> const & getMgr();
     void flush();
 };
 
