@@ -219,15 +219,14 @@ A sample implementation, roughly taken from the windows installmgr:
             config->Save();
 
             // LET'S SHOW THE USER SOME SAMPLE TEXT FROM THE MODULE
-            SWMgr *mgr = new SWMgr();
-            SWModule *mod = mgr->getModule(modName);
+            SWMgr mgr;
+            auto const mod(mgr.getModule(modName));
             mod->setKey("Ipet 2:12");
             tmpBuf = mod->StripText();
             mod->setKey("gen 1:10");
             tmpBuf += "\n\n";
             tmpBuf += mod->StripText();
             SOME_DIALOG_CONTROL->SETTEXT(tmpBuf.c_str());
-            delete mgr;
 
             // if USER CLICKS OK means we should return true
             return true;
