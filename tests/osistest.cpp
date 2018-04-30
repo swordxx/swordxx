@@ -32,26 +32,26 @@ using namespace std;
 using namespace swordxx;
 
 
-void outputCurrentVerse(SWModule *module) {
+void outputCurrentVerse(SWModule & module) {
 
-    module->renderText();
+    module.renderText();
 
     cout << "Key:\n";
-    cout << module->getKeyText() << "\n";
+    cout << module.getKeyText() << "\n";
     cout << "-------\n";
 
     cout << "Preverse Header 0:\nRaw:\n";
-    std::string header = module->getEntryAttributes()["Heading"]["Preverse"]["0"];
+    std::string header = module.getEntryAttributes()["Heading"]["Preverse"]["0"];
     cout << header << endl;
     cout << "-------\n";
     cout << "Rendered Header:\n";
-    cout << module->renderText(header.c_str()) << endl;
+    cout << module.renderText(header.c_str()) << endl;
     cout << "-------\n";
     cout << "CSS:\n";
-    cout << module->getRenderHeader() << endl;
+    cout << module.getRenderHeader() << endl;
     cout << "-------\n";
     cout << "RenderText:\n";
-    cout << module->renderText() << endl;
+    cout << module.renderText() << endl;
     cout << "-------\n";
     cout << "-------\n\n";
 }
@@ -75,13 +75,13 @@ int main(int argc, char **argv) {
     }
 
     module->setKey("Ps.3.1");
-    outputCurrentVerse(module.get());
+    outputCurrentVerse(*module);
 
     module->setKey("Matt.2.6");
-    outputCurrentVerse(module.get());
+    outputCurrentVerse(*module);
 
     module->setKey("Mark.1.14");
-    outputCurrentVerse(module.get());
+    outputCurrentVerse(*module);
 
 
     cout << "\nWhitespace tests around headings:\n";
