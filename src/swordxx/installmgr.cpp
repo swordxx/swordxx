@@ -644,24 +644,25 @@ int InstallMgr::remoteCopy(InstallSource & is,
     if (!isUserDisclaimerConfirmed()) return -1;
 
     int retVal = 0;
-    RemoteTransport * trans = nullptr;
+    std::shared_ptr<RemoteTransport> trans;
     if (is.m_type == "FTP"
 #if SWORDXX_CURL_HAS_SFTP
         || is->type == "SFTP"
 #endif
         ) {
 
-        auto * const t =
-                new CURLFTPTransport(is.m_source.c_str(), m_statusReporter);
+        auto t(std::make_shared<CURLFTPTransport>(is.m_source.c_str(),
+                                                  m_statusReporter));
         t->setPassive(m_passive);
-        trans = t;
+        trans = std::move(t);
     }
     else if (is.m_type == "HTTP" || is.m_type == "HTTPS") {
-        trans = new CURLHTTPTransport(is.m_source.c_str(), m_statusReporter);
+        trans = std::make_shared<CURLHTTPTransport>(is.m_source.c_str(),
+                                                    m_statusReporter);
     }
 
     // set classwide current transport for other thread terminate() call:
-    std::atomic_store_explicit(&m_transport, std::shared_ptr<RemoteTransport>(trans), std::memory_order_release);
+    std::atomic_store_explicit(&m_transport, trans, std::memory_order_release);
 
     if (is.m_u.length()) {
         trans->setUser(is.m_u.c_str());
