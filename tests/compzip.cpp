@@ -38,67 +38,45 @@
 using namespace swordxx;
 
 class FileCompress: public ZipCompress {
+
+public: /* Methods: */
+
+    FileCompress(std::string const & filename)
+        : ufd(FileMgr::createPathAndFile(filename.c_str()))
+        , zfd(FileMgr::createPathAndFile((filename + ".zip").c_str()))
+    {}
+
+    ~FileCompress() override {
+        ::close(ufd);
+        ::close(zfd);
+    }
+
+    unsigned long GetChars(char * buf, unsigned long len, Direction) override
+    { return ::read(ifd, buf, len); }
+
+    unsigned long SendChars(char * buf, unsigned long len, Direction) override
+    { return ::write(ofd, buf, len); }
+
+    void Encode() override {
+        ifd = ufd;
+        ofd = zfd;
+        ZipCompress::Encode();
+    }
+
+    void Decode() override {
+        ifd = zfd;
+        ofd = ufd;
+        ZipCompress::Decode();
+    }
+
+private: /* Fields: */
+
     int ifd;
     int ofd;
     int ufd;
     int zfd;
-public:
-    FileCompress(char *);
-    ~FileCompress() override;
-    unsigned long GetChars(char *, unsigned long len, Direction) override;
-    unsigned long SendChars(char *, unsigned long len, Direction) override;
-    void Encode() override;
-    void Decode() override;
+
 };
-
-
-FileCompress::FileCompress(char *fname)
-{
-    char buf[256];
-
-    ufd  = FileMgr::createPathAndFile(fname);
-
-    sprintf(buf, "%s.zip", fname);
-    zfd = FileMgr::createPathAndFile(buf);
-}
-
-
-FileCompress::~FileCompress()
-{
-    close(ufd);
-    close(zfd);
-}
-
-
-unsigned long FileCompress::GetChars(char *buf, unsigned long len, Direction)
-{
-    return read(ifd, buf, len);
-}
-
-
-unsigned long FileCompress::SendChars(char *buf, unsigned long len, Direction)
-{
-    return write(ofd, buf, len);
-}
-
-
-void FileCompress::Encode()
-{
-    ifd = ufd;
-    ofd = zfd;
-
-    ZipCompress::Encode();
-}
-
-
-void FileCompress::Decode()
-{
-    ifd = zfd;
-    ofd = ufd;
-
-    ZipCompress::Decode();
-}
-
 
 int main(int argc, char * argv[]) {
     bool decomp = false;
@@ -114,7 +92,6 @@ int main(int argc, char * argv[]) {
             decomp = true;
         }
     }
-
 
     FileCompress fobj(argv[1]);
     if (decomp) {
