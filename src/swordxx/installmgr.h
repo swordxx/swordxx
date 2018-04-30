@@ -126,7 +126,7 @@ public:
 
         /** call to delete all files of a locally installed module.
          */
-    virtual int removeModule(SWMgr *manager, const char *modName);
+    bool removeModule(SWMgr & manager, std::string const & modName);
 
         /** mostly an internally used method to remote download from a remote source to a local destination
          */

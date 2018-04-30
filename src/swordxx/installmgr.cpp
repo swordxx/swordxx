@@ -186,22 +186,21 @@ void InstallMgr::terminate() {
 }
 
 
-int InstallMgr::removeModule(SWMgr *manager, const char *moduleName) {
-    assert(manager);
-    assert(moduleName);
+bool InstallMgr::removeModule(SWMgr & manager, std::string const & moduleName) {
     SectionMap::iterator module;
     ConfigEntMap::iterator fileBegin;
     ConfigEntMap::iterator fileEnd, entry;
 
-    // save our own copy, cuz when we remove the module from the SWMgr
-    // it's likely we'll free the memory passed to us in moduleName
-    std::string modName = moduleName;
-    module = manager->config->sections().find(modName);
+    module = manager.config->sections().find(moduleName);
 
-    if (module != manager->config->sections().end()) {
+    if (module != manager.config->sections().end()) {
+        // save our own copy, cuz when we remove the module from the SWMgr
+        // it's likely we'll free the memory passed to us in moduleName
+        auto const modName(moduleName);
+
         // to be sure all files are closed
         // this does not remove the .conf information from SWMgr
-        manager->deleteModule(modName.c_str());
+        manager.deleteModule(modName.c_str());
 
         fileBegin = module->second.lower_bound("File");
         fileEnd = module->second.upper_bound("File");
@@ -223,11 +222,11 @@ int InstallMgr::removeModule(SWMgr *manager, const char *moduleName) {
 
             FileMgr::removeDir(modDir.c_str());
 
-            if ((dir = opendir(manager->m_configPath.c_str()))) {    // find and remove .conf file
+            if ((dir = opendir(manager.m_configPath.c_str()))) {    // find and remove .conf file
                 rewinddir(dir);
                 while ((ent = readdir(dir))) {
                     if ((std::strcmp(ent->d_name, ".")) && (std::strcmp(ent->d_name, ".."))) {
-                        std::string modFile(manager->m_configPath);
+                        std::string modFile(manager.m_configPath);
                         removeTrailingDirectorySlashes(modFile);
                         modFile += "/";
                         modFile += ent->d_name;
@@ -242,9 +241,9 @@ int InstallMgr::removeModule(SWMgr *manager, const char *moduleName) {
                 closedir(dir);
             }
         }
-        return 0;
+        return true;
     }
-    return 1;
+    return false;
 }
 
 
@@ -477,7 +476,7 @@ int InstallMgr::installModule(SWMgr *destMgr, const char *fromLocation, const ch
                             if (cipher) {
                                 if (getCipherCode(modName, config)) {
                                     SWMgr newDest(destMgr->m_prefixPath.c_str());
-                                    removeModule(&newDest, modName);
+                                    removeModule(newDest, modName);
                                     aborted = true;
                                 }
                                 else {

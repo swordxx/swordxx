@@ -220,7 +220,7 @@ void uninstallModule(const char *modName) {
         fprintf(stderr, "Couldn't find module [%s] to remove\n", modName);
         finish(-2);
     }
-    installMgr->removeModule(mgr, it->second->getName().c_str());
+    installMgr->removeModule(*mgr, it->second->getName());
     cout << "Removed module: [" << modName << "]\n";
 }
 
