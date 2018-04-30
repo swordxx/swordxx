@@ -252,96 +252,6 @@ bool InstallMgr::removeModule(SWMgr & manager, std::string const & moduleName) {
 }
 
 
-// TODO: rename to netCopy
-int InstallMgr::remoteCopy(InstallSource *is, const char *src, const char *dest, bool dirTransfer, const char *suffix) {
-SWLog::getSystemLog()->logDebug("remoteCopy: %s, %s, %s, %c, %s", (is?is->m_source.c_str():"null"), src, (dest?dest:"null"), (dirTransfer?'t':'f'), (suffix?suffix:"null"));
-
-    // assert user disclaimer has been confirmed
-    if (!isUserDisclaimerConfirmed()) return -1;
-
-    int retVal = 0;
-    RemoteTransport * trans = nullptr;
-    if (is->m_type == "FTP"
-#if SWORDXX_CURL_HAS_SFTP
-        || is->type == "SFTP"
-#endif
-        ) {
-
-        auto * const t =
-                new CURLFTPTransport(is->m_source.c_str(), m_statusReporter);
-        t->setPassive(m_passive);
-        trans = t;
-    }
-    else if (is->m_type == "HTTP" || is->m_type == "HTTPS") {
-        trans = new CURLHTTPTransport(is->m_source.c_str(), m_statusReporter);
-    }
-    m_transport.reset(trans); // set classwide current transport for other thread terminate() call
-    if (is->m_u.length()) {
-        trans->setUser(is->m_u.c_str());
-        trans->setPasswd(is->m_p.c_str());
-    }
-    else {
-        trans->setUser(m_u.c_str());
-        trans->setPasswd(m_p.c_str());
-    }
-
-    std::string urlPrefix;
-    if (is->m_type == "HTTP") {
-        urlPrefix = "http://";
-    }
-    else if (is->m_type == "HTTPS") {
-        urlPrefix = "https://";
-    }
-#if SWORDXX_CURL_HAS_SFTP
-    else if (is->type == "SFTP") {
-        urlPrefix = "sftp://";
-    }
-#endif
-    else {
-        urlPrefix = "ftp://";
-    }
-    urlPrefix.append(is->m_source);
-
-    // let's be sure we can connect.  This seems to be necessary but sucks
-//    std::string url = urlPrefix + is->directory.c_str() + "/"; //dont forget the final slash
-//    if (trans->getURL("swdirlist.tmp", url.c_str())) {
-//         SWLog::getSystemLog()->logDebug("FTPCopy: failed to get dir %s\n", url.c_str());
-//         return -1;
-//    }
-
-
-    if (dirTransfer) {
-        std::string dir(is->m_directory);
-        removeTrailingDirectorySlashes(dir);
-        (dir += '/') += src; //dont forget the final slash
-SWLog::getSystemLog()->logDebug("remoteCopy: dirTransfer: %s", dir.c_str());
-
-        retVal = trans->copyDirectory(urlPrefix.c_str(),
-                                      dir.c_str(),
-                                      dest,
-                                      suffix);
-
-
-    }
-    else {
-        try {
-            std::string url = urlPrefix + is->m_directory;
-            removeTrailingDirectorySlashes(url);
-            (url += '/') += src; // Dont forget the final slash
-            if (!trans->getUrl(dest, url.c_str())) {
-                SWLog::getSystemLog()->logDebug("netCopy: failed to get file %s", url.c_str());
-                retVal = -1;
-            }
-        }
-        catch (...) {
-            retVal = -1;
-        }
-    }
-    m_transport.reset();
-    return retVal;
-}
-
-
 int InstallMgr::installModule(SWMgr & destMgr,
                               const char * fromLocation,
                               const char * modName,
@@ -393,7 +303,7 @@ int InstallMgr::installModule(SWMgr & destMgr,
             if (is) {
                 while (fileBegin != fileEnd) {    // netCopy each file first
                     buffer = sourceDir + fileBegin->second.c_str();
-                    if (remoteCopy(is, fileBegin->second.c_str(), buffer.c_str())) {
+                    if (remoteCopy(*is, fileBegin->second.c_str(), buffer.c_str())) {
                         aborted = true;
                         break;    // user aborted
                     }
@@ -453,7 +363,7 @@ int InstallMgr::installModule(SWMgr & destMgr,
                 SWLog::getSystemLog()->logDebug("***** relativePath: %s \n", relativePath.c_str());
 
                 if (is) {
-                    if (remoteCopy(is, relativePath.c_str(), absolutePath.c_str(), true)) {
+                    if (remoteCopy(*is, relativePath.c_str(), absolutePath.c_str(), true)) {
                         aborted = true;    // user aborted
                     }
                 }
@@ -522,14 +432,14 @@ int InstallMgr::refreshRemoteSource(InstallSource & is) {
 
     std::string archive = target + ".tar.gz";
 
-    errorCode = remoteCopy(&is, "mods.d.tar.gz", archive.c_str(), false);
+    errorCode = remoteCopy(is, "mods.d.tar.gz", archive.c_str(), false);
     if (!errorCode) { //sucessfully downloaded the tar,gz of module configs
         FileDesc *fd = FileMgr::getSystemFileMgr()->open(archive.c_str(), FileMgr::RDONLY);
         untargz(fd->getFd(), root.c_str());
         FileMgr::getSystemFileMgr()->close(fd);
     }
     else
-    errorCode = remoteCopy(&is, "mods.d", target.c_str(), true, ".conf"); //copy the whole directory
+    errorCode = remoteCopy(is, "mods.d", target.c_str(), true, ".conf"); //copy the whole directory
 
     is.flush();
     return errorCode;
@@ -616,7 +526,7 @@ int InstallMgr::refreshRemoteSourceConfiguration() {
     InstallSource is("FTP");
     is.m_source = "ftp.crosswire.org";
     is.m_directory = "/pub/sword";
-    int errorCode = remoteCopy(&is, masterRepoList, masterRepoListPath.c_str(), false);
+    int errorCode = remoteCopy(is, masterRepoList, masterRepoListPath.c_str(), false);
     if (!errorCode) { //sucessfully downloaded the repo list
         SWConfig masterList(masterRepoListPath.c_str());
         SectionMap::iterator sections = masterList.sections().find("Repos");
@@ -716,5 +626,102 @@ SWMgr *InstallSource::getMgr() {
 }
 
 
-} /* namespace swordxx */
+int InstallMgr::remoteCopy(InstallSource & is,
+                           const char * src,
+                           const char * dest,
+                           bool dirTransfer,
+                           const char * suffix)
+{
+    SWLog::getSystemLog()->logDebug("remoteCopy: %s, %s, %s, %c, %s",
+                                    is.m_source.c_str(),
+                                    src,
+                                    (dest ? dest : "null"),
+                                    (dirTransfer ? 't' : 'f'),
+                                    (suffix ? suffix : "null"));
 
+    // assert user disclaimer has been confirmed
+    if (!isUserDisclaimerConfirmed()) return -1;
+
+    int retVal = 0;
+    RemoteTransport * trans = nullptr;
+    if (is.m_type == "FTP"
+#if SWORDXX_CURL_HAS_SFTP
+        || is->type == "SFTP"
+#endif
+        ) {
+
+        auto * const t =
+                new CURLFTPTransport(is.m_source.c_str(), m_statusReporter);
+        t->setPassive(m_passive);
+        trans = t;
+    }
+    else if (is.m_type == "HTTP" || is.m_type == "HTTPS") {
+        trans = new CURLHTTPTransport(is.m_source.c_str(), m_statusReporter);
+    }
+    m_transport.reset(trans); // set classwide current transport for other thread terminate() call
+    if (is.m_u.length()) {
+        trans->setUser(is.m_u.c_str());
+        trans->setPasswd(is.m_p.c_str());
+    }
+    else {
+        trans->setUser(m_u.c_str());
+        trans->setPasswd(m_p.c_str());
+    }
+
+    std::string urlPrefix;
+    if (is.m_type == "HTTP") {
+        urlPrefix = "http://";
+    }
+    else if (is.m_type == "HTTPS") {
+        urlPrefix = "https://";
+    }
+#if SWORDXX_CURL_HAS_SFTP
+    else if (is.type == "SFTP") {
+        urlPrefix = "sftp://";
+    }
+#endif
+    else {
+        urlPrefix = "ftp://";
+    }
+    urlPrefix.append(is.m_source);
+
+    // let's be sure we can connect.  This seems to be necessary but sucks
+//    std::string url = urlPrefix + is->directory.c_str() + "/"; //dont forget the final slash
+//    if (trans->getURL("swdirlist.tmp", url.c_str())) {
+//         SWLog::getSystemLog()->logDebug("FTPCopy: failed to get dir %s\n", url.c_str());
+//         return -1;
+//    }
+
+
+    if (dirTransfer) {
+        std::string dir(is.m_directory);
+        removeTrailingDirectorySlashes(dir);
+        (dir += '/') += src; //dont forget the final slash
+SWLog::getSystemLog()->logDebug("remoteCopy: dirTransfer: %s", dir.c_str());
+
+        retVal = trans->copyDirectory(urlPrefix.c_str(),
+                                      dir.c_str(),
+                                      dest,
+                                      suffix);
+
+
+    }
+    else {
+        try {
+            std::string url = urlPrefix + is.m_directory;
+            removeTrailingDirectorySlashes(url);
+            (url += '/') += src; // Dont forget the final slash
+            if (!trans->getUrl(dest, url.c_str())) {
+                SWLog::getSystemLog()->logDebug("netCopy: failed to get file %s", url.c_str());
+                retVal = -1;
+            }
+        }
+        catch (...) {
+            retVal = -1;
+        }
+    }
+    m_transport.reset();
+    return retVal;
+}
+
+} /* namespace swordxx */

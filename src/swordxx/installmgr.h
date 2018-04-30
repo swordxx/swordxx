@@ -128,10 +128,6 @@ public:
          */
     bool removeModule(SWMgr & manager, std::string const & modName);
 
-        /** mostly an internally used method to remote download from a remote source to a local destination
-         */
-    virtual int remoteCopy(InstallSource *is, const char *src, const char *dest, bool dirTransfer = false, const char *suffix = "");
-
         /** call to install a module from a local path (fromLocation) or remote InstallSource (is) (leave the other 0)
          */
     int installModule(SWMgr & destMgr,
@@ -267,6 +263,15 @@ A sample implementation, roughly taken from the windows installmgr:
      *   to help the user select a basic foundation of useful modules
      */
     bool isDefaultModule(const char *modName);
+
+private: /* Methods: */
+
+    /** remote download from a remote source to a local destination */
+    int remoteCopy(InstallSource & is,
+                   const char * src,
+                   const char * dest,
+                   bool dirTransfer = false,
+                   const char * suffix = "");
 };
 
 
