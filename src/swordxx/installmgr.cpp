@@ -237,12 +237,12 @@ bool InstallMgr::removeModule(SWMgr & manager, std::string const & moduleName) {
                         removeTrailingDirectorySlashes(modFile);
                         modFile += "/";
                         modFile += ent->d_name;
-                        SWConfig *config = new SWConfig(modFile.c_str());
-                        if (config->sections().find(modName) != config->sections().end()) {
-                            delete config;
+                        if ([&modFile, &modName]() {
+                                SWConfig config(modFile.c_str());
+                                auto const & sections = config.sections();
+                                return sections.find(modName) != sections.end();
+                            }())
                             FileMgr::removeFile(modFile.c_str());
-                        }
-                        else    delete config;
                     }
                 }
                 closedir(dir);
