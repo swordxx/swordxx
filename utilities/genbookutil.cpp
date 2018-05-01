@@ -229,6 +229,4 @@ int main(int argc, char **argv) {
     while (input.compare("q"));
 
     delete treeKey;
-
-    return 0;
 }
