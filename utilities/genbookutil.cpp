@@ -168,16 +168,15 @@ int main(int argc, char **argv) {
         std::exit(-1);
     }
 
-    TreeKeyIdx *treeKey = new TreeKeyIdx(argv[1]);
-
-    if (treeKey->popError()) {
-        RawGenBook::createModule(argv[1]);
+    {
+        TreeKeyIdx treeKey(argv[1]);
+        if (treeKey.popError())
+            RawGenBook::createModule(argv[1]);
     }
-    delete treeKey;
 
     RawGenBook *book = new RawGenBook(argv[1]);
     TreeKeyIdx root = *static_cast<TreeKeyIdx *>(book->getKey());
-    treeKey = static_cast<TreeKeyIdx *>(book->getKey());
+    auto const treeKey = static_cast<TreeKeyIdx *>(book->getKey());
 
     std::string input;
     char line[1024];
