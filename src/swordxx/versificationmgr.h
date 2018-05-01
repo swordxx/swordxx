@@ -21,69 +21,97 @@
  *
  */
 
+#ifndef SWORDXX_VERSIFICATIONMGR_H
+#define SWORDXX_VERSIFICATIONMGR_H
+
 #include <list>
 #include <memory>
 #include <string>
 #include "defs.h"
 
 
-#ifndef VERSIFICATIONMGR_H
-#define VERSIFICATIONMGR_H
-
-
 namespace swordxx {
 
+struct BookOffsetLess;
 class TreeKey;
 
-struct abbrev
-{
-    const char *ab;
-    const char *osis;
+struct abbrev {
+    char const * ab;
+    char const * osis;
 };
 
 struct sbook {
-    /**Name of book
-    */
-    const char *name;
 
-    /**OSIS name
-    */
-    const char *osis;
+    /** Name of the book: */
+    char const * name;
 
-    /**Preferred Abbreviation
-    */
-    const char *prefAbbrev;
+    /** OSIS name: */
+    char const * osis;
 
-    /**Maximum chapters in book
-    */
+    /** Preferred abbreviation: */
+    char const * prefAbbrev;
+
+    /** Maximum chapters in book: */
     unsigned char chapmax;
-    /** Array[chapmax] of maximum verses in chapters
-    */
-    int *versemax;
+
+    /** Array[chapmax] of maximum verses in chapters: */
+    int * versemax;
+
 };
 
 
 class SWDLLEXPORT VersificationMgr {
 
+public: /* Types: */
 
-public:
     class System;
 
-private:
-
-    class Private;
-    Private *p;
-
-    void init();
-
-protected:
-    static std::unique_ptr<VersificationMgr> systemVersificationMgr;
-
-public:
     class SWDLLEXPORT Book {
+
         friend class System;
         friend struct BookOffsetLess;
+
+    private: /* Types: */
+
         class Private;
+
+    public: /* Methods: */
+
+        Book() { init(); }
+
+        Book(Book const & copy);
+
+        Book(std::string longName,
+             std::string osisName,
+             std::string prefAbbrev,
+             unsigned int chapMax)
+            : m_longName(std::move(longName))
+            , m_osisName(std::move(osisName))
+            , m_prefAbbrev(std::move(prefAbbrev))
+            , m_chapMax(chapMax)
+        { init(); }
+
+        ~Book();
+
+        Book & operator=(Book const & copy);
+
+        std::string const & getLongName() const noexcept { return m_longName; }
+
+        std::string const & getOSISName() const noexcept { return m_osisName; }
+
+        std::string const & getPreferredAbbreviation() const noexcept
+        { return m_prefAbbrev; }
+
+        unsigned int getChapterMax() const noexcept { return m_chapMax; }
+
+        int getVerseMax(int chapter) const;
+
+    private: /* Methods: */
+
+        void init();
+
+    private: /* Fields: */
+
         Private *m_p;
 
         /** book name */
@@ -98,74 +126,114 @@ public:
         /** Maximum chapters in book */
         unsigned int m_chapMax;
 
-        void init();
-
-    public:
-        Book() { init(); }
-        Book(const Book &other);
-        Book &operator =(const Book &other);
-        Book(std::string longName,
-             std::string osisName,
-             std::string prefAbbrev,
-             unsigned int chapMax)
-            : m_longName(std::move(longName))
-            , m_osisName(std::move(osisName))
-            , m_prefAbbrev(std::move(prefAbbrev))
-            , m_chapMax(chapMax)
-        {
-            init();
-        }
-        ~Book();
-        std::string const & getLongName() const noexcept { return m_longName; }
-        std::string const & getOSISName() const noexcept { return m_osisName; }
-        std::string const & getPreferredAbbreviation() const noexcept { return m_prefAbbrev; }
-        unsigned int getChapterMax() const noexcept { return m_chapMax; }
-        int getVerseMax(int chapter) const;
     };
 
     class SWDLLEXPORT System {
+
+    private: /* Types: */
+
         class Private;
-        Private * m_p;
-        std::string m_name;
-        int m_BMAX[2];
-        long m_ntStartOffset;
-        void init();
-    public:
-        System() { this->m_name = ""; init(); }
-        System(const System &other);
-        System &operator =(const System &other);
-        System(const char *name) { this->m_name = name; init(); }
+
+    public: /* Methods: */
+
+        System() { init(); }
+
+        System(System const & copy);
+
+        System(char const * name) : m_name(name) { init(); }
+
         ~System();
+
+        System & operator=(System const & copy);
+
         std::string const & getName() const { return m_name; }
-        const Book *getBookByName(const char *bookName) const;
-        int getBookNumberByOSISName(const char *bookName) const;
-        const Book *getBook(int number) const;
+
+        Book const * getBookByName(char const * bookName) const;
+
+        int getBookNumberByOSISName(char const * bookName) const;
+
+        Book const * getBook(int number) const;
+
         int getBookCount() const;
+
         void loadFromSBook(sbook const * ot,
                            sbook const * nt,
                            int * chMax,
                            unsigned char const * mappings = nullptr);
+
         long getOffsetFromVerse(int book, int chapter, int verse) const;
-        char getVerseFromOffset(long offset, int *book, int *chapter, int *verse) const;
-        const int *getBMAX() const { return m_BMAX; }
+
+        char getVerseFromOffset(long offset,
+                                int * book,
+                                int * chapter,
+                                int * verse) const;
+
+        int const * getBMAX() const { return m_BMAX; }
+
         long getNTStartOffset() const { return m_ntStartOffset; }
-        void translateVerse(const System *dstSys, const char **book, int *chapter, int *verse, int *verse_end) const;
+
+        void translateVerse(System const * dstSys,
+                            char const ** book,
+                            int * chapter,
+                            int * verse,
+                            int * verse_end) const;
+
+    private: /* Methods: */
+
+        void init();
+
+    private: /* Fields: */
+
+        Private * m_p;
+        std::string m_name;
+        int m_BMAX[2];
+        long m_ntStartOffset;
+
     };
+
+private: /* Types: */
+
+    class Private;
+
+public: /* Methods: */
+
     VersificationMgr() { init(); }
+
     ~VersificationMgr();
-    static VersificationMgr *getSystemVersificationMgr();
-    static void setSystemVersificationMgr(VersificationMgr *newVersificationMgr);
-    const std::list<std::string> getVersificationSystems() const;
-    const System *getVersificationSystem(const char *name) const;
+
+    static VersificationMgr * getSystemVersificationMgr();
+
+    static void setSystemVersificationMgr(
+            VersificationMgr * newVersificationMgr);
+
+    std::list<std::string> const getVersificationSystems() const;
+
+    System const * getVersificationSystem(char const * name) const;
+
     void registerVersificationSystem(char const * name,
                                      sbook const * ot,
                                      sbook const * nt,
                                      int * chMax,
                                      unsigned char const * mappings = nullptr);
-    void registerVersificationSystem(const char *name, const TreeKey *);
+
+    void registerVersificationSystem(char const * name, TreeKey const *);
+
+private: /* Methods: */
+
+    void init();
+
+protected: /* Fields: */
+
+    static std::unique_ptr<VersificationMgr> systemVersificationMgr;
+
+private: /* Fields: */
+
+    Private * p;
+
 };
 
-SWDLLEXPORT extern const struct abbrev builtin_abbrevs[];
+SWDLLEXPORT extern abbrev const builtin_abbrevs[];
 
 } /* namespace swordxx */
-#endif
+
+#endif /* SWORDXX_VERSIFICATIONMGR_H */
