@@ -33,11 +33,12 @@ using namespace swordxx;
 int main(int argc, char **argv) {
     std::cerr << "\n";
     SWLog::getSystemLog()->setLogLevel(SWLog::LOG_DEBUG);
-    SWConfig *sysConf = nullptr;
-    if (argc > 1) {
-        sysConf = new SWConfig(argv[1]);
-    }
-    SWMgr mymgr(nullptr, sysConf);
+
+    std::unique_ptr<SWConfig> sysConf;
+    if (argc > 1)
+        sysConf = std::make_unique<SWConfig>(argv[1]);
+
+    SWMgr mymgr(nullptr, sysConf.get());
     std::cerr << "\n\nprefixPath: " << mymgr.m_prefixPath;
     std::cerr << "\nconfigPath: " << mymgr.m_configPath << "\n\n";
 
@@ -57,8 +58,6 @@ int main(int argc, char **argv) {
         for (mhc->setKey("Gen 1:1"); *mhc->getKey() < (VerseKey) "Gen 1:10"; (*mhc).increment())
             std::cout << mhc->renderText() << "\n";
     }
-
-    delete sysConf;
 
     return 0;
 }
