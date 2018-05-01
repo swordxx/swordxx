@@ -56,9 +56,11 @@ class SWDLLEXPORT SWKey {
 
     std::string m_keyText;
 
+    bool m_persist = false;
+
 protected:
+
     bool m_boundSet = false;
-    bool m_persist;
     char m_error;
 
     std::string m_localeName;

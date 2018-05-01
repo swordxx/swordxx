@@ -51,7 +51,6 @@ SWKey::SWKey(std::string keyText)
 {
     setLocale(LocaleMgr::getSystemLocaleMgr()->getDefaultLocaleName());
     m_index     = 0;
-    m_persist   = 0;
     m_error     = 0;
     m_userData  = 0;
 }
