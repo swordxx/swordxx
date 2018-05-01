@@ -882,308 +882,311 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 
     // lets create or open our search index
     static TCHAR const * stopWords[] = { nullptr };
-    auto * const an =
-            new lucene::analysis::standard::StandardAnalyzer(stopWords);
 
-    auto * ramDir = new lucene::store::RAMDirectory();
-    auto * coreWriter = new lucene::index::IndexWriter(ramDir, an, true);
-    coreWriter->setMaxFieldLength(MAX_CONV_SIZE);
-
-    char perc = 1;
-    VerseKey *vkcheck = dynamic_cast<VerseKey *>(key);
     std::unique_ptr<VerseKey> chapMax;
-    if (vkcheck)
-        chapMax.reset(static_cast<VerseKey *>(vkcheck->clone().release()));
+    bool savePEA;
+    {
+        lucene::analysis::standard::StandardAnalyzer an(stopWords);
+        lucene::store::RAMDirectory ramDir;
+        lucene::index::IndexWriter coreWriter(&ramDir, &an, true);
 
-    TreeKeyIdx *tkcheck = dynamic_cast<TreeKeyIdx *>(key);
+        coreWriter.setMaxFieldLength(MAX_CONV_SIZE);
 
+        char perc = 1;
+        VerseKey *vkcheck = dynamic_cast<VerseKey *>(key);
+        if (vkcheck)
+            chapMax.reset(static_cast<VerseKey *>(vkcheck->clone().release()));
 
-    positionToBottom();
-    long highIndex = key->getIndex();
-    if (!highIndex)
-        highIndex = 1;        // avoid division by zero errors.
-
-    bool savePEA = isProcessEntryAttributes();
-    setProcessEntryAttributes(true);
-
-    // prox chapter blocks
-    // position module at the beginning
-    positionToTop();
-
-    std::string proxBuf;
-    std::string proxLem;
-    std::string proxMorph;
-    std::string strong;
-    std::string morph;
-
-    char err = popError();
-    while (!err) {
-        long mindex = key->getIndex();
-
-        proxBuf = "";
-        proxLem = "";
-        proxMorph = "";
-
-        // computer percent complete so we can report to our progress callback
-        float per = (float)mindex / highIndex;
-        // between 5%-98%
-        per *= 93; per += 5;
-        char newperc = (char)per;
-        if (newperc > perc) {
-            perc = newperc;
-            (*percent)(perc, percentUserData);
-        }
-
-        // get "content" field
-        auto content(stripText());
-
-        bool good = false;
-
-        // start out entry
-        auto * const doc = new lucene::document::Document();
-        // get "key" field
-        std::string keyText = (vkcheck) ? vkcheck->getOSISRef() : getKeyText();
-        if (!content.empty()) {
-            good = true;
+        TreeKeyIdx *tkcheck = dynamic_cast<TreeKeyIdx *>(key);
 
 
-            // build "strong" field
-            AttributeTypeList::iterator words;
-            AttributeList::iterator word;
-            AttributeValue::iterator strongVal;
-            AttributeValue::iterator morphVal;
+        positionToBottom();
+        long highIndex = key->getIndex();
+        if (!highIndex)
+            highIndex = 1;        // avoid division by zero errors.
 
-            strong="";
-            morph="";
-            words = getEntryAttributes().find("Word");
-            if (words != getEntryAttributes().end()) {
-                for (word = words->second.begin();word != words->second.end(); word++) {
-                    int partCount = std::atoi(word->second["PartCount"].c_str());
-                    if (!partCount) partCount = 1;
-                    for (int i = 0; i < partCount; i++) {
-                        std::string tmp = "Lemma";
-                        if (partCount > 1) tmp += formatted(".%d", i+1);
-                        strongVal = word->second.find(tmp);
-                        if (strongVal != word->second.end()) {
-                            // cheeze.  skip empty article tags that weren't assigned to any text
-                            if (strongVal->second == "G3588") {
-                                if (word->second.find("Text") == word->second.end())
-                                    continue;    // no text? let's skip
-                            }
-                            strong.append(strongVal->second);
-                            morph.append(strongVal->second);
-                            morph.push_back('@');
-                            std::string tmp2("Morph");
-                            if (partCount > 1) tmp2 += formatted(".%d", i+1);
-                            morphVal = word->second.find(tmp2);
-                            if (morphVal != word->second.end()) {
-                                morph.append(morphVal->second);
-                            }
-                            strong.push_back(' ');
-                            morph.push_back(' ');
-                        }
-                    }
-                }
+        savePEA = isProcessEntryAttributes();
+        setProcessEntryAttributes(true);
+
+        // prox chapter blocks
+        // position module at the beginning
+        positionToTop();
+
+        std::string proxBuf;
+        std::string proxLem;
+        std::string proxMorph;
+        std::string strong;
+        std::string morph;
+
+        char err = popError();
+        while (!err) {
+            long mindex = key->getIndex();
+
+            proxBuf = "";
+            proxLem = "";
+            proxMorph = "";
+
+            // computer percent complete so we can report to our progress callback
+            float per = (float)mindex / highIndex;
+            // between 5%-98%
+            per *= 93; per += 5;
+            char newperc = (char)per;
+            if (newperc > perc) {
+                perc = newperc;
+                (*percent)(perc, percentUserData);
             }
 
-            using lucene::document::Field;
-            doc->add(*_CLNEW Field(_T("key"), utf8ToWChar(keyText.c_str()).c_str(), Field::STORE_YES | Field::INDEX_UNTOKENIZED));
+            // get "content" field
+            auto content(stripText());
 
-            if (includeKeyInSearch)
-                content = keyText + " " + content;
+            bool good = false;
 
-            doc->add(*_CLNEW Field(_T("content"), utf8ToWChar(content.c_str()).c_str(), Field::STORE_NO | Field::INDEX_TOKENIZED));
+            // start out entry
 
-            if (strong.length() > 0) {
-                doc->add(*_CLNEW Field(_T("lemma"), utf8ToWChar(strong.c_str()).c_str(), Field::STORE_NO | Field::INDEX_TOKENIZED));
-                doc->add(*_CLNEW Field(_T("morph"), utf8ToWChar(morph.c_str()).c_str(), Field::STORE_NO | Field::INDEX_TOKENIZED));
-//printf("setting fields (%s).\ncontent: %s\nlemma: %s\n", (const char *)*key, content, strong.c_str());
-            }
+            {
+                lucene::document::Document doc;
+                // get "key" field
+                std::string keyText = (vkcheck) ? vkcheck->getOSISRef() : getKeyText();
+                if (!content.empty()) {
+                    good = true;
 
-//printf("setting fields (%s).\n", (const char *)*key);
-//fflush(stdout);
-        }
-        // don't write yet, cuz we have to see if we're the first of a prox block (5:1 or chapter5/verse1
 
-        // for VerseKeys use chapter
-        if (vkcheck) {
-            *chapMax = *vkcheck;
-            // we're the first verse in a chapter
-            if (vkcheck->getVerse() == 1) {
-                chapMax->positionToMaxVerse();
-                VerseKey saveKey2 = *vkcheck;
-                while ((!err) && (*vkcheck <= *chapMax)) {
-//printf("building proxBuf from (%s).\nproxBuf.c_str(): %s\n", (const char *)*key, proxBuf.c_str());
-//printf("building proxBuf from (%s).\n", (const char *)*key);
+                    // build "strong" field
+                    AttributeTypeList::iterator words;
+                    AttributeList::iterator word;
+                    AttributeValue::iterator strongVal;
+                    AttributeValue::iterator morphVal;
 
-                    content = stripText();
-                    if (!content.empty()) {
-                        // build "strong" field
-                        strong = "";
-                        morph = "";
-                        AttributeTypeList::iterator words;
-                        AttributeList::iterator word;
-                        AttributeValue::iterator strongVal;
-                        AttributeValue::iterator morphVal;
-
-                        words = getEntryAttributes().find("Word");
-                        if (words != getEntryAttributes().end()) {
-                            for (word = words->second.begin();word != words->second.end(); word++) {
-                                int partCount = std::atoi(word->second["PartCount"].c_str());
-                                if (!partCount) partCount = 1;
-                                for (int i = 0; i < partCount; i++) {
-                                    std::string tmp = "Lemma";
-                                    if (partCount > 1) tmp += formatted(".%d", i+1);
-                                    strongVal = word->second.find(tmp);
-                                    if (strongVal != word->second.end()) {
-                                        // cheeze.  skip empty article tags that weren't assigned to any text
-                                        if (strongVal->second == "G3588") {
-                                            if (word->second.find("Text") == word->second.end())
-                                                continue;    // no text? let's skip
-                                        }
-                                        strong.append(strongVal->second);
-                                        morph.append(strongVal->second);
-                                        morph.push_back('@');
-                                        std::string tmp2("Morph");
-                                        if (partCount > 1) tmp2 += formatted(".%d", i+1);
-                                        morphVal = word->second.find(tmp2);
-                                        if (morphVal != word->second.end()) {
-                                            morph.append(morphVal->second);
-                                        }
-                                        strong.push_back(' ');
-                                        morph.push_back(' ');
+                    strong="";
+                    morph="";
+                    words = getEntryAttributes().find("Word");
+                    if (words != getEntryAttributes().end()) {
+                        for (word = words->second.begin();word != words->second.end(); word++) {
+                            int partCount = std::atoi(word->second["PartCount"].c_str());
+                            if (!partCount) partCount = 1;
+                            for (int i = 0; i < partCount; i++) {
+                                std::string tmp = "Lemma";
+                                if (partCount > 1) tmp += formatted(".%d", i+1);
+                                strongVal = word->second.find(tmp);
+                                if (strongVal != word->second.end()) {
+                                    // cheeze.  skip empty article tags that weren't assigned to any text
+                                    if (strongVal->second == "G3588") {
+                                        if (word->second.find("Text") == word->second.end())
+                                            continue;    // no text? let's skip
                                     }
+                                    strong.append(strongVal->second);
+                                    morph.append(strongVal->second);
+                                    morph.push_back('@');
+                                    std::string tmp2("Morph");
+                                    if (partCount > 1) tmp2 += formatted(".%d", i+1);
+                                    morphVal = word->second.find(tmp2);
+                                    if (morphVal != word->second.end()) {
+                                        morph.append(morphVal->second);
+                                    }
+                                    strong.push_back(' ');
+                                    morph.push_back(' ');
                                 }
                             }
                         }
-                        proxBuf += content;
-                        proxBuf.push_back(' ');
-                        proxLem += strong;
-                        proxMorph += morph;
-                        if (proxLem.length()) {
-                            proxLem.append("\n");
-                            proxMorph.append("\n");
-                        }
                     }
-                    increment(1);
-                    err = popError();
+
+                    using lucene::document::Field;
+                    doc.add(*_CLNEW Field(_T("key"), utf8ToWChar(keyText.c_str()).c_str(), Field::STORE_YES | Field::INDEX_UNTOKENIZED));
+
+                    if (includeKeyInSearch)
+                        content = keyText + " " + content;
+
+                    doc.add(*_CLNEW Field(_T("content"), utf8ToWChar(content.c_str()).c_str(), Field::STORE_NO | Field::INDEX_TOKENIZED));
+
+                    if (strong.length() > 0) {
+                        doc.add(*_CLNEW Field(_T("lemma"), utf8ToWChar(strong.c_str()).c_str(), Field::STORE_NO | Field::INDEX_TOKENIZED));
+                        doc.add(*_CLNEW Field(_T("morph"), utf8ToWChar(morph.c_str()).c_str(), Field::STORE_NO | Field::INDEX_TOKENIZED));
+        //printf("setting fields (%s).\ncontent: %s\nlemma: %s\n", (const char *)*key, content, strong.c_str());
+                    }
+
+        //printf("setting fields (%s).\n", (const char *)*key);
+        //fflush(stdout);
                 }
-                err = 0;
-                *vkcheck = saveKey2;
-            }
-        }
+                // don't write yet, cuz we have to see if we're the first of a prox block (5:1 or chapter5/verse1
 
-        // for TreeKeys use siblings if we have no children
-        else if (tkcheck) {
-            if (!tkcheck->hasChildren()) {
-                if (!tkcheck->previousSibling()) {
-                    do {
-//printf("building proxBuf from (%s).\n", (const char *)*key);
-//fflush(stdout);
+                // for VerseKeys use chapter
+                if (vkcheck) {
+                    *chapMax = *vkcheck;
+                    // we're the first verse in a chapter
+                    if (vkcheck->getVerse() == 1) {
+                        chapMax->positionToMaxVerse();
+                        VerseKey saveKey2 = *vkcheck;
+                        while ((!err) && (*vkcheck <= *chapMax)) {
+        //printf("building proxBuf from (%s).\nproxBuf.c_str(): %s\n", (const char *)*key, proxBuf.c_str());
+        //printf("building proxBuf from (%s).\n", (const char *)*key);
 
-                        content = stripText();
-                        if (!content.empty()) {
-                            // build "strong" field
-                            strong = "";
-                            morph = "";
-                            AttributeTypeList::iterator words;
-                            AttributeList::iterator word;
-                            AttributeValue::iterator strongVal;
-                            AttributeValue::iterator morphVal;
+                            content = stripText();
+                            if (!content.empty()) {
+                                // build "strong" field
+                                strong = "";
+                                morph = "";
+                                AttributeTypeList::iterator words;
+                                AttributeList::iterator word;
+                                AttributeValue::iterator strongVal;
+                                AttributeValue::iterator morphVal;
 
-                            words = getEntryAttributes().find("Word");
-                            if (words != getEntryAttributes().end()) {
-                                for (word = words->second.begin();word != words->second.end(); word++) {
-                                    int partCount = std::atoi(word->second["PartCount"].c_str());
-                                    if (!partCount) partCount = 1;
-                                    for (int i = 0; i < partCount; i++) {
-                                        std::string tmp = "Lemma";
-                                        if (partCount > 1) tmp += formatted(".%d", i+1);
-                                        strongVal = word->second.find(tmp);
-                                        if (strongVal != word->second.end()) {
-                                            // cheeze.  skip empty article tags that weren't assigned to any text
-                                            if (strongVal->second == "G3588") {
-                                                if (word->second.find("Text") == word->second.end())
-                                                    continue;    // no text? let's skip
+                                words = getEntryAttributes().find("Word");
+                                if (words != getEntryAttributes().end()) {
+                                    for (word = words->second.begin();word != words->second.end(); word++) {
+                                        int partCount = std::atoi(word->second["PartCount"].c_str());
+                                        if (!partCount) partCount = 1;
+                                        for (int i = 0; i < partCount; i++) {
+                                            std::string tmp = "Lemma";
+                                            if (partCount > 1) tmp += formatted(".%d", i+1);
+                                            strongVal = word->second.find(tmp);
+                                            if (strongVal != word->second.end()) {
+                                                // cheeze.  skip empty article tags that weren't assigned to any text
+                                                if (strongVal->second == "G3588") {
+                                                    if (word->second.find("Text") == word->second.end())
+                                                        continue;    // no text? let's skip
+                                                }
+                                                strong.append(strongVal->second);
+                                                morph.append(strongVal->second);
+                                                morph.push_back('@');
+                                                std::string tmp2("Morph");
+                                                if (partCount > 1) tmp2 += formatted(".%d", i+1);
+                                                morphVal = word->second.find(tmp2);
+                                                if (morphVal != word->second.end()) {
+                                                    morph.append(morphVal->second);
+                                                }
+                                                strong.push_back(' ');
+                                                morph.push_back(' ');
                                             }
-                                            strong.append(strongVal->second);
-                                            morph.append(strongVal->second);
-                                            morph.push_back('@');
-                                            std::string tmp2("Morph");
-                                            if (partCount > 1) tmp2 += formatted(".%d", i+1);
-                                            morphVal = word->second.find(tmp2);
-                                            if (morphVal != word->second.end()) {
-                                                morph.append(morphVal->second);
-                                            }
-                                            strong.push_back(' ');
-                                            morph.push_back(' ');
                                         }
                                     }
                                 }
+                                proxBuf += content;
+                                proxBuf.push_back(' ');
+                                proxLem += strong;
+                                proxMorph += morph;
+                                if (proxLem.length()) {
+                                    proxLem.append("\n");
+                                    proxMorph.append("\n");
+                                }
                             }
-
-                            proxBuf += content;
-                            proxBuf.push_back(' ');
-                            proxLem += strong;
-                            proxMorph += morph;
-                            if (proxLem.length()) {
-                                proxLem.append("\n");
-                                proxMorph.append("\n");
-                            }
+                            increment(1);
+                            err = popError();
                         }
-                    } while (tkcheck->nextSibling());
-                    tkcheck->parent();
-                    tkcheck->firstChild();
+                        err = 0;
+                        *vkcheck = saveKey2;
+                    }
                 }
-                else tkcheck->nextSibling();    // reposition from our previousSibling test
+
+                // for TreeKeys use siblings if we have no children
+                else if (tkcheck) {
+                    if (!tkcheck->hasChildren()) {
+                        if (!tkcheck->previousSibling()) {
+                            do {
+        //printf("building proxBuf from (%s).\n", (const char *)*key);
+        //fflush(stdout);
+
+                                content = stripText();
+                                if (!content.empty()) {
+                                    // build "strong" field
+                                    strong = "";
+                                    morph = "";
+                                    AttributeTypeList::iterator words;
+                                    AttributeList::iterator word;
+                                    AttributeValue::iterator strongVal;
+                                    AttributeValue::iterator morphVal;
+
+                                    words = getEntryAttributes().find("Word");
+                                    if (words != getEntryAttributes().end()) {
+                                        for (word = words->second.begin();word != words->second.end(); word++) {
+                                            int partCount = std::atoi(word->second["PartCount"].c_str());
+                                            if (!partCount) partCount = 1;
+                                            for (int i = 0; i < partCount; i++) {
+                                                std::string tmp = "Lemma";
+                                                if (partCount > 1) tmp += formatted(".%d", i+1);
+                                                strongVal = word->second.find(tmp);
+                                                if (strongVal != word->second.end()) {
+                                                    // cheeze.  skip empty article tags that weren't assigned to any text
+                                                    if (strongVal->second == "G3588") {
+                                                        if (word->second.find("Text") == word->second.end())
+                                                            continue;    // no text? let's skip
+                                                    }
+                                                    strong.append(strongVal->second);
+                                                    morph.append(strongVal->second);
+                                                    morph.push_back('@');
+                                                    std::string tmp2("Morph");
+                                                    if (partCount > 1) tmp2 += formatted(".%d", i+1);
+                                                    morphVal = word->second.find(tmp2);
+                                                    if (morphVal != word->second.end()) {
+                                                        morph.append(morphVal->second);
+                                                    }
+                                                    strong.push_back(' ');
+                                                    morph.push_back(' ');
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    proxBuf += content;
+                                    proxBuf.push_back(' ');
+                                    proxLem += strong;
+                                    proxMorph += morph;
+                                    if (proxLem.length()) {
+                                        proxLem.append("\n");
+                                        proxMorph.append("\n");
+                                    }
+                                }
+                            } while (tkcheck->nextSibling());
+                            tkcheck->parent();
+                            tkcheck->firstChild();
+                        }
+                        else tkcheck->nextSibling();    // reposition from our previousSibling test
+                    }
+                }
+
+                using lucene::document::Field;
+                if (proxBuf.length() > 0) {
+                    doc.add(*_CLNEW Field(_T("prox"), utf8ToWChar(proxBuf.c_str()).c_str(), Field::STORE_NO | Field::INDEX_TOKENIZED));
+                    good = true;
+                }
+                if (proxLem.length() > 0) {
+                    doc.add(*_CLNEW Field(_T("proxlem"), utf8ToWChar(proxLem.c_str()).c_str(), Field::STORE_NO | Field::INDEX_TOKENIZED) );
+                    doc.add(*_CLNEW Field(_T("proxmorph"), utf8ToWChar(proxMorph.c_str()).c_str(), Field::STORE_NO | Field::INDEX_TOKENIZED) );
+                    good = true;
+                }
+                if (good) {
+        //printf("writing (%s).\n", (const char *)*key);
+        //fflush(stdout);
+                    coreWriter.addDocument(&doc);
+                }
             }
+
+            increment(1);
+            err = popError();
         }
 
-        using lucene::document::Field;
-        if (proxBuf.length() > 0) {
-            doc->add(*_CLNEW Field(_T("prox"), utf8ToWChar(proxBuf.c_str()).c_str(), Field::STORE_NO | Field::INDEX_TOKENIZED));
-            good = true;
-        }
-        if (proxLem.length() > 0) {
-            doc->add(*_CLNEW Field(_T("proxlem"), utf8ToWChar(proxLem.c_str()).c_str(), Field::STORE_NO | Field::INDEX_TOKENIZED) );
-            doc->add(*_CLNEW Field(_T("proxmorph"), utf8ToWChar(proxMorph.c_str()).c_str(), Field::STORE_NO | Field::INDEX_TOKENIZED) );
-            good = true;
-        }
-        if (good) {
-//printf("writing (%s).\n", (const char *)*key);
-//fflush(stdout);
-            coreWriter->addDocument(doc);
-        }
-        delete doc;
+        // Optimizing automatically happens with the call to addIndexes
+        //coreWriter->optimize();
+        coreWriter.close();
 
-        increment(1);
-        err = popError();
+        auto * d = lucene::store::FSDirectory::getDirectory(target.c_str());
+        bool const createIndex =
+                [d,&target]() {
+                    if (lucene::index::IndexReader::indexExists(target.c_str())) {
+                        if (lucene::index::IndexReader::isLocked(d))
+                            lucene::index::IndexReader::unlock(d);
+                        return false;
+                    }
+                    return true;
+                }();
+        {
+            lucene::index::IndexWriter fsWriter(d, &an, createIndex);
+            lucene::store::Directory * dirs[] = { &ramDir, nullptr };
+            lucene::util::ConstValueArray<lucene::store::Directory *> dirsa(dirs,
+                                                                            1);
+            fsWriter.addIndexes(dirsa);
+            fsWriter.close();
+        }
     }
-
-    // Optimizing automatically happens with the call to addIndexes
-    //coreWriter->optimize();
-    coreWriter->close();
-
-    auto * d = lucene::store::FSDirectory::getDirectory(target.c_str());
-    bool const createIndex =
-            [d,&target]() {
-                if (lucene::index::IndexReader::indexExists(target.c_str())) {
-                    if (lucene::index::IndexReader::isLocked(d))
-                        lucene::index::IndexReader::unlock(d);
-                    return false;
-                }
-                return true;
-            }();
-    auto * fsWriter = new lucene::index::IndexWriter(d, an, createIndex);
-    lucene::store::Directory * dirs[] = { ramDir, nullptr };
-    lucene::util::ConstValueArray< lucene::store::Directory *>dirsa(dirs, 1);
-    fsWriter->addIndexes(dirsa);
-    fsWriter->close();
-
-    delete ramDir;
-    delete coreWriter;
-    delete fsWriter;
-    delete an;
 
     // reposition module back to where it was before we were called
     setKey(*saveKey);
