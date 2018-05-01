@@ -63,9 +63,11 @@ void usage(char const * progName, char const * error = nullptr) {
     fprintf(stderr, "\t\t\t\t 2 - verse; 3 - chapter; 4 - book\n");
     fprintf(stderr, "  -v <v11n>\t\t specify a versification scheme to use (default is KJV)\n");
     fprintf(stderr, "\t\t\t\t Note: The following are valid values for v11n:\n");
-    auto const & vmgr = *VersificationMgr::getSystemVersificationMgr();
-    for (auto const & vs : vmgr.getVersificationSystems())
-        fprintf(stderr, "\t\t\t\t\t%s\n", vs.c_str());
+    {
+        auto const vmgr(VersificationMgr::getSystemVersificationMgr());
+        for (auto const & vs : vmgr->getVersificationSystems())
+            fprintf(stderr, "\t\t\t\t\t%s\n", vs.c_str());
+    }
     fprintf(stderr, "  -l <locale>\t\t specify a locale scheme to use (default is en)\n");
     fprintf(stderr, "  -c <cipher_key>\t encipher module using supplied key\n");
     fprintf(stderr, "\t\t\t\t (default no enciphering)\n");

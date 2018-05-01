@@ -202,10 +202,10 @@ public: /* Methods: */
 
     ~VersificationMgr();
 
-    static VersificationMgr * getSystemVersificationMgr();
+    static std::shared_ptr<VersificationMgr const> getSystemVersificationMgr();
 
     static void setSystemVersificationMgr(
-            VersificationMgr * newVersificationMgr);
+            std::shared_ptr<VersificationMgr const> newVersificationMgr);
 
     std::list<std::string> const getVersificationSystems() const;
 
@@ -225,7 +225,7 @@ private: /* Methods: */
 
 private: /* Fields: */
 
-    static std::unique_ptr<VersificationMgr> m_systemVersificationMgr;
+    static std::shared_ptr<VersificationMgr const> m_systemVersificationMgr;
     Private * p;
 
 };

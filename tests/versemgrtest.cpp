@@ -35,8 +35,7 @@ int main(int argc, char **argv) {
 
     const char *v11n = (argc > 1) ? argv[1] : "KJV";
 
-    VersificationMgr *vmgr = VersificationMgr::getSystemVersificationMgr();
-    const VersificationMgr::System *system = vmgr->getVersificationSystem(v11n);
+    const VersificationMgr::System *system = VersificationMgr::getSystemVersificationMgr()->getVersificationSystem(v11n);
     int bookCount = system->getBookCount();
     const VersificationMgr::Book *lastBook = system->getBook(bookCount-1);
     int chapMax = lastBook->getChapterMax();
