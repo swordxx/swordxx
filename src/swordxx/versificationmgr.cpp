@@ -97,15 +97,14 @@ public:
     std::vector<mapping> m_mappings;
     std::vector<char const *> m_mappingsExtraBooks;
 
-    Private() {
+    Private() = default;
+    Private(Private const & copy) {
+        m_books = copy.m_books;
+        m_osisLookup = copy.m_osisLookup;
     }
-    Private(const VersificationMgr::System::Private &other) {
-        m_books = other.m_books;
-        m_osisLookup = other.m_osisLookup;
-    }
-    VersificationMgr::System::Private &operator =(const VersificationMgr::System::Private &other) {
-        m_books = other.m_books;
-        m_osisLookup = other.m_osisLookup;
+    Private & operator=(Private const & copy) {
+        m_books = copy.m_books;
+        m_osisLookup = copy.m_osisLookup;
         return *this;
     }
 };
@@ -118,21 +117,9 @@ public:
     std::vector<int> m_verseMax;
     std::vector<long> m_offsetPrecomputed;
 
-    Private() {
-        m_verseMax.clear();
-    }
-    Private(const VersificationMgr::Book::Private &other) {
-        m_verseMax.clear();
-        m_verseMax = other.m_verseMax;
-        m_offsetPrecomputed = other.m_offsetPrecomputed;
-    }
-    VersificationMgr::Book::Private &operator =(const VersificationMgr::Book::Private &other) {
-        m_verseMax.clear();
-                int s = other.m_verseMax.size();
-                if (s) m_verseMax = other.m_verseMax;
-        m_offsetPrecomputed = other.m_offsetPrecomputed;
-        return *this;
-    }
+    Private() = default;
+    Private(Private const &) = default;
+    Private & operator=(Private const &) = default;
 };
 
 
@@ -361,15 +348,9 @@ char VersificationMgr::System::getVerseFromOffset(long offset, int *book, int *c
 
 class VersificationMgr::Private {
 public:
-    Private() {
-    }
-    Private(const VersificationMgr::Private &other) {
-        m_systems = other.m_systems;
-    }
-    VersificationMgr::Private &operator =(const VersificationMgr::Private &other) {
-        m_systems = other.m_systems;
-        return *this;
-    }
+    Private() = default;
+    Private(Private const &) = default;
+    Private & operator=(Private const &) = default;
     std::map<std::string, System> m_systems;
 };
 // ---------------- statics -----------------
