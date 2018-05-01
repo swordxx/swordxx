@@ -53,28 +53,28 @@
 namespace swordxx {
 
 VersificationMgr *VersificationMgr::getSystemVersificationMgr() {
-    if (!systemVersificationMgr) {
-        systemVersificationMgr = std::make_unique<VersificationMgr>();
-        systemVersificationMgr->registerVersificationSystem("KJV", otbooks, ntbooks, vm);
-        systemVersificationMgr->registerVersificationSystem("Leningrad", otbooks_leningrad, ntbooks_null, vm_leningrad);
-        systemVersificationMgr->registerVersificationSystem("MT", otbooks_mt, ntbooks_null, vm_mt);
-        systemVersificationMgr->registerVersificationSystem("KJVA", otbooks_kjva, ntbooks, vm_kjva);
-        systemVersificationMgr->registerVersificationSystem("NRSV", otbooks, ntbooks, vm_nrsv, mappings_nrsv);
-        systemVersificationMgr->registerVersificationSystem("NRSVA", otbooks_nrsva, ntbooks, vm_nrsva);
-        systemVersificationMgr->registerVersificationSystem("Synodal", otbooks_synodal, ntbooks_synodal, vm_synodal, mappings_synodal);
-        systemVersificationMgr->registerVersificationSystem("SynodalProt", otbooks_synodalProt, ntbooks_synodal, vm_synodalProt);
-        systemVersificationMgr->registerVersificationSystem("Vulg", otbooks_vulg, ntbooks_vulg, vm_vulg, mappings_vulg);
-        systemVersificationMgr->registerVersificationSystem("German", otbooks_german, ntbooks, vm_german);
-        systemVersificationMgr->registerVersificationSystem("Luther", otbooks_luther, ntbooks_luther, vm_luther);
-        systemVersificationMgr->registerVersificationSystem("Catholic", otbooks_catholic, ntbooks, vm_catholic);
-        systemVersificationMgr->registerVersificationSystem("Catholic2", otbooks_catholic2, ntbooks, vm_catholic2);
-        systemVersificationMgr->registerVersificationSystem("LXX", otbooks_lxx, ntbooks, vm_lxx);
-        systemVersificationMgr->registerVersificationSystem("Orthodox", otbooks_orthodox, ntbooks, vm_orthodox);
-        systemVersificationMgr->registerVersificationSystem("Calvin", otbooks, ntbooks, vm_calvin, mappings_calvin);
-        systemVersificationMgr->registerVersificationSystem("DarbyFr", otbooks, ntbooks, vm_darbyfr, mappings_darbyfr);
-        systemVersificationMgr->registerVersificationSystem("Segond", otbooks, ntbooks, vm_segond, mappings_segond);
+    if (!m_systemVersificationMgr) {
+        m_systemVersificationMgr = std::make_unique<VersificationMgr>();
+        m_systemVersificationMgr->registerVersificationSystem("KJV", otbooks, ntbooks, vm);
+        m_systemVersificationMgr->registerVersificationSystem("Leningrad", otbooks_leningrad, ntbooks_null, vm_leningrad);
+        m_systemVersificationMgr->registerVersificationSystem("MT", otbooks_mt, ntbooks_null, vm_mt);
+        m_systemVersificationMgr->registerVersificationSystem("KJVA", otbooks_kjva, ntbooks, vm_kjva);
+        m_systemVersificationMgr->registerVersificationSystem("NRSV", otbooks, ntbooks, vm_nrsv, mappings_nrsv);
+        m_systemVersificationMgr->registerVersificationSystem("NRSVA", otbooks_nrsva, ntbooks, vm_nrsva);
+        m_systemVersificationMgr->registerVersificationSystem("Synodal", otbooks_synodal, ntbooks_synodal, vm_synodal, mappings_synodal);
+        m_systemVersificationMgr->registerVersificationSystem("SynodalProt", otbooks_synodalProt, ntbooks_synodal, vm_synodalProt);
+        m_systemVersificationMgr->registerVersificationSystem("Vulg", otbooks_vulg, ntbooks_vulg, vm_vulg, mappings_vulg);
+        m_systemVersificationMgr->registerVersificationSystem("German", otbooks_german, ntbooks, vm_german);
+        m_systemVersificationMgr->registerVersificationSystem("Luther", otbooks_luther, ntbooks_luther, vm_luther);
+        m_systemVersificationMgr->registerVersificationSystem("Catholic", otbooks_catholic, ntbooks, vm_catholic);
+        m_systemVersificationMgr->registerVersificationSystem("Catholic2", otbooks_catholic2, ntbooks, vm_catholic2);
+        m_systemVersificationMgr->registerVersificationSystem("LXX", otbooks_lxx, ntbooks, vm_lxx);
+        m_systemVersificationMgr->registerVersificationSystem("Orthodox", otbooks_orthodox, ntbooks, vm_orthodox);
+        m_systemVersificationMgr->registerVersificationSystem("Calvin", otbooks, ntbooks, vm_calvin, mappings_calvin);
+        m_systemVersificationMgr->registerVersificationSystem("DarbyFr", otbooks, ntbooks, vm_darbyfr, mappings_darbyfr);
+        m_systemVersificationMgr->registerVersificationSystem("Segond", otbooks, ntbooks, vm_segond, mappings_segond);
     }
-    return systemVersificationMgr.get();
+    return m_systemVersificationMgr.get();
 }
 
 
@@ -354,7 +354,7 @@ public:
     std::map<std::string, System> m_systems;
 };
 // ---------------- statics -----------------
-std::unique_ptr<VersificationMgr> VersificationMgr::systemVersificationMgr;
+std::unique_ptr<VersificationMgr> VersificationMgr::m_systemVersificationMgr;
 
 void VersificationMgr::init() {
     p = new Private();
@@ -367,7 +367,7 @@ VersificationMgr::~VersificationMgr() {
 
 
 void VersificationMgr::setSystemVersificationMgr(VersificationMgr *newVersificationMgr) {
-    systemVersificationMgr.reset(newVersificationMgr);
+    m_systemVersificationMgr.reset(newVersificationMgr);
 }
 
 

@@ -223,12 +223,9 @@ private: /* Methods: */
 
     void init();
 
-protected: /* Fields: */
-
-    static std::unique_ptr<VersificationMgr> systemVersificationMgr;
-
 private: /* Fields: */
 
+    static std::unique_ptr<VersificationMgr> m_systemVersificationMgr;
     Private * p;
 
 };
