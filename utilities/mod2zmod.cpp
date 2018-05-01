@@ -75,7 +75,7 @@ int main(int argc, char **argv)
     int compType = 1;
     string cipherKey = "";
     std::unique_ptr<SWCompress> compressor;
-    SWModule * outModule    = nullptr;
+
     int compLevel = 0;
 
     if ((argc < 3) || (argc > 7)) {
@@ -161,19 +161,20 @@ int main(int argc, char **argv)
         std::exit(-3);
     }
 
+    std::unique_ptr<SWModule> outModule;
     switch (modType) {
     case BIBLE:
     case COM: {
         SWKey *k = inModule.getKey();
         VerseKey *vk = dynamic_cast<VerseKey *>(k);
-        outModule = new zText(argv[2], nullptr, nullptr, iType, std::move(compressor),
+        outModule = std::make_unique<zText>(argv[2], nullptr, nullptr, iType, std::move(compressor),
             ENC_UNKNOWN, DIRECTION_LTR, FMT_UNKNOWN, nullptr,
             vk->getVersificationSystem().c_str());    // open our datapath with our RawText driver.
         static_cast<VerseKey *>(inModule.getKey())->setIntros(true);
         break;
     }
     case LEX:
-        outModule = new zLD(argv[2], nullptr, nullptr, iType, std::move(compressor));        // open our datapath with our RawText driver.
+        outModule = std::make_unique<zLD>(argv[2], nullptr, nullptr, iType, std::move(compressor));        // open our datapath with our RawText driver.
         break;
     }
 
@@ -219,6 +220,5 @@ int main(int argc, char **argv)
         }
         inModule.increment();
     }
-    delete outModule;
 }
 
