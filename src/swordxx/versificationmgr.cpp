@@ -54,7 +54,7 @@
 namespace swordxx {
 
 std::shared_ptr<VersificationMgr const>
-VersificationMgr::getSystemVersificationMgr() {
+VersificationMgr::systemVersificationMgr() {
     if (auto r = std::atomic_load_explicit(&m_systemVersificationMgr,
                                            std::memory_order_acquire))
         return r;
@@ -491,7 +491,7 @@ void VersificationMgr::System::translateVerse(const System *dstSys, const char *
         SWLog::getSystemLog()->logDebug("There is no mapping.\n");
     }
     else if (dstName != "KJVA" && dstName != "KJV") {
-        const System *kjva = getSystemVersificationMgr()->getVersificationSystem("KJVA");
+        const System *kjva = systemVersificationMgr()->getVersificationSystem("KJVA");
         const int src_verse = *verse;
 
         translateVerse(kjva, book, chapter, verse, verse_end);

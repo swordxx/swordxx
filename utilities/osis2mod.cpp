@@ -110,7 +110,7 @@ static bool inCanonicalOSISBook = true; // osisID is for a book that is not in S
 static bool normalize           = true; // Whether to normalize UTF-8 to NFC
 
 bool isOSISAbbrev(const char *buf) {
-    auto const vmgr(VersificationMgr::getSystemVersificationMgr());
+    auto const vmgr(VersificationMgr::systemVersificationMgr());
     VersificationMgr::System const * av11n =
             vmgr->getVersificationSystem(
                 currentVerse.getVersificationSystem().c_str());
@@ -1385,7 +1385,7 @@ void usage(char const * app,
     fprintf(stderr, "  -v <v11n>\t\t specify a versification scheme to use (default is KJV)\n");
     fprintf(stderr, "\t\t\t\t Note: The following are valid values for v11n:");
 
-    auto const av11n(VersificationMgr::getSystemVersificationMgr()->getVersificationSystems());
+    auto const av11n(VersificationMgr::systemVersificationMgr()->getVersificationSystems());
     for (auto loop = av11n.begin(); loop != av11n.end(); ++loop) {
         if ((distance(av11n.begin(), loop) % 3) == 0) {
             fprintf(stderr, "\n\t\t\t\t   %-12s", (*loop).c_str());

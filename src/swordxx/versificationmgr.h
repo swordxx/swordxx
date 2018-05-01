@@ -202,7 +202,7 @@ public: /* Methods: */
 
     ~VersificationMgr();
 
-    static std::shared_ptr<VersificationMgr const> getSystemVersificationMgr();
+    static std::shared_ptr<VersificationMgr const> systemVersificationMgr();
 
     static void setSystemVersificationMgr(
             std::shared_ptr<VersificationMgr const> newVersificationMgr);

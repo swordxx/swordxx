@@ -64,7 +64,7 @@ void usage(char const * progName, char const * error = nullptr) {
     fprintf(stderr, "  -v <v11n>\t\t specify a versification scheme to use (default is KJV)\n");
     fprintf(stderr, "\t\t\t\t Note: The following are valid values for v11n:\n");
     {
-        auto const vmgr(VersificationMgr::getSystemVersificationMgr());
+        auto const vmgr(VersificationMgr::systemVersificationMgr());
         for (auto const & vs : vmgr->getVersificationSystems())
             fprintf(stderr, "\t\t\t\t\t%s\n", vs.c_str());
     }
@@ -160,7 +160,7 @@ int main(int argc, char **argv) {
         else usage(progName, (((std::string)"Unknown argument: ")+ argv[i]).c_str());
     }
     // -----------------------------------------------------
-    const VersificationMgr::System *v = VersificationMgr::getSystemVersificationMgr()->getVersificationSystem(v11n.c_str());
+    const VersificationMgr::System *v = VersificationMgr::systemVersificationMgr()->getVersificationSystem(v11n.c_str());
     if (!v) std::cout << "Warning: Versification " << v11n << " not found. Using KJV versification...\n";
 
     std::unique_ptr<SWCompress> compressor;
