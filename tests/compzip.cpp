@@ -37,6 +37,8 @@
 
 using namespace swordxx;
 
+namespace {
+
 class FileCompress: public ZipCompress {
 
 public: /* Methods: */
@@ -77,6 +79,8 @@ private: /* Fields: */
     int zfd;
 
 };
+
+} // anonymous namespace
 
 int main(int argc, char * argv[]) {
     bool decomp = false;
