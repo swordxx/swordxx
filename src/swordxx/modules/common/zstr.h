@@ -42,7 +42,7 @@ class FileDesc;
 class SWDLLEXPORT zStr {
 
 private:
-    mutable EntriesBlock *m_cacheBlock;
+    mutable std::unique_ptr<EntriesBlock> m_cacheBlock;
     mutable long m_cacheBlockIndex;
     mutable bool m_cacheDirty;
     bool m_caseSensitive;

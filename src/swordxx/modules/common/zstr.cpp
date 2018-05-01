@@ -87,7 +87,6 @@ zStr::zStr(char const * ipath,
                                         errno);
     }
 
-    m_cacheBlock = nullptr;
     m_cacheBlockIndex = -1;
     m_cacheDirty = false;
 }
@@ -392,7 +391,7 @@ void zStr::getCompressedText(long block, long entry, char **buf) const {
 
         m_compressor->zBuf(&len, &buf2[0u]);
         char * rawBuf = m_compressor->Buf(nullptr, &len);
-        m_cacheBlock = new EntriesBlock(rawBuf, len);
+        m_cacheBlock = std::make_unique<EntriesBlock>(rawBuf, len);
         m_cacheBlockIndex = block;
     }
     size = m_cacheBlock->getEntrySize(entry);
@@ -489,12 +488,12 @@ void zStr::setText(const char *ikey, const char *buf, long len) {
     if (len > 0) {    // NOT a link
         if (!m_cacheBlock) {
             flushCache();
-            m_cacheBlock = new EntriesBlock();
+            m_cacheBlock = std::make_unique<EntriesBlock>();
             m_cacheBlockIndex = (zdxfd->seek(0, SEEK_END) / ZDXENTRYSIZE);
         }
         else if (m_cacheBlock->getCount() >= m_blockCount) {
             flushCache();
-            m_cacheBlock = new EntriesBlock();
+            m_cacheBlock = std::make_unique<EntriesBlock>();
             m_cacheBlockIndex = (zdxfd->seek(0, SEEK_END) / ZDXENTRYSIZE);
         }
         uint32_t entry = m_cacheBlock->addEntry(buf);
@@ -613,8 +612,7 @@ void zStr::flushCache() const {
             zdxfd->write(&outstart, 4);
             zdxfd->write(&outsize, 4);
         }
-        delete m_cacheBlock;
-        m_cacheBlock = nullptr;
+        m_cacheBlock.reset();
     }
     m_cacheBlockIndex = -1;
     m_cacheDirty = false;
