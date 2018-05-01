@@ -50,14 +50,7 @@
 #include "swlog.h"
 
 
-using std::vector;
-using std::map;
-using std::distance;
-using std::lower_bound;
-
-
 namespace swordxx {
-
 
 VersificationMgr *VersificationMgr::getSystemVersificationMgr() {
     if (!systemVersificationMgr) {
@@ -88,8 +81,8 @@ VersificationMgr *VersificationMgr::getSystemVersificationMgr() {
 class VersificationMgr::System::Private {
 public:
     /** Array[chapmax] of maximum verses in chapters */
-    vector<Book> m_books;
-    map<std::string, int> m_osisLookup;
+    std::vector<Book> m_books;
+    std::map<std::string, int> m_osisLookup;
     /** General mapping rule is that first verse of every chapter corresponds first
         verse of another chapter in default intermediate canon(kjva), so mapping data
         contains expections. Intermediate canon could not contain corresponding data.
@@ -100,9 +93,9 @@ public:
         TODO what if book name in one v11n differs from cannon
             special section in mapping for book transformation
     */
-    typedef vector<const unsigned char*> mapping;
-    vector<mapping> m_mappings;
-    vector<const char*> m_mappingsExtraBooks;
+    using mapping = std::vector<unsigned char const *>;
+    std::vector<mapping> m_mappings;
+    std::vector<char const *> m_mappingsExtraBooks;
 
     Private() {
     }
@@ -122,8 +115,8 @@ class VersificationMgr::Book::Private {
 friend struct BookOffsetLess;
 public:
     /** Array[chapmax] of maximum verses in chapters */
-    vector<int> m_verseMax;
-    vector<long> m_offsetPrecomputed;
+    std::vector<int> m_verseMax;
+    std::vector<long> m_offsetPrecomputed;
 
     Private() {
         m_verseMax.clear();
@@ -197,7 +190,7 @@ const VersificationMgr::Book *VersificationMgr::System::getBook(int number) cons
 
 
 int VersificationMgr::System::getBookNumberByOSISName(const char *bookName) const {
-    map<std::string, int>::const_iterator it = m_p->m_osisLookup.find(bookName);
+    auto const it(m_p->m_osisLookup.find(bookName));
     return (it != m_p->m_osisLookup.end()) ? it->second : -1;
 }
 
@@ -334,28 +327,28 @@ char VersificationMgr::System::getVerseFromOffset(long offset, int *book, int *c
     }
 
     // binary search for book
-    vector<Book>::iterator b = lower_bound(m_p->m_books.begin(), m_p->m_books.end(), offset, BookOffsetLess());
+    auto b = lower_bound(m_p->m_books.cbegin(), m_p->m_books.cend(), offset, BookOffsetLess());
     if (b == m_p->m_books.end()) b--;
-    (*book)    = distance(m_p->m_books.begin(), b)+1;
-    if (offset < (*(b->m_p->m_offsetPrecomputed.begin()))-((((!(*book)) || (*book)==m_BMAX[0]+1))?2:1)) { // -1 for chapter headings
+    (*book)    = distance(m_p->m_books.cbegin(), b)+1;
+    if (offset < (*(b->m_p->m_offsetPrecomputed.cbegin()))-((((!(*book)) || (*book)==m_BMAX[0]+1))?2:1)) { // -1 for chapter headings
         (*book)--;
-        if (b != m_p->m_books.begin()) {
+        if (b != m_p->m_books.cbegin()) {
             b--;
         }
     }
-    vector<long>::iterator c = lower_bound(b->m_p->m_offsetPrecomputed.begin(), b->m_p->m_offsetPrecomputed.end(), offset);
+    auto c = lower_bound(b->m_p->m_offsetPrecomputed.cbegin(), b->m_p->m_offsetPrecomputed.cend(), offset);
 
     // if we're a book heading, we are lessthan chapter precomputes, but greater book.  This catches corner case.
     if (c == b->m_p->m_offsetPrecomputed.end()) {
         c--;
     }
-    if ((offset < *c) && (c == b->m_p->m_offsetPrecomputed.begin())) {
+    if ((offset < *c) && (c == b->m_p->m_offsetPrecomputed.cbegin())) {
         (*chapter) = (offset - *c)+1;    // should be 0 or -1 (for testament heading)
         (*verse) = 0;
     }
     else {
         if (offset < *c) c--;
-        (*chapter) = distance(b->m_p->m_offsetPrecomputed.begin(), c)+1;
+        (*chapter) = distance(b->m_p->m_offsetPrecomputed.cbegin(), c)+1;
         (*verse)   = (offset - *c);
     }
     return ((*chapter > 0) && (*verse > b->getVerseMax(*chapter))) ? KEYERR_OUTOFBOUNDS : 0;
@@ -377,7 +370,7 @@ public:
         m_systems = other.m_systems;
         return *this;
     }
-    map<std::string, System> m_systems;
+    std::map<std::string, System> m_systems;
 };
 // ---------------- statics -----------------
 std::unique_ptr<VersificationMgr> VersificationMgr::systemVersificationMgr;
@@ -398,7 +391,7 @@ void VersificationMgr::setSystemVersificationMgr(VersificationMgr *newVersificat
 
 
 const VersificationMgr::System *VersificationMgr::getVersificationSystem(const char *name) const {
-    map<std::string, System>::const_iterator it = p->m_systems.find(name);
+    auto const it(p->m_systems.find(name));
     return (it != p->m_systems.end()) ? &(it->second) : nullptr;
 }
 
@@ -416,9 +409,8 @@ void VersificationMgr::registerVersificationSystem(const char * /* name */, cons
 
 const std::list<std::string> VersificationMgr::getVersificationSystems() const {
     std::list<std::string> retVal;
-    for (map<std::string, System>::const_iterator it = p->m_systems.begin(); it != p->m_systems.end(); it++) {
+    for (auto it = p->m_systems.cbegin(); it != p->m_systems.cend(); ++it)
         retVal.push_back(it->first);
-    }
     return retVal;
 }
 
