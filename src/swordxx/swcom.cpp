@@ -50,21 +50,9 @@ std::unique_ptr<SWKey> staticCreateKey(char const * const versification) {
 
 SWCom::SWCom(const char *imodname, const char *imoddesc, TextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char *ilang, const char *versification): SWModule(staticCreateKey(versification), imodname, imoddesc, "Commentaries", enc, dir, mark, ilang) {
     this->m_versification = versification;
-    m_tmpVK1 = static_cast<VerseKey *>(createKey().release());
-    m_tmpVK2 = static_cast<VerseKey *>(createKey().release());
-        m_tmpSecond = false;
+    m_tmpVK1.setVersificationSystem(versification);
+    m_tmpVK2.setVersificationSystem(versification);
 }
-
-
-/******************************************************************************
- * SWCom Destructor - Cleans up instance of SWCom
- */
-
-SWCom::~SWCom() {
-    delete m_tmpVK1;
-    delete m_tmpVK2;
-}
-
 
 std::unique_ptr<SWKey> SWCom::createKey() const
 { return staticCreateKey(m_versification.c_str()); }
@@ -81,11 +69,11 @@ VerseKey &SWCom::getVerseKey(const SWKey *keyToConvert) const {
                 dynamic_cast<VerseKey *>(lkTest->getElement()))
             return *key_;
 
-    VerseKey * retKey = (m_tmpSecond) ? m_tmpVK1 : m_tmpVK2;
+    VerseKey & retKey = (m_tmpSecond) ? m_tmpVK1 : m_tmpVK2;
     m_tmpSecond = !m_tmpSecond;
-    retKey->setLocale(LocaleMgr::getSystemLocaleMgr()->getDefaultLocaleName());
-    retKey->positionFrom(*thisKey);
-    return (*retKey);
+    retKey.setLocale(LocaleMgr::getSystemLocaleMgr()->getDefaultLocaleName());
+    retKey.positionFrom(*thisKey);
+    return retKey;
 }
 
 

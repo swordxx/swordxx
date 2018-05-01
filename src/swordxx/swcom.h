@@ -39,6 +39,7 @@
 #include "swmodule.h"
 
 #include "defs.h"
+#include "keys/versekey.h"
 
 
 namespace swordxx {
@@ -50,9 +51,9 @@ class SWKey;
   */
 class SWDLLEXPORT SWCom : public SWModule {
 
-    mutable VerseKey *m_tmpVK1;
-    mutable VerseKey *m_tmpVK2;
-        mutable bool m_tmpSecond;
+    mutable VerseKey m_tmpVK1;
+    mutable VerseKey m_tmpVK2;
+        mutable bool m_tmpSecond = false;
     std::string m_versification;
 
 protected:
@@ -69,7 +70,6 @@ public:
           char const * ilang = nullptr,
           char const * m_versification = "KJV");
 
-    ~SWCom() override;
     std::unique_ptr<SWKey> createKey() const override;
 
 };
