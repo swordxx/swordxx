@@ -278,8 +278,6 @@ int main(int argc, char **argv) {
     }
 
     FileMgr::getSystemFileMgr()->close(fd);
-
-    return 0;
 }
 
 void writeEntry(SWModule & module,
