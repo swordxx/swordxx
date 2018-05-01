@@ -35,11 +35,8 @@ namespace swordxx {
 */
 class SWDLLEXPORT SWGenBook : public SWModule {
 
-protected:
-    mutable TreeKey *tmpTreeKey;
-    TreeKey & getTreeKey(SWKey * k = nullptr) const;
+public: /* Methods: */
 
-public:
     /** Initializes data for instance of SWGenBook
     */
     SWGenBook(std::unique_ptr<SWKey> key_,
@@ -50,7 +47,13 @@ public:
               SWTextMarkup markup = FMT_UNKNOWN,
               char const * ilang = nullptr);
 
-    virtual ~SWGenBook();
+protected: /* Methods: */
+
+    TreeKey & getTreeKey(SWKey * k = nullptr) const;
+
+private: /* Fields: */
+
+    mutable std::unique_ptr<TreeKey> m_tmpTreeKey;
 
 };
 

@@ -49,16 +49,7 @@ SWGenBook::SWGenBook(std::unique_ptr<SWKey> key_,
                dir,
                mark,
                ilang)
-{ tmpTreeKey = nullptr; }
-
-
-/******************************************************************************
- * SWGenBook Destructor - Cleans up instance of SWGenBook
- */
-
-SWGenBook::~SWGenBook() {
-    delete tmpTreeKey;
-}
+{}
 
 
 TreeKey & SWGenBook::getTreeKey(SWKey * k) const {
@@ -80,10 +71,9 @@ TreeKey & SWGenBook::getTreeKey(SWKey * k) const {
         if (TreeKey * const key_ = tkey->getTreeKey())
             return *key_;
 
-    delete tmpTreeKey;
-    tmpTreeKey = static_cast<TreeKey *>(createKey().release());
-    tmpTreeKey->positionFrom(*thiskey);
-    return (*tmpTreeKey);
+    m_tmpTreeKey.reset(static_cast<TreeKey *>(createKey().release()));
+    m_tmpTreeKey->positionFrom(*thiskey);
+    return (*m_tmpTreeKey);
 }
 
 } /* namespace swordxx */
