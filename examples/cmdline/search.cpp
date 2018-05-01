@@ -105,7 +105,7 @@ int main(int argc, char **argv)
         VerseKey * parser = dynamic_cast<VerseKey *>(k);
         VerseKey kjvParser;
         if (!parser) parser = &kjvParser;    // use standard KJV parsing as fallback
-        maybeScope = parser->parseVerseList(argv[3], parser->getText(), true);
+        maybeScope = parser->parseVerseList(argv[3], parser->getText().c_str(), true);
         scope = &maybeScope;
     }
 
@@ -126,7 +126,7 @@ int main(int argc, char **argv)
         std::cout << listkey.getText();
         if (listkey.getElement()->m_userData) std::cout << " : " << listkey.getElement()->m_userData << "%";
         std::cout << std::endl;
-        ++listkey;
+        listkey.increment();
     }
 
     return 0;

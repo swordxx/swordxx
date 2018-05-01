@@ -51,7 +51,7 @@ int main(int argc, char * argv[]) {
     SWMgr library;
 
     // Try to retrieve a reference to an installed book (module):
-    SWModule *const book = library.getModule((argc > 1) ? argv[1] : "KJV");
+    auto const book(library.getModule((argc > 1) ? argv[1] : "KJV"));
 
     // Set that book's reference key to our desired verse:
     book->setKey((argc > 2) ? argv[2] : "James 1:19");

@@ -38,7 +38,7 @@ int main() {
 
 
         SWMgr library;
-        SWModule *book = library.getModule(modName);
+        auto const book(library.getModule(modName));
         if (!book) {
                 cerr << "Can't find module: " << modName << endl;
                 return -1;

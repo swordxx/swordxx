@@ -32,11 +32,12 @@
 
 
 using namespace swordxx;
-using namespace std;
 
 const bool o = 1;
 
-void parallelDisplay(vector<SWModule *>modules, const char *key) {
+void parallelDisplay(std::vector<std::shared_ptr<SWModule> > const & modules,
+                     const char * key)
+{
 
     //cout << "Start key:" << key;
 
@@ -55,11 +56,12 @@ void parallelDisplay(vector<SWModule *>modules, const char *key) {
     for (master->setVerse(1);       (master->getBook()    == curBook)
                     && (master->getChapter() == curChapter)
                     && !master->popError();
-                                        ++(*master)) {
+                                        master->increment()) {
 
-        if(o) cout << "<tr class=\"" << (master->getVerse() == curVerse ? "currentverse":"verse") << "\">";
+        if (o)
+            std::cout << "<tr class=\"" << (master->getVerse() == curVerse ? "currentverse":"verse") << "\">";
 
-        for (vector<SWModule *>::iterator module = modules.begin(); module != modules.end(); ++module) {
+        for (auto module = modules.begin(); module != modules.end(); ++module) {
             //cout << "\n\n====================\nfromKey" << master->getOSISRef();
 
             (*module)->setKey(*master);
@@ -67,7 +69,8 @@ void parallelDisplay(vector<SWModule *>modules, const char *key) {
 
             //cout << "setKey" << (*module)->getName() << slave.getBookName() << slave.getRangeText() << slave.getShortText();
 
-            if(o) cout << "<td>" << "<span class=\"versenum\">";
+            if (o)
+                std::cout << "<td>" << "<span class=\"versenum\">";
 
             //cout << "[" << (int)slave.getBook() << " " << (int)master->getBook() << " " << (int)slave.getTestament() << " " << (int)master->getTestament() << "]";
 
@@ -75,53 +78,68 @@ void parallelDisplay(vector<SWModule *>modules, const char *key) {
             if (!(*module)->popError()) {
 
                 if (slave.getBookName() != master->getBookName()) {
-                    if(o) cout << slave.getShortText();
+                    if (o)
+                        std::cout << slave.getShortText();
                 }
                 else if(slave.getChapter() != master->getChapter()) {
-                    if(o) cout << slave.getChapter() << ":" << slave.getVerse();
+                    if (o)
+                        std::cout << slave.getChapter() << ":" << slave.getVerse();
                 }
                 else {
-                    if(o) cout << slave.getVerse();
+                    if (o)
+                        std::cout << slave.getVerse();
                 }
 
                 if(slave.isBoundSet()) {
-                    if(o) cout << "-";
+                    if (o)
+                        std::cout << "-";
                     if(slave.getUpperBound().getBook() != slave.getLowerBound().getBook()) {
-                        if(o) cout << slave.getUpperBound().getShortText();
+                        if (o)
+                            std::cout << slave.getUpperBound().getShortText();
                     }
                     else if(slave.getUpperBound().getChapter() != slave.getLowerBound().getChapter()) {
-                        if(o) cout << slave.getUpperBound().getChapter() << ":" << slave.getUpperBound().getVerse();
+                        if (o)
+                            std::cout << slave.getUpperBound().getChapter() << ":" << slave.getUpperBound().getVerse();
                     }
                     else {
-                        if(o) cout << slave.getUpperBound().getVerse();
+                        if (o)
+                            std::cout << slave.getUpperBound().getVerse();
                     }
                 }
 
-                if(o) cout << "</span> ";
+                if (o)
+                    std::cout << "</span> ";
 
 
                 if(slave.isBoundSet()) {
                     VerseKey temp(slave);
                     for(int i = slave.getLowerBound().getIndex(); i <= slave.getUpperBound().getIndex(); ++i) {
-                        if(i > 0) if(o) cout << " ";
+                        if (o && (i > 0))
+                            std::cout << " ";
                         temp.setIndex(i);
                         (*module)->setKey(temp);
-                        if(o) cout << (*module)->renderText();
+                        if (o)
+                            std::cout << (*module)->renderText();
                     }
                 }
                 else {
-                    if(o) cout << (*module)->renderText();
+                    if (o)
+                        std::cout << (*module)->renderText();
                 }
 
-                if(o) cout << "</td>";
+                if (o)
+                    std::cout << "</td>";
             }
         }
-        if(o) cout << "</tr>";
+        if (o)
+            std::cout << "</tr>";
     }
 }
 
 
-void outputHeader(vector<SWModule *>modules, const char *key) {
+void outputHeader(std::vector<std::shared_ptr<SWModule>> const & modules,
+                  char const * key)
+{
 
     modules[0]->setKey(key);
 
@@ -129,7 +147,7 @@ void outputHeader(vector<SWModule *>modules, const char *key) {
     // otherwise we just get what the user typed
     modules[0]->renderText();
 
-    cout
+    std::cout
     << "<?xml version=\"1.0\" encoding=\"utf-8\"?>"
     << "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">"
     << "<html xmlns=\"http://www.w3.org/1999/xhtml\" xmlns:og=\"http://ogp.me/ns#\" xmlns:fb=\"https://www.facebook.com/2008/fbml\" xml:lang=\"en_US\" lang=\"en_US\">"
@@ -162,32 +180,30 @@ void outputHeader(vector<SWModule *>modules, const char *key) {
     <<       "<h2>Parallel Viewing: " << modules[0]->getKeyText() << "</h2><br/>"
     <<       "<table><thead><tr>";
 
-    for (vector<SWModule *>::iterator module = modules.begin(); module != modules.end(); ++module) {
-        cout << "<th>" << (*module)->getDescription() << "</th>";
+    for (auto module = modules.begin(); module != modules.end(); ++module) {
+        std::cout << "<th>" << (*module)->getDescription() << "</th>";
     }
 
-    cout
-    <<       "</tr></thead><tbody>";
+    std::cout << "</tr></thead><tbody>";
 
 
 }
 
-void outputFooter(vector<SWModule *>modules) {
+void outputFooter(std::vector<std::shared_ptr<SWModule>> const & modules) {
 
-    cout
-    <<       "</tbody><tfoot><tr>";
+    std::cout << "</tbody><tfoot><tr>";
 
-    for (vector<SWModule *>::iterator module = modules.begin(); module != modules.end(); ++module) {
+    for (auto module = modules.begin(); module != modules.end(); ++module) {
         std::string copyLine = (*module)->getConfigEntry("ShortCopyright");
         std::string promoLine = (*module)->getConfigEntry("ShortPromo");
-        cout
+        std::cout
         << "<th>"
         << "<div class=\"copyLine\">" <<  copyLine << "</div>"
         << "<div class=\"promoLine\">" << promoLine << "</div>"
         << "</th>";
     }
 
-    cout
+    std::cout
     <<       "</tr></tfoot></table>"
     <<     "</div>"
     <<   "</div>"
@@ -215,9 +231,9 @@ int main(int argc, char **argv) {
         std::exit(-1);
     }
 
-    vector<SWModule *> modules;
+    std::vector<std::shared_ptr<SWModule>> modules;
     for (int i = 1; i < argc-1; ++i) {
-        SWModule *bible = library.getModule(argv[i]);
+        auto bible(library.getModule(argv[i]));
         if (!bible) {
             fprintf(stderr, "Could not find module [%s].  Available modules:\n", argv[i]);
             for (auto const & mp : library.modules())
@@ -226,7 +242,7 @@ int main(int argc, char **argv) {
                         mp.second->getDescription().c_str());
             std::exit(-2);
         }
-        modules.push_back(bible);
+        modules.emplace_back(std::move(bible));
     }
 
     if(o) outputHeader(modules, argv[argc-1]);

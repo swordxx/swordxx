@@ -38,7 +38,7 @@ using namespace std;
 int main() {
     SWMgr library;
 
-    SWModule *book = library.getModule("KJV");
+    auto const book(library.getModule("KJV"));
 
     VerseKey *vk = (VerseKey *) book->getKey();
     for (;!vk->popError();vk->setChapter(vk->getChapter()+1)) {

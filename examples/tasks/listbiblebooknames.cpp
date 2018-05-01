@@ -35,7 +35,7 @@ int main(int argc, char * argv[]) {
 
     char const * const modName = (argc > 1) ? argv[1] : "KJV";
     SWMgr manager;
-    SWModule * const bible = manager.getModule(modName);
+    auto const bible(manager.getModule(modName));
     if (!bible)
         std::cout << "Module \"" << modName
                   << "\" is not installed.\nPlease install to show "
@@ -45,7 +45,7 @@ int main(int argc, char * argv[]) {
     VerseKey * const vk =
             bible ? static_cast<VerseKey *>(bible->getKey()) : new VerseKey();
 
-    for ((*vk) = Position::Top; !vk->popError(); vk->setBook(vk->getBook() + 1))
+    for (vk->positionToTop(); !vk->popError(); vk->setBook(vk->getBook() + 1))
         std::cout << vk->getBookName() << '\n';
 
     /* If we allocated VerseKey unassociated with a module, above, then we must

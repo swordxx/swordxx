@@ -52,8 +52,6 @@ int main(int argc, char **argv)
     SWMgr manager(std::make_shared<MarkupFilterMgr>(FMT_XHTML));
 //    SWMgr manager(new MarkupFilterMgr(FMT_WEBIF));
 
-    SWModule *target;
-
     if (argc != 3) {
         fprintf(stderr, "\nusage: %s <modname> <\"lookup key\">\n"
                              "\tExample: lookup KJV \"James 1:19\"\n\n", argv[0]);
@@ -61,7 +59,7 @@ int main(int argc, char **argv)
         std::exit(-1);
     }
 
-    target = manager.getModule(argv[1]);
+    auto const target(manager.getModule(argv[1]));
     if (!target) {
         fprintf(stderr, "Could not find module [%s].  Available modules:\n", argv[1]);
         for (auto const & mp : manager.modules()) {

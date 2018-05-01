@@ -36,7 +36,7 @@ int main() {
 
     const char *modName = "KJVA";
     SWMgr manager;
-    SWModule *bible = manager.getModule(modName);
+    auto const bible(manager.getModule(modName));
     if (!bible) {
         cout << modName << " not installed for example.  Please install.\n\n";
         std::exit(-1);

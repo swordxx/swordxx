@@ -33,7 +33,7 @@ using namespace std;
 int main(int argc, char **argv) {
 
     SWMgr library;
-    SWModule *kjv = library.getModule((argc > 1)?argv[1]:"KJV");
+    auto const kjv(library.getModule((argc > 1)?argv[1]:"KJV"));
 
     kjv->setKey(argc > 2 ? argv[2] : "Jn.3.16");
 

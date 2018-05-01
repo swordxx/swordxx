@@ -63,7 +63,7 @@ int main(int argc, char * argv[]) {
 
     {
         SWMgr library;
-        if (SWModule * const mod = library.getModule(module)) {
+        if (auto const mod = library.getModule(module)) {
             if (mod->setKey(key) != 0) {
                 std::cerr << "No such key: \"" << key << "\"!" << std::endl;
                 return EXIT_FAILURE;

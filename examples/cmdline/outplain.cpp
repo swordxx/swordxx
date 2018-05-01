@@ -55,7 +55,7 @@ int main(int argc, char **argv) {
     SWMgr manager(std::make_shared<MarkupFilterMgr>(swordxx::FMT_HTMLHREF, swordxx::ENC_UTF16));
 
     const char *bookName = (argc > 1) ? argv[1] : "WLC";
-    SWModule *b = manager.getModule(bookName);
+    auto const b(manager.getModule(bookName));
     if (!b) return -1;
     SWModule &book = *b;
     book.setProcessEntryAttributes(false);

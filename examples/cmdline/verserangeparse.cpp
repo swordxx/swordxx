@@ -46,10 +46,10 @@ int main(int argc, char **argv)
     VerseKey parser;
     ListKey result;
 
-    result = parser.parseVerseList(range, parser.getText(), true);
+    result = parser.parseVerseList(range, parser.getText().c_str(), true);
 
     // let's iterate the key and display
-    for (result.positionToTop(); !result.popError(); ++result) {
+    for (result.positionToTop(); !result.popError(); result.increment()) {
         cout << result.getText() << "\n";
     }
     cout << endl;
@@ -60,13 +60,13 @@ int main(int argc, char **argv)
     SWMgr library(std::make_shared<MarkupFilterMgr>(FMT_PLAIN));    // render plain without fancy markup
 
     // Let's get a book;
-    SWModule *book = library.getModule("KJV");
+    auto const book(library.getModule("KJV"));
 
     // couldn't find our test module
     if (!book) return -1;
 
     // now let's iterate the book and display
-    for (result.positionToTop(); !result.popError(); ++result) {
+    for (result.positionToTop(); !result.popError(); result.increment()) {
         book->setKey(result);
         cout << "*** " << book->getKeyText() << ": " << book->renderText() << "\n";
     }
