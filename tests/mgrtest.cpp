@@ -58,6 +58,4 @@ int main(int argc, char **argv) {
         for (mhc->setKey("Gen 1:1"); *mhc->getKey() < (VerseKey) "Gen 1:10"; (*mhc).increment())
             std::cout << mhc->renderText() << "\n";
     }
-
-    return 0;
 }
