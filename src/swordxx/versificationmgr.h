@@ -33,9 +33,7 @@
 
 namespace swordxx {
 
-struct sbook;
 class TreeKey;
-
 
 struct abbrev
 {
