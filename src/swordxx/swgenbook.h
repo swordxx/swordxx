@@ -47,6 +47,8 @@ public: /* Methods: */
               SWTextMarkup markup = FMT_UNKNOWN,
               char const * ilang = nullptr);
 
+    ~SWGenBook() noexcept override;
+
 protected: /* Methods: */
 
     TreeKey & getTreeKey(SWKey * k = nullptr) const;

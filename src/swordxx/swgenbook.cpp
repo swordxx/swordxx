@@ -51,6 +51,7 @@ SWGenBook::SWGenBook(std::unique_ptr<SWKey> key_,
                ilang)
 {}
 
+SWGenBook::~SWGenBook() noexcept = default;
 
 TreeKey & SWGenBook::getTreeKey(SWKey * k) const {
     SWKey * const thiskey = k ? k : this->key;
