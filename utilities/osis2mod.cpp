@@ -2124,6 +2124,5 @@ int main(int argc, char **argv) {
     delete outputDecoder;
 
     fprintf(stderr, "SUCCESS: %s: has finished its work and will now rest\n", program);
-    std::exit(0); // success
 }
 
