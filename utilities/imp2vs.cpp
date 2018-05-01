@@ -191,11 +191,11 @@ int main(int argc, char **argv) {
         }
     }
 
-    SWModule * module = nullptr;
+    std::unique_ptr<SWModule> module;
     if (compressor) {
         // Create a compressed text module allowing very large entries
         // Taking defaults except for first, fourth, fifth and last argument
-        module = new zText(
+        module = std::make_unique<zText>(
                 outPath.c_str(),        // ipath
                 nullptr,        // iname
                 nullptr,        // idesc
@@ -207,11 +207,24 @@ int main(int argc, char **argv) {
                 nullptr,        // lang
                 v11n.c_str()        // versification
                );
-    }
-    else {
-        module = (!fourByteSize)
-            ? (SWModule *)new RawText(outPath.c_str(), nullptr, nullptr, ENC_UNKNOWN, DIRECTION_LTR, FMT_UNKNOWN, nullptr, v11n.c_str())
-            : (SWModule *)new RawText4(outPath.c_str(), nullptr, nullptr, ENC_UNKNOWN, DIRECTION_LTR, FMT_UNKNOWN, nullptr, v11n.c_str());
+    } else if (fourByteSize) {
+        module = std::make_unique<RawText4>(outPath.c_str(),
+                                            nullptr,
+                                            nullptr,
+                                            ENC_UNKNOWN,
+                                            DIRECTION_LTR,
+                                            FMT_UNKNOWN,
+                                            nullptr,
+                                            v11n.c_str());
+    } else {
+        module = std::make_unique<RawText>(outPath.c_str(),
+                                           nullptr,
+                                           nullptr,
+                                           ENC_UNKNOWN,
+                                           DIRECTION_LTR,
+                                           FMT_UNKNOWN,
+                                           nullptr,
+                                           v11n.c_str());
     }
     // -----------------------------------------------------
 
@@ -263,8 +276,6 @@ int main(int argc, char **argv) {
     if ((keyBuffer.size()) && (entBuffer.size())) {
         writeEntry(*module, keyBuffer, entBuffer, replace);
     }
-
-    delete module;
 
     FileMgr::getSystemFileMgr()->close(fd);
 
