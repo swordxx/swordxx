@@ -96,7 +96,9 @@ int main(int argc, char **argv)
 
     else if  (renderForm.length())      usage(progName, (((std::string) "Unknown output_format for -r (")+renderForm+")").c_str());
 
-    SWMgr *mgr = (markupMgr) ? new SWMgr(std::move(markupMgr)) : new SWMgr();
+    auto const mgr(markupMgr
+                   ? std::make_unique<SWMgr>(std::move(markupMgr))
+                   : std::make_unique<SWMgr>());
 
     // set any options filters passed with -f
     for (map<std::string, std::string>::iterator it = options.begin(); it != options.end(); it++) {
