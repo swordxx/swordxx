@@ -101,9 +101,8 @@ int main(int argc, char **argv)
                    : std::make_unique<SWMgr>());
 
     // set any options filters passed with -f
-    for (map<std::string, std::string>::iterator it = options.begin(); it != options.end(); it++) {
+    for (auto it = options.cbegin(); it != options.cend(); ++it)
         mgr->setGlobalOption(it->first.c_str(), it->second.c_str());
-    }
 
     auto const module(mgr->getModule(modName));
 
