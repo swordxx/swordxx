@@ -26,6 +26,7 @@
 #include "../swoptfilter.h"
 
 #include <map>
+#include <memory>
 #include <list>
 #include <string>
 #include <unicode/translit.h>
@@ -71,7 +72,9 @@ private:
     std::list<std::string> options;
 
     bool addTrans(const char* newTrans, std::string* transList);
-    Transliterator *createTrans(const UnicodeString& ID, UTransDirection dir, UErrorCode &status);
+    std::unique_ptr<Transliterator> createTrans(UnicodeString const & ID,
+                                                UTransDirection dir,
+                                                UErrorCode & status);
 
 public:
     UTF8Transliterator();

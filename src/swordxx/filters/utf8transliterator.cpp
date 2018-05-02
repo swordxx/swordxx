@@ -108,16 +108,16 @@ bool UTF8Transliterator::addTrans(const char* newTrans, std::string* transList) 
 }
 
 
-Transliterator * UTF8Transliterator::createTrans(const UnicodeString& ID, UTransDirection /* dir */, UErrorCode &status )
+std::unique_ptr<Transliterator> UTF8Transliterator::createTrans(
+        UnicodeString const & ID,
+        UTransDirection /* dir */,
+        UErrorCode & status)
 {
-    Transliterator *trans = Transliterator::createInstance(ID,UTRANS_FORWARD,status);
-    if (U_FAILURE(status)) {
-        delete trans;
+    std::unique_ptr<Transliterator> r(
+                Transliterator::createInstance(ID, UTRANS_FORWARD, status));
+    if (U_FAILURE(status))
         return nullptr;
-    }
-    else {
-        return trans;
-    }
+    return r;
 }
 
 void UTF8Transliterator::setOptionValue(const char *ival)
@@ -147,9 +147,9 @@ char UTF8Transliterator::processText(std::string &text, const SWKey *key, const 
         // Convert UTF-8 string to UTF-16 (UChars)
                 j = std::strlen(text.c_str());
                 int32_t len = (j * 2) + 1;
-                UChar *source = new UChar[len];
+                auto const source(std::make_unique<UChar[]>(len));
                 err = U_ZERO_ERROR;
-                len = ucnv_toUChars(conv, source, len, text.c_str(), j, &err);
+                len = ucnv_toUChars(conv, source.get(), len, text.c_str(), j, &err);
                 source[len] = 0;
 
         // Figure out which scripts are used in the string
@@ -685,14 +685,17 @@ char UTF8Transliterator::processText(std::string &text, const SWKey *key, const 
                 addTrans("NFC", &ID);
 
                 err = U_ZERO_ERROR;
-                Transliterator * trans = createTrans(UnicodeString(ID.c_str()), UTRANS_FORWARD, err);
-                if (trans && !U_FAILURE(err)) {
-                        UnicodeString target = UnicodeString(source);
-            trans->transliterate(target);
-            text.resize(text.size() * 2u, '\0');
-            len = ucnv_fromUChars(conv, &text[0u], text.size(), target.getBuffer(), target.length(), &err);
-            text.resize(len, '\0');
-            delete trans;
+                if (auto const trans = createTrans(UnicodeString(ID.c_str()),
+                                                   UTRANS_FORWARD,
+                                                   err))
+                {
+                    if (!U_FAILURE(err)) {
+                        UnicodeString target = UnicodeString(source.get());
+                        trans->transliterate(target);
+                        text.resize(text.size() * 2u, '\0');
+                        len = ucnv_fromUChars(conv, &text[0u], text.size(), target.getBuffer(), target.length(), &err);
+                        text.resize(len, '\0');
+                    }
                 }
                 ucnv_close(conv);
         }
