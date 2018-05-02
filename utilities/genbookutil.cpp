@@ -90,16 +90,16 @@ void assurePath(TreeKeyIdx *treeKey) {
 }
 
 
-void viewEntryText(RawGenBook *book) {
+void viewEntryText(RawGenBook const & book) {
     std::cout << "\n";
-    std::cout << book->renderText();
+    std::cout << book.renderText();
     std::cout << "\n";
 }
 
 
-void setEntryText(RawGenBook *book) {
+void setEntryText(RawGenBook & book) {
     std::string body;
-    TreeKeyIdx * treeKey = static_cast<TreeKeyIdx *>(book->getKey());
+    TreeKeyIdx * treeKey = static_cast<TreeKeyIdx *>(book.getKey());
     if (treeKey->getOffset()) {
         char buf[1023];
         std::cout << "Enter New Entry Text ('.' on a line by itself to end): \n";
@@ -113,7 +113,7 @@ void setEntryText(RawGenBook *book) {
             body += "\n";
         } while (true);
 
-        book->setEntry(body.c_str());
+        book.setEntry(body.c_str());
     }
     else    std::cout << "Can't add entry text to root node\n";
 }
@@ -174,9 +174,9 @@ int main(int argc, char **argv) {
             RawGenBook::createModule(argv[1]);
     }
 
-    RawGenBook *book = new RawGenBook(argv[1]);
-    TreeKeyIdx root = *static_cast<TreeKeyIdx *>(book->getKey());
-    auto const treeKey = static_cast<TreeKeyIdx *>(book->getKey());
+    RawGenBook book(argv[1]);
+    TreeKeyIdx root = *static_cast<TreeKeyIdx *>(book.getKey());
+    auto const treeKey = static_cast<TreeKeyIdx *>(book.getKey());
 
     std::string input;
     char line[1024];
