@@ -38,14 +38,14 @@ int main(int argc, char **argv) {
 
     long encipher = std::atoi(argv[2]);
 
-    SWFilter *filter = new CipherFilter(argv[1]);
+    CipherFilter filter(argv[1]);
 
     std::string text;
     char buf[4096];
     std::cin >> buf;
     text = buf;
 
-    filter->processText(text, (SWKey *)encipher);
+    filter.processText(text, (SWKey *)encipher);
 
     std::cout << text;
 
