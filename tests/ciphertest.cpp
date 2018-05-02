@@ -48,8 +48,4 @@ int main(int argc, char **argv) {
     filter.processText(text, (SWKey *)encipher);
 
     std::cout << text;
-
-
-
-    return 0;
 }
