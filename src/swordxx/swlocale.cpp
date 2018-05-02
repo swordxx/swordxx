@@ -32,57 +32,42 @@
 
 namespace swordxx {
 
-
-namespace {
-    typedef std::map < std::string, std::string, std::less < std::string > >LookupMap;
-}
-
-
-const char *SWLocale::DEFAULT_LOCALE_NAME="en";
-
-
-// I hate bridge patterns, but this hides swconfig and map from lots o stuff
-class SWLocale::Private {
-public:
-    LookupMap lookupTable;
-    LookupMap mergedAbbrevs;
-};
-
+char const * SWLocale::DEFAULT_LOCALE_NAME = "en";
 
 SWLocale::SWLocale(const char *ifilename) {
-    m_p = new Private;
-
     m_bookLongNames  = nullptr;
     m_bookPrefAbbrev = nullptr;
     if (ifilename) {
-        m_localeSource   = new SWConfig(ifilename);
+        m_localeSource = std::make_unique<SWConfig>(ifilename);
 
         // Assure all english abbrevs are present
-        for (int j = 0; builtin_abbrevs[j].osis[0]; j++) {
-            m_p->mergedAbbrevs[builtin_abbrevs[j].ab] = builtin_abbrevs[j].osis;
-        }
-        ConfigEntMap::iterator it = m_localeSource->sections()["Book Abbrevs"].begin();
-        ConfigEntMap::iterator end = m_localeSource->sections()["Book Abbrevs"].end();
-        for (; it != end; it++) {
-            m_p->mergedAbbrevs[it->first.c_str()] = it->second.c_str();
-        }
-        auto const size = m_p->mergedAbbrevs.size();
+        for (std::size_t j = 0; builtin_abbrevs[j].osis[0]; ++j)
+            m_mergedAbbrevs[builtin_abbrevs[j].ab] = builtin_abbrevs[j].osis;
+
+        for (auto const & ap : m_localeSource->sections()["Book Abbrevs"])
+            m_mergedAbbrevs[ap.first.c_str()] = ap.second.c_str();
+
+        auto const size = m_mergedAbbrevs.size();
         m_bookAbbrevs = std::make_unique<struct abbrev[]>(size + 1);
-        int i = 0;
-        for (LookupMap::iterator it2 = m_p->mergedAbbrevs.begin(); it2 != m_p->mergedAbbrevs.end(); it2++, i++) {
-            m_bookAbbrevs[i].ab = it2->first.c_str();
-            m_bookAbbrevs[i].osis = it2->second.c_str();
+        std::size_t i = 0;
+        for (auto const & ap : m_mergedAbbrevs) {
+            auto & bookAbbrev = m_bookAbbrevs[i];
+            bookAbbrev.ab = ap.first.c_str();
+            bookAbbrev.osis = ap.second.c_str();
+            ++i;
         }
 
         m_bookAbbrevs[i].ab = "";
         m_bookAbbrevs[i].osis = "";
         m_abbrevsCnt = size;
-    }
-    else {
-        m_localeSource   = new SWConfig();
-        (*m_localeSource)["Meta"]["Name"] = DEFAULT_LOCALE_NAME;
-        (*m_localeSource)["Meta"]["Description"] = "English (US)";
-        for (m_abbrevsCnt = 0; builtin_abbrevs[m_abbrevsCnt].osis[0]; m_abbrevsCnt++);
+    } else {
+        m_localeSource = std::make_unique<SWConfig>();
+        auto & meta = (*m_localeSource)["Meta"];
+        meta["Name"] = DEFAULT_LOCALE_NAME;
+        meta["Description"] = "English (US)";
+        m_abbrevsCnt = 0u;
+        while (builtin_abbrevs[m_abbrevsCnt].osis[0])
+            ++m_abbrevsCnt;
     }
 
     auto const & sections = m_localeSource->sections();
@@ -101,47 +86,24 @@ SWLocale::SWLocale(const char *ifilename) {
     }
 }
 
-
-SWLocale::~SWLocale() {
-    delete m_localeSource;
-    delete m_p;
-}
-
+SWLocale::~SWLocale() noexcept = default;
 
 std::string const & SWLocale::translate(const char *text) {
     LookupMap::iterator entry;
 
-    entry = m_p->lookupTable.find(text);
+    entry = m_lookupTable.find(text);
 
-    if (entry == m_p->lookupTable.end()) {
+    if (entry == m_lookupTable.end()) {
         ConfigEntMap::iterator confEntry;
         confEntry = m_localeSource->sections()["Text"].find(text);
         if (confEntry == m_localeSource->sections()["Text"].end())
-            m_p->lookupTable.insert(LookupMap::value_type(text, text));
-        else {//valid value found
-            /*
-            - If Encoding==Latin1 and we have a StringHelper, convert to UTF-8
-            - If StringHelper present and Encoding is UTF-8, use UTF8
-            - If StringHelper not present and Latin1, use Latin1
-            - If StringHelper not present and UTF-8, no idea what to do. Should't happen
-            */
-/*            if (StringHelper::getSystemStringHelper()) {
-                if (!std::strcmp(encoding, "UTF-8")) {
-                    p->lookupTable.insert(LookupMap::value_type(text, (*confEntry).second.c_str()));
-                }
-                else { //latin1 expected, convert to UTF-8
-                    std::string t((*confEntry).second);
-                    t = StringHelper::getSystemStringHelper()->latin2unicode( t );
-
-                    p->lookupTable.insert(LookupMap::value_type(text, t.c_str()));
-                }
-            }
-            else { //no stringhelper, just insert. Nothing we can do*/
-                m_p->lookupTable.insert(LookupMap::value_type(text, (*confEntry).second.c_str()));
-//             }
-
+            m_lookupTable.insert(LookupMap::value_type(text, text));
+        else {
+            m_lookupTable.insert(
+                        LookupMap::value_type(text,
+                                              (*confEntry).second.c_str()));
         }
-        entry = m_p->lookupTable.find(text);
+        entry = m_lookupTable.find(text);
     }
     return (*entry).second;
 }

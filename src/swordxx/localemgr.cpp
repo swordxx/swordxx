@@ -149,7 +149,7 @@ void LocaleMgr::loadConfigDir(char const * ipath) {
 
                 auto const it(m_locales.find(localeName));
                 if (it != m_locales.end()) { // already present
-                    *(it->second) += *locale;
+                    it->second->augment(*locale);
                 } else {
                     m_locales.emplace(localeName, std::move(locale));
                 }

@@ -24,6 +24,7 @@
 #ifndef SWLOCALE_H
 #define SWLOCALE_H
 
+#include <map>
 #include <memory>
 #include <string>
 #include "defs.h"
@@ -42,11 +43,12 @@ static const int ENDOFABBREVS = -2;
 */
 class SWDLLEXPORT SWLocale {
 
-class Private;
+    using LookupMap = std::map<std::string, std::string>;
 
-    Private * m_p;
+    LookupMap m_lookupTable;
+    LookupMap m_mergedAbbrevs;
 
-    SWConfig * m_localeSource;
+    std::unique_ptr<SWConfig> m_localeSource;
 
     std::string m_name;
     std::string m_description;
@@ -58,23 +60,26 @@ class Private;
 
 public:
     SWLocale(const char *ifilename);
-    virtual ~SWLocale();
+    virtual ~SWLocale() noexcept;
 
     /**
     * This function is used to get the name of the languages which this object is handling.
     * @return The name of the managed language. A possible example is "de".
     */
     std::string const & getName() const noexcept { return m_name; }
+
     /**
     * @return The description. A possible example is "German".
     */
     std::string const & getDescription() const noexcept { return m_description; }
     std::string const & getEncoding() const noexcept { return m_encoding; }
     std::string const & translate(const char *text);
-    void augment(SWLocale &addFrom);
-    SWLocale & operator +=(SWLocale &addFrom) { augment(addFrom); return *this; }
+
+    void augment(SWLocale & addFrom);
+
     struct abbrev const * getBookAbbrevs(std::size_t * retSize);
     static const char *DEFAULT_LOCALE_NAME;
+
 };
 
 } /* namespace swordxx */
