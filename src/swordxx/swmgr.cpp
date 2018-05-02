@@ -648,7 +648,9 @@ void SWMgr::augmentModules(NormalizedPath const & path, bool multiMod) {
             // fix config's Section names to rename modules which are available more than once
             // find out which sections are in both config objects
             // inserting all configs first is not good because that overwrites old keys and new modules would share the same config
-            for (SectionMap::iterator it = config->sections().begin(); it != config->sections().end();) {
+            for (auto it = config->sections().cbegin();
+                 it != config->sections().cend();)
+            {
                 if (saveConfig->sections().find( (*it).first ) != saveConfig->sections().end()) { //if the new section is already present rename it
                     ConfigEntMap entMap((*it).second);
 
@@ -661,7 +663,7 @@ void SWMgr::augmentModules(NormalizedPath const & path, bool multiMod) {
 
                     config->sections().emplace(std::move(name),
                                                std::move(entMap));
-                    SectionMap::iterator toErase = it++;
+                    auto const toErase = it++;
                     config->sections().erase(toErase);
                 }
                 else ++it;
