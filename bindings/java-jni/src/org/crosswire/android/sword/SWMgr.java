@@ -84,7 +84,8 @@ public class SWMgr {
 */
 	}
 	public static interface BibleSyncListener {
-		public void messageReceived(String osisRef);
+		public void navReceived(String osisRef);
+		public void chatReceived(String user, String message);
 	}
 	public native void        startBibleSync(String appName, String userName, String passphrase, BibleSyncListener listener);
 	public native void        stopBibleSync();

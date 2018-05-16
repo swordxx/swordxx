@@ -68,8 +68,8 @@ jobject bibleSyncListener = 0;
 JNIEnv *bibleSyncListenerEnv = 0;
 #endif
 static SWBuf STORAGE_BASE;
-static char *SWORD_PATH = "/sdcard/sword";
-static char *AND_BIBLE_MODULES_PATH = "/sdcard/Android/data/net.bible.android.activity/files";
+const char *SWORD_PATH = "/sdcard/sword";
+const char *AND_BIBLE_MODULES_PATH = "/sdcard/Android/data/net.bible.android.activity/files";
 //ANativeActivity *_activity;
 
 // this method converts a UTF8 encoded SWBuf to a Java String, avoiding a bug in jni NewStringUTF
@@ -201,6 +201,11 @@ SWLog::getSystemLog()->logDebug("libsword: init() creating WebMgr using path: %s
 SWLog::getSystemLog()->logDebug("libsword: init() augmenting modules from: %s", AND_BIBLE_MODULES_PATH);
 		// for And Bible modules
 		mgr->augmentModules(AND_BIBLE_MODULES_PATH, true);
+		// if our basedir isn't the sdcard, let's augment the sdcard
+		if (strcmp(baseDir.c_str(), SWORD_PATH)) {
+SWLog::getSystemLog()->logDebug("libsword: init() augmenting modules from: %s", SWORD_PATH);
+			mgr->augmentModules(SWORD_PATH, true);
+		}
 SWLog::getSystemLog()->logDebug("libsword: init() end.");
 	}
 }
@@ -244,34 +249,50 @@ SWLog::getSystemLog()->logDebug("initInstall: instantiated InstallMgr with baseD
 void bibleSyncCallback(char cmd, string pkt_uuid, string bible, string ref, string alt, string group, string domain, string info, string dump) {
 SWLog::getSystemLog()->logDebug("bibleSync callback msg: %c; pkt_uuid: %s; bible: %s; ref: %s; alt: %s; group: %s; domain: %s; info: %s; dump: %s", cmd, pkt_uuid.c_str(), bible.c_str(), ref.c_str(), alt.c_str(), group.c_str(), domain.c_str(), info.c_str(), dump.c_str());
 	if (::bibleSyncListener) {
-SWLog::getSystemLog()->logDebug("bibleSync listener is true");
+		SWLog::getSystemLog()->logDebug("bibleSync listener is true");
 		jclass cls = bibleSyncListenerEnv->GetObjectClass(::bibleSyncListener);
-		jmethodID mid = bibleSyncListenerEnv->GetMethodID(cls, "messageReceived", "(Ljava/lang/String;)V");
-SWLog::getSystemLog()->logDebug("bibleSync listener mid: %ld", mid);
-		if (mid) {
-SWLog::getSystemLog()->logDebug("bibleSync listener mid is available");
-			switch(cmd) {
+		switch (cmd) {
 			// error
 			case 'E':
-			// mismatch
+				// mismatch
 			case 'M':
-			// new speaker
+				// new speaker
 			case 'S':
-			// dead speaker
+				// dead speaker
 			case 'D':
-			// announce
+				// announce
 			case 'A':
 				break;
-			// navigation
-			case 'N':
-SWLog::getSystemLog()->logDebug("bibleSync Nav Received: %s", ref.c_str());
-				jstring msg = strToUTF8Java(bibleSyncListenerEnv, ref.c_str());
-				bibleSyncListenerEnv->CallVoidMethod(::bibleSyncListener, mid, msg);
-				bibleSyncListenerEnv->DeleteLocalRef(msg);
+				// chat message
+			case 'C': {
+				SWLog::getSystemLog()->logDebug("bibleSync Chat Received: %s", ref.c_str());
+				jmethodID mid = bibleSyncListenerEnv->GetMethodID(cls, "chatReceived",
+				                                                  "(Ljava/lang/String;Ljava/lang/String;)V");
+				if (mid) {
+					SWLog::getSystemLog()->logDebug("bibleSync listener mid is available");
+					jstring user = strToUTF8Java(bibleSyncListenerEnv, group.c_str());
+					jstring msg = strToUTF8Java(bibleSyncListenerEnv, alt.c_str());
+					bibleSyncListenerEnv->CallVoidMethod(::bibleSyncListener, mid, user, msg);
+					bibleSyncListenerEnv->DeleteLocalRef(user);
+					bibleSyncListenerEnv->DeleteLocalRef(msg);
+				}
+				break;
+			}
+				// navigation
+			case 'N': {
+				SWLog::getSystemLog()->logDebug("bibleSync Nav Received: %s", ref.c_str());
+				jmethodID mid = bibleSyncListenerEnv->GetMethodID(cls, "navReceived",
+				                                                  "(Ljava/lang/String;)V");
+				if (mid) {
+					SWLog::getSystemLog()->logDebug("bibleSync listener mid is available");
+					jstring msg = strToUTF8Java(bibleSyncListenerEnv, ref.c_str());
+					bibleSyncListenerEnv->CallVoidMethod(::bibleSyncListener, mid, msg);
+					bibleSyncListenerEnv->DeleteLocalRef(msg);
+				}
 				break;
 			}
 		}
-SWLog::getSystemLog()->logDebug("bibleSync listener deleting local ref to cls");
+		SWLog::getSystemLog()->logDebug("bibleSync listener deleting local ref to cls");
 		bibleSyncListenerEnv->DeleteLocalRef(cls);
 	}
 }
@@ -2016,7 +2037,7 @@ SWLog::getSystemLog()->logDebug("libsword: sendBibleSyncMessage() bibleSync not 
 	if (modNamePrefix) modName = modNamePrefix;
 
 #ifdef BIBLESYNC
-	BibleSync_xmit_status result = bibleSync->Transmit(BSP_SYNC, modName.c_str(), osisRef.c_str());
+	BibleSync_xmit_status result = bibleSync->Transmit(modName.c_str(), osisRef.c_str());
 #endif
 SWLog::getSystemLog()->logDebug("libsword: sendBibleSyncMessage() finished with status code: %d", result);
 

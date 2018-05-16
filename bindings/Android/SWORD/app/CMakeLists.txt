@@ -193,7 +193,8 @@ add_library( # Sets the name of the library.
 
 
         ../../../../../biblesync/src/biblesync.cc
-        ../../../../../biblesync/src/ifaddrs.c
+        ../../../../../biblesync/src/Android/ifaddrs.c
+        ../../../../../biblesync/src/Android/uuid.c
 
              )
 
@@ -201,6 +202,7 @@ include_directories(
     ../../../../include
 
     ../../../../../biblesync/include
+    ../../../../../biblesync/src/Android/
 
     )
 # Searches for a specified prebuilt library and stores the path as a

@@ -370,10 +370,28 @@ public class SWORD extends CordovaPlugin {
 			    @Override
 			    public void run() {
 				mgr.startBibleSync(appName, userName, passphrase, new SWMgr.BibleSyncListener() {
-					public void messageReceived(String message) {
-						PluginResult result = new PluginResult(PluginResult.Status.OK, message);
-						result.setKeepCallback(true);
-						bibleSyncListener.sendPluginResult(result);
+					public void navReceived(String message) {
+						try {
+							JSONObject m = new JSONObject();
+							m.put("cmd", "nav");
+							m.put("osisRef", message);
+							PluginResult result = new PluginResult(PluginResult.Status.OK, m);
+							result.setKeepCallback(true);
+							bibleSyncListener.sendPluginResult(result);
+						}
+						catch (Exception e) { e.printStackTrace(); }
+					}
+					public void chatReceived(String user, String message) {
+						try {
+							JSONObject m = new JSONObject();
+							m.put("cmd", "chat");
+							m.put("user", user);
+							m.put("message", message);
+							PluginResult result = new PluginResult(PluginResult.Status.OK, m);
+							result.setKeepCallback(true);
+							bibleSyncListener.sendPluginResult(result);
+						}
+						catch (Exception e) { e.printStackTrace(); }
 					}
 				});
 			    }
