@@ -46,7 +46,9 @@ int main(int argc, char **argv) {
 	VerseKey *vk = (bible) ? (VerseKey *)bible->getKey() : new VerseKey();
 
 	for ((*vk) = TOP; !vk->popError(); vk->setBook(vk->getBook()+1)) {
-		cout << vk->getBookName() << "\n";
+		if (!bible || bible->hasEntry(vk)) {
+			cout << vk->getBookName() << "\n";
+		}
 	}
 
 	// if we 'new'ed a VerseKey unassociated with a module, above, then we should delete it.
