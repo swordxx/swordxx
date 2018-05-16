@@ -91,6 +91,7 @@ int main(int argc, char **argv)
 	manager.setGlobalOption("Greek Accents", "Off");
 	manager.setGlobalOption("Strong's Numbers", "Off");
 	manager.setGlobalOption("Hebrew Vowel Points", "Off");
+	manager.setGlobalOption("Headings", "On");
 	manager.filterText("Greek Accents", searchTerm);
 
 	it = manager.Modules.find(argv[1]);
