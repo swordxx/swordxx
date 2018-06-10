@@ -27,12 +27,6 @@
 #include <utf8greekaccents.h>
 #include <utilstr.h>
 
-
-#ifdef _ICU_
-#include <utf8nfkd.h>
-sword::UTF8NFKD decompose;
-#endif
-
 using std::map;
 
 SWORD_NAMESPACE_START
@@ -68,6 +62,8 @@ namespace {
 			converters[0x0314] = "";	// COMBINING REVERSED COMMA ABOVE
 			converters[0x037A] = "";	// GREEK YPOGEGRAMMENI
 			converters[0x0342] = "";	// COMBINING GREEK PERISPOMENI
+			converters[0x1FBD] = "";	// GREEK KORONIS
+			converters[0x0343] = "";	// COMBINING GREEK KORONIS
 			// Now converted pre-composed characters to their alphabetic bases, discarding the accents
 			// Greek
 			// UPPER case
