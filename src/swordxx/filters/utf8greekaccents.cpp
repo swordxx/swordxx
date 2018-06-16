@@ -57,6 +57,8 @@ public: /* Methods: */
         emplace(0x0314, ""); // COMBINING REVERSED COMMA ABOVE
         emplace(0x037A, ""); // GREEK YPOGEGRAMMENI
         emplace(0x0342, ""); // COMBINING GREEK PERISPOMENI
+        emplace(0x1FBD, ""); // GREEK KORONIS
+        emplace(0x0343, ""); // COMBINING GREEK KORONIS
         // Now converted pre-composed characters to their alphabetic bases, discarding the accents
         auto const utf8Emplace =
                 [this](std::uint32_t value, std::uint32_t replacement)
