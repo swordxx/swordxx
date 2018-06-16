@@ -453,18 +453,33 @@ debugPrint("initMgr, mgr: " + String(describing: mgr))
     @objc(SWMgr_startBibleSync:)
     func SWMgr_startBibleSync(command: CDVInvokedUrlCommand) {
         initMgr()
-        let appName = command.arguments[1] as? String ?? ""
-        let userName = command.arguments[2] as? String ?? ""
-        let passphrase = command.arguments[3] as? String ?? ""
+        let appName = command.arguments[0] as? String ?? ""
+        let userName = command.arguments[1] as? String ?? ""
+        let passphrase = command.arguments[2] as? String ?? ""
             bibleSyncCallbackID = command.callbackId
             DispatchQueue.global().async {
                 mySWORDPlugin = self
-                org_crosswire_sword_SWMgr_startBibleSync(self.mgr, appName, userName, passphrase, { (message: Optional<UnsafePointer<Int8>>) in
-                    let response = String(cString: message!)
+                org_crosswire_sword_SWMgr_startBibleSync(self.mgr, appName, userName, passphrase, { (cmd : Int8, str1: Optional<UnsafePointer<Int8>>, str2: Optional<UnsafePointer<Int8>>) in
+                    let response1 = String(cString: str1!)
+                    let response2 = String(cString: str2!)
                     if (mySWORDPlugin != nil && mySWORDPlugin!.bibleSyncCallbackID != "") {
-                        let result = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: response)
-                        result?.setKeepCallbackAs(true)
-                        mySWORDPlugin!.commandDelegate!.send(result, callbackId: mySWORDPlugin!.bibleSyncCallbackID)
+			if (cmd == CChar("N")) {
+				var retVal = [String:Any]()
+				retVal["cmd"]     = "nav";
+				retVal["osisRef"] = response1;
+				let result = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: retVal)
+				result?.setKeepCallbackAs(true)
+				mySWORDPlugin!.commandDelegate!.send(result, callbackId: mySWORDPlugin!.bibleSyncCallbackID)
+			}
+			else if (cmd == CChar("C")	) {
+				var retVal = [String:Any]()
+				retVal["cmd"]     = "chat";
+				retVal["user"]    = response1;
+				retVal["message"] = response2;
+				let result = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: retVal)
+				result?.setKeepCallbackAs(true)
+				mySWORDPlugin!.commandDelegate!.send(result, callbackId: mySWORDPlugin!.bibleSyncCallbackID)
+			}
                     }
                 });
                 
