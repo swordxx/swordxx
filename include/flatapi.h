@@ -87,7 +87,7 @@ void SWDLLEXPORT org_crosswire_sword_SWModule_terminateSearch
 
 typedef void (*org_crosswire_sword_SWModule_SearchCallback)(int);
 
-typedef void (*org_biblesync_MessageReceivedCallback)(const char *);
+typedef void (*org_biblesync_MessageReceivedCallback)(char, const char *, const char *);
 
 /*
  * Class:     org_crosswire_sword_SWModule

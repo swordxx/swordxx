@@ -134,12 +134,19 @@ SWLog::getSystemLog()->logDebug("bibleSync listener is true");
 		// announce
 		case 'A':
 			break;
+		// chat message
+		case 'C': {
+SWLog::getSystemLog()->logDebug("bibleSync Chat Received: %s", ref.c_str());
+			(*bibleSyncListener)(cmd, group.c_str(), alt.c_str());
+			break;
+		}
 		// navigation
 		case 'N':
 SWLog::getSystemLog()->logDebug("bibleSync Nav Received: %s", ref.c_str());
-			(*bibleSyncListener)(ref.c_str());
+			(*bibleSyncListener)(cmd, ref.c_str(), 0);
 			break;
 		}
+
 	}
 }
 #endif
@@ -1804,7 +1811,7 @@ SWLog::getSystemLog()->logDebug("libsword: sendBibleSyncMessage() bibleSync not 
 	const char *modNamePrefix = osisRef.stripPrefix(':');
 	if (modNamePrefix) modName = modNamePrefix;
 
-	BibleSync_xmit_status result = bibleSync->Transmit(BSP_SYNC, modName.c_str(), osisRef.c_str());
+	BibleSync_xmit_status result = bibleSync->Transmit(modName.c_str(), osisRef.c_str());
 SWLog::getSystemLog()->logDebug("libsword: sendBibleSyncMessage() finished with status code: %d", result);
 #else
 SWLog::getSystemLog()->logDebug("libsword: sendBibleSyncMessage() bibleSync not active; message not sent.");
