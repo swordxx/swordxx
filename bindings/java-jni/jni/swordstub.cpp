@@ -1104,6 +1104,7 @@ JNIEXPORT jobjectArray JNICALL Java_org_crosswire_android_sword_SWModule_getEntr
 	const char *level2 = env->GetStringUTFChars(level2JS, NULL);
 	const char *level3 = env->GetStringUTFChars(level3JS, NULL);
 	bool filtered = (filteredJS == JNI_TRUE);
+SWLog::getSystemLog()->logDebug("calling getEntryAttributes(%s, %s, %s, %s", level1, level2, level3, (filtered?"true":"false"));
 
 	jclass clazzString = env->FindClass("java/lang/String");
 	jobjectArray ret = 0;
