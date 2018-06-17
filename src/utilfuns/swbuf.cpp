@@ -50,17 +50,25 @@ SWBuf &SWBuf::setFormatted(const char *format, ...) {
 	va_list argptr;
 
 	va_start(argptr, format);
+
+	setFormattedVA(format, argptr);
+
+	va_end(argptr);
+	return *this;
+}
+
+SWBuf &SWBuf::setFormattedVA(const char *format, va_list argptr) {
+	va_list argptr2;
+	va_copy(argptr2, argptr);
 #ifdef NO_VSNPRINTF
 	static char junkBuf[JUNKBUFSIZE];
 	int len = vsprintf(junkBuf, format, argptr)+1;
 #else
 	int len = vsnprintf(0, 0, format, argptr)+1;
 #endif
-	va_end(argptr);
 	assureSize(len);
-	va_start(argptr, format);
-	end = vsprintf(buf, format, argptr) + buf;
-	va_end(argptr);
+	end = vsprintf(buf, format, argptr2) + buf;
+	va_end(argptr2);
 	return *this;
 }
 

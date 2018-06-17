@@ -26,6 +26,7 @@
 #include <defs.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdarg.h>
 #ifdef __BORLANDC__
 #include <mem.h>
 #endif
@@ -228,6 +229,7 @@ public:
 	* @param ... Add all arguments here.
 	*/
 	SWBuf &setFormatted(const char *format, ...);
+	SWBuf &setFormattedVA(const char *format, va_list argptr);
 
 	/**
 	* SWBuf::setSize - Size this buffer to a specific length.

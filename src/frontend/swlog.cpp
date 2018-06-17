@@ -29,6 +29,7 @@
 #include <unicode/ustream.h>
 #endif
 #include "swlog.h"
+#include "swbuf.h"
 
 
 SWORD_NAMESPACE_START
@@ -64,12 +65,12 @@ void SWLog::setSystemLog(SWLog *newLog) {
 
 
 void SWLog::logWarning(const char *fmt, ...) const {
-	char msg[2048];
 	va_list argptr;
 
 	if (logLevel >= LOG_WARN) {
+		SWBuf msg;
 		va_start(argptr, fmt);
-		vsprintf(msg, fmt, argptr);
+		msg.setFormattedVA(fmt, argptr);
 		va_end(argptr);
 		logMessage(msg, LOG_WARN);
 	}
@@ -77,12 +78,12 @@ void SWLog::logWarning(const char *fmt, ...) const {
 
 
 void SWLog::logError(const char *fmt, ...) const {
-	char msg[2048];
 	va_list argptr;
 
 	if (logLevel) {
+		SWBuf msg;
 		va_start(argptr, fmt);
-		vsprintf(msg, fmt, argptr);
+		msg.setFormattedVA(fmt, argptr);
 		va_end(argptr);
 		logMessage(msg, LOG_ERROR);
 	}
@@ -90,12 +91,12 @@ void SWLog::logError(const char *fmt, ...) const {
 
 
 void SWLog::logInformation(const char *fmt, ...) const {
-	char msg[2048];
 	va_list argptr;
 
 	if (logLevel >= LOG_INFO) {
+		SWBuf msg;
 		va_start(argptr, fmt);
-		vsprintf(msg, fmt, argptr);
+		msg.setFormattedVA(fmt, argptr);
 		va_end(argptr);
 		logMessage(msg, LOG_INFO);
 	}
@@ -103,12 +104,12 @@ void SWLog::logInformation(const char *fmt, ...) const {
 
 
 void SWLog::logTimedInformation(const char *fmt, ...) const {
-	char msg[2048];
 	va_list argptr;
 
 	if (logLevel >= LOG_TIMEDINFO) {
+		SWBuf msg;
 		va_start(argptr, fmt);
-		vsprintf(msg, fmt, argptr);
+		msg.setFormattedVA(fmt, argptr);
 		va_end(argptr);
 		logMessage(msg, LOG_TIMEDINFO);
 	}
@@ -116,12 +117,12 @@ void SWLog::logTimedInformation(const char *fmt, ...) const {
 
 
 void SWLog::logDebug(const char *fmt, ...) const {
-	char msg[2048];
 	va_list argptr;
 
 	if (logLevel >= LOG_DEBUG) {
+		SWBuf msg;
 		va_start(argptr, fmt);
-		vsprintf(msg, fmt, argptr);
+		msg.setFormattedVA(fmt, argptr);
 		va_end(argptr);
 		logMessage(msg, LOG_DEBUG);
 	}
