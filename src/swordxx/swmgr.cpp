@@ -118,24 +118,28 @@ void setSystemLogLevel(SWConfig * sysConf,
             logLevelString = entry->second;
     }
     if (!logLevelString.empty()) {
-        int const logLevel =
-                logLevelString == "ERROR"     ? SWLog::LOG_ERROR :
-                logLevelString == "WARN"      ? SWLog::LOG_WARN :
-                logLevelString == "INFO"      ? SWLog::LOG_INFO :
-                logLevelString == "TIMEDINFO" ? SWLog::LOG_TIMEDINFO :
-                logLevelString == "DEBUG"     ? SWLog::LOG_DEBUG :
-                -1;
         auto & logger = *SWLog::getSystemLog();
-        if (logLevel < 0) {
+        SWLog::LogLevel logLevel;
+        if (logLevelString == "ERROR") {
+            logLevel = SWLog::LOG_ERROR;
+        } else if (logLevelString == "WARN") {
+            logLevel = SWLog::LOG_WARN;
+        } else if (logLevelString == "INFO") {
+            logLevel = SWLog::LOG_INFO;
+        } else if (logLevelString == "TIMEDINFO") {
+            logLevel = SWLog::LOG_TIMEDINFO;
+        } else if (logLevelString == "DEBUG") {
+            logLevel = SWLog::LOG_DEBUG;
+        } else {
             logger.logError("Invalid LogLevel found in %s: LogLevel: %s",
                             logLocation.c_str(),
                             logLevelString.c_str());
-        } else {
-            logger.setLogLevel(logLevel);
-            logger.logInformation("Setting log level from %s to %s",
-                                  logLocation.c_str(),
-                                  logLevelString.c_str());
+            return;
         }
+        logger.setLogLevel(logLevel);
+        logger.logInformation("Setting log level from %s to %s",
+                              logLocation.c_str(),
+                              logLevelString.c_str());
     }
 }
 

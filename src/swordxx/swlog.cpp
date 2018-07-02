@@ -22,105 +22,57 @@
 
 #include "swlog.h"
 
+#include <cassert>
 #include <cstdarg>
 #include <cstdio>
 #include <iostream>
-#if SWORDXX_HAS_ICU
-#include <unicode/ustdio.h>
-#include <unicode/ustream.h>
-#endif
+#include <limits>
+#include <new>
 
 
 namespace swordxx {
 
+std::shared_ptr<SWLog> SWLog::m_systemLog;
 
-std::shared_ptr<SWLog> SWLog::systemLog;
-
-const int SWLog::LOG_ERROR     = 1;
-const int SWLog::LOG_WARN      = 2;
-const int SWLog::LOG_INFO      = 3;
-const int SWLog::LOG_TIMEDINFO = 4;
-const int SWLog::LOG_DEBUG     = 5;
+SWLog::SWLog() noexcept = default;
+SWLog::~SWLog() noexcept = default;
 
 std::shared_ptr<SWLog> const & SWLog::getSystemLog() {
-    if (!systemLog)
-        systemLog = std::make_shared<SWLog>();
+    if (!m_systemLog)
+        m_systemLog = std::make_shared<SWLog>();
 
-    return systemLog;
+    return m_systemLog;
 }
 
+void SWLog::setSystemLog(std::shared_ptr<SWLog> newLogger) noexcept
+{ m_systemLog = std::move(newLogger); }
 
-void SWLog::setSystemLog(std::shared_ptr<SWLog> newLogger) {
-    systemLog = std::move(newLogger);
-}
-
-
-void SWLog::logWarning(const char *fmt, ...) const {
-    char msg[2048];
-    va_list argptr;
-
-    if (logLevel >= LOG_WARN) {
+template <SWLog::LogLevel LOGLEVEL>
+void SWLog::logMessage(char const * fmt, ...) const {
+    using U = std::underlying_type<LogLevel>::type;
+    if (static_cast<U>(m_logLevel) >= static_cast<U>(LOGLEVEL)) {
+        va_list argptr;
         va_start(argptr, fmt);
-        vsprintf(msg, fmt, argptr);
+        auto size_(std::vsnprintf(nullptr, 0u, fmt, argptr));
+        assert(size_ >= 0);
+        static_assert(std::numeric_limits<decltype(size_)>::max()
+                      <= std::numeric_limits<std::size_t>::max(), "");
+        auto size(static_cast<std::size_t>(size_));
+        if (!++size)
+            throw std::bad_array_new_length();
+        auto strData(std::make_unique<char[]>(size));
+        std::vsnprintf(strData.get(), size, fmt, argptr);
         va_end(argptr);
-        logMessage(msg, LOG_WARN);
+        std::cerr << strData.get() << std::endl;
     }
 }
 
-
-void SWLog::logError(const char *fmt, ...) const {
-    char msg[2048];
-    va_list argptr;
-
-    if (logLevel) {
-        va_start(argptr, fmt);
-        vsprintf(msg, fmt, argptr);
-        va_end(argptr);
-        logMessage(msg, LOG_ERROR);
-    }
-}
+template void SWLog::logMessage<SWLog::LOG_ERROR>(char const * fmt, ...) const;
+template void SWLog::logMessage<SWLog::LOG_WARN>(char const * fmt, ...) const;
+template void SWLog::logMessage<SWLog::LOG_INFO>(char const * fmt, ...) const;
+template void SWLog::logMessage<SWLog::LOG_TIMEDINFO>(char const * fmt, ...)
+        const;
+template void SWLog::logMessage<SWLog::LOG_DEBUG>(char const * fmt, ...) const;
 
 
-void SWLog::logInformation(const char *fmt, ...) const {
-    char msg[2048];
-    va_list argptr;
-
-    if (logLevel >= LOG_INFO) {
-        va_start(argptr, fmt);
-        vsprintf(msg, fmt, argptr);
-        va_end(argptr);
-        logMessage(msg, LOG_INFO);
-    }
-}
-
-
-void SWLog::logTimedInformation(const char *fmt, ...) const {
-    char msg[2048];
-    va_list argptr;
-
-    if (logLevel >= LOG_TIMEDINFO) {
-        va_start(argptr, fmt);
-        vsprintf(msg, fmt, argptr);
-        va_end(argptr);
-        logMessage(msg, LOG_TIMEDINFO);
-    }
-}
-
-
-void SWLog::logDebug(const char *fmt, ...) const {
-    char msg[2048];
-    va_list argptr;
-
-    if (logLevel >= LOG_DEBUG) {
-        va_start(argptr, fmt);
-        vsprintf(msg, fmt, argptr);
-        va_end(argptr);
-        logMessage(msg, LOG_DEBUG);
-    }
-}
-
-void SWLog::logMessage(const char *message, int /* level */) const {
-    std::cerr << message;
-    std::cerr << std::endl;
-}
 } /* namespace swordxx */
