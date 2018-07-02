@@ -19,11 +19,10 @@
  * General Public License for more details.
  */
 
-#ifndef CANON_LENINGRAD_H
-#define CANON_LENINGRAD_H
+#ifndef SWORDXX_CANON_LENINGRAD_H
+#define SWORDXX_CANON_LENINGRAD_H
 
 namespace swordxx {
-
 
 // Versification system: Leningrad
 // Book order: Gen Exod Lev Num Deut Josh Judg 1Sam 2Sam 1Kgs 2Kgs Isa Jer Ezek Hos Joel Amos Obad Jonah Mic Nah Hab Zeph Hag Zech Mal 1Chr 2Chr Ps Job Prov Ruth Song Eccl Lam Esth Dan Ezra Neh
@@ -236,8 +235,6 @@ int vm_leningrad[] = {
   36, 47, 31
 };
 
-
 } /* namespace swordxx */
 
-
-#endif
+#endif /* SWORDXX_CANON_LENINGRAD_H */

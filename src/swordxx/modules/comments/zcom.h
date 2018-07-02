@@ -21,8 +21,8 @@
  *
  */
 
-#ifndef ZCOM_H
-#define ZCOM_H
+#ifndef SWORDXX_ZCOM_H
+#define SWORDXX_ZCOM_H
 
 #include "../../swcom.h"
 #include "../common/zverse.h"
@@ -83,4 +83,4 @@ protected: /* Methods: */
 
 } /* namespace swordxx */
 
-#endif
+#endif /* SWORDXX_ZCOM_H */

@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef GBFLATEX_H
-#define GBFLATEX_H
+#ifndef SWORDXX_GBFLATEX_H
+#define SWORDXX_GBFLATEX_H
 
 #include "../swbasicfilter.h"
 
@@ -56,4 +56,5 @@ public:
 };
 
 } /* namespace swordxx */
-#endif
+
+#endif /* SWORDXX_GBFLATEX_H */

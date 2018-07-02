@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef THMLPLAIN_H
-#define THMLPLAIN_H
+#ifndef SWORDXX_THMLPLAIN_H
+#define SWORDXX_THMLPLAIN_H
 
 #include "../swfilter.h"
 
@@ -41,4 +41,5 @@ public:
 };
 
 } /* namespace swordxx */
-#endif
+
+#endif /* SWORDXX_THMLPLAIN_H */

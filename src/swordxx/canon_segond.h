@@ -21,8 +21,8 @@
  *
  */
 
-#ifndef CANON_SEGOND_H
-#define CANON_SEGOND_H
+#ifndef SWORDXX_CANON_SEGOND_H
+#define SWORDXX_CANON_SEGOND_H
 
 namespace swordxx {
 
@@ -387,4 +387,4 @@ unsigned char mappings_segond[] = {
 
 } /* namespace swordxx { */
 
-#endif
+#endif /* SWORDXX_CANON_SEGOND_H */

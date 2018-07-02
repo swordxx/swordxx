@@ -21,8 +21,8 @@
  *
  */
 
-#ifndef SWCIPHER_H
-#define SWCIPHER_H
+#ifndef SWORDXX_SWCIPHER_H
+#define SWORDXX_SWCIPHER_H
 
 #include "sapphire.h"
 
@@ -52,4 +52,5 @@ public:
 };
 
 } /* namespace swordxx */
-#endif
+
+#endif /* SWORDXX_SWCIPHER_H */

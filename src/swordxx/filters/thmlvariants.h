@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef THMLVARIANTS_H
-#define THMLVARIANTS_H
+#ifndef SWORDXX_THMLVARIANTS_H
+#define SWORDXX_THMLVARIANTS_H
 
 #include "../swoptfilter.h"
 
@@ -42,4 +42,5 @@ public:
 };
 
 } /* namespace swordxx */
-#endif
+
+#endif /* SWORDXX_THMLVARIANTS_H */

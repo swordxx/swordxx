@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef OSISHEADINGS_H
-#define OSISHEADINGS_H
+#ifndef SWORDXX_OSISHEADINGS_H
+#define SWORDXX_OSISHEADINGS_H
 
 #include "../offonoptionfilter.h"
 #include "../swbasicfilter.h"
@@ -46,4 +46,5 @@ public:
 };
 
 } /* namespace swordxx */
-#endif
+
+#endif /* SWORDXX_OSISHEADINGS_H */

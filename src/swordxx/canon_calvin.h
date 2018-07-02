@@ -21,8 +21,8 @@
  *
  */
 
-#ifndef CANON_CALVIN_H
-#define CANON_CALVIN_H
+#ifndef SWORDXX_CANON_CALVIN_H
+#define SWORDXX_CANON_CALVIN_H
 
 namespace swordxx {
 
@@ -392,4 +392,4 @@ unsigned char mappings_calvin[] = {
 
 } /* namespace swordxx { */
 
-#endif
+#endif /* SWORDXX_CANON_CALVIN_H */

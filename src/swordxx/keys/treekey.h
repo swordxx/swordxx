@@ -21,8 +21,8 @@
  */
 
 
-#ifndef TREEKEY_H
-#define TREEKEY_H
+#ifndef SWORDXX_TREEKEY_H
+#define SWORDXX_TREEKEY_H
 
 #include "../swkey.h"
 
@@ -133,7 +133,8 @@ public:
 
     SWKEY_OPERATORS(TreeKey)
 
-    };
+};
 
 } /* namespace swordxx */
-#endif
+
+#endif /* SWORDXX_TREEKEY_H */

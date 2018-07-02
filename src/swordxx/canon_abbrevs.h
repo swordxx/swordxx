@@ -21,11 +21,10 @@
  *
  */
 
-#ifndef CANON_ABBREVS_H
-#define CANON_ABBREVS_H
+#ifndef SWORDXX_CANON_ABBREVS_H
+#define SWORDXX_CANON_ABBREVS_H
 
 namespace swordxx {
-
 
 /******************************************************************************
  *    Abbreviations - MUST be in alphabetical order & by PRIORITY
@@ -543,8 +542,6 @@ const struct abbrev builtin_abbrevs[] = {
   {"", ""}
 };
 
-
 } /* namespace swordxx */
 
-
-#endif
+#endif /* SWORDXX_CANON_ABBREVS_H */

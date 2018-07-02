@@ -21,8 +21,8 @@
  *
  */
 
-#ifndef SWFILTER_H
-#define SWFILTER_H
+#ifndef SWORDXX_SWFILTER_H
+#define SWORDXX_SWFILTER_H
 
 #include <string>
 
@@ -63,4 +63,5 @@ public:
 };
 
     } /* namespace swordxx */
-#endif
+
+#endif /* SWORDXX_SWFILTER_H */

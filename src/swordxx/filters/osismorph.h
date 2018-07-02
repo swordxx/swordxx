@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef OSISMORPH_H
-#define OSISMORPH_H
+#ifndef SWORDXX_OSISMORPH_H
+#define SWORDXX_OSISMORPH_H
 
 #include "../offonoptionfilter.h"
 
@@ -42,4 +42,5 @@ public:
 };
 
 } /* namespace swordxx */
-#endif
+
+#endif /* SWORDXX_OSISMORPH_H */

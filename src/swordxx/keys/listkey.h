@@ -22,8 +22,8 @@
  *
  */
 
-#ifndef SWLSTKEY_H
-#define SWLSTKEY_H
+#ifndef SWORDXX_LISTKEY_H
+#define SWORDXX_LISTKEY_H
 
 #include "../swkey.h"
 
@@ -173,4 +173,5 @@ private: /* Methods: */
 };
 
 } /* namespace swordxx */
-#endif
+
+#endif /* SWORDXX_LISTKEY_H */

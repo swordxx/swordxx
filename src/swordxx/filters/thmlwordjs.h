@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef THMLWORDSJS_H
-#define THMLWORDSJS_H
+#ifndef SWORDXX_THMLWORDSJS_H
+#define SWORDXX_THMLWORDSJS_H
 
 #include "../offonoptionfilter.h"
 
@@ -60,4 +60,5 @@ public:
 };
 
 } /* namespace swordxx */
-#endif
+
+#endif /* SWORDXX_THMLWORDSJS_H */

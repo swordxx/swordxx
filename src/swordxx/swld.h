@@ -21,8 +21,8 @@
  *
  */
 
-#ifndef SWLD_H
-#define SWLD_H
+#ifndef SWORDXX_SWLD_H
+#define SWORDXX_SWLD_H
 
 #include "swmodule.h"
 
@@ -65,4 +65,5 @@ public:
 };
 
 } /* namespace swordxx */
-#endif
+
+#endif /* SWORDXX_SWLD_H */

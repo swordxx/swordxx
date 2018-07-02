@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef SWOPTFILTER_H
-#define SWOPTFILTER_H
+#ifndef SWORDXX_SWOPTFILTER_H
+#define SWORDXX_SWOPTFILTER_H
 
 #include "swfilter.h"
 
@@ -88,4 +88,5 @@ public:
 };
 
 } /* namespace swordxx */
-#endif
+
+#endif /* SWORDXX_SWOPTFILTER_H */

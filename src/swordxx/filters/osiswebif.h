@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef OSISWEBIF_H
-#define OSISWEBIF_H
+#ifndef SWORDXX_OSISWEBIF_H
+#define SWORDXX_OSISWEBIF_H
 
 #include "osisxhtml.h"
 
@@ -51,4 +51,5 @@ public:
 };
 
 } /* namespace swordxx */
-#endif
+
+#endif /* SWORDXX_OSISWEBIF_H */

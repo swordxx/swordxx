@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef GBFOSIS_H
-#define GBFOSIS_H
+#ifndef SWORDXX_GBFOSIS_H
+#define SWORDXX_GBFOSIS_H
 
 #include "../swfilter.h"
 
@@ -43,4 +43,5 @@ public:
 };
 
 } /* namespace swordxx */
-#endif /* THMLOSIS_H */
+
+#endif /* SWORDXX_GBFOSIS_H */

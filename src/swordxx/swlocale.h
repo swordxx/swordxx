@@ -21,8 +21,8 @@
  *
  */
 
-#ifndef SWLOCALE_H
-#define SWLOCALE_H
+#ifndef SWORDXX_SWLOCALE_H
+#define SWORDXX_SWLOCALE_H
 
 #include <map>
 #include <memory>
@@ -83,4 +83,5 @@ public:
 };
 
 } /* namespace swordxx */
-#endif
+
+#endif /* SWORDXX_SWLOCALE_H */

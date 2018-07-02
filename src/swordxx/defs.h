@@ -22,8 +22,8 @@
 // ----------------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------------
-#ifndef SWORDDEFS_H
-#define SWORDDEFS_H
+#ifndef SWORDXX_DEFS_H
+#define SWORDXX_DEFS_H
 
 namespace swordxx {
 
@@ -107,4 +107,5 @@ enum BlockType: char {
 };
 
 } /* namespace swordxx */
-#endif //SWORDDEFS_H
+
+#endif /* SWORDXX_DEFS_H */

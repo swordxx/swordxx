@@ -21,8 +21,8 @@
  */
 
 
-#ifndef TREEKEYIDX_H
-#define TREEKEYIDX_H
+#ifndef SWORDXX_TREEKEYIDX_H
+#define SWORDXX_TREEKEYIDX_H
 
 #include <cstdint>
 #include <memory>
@@ -127,4 +127,4 @@ public:
 
 } /* namespace swordxx */
 
-#endif
+#endif /* SWORDXX_TREEKEYIDX_H */

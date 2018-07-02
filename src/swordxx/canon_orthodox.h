@@ -19,11 +19,10 @@
  * General Public License for more details.
  */
 
-#ifndef CANON_ORTHODOX_H
-#define CANON_ORTHODOX_H
+#ifndef SWORDXX_CANON_ORTHODOX_H
+#define SWORDXX_CANON_ORTHODOX_H
 
 namespace swordxx {
-
 
 // Versification system: Orthodox
 // Book order: Gen Exod Lev Num Deut Josh Judg Ruth 1Sam 2Sam 1Kgs 2Kgs 1Chr 2Chr 1Esd Ezra Neh Tob Jdt Esth 1Macc 2Macc 3Macc Ps PrMan Job Prov Eccl Song Wis Sir Hos Amos Mic Joel Obad Jonah Nah Hab Zeph Hag Zech Mal Isa Jer Bar Lam EpJer Ezek Sus Dan Bel 4Macc Matt Mark Luke John Acts Rom 1Cor 2Cor Gal Eph Phil Col 1Thess 2Thess 1Tim 2Tim Titus Phlm Heb Jas 1Pet 2Pet 1John 2John 3John Jude Rev
@@ -363,8 +362,6 @@ int vm_orthodox[] = {
   27, 21
 };
 
-
 } /* namespace swordxx */
 
-
-#endif
+#endif /* SWORDXX_CANON_ORTHODOX_H */

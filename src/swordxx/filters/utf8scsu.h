@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef UTF8SCSU_H
-#define UTF8SCSU_H
+#ifndef SWORDXX_UTF8SCSU_H
+#define SWORDXX_UTF8SCSU_H
 
 #include "../swfilter.h"
 
@@ -49,4 +49,5 @@ public:
 };
 
 } /* namespace swordxx */
-#endif
+
+#endif /* SWORDXX_UTF8SCSU_H */

@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef TEILATEX_H
-#define TEILATEX_H
+#ifndef SWORDXX_TEILATEX_H
+#define SWORDXX_TEILATEX_H
 
 #include "../swbasicfilter.h"
 
@@ -61,4 +61,5 @@ public:
 };
 
 } /* namespace swordxx */
-#endif
+
+#endif /* SWORDXX_TEILATEX_H */

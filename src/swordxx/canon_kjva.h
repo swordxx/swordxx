@@ -19,11 +19,10 @@
  * General Public License for more details.
  */
 
-#ifndef CANON_KJVA_H
-#define CANON_KJVA_H
+#ifndef SWORDXX_CANON_KJVA_H
+#define SWORDXX_CANON_KJVA_H
 
 namespace swordxx {
-
 
 // Versification system: KJVA
 // Book order: Gen Exod Lev Num Deut Josh Judg Ruth 1Sam 2Sam 1Kgs 2Kgs 1Chr 2Chr Ezra Neh Esth Job Ps Prov Eccl Song Isa Jer Lam Ezek Dan Hos Joel Amos Obad Jonah Mic Nah Hab Zeph Hag Zech Mal 1Esd 2Esd Tob Jdt AddEsth Wis Sir Bar PrAzar Sus Bel PrMan 1Macc 2Macc Matt Mark Luke John Acts Rom 1Cor 2Cor Gal Eph Phil Col 1Thess 2Thess 1Tim 2Tim Titus Phlm Heb Jas 1Pet 2Pet 1John 2John 3John Jude Rev
@@ -359,8 +358,6 @@ int vm_kjva[] = {
   27, 21
 };
 
-
 } /* namespace swordxx */
 
-
-#endif
+#endif /* SWORDXX_CANON_KJVA_H */

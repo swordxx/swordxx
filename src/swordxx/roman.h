@@ -19,8 +19,9 @@
  * General Public License for more details.
  *
  */
-#ifndef ROMAN_H
-#define ROMAN_H
+
+#ifndef SWORDXX_ROMAN_H
+#define SWORDXX_ROMAN_H
 
 #include "defs.h"
 
@@ -38,4 +39,5 @@ char isroman(const char *, int maxchars = 0);
 int from_rom(const char *s);
 
 } /* namespace swordxx */
-#endif
+
+#endif /* SWORDXX_ROMAN_H */

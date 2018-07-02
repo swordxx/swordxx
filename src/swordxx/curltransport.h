@@ -13,8 +13,8 @@
  *
  */
 
-#ifndef CURLTRANSPORT_H
-#define CURLTRANSPORT_H
+#ifndef SWORDXX_CURLTRANSPORT_H
+#define SWORDXX_CURLTRANSPORT_H
 
 #include "remotetrans.h"
 
@@ -85,4 +85,4 @@ public: /* Methods: */
 
 } /* namespace swordxx */
 
-#endif /* CURLTRANSPORT_H */
+#endif /* SWORDXX_CURLTRANSPORT_H */

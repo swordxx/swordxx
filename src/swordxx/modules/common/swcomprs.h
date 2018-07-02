@@ -21,8 +21,8 @@
  *
  */
 
-#ifndef SWCOMPRS_H
-#define SWCOMPRS_H
+#ifndef SWORDXX_SWCOMPRS_H
+#define SWORDXX_SWCOMPRS_H
 
 #include "../../defs.h"
 
@@ -66,4 +66,5 @@ protected: /* Fields: */
 };
 
 } /* namespace swordxx */
-#endif
+
+#endif /* SWORDXX_SWCOMPRS_H */

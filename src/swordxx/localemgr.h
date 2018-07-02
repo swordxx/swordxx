@@ -21,8 +21,8 @@
  *
  */
 
-#ifndef LOCALEMGR_H
-#define LOCALEMGR_H
+#ifndef SWORDXX_LOCALEMGR_H
+#define SWORDXX_LOCALEMGR_H
 
 #include <map>
 #include <memory>
@@ -124,4 +124,4 @@ private: /* Fields: */
 
 } /* namespace swordxx */
 
-#endif
+#endif /* SWORDXX_LOCALEMGR_H */

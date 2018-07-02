@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef CANON_H
-#define CANON_H
+#ifndef SWORDXX_CANON_H
+#define SWORDXX_CANON_H
 
 #include "canon_abbrevs.h"
 #include "versificationmgr.h"
@@ -336,8 +336,6 @@ int vm[] = {
   27, 21
 };
 
-
 } /* namespace swordxx */
 
-
-#endif
+#endif /* SWORDXX_CANON_H */

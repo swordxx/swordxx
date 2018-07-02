@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef CURLFTPT_H
-#define CURLFTPT_H
+#ifndef SWORDXX_CURLFTPT_H
+#define SWORDXX_CURLFTPT_H
 
 #include "curltransport.h"
 
@@ -55,4 +55,4 @@ private: /* Fields: */
 
 } /* namespace swordxx */
 
-#endif
+#endif /* SWORDXX_CURLFTPT_H */

@@ -21,8 +21,8 @@
  *
  */
 
-#ifndef RAWLD_H
-#define RAWLD_H
+#ifndef SWORDXX_RAWLDBASE_H
+#define SWORDXX_RAWLDBASE_H
 
 #include "../../swld.h"
 #include "../common/rawstr.h"
@@ -80,4 +80,5 @@ extern template class RawLdBase<RawStr>;
 extern template class RawLdBase<RawStr4>;
 
 } /* namespace swordxx */
-#endif
+
+#endif /* SWORDXX_RAWLDBASE_H */

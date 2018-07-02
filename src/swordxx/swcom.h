@@ -33,8 +33,8 @@
  *
  */
 
-#ifndef SWCOM_H
-#define SWCOM_H
+#ifndef SWORDXX_SWCOM_H
+#define SWORDXX_SWCOM_H
 
 #include "swmodule.h"
 
@@ -75,4 +75,5 @@ public:
 };
 
 } /* namespace swordxx */
-#endif
+
+#endif /* SWORDXX_SWCOM_H */

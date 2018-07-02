@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef OSISOSIS_H
-#define OSISOSIS_H
+#ifndef SWORDXX_OSISOSIS_H
+#define SWORDXX_OSISOSIS_H
 
 #include "../swbasicfilter.h"
 
@@ -63,4 +63,5 @@ public:
 };
 
 } /* namespace swordxx */
-#endif
+
+#endif /* SWORDXX_OSISOSIS_H */

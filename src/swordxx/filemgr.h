@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef FILEMGR_H
-#define FILEMGR_H
+#ifndef SWORDXX_FILEMGR_H
+#define SWORDXX_FILEMGR_H
 
 #include <string>
 #include <sys/stat.h>
@@ -223,4 +223,5 @@ public:
 
 
 } /* namespace swordxx */
-#endif
+
+#endif /* SWORDXX_FILEMGR_H */

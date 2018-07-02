@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef MARKUPFILTMGR_H
-#define MARKUPFILTMGR_H
+#ifndef SWORDXX_MARKUPFILTMGR_H
+#define SWORDXX_MARKUPFILTMGR_H
 
 #include "encfiltmgr.h"
 
@@ -66,4 +66,5 @@ public:
 };
 
 } /* namespace swordxx */
-#endif
+
+#endif /* SWORDXX_MARKUPFILTMGR_H */

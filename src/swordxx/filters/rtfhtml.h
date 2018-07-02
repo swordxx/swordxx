@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef RTFHTML_H
-#define RTFHTML_H
+#ifndef SWORDXX_RTFHTML_H
+#define SWORDXX_RTFHTML_H
 
 #include "../swfilter.h"
 
@@ -41,4 +41,5 @@ public:
 };
 
 } /* namespace swordxx */
-#endif
+
+#endif /* SWORDXX_RTFHTML_H */

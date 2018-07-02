@@ -1,5 +1,5 @@
-#ifndef FTPPARSE_H
-#define FTPPARSE_H
+#ifndef SWORDXX_FTPPARSE_H
+#define SWORDXX_FTPPARSE_H
 
 #include <time.h>
 
@@ -51,4 +51,4 @@ time is correct in the local time zone, and gmtime() for REMOTE* times.
 
 extern int ftpparse(struct FtpParseData *, char *, int);
 
-#endif
+#endif /* SWORDXX_FTPPARSE_H */

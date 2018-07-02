@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef INSTALLMGR_H
-#define INSTALLMGR_H
+#ifndef SWORDXX_INSTALLMGR_H
+#define SWORDXX_INSTALLMGR_H
 
 #include <map>
 #include <memory>
@@ -279,4 +279,4 @@ private: /* Methods: */
 
 } /* namespace swordxx */
 
-#endif
+#endif /* SWORDXX_INSTALLMGR_H */

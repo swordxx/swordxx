@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef SIZEDTYPES_H
-#define SIZEDTYPES_H
+#ifndef SWORDXX_SYSDATA_H
+#define SWORDXX_SYSDATA_H
 
 #include <cstdint>
 
@@ -96,4 +96,4 @@ constexpr uint64_t swapFromArch(uint64_t v) noexcept { return archtosword64(v); 
 
 } /* namespace swordxx */
 
-#endif
+#endif /* SWORDXX_SYSDATA_H */

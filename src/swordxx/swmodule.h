@@ -22,8 +22,8 @@
  *
  */
 
-#ifndef SWMODULE_H
-#define SWMODULE_H
+#ifndef SWORDXX_SWMODULE_H
+#define SWORDXX_SWMODULE_H
 
 #ifndef    _WIN32_WCE
 #include <iostream>
@@ -564,4 +564,5 @@ private: /* Methods: */
 };
 
 } /* namespace swordxx */
-#endif
+
+#endif /* SWORDXX_SWMODULE_H */

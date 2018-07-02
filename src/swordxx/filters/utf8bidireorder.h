@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef UTF8BIDIREORDER_H
-#define UTF8BIDIREORDER_H
+#ifndef SWORDXX_UTF8BIDIREORDER_H
+#define SWORDXX_UTF8BIDIREORDER_H
 
 #include "../swfilter.h"
 
@@ -50,5 +50,5 @@ public:
 };
 
 } /* namespace swordxx */
-#endif
 
+#endif /* SWORDXX_UTF8BIDIREORDER_H */

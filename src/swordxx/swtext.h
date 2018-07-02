@@ -21,8 +21,8 @@
  *
  */
 
-#ifndef SWTEXT_H
-#define SWTEXT_H
+#ifndef SWORDXX_SWTEXT_H
+#define SWORDXX_SWTEXT_H
 
 #include "swmodule.h"
 
@@ -61,4 +61,4 @@ public:
 
 } /* namespace swordxx */
 
-#endif
+#endif /* SWORDXX_SWTEXT_H */

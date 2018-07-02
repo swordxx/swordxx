@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef GBFHEADINGS_H
-#define GBFHEADINGS_H
+#ifndef SWORDXX_GBFHEADINGS_H
+#define SWORDXX_GBFHEADINGS_H
 
 #include "../offonoptionfilter.h"
 
@@ -40,4 +40,5 @@ public:
 };
 
 } /* namespace swordxx */
-#endif
+
+#endif /* SWORDXX_GBFHEADINGS_H */

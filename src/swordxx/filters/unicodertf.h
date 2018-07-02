@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef UNICODERTF_H
-#define UNICODERTF_H
+#ifndef SWORDXX_UNICODERTF_H
+#define SWORDXX_UNICODERTF_H
 
 #include "../swfilter.h"
 
@@ -39,4 +39,5 @@ public:
 };
 
 } /* namespace swordxx */
-#endif
+
+#endif /* SWORDXX_UNICODERTF_H */

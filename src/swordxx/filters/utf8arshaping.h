@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef UTF8ARSHAPING_H
-#define UTF8ARSHAPING_H
+#ifndef SWORDXX_UTF8ARSHAPING_H
+#define SWORDXX_UTF8ARSHAPING_H
 
 #include "../swfilter.h"
 
@@ -51,6 +51,5 @@ public:
 };
 
 } /* namespace swordxx */
-#endif
 
-
+#endif /* SWORDXX_UTF8ARSHAPING_H */

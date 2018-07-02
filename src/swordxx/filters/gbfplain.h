@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef GBFPLAIN_H
-#define GBFPLAIN_H
+#ifndef SWORDXX_GBFPLAIN_H
+#define SWORDXX_GBFPLAIN_H
 
 #include "../swfilter.h"
 
@@ -39,4 +39,5 @@ public:
 };
 
 } /* namespace swordxx */
-#endif
+
+#endif /* SWORDXX_GBFPLAIN_H */

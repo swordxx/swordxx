@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef TEIXHTML_H
-#define TEIXHTML_H
+#ifndef SWORDXX_TEIXHTML_H
+#define SWORDXX_TEIXHTML_H
 
 #include "../swbasicfilter.h"
 
@@ -60,4 +60,5 @@ public:
 };
 
 } /* namespace swordxx */
-#endif
+
+#endif /* SWORDXX_TEIXHTML_H */

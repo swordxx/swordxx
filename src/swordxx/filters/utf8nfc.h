@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef UTF8NFC_H
-#define UTF8NFC_H
+#ifndef SWORDXX_UTF8NFC_H
+#define SWORDXX_UTF8NFC_H
 
 #include "../swfilter.h"
 
@@ -50,4 +50,5 @@ public:
 };
 
 } /* namespace swordxx */
-#endif
+
+#endif /* SWORDXX_UTF8NFC_H */

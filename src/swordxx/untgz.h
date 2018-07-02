@@ -1,5 +1,5 @@
-#ifndef UNTGZ_H
-#define UNTGZ_H
+#ifndef SWORDXX_UNTGZ_H
+#define SWORDXX_UNTGZ_H
 
 #include <zlib.h>
 
@@ -13,4 +13,4 @@ int untargz(int fd, const char *dest) __attribute__ ((visibility("internal")));
 } /* extern "C" { */
 #endif
 
-#endif
+#endif /* SWORDXX_UNTGZ_H */

@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef SWGENBOOK_H
-#define SWGENBOOK_H
+#ifndef SWORDXX_SWGENBOOK_H
+#define SWORDXX_SWGENBOOK_H
 
 #include "swmodule.h"
 
@@ -60,4 +60,5 @@ private: /* Fields: */
 };
 
 } /* namespace swordxx */
-#endif
+
+#endif /* SWORDXX_SWGENBOOK_H */

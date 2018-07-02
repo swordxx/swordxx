@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef OSISMORPHSEGMENTATION_H
-#define OSISMORPHSEGMENTATION_H
+#ifndef SWORDXX_OSISMORPHSEGMENTATION_H
+#define SWORDXX_OSISMORPHSEGMENTATION_H
 
 #include "../offonoptionfilter.h"
 
@@ -45,4 +45,5 @@ public:
 };
 
 } /* namespace swordxx */
-#endif
+
+#endif /* SWORDXX_OSISMORPHSEGMENTATION_H */

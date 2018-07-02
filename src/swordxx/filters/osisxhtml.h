@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef OSISXHTML_H
-#define OSISXHTML_H
+#ifndef SWORDXX_OSISXHTML_H
+#define SWORDXX_OSISXHTML_H
 
 #include "../swbasicfilter.h"
 
@@ -92,4 +92,5 @@ public:
 };
 
 } /* namespace swordxx */
-#endif
+
+#endif /* SWORDXX_OSISXHTML_H */

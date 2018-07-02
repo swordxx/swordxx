@@ -21,8 +21,8 @@
  *
  */
 
-#ifndef ZLD_H
-#define ZLD_H
+#ifndef SWORDXX_ZLD_H
+#define SWORDXX_ZLD_H
 
 #include "../../swld.h"
 #include "../common/zstr.h"
@@ -81,4 +81,5 @@ protected: /* Methods: */
 };
 
 } /* namespace swordxx */
-#endif
+
+#endif /* SWORDXX_ZLD_H */

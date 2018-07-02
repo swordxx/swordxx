@@ -19,8 +19,8 @@
  * General Public License for more details.
  */
 
-#ifndef CANON_SYNODAL_H
-#define CANON_SYNODAL_H
+#ifndef SWORDXX_CANON_SYNODAL_H
+#define SWORDXX_CANON_SYNODAL_H
 
 namespace swordxx {
 
@@ -589,5 +589,4 @@ unsigned char mappings_synodal[] = {
 
 } /* namespace swordxx */
 
-
-#endif
+#endif /* SWORDXX_CANON_SYNODAL_H */

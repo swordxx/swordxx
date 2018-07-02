@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef GBFMORPH_H
-#define GBFMORPH_H
+#ifndef SWORDXX_GBFMORPH_H
+#define SWORDXX_GBFMORPH_H
 
 #include "../offonoptionfilter.h"
 
@@ -42,4 +42,5 @@ public:
 };
 
 } /* namespace swordxx */
-#endif
+
+#endif /* SWORDXX_GBFMORPH_H */

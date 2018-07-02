@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef UTF8HEBREWPOINTS_H
-#define UTF8HEBREWPOINTS_H
+#ifndef SWORDXX_UTF8HEBREWPOINTS_H
+#define SWORDXX_UTF8HEBREWPOINTS_H
 
 #include "../onoffoptionfilter.h"
 
@@ -42,4 +42,5 @@ public:
 };
 
 } /* namespace swordxx */
-#endif
+
+#endif /* SWORDXX_UTF8HEBREWPOINTS_H */

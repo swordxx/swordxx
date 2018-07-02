@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef UTF8NFKD_H
-#define UTF8NFKD_H
+#ifndef SWORDXX_UTF8NFKD_H
+#define SWORDXX_UTF8NFKD_H
 
 #include "../swfilter.h"
 
@@ -48,4 +48,5 @@ public:
 };
 
 } /* namespace swordxx */
-#endif
+
+#endif /* SWORDXX_UTF8NFKD_H */

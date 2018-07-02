@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef GBFWORDSJS_H
-#define GBFWORDSJS_H
+#ifndef SWORDXX_GBFWORDSJS_H
+#define SWORDXX_GBFWORDSJS_H
 
 #include "../offonoptionfilter.h"
 
@@ -60,4 +60,5 @@ public:
 };
 
 } /* namespace swordxx */
-#endif
+
+#endif /* SWORDXX_GBFWORDSJS_H */

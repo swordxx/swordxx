@@ -21,8 +21,8 @@
  *
  */
 
-#ifndef OSISREFERENCELINKS_H
-#define OSISREFERENCELINKS_H
+#ifndef SWORDXX_OSISREFERENCELINKS_H
+#define SWORDXX_OSISREFERENCELINKS_H
 
 #include "../onoffoptionfilter.h"
 
@@ -59,6 +59,5 @@ public:
 };
 
 } /* namespace swordxx */
-#endif
 
-
+#endif /* SWORDXX_OSISREFERENCELINKS_H */

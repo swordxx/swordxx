@@ -19,11 +19,10 @@
  * General Public License for more details.
  */
 
-#ifndef CANON_NULL_H
-#define CANON_NULL_H
+#ifndef SWORDXX_CANON_NULL_H
+#define SWORDXX_CANON_NULL_H
 
 namespace swordxx {
-
 
 // Versification system: null
 // Book order:
@@ -43,5 +42,4 @@ struct sbook ntbooks_null[] = {
 
 } /* namespace swordxx */
 
-
-#endif
+#endif /* SWORDXX_CANON_NULL_H */

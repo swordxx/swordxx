@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef UTILSTR_H
-#define UTILSTR_H
+#ifndef SWORDXX_UTILSTR_H
+#define SWORDXX_UTILSTR_H
 
 #include <cstddef>
 #include <cstdint>
@@ -333,7 +333,6 @@ std::wstring utf8ToWChar(const char *buf);
  */
 std::string wcharToUTF8(const wchar_t *buf);
 
-
-
 } /* namespace swordxx */
-#endif
+
+#endif /* SWORDXX_UTILSTR_H */

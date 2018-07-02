@@ -41,8 +41,8 @@
  *
  */
 
-#ifndef SWMGR_H
-#define SWMGR_H
+#ifndef SWORDXX_SWMGR_H
+#define SWORDXX_SWMGR_H
 
 #include <memory>
 #include <map>
@@ -446,4 +446,5 @@ public:
 };
 
 } /* namespace swordxx */
-#endif
+
+#endif /* SWORDXX_SWMGR_H */

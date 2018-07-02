@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef THMLHEADINGS_H
-#define THMLHEADINGS_H
+#ifndef SWORDXX_THMLHEADINGS_H
+#define SWORDXX_THMLHEADINGS_H
 
 #include "../offonoptionfilter.h"
 
@@ -42,4 +42,5 @@ public:
 };
 
 } /* namespace swordxx */
-#endif
+
+#endif /* SWORDXX_THMLHEADINGS_H */

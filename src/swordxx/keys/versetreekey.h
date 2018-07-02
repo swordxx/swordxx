@@ -22,8 +22,8 @@
  */
 
 
-#ifndef VERSETREEKEY_H
-#define VERSETREEKEY_H
+#ifndef SWORDXX_VERSETREEKEY_H
+#define SWORDXX_VERSETREEKEY_H
 
 #include "treekey.h"
 #include "versekey.h"
@@ -119,4 +119,4 @@ public:
 
 } /* namespace swordxx */
 
-#endif //VERSETREEKEY_H
+#endif /* SWORDXX_VERSETREEKEY_H */

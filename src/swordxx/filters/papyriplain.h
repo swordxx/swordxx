@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef PAPYRIPLAIN_H
-#define PAPYRIPLAIN_H
+#ifndef SWORDXX_PAPYRIPLAIN_H
+#define SWORDXX_PAPYRIPLAIN_H
 
 #include "../swoptfilter.h"
 
@@ -41,4 +41,5 @@ public:
 };
 
 } /* namespace swordxx */
-#endif
+
+#endif /* SWORDXX_PAPYRIPLAIN_H */

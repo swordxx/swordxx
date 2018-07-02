@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef TEIRTF_H
-#define TEIRTF_H
+#ifndef SWORDXX_TEIRTF_H
+#define SWORDXX_TEIRTF_H
 
 #include "../swbasicfilter.h"
 
@@ -57,4 +57,5 @@ public:
 };
 
 } /* namespace swordxx */
-#endif
+
+#endif /* SWORDXX_TEIRTF_H */

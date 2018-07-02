@@ -22,8 +22,8 @@
  *
  */
 
-#ifndef ENCFILTERMGR_H
-#define ENCFILTERMGR_H
+#ifndef SWORDXX_ENCFILTERMGR_H
+#define SWORDXX_ENCFILTERMGR_H
 
 #include "swfiltermgr.h"
 
@@ -80,4 +80,5 @@ private: /* Fields: */
 };
 
 } /* namespace swordxx */
-#endif
+
+#endif /* SWORDXX_ENCFILTERMGR_H */

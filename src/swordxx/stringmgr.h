@@ -21,9 +21,8 @@
  *
  */
 
-
-#ifndef STRINGMGR_H
-#define STRINGMGR_H
+#ifndef SWORDXX_STRINGMGR_H
+#define SWORDXX_STRINGMGR_H
 
 #include <cstring>
 #include <memory>
@@ -99,4 +98,4 @@ inline void toupperstr_utf8(std::string & str)
 } /* namespace swordxx */
 
 
-#endif //STRINGMGR_H
+#endif /* SWORDXX_STRINGMGR_H */

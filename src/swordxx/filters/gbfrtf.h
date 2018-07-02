@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef GBFRTF_H
-#define GBFRTF_H
+#ifndef SWORDXX_GBFRTF_H
+#define SWORDXX_GBFRTF_H
 
 #include "../swfilter.h"
 
@@ -39,4 +39,5 @@ public:
 };
 
 } /* namespace swordxx */
-#endif
+
+#endif /* SWORDXX_GBFRTF_H */

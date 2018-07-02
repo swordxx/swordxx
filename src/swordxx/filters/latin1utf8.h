@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef LATIN1UTF8_H
-#define LATIN1UTF8_H
+#ifndef SWORDXX_LATIN1UTF8_H
+#define SWORDXX_LATIN1UTF8_H
 
 #include "../swfilter.h"
 
@@ -39,4 +39,5 @@ public:
 };
 
 } /* namespace swordxx */
-#endif
+
+#endif /* SWORDXX_LATIN1UTF8_H */

@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef THMLFOOTNOTES_H
-#define THMLFOOTNOTES_H
+#ifndef SWORDXX_THMLFOOTNOTES_H
+#define SWORDXX_THMLFOOTNOTES_H
 
 #include "../offonoptionfilter.h"
 
@@ -42,4 +42,5 @@ public:
 };
 
 } /* namespace swordxx */
-#endif
+
+#endif /* SWORDXX_THMLFOOTNOTES_H */

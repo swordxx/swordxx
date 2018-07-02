@@ -22,8 +22,8 @@
  *
  */
 
-#ifndef SWKEY_H
-#define SWKEY_H
+#ifndef SWORDXX_SWKEY_H
+#define SWORDXX_SWKEY_H
 
 #include <cstdint>
 #include <memory>
@@ -220,4 +220,5 @@ inline bool operator<=(SWKey const & lhs, SWKey const & rhs) noexcept
 { return !(lhs.compare(rhs) > 0); }
 
 } /* namespace swordxx */
-#endif
+
+#endif /* SWORDXX_SWKEY_H */

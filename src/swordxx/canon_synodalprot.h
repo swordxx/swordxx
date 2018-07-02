@@ -19,8 +19,8 @@
  * General Public License for more details.
  */
 
-#ifndef CANON_SYNODALPROT_H
-#define CANON_SYNODALPROT_H
+#ifndef SWORDXX_CANON_SYNODALPROT_H
+#define SWORDXX_CANON_SYNODALPROT_H
 
 namespace swordxx {
 
@@ -309,8 +309,6 @@ int vm_synodalProt[] = {
   27, 21
 };
 
-
 } /* namespace swordxx */
 
-
-#endif
+#endif /* SWORDXX_CANON_SYNODALPROT_H */

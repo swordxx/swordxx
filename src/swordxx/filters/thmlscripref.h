@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef THMLSCRIPREF_H
-#define THMLSCRIPREF_H
+#ifndef SWORDXX_THMLSCRIPREF_H
+#define SWORDXX_THMLSCRIPREF_H
 
 #include "../offonoptionfilter.h"
 
@@ -42,4 +42,5 @@ public:
 };
 
 } /* namespace swordxx */
-#endif
+
+#endif /* SWORDXX_THMLSCRIPREF_H */

@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef OSISGLOSSES_H
-#define OSISGLOSSES_H
+#ifndef SWORDXX_OSISGLOSSES_H
+#define SWORDXX_OSISGLOSSES_H
 
 #include "../offonoptionfilter.h"
 
@@ -42,4 +42,5 @@ public:
 };
 
 } /* namespace swordxx */
-#endif
+
+#endif /* SWORDXX_OSISGLOSSES_H */

@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef OSISFOOTNOTES_H
-#define OSISFOOTNOTES_H
+#ifndef SWORDXX_OSISFOOTNOTES_H
+#define SWORDXX_OSISFOOTNOTES_H
 
 #include "../offonoptionfilter.h"
 
@@ -42,4 +42,5 @@ public:
 };
 
 } /* namespace swordxx */
-#endif
+
+#endif /* SWORDXX_OSISFOOTNOTES_H */

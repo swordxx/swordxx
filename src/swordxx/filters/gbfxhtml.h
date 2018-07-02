@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef GBFXHTML_H
-#define GBFXHTML_H
+#ifndef SWORDXX_GBFXHTML_H
+#define SWORDXX_GBFXHTML_H
 
 #include "../swbasicfilter.h"
 
@@ -55,4 +55,5 @@ public:
 };
 
 } /* namespace swordxx */
-#endif
+
+#endif /* SWORDXX_GBFXHTML_H */

@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef OSISLATEX_H
-#define OSISLATEX_H
+#ifndef SWORDXX_OSISLATEX_H
+#define SWORDXX_OSISLATEX_H
 
 #include "../swbasicfilter.h"
 
@@ -89,4 +89,5 @@ public:
 };
 
 } /* namespace swordxx */
-#endif
+
+#endif /* SWORDXX_OSISLATEX_H */

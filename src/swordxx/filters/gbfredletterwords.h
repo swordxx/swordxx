@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef GBFREDLETTERWORDS_H
-#define GBFREDLETTERWORDS_H
+#ifndef SWORDXX_GBFREDLETTERWORDS_H
+#define SWORDXX_GBFREDLETTERWORDS_H
 
 #include "../offonoptionfilter.h"
 
@@ -44,4 +44,5 @@ public:
 };
 
 } /* namespace swordxx */
-#endif
+
+#endif /* SWORDXX_GBFREDLETTERWORDS_H */

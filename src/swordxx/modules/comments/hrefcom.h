@@ -22,8 +22,8 @@
  *
  */
 
-#ifndef HREFCOM_H
-#define HREFCOM_H
+#ifndef SWORDXX_HREFCOM_H
+#define SWORDXX_HREFCOM_H
 
 #include "../../swcom.h"
 #include "../common/rawverse.h"
@@ -53,4 +53,5 @@ private: /* Fields: */
 };
 
 } /* namespace swordxx */
-#endif
+
+#endif /* SWORDXX_HREFCOM_H */

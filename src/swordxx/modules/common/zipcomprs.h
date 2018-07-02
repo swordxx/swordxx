@@ -21,8 +21,8 @@
  *
  */
 
-#ifndef ZIPCOMPRS_H
-#define ZIPCOMPRS_H
+#ifndef SWORDXX_ZIPCOMPRS_H
+#define SWORDXX_ZIPCOMPRS_H
 
 #include "swcomprs.h"
 
@@ -43,4 +43,5 @@ public:
 };
 
 } /* namespace swordxx */
-#endif
+
+#endif /* SWORDXX_ZIPCOMPRS_H */

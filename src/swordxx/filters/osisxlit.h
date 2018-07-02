@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef OSISXLIT_H
-#define OSISXLIT_H
+#ifndef SWORDXX_OSISXLIT_H
+#define SWORDXX_OSISXLIT_H
 
 #include "../offonoptionfilter.h"
 
@@ -42,4 +42,5 @@ public:
 };
 
 } /* namespace swordxx */
-#endif
+
+#endif /* SWORDXX_OSISXLIT_H */

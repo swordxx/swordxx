@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef ENTRIESBLK_H
-#define ENTRIESBLK_H
+#ifndef SWORDXX_ENTRIESBLK_H
+#define SWORDXX_ENTRIESBLK_H
 
 #include "../../defs.h"
 #include "../../sysdata.h"
@@ -54,4 +54,5 @@ public:
 
 
 } /* namespace swordxx */
-#endif
+
+#endif /* SWORDXX_ENTRIESBLK_H */

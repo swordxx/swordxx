@@ -22,8 +22,8 @@
  *
  */
 
-#ifndef RAWGENBOOK_H
-#define RAWGENBOOK_H
+#ifndef SWORDXX_RAWGENBOOK_H
+#define SWORDXX_RAWGENBOOK_H
 
 #include "../../swgenbook.h"
 
@@ -69,4 +69,5 @@ protected: /* Methods: */
 };
 
 } /* namespace swordxx */
-#endif
+
+#endif /* SWORDXX_RAWGENBOOK_H */

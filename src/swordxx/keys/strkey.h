@@ -21,8 +21,8 @@
  */
 
 
-#ifndef STRKEY_H
-#define STRKEY_H
+#ifndef SWORDXX_STRKEY_H
+#define SWORDXX_STRKEY_H
 
 #include "../swkey.h"
 
@@ -57,6 +57,7 @@ public:
   SWKEY_OPERATORS(StrKey)
 
 };
+
 } /* namespace swordxx */
 
-#endif
+#endif /* SWORDXX_STRKEY_H */

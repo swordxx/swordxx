@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef CIPHERFIL_H
-#define CIPHERFIL_H
+#ifndef SWORDXX_CIPHERFIL_H
+#define SWORDXX_CIPHERFIL_H
 
 #include "../swfilter.h"
 
@@ -52,4 +52,4 @@ private: /* Fields: */
 
 } /* namespace swordxx */
 
-#endif /* CIPHERFIL_H */
+#endif /* SWORDXX_CIPHERFIL_H */

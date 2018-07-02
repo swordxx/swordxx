@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef GREEKLEXATTRIBS_H
-#define GREEKLEXATTRIBS_H
+#ifndef SWORDXX_GREEKLEXATTRIBS_H
+#define SWORDXX_GREEKLEXATTRIBS_H
 
 #include "../swoptfilter.h"
 
@@ -41,4 +41,5 @@ public:
 };
 
 } /* namespace swordxx */
-#endif
+
+#endif /* SWORDXX_GREEKLEXATTRIBS_H */

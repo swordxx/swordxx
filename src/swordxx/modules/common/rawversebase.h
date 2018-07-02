@@ -23,8 +23,8 @@
  *
  */
 
-#ifndef RAWVERSEBASE_H
-#define RAWVERSEBASE_H
+#ifndef SWORDXX_RAWVERSEBASE_H
+#define SWORDXX_RAWVERSEBASE_H
 
 #include <cstdio>
 #include <string>
@@ -86,4 +86,4 @@ extern template class RawVerseBase<std::uint32_t>;
 
 } /* namespace swordxx */
 
-#endif /* RAWVERSEBASE_H */
+#endif /* SWORDXX_RAWVERSEBASE_H */

@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef TEIPLAIN_H
-#define TEIPLAIN_H
+#ifndef SWORDXX_TEIPLAIN_H
+#define SWORDXX_TEIPLAIN_H
 
 #include "../swbasicfilter.h"
 
@@ -56,4 +56,5 @@ public:
 };
 
 } /* namespace swordxx */
-#endif
+
+#endif /* SWORDXX_TEIPLAIN_H */

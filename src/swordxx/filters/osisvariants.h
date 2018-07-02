@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef OSISVARIANTS_H
-#define OSISVARIANTS_H
+#ifndef SWORDXX_OSISVARIANTS_H
+#define SWORDXX_OSISVARIANTS_H
 
 #include "../swoptfilter.h"
 
@@ -43,4 +43,5 @@ public:
 };
 
 } /* namespace swordxx */
-#endif
+
+#endif /* SWORDXX_OSISVARIANTS_H */

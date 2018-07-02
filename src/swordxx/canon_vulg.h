@@ -19,8 +19,8 @@
  * General Public License for more details.
  */
 
-#ifndef CANON_VULG_H
-#define CANON_VULG_H
+#ifndef SWORDXX_CANON_VULG_H
+#define SWORDXX_CANON_VULG_H
 
 namespace swordxx {
 
@@ -670,4 +670,4 @@ unsigned char mappings_vulg[] = {
 
 } /* namespace swordxx */
 
-#endif
+#endif /* SWORDXX_CANON_VULG_H */

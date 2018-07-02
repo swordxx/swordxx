@@ -23,8 +23,8 @@
  *
  */
 
-#ifndef SWBASICFILTER_H
-#define SWBASICFILTER_H
+#ifndef SWORDXX_SWBASICFILTER_H
+#define SWORDXX_SWBASICFILTER_H
 
 #include <map>
 #include <memory>
@@ -244,4 +244,4 @@ private: /* Fields: */
 
 } /* namespace swordxx */
 
-#endif
+#endif /* SWORDXX_SWBASICFILTER_H */

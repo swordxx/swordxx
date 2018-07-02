@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef THMLLEMMA_H
-#define THMLLEMMA_H
+#ifndef SWORDXX_THMLLEMMA_H
+#define SWORDXX_THMLLEMMA_H
 
 #include "../offonoptionfilter.h"
 
@@ -42,4 +42,5 @@ public:
 };
 
 } /* namespace swordxx */
-#endif
+
+#endif /* SWORDXX_THMLLEMMA_H */

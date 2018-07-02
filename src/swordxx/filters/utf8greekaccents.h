@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef UTF8GREEKACCENTS_H
-#define UTF8GREEKACCENTS_H
+#ifndef SWORDXX_UTF8GREEKACCENTS_H
+#define SWORDXX_UTF8GREEKACCENTS_H
 
 #include "../onoffoptionfilter.h"
 
@@ -42,4 +42,5 @@ public:
 };
 
 } /* namespace swordxx */
-#endif
+
+#endif /* SWORDXX_UTF8GREEKACCENTS_H */

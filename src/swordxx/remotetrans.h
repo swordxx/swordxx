@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef REMOTETRANS_H
-#define REMOTETRANS_H
+#ifndef SWORDXX_REMOTETRANS_H
+#define SWORDXX_REMOTETRANS_H
 
 #include <atomic>
 #include <cstddef>
@@ -99,4 +99,4 @@ public:
 
 } /* namespace swordxx */
 
-#endif
+#endif /* SWORDXX_REMOTETRANS_H */

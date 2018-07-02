@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef UTF8TRANSLITERATOR_H
-#define UTF8TRANSLITERATOR_H
+#ifndef SWORDXX_UTF8TRANSLITERATOR_H
+#define SWORDXX_UTF8TRANSLITERATOR_H
 
 #include "../swoptfilter.h"
 
@@ -93,4 +93,5 @@ public:
 };
 
 } /* namespace swordxx */
-#endif
+
+#endif /* SWORDXX_UTF8TRANSLITERATOR_H */

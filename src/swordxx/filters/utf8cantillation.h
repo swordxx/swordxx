@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef UTF8CANTILLATION_H
-#define UTF8CANTILLATION_H
+#ifndef SWORDXX_UTF8CANTILLATION_H
+#define SWORDXX_UTF8CANTILLATION_H
 
 #include "../offonoptionfilter.h"
 
@@ -42,4 +42,5 @@ public:
 };
 
 } /* namespace swordxx */
-#endif
+
+#endif /* SWORDXX_UTF8CANTILLATION_H */

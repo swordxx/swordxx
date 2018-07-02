@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef OSISLEMMA_H
-#define OSISLEMMA_H
+#ifndef SWORDXX_OSISLEMMA_H
+#define SWORDXX_OSISLEMMA_H
 
 #include "../offonoptionfilter.h"
 
@@ -42,4 +42,5 @@ public:
 };
 
 } /* namespace swordxx */
-#endif
+
+#endif /* SWORDXX_OSISLEMMA_H */

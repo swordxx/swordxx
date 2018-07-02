@@ -20,10 +20,8 @@
  *
  */
 
-//---------------------------------------------------------------------------
-#ifndef swlogH
-#define swlogH
-//---------------------------------------------------------------------------
+#ifndef SWORDXX_SWLOG_H
+#define SWORDXX_SWLOG_H
 
 #include <memory>
 #include <utility>
@@ -99,4 +97,5 @@ extern template
 void SWLog::logMessage<SWLog::LOG_DEBUG>(char const * fmt, ...) const;
 
 } /* namespace swordxx */
-#endif
+
+#endif /* SWORDXX_SWLOG_H */

@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef GBFTHML_H
-#define GBFTHML_H
+#ifndef SWORDXX_GBFTHML_H
+#define SWORDXX_GBFTHML_H
 
 #include "../swfilter.h"
 
@@ -39,4 +39,5 @@ public:
 };
 
 } /* namespace swordxx */
-#endif
+
+#endif /* SWORDXX_GBFTHML_H */

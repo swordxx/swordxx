@@ -22,8 +22,8 @@
  */
 
 
-#ifndef VERSEKEY_H
-#define VERSEKEY_H
+#ifndef SWORDXX_VERSEKEY_H
+#define SWORDXX_VERSEKEY_H
 
 #include "../swkey.h"
 
@@ -390,4 +390,4 @@ public:
 
 } /* namespace swordxx */
 
-#endif //VERSEKEY_H
+#endif /* SWORDXX_VERSEKEY_H */

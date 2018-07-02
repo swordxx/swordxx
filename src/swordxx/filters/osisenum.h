@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef OSISENUM_H
-#define OSISENUM_H
+#ifndef SWORDXX_OSISENUM_H
+#define SWORDXX_OSISENUM_H
 
 #include "../offonoptionfilter.h"
 
@@ -42,4 +42,5 @@ public:
 };
 
 } /* namespace swordxx */
-#endif
+
+#endif /* SWORDXX_OSISENUM_H */

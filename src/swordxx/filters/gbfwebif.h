@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef GBFWEBIF_H
-#define GBFWEBIF_H
+#ifndef SWORDXX_GBFWEBIF_H
+#define SWORDXX_GBFWEBIF_H
 
 #include "gbfxhtml.h"
 
@@ -45,4 +45,5 @@ public:
 };
 
 } /* namespace swordxx */
-#endif
+
+#endif /* SWORDXX_GBFWEBIF_H */

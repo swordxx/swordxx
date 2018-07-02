@@ -19,8 +19,8 @@
  * General Public License for more details.
  */
 
-#ifndef CANON_CATHOLIC_H
-#define CANON_CATHOLIC_H
+#ifndef SWORDXX_CANON_CATHOLIC_H
+#define SWORDXX_CANON_CATHOLIC_H
 
 namespace swordxx {
 
@@ -334,8 +334,6 @@ int vm_catholic[] = {
   27, 21
 };
 
-
 } /* namespace swordxx */
 
-
-#endif
+#endif /* SWORDXX_CANON_CATHOLIC_H */

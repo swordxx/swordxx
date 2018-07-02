@@ -23,8 +23,8 @@
  *
  */
 
-#ifndef ZSTR_H
-#define ZSTR_H
+#ifndef SWORDXX_ZSTR_H
+#define SWORDXX_ZSTR_H
 
 #include <string>
 #include "../../defs.h"
@@ -79,4 +79,5 @@ public:
 };
 
 } /* namespace swordxx */
-#endif
+
+#endif /* SWORDXX_ZSTR_H */

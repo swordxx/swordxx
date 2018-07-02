@@ -21,8 +21,8 @@
  *
  */
 
-#ifndef RAWCOM_H
-#define RAWCOM_H
+#ifndef SWORDXX_RAWCOM_H
+#define SWORDXX_RAWCOM_H
 
 #include "../../swcom.h"
 #include "../common/rawverse.h"
@@ -66,4 +66,4 @@ protected: /* Methods: */
 
 } /* namespace swordxx */
 
-#endif
+#endif /* SWORDXX_RAWCOM_H */

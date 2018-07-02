@@ -21,8 +21,8 @@
  *
  */
 
-#ifndef UTF8ARABICPOINTS_H
-#define UTF8ARABICPOINTS_H
+#ifndef SWORDXX_UTF8ARABICPOINTS_H
+#define SWORDXX_UTF8ARABICPOINTS_H
 
 #include "../onoffoptionfilter.h"
 
@@ -43,4 +43,5 @@ public:
 };
 
 } /* namespace swordxx */
-#endif
+
+#endif /* SWORDXX_UTF8ARABICPOINTS_H */

@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef THMLOSIS_H
-#define THMLOSIS_H
+#ifndef SWORDXX_THMLOSIS_H
+#define SWORDXX_THMLOSIS_H
 
 #include "../swfilter.h"
 
@@ -42,4 +42,5 @@ public:
 };
 
 } /* namespace swordxx */
-#endif /* THMLOSIS_H */
+
+#endif /* SWORDXX_THMLOSIS_H */

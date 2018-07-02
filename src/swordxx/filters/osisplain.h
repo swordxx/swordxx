@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef OSISPLAIN_H
-#define OSISPLAIN_H
+#ifndef SWORDXX_OSISPLAIN_H
+#define SWORDXX_OSISPLAIN_H
 
 #include "../swbasicfilter.h"
 
@@ -54,4 +54,5 @@ public:
 };
 
 } /* namespace swordxx */
-#endif
+
+#endif /* SWORDXX_OSISPLAIN_H */

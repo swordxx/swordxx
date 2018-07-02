@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef OSISRTF_H
-#define OSISRTF_H
+#ifndef SWORDXX_OSISRTF_H
+#define SWORDXX_OSISRTF_H
 
 #include "../swbasicfilter.h"
 
@@ -51,4 +51,5 @@ public:
 };
 
 } /* namespace swordxx */
-#endif
+
+#endif /* SWORDXX_OSISRTF_H */

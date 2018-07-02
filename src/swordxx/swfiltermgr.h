@@ -21,8 +21,8 @@
  *
  */
 
-#ifndef SWFILTERMGR_H
-#define SWFILTERMGR_H
+#ifndef SWORDXX_SWFILTERMGR_H
+#define SWORDXX_SWFILTERMGR_H
 
 #include "defs.h"
 #include "swconfig.h"
@@ -135,4 +135,4 @@ private: /* Fields: */
 
 } /* namespace swordxx */
 
-#endif /* SWFILTERMGR_H */
+#endif /* SWORDXX_SWFILTERMGR_H */

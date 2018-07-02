@@ -22,8 +22,8 @@
  *
  */
 
-#ifndef RAWFILES_H
-#define RAWFILES_H
+#ifndef SWORDXX_RAWFILES_H
+#define SWORDXX_RAWFILES_H
 
 #include "../../swcom.h"
 #include "../common/rawverse.h"
@@ -63,4 +63,5 @@ protected: /* Methods: */
 };
 
 } /* namespace swordxx */
-#endif
+
+#endif /* SWORDXX_RAWFILES_H */

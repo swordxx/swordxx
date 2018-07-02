@@ -21,8 +21,8 @@
  *
  */
 
-#ifndef BZ2COMPRS_H
-#define BZ2COMPRS_H
+#ifndef SWORDXX_BZ2COMPRS_H
+#define SWORDXX_BZ2COMPRS_H
 
 #include "swcomprs.h"
 
@@ -43,4 +43,5 @@ public:
 };
 
 } /* namespace swordxx */
-#endif
+
+#endif /* SWORDXX_BZ2COMPRS_H */

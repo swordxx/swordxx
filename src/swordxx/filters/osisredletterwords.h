@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef OSISREDLETTERWORDS_H
-#define OSISREDLETTERWORDS_H
+#ifndef SWORDXX_OSISREDLETTERWORDS_H
+#define SWORDXX_OSISREDLETTERWORDS_H
 
 #include "../onoffoptionfilter.h"
 
@@ -42,4 +42,5 @@ public:
 };
 
 } /* namespace swordxx */
-#endif
+
+#endif /* SWORDXX_OSISREDLETTERWORDS_H */

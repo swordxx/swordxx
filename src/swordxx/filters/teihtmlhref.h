@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef TEIHTMLHREF_H
-#define TEIHTMLHREF_H
+#ifndef SWORDXX_TEIHTMLHREF_H
+#define SWORDXX_TEIHTMLHREF_H
 
 #include "../swbasicfilter.h"
 
@@ -59,4 +59,5 @@ public:
 };
 
 } /* namespace swordxx */
-#endif
+
+#endif /* SWORDXX_TEIHTMLHREF_H */

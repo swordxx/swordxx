@@ -19,8 +19,8 @@
  * General Public License for more details.
  */
 
-#ifndef CANON_NRSVA_H
-#define CANON_NRSVA_H
+#ifndef SWORDXX_CANON_NRSVA_H
+#define SWORDXX_CANON_NRSVA_H
 
 namespace swordxx {
 
@@ -368,8 +368,6 @@ int vm_nrsva[] = {
   27, 21
 };
 
-
 } /* namespace swordxx */
 
-
-#endif
+#endif /* SWORDXX_CANON_NRSVA_H */

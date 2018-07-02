@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef OSISWORDSJS_H
-#define OSISWORDSJS_H
+#ifndef SWORDXX_OSISWORDSJS_H
+#define SWORDXX_OSISWORDSJS_H
 
 #include "../offonoptionfilter.h"
 
@@ -60,4 +60,5 @@ public:
 };
 
 } /* namespace swordxx */
-#endif
+
+#endif /* SWORDXX_OSISWORDSJS_H */

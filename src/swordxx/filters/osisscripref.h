@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef OSISSCRIPREF_H
-#define OSISSCRIPREF_H
+#ifndef SWORDXX_OSISSCRIPREF_H
+#define SWORDXX_OSISSCRIPREF_H
 
 #include "../offonoptionfilter.h"
 
@@ -42,4 +42,5 @@ public:
 };
 
 } /* namespace swordxx */
-#endif
+
+#endif /* SWORDXX_OSISSCRIPREF_H */

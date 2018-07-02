@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef THMLLATEX_H
-#define THMLLATEX_H
+#ifndef SWORDXX_THMLLATEX_H
+#define SWORDXX_THMLLATEX_H
 
 #include "../swbasicfilter.h"
 
@@ -64,4 +64,4 @@ public:
 
 } /* namespace swordxx */
 
-#endif
+#endif /* SWORDXX_THMLLATEX_H */

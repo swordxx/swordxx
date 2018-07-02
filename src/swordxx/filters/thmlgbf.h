@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef THMLGBF_H
-#define THMLGBF_H
+#ifndef SWORDXX_THMLGBF_H
+#define SWORDXX_THMLGBF_H
 
 #include "../swfilter.h"
 
@@ -42,4 +42,5 @@ public:
 };
 
 } /* namespace swordxx */
-#endif
+
+#endif /* SWORDXX_THMLGBF_H */
