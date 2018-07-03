@@ -335,9 +335,9 @@ char SWMgr::findConfig(std::string & prefixPath, std::string & configPath, std::
     }
 
     SWConfig * sysConf = nullptr;
-    std::string sysConfDataPath = "";
+    std::string sysConfDataPath;
 
-    std::string homeDir = getHomeDir();
+    auto const homeDir(getHomeDir());
 
     // check for a sysConf passed in to us
     SWLog::getSystemLog()->logDebug("Checking for provided SWConfig(\"swordxx.conf\")...");
