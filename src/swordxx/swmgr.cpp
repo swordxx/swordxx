@@ -292,10 +292,10 @@ SWMgr::SWMgr(char const * iConfigPath,
         m_configPath = path;
     }
     else {
-        if (FileMgr::existsDir(path.c_str(), "mods.d")) {
-            m_prefixPath = path;
-            path += "mods.d";
-            m_configPath = path;
+        auto checkPath(path + "mods.d");
+        if (FileMgr::isReadable(checkPath)) {
+            m_prefixPath = std::move(path);
+            m_configPath = std::move(checkPath);
             configType = 1;
         }
     }
