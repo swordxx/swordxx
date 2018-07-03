@@ -428,7 +428,7 @@ int InstallMgr::refreshRemoteSource(InstallSource & is) {
 
     FileMgr::removeDir(target.c_str());
 
-    if (!FileMgr::existsDir(target.c_str()))
+    if (!FileMgr::exists(target))
         FileMgr::createPathAndFile((target+"/globals.conf").c_str());
 
     std::string archive = target + ".tar.gz";
