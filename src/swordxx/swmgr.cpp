@@ -588,8 +588,7 @@ char SWMgr::findConfig(std::string & prefixPath, std::string & configPath, std::
             return 2;
         }
 
-        path = homeDir;
-        path += "swordxx/";
+        path = homeDir + "swordxx/";
         SWLog::getSystemLog()->logDebug("  Checking for %smods.d...", path.c_str());
         if (FileMgr::existsDir(path.c_str(), "mods.d")) {
             SWLog::getSystemLog()->logDebug("found.");
