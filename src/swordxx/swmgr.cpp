@@ -322,8 +322,6 @@ char SWMgr::findConfig(std::string & prefixPath, std::string & configPath, std::
     static bool setLogLevel = false;
     std::string path;
     std::string sysConfPath;
-    ConfigEntMap::iterator entry;
-    ConfigEntMap::iterator lastEntry;
 
     if (!setLogLevel) {
         auto const envVar(::getenv("SWORD_LOGLEVEL"));
@@ -355,8 +353,11 @@ char SWMgr::findConfig(std::string & prefixPath, std::string & configPath, std::
             SWLog::getSystemLog()->logDebug("Overriding any systemwide or ~/.swordxx/ swordxx.conf with one found in current directory.");
             sysConfPath = "./swordxx.conf";
             sysConf = new SWConfig(sysConfPath.c_str());
-            if ((entry = sysConf->sections()["Install"].find("DataPath")) != sysConf->sections()["Install"].end()) {
-                sysConfDataPath = (*entry).second;
+            {
+                auto const & section = sysConf->sections()["Install"];
+                auto const entry(section.find("DataPath"));
+                if (entry != section.end())
+                    sysConfDataPath = entry->second;
             }
             if (!setLogLevel) { setSystemLogLevel(sysConf); setLogLevel = true; }
             if (providedSysConf) {
@@ -464,8 +465,11 @@ char SWMgr::findConfig(std::string & prefixPath, std::string & configPath, std::
 
     if (sysConf) {
         if (!setLogLevel) { setSystemLogLevel(sysConf); setLogLevel = true; }
-        if ((entry = sysConf->sections()["Install"].find("DataPath")) != sysConf->sections()["Install"].end()) {
-            sysConfDataPath = (*entry).second;
+        {
+            auto const & section = sysConf->sections()["Install"];
+            auto const entry(section.find("DataPath"));
+            if (entry != section.end())
+                sysConfDataPath = entry->second;
         }
         if (!sysConfDataPath.empty()) {
             addTrailingDirectorySlash(sysConfDataPath);
@@ -499,9 +503,10 @@ char SWMgr::findConfig(std::string & prefixPath, std::string & configPath, std::
         if (!setLogLevel) { setSystemLogLevel(sysConf); setLogLevel = true; }
         if (augPaths) {
             augPaths->clear();
-            entry     = sysConf->sections()["Install"].lower_bound("AugmentPath");
-            lastEntry = sysConf->sections()["Install"].upper_bound("AugmentPath");
-            for (;entry != lastEntry; entry++) {
+            auto const & section = sysConf->sections()["Install"];
+            auto entry(section.lower_bound("AugmentPath"));
+            auto const lastEntry(section.upper_bound("AugmentPath"));
+            for (; entry != lastEntry; ++entry) {
                 path = entry->second;
                 addTrailingDirectorySlash(path);
                 augPaths->push_back(path);
