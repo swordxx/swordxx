@@ -348,32 +348,38 @@ char SWMgr::findConfig(std::string & prefixPath, std::string & configPath, std::
     if (!sysConf) {
         // check working directory
         SWLog::getSystemLog()->logDebug("Checking working directory for swordxx.conf...");
-        if (FileMgr::existsFile(".", "swordxx.conf")) {
-            SWLog::getSystemLog()->logDebug("Overriding any systemwide or ~/.swordxx/ swordxx.conf with one found in current directory.");
-            sysConfPath = "./swordxx.conf";
-            sysConf = new SWConfig(sysConfPath.c_str());
-            {
-                auto const & section = sysConf->sections()["Install"];
-                auto const entry(section.find("DataPath"));
-                if (entry != section.end())
-                    sysConfDataPath = entry->second;
-            }
-            if (!setLogLevel) { setSystemLogLevel(sysConf); setLogLevel = true; }
-            if (providedSysConf) {
-                *providedSysConf = sysConf;
-            }
-            else {
-                delete sysConf;
-                sysConf = nullptr;
+        {
+            auto checkPath("./swordxx.conf");
+            if (FileMgr::isReadable(checkPath)) {
+                SWLog::getSystemLog()->logDebug("Overriding any systemwide or ~/.swordxx/ swordxx.conf with one found in current directory.");
+                sysConfPath = std::move(checkPath);
+                sysConf = new SWConfig(sysConfPath.c_str());
+                {
+                    auto const & section = sysConf->sections()["Install"];
+                    auto const entry(section.find("DataPath"));
+                    if (entry != section.end())
+                        sysConfDataPath = entry->second;
+                }
+                if (!setLogLevel) { setSystemLogLevel(sysConf); setLogLevel = true; }
+                if (providedSysConf) {
+                    *providedSysConf = sysConf;
+                }
+                else {
+                    delete sysConf;
+                    sysConf = nullptr;
+                }
             }
         }
         if (sysConfDataPath.empty()) {
             SWLog::getSystemLog()->logDebug("Checking working directory for mods.conf...");
-            if (FileMgr::existsFile(".", "mods.conf")) {
-                SWLog::getSystemLog()->logDebug("found.");
-                prefixPath = "./";
-                configPath = "./mods.conf";
-                return configType;
+            {
+                auto checkPath("./mods.conf");
+                if (FileMgr::isReadable(checkPath)) {
+                    SWLog::getSystemLog()->logDebug("found.");
+                    prefixPath = "./";
+                    configPath = std::move(checkPath);
+                    return configType;
+                }
             }
 
             SWLog::getSystemLog()->logDebug("Checking working directory for mods.d...");
@@ -409,12 +415,14 @@ char SWMgr::findConfig(std::string & prefixPath, std::string & configPath, std::
                     addTrailingDirectorySlash(path);
 
                     SWLog::getSystemLog()->logDebug("Checking $SWORDXX_PATH for mods.conf...");
-                    if (FileMgr::existsFile(path.c_str(), "mods.conf")) {
-                        SWLog::getSystemLog()->logDebug("found.");
-                        prefixPath = path;
-                        path += "mods.conf";
-                        configPath = std::move(path);
-                        return configType;
+                    {
+                        auto checkPath(path + "mods.conf");
+                        if (FileMgr::isReadable(checkPath)) {
+                            SWLog::getSystemLog()->logDebug("found.");
+                            prefixPath = std::move(path);
+                            configPath = std::move(checkPath);
+                            return configType;
+                        }
                     }
 
                     SWLog::getSystemLog()->logDebug("Checking $SWORDXX_PATH for mods.d...");
@@ -442,24 +450,24 @@ char SWMgr::findConfig(std::string & prefixPath, std::string & configPath, std::
                 {
                     SWLog::getSystemLog()->logDebug("Checking for %s...",
                                                     gfp.c_str());
-                    if (FileMgr::existsFile(gfp.c_str())) {
+                    if (FileMgr::isReadable(gfp)) {
                         SWLog::getSystemLog()->logDebug("found.");
-                        sysConfPath = gfp;
+                        sysConfPath = std::move(gfp);
                         break;
                     }
                 }
             }
 
             if (!homeDir.empty()) {
-                std::string const tryPath(homeDir + ".swordxx/swordxx.conf");
-                if (FileMgr::existsFile(tryPath.c_str())) {
-                    SWLog::getSystemLog()->logDebug("Overriding any systemwide swordxx.conf with one found in users home directory (%s)", tryPath.c_str());
-                    sysConfPath = tryPath;
+                std::string checkPath(homeDir + ".swordxx/swordxx.conf");
+                if (FileMgr::isReadable(checkPath)) {
+                    SWLog::getSystemLog()->logDebug("Overriding any systemwide swordxx.conf with one found in users home directory (%s)", checkPath.c_str());
+                    sysConfPath = std::move(checkPath);
                 } else {
-                    std::string const tryPath2(homeDir + "swordxx/swordxx.conf");
-                    if (FileMgr::existsFile(tryPath2.c_str())) {
-                        SWLog::getSystemLog()->logDebug("Overriding any systemwide swordxx.conf with one found in users home directory (%s)", tryPath2.c_str());
-                        sysConfPath = tryPath2;
+                    std::string checkPath2(homeDir + "swordxx/swordxx.conf");
+                    if (FileMgr::isReadable(checkPath2)) {
+                        SWLog::getSystemLog()->logDebug("Overriding any systemwide swordxx.conf with one found in users home directory (%s)", checkPath2.c_str());
+                        sysConfPath = std::move(checkPath2);
                     }
                 }
             }
@@ -485,7 +493,7 @@ char SWMgr::findConfig(std::string & prefixPath, std::string & configPath, std::
             SWLog::getSystemLog()->logDebug("DataPath in %s is set to %s.", sysConfPath.c_str(), path.c_str());
             SWLog::getSystemLog()->logDebug("Checking for mods.conf in DataPath...");
 
-            if (FileMgr::existsFile(path.c_str(), "mods.conf")) {
+            if (FileMgr::isReadable(path + "mods.conf")) {
                 SWLog::getSystemLog()->logDebug("found.");
                 prefixPath = path;
                 path += "mods.conf";
@@ -587,12 +595,14 @@ char SWMgr::findConfig(std::string & prefixPath, std::string & configPath, std::
         auto path(homeDir);
         path += ".swordxx/";
         SWLog::getSystemLog()->logDebug("  Checking for %smods.conf...", path.c_str());
-        if (FileMgr::existsFile(path.c_str(), "mods.conf")) {
-            SWLog::getSystemLog()->logDebug("found.");
-            prefixPath = path;
-            path += "mods.conf";
-            configPath = std::move(path);
-            return configType;
+        {
+            auto checkPath(path + "mods.conf");
+            if (FileMgr::isReadable(checkPath)) {
+                SWLog::getSystemLog()->logDebug("found.");
+                prefixPath = std::move(path);
+                configPath = std::move(checkPath);
+                return configType;
+            }
         }
 
         SWLog::getSystemLog()->logDebug("  Checking for %smods.d...", path.c_str());
