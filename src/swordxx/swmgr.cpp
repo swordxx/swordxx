@@ -377,20 +377,26 @@ char SWMgr::findConfig(std::string & prefixPath, std::string & configPath, std::
             }
 
             SWLog::getSystemLog()->logDebug("Checking working directory for mods.d...");
-            if (FileMgr::existsDir(".", "mods.d")) {
-                SWLog::getSystemLog()->logDebug("found.");
-                prefixPath = "./";
-                configPath = "./mods.d";
-                return 1;
+            {
+                std::string checkPath("./mods.d");
+                if (FileMgr::isReadable(checkPath)) {
+                    SWLog::getSystemLog()->logDebug("found.");
+                    prefixPath = "./";
+                    configPath = std::move(checkPath);
+                    return 1;
+                }
             }
 
             // check working directory ../library/
             SWLog::getSystemLog()->logDebug("Checking working directory ../library/ for mods.d...");
-            if (FileMgr::existsDir("../library", "mods.d")) {
-                SWLog::getSystemLog()->logDebug("found.");
-                prefixPath = "../library/";
-                configPath = "../library/mods.d";
-                return 1;
+            {
+                std::string checkPath("../library/mods.d");
+                if (FileMgr::isReadable(checkPath)) {
+                    SWLog::getSystemLog()->logDebug("found.");
+                    prefixPath = "../library/";
+                    configPath = std::move(checkPath);
+                    return 1;
+                }
             }
 
             // check environment variable SWORDXX_PATH
@@ -412,12 +418,14 @@ char SWMgr::findConfig(std::string & prefixPath, std::string & configPath, std::
                     }
 
                     SWLog::getSystemLog()->logDebug("Checking $SWORDXX_PATH for mods.d...");
-                    if (FileMgr::existsDir(path.c_str(), "mods.d")) {
-                        SWLog::getSystemLog()->logDebug("found.");
-                        prefixPath = path;
-                        path += "mods.d";
-                        configPath = std::move(path);
-                        return 1;
+                    {
+                        auto checkPath(path + "mods.d");
+                        if (FileMgr::isReadable(checkPath)) {
+                            SWLog::getSystemLog()->logDebug("found.");
+                            prefixPath = std::move(path);
+                            configPath = std::move(checkPath);
+                            return 1;
+                        }
                     }
                 }
             }
@@ -487,12 +495,14 @@ char SWMgr::findConfig(std::string & prefixPath, std::string & configPath, std::
 
             SWLog::getSystemLog()->logDebug("Checking for mods.d in DataPath...");
 
-            if (FileMgr::existsDir(path.c_str(), "mods.d")) {
-                SWLog::getSystemLog()->logDebug("found.");
-                prefixPath = path;
-                path += "mods.d";
-                configPath = path;
-                configType = 1;
+            {
+                auto checkPath(path + "mods.d");
+                if (FileMgr::isReadable(checkPath)) {
+                    SWLog::getSystemLog()->logDebug("found.");
+                    prefixPath = std::move(path);
+                    configPath = std::move(checkPath);
+                    configType = 1;
+                }
             }
         }
     }
@@ -536,11 +546,11 @@ char SWMgr::findConfig(std::string & prefixPath, std::string & configPath, std::
 
             path += "Application Data/swordxx/";
             SWLog::getSystemLog()->logDebug("Checking %s for mods.d...", path.c_str());
-            if (FileMgr::existsDir(path.c_str(), "mods.d")) {
+            auto checkPath(path + "mods.d");
+            if (FileMgr::isReadable(checkPath)) {
                 SWLog::getSystemLog()->logDebug("found.");
-                prefixPath = path;
-                path += "mods.d";
-                configPath = std::move(path);
+                prefixPath = std::move(path);
+                configPath = std::move(checkPath);
                 return 1;
             }
         }
@@ -557,12 +567,14 @@ char SWMgr::findConfig(std::string & prefixPath, std::string & configPath, std::
         addTrailingDirectorySlash(path);
 
         SWLog::getSystemLog()->logDebug("Checking %s for mods.d...", path.c_str());
-        if (FileMgr::existsDir(path.c_str(), "mods.d")) {
-            SWLog::getSystemLog()->logDebug("found.");
-            prefixPath = path;
-            path += "mods.d";
-            configPath = std::move(path);
-            return 1;
+        {
+            auto checkPath(path + "mods.d");
+            if (FileMgr::isReadable(checkPath)) {
+                SWLog::getSystemLog()->logDebug("found.");
+                prefixPath = std::move(path);
+                configPath = std::move(checkPath);
+                return 1;
+            }
         }
     }
 
@@ -584,22 +596,26 @@ char SWMgr::findConfig(std::string & prefixPath, std::string & configPath, std::
         }
 
         SWLog::getSystemLog()->logDebug("  Checking for %smods.d...", path.c_str());
-        if (FileMgr::existsDir(path.c_str(), "mods.d")) {
-            SWLog::getSystemLog()->logDebug("found.");
-            prefixPath = path;
-            path += "mods.d";
-            configPath = std::move(path);
-            return 2;
+        {
+            auto checkPath(path + "mods.d");
+            if (FileMgr::isReadable(checkPath)) {
+                SWLog::getSystemLog()->logDebug("found.");
+                prefixPath = std::move(path);
+                configPath = std::move(checkPath);
+                return 2;
+            }
         }
 
         path = homeDir + "swordxx/";
         SWLog::getSystemLog()->logDebug("  Checking for %smods.d...", path.c_str());
-        if (FileMgr::existsDir(path.c_str(), "mods.d")) {
-            SWLog::getSystemLog()->logDebug("found.");
-            prefixPath = path;
-            path += "mods.d";
-            configPath = std::move(path);
-            return 2;
+        {
+            auto checkPath(path + "mods.d");
+            if (FileMgr::isReadable(checkPath)) {
+                SWLog::getSystemLog()->logDebug("found.");
+                prefixPath = std::move(path);
+                configPath = std::move(checkPath);
+                return 2;
+            }
         }
     }
     return configType;
