@@ -508,7 +508,7 @@ char SWMgr::findConfig(std::string & prefixPath, std::string & configPath, std::
             for (; entry != lastEntry; ++entry) {
                 auto path(entry->second);
                 addTrailingDirectorySlash(path);
-                augPaths->push_back(path);
+                augPaths->emplace_back(std::move(path));
             }
         }
         if (providedSysConf) {
