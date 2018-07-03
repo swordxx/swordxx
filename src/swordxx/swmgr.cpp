@@ -550,10 +550,9 @@ char SWMgr::findConfig(std::string & prefixPath, std::string & configPath, std::
 
     SWLog::getSystemLog()->logDebug("Checking $HOME/Library/Application Support/SwordXX/...");
 
-    std::string pathCheck = getHomeDir();
-    if (!pathCheck.empty()) {
-        SWLog::getSystemLog()->logDebug("found (%s).", pathCheck.c_str());
-        auto path(pathCheck);
+    if (!homeDir.empty()) {
+        SWLog::getSystemLog()->logDebug("found (%s).", homeDir.c_str());
+        auto path(homeDir);
         addTrailingDirectorySlash(path);
 
         SWLog::getSystemLog()->logDebug("Checking %s for mods.d...", path.c_str());
