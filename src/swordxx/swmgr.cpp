@@ -499,11 +499,8 @@ char SWMgr::findConfig(std::string & prefixPath, std::string & configPath, std::
                 path += "mods.conf";
                 configPath = path;
                 configType = 1;
-            }
-
-            SWLog::getSystemLog()->logDebug("Checking for mods.d in DataPath...");
-
-            {
+            } else {
+                SWLog::getSystemLog()->logDebug("Checking for mods.d in DataPath...");
                 auto checkPath(path + "mods.d");
                 if (FileMgr::isReadable(checkPath)) {
                     SWLog::getSystemLog()->logDebug("found.");
