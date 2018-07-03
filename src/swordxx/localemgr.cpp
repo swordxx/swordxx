@@ -87,8 +87,8 @@ LocaleMgr::LocaleMgr(char const * const iConfigPath)
         loadConfigDir(iConfigPath);
     }
 
-    std::string path;
     if (!prefixPath.empty()) {
+        std::string path;
         switch (configType) {
         case 2: {
             std::size_t i = configPath.size() - 1u;
@@ -104,16 +104,19 @@ LocaleMgr::LocaleMgr(char const * const iConfigPath)
             addTrailingDirectorySlash(path);
             break;
         }
-        if (FileMgr::existsDir(path.c_str(), "locales.d")) {
-            path += "locales.d";
+        path += "locales.d";
+        if (FileMgr::isReadable(path))
             loadConfigDir(path.c_str());
-        }
     }
 
-    if (augPaths.size() && configType != 9) //load locale files from all augmented paths
-        for (auto const & augPath : augPaths)
-            if (FileMgr::existsDir(augPath.c_str(), "locales.d"))
-                loadConfigDir((augPath + "locales.d").c_str());
+    // Load locale files from all augmented paths:
+    if (augPaths.size() && configType != 9) {
+        for (auto const & augPath : augPaths) {
+            auto const path(augPath + "/locales.d");
+            if (FileMgr::isReadable(path))
+                loadConfigDir(path.c_str());
+        }
+    }
 }
 
 LocaleMgr::~LocaleMgr() noexcept {}
