@@ -528,20 +528,21 @@ char SWMgr::findConfig(std::string & prefixPath, std::string & configPath, std::
 
     SWLog::getSystemLog()->logDebug("Checking $ALLUSERSPROFILE/Application Data/swordxx/...");
 
-    std::string envallusersdir(getEnvironmentVariable("ALLUSERSPROFILE"));
-    if (!envallusersdir.empty()) {
-        SWLog::getSystemLog()->logDebug("found (%s).", envallusersdir.c_str());
-        auto path(envallusersdir);
-        addTrailingDirectorySlash(path);
+    {
+        std::string path(getEnvironmentVariable("ALLUSERSPROFILE"));
+        if (!path.empty()) {
+            SWLog::getSystemLog()->logDebug("found (%s).", path.c_str());
+            addTrailingDirectorySlash(path);
 
-        path += "Application Data/swordxx/";
-        SWLog::getSystemLog()->logDebug("Checking %s for mods.d...", path.c_str());
-        if (FileMgr::existsDir(path.c_str(), "mods.d")) {
-            SWLog::getSystemLog()->logDebug("found.");
-            prefixPath = path;
-            path += "mods.d";
-            configPath = std::move(path);
-            return 1;
+            path += "Application Data/swordxx/";
+            SWLog::getSystemLog()->logDebug("Checking %s for mods.d...", path.c_str());
+            if (FileMgr::existsDir(path.c_str(), "mods.d")) {
+                SWLog::getSystemLog()->logDebug("found.");
+                prefixPath = path;
+                path += "mods.d";
+                configPath = std::move(path);
+                return 1;
+            }
         }
     }
 
