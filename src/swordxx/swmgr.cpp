@@ -789,187 +789,183 @@ std::shared_ptr<SWModule> SWMgr::createModule(std::string const & name,
                                               std::string const & driver,
                                               ConfigEntMap section)
 {
-    std::string description, datapath, misc1;
-    ConfigEntMap::const_iterator entry;
-    std::string lang, sourceformat, encoding;
-    SWTextDirection direction;
-    SWTextMarkup markup;
-    TextEncoding enc;
+    auto const getEntry =
+            [&section](char const * const key,
+                       std::string defValue = std::string())
+            {
+                auto const it(section.find(key));
+                return (it != section.end()) ? it->second : defValue;
+            };
 
-    description  = ((entry = section.find("Description")) != section.end()) ? (*entry).second : std::string();
-    lang  = ((entry = section.find("Lang")) != section.end()) ? (*entry).second : std::string("en");
-     sourceformat = ((entry = section.find("SourceType"))  != section.end()) ? (*entry).second : std::string();
-     encoding = ((entry = section.find("Encoding"))  != section.end()) ? (*entry).second : std::string();
-    datapath = m_prefixPath;
+    auto datapath(m_prefixPath);
     addTrailingDirectorySlash(datapath);
-
-    std::string versification = ((entry = section.find("Versification"))  != section.end()) ? (*entry).second : std::string("KJV");
+    auto description(getEntry("Description"));
+    auto versification(getEntry("Versification", "KJV"));
+    auto lang(getEntry("Lang", "en"));
 
     // DataPath - relative path to data used by module driver.  May be a directory, may be a File.
     //   Typically not useful by outside world.  See AbsoluteDataPath, PrefixPath, and RelativePrefixPath
     //   below.
-    misc1 += ((entry = section.find("DataPath")) != section.end()) ? (*entry).second : std::string();
-    char const * buf2 = misc1.c_str();
-//    for (; ((*buf2) && ((*buf2 == '.') || (*buf2 == '/') || (*buf2 == '\\'))); buf2++);
-    for (; ((*buf2) && ((*buf2 == '/') || (*buf2 == '\\'))); buf2++);
-    if (!std::strncmp(buf2, "./", 2)) { //remove the leading ./ in the module data path to make it look better
-        buf2 += 2;
+    {
+        auto const dataPathEntry(getEntry("DataPath"));
+        auto const * buf2 = dataPathEntry.c_str();
+    //    for (; ((*buf2) && ((*buf2 == '.') || (*buf2 == '/') || (*buf2 == '\\'))); buf2++);
+        for (; ((*buf2) && ((*buf2 == '/') || (*buf2 == '\\'))); buf2++);
+        if (!std::strncmp(buf2, "./", 2)) { //remove the leading ./ in the module data path to make it look better
+            buf2 += 2;
+        }
+        // PrefixPath - absolute directory path to the repository in which this module was found
+        section["PrefixPath"] = datapath;
+        if (*buf2)
+            datapath += buf2;
     }
-    // PrefixPath - absolute directory path to the repository in which this module was found
-    section["PrefixPath"] = datapath;
-    if (*buf2)
-        datapath += buf2;
 
     section["AbsoluteDataPath"] = datapath;
 
-    if (caseInsensitiveEquals(sourceformat, "GBF"))
-        markup = FMT_GBF;
-    else if (caseInsensitiveEquals(sourceformat, "ThML"))
-        markup = FMT_THML;
-    else if (caseInsensitiveEquals(sourceformat, "OSIS"))
-        markup = FMT_OSIS;
-    else if (caseInsensitiveEquals(sourceformat, "TEI"))
-        markup = FMT_TEI;
-    else
-        markup = FMT_GBF;
+    auto const markup(
+                [getEntry]() {
+                    auto const sourceformat(getEntry("SourceType"));
+                    if (caseInsensitiveEquals(sourceformat, "ThML")) {
+                        return FMT_THML;
+                    } else if (caseInsensitiveEquals(sourceformat, "OSIS")) {
+                        return FMT_OSIS;
+                    } else if (caseInsensitiveEquals(sourceformat, "TEI")) {
+                        return FMT_TEI;
+                    } else {
+                        return FMT_GBF;
+                    }
+                }());
 
-    if (caseInsensitiveEquals(encoding, "UTF-8")) {
-        enc = ENC_UTF8;
-    }
-    else if (caseInsensitiveEquals(encoding, "SCSU")) {
-        enc = ENC_SCSU;
-    }
-    else if (caseInsensitiveEquals(encoding, "UTF-16")) {
-        enc = ENC_UTF16;
-    }
-    else enc = ENC_LATIN1;
+    auto const enc(
+                [getEntry]() {
+                    auto const encoding(getEntry("Encoding"));
+                    if (caseInsensitiveEquals(encoding, "UTF-8")) {
+                        return ENC_UTF8;
+                    } else if (caseInsensitiveEquals(encoding, "SCSU")) {
+                        return ENC_SCSU;
+                    } else if (caseInsensitiveEquals(encoding, "UTF-16")) {
+                        return ENC_UTF16;
+                    } else {
+                        return ENC_LATIN1;
+                    }
+                }());
 
-    if ((entry = section.find("Direction")) == section.end()) {
-        direction = DIRECTION_LTR;
-    }
-    else if (caseInsensitiveEquals((*entry).second, "rtol")) {
-        direction = DIRECTION_RTL;
-    }
-    else if (caseInsensitiveEquals((*entry).second, "bidi")) {
-        direction = DIRECTION_BIDI;
-    }
-    else {
-        direction = DIRECTION_LTR;
-    }
+    auto const direction(
+                [getEntry]() {
+                    auto const dirEntry(getEntry("Direction"));
+                    if (caseInsensitiveEquals(dirEntry, "rtol")) {
+                        return DIRECTION_RTL;
+                    } else if (caseInsensitiveEquals(dirEntry, "bidi")) {
+                        return DIRECTION_BIDI;
+                    } else {
+                        return DIRECTION_LTR;
+                    }
+                }());
 
-    std::shared_ptr<SWModule> newmod;
+    auto const getCompress =
+            [getEntry]() -> std::unique_ptr<SWCompress> {
+                auto const compressTypeEntry(getEntry("CompressType", "LZSS"));
+                if (caseInsensitiveEquals(compressTypeEntry, "ZIP")) {
+                    return std::make_unique<ZipCompress>();
+                } else if (caseInsensitiveEquals(compressTypeEntry, "BZIP2")) {
+                    return std::make_unique<Bzip2Compress>();
+                } else if (caseInsensitiveEquals(compressTypeEntry, "XZ")) {
+                    return std::make_unique<XzCompress>();
+                } else if (caseInsensitiveEquals(compressTypeEntry, "LZSS")) {
+                    return  std::make_unique<LZSSCompress>();
+                }
+                return nullptr;
+            };
+
+    auto const stripAbsolutePathLastComponent =
+            [&section]() {
+                section["AbsoluteDataPath"] =
+                        NormalizedPath(section["AbsoluteDataPath"])
+                                .getParentDirectory();
+            };
+
+    auto const finalizeModule =
+            [&section](std::shared_ptr<SWModule> newModule) {
+                // if a specific module type is set in the config, use this
+                {
+                    auto const it(section.find("Type"));
+                    if ((it != section.end()) && !it->second.empty())
+                        newModule->setType(it->second);
+                }
+
+                newModule->setConfig(std::move(section));
+                return newModule;
+            };
+
     if (caseInsensitiveEquals(driver, "zText")
         || caseInsensitiveEquals(driver, "zCom")
         || caseInsensitiveEquals(driver, "zText4")
         || caseInsensitiveEquals(driver, "zCom4"))
     {
-        BlockType blockType = CHAPTERBLOCKS;
-        misc1 = ((entry = section.find("BlockType")) != section.end()) ? (*entry).second : std::string("CHAPTER");
-        if (caseInsensitiveEquals(misc1, "VERSE"))
-            blockType = VERSEBLOCKS;
-        else if (caseInsensitiveEquals(misc1, "CHAPTER"))
-            blockType = CHAPTERBLOCKS;
-        else if (caseInsensitiveEquals(misc1, "BOOK"))
-            blockType = BOOKBLOCKS;
-
-        misc1 = ((entry = section.find("CompressType")) != section.end()) ? (*entry).second : std::string("LZSS");
-        std::unique_ptr<SWCompress> compress;
-        if (caseInsensitiveEquals(misc1, "ZIP"))
-            compress = std::make_unique<ZipCompress>();
-        else if (caseInsensitiveEquals(misc1, "BZIP2"))
-            compress = std::make_unique<Bzip2Compress>();
-        else
-        if (caseInsensitiveEquals(misc1, "XZ"))
-            compress = std::make_unique<XzCompress>();
-        else
-        if (caseInsensitiveEquals(misc1, "LZSS"))
-            compress = std::make_unique<LZSSCompress>();
-
-        if (compress) {
-            if (caseInsensitiveEquals(driver, "zText"))
-                newmod = std::make_shared<zText>(datapath.c_str(), name.c_str(), description.c_str(), blockType, std::move(compress), enc, direction, markup, lang.c_str(), versification.c_str());
-            else if (caseInsensitiveEquals(driver, "zText4"))
-                newmod = std::make_shared<zText4>(datapath.c_str(), name.c_str(), description.c_str(), blockType, std::move(compress), enc, direction, markup, lang.c_str(), versification.c_str());
-            else if (caseInsensitiveEquals(driver, "zCom4"))
-                newmod = std::make_shared<zCom4>(datapath.c_str(), name.c_str(), description.c_str(), blockType, std::move(compress), enc, direction, markup, lang.c_str(), versification.c_str());
-            else
-                newmod = std::make_shared<zCom>(datapath.c_str(), name.c_str(), description.c_str(), blockType, std::move(compress), enc, direction, markup, lang.c_str(), versification.c_str());
+        auto const blockType(
+                [getEntry]() {
+                    auto const blockTypeEntry(getEntry("BlockType", "CHAPTER"));
+                    if (caseInsensitiveEquals(blockTypeEntry, "VERSE")) {
+                        return VERSEBLOCKS;
+                    } else if (caseInsensitiveEquals(blockTypeEntry, "BOOK")) {
+                        return BOOKBLOCKS;
+                    } else {
+                        return CHAPTERBLOCKS;
+                    }
+                }());
+        if (auto compress = getCompress()) {
+            if (caseInsensitiveEquals(driver, "zText")) {
+                return finalizeModule(std::make_shared<zText>(datapath.c_str(), name.c_str(), description.c_str(), blockType, std::move(compress), enc, direction, markup, lang.c_str(), versification.c_str()));
+            } else if (caseInsensitiveEquals(driver, "zText4")) {
+                return finalizeModule(std::make_shared<zText4>(datapath.c_str(), name.c_str(), description.c_str(), blockType, std::move(compress), enc, direction, markup, lang.c_str(), versification.c_str()));
+            } else if (caseInsensitiveEquals(driver, "zCom4")) {
+                return finalizeModule(std::make_shared<zCom4>(datapath.c_str(), name.c_str(), description.c_str(), blockType, std::move(compress), enc, direction, markup, lang.c_str(), versification.c_str()));
+            } else {
+                return finalizeModule(std::make_shared<zCom>(datapath.c_str(), name.c_str(), description.c_str(), blockType, std::move(compress), enc, direction, markup, lang.c_str(), versification.c_str()));
+            }
         }
-    }
-
-    /* Used for position of final / in AbsoluteDataPath, but also set to true
-       for modules types that need to strip module name: */
-    bool pos = false;
-    if (caseInsensitiveEquals(driver, "RawText")) {
-        newmod = std::make_shared<RawText>(datapath.c_str(), name.c_str(), description.c_str(), enc, direction, markup, lang.c_str(), versification.c_str());
+    } else if (caseInsensitiveEquals(driver, "RawText")) {
+        return finalizeModule(std::make_shared<RawText>(datapath.c_str(), name.c_str(), description.c_str(), enc, direction, markup, lang.c_str(), versification.c_str()));
     } else if (caseInsensitiveEquals(driver, "RawText4")) {
-        newmod = std::make_shared<RawText4>(datapath.c_str(), name.c_str(), description.c_str(), enc, direction, markup, lang.c_str(), versification.c_str());
+        return finalizeModule(std::make_shared<RawText4>(datapath.c_str(), name.c_str(), description.c_str(), enc, direction, markup, lang.c_str(), versification.c_str()));
     } else if (caseInsensitiveEquals(driver, "RawGBF")) { // backward support old drivers
-        newmod = std::make_shared<RawText>(datapath.c_str(), name.c_str(), description.c_str(), enc, direction, markup, lang.c_str());
+        return finalizeModule(std::make_shared<RawText>(datapath.c_str(), name.c_str(), description.c_str(), enc, direction, markup, lang.c_str()));
     } else if (caseInsensitiveEquals(driver, "RawCom")) {
-        newmod = std::make_shared<RawCom>(datapath.c_str(), name.c_str(), description.c_str(), enc, direction, markup, lang.c_str(), versification.c_str());
+        return finalizeModule(std::make_shared<RawCom>(datapath.c_str(), name.c_str(), description.c_str(), enc, direction, markup, lang.c_str(), versification.c_str()));
     } else if (caseInsensitiveEquals(driver, "RawCom4")) {
-        newmod = std::make_shared<RawCom4>(datapath.c_str(), name.c_str(), description.c_str(), enc, direction, markup, lang.c_str(), versification.c_str());
+        return finalizeModule(std::make_shared<RawCom4>(datapath.c_str(), name.c_str(), description.c_str(), enc, direction, markup, lang.c_str(), versification.c_str()));
     } else if (caseInsensitiveEquals(driver, "RawFiles")) {
-        newmod = std::make_shared<RawFiles>(datapath.c_str(), name.c_str(), description.c_str(), enc, direction, markup, lang.c_str());
+        return finalizeModule(std::make_shared<RawFiles>(datapath.c_str(), name.c_str(), description.c_str(), enc, direction, markup, lang.c_str()));
     } else if (caseInsensitiveEquals(driver, "HREFCom")) {
-        misc1 = ((entry = section.find("Prefix")) != section.end()) ? (*entry).second : std::string();
-        newmod = std::make_shared<HREFCom>(datapath.c_str(), misc1.c_str(), name.c_str(), description.c_str());
+        auto const prefixEntry(getEntry("Prefix"));
+        return finalizeModule(std::make_shared<HREFCom>(datapath.c_str(), prefixEntry.c_str(), name.c_str(), description.c_str()));
     } else if (caseInsensitiveEquals(driver, "RawLD")) {
-        bool caseSensitive = ((entry = section.find("CaseSensitiveKeys")) != section.end()) ? (*entry).second == "true": false;
-        bool strongsPadding = ((entry = section.find("StrongsPadding")) != section.end()) ? (*entry).second == "true": true;
-        newmod = std::make_shared<RawLD>(datapath.c_str(), name.c_str(), description.c_str(), enc, direction, markup, lang.c_str(), caseSensitive, strongsPadding);
-        pos = true;
+        auto const caseSensitive(getEntry("CaseSensitiveKeys") == "true");
+        auto const strongsPadding(getEntry("StrongsPadding", "true") == "true");
+        stripAbsolutePathLastComponent();
+        return finalizeModule(std::make_shared<RawLD>(datapath.c_str(), name.c_str(), description.c_str(), enc, direction, markup, lang.c_str(), caseSensitive, strongsPadding));
     } else if (caseInsensitiveEquals(driver, "RawLD4")) {
-        bool caseSensitive = ((entry = section.find("CaseSensitiveKeys")) != section.end()) ? (*entry).second == "true": false;
-        bool strongsPadding = ((entry = section.find("StrongsPadding")) != section.end()) ? (*entry).second == "true": true;
-        newmod = std::make_shared<RawLD4>(datapath.c_str(), name.c_str(), description.c_str(), enc, direction, markup, lang.c_str(), caseSensitive, strongsPadding);
-        pos = true;
+        auto const caseSensitive(getEntry("CaseSensitiveKeys") == "true");
+        auto const strongsPadding(getEntry("StrongsPadding", "true") == "true");
+        stripAbsolutePathLastComponent();
+        return finalizeModule(std::make_shared<RawLD4>(datapath.c_str(), name.c_str(), description.c_str(), enc, direction, markup, lang.c_str(), caseSensitive, strongsPadding));
     } else if (caseInsensitiveEquals(driver, "zLD")) {
-        std::unique_ptr<SWCompress> compress;
-        int blockCount;
-        bool caseSensitive = ((entry = section.find("CaseSensitiveKeys")) != section.end()) ? (*entry).second == "true": false;
-        bool strongsPadding = ((entry = section.find("StrongsPadding")) != section.end()) ? (*entry).second == "true": true;
-        misc1 = ((entry = section.find("BlockCount")) != section.end()) ? (*entry).second : std::string("200");
-        blockCount = std::atoi(misc1.c_str());
-        blockCount = (blockCount) ? blockCount : 200;
-
-        misc1 = ((entry = section.find("CompressType")) != section.end()) ? (*entry).second : std::string("LZSS");
-        if (caseInsensitiveEquals(misc1, "ZIP"))
-            compress = std::make_unique<ZipCompress>();
-        else if (caseInsensitiveEquals(misc1, "BZIP2"))
-            compress = std::make_unique<Bzip2Compress>();
-        else
-        if (caseInsensitiveEquals(misc1, "XZ"))
-            compress = std::make_unique<XzCompress>();
-        else
-        if (caseInsensitiveEquals(misc1, "LZSS"))
-            compress = std::make_unique<LZSSCompress>();
-
-        if (compress) {
-            newmod = std::make_shared<zLD>(datapath.c_str(), name.c_str(), description.c_str(), blockCount, std::move(compress), enc, direction, markup, lang.c_str(), caseSensitive, strongsPadding);
-            pos = true;
+        auto const caseSensitive(getEntry("CaseSensitiveKeys") == "true");
+        auto const strongsPadding(getEntry("StrongsPadding", "true") == "true");
+        auto const blockCountEntry(getEntry("BlockCount", "200"));
+        auto blockCount(std::atoi(blockCountEntry.c_str()));
+        if (!blockCount)
+            blockCount = 200;
+        if (auto compress = getCompress()) {
+            stripAbsolutePathLastComponent();
+            return finalizeModule(std::make_shared<zLD>(datapath.c_str(), name.c_str(), description.c_str(), blockCount, std::move(compress), enc, direction, markup, lang.c_str(), caseSensitive, strongsPadding));
         }
     } else if (caseInsensitiveEquals(driver, "RawGenBook")) {
-        misc1 = ((entry = section.find("KeyType")) != section.end()) ? (*entry).second : std::string("TreeKey");
-        newmod = std::make_shared<RawGenBook>(datapath.c_str(), name.c_str(), description.c_str(), enc, direction, markup, lang.c_str(), misc1.c_str());
-        pos = true;
+        auto const keyTypeEntry(getEntry("KeyType", "TreeKey"));
+        return finalizeModule(std::make_shared<RawGenBook>(datapath.c_str(), name.c_str(), description.c_str(), enc, direction, markup, lang.c_str(), keyTypeEntry.c_str()));
     }
 
-    if (newmod) {
-        if (pos)
-            section["AbsoluteDataPath"] =
-                    NormalizedPath(section["AbsoluteDataPath"])
-                            .getParentDirectory();
-
-        // if a specific module type is set in the config, use this
-        if ((entry = section.find("Type")) != section.end())
-            newmod->setType(entry->second);
-
-        newmod->setConfig(std::move(section));
-    }
-
-    return newmod;
+    return nullptr;
 }
 
 void SWMgr::addGlobalOptionFilters(SWModule & module,
