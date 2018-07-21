@@ -514,9 +514,15 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
             } else {
                 outText(("<span class=\""
                          + tag.attribute("type")
-                         + "\"/>").c_str(),
+                         + '"').c_str(),
                         buf,
                         u);
+                for (auto const & attributeName : tag.attributeNames())
+                    outText((" data-" + attributeName + "=\""
+                             + tag.attribute(attributeName) + "\"").c_str(),
+                            buf,
+                            u);
+                outText("/>", buf, u);
             }
         }
 
