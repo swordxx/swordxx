@@ -520,8 +520,15 @@ bool OSISXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 			
 			
 			else {
-				SWBuf type = tag.getAttribute("type");
-				outText(SWBuf("<span class=\"") + type + "\"/>", buf,u);
+				SWBuf attVal = tag.getAttribute("type");
+				outText(SWBuf("<span class=\"") + attVal + "\"", buf,u);
+				StringList attributes =  tag.getAttributeNames();
+				for (StringList::const_iterator it = attributes.begin(); it != attributes.end(); ++it) {
+					attVal = tag.getAttribute(*it);
+					outText(SWBuf(" data-") + *it + "=\"" + attVal + "\"", buf,u);
+				}
+				outText(SWBuf("></span>"), buf,u);
+				
 			}
 		}
 
