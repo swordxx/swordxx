@@ -98,7 +98,7 @@ SWText * module = nullptr;
 VerseKey currentVerse;
 std::string v11n     = "KJV";
 std::string activeOsisID;
-char currentOsisID[255];
+std::string currentOsisID;
 
 std::string activeVerseText;
 
@@ -719,7 +719,7 @@ bool handleToken(std::string &text, XMLTag token) {
                 currentVerse.setText(token.attribute("osisID"));
                 currentVerse.setChapter(0);
                 currentVerse.setVerse(0);
-                std::strcpy(currentOsisID, currentVerse.getOSISRef());
+                currentOsisID = currentVerse.getOSISRef();
 
                 sidBook         = token.attribute("sID");
                 inChapter       = false;
@@ -766,7 +766,7 @@ bool handleToken(std::string &text, XMLTag token) {
                     cout << "DEBUG(FOUND): Current chapter is " << currentVerse.getOSISRef() << " (" << token.attribute("osisID") << ")" << endl;
                 }
 
-                std::strcpy(currentOsisID, currentVerse.getOSISRef());
+                currentOsisID = currentVerse.getOSISRef();
 
                 sidChapter      = token.attribute("sID");
                 inChapter       = true;
@@ -846,7 +846,7 @@ bool handleToken(std::string &text, XMLTag token) {
                     cout << "ERROR(REF): Invalid osisID/annotateRef: " << token.attribute((tokenName == "verse") ? "osisID" : "annotateRef") << endl;
                 }
 
-                std::strcpy(currentOsisID, currentVerse.getOSISRef());
+                currentOsisID = currentVerse.getOSISRef();
 
                 if (debug & DEBUG_OTHER) {
                     cout << "DEBUG(FOUND): New current verse is " << currentVerse.getOSISRef() << endl;
@@ -899,7 +899,7 @@ bool handleToken(std::string &text, XMLTag token) {
                 cout << "DEBUG(FOUND): majorSection found " << currentVerse.getOSISRef() << endl;
             }
 
-            std::strcpy(currentOsisID, currentVerse.getOSISRef());
+            currentOsisID = currentVerse.getOSISRef();
 
 // as a result of the incorrect assumption these flags are set also incorrectly and cause problems in situations where majorSections do not follow the assumptions made during creation of this patch
 
@@ -1442,7 +1442,7 @@ void processOSIS(istream& infile) {
 
     activeOsisID.clear();
 
-    std::strcpy(currentOsisID,"N/A");
+    currentOsisID = "N/A";
 
     currentVerse.setVersificationSystem(v11n.c_str());
     currentVerse.setAutoNormalize(false);
