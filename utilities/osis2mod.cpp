@@ -1964,8 +1964,9 @@ int main(int argc, char **argv) {
             if (compLevel < 0 || compLevel > 10) {
                 usage(*argv, "-l requires a value from 1-9");
             }
+        } else {
+            usage(*argv, (std::string("Unknown argument: ") + argv[i]).c_str());
         }
-        else usage(*argv, (((std::string)"Unknown argument: ")+ argv[i]).c_str());
     }
 
     if (isCommentary) isCommentary = true;  // avoid unused warning for now
