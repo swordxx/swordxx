@@ -14,7 +14,7 @@ matrix:
           sources: &toolchainSources
             - ubuntu-toolchain-r-test
           packages:
-            - &baseDeps [libbz2-dev, xz-utils, liblzma-dev, libcurl4-openssl-dev, zlib1g-dev, libclucene-dev, curl]
+            - &baseDeps [libbz2-dev, xz-utils, liblzma-dev, libcurl4-openssl-dev, zlib1g-dev, libclucene-dev, curl, libicu-dev]
             - [gcc-7, g++-7]
     - env: CXX=g++-7 CC=gcc-7 CMAKE_VERSION=3.7.0
       addons: *gcc7addons
