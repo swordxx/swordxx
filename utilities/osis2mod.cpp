@@ -64,8 +64,6 @@
 
 using namespace swordxx;
 
-using namespace std;
-
 namespace {
 
 int       debug            =   0; // mask of debug flags
@@ -201,7 +199,7 @@ void prepareSWText(const char *osisID, std::string &text)
 
     // Trust, but verify.
     if (!normalize && !utf8State) {
-        cout << "WARNING(UTF8): " << osisID << ": Should be converted to UTF-8 (" << text << ")" << endl;
+        std::cout << "WARNING(UTF8): " << osisID << ": Should be converted to UTF-8 (" << text << ")" << std::endl;
     }
 
 #if SWORDXX_HAS_ICU
@@ -209,7 +207,7 @@ void prepareSWText(const char *osisID, std::string &text)
         // Don't need to normalize text that is ASCII
         // But assume other non-UTF-8 text is Latin1 (cp1252) and convert it to UTF-8
         if (!utf8State) {
-            cout << "INFO(UTF8): " << osisID << ": Converting to UTF-8 (" << text << ")" << endl;
+            std::cout << "INFO(UTF8): " << osisID << ": Converting to UTF-8 (" << text << ")" << std::endl;
             converter.processText(text, (SWKey *)2);  // note the hack of 2 to mimic a real key. TODO: remove all hacks
             converted++;
 
@@ -221,7 +219,7 @@ void prepareSWText(const char *osisID, std::string &text)
 
         // Double check. This probably can be removed.
         if (!utf8State) {
-            cout << "ERROR(UTF8): " << osisID << ": Converting to UTF-8 (" << text << ")" << endl;
+            std::cout << "ERROR(UTF8): " << osisID << ": Converting to UTF-8 (" << text << ")" << std::endl;
         }
 
         if (utf8State > 0) {
@@ -255,7 +253,7 @@ void prepareSWVerseKey(std::string &buf) {
     while (*p) {
         if (inRange) {
             if (debug & DEBUG_REF) {
-                cout << "DEBUG(REF): Copy range marker:" << *p << endl;;
+                std::cout << "DEBUG(REF): Copy range marker:" << *p << std::endl;
             }
 
             // Range markers are copied as is
@@ -275,30 +273,30 @@ void prepareSWVerseKey(std::string &buf) {
             p = n + 1;
 
             if (debug & DEBUG_REF) {
-                cout << "DEBUG(REF): Found a work prefix ";
+                std::cout << "DEBUG(REF): Found a work prefix ";
                 for (char *x = s; x <= n; x++) {
-                    cout << *x;
+                    std::cout << *x;
                 }
-                cout << endl;
+                std::cout << std::endl;
             }
         }
 
         // Now we are in the meat of an osisID.
         // Copy it to its end but stop on a grain marker of '!'
         if (debug & DEBUG_REF) {
-            cout << "DEBUG(REF): Copy osisID:";
+            std::cout << "DEBUG(REF): Copy osisID:";
         }
 
         while (*p && *p != '!' && *p != ' ' && *p != '-') {
             if (debug & DEBUG_REF) {
-                cout << *p;
+                std::cout << *p;
             }
 
             *s++ = *p++;
         }
 
         if (debug & DEBUG_REF) {
-            cout << endl;
+            std::cout << std::endl;
         }
 
         // The ! and everything following until we hit
@@ -310,11 +308,11 @@ void prepareSWVerseKey(std::string &buf) {
             }
 
             if (debug & DEBUG_REF) {
-                cout << "DEBUG(REF): Found a grain suffix ";
+                std::cout << "DEBUG(REF): Found a grain suffix ";
                 for (char *x = p; x < n; x++) {
-                    cout << *x;
+                    std::cout << *x;
                 }
-                cout << endl;
+                std::cout << std::endl;
             }
 
             p = n;
@@ -328,7 +326,7 @@ void prepareSWVerseKey(std::string &buf) {
 
         if (debug & DEBUG_REF) {
             if (inRange) {
-                cout << "DEBUG(REF): Found a range" << endl;
+                std::cout << "DEBUG(REF): Found a range" << std::endl;
             }
         }
 
@@ -343,7 +341,7 @@ void prepareSWVerseKey(std::string &buf) {
             *s++ = ';';
 
             if (debug & DEBUG_REF) {
-                cout << "DEBUG(REF): replacing space with ;. Remaining: " << p << endl;
+                std::cout << "DEBUG(REF): replacing space with ;. Remaining: " << p << std::endl;
             }
         }
     }
@@ -357,7 +355,7 @@ void prepareSWVerseKey(std::string &buf) {
         buf.resize(s - buf.c_str());
 
         if (debug & DEBUG_REF) {
-            cout << "DEBUG(REF): shortended keyVal to`" << buf.c_str() << "`"<< endl;
+            std::cout << "DEBUG(REF): shortended keyVal to`" << buf.c_str() << "`"<< std::endl;
         }
     }
 }
@@ -397,8 +395,8 @@ bool isValidRef(const char *buf, const char *caller) {
     // If we have gotten here the reference is not in the selected versification.
     // cout << "INFO(V11N): " << before << " is not in the " << currentVerse.getVersificationSystem() << " versification." << endl;
     if (debug & DEBUG_REV11N) {
-        cout << "DEBUG(V11N)[" << caller << "]: " << before.getText()
-             << " normalizes to "  << after.getText() << endl;
+        std::cout << "DEBUG(V11N)[" << caller << "]: " << before.getText()
+                  << " normalizes to "  << after.getText() << std::endl;
     }
 
     return false;
@@ -449,7 +447,7 @@ void makeValidRef(VerseKey &key) {
     key.setVerse(verseMax);
 
     if (debug & DEBUG_REV11N) {
-        cout << "DEBUG(V11N) Chapter max:" << chapterMax << ", Verse Max:" << verseMax << endl;
+        std::cout << "DEBUG(V11N) Chapter max:" << chapterMax << ", Verse Max:" << verseMax << std::endl;
     }
 
     // There are three cases we want to handle:
@@ -473,9 +471,10 @@ void makeValidRef(VerseKey &key) {
         key.decrement(1);
     }
 
-    cout << "INFO(V11N): " << saveKey.getOSISRef()
-         << " is not in the " << key.getVersificationSystem()
-         << " versification. Appending content to " << key.getOSISRef() << endl;
+    std::cout << "INFO(V11N): " << saveKey.getOSISRef()
+              << " is not in the " << key.getVersificationSystem()
+              << " versification. Appending content to " << key.getOSISRef()
+              << std::endl;
 }
 
 void writeEntry(std::string &text, bool force = false) {
@@ -554,7 +553,7 @@ void writeEntry(std::string &text, bool force = false) {
         if (module->hasEntry(&currentVerse)) {
             module->flush();
             std::string currentText = module->getRawEntry();
-            cout << "INFO(WRITE): Appending entry: " << currentVerse.getOSISRef() << ": " << activeVerseText << endl;
+            std::cout << "INFO(WRITE): Appending entry: " << currentVerse.getOSISRef() << ": " << activeVerseText << std::endl;
 
             // If we have a non-UTF-8 encoding, we should decode it before concatenating, then re-encode it
             if (outputDecoder) {
@@ -568,7 +567,7 @@ void writeEntry(std::string &text, bool force = false) {
         }
 
         if (debug & DEBUG_WRITE) {
-            cout << "DEBUG(WRITE): " << activeOsisID << ":" << currentVerse.getOSISRef() << ": " << activeVerseText << endl;
+            std::cout << "DEBUG(WRITE): " << activeOsisID << ":" << currentVerse.getOSISRef() << ": " << activeVerseText << std::endl;
         }
 
         module->setEntry(activeVerseText.c_str());
@@ -607,7 +606,7 @@ void linkToEntry(VerseKey &linkKey, VerseKey &dest) {
     saveKey = currentVerse;
     currentVerse = linkKey;
 
-    cout << "INFO(LINK): Linking " << currentVerse.getOSISRef() << " to " << dest.getOSISRef() << "\n";
+    std::cout << "INFO(LINK): Linking " << currentVerse.getOSISRef() << " to " << dest.getOSISRef() << "\n";
     module->linkEntry(dest);
 
     currentVerse = saveKey;
@@ -677,7 +676,7 @@ bool handleToken(std::string &text, XMLTag token) {
             tagStack.push(token);
 
             if (debug & DEBUG_STACK) {
-                cout << "DEBUG(STACK): " << currentOsisID << ": push (" << tagStack.size() << ") " << token.name() << endl;
+                std::cout << "DEBUG(STACK): " << currentOsisID << ": push (" << tagStack.size() << ") " << token.name() << std::endl;
             }
         }
 
@@ -685,7 +684,7 @@ bool handleToken(std::string &text, XMLTag token) {
         if (!firstDiv) {
             if (headerEnded && (tokenName == "div")) {
                 if (debug & DEBUG_OTHER) {
-                    cout << "DEBUG(FOUND): Found first div and pitching prior material: " << text << endl;
+                    std::cout << "DEBUG(FOUND): Found first div and pitching prior material: " << text << std::endl;
                 }
 
                 // TODO: Save off the content to use it to suggest the module's conf.
@@ -707,9 +706,11 @@ bool handleToken(std::string &text, XMLTag token) {
                 if (inBookIntro || inChapterIntro) { // this one should never happen, but just in case
 
                     if (debug & DEBUG_TITLE) {
-                        cout << "DEBUG(TITLE): " << currentOsisID << ": OOPS INTRO " << endl;
-                        cout << "\tinChapterIntro = " << inChapterIntro << endl;
-                        cout << "\tinBookIntro = " << inBookIntro << endl;
+                        std::cout << "DEBUG(TITLE): " << currentOsisID
+                                  << ": OOPS INTRO " << std::endl
+                                  << "\tinChapterIntro = " << inChapterIntro
+                                  << std::endl << "\tinBookIntro = "
+                                  << inBookIntro << std::endl;
                     }
 
                     currentVerse.setTestament(0);
@@ -731,7 +732,7 @@ bool handleToken(std::string &text, XMLTag token) {
                 inChapterIntro  = false;
 
                 if (debug & DEBUG_TITLE) {
-                    cout << "DEBUG(TITLE): " << currentOsisID << ": Looking for book introduction" << endl;
+                    std::cout << "DEBUG(TITLE): " << currentOsisID << ": Looking for book introduction" << std::endl;
                 }
 
                 bookDepth       = tagStack.size();
@@ -740,10 +741,10 @@ bool handleToken(std::string &text, XMLTag token) {
 
                 inCanonicalOSISBook = isOSISAbbrev(token.attribute("osisID").c_str());
                 if (!inCanonicalOSISBook) {
-                    cout << "WARNING(V11N): New book is " << token.attribute("osisID") << " and is not in " << v11n << " versification, ignoring" << endl;
+                    std::cout << "WARNING(V11N): New book is " << token.attribute("osisID") << " and is not in " << v11n << " versification, ignoring" << std::endl;
                 }
                 else if (debug & DEBUG_OTHER) {
-                    cout << "DEBUG(FOUND): New book is " << currentVerse.getOSISRef() << endl;
+                    std::cout << "DEBUG(FOUND): New book is " << currentVerse.getOSISRef() << std::endl;
                 }
 
                 return false;
@@ -755,7 +756,7 @@ bool handleToken(std::string &text, XMLTag token) {
             ) {
                 if (inBookIntro) {
                     if (debug & DEBUG_TITLE) {
-                        cout << "DEBUG(TITLE): " << currentOsisID << ": BOOK INTRO "<< text << endl;
+                        std::cout << "DEBUG(TITLE): " << currentOsisID << ": BOOK INTRO "<< text << std::endl;
                     }
 
                     writeEntry(text);
@@ -765,7 +766,7 @@ bool handleToken(std::string &text, XMLTag token) {
                 currentVerse.setVerse(0);
 
                 if (debug & DEBUG_OTHER) {
-                    cout << "DEBUG(FOUND): Current chapter is " << currentVerse.getOSISRef() << " (" << token.attribute("osisID") << ")" << endl;
+                    std::cout << "DEBUG(FOUND): Current chapter is " << currentVerse.getOSISRef() << " (" << token.attribute("osisID") << ")" << std::endl;
                 }
 
                 currentOsisID = currentVerse.getOSISRef();
@@ -778,7 +779,7 @@ bool handleToken(std::string &text, XMLTag token) {
                 inChapterIntro  = true;
 
                 if (debug & DEBUG_TITLE) {
-                    cout << "DEBUG(TITLE): " << currentOsisID << ": Looking for chapter introduction" << endl;
+                    std::cout << "DEBUG(TITLE): " << currentOsisID << ": Looking for chapter introduction" << std::endl;
                 }
 
                 chapterDepth    = tagStack.size();
@@ -792,17 +793,17 @@ bool handleToken(std::string &text, XMLTag token) {
                 (tokenName == "div" && !token.attribute("annotateType").empty())
             ) {
                 if (debug & DEBUG_OTHER) {
-                    cout << "DEBUG(FOUND): Entering verse" << endl;
+                    std::cout << "DEBUG(FOUND): Entering verse" << std::endl;
                 }
 
                 if (inChapterIntro) {
                     if (debug & DEBUG_TITLE) {
-                        cout << "DEBUG(TITLE): " << currentOsisID << ": Done looking for chapter introduction" << endl;
+                        std::cout << "DEBUG(TITLE): " << currentOsisID << ": Done looking for chapter introduction" << std::endl;
                     }
 
                     if (text.length()) {
                         if (debug & DEBUG_TITLE) {
-                            cout << "DEBUG(TITLE): " << currentOsisID << ": CHAPTER INTRO "<< text << endl;
+                            std::cout << "DEBUG(TITLE): " << currentOsisID << ": CHAPTER INTRO "<< text << std::endl;
                         }
 
                         writeEntry(text);
@@ -840,20 +841,20 @@ bool handleToken(std::string &text, XMLTag token) {
                         verseKeys.positionToTop();
                         verseKeys.increment(1);
                         if (!verseKeys.popError()) {
-                            cout << "DEBUG(LINK): " << currentVerse.getOSISRef() << endl;
+                            std::cout << "DEBUG(LINK): " << currentVerse.getOSISRef() << std::endl;
                             linkedVerses.push_back(verseKeys);
                         }
                     }
                 }
                 else {
-                    cout << "ERROR(REF): Invalid osisID/annotateRef: " << token.attribute((tokenName == "verse") ? "osisID" : "annotateRef") << endl;
+                    std::cout << "ERROR(REF): Invalid osisID/annotateRef: " << token.attribute((tokenName == "verse") ? "osisID" : "annotateRef") << std::endl;
                 }
 
                 currentOsisID = currentVerse.getOSISRef();
 
                 if (debug & DEBUG_OTHER) {
-                    cout << "DEBUG(FOUND): New current verse is " << currentVerse.getOSISRef() << endl;
-                    cout << "DEBUG(FOUND): osisID/annotateRef is adjusted to: " << keyVal << endl;
+                    std::cout << "DEBUG(FOUND): New current verse is " << currentVerse.getOSISRef() << std::endl;
+                    std::cout << "DEBUG(FOUND): osisID/annotateRef is adjusted to: " << keyVal << std::endl;
                 }
 
                 sidVerse        = token.attribute("sID");
@@ -893,13 +894,13 @@ bool handleToken(std::string &text, XMLTag token) {
         if (tokenName == "div" && typeAttr == "majorSection") {
             if (inBookIntro) {
                 if (debug & DEBUG_TITLE) {
-                    cout << "DEBUG(TITLE): " << currentOsisID << ": BOOK INTRO "<< text << endl;
+                    std::cout << "DEBUG(TITLE): " << currentOsisID << ": BOOK INTRO "<< text << std::endl;
                 }
                 writeEntry(text);
             }
 
             if (debug & DEBUG_OTHER) {
-                cout << "DEBUG(FOUND): majorSection found " << currentVerse.getOSISRef() << endl;
+                std::cout << "DEBUG(FOUND): majorSection found " << currentVerse.getOSISRef() << std::endl;
             }
 
             currentOsisID = currentVerse.getOSISRef();
@@ -913,7 +914,7 @@ bool handleToken(std::string &text, XMLTag token) {
             inChapterIntro  = true;
 
             if (debug & DEBUG_TITLE) {
-                cout << "DEBUG(TITLE): " << currentOsisID << ": Looking for chapter introduction" << endl;
+                std::cout << "DEBUG(TITLE): " << currentOsisID << ": Looking for chapter introduction" << std::endl;
             }
 
             verseDepth      = 0;
@@ -929,7 +930,7 @@ bool handleToken(std::string &text, XMLTag token) {
             quoteStack.push(token);
 
             if (debug & DEBUG_QUOTE) {
-                cout << "DEBUG(QUOTE): " << currentOsisID << ": quote top(" << quoteStack.size() << ") " << token.toString() << endl;
+                std::cout << "DEBUG(QUOTE): " << currentOsisID << ": quote top(" << quoteStack.size() << ") " << token.toString() << std::endl;
             }
 
             if (token.attribute("who") == "Jesus") {
@@ -973,12 +974,12 @@ bool handleToken(std::string &text, XMLTag token) {
                     (tokenName == "title" && typeAttr.length() != 0 && typeAttr != "main" && typeAttr != "chapter" && typeAttr != "sub")
                 ) {
                     if (debug & DEBUG_TITLE) {
-                        cout << "DEBUG(TITLE): " << currentOsisID << ": Done looking for chapter introduction" << endl;
+                        std::cout << "DEBUG(TITLE): " << currentOsisID << ": Done looking for chapter introduction" << std::endl;
                     }
 
                     if (text.length()) {
                         if (debug & DEBUG_TITLE) {
-                            cout << "DEBUG(TITLE): " << currentOsisID << ": CHAPTER INTRO "<< text << endl;
+                            std::cout << "DEBUG(TITLE): " << currentOsisID << ": CHAPTER INTRO "<< text << std::endl;
                         }
 
                         // Since we have found the boundary, we need to write out the chapter heading
@@ -1004,7 +1005,7 @@ bool handleToken(std::string &text, XMLTag token) {
 
         if (debug & DEBUG_INTERVERSE) {
             if (!inVerse && !inBookIntro && !inChapterIntro) {
-                cout << "DEBUG(INTERVERSE): " << currentOsisID << ": interverse start token " << token.toString() << ":" << text.c_str() << endl;
+                std::cout << "DEBUG(INTERVERSE): " << currentOsisID << ": interverse start token " << token.toString() << ":" << text.c_str() << std::endl;
             }
         }
 
@@ -1015,7 +1016,7 @@ bool handleToken(std::string &text, XMLTag token) {
     else {
 
         if (tagStack.empty()) {
-            cout << "FATAL(NESTING): " << currentOsisID << ": tag expected" << endl;
+            std::cout << "FATAL(NESTING): " << currentOsisID << ": tag expected" << std::endl;
             std::exit(EXIT_BAD_NESTING);
         }
 
@@ -1025,13 +1026,13 @@ bool handleToken(std::string &text, XMLTag token) {
             tagDepth = tagStack.size();
 
             if (debug & DEBUG_STACK) {
-                cout << "DEBUG(STACK): " << currentOsisID << ": pop(" << tagDepth << ") " << topToken.name() << endl;
+                std::cout << "DEBUG(STACK): " << currentOsisID << ": pop(" << tagDepth << ") " << topToken.name() << std::endl;
             }
 
             tagStack.pop();
 
             if (tokenName != topToken.name()) {
-                cout << "FATAL(NESTING): " << currentOsisID << ": Expected " << topToken.name() << " found " << tokenName << endl;
+                std::cout << "FATAL(NESTING): " << currentOsisID << ": Expected " << topToken.name() << " found " << tokenName << std::endl;
 //                std::exit(EXIT_BAD_NESTING); // (OSK) I'm sure this validity check is a good idea, but there's a bug somewhere that's killing the converter here.
                         // So I'm disabling this line. Unvalidated OSIS files shouldn't be run through the converter anyway.
                         // (DM) This has nothing to do with well-form or valid. It checks milestoned elements for proper nesting.
@@ -1044,7 +1045,7 @@ bool handleToken(std::string &text, XMLTag token) {
                 headerEnded = true;
 
                 if (debug & DEBUG_OTHER) {
-                    cout << "DEBUG(FOUND): End of header found" << endl;
+                    std::cout << "DEBUG(FOUND): End of header found" << std::endl;
                 }
             }
 
@@ -1058,7 +1059,7 @@ bool handleToken(std::string &text, XMLTag token) {
         ) {
 
             if (tagDepth != verseDepth) {
-                cout << "WARNING(NESTING): verse " << currentOsisID << " is not well formed:(" << verseDepth << "," << tagDepth << ")" << endl;
+                std::cout << "WARNING(NESTING): verse " << currentOsisID << " is not well formed:(" << verseDepth << "," << tagDepth << ")" << std::endl;
             }
 
             // If we are in WOC then we need to terminate the <q who="Jesus" marker=""> that was added earlier in the verse.
@@ -1098,7 +1099,7 @@ bool handleToken(std::string &text, XMLTag token) {
             XMLTag topToken = quoteStack.top();
 
             if (debug & DEBUG_QUOTE) {
-                cout << "DEBUG(QUOTE): " << currentOsisID << ": quote pop(" << quoteStack.size() << ") " << topToken.toString() << " -- " << token.toString() << endl;
+                std::cout << "DEBUG(QUOTE): " << currentOsisID << ": quote pop(" << quoteStack.size() << ") " << topToken.toString() << " -- " << token.toString() << std::endl;
             }
 
             quoteStack.pop();
@@ -1108,14 +1109,14 @@ bool handleToken(std::string &text, XMLTag token) {
             if (token.attribute("who") == "Jesus") {
 
                 if (debug & DEBUG_QUOTE) {
-                    cout << "DEBUG(QUOTE): " << currentOsisID << ": (" << quoteStack.size() << ") " << topToken.toString() << " -- " << token.toString() << endl;
+                    std::cout << "DEBUG(QUOTE): " << currentOsisID << ": (" << quoteStack.size() << ") " << topToken.toString() << " -- " << token.toString() << std::endl;
                 }
 
                 inWOC = false;
                 auto sID(topToken.attribute("sID"));
                 auto eID(token.attribute("eID"));
                 if (sID != eID) {
-                    cout << "ERROR(NESTING): improper nesting " << currentOsisID << ": matching (sID,eID) not found. Looking at (" << sID << "," << eID << ")" << endl;
+                    std::cout << "ERROR(NESTING): improper nesting " << currentOsisID << ": matching (sID,eID) not found. Looking at (" << sID << "," << eID << ")" << std::endl;
                 }
 
 
@@ -1177,14 +1178,14 @@ bool handleToken(std::string &text, XMLTag token) {
                 writeEntry(text);
 
                 if (debug & DEBUG_INTERVERSE) {
-                    cout << "DEBUG(INTERVERSE): " << currentOsisID << ": appending interverse end tag: " << tokenName << "(" << tagDepth << "," << chapterDepth << "," << bookDepth << ")" << endl;
+                    std::cout << "DEBUG(INTERVERSE): " << currentOsisID << ": appending interverse end tag: " << tokenName << "(" << tagDepth << "," << chapterDepth << "," << bookDepth << ")" << std::endl;
                 }
 
                 return true;
             }
 
             if (debug & DEBUG_INTERVERSE) {
-                cout << "DEBUG(INTERVERSE): " << currentOsisID << ": interverse end tag: " << tokenName << "(" << tagDepth << "," << chapterDepth << "," << bookDepth << ")" << endl;
+                std::cout << "DEBUG(INTERVERSE): " << currentOsisID << ": interverse end tag: " << tokenName << "(" << tagDepth << "," << chapterDepth << "," << bookDepth << ")" << std::endl;
             }
 
             return false;
@@ -1217,7 +1218,7 @@ XMLTag transformBSP(XMLTag t) {
     if (t.isEmpty()) {
 
         if (debug & DEBUG_XFORM) {
-            cout << "DEBUG(XFORM): " << currentOsisID << ": xform empty " << t.toString() << endl;
+            std::cout << "DEBUG(XFORM): " << currentOsisID << ": xform empty " << t.toString() << std::endl;
         }
 
         return t;
@@ -1260,9 +1261,9 @@ XMLTag transformBSP(XMLTag t) {
         bspTagStack.push(t);
 
         if (debug & DEBUG_XFORM) {
-            cout << "DEBUG(XFORM): " << currentOsisID << ": xform push (" << bspTagStack.size() << ") " << t.toString() << " (tagname=" << tagName << ")" << endl;
+            std::cout << "DEBUG(XFORM): " << currentOsisID << ": xform push (" << bspTagStack.size() << ") " << t.toString() << " (tagname=" << tagName << ")" << std::endl;
             XMLTag topToken = bspTagStack.top();
-            cout << "DEBUG(XFORM): " << currentOsisID << ": xform top(" << bspTagStack.size() << ") " << topToken.toString() << endl;
+            std::cout << "DEBUG(XFORM): " << currentOsisID << ": xform top(" << bspTagStack.size() << ") " << topToken.toString() << std::endl;
         }
     }
     else {
@@ -1270,7 +1271,7 @@ XMLTag transformBSP(XMLTag t) {
             XMLTag topToken = bspTagStack.top();
 
             if (debug & DEBUG_XFORM) {
-                cout << "DEBUG(XFORM): " << currentOsisID << ": xform pop(" << bspTagStack.size() << ") " << topToken.toString() << endl;
+                std::cout << "DEBUG(XFORM): " << currentOsisID << ": xform pop(" << bspTagStack.size() << ") " << topToken.toString() << std::endl;
             }
 
             bspTagStack.pop();
@@ -1298,7 +1299,7 @@ XMLTag transformBSP(XMLTag t) {
             }
         }
         else {
-            cout << "FATAL(TAGSTACK): " << currentOsisID << ": closing tag without opening tag" << endl;
+            std::cout << "FATAL(TAGSTACK): " << currentOsisID << ": closing tag without opening tag" << std::endl;
         }
     }
 
@@ -1426,7 +1427,7 @@ void usage(char const * app,
     std::exit(EXIT_BAD_ARG);
 }
 
-void processOSIS(istream& infile) {
+void processOSIS(std::istream & infile) {
     typedef enum {
         CS_NOT_IN_COMMENT,            // or seen starting "<"
         CS_SEEN_STARTING_EXCLAMATION,
@@ -1584,7 +1585,7 @@ void processOSIS(istream& infile) {
                     }
                     break;
                     default:
-                    cout << "FATAL(ENTITY): unknown entitytype on entity end: " << entitytype << endl;
+                    std::cout << "FATAL(ENTITY): unknown entitytype on entity end: " << entitytype << std::endl;
                     std::exit(EXIT_BAD_NESTING);
                 }
             }
@@ -1601,7 +1602,7 @@ void processOSIS(istream& infile) {
                     case ET_ERR :
                     // Remove the leading &
                     entityToken.erase(0u, 1u);
-                    cout << "WARNING(PARSE): malformed entity, replacing &" << entityToken << " with &amp;" << entityToken << endl;
+                    std::cout << "WARNING(PARSE): malformed entity, replacing &" << entityToken << " with &amp;" << entityToken << std::endl;
                     if (intoken) {
                         token.append("&amp;");
                         token.append(entityToken);
@@ -1613,10 +1614,10 @@ void processOSIS(istream& infile) {
                     break;
                     case ET_HEX :
                     if (entityToken[1] != 'x') {
-                        cout << "WARNING(PARSE): HEX entity must begin with &x, found " << entityToken << endl;
+                        std::cout << "WARNING(PARSE): HEX entity must begin with &x, found " << entityToken << std::endl;
                     }
                     else {
-                        cout << "WARNING(PARSE): Sword++ does not search HEX entities, found " << entityToken << endl;
+                        std::cout << "WARNING(PARSE): Sword++ does not search HEX entities, found " << entityToken << std::endl;
                     }
                     break;
                     case ET_CHAR :
@@ -1625,41 +1626,41 @@ void processOSIS(istream& infile) {
                         (entityToken != "&gt;")   &&
                         (entityToken != "&quot;") &&
                         (entityToken != "&apos;")) {
-                        cout << "WARNING(PARSE): XML only supports 5 Character entities &amp;, &lt;, &gt;, &quot; and &apos;, found " << entityToken << endl;
+                        std::cout << "WARNING(PARSE): XML only supports 5 Character entities &amp;, &lt;, &gt;, &quot; and &apos;, found " << entityToken << std::endl;
                     }
                     else
                     if (entityToken == "&apos;") {
-                        cout << "WARNING(PARSE): While valid for XML, XHTML does not support &apos;." << endl;
+                        std::cout << "WARNING(PARSE): While valid for XML, XHTML does not support &apos;." << std::endl;
                         if (!inattribute) {
-                            cout << "WARNING(PARSE): &apos; is unnecessary outside of attribute values. Replacing with '. " << endl;
+                            std::cout << "WARNING(PARSE): &apos; is unnecessary outside of attribute values. Replacing with '. " << std::endl;
                             entityToken = "'";
                         }
                         else {
                             switch (attrQuoteChar) {
                                 case '"' :
-                                cout << "WARNING(PARSE): &apos; is unnecessary inside double quoted attribute values. Replacing with '. " << endl;
+                                std::cout << "WARNING(PARSE): &apos; is unnecessary inside double quoted attribute values. Replacing with '. " << std::endl;
                                 entityToken = "'";
                                 break;
                                 case '\'' :
-                                cout << "WARNING(PARSE): &apos; is only needed within single quoted attribute values. Considering using double quoted attribute and replacing with '." << endl;
+                                std::cout << "WARNING(PARSE): &apos; is only needed within single quoted attribute values. Considering using double quoted attribute and replacing with '." << std::endl;
                                 break;
                             }
                         }
                     }
                     else
                     if (entityToken == "&quot;") {
-                        cout << "WARNING(PARSE): While valid for XML, &quot; is only needed within double quoted attribute values" << endl;
+                        std::cout << "WARNING(PARSE): While valid for XML, &quot; is only needed within double quoted attribute values" << std::endl;
                         if (!inattribute) {
-                            cout << "WARNING(PARSE): &quot; is unnecessary outside of attribute values. Replace with \"." << endl;
+                            std::cout << "WARNING(PARSE): &quot; is unnecessary outside of attribute values. Replace with \"." << std::endl;
                             entityToken = "\"";
                         }
                         else {
                             switch (attrQuoteChar) {
                                 case '"' :
-                                cout << "WARNING(PARSE): &quot; is only needed within double quoted attribute values. Considering using single quoted attribute and replacing with \"." << endl;
+                                std::cout << "WARNING(PARSE): &quot; is only needed within double quoted attribute values. Considering using single quoted attribute and replacing with \"." << std::endl;
                                 break;
                                 case '\'' :
-                                cout << "WARNING(PARSE): &quot; is unnecessary inside single quoted attribute values. Replace with \"." << endl;
+                                std::cout << "WARNING(PARSE): &quot; is unnecessary inside single quoted attribute values. Replace with \"." << std::endl;
                                 entityToken = "\"";
                                 break;
                             }
@@ -1667,7 +1668,7 @@ void processOSIS(istream& infile) {
                     }
                     break;
                     case ET_NUM :
-                    cout << "WARNING(PARSE): Sword++ does not search numeric entities, found " << entityToken << endl;
+                    std::cout << "WARNING(PARSE): Sword++ does not search numeric entities, found " << entityToken << std::endl;
                     break;
                     case ET_NONE :
                     default:
@@ -1731,7 +1732,7 @@ void processOSIS(istream& infile) {
                         token.push_back(curChar);
 
                         if (debug & DEBUG_OTHER) {
-                            cout << "DEBUG(COMMENTS): in comment" << endl;
+                            std::cout << "DEBUG(COMMENTS): in comment" << std::endl;
                         }
 
                         continue;
@@ -1741,7 +1742,7 @@ void processOSIS(istream& infile) {
                     }
 
                 default:
-                    cout << "FATAL(COMMENTS): unknown commentstate on comment start: " << commentstate << endl;
+                    std::cout << "FATAL(COMMENTS): unknown commentstate on comment start: " << commentstate << std::endl;
                     std::exit(EXIT_BAD_NESTING);
             }
         }
@@ -1774,7 +1775,7 @@ void processOSIS(istream& infile) {
                         commentstate = CS_NOT_IN_COMMENT;
 
                         if (debug & DEBUG_OTHER) {
-                            cout << "DEBUG(COMMENTS): out of comment" << endl;
+                            std::cout << "DEBUG(COMMENTS): out of comment" << std::endl;
                         }
 
                         continue;
@@ -1785,7 +1786,7 @@ void processOSIS(istream& infile) {
                     }
 
                 default:
-                    cout << "FATAL(COMMENTS): unknown commentstate on comment end: " << commentstate << endl;
+                    std::cout << "FATAL(COMMENTS): unknown commentstate on comment end: " << commentstate << std::endl;
                     std::exit(EXIT_BAD_NESTING);
             }
         }
@@ -1810,14 +1811,14 @@ void processOSIS(istream& infile) {
             // take this charIsAlpha if out to check for bugs in text
             if (charIsAlpha(token[1]) ||
                 (((token[1] == '/') || (token[1] == '?')) && charIsAlpha(token[2]))) {
-                //cout << "Handle:" << token.c_str() << endl;
+                // std::cout << "Handle:" << token.c_str() << std::endl;
                 XMLTag t = transformBSP(token.c_str());
 
                 if (!handleToken(text, t)) {
                     text.append(t.toString());
                 }
             } else {
-                cout << "WARNING(PARSE): malformed token: " << token << endl;
+                std::cout << "WARNING(PARSE): malformed token: " << token << std::endl;
             }
             continue;
         }
@@ -1827,8 +1828,8 @@ void processOSIS(istream& infile) {
         }
         else {
             switch (curChar) {
-                case '>' : cout << "WARNING(PARSE): > should be &gt;" << endl; text.append("&gt;"); break;
-                case '<' : cout << "WARNING(PARSE): < should be &lt;" << endl; text.append("&lt;"); break;
+                case '>' : std::cout << "WARNING(PARSE): > should be &gt;" << std::endl; text.append("&gt;"); break;
+                case '<' : std::cout << "WARNING(PARSE): < should be &lt;" << std::endl; text.append("&lt;"); break;
                 default  : text.push_back(curChar); break;
             }
         }
@@ -1993,12 +1994,12 @@ int main(int argc, char **argv) {
 #ifndef SWORDXX_HAS_ICU
     if (normalize) {
         normalize = false;
-        cout << "WARNING(UTF8): " << program << " is not compiled with support for ICU. Assuming -N." << endl;
+        std::cout << "WARNING(UTF8): " << program << " is not compiled with support for ICU. Assuming -N." << std::endl;
     }
 #endif
 
     if (debug & DEBUG_OTHER) {
-        cout << "DEBUG(ARGS):\n\tpath: " << path << "\n\tosisDoc: " << osisDoc << "\n\tcreate: " << append << "\n\tcompressType: " << compType << "\n\tblockType: " << iType << "\n\tcompressLevel: " << compLevel << "\n\tcipherKey: " << cipherKey.c_str() << "\n\tnormalize: " << normalize << endl;
+        std::cout << "DEBUG(ARGS):\n\tpath: " << path << "\n\tosisDoc: " << osisDoc << "\n\tcreate: " << append << "\n\tcompressType: " << compType << "\n\tblockType: " << iType << "\n\tcompressLevel: " << compLevel << "\n\tcipherKey: " << cipherKey.c_str() << "\n\tnormalize: " << normalize << std::endl;
     }
 
     if (!append) {  // == 0 then create module
@@ -2111,11 +2112,11 @@ int main(int argc, char **argv) {
     // Either read from std::cin (aka stdin), when the argument is a '-'
     // or from a specified file.
     if (!std::strcmp(osisDoc, "-")) {
-        processOSIS(cin);
+        processOSIS(std::cin);
     }
     else {
         // Let's see if we can open our input file
-        ifstream infile(osisDoc);
+        std::ifstream infile(osisDoc);
         if (infile.fail()) {
             fprintf(stderr, "ERROR: %s: couldn't open input file: %s \n", program, osisDoc);
             std::exit(EXIT_NO_READ);
