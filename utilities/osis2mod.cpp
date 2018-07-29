@@ -67,23 +67,23 @@ using namespace swordxx;
 using namespace std;
 
 int       debug            =   0; // mask of debug flags
-const int DEBUG_WRITE      =   1; // writing to module
-const int DEBUG_VERSE      =   2; // verse start and end
-const int DEBUG_QUOTE      =   4; // quotes, especially Words of Christ (WOC)
-const int DEBUG_TITLE      =   8; // titles
-const int DEBUG_INTERVERSE =  16; // inter-verse maerial
-const int DEBUG_XFORM      =  32; // transformations
-const int DEBUG_REV11N     =  64; // versification
-const int DEBUG_REF        = 128; // parsing of osisID and osisRef
-const int DEBUG_STACK      = 256; // cleanup of references
-const int DEBUG_OTHER      = 512; // ins and outs of books, chapters and verses
+constexpr int DEBUG_WRITE      =   1; // writing to module
+constexpr int DEBUG_VERSE      =   2; // verse start and end
+constexpr int DEBUG_QUOTE      =   4; // quotes, especially Words of Christ (WOC)
+constexpr int DEBUG_TITLE      =   8; // titles
+constexpr int DEBUG_INTERVERSE =  16; // inter-verse maerial
+constexpr int DEBUG_XFORM      =  32; // transformations
+constexpr int DEBUG_REV11N     =  64; // versification
+constexpr int DEBUG_REF        = 128; // parsing of osisID and osisRef
+constexpr int DEBUG_STACK      = 256; // cleanup of references
+constexpr int DEBUG_OTHER      = 512; // ins and outs of books, chapters and verses
 
 // Exit codes
-const int EXIT_BAD_ARG     =   1; // Bad parameter given for program
-const int EXIT_NO_WRITE    =   2; // Could not open the module for writing
-const int EXIT_NO_CREATE   =   3; // Could not create the module
-const int EXIT_NO_READ     =   4; // Could not open the input file for reading.
-const int EXIT_BAD_NESTING =   5; // BSP or BCV nesting is bad
+constexpr int EXIT_BAD_ARG     =   1; // Bad parameter given for program
+constexpr int EXIT_NO_WRITE    =   2; // Could not open the module for writing
+constexpr int EXIT_NO_CREATE   =   3; // Could not create the module
+constexpr int EXIT_NO_READ     =   4; // Could not open the input file for reading.
+constexpr int EXIT_BAD_NESTING =   5; // BSP or BCV nesting is bad
 
 #if SWORDXX_HAS_ICU
 UTF8NFC    normalizer;
