@@ -48,14 +48,12 @@ SET(test_PROGRAMS
     xmltest
 )
 
-IF(SWORDXX_WITH_ICU)
-    SET(test_PROGRAMS
-        ${test_PROGRAMS}
-        icutest
+SET(test_PROGRAMS
+    ${test_PROGRAMS}
+    icutest
 #        tlitmgrtest
-        translittest
-    )
-ENDIF(SWORDXX_WITH_ICU)
+    translittest
+)
 
 SET(test_PROGRAMS
     ${test_PROGRAMS}

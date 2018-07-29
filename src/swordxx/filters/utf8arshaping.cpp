@@ -21,8 +21,6 @@
  *
  */
 
-#if SWORDXX_HAS_ICU
-
 #include "utf8arshaping.h"
 
 #include <cstdlib>
@@ -64,4 +62,3 @@ char UTF8arShaping::processText(std::string &text, const SWKey *key, const SWMod
 }
 
 } /* namespace swordxx */
-#endif

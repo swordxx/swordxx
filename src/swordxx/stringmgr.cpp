@@ -24,7 +24,6 @@
 
 #include <cassert>
 #include <limits>
-#if SWORDXX_HAS_ICU
 #include <unicode/locid.h>
 #include <unicode/translit.h>
 #include <unicode/uchar.h>
@@ -32,7 +31,6 @@
 #include <unicode/unistr.h>
 #include <unicode/ustring.h>
 #include <unicode/utypes.h>
-#endif
 #include "localemgr.h"
 #include "utilstr.h"
 
@@ -111,9 +109,6 @@ namespace {
     }
 }
 
-
-#if SWORDXX_HAS_ICU
-
 //here comes our ICUStringMgr reimplementation
 class ICUStringMgr : public StringMgr {
 public:
@@ -122,8 +117,6 @@ public:
 protected:
     bool supportsUnicode() const override { return true; }
 };
-
-#endif /* SWORDXX_HAS_ICU */
 
 
 /** Default constructor
@@ -156,11 +149,7 @@ void StringMgr::setSystemStringMgr(StringMgr *newStringMgr) {
 */
 StringMgr* StringMgr::getSystemStringMgr() {
     if (!systemStringMgr) {
-#if SWORDXX_HAS_ICU
         systemStringMgr = std::make_unique<ICUStringMgr>();
-#else
-        systemStringMgr = std::make_unique<StringMgr>();
-#endif
     }
 
     return systemStringMgr.get();
@@ -211,9 +200,6 @@ bool StringMgr::supportsUnicode() const {
     return false; //default impl has no UTF8 support
 }
 
-
-#if SWORDXX_HAS_ICU
-
 void ICUStringMgr::upperUTF8(std::string & str) const {
     if (str.empty())
         return;
@@ -263,7 +249,5 @@ void ICUStringMgr::upperUTF8(std::string & str) const {
     ucInUTF16.reset();
     str.assign(lcInUTF8.get(), static_cast<std::size_t>(lcSizeInUtf8));
 }
-
-#endif
 
 } /* namespace swordxx */

@@ -31,9 +31,7 @@
 #include "filters/utf16utf8.h"
 #include "filters/utf8latin1.h"
 #include "filters/utf8html.h"
-#if SWORDXX_HAS_ICU
 #include "filters/utf8scsu.h"
-#endif
 #include "filters/utf8utf16.h"
 #include "swmgr.h"
 #include "swmodule.h"
@@ -49,9 +47,7 @@ std::shared_ptr<SWFilter> makeEncodingFilter(TextEncoding const encoding) {
         case ENC_UTF16:  return std::make_shared<UTF8UTF16>();
         case ENC_RTF:    return std::make_shared<UnicodeRTF>();
         case ENC_HTML:   return std::make_shared<UTF8HTML>();
-#if SWORDXX_HAS_ICU
         case ENC_SCSU:   return std::make_shared<UTF8SCSU>();
-#endif
         default: // i.e. case ENC_UTF8
             return std::shared_ptr<SWFilter>();
     }

@@ -20,8 +20,6 @@
  *
  */
 
-#if SWORDXX_HAS_ICU
-
 #include "utf8scsu.h"
 
 #include <string>
@@ -60,5 +58,3 @@ char UTF8SCSU::processText(std::string &text, const SWKey *key, const SWModule *
 }
 
 } /* namespace swordxx */
-
-#endif /* SWORDXX_HAS_ICU */

@@ -37,7 +37,6 @@
 #include <swordxx/modules/genbook/rawgenbook.h>
 #include <swordxx/stringmgr.h>
 #include <swordxx/utilstr.h>
-#if SWORDXX_HAS_ICU
 #include <unicode/utypes.h>
 #include <unicode/ucnv.h>
 #include <unicode/ustring.h>
@@ -45,7 +44,6 @@
 #include <unicode/unistr.h>
 #include <unicode/translit.h>
 #include <unicode/locid.h>
-#endif
 
 
 using namespace swordxx;
@@ -143,7 +141,6 @@ void writeEntry(SWModule & book,
 
 // Added for Hesychius, but this stuff should be pushed back into new StringMgr
 // functionality
-#if SWORDXX_HAS_ICU
 //    if (lexLevels) {
     if (lexLevels && !hasPrefix(keyBuffer, "/Intro")) {
         auto const size = (keyBuffer.size() + (lexLevels * 2));
@@ -196,7 +193,6 @@ void writeEntry(SWModule & book,
             u_strToUTF8(&keyBuffer[0u], max, nullptr, ubuffer.get(), -1, &err);
         }
     }
-#endif /* SWORDXX_HAS_ICU */
 
     std::cout << keyBuffer << std::endl;
 

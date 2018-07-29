@@ -1,6 +1,3 @@
-# TODO: write FindICU (icu-config only for 2.2 and up) -- currently taken from another CMake system
-#       use BUILD_SHARED_LIBS
-#
 # NOTES: Defaults to build type of Shared
 #        Forces out-of-source tree build
 #
@@ -11,7 +8,7 @@
 # all posterity and eternity, wherever such transfer is possible.  Where it is
 # not, then this file is released under the GPLv2 by myself.
 PROJECT(swordxx CXX C)
-CMAKE_MINIMUM_REQUIRED(VERSION 3.3)
+CMAKE_MINIMUM_REQUIRED(VERSION 3.7)
 CMAKE_POLICY(SET CMP0017 NEW)
 
 # Set versions
@@ -150,24 +147,9 @@ ELSE()
     MESSAGE(FATAL_ERROR "Required CLucene >2.0 not found!")
 ENDIF()
 
-IF(PKG_CONFIG_FOUND)
-    pkg_check_modules(ICU icu-uc icu-i18n)
-ENDIF()
-IF(ICU_FOUND AND NOT SWORDXX_NO_ICU STREQUAL "No")
-    MESSAGE(STATUS "Using ICU: yes")
-    ListToSList(ICU_CFLAGS_OTHER)
-    SListAppend(SWORDXX_CFLAGS      ${ICU_CFLAGS_OTHER})
-    ListAppend(SWORDXX_DEFINITIONS  "SWORDXX_HAS_ICU=1" "_USTDIO_")
-    ListAppend(SWORDXX_INCLUDE_DIRS   ${ICU_INCLUDE_DIRS})
-    ExpandLibs("${ICU_LIBRARY_DIRS}" "${ICU_LIBRARIES}" ICU_LIBS)
-    ListAppend(SWORDXX_LINK_LIBRARIES ${ICU_LIBS})
-    ListToSList(ICU_LDFLAGS_OTHER)
-    SListAppend(SWORDXX_LDFLAGS     ${ICU_LDFLAGS_OTHER})
-    SET(SWORDXX_WITH_ICU 1)
-ELSE()
-    MESSAGE(STATUS "Using ICU: no")
-    SET(SWORDXX_WITH_ICU 0)
-ENDIF()
+FIND_PACKAGE(ICU REQUIRED COMPONENTS data i18n uc)
+ListAppend(SWORDXX_INCLUDE_DIRS   ${ICU_INCLUDE_DIRS})
+ListAppend(SWORDXX_LINK_LIBRARIES ${ICU_LIBRARIES})
 
 
 ################################################################################

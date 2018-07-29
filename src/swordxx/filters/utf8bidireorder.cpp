@@ -22,8 +22,6 @@
  *
  */
 
-#if SWORDXX_HAS_ICU
-
 #include "utf8bidireorder.h"
 
 #include <cstdlib>
@@ -77,5 +75,3 @@ char UTF8BiDiReorder::processText(std::string &text, const SWKey *key, const SWM
 }
 
 } /* namespace swordxx */
-
-#endif /* SWORDXX_HAS_ICU */

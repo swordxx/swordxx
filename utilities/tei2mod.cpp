@@ -61,10 +61,8 @@
 #include <memory>
 #include <string>
 #include <swordxx/filters/cipherfil.h>
-#if SWORDXX_HAS_ICU
 #include <swordxx/filters/latin1utf8.h>
 #include <swordxx/filters/utf8nfc.h>
-#endif
 #include <swordxx/modules/common/bz2comprs.h>
 #include <swordxx/modules/common/lzsscomprs.h>
 #include <swordxx/modules/common/xzcomprs.h>
@@ -80,13 +78,11 @@ using namespace swordxx;
 
 using namespace std;
 
-#if SWORDXX_HAS_ICU
 UTF8NFC * normalizer = nullptr;
 int normalized = 0;
 
 Latin1UTF8 converter;
 int converted = 0;
-#endif
 
 #define DEBUG
 
@@ -171,7 +167,6 @@ int detectUTF8(const char *txt) {
 }
 
 void normalizeInput(SWKey &key, std::string &text) {
-#if SWORDXX_HAS_ICU
     int utf8State = detectUTF8(text.c_str());
     if (normalize) {
         // Don't need to normalize text that is ASCII
@@ -200,7 +195,6 @@ void normalizeInput(SWKey &key, std::string &text) {
             }
         }
     }
-#endif /* SWORDXX_HAS_ICU */
 }
 
 void writeEntry(SWKey &key, std::string &text) {
@@ -361,10 +355,8 @@ bool handleToken(std::string & text, XMLTag & token) {
 }
 
 int main(int argc, char **argv) {
-#if SWORDXX_HAS_ICU
     UTF8NFC normalizr;
     normalizer = &normalizr;
-#endif
 
     std::string program = argv[0];
     fprintf(stderr, "You are running %s: $Rev$\n", argv[0]);
@@ -436,12 +428,10 @@ int main(int argc, char **argv) {
         recommendedPath += "rawld4/";
     }
 
-#if SWORDXX_HAS_ICU
     if (normalize) {
         normalize = false;
         cout << program << " is not compiled with support for ICU. Setting -N flag." << endl;
     }
-#endif
 
     if (compType == "LZSS") {
         compressor = std::make_unique<LZSSCompress>();
@@ -571,10 +561,8 @@ int main(int argc, char **argv) {
     delete cipherFilter;
     infile.close();
 
-#if SWORDXX_HAS_ICU
     if (converted)  fprintf(stderr, "tei2mod converted %d verses to UTF-8\n", converted);
     if (normalized) fprintf(stderr, "tei2mod normalized %d verses to NFC\n", normalized);
-#endif
 
     /*
      * Suggested module name detection.

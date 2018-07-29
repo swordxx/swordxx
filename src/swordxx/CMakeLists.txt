@@ -42,12 +42,6 @@ ADD_DEFINITIONS("-DSWORDXX_VERSION_H_FILE=\"${SWORDXX_VERSION_H_FILE}\"")
 INSTALL(FILES "${SWORDXX_VERSION_H_FILE}"
         DESTINATION "${SWORDXX_INCLUDE_INSTALL_PREFIX}/swordxx")
 
-# Generate and install config.h header:
-CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/config.h.in"
-               "${CMAKE_BINARY_DIR}/include/swordxx/config.h" @ONLY)
-INSTALL(FILES "${CMAKE_BINARY_DIR}/include/swordxx/config.h"
-        DESTINATION "${SWORDXX_INCLUDE_INSTALL_PREFIX}/swordxx")
-
 # Set some variables for SwordxxConfig.cmake and sworxx.pc generation:
 SET(SWORDXX_INSTALL_LINK_LIBRARIES "-L${SWORDXX_LIB_INSTALL_PREFIX} -lswordxx")
 SET(SWORDXX_INSTALL_INCLUDE_DIRS "${SWORDXX_INCLUDE_INSTALL_PREFIX}")

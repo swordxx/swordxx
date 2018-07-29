@@ -25,11 +25,9 @@
 
 #include "../swfilter.h"
 
-#if SWORDXX_HAS_ICU
 #include <unicode/utypes.h>
 #include <unicode/ucnv.h>
 #include <unicode/uchar.h>
-#endif
 
 
 namespace swordxx {
@@ -38,22 +36,9 @@ namespace swordxx {
  */
 class SWDLLEXPORT SCSUUTF8 : public SWFilter {
 private:
-#if SWORDXX_HAS_ICU
     UConverter* scsuConv;
     UConverter* utf8Conv;
     UErrorCode err = U_ZERO_ERROR;
-#else
-    // without ICU, we'll attempt to use Roman Czyborra's SCSU decoder code
-    unsigned char active;
-    bool mode;
-    unsigned long c, d;
-
-    static unsigned short start[8];
-    static unsigned short slide[8];
-    static unsigned short win[256];
-
-    int UTF8Output(unsigned long, std::string* utf8Buf);
-#endif
 
 public:
     SCSUUTF8();

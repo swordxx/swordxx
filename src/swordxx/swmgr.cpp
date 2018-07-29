@@ -84,9 +84,7 @@
 #include "modules/common/swcipher.h"
 #include "modules/common/xzcomprs.h"
 #include "modules/common/zipcomprs.h"
-#if SWORDXX_HAS_ICU
 #include "filters/utf8transliterator.h"
-#endif
 #include "modules/genbook/rawgenbook.h"
 #include "modules/lexdict/rawld.h"
 #include "modules/lexdict/rawld4.h"
@@ -196,11 +194,9 @@ void SWMgr::init() {
     ADD_OPTION_FILTER(PapyriPlain,);
 
 // UTF8Transliterator needs to be handled differently because it should always available as an option, for all modules
-#if SWORDXX_HAS_ICU
     ADD_OPTION_FILTER(UTF8Transliterator,
                       transliterator = filter;
                       options.push_back(filter->getOptionName()););
-#endif
 
     ADD_EXTRA_FILTER(GBFPlain,  m_gbfplain  = filter;);
     ADD_EXTRA_FILTER(ThMLPlain, m_thmlplain = filter;);
@@ -1017,9 +1013,7 @@ void SWMgr::addGlobalOptionFilters(SWModule & module,
     if (filterMgr)
         /// \bug Iterator start already invalidated?
         filterMgr->addGlobalOptions(module, section, start, end);
-#if SWORDXX_HAS_ICU
     module.addOptionFilter(transliterator);
-#endif
 }
 
 

@@ -23,8 +23,6 @@
 
 #include "utf8transliterator.h"
 
-#if SWORDXX_HAS_ICU
-
 #include <cstdlib>
 #include <unicode/resbund.h>
 #include <unicode/uchar.h>
@@ -703,7 +701,3 @@ char UTF8Transliterator::processText(std::string &text, const SWKey *key, const 
 }
 
 } /* namespace swordxx */
-#endif
-
-
-
