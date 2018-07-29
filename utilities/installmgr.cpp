@@ -50,7 +50,8 @@ std::string confPath;
 
 bool isConfirmed;
 
-void usage(char const * progName = nullptr, char const * error = nullptr);
+[[noreturn]] void usage(char const * progName = nullptr,
+                        char const * error = nullptr);
 
 class MyInstallMgr : public InstallMgr {
 public:
@@ -350,8 +351,7 @@ void localDirInstallModule(const char *dir, const char *modName) {
     } else cout << "\nInstalled module: [" << module.getName() << "]\n";
 }
 
-
-void usage(const char *progName, const char *error) {
+[[noreturn]] void usage(const char *progName, const char *error) {
 
     if (error) fprintf(stderr, "\n%s: %s\n", (progName ? progName : "installmgr"), error);
 
