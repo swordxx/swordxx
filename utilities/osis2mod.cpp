@@ -97,7 +97,7 @@ int converted  = 0;
 SWText * module = nullptr;
 VerseKey currentVerse;
 std::string v11n     = "KJV";
-char activeOsisID[255];
+std::string activeOsisID;
 char currentOsisID[255];
 
 std::string activeVerseText;
@@ -507,7 +507,7 @@ void writeEntry(std::string &text, bool force = false) {
     saveKey = currentVerse;
 
     // If we have seen a verse and the supplied one is different then we output the collected one.
-    if (*activeOsisID && std::strcmp(activeOsisID, keyOsisID)) {
+    if (!activeOsisID.empty() && activeOsisID != keyOsisID) {
 
         if (!isValidRef(lastKey.getText().c_str(), "writeEntry")) {
             makeValidRef(lastKey);
@@ -515,7 +515,7 @@ void writeEntry(std::string &text, bool force = false) {
 
         currentVerse = lastKey;
 
-        prepareSWText(activeOsisID, activeVerseText);
+        prepareSWText(activeOsisID.c_str(), activeVerseText);
 
         // Put the revision into the module
         int testmt = currentVerse.getTestament();
@@ -587,7 +587,7 @@ void writeEntry(std::string &text, bool force = false) {
 
     currentVerse = saveKey;
     lastKey = currentVerse;
-    std::strcpy(activeOsisID, keyOsisID);
+    activeOsisID = keyOsisID;
 }
 
 void linkToEntry(VerseKey &linkKey, VerseKey &dest) {
@@ -1440,7 +1440,7 @@ void processOSIS(istream& infile) {
         ET_ERR
     } t_entitytype;
 
-    activeOsisID[0] = '\0';
+    activeOsisID.clear();
 
     std::strcpy(currentOsisID,"N/A");
 
