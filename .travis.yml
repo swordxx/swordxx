@@ -3,8 +3,7 @@ sudo: required
 dist: trusty
 language: generic
 before_install:
-  - curl -sSL https://cmake.org/files/v3.3/cmake-3.3.0-Linux-x86_64.tar.gz | sudo tar -xzC /opt
-  - curl -sSL https://cmake.org/files/v3.6/cmake-3.6.2-Linux-x86_64.tar.gz | sudo tar -xzC /opt
+  - curl -sSL https://cmake.org/files/v3.7/cmake-3.7.0-Linux-x86_64.tar.gz | sudo tar -xzC /opt
   - curl -sSL https://cmake.org/files/v3.9/cmake-3.9.3-Linux-x86_64.tar.gz | sudo tar -xzC /opt
 script: ./travis.sh || exit 1
 matrix:
@@ -17,9 +16,7 @@ matrix:
           packages:
             - &baseDeps [libbz2-dev, xz-utils, liblzma-dev, libcurl4-openssl-dev, zlib1g-dev, libclucene-dev, curl]
             - [gcc-7, g++-7]
-    - env: CXX=g++-7 CC=gcc-7 CMAKE_VERSION=3.6.2
-      addons: *gcc7addons
-    - env: CXX=g++-7 CC=gcc-7 CMAKE_VERSION=3.3.0
+    - env: CXX=g++-7 CC=gcc-7 CMAKE_VERSION=3.7.0
       addons: *gcc7addons
     - env: CXX=g++-6 CC=gcc-6
       addons:
