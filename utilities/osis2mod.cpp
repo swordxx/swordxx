@@ -1462,11 +1462,11 @@ void processOSIS(istream& infile) {
     bool intoken = false;
     bool inWhitespace = false;
     bool seeingSpace = false;
-    unsigned char curChar = '\0';
+    char curChar = '\0';
     std::string entityToken;
     bool inentity = false;
     t_entitytype entitytype = ET_NONE;
-    unsigned char attrQuoteChar = '\0';
+    char attrQuoteChar = '\0';
     bool inattribute = false;
     unsigned int linePos = 1;
     unsigned int charPos = 0;
@@ -1480,7 +1480,7 @@ void processOSIS(istream& infile) {
             continue;
         }
 
-        curChar = (unsigned char) possibleChar;
+        curChar = static_cast<char>(possibleChar);
 
         // All newlines are simply whitespace
         // Does a Sword++ module actually require this?
@@ -1588,7 +1588,7 @@ void processOSIS(istream& infile) {
             }
 
             if (entitytype != ET_ERR) {
-                entityToken.push_back((char) curChar);
+                entityToken.push_back(curChar);
             }
 
             // It is an entity, perhaps invalid, if curChar is ';', error otherwise
@@ -1706,7 +1706,7 @@ void processOSIS(istream& infile) {
                 case CS_NOT_IN_COMMENT :
                     if (curChar == '!') {
                         commentstate = CS_SEEN_STARTING_EXCLAMATION;
-                        token.push_back((char) curChar);
+                        token.push_back(curChar);
                         continue;
                     } else {
                         break;
@@ -1715,7 +1715,7 @@ void processOSIS(istream& infile) {
                 case CS_SEEN_STARTING_EXCLAMATION :
                     if (curChar == '-') {
                         commentstate = CS_SEEN_STARTING_HYPHEN;
-                        token.push_back((char) curChar);
+                        token.push_back(curChar);
                         continue;
                     } else {
                         commentstate = CS_NOT_IN_COMMENT;
@@ -1726,7 +1726,7 @@ void processOSIS(istream& infile) {
                     if (curChar == '-') {
                         incomment = true;
                         commentstate = CS_IN_COMMENT;
-                        token.push_back((char) curChar);
+                        token.push_back(curChar);
 
                         if (debug & DEBUG_OTHER) {
                             cout << "DEBUG(COMMENTS): in comment" << endl;
@@ -1821,13 +1821,13 @@ void processOSIS(istream& infile) {
         }
 
         if (intoken) {
-            token.push_back((char) curChar);
+            token.push_back(curChar);
         }
         else {
             switch (curChar) {
                 case '>' : cout << "WARNING(PARSE): > should be &gt;" << endl; text.append("&gt;"); break;
                 case '<' : cout << "WARNING(PARSE): < should be &lt;" << endl; text.append("&lt;"); break;
-                default  : text.push_back((char) curChar); break;
+                default  : text.push_back(curChar); break;
             }
         }
     }
