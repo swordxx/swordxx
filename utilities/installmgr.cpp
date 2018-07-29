@@ -146,19 +146,20 @@ void init() {
 }
 
 
-// clean up and exit if status is 0 or negative error code
-void finish(int status) {
+void cleanup() {
     delete statusReporter;
     delete installMgr;
     delete mgr;
 
     installMgr = nullptr;
     mgr        = nullptr;
+}
 
-    if (status < 1) {
-        cout << "\n";
-        std::exit(status);
-    }
+// clean up and exit if status is 0 or negative error code
+[[noreturn]] void finish(int status) {
+    cleanup();
+    cout << "\n";
+    std::exit(status);
 }
 
 
@@ -204,7 +205,7 @@ void syncConfig() {
     // be sure we have at least some config file already out there
     if (!FileMgr::existsFile(confPath.c_str())) {
         createBasicConfig(true, false);
-        finish(1); // cleanup and don't exit
+        cleanup();
         init();    // re-init with InstallMgr which uses our new config
     }
 
@@ -457,7 +458,6 @@ int main(int argc, char **argv) {
         else usage(*argv, (((std::string)"Unknown argument: ")+ argv[i]).c_str());
     }
 
-    finish(0);
-
+    cleanup();
     return 0;
 }
