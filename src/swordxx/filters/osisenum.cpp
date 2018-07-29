@@ -65,6 +65,10 @@ char OSISEnum::processText(std::string &text, const SWKey *key, const SWModule *
                         token = wtag.toString();
                         trimString(token);
                         result.append(token);
+                    } else { // Keep original token in text:
+                        result.push_back('<');
+                        result.append(token);
+                        result.push_back('>');
                     }
                 } else { // Keep original token in text:
                     result.push_back('<');
