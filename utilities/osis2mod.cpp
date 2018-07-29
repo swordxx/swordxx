@@ -66,6 +66,8 @@ using namespace swordxx;
 
 using namespace std;
 
+namespace {
+
 int       debug            =   0; // mask of debug flags
 constexpr int DEBUG_WRITE      =   1; // writing to module
 constexpr int DEBUG_VERSE      =   2; // verse start and end
@@ -1842,6 +1844,8 @@ void processOSIS(istream& infile) {
     if (normalized) fprintf(stderr, "osis2mod normalized %d verses to NFC\n", normalized);
 #endif
 }
+
+} // anonymous namespace
 
 int main(int argc, char **argv) {
 
