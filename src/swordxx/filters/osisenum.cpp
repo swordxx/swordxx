@@ -48,47 +48,35 @@ OSISEnum::~OSISEnum() {
 char OSISEnum::processText(std::string &text, const SWKey *key, const SWModule *module) {
     (void) key;
     (void) module;
-    std::string token;
-    bool intoken = false;
-
-    const std::string orig = text;
-    const char * from = orig.c_str();
 
     if (!option) {
-        for (text = ""; *from; ++from) {
-            if (*from == '<') {
-                intoken = true;
-                token = "";
-                continue;
-            }
-            if (*from == '>') {    // process tokens
-                intoken = false;
+        std::string result;
+        std::string token;
+        bool inToken = false;
+        for (auto const & c : text) {
+            if (c == '<') {
+                inToken = true;
+            } else if (c == '>') { // Process token:
+                inToken = false;
                 if (hasPrefix(token, "w ")) {    // Word
                     XMLTag wtag(token.c_str());
                     if (!wtag.attribute("n").empty()) {
                         wtag.eraseAttribute("n");
                         token = wtag.toString();
                         trimString(token);
-                        // drop <>
-                        token.erase(0u, 1u);
-                        token.pop_back();
+                        result.append(token);
                     }
+                } else { // Keep original token in text:
+                    result.push_back('<');
+                    result.append(token);
+                    result.push_back('>');
                 }
-
-                // keep token in text
-                text.push_back('<');
-                text.append(token);
-                text.push_back('>');
-
-                continue;
-            }
-            if (intoken) {
-                token += *from;
-            }
-            else    {
-                text.push_back(*from);
+                token.clear();
+            } else {
+                (inToken ? token : result).push_back(c);
             }
         }
+        text = std::move(result);
     }
     return 0;
 }
