@@ -1008,8 +1008,6 @@ bool handleToken(std::string &text, XMLTag token) {
                 std::cout << "DEBUG(INTERVERSE): " << currentOsisID << ": interverse start token " << token.toString() << ":" << text.c_str() << std::endl;
             }
         }
-
-        return false;
     } // Done with procesing start and empty tags
 
     // Process end tags
@@ -1190,8 +1188,6 @@ bool handleToken(std::string &text, XMLTag token) {
 
             return false;
         }
-
-        return false;
     } // done with Processing end tags
 
     return false;
