@@ -103,13 +103,13 @@ struct __attribute__ ((visibility("internal"))) Sapphire::State {
 
     State(NoInitialization const);
     State();
-    State(State &&);
+    State(State &&) = delete;
     State(State const &);
     State(std::uint8_t * key, std::size_t keysize);
 
     ~State() noexcept;
 
-    State & operator=(State &&) noexcept;
+    State & operator=(State &&) = delete;
     State & operator=(State const &) noexcept;
 
     void defaultInitialize();
@@ -145,10 +145,6 @@ Sapphire::State::State()
     : State(DontInitialize)
 { defaultInitialize(); }
 
-Sapphire::State::State(State && move)
-    : State(DontInitialize)
-{ (*this) = std::move(move); }
-
 Sapphire::State::State(State const & copy)
     : State(DontInitialize)
 { (*this) = copy; }
@@ -159,7 +155,6 @@ Sapphire::State::State(std::uint8_t * key, std::size_t keysize)
 
 Sapphire::State::~State() noexcept { std::memset(this, 0, sizeof(*this)); }
 
-Sapphire::State & Sapphire::State::operator=(State &&) noexcept = default;
 Sapphire::State & Sapphire::State::operator=(State const &) noexcept = default;
 
 void Sapphire::State::defaultInitialize() {
