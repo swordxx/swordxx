@@ -49,7 +49,7 @@ void writeEntry(SWModule & module,
                 std::string const & entry,
                 bool const replace);
 
-void usage(char const * progName, char const * error = nullptr) {
+[[noreturn]] void usage(char const * progName, char const * error = nullptr) {
     if (error) fprintf(stderr, "\n%s: %s\n", progName, error);
     fprintf(stderr, "\n=== imp2vs (Revision $Rev$) Sword++ Bible/Commentary importer.\n");
     fprintf(stderr, "\nusage: %s <imp_file> [options]\n", progName);
