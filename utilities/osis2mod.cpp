@@ -476,7 +476,7 @@ void makeValidRef(VerseKey &key) {
 }
 
 void writeEntry(std::string &text, bool force = false) {
-    char keyOsisID[255];
+    std::string keyOsisID;
 
     static const char* revision = "<milestone type=\"x-importer\" subType=\"x-osis2mod\" n=\"$Rev$\"/>";
     static bool firstOT = true;
@@ -486,12 +486,11 @@ void writeEntry(std::string &text, bool force = false) {
         return;
     }
 
-    std::strcpy(keyOsisID, currentVerse.getOSISRef());
+    keyOsisID = currentVerse.getOSISRef();
 
     // set keyOsisID to anything that an osisID cannot be.
-    if (force) {
-        std::strcpy(keyOsisID, "-force");
-    }
+    if (force)
+        keyOsisID = "-force";
 
     static VerseKey lastKey;
     lastKey.setVersificationSystem(
