@@ -2095,8 +2095,6 @@ int main(int argc, char **argv) {
             );
     }
 
-    SWFilter * cipherFilter = nullptr;
-
     if (cipherKey.length()) {
         fprintf(stderr, "Adding cipher filter with phrase: %s\n", cipherKey.c_str() );
         module->addRawFilter(std::make_shared<CipherFilter>(cipherKey.c_str()));
@@ -2124,7 +2122,6 @@ int main(int argc, char **argv) {
     }
 
     delete module;
-    delete cipherFilter;
     delete outputEncoder;
     delete outputDecoder;
 
