@@ -480,7 +480,6 @@ void makeValidRef(VerseKey &key) {
 void writeEntry(std::string &text, bool force = false) {
     std::string keyOsisID;
 
-    static const char* revision = "<milestone type=\"x-importer\" subType=\"x-osis2mod\" n=\"$Rev$\"/>";
     static bool firstOT = true;
     static bool firstNT = true;
 
@@ -530,7 +529,8 @@ void writeEntry(std::string &text, bool force = false) {
             currentVerse.setBook(0);
             currentVerse.setChapter(0);
             currentVerse.setVerse(0);
-            module->setEntry(revision);
+            module->setEntry("<milestone type=\"x-importer\" "
+                             "subType=\"x-osis2mod\" n=\"$Rev$\"/>");
             currentVerse = t;
             switch (testmt) {
             case 1:
