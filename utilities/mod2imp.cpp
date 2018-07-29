@@ -41,7 +41,7 @@ using std::endl;
 using namespace swordxx;
 
 
-void usage(const char * progName, const char * error = nullptr) {
+[[noreturn]] void usage(const char * progName, const char * error = nullptr) {
     if (error) fprintf(stderr, "\n%s: %s\n", progName, error);
     fprintf(stderr, "\n=== mod2imp (Revision $Rev$) Sword++ module exporter.\n");
     fprintf(stderr, "\nusage: %s <module_name> [options]\n"
