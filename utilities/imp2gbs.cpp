@@ -29,7 +29,6 @@
 #include <cstdio>
 #include <cstdlib>
 #include <iostream>
-#include <swordxx/config.h>
 #include <swordxx/filemgr.h>
 #include <swordxx/filters/utf8greekaccents.h>
 #include <swordxx/keys/treekeyidx.h>

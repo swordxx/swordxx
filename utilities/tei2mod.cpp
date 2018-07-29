@@ -52,8 +52,6 @@
     #pragma warning( disable: 4251 )
 #endif
 
-#include <swordxx/config.h>
-
 #include <array>
 #include <cstdio>
 #include <fstream>
