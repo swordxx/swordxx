@@ -47,13 +47,6 @@ using std::endl;
 using std::cerr;
 using std::cout;
 
-void errorOutHelp(char *appName) {
-    cerr << appName << " - a tool to output a Sword++ module in OSIS format\n";
-    cerr << "usage: "<< appName << " <modname> \n";
-    cerr << "\n\n";
-    std::exit(-1);
-}
-
 
 int main(int argc, char **argv)
 {
@@ -76,12 +69,18 @@ int main(int argc, char **argv)
     cerr << "If you still must export Sword++ module data, use mod2imp.\n";
     cerr << "It is more lossless; or less lossful, and easier to read.\n\n";
 
-    if ((argc != 2)) {
-        errorOutHelp(argv[0]);
-    }
-
-    if ((!std::strcmp(argv[1], "-h")) || (!std::strcmp(argv[1], "--help")) || (!std::strcmp(argv[1], "/?")) || (!std::strcmp(argv[1], "-?")) || (!std::strcmp(argv[1], "-help"))) {
-        errorOutHelp(argv[0]);
+    if ((argc != 2)
+        || (!std::strcmp(argv[1], "-h"))
+        || (!std::strcmp(argv[1], "--help"))
+        || (!std::strcmp(argv[1], "/?"))
+        || (!std::strcmp(argv[1], "-?"))
+        || (!std::strcmp(argv[1], "-help")))
+    {
+        cerr << argv[0u] << " - a tool to output a Sword++ module in OSIS "
+                            "format\n";
+        cerr << "usage: "<< argv[0u] << " <modname> \n";
+        cerr << "\n\n";
+        return 1;
     }
 
     SWMgr mgr(std::make_shared<MarkupFilterMgr>(FMT_OSIS));
