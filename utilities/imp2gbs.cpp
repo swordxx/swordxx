@@ -50,6 +50,8 @@
 
 using namespace swordxx;
 
+namespace {
+
 std::string outPath;
 std::string inFile;
 bool  toUpper     = false;
@@ -210,6 +212,7 @@ void writeEntry(SWModule & book,
     book.setEntry(entBuffer.c_str());
 }
 
+} // anonymous namespace
 
 int main(int argc, char * argv[]) {
     greekAccentsFilter.setOptionValue("Off"); // off = accents off
