@@ -32,6 +32,7 @@
 #include <fcntl.h>
 #include <fstream>
 #include <iostream>
+#include <sstream>
 #include <stack>
 #include <string>
 #include <swordxx/filters/cipherfil.h>
@@ -808,9 +809,10 @@ bool handleToken(std::string &text, XMLTag token) {
 
                 // Did we have pre-verse material that needs to be marked?
                 if (inPreVerse) {
-                    char genBuf[200];
-                    sprintf(genBuf, "<div type=\"x-milestone\" subType=\"x-preverse\" eID=\"pv%d\"/>", genID++);
-                    text.append(genBuf);
+                    std::ostringstream oss;
+                    oss << "<div type=\"x-milestone\" subType=\"x-preverse\" "
+                           "eID=\"pv" << genID++ << "\"/>";
+                    text.append(oss.str());
                 }
 
                 // Get osisID for verse or annotateRef for commentary
@@ -991,9 +993,10 @@ bool handleToken(std::string &text, XMLTag token) {
             }
 
             if (inPreVerse) {
-                char genBuf[200];
-                sprintf(genBuf, "<div type=\"x-milestone\" subType=\"x-preverse\" sID=\"pv%d\"/>", genID);
-                text.append(genBuf);
+                std::ostringstream oss;
+                oss << "<div type=\"x-milestone\" subType=\"x-preverse\" "
+                       "sID=\"pv" << genID << "\"/>";
+                text.append(oss.str());
             }
         }
 
@@ -1206,7 +1209,6 @@ bool handleToken(std::string &text, XMLTag token) {
 XMLTag transformBSP(XMLTag t) {
     static std::stack<XMLTag> bspTagStack;
     static int sID = 1;
-    char buf[11];
     std::string typeAttr = t.attribute("type");
 
     // Support simplification transformations
@@ -1224,8 +1226,9 @@ XMLTag transformBSP(XMLTag t) {
         // Transform <p> into <div type="x-p"> and milestone it
         if (tagName == "p") {
             t = "<div type=\"x-p\" />";
-            sprintf(buf, "gen%d", sID++);
-            t.setAttribute("sID", buf);
+            std::ostringstream oss;
+            oss << "gen" << sID++;
+            t.setAttribute("sID", oss.str().c_str());
         }
 
         // Transform <tag> into <tag  sID="">, where tag is a milestoneable element.
@@ -1248,8 +1251,9 @@ XMLTag transformBSP(XMLTag t) {
              tagName == "verse"
         ) {
             t.setEmpty(true);
-            sprintf(buf, "gen%d", sID++);
-            t.setAttribute("sID", buf);
+            std::ostringstream oss;
+            oss << "gen" << sID++;
+            t.setAttribute("sID", oss.str().c_str());
         }
         bspTagStack.push(t);
 
