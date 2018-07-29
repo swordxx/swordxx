@@ -341,7 +341,7 @@ bool handleToken(std::string & text, XMLTag & token) {
     return false;
 }
 
-void usage(char const * app, char const * error = nullptr) {
+[[noreturn]] void usage(char const * app, char const * error = nullptr) {
 
     if (error) fprintf(stderr, "\n%s: %s\n", app, error);
 
