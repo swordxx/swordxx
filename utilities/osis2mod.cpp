@@ -658,11 +658,11 @@ bool handleToken(std::string &text, XMLTag token) {
     static std::stack<XMLTag> tagStack;
 
     // The following are used to validate well-formedness
-    static int                chapterDepth    = 0;
-    static int                bookDepth       = 0;
-    static int                verseDepth      = 0;
+    static std::size_t chapterDepth = 0u;
+    static std::size_t bookDepth    = 0u;
+    static std::size_t verseDepth   = 0u;
 
-    int                       tagDepth        = tagStack.size();
+    std::size_t tagDepth = tagStack.size();
     std::string                     tokenName       = token.name();
     bool                      isEndTag        = token.isEndTag() || !token.attribute("eID").empty();
     std::string                     typeAttr        = token.attribute("type");
@@ -736,8 +736,8 @@ bool handleToken(std::string &text, XMLTag token) {
                 }
 
                 bookDepth       = tagStack.size();
-                chapterDepth    = 0;
-                verseDepth      = 0;
+                chapterDepth    = 0u;
+                verseDepth      = 0u;
 
                 inCanonicalOSISBook = isOSISAbbrev(token.attribute("osisID").c_str());
                 if (!inCanonicalOSISBook) {
@@ -783,7 +783,7 @@ bool handleToken(std::string &text, XMLTag token) {
                 }
 
                 chapterDepth    = tagStack.size();
-                verseDepth      = 0;
+                verseDepth      = 0u;
 
                 return false;
             }
@@ -917,7 +917,7 @@ bool handleToken(std::string &text, XMLTag token) {
                 std::cout << "DEBUG(TITLE): " << currentOsisID << ": Looking for chapter introduction" << std::endl;
             }
 
-            verseDepth      = 0;
+            verseDepth      = 0u;
 
             return false;
         }
@@ -1087,7 +1087,7 @@ bool handleToken(std::string &text, XMLTag token) {
 
             inVerse     = false;
             inPreVerse  = false;
-            verseDepth  = 0;
+            verseDepth  = 0u;
 
             return true;
         }
@@ -1148,8 +1148,8 @@ bool handleToken(std::string &text, XMLTag token) {
                 writeEntry(text);
                 inChapter    = false;
                 sidChapter   = "";
-                chapterDepth = 0;
-                verseDepth   = 0;
+                chapterDepth = 0u;
+                verseDepth   = 0u;
                 return true;
             }
 
@@ -1157,17 +1157,17 @@ bool handleToken(std::string &text, XMLTag token) {
             if (tokenName == "div" && eidAttr == sidBook) {
                 text.append(token.toString());
                 writeEntry(text);
-                bookDepth    = 0;
-                chapterDepth = 0;
-                verseDepth   = 0;
+                bookDepth    = 0u;
+                chapterDepth = 0u;
+                verseDepth   = 0u;
                 return true;
             }
 
             // Do not include the end of an osis document
             if (tokenName == "osisText" || tokenName == "osis") {
-                bookDepth    = 0;
-                chapterDepth = 0;
-                verseDepth   = 0;
+                bookDepth    = 0u;
+                chapterDepth = 0u;
+                verseDepth   = 0u;
                 text         = "";
                 return true;
             }
