@@ -226,9 +226,9 @@ int main(int argc, char * argv[]) {
 
     // Do some initialization stuff
     if (!augMod)
-        RawGenBook::createModule(outPath.c_str());
+        RawGenBook::createModule(outPath);
     {
-        RawGenBook book(outPath.c_str());
+        RawGenBook book(outPath);
 
         std::string lineBuffer;
         std::string keyBuffer;
