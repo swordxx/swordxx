@@ -107,8 +107,8 @@ ListKey currentKeyIDs = ListKey();
 
 std::vector<ListKey> linkedVerses;
 
-static bool inCanonicalOSISBook = true; // osisID is for a book that is not in Sword++'s canon
-static bool normalize           = true; // Whether to normalize UTF-8 to NFC
+bool inCanonicalOSISBook = true; // osisID is for a book that is not in Sword++'s canon
+bool normalize           = true; // Whether to normalize UTF-8 to NFC
 
 bool isOSISAbbrev(const char *buf) {
     auto const vmgr(VersificationMgr::systemVersificationMgr());
