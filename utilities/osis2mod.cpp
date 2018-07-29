@@ -1347,6 +1347,7 @@ void writeLinks()
     }
 }
 
+[[noreturn]]
 void usage(char const * app,
            char const * error = nullptr,
            bool const verboseHelp = false)
