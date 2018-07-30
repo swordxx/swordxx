@@ -36,9 +36,6 @@ using swordxx::TreeKeyIdx;
 using swordxx::RawGenBook;
 using swordxx::SWKey;
 
-//#define DEBUG
-
-
 enum XML_FORMATS { F_AUTODETECT, F_OSIS, F_THML, F_TEI };
 
 #define HELPTEXT "xml2gbs 1.0 OSIS/ThML/TEI General Book module creation tool for the Sword++ Project\n  usage:\n   xml2gbs [-l] [-i] [-fT|-fO|-fE] <filename> [modname]\n  -l uses long div names in ThML files\n  -i exports to IMP format instead of creating a module\n  -fO, -fT, and -fE will set the importer to expect OSIS, ThML, or TEI format respectively\n    (otherwise it attempts to autodetect)\n"
@@ -77,10 +74,6 @@ int processXML(const char* filename, char* modname, bool longnames, bool exportf
   char* strtmp;
   std::string entbuffer;
 
-#ifdef DEBUG
-  printf ("%s :%s :%d :%d :%d\n\n", filename, modname, longnames, exportfile, format);
-#endif
-
   std::ifstream infile(filename);
   if (!infile.is_open()) {
         std::cerr << HELPTEXT;
@@ -116,10 +109,6 @@ int processXML(const char* filename, char* modname, bool longnames, bool exportf
     }
     book = std::make_unique<RawGenBook>(modname);
   }
-
-#ifdef DEBUG
-//  TreeKeyIdx root = *((TreeKeyIdx *)((SWKey *)(*book)));
-#endif
 
   int c;
   while ((c = infile.get()) != EOF) {
@@ -299,10 +288,6 @@ int processXML(const char* filename, char* modname, bool longnames, bool exportf
       entrysize++;
     }
   }
-
-#ifdef DEBUG
-//  printTree(root, treeKey);
-#endif
 
     return 0;
 }
