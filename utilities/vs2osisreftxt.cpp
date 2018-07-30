@@ -21,10 +21,6 @@
  *
  */
 
-#ifdef _MSC_VER
-    #pragma warning( disable: 4251 )
-#endif
-
 #include <cstdio>
 #include <iostream>
 #include <swordxx/keys/versekey.h>

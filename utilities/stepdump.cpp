@@ -20,11 +20,6 @@
  *
  */
 
-#ifdef _MSC_VER
-    #pragma warning( disable: 4251 )
-    #pragma warning( disable: 4996 )
-#endif
-
 #include <cstdio>
 #include <cstring>
 #include <fcntl.h>

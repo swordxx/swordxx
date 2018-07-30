@@ -20,10 +20,6 @@
  *
  */
 
-#ifdef _MSC_VER
-    #pragma warning( disable: 4251 )
-#endif
-
 #include <iostream>
 #include <swordxx/keys/versekey.h>
 #include <swordxx/localemgr.h>

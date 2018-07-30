@@ -48,10 +48,6 @@
  * author DM Smith
  */
 
-#ifdef _MSC_VER
-    #pragma warning( disable: 4251 )
-#endif
-
 #include <array>
 #include <cstdio>
 #include <fstream>

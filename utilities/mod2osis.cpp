@@ -20,10 +20,6 @@
  *
  */
 
-#ifdef _MSC_VER
-    #pragma warning( disable: 4251 )
-#endif
-
 #include <algorithm>
 #include <cstdio>
 #include <fcntl.h>
