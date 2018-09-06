@@ -21,6 +21,7 @@
  */
 
 
+#include <csignal>
 #include "swordorb-impl.hpp"
 #include <iostream>
 #include <swmgr.h>
@@ -28,6 +29,7 @@
 
 SWConfig *sysConf = 0;
 WebMgr *swordMgr = 0;
+CORBA::ORB_var orb = 0;
 
 class CleanStatics {
 public:
@@ -42,6 +44,10 @@ public:
 } cleanStatics;
 
 
+void term_handler(int signal) {
+	std::cerr << "SIGTERM received, exiting nicely...\n";
+	if (orb) orb->shutdown(!0);
+}
 
 
 int main (int argc, char** argv)
@@ -65,7 +71,7 @@ int main (int argc, char** argv)
 
 
     // Initialise the ORB.
-    CORBA::ORB_var orb = CORBA::ORB_init(argc, argv, "omniORB4", options);
+    orb = CORBA::ORB_init(argc, argv, "omniORB4", options);
 
     // Obtain a reference to the root POA.
     CORBA::Object_var obj = orb->resolve_initial_references("RootPOA");
@@ -98,8 +104,13 @@ int main (int argc, char** argv)
     PortableServer::POAManager_var pman = poa->the_POAManager();
     pman->activate();
 
+	std::signal(SIGTERM, term_handler);
+
+
     orb->run();
+	std::cerr << "ORB has stopped running.\n";
     orb->destroy();
+	std::cerr << "ORB is destroyed.\n";
   }
   catch(CORBA::TRANSIENT&) {
     std::cerr << "Caught system exception TRANSIENT -- unable to contact the "

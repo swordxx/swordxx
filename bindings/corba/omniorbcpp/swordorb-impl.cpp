@@ -22,6 +22,7 @@
 
 #include <iostream>
 #include <vector>
+#include <csignal>
 
 #include <swordorb-impl.hpp>
 
@@ -482,7 +483,7 @@ void swordorb_SWMgr_i::setCipherKey(const char* modName, const char* key){
 }
 
 void swordorb_SWMgr_i::terminate(){
-	exit(0);
+	raise(SIGTERM);
 }
 
 ::CORBA::Boolean swordorb_SWMgr_i::testConnection(){
