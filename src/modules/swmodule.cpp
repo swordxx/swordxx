@@ -716,31 +716,49 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 
 			// multiword
 			case -2: { // enclose our allocations
-				int loopCount = 0;
+				int stripped = 0;
+				int twoVerse = 0;
 				unsigned int foundWords = 0;
+				textBuf = getRawEntry();
+				SWBuf testBuf;
 				do {
-					textBuf = ((loopCount == 0)&&(!specialStrips)) ? getRawEntry() : stripText();
-					foundWords = 0;
-					
-					for (unsigned int i = 0; i < words.size(); i++) {
-						if ((flags & REG_ICASE) == REG_ICASE) toupperstr(textBuf);
-						sres = strstr(textBuf.c_str(), words[i].c_str());
-						if (!sres) {
-							break; //for loop
+					stripped = 0;
+					do {
+						if (stripped||specialStrips||twoVerse) {
+							testBuf = twoVerse ? lastBuf + ' ' + textBuf : textBuf;
+							if (stripped) testBuf = stripText(testBuf);
 						}
-						foundWords++;
-					}
-					
-					loopCount++;
-				} while ( (loopCount < 2) && (foundWords == words.size()));
-				
-				if ((loopCount == 2) && (foundWords == words.size())) { //we found the right words in both raw and stripped text, which means it's a valid result item
-					*resultKey = *getKey();
+						else testBuf.setSize(0);
+						foundWords = 0;
+
+						for (unsigned int i = 0; i < words.size(); i++) {
+							if ((flags & REG_ICASE) == REG_ICASE) toupperstr(testBuf.size() ? testBuf : textBuf);
+							sres = strstr(testBuf.size() ? testBuf.c_str() : textBuf.c_str(), words[i].c_str());
+							if (!sres) {
+								break; //for loop
+							}
+							foundWords++;
+						}
+
+						++stripped;
+					} while ( (stripped < 2) && (foundWords == words.size()));
+					++twoVerse;
+				} while ( (twoVerse < 2) && (stripped != 2 || foundWords != words.size()));
+
+				if ((stripped == 2) && (foundWords == words.size())) { //we found the right words in both raw and stripped text, which means it's a valid result item
+					*resultKey = (twoVerse == 1) ? *getKey() : *lastKey;
 					resultKey->clearBound();
 					listKey << *resultKey;
+					lastBuf = "";
+					if (twoVerse == 2) {
+						lastBuf = textBuf;
+					}
 				}
+				else {
+					lastBuf = textBuf;
 				}
-				break;
+			}
+			break;
 
 			// entry attributes
 			case -3: {
