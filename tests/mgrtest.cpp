@@ -39,7 +39,7 @@ int main(int argc, char **argv) {
         sysConf = std::make_unique<SWConfig>(argv[1]);
 
     SWMgr mymgr(nullptr, sysConf.get());
-    std::cerr << "\n\nprefixPath: " << mymgr.m_prefixPath;
+    std::cerr << "\n\nprefixPath: " << mymgr.prefixPath();
     std::cerr << "\nconfigPath: " << mymgr.m_configPath << "\n\n";
 
     for (auto const & mp : mymgr.modules()) {

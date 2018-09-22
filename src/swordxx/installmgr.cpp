@@ -319,7 +319,7 @@ int InstallMgr::installModule(SWMgr & destMgr,
                 while (fileBegin != fileEnd && !retVal) {
                     std::string sourcePath = sourceDir;
                     sourcePath += fileBegin->second.c_str();
-                    std::string dest = destMgr.m_prefixPath;
+                    std::string dest = destMgr.prefixPath();
                     removeTrailingDirectorySlashes(dest);
                     dest += '/';
                     dest += fileBegin->second.c_str();
@@ -357,10 +357,10 @@ int InstallMgr::installModule(SWMgr & destMgr,
                     relativePath.erase(0u, entry2->second.size());
                 }
                 else {
-                    relativePath.erase(0u, mgr.m_prefixPath.size());
+                    relativePath.erase(0u, mgr.prefixPath().size());
                 }
-                SWLog::getSystemLog()->logDebug("***** mgr.prefixPath: %s \n", mgr.m_prefixPath.c_str());
-                SWLog::getSystemLog()->logDebug("***** destMgr->prefixPath: %s \n", destMgr.m_prefixPath.c_str());
+                SWLog::getSystemLog()->logDebug("***** mgr.prefixPath: %s \n", mgr.prefixPath().c_str());
+                SWLog::getSystemLog()->logDebug("***** destMgr->prefixPath: %s \n", destMgr.prefixPath().c_str());
                 SWLog::getSystemLog()->logDebug("***** absolutePath: %s \n", absolutePath.c_str());
                 SWLog::getSystemLog()->logDebug("***** relativePath: %s \n", relativePath.c_str());
 
@@ -370,7 +370,7 @@ int InstallMgr::installModule(SWMgr & destMgr,
                     }
                 }
                 if (!aborted) {
-                    std::string destPath(std::string(destMgr.m_prefixPath) += relativePath);
+                    std::string destPath(destMgr.prefixPath() + relativePath);
                     retVal = FileMgr::copyDir(absolutePath.c_str(), destPath.c_str());
                 }
                 if (is) {        // delete tmp netCopied files
@@ -396,7 +396,7 @@ int InstallMgr::installModule(SWMgr & destMgr,
                             retVal = FileMgr::copyFile(modFile.c_str(), targetFile.c_str());
                             if (cipher) {
                                 if (getCipherCode(modName, &config)) {
-                                    SWMgr newDest(destMgr.m_prefixPath.c_str());
+                                    SWMgr newDest(destMgr.prefixPath().c_str());
                                     removeModule(newDest, modName);
                                     aborted = true;
                                 }

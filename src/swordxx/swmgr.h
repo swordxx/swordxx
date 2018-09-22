@@ -88,6 +88,9 @@ private:
     bool augmentHome = true;
     void init(); // use to initialize before loading modules
 
+    /** The path to main module set and locales. */
+    std::string m_prefixPath;
+
 protected:
     std::shared_ptr<SWFilterMgr> const filterMgr; // Made protected because because BibleTime needs it
     SWConfig * myconfig = nullptr; // made protected because because BibleTime needs it
@@ -248,10 +251,6 @@ public:
     */
     SWConfig *sysConfig;
 
-    /** The path to main module set and locales
-     */
-    std::string m_prefixPath;
-
     /** path to main module set configuration
      */
     std::string m_configPath;
@@ -315,6 +314,9 @@ public:
      *    be sure to destroy only when retrieved objects are no longer needed.
      */
     virtual ~SWMgr();
+
+    /** \returns The path to main module set and locales. */
+    std::string const & prefixPath() const noexcept { return m_prefixPath; }
 
     /**
      * Adds books from a new path to the library
