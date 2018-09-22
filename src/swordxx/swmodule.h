@@ -56,7 +56,7 @@ using AttributeValue = std::map<std::string, std::string>;
  */
 class SWDLLEXPORT SWModule {
 
-private: /* Types: */
+public: /* Types: */
 
     using FilterList = std::list<std::shared_ptr<SWFilter> >;
     using OptionFilterList = std::list<std::shared_ptr<SWOptionFilter> >;
