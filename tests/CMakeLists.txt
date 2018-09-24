@@ -74,3 +74,31 @@ ENDFOREACH(ICUTEST icutest translittest)
 
 # Excluded until I know we have the tests working
 ADD_SUBDIRECTORY(testsuite)
+
+
+################################################################################
+# Regular tests:
+####
+
+ENABLE_TESTING()
+ADD_CUSTOM_TARGET("check" COMMAND "${CMAKE_CTEST_COMMAND}")
+ADD_DEPENDENCIES("tests" "check")
+
+FUNCTION(AddTest name)
+    ADD_EXECUTABLE("testImpl_${name}" EXCLUDE_FROM_ALL
+        "${CMAKE_CURRENT_SOURCE_DIR}/test${name}.cpp")
+    TARGET_LINK_LIBRARIES("testImpl_${name}" swordxx)
+    ADD_DEPENDENCIES("check" "testImpl_${name}")
+    ADD_TEST(NAME "test_${name}" COMMAND "$<TARGET_FILE:testImpl_${name}>")
+ENDFUNCTION()
+
+AddTest("CharIsDigit")
+AddTest("CharIsHexDigit")
+AddTest("CharIsUpper")
+AddTest("CharIsLower")
+AddTest("CharIsAlpha")
+AddTest("CharIsAlnum")
+AddTest("CharIsSpace")
+AddTest("CharToDecimal")
+AddTest("CharToHexadecimal")
+AddTest("CharToUpper")
