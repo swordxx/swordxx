@@ -474,15 +474,8 @@ map<SWModule *, int> InstallMgr::getModuleStatus(const SWMgr &base, const SWMgr 
         }
 
         static auto const getVersion = [](char const * const str,
-                                          Version defValue) noexcept
-        {
-            if (str) {
-                auto r(parseVersion(str));
-                if (r.first)
-                    return r.second;
-            }
-            return defValue;
-        };
+                                          char const * const defValue) noexcept
+        { return isValidSwordVersion(str) ? str : defValue; };
 
         /// \todo Use MinimumVersion key:
         #if 0
@@ -493,15 +486,13 @@ map<SWModule *, int> InstallMgr::getModuleStatus(const SWMgr &base, const SWMgr 
 
         if (auto const baseMod = base.getModule(mp.first.c_str())) {
             auto const sourceVersion(
-                    getVersion(mp.second->getConfigEntry("Version"), 0x1u));
+                    getVersion(mp.second->getConfigEntry("Version"), "1"));
             auto const targetVersion(
-                    getVersion(baseMod->getConfigEntry("Version"), 0x1u));
-            modStat |=
-                    (sourceVersion > targetVersion)
-                     ? MODSTAT_UPDATED
-                     : (sourceVersion < targetVersion)
-                       ? MODSTAT_OLDER
-                       : MODSTAT_SAMEVERSION;
+                    getVersion(baseMod->getConfigEntry("Version"), "1"));
+            int const c = compareVersions(sourceVersion, targetVersion);
+            modStat |= ((c == 0)
+                        ? MODSTAT_SAMEVERSION
+                        : ((c > 0) ? MODSTAT_UPDATED : MODSTAT_OLDER));
         }
         else modStat |= MODSTAT_NEW;
 

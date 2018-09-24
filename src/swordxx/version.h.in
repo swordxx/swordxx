@@ -14,55 +14,44 @@
 #ifndef SWORDXX_VERSION_H
 #define SWORDXX_VERSION_H
 
-#include <cassert>
 #include <cstdint>
-#include <mutex>
 #include <string>
-#include <utility>
 
 
 namespace swordxx {
-namespace detail {
-
-struct VersionStaticInit { static std::mutex mutex; };
-
-} /* namespace detail { */
 
 using Version = std::uint32_t;
 
+#define SWORDXX_VERSION @SWORDXX_VERSION_C@;
 #define SWORDXX_VERSION_STR "@SWORDXX_VERSION@"
-#define SWORDXX_VERSION ::swordxx::Version(@SWORDXX_VERSION_C@)
-
-#define SWORDXX_SWORD_COMPAT_VERSION \
-    ::swordxx::Version(@SWORDXX_SWORD_COMPAT_VERSION_C@)
-#define SWORDXX_SWORD_COMPAT_VERSION_STR "@SWORDXX_SWORD_COMPAT_VERSION@"
-
-std::string versionToString(Version v);
-
-constexpr inline Version buildVersion() noexcept { return SWORDXX_VERSION; }
-inline std::string buildVersionStr() noexcept {
-    std::lock_guard<std::mutex> const guard(detail::VersionStaticInit::mutex);
-    static std::string const staticStr(SWORDXX_VERSION_STR);
-    return staticStr;
-}
-
-constexpr inline Version buildSwordCompatVersion() noexcept
-{ return SWORDXX_SWORD_COMPAT_VERSION; }
-
-inline std::string buildSwordCompatVersionStr() noexcept {
-    std::lock_guard<std::mutex> const guard(
-                swordxx::detail::VersionStaticInit::mutex);
-    static std::string const staticStr(SWORDXX_SWORD_COMPAT_VERSION_STR);
-    return staticStr;
-}
 
 Version runtimeVersion() noexcept;
-std::string runtimeVersionStr() noexcept;
+std::string const & runtimeVersionStr() noexcept;
 
-Version swordCompatVersion() noexcept;
-std::string swordCompatVersionStr() noexcept;
+bool isValidSwordVersion(char const * swordVersion) noexcept;
 
-std::pair<bool, Version> parseVersion(char const * c) noexcept;
+/// \pre isValidSwordVersion(a) && isValidSwordVersion(b)
+int compareVersions(char const * a, char const * b) noexcept;
+
+/// \pre isValidSwordVersion(a) && isValidSwordVersion(b)
+bool versionEqual(char const * a, char const * b) noexcept;
+
+/// \pre isValidSwordVersion(a) && isValidSwordVersion(b)
+bool versionNotEqual(char const * a, char const * b) noexcept;
+
+/// \pre isValidSwordVersion(a) && isValidSwordVersion(b)
+bool versionLess(char const * a, char const * b) noexcept;
+
+/// \pre isValidSwordVersion(a) && isValidSwordVersion(b)
+bool versionLessEqual(char const * a, char const * b) noexcept;
+
+/// \pre isValidSwordVersion(a) && isValidSwordVersion(b)
+bool versionGreater(char const * a, char const * b) noexcept;
+
+/// \pre isValidSwordVersion(a) && isValidSwordVersion(b)
+bool versionGreaterEqual(char const * a, char const * b) noexcept;
+
+bool isCompatibleWithSwordVersion(char const * swordVersion) noexcept;
 
 } /* namespace swordxx { */
 
