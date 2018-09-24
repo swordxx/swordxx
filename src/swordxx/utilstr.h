@@ -27,6 +27,7 @@
 #include <cstdint>
 #include <cstdio>
 #include <cstring>
+#include <limits>
 #include <string>
 #include <type_traits>
 #include <utility>
@@ -34,6 +35,8 @@
 
 
 namespace swordxx {
+
+static_assert(std::numeric_limits<unsigned char>::max() == 255u, "");
 
 void addTrailingDirectorySlash(std::string & buf);
 void removeTrailingDirectorySlashes(std::string & buf);
