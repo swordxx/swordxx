@@ -239,7 +239,7 @@ void ICUStringMgr::upperUTF8(std::string & str) const {
     u_strToUTF8(nullptr, 0, &lcSizeInUtf8, ucInUTF16.get(), ucSizeInUtf16, &err);
     if ((err != U_BUFFER_OVERFLOW_ERROR) && (err != U_ZERO_ERROR))
         return;
-    auto lcInUTF8(std::make_unique<char>(
+    auto lcInUTF8(std::make_unique<char[]>(
                       static_cast<std::size_t>(lcSizeInUtf8)));
 
     err = U_ZERO_ERROR;
