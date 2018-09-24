@@ -73,6 +73,38 @@ constexpr bool charIsDigitTable[256] = {
 constexpr bool charIsDigit(char const c) noexcept
 { return charIsDigitTable[static_cast<unsigned char>(c)]; }
 
+constexpr bool charIsHexDigitTable[256] = {
+    false, false, false, false, false, false, false, false, false, false,
+    false, false, false, false, false, false, false, false, false, false,
+    false, false, false, false, false, false, false, false, false, false,
+    false, false, false, false, false, false, false, false, false, false,
+    false, false, false, false, false, false, false, false, true,  true,
+    true,  true,  true,  true,  true,  true,  true,  true,  false, false,
+    false, false, false, false, false, true,  true,  true,  true,  true,
+    true,  false, false, false, false, false, false, false, false, false,
+    false, false, false, false, false, false, false, false, false, false,
+    false, false, false, false, false, false, false, true,  true,  true,
+    true,  true,  true,  false, false, false, false, false, false, false,
+    false, false, false, false, false, false, false, false, false, false,
+    false, false, false, false, false, false, false, false, false, false,
+    false, false, false, false, false, false, false, false, false, false,
+    false, false, false, false, false, false, false, false, false, false,
+    false, false, false, false, false, false, false, false, false, false,
+    false, false, false, false, false, false, false, false, false, false,
+    false, false, false, false, false, false, false, false, false, false,
+    false, false, false, false, false, false, false, false, false, false,
+    false, false, false, false, false, false, false, false, false, false,
+    false, false, false, false, false, false, false, false, false, false,
+    false, false, false, false, false, false, false, false, false, false,
+    false, false, false, false, false, false, false, false, false, false,
+    false, false, false, false, false, false, false, false, false, false,
+    false, false, false, false, false, false, false, false, false, false,
+    false, false, false, false, false, false
+};
+
+constexpr bool charIsHexDigit(char const c) noexcept
+{ return charIsHexDigitTable[static_cast<unsigned char>(c)]; }
+
 constexpr bool charIsUpperTable[256] = {
     false, false, false, false, false, false, false, false, false, false,
     false, false, false, false, false, false, false, false, false, false,
