@@ -123,8 +123,7 @@ void cleanup() {
 }
 
 
-void createBasicConfig(bool enableRemote, bool /* addCrossWire */) {
-
+void createBasicConfig() {
     FileMgr::createParent(confPath.c_str());
     remove(confPath.c_str());
 
@@ -135,22 +134,16 @@ void createBasicConfig(bool enableRemote, bool /* addCrossWire */) {
 
     SWConfig config(confPath.c_str());
     config["General"]["PassiveFTP"] = "true";
-    if (enableRemote) {
-        config["Sources"]["FTPSource"] = is.getConfEnt();
-    }
+    config["Sources"]["FTPSource"] = is.getConfEnt();
     config.save();
 }
 
 
 void initConfig() {
     init();
-
-    bool enable = true;
-
-    createBasicConfig(enable, true);
-
-    cout << "\n\nInitialized basic config file at [" << confPath << "]\n";
-    cout << "with remote source features " << ((enable) ? "ENABLED" : "DISABLED") << "\n";
+    createBasicConfig();
+    cout << "\n\nInitialized basic config file at [" << confPath << "]"
+         << std::endl;
 }
 
 
@@ -159,7 +152,7 @@ void syncConfig() {
 
     // be sure we have at least some config file already out there
     if (!FileMgr::existsFile(confPath.c_str())) {
-        createBasicConfig(true, false);
+        createBasicConfig();
         cleanup();
         init();    // re-init with InstallMgr which uses our new config
     }
