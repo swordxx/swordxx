@@ -77,7 +77,7 @@ protected:
     std::set<std::string> m_defaultMods;
     std::string m_privatePath; /**< \note Includes trailing slash. */
     std::string m_confPath;
-    StatusReporter * m_statusReporter;
+    std::shared_ptr<StatusReporter> m_statusReporter;
     bool m_passive;
     std::string m_u, m_p;
 
@@ -108,7 +108,7 @@ public:
      *  source configuration.
          */
     InstallMgr(NormalizedPath const & privatePath = "./",
-               StatusReporter * statusReporter = nullptr,
+               std::shared_ptr<StatusReporter> statusReporter = nullptr,
                std::string u = "ftp",
                std::string p = "installmgr@user.com");
     virtual ~InstallMgr();

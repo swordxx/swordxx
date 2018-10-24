@@ -23,12 +23,14 @@
 #include <cstdio>
 #include <iostream>
 #include <map>
+#include <memory>
 #include <swordxx/filemgr.h>
 #include <swordxx/installmgr.h>
 #include <swordxx/remotetrans.h>
 #include <swordxx/swlog.h>
 #include <swordxx/swmgr.h>
 #include <swordxx/swmodule.h>
+#include <utility>
 
 
 using namespace swordxx;
@@ -39,7 +41,6 @@ char const * progName = "installmgr";
 
 SWMgr * mgr = nullptr;
 InstallMgr * installMgr = nullptr;
-StatusReporter * statusReporter = nullptr;
 std::string baseDir;
 std::string confPath;
 
@@ -48,8 +49,8 @@ std::string confPath;
 class MyInstallMgr : public InstallMgr {
 public:
     MyInstallMgr(const char * privatePath,
-                 StatusReporter * sr)
-        : InstallMgr(privatePath, sr)
+                 std::shared_ptr<StatusReporter> sr = nullptr)
+        : InstallMgr(privatePath, std::move(sr))
     {}
 };
 
@@ -103,14 +104,12 @@ void init() {
         if (baseDir_.length() < 1) baseDir_ = ".";
         baseDir_ += "/.swordxx/InstallMgr";
         confPath = baseDir_ + "/InstallMgr.conf";
-        statusReporter = new MyStatusReporter();
-        installMgr = new MyInstallMgr(baseDir_.c_str(), statusReporter);
+        installMgr = new MyInstallMgr(baseDir_.c_str(), std::make_shared<MyStatusReporter>());
     }
 }
 
 
 void cleanup() {
-    delete statusReporter;
     delete installMgr;
     delete mgr;
 

@@ -19,6 +19,7 @@
 #include "remotetrans.h"
 
 #include <atomic>
+#include <memory>
 #include "defs.h"
 
 
@@ -64,7 +65,7 @@ protected: /* Types: */
     /* Fields: */
 
         void * m_session;
-        StatusReporter * m_statusReporter;
+        std::shared_ptr<StatusReporter> m_statusReporter;
         std::atomic<bool> & m_term;
         OutFile m_outFile;
 

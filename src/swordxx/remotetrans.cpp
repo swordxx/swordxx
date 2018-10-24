@@ -36,10 +36,11 @@ namespace swordxx {
 
 StatusReporter::~StatusReporter() noexcept = default;
 
-RemoteTransport::RemoteTransport(const char *host, StatusReporter *statusReporter)
-    : m_term(false)
+RemoteTransport::RemoteTransport(const char * host,
+                                 std::shared_ptr<StatusReporter> statusReporter)
+    : m_statusReporter(std::move(statusReporter))
+    , m_term(false)
 {
-    this->m_statusReporter = statusReporter;
     this->m_host = host;
     m_u = "ftp";
     m_p = "installmgr@user.com";

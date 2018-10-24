@@ -25,6 +25,7 @@
 
 #include <atomic>
 #include <cstddef>
+#include <memory>
 #include <string>
 #include <vector>
 #include "defs.h"
@@ -67,7 +68,7 @@ public: /* Methods: */
 class SWDLLEXPORT RemoteTransport {
 
 protected:
-    StatusReporter * m_statusReporter;
+    std::shared_ptr<StatusReporter> m_statusReporter;
     std::atomic<bool> m_term;
     std::string m_host;
     std::string m_u;
@@ -75,7 +76,8 @@ protected:
 
 public:
     RemoteTransport(char const * host,
-                    StatusReporter * statusReporter = nullptr);
+                    std::shared_ptr<StatusReporter> statusReporter
+                            = std::shared_ptr<StatusReporter>());
     virtual ~RemoteTransport();
 
     /***********

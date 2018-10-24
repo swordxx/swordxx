@@ -61,7 +61,11 @@ const int InstallMgr::MODSTAT_CIPHERED         = 0x010;
 const int InstallMgr::MODSTAT_CIPHERKEYPRESENT = 0x020;
 
 
-InstallMgr::InstallMgr(NormalizedPath const & privatePath, StatusReporter *sr, std::string u, std::string p) {
+InstallMgr::InstallMgr(NormalizedPath const & privatePath,
+                       std::shared_ptr<StatusReporter> sr,
+                       std::string u,
+                       std::string p)
+{
     m_statusReporter = sr;
     this->m_u = u;
     this->m_p = p;
