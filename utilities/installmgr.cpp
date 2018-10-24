@@ -56,7 +56,11 @@ class MyStatusReporter : public StatusReporter {
 
     /// \bug may throw, leading to std::unexpected:
     void update(std::size_t totalBytes, std::size_t completedBytes) noexcept override {
-        int p = (totalBytes > 0) ? (int)(74.0 * ((double)completedBytes / (double)totalBytes)) : 0;
+        int const p = (totalBytes > 0)
+                      ? static_cast<int>(74.0
+                                         * (static_cast<double>(completedBytes)
+                                            / static_cast<double>(totalBytes)))
+                      : 0;
         for (;last < p; ++last) {
             if (!last) {
                 std::string output(formatted("[ File Bytes: %ld", totalBytes));
@@ -75,7 +79,9 @@ class MyStatusReporter : public StatusReporter {
         while (output.size() < 75) output += " ";
         output += "]";
         std::cout << "\n" << output.c_str() << "\n ";
-        int p = (int)(74.0 * (double)completedBytes/totalBytes);
+        int p = static_cast<int>(74.0
+                                 * (static_cast<double>(completedBytes)
+                                    / static_cast<double>(totalBytes)));
         for (int i = 0; i < p; ++i) { std::cout << "="; }
         std::cout << "\n\n" << message << "\n";
         last = 0;
@@ -401,7 +407,7 @@ int main(int argc, char **argv) {
             }
             else usage(*argv, "-ri requires <remoteSrcName> <modName>");
         }
-        else usage(*argv, (((std::string)"Unknown argument: ")+ argv[i]).c_str());
+        else usage(*argv, (std::string("Unknown argument: ") + argv[i]).c_str());
     }
 
     cleanup();
