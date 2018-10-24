@@ -32,8 +32,6 @@
 
 
 using namespace swordxx;
-using std::cout;
-using std::cerr;
 
 namespace {
 SWMgr * mgr = nullptr;
@@ -64,11 +62,11 @@ class MyStatusReporter : public StatusReporter {
                 std::string output(formatted("[ File Bytes: %ld", totalBytes));
                 while (output.size() < 75) output += " ";
                 output += "]";
-                cout << output.c_str() << "\n ";
+                std::cout << output.c_str() << "\n ";
             }
-            cout << "-";
+            std::cout << "-";
         }
-        cout.flush();
+        std::cout.flush();
     }
 
     /// \bug may throw, leading to std::unexpected:
@@ -76,10 +74,10 @@ class MyStatusReporter : public StatusReporter {
         std::string output(formatted("[ Total Bytes: %ld; Completed Bytes: %ld", totalBytes, completedBytes));
         while (output.size() < 75) output += " ";
         output += "]";
-        cout << "\n" << output.c_str() << "\n ";
+        std::cout << "\n" << output.c_str() << "\n ";
         int p = (int)(74.0 * (double)completedBytes/totalBytes);
-        for (int i = 0; i < p; ++i) { cout << "="; }
-        cout << "\n\n" << message << "\n";
+        for (int i = 0; i < p; ++i) { std::cout << "="; }
+        std::cout << "\n\n" << message << "\n";
         last = 0;
     }
 };
@@ -116,7 +114,7 @@ void cleanup() {
 // clean up and exit if status is 0 or negative error code
 [[noreturn]] void finish(int status) {
     cleanup();
-    cout << "\n";
+    std::cout << "\n";
     std::exit(status);
 }
 
@@ -140,8 +138,8 @@ void createBasicConfig() {
 void initConfig() {
     init();
     createBasicConfig();
-    cout << "\n\nInitialized basic config file at [" << confPath << "]"
-         << std::endl;
+    std::cout << "\n\nInitialized basic config file at [" << confPath << "]"
+              << std::endl;
 }
 
 
@@ -156,8 +154,8 @@ void syncConfig() {
     }
 
     if (!installMgr->refreshRemoteSourceConfiguration())
-        cout << "\nSync'd config file with master remote source list.\n";
-    else cout << "\nFailed to sync config file with master remote source list.\n";
+        std::cout << "\nSync'd config file with master remote source list.\n";
+    else std::cout << "\nFailed to sync config file with master remote source list.\n";
 }
 
 
@@ -170,18 +168,18 @@ void uninstallModule(const char *modName) {
         finish(-2);
     }
     installMgr->removeModule(*mgr, it->second->getName());
-    cout << "Removed module: [" << modName << "]\n";
+    std::cout << "Removed module: [" << modName << "]\n";
 }
 
 
 void listRemoteSources() {
     init();
-    cout << "Remote Sources:\n\n";
+    std::cout << "Remote Sources:\n\n";
     for (InstallSourceMap::iterator it = installMgr->sources.begin(); it != installMgr->sources.end(); it++) {
-        cout << "[" << it->second->m_caption << "]\n";
-        cout << "\tType     : " << it->second->m_type << "\n";
-        cout << "\tSource   : " << it->second->m_source << "\n";
-        cout << "\tDirectory: " << it->second->m_directory << "\n";
+        std::cout << "[" << it->second->m_caption << "]\n";
+        std::cout << "\tType     : " << it->second->m_type << "\n";
+        std::cout << "\tSource   : " << it->second->m_source << "\n";
+        std::cout << "\tDirectory: " << it->second->m_directory << "\n";
     }
 }
 
@@ -196,8 +194,8 @@ void refreshRemoteSource(const char *sourceName) {
     }
 
     if (!installMgr->refreshRemoteSource(*source->second))
-        cout << "\nRemote Source Refreshed\n";
-    else    cerr << "\nError Refreshing Remote Source\n";
+        std::cout << "\nRemote Source Refreshed\n";
+    else    std::cerr << "\nError Refreshing Remote Source\n";
 }
 
 
@@ -215,7 +213,7 @@ void listModules(SWMgr * otherMgr = nullptr, bool onlyNewAndUpdates = false) {
         if (it->second & InstallMgr::MODSTAT_UPDATED) status = "+";
 
         if (!onlyNewAndUpdates || status == "*" || status == "+") {
-            cout << status << "[" << module->getName() << "]  \t(" << version << ")  \t- " << module->getDescription() << "\n";
+            std::cout << status << "[" << module->getName() << "]  \t(" << version << ")  \t- " << module->getDescription() << "\n";
         }
     }
 }
@@ -223,7 +221,7 @@ void listModules(SWMgr * otherMgr = nullptr, bool onlyNewAndUpdates = false) {
 
 void remoteListModules(const char *sourceName, bool onlyNewAndUpdated = false) {
     init();
-    cout << "Available Modules:\n(be sure to refresh remote source (-r) first for most current list)\n\n";
+    std::cout << "Available Modules:\n(be sure to refresh remote source (-r) first for most current list)\n\n";
     InstallSourceMap::iterator source = installMgr->sources.find(sourceName);
     if (source == installMgr->sources.end()) {
         std::cerr << "Couldn't find remote source [" << sourceName << "]\n"
@@ -250,14 +248,14 @@ void remoteDescribeModule(char const * const sourceName,
                   << sourceName << ']' << std::endl;
         finish(-3);
     }
-    cout << "Module Description\n\n";
+    std::cout << "Module Description\n\n";
     for (auto const & vp : m->getConfig())
-        cout << "[" << vp.first << "]:" << vp.second << "\n";
+        std::cout << "[" << vp.first << "]:" << vp.second << "\n";
 }
 
 
 void localDirListModules(const char *dir) {
-    cout << "Available Modules:\n\n";
+    std::cout << "Available Modules:\n\n";
     SWMgr mgr_(dir);
     listModules(&mgr_);
 }
@@ -284,8 +282,8 @@ void remoteInstallModule(const char *sourceName, const char *modName) {
 
     int error = installMgr->installModule(*mgr, nullptr, module.getName().c_str(), &is);
     if (error) {
-        cout << "\nError installing module: [" << module.getName() << "] (write permissions?)\n";
-    } else cout << "\nInstalled module: [" << module.getName() << "]\n";
+        std::cout << "\nError installing module: [" << module.getName() << "] (write permissions?)\n";
+    } else std::cout << "\nInstalled module: [" << module.getName() << "]\n";
 }
 
 
@@ -301,8 +299,8 @@ void localDirInstallModule(const char *dir, const char *modName) {
     SWModule const & module = *it->second;
     int error = installMgr->installModule(*mgr, dir, module.getName().c_str());
     if (error) {
-        cout << "\nError installing module: [" << module.getName() << "] (write permissions?)\n";
-    } else cout << "\nInstalled module: [" << module.getName() << "]\n";
+        std::cout << "\nError installing module: [" << module.getName() << "] (write permissions?)\n";
+    } else std::cout << "\nInstalled module: [" << module.getName() << "]\n";
 }
 
 [[noreturn]] void usage(const char *progName, const char *error) {
@@ -349,7 +347,7 @@ int main(int argc, char **argv) {
             initConfig();
         }
         else if (!std::strcmp(argv[i], "-l")) {    // list installed modules
-            cout << "Installed Modules:\n\n";
+            std::cout << "Installed Modules:\n\n";
             listModules();
         }
         else if (!std::strcmp(argv[i], "-ll")) {    // list from local directory
