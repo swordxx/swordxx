@@ -167,7 +167,8 @@ void uninstallModule(const char *modName) {
     init();
     auto const it = mgr->modules().find(modName);
     if (it == mgr->modules().end()) {
-        fprintf(stderr, "Couldn't find module [%s] to remove\n", modName);
+        std::cerr << "Couldn't find module [" << modName << "] to remove\n"
+                  << std::flush;
         finish(-2);
     }
     installMgr->removeModule(*mgr, it->second->getName());
@@ -191,7 +192,8 @@ void refreshRemoteSource(const char *sourceName) {
     init();
     InstallSourceMap::iterator source = installMgr->sources.find(sourceName);
     if (source == installMgr->sources.end()) {
-        fprintf(stderr, "Couldn't find remote source [%s]\n", sourceName);
+        std::cerr << "Couldn't find remote source [" << sourceName << "]\n"
+                  << std::flush;
         finish(-3);
     }
 
@@ -226,7 +228,8 @@ void remoteListModules(const char *sourceName, bool onlyNewAndUpdated = false) {
     cout << "Available Modules:\n(be sure to refresh remote source (-r) first for most current list)\n\n";
     InstallSourceMap::iterator source = installMgr->sources.find(sourceName);
     if (source == installMgr->sources.end()) {
-        fprintf(stderr, "Couldn't find remote source [%s]\n", sourceName);
+        std::cerr << "Couldn't find remote source [" << sourceName << "]\n"
+                  << std::flush;
         finish(-3);
     }
     listModules(source->second->getMgr().get(), onlyNewAndUpdated);
@@ -266,14 +269,17 @@ void remoteInstallModule(const char *sourceName, const char *modName) {
     init();
     InstallSourceMap::iterator source = installMgr->sources.find(sourceName);
     if (source == installMgr->sources.end()) {
-        fprintf(stderr, "Couldn't find remote source [%s]\n", sourceName);
+        std::cerr << "Couldn't find remote source [" << sourceName << "]\n"
+                  << std::flush;
         finish(-3);
     }
     auto & is = *source->second;
     auto const rmgr(is.getMgr());
     auto const it = rmgr->modules().find(modName);
     if (it == rmgr->modules().end()) {
-        fprintf(stderr, "Remote source [%s] does not make available module [%s]\n", sourceName, modName);
+        std::cerr << "Remote source [" << sourceName
+                  << "] does not make available module [" << modName << "]\n"
+                  << std::flush;
         finish(-4);
     }
     SWModule const & module = *it->second;
@@ -290,7 +296,8 @@ void localDirInstallModule(const char *dir, const char *modName) {
     SWMgr lmgr(dir);
     auto const it = lmgr.modules().find(modName);
     if (it == lmgr.modules().end()) {
-        fprintf(stderr, "Module [%s] not available at path [%s]\n", modName, dir);
+        std::cerr << "Module [" << modName << "] not available at path [" << dir
+                  << "]\n" << std::flush;
         finish(-4);
     }
     SWModule const & module = *it->second;
@@ -301,10 +308,12 @@ void localDirInstallModule(const char *dir, const char *modName) {
 }
 
 [[noreturn]] void usage(const char *progName, const char *error) {
+    if (!progName)
+        progName = "installmgr";
+    if (error)
+        std::cerr << '\n' << progName << ": " << error << std::endl;
 
-    if (error) fprintf(stderr, "\n%s: %s\n", (progName ? progName : "installmgr"), error);
-
-    fprintf(stderr, "\nusage: %s [--allow...] <command> [command ...]\n"
+    std::cerr << "\nusage: " << progName << " [--allow...] <command> [command ...]\n"
         "\n\t --allow-internet-access-and-risk-tracing-and-jail-or-martyrdom \n"
         "\n  This aptly named option will allow the program to connect to the internet without asking for user confirmation\n"
         "  In many places this may well be a risky or even foolish undertaking.\n"
@@ -325,8 +334,7 @@ void localDirInstallModule(const char *dir, const char *modName) {
         "\t-u <modName>\t\t\tuninstall module\n"
         "\t-ll <path>\t\t\tlist available modules at local path\n"
         "\t-li <path> <modName>\t\tinstall module from local path\n"
-        "\t-d\t\t\t\tturn debug output on\n"
-        , (progName ? progName : "installmgr"));
+        "\t-d\t\t\t\tturn debug output on\n" << std::flush;
     finish(-1);
 }
 
