@@ -34,14 +34,16 @@
 using namespace swordxx;
 
 namespace {
+
+char const * progName = "installmgr";
+
 SWMgr * mgr = nullptr;
 InstallMgr * installMgr = nullptr;
 StatusReporter * statusReporter = nullptr;
 std::string baseDir;
 std::string confPath;
 
-[[noreturn]] void usage(char const * progName = nullptr,
-                        char const * error = nullptr);
+[[noreturn]] void usage(char const * error = nullptr);
 
 class MyInstallMgr : public InstallMgr {
 public:
@@ -94,8 +96,7 @@ void init() {
         mgr = new SWMgr();
 
         if (!mgr->config)
-            usage(nullptr,
-                  "ERROR: Sword++ configuration not found.  Please configure "
+            usage("ERROR: Sword++ configuration not found.  Please configure "
                   "Sword++ before using this program.");
 
         std::string baseDir_ = SWMgr::getHomeDir();
@@ -309,9 +310,7 @@ void localDirInstallModule(const char *dir, const char *modName) {
     } else std::cout << "\nInstalled module: [" << module.getName() << "]\n";
 }
 
-[[noreturn]] void usage(const char *progName, const char *error) {
-    if (!progName)
-        progName = "installmgr";
+[[noreturn]] void usage(const char *error) {
     if (error)
         std::cerr << '\n' << progName << ": " << error << std::endl;
 
@@ -343,7 +342,9 @@ void localDirInstallModule(const char *dir, const char *modName) {
 } // anonymous namespace
 
 int main(int argc, char **argv) {
-    if (argc < 2) usage(*argv);
+    if (argc > 0)
+        progName = *argv;
+    if (argc < 2) usage();
 
     for (int i = 1; i < argc; i++) {
         if (!std::strcmp(argv[i], "-d")) {
@@ -358,7 +359,7 @@ int main(int argc, char **argv) {
         }
         else if (!std::strcmp(argv[i], "-ll")) {    // list from local directory
             if (i+1 < argc) localDirListModules(argv[++i]);
-            else usage(*argv, "-ll requires <path>");
+            else usage("-ll requires <path>");
         }
         else if (!std::strcmp(argv[i], "-li")) {    // install from local directory
             if (i+2 < argc) {
@@ -366,11 +367,11 @@ int main(int argc, char **argv) {
                 const char *modName = argv[++i];
                 localDirInstallModule(path, modName);
             }
-            else usage(*argv, "-li requires <path> <modName>");
+            else usage("-li requires <path> <modName>");
         }
         else if (!std::strcmp(argv[i], "-u")) {    // uninstall module
             if (i+1 < argc) uninstallModule(argv[++i]);
-            else usage(*argv, "-u requires <modName>");
+            else usage("-u requires <modName>");
         }
         else if (!std::strcmp(argv[i], "-s")) {    // list sources
             listRemoteSources();
@@ -380,15 +381,15 @@ int main(int argc, char **argv) {
         }
         else if (!std::strcmp(argv[i], "-r")) {    // refresh remote source
             if (i+1 < argc) refreshRemoteSource(argv[++i]);
-            else usage(*argv, "-r requires <remoteSrcName>");
+            else usage("-r requires <remoteSrcName>");
         }
         else if (!std::strcmp(argv[i], "-rl")) {    // list remote modules
             if (i+1 < argc) remoteListModules(argv[++i]);
-            else usage(*argv, "-rl requires <remoteSrcName>");
+            else usage("-rl requires <remoteSrcName>");
         }
         else if (!std::strcmp(argv[i], "-rd")) {    // list differences between remote source and installed modules
             if (i+1 < argc) remoteListModules(argv[++i], true);
-            else usage(*argv, "-rd requires <remoteSrcName>");
+            else usage("-rd requires <remoteSrcName>");
         }
         else if (!std::strcmp(argv[i], "-rdesc")) { // describe remove module
             if (i + 2 < argc) {
@@ -396,7 +397,7 @@ int main(int argc, char **argv) {
                 char const * const modName = argv[++i];
                 remoteDescribeModule(source, modName);
             } else {
-                usage(*argv, "-rdesc requires <remoteSrcName> <modName>");
+                usage("-rdesc requires <remoteSrcName> <modName>");
             }
         }
         else if (!std::strcmp(argv[i], "-ri")) {    // install from remote directory
@@ -405,9 +406,9 @@ int main(int argc, char **argv) {
                 const char *modName = argv[++i];
                 remoteInstallModule(source, modName);
             }
-            else usage(*argv, "-ri requires <remoteSrcName> <modName>");
+            else usage("-ri requires <remoteSrcName> <modName>");
         }
-        else usage(*argv, (std::string("Unknown argument: ") + argv[i]).c_str());
+        else usage((std::string("Unknown argument: ") + argv[i]).c_str());
     }
 
     cleanup();
