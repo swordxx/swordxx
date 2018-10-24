@@ -47,8 +47,8 @@ std::string confPath;
 
 class MyInstallMgr : public InstallMgr {
 public:
-    MyInstallMgr(const char * privatePath = "./",
-                 StatusReporter * sr = nullptr)
+    MyInstallMgr(const char * privatePath,
+                 StatusReporter * sr)
         : InstallMgr(privatePath, sr)
     {}
 };
