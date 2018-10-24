@@ -34,8 +34,6 @@
 using namespace swordxx;
 using std::cout;
 using std::cerr;
-using std::cin;
-using std::map;
 
 namespace {
 SWMgr * mgr = nullptr;
