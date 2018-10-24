@@ -62,7 +62,6 @@ const int InstallMgr::MODSTAT_CIPHERKEYPRESENT = 0x020;
 
 
 InstallMgr::InstallMgr(NormalizedPath const & privatePath, StatusReporter *sr, std::string u, std::string p) {
-    m_userDisclaimerConfirmed = false;
     m_statusReporter = sr;
     this->m_u = u;
     this->m_p = p;
@@ -418,10 +417,6 @@ int InstallMgr::installModule(SWMgr & destMgr,
 
 
 int InstallMgr::refreshRemoteSource(InstallSource & is) {
-
-    // assert user disclaimer has been confirmed
-    if (!isUserDisclaimerConfirmed()) return -1;
-
     NormalizedPath const root(m_privatePath + is.m_uid);
     std::string const target(root.str() + "/mods.d");
     int errorCode = -1; //0 means successful
@@ -509,10 +504,6 @@ map<SWModule *, int> InstallMgr::getModuleStatus(const SWMgr &base, const SWMgr 
  *     sources and integrate it with our configurations.
  */
 int InstallMgr::refreshRemoteSourceConfiguration() {
-
-    // assert user disclaimer has been confirmed
-    if (!isUserDisclaimerConfirmed()) return -1;
-
     std::string const masterRepoListPath(
                 NormalizedPath(m_privatePath).str() + "/" + masterRepoList);
     InstallSource is("FTP");
@@ -629,9 +620,6 @@ int InstallMgr::remoteCopy(InstallSource & is,
                                     (dest ? dest : "null"),
                                     (dirTransfer ? 't' : 'f'),
                                     (suffix ? suffix : "null"));
-
-    // assert user disclaimer has been confirmed
-    if (!isUserDisclaimerConfirmed()) return -1;
 
     int retVal = 0;
     std::shared_ptr<RemoteTransport> trans;

@@ -44,8 +44,6 @@ StatusReporter * statusReporter = nullptr;
 std::string baseDir;
 std::string confPath;
 
-bool isConfirmed;
-
 [[noreturn]] void usage(char const * progName = nullptr,
                         char const * error = nullptr);
 
@@ -55,40 +53,6 @@ public:
                  StatusReporter * sr = nullptr)
         : InstallMgr(privatePath, sr)
     {}
-
-bool isUserDisclaimerConfirmed() const override {
-    static bool confirmed = false;
-
-    if (isConfirmed) {
-        confirmed = true;
-    }
-        if (!confirmed) {
-        cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
-        cout << "                -=+* WARNING *+=- -=+* WARNING *+=-\n\n\n";
-        cout << "Although Install Manager provides a convenient way for installing\n";
-        cout << "and upgrading Sword++ components, it also uses a systematic method\n";
-        cout << "for accessing sites which gives packet sniffers a target to lock\n";
-        cout << "into for singling out users. \n\n\n";
-        cout << "IF YOU LIVE IN A PERSECUTED COUNTRY AND DO NOT WISH TO RISK DETECTION,\n";
-        cout << "YOU SHOULD *NOT* USE INSTALL MANAGER'S REMOTE SOURCE FEATURES.\n\n\n";
-        cout << "Also, Remote Sources other than CrossWire may contain less than\n";
-        cout << "quality modules, modules with unorthodox content, or even modules\n";
-        cout << "which are not legitimately distributable.  Many repositories\n";
-        cout << "contain wonderfully useful content.  These repositories simply\n";
-        cout << "are not reviewed or maintained by CrossWire and CrossWire\n";
-        cout << "cannot be held responsible for their content. CAVEAT EMPTOR.\n\n\n";
-        cout << "If you understand this and are willing to enable remote source features\n";
-        cout << "then type yes at the prompt\n\n";
-        cout << "enable? [no] ";
-
-        std::string prompt;
-        std::getline(cin , prompt);
-        confirmed = prompt == "yes";
-        cout << "\n";
-    }
-    return confirmed;
-}
-
 };
 
 class MyStatusReporter : public StatusReporter {
@@ -181,7 +145,7 @@ void createBasicConfig(bool enableRemote, bool /* addCrossWire */) {
 void initConfig() {
     init();
 
-    bool enable = installMgr->isUserDisclaimerConfirmed();
+    bool enable = true;
 
     createBasicConfig(enable, true);
 
@@ -192,11 +156,6 @@ void initConfig() {
 
 void syncConfig() {
     init();
-
-    if (!installMgr->isUserDisclaimerConfirmed()) {  // assert disclaimer is accepted
-        cout << "\n\nDisclaimer not accepted.  Aborting.";
-        return;
-    }
 
     // be sure we have at least some config file already out there
     if (!FileMgr::existsFile(confPath.c_str())) {
@@ -381,17 +340,11 @@ void localDirInstallModule(const char *dir, const char *modName) {
 } // anonymous namespace
 
 int main(int argc, char **argv) {
-
-    isConfirmed = false;
-
     if (argc < 2) usage(*argv);
 
     for (int i = 1; i < argc; i++) {
         if (!std::strcmp(argv[i], "-d")) {
             SWLog::getSystemLog()->setLogLevel(SWLog::LOG_DEBUG);
-        }
-        else if (!std::strcmp(argv[i], "--allow-internet-access-and-risk-tracing-and-jail-or-martyrdom")) {
-            isConfirmed = true;
         }
         else if (!std::strcmp(argv[i], "-init")) {
             initConfig();

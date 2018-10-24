@@ -74,7 +74,6 @@ typedef std::map<std::string, std::shared_ptr<InstallSource> > InstallSourceMap;
 class SWDLLEXPORT InstallMgr {
 
 protected:
-    bool m_userDisclaimerConfirmed;
     std::set<std::string> m_defaultMods;
     std::string m_privatePath; /**< \note Includes trailing slash. */
     std::string m_confPath;
@@ -145,59 +144,6 @@ public:
          *  remote sources from the master list at CrossWire
          */
     virtual int refreshRemoteSourceConfiguration();
-
-    /** Override this and provide an input mechanism to allow your users
-     *  to confirm that they understand this important disclaimer.
-     *  This method will be called immediately before attempting to perform
-     *  any network function.
-     *  If you would like your confirmation to always show at a predefined
-     *  time before attempting network operations, then you can call this
-     *  method yourself at the desired time.
-     *
-     *  Return true if your user confirms.
-         *
-     *  User disclaimer should ask user for confirmation of 2 critical items:
-     *  and the default answer should be NO
-     *  (possibly the wrong language for the disclaimer)
-     *
-
-A sample impl:
-
-    static bool confirmed = false;
-        if (!confirmed) {
-        cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
-        cout << "                -=+* WARNING *+=- -=+* WARNING *+=-\n\n\n";
-        cout << "Although Install Manager provides a convenient way for installing\n";
-        cout << "and upgrading Sword++ components, it also uses a systematic method\n";
-        cout << "for accessing sites which gives packet sniffers a target to lock\n";
-        cout << "into for singling out users. \n\n\n";
-        cout << "IF YOU LIVE IN A PERSECUTED COUNTRY AND DO NOT WISH TO RISK DETECTION,\n";
-        cout << "YOU SHOULD *NOT* USE INSTALL MANAGER'S REMOTE SOURCE FEATURES.\n\n\n";
-        cout << "Also, Remote Sources other than CrossWire may contain less than\n";
-        cout << "quality modules, modules with unorthodox content, or even modules\n";
-        cout << "which are not legitimately distributable.  Many repositories\n";
-        cout << "contain wonderfully useful content.  These repositories simply\n";
-        cout << "are not reviewed or maintained by CrossWire and CrossWire\n";
-        cout << "cannot be held responsible for their content. CAVEAT EMPTOR.\n\n\n";
-        cout << "If you understand this and are willing to enable remote source features\n";
-        cout << "then type yes at the prompt\n\n";
-        cout << "enable? [no] ";
-
-        char prompt[10];
-        fgets(prompt, 9, stdin);
-        confirmed = (!std::strcmp(prompt, "yes\n"));
-        }
-        return confirmed;
-
-         */
-    virtual bool isUserDisclaimerConfirmed() const { return m_userDisclaimerConfirmed; }
-
-    /** Preferred method of reporting user disclaimer confirmation is to override the above method
-     * instead of using the setter below. This is provided for clients who don't wish to inherit
-     * InstallMgr and override method.
-     */
-    void setUserDisclaimerConfirmed(bool val) { m_userDisclaimerConfirmed = val; }
-
 
     /** override this and provide an input mechanism to allow your users
      * to enter the decipher code for a module.
