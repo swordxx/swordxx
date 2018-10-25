@@ -17,7 +17,6 @@ INCLUDE_DIRECTORIES(${SWORD_BUILD_INCLUDES})
 SwordxxHandleConditionalBuild("tests" TESTS FALSE TRUE)
 
 SET(test_PROGRAMS
-    bibliotest
     ciphertest
     complzss
     compnone

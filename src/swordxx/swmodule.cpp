@@ -797,29 +797,6 @@ std::string SWModule::stripText(const SWKey *tmpKey) {
     return retVal;
 }
 
-/******************************************************************************
- * SWModule::getBibliography    -Returns bibliographic data for a module in the
- *                                requested format
- *
- * ENT: bibFormat format of the bibliographic data
- *
- * RET: bibliographic data in the requested format as a string (BibTeX by default)
- */
-
-std::string SWModule::getBibliography(BibliographyFormat format) const {
-    std::string s;
-    switch (format) {
-    case BIB_BIBTEX:
-        s.append("@Book {")
-         .append(m_moduleName)
-         .append(", Title = \"")
-         .append(m_moduleDescription)
-         .append("\", Publisher = \"CrossWire Bible Society\"}");
-        break;
-    }
-    return s;
-}
-
 const char *SWModule::getConfigEntry(const char *key_) const {
     ConfigEntMap::const_iterator const it(m_config.find(key_));
     return (it != m_config.end()) ? it->second.c_str() : nullptr;
