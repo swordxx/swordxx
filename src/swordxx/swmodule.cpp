@@ -833,6 +833,15 @@ void SWModule::deleteSearchFramework()
 
 
 signed char SWModule::createSearchFramework(void (*percent)(char, void *), void *percentUserData) {
+    static auto const getWordPartCount =
+            [](auto const & wordAttrs_) noexcept {
+                auto const it(wordAttrs_.find("PartCount"));
+                if (it == wordAttrs_.end())
+                    return 1;
+                auto const r = std::atoi(it->second.c_str());
+                return r ? r : 1;
+            };
+
     const int MAX_CONV_SIZE = 1024 * 1024;
     auto target(searchIndexPath());
     int status = FileMgr::createParent((target+"/dummy").c_str());
@@ -948,37 +957,30 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
 
 
                     // build "strong" field
-                    AttributeTypeList::iterator words;
-                    AttributeList::iterator word;
-                    AttributeValue::iterator strongVal;
-                    AttributeValue::iterator morphVal;
-
                     strong="";
                     morph="";
-                    words = getEntryAttributes().find("Word");
-                    if (words != getEntryAttributes().end()) {
-                        for (word = words->second.begin();word != words->second.end(); word++) {
-                            int partCount = std::atoi(word->second["PartCount"].c_str());
-                            if (!partCount) partCount = 1;
+                    auto const wordsIt(getEntryAttributes().find("Word"));
+                    if (wordsIt != getEntryAttributes().end()) {
+                        for (auto const & wordPair : wordsIt->second) {
+                            auto const & wordAttrs = wordPair.second;
+                            auto const partCount = getWordPartCount(wordAttrs);
                             for (int i = 0; i < partCount; i++) {
                                 std::string tmp = "Lemma";
                                 if (partCount > 1) tmp += formatted(".%d", i+1);
-                                strongVal = word->second.find(tmp);
-                                if (strongVal != word->second.end()) {
+                                auto const strongVal(wordAttrs.find(tmp));
+                                if (strongVal != wordAttrs.end()) {
                                     // cheeze.  skip empty article tags that weren't assigned to any text
-                                    if (strongVal->second == "G3588") {
-                                        if (word->second.find("Text") == word->second.end())
+                                    if (strongVal->second == "G3588")
+                                        if (wordAttrs.find("Text") == wordAttrs.end())
                                             continue;    // no text? let's skip
-                                    }
                                     strong.append(strongVal->second);
                                     morph.append(strongVal->second);
                                     morph.push_back('@');
                                     std::string tmp2("Morph");
                                     if (partCount > 1) tmp2 += formatted(".%d", i+1);
-                                    morphVal = word->second.find(tmp2);
-                                    if (morphVal != word->second.end()) {
+                                    auto const morphVal(wordAttrs.find(tmp2));
+                                    if (morphVal != wordAttrs.end())
                                         morph.append(morphVal->second);
-                                    }
                                     strong.push_back(' ');
                                     morph.push_back(' ');
                                 }
@@ -1021,35 +1023,33 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
                                 // build "strong" field
                                 strong = "";
                                 morph = "";
-                                AttributeTypeList::iterator words;
-                                AttributeList::iterator word;
-                                AttributeValue::iterator strongVal;
-                                AttributeValue::iterator morphVal;
-
-                                words = getEntryAttributes().find("Word");
-                                if (words != getEntryAttributes().end()) {
-                                    for (word = words->second.begin();word != words->second.end(); word++) {
-                                        int partCount = std::atoi(word->second["PartCount"].c_str());
-                                        if (!partCount) partCount = 1;
+                                auto const wordsIt(
+                                            getEntryAttributes().find("Word"));
+                                if (wordsIt != getEntryAttributes().end()) {
+                                    for (auto const & wordPair : wordsIt->second) {
+                                        auto const & wordAttrs =
+                                                wordPair.second;
+                                        auto const partCount =
+                                                getWordPartCount(wordAttrs);
                                         for (int i = 0; i < partCount; i++) {
                                             std::string tmp = "Lemma";
                                             if (partCount > 1) tmp += formatted(".%d", i+1);
-                                            strongVal = word->second.find(tmp);
-                                            if (strongVal != word->second.end()) {
+                                            auto const strongVal(
+                                                        wordAttrs.find(tmp));
+                                            if (strongVal != wordAttrs.end()) {
                                                 // cheeze.  skip empty article tags that weren't assigned to any text
-                                                if (strongVal->second == "G3588") {
-                                                    if (word->second.find("Text") == word->second.end())
+                                                if (strongVal->second == "G3588")
+                                                    if (wordAttrs.find("Text") == wordAttrs.end())
                                                         continue;    // no text? let's skip
-                                                }
                                                 strong.append(strongVal->second);
                                                 morph.append(strongVal->second);
                                                 morph.push_back('@');
                                                 std::string tmp2("Morph");
                                                 if (partCount > 1) tmp2 += formatted(".%d", i+1);
-                                                morphVal = word->second.find(tmp2);
-                                                if (morphVal != word->second.end()) {
+                                                auto const morphVal(
+                                                            wordAttrs.find(tmp2));
+                                                if (morphVal != wordAttrs.end())
                                                     morph.append(morphVal->second);
-                                                }
                                                 strong.push_back(' ');
                                                 morph.push_back(' ');
                                             }
@@ -1086,35 +1086,30 @@ signed char SWModule::createSearchFramework(void (*percent)(char, void *), void 
                                     // build "strong" field
                                     strong = "";
                                     morph = "";
-                                    AttributeTypeList::iterator words;
-                                    AttributeList::iterator word;
-                                    AttributeValue::iterator strongVal;
-                                    AttributeValue::iterator morphVal;
-
-                                    words = getEntryAttributes().find("Word");
-                                    if (words != getEntryAttributes().end()) {
-                                        for (word = words->second.begin();word != words->second.end(); word++) {
-                                            int partCount = std::atoi(word->second["PartCount"].c_str());
-                                            if (!partCount) partCount = 1;
+                                    auto const wordsIt(
+                                                getEntryAttributes().find("Word"));
+                                    if (wordsIt != getEntryAttributes().end()) {
+                                        for (auto const & wordPair : wordsIt->second) {
+                                            auto const & wordAttrs = wordPair.second;
+                                            auto const partCount =
+                                                    getWordPartCount(wordAttrs);
                                             for (int i = 0; i < partCount; i++) {
                                                 std::string tmp = "Lemma";
                                                 if (partCount > 1) tmp += formatted(".%d", i+1);
-                                                strongVal = word->second.find(tmp);
-                                                if (strongVal != word->second.end()) {
+                                                auto const strongVal(wordAttrs.find(tmp));
+                                                if (strongVal != wordAttrs.end()) {
                                                     // cheeze.  skip empty article tags that weren't assigned to any text
-                                                    if (strongVal->second == "G3588") {
-                                                        if (word->second.find("Text") == word->second.end())
+                                                    if (strongVal->second == "G3588")
+                                                        if (wordAttrs.find("Text") == wordAttrs.end())
                                                             continue;    // no text? let's skip
-                                                    }
                                                     strong.append(strongVal->second);
                                                     morph.append(strongVal->second);
                                                     morph.push_back('@');
                                                     std::string tmp2("Morph");
                                                     if (partCount > 1) tmp2 += formatted(".%d", i+1);
-                                                    morphVal = word->second.find(tmp2);
-                                                    if (morphVal != word->second.end()) {
+                                                    auto const morphVal(wordAttrs.find(tmp2));
+                                                    if (morphVal != wordAttrs.end())
                                                         morph.append(morphVal->second);
-                                                    }
                                                     strong.push_back(' ');
                                                     morph.push_back(' ');
                                                 }
