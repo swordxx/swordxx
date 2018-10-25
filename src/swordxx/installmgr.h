@@ -81,6 +81,8 @@ protected:
     bool m_passive;
     std::string m_u, m_p;
 
+private:
+
     /** we have a transport member to set as current running transport so we
      *  can ask it to terminate below, if user requests
          */
