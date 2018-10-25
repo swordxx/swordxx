@@ -543,10 +543,10 @@ ListKey &SWModule::search(char const * istr,
             // entry attributes
             case -3: {
                 renderText();    // force parse
-                AttributeTypeList &entryAttribs = getEntryAttributes();
-                AttributeTypeList::iterator i1Start, i1End;
-                AttributeList::iterator i2Start, i2End;
-                AttributeValue::iterator i3Start, i3End;
+                AttributeTypeList const & entryAttribs = getEntryAttributes();
+                AttributeTypeList::const_iterator i1Start, i1End;
+                AttributeList::const_iterator i2Start, i2End;
+                AttributeValue::const_iterator i3Start, i3End;
 
                 if ((words.size()) && (words[0].length())) {
                     i1Start = entryAttribs.find(words[0]);
