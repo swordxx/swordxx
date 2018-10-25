@@ -578,7 +578,6 @@ int InstallMgr::refreshRemoteSourceConfiguration() {
 
 InstallSource::InstallSource(const char *type, const char *confEnt) {
     this->m_type = type;
-    m_userData = nullptr;
     if (confEnt) {
         std::string buf = confEnt;
         m_caption   = stripPrefix(buf, '|');

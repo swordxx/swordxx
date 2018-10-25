@@ -60,7 +60,6 @@ public:
 
     std::string m_type;
     std::string m_localShadow;
-    void *m_userData;
     std::shared_ptr<SWMgr> const & getMgr();
     void flush();
 };
