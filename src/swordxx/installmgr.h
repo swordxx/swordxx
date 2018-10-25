@@ -115,6 +115,9 @@ public:
                std::string p = "installmgr@user.com");
     virtual ~InstallMgr();
 
+    std::shared_ptr<StatusReporter> const & statusReporter() const noexcept
+    { return m_statusReporter; }
+
     /** Call to re-read InstallMgr.conf
          */
     void readInstallConf();
