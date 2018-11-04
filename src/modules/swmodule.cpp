@@ -731,8 +731,8 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 						else testBuf.setSize(0);
 						foundWords = 0;
 
+						if ((flags & REG_ICASE) == REG_ICASE) toupperstr(testBuf.size() ? testBuf : textBuf);
 						for (unsigned int i = 0; i < words.size(); i++) {
-							if ((flags & REG_ICASE) == REG_ICASE) toupperstr(testBuf.size() ? testBuf : textBuf);
 							sres = strstr(testBuf.size() ? testBuf.c_str() : textBuf.c_str(), words[i].c_str());
 							if (!sres) {
 								break; //for loop
