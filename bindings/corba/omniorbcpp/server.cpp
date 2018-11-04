@@ -22,6 +22,7 @@
 
 
 #include <csignal>
+#include <thread>
 #include "swordorb-impl.hpp"
 #include <iostream>
 #include <swmgr.h>
@@ -43,10 +44,47 @@ public:
 	}
 } cleanStatics;
 
+#include <mutex>
+#include <condition_variable>
 
-void term_handler(int signal) {
+class Semaphore {
+private:
+    std::mutex mtx;
+    std::condition_variable cv;
+    int count;
+
+public:
+    Semaphore (int count_ = 0) : count(count_) {}
+
+    inline void notify() {
+        std::unique_lock<std::mutex> lock(mtx);
+        count++;
+        cv.notify_one();
+    }
+
+    inline void wait() {
+        std::unique_lock<std::mutex> lock(mtx);
+
+        while(count == 0){
+            cv.wait(lock);
+        }
+        count--;
+    }
+};
+
+Semaphore waitingForTermSemaphore;
+
+void waitingForTermFunction() {
+	waitingForTermSemaphore.wait();
+std::cerr << "Semaphore passed shutting down orb...\n";
+	if (orb) orb->shutdown(true);
+std::cerr << "ORB shutdown returned...\n";
+}
+
+void termHandler(int signal) {
 	std::cerr << "SIGTERM received, exiting nicely...\n";
-	if (orb) orb->shutdown(!0);
+	std::cerr << "notifying semaphore...\n";
+	waitingForTermSemaphore.notify();
 }
 
 
@@ -104,13 +142,17 @@ int main (int argc, char** argv)
     PortableServer::POAManager_var pman = poa->the_POAManager();
     pman->activate();
 
-	std::signal(SIGTERM, term_handler);
+	std::thread waitingForTermThread(waitingForTermFunction);
+	std::signal(SIGTERM, termHandler);
 
 
     orb->run();
 	std::cerr << "ORB has stopped running.\n";
     orb->destroy();
 	std::cerr << "ORB is destroyed.\n";
+	std::cerr << "joining terminate thread.\n";
+	waitingForTermThread.join();
+	std::cerr << "exiting...\n";
   }
   catch(CORBA::TRANSIENT&) {
     std::cerr << "Caught system exception TRANSIENT -- unable to contact the "

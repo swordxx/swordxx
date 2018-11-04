@@ -19,7 +19,7 @@ LIBS += -L/usr/lib64
 #CXXFLAGS += -g -O0
 #CFLAGS += -g -O0
 #LDFLAGS += -g -O0
-CXXFLAGS += -O3
+CXXFLAGS += -O3 -std=c++0x
 CFLAGS += -O3
 #-----------------------------------------------------------------------------
 

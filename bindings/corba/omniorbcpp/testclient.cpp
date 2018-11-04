@@ -110,6 +110,10 @@ int main (int argc, char *argv[])
 		std::cout << "\nFiltered text: " << mgr->filterText("Greek Accents", "ὁ θεὸς") << "\n";
 */
 
+		std::cout << "Terminating ORB...\n";
+
+		mgr->terminate();
+
 		
 	} catch(const CORBA::Exception& ex) {
 		std::cout << "exception: " << ex._name() << std::endl;
