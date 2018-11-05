@@ -207,7 +207,7 @@ AM_CONDITIONAL(HAVE_CPPUNIT, test "$CPPUNIT_LIBS")
 # Find pkg-config
 # ---------------------------------------------------------------------
 use_pkgconfig=yes
-AC_PATH_PROG(PKG_CONFIG, pkg-config, no)
+PKG_PROG_PKG_CONFIG(PKG_CONFIG, pkg-config, no)
 if test x$PKG_CONFIG = xno ; then
   AC_MSG_WARN([*** pkg-config not found. See http://www.freedesktop.org/software/pkgconfig/])
   AC_MSG_WARN([not using pkg-config])
