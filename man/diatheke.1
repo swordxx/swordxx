@@ -1,10 +1,3 @@
-.\" diatheke man page
-.\" (C)2006 Eeli Kaikkonen
-.\" You may do whatever you wish with this file.
-.\" Version 0.8
-.\" (C) 2018 CrossWire Bible Society
-.\" for additions/changes from version 0.9 and onwards
-.\" You may still do whatever you wish with this file
 .TH DIATHEKE 1 "2018-11-08" "diatheke 4.8" "Diatheke man page"
 .SH NAME
 diatheke \- a command line Bible reader
@@ -34,8 +27,11 @@ diatheke \- a command line Bible reader
 
 .B diatheke
 .B \-b system
-.B \-k modulelist\fR|\fBmodulelistnames\fR|\fBlocalelist
-
+.B \-k modulelist\fR|\fBmodulelistnames\fR|\fBlocalelist\fR|\fBbibliography
+modulelist will return a list of the names and descriptions of all installed modules
+modulelistnames will return a list of the names of all installed modules
+localelist will return a list of all installed libsword locales
+bibliography will return a list of all installed modules and their BibTex bibliographical entry 
 .B diatheke
 .B \-b info
 .B \-k
@@ -69,20 +65,16 @@ Module option filters. A combination of "fmhcvalsrbx". See MODULE OPTIONS.
 Maximum number of verses returned. Any integer value.
 .TP
 .B \-f
-Output format. One of GBF, ThML, RTF, HTML, OSIS, CGI, plain (default).
+Output format.One of CGI, GBF, HTML, HTMLHREF, LaTeX, OSIS, RTF,
+  ThML, WEBIF, XHTML, plain, and internal (def)
+
 This currently works only if there is a Sword library filter from the original format to
-the specified output format. HTML and CGI are for generating text for a webpage.
+the specified output format. XHTML, HTML and CGI are for generating text for a webpage.
 .TP
 .B \-e
 Output character encoding. One of Latin1, UTF16, HTML, RTF, UTF8 (default).
 This currently works only for module contents, not for system key contents
 or key texts.
-.TP
-.B \-t
-.\" TODO
-Script. (This seems to be broken in version 4.2.1,
-it should allow e.g. Greek->Latin1 character
-transliteration with "\-t Latin".)
 .TP
 .B \-v
 Variant. The text may contain variant readings. One of \-1 (all), 0, 1.
@@ -121,6 +113,9 @@ Hebrew vowels.
 .B a
 Greek accents.
 .TP
+.B p
+Arabic vowels
+.TP
 .B l
 Lemmas (the base forms of the words).
 .TP
@@ -133,8 +128,31 @@ Arabic shaping.
 .B b
 Bi-directional reordering.
 .TP
-.B x
+.B w
 Red Words of Christ.
+.TP
+.B g 
+Glosses/Ruby
+.TP
+.B e
+Word Enumerations
+.TP
+.B
+i
+Intros
+.TP
+.B
+x
+Encoded transliterations, i.e. transliterations provided by the module (currently uncommon)
+.TP
+.B
+t
+Algorithmic Transliterations via ICU
+.TP
+.B
+M
+morpheme segmentation
+
 .SH QUERY KEYS
 .TP
 .B Bible texts and Commentaries
@@ -200,5 +218,5 @@ is shown diatheke has been bad.
 Sword library: \(co 1994-2018 Crosswire Bible Society,
 released under GPL licence.
 Diatheke: written by Chris Little, Peter von Kaehne, Troy Griffitts
+Manpage: written by Eeli Kaikkonen, Peter von Kaehne
 \(co 1999-2018 Crosswire Bible Society, released under GPL licence.
-This manpage was written by Eeli Kaikkonen and may be used freely.
