@@ -54,6 +54,7 @@ const char *OSISXHTML::getHeader() const {
 		.acrostic { text-align: center; }\n\
 		.colophon {font-style: italic; font-size: small; display: block; }\n\
 		.rdg { font-style: italic; }\n\
+		.inscription {font-variant: small-caps; }\n\
 		.catchWord {font-style: bold; }\n\
 		.x-p-indent {text-indent: 1em; }\n\
 	";
@@ -615,7 +616,7 @@ bool OSISXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 			}
 		}
 		// <catchWord> & <rdg> tags (italicize)
-		else if (!strcmp(tag.getName(), "rdg") || !strcmp(tag.getName(), "catchWord")) {
+		else if (!strcmp(tag.getName(), "rdg") || !strcmp(tag.getName(), "catchWord") || !strcmp(tag.getName(), "inscription")) {
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
 				outText("<span class=\"", buf, u);
 				outText(tag.getName(), buf, u);
