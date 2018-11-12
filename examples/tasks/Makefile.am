@@ -10,3 +10,7 @@ noinst_PROGRAMS = parallelbibles listbiblebooknames simpleverselookup
 parallelbibles_SOURCES = parallelbibles.cpp
 listbiblebooknames_SOURCES = listbiblebooknames.cpp
 simpleverselookup_SOURCES = simpleverselookup.cpp
+
+distclean-local:
+	-rm -f Makefile.in
+	
