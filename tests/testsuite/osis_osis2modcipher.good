@@ -32,6 +32,7 @@ CSS:
 		.acrostic { text-align: center; }
 		.colophon {font-style: italic; font-size: small; display: block; }
 		.rdg { font-style: italic; }
+		.inscription {font-variant: small-caps; }
 		.catchWord {font-style: bold; }
 		.x-p-indent {text-indent: 1em; }
 	
@@ -73,6 +74,7 @@ CSS:
 		.acrostic { text-align: center; }
 		.colophon {font-style: italic; font-size: small; display: block; }
 		.rdg { font-style: italic; }
+		.inscription {font-variant: small-caps; }
 		.catchWord {font-style: bold; }
 		.x-p-indent {text-indent: 1em; }
 	
@@ -121,6 +123,7 @@ CSS:
 		.acrostic { text-align: center; }
 		.colophon {font-style: italic; font-size: small; display: block; }
 		.rdg { font-style: italic; }
+		.inscription {font-variant: small-caps; }
 		.catchWord {font-style: bold; }
 		.x-p-indent {text-indent: 1em; }
 	

@@ -10,3 +10,11 @@ run:
 clean-local:
 	-rm -rf tmp
 	-rm -rf *.try
+
+distclean-local:
+	-rm -f Makefile.in
+	-rm -rf osis
+	-rm -rf ldr12n
+	
+	
+	
