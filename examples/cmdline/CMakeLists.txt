@@ -9,6 +9,7 @@ SET(example_PROGRAMS
     lookup
     outplain
     outrender
+    outvplskeleton
     search
     simple
     stripaccents

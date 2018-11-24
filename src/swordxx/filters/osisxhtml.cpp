@@ -55,6 +55,7 @@ const char *OSISXHTML::getHeader() const {
         ".acrostic { text-align: center; }\n"
         ".colophon { font-style: italic; font-size: small; display: block; }\n"
         ".rdg { font-style: italic; }\n"
+        ".inscription {font-variant: small-caps; }\n"
         ".catchWord { font-style: bold; }\n"
         ".x-p-indent { text-indent: 1em; }\n"
     ;
@@ -608,8 +609,11 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
                 u.supressAdjacentWhitespace = true;
             }
         }
-        // <catchWord> & <rdg> tags (italicize)
-        else if ((tag.name() == "rdg") || (tag.name() == "catchWord")) {
+        // <catchWord>, <rdg> and <inscription> tags (italicize):
+        else if ((tag.name() == "rdg")
+                 || (tag.name() == "catchWord")
+                 || (tag.name() == "inscription"))
+        {
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {
                 outText("<span class=\"", buf, u);
                 outText(tag.name().c_str(), buf, u);

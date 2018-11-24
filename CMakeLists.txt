@@ -40,6 +40,12 @@ SET(SWORDXX_SYSCONF_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}/etc"
 SET(SWORDXX_SHARE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}/share"
     CACHE STRING "Directory to install global data files. Defaults to \"\${CMAKE_INSTALL_PREFIX}/share\"")
 
+SET(SWORDXX_MAN_INSTALL_PREFIX "${SWORDXX_SHARE_INSTALL_PREFIX}/man"
+    CACHE STRING "Directory to install manual pages to. Defaults to \"\${SWORDXX_SHARE_INSTALL_PREFIX}/man\"")
+
+SET(SWORDXX_WITH_MAN_PAGES TRUE CACHE BOOL
+    "Specifies whether man pages for Sword++ are generated and installed.")
+
 
 # If SWORDXX_BUILDCONFIG set, load the file and fail on error. Otherwise, try to
 # include either "config.cmake" under either the build directory or the source
@@ -220,3 +226,12 @@ ADD_SUBDIRECTORY("${CMAKE_CURRENT_SOURCE_DIR}/src/swordxx")
 ADD_SUBDIRECTORY("${CMAKE_CURRENT_SOURCE_DIR}/examples")
 ADD_SUBDIRECTORY("${CMAKE_CURRENT_SOURCE_DIR}/tests")
 ADD_SUBDIRECTORY("${CMAKE_CURRENT_SOURCE_DIR}/utilities")
+
+################################################################################
+# Manual pages:
+#
+FILE(GLOB SWORDXX_MAN1_PAGES "${CMAKE_CURRENT_SOURCE_DIR}/man/*.1")
+ADD_CUSTOM_TARGET("manfiles" SOURCES ${SWORDXX_MAN1_PAGES})
+IF(SWORDXX_WITH_MAN_PAGES)
+    INSTALL(FILES ${SWORDXX_MAN1_PAGES} DESTINATION "${SWORDXX_MAN_INSTALL_PREFIX}/man1")
+ENDIF()
