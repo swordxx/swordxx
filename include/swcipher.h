@@ -27,6 +27,7 @@
 #include <sapphire.h>
 
 #include <defs.h>
+#include <swbuf.h>
 
 SWORD_NAMESPACE_START
 
@@ -48,6 +49,7 @@ public:
   virtual char *cipherBuf (unsigned long *len, const char *buf = 0);
   virtual void Encode (void);
   virtual void Decode (void);
+  static SWBuf personalize(const SWBuf &buf, bool encode);
 };
 
 SWORD_NAMESPACE_END

@@ -21,6 +21,7 @@
  */
 
 #include <cipherfil.h>
+#include <swcipher.h>
 #include <filemgr.h>
 #include <swbuf.h>
 #include <iostream>
@@ -30,7 +31,7 @@ using namespace sword;
 int main(int argc, char **argv) {
 	
 	if (argc != 3) {
-		std::cerr << "usage: " << *argv << " <key> <0-encipher|1-decipher>\n";
+		std::cerr << "usage: " << *argv << " <key> <0-encipher|1-decipher|2-personalize|3-de-personalize>\n";
 		return -1;
 	}
 
@@ -44,11 +45,16 @@ int main(int argc, char **argv) {
 	std::cin >> buf;
 	text = buf;
 
-	filter->processText(text, (SWKey *)encipher);
+	switch (encipher) {
+	case 2:
+	case 3:
+		text = SWCipher::personalize(text, encipher == 2);
+		break;
+	default:
+		filter->processText(text, (SWKey *)encipher);
+	}
 
 	std::cout << text;
-	
-
 	
 	return 0;
 }
