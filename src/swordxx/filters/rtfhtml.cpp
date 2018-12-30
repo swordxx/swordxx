@@ -43,13 +43,9 @@ char RTFHTML::processText(std::string &text, const SWKey *key, const SWModule *m
     (void) module;
     bool center = false;
 
-    const char *from;
-    std::string orig = text;
-    from = orig.c_str();
-    for (text = ""; *from; from++)
-    {
-        if (*from == '\\') // a RTF command
-        {
+    std::string newText;
+    for (const char * from = text.c_str(); *from; ++from) {
+        if (*from == '\\') { // a RTF command
             // \u12345?
             if ( *(from+1) == 'u' && (*(from+2) == '-' || charIsDigit(*(from+2)))) {
                 from += 2;
@@ -59,7 +55,7 @@ char RTFHTML::processText(std::string &text, const SWKey *key, const SWModule *m
                 num.append(from, end-from);
                 int16_t n = std::atoi(num.c_str());
                 uint32_t u = (uint16_t)n;
-                text.append(getUTF8FromUniChar(u));
+                newText.append(getUTF8FromUniChar(u));
                 from += (end-from);
                 continue;
             }
@@ -68,7 +64,7 @@ char RTFHTML::processText(std::string &text, const SWKey *key, const SWModule *m
             { // switch all modifiers off
                 if (center)
                 {
-                    text += "</center>";
+                    newText += "</center>";
                     center = false;
                 }
                 from += 4;
@@ -77,7 +73,7 @@ char RTFHTML::processText(std::string &text, const SWKey *key, const SWModule *m
             if ( !std::strncmp(from+1, "par", 3) )
                 //(from[1] == 'p') && (from[2] == 'a') && (from[3] == 'r'))
             {
-                text += "<p/>\n";
+                newText += "<p/>\n";
                 from += 3;
                 continue;
             }
@@ -91,7 +87,7 @@ char RTFHTML::processText(std::string &text, const SWKey *key, const SWModule *m
             {
                 if (!center)
                 {
-                    text += "<center>";
+                    newText += "<center>";
                     center = true;
                 }
                 from += 2;
@@ -99,8 +95,9 @@ char RTFHTML::processText(std::string &text, const SWKey *key, const SWModule *m
             }
         }
 
-        text += *from;
+        newText += *from;
     }
+    text = std::move(newText);
     return 0;
 }
 
