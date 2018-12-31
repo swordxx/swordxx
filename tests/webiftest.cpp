@@ -30,7 +30,6 @@
 #include <swordxx/filters/gbfosis.h>
 #include <swordxx/filters/thmlhtmlhref.h>
 #include <swordxx/filters/thmlosis.h>
-#include <swordxx/filters/unicodertf.h>
 #include <swordxx/keys/versekey.h>
 #include <swordxx/markupfiltmgr.h>
 #include <swordxx/swmgr.h>
