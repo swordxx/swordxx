@@ -75,7 +75,6 @@ enum SWTextMarkup: char {
     FMT_GBF,
     FMT_HTML,
     FMT_HTMLHREF,
-    FMT_RTF,
     FMT_OSIS,
     FMT_WEBIF,
     FMT_TEI,
@@ -89,7 +88,6 @@ enum TextEncoding: char {
     ENC_UTF8,
     ENC_SCSU,
     ENC_UTF16,
-    ENC_RTF,
     ENC_HTML
 };
 

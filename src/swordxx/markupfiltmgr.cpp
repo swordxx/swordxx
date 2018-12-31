@@ -27,7 +27,6 @@
 #include "filters/gbflatex.h"
 #include "filters/gbfosis.h"
 #include "filters/gbfplain.h"
-#include "filters/gbfrtf.h"
 #include "filters/gbfthml.h"
 #include "filters/gbfwebif.h"
 #include "filters/gbfxhtml.h"
@@ -35,13 +34,11 @@
 #include "filters/osislatex.h"
 #include "filters/osisosis.h"
 #include "filters/osisplain.h"
-#include "filters/osisrtf.h"
 #include "filters/osiswebif.h"
 #include "filters/osisxhtml.h"
 #include "filters/teihtmlhref.h"
 #include "filters/teilatex.h"
 #include "filters/teiplain.h"
-#include "filters/teirtf.h"
 #include "filters/teixhtml.h"
 #include "filters/thmlgbf.h"
 #include "filters/thmlhtml.h"
@@ -49,7 +46,6 @@
 #include "filters/thmllatex.h"
 #include "filters/thmlosis.h"
 #include "filters/thmlplain.h"
-#include "filters/thmlrtf.h"
 #include "filters/thmlwebif.h"
 #include "filters/thmlxhtml.h"
 #include "markupfiltmgr.h"
@@ -255,14 +251,6 @@ void MarkupFilterMgr::CreateFilters(char markup_) {
         m_fromgbf = std::make_shared<GBFHTMLHREF>();
         m_fromosis = std::make_shared<OSISHTMLHREF>();
         m_fromtei = std::make_shared<TEIHTMLHREF>();
-        break;
-
-    case FMT_RTF:
-        m_fromplain.reset();
-        m_fromthml = std::make_shared<ThMLRTF>();
-        m_fromgbf = std::make_shared<GBFRTF>();
-        m_fromosis = std::make_shared<OSISRTF>();
-        m_fromtei = std::make_shared<TEIRTF>();
         break;
 
     case FMT_LATEX:

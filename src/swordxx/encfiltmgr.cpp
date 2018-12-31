@@ -27,7 +27,6 @@
 #include <cassert>
 #include "filters/latin1utf8.h"
 #include "filters/scsuutf8.h"
-#include "filters/unicodertf.h"
 #include "filters/utf16utf8.h"
 #include "filters/utf8latin1.h"
 #include "filters/utf8html.h"
@@ -45,7 +44,6 @@ std::shared_ptr<SWFilter> makeEncodingFilter(TextEncoding const encoding) {
     switch (encoding) {
         case ENC_LATIN1: return std::make_shared<UTF8Latin1>();
         case ENC_UTF16:  return std::make_shared<UTF8UTF16>();
-        case ENC_RTF:    return std::make_shared<UnicodeRTF>();
         case ENC_HTML:   return std::make_shared<UTF8HTML>();
         case ENC_SCSU:   return std::make_shared<UTF8SCSU>();
         default: // i.e. case ENC_UTF8
