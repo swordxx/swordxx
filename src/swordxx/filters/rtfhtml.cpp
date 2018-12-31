@@ -77,11 +77,6 @@ char RTFHTML::processText(std::string &text, const SWKey *key, const SWModule *m
                 from += 3;
                 continue;
             }
-            if (from[1] == ' ')
-            {
-                from += 1;
-                continue;
-            }
             if ( !std::strncmp(from+1, "qc", 2) )
             //(from[1] == 'q') && (from[2] == 'c')) // center on
             {
