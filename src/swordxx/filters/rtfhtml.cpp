@@ -93,6 +93,12 @@ char RTFHTML::processText(std::string &text, const SWKey *key, const SWModule *m
                 from += 2;
                 continue;
             }
+        } else if (*from == '&') {
+            newText.append("&amp;");
+            continue;
+        } else if (*from == '<') {
+            newText.append("&lt;");
+            continue;
         }
 
         newText += *from;
