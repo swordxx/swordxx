@@ -69,7 +69,6 @@ void percentUpdate(char percent, void *userData) {
 
 int main(int argc, char **argv)
 {
-//    SWMgr manager(0, 0, true, new MarkupFilterMgr(FMT_RTF, ENC_RTF));
     SWMgr manager;
     ListKey listkey;
     ListKey * scope = nullptr;

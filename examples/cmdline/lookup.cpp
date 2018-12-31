@@ -35,23 +35,13 @@
 using swordxx::SWMgr;
 using swordxx::MarkupFilterMgr;
 using swordxx::SWModule;
-using swordxx::FMT_WEBIF;
 using swordxx::FMT_XHTML;
-using swordxx::FMT_RTF;
-using swordxx::FMT_LATEX;
 using swordxx::VerseKey;
 
 
 int main(int argc, char **argv)
 {
-
-// for testing webmgr
-//    WebMgr manager((const char *)0);
-//    manager.setJavascript(true);
-//
     SWMgr manager(std::make_shared<MarkupFilterMgr>(FMT_XHTML));
-//    SWMgr manager(new MarkupFilterMgr(FMT_WEBIF));
-
     if (argc != 3) {
         fprintf(stderr, "\nusage: %s <modname> <\"lookup key\">\n"
                              "\tExample: lookup KJV \"James 1:19\"\n\n", argv[0]);

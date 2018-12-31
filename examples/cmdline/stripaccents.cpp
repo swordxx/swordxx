@@ -47,7 +47,6 @@ int usage()
 
 int main(int argc, char **argv)
 {
-//    SWMgr manager(0, 0, true, new MarkupFilterMgr(FMT_RTF, ENC_RTF));
     SWMgr manager;
 
     if ((argc < 3) || (argc > 3)) {
