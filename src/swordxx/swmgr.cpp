@@ -1118,11 +1118,6 @@ void SWMgr::addRenderFilters(SWModule & module, ConfigEntMap const & section) {
         }
     }
 
-// process module    - eg. follows
-//    if (caseInsensitiveEquals(sourceformat, "GBF")) {
-//        module->AddRenderFilter(gbftortf);
-//    }
-
     if (filterMgr)
         filterMgr->addRenderFilters(module, section);
 }
