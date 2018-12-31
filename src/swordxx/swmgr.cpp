@@ -59,7 +59,6 @@
 #include "filters/osisvariants.h"
 #include "filters/osisxlit.h"
 #include "filters/papyriplain.h"
-#include "filters/rtfhtml.h"
 #include "filters/teiplain.h"
 #include "filters/thmlfootnotes.h"
 #include "filters/thmlheadings.h"
@@ -202,9 +201,6 @@ void SWMgr::init() {
     ADD_EXTRA_FILTER(ThMLPlain, m_thmlplain = filter;);
     ADD_EXTRA_FILTER(OSISPlain, m_osisplain = filter;);
     ADD_EXTRA_FILTER(TEIPlain,  m_teiplain  = filter;);
-    /* Filters which aren't really used anywhere but which we want available for
-       a "FilterName" -> filter mapping (e.g., filterText): */
-    ADD_EXTRA_FILTER(RTFHTML,);
 
     #undef ADD_EXTRA_FILTER
     #undef ADD_OPTION_FILTER
