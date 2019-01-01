@@ -34,6 +34,7 @@
 #include <iterator>
 #include <sys/stat.h>
 #include <tuple>
+#include <type_traits>
 #include <utility>
 #include "filemgr.h"
 #include "filters/cipherfil.h"
@@ -100,6 +101,47 @@
 
 namespace swordxx {
 namespace {
+
+class DirectoryEnumerator {
+
+public: /* Methods: */
+
+    DirectoryEnumerator(char const * const path) : m_dir(::opendir(path)) {}
+
+    DirectoryEnumerator(DirectoryEnumerator && move) noexcept
+        : m_dir(move.m_dir)
+    { move.m_dir = nullptr; }
+
+    DirectoryEnumerator(DirectoryEnumerator const &) = delete;
+
+    ~DirectoryEnumerator() noexcept {
+        if (m_dir)
+            ::closedir(m_dir);
+    }
+
+    DirectoryEnumerator & operator=(DirectoryEnumerator &&) = delete;
+    DirectoryEnumerator & operator=(DirectoryEnumerator const &) = delete;
+
+    explicit operator bool() const noexcept { return m_dir; }
+
+    char const * readEntry() noexcept {
+        auto const entry(::readdir(m_dir));
+        static_assert(std::is_pointer<decltype(entry)>::value, "");
+        return entry ? entry->d_name : nullptr;
+    }
+
+    void close() noexcept {
+        if (m_dir) {
+            ::closedir(m_dir);
+            m_dir = nullptr;
+        }
+    }
+
+private: /* Fields: */
+
+    ::DIR * m_dir;
+
+};
 
 void setSystemLogLevel(char const * const logLocation,
                        std::string const & logLevelString)
@@ -633,22 +675,21 @@ void SWMgr::loadConfigDir(const char *ipath)
     assert(ipath);
     std::string newmodfile;
 
-    if (auto dir = ::opendir(ipath)) {
-        ::rewinddir(dir);
-        while (auto ent = ::readdir(dir)) {
+    if (auto dir = DirectoryEnumerator(ipath)) {
+        while (auto const ent = dir.readEntry()) {
             //check whether it ends with .conf, if it doesn't skip it!
-            if ((std::strlen(ent->d_name) <= 5) || std::strncmp(".conf", (ent->d_name + std::strlen(ent->d_name) - 5), 5 )) {
+            if ((std::strlen(ent) <= 5) || std::strncmp(".conf", (ent + std::strlen(ent) - 5), 5 )) {
                 continue;
             }
 
             newmodfile = ipath;
             addTrailingDirectorySlash(newmodfile);
-            newmodfile += ent->d_name;
+            newmodfile += ent;
             if (config)
                 config->augment(SWConfig(newmodfile.c_str()));
             else    config = myconfig = new SWConfig(newmodfile.c_str());
         }
-        ::closedir(dir);
+        dir.close();
 
         if (!config) {    // if no .conf file exist yet, create a default
             newmodfile = ipath;
@@ -1188,13 +1229,12 @@ void SWMgr::InstallScan(const char *dirname)
    std::string targetName;
 
     if (FileMgr::existsDir(dirname)) {
-        if (auto dir = ::opendir(dirname)) {
-            ::rewinddir(dir);
-            while (auto ent = ::readdir(dir)) {
-                if ((std::strcmp(ent->d_name, ".")) && (std::strcmp(ent->d_name, ".."))) {
+        if (auto dir = DirectoryEnumerator(dirname)) {
+            while (auto const ent = dir.readEntry()) {
+                if ((std::strcmp(ent, ".")) && (std::strcmp(ent, ".."))) {
                     newmodfile = dirname;
                     addTrailingDirectorySlash(newmodfile);
-                    newmodfile += ent->d_name;
+                    newmodfile += ent;
 
                     // mods.d
                     if (configType) {
@@ -1202,7 +1242,7 @@ void SWMgr::InstallScan(const char *dirname)
                             FileMgr::getSystemFileMgr()->close(conffd);
                         targetName = m_configPath;
                         addTrailingDirectorySlash(targetName);
-                        targetName += ent->d_name;
+                        targetName += ent;
                         conffd = FileMgr::getSystemFileMgr()->open(targetName.c_str(), FileMgr::WRONLY|FileMgr::CREAT, FileMgr::IREAD|FileMgr::IWRITE);
                     }
 
@@ -1222,9 +1262,9 @@ void SWMgr::InstallScan(const char *dirname)
                     FileMgr::removeFile(newmodfile.c_str());
                 }
             }
+            dir.close();
             if (conffd)
                 FileMgr::getSystemFileMgr()->close(conffd);
-            ::closedir(dir);
         }
     }
 }
