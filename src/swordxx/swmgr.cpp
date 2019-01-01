@@ -1096,24 +1096,6 @@ void SWMgr::addEncodingFilters(SWModule & module,
 
 
 void SWMgr::addRenderFilters(SWModule & module, ConfigEntMap const & section) {
-    ConfigEntMap::const_iterator entry(section.find("SourceType"));
-    std::string sourceformat(
-                (entry != section.end()) ? entry->second : std::string());
-
-    // Temporary: To support old module types
-    // TODO: Remove at 1.6.0 release?
-    if (sourceformat.empty()) {
-        entry = section.find("ModDrv");
-        if (entry != section.end())
-            sourceformat = entry->second;
-
-        if (caseInsensitiveEquals(sourceformat, "RawGBF")) {
-            sourceformat = "GBF";
-        } else {
-            sourceformat.clear();
-        }
-    }
-
     if (filterMgr)
         filterMgr->addRenderFilters(module, section);
 }
