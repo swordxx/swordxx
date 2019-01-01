@@ -319,15 +319,15 @@ SWMgr::~SWMgr() {
 char SWMgr::findConfig(std::string & prefixPath, std::string & configPath, std::list<std::string> *augPaths, SWConfig **providedSysConf) {
     char configType = 0;
 
-    static bool setLogLevel = false;
+    static bool logLevelWasSet = false;
     std::string sysConfPath;
 
-    if (!setLogLevel) {
+    if (!logLevelWasSet) {
         auto const envVar(::getenv("SWORD_LOGLEVEL"));
         std::string envLogLevel(envVar ? envVar : "");
         if (!envLogLevel.empty()) {
             setSystemLogLevel(envLogLevel);
-            setLogLevel = true;
+            logLevelWasSet = true;
         }
     }
 
@@ -341,7 +341,7 @@ char SWMgr::findConfig(std::string & prefixPath, std::string & configPath, std::
     if (providedSysConf && *providedSysConf) {
         sysConf = *providedSysConf;
         SWLog::getSystemLog()->logDebug("found.");
-        if (!setLogLevel) { setSystemLogLevel(*sysConf); setLogLevel = true; }
+        if (!logLevelWasSet) { setSystemLogLevel(*sysConf); logLevelWasSet = true; }
     }
 
     // if we haven't been given our datapath in a sysconf, we need to track it down
@@ -360,7 +360,7 @@ char SWMgr::findConfig(std::string & prefixPath, std::string & configPath, std::
                     if (entry != section.end())
                         sysConfDataPath = entry->second;
                 }
-                if (!setLogLevel) { setSystemLogLevel(*sysConf); setLogLevel = true; }
+                if (!logLevelWasSet) { setSystemLogLevel(*sysConf); logLevelWasSet = true; }
                 if (providedSysConf) {
                     *providedSysConf = sysConf;
                 }
@@ -479,7 +479,7 @@ char SWMgr::findConfig(std::string & prefixPath, std::string & configPath, std::
     }
 
     if (sysConf) {
-        if (!setLogLevel) { setSystemLogLevel(*sysConf); setLogLevel = true; }
+        if (!logLevelWasSet) { setSystemLogLevel(*sysConf); logLevelWasSet = true; }
         {
             auto const & section = sysConf->sections()["Install"];
             auto const entry(section.find("DataPath"));
@@ -514,7 +514,7 @@ char SWMgr::findConfig(std::string & prefixPath, std::string & configPath, std::
 
     // do some extra processing of sysConf if we have one
     if (sysConf) {
-        if (!setLogLevel) { setSystemLogLevel(*sysConf); setLogLevel = true; }
+        if (!logLevelWasSet) { setSystemLogLevel(*sysConf); logLevelWasSet = true; }
         if (augPaths) {
             augPaths->clear();
             auto const & section = sysConf->sections()["Install"];
