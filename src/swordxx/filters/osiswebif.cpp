@@ -50,9 +50,9 @@ std::unique_ptr<BasicFilterUserData> OSISWEBIF::createUserData(
 }
 
 bool OSISWEBIF::handleToken(std::string &buf, const char *token, BasicFilterUserData *userData) {
-    MyUserData * u = static_cast<MyUserData *>(userData);
+    auto & u = *static_cast<MyUserData *>(userData);
     std::string scratch;
-    bool sub = (u->suspendTextPassThru) ? substituteToken(scratch, token) : substituteToken(buf, token);
+    bool sub = (u.suspendTextPassThru) ? substituteToken(scratch, token) : substituteToken(buf, token);
     if (!sub) {
 
         // manually process if it wasn't a simple substitution
@@ -63,7 +63,7 @@ bool OSISWEBIF::handleToken(std::string &buf, const char *token, BasicFilterUser
 
             // start <w> tag
             if ((!tag.isEmpty()) && (!tag.isEndTag())) {
-                u->w = token;
+                u.w = token;
             }
 
             // end or empty <w> tag
@@ -73,8 +73,8 @@ bool OSISWEBIF::handleToken(std::string &buf, const char *token, BasicFilterUser
                 bool show = true;    // to handle unplaced article in kjv2003-- temporary till combined
 
                 if (endTag) {
-                    tag = u->w.c_str();
-                    lastText = u->lastTextNode.c_str();
+                    tag = u.w.c_str();
+                    lastText = u.lastTextNode.c_str();
                 }
                 else lastText = "stuff";
 
@@ -149,8 +149,8 @@ bool OSISWEBIF::handleToken(std::string &buf, const char *token, BasicFilterUser
                 if (!tag.isEmpty()) {
                     if (!strongsMarkup) {    // leave strong's markup notes out, in the future we'll probably have different option filters to turn different note types on or off
                         std::string footnoteNumber = tag.attribute("swordFootnote");
-                        std::string modName = (u->module) ? u->module->getName() : "";
-                        if (auto const * const vkey = u->verseKey) {
+                        std::string modName = (u.module) ? u.module->getName() : "";
+                        if (auto const * const vkey = u.verseKey) {
                             char const ch = ((tag.attribute("type") == "crossReference") || (tag.attribute("type") == "x-cross-ref")) ? 'x':'n';
 //                            buf += formatted("<a href=\"noteID=%s.%c.%s\"><small><sup>*%c</sup></small></a> ", vkey->getText(), ch, footnoteNumber.c_str(), ch);
                             buf.append("<span class=\"fn\" onclick=\"f(\'")
@@ -164,11 +164,11 @@ bool OSISWEBIF::handleToken(std::string &buf, const char *token, BasicFilterUser
                                .append("</span>");
                         }
                     }
-                    u->suspendTextPassThru = (++u->suspendLevel);
+                    u.suspendTextPassThru = (++u.suspendLevel);
                 }
             }
             if (tag.isEndTag()) {
-                u->suspendTextPassThru = (--u->suspendLevel);
+                u.suspendTextPassThru = (--u.suspendLevel);
 
             }
         }
