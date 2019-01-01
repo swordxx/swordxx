@@ -42,7 +42,7 @@ using namespace swordxx;
     fprintf(stderr, "\n=== mod2imp (Revision $Rev$) Sword++ module exporter.\n");
     fprintf(stderr, "\nusage: %s <module_name> [options]\n"
         "\t -r [output_format]  - render content instead of outputting raw native\n"
-        "\t\tdata.  output_format can be: OSIS, XHTML, LATEX, HTMLHREF.\n"
+        "\t\tdata.  output_format can be: OSIS, XHTML, HTMLHREF.\n"
         "\t -s - strip markup instead of outputting raw native data.\n"
         "\t -f <option_name> <option_value> - when rendering (-r, above), option\n"
         "\t\tfilter values can be set with this option.\n\n"
@@ -86,7 +86,6 @@ int main(int argc, char **argv)
     std::shared_ptr<MarkupFilterMgr> markupMgr;
     if       (renderForm == "HTMLHREF") markupMgr = std::make_shared<MarkupFilterMgr>(swordxx::FMT_HTMLHREF);
     else if  (renderForm == "OSIS")     markupMgr = std::make_shared<MarkupFilterMgr>(swordxx::FMT_OSIS);
-    else if  (renderForm == "LATEX")    markupMgr = std::make_shared<MarkupFilterMgr>(swordxx::FMT_LATEX);
     else if  (renderForm == "XHTML")    markupMgr = std::make_shared<MarkupFilterMgr>(swordxx::FMT_XHTML);
 
     else if  (renderForm.length())      usage(progName, (((std::string) "Unknown output_format for -r (")+renderForm+")").c_str());

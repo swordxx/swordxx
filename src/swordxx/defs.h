@@ -78,8 +78,7 @@ enum SWTextMarkup: char {
     FMT_OSIS,
     FMT_WEBIF,
     FMT_TEI,
-    FMT_XHTML,
-    FMT_LATEX
+    FMT_XHTML
 };
 
 enum TextEncoding: char {
