@@ -323,8 +323,7 @@ char SWMgr::findConfig(std::string & prefixPath, std::string & configPath, std::
     std::string sysConfPath;
 
     if (!logLevelWasSet) {
-        auto const envVar(::getenv("SWORD_LOGLEVEL"));
-        std::string envLogLevel(envVar ? envVar : "");
+        auto const envLogLevel(getEnvironmentVariable("SWORD_LOGLEVEL"));
         if (!envLogLevel.empty()) {
             setSystemLogLevel(envLogLevel);
             logLevelWasSet = true;
