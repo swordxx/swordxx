@@ -631,13 +631,11 @@ char SWMgr::findConfig(std::string & prefixPath, std::string & configPath, std::
 void SWMgr::loadConfigDir(const char *ipath)
 {
     assert(ipath);
-    ::DIR * dir;
-    ::dirent * ent;
     std::string newmodfile;
 
-    if ((dir = ::opendir(ipath))) {
+    if (auto dir = ::opendir(ipath)) {
         ::rewinddir(dir);
-        while ((ent = ::readdir(dir))) {
+        while (auto ent = ::readdir(dir)) {
             //check whether it ends with .conf, if it doesn't skip it!
             if ((std::strlen(ent->d_name) <= 5) || std::strncmp(".conf", (ent->d_name + std::strlen(ent->d_name) - 5), 5 )) {
                 continue;
@@ -1185,16 +1183,14 @@ void SWMgr::deleteModule(const char *modName) { m_modules.erase(modName); }
 
 void SWMgr::InstallScan(const char *dirname)
 {
-   ::DIR * dir;
-   ::dirent * ent;
    FileDesc * conffd = nullptr;
    std::string newmodfile;
    std::string targetName;
 
     if (FileMgr::existsDir(dirname)) {
-        if ((dir = ::opendir(dirname))) {
+        if (auto dir = ::opendir(dirname)) {
             ::rewinddir(dir);
-            while ((ent = ::readdir(dir))) {
+            while (auto ent = ::readdir(dir)) {
                 if ((std::strcmp(ent->d_name, ".")) && (std::strcmp(ent->d_name, ".."))) {
                     newmodfile = dirname;
                     addTrailingDirectorySlash(newmodfile);
