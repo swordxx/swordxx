@@ -24,7 +24,6 @@
 
 #include <cassert>
 #include <cstring>
-#include <dirent.h>
 #include <fcntl.h>
 #include <string>
 #include "filemgr.h"
