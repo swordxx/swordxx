@@ -25,7 +25,6 @@
 #include <atomic>
 #include <cassert>
 #include <cstdio>
-#include <dirent.h>
 #include <fcntl.h>
 #include <iostream>
 #include <map>
@@ -33,6 +32,7 @@
 #include <utility>
 #include "curlftpt.h"
 #include "curlhttpt.h"
+#include "DirectoryEnumerator.h"
 #include "filemgr.h"
 #include "swlog.h"
 #include "swmgr.h"
@@ -226,20 +226,15 @@ bool InstallMgr::removeModule(SWMgr & manager, std::string const & moduleName) {
             }
         }
         else {    //remove all files in DataPath directory
-
-            DIR *dir;
-            struct dirent *ent;
-
             FileMgr::removeDir(modDir.c_str());
 
-            if ((dir = opendir(manager.m_configPath.c_str()))) {    // find and remove .conf file
-                rewinddir(dir);
-                while ((ent = readdir(dir))) {
-                    if ((std::strcmp(ent->d_name, ".")) && (std::strcmp(ent->d_name, ".."))) {
+            if (auto dir = DirectoryEnumerator(manager.m_configPath)) {    // find and remove .conf file
+                while (auto ent = dir.readEntry()) {
+                    if ((std::strcmp(ent, ".")) && (std::strcmp(ent, ".."))) {
                         std::string modFile(manager.m_configPath);
                         removeTrailingDirectorySlashes(modFile);
                         modFile += "/";
-                        modFile += ent->d_name;
+                        modFile += ent;
                         if ([&modFile, &modName]() {
                                 SWConfig config(modFile.c_str());
                                 auto const & sections = config.sections();
@@ -248,7 +243,6 @@ bool InstallMgr::removeModule(SWMgr & manager, std::string const & moduleName) {
                             FileMgr::removeFile(modFile.c_str());
                     }
                 }
-                closedir(dir);
             }
         }
         return true;
@@ -271,8 +265,6 @@ int InstallMgr::installModule(SWMgr & destMgr,
     std::string buffer;
     bool aborted = false;
     bool cipher = false;
-    DIR *dir;
-    struct dirent *ent;
     std::string modFile;
 
     SWLog::getSystemLog()->logDebug("***** InstallMgr::installModule\n");
@@ -384,18 +376,19 @@ int InstallMgr::installModule(SWMgr & destMgr,
         }
         if (!aborted) {
             std::string confDir = sourceDir + "mods.d/";
-            if ((dir = opendir(confDir.c_str()))) {    // find and copy .conf file
-                rewinddir(dir);
-                while ((ent = readdir(dir)) && !retVal) {
-                    if ((std::strcmp(ent->d_name, ".")) && (std::strcmp(ent->d_name, ".."))) {
+            if (auto dir = DirectoryEnumerator(confDir)) {    // find and copy .conf file
+                while (auto const ent = dir.readEntry()) {
+                    if (retVal)
+                        break;
+                    if ((std::strcmp(ent, ".")) && (std::strcmp(ent, ".."))) {
                         modFile = confDir;
-                        modFile += ent->d_name;
+                        modFile += ent;
                         SWConfig config(modFile.c_str());
                         if (config.sections().find(modName) != config.sections().end()) {
                             std::string targetFile = destMgr.m_configPath; //"./mods.d/";
                             removeTrailingDirectorySlashes(targetFile);
                             targetFile += "/";
-                            targetFile += ent->d_name;
+                            targetFile += ent;
                             retVal = FileMgr::copyFile(modFile.c_str(), targetFile.c_str());
                             if (cipher) {
                                 if (getCipherCode(modName, &config)) {
@@ -411,7 +404,6 @@ int InstallMgr::installModule(SWMgr & destMgr,
                         }
                     }
                 }
-                closedir(dir);
             }
         }
         return (aborted) ? -9 : retVal;
