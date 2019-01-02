@@ -26,7 +26,6 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
-#include <dirent.h>
 #include <fcntl.h>
 #ifndef _MSC_VER
 #include <iostream>
@@ -34,8 +33,8 @@
 #include <iterator>
 #include <sys/stat.h>
 #include <tuple>
-#include <type_traits>
 #include <utility>
+#include "DirectoryEnumerator.h"
 #include "filemgr.h"
 #include "filters/cipherfil.h"
 #include "filters/gbffootnotes.h"
@@ -101,47 +100,6 @@
 
 namespace swordxx {
 namespace {
-
-class DirectoryEnumerator {
-
-public: /* Methods: */
-
-    DirectoryEnumerator(char const * const path) : m_dir(::opendir(path)) {}
-
-    DirectoryEnumerator(DirectoryEnumerator && move) noexcept
-        : m_dir(move.m_dir)
-    { move.m_dir = nullptr; }
-
-    DirectoryEnumerator(DirectoryEnumerator const &) = delete;
-
-    ~DirectoryEnumerator() noexcept {
-        if (m_dir)
-            ::closedir(m_dir);
-    }
-
-    DirectoryEnumerator & operator=(DirectoryEnumerator &&) = delete;
-    DirectoryEnumerator & operator=(DirectoryEnumerator const &) = delete;
-
-    explicit operator bool() const noexcept { return m_dir; }
-
-    char const * readEntry() noexcept {
-        auto const entry(::readdir(m_dir));
-        static_assert(std::is_pointer<decltype(entry)>::value, "");
-        return entry ? entry->d_name : nullptr;
-    }
-
-    void close() noexcept {
-        if (m_dir) {
-            ::closedir(m_dir);
-            m_dir = nullptr;
-        }
-    }
-
-private: /* Fields: */
-
-    ::DIR * m_dir;
-
-};
 
 void setSystemLogLevel(char const * const logLocation,
                        std::string const & logLevelString)
