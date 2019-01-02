@@ -42,8 +42,6 @@
 #include SWORDXX_VERSION_H_FILE
 
 
-using std::map;
-
 namespace swordxx {
 
 namespace {
@@ -442,8 +440,8 @@ bool InstallMgr::isDefaultModule(const char *modName) {
  * getModuleStatus - compare the modules of two SWMgrs and return a
  *     vector describing the status of each.  See MODSTAT_*
  */
-map<SWModule *, int> InstallMgr::getModuleStatus(const SWMgr &base, const SWMgr &other) {
-    map<SWModule *, int> retVal;
+std::map<SWModule *, int> InstallMgr::getModuleStatus(const SWMgr &base, const SWMgr &other) {
+    std::map<SWModule *, int> retVal;
     bool cipher;
     bool keyPresent;
     int modStat;
