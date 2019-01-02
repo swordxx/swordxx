@@ -30,6 +30,10 @@ DirectoryEnumerator::DirectoryEnumerator(char const * const path)
     : m_dir(::opendir(path))
 {}
 
+DirectoryEnumerator::DirectoryEnumerator(std::string const & path)
+    : DirectoryEnumerator(path.c_str())
+{}
+
 DirectoryEnumerator::DirectoryEnumerator(DirectoryEnumerator && move) noexcept
     : m_dir(move.m_dir)
 { move.m_dir = nullptr; }

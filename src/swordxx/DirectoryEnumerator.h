@@ -16,6 +16,9 @@
 #ifndef SWORDXX_DIRECTORYENUMERATOR_H
 #define SWORDXX_DIRECTORYENUMERATOR_H
 
+#include <string>
+
+
 namespace swordxx {
 
 class DirectoryEnumerator {
@@ -23,6 +26,7 @@ class DirectoryEnumerator {
 public: /* Methods: */
 
     DirectoryEnumerator(char const * const path);
+    DirectoryEnumerator(std::string const & path);
     DirectoryEnumerator(DirectoryEnumerator && move) noexcept;
     DirectoryEnumerator(DirectoryEnumerator const &) = delete;
 
