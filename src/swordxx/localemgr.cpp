@@ -27,10 +27,10 @@
 #include <cstddef>
 #include <cstdio>
 #include <cstdlib>
-#include <dirent.h>
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <utility>
+#include "DirectoryEnumerator.h"
 #include "filemgr.h"
 #include "stringmgr.h"
 #include "swlog.h"
@@ -124,19 +124,15 @@ LocaleMgr::~LocaleMgr() noexcept {}
 void LocaleMgr::loadConfigDir(char const * ipath) {
     SWLog::getSystemLog()->logInformation("LocaleMgr::loadConfigDir loading %s",
                                           ipath);
-    struct DirCloser {
-        void operator()(DIR * const dir) const noexcept { ::closedir(dir); }
-    };
-    if (auto dir = std::unique_ptr<DIR, DirCloser>(::opendir(ipath))) {
-        ::rewinddir(dir.get());
-        while (auto const ent = ::readdir(dir.get())) {
-            if (!std::strcmp(ent->d_name, ".") || !std::strcmp(ent->d_name, ".."))
+    if (auto dir = DirectoryEnumerator(ipath)) {
+        while (auto const ent = dir.readEntry()) {
+            if (!std::strcmp(ent, ".") || !std::strcmp(ent, ".."))
                 continue;
             auto locale(std::make_shared<SWLocale>(
                             [&ipath,&ent]{
                                 std::string newmodfile(ipath);
                                 addTrailingDirectorySlash(newmodfile);
-                                newmodfile += ent->d_name;
+                                newmodfile += ent;
                                 return newmodfile;
 
                             }().c_str()));
