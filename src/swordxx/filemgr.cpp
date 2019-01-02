@@ -448,15 +448,13 @@ int FileMgr::copyDir(const char *srcDir, const char *destDir) {
         while (auto const ent = dir.readEntry()) {
             if (retVal)
                 break;
-            if ((std::strcmp(ent, ".")) && (std::strcmp(ent, ".."))) {
-                std::string const srcPath(sDir + ent);
-                std::string const destPath(dDir + ent);
-                if (!isDirectory(srcPath)) {
-                    retVal = copyFile(srcPath.c_str(), destPath.c_str());
-                }
-                else {
-                    retVal = copyDir(srcPath.c_str(), destPath.c_str());
-                }
+            std::string const srcPath(sDir + ent);
+            std::string const destPath(dDir + ent);
+            if (!isDirectory(srcPath)) {
+                retVal = copyFile(srcPath.c_str(), destPath.c_str());
+            }
+            else {
+                retVal = copyDir(srcPath.c_str(), destPath.c_str());
             }
         }
     }
@@ -467,14 +465,12 @@ int FileMgr::copyDir(const char *srcDir, const char *destDir) {
 int FileMgr::removeDir(const char *targetDir) {
     if (auto dir = DirectoryEnumerator(targetDir)) {
         while (auto const ent = dir.readEntry()) {
-            if ((std::strcmp(ent, ".")) && (std::strcmp(ent, ".."))) {
-                std::string targetPath(std::string(targetDir) + '/' + ent);
-                if (!isDirectory(targetPath)) {
-                    FileMgr::removeFile(targetPath.c_str());
-                }
-                else {
-                    FileMgr::removeDir(targetPath.c_str());
-                }
+            std::string targetPath(std::string(targetDir) + '/' + ent);
+            if (!isDirectory(targetPath)) {
+                FileMgr::removeFile(targetPath.c_str());
+            }
+            else {
+                FileMgr::removeDir(targetPath.c_str());
             }
         }
         dir.close();

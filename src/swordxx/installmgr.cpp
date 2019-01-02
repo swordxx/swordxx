@@ -230,18 +230,16 @@ bool InstallMgr::removeModule(SWMgr & manager, std::string const & moduleName) {
 
             if (auto dir = DirectoryEnumerator(manager.m_configPath)) {    // find and remove .conf file
                 while (auto ent = dir.readEntry()) {
-                    if ((std::strcmp(ent, ".")) && (std::strcmp(ent, ".."))) {
-                        std::string modFile(manager.m_configPath);
-                        removeTrailingDirectorySlashes(modFile);
-                        modFile += "/";
-                        modFile += ent;
-                        if ([&modFile, &modName]() {
-                                SWConfig config(modFile.c_str());
-                                auto const & sections = config.sections();
-                                return sections.find(modName) != sections.end();
-                            }())
-                            FileMgr::removeFile(modFile.c_str());
-                    }
+                    std::string modFile(manager.m_configPath);
+                    removeTrailingDirectorySlashes(modFile);
+                    modFile += "/";
+                    modFile += ent;
+                    if ([&modFile, &modName]() {
+                            SWConfig config(modFile.c_str());
+                            auto const & sections = config.sections();
+                            return sections.find(modName) != sections.end();
+                        }())
+                        FileMgr::removeFile(modFile.c_str());
                 }
             }
         }
@@ -380,26 +378,24 @@ int InstallMgr::installModule(SWMgr & destMgr,
                 while (auto const ent = dir.readEntry()) {
                     if (retVal)
                         break;
-                    if ((std::strcmp(ent, ".")) && (std::strcmp(ent, ".."))) {
-                        modFile = confDir;
-                        modFile += ent;
-                        SWConfig config(modFile.c_str());
-                        if (config.sections().find(modName) != config.sections().end()) {
-                            std::string targetFile = destMgr.m_configPath; //"./mods.d/";
-                            removeTrailingDirectorySlashes(targetFile);
-                            targetFile += "/";
-                            targetFile += ent;
-                            retVal = FileMgr::copyFile(modFile.c_str(), targetFile.c_str());
-                            if (cipher) {
-                                if (getCipherCode(modName, &config)) {
-                                    SWMgr newDest(destMgr.prefixPath().c_str());
-                                    removeModule(newDest, modName);
-                                    aborted = true;
-                                }
-                                else {
-                                    config.save();
-                                    retVal = FileMgr::copyFile(modFile.c_str(), targetFile.c_str());
-                                }
+                    modFile = confDir;
+                    modFile += ent;
+                    SWConfig config(modFile.c_str());
+                    if (config.sections().find(modName) != config.sections().end()) {
+                        std::string targetFile = destMgr.m_configPath; //"./mods.d/";
+                        removeTrailingDirectorySlashes(targetFile);
+                        targetFile += "/";
+                        targetFile += ent;
+                        retVal = FileMgr::copyFile(modFile.c_str(), targetFile.c_str());
+                        if (cipher) {
+                            if (getCipherCode(modName, &config)) {
+                                SWMgr newDest(destMgr.prefixPath().c_str());
+                                removeModule(newDest, modName);
+                                aborted = true;
+                            }
+                            else {
+                                config.save();
+                                retVal = FileMgr::copyFile(modFile.c_str(), targetFile.c_str());
                             }
                         }
                     }

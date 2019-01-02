@@ -126,8 +126,6 @@ void LocaleMgr::loadConfigDir(char const * ipath) {
                                           ipath);
     if (auto dir = DirectoryEnumerator(ipath)) {
         while (auto const ent = dir.readEntry()) {
-            if (!std::strcmp(ent, ".") || !std::strcmp(ent, ".."))
-                continue;
             auto locale(std::make_shared<SWLocale>(
                             [&ipath,&ent]{
                                 std::string newmodfile(ipath);

@@ -1189,36 +1189,34 @@ void SWMgr::InstallScan(const char *dirname)
     if (FileMgr::existsDir(dirname)) {
         if (auto dir = DirectoryEnumerator(dirname)) {
             while (auto const ent = dir.readEntry()) {
-                if ((std::strcmp(ent, ".")) && (std::strcmp(ent, ".."))) {
-                    newmodfile = dirname;
-                    addTrailingDirectorySlash(newmodfile);
-                    newmodfile += ent;
+                newmodfile = dirname;
+                addTrailingDirectorySlash(newmodfile);
+                newmodfile += ent;
 
-                    // mods.d
-                    if (configType) {
-                        if (conffd)
+                // mods.d
+                if (configType) {
+                    if (conffd)
+                        FileMgr::getSystemFileMgr()->close(conffd);
+                    targetName = m_configPath;
+                    addTrailingDirectorySlash(targetName);
+                    targetName += ent;
+                    conffd = FileMgr::getSystemFileMgr()->open(targetName.c_str(), FileMgr::WRONLY|FileMgr::CREAT, FileMgr::IREAD|FileMgr::IWRITE);
+                }
+
+                // mods.conf
+                else {
+                    if (!conffd) {
+                        conffd = FileMgr::getSystemFileMgr()->open(config->filename().c_str(), FileMgr::WRONLY|FileMgr::APPEND);
+                        if (conffd && conffd->getFd() >= 0)
+                            conffd->seek(0L, SEEK_END);
+                        else {
                             FileMgr::getSystemFileMgr()->close(conffd);
-                        targetName = m_configPath;
-                        addTrailingDirectorySlash(targetName);
-                        targetName += ent;
-                        conffd = FileMgr::getSystemFileMgr()->open(targetName.c_str(), FileMgr::WRONLY|FileMgr::CREAT, FileMgr::IREAD|FileMgr::IWRITE);
-                    }
-
-                    // mods.conf
-                    else {
-                        if (!conffd) {
-                            conffd = FileMgr::getSystemFileMgr()->open(config->filename().c_str(), FileMgr::WRONLY|FileMgr::APPEND);
-                            if (conffd && conffd->getFd() >= 0)
-                                conffd->seek(0L, SEEK_END);
-                            else {
-                                FileMgr::getSystemFileMgr()->close(conffd);
-                                conffd = nullptr;
-                            }
+                            conffd = nullptr;
                         }
                     }
-                    AddModToConfig(conffd, newmodfile.c_str());
-                    FileMgr::removeFile(newmodfile.c_str());
                 }
+                AddModToConfig(conffd, newmodfile.c_str());
+                FileMgr::removeFile(newmodfile.c_str());
             }
             dir.close();
             if (conffd)

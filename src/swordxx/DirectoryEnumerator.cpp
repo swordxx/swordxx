@@ -54,9 +54,26 @@ DirectoryEnumerator & DirectoryEnumerator::operator=(
 }
 
 char const * DirectoryEnumerator::readEntry() noexcept {
-    auto const entry(::readdir(dirCast(m_dir)));
-    static_assert(std::is_pointer<decltype(entry)>::value, "");
-    return entry ? entry->d_name : nullptr;
+    for (;;) {
+        auto const entry(::readdir(dirCast(m_dir)));
+        static_assert(std::is_pointer<decltype(entry)>::value, "");
+        if (!entry)
+            return nullptr;
+        auto const r = entry->d_name;
+        if (*r == '.') {
+            switch (*(r + 1)) {
+            case '\0':
+                continue; // skip "."
+            case '.':
+                if (*(r + 2) == '\0')
+                    continue; // skip ".."
+                break;
+            default:
+                break;
+            }
+        }
+        return r;
+    }
 }
 
 void DirectoryEnumerator::close() noexcept {
