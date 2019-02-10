@@ -51,7 +51,7 @@ EntriesBlock::EntriesBlock() {
 
 
 EntriesBlock::~EntriesBlock() {
-    free(block);
+    std::free(block);
 }
 
 
