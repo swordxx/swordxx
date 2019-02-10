@@ -116,7 +116,8 @@ class SWDLLEXPORT FileMgr {
 
     friend class FileDesc;
 
-    FileDesc * files = nullptr;
+    FileDesc * m_files = nullptr;
+    std::size_t m_maxFiles;
     int sysOpen(FileDesc * file);
 protected:
     static std::unique_ptr<FileMgr> systemFileMgr;
@@ -130,19 +131,13 @@ public:
     static int const IREAD;
     static int const IWRITE;
 
-    /** Maximum number of open files set in the constructor.
-    * determines the max number of real system files that
-    * filemgr will open.  Adjust for tuning.
-    */
-    int maxFiles;
-
     static FileMgr *getSystemFileMgr();
     static void setSystemFileMgr(FileMgr *newFileMgr);
 
     /** Constructor.
     * @param maxFiles The number of files that this FileMgr may open in parallel, if necessary. Must be at least 2.
     */
-    FileMgr(int maxFiles_ = 35);
+    FileMgr(std::size_t maxFiles = 35u);
 
     /**
     * Destructor. Clean things up. Will close all files opened by this FileMgr object.
