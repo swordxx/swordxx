@@ -47,13 +47,13 @@ EntriesBlock::~EntriesBlock() noexcept = default;
 
 
 void EntriesBlock::setCount(int count) {
-    uint32_t rawCount = archtosword32(count);
+    std::uint32_t rawCount = archtosword32(count);
     std::memcpy(m_block.data(), &rawCount, sizeof(rawCount));
 }
 
 
 int EntriesBlock::getCount() {
-    uint32_t count = 0;
+    std::uint32_t count = 0;
     std::memcpy(&count, m_block.data(), sizeof(count));
     count = swordtoarch32(count);
     return count;
@@ -61,8 +61,8 @@ int EntriesBlock::getCount() {
 
 
 void EntriesBlock::getMetaEntry(int index, unsigned long *offset, unsigned long *size) {
-    uint32_t rawOffset = 0;
-    uint32_t rawSize = 0;
+    std::uint32_t rawOffset = 0;
+    std::uint32_t rawSize = 0;
     *offset = 0;
     *size = 0;
     if (index >= getCount())    // assert index < count
@@ -78,8 +78,8 @@ void EntriesBlock::getMetaEntry(int index, unsigned long *offset, unsigned long 
 
 
 void EntriesBlock::setMetaEntry(int index, unsigned long offset, unsigned long size) {
-    uint32_t rawOffset = archtosword32(offset);
-    uint32_t rawSize = archtosword32(size);
+    std::uint32_t rawOffset = archtosword32(offset);
+    std::uint32_t rawSize = archtosword32(size);
 
     if (index >= getCount())    // assert index < count
         return;
