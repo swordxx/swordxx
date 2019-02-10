@@ -194,29 +194,6 @@ bool GBFXHTML::handleToken(std::string &buf, const char *token, BasicFilterUserD
         else if (tag.name() == "Rf") {
             u->suspendTextPassThru = false;
         }
-/*
-        else if (!std::strncmp(token, "RB", 2)) {
-            buf += "<i> ";
-            u->hasFootnotePreTag = true;
-        }
-
-        else if (!std::strncmp(token, "Rf", 2)) {
-            buf += "&nbsp<a href=\"note=";
-            buf += u->lastTextNode.c_str();
-            buf += "\">";
-            buf += "<small><sup>*n</sup></small></a>&nbsp";
-            // let's let text resume to output again
-            u->suspendTextPassThru = false;
-        }
-
-        else if (!std::strncmp(token, "RF", 2)) {
-            if (u->hasFootnotePreTag) {
-                u->hasFootnotePreTag = false;
-                buf += "</i> ";
-            }
-            u->suspendTextPassThru = true;
-        }
-*/
         else if (!std::strncmp(token, "FN", 2)) {
             buf += "<font face=\"";
             for (tok = token + 2; *tok; tok++)
