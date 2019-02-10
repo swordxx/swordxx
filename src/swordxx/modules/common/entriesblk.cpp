@@ -30,10 +30,12 @@
 
 namespace swordxx {
 
-const int EntriesBlock::METAHEADERSIZE = 4;
-    // count(4);
-const int EntriesBlock::METAENTRYSIZE = 8;
-    // offset(4); size(4);
+namespace {
+
+constexpr std::size_t METAHEADERSIZE = 4u; // count(4);
+constexpr std::size_t METAENTRYSIZE = 8u; // offset(4); size(4);
+
+} // anonymous namespace
 
 EntriesBlock::EntriesBlock(const char *iBlock, unsigned long size)
     : m_block(size ? size : sizeof(std::uint32_t), '\0')

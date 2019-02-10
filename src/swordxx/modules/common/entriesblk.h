@@ -31,8 +31,6 @@
 namespace swordxx {
 
 class SWDLLEXPORT EntriesBlock {
-    static const int METAHEADERSIZE;
-    static const int METAENTRYSIZE;
 
 private:
     std::vector<char> m_block;
