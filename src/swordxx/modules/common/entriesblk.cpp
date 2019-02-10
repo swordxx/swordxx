@@ -55,10 +55,10 @@ void EntriesBlock::setCount(int count) {
 
 
 int EntriesBlock::getCount() {
-    std::uint32_t count = 0;
-    std::memcpy(&count, m_block.data(), sizeof(count));
-    count = swordtoarch32(count);
-    return count;
+    std::uint32_t rawCount = 0;
+    assert(m_block.size() >= sizeof(rawCount));
+    std::memcpy(&rawCount, m_block.data(), sizeof(rawCount));
+    return swordtoarch32(rawCount);
 }
 
 
