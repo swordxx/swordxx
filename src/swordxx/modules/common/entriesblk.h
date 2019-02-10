@@ -41,7 +41,7 @@ private:
 public:
     EntriesBlock();
     EntriesBlock(char const * iBlock, std::size_t size);
-    ~EntriesBlock();
+    ~EntriesBlock() noexcept;
 
     int getCount();
     int addEntry(const char *entry);
