@@ -22,6 +22,7 @@
 
 #include "entriesblk.h"
 
+#include <cassert>
 #include <cstdint>
 #include <cstdlib>
 #include <cstring>
@@ -48,6 +49,7 @@ EntriesBlock::~EntriesBlock() noexcept = default;
 
 void EntriesBlock::setCount(int count) {
     std::uint32_t rawCount = archtosword32(count);
+    assert(m_block.size() >= sizeof(rawCount));
     std::memcpy(m_block.data(), &rawCount, sizeof(rawCount));
 }
 
