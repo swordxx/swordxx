@@ -37,17 +37,17 @@ const int EntriesBlock::METAENTRYSIZE = 8;
 
 EntriesBlock::EntriesBlock(const char *iBlock, unsigned long size) {
     if (size) {
-        block = (char *)std::calloc(1, size);
+        block = static_cast<char *>(std::calloc(1, size));
         std::memcpy(block, iBlock, size);
     }
     else {
-        block = (char *)std::calloc(1, sizeof(uint32_t));
+        block = static_cast<char *>(std::calloc(1, sizeof(uint32_t)));
     }
 }
 
 
 EntriesBlock::EntriesBlock() {
-    block = (char *)std::calloc(1, sizeof(uint32_t));
+    block = static_cast<char *>(std::calloc(1, sizeof(uint32_t)));
 }
 
 
