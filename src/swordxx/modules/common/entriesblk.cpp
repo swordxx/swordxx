@@ -38,16 +38,22 @@ const int EntriesBlock::METAENTRYSIZE = 8;
 EntriesBlock::EntriesBlock(const char *iBlock, unsigned long size) {
     if (size) {
         block = static_cast<char *>(std::calloc(1, size));
+        if (!block)
+            throw std::bad_alloc();
         std::memcpy(block, iBlock, size);
     }
     else {
         block = static_cast<char *>(std::calloc(1, sizeof(uint32_t)));
+        if (!block)
+            throw std::bad_alloc();
     }
 }
 
 
 EntriesBlock::EntriesBlock() {
     block = static_cast<char *>(std::calloc(1, sizeof(uint32_t)));
+    if (!block)
+        throw std::bad_alloc();
 }
 
 
