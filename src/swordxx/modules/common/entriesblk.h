@@ -23,6 +23,7 @@
 #ifndef SWORDXX_ENTRIESBLK_H
 #define SWORDXX_ENTRIESBLK_H
 
+#include <vector>
 #include "../../defs.h"
 #include "../../sysdata.h"
 
@@ -34,14 +35,14 @@ class SWDLLEXPORT EntriesBlock {
     static const int METAENTRYSIZE;
 
 private:
-    char *block;
+    std::vector<char> m_block;
     void setCount(int count);
     void getMetaEntry(int index, unsigned long *offset, unsigned long *size);
     void setMetaEntry(int index, unsigned long offset, unsigned long size);
 
 public:
-    EntriesBlock(const char *iBlock, unsigned long size);
     EntriesBlock();
+    EntriesBlock(char const * iBlock, std::size_t size);
     ~EntriesBlock();
 
     int getCount();

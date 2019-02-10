@@ -25,7 +25,6 @@
 #include <cstdint>
 #include <cstdlib>
 #include <cstring>
-#include <new>
 
 
 namespace swordxx {
@@ -35,42 +34,27 @@ const int EntriesBlock::METAHEADERSIZE = 4;
 const int EntriesBlock::METAENTRYSIZE = 8;
     // offset(4); size(4);
 
-EntriesBlock::EntriesBlock(const char *iBlock, unsigned long size) {
-    if (size) {
-        block = static_cast<char *>(std::calloc(1, size));
-        if (!block)
-            throw std::bad_alloc();
-        std::memcpy(block, iBlock, size);
-    }
-    else {
-        block = static_cast<char *>(std::calloc(1, sizeof(uint32_t)));
-        if (!block)
-            throw std::bad_alloc();
-    }
-}
+EntriesBlock::EntriesBlock(const char *iBlock, unsigned long size)
+    : m_block(size ? size : sizeof(std::uint32_t), '\0')
+{ std::memcpy(m_block.data(), iBlock, size); }
 
 
-EntriesBlock::EntriesBlock() {
-    block = static_cast<char *>(std::calloc(1, sizeof(uint32_t)));
-    if (!block)
-        throw std::bad_alloc();
-}
+EntriesBlock::EntriesBlock()
+    : m_block(sizeof(std::uint32_t), '\0')
+{}
 
-
-EntriesBlock::~EntriesBlock() {
-    std::free(block);
-}
+EntriesBlock::~EntriesBlock() noexcept = default;
 
 
 void EntriesBlock::setCount(int count) {
     uint32_t rawCount = archtosword32(count);
-    std::memcpy(block, &rawCount, sizeof(uint32_t));
+    std::memcpy(m_block.data(), &rawCount, sizeof(rawCount));
 }
 
 
 int EntriesBlock::getCount() {
     uint32_t count = 0;
-    std::memcpy(&count, block, sizeof(uint32_t));
+    std::memcpy(&count, m_block.data(), sizeof(count));
     count = swordtoarch32(count);
     return count;
 }
@@ -85,8 +69,8 @@ void EntriesBlock::getMetaEntry(int index, unsigned long *offset, unsigned long 
         return;
 
     // first 4 bytes is count, each 6 bytes after is each meta entry
-    std::memcpy(&rawOffset, block + METAHEADERSIZE + (index * METAENTRYSIZE), sizeof(rawOffset));
-    std::memcpy(&rawSize, block + METAHEADERSIZE + (index * METAENTRYSIZE) + sizeof(rawOffset), sizeof(rawSize));
+    std::memcpy(&rawOffset, m_block.data() + METAHEADERSIZE + (index * METAENTRYSIZE), sizeof(rawOffset));
+    std::memcpy(&rawSize, m_block.data() + METAHEADERSIZE + (index * METAENTRYSIZE) + sizeof(rawOffset), sizeof(rawSize));
 
     *offset = (unsigned long)swordtoarch32(rawOffset);
     *size   = (unsigned long)swordtoarch32(rawSize);
@@ -101,8 +85,8 @@ void EntriesBlock::setMetaEntry(int index, unsigned long offset, unsigned long s
         return;
 
     // first 4 bytes is count, each 6 bytes after is each meta entry
-    std::memcpy(block + METAHEADERSIZE + (index * METAENTRYSIZE), &rawOffset, sizeof(rawOffset));
-    std::memcpy(block + METAHEADERSIZE + (index * METAENTRYSIZE) + sizeof(rawOffset), &rawSize, sizeof(rawSize));
+    std::memcpy(m_block.data() + METAHEADERSIZE + (index * METAENTRYSIZE), &rawOffset, sizeof(rawOffset));
+    std::memcpy(m_block.data() + METAHEADERSIZE + (index * METAENTRYSIZE) + sizeof(rawOffset), &rawSize, sizeof(rawSize));
 }
 
 
@@ -116,7 +100,7 @@ const char *EntriesBlock::getRawData(unsigned long *retSize) {
         max = ((offset + size) > max) ? (offset + size) : max;
     }
     *retSize = max;
-    return block;
+    return m_block.data();
 }
 
 
@@ -129,14 +113,11 @@ int EntriesBlock::addEntry(const char *entry) {
     int count = getCount();
     unsigned long dataStart = METAHEADERSIZE + (count * METAENTRYSIZE);
     // new meta entry + new data size + 1 because null
-    {
-        auto newBlock = std::realloc(block, dataSize + METAENTRYSIZE + len + 1);
-        if (!newBlock)
-            throw std::bad_alloc();
-        block = static_cast<char *>(newBlock);
-    }
+    m_block.resize(dataSize + METAENTRYSIZE + len + 1);
     // shift right to make room for new meta entry
-    std::memmove(block + dataStart + METAENTRYSIZE, block + dataStart, dataSize - dataStart);
+    std::memmove(m_block.data() + dataStart + METAENTRYSIZE,
+                 m_block.data() + dataStart,
+                 dataSize - dataStart);
 
     for (int loop = 0; loop < count; loop++) {
         getMetaEntry(loop, &offset, &size);
@@ -149,7 +130,7 @@ int EntriesBlock::addEntry(const char *entry) {
     offset = dataSize;    // original dataSize before realloc
     size = len + 1;
     // add our text to the end
-    std::memcpy(block + offset + METAENTRYSIZE, entry, size);
+    std::memcpy(m_block.data() + offset + METAENTRYSIZE, entry, size);
     // increment count
     setCount(count + 1);
     // add our meta entry
@@ -165,7 +146,7 @@ const char *EntriesBlock::getEntry(int entryIndex) {
     static const char *empty = "";
 
     getMetaEntry(entryIndex, &offset, &size);
-    return (offset) ? block+offset : empty;
+    return (offset) ? m_block.data() + offset : empty;
 }
 
 
@@ -190,7 +171,9 @@ void EntriesBlock::removeEntry(int entryIndex) {
         return;
 
     // shift left to retrieve space used for old entry
-    std::memmove(block + offset, block + offset + size, dataSize - (offset + size));
+    std::memmove(m_block.data() + offset,
+                 m_block.data() + offset + size,
+                 dataSize - (offset + size));
 
     // fix offset for all entries after our entry that were shifted left
     for (int loop = entryIndex + 1; loop < count; loop++) {
