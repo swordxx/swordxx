@@ -444,7 +444,8 @@ template <typename ...> struct OkFormattedTypes;
 template <> struct OkFormattedTypes<>
 { static constexpr bool const value = true; };
 
-template <typename T> struct OkFormattedTypes<T>: OkFormattedType<T> {};
+template <typename T> struct OkFormattedTypes<T>
+{ static constexpr bool const value = OkFormattedType<T>::value; };
 
 template <typename T, typename ... Ts> struct OkFormattedTypes<T, Ts...> {
     static constexpr bool const value =
