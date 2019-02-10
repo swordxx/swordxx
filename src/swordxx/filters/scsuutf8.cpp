@@ -57,7 +57,7 @@ char SCSUUTF8::processText(std::string &text, const SWKey *key, const SWModule *
 
     // Try decoding with ICU if possible
     err = U_ZERO_ERROR;
-    UnicodeString utf16Text(text.c_str(), text.length(), scsuConv, err);
+    icu::UnicodeString utf16Text(text.c_str(), text.length(), scsuConv, err);
     err = U_ZERO_ERROR;
     int32_t len = utf16Text.extract(&text[0u], text.size(), utf8Conv, err);
     if (len > (int32_t)text.size()+1) {

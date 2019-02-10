@@ -106,13 +106,13 @@ bool UTF8Transliterator::addTrans(const char* newTrans, std::string* transList) 
 }
 
 
-std::unique_ptr<Transliterator> UTF8Transliterator::createTrans(
-        UnicodeString const & ID,
+std::unique_ptr<icu::Transliterator> UTF8Transliterator::createTrans(
+        icu::UnicodeString const & ID,
         UTransDirection /* dir */,
         UErrorCode & status)
 {
-    std::unique_ptr<Transliterator> r(
-                Transliterator::createInstance(ID, UTRANS_FORWARD, status));
+    std::unique_ptr<icu::Transliterator> r(
+                icu::Transliterator::createInstance(ID, UTRANS_FORWARD, status));
     if (U_FAILURE(status))
         return nullptr;
     return r;
@@ -683,12 +683,12 @@ char UTF8Transliterator::processText(std::string &text, const SWKey *key, const 
                 addTrans("NFC", &ID);
 
                 err = U_ZERO_ERROR;
-                if (auto const trans = createTrans(UnicodeString(ID.c_str()),
+                if (auto const trans = createTrans(icu::UnicodeString(ID.c_str()),
                                                    UTRANS_FORWARD,
                                                    err))
                 {
                     if (!U_FAILURE(err)) {
-                        UnicodeString target = UnicodeString(source.get());
+                        icu::UnicodeString target = icu::UnicodeString(source.get());
                         trans->transliterate(target);
                         text.resize(text.size() * 2u, '\0');
                         len = ucnv_fromUChars(conv, &text[0u], text.size(), target.getBuffer(), target.length(), &err);

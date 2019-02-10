@@ -45,11 +45,11 @@ char UTF8NFC::processText(std::string &text, const SWKey *key, const SWModule *m
         return -1;
 
     err = U_ZERO_ERROR;
-    UnicodeString source(text.c_str(), text.size(), conv, err);
-    UnicodeString target;
+    icu::UnicodeString source(text.c_str(), text.size(), conv, err);
+    icu::UnicodeString target;
 
     err = U_ZERO_ERROR;
-    Normalizer::normalize(source, UNORM_NFC, 0, target, err);
+    icu::Normalizer::normalize(source, UNORM_NFC, 0, target, err);
 
     err = U_ZERO_ERROR;
     text.resize(text.size() * 2u, '\0'); // potentially, it can grow to 2x the original size

@@ -52,11 +52,11 @@ namespace swordxx {
 class SWModule;
 
 struct SWTransData {
-    UnicodeString resource;
+    icu::UnicodeString resource;
     UTransDirection dir;
 };
-typedef std::map<const UnicodeString, SWTransData> SWTransMap;
-typedef std::pair<UnicodeString, SWTransData> SWTransPair;
+using SWTransMap = std::map<icu::UnicodeString const, SWTransData>;
+using SWTransPair = std::pair<icu::UnicodeString, SWTransData>;
 
 /** This Filter uses ICU for transliteration
 */
@@ -72,9 +72,10 @@ private:
     std::list<std::string> options;
 
     bool addTrans(const char* newTrans, std::string* transList);
-    std::unique_ptr<Transliterator> createTrans(UnicodeString const & ID,
-                                                UTransDirection dir,
-                                                UErrorCode & status);
+    std::unique_ptr<icu::Transliterator> createTrans(
+            icu::UnicodeString const & ID,
+            UTransDirection dir,
+            UErrorCode & status);
 
 public:
     UTF8Transliterator();
