@@ -114,11 +114,9 @@ int RemoteTransport::copyDirectory(const char * urlPrefix_,
         std::string const buffer(dest + entryName);
         if (buffer.size() < suffix.size())
             continue;
-        if (std::equal(buffer.end()
-                        - static_cast<std::string::difference_type>(
-                            suffix.size()),
-                        suffix.begin(),
-                        suffix.end()))
+        if (buffer.compare(buffer.size() - suffix.size(),
+                           suffix.size(),
+                           suffix) == 0)
             continue;
         if (m_statusReporter) {
             std::string buffer2 = "Downloading (";
