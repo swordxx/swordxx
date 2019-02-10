@@ -409,9 +409,9 @@ constexpr char charToUpperTable[256] = {
 constexpr char charToUpper(char c) noexcept
 { return charToUpperTable[static_cast<unsigned char>(c)]; }
 
-void leftTrimString(std::string & str) noexcept;
-void rightTrimString(std::string & str) noexcept;
-void trimString(std::string & str) noexcept;
+void leftTrimString(std::string & str);
+void rightTrimString(std::string & str);
+void trimString(std::string & str);
 
 inline bool hasPrefix(char const * str, char const * prefix) noexcept {
     while (*prefix != '\0') {

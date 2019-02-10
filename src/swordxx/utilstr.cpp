@@ -55,17 +55,17 @@ void removeTrailingDirectorySlashes(std::string & buf) {
     }
 }
 
-void leftTrimString(std::string & str) noexcept {
+void leftTrimString(std::string & str) {
     auto begin(str.begin());
     str.erase(begin, std::find_if_not(begin, str.end(), charIsSpace));
 }
 
-void rightTrimString(std::string & str) noexcept {
+void rightTrimString(std::string & str) {
     str.erase(std::find_if_not(str.rbegin(), str.rend(), charIsSpace).base(),
               str.end());
 }
 
-void trimString(std::string & str) noexcept {
+void trimString(std::string & str) {
     leftTrimString(str);
     rightTrimString(str);
 }
