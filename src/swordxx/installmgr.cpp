@@ -270,7 +270,7 @@ int InstallMgr::installModule(SWMgr & destMgr,
 
     if (is)
         sourceDir = m_privatePath + is->m_uid;
-    else    sourceDir = fromLocation;
+    else    sourceDir = fromLocation ? fromLocation : "";
 
     removeTrailingDirectorySlashes(sourceDir);
     sourceDir += '/';
