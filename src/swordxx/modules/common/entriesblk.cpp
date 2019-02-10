@@ -25,6 +25,7 @@
 #include <cstdint>
 #include <cstdlib>
 #include <cstring>
+#include <new>
 
 
 namespace swordxx {
@@ -122,7 +123,12 @@ int EntriesBlock::addEntry(const char *entry) {
     int count = getCount();
     unsigned long dataStart = METAHEADERSIZE + (count * METAENTRYSIZE);
     // new meta entry + new data size + 1 because null
-    block = (char *)realloc(block, dataSize + METAENTRYSIZE + len + 1);
+    {
+        auto newBlock = std::realloc(block, dataSize + METAENTRYSIZE + len + 1);
+        if (!newBlock)
+            throw std::bad_alloc();
+        block = static_cast<char *>(newBlock);
+    }
     // shift right to make room for new meta entry
     std::memmove(block + dataStart + METAENTRYSIZE, block + dataStart, dataSize - dataStart);
 
