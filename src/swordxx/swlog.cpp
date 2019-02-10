@@ -53,17 +53,22 @@ void SWLog::logMessage(char const * fmt, ...) const {
     if (static_cast<U>(m_logLevel) >= static_cast<U>(LOGLEVEL)) {
         va_list argptr;
         va_start(argptr, fmt);
-        auto size_(std::vsnprintf(nullptr, 0u, fmt, argptr));
-        assert(size_ >= 0);
-        static_assert(std::numeric_limits<decltype(size_)>::max()
-                      <= std::numeric_limits<std::size_t>::max(), "");
-        auto size(static_cast<std::size_t>(size_));
-        if (!++size)
-            throw std::bad_array_new_length();
-        auto strData(std::make_unique<char[]>(size));
-        std::vsnprintf(strData.get(), size, fmt, argptr);
+        try {
+            auto size_(std::vsnprintf(nullptr, 0u, fmt, argptr));
+            assert(size_ >= 0);
+            static_assert(std::numeric_limits<decltype(size_)>::max()
+                          <= std::numeric_limits<std::size_t>::max(), "");
+            auto size(static_cast<std::size_t>(size_));
+            if (!++size)
+                throw std::bad_array_new_length();
+            auto strData(std::make_unique<char[]>(size));
+            std::vsnprintf(strData.get(), size, fmt, argptr);
+            std::cerr << strData.get() << std::endl;
+        } catch (...) {
+            va_end(argptr);
+            throw;
+        }
         va_end(argptr);
-        std::cerr << strData.get() << std::endl;
     }
 }
 
