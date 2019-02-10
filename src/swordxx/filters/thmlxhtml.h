@@ -40,7 +40,7 @@ protected:
     public:
         MyUserData(const SWModule *module, const SWKey *key);//: BasicFilterUserData(module, key) {}
         ~MyUserData() noexcept override;
-        bool inscriptRef;
+        bool inscriptRef = false;
         char sectionHeaderLevel = 0;
         bool isBiblicalText;
         std::string version;
