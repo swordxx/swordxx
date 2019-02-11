@@ -394,9 +394,9 @@ void zStr::getCompressedText(long block, long entry, char **buf) const {
         m_cacheBlock = std::make_unique<EntriesBlock>(rawBuf, len);
         m_cacheBlockIndex = block;
     }
-    size = m_cacheBlock->getEntrySize(entry);
+    size = (*m_cacheBlock)[entry].size();
     *buf = (*buf) ? (char *)realloc(*buf, size*2 + 1) : (char *)malloc(size*2 + 1);
-    std::strcpy(*buf, m_cacheBlock->getEntry(entry));
+    std::strcpy(*buf, (*m_cacheBlock)[entry].c_str());
 }
 
 
@@ -491,7 +491,7 @@ void zStr::setText(const char *ikey, const char *buf, long len) {
             m_cacheBlock = std::make_unique<EntriesBlock>();
             m_cacheBlockIndex = (zdxfd->seek(0, SEEK_END) / ZDXENTRYSIZE);
         }
-        else if (m_cacheBlock->getCount() >= m_blockCount) {
+        else if (m_cacheBlock->numEntries() >= m_blockCount) {
             flushCache();
             m_cacheBlock = std::make_unique<EntriesBlock>();
             m_cacheBlockIndex = (zdxfd->seek(0, SEEK_END) / ZDXENTRYSIZE);
@@ -561,12 +561,15 @@ void zStr::flushCache() const {
     if (m_cacheBlock) {
         if (m_cacheDirty) {
             uint32_t start = 0;
-            unsigned long size = 0;
             uint32_t outstart = 0, outsize = 0;
+            std::size_t size;
 
-            const char *rawBuf = m_cacheBlock->getRawData(&size);
-            m_compressor->Buf(rawBuf, &size);
-            m_compressor->zBuf(&size);
+            {
+                auto const rawBuf(m_cacheBlock->serialized());
+                size = rawBuf.size();
+                m_compressor->Buf(rawBuf.data(), &size);
+                m_compressor->zBuf(&size);
+            }
 
             std::string buf(size + 5u, '\0');
             /// \bug order of evaluation of function arguments is undefined:

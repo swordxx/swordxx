@@ -23,32 +23,41 @@
 #ifndef SWORDXX_ENTRIESBLK_H
 #define SWORDXX_ENTRIESBLK_H
 
+#include <cstddef>
+#include <cstdint>
+#include <string>
 #include <vector>
 #include "../../defs.h"
-#include "../../sysdata.h"
 
 
 namespace swordxx {
 
 class SWDLLEXPORT EntriesBlock {
 
-private:
-    std::vector<char> m_block;
-    void setCount(int count);
-    void getMetaEntry(int index, unsigned long *offset, unsigned long *size);
-    void setMetaEntry(int index, unsigned long offset, unsigned long size);
+public: /* Types: */
 
-public:
-    EntriesBlock();
-    EntriesBlock(char const * iBlock, std::size_t size);
+    using SizeType = std::uint32_t;
+    using EntrySizeType = std::uint32_t;
+    using EntryOffsetType = std::uint32_t;
+
+public: /* Methods: */
+
+    EntriesBlock() noexcept;
+    EntriesBlock(void const * iBlock, std::size_t size);
     ~EntriesBlock() noexcept;
 
-    int getCount();
-    int addEntry(const char *entry);
-    const char *getEntry(int entryIndex);
-    unsigned long getEntrySize(int entryIndex);
-    void removeEntry(int entryIndex);
-    const char *getRawData(unsigned long *size);
+    SizeType numEntries() const;
+    SizeType addEntry(std::string entry);
+    std::string const & operator[](SizeType entryIndex) const noexcept;
+
+    std::vector<char> serialized() const;
+    std::size_t serializedSize() const noexcept { return m_serializedSize; }
+
+private: /* Fields: */
+
+    std::vector<std::string> m_entries;
+    std::size_t m_serializedSize = sizeof(SizeType);
+
 };
 
 
