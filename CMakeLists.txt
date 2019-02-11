@@ -11,6 +11,12 @@ PROJECT(swordxx CXX C)
 CMAKE_MINIMUM_REQUIRED(VERSION 3.7)
 CMAKE_POLICY(SET CMP0017 NEW)
 
+# Make sure it's an out-of-stream build
+IF(${CMAKE_CURRENT_BINARY_DIR} STREQUAL ${CMAKE_CURRENT_SOURCE_DIR})
+    MESSAGE(FATAL_ERROR
+            "Please invoke CMake from a different directory than the source.")
+ENDIF()
+
 # Set versions
 SET(SWORDXX_VERSION "2.0.0")
 SET(SWORDXX_VERSION_STR "2.0.0_beta1")
@@ -75,11 +81,6 @@ ELSE()
     ENDIF()
   ENDIF()
   UNSET(r)
-ENDIF()
-
-# Make sure it's an out-of-stream build
-IF(${CMAKE_CURRENT_BINARY_DIR} STREQUAL ${CMAKE_CURRENT_SOURCE_DIR})
-    MESSAGE(FATAL_ERROR "Please invoke CMake from a different directory than the source.")
 ENDIF()
 
 
