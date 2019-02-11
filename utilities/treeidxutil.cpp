@@ -93,16 +93,6 @@ void appendChild(TreeKeyIdx & treeKey) {
     treeKey.save();
 }
 
-
-void removeEntry(EntriesBlock *eb, int index) {
-    if (index < eb->getCount()) {
-        std::cout << "Removing entry [" << index << "]\n";
-        eb->removeEntry(index);
-    }
-    else std::cout << "Invalid entry number\n\n";
-}
-
-
 int main(int argc, char **argv) {
 
     if (argc != 2) {
