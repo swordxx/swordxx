@@ -23,34 +23,11 @@ SET(SWORDXX_VERSION_STR "2.0.0_beta1")
 SET(SWORDXX_SWORD_COMPAT_VERSION "1.7.4")
 
 MESSAGE(STATUS "Configuring libswordxx version ${SWORDXX_VERSION}")
-MESSAGE(STATUS "Installation prefix: ${CMAKE_INSTALL_PREFIX}")
 
 INCLUDE("${CMAKE_CURRENT_SOURCE_DIR}/cmake/helpers.cmake")
 SET(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 CalculateVersionForCode("${SWORDXX_VERSION}" SWORDXX_VERSION_C)
-
-# User options
-SET(SWORDXX_LIB_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}/lib"
-    CACHE STRING "Object code library install directory. Defaults to \"\${CMAKE_INSTALL_PREFIX}/lib\"")
-
-SET(SWORDXX_INCLUDE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}/include"
-    CACHE STRING "C Header files install directory. Defaults to \"\${CMAKE_INSTALL_PREFIX}/include\"")
-
-SET(SWORDXX_BIN_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}/bin"
-    CACHE STRING "Directory to install binary executable files. Defaults to \"\${CMAKE_INSTALL_PREFIX}/bin\"")
-
-SET(SWORDXX_SYSCONF_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}/etc"
-    CACHE STRING "Directory to install global config files. Defaults to \"\${CMAKE_INSTALL_PREFIX}/etc\"")
-
-SET(SWORDXX_SHARE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}/share"
-    CACHE STRING "Directory to install global data files. Defaults to \"\${CMAKE_INSTALL_PREFIX}/share\"")
-
-SET(SWORDXX_MAN_INSTALL_PREFIX "${SWORDXX_SHARE_INSTALL_PREFIX}/man"
-    CACHE STRING "Directory to install manual pages to. Defaults to \"\${SWORDXX_SHARE_INSTALL_PREFIX}/man\"")
-
-SET(SWORDXX_WITH_MAN_PAGES TRUE CACHE BOOL
-    "Specifies whether man pages for Sword++ are generated and installed.")
 
 
 # If SWORDXX_BUILDCONFIG set, load the file and fail on error. Otherwise, try to
@@ -82,6 +59,37 @@ ELSE()
   ENDIF()
   UNSET(r)
 ENDIF()
+
+# User options:
+MESSAGE(STATUS "Installation prefix: ${CMAKE_INSTALL_PREFIX}")
+MACRO(SwordxxDefineCacheVar name type default description)
+    IF(NOT DEFINED "${name}")
+        SET("${name}" "${default}" CACHE "${type}" "${description}")
+    ENDIF()
+    MESSAGE(STATUS "CACHE ${name}:${type} = \"${${name}}\"")
+ENDMACRO()
+
+# User options
+SwordxxDefineCacheVar(SWORDXX_LIB_INSTALL_PREFIX STRING
+    "${CMAKE_INSTALL_PREFIX}/lib"
+    "Object code library install directory. Defaults to \"\${CMAKE_INSTALL_PREFIX}/lib\"")
+SwordxxDefineCacheVar(SWORDXX_INCLUDE_INSTALL_PREFIX STRING
+    "${CMAKE_INSTALL_PREFIX}/include"
+    "C Header files install directory. Defaults to \"\${CMAKE_INSTALL_PREFIX}/include\"")
+SwordxxDefineCacheVar(SWORDXX_BIN_INSTALL_PREFIX STRING
+    "${CMAKE_INSTALL_PREFIX}/bin"
+    "Directory to install binary executable files. Defaults to \"\${CMAKE_INSTALL_PREFIX}/bin\"")
+SwordxxDefineCacheVar(SWORDXX_SYSCONF_INSTALL_PREFIX STRING
+    "${CMAKE_INSTALL_PREFIX}/etc"
+    "Directory to install global config files. Defaults to \"\${CMAKE_INSTALL_PREFIX}/etc\"")
+SwordxxDefineCacheVar(SWORDXX_SHARE_INSTALL_PREFIX STRING
+    "${CMAKE_INSTALL_PREFIX}/share"
+    "Directory to install global data files. Defaults to \"\${CMAKE_INSTALL_PREFIX}/share\"")
+SwordxxDefineCacheVar(SWORDXX_MAN_INSTALL_PREFIX STRING
+    "${SWORDXX_SHARE_INSTALL_PREFIX}/man"
+    "Directory to install manual pages to. Defaults to \"\${SWORDXX_SHARE_INSTALL_PREFIX}/man\"")
+SwordxxDefineCacheVar(SWORDXX_WITH_MAN_PAGES BOOL TRUE
+    "Specifies whether man pages for Sword++ are generated and installed.")
 
 
 ###########################################################################################
