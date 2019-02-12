@@ -53,16 +53,21 @@ inline constexpr bool sumFits(T a, T b, Args && ... args) noexcept {
 
 } // anonymous namespace
 
-EntriesBlock::EntriesBlock(void const * iBlock, std::size_t size) {
+EntriesBlock::EntriesBlock(void const * iBlock, std::size_t size)
+    : m_serializedSize(size ? size : sizeof(SizeType))
+{
+    if (!size)
+        return;
     auto readPtr(static_cast<char const *>(iBlock));
     auto sizeLeft(size);
     auto const read =
-            [&readPtr, &sizeLeft](void const * data, std::size_t dataSize) {
+            [&readPtr, &sizeLeft](void * const data, std::size_t const dataSize)
+            {
                 if (sizeLeft < dataSize)
                     return false;
-                std::memcpy(&data, readPtr, sizeof(dataSize));
-                readPtr += sizeof(dataSize);
-                sizeLeft -= sizeof(dataSize);
+                std::memcpy(data, readPtr, dataSize);
+                readPtr += dataSize;
+                sizeLeft -= dataSize;
                 return true;
             };
     auto const read32 =
@@ -96,8 +101,10 @@ EntriesBlock::EntriesBlock(void const * iBlock, std::size_t size) {
         std::vector<char> entryBuffer;
         for (auto const & metaEntry : metaInfo) {
             // Drop removed entries:
-            if (!metaEntry.offset)
+            if (!metaEntry.offset) {
+                m_serializedSize -= METAENTRYSIZE;
                 continue;
+            }
 
             if (metaEntry.size <= 0u)
                 throw std::runtime_error("Unexpected empty entry!");
@@ -201,8 +208,8 @@ EntriesBlock::SizeType EntriesBlock::addEntry(std::string entry) {
 }
 
 std::string const & EntriesBlock::operator[](SizeType index) const noexcept {
-    assert(index < m_entries.size());
-    return m_entries[index];
+    static std::string const empty;
+    return (index < m_entries.size()) ? m_entries[index] : empty;
 }
 
 } /* namespace swordxx */
