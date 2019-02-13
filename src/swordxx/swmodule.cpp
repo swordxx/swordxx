@@ -418,11 +418,9 @@ ListKey &SWModule::search(char const * istr,
             words.emplace_back(term.c_str(), r.second);
             term.erase(0u, r.second + 1u);
         }
-        if ((flags & REG_ICASE) == REG_ICASE) {
-            for (unsigned int i = 0; i < words.size(); i++) {
-                toupperstr(words[i]);
-            }
-        }
+        if ((flags & REG_ICASE) == REG_ICASE)
+            for (auto & word : words)
+                toupperstr(word);
         break;
 
     // entry attributes
@@ -515,14 +513,14 @@ ListKey &SWModule::search(char const * istr,
             // multiword
             case -2: { // enclose our allocations
                 int loopCount = 0;
-                unsigned int foundWords = 0;
+                decltype(words)::size_type foundWords = 0;
                 do {
                     textBuf = ((loopCount == 0)&&(!specialStrips)) ? getRawEntry() : stripText();
                     foundWords = 0;
 
-                    for (unsigned int i = 0; i < words.size(); i++) {
+                    for (auto const & word : words) {
                         if ((flags & REG_ICASE) == REG_ICASE) toupperstr(textBuf);
-                        sres = std::strstr(textBuf.c_str(), words[i].c_str());
+                        sres = std::strstr(textBuf.c_str(), word.c_str());
                         if (!sres) {
                             break; //for loop
                         }
