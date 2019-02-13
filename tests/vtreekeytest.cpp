@@ -35,10 +35,16 @@ using namespace swordxx;
 using std::cout;
 using std::endl;
 
+#define MODULE_NAME "KJVgb"
+
 int main(int /* argc */, char ** /* argv */) {
 
     SWMgr mgr;
-    auto const mod(mgr.getModule("KJVgb"));
+    auto const mod(mgr.getModule(MODULE_NAME));
+    if (!mod) {
+        std::cerr << "Module \"" MODULE_NAME "\" not found!" << std::endl;
+        return EXIT_FAILURE;
+    }
 
     std::unique_ptr<VerseKey> key1(
                 static_cast<VerseKey *>(mod->createKey().release()));
