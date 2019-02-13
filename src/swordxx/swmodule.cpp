@@ -519,11 +519,11 @@ ListKey &SWModule::search(char const * istr,
                     foundWords = 0;
 
                     for (auto const & word : words) {
-                        if ((flags & REG_ICASE) == REG_ICASE) toupperstr(textBuf);
+                        if ((flags & REG_ICASE) == REG_ICASE)
+                            toupperstr(textBuf);
                         sres = std::strstr(textBuf.c_str(), word.c_str());
-                        if (!sres) {
+                        if (!sres)
                             break; //for loop
-                        }
                         foundWords++;
                     }
 
