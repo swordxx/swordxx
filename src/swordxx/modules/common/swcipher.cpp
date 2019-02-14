@@ -46,18 +46,14 @@ SWCipher::SWCipher(char const * key)
  */
 
 SWCipher::~SWCipher()
-{
-    if (m_buf)
-        free(m_buf);
-}
+{ free(m_buf); }
 
 
 char *SWCipher::Buf(const char *ibuf, std::size_t ilen)
 {
     if (ibuf) {
 
-        if (m_buf)
-            free(m_buf);
+        free(m_buf);
 
         if (!ilen) {
                 m_len = std::strlen(m_buf);
@@ -82,8 +78,7 @@ char *SWCipher::cipherBuf(std::size_t *ilen, const char *ibuf)
 {
     if (ibuf) {
 
-        if (m_buf)
-            free(m_buf);
+        free(m_buf);
 
         std::size_t const bufSize = *ilen + 1u;
         if (!bufSize)
