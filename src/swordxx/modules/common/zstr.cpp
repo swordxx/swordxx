@@ -426,8 +426,7 @@ void zStr::setText(const char *ikey, const char *buf, long len) {
 
     char notFound = findKeyIndex(ikey, &idxoff, 0);
     if (!notFound) {
-        auto const dbKey2(getKeyFromIdxOffset(idxoff));
-        auto diff = key.compare(dbKey2);
+        auto diff = key.compare(getKeyFromIdxOffset(idxoff));
         if (diff < 0) {
         }
         else if (diff > 0) {
