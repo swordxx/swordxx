@@ -38,7 +38,7 @@ namespace swordxx {
  */
 
 SWCipher::SWCipher(char const * key)
-    : buf(nullptr)
+    : m_buf(nullptr)
 { SWCipher::setCipherKey(key); }
 
 
@@ -48,8 +48,8 @@ SWCipher::SWCipher(char const * key)
 
 SWCipher::~SWCipher()
 {
-    if (buf)
-        free(buf);
+    if (m_buf)
+        free(m_buf);
 }
 
 
@@ -57,27 +57,27 @@ char *SWCipher::Buf(const char *ibuf, unsigned long ilen)
 {
     if (ibuf) {
 
-        if (buf)
-            free(buf);
+        if (m_buf)
+            free(m_buf);
 
         if (!ilen) {
-                len = std::strlen(buf);
-            ilen = len + 1;
+                m_len = std::strlen(m_buf);
+            ilen = m_len + 1;
         }
-        else len = ilen;
+        else m_len = ilen;
 
         static_assert(std::numeric_limits<unsigned long>::max()
                       <= std::numeric_limits<std::size_t>::max(), "");
-        buf = static_cast<char *>(malloc(ilen));
-        if (!buf)
+        m_buf = static_cast<char *>(malloc(ilen));
+        if (!m_buf)
             throw std::bad_alloc();
-        std::memcpy(buf, ibuf, ilen);
-        cipher = false;
+        std::memcpy(m_buf, ibuf, ilen);
+        m_cipher = false;
     }
 
     Decode();
 
-    return buf;
+    return m_buf;
 }
 
 
@@ -85,26 +85,26 @@ char *SWCipher::cipherBuf(unsigned long *ilen, const char *ibuf)
 {
     if (ibuf) {
 
-        if (buf)
-            free(buf);
+        if (m_buf)
+            free(m_buf);
 
         static_assert(std::numeric_limits<unsigned long>::max()
                       <= std::numeric_limits<std::size_t>::max(), "");
         std::size_t const bufSize = std::size_t(*ilen) + 1u;
         if (!bufSize)
             throw std::bad_alloc();
-        buf = static_cast<char *>(malloc(bufSize));
-        if (!buf)
+        m_buf = static_cast<char *>(malloc(bufSize));
+        if (!m_buf)
             throw std::bad_alloc();
-        std::memcpy(buf, ibuf, *ilen);
-        len = *ilen;
-        cipher = true;
+        std::memcpy(m_buf, ibuf, *ilen);
+        m_len = *ilen;
+        m_cipher = true;
     }
 
     Encode();
 
-    *ilen = len;
-    return buf;
+    *ilen = m_len;
+    return m_buf;
 }
 
 
@@ -118,16 +118,16 @@ char *SWCipher::cipherBuf(unsigned long *ilen, const char *ibuf)
 
 void SWCipher::Encode(void)
 {
-    if (!cipher) {
-        work = master;
-        for (unsigned long i = 0; i < len; i++) {
+    if (!m_cipher) {
+        m_work = m_master;
+        for (unsigned long i = 0; i < m_len; i++) {
             std::uint8_t c;
             static_assert(sizeof(char) == sizeof(std::uint8_t), "");
-            std::memcpy(&c, buf + i, 1u);
-            c = work.encrypt(c);
-            std::memcpy(buf + i, &c, 1u);
+            std::memcpy(&c, m_buf + i, 1u);
+            c = m_work.encrypt(c);
+            std::memcpy(m_buf + i, &c, 1u);
         }
-        cipher = true;
+        m_cipher = true;
     }
 }
 
@@ -142,18 +142,18 @@ void SWCipher::Encode(void)
 
 void SWCipher::Decode(void)
 {
-    if (cipher) {
-        work = master;
+    if (m_cipher) {
+        m_work = m_master;
         unsigned long i;
-        for (i = 0; i < len; i++) {
+        for (i = 0; i < m_len; i++) {
             std::uint8_t c;
             static_assert(sizeof(char) == sizeof(std::uint8_t), "");
-            std::memcpy(&c, buf + i, 1u);
-            c = work.decrypt(c);
-            std::memcpy(buf + i, &c, 1u);
+            std::memcpy(&c, m_buf + i, 1u);
+            c = m_work.decrypt(c);
+            std::memcpy(m_buf + i, &c, 1u);
         }
-        buf[i] = 0;
-        cipher = false;
+        m_buf[i] = 0;
+        m_cipher = false;
     }
 }
 
@@ -171,7 +171,7 @@ void SWCipher::setCipherKey(const char *ikey) {
     static_assert(alignof(char) == alignof(std::uint8_t), "");
     std::uint8_t key[255u];
     std::memcpy(key, ikey, keySize);
-    master.initialize(key, keySize);
+    m_master.initialize(key, keySize);
 }
 
 } /* namespace swordxx */

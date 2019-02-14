@@ -34,12 +34,12 @@ namespace swordxx {
 class SWDLLEXPORT SWCipher
 {
 
-  Sapphire master;
-  Sapphire work;
+  Sapphire m_master;
+  Sapphire m_work;
 
-  char *buf;
-  bool cipher;
-  unsigned long len;
+  char * m_buf;
+  bool m_cipher;
+  unsigned long m_len;
 protected:
 public:
     SWCipher(char const * key);
