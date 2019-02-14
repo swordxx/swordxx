@@ -26,6 +26,7 @@
 #include <cstdlib>
 #include <cstring>
 #include <fcntl.h>
+#include <memory>
 #include <sys/stat.h>
 #include <sys/types.h>
 
@@ -51,12 +52,13 @@ int main(int argc, char **argv) {
         std::exit(1);
     }
 
-    tmpbuf = (char*) std::calloc(std::strlen(argv[1]) + 11,1);
-    sprintf(tmpbuf, "%s.idx", argv[1]);
-    idxfd = open(tmpbuf, O_RDONLY|O_BINARY);
-    sprintf(tmpbuf, "%s.dat", argv[1]);
-    datfd = open(tmpbuf, O_RDONLY|O_BINARY);
-    free(tmpbuf);
+    {
+        auto const tmpBuf(std::make_unique<char[]>(std::strlen(argv[1]) + 11));
+        sprintf(tmpBuf.get(), "%s.idx", argv[1]);
+        idxfd = open(tmpBuf.get(), O_RDONLY|O_BINARY);
+        sprintf(tmpBuf.get(), "%s.dat", argv[1]);
+        datfd = open(tmpBuf.get(), O_RDONLY|O_BINARY);
+    }
 
     offset = std::atoi(argv[2]) * 6;
     lseek(idxfd, offset, SEEK_SET);
