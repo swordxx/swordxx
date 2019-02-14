@@ -36,11 +36,11 @@ char CipherFilter::processText(std::string &text, const SWKey *key, const SWModu
         std::size_t len = text.length();
         if (!key) {    // hack, using key to determine encipher, or decipher
             m_cipher.cipherBuf(&len, &text[0u]); //set buffer to enciphered text
-            std::memcpy(&text[0u], m_cipher.Buf(), len);
+            std::memcpy(&text[0u], m_cipher.buf(), len);
 //            text = cipher->Buf(); //get the deciphered buffer
         }
         else if ((unsigned long)key == 1) {
-            m_cipher.Buf(&text[0u], len);
+            m_cipher.buf(&text[0u], len);
             std::memcpy(&text[0u], m_cipher.cipherBuf(&len), len);
 //            text = cipher->cipherBuf(&len);
         }

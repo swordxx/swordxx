@@ -31,24 +31,26 @@
 
 namespace swordxx {
 
-class SWDLLEXPORT SWCipher
-{
+class SWDLLEXPORT SWCipher final {
 
-  Sapphire m_master;
-  Sapphire m_work;
+public: /* Methods: */
 
-  char * m_buf;
-  bool m_cipher;
-  std::size_t m_len;
-protected:
-public:
     SWCipher(char const * key);
-  virtual void setCipherKey (const char *key);
-    virtual ~ SWCipher ();
-  virtual char * Buf(char const * buf = nullptr, std::size_t len = 0u);
-  virtual char * cipherBuf(std::size_t * len, char const * buf = nullptr);
-  virtual void Encode (void);
-  virtual void Decode (void);
+    ~SWCipher() noexcept;
+
+    void setCipherKey(char const * key);
+    char * buf(char const * buf = nullptr, std::size_t len = 0u);
+    char * cipherBuf(std::size_t * len, char const * buf = nullptr);
+
+private: /* Fields: */
+
+    Sapphire m_master;
+    Sapphire m_work;
+
+    char * m_buf = nullptr;
+    bool m_cipher;
+    std::size_t m_len;
+
 };
 
 } /* namespace swordxx */

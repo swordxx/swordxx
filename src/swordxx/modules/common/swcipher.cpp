@@ -45,12 +45,11 @@ SWCipher::SWCipher(char const * key)
  * SWCipher Destructor - Cleans up instance of SWCipher
  */
 
-SWCipher::~SWCipher()
+SWCipher::~SWCipher() noexcept
 { free(m_buf); }
 
 
-char *SWCipher::Buf(const char *ibuf, std::size_t ilen)
-{
+char * SWCipher::buf(char const * ibuf, std::size_t ilen) {
     if (ibuf) {
 
         free(m_buf);
@@ -68,14 +67,26 @@ char *SWCipher::Buf(const char *ibuf, std::size_t ilen)
         m_cipher = false;
     }
 
-    Decode();
+    // Decode:
+    if (m_cipher) {
+        m_work = m_master;
+        std::size_t i;
+        for (i = 0; i < m_len; i++) {
+            std::uint8_t c;
+            static_assert(sizeof(char) == sizeof(std::uint8_t), "");
+            std::memcpy(&c, m_buf + i, 1u);
+            c = m_work.decrypt(c);
+            std::memcpy(m_buf + i, &c, 1u);
+        }
+        m_buf[i] = 0;
+        m_cipher = false;
+    }
 
     return m_buf;
 }
 
 
-char *SWCipher::cipherBuf(std::size_t *ilen, const char *ibuf)
-{
+char * SWCipher::cipherBuf(std::size_t * ilen, char const * ibuf) {
     if (ibuf) {
 
         free(m_buf);
@@ -91,23 +102,7 @@ char *SWCipher::cipherBuf(std::size_t *ilen, const char *ibuf)
         m_cipher = true;
     }
 
-    Encode();
-
-    *ilen = m_len;
-    return m_buf;
-}
-
-
-/******************************************************************************
- * SWCipher::Encode    - This function "encodes" the input stream into the
- *                        output stream.
- *                        The GetChars() and SendChars() functions are
- *                        used to separate this method from the actual
- *                        i/o.
- */
-
-void SWCipher::Encode(void)
-{
+    // Encode:
     if (!m_cipher) {
         m_work = m_master;
         for (std::size_t i = 0; i < m_len; ++i) {
@@ -119,32 +114,9 @@ void SWCipher::Encode(void)
         }
         m_cipher = true;
     }
-}
 
-
-/******************************************************************************
- * SWCipher::Decode    - This function "decodes" the input stream into the
- *                        output stream.
- *                        The GetChars() and SendChars() functions are
- *                        used to separate this method from the actual
- *                        i/o.
- */
-
-void SWCipher::Decode(void)
-{
-    if (m_cipher) {
-        m_work = m_master;
-        std::size_t i;
-        for (i = 0; i < m_len; i++) {
-            std::uint8_t c;
-            static_assert(sizeof(char) == sizeof(std::uint8_t), "");
-            std::memcpy(&c, m_buf + i, 1u);
-            c = m_work.decrypt(c);
-            std::memcpy(m_buf + i, &c, 1u);
-        }
-        m_buf[i] = 0;
-        m_cipher = false;
-    }
+    *ilen = m_len;
+    return m_buf;
 }
 
 
@@ -153,7 +125,7 @@ void SWCipher::Decode(void)
  *
  */
 
-void SWCipher::setCipherKey(const char *ikey) {
+void SWCipher::setCipherKey(char const * ikey) {
     auto const keySize = std::strlen(ikey);
     assert(keySize < 256u); /// \todo Throw exception instead!?
     static_assert(sizeof(char) == sizeof(std::uint8_t), "");
