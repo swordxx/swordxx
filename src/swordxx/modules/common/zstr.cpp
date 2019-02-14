@@ -417,7 +417,6 @@ void zStr::setText(const char *ikey, const char *buf, long len) {
     int32_t endoff;
     long idxoff = 0;
     int32_t shiftSize;
-    char * dbKey = nullptr;
     char * ch = nullptr;
 
     len = (len < 0) ? std::strlen(buf) : len;
@@ -535,8 +534,6 @@ void zStr::setText(const char *ikey, const char *buf, long len) {
             FileMgr::getSystemFileMgr()->trunc(idxfd);    // truncate index
         }
     }
-
-    free(dbKey);
 }
 
 
