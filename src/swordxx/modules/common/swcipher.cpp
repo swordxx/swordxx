@@ -26,7 +26,6 @@
 #include <cassert>
 #include <cstdlib>
 #include <cstring>
-#include <limits>
 #include <new>
 
 
@@ -53,7 +52,7 @@ SWCipher::~SWCipher()
 }
 
 
-char *SWCipher::Buf(const char *ibuf, unsigned long ilen)
+char *SWCipher::Buf(const char *ibuf, std::size_t ilen)
 {
     if (ibuf) {
 
@@ -66,8 +65,6 @@ char *SWCipher::Buf(const char *ibuf, unsigned long ilen)
         }
         else m_len = ilen;
 
-        static_assert(std::numeric_limits<unsigned long>::max()
-                      <= std::numeric_limits<std::size_t>::max(), "");
         m_buf = static_cast<char *>(malloc(ilen));
         if (!m_buf)
             throw std::bad_alloc();
@@ -81,16 +78,14 @@ char *SWCipher::Buf(const char *ibuf, unsigned long ilen)
 }
 
 
-char *SWCipher::cipherBuf(unsigned long *ilen, const char *ibuf)
+char *SWCipher::cipherBuf(std::size_t *ilen, const char *ibuf)
 {
     if (ibuf) {
 
         if (m_buf)
             free(m_buf);
 
-        static_assert(std::numeric_limits<unsigned long>::max()
-                      <= std::numeric_limits<std::size_t>::max(), "");
-        std::size_t const bufSize = std::size_t(*ilen) + 1u;
+        std::size_t const bufSize = *ilen + 1u;
         if (!bufSize)
             throw std::bad_alloc();
         m_buf = static_cast<char *>(malloc(bufSize));
@@ -120,7 +115,7 @@ void SWCipher::Encode(void)
 {
     if (!m_cipher) {
         m_work = m_master;
-        for (unsigned long i = 0; i < m_len; i++) {
+        for (std::size_t i = 0; i < m_len; ++i) {
             std::uint8_t c;
             static_assert(sizeof(char) == sizeof(std::uint8_t), "");
             std::memcpy(&c, m_buf + i, 1u);
@@ -144,7 +139,7 @@ void SWCipher::Decode(void)
 {
     if (m_cipher) {
         m_work = m_master;
-        unsigned long i;
+        std::size_t i;
         for (i = 0; i < m_len; i++) {
             std::uint8_t c;
             static_assert(sizeof(char) == sizeof(std::uint8_t), "");

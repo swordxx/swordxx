@@ -24,9 +24,9 @@
 #ifndef SWORDXX_SWCIPHER_H
 #define SWORDXX_SWCIPHER_H
 
-#include "sapphire.h"
-
+#include <cstddef>
 #include "../../defs.h"
+#include "sapphire.h"
 
 
 namespace swordxx {
@@ -39,14 +39,14 @@ class SWDLLEXPORT SWCipher
 
   char * m_buf;
   bool m_cipher;
-  unsigned long m_len;
+  std::size_t m_len;
 protected:
 public:
     SWCipher(char const * key);
   virtual void setCipherKey (const char *key);
     virtual ~ SWCipher ();
-  virtual char * Buf(char const * buf = nullptr, unsigned long len = 0u);
-  virtual char * cipherBuf(unsigned long * len, char const * buf = nullptr);
+  virtual char * Buf(char const * buf = nullptr, std::size_t len = 0u);
+  virtual char * cipherBuf(std::size_t * len, char const * buf = nullptr);
   virtual void Encode (void);
   virtual void Decode (void);
 };

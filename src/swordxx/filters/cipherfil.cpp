@@ -33,7 +33,7 @@ namespace swordxx {
 char CipherFilter::processText(std::string &text, const SWKey *key, const SWModule *module) {
     (void) module;
     if (text.length() > 2) { //check if it's large enough to substract 2 in the next step.
-        unsigned long len = text.length();
+        std::size_t len = text.length();
         if (!key) {    // hack, using key to determine encipher, or decipher
             m_cipher.cipherBuf(&len, &text[0u]); //set buffer to enciphered text
             std::memcpy(&text[0u], m_cipher.Buf(), len);
