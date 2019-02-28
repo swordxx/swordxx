@@ -34,6 +34,9 @@
  * and renamed to Sapphire II Stream Cipher 2 January 1995.
  */
 
+#ifndef SWORDXX_SAPPHIRE_H
+#define SWORDXX_SAPPHIRE_H
+
 #include <cstddef>
 #include <cstdint>
 #include "../../defs.h"
@@ -83,3 +86,5 @@ private: /* Fields: */
 };
 
 } /* namespace swordxx */
+
+#endif /* SWORDXX_SAPPHIRE_H */
