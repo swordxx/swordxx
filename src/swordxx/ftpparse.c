@@ -52,12 +52,12 @@ static long currentyear; /* approximation to current year */
 
 static void initbase(void)
 {
-  struct tm *t;
+  struct tm t;
   if (!flagneedbase) return;
 
   base = 0;
-  t = gmtime(&base);
-  base = -(totai(t->tm_year + 1900,t->tm_mon,t->tm_mday) + t->tm_hour * 3600 + t->tm_min * 60 + t->tm_sec);
+  gmtime_r(&base, &t);
+  base = -(totai(t.tm_year + 1900,t.tm_mon,t.tm_mday) + t.tm_hour * 3600 + t.tm_min * 60 + t.tm_sec);
   /* assumes the right time_t, counting seconds. */
   /* base may be slightly off if time_t counts non-leap seconds. */
   flagneedbase = 0;
