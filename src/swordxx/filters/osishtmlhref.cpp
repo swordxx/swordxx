@@ -438,7 +438,7 @@ bool OSISHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterU
                 u->suspendTextPassThru = (++u->suspendLevel);
             }
             else if (tag.isEndTag()) {
-                std::string lastText = u->lastSuspendSegment.c_str();
+                std::string lastText = u->lastSuspendSegment;
                 u->suspendTextPassThru = (--u->suspendLevel);
                 if (lastText.size()) {
                     toupperstr(lastText);
