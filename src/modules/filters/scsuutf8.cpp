@@ -140,7 +140,7 @@ char SCSUUTF8::processText(SWBuf &text, const SWKey *key, const SWModule *module
 #ifdef _ICU_
 	// Try decoding with ICU if possible
 	err = U_ZERO_ERROR;
-	UnicodeString utf16Text(text.getRawData(), text.length(), scsuConv, err);
+	icu::UnicodeString utf16Text(text.getRawData(), text.length(), scsuConv, err);
 	err = U_ZERO_ERROR;
 	int32_t len = utf16Text.extract(text.getRawData(), text.size(), utf8Conv, err);
 	if (len > (int32_t)text.size()+1) {

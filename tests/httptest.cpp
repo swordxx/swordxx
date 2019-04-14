@@ -1,5 +1,5 @@
-#include <sword/curlhttpt.h>
-#include <sword/filemgr.h>
+#include <curlhttpt.h>
+#include <filemgr.h>
 #include <vector>
 #include <iostream>
 

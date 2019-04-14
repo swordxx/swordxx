@@ -422,7 +422,7 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 
 	std::regex preg;
 #elif defined(USEICUREGEX)
-	RegexMatcher *matcher = 0;
+	icu::RegexMatcher *matcher = 0;
 #else
 	regex_t preg;
 #endif
@@ -468,7 +468,7 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 		preg = std::regex((SWBuf(".*")+istr+".*").c_str(), std::regex_constants::extended | searchType | flags);
 #elif defined(USEICUREGEX)
 		UErrorCode        status    = U_ZERO_ERROR;
-		matcher = new RegexMatcher(istr, searchType | flags, status);
+		matcher = new icu::RegexMatcher(istr, searchType | flags, status);
 		if (U_FAILURE(status)) {
 			SWLog::getSystemLog()->logError("Error compiling Regex: %d", status);
 			return listKey;
@@ -662,7 +662,7 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 #ifdef USECXX11REGEX
 			if (std::regex_match(std::string(textBuf.c_str()), preg)) {
 #elif defined(USEICUREGEX)
-			UnicodeString stringToTest = textBuf.c_str();
+			icu::UnicodeString stringToTest = textBuf.c_str();
 			matcher->reset(stringToTest);
 
 			if (matcher->find()) {

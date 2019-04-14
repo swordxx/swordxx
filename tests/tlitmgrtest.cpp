@@ -247,6 +247,8 @@
 #include "unicode/ustream.h"
 #include <iostream>
 
+using icu::UnicodeString;
+
 class SWCharString {
  public:
     inline SWCharString(const UnicodeString& str);
@@ -285,6 +287,8 @@ static const char SW_RESDATA[] = "/usr/local/lib/sword/";
 #include <map>
 
 using namespace std;
+using icu::UnicodeString;
+using icu::Transliterator;
 
 struct SWTransData {
 	UnicodeString resource;
@@ -300,8 +304,7 @@ SWTransMap *sw_tmap;
 Transliterator * instantiateTrans(const UnicodeString& ID, const UnicodeString& resource,
 		UTransDirection dir, UParseError &parseError, UErrorCode &status );
 
-Transliterator *SWTransFactory(const UnicodeString &ID, 
-	Transliterator::Token context)
+Transliterator *SWTransFactory(const UnicodeString &ID, Transliterator::Token context)
 {
 	std::cout << "running factory for " << ID << std::endl;
 	SWTransMap::iterator swelement;
@@ -320,9 +323,7 @@ Transliterator *SWTransFactory(const UnicodeString &ID,
 	return NULL;
 }
 
-void  instantiateTransFactory(const UnicodeString& ID, const UnicodeString& resource,
-		UTransDirection dir, UParseError &parseError, UErrorCode &status )
-{
+void  instantiateTransFactory(const UnicodeString& ID, const UnicodeString& resource, UTransDirection dir, UParseError &parseError, UErrorCode &status) {
 		std::cout << "making factory for ID " << ID << std::endl;
 		Transliterator::Token context;
 		SWTransData swstuff; 
@@ -335,9 +336,7 @@ void  instantiateTransFactory(const UnicodeString& ID, const UnicodeString& reso
 		Transliterator::registerFactory(ID, &SWTransFactory, context);
 }
 
-void  registerTrans(const UnicodeString& ID, const UnicodeString& resource,
-		UTransDirection dir, UErrorCode &status )
-{
+void  registerTrans(const UnicodeString& ID, const UnicodeString& resource, UTransDirection dir, UErrorCode &status) {
 		std::cout << "registering ID locally " << ID << std::endl;
 		SWTransData swstuff; 
 		swstuff.resource = resource;
@@ -348,7 +347,7 @@ void  registerTrans(const UnicodeString& ID, const UnicodeString& resource,
 		sw_tmap->insert(swpair);
 }
 
-bool checkTrans(const UnicodeString& ID, UErrorCode &status )
+bool checkTrans(const UnicodeString& ID, UErrorCode &status)
 {
 		Transliterator *trans = Transliterator::createInstance(ID, UTRANS_FORWARD, status);
 		if (!U_FAILURE(status))
@@ -375,7 +374,7 @@ bool checkTrans(const UnicodeString& ID, UErrorCode &status )
 		//std::cout << "importing: " << ID << ", " << resource << std::endl;
 		SWCharString ch(swstuff.resource);
 		UResourceBundle *bundle = ures_openDirect(SW_RESDATA, ch, &status);
-		const UnicodeString rules = ures_getUnicodeStringByKey(bundle, RB_RULE, &status);
+		const UnicodeString rules = icu::ures_getUnicodeStringByKey(bundle, RB_RULE, &status);
 		ures_close(bundle);
 		//parser.parse(rules, isReverse ? UTRANS_REVERSE : UTRANS_FORWARD,
 		//        parseError, status);
@@ -412,9 +411,7 @@ bool checkTrans(const UnicodeString& ID, UErrorCode &status )
 	}
 }
 
-Transliterator * createTrans(const UnicodeString& preID, const UnicodeString& ID, 
-	const UnicodeString& postID, UTransDirection dir, UErrorCode &status )
-{
+Transliterator * createTrans(const UnicodeString& preID, const UnicodeString& ID, const UnicodeString& postID, UTransDirection dir, UErrorCode &status) {
 	// extract id to check from ID xxx;id;xxx
 	if (checkTrans(ID, status)) {
 		UnicodeString fullID = preID;
@@ -434,8 +431,7 @@ Transliterator * createTrans(const UnicodeString& preID, const UnicodeString& ID
 	}
 }
 
-Transliterator * instantiateTrans(const UnicodeString& ID, const UnicodeString& resource,
-		UTransDirection dir, UParseError &parseError, UErrorCode &status )
+Transliterator * instantiateTrans(const UnicodeString& ID, const UnicodeString& resource, UTransDirection dir, UParseError &parseError, UErrorCode &status )
 {
 	//TransliterationRuleData *ruleData;
 	//TransliteratorParser parser;
@@ -447,7 +443,7 @@ Transliterator * instantiateTrans(const UnicodeString& ID, const UnicodeString& 
 	std::cout << "importing: " << ID << ", " << resource << std::endl;
 	SWCharString ch(resource);
 	UResourceBundle *bundle = ures_openDirect(SW_RESDATA, ch, &status);
-	const UnicodeString rules = ures_getUnicodeStringByKey(bundle, RB_RULE, &status);
+	const UnicodeString rules = icu::ures_getUnicodeStringByKey(bundle, RB_RULE, &status);
 	ures_close(bundle);
 	//parser.parse(rules, isReverse ? UTRANS_REVERSE : UTRANS_FORWARD,
     //        parseError, status);
@@ -500,9 +496,9 @@ void initiateSwordTransliterators(UErrorCode &status)
             colBund = ures_getByIndex(transIDs, row, 0, &status);
 
             if (U_SUCCESS(status) && ures_getSize(colBund) == 4) {
-                UnicodeString id = ures_getUnicodeStringByIndex(colBund, 0, &status);
-                UChar type = ures_getUnicodeStringByIndex(colBund, 1, &status).charAt(0);
-                UnicodeString resString = ures_getUnicodeStringByIndex(colBund, 2, &status);
+                UnicodeString id = icu::ures_getUnicodeStringByIndex(colBund, 0, &status);
+                UChar type = icu::ures_getUnicodeStringByIndex(colBund, 1, &status).charAt(0);
+                UnicodeString resString = icu::ures_getUnicodeStringByIndex(colBund, 2, &status);
 
                 if (U_SUCCESS(status)) {
                     switch (type) {
@@ -513,7 +509,7 @@ void initiateSwordTransliterators(UErrorCode &status)
                         {
                             //UBool visible = (type == 0x0066 /*f*/);
                             UTransDirection dir =
-                                (ures_getUnicodeStringByIndex(colBund, 3, &status).charAt(0) ==
+                                (icu::ures_getUnicodeStringByIndex(colBund, 3, &status).charAt(0) ==
                                  0x0046 /*F*/) ?
                                 UTRANS_FORWARD : UTRANS_REVERSE;
                             //registry->put(id, resString, dir, visible);
@@ -567,9 +563,9 @@ void initiateSwordTransliteratorsByFactory(UErrorCode &status)
             colBund = ures_getByIndex(transIDs, row, 0, &status);
 
             if (U_SUCCESS(status) && ures_getSize(colBund) == 4) {
-                UnicodeString id = ures_getUnicodeStringByIndex(colBund, 0, &status);
-                UChar type = ures_getUnicodeStringByIndex(colBund, 1, &status).charAt(0);
-                UnicodeString resString = ures_getUnicodeStringByIndex(colBund, 2, &status);
+                UnicodeString id = icu::ures_getUnicodeStringByIndex(colBund, 0, &status);
+                UChar type = icu::ures_getUnicodeStringByIndex(colBund, 1, &status).charAt(0);
+                UnicodeString resString = icu::ures_getUnicodeStringByIndex(colBund, 2, &status);
 				std::cout << "ok so far" << std::endl;
 
                 if (U_SUCCESS(status)) {
@@ -581,7 +577,7 @@ void initiateSwordTransliteratorsByFactory(UErrorCode &status)
                         {
                             //UBool visible = (type == 0x0066 /*f*/);
                             UTransDirection dir =
-                                (ures_getUnicodeStringByIndex(colBund, 3, &status).charAt(0) ==
+                                (icu::ures_getUnicodeStringByIndex(colBund, 3, &status).charAt(0) ==
                                  0x0046 /*F*/) ?
                                 UTRANS_FORWARD : UTRANS_REVERSE;
                             //registry->put(id, resString, dir, visible);
@@ -636,9 +632,9 @@ void initiateSwordTransliteratorsToMap(UErrorCode &status)
             colBund = ures_getByIndex(transIDs, row, 0, &status);
 
             if (U_SUCCESS(status) && ures_getSize(colBund) == 4) {
-                UnicodeString id = ures_getUnicodeStringByIndex(colBund, 0, &status);
-                UChar type = ures_getUnicodeStringByIndex(colBund, 1, &status).charAt(0);
-                UnicodeString resString = ures_getUnicodeStringByIndex(colBund, 2, &status);
+                UnicodeString id = icu::ures_getUnicodeStringByIndex(colBund, 0, &status);
+                UChar type = icu::ures_getUnicodeStringByIndex(colBund, 1, &status).charAt(0);
+                UnicodeString resString = icu::ures_getUnicodeStringByIndex(colBund, 2, &status);
 				std::cout << "ok so far" << std::endl;
 
                 if (U_SUCCESS(status)) {
@@ -650,7 +646,7 @@ void initiateSwordTransliteratorsToMap(UErrorCode &status)
                         {
                             //UBool visible = (type == 0x0066 /*f*/);
                             UTransDirection dir =
-                                (ures_getUnicodeStringByIndex(colBund, 3, &status).charAt(0) ==
+                                (icu::ures_getUnicodeStringByIndex(colBund, 3, &status).charAt(0) ==
                                  0x0046 /*F*/) ?
                                 UTRANS_FORWARD : UTRANS_REVERSE;
                             //registry->put(id, resString, dir, visible);

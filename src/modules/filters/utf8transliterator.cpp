@@ -328,9 +328,9 @@ bool UTF8Transliterator::addTrans(const char* newTrans, SWBuf* transList) {
 }
 
 
-Transliterator * UTF8Transliterator::createTrans(const UnicodeString& ID, UTransDirection dir, UErrorCode &status )
+icu::Transliterator * UTF8Transliterator::createTrans(const icu::UnicodeString& ID, UTransDirection dir, UErrorCode &status )
 {
-	Transliterator *trans = Transliterator::createInstance(ID,UTRANS_FORWARD,status);
+	icu::Transliterator *trans = icu::Transliterator::createInstance(ID,UTRANS_FORWARD,status);
 	if (U_FAILURE(status)) {
 		delete trans;
 		return NULL;
@@ -906,9 +906,9 @@ char UTF8Transliterator::processText(SWBuf &text, const SWKey *key, const SWModu
                 addTrans("NFC", &ID);
 
                 err = U_ZERO_ERROR;
-                Transliterator * trans = createTrans(UnicodeString(ID), UTRANS_FORWARD, err);
+                icu::Transliterator * trans = createTrans(icu::UnicodeString(ID), UTRANS_FORWARD, err);
                 if (trans && !U_FAILURE(err)) {
-                        UnicodeString target = UnicodeString(source);
+                        icu::UnicodeString target = icu::UnicodeString(source);
 			trans->transliterate(target);
 			text.setSize(text.size()*2);
 			len = ucnv_fromUChars(conv, text.getRawData(), text.size(), target.getBuffer(), target.length(), &err);

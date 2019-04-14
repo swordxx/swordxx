@@ -46,7 +46,7 @@ char UTF8SCSU::processText(SWBuf &text, const SWKey *key, const SWModule *module
 		return -1;
 
 	err = U_ZERO_ERROR;
-	UnicodeString utf16Text(text.getRawData(), text.length(), utf8Conv, err);
+	icu::UnicodeString utf16Text(text.getRawData(), text.length(), utf8Conv, err);
 	err = U_ZERO_ERROR;
 	int32_t len = utf16Text.extract(text.getRawData(), text.size(), scsuConv, err);
 	if (len > (int32_t)text.size()+1) {

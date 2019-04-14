@@ -50,11 +50,11 @@ SWORD_NAMESPACE_START
 class SWModule;
 
 struct SWTransData {
-	UnicodeString resource;
+	icu::UnicodeString resource;
 	UTransDirection dir;
 };
-typedef std::map<const UnicodeString, SWTransData> SWTransMap;
-typedef std::pair<UnicodeString, SWTransData> SWTransPair;
+typedef std::map<const icu::UnicodeString, SWTransData> SWTransMap;
+typedef std::pair<icu::UnicodeString, SWTransData> SWTransPair;
 
 /** This Filter uses ICU for transliteration
 */
@@ -81,7 +81,7 @@ private:
 	bool checkTrans(const UnicodeString& ID, UErrorCode &status);
 #endif
 	bool addTrans(const char* newTrans, SWBuf* transList);
-	Transliterator *createTrans(const UnicodeString& ID, UTransDirection dir, UErrorCode &status);
+	icu::Transliterator *createTrans(const icu::UnicodeString& ID, UTransDirection dir, UErrorCode &status);
 
 public:
 	UTF8Transliterator();
