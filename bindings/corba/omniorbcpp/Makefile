@@ -7,8 +7,7 @@ CXXFLAGS += $(shell PKG_CONFIG_PATH=${PREFIX}/lib/pkgconfig pkg-config --cflags 
 CFLAGS += $(shell PKG_CONFIG_PATH=${PREFIX}/lib/pkgconfig pkg-config --cflags sword)
 LIBS += $(shell PKG_CONFIG_PATH=${PREFIX}/lib/pkgconfig pkg-config --libs sword)
 
-#orbit stuff
-CFLAGS += $(shell orbit2-config --cflags)
+#omniORB stuff
 CFLAGS += $(shell PKG_CONFIG_PATH=${PREFIX}/lib/pkgconfig pkg-config --cflags omniORB4)
 CXXFLAGS += $(shell PKG_CONFIG_PATH=${PREFIX}/lib/pkgconfig pkg-config --cflags omniORB4)
 LIBS += $(shell PKG_CONFIG_PATH=${PREFIX}/lib/pkgconfig pkg-config --libs omniORB4)
