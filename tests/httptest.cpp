@@ -12,9 +12,9 @@ using std::endl;
 
 int main(int argc, char **argv) {
 	RemoteTransport *t = new CURLHTTPTransport("crosswire");
-	auto x = t->getDirList("https://ftp.crosswire.org/ftpmirror/pub/sword/raw/");
+	vector<DirEntry> x = t->getDirList("https://ftp.crosswire.org/ftpmirror/pub/sword/raw/");
 //	auto x = t->getDirList("https://crosswire.org/ftpmirror/pub/sword/raw/");
-	for (auto i = x.begin(); i != x.end(); ++i) {
+	for (vector<DirEntry>::const_iterator i = x.begin(); i != x.end(); ++i) {
 		cout << i->name << "\t" << i->size << "\t" << i->isDirectory << endl;
 	}
 	return 0;
