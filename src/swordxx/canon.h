@@ -34,7 +34,7 @@ namespace swordxx {
  * [on]tbooks - initialize static instance for all canonical text names
  *        and chapmax
  */
-struct sbook otbooks[] = {
+constexpr sbook const otbooks[] = {
   {"Genesis", "Gen", "Gen", 50, nullptr},
   {"Exodus", "Exod", "Exod", 40, nullptr},
   {"Leviticus", "Lev", "Lev", 27, nullptr},
@@ -76,7 +76,7 @@ struct sbook otbooks[] = {
   {"Malachi", "Mal", "Mal", 4, nullptr},
   {"", "", "", 0, nullptr}
 };
-struct sbook ntbooks[] = {
+constexpr sbook const ntbooks[] = {
   {"Matthew", "Matt", "Matt", 28, nullptr},
   {"Mark", "Mark", "Mark", 16, nullptr},
   {"Luke", "Luke", "Luke", 24, nullptr},
@@ -111,7 +111,7 @@ struct sbook ntbooks[] = {
  *    Maximum verses per chapter
  */
 
-int vm[] = {
+constexpr int const vm[] = {
   // Genesis
   31, 25, 24, 26, 32, 22, 24, 22, 29, 32,
   32, 20, 18, 24, 21, 16, 27, 33, 38, 18,
