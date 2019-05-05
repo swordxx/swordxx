@@ -31,6 +31,7 @@
 #include <iostream>
 #include <map>
 #include <swmodule.h>
+#include <swoptfilter.h>
 #include <stdio.h>
 #include <swlog.h>
 
@@ -321,6 +322,14 @@ void remoteDescribeModule(const char *sourceName, const char *modName) {
 	cout << "Module Description\n\n";
 	for (ConfigEntMap::const_iterator it = m->getConfig().begin(); it != m->getConfig().end(); ++it) {
 		cout << "[" << it->first << "]:" << it->second << "\n";
+	}
+	cout << "\nOption Features available for module: " << m->getName() << "\n\n";
+	for (OptionFilterList::const_iterator it = m->getOptionFilters().begin(); it != m->getOptionFilters().end(); ++it) {
+		cout << (*it)->getOptionName() << " (" << (*it)->getOptionTip() << ")\n";
+		StringList optionValues = (*it)->getOptionValues();
+		for (StringList::const_iterator it2 = optionValues.begin(); it2 != optionValues.end(); ++it2) {
+			cout << "\t" << *it2 << "\n";
+		}
 	}
 }
 
