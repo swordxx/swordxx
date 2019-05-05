@@ -631,6 +631,8 @@ public:
 	}
 	SWDEPRECATED SWModule &AddOptionFilter(SWOptionFilter *newFilter) { return addOptionFilter(newFilter); }
 
+	virtual const OptionFilterList &getOptionFilters() const { return *optionFilters; }
+
 	/** OptionFilter a text buffer
 	 * @param buf the buffer to filter
 	 * @param key key location from where this buffer was extracted
