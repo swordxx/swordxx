@@ -238,8 +238,7 @@ bool OSISPlain::handleToken(std::string &buf, const char *token, BasicFilterUser
                     const unsigned char *o = b;
                     if (getUniCharFromUTF8(&b)) {
                         while (o != b) buf.push_back(*(o++));
-                        buf.push_back((unsigned char)0xCC);
-                        buf.push_back((unsigned char)0x85);
+                        buf.append("\u0305"); // U+0305 COMBINING OVERLINE
                     }
                 }
             }
