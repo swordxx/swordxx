@@ -217,8 +217,6 @@ public: /* Methods: */
                                      int const * chMax,
                                      unsigned char const * mappings = nullptr);
 
-    void registerVersificationSystem(char const * name, TreeKey const *);
-
 private: /* Methods: */
 
     void init();

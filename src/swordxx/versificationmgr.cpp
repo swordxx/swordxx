@@ -404,10 +404,6 @@ void VersificationMgr::registerVersificationSystem(const char *name, const sbook
 }
 
 
-void VersificationMgr::registerVersificationSystem(const char * /* name */, const TreeKey * /* tk */) {
-}
-
-
 const std::list<std::string> VersificationMgr::getVersificationSystems() const {
     std::list<std::string> retVal;
     for (auto it = p->m_systems.cbegin(); it != p->m_systems.cend(); ++it)
