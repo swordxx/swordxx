@@ -197,7 +197,7 @@ int VersificationMgr::System::getBookNumberByOSISName(const char *bookName) cons
 }
 
 
-void VersificationMgr::System::loadFromSBook(const sbook *ot, const sbook *nt, int *chMax, const unsigned char *mappings) {
+void VersificationMgr::System::loadFromSBook(const sbook *ot, const sbook *nt, int const *chMax, const unsigned char *mappings) {
     int chap = 0;
     int book = 0;
     long offset = 0;    // module heading
@@ -397,7 +397,7 @@ const VersificationMgr::System *VersificationMgr::getVersificationSystem(const c
 }
 
 
-void VersificationMgr::registerVersificationSystem(const char *name, const sbook *ot, const sbook *nt, int *chMax, const unsigned char *mappings) {
+void VersificationMgr::registerVersificationSystem(const char *name, const sbook *ot, const sbook *nt, int const *chMax, const unsigned char *mappings) {
     p->m_systems[name] = name;
     System &s = p->m_systems[name];
     s.loadFromSBook(ot, nt, chMax, mappings);

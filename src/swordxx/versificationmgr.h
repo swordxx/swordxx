@@ -159,7 +159,7 @@ public: /* Types: */
 
         void loadFromSBook(sbook const * ot,
                            sbook const * nt,
-                           int * chMax,
+                           int const * chMax,
                            unsigned char const * mappings = nullptr);
 
         long getOffsetFromVerse(int book, int chapter, int verse) const;
@@ -214,7 +214,7 @@ public: /* Methods: */
     void registerVersificationSystem(char const * name,
                                      sbook const * ot,
                                      sbook const * nt,
-                                     int * chMax,
+                                     int const * chMax,
                                      unsigned char const * mappings = nullptr);
 
     void registerVersificationSystem(char const * name, TreeKey const *);
