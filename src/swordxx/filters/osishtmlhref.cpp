@@ -444,7 +444,8 @@ bool OSISHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterU
                     toupperstr(lastText);
                     const unsigned char *tmpBuf = (const unsigned char *)lastText.c_str();
                     getUniCharFromUTF8(&tmpBuf);
-                    int char_length = (tmpBuf - (const unsigned char *)lastText.c_str());
+                    auto const char_length =
+                            tmpBuf ? (tmpBuf - (const unsigned char *)lastText.c_str()) : 1;
                     scratch = formatted("%.*s<font size=\"-1\">%s</font>",
                         char_length,
                         lastText.c_str(),
