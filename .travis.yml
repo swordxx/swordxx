@@ -3,9 +3,10 @@ sudo: required
 dist: trusty
 language: generic
 before_install:
-  - if [[ "${CXX:0:5}" == "clang" ]]; then curl -sSL https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -; fi
-  - if [[ "$CXX" == "clang++-8" ]]; then echo 'deb http://apt.llvm.org/trusty/ llvm-toolchain-trusty-8 main' | sudo tee -a /etc/apt/sources.list; fi
-  - if [[ "$CXX" == "clang++-7" ]]; then echo 'deb http://apt.llvm.org/trusty/ llvm-toolchain-trusty-7 main' | sudo tee -a /etc/apt/sources.list; fi
+  - if [[ "${CXX%-*}" == "clang++" ]]; then curl -sSL https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -; fi
+  - if [[ "${CXX%-*}" == "clang++" ]]; then echo 'deb http://apt.llvm.org/trusty/ llvm-toolchain-trusty-${CXX##*-} main' | sudo tee -a /etc/apt/sources.list; fi
+  - if [[ "${CXX%-*}" == "clang++" ]]; then sudo apt-get update -qq; fi
+  - if [[ "${CXX%-*}" == "clang++" ]]; then sudo apt-get install clang-${CXX##*-}; fi
   - curl -sSL https://cmake.org/files/v3.8/cmake-3.8.0-Linux-x86_64.tar.gz | sudo tar -xzC /opt
   - curl -sSL https://cmake.org/files/v3.14/cmake-3.14.3-Linux-x86_64.tar.gz | sudo tar -xzC /opt
 script: ./travis.sh || exit 1
@@ -27,14 +28,11 @@ matrix:
           sources: *gccSources
           packages: [*baseDeps, gcc-7, g++-7]
     - env: CXX=clang++-8 CC=clang-8
-      addons:
+      addons: &clangAddons
         apt:
           sources: *gccSources
-          packages: [*baseDeps, clang-8]
+          packages: *baseDeps
     - env: CXX=clang++-7 CC=clang-7
-      addons:
-        apt:
-          sources: *gccSources
-          packages: [*baseDeps, clang-7]
+      addons: *clangAddons
 notifications:
   irc: "chat.freenode.net#sword++"
