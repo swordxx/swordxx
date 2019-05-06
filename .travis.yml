@@ -1,5 +1,5 @@
 sudo: required
-# Required for C++11/14 and modern cmake
+# Required for C++17 and modern CMake
 dist: trusty
 language: generic
 before_install:
@@ -8,16 +8,21 @@ before_install:
 script: ./travis.sh || exit 1
 matrix:
   include:
-    - env: CXX=g++-7 CC=gcc-7
-      addons: &gcc7addons
+    - env: CXX=g++-8 CC=gcc-8
+      addons: &gcc8addons
         apt:
           sources: &toolchainSources
             - ubuntu-toolchain-r-test
           packages:
             - &baseDeps [libbz2-dev, xz-utils, liblzma-dev, libcurl4-openssl-dev, zlib1g-dev, curl, libicu-dev]
-            - [gcc-7, g++-7]
-    - env: CXX=g++-7 CC=gcc-7 CMAKE_VERSION=3.8.0
-      addons: *gcc7addons
+            - [gcc-8, g++-8]
+    - env: CXX=g++-8 CC=gcc-8 CMAKE_VERSION=3.8.0
+      addons: *gcc8addons
+    - env: CXX=g++-7 CC=gcc-7
+      addons:
+        apt:
+          sources: *toolchainSources
+          packages: [*baseDeps, gcc-7, g++-7]
     - env: CXX=g++-6 CC=gcc-6
       addons:
         apt:
