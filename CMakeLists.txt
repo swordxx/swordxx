@@ -8,7 +8,7 @@
 # all posterity and eternity, wherever such transfer is possible.  Where it is
 # not, then this file is released under the GPLv2 by myself.
 PROJECT(swordxx CXX C)
-CMAKE_MINIMUM_REQUIRED(VERSION 3.7)
+CMAKE_MINIMUM_REQUIRED(VERSION 3.8)
 CMAKE_POLICY(SET CMP0017 NEW)
 
 # Make sure it's an out-of-stream build
