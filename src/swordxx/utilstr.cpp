@@ -280,38 +280,4 @@ std::string assureValidUTF8(const char *buf) {
     if (invalidChar) { /** \bug !?!?!? */ }
     return myCopy;
 }
-
-std::wstring utf8ToWChar(const char *buf) {
-    assert(buf);
-    char const * q = nullptr;
-    std::wstring wcharBuf;
-    while (*buf) {
-        q = buf;
-        wchar_t wc = getUniCharFromUTF8((const unsigned char **)&buf);
-        if (!wc) {
-            // if my buffer was advanced but nothing was converted, I had invalid data
-            if (buf - q) {
-                // invalid bytes in UTF8 stream
-                wcharBuf.push_back((wchar_t)0x1a);        // unicode replacement character
-            }
-        }
-        else wcharBuf.push_back(wc);
-    }
-    return wcharBuf;
-}
-
-
-/****
- * This can be called to convert a wchar_t[] to a UTF-8 std::string
- *
- */
-std::string wcharToUTF8(const wchar_t * buf) {
-    assert(buf);
-    std::string utf8Buf;
-    for (; *buf; ++buf)
-        utf8Buf.append(getUTF8FromUniChar(*buf));
-    return utf8Buf;
-}
-
-
 } /* namespace swordxx */

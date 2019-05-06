@@ -607,17 +607,6 @@ std::string getUTF8FromUniChar(uint32_t uchar);
  */
 std::string assureValidUTF8(const char *buf);
 
-/****
- * This can be called to convert a UTF8 stream to a wstring.
- */
-std::wstring utf8ToWChar(const char *buf);
-
-/****
- * This can be called to convert a wchar_t[] to a UTF-8 string.
- *
- */
-std::string wcharToUTF8(const wchar_t *buf);
-
 } /* namespace swordxx */
 
 #endif /* SWORDXX_UTILSTR_H */

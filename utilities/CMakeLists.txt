@@ -22,7 +22,6 @@ SET(install_UTILITIES
     imp2ld
     imp2vs
     installmgr
-    mkfastmod
     mod2imp
     mod2osis
     mod2vpl

@@ -33,14 +33,6 @@
 #include "../common/zverse4.h"
 
 
-namespace lucene { namespace index {
-class IndexReader;
-}}
-
-namespace lucene { namespace search {
-class IndexSearcher;
-}}
-
 namespace swordxx {
 
 /*** SWModule implementation for compressed modules

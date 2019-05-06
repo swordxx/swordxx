@@ -42,15 +42,12 @@ namespace swordxx {
 class SWOptionFilter;
 class SWFilter;
 
-#define SEARCHFLAG_MATCHWHOLEENTRY 4096
-
 using AttributeValue = std::map<std::string, std::string>;
 
 /**
  * The class SWModule is the base class for all modules used in Sword++.
- * It provides functions to look up a text passage, to search in the module,
- * to switch on/off the state of optional things like Strong's numbers or
- * footnotes.
+ * It provides functions to look up a text passage, to switch on/off the state
+ * of optional things like Strong's numbers or footnotes.
  *
  * SWModule has also functions to write to the data files.
  */
@@ -213,40 +210,6 @@ public:
     SWTextMarkup getMarkup() const { return m_textMarkup; }
 
     std::string const & getLanguage() const { return m_moduleLanguageName; }
-
-
-    // search interface -------------------------------------------------
-
-    /**
-    * This is the default callback function for searching.
-    * This function is a placeholder and does nothing.
-    * You can define your own function for search progress
-    * evaluation, and pass it over to Search().
-    */
-    static void nullPercent(char percent, void *userData);
-
-    /** Searches a module for a string
-     *
-     * @param istr string for which to search
-     * @param searchType type of search to perform
-     *            >=0 - regex; (for backward compat, if > 0 then used as additional REGEX FLAGS)
-     *            -1  - phrase
-     *            -2  - multiword
-     *            -3  - entryAttrib (eg. Word//Lemma./G1234/)      (Lemma with dot means check components (Lemma.[1-9]) also)
-     *            -4  - Lucene
-     * @param flags options flags for search
-     * @param scope Key containing the scope. VerseKey or ListKey are useful here.
-     * @param percent Callback function to get the current search status in %.
-     * @param percentUserData Anything that you might want to send to the precent callback function.
-     *
-     * @return ListKey set to verses that contain istr
-     */
-    ListKey & search(char const * istr,
-                     int searchType = 0,
-                     int flags = 0,
-                     SWKey * scope = nullptr,
-                     void (* percent)(char, void *) = &nullPercent,
-                     void * percentUserData = nullptr);
 
     /** Allocates a key of specific type for module
      * The different reimplementations of SWModule (e.g. SWText) support SWKey implementations,
@@ -533,25 +496,9 @@ public:
     /** Whether or not we're processing Entry Attributes */
     bool isProcessEntryAttributes() const { return m_processEntryAttributes; }
 
-
-    // Searching:
-
-    /** Ask the object to build any indecies it wants for optimal searching */
-    signed char createSearchFramework(
-            void (* percent)(char, void *) = &nullPercent,
-            void * percentUserData = nullptr);
-
-    void deleteSearchFramework();
-
-    bool hasSearchIndex();
-
 protected: /* Methods: */
 
     virtual std::string getRawEntryImpl() const = 0;
-
-private: /* Methods: */
-
-    std::string searchIndexPath();
 
 };
 
