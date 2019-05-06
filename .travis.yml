@@ -23,7 +23,11 @@ matrix:
         apt:
           sources: *gccSources
           packages: [*baseDeps, gcc-7, g++-7]
-    - env: CXX=clang++ CC=clang
-      addons: *gcc7addons
+    - env: CXX=clang++-8.0 CC=clang-8.0
+      addons:
+        apt:
+          sources:
+            - llvm-toolchain-trusty-8.0
+          packages: [*baseDeps, clang++-8.0]
 notifications:
   irc: "chat.freenode.net#sword++"
