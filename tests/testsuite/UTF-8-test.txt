@@ -1,7 +1,9 @@
 UTF-8 decoder capability and stress test
 ----------------------------------------
 
-Markus Kuhn <http://www.cl.cam.ac.uk/~mgk25/> - 2015-08-28 - CC BY 4.0
+Original version by:  Markus Kuhn <http://www.cl.cam.ac.uk/~mgk25/> - 2015-08-28 - CC BY 4.0
+  https://creativecommons.org/licenses/by/4.0/
+With changes made to the original.
 
 This test file can help you examine, how your UTF-8 decoder handles
 various types of correct, malformed, or otherwise interesting UTF-8
