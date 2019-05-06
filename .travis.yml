@@ -23,16 +23,6 @@ matrix:
         apt:
           sources: *toolchainSources
           packages: [*baseDeps, gcc-7, g++-7]
-    - env: CXX=g++-6 CC=gcc-6
-      addons:
-        apt:
-          sources: *toolchainSources
-          packages: [*baseDeps, gcc-6, g++-6]
-    - env: CXX=g++-5 CC=gcc-5
-      addons:
-        apt:
-          sources: *toolchainSources
-          packages: [*baseDeps, gcc-5, g++-5]
     - env: CXX=clang++ CC=clang
       addons: *gcc7addons
 notifications:
