@@ -27,6 +27,7 @@
 #include "../keys/versekey.h"
 #include "../stringmgr.h"
 #include "../swmodule.h"
+#include "../unicode.h"
 #include "../url.h"
 #include "../utilstr.h"
 #include "../utilxml.h"
@@ -442,10 +443,8 @@ bool OSISHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterU
                 u->suspendTextPassThru = (--u->suspendLevel);
                 if (!lastText.empty()) {
                     toupperstr(lastText);
-                    const unsigned char *tmpBuf = (const unsigned char *)lastText.c_str();
-                    getUniCharFromUTF8(&tmpBuf);
-                    auto const char_length =
-                            tmpBuf ? (tmpBuf - (const unsigned char *)lastText.c_str()) : 1;
+                    auto const r(codepointFromUtf8(lastText));
+                    auto const char_length = r.second ? r.second : 1;
                     scratch = formatted("%.*s<font size=\"-1\">%s</font>",
                         char_length,
                         lastText.c_str(),

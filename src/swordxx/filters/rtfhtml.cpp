@@ -27,6 +27,7 @@
 #include <cstdlib>
 #include <string>
 #include "../sysdata.h"
+#include "../unicode.h"
 #include "../utilstr.h"
 
 
@@ -55,7 +56,7 @@ char RTFHTML::processText(std::string &text, const SWKey *key, const SWModule *m
                 num.append(from, end-from);
                 int16_t n = std::atoi(num.c_str());
                 uint32_t u = (uint16_t)n;
-                newText.append(getUTF8FromUniChar(u));
+                newText.append(utf8FromCodepoint(u));
                 from += (end-from);
                 continue;
             }

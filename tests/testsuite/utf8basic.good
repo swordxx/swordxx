@@ -74,17 +74,13 @@ You should see the Greek word 'kosme':       "κόσμε"                      
 2.1.2  2 bytes (U-00000080):        ""                                       |
 2.1.3  3 bytes (U-00000800):        "ࠀ"                                       |
 2.1.4  4 bytes (U-00010000):        "𐀀"                                       |
-2.1.5  5 bytes (U-00200000):        "�"                                       |
-2.1.6  6 bytes (U-04000000):        "�"                                       |
                                                                               |
 2.2  Last possible sequence of a certain length                               |
                                                                               |
 2.2.1  1 byte  (U-0000007F):        ""                                        
 2.2.2  2 bytes (U-000007FF):        "߿"                                       |
 2.2.3  3 bytes (U-0000FFFF):        "￿"                                       |
-2.2.4  4 bytes (U-001FFFFF):        "�"                                       |
-2.2.5  5 bytes (U-03FFFFFF):        "�"                                       |
-2.2.6  6 bytes (U-7FFFFFFF):        "�"                                       |
+2.2.4  4 bytes (U-0010FFFF):        "􏿿"                                       |
                                                                               |
 2.3  Other boundary conditions                                                |
                                                                               |
@@ -92,7 +88,6 @@ You should see the Greek word 'kosme':       "κόσμε"                      
 2.3.2  U-0000E000 = ee 80 80 = ""                                            |
 2.3.3  U-0000FFFD = ef bf bd = "�"                                            |
 2.3.4  U-0010FFFF = f4 8f bf bf = "􏿿"                                         |
-2.3.5  U-00110000 = f4 90 80 80 = "�"                                         |
                                                                               |
 3  Malformed sequences                                                        |
                                                                               |
@@ -153,22 +148,18 @@ malformed sequence, i.e., you should see only a single replacement            |
 character in each of the next 10 tests. (Characters as in section 2)          |
                                                                               |
 3.3.1  2-byte sequence with last byte missing (U+0000):     "�"               |
-3.3.2  3-byte sequence with last byte missing (U+0000):     "�"               |
-3.3.3  4-byte sequence with last byte missing (U+0000):     "�"               |
-3.3.4  5-byte sequence with last byte missing (U+0000):     "�"               |
-3.3.5  6-byte sequence with last byte missing (U+0000):     "�"               |
-3.3.6  2-byte sequence with last byte missing (U-000007FF): "�"               |
-3.3.7  3-byte sequence with last byte missing (U-0000FFFF): "�"               |
-3.3.8  4-byte sequence with last byte missing (U-001FFFFF): "�"               |
-3.3.9  5-byte sequence with last byte missing (U-03FFFFFF): "�"               |
-3.3.10 6-byte sequence with last byte missing (U-7FFFFFFF): "�"               |
+3.3.2  3-byte sequence with last byte missing (U+0000):     "��"               |
+3.3.3  4-byte sequence with last byte missing (U+0000):     "���"               |
+3.3.4  2-byte sequence with last byte missing (U-000007FF): "�"               |
+3.3.5  3-byte sequence with last byte missing (U-0000FFFF): "��"               |
+3.3.6  4-byte sequence with last byte missing (U-001FFFFF): "���"               |
                                                                               |
 3.4  Concatenation of incomplete sequences                                    |
                                                                               |
-All the 10 sequences of 3.3 concatenated, you should see 10 malformed         |
+All the 6 sequences of 3.3 concatenated, you should see 6 malformed         |
 sequences being signalled:                                                    |
                                                                               |
-   "����������"                                                               |
+   "������������"                                                               |
                                                                               |
 3.5  Impossible bytes                                                         |
                                                                               |
@@ -206,11 +197,9 @@ like a malformed UTF-8 sequence, for instance by substituting it with         |
 a replacement character. If you see a slash below, you do not have a          |
 safe UTF-8 decoder!                                                           |
                                                                               |
-4.1.1 U+002F = c0 af             = "�"                                        |
-4.1.2 U+002F = e0 80 af          = "�"                                        |
-4.1.3 U+002F = f0 80 80 af       = "�"                                        |
-4.1.4 U+002F = f8 80 80 80 af    = "�"                                        |
-4.1.5 U+002F = fc 80 80 80 80 af = "�"                                        |
+4.1.1 U+002F = c0 af             = "��"                                        |
+4.1.2 U+002F = e0 80 af          = "���"                                        |
+4.1.3 U+002F = f0 80 80 af       = "����"                                        |
                                                                               |
 4.2  Maximum overlong sequences                                               |
                                                                               |
@@ -219,11 +208,9 @@ overlong sequence if represented with the given number of bytes. This         |
 is a boundary test for safe UTF-8 decoders. All five characters should        |
 be rejected like malformed UTF-8 sequences.                                   |
                                                                               |
-4.2.1  U-0000007F = c1 bf             = "�"                                   |
-4.2.2  U-000007FF = e0 9f bf          = "�"                                   |
-4.2.3  U-0000FFFF = f0 8f bf bf       = "�"                                   |
-4.2.4  U-001FFFFF = f8 87 bf bf bf    = "�"                                   |
-4.2.5  U-03FFFFFF = fc 83 bf bf bf bf = "�"                                   |
+4.2.1  U-0000007F = c1 bf             = "��"                                   |
+4.2.2  U-000007FF = e0 9f bf          = "���"                                   |
+4.2.3  U-0000FFFF = f0 8f bf bf       = "����"                                   |
                                                                               |
 4.3  Overlong representation of the NUL character                             |
                                                                               |
@@ -231,11 +218,9 @@ The following five sequences should also be rejected like malformed           |
 UTF-8 sequences and should not be treated like the ASCII NUL                  |
 character.                                                                    |
                                                                               |
-4.3.1  U+0000 = c0 80             = "�"                                       |
-4.3.2  U+0000 = e0 80 80          = "�"                                       |
-4.3.3  U+0000 = f0 80 80 80       = "�"                                       |
-4.3.4  U+0000 = f8 80 80 80 80    = "�"                                       |
-4.3.5  U+0000 = fc 80 80 80 80 80 = "�"                                       |
+4.3.1  U+0000 = c0 80             = "��"                                       |
+4.3.2  U+0000 = e0 80 80          = "���"                                       |
+4.3.3  U+0000 = f0 80 80 80       = "����"                                       |
                                                                               |
 5  Illegal code positions                                                     |
                                                                               |

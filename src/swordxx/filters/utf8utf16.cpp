@@ -22,9 +22,10 @@
 
 #include "utf8utf16.h"
 
+#include <cassert>
 #include <cstdint>
 #include <string>
-#include "../utilstr.h"
+#include "../unicode.h"
 
 
 namespace swordxx {
@@ -35,34 +36,35 @@ UTF8UTF16::UTF8UTF16() {
 
 
 char UTF8UTF16::processText(std::string &text, const SWKey * /*key */, const SWModule * /* module */) {
-    const unsigned char *from;
-    std::string orig = text;
-
-    from = (const unsigned char *)orig.c_str();
-
-    // -------------------------------
-    text = "";
-    while (*from) {
-
-        uint32_t ch = getUniCharFromUTF8(&from);
-
-        if (!ch) continue;    // invalid char
-
-        if (ch < 0x10000) {
-            auto const oldSize = text.size();
-            text.resize(oldSize + 2);
-            *((uint16_t *) &text[oldSize]) = (uint16_t)ch;
-        }
-        else {
-            uint16_t utf16;
-            utf16 = (int16_t)((ch - 0x10000) / 0x400 + 0xD800);
-            auto const oldSize = text.size();
-            text.resize(oldSize + 4);
-            *((uint16_t *) &text[oldSize]) = utf16;
-            utf16 = (int16_t)((ch - 0x10000) % 0x400 + 0xDC00);
-            *((uint16_t *) &text[oldSize + 2u]) = utf16;
+    std::string result;
+    std::string_view sv(text);
+    while (!sv.empty()) {
+        auto r(codepointFromUtf8(sv));
+        if (r.second) {
+            sv.remove_prefix(r.second);
+            if (r.first < 0x10000) {
+                std::uint16_t const ch = static_cast<std::uint16_t>(r.first);
+                result.append(reinterpret_cast<char const *>(&ch), sizeof(ch));
+            } else {
+                r.first -= 0x10000;
+                struct __attribute__((packed)) Surrogates {
+                    std::uint16_t high;
+                    std::uint16_t low;
+                } ss;
+                static_assert(sizeof(ss) == 2 * sizeof(std::uint16_t), "");
+                ss.high = static_cast<std::uint16_t>((r.first >> 10) + 0xd800);
+                ss.low = (r.first & 0b11'1111'1111) + 0xdc00;
+                result.append(reinterpret_cast<char const *>(&ss), sizeof(ss));
+            }
+        } else {
+            assert(!r.first);
+            sv.remove_prefix(1u);
+            static std::uint16_t const replacementChar = 0xfffd;
+            result.append(reinterpret_cast<char const *>(&replacementChar),
+                          sizeof(replacementChar));
         }
     }
+    text = std::move(result);
     return 0;
 }
 

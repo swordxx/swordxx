@@ -27,6 +27,7 @@
 #include "../keys/versekey.h"
 #include "../stringmgr.h"
 #include "../swmodule.h"
+#include "../unicode.h"
 #include "../utilstr.h"
 #include "../utilxml.h"
 
@@ -233,12 +234,13 @@ bool OSISPlain::handleToken(std::string &buf, const char *token, BasicFilterUser
             }
         else if (!std::strncmp(token, "/hi", 3)) {
             if (u->hiType == "overline") {
-                const unsigned char *b = (const unsigned char *)u->lastTextNode.c_str();
-                while (*b) {
-                    const unsigned char *o = b;
-                    if (getUniCharFromUTF8(&b)) {
-                        while (o != b) buf.push_back(*(o++));
+                std::string_view sv = u->lastTextNode;
+                while (!sv.empty()) {
+                    auto const r(codepointFromUtf8(sv));
+                    if (r.second) {
+                        buf.append(sv.data(), r.second);
                         buf.append("\u0305"); // U+0305 COMBINING OVERLINE
+                        sv.remove_prefix(r.second);
                     }
                 }
             }

@@ -20,11 +20,12 @@
  *
  */
 
+#include <cassert>
 #include <cstring>
 #include <iostream>
 #include <memory>
 #include <swordxx/filters/utf8greekaccents.h>
-#include <swordxx/utilstr.h>
+#include <swordxx/unicode.h>
 #include <string>
 #include <unistd.h>
 #include <vector>
@@ -65,18 +66,17 @@ int main(int argc, char **argv) {
                 filter->processText(filteredContents);
             }
         }
-        std::vector<unsigned char> rawData(filteredContents.size() + 1u);
-        std::memcpy(rawData.data(),
-                    filteredContents.c_str(),
-                    filteredContents.size() + 1u);
-        // UTF-32 BOM
-        std::uint32_t ch = 0xfeff;
-        auto const * c = rawData.data();
-        while (*c) {
-            ch = getUniCharFromUTF8(&c);
-            if (!ch)
-                ch = 0xFFFD;
-            cout << getUTF8FromUniChar(ch);
+        std::string_view sv(filteredContents);
+        while (!sv.empty()) {
+            auto r(codepointFromUtf8(sv));
+            if (r.second) {
+                sv.remove_prefix(r.second);
+            } else {
+                assert(!r.first);
+                r.first = 0xfffd;
+                sv.remove_prefix(1u);
+            }
+            cout << utf8FromValidCodepoint(r.first);
         }
     }
 }

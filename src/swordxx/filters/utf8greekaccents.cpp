@@ -23,11 +23,12 @@
 
 #include "utf8greekaccents.h"
 
+#include <cassert>
 #include <cstdio>
 #include <cstdlib>
 #include <unordered_map>
 #include <vector>
-#include "../utilstr.h"
+#include "../unicode.h"
 
 
 namespace swordxx {
@@ -62,7 +63,7 @@ public: /* Methods: */
         // Now converted pre-composed characters to their alphabetic bases, discarding the accents
         auto const utf8Emplace =
                 [this](std::uint32_t value, std::uint32_t replacement)
-                { return emplace(value, getUTF8FromUniChar(replacement)); };
+                { return emplace(value, utf8FromValidCodepoint(replacement)); };
         // Greek
         // UPPER case
         utf8Emplace(0x0386, 0x0391); // GREEK CAPITAL LETTER ALPHA WITH TONOS
@@ -348,26 +349,29 @@ char UTF8GreekAccents::processText(std::string &text, const SWKey *key, const SW
     static Converters const converters;
 
     if (option)
-        return 0; //we don't want greek accents
+        return 0; // we don't want greek accents
 
-    std::vector<unsigned char> rawData(text.size() + 1u);
-    std::memcpy(rawData.data(), text.c_str(), text.size() + 1u);
-    std::string r;
-    auto const * from = rawData.data();
-    while (*from) {
-        auto ch = getUniCharFromUTF8(&from, ConvertFlags::SkipValidation);
-        // if ch is bad, then convert to replacement char
-        if (!ch)
-            ch = 0xFFFD;
-
-        auto const it = converters.find(ch);
-        if (it == converters.end()) {
-            r.append(getUTF8FromUniChar(ch));
-        } else {
-            r.append(it->second);
-        }
+    if (!text.empty()) {
+        std::string_view sv(text);
+        std::string result;
+        do {
+            auto const r(codepointFromValidUtf8(sv));
+            if (r.second) {
+                sv.remove_prefix(r.second);
+                auto const it = converters.find(r.first);
+                if (it == converters.end()) {
+                    result.append(utf8FromValidCodepoint(r.first));
+                } else {
+                    result.append(it->second);
+                }
+            } else {
+                assert(!r.first);
+                result.append("\ufffd"); // Unicode replacement character
+                sv.remove_prefix(1u);
+            }
+        } while (!sv.empty());
+        text = std::move(result);
     }
-    text = std::move(r);
     return 0;
 }
 

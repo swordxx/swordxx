@@ -566,47 +566,6 @@ constexpr char const asciiCharToUpperTable[256u] = {
 constexpr char asciiCharToUpper(char const c) noexcept
 { return asciiCharToUpperTable[static_cast<unsigned char>(c)]; }
 
-enum class ConvertFlags : unsigned { None = 0x0, SkipValidation = 0x1 };
-
-/******************************************************************************
- * getUniCharFromUTF8 - retrieves the next Unicode codepoint from a UTF8 string
- *                     and increments buf to start of next codepoint
- *
- * ENT:    buf - address of a utf8 buffer
- *
- * RET:    buf - incremented past last byte used in computing the current codepoint
- *         unicode codepoint value (0 with buf incremented is invalid UTF8 byte
- */
-uint32_t getUniCharFromUTF8(unsigned char const ** buf,
-                            ConvertFlags flags = ConvertFlags::None);
-
-
-/******************************************************************************
- * getUTF8FromUniChar - retrieves us UTF8 string from a
- *                     Unicode codepoint
- *
- * ENT:    uchar - unicode codepoint value
- *
- * RET:    buf - a UTF8 string which consists of the proper UTF8 sequence of
- *                 bytes for the given Unicode codepoint
- */
-
-std::string getUTF8FromUniChar(uint32_t uchar);
-
-
-/******************************************************************************
- * assureValidUTF8 - iterates the supplied UTF-8 buffer and checks for validity
- *                     replacing invalid bytes if necessary and returning a
- *                    verified UTF8 buffer, leaving the original input
- *                    unchanged.
- *
- * ENT:    buf - a utf8 buffer
- *
- * RET:    input buffer validated and any problems fixed by substituting a
- *         replacement character for bytes not valid.
- */
-std::string assureValidUTF8(const char *buf);
-
 } /* namespace swordxx */
 
 #endif /* SWORDXX_UTILSTR_H */
