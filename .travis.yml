@@ -11,7 +11,7 @@ matrix:
     - env: CXX=g++-8 CC=gcc-8
       addons: &gcc8addons
         apt:
-          sources: &toolchainSources
+          sources: &gccSources
             - ubuntu-toolchain-r-test
           packages:
             - &baseDeps [libbz2-dev, xz-utils, liblzma-dev, libcurl4-openssl-dev, zlib1g-dev, curl, libicu-dev]
@@ -21,7 +21,7 @@ matrix:
     - env: CXX=g++-7 CC=gcc-7
       addons:
         apt:
-          sources: *toolchainSources
+          sources: *gccSources
           packages: [*baseDeps, gcc-7, g++-7]
     - env: CXX=clang++ CC=clang
       addons: *gcc7addons
