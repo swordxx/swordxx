@@ -43,7 +43,7 @@ template <typename BaseZVerse>
 class SWDLLEXPORT zTextBase: public BaseZVerse, public SWText {
 
     VerseKey *lastWriteKey;
-    bool sameBlock(VerseKey const & lastWriteKey, VerseKey const & key);
+    bool sameBlock(VerseKey const & lastWriteKey, VerseKey const & key_);
     int blockType;
 
 public: /* Types: */

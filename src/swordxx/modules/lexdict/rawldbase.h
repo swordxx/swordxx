@@ -63,7 +63,7 @@ public: /* Methods: */
     void linkEntry(SWKey const & linkKey) override;
     void deleteEntry() override;
     long getEntryCount() const override;
-    long getEntryForKey(char const * key) const override;
+    long getEntryForKey(char const * key_) const override;
     std::string getKeyForEntry(long entry) const override;
 
 protected: /* Methods: */
