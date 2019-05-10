@@ -290,6 +290,12 @@ public:
      */
     FilterList const & getRenderFilters() const { return m_renderFilters; }
 
+    /**
+      \returns a reference to the options filters associated with this module.
+    */
+    OptionFilterList const & getOptionFilters() const
+    { return m_optionFilters; }
+
     /** Removes a RenderFilter from this module's renderFilters queue
      * @param oldFilter the filter to remove
      * @return *this

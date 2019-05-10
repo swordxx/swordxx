@@ -30,6 +30,7 @@
 #include <swordxx/swlog.h>
 #include <swordxx/swmgr.h>
 #include <swordxx/swmodule.h>
+#include <swordxx/swoptfilter.h>
 #include <utility>
 
 
@@ -257,6 +258,13 @@ void remoteDescribeModule(char const * const sourceName,
     std::cout << "Module Description\n\n";
     for (auto const & vp : m->getConfig())
         std::cout << "[" << vp.first << "]:" << vp.second << "\n";
+    std::cout << "\nOption Features available for module: " << m->getName()
+              << "\n\n";
+    for (auto const & of : m->getOptionFilters()) {
+        std::cout << of->getOptionName() << " (" << of->getOptionTip() << ")\n";
+        for (auto const & ov : of->getOptionValues())
+            std::cout << "\t" << ov << "\n";
+    }
 }
 
 

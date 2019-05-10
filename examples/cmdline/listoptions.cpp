@@ -26,10 +26,31 @@
 
 #include <iostream>
 #include <swordxx/swmgr.h>
+#include <swordxx/swmodule.h>
+#include <swordxx/swoptfilter.h>
 
 
-int main() {
+int main(int argc, char * argv[]) {
     swordxx::SWMgr library;
+
+    // specific module features:
+    if (argc == 2) {
+        auto module(library.getModule(argv[1u]));
+        if (!module) {
+            std::cerr << "Unable to find module: " << argv[1u] << std::endl;
+            return 1;
+        }
+        std::cout << "Option Features available for module: "
+                  << module->getName() << "\n\n";
+        for (auto const & of : module->getOptionFilters()) {
+            std::cout << of->getOptionName() << " (" << of->getOptionTip()
+                      << ")\n";
+            for (auto const & ov : of->getOptionValues())
+                std::cout << "\t" << ov << "\n";
+        }
+        return 0;
+    }
+
     auto const options(library.getGlobalOptions());
     for (auto const & option : options) {
         std::cout << option << " ("
