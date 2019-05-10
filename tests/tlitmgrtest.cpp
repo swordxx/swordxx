@@ -386,7 +386,7 @@ bool checkTrans(const icu::UnicodeString& ID, UErrorCode &status )
         }
 
 
-        icu::Transliterator *trans = icu::Transliterator::createFromRules(ID, rules, swstuff.dir,
+        icu::Transliterator *trans2 = icu::Transliterator::createFromRules(ID, rules, swstuff.dir,
             parseError,status);
         if (U_FAILURE(status)) {
             std::cout << "Failed to create transliterator" << std::endl;
@@ -400,7 +400,7 @@ bool checkTrans(const icu::UnicodeString& ID, UErrorCode &status )
             return false;
         }
 
-        icu::Transliterator::registerInstance(trans);
+        icu::Transliterator::registerInstance(trans2);
         return true;
 
         //Transliterator *trans = instantiateTrans(ID, swstuff.resource, swstuff.dir, parseError, status);
