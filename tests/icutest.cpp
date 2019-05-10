@@ -29,8 +29,6 @@
 #include <unicode/utypes.h>   /* Basic ICU data types */
 
 
-using namespace std;
-
 int main() {
   UErrorCode status = U_ZERO_ERROR;
 
@@ -45,6 +43,6 @@ int main() {
   ucnv_toUChars(conv, uBuf.get(), uLength,
         samplestring, uLength, &status);
 
-  cout << samplestring << endl;
+  std::cout << samplestring << std::endl;
   return 0;
 }
