@@ -57,10 +57,12 @@
         <source-file src="libs/android/x86/libsword.so" target-dir="libs/x86" />
         <source-file src="libs/android/x86_64/libsword.so" target-dir="libs/x86_64" />
 
+<!-- no longer needed with latest ndk
         <source-file src="libs/android/arm64-v8a/libc++_shared.so" target-dir="libs/arm64-v8a" />
         <source-file src="libs/android/armeabi-v7a/libc++_shared.so" target-dir="libs/armeabi-v7a" />
         <source-file src="libs/android/x86/libc++_shared.so" target-dir="libs/x86" />
         <source-file src="libs/android/x86_64/libc++_shared.so" target-dir="libs/x86_64" />
+-->
 <!--
         <source-file src="libs/android/arm64-v8a/libstlport_shared.so" target-dir="libs/arm64-v8a" />
         <source-file src="libs/android/armeabi-v7a/libstlport_shared.so" target-dir="libs/armeabi-v7a" />

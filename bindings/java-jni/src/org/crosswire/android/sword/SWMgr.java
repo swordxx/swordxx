@@ -63,6 +63,7 @@ public class SWMgr {
 	public native void        setJavascript(boolean val);
 	public native String[]    getAvailableLocales();
 	public native void        setDefaultLocale(String name);
+	public native String      translate(String text, String localeName);
 
 	/**
 	 * add a conf snippet to extraConfig.  This is useful for adding a config section

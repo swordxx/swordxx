@@ -910,6 +910,24 @@ JNIEXPORT void JNICALL Java_org_crosswire_android_sword_SWMgr_setDefaultLocale
 }
 
 
+/*
+ * Class:     org_crosswire_android_sword_SWMgr
+ * Method:    translate
+ * Signature: (Ljava/lang/String;Ljava/lang/String)Ljava/lang/String;
+ */
+JNIEXPORT jstring JNICALL Java_org_crosswire_android_sword_SWMgr_translate
+		(JNIEnv *env, jobject me, jstring textJS, jstring localeNameJS) {
+	const char *text = env->GetStringUTFChars(textJS, NULL);
+	const char *localeName = env->GetStringUTFChars(localeNameJS, NULL);
+
+	SWBuf translation = assureValidUTF8(LocaleMgr::getSystemLocaleMgr()->translate(text, localeName));
+
+	env->ReleaseStringUTFChars(localeNameJS, localeName);
+	env->ReleaseStringUTFChars(textJS, text);
+
+	return strToUTF8Java(env, translation);
+}
+
 
 // SWModule methods ----------------------------------------------------------------------------------
 
