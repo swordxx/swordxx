@@ -82,7 +82,7 @@ bool OSISPlain::processStage(char stage, SWBuf &text, char *&from, BasicFilterUs
 	// getUniCharFromUTF8 for slight speed improvement
 		
 	if (stage == PRECHAR) {
-		if (from[0] == 0xC2 && from[1] == 0xAD) return true;	// skip soft hyphens
+		if ((unsigned)from[0] == 0xC2 && (unsigned)from[1] == 0xAD) return true;	// skip soft hyphens
 	}
 	return false;
 }
