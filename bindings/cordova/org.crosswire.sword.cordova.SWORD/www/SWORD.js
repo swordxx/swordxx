@@ -343,6 +343,30 @@ SWMgr.prototype.setJavascript = function(val, callback) {
 	);
 }
 
+SWMgr.prototype.getAvailableLocales = function(callback) {
+	var retVal = [];
+	exec(callback?callback:function(r) { retVal = r; },
+		function(err) { utils.alert('[ERROR] problem: ' + err); },
+		"SWORD", "SWMgr_getAvailableLocales", []
+	);
+	return retVal;
+}
+
+SWMgr.prototype.setDefaultLocale = function(val, callback) {
+	exec(callback?callback:function() {},
+		function(err) { utils.alert('[ERROR] problem: ' + err); },
+		"SWORD", "SWMgr_setDefaultLocale", [val]
+	);
+}
+
+SWMgr.prototype.translate = function(text, locale, callback) {
+	exec(callback?callback:function() {},
+		function(err) { utils.alert('[ERROR] problem: ' + err); },
+		"SWORD", "SWMgr_translate", [text, locale]
+	);
+}
+
+
 function HTTPUtils() {}
 
 HTTPUtils.prototype.METHOD_GET  =  0;
@@ -371,8 +395,6 @@ HTTPUtils.prototype.makeRequest = function(url, postData, callback, method) {
 	public native String[]    getGlobalOptionValues(String option);
 	public native void        setCipherKey(String modName, String key);
 	public native void        setJavascript(boolean val);
-	public native String[]    getAvailableLocales();
-	public native void        setDefaultLocale(String name);
 */
 
 

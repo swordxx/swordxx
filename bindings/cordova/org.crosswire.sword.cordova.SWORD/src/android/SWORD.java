@@ -415,6 +415,24 @@ public class SWORD extends CordovaPlugin {
 			mgr.sendBibleSyncMessage(osisRef);
 			callbackContext.success();
 		}
+		else if (action.equals("SWMgr_getAvailableLocales")) {
+			JSONArray r = new JSONArray();
+			for (String s : mgr.getAvailableLocales()) {
+				r.put(s);
+			}
+			callbackContext.success(r);
+		}
+		else if (action.equals("SWMgr_setDefaultLocale")) {
+			String val = args.getString(0);
+			mgr.setDefaultLocale(val);
+			callbackContext.success();
+		}
+		else if (action.equals("SWModule_translate")) {
+			String text = args.getString(0);
+			String locale = args.getString(1);
+			String translated = mgr.translate(text, locale);
+			callbackContext.success(translated);
+		}
 		else if (action.equals("SWModule_getRenderText")) {
 			SWModule mod = mgr.getModuleByName(args.getString(0));
 			if (mod == null) { callbackContext.error("couldn't find module: " + args.getString(0)); return true; }
