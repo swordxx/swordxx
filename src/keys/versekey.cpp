@@ -1275,7 +1275,7 @@ const char *VerseKey::getOSISBookName() const {
 
 
 const char *VerseKey::getBookAbbrev() const {
-	return refSys->getBook(((testament>1)?BMAX[0]:0)+book-1)->getPreferredAbbreviation();
+	return getPrivateLocale()->translate(refSys->getBook(((testament>1)?BMAX[0]:0)+book-1)->getPreferredAbbreviation());
 }
 
 
