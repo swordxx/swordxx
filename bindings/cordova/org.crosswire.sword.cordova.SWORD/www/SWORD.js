@@ -360,6 +360,8 @@ SWMgr.prototype.setDefaultLocale = function(val, callback) {
 }
 
 SWMgr.prototype.translate = function(text, locale, callback) {
+	// support overloaded (text, callback)
+	if (!callback && locale) { callback = locale; locale = null; }
 	exec(callback?callback:function() {},
 		function(err) { utils.alert('[ERROR] problem: ' + err); },
 		"SWORD", "SWMgr_translate", [text, locale]

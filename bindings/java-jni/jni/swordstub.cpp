@@ -1007,7 +1007,7 @@ JNIEXPORT jstring JNICALL Java_org_crosswire_android_sword_SWMgr_translate
 	const char *text = env->GetStringUTFChars(textJS, NULL);
 	const char *localeName = env->GetStringUTFChars(localeNameJS, NULL);
 
-	SWBuf translation = assureValidUTF8(LocaleMgr::getSystemLocaleMgr()->translate(text, localeName));
+	SWBuf translation = assureValidUTF8(LocaleMgr::getSystemLocaleMgr()->translate(text, (localeName && strcmp(localeName, "null"))?localeName:0));
 
 	env->ReleaseStringUTFChars(localeNameJS, localeName);
 	env->ReleaseStringUTFChars(textJS, text);
