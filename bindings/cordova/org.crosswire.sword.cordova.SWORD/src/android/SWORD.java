@@ -427,7 +427,7 @@ public class SWORD extends CordovaPlugin {
 			mgr.setDefaultLocale(val);
 			callbackContext.success();
 		}
-		else if (action.equals("SWModule_translate")) {
+		else if (action.equals("SWMgr_translate")) {
 			String text = args.getString(0);
 			String locale = args.getString(1);
 			String translated = mgr.translate(text, locale);

@@ -35,6 +35,7 @@
 #include <swmodule.h>
 #include <versekey.h>
 #include <localemgr.h>
+#include <stringmgr.h>
 #include <treekeyidx.h>
 #include <installmgr.h>
 #include <remotetrans.h>
@@ -60,12 +61,14 @@ using namespace sword;
 namespace {
 WebMgr *mgr = 0;
 InstallMgr *installMgr = 0;
+LocaleMgr *localeMgr = 0;
 
 #ifdef BIBLESYNC
 BibleSync *bibleSync = 0;
 using std::string;
 jobject bibleSyncListener = 0;
 JNIEnv *bibleSyncListenerEnv = 0;
+JNIEnv *lastEnv = 0;
 #endif
 static SWBuf STORAGE_BASE;
 const char *SWORD_PATH = "/sdcard/sword";
@@ -154,11 +157,52 @@ public:
 	}
 };
 
+class AndroidStringMgr : public StringMgr {
+public:
+	virtual char *upperUTF8(char *buf, unsigned int maxLen = 0) const {
+		if (lastEnv) {
+			long bufLen = strlen(buf);
+			jbyteArray array = lastEnv->NewByteArray(bufLen);
+			lastEnv->SetByteArrayRegion(array, 0, bufLen, (const jbyte *)buf);
+			jstring strEncode = lastEnv->NewStringUTF("UTF-8");
+			jclass cls = lastEnv->FindClass("java/lang/String");
+			jmethodID ctor = lastEnv->GetMethodID(cls, "<init>", "([BLjava/lang/String;)V");
+			jstring object = (jstring) lastEnv->NewObject(cls, ctor, array, strEncode);
+			jmethodID toUpperCase = lastEnv->GetMethodID(cls, "toUpperCase", "()Ljava/lang/String;");
+			jstring objectUpper = (jstring)lastEnv->CallObjectMethod(object, toUpperCase, NULL);
+
+			const char *ret = (objectUpper?lastEnv->GetStringUTFChars(objectUpper, NULL):0);
+			if (ret) {
+				unsigned long retLen = strlen(ret);
+				if (retLen >= maxLen) retLen = maxLen-1;
+				memcpy(buf, ret, retLen);
+				buf[retLen] = 0;
+
+				lastEnv->ReleaseStringUTFChars(objectUpper, ret);
+			}
+
+			lastEnv->DeleteLocalRef(strEncode);
+			lastEnv->DeleteLocalRef(array);
+			lastEnv->DeleteLocalRef(cls);
+			lastEnv->DeleteLocalRef(objectUpper);
+			lastEnv->DeleteLocalRef(object);
+		}
+		return buf;
+	}
+protected:
+	virtual bool supportsUnicode() const { return true; }
+};
 
 static void init(JNIEnv *env) {
-	if (!mgr) {
+
+	// very first init
+	if (!lastEnv) {
 		SWLog::setSystemLog(new AndroidLogger());
 		SWLog::getSystemLog()->setLogLevel(SWLog::LOG_DEBUG);
+		StringMgr::setSystemStringMgr(new AndroidStringMgr());
+	}
+	if (env) lastEnv = env;
+	if (!mgr) {
 SWLog::getSystemLog()->logDebug("libsword: init() begin");
 		SWBuf baseDir  = SWORD_PATH;
 		SWBuf confPath = baseDir + "/mods.d/globals.conf";
@@ -206,6 +250,9 @@ SWLog::getSystemLog()->logDebug("libsword: init() augmenting modules from: %s", 
 SWLog::getSystemLog()->logDebug("libsword: init() augmenting modules from: %s", SWORD_PATH);
 			mgr->augmentModules(SWORD_PATH, true);
 		}
+SWLog::getSystemLog()->logDebug("libsword: init() adding locales from baseDir.");
+		LocaleMgr::getSystemLocaleMgr()->loadConfigDir(SWBuf(baseDir + "/locales.d").c_str());
+		LocaleMgr::getSystemLocaleMgr()->loadConfigDir(SWBuf(baseDir + "/uilocales.d").c_str());
 SWLog::getSystemLog()->logDebug("libsword: init() end.");
 	}
 }
@@ -792,6 +839,46 @@ JNIEXPORT jobjectArray JNICALL Java_org_crosswire_android_sword_SWMgr_addExtraCo
 	Java_org_crosswire_android_sword_SWMgr_reInit(env, me);
 
 	return ret;
+}
+
+
+// TODO: not used yet.  Maybe not necessary
+/*
+ * Class:     org_crosswire_android_sword_SWMgr
+ * Method:    putResource
+ * Signature: (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+ */
+JNIEXPORT void JNICALL Java_org_crosswire_android_sword_SWMgr_putResource
+		(JNIEnv *env, jobject me, jstring pathJS, jstring dataJS, jstring typeJS) {
+
+	init(env);
+
+	const char *s = env->GetStringUTFChars(pathJS, NULL);
+
+	SWBuf path = s;
+
+	env->ReleaseStringUTFChars(pathJS, s);
+
+	s = env->GetStringUTFChars(dataJS, NULL);
+
+	SWBuf data = s;
+
+	env->ReleaseStringUTFChars(dataJS, s);
+
+	s = env->GetStringUTFChars(typeJS, NULL);
+
+	SWBuf type = s;
+
+	env->ReleaseStringUTFChars(typeJS, s);
+
+	SWBuf baseDir = STORAGE_BASE;
+	SWBuf fullPath = baseDir + "/" + path;
+	FileMgr::createParent(fullPath.c_str());
+	FileMgr::removeFile(fullPath.c_str());
+	FileDesc *fd = FileMgr::getSystemFileMgr()->open(fullPath.c_str(), FileMgr::CREAT|FileMgr::WRONLY, FileMgr::IREAD|FileMgr::IWRITE);
+	fd->getFd();
+	fd->write(data.c_str(), data.size());
+	FileMgr::getSystemFileMgr()->close(fd);
 }
 
 
