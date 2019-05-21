@@ -109,10 +109,22 @@ const char *SWLocale::translate(const char *text) {
 	entry = p->lookupTable.find(text);
 
 	if (entry == p->lookupTable.end()) {
+		SectionMap::iterator secEntry;
 		ConfigEntMap::iterator confEntry;
-		confEntry = localeSource->getSection("Text").find(text);
-		if (confEntry == localeSource->getSection("Text").end())
-			p->lookupTable.insert(LookupMap::value_type(text, text));
+		SWBuf textBuf = text;
+		if (textBuf.startsWith("prefAbbr_")) {
+			textBuf.stripPrefix('_');
+			secEntry = localeSource->getSections().find("Pref Abbrevs");
+			if (secEntry == localeSource->getSections().end()) {
+				secEntry = localeSource->getSections().find("Text");
+			}
+		}
+		else {
+			secEntry = localeSource->getSections().find("Text");
+		}
+		confEntry = secEntry->second.find(textBuf.c_str());
+		if (confEntry == secEntry->second.end())
+			p->lookupTable.insert(LookupMap::value_type(text, textBuf.c_str()));
 		else {//valid value found
 			/*
 			- If Encoding==Latin1 and we have a StringHelper, convert to UTF-8
