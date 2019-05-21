@@ -251,8 +251,10 @@ SWLog::getSystemLog()->logDebug("libsword: init() augmenting modules from: %s", 
 			mgr->augmentModules(SWORD_PATH, true);
 		}
 SWLog::getSystemLog()->logDebug("libsword: init() adding locales from baseDir.");
-		LocaleMgr::getSystemLocaleMgr()->loadConfigDir(SWBuf(baseDir + "/locales.d").c_str());
-		LocaleMgr::getSystemLocaleMgr()->loadConfigDir(SWBuf(baseDir + "/uilocales.d").c_str());
+		LocaleMgr::getSystemLocaleMgr()->loadConfigDir(SWBuf(STORAGE_BASE + "/locales.d").c_str());
+		LocaleMgr::getSystemLocaleMgr()->loadConfigDir(SWBuf(STORAGE_BASE + "/uilocales.d").c_str());
+		LocaleMgr::getSystemLocaleMgr()->loadConfigDir((SWBuf(SWORD_PATH) + "/locales.d").c_str());
+		LocaleMgr::getSystemLocaleMgr()->loadConfigDir((SWBuf(SWORD_PATH) + "/uilocales.d").c_str());
 SWLog::getSystemLog()->logDebug("libsword: init() end.");
 	}
 }
