@@ -4,14 +4,17 @@ all: srcdeps
 	@echo
 
 srcdeps:
-	mkdir -p org.crosswire.sword.cordova.SWORD/libs/ios/
-	cp ../../include/defs.h ../../include/flatapi.h org.crosswire.sword.cordova.SWORD/src/ios/
+	mkdir -p cordova-plugin-crosswire-sword/libs/ios/
+	cp ../../include/defs.h ../../include/flatapi.h cordova-plugin-crosswire-sword/src/ios/
 
 
 clean:
 	# these are from ../Android
-	rm -rf org.crosswire.sword.cordova.SWORD/libs/android/*
-	rm -rf org.crosswire.sword.cordova.SWORD/libs/ios/*
-	rm org.crosswire.sword.cordova.SWORD/src/android/AndroidMgr.java org.crosswire.sword.cordova.SWORD/src/android/InstallMgr.java org.crosswire.sword.cordova.SWORD/src/android/SWMgr.java org.crosswire.sword.cordova.SWORD/src/android/SWModule.java
-	rm org.crosswire.sword.cordova.SWORD/src/ios/defs.h org.crosswire.sword.cordova.SWORD/src/ios/flatapi.h
+	rm -rf cordova-plugin-crosswire-sword/libs/android/*
+	rm -rf cordova-plugin-crosswire-sword/libs/ios/*
+	rm cordova-plugin-crosswire-sword/src/android/AndroidMgr.java cordova-plugin-crosswire-sword/src/android/InstallMgr.java cordova-plugin-crosswire-sword/src/android/SWMgr.java cordova-plugin-crosswire-sword/src/android/SWModule.java
+	rm cordova-plugin-crosswire-sword/src/ios/defs.h cordova-plugin-crosswire-sword/src/ios/flatapi.h
+
+publish:
+	npm publish cordova-plugin-crosswire-sword/
 

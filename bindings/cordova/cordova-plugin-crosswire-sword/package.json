@@ -1,9 +1,9 @@
 {
-  "name": "SWORD",
+  "name": "cordova-plugin-crosswire-sword",
   "version": "0.0.1",
   "description": "The SWORD Project Plugin",
   "cordova": {
-    "id": "org.crosswire.sword.cordova.SWORD",
+    "id": "cordova-plugin-crosswire-sword",
     "platforms": [
       "android",
       "amazon-fireos",
@@ -11,11 +11,12 @@
     ]
   },
   "repository": {
-    "type": "git",
+    "type": "svn",
     "url": "https://crosswire.org/svn/sword"
   },
   "keywords": [
     "cordova",
+    "crosswire",
     "sword",
     "Bible",
     "ecosystem:cordova",

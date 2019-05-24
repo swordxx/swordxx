@@ -1,14 +1,14 @@
 all: javawrapper
-	rm -rf ../cordova/org.crosswire.sword.cordova.SWORD/libs/android/*
-	cp -a SWORD/app/build/intermediates/transforms/stripDebugSymbol/release/0/lib/* ../cordova/org.crosswire.sword.cordova.SWORD/libs/android/
+	rm -rf ../cordova/cordova-plugin-crosswire-sword/libs/android/*
+	cp -a SWORD/app/build/intermediates/transforms/stripDebugSymbol/release/0/lib/* ../cordova/cordova-plugin-crosswire-sword/libs/android/
 
 debug: javawrapper
-	rm -rf ../cordova/org.crosswire.sword.cordova.SWORD/libs/android/*
-#	cp -a SWORD/app/build/intermediates/cmake/debug/obj/* ../cordova/org.crosswire.sword.cordova.SWORD/libs/android/
-	cp -a SWORD/app/build/intermediates/cmake/release/obj/* ../cordova/org.crosswire.sword.cordova.SWORD/libs/android/
+	rm -rf ../cordova/cordova-plugin-crosswire-sword/libs/android/*
+#	cp -a SWORD/app/build/intermediates/cmake/debug/obj/* ../cordova/cordova-plugin-crosswire-sword/libs/android/
+	cp -a SWORD/app/build/intermediates/cmake/release/obj/* ../cordova/cordova-plugin-crosswire-sword/libs/android/
 
 javawrapper:
-	cp -a SWORD/app/src/main/java/org/crosswire/android/sword/* ../cordova/org.crosswire.sword.cordova.SWORD/src/android/
+	cp -a SWORD/app/src/main/java/org/crosswire/android/sword/* ../cordova/cordova-plugin-crosswire-sword/src/android/
 
 clean:
 	#these are from ../java-jni
