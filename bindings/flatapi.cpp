@@ -32,6 +32,7 @@
 #include <versekey.h>
 #include <treekeyidx.h>
 #include <filemgr.h>
+#include <stringmgr.h>
 #include <swbuf.h>
 #include <swlog.h>
 #include <localemgr.h>
@@ -117,6 +118,7 @@ void percentUpdate(char percent, void *userData) {
 using std::string;
 BibleSync *bibleSync = 0;
 org_biblesync_MessageReceivedCallback bibleSyncListener = 0;
+org_crosswire_sword_StringMgr_toUpperUTF8 toUpperUTF8 = 0;
 
 void bibleSyncCallback(char cmd, string pkt_uuid, string bible, string ref, string alt, string group, string domain, string info, string dump) {
 SWLog::getSystemLog()->logDebug("bibleSync callback msg: %c; pkt_uuid: %s; bible: %s; ref: %s; alt: %s; group: %s; domain: %s; info: %s; dump: %s", cmd, pkt_uuid.c_str(), bible.c_str(), ref.c_str(), alt.c_str(), group.c_str(), domain.c_str(), info.c_str(), dump.c_str());
@@ -335,6 +337,17 @@ public:
 	}
 };
 
+class FlatStringMgr : public StringMgr {
+public:
+	virtual char *upperUTF8(char *buf, unsigned int maxLen = 0) const {
+		if (toUpperUTF8) {
+			return (*toUpperUTF8)(buf, maxLen);
+		}
+		return buf;
+	}
+protected:
+	virtual bool supportsUnicode() const { return toUpperUTF8 != 0; }
+};
 
 
 const char **HandleSWMgr::globalOptions = 0;
@@ -355,6 +368,7 @@ public:
 		HandleSWMgr::availableLocales = 0;
 
 		HandleInstMgr::remoteSources = 0;
+		StringMgr::setSystemStringMgr(new FlatStringMgr());
 	}
 	~InitStatics() {
 
@@ -1048,6 +1062,9 @@ SWHANDLE SWDLLEXPORT org_crosswire_sword_SWMgr_newWithPath(const char *path) {
 	bool exists = FileMgr::existsFile(extraPath.c_str());
 SWLog::getSystemLog()->logDebug("libsword: extraConfig %s at path: %s", exists?"Exists":"Absent", extraPath.c_str());
 
+SWLog::getSystemLog()->logDebug("libsword: init() adding locales from baseDir.");
+	LocaleMgr::getSystemLocaleMgr()->loadConfigDir(SWBuf(confPath + "locales.d").c_str());
+	LocaleMgr::getSystemLocaleMgr()->loadConfigDir(SWBuf(confPath + "uilocales.d").c_str());
 SWLog::getSystemLog()->logDebug("libsword: init() creating WebMgr using path: %s", path);
 	return (SWHANDLE) new HandleSWMgr(new WebMgr(confPath.c_str(), exists?extraPath.c_str():0));
 }
@@ -1533,6 +1550,10 @@ const char * SWDLLEXPORT org_crosswire_sword_SWMgr_translate
 //
 //
 
+void SWDLLEXPORT org_crosswire_sword_StringMgr_setToUpper
+  (org_crosswire_sword_StringMgr_toUpperUTF8 toUpperUTF8Funct) {
+	toUpperUTF8 = toUpperUTF8Funct;
+}
 
 /*
  * Class:     org_crosswire_sword_InstallMgr

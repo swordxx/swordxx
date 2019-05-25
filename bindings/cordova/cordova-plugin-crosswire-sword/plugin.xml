@@ -3,9 +3,9 @@
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
     xmlns:rim="http://www.blackberry.com/ns/widgets"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    id="org.crosswire.sword.cordova.SWORD"
+    id="cordova-plugin-crosswire-sword"
     version="0.0.1">
-    <name>SWORD</name>
+    <name>cordova-plugin-crosswire-sword</name>
     <description>The SWORD Project Plugin</description>
     <license>GNU 2.0</license>
     <keywords>cordova,sword,Bible</keywords>

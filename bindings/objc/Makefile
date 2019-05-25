@@ -10,12 +10,12 @@
 all: deploycordova
 
 deploycordova:
-	mkdir -p ../cordova/org.crosswire.sword.cordova.SWORD/libs/ios/
-	cp ./dependencies/curl/lib/libcurl.a ../cordova/org.crosswire.sword.cordova.SWORD/libs/ios/
-#	cp ./Build/Debug-iphonesimulator/libSWORD.a ../cordova/org.crosswire.sword.cordova.SWORD/libs/ios/
-#	cp ./Build/Debug-iphoneos/libSWORD.a ../cordova/org.crosswire.sword.cordova.SWORD/libs/ios/
-	cp SWORD/Release-universal/libSWORD.a ../cordova/org.crosswire.sword.cordova.SWORD/libs/ios/
-	cp ../../include/defs.h ../../include/flatapi.h ../cordova/org.crosswire.sword.cordova.SWORD/src/ios/
+	mkdir -p ../cordova/cordova-plugin-crosswire-sword/libs/ios/
+	cp ./dependencies/curl/lib/libcurl.a ../cordova/cordova-plugin-crosswire-sword/libs/ios/
+#	cp ./Build/Debug-iphonesimulator/libSWORD.a ../cordova/cordova-plugin-crosswire-sword/libs/ios/
+#	cp ./Build/Debug-iphoneos/libSWORD.a ../cordova/cordova-plugin-crosswire-sword/libs/ios/
+	cp SWORD/Release-universal/libSWORD.a ../cordova/cordova-plugin-crosswire-sword/libs/ios/
+	cp ../../include/defs.h ../../include/flatapi.h ../cordova/cordova-plugin-crosswire-sword/src/ios/
 
 
 

@@ -496,7 +496,10 @@ const char * SWDLLEXPORT org_crosswire_sword_SWMgr_translate
 //
 
 typedef void (*org_crosswire_sword_InstallMgr_StatusCallback)(const char *, unsigned long, unsigned long);
+typedef char * (*org_crosswire_sword_StringMgr_toUpperUTF8)(const char *, unsigned long);
 
+void SWDLLEXPORT org_crosswire_sword_StringMgr_setToUpper
+  (org_crosswire_sword_StringMgr_toUpperUTF8 toUpperUTF8);
 /*
  * Class:     org_crosswire_sword_InstallMgr
  * Method:    new

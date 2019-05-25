@@ -24,6 +24,13 @@ var mySWORDPlugin:SWORD? = nil
 		VERSEKEY_BOOKNAME = Int(org_crosswire_sword_SWModule_VERSEKEY_BOOKNAME);
 		VERSEKEY_SHORTTEXT = Int(org_crosswire_sword_SWModule_VERSEKEY_SHORTTEXT);
 
+		org_crosswire_sword_StringMgr_setToUpper({ (text: Optional<UnsafePointer<Int8>>, maxBytes: u_long) in
+			let lower = String(cString: text!)
+			let upper = lower.uppercased()
+			strncpy(UnsafeMutablePointer<Int8>(mutating: text), upper, Int(maxBytes));
+			return UnsafeMutablePointer<Int8>(mutating: text)
+		})
+
 		initMgr()
 
 		let libswordVersion = String(cString: org_crosswire_sword_SWMgr_version(mgr))
@@ -220,7 +227,38 @@ debugPrint("initMgr, mgr: " + String(describing: mgr))
         let retVal = getStringArray(buffer: org_crosswire_sword_SWConfig_getSections(confPath))
         self.commandDelegate!.send(CDVPluginResult(status: CDVCommandStatus_OK, messageAs: retVal), callbackId: command.callbackId)
   }
+
+
+    @objc(SWMgr_getAvailableLocales:)
+    func SWMgr_getAvailableLocales(command: CDVInvokedUrlCommand) {
+	initMgr()
+        let retVal = getStringArray(buffer: org_crosswire_sword_SWMgr_getAvailableLocales(mgr))
+        self.commandDelegate!.send(CDVPluginResult(status: CDVCommandStatus_OK, messageAs: retVal), callbackId: command.callbackId)
+    }
+
+
+    @objc(SWMgr_setDefaultLocale:)
+    func SWMgr_setDefaultLocale(command: CDVInvokedUrlCommand) {
+        initMgr()
+        let localeName = command.arguments[0] as? String ?? ""
+        org_crosswire_sword_SWMgr_setDefaultLocale(mgr, localeName)
+        self.commandDelegate!.send(CDVPluginResult(status: CDVCommandStatus_OK, messageAs: "SWMgr_setDefaultLocale"), callbackId: command.callbackId)
+    }
     
+
+    @objc(SWMgr_translate:)
+    func SWMgr_translate(command: CDVInvokedUrlCommand) {
+
+        initMgr()
+
+        let text = command.arguments[0] as? String ?? ""
+        let localeName = command.arguments[1] as? String ?? ""
+
+        let translated = org_crosswire_sword_SWMgr_translate(mgr, text, localeName == "null" || localeName == "" ? nil : localeName)
+        let retVal = translated == nil ? nil : String(cString:translated!)
+        self.commandDelegate!.send(CDVPluginResult(status: CDVCommandStatus_OK, messageAs: retVal), callbackId: command.callbackId)
+    }
+
     
     @objc(echo:)
     func echo(command: CDVInvokedUrlCommand) {
