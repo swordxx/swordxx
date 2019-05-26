@@ -55,7 +55,6 @@ public class SWORD extends CordovaPlugin {
 	public static InstallMgr installMgr = null;
 	private CallbackContext installReporterContext = null;
 	private CallbackContext searchReporterContext = null;
-	private CallbackContext renderChapterContext = null;
 	private CallbackContext sendContext = null;
 
 	/**
@@ -77,7 +76,6 @@ public class SWORD extends CordovaPlugin {
 		installMgr = new InstallMgr();
 		installReporterContext = null;
 		searchReporterContext = null;
-		renderChapterContext = null;
 	}
 
 	/**
@@ -332,26 +330,28 @@ public class SWORD extends CordovaPlugin {
 			callbackContext.sendPluginResult(result);
 		}
 		else if (action.equals("SWModule_getRenderChapter")) {
-			this.renderChapterContext = callbackContext;
-
+Log.d(TAG, "SWModule_getRenderChapter");
 			final SWModule masterMod = mgr.getModuleByName(args.getString(0));
 			final SWModule mod = mgr.getModuleByName(args.getString(1));
+			final CallbackContext myCallbackContext = callbackContext;
 			if (masterMod == null) { callbackContext.error("couldn't find master module: " + args.getString(0)); return true; }
 			if (mod == null) { callbackContext.error("couldn't find module: " + args.getString(1)); return true; }
 
 			cordova.getThreadPool().execute(new Runnable() {
+				private CallbackContext myThreadRenderChapterContext = myCallbackContext;
 			    @Override
 			    public void run() {
 
 				JSONArray r = new JSONArray();
 				try {
+Log.d(TAG, "... in spawned thread to renderChapter");
 					r = getRenderChapter(masterMod, mod);
+Log.d(TAG, "... finished renderChapter");
 				} catch (JSONException e) { e.printStackTrace(); }
 				PluginResult result = new PluginResult(PluginResult.Status.OK, r);
 				result.setKeepCallback(false);
-				if (renderChapterContext != null) {
-					renderChapterContext.sendPluginResult(result);
-					renderChapterContext = null;
+				if (myThreadRenderChapterContext != null) {
+					myThreadRenderChapterContext.sendPluginResult(result);
 				}
 			    }
 			});
@@ -565,16 +565,20 @@ Log.d(TAG, "makeRequest(url: " + url + ", postData: " + postData + ", method: " 
 
 		String currentKey[]   = masterMod.getKeyChildren();
 
+Log.d(TAG, "getRenderChapter: checking currentKey");
 		// assert we have a valid location
 		if (currentKey.length <= SWModule.VERSEKEY_BOOKABBREV || currentKey.length <= SWModule.VERSEKEY_CHAPTER) return r;
+Log.d(TAG, "getRenderChapter: currentKey valid.");
 
 		masterMod.setKeyText(currentKey[SWModule.VERSEKEY_BOOKABBREV]+"."+currentKey[SWModule.VERSEKEY_CHAPTER]+".1");
+Log.d(TAG, "getRenderChapter: masterMod.setKeyText returned.");
 
 		String [] verseKey = masterMod.getKeyChildren();
 		while (
 				   masterMod.error() == 0
 				&& currentKey[SWModule.VERSEKEY_BOOK].equals(verseKey[SWModule.VERSEKEY_BOOK])
 				&& currentKey[SWModule.VERSEKEY_CHAPTER].equals(verseKey[SWModule.VERSEKEY_CHAPTER])) {
+Log.d(TAG, "looping chapter: " + verseKey[SWModule.VERSEKEY_OSISREF]);
 
 			mod.setKeyText(verseKey[SWModule.VERSEKEY_OSISREF]);
 			char error = mod.error();
@@ -599,6 +603,7 @@ Log.d(TAG, "makeRequest(url: " + url + ", postData: " + postData + ", method: " 
 			masterMod.next();
 			verseKey = masterMod.getKeyChildren();
 		}
+Log.d(TAG, "Done looping chapter");
 
 		masterMod.setKeyText(saveMasterKey);
 		mod.setKeyText(saveKey);

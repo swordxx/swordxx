@@ -1,6 +1,6 @@
 {
   "name": "cordova-plugin-crosswire-sword",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "The SWORD Project Plugin",
   "cordova": {
     "id": "cordova-plugin-crosswire-sword",
