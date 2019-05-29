@@ -46,6 +46,7 @@ static const int ENDOFABBREVS = -2;
 */
 class SWDLLEXPORT SWLocale {
 
+    /// \todo Convert to unordered_map with heterogenous lookup for C++2a.
     using LookupMap = std::map<std::string, std::string, std::less<>>;
 
     LookupMap m_lookupTable;
