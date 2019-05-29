@@ -23,7 +23,6 @@
 
 #include "swlocale.h"
 
-#include <map>
 #include "keys/versekey.h"
 #include "swconfig.h"
 #include "utilstr.h"
