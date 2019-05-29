@@ -352,7 +352,7 @@ char SWMgr::findConfig(std::string & prefixPath, std::string & configPath, std::
             if (FileMgr::isReadable(checkPath)) {
                 SWLog::getSystemLog()->logDebug("Overriding any systemwide or ~/.swordxx/ swordxx.conf with one found in current directory.");
                 sysConfPath = std::move(checkPath);
-                sysConf = new SWConfig(sysConfPath.c_str());
+                sysConf = new SWConfig(sysConfPath);
                 {
                     auto const & section = sysConf->sections()["Install"];
                     auto const entry(section.find("DataPath"));
@@ -474,7 +474,7 @@ char SWMgr::findConfig(std::string & prefixPath, std::string & configPath, std::
     }
 
     if (!sysConf && !sysConfPath.empty()) {
-        sysConf = new SWConfig(sysConfPath.c_str());
+        sysConf = new SWConfig(sysConfPath);
     }
 
     if (sysConf) {
@@ -644,8 +644,8 @@ void SWMgr::loadConfigDir(const char *ipath)
             addTrailingDirectorySlash(newmodfile);
             newmodfile += ent;
             if (config)
-                config->augment(SWConfig(newmodfile.c_str()));
-            else    config = myconfig = new SWConfig(newmodfile.c_str());
+                config->augment(SWConfig(newmodfile));
+            else    config = myconfig = new SWConfig(newmodfile);
         }
         dir.close();
 
@@ -653,7 +653,7 @@ void SWMgr::loadConfigDir(const char *ipath)
             newmodfile = ipath;
             addTrailingDirectorySlash(newmodfile);
             newmodfile += "globals.conf";
-            config = myconfig = new SWConfig(newmodfile.c_str());
+            config = myconfig = new SWConfig(newmodfile);
         }
     }
 }

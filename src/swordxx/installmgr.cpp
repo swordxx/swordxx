@@ -85,7 +85,7 @@ void InstallMgr::clearSources() { sources.clear(); }
 
 
 void InstallMgr::readInstallConf() {
-    installConf = std::make_unique<SWConfig>(m_confPath.c_str());
+    installConf = std::make_unique<SWConfig>(m_confPath);
 
     clearSources();
 
@@ -233,7 +233,7 @@ bool InstallMgr::removeModule(SWMgr & manager, std::string const & moduleName) {
                     modFile += "/";
                     modFile += ent;
                     if ([&modFile, &modName]() {
-                            SWConfig config(modFile.c_str());
+                            SWConfig config(modFile);
                             auto const & sections = config.sections();
                             return sections.find(modName) != sections.end();
                         }())
@@ -378,7 +378,7 @@ int InstallMgr::installModule(SWMgr & destMgr,
                         break;
                     modFile = confDir;
                     modFile += ent;
-                    SWConfig config(modFile.c_str());
+                    SWConfig config(modFile);
                     if (config.sections().find(modName) != config.sections().end()) {
                         std::string targetFile = destMgr.m_configPath; //"./mods.d/";
                         removeTrailingDirectorySlashes(targetFile);
@@ -501,7 +501,7 @@ int InstallMgr::refreshRemoteSourceConfiguration() {
     is.m_directory = "/pub/sword";
     int errorCode = remoteCopy(is, masterRepoList, masterRepoListPath.c_str(), false);
     if (!errorCode) { //sucessfully downloaded the repo list
-        SWConfig masterList(masterRepoListPath.c_str());
+        SWConfig masterList(masterRepoListPath);
         SectionMap::iterator sections = masterList.sections().find("Repos");
         if (sections != masterList.sections().end()) {
             for (auto & ap : sections->second) {

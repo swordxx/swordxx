@@ -135,7 +135,7 @@ void createBasicConfig() {
     is.m_source = "ftp.crosswire.org";
     is.m_directory = "/pub/sword/raw";
 
-    SWConfig config(confPath.c_str());
+    SWConfig config(confPath);
     config["General"]["PassiveFTP"] = "true";
     config["Sources"]["FTPSource"] = is.getConfEnt();
     config.save();
