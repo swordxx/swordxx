@@ -40,12 +40,15 @@ SWLocale::SWLocale(const char *ifilename) {
     if (ifilename) {
         m_localeSource = std::make_unique<SWConfig>(ifilename);
 
-        // Assure all english abbrevs are present
-        for (std::size_t j = 0; builtin_abbrevs[j].osis[0]; ++j)
-            m_mergedAbbrevs[builtin_abbrevs[j].ab] = builtin_abbrevs[j].osis;
-
         for (auto const & ap : m_localeSource->sections()["Book Abbrevs"])
-            m_mergedAbbrevs[ap.first.c_str()] = ap.second.c_str();
+            m_mergedAbbrevs[ap.first] = ap.second;
+
+        // Assure english abbrevs for missing abbreviations:
+        for (std::size_t j = 0; builtin_abbrevs[j].osis[0]; ++j)
+            if (m_mergedAbbrevs.find(builtin_abbrevs[j].ab)
+                == m_mergedAbbrevs.end())
+                m_mergedAbbrevs.emplace(builtin_abbrevs[j].ab,
+                                        builtin_abbrevs[j].osis);
 
         auto const size = m_mergedAbbrevs.size();
         m_bookAbbrevs = std::make_unique<struct abbrev[]>(size + 1);
