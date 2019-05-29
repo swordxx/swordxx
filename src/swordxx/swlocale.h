@@ -69,7 +69,8 @@ public:
     * @return The description. A possible example is "German".
     */
     std::string const & getDescription() const noexcept { return m_description; }
-    std::string const & translate(std::string_view text);
+
+    std::string translate(std::string_view text);
 
     void augment(SWLocale const & addFrom);
 

@@ -67,7 +67,7 @@ SWLocale::SWLocale(const char *ifilename) {
 
 SWLocale::~SWLocale() noexcept = default;
 
-std::string const & SWLocale::translate(std::string_view text) {
+std::string SWLocale::translate(std::string_view text) {
     auto const it(m_textTranslations.find(text));
     return (it != m_textTranslations.end()) ? it->second : std::string(text);
 }

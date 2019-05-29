@@ -215,10 +215,10 @@ public:
 
     /** Get/Set position of this key by Book Name
      */
-    std::string const & getBookName() const;
+    std::string getBookName() const;
     void setBookName(std::string_view bookName);
 
-    std::string const & getBookAbbrev() const;
+    std::string getBookAbbrev() const;
     /** Gets testament
     *
     * @return value of testament
