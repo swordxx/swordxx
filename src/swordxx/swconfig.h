@@ -108,7 +108,7 @@ public: /* Methods: */
 
 private: /* Fields: */
 
-    std::string m_filename; /**< The filename of the configuration file. */
+    std::string const m_filename; /**< The filename of the configuration file.*/
     SectionMap m_sections; /**< Mapping of available sections. */
 
 }; /* class SWConfig */
