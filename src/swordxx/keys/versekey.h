@@ -28,6 +28,7 @@
 #include "../swkey.h"
 
 #include <memory>
+#include <string_view>
 #include "listkey.h"
 #include "../defs.h"
 #include "../versificationmgr.h"
@@ -87,7 +88,7 @@ protected:
      * ENT:    @param abbr - key for which to search;
      * RET:    @return book number or < 0 = not valid
      */
-    int getBookFromAbbrev(const char *abbr) const;
+    int getBookFromAbbrev(std::string_view abbr) const;
 
     /** Refresh keytext based on testament|book|chapter|verse
     * default auto normalization to true

@@ -349,48 +349,38 @@ void VerseKey::freshtext() const
  * RET:    book number or < 0 = not valid
  */
 
-int VerseKey::getBookFromAbbrev(const char *iabbr) const
-{
-    assert(iabbr);
-    if (!*iabbr)
+int VerseKey::getBookFromAbbrev(std::string_view iabbr) const {
+    iabbr = trimmedView(iabbr);
+    if (iabbr.empty())
         return -1;
 
     StringMgr* stringMgr = StringMgr::getSystemStringMgr();
-    const bool hasUTF8Support = StringMgr::hasUTF8Support();
 
-    // The first iteration of this loop tries to uppercase
-    // the string. If we still fail to match, we try
-    // matching the string without any toupper logic.
-    // This is useful for, say, Chinese user input
-    // on a system that doesn't properly support
-    // a true Unicode-toupper function (!hasUTF8Support)
-    for (int i = 0; i < 2; i++) {
-        std::string abbr(iabbr);
-        trimString(abbr);
-
-        if (!i) {
-            if (hasUTF8Support) { //we have support for UTF-8 handling; we expect UTF-8 encoded locales
-                stringMgr->upperUTF8(abbr);
-            }
-            else {
-                stringMgr->upperLatin1(abbr);
-            }
-        }
-
-        if (!abbr.empty()) {
-            auto const & abbrevs = getPrivateLocale().bookAbbreviations();
-            for (auto it = abbrevs.lower_bound(abbr); it != abbrevs.end(); ++it)
-            {
-                auto const & foundAbbr = it->first;
-                if (foundAbbr.size() < abbr.size())
-                    break;
-                if (std::memcmp(abbr.c_str(), foundAbbr.c_str(), abbr.size()))
-                    break;
-                auto const & osis = it->second;
-                auto retVal = m_refSys->getBookNumberByOSISName(osis.c_str());
-                if (retVal >= 0)
-                    return retVal;
-            }
+    /* The first iteration of the following loop tries to uppercase the string.
+       If we still fail to match, we try matching the string without any toupper
+       logic. This is useful for, say, Chinese user input on a system that
+       doesn't properly support a true Unicode-toupper function. */
+    std::string upperAbbr(iabbr);
+    if (StringMgr::hasUTF8Support()) {
+        stringMgr->upperUTF8(upperAbbr);
+    } else {
+        stringMgr->upperLatin1(upperAbbr);
+    }
+    std::string_view abbr(upperAbbr);
+    for (int i = 0; i < 2; i++, abbr = iabbr) {
+        assert(!abbr.empty());
+        auto const & abbrevs = getPrivateLocale().bookAbbreviations();
+        for (auto it = abbrevs.lower_bound(abbr); it != abbrevs.end(); ++it)
+        {
+            auto const & foundAbbr = it->first;
+            if (foundAbbr.size() < abbr.size())
+                break;
+            if (std::memcmp(abbr.data(), foundAbbr.c_str(), abbr.size()))
+                break;
+            auto const & osis = it->second;
+            auto retVal = m_refSys->getBookNumberByOSISName(osis.c_str());
+            if (retVal >= 0)
+                return retVal;
         }
     }
     return -1;
@@ -406,7 +396,7 @@ void VerseKey::validateCurrentLocale() const {
         for (int i = 0; i < m_refSys->getBookCount(); i++) {
             std::string abbr(getPrivateLocale().translate(m_refSys->getBook(i)->getLongName()));
             trimString(abbr);
-            const int bn = getBookFromAbbrev(abbr.c_str());
+            const int bn = getBookFromAbbrev(abbr);
             if (bn != i+1) {
                 SWLog::getSystemLog()->logDebug("VerseKey::Book: %s does not have a matching toupper abbrevs entry! book number returned was: %d, should be %d. Required entry to add to locale:", abbr.c_str(), bn, i);
 
@@ -546,7 +536,7 @@ ListKey VerseKey::parseVerseList(const char *buf, const char *defaultKey, bool e
             if (chap == -1) {
                 book.push_back(*buf);
                 book.push_back(*(buf + 1u));
-                if (getBookFromAbbrev(book.c_str()) > -1) {
+                if (getBookFromAbbrev(book) > -1) {
                     book.pop_back();
                     buf++;
                     break;
@@ -632,7 +622,7 @@ terminate_range:
                 if (caseInsensitiveEquals(book, "ch") || caseInsensitiveEquals(book, "chap")) {    // Verse abbrev
                     book = lastKey->getBookName();
                 }
-                bookno = getBookFromAbbrev(book.c_str());
+                bookno = getBookFromAbbrev(book);
                 if ((bookno > -1) && (suffix == 'f') && (book[book.size() - 1u] == 'f')) {
                     suffix = 0;
                 }
@@ -908,7 +898,7 @@ terminate_range:
         if (caseInsensitiveEquals(book, "ch") || caseInsensitiveEquals(book, "chap")) {    // Verse abbrev
             book = lastKey->getBookName();
         }
-        bookno = getBookFromAbbrev(book.c_str());
+        bookno = getBookFromAbbrev(book);
         if ((bookno > -1) && (suffix == 'f') && (book[book.size()-1] == 'f')) {
             suffix = 0;
         }
