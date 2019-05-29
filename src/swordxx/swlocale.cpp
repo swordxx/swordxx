@@ -89,23 +89,16 @@ SWLocale::SWLocale(const char *ifilename) {
 SWLocale::~SWLocale() noexcept = default;
 
 std::string const & SWLocale::translate(std::string_view text) {
-    LookupMap::iterator entry;
-
-    entry = m_lookupTable.find(text);
-
+    auto const entry(m_lookupTable.find(text));
     if (entry == m_lookupTable.end()) {
-        ConfigEntMap::iterator confEntry;
-        confEntry = m_localeSource->sections()["Text"].find(text);
-        if (confEntry == m_localeSource->sections()["Text"].end())
-            m_lookupTable.insert(LookupMap::value_type(text, text));
-        else {
-            m_lookupTable.insert(
-                        LookupMap::value_type(text,
-                                              (*confEntry).second.c_str()));
-        }
-        entry = m_lookupTable.find(text);
+        auto const & textSection = (*m_localeSource)["Text"];
+        auto const confEntry(textSection.find(text));
+        if (confEntry == textSection.end())
+            return m_lookupTable.emplace(text, text).first->second;
+        return m_lookupTable.emplace(std::move(text),
+                                     confEntry->second).first->second;
     }
-    return (*entry).second;
+    return entry->second;
 }
 
 void SWLocale::augment(SWLocale &addFrom) {
