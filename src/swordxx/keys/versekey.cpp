@@ -1488,9 +1488,8 @@ void VerseKey::setBook(char ibook)
  * ENT:    bname - book name/abbrev
  */
 
-void VerseKey::setBookName(const char *bname)
-{
-    int bnum = getBookFromAbbrev(bname);
+void VerseKey::setBookName(std::string_view bookName) {
+    int bnum = getBookFromAbbrev(bookName);
     if (bnum > -1) {
         if (bnum > m_BMAX[0]) {
             bnum -= m_BMAX[0];

@@ -216,7 +216,7 @@ public:
     /** Get/Set position of this key by Book Name
      */
     std::string const & getBookName() const;
-    void setBookName(const char *bname);
+    void setBookName(std::string_view bookName);
 
     std::string const & getBookAbbrev() const;
     /** Gets testament

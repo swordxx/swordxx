@@ -183,7 +183,7 @@ void VerseTreeKey::positionChanged() {
             setVerse(0);
         }    //path = "[ Module Heading ]";
         else {
-            setBookName(seg[--legs].c_str());
+            setBookName(seg[--legs]);
             m_chapter = (legs > 0) ? std::atoi(seg[--legs].c_str()) : 0;
             setVerse((legs > 0) ? std::atoi(seg[--legs].c_str()) : 0);
         }
