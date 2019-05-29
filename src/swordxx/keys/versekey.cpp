@@ -1189,7 +1189,7 @@ std::string const & VerseKey::getOSISBookName() const {
 
 
 std::string VerseKey::getBookAbbrev() const {
-    return getPrivateLocale().translate(m_refSys->getBook(((m_testament>1)?m_BMAX[0]:0)+m_book-1)->getPreferredAbbreviation());
+    return getPrivateLocale().translate(m_refSys->getBook(((m_testament>1)?m_BMAX[0]:0)+m_book-1)->getPreferredAbbreviation(), SWLocale::PreferredAbbreviation);
 }
 
 void VerseKey::positionToTop() {

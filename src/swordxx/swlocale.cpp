@@ -63,13 +63,22 @@ SWLocale::SWLocale(const char *ifilename) {
     // Add all text entries:
     for (auto & ep : (*localeSource)["Text"])
         m_textTranslations.emplace(ep.first, ep.second);
+
+    // Add all preferred abbreviation entries:
+    for (auto & vp : (*localeSource)["Pref Abbrevs"])
+        m_preferredAbbreviationTranslations.emplace(vp.first, vp.second);
 }
 
 SWLocale::~SWLocale() noexcept = default;
 
-std::string SWLocale::translate(std::string_view text) {
-    auto const it(m_textTranslations.find(text));
-    return (it != m_textTranslations.end()) ? it->second : std::string(text);
+std::string SWLocale::translate(std::string_view text,
+                                TranslationType translationType)
+{
+    auto const & container = (translationType == Text)
+                             ? m_textTranslations
+                             : m_preferredAbbreviationTranslations;
+    auto const it(container.find(text));
+    return (it != container.end()) ? it->second : std::string(text);
 }
 
 void SWLocale::augment(SWLocale const & addFrom) {
