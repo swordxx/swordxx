@@ -88,7 +88,7 @@ SWLocale::SWLocale(const char *ifilename) {
 
 SWLocale::~SWLocale() noexcept = default;
 
-std::string const & SWLocale::translate(const char *text) {
+std::string const & SWLocale::translate(std::string_view text) {
     LookupMap::iterator entry;
 
     entry = m_lookupTable.find(text);

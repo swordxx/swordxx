@@ -430,7 +430,7 @@ int VerseKey::getBookFromAbbrev(const char *iabbr) const
 void VerseKey::validateCurrentLocale() const {
     if (SWLog::getSystemLog()->getLogLevel() >= SWLog::LOG_DEBUG) { //make sure log is wanted, this loop stuff costs a lot of time
         for (int i = 0; i < m_refSys->getBookCount(); i++) {
-            std::string abbr(getPrivateLocale().translate(m_refSys->getBook(i)->getLongName().c_str()));
+            std::string abbr(getPrivateLocale().translate(m_refSys->getBook(i)->getLongName()));
             trimString(abbr);
             const int bn = getBookFromAbbrev(abbr.c_str());
             if (bn != i+1) {
@@ -1215,7 +1215,7 @@ std::string VerseKey::getShortText() const {
 
 
 std::string const & VerseKey::getBookName() const {
-    return getPrivateLocale().translate(m_refSys->getBook(((m_testament>1)?m_BMAX[0]:0)+m_book-1)->getLongName().c_str());
+    return getPrivateLocale().translate(m_refSys->getBook(((m_testament>1)?m_BMAX[0]:0)+m_book-1)->getLongName());
 }
 
 
@@ -1225,7 +1225,7 @@ std::string const & VerseKey::getOSISBookName() const {
 
 
 std::string const & VerseKey::getBookAbbrev() const {
-    return getPrivateLocale().translate(m_refSys->getBook(((m_testament>1)?m_BMAX[0]:0)+m_book-1)->getPreferredAbbreviation().c_str());
+    return getPrivateLocale().translate(m_refSys->getBook(((m_testament>1)?m_BMAX[0]:0)+m_book-1)->getPreferredAbbreviation());
 }
 
 void VerseKey::positionToTop() {

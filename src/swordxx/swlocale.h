@@ -27,6 +27,7 @@
 #include <map>
 #include <memory>
 #include <string>
+#include <string_view>
 #include "defs.h"
 
 
@@ -43,7 +44,7 @@ static const int ENDOFABBREVS = -2;
 */
 class SWDLLEXPORT SWLocale {
 
-    using LookupMap = std::map<std::string, std::string>;
+    using LookupMap = std::map<std::string, std::string, std::less<>>;
 
     LookupMap m_lookupTable;
     LookupMap m_mergedAbbrevs;
@@ -73,7 +74,7 @@ public:
     */
     std::string const & getDescription() const noexcept { return m_description; }
     std::string const & getEncoding() const noexcept { return m_encoding; }
-    std::string const & translate(const char *text);
+    std::string const & translate(std::string_view text);
 
     void augment(SWLocale & addFrom);
 
