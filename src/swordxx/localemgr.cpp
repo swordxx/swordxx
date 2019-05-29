@@ -154,12 +154,13 @@ void LocaleMgr::loadConfigDir(char const * ipath) {
     }
 }
 
-std::shared_ptr<SWLocale> LocaleMgr::getLocale(char const * name) {
+std::shared_ptr<SWLocale> LocaleMgr::getLocale(std::string_view name) {
     auto const it = m_locales.find(name);
     if (it != m_locales.end())
         return it->second;
 
-    SWLog::getSystemLog()->logWarning("LocaleMgr::getLocale failed to find %s\n", name);
+    SWLog::getSystemLog()->logWarning("LocaleMgr::getLocale failed to find %s\n",
+                                      std::string(name).c_str());
     return m_locales[SWLocale::DEFAULT_LOCALE_NAME];
 }
 
@@ -171,13 +172,14 @@ std::list<std::string> LocaleMgr::getAvailableLocales() {
     return retVal;
 }
 
-std::string LocaleMgr::translate(char const * text, char const * localeName) {
-    assert(text);
-    if (auto target = getLocale(localeName
-                                ? localeName
-                                : m_defaultLocaleName.c_str()))
+std::string LocaleMgr::translate(std::string_view text,
+                                 std::string_view localeName)
+{
+    if (auto target = getLocale(localeName.empty()
+                                ? m_defaultLocaleName
+                                : localeName))
         return target->translate(text);
-    return text;
+    return std::string(text);
 }
 
 void LocaleMgr::setDefaultLocaleName(char const * const name) {

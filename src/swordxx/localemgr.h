@@ -28,6 +28,7 @@
 #include <memory>
 #include <list>
 #include <string>
+#include <string_view>
 #include "defs.h"
 
 
@@ -35,7 +36,7 @@ namespace swordxx {
 
 class SWLocale;
 
-using LocaleMap = std::map<std::string, std::shared_ptr<SWLocale> >;
+using LocaleMap = std::map<std::string, std::shared_ptr<SWLocale>, std::less<>>;
 
 /**
 * The LocaleMgr class handles all the different locales of Sword++.
@@ -69,7 +70,7 @@ public: /* Methods: */
     * @param name The name of the locale you want to have. For example use getLocale("de") to get the locale for the German language.
     * @return Returns the locale object if the locale with the name given as parameter was found. If it wasn't found return nullptr.
     */
-    virtual std::shared_ptr<SWLocale> getLocale(char const * name);
+    virtual std::shared_ptr<SWLocale> getLocale(std::string_view name);
 
     /** Get the list of available locales.
     *
@@ -84,8 +85,9 @@ public: /* Methods: */
     * @param localeName The name of the locale Sword++ should use
     * @return Returns the translated text.
     */
-    virtual std::string translate(char const * text,
-                                  char const * localeName = nullptr);
+    virtual std::string translate(std::string_view text,
+                                  std::string_view localeName =
+                                        std::string_view());
 
     /** Get the default locale name. To set it use @see setDefaultLocaleName
     *
