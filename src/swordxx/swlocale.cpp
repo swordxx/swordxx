@@ -88,7 +88,7 @@ std::string const & SWLocale::translate(std::string_view text) {
     return entry->second;
 }
 
-void SWLocale::augment(SWLocale &addFrom) {
+void SWLocale::augment(SWLocale const & addFrom) {
     m_localeSource->augment(*addFrom.m_localeSource);
     m_lookupTable.clear();
 }

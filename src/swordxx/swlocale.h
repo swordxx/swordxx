@@ -74,7 +74,7 @@ public:
     std::string const & getEncoding() const noexcept { return m_encoding; }
     std::string const & translate(std::string_view text);
 
-    void augment(SWLocale & addFrom);
+    void augment(SWLocale const & addFrom);
 
     ConfigEntMap const & bookAbbreviations() const noexcept {
         assert(m_bookAbbrevs);
