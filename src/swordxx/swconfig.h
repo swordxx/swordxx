@@ -33,26 +33,29 @@ class MultiMapWithDefault: public std::multimap<Key, T, Args...> {
 
 public: /* Methods: */
 
-    T & operator[](Key const & key) {
+    template <typename Key_>
+    T & operator[](Key_ && key) {
         auto const it(this->find(key));
         return (it != this->end())
                ? it->second
-               : this->emplace(key, T())->second;
+               : this->emplace(std::forward<Key_>(key), T())->second;
     }
 
-    bool has(Key const & key, T const & value) const noexcept {
+    template <typename Key_, typename Value_>
+    bool has(Key_ && key, Value_ && value) const noexcept {
         auto const end(this->upper_bound(key));
-        return std::find_if(this->lower_bound(key),
+        return std::find_if(this->lower_bound(std::forward<Key_>(key)),
                             end,
-                            [&value](auto const & vp)
-                            { return vp.second == value; }) != end;
+                            [v = std::forward<Value_>(value)](auto const & vp)
+                            { return vp.second == v; }) != end;
     }
 };
 
 } /* namespace detail { */
 
-using ConfigEntMap = detail::MultiMapWithDefault<std::string, std::string>;
-using SectionMap = std::map<std::string, ConfigEntMap>;
+using ConfigEntMap =
+        detail::MultiMapWithDefault<std::string, std::string, std::less<>>;
+using SectionMap = std::map<std::string, ConfigEntMap, std::less<>>;
 
 /**
    \brief A class to read and save settings from and to a file.
