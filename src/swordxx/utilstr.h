@@ -413,6 +413,10 @@ void leftTrimString(std::string & str);
 void rightTrimString(std::string & str);
 void trimString(std::string & str);
 
+std::string_view leftTrimmedView(std::string_view sv) noexcept;
+std::string_view rightTrimmedView(std::string_view sv) noexcept;
+std::string_view trimmedView(std::string_view sv) noexcept;
+
 inline bool hasPrefix(char const * str, char const * prefix) noexcept {
     while (*prefix != '\0') {
         if (*prefix != *str)

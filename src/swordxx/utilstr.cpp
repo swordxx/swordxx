@@ -70,6 +70,21 @@ void trimString(std::string & str) {
     rightTrimString(str);
 }
 
+std::string_view leftTrimmedView(std::string_view sv) noexcept {
+    while (!sv.empty() && charIsSpace(*sv.begin()))
+        sv.remove_prefix(1u);
+    return sv;
+}
+
+std::string_view rightTrimmedView(std::string_view sv) noexcept {
+    while (!sv.empty() && charIsSpace(*sv.rbegin()))
+        sv.remove_suffix(1u);
+    return sv;
+}
+
+std::string_view trimmedView(std::string_view sv) noexcept
+{ return rightTrimmedView(leftTrimmedView(sv)); }
+
 std::string stripPrefix(std::string & str, char const separator) {
     char const * m = str.c_str();
     while (*m && *m != separator)
