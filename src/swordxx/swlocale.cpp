@@ -103,6 +103,7 @@ std::string const & SWLocale::translate(std::string_view text) {
 
 void SWLocale::augment(SWLocale &addFrom) {
     m_localeSource->augment(*addFrom.m_localeSource);
+    m_lookupTable.clear();
 }
 
 struct abbrev const * SWLocale::getBookAbbrevs(std::size_t * retSize) {
