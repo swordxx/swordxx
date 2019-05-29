@@ -35,8 +35,6 @@ namespace swordxx {
 char const * SWLocale::DEFAULT_LOCALE_NAME = "en";
 
 SWLocale::SWLocale(const char *ifilename) {
-    m_bookLongNames  = nullptr;
-    m_bookPrefAbbrev = nullptr;
     if (ifilename) {
         m_localeSource = std::make_unique<SWConfig>(ifilename);
 

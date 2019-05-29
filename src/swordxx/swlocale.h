@@ -56,8 +56,6 @@ class SWDLLEXPORT SWLocale {
     std::string m_encoding;
     std::unique_ptr<struct abbrev[]> m_bookAbbrevs;
     std::size_t m_abbrevsCnt;
-    const char ** m_bookLongNames;
-    const char ** m_bookPrefAbbrev;
 
 public:
     SWLocale(const char *ifilename);
