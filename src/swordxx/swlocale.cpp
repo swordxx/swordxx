@@ -73,9 +73,29 @@ std::string const & SWLocale::translate(std::string_view text) {
 }
 
 void SWLocale::augment(SWLocale const & addFrom) {
+    /* Because the other locale augments this one, it makes sense to use the
+       augmented name and description as well, which might contain information
+       about the augmentation. */
+    m_name = addFrom.m_name;
+    m_description = addFrom.m_description;
+
     // Texts in the locale augmenting this one override the texts of this locale
     for (auto const & vp : addFrom.m_textTranslations)
         m_textTranslations[vp.first] = vp.second;
+
+    // Book abbrevations are appended except the ones which would be duplicates:
+    auto const bookAbbrevExists =
+            [this](auto const & valuePair) {
+                for (auto range(m_bookAbbrevs.equal_range(valuePair.first));
+                     range.first != range.second;
+                     ++range.first)
+                    if (range.first->second == valuePair.second)
+                        return true;
+                return false;
+            };
+    for (auto const & vp : addFrom.m_bookAbbrevs)
+        if (!bookAbbrevExists(vp))
+            m_bookAbbrevs.emplace(vp);
 }
 
 ConfigEntMap const & SWLocale::builtinBookAbbreviations() {
