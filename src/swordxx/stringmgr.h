@@ -50,27 +50,12 @@ public:
     */
     static StringMgr *getSystemStringMgr();
 
-    /** Checks whether Utf8 support is available.
-    * Override the function supportsUnicode() to tell whether your implementation has utf8 support.
-    * @return True if this implementation provides support for Utf8 handling or false if just latin1 handling is available
-    */
-    static inline bool hasUTF8Support() {
-        return getSystemStringMgr()->supportsUnicode();
-    }
-
     /** Converts the param to an upper case Utf8 string
     * @param text The text encoded in utf8 which should be turned into an upper case string
     * @param max Max buffer size
     * @return text buffer (only for convenience)
     */
-    virtual void upperUTF8(std::string & str) const;
-
-    /** Converts the param to an uppercase latin1 string
-    * @param text The text encoded in latin1 which should be turned into an upper case string
-    * @param max Max buffer size
-    * @return text buffer (only for convenience)
-    */
-    virtual void upperLatin1(std::string & str) const;
+    virtual void upperUTF8(std::string & str) const = 0;
 
 
 protected:
@@ -82,8 +67,6 @@ protected:
     /** Copy constructor
     */
     StringMgr(const StringMgr &);
-
-    virtual bool supportsUnicode() const;
 
 private:
     static std::unique_ptr<StringMgr> systemStringMgr;

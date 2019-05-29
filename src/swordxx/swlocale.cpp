@@ -69,7 +69,6 @@ SWLocale::SWLocale(const char *ifilename) {
                 };
         maybeGetEntry(m_name, "Name");
         maybeGetEntry(m_description, "Description");
-        maybeGetEntry(m_encoding, "Encoding");
     }
 }
 

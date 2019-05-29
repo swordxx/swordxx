@@ -143,14 +143,6 @@ void LocaleMgr::loadConfigDir(char const * ipath) {
                             }().c_str()));
             auto const & localeName = locale->getName();
             if (!localeName.empty()) {
-                auto const & localeEncoding = locale->getEncoding();
-                if (StringMgr::hasUTF8Support()) {
-                    if (localeEncoding != "UTF-8" && localeEncoding != "ASCII")
-                        continue;
-                } else if (localeEncoding == "UTF-8") { // Exclude UTF-8 locales
-                    continue;
-                }
-
                 auto const it(m_locales.find(localeName));
                 if (it != m_locales.end()) { // already present
                     it->second->augment(*locale);

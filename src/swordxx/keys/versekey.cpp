@@ -361,11 +361,7 @@ int VerseKey::getBookFromAbbrev(std::string_view iabbr) const {
        logic. This is useful for, say, Chinese user input on a system that
        doesn't properly support a true Unicode-toupper function. */
     std::string upperAbbr(iabbr);
-    if (StringMgr::hasUTF8Support()) {
-        stringMgr->upperUTF8(upperAbbr);
-    } else {
-        stringMgr->upperLatin1(upperAbbr);
-    }
+    stringMgr->upperUTF8(upperAbbr);
     std::string_view abbr(upperAbbr);
     for (int i = 0; i < 2; i++, abbr = iabbr) {
         assert(!abbr.empty());
@@ -401,13 +397,7 @@ void VerseKey::validateCurrentLocale() const {
                 SWLog::getSystemLog()->logDebug("VerseKey::Book: %s does not have a matching toupper abbrevs entry! book number returned was: %d, should be %d. Required entry to add to locale:", abbr.c_str(), bn, i);
 
                 StringMgr* stringMgr = StringMgr::getSystemStringMgr();
-                const bool hasUTF8Support = StringMgr::hasUTF8Support();
-                if (hasUTF8Support) { //we have support for UTF-8 handling; we expect UTF-8 encoded locales
-                    stringMgr->upperUTF8(abbr);
-                }
-                else {
-                    stringMgr->upperLatin1(abbr);
-                }
+                stringMgr->upperUTF8(abbr);
                 SWLog::getSystemLog()->logDebug("%s=%s\n", abbr.c_str(), m_refSys->getBook(i)->getOSISName().c_str());
             }
         }

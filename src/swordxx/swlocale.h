@@ -55,7 +55,6 @@ class SWDLLEXPORT SWLocale {
 
     std::string m_name;
     std::string m_description;
-    std::string m_encoding;
 
 public:
     SWLocale(const char *ifilename);
@@ -71,7 +70,6 @@ public:
     * @return The description. A possible example is "German".
     */
     std::string const & getDescription() const noexcept { return m_description; }
-    std::string const & getEncoding() const noexcept { return m_encoding; }
     std::string const & translate(std::string_view text);
 
     void augment(SWLocale const & addFrom);

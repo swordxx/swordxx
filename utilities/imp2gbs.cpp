@@ -88,14 +88,7 @@ void parseParams(int argc, char * argv[]) {
             }
             else usage(*argv);
         } else if (!std::strcmp(argv[i], "-U")) {
-            if (StringMgr::hasUTF8Support()) {
-                toUpper = true;
-            } else {
-                std::cerr << "Error: " << *argv
-                          << ". Cannot reliably toUpper without UTF8 support\n"
-                             "\t(recompile with ICU enabled)\n\n";
-                usage(*argv);
-            }
+            toUpper = true;
         } else if (!std::strcmp(argv[i], "-g")) {
             greekFilter = true;
         } else if (!std::strcmp(argv[i], "-O")) {

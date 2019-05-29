@@ -114,8 +114,6 @@ class ICUStringMgr : public StringMgr {
 public:
     void upperUTF8(std::string & str) const override;
 
-protected:
-    bool supportsUnicode() const override { return true; }
 };
 
 
@@ -153,51 +151,6 @@ StringMgr* StringMgr::getSystemStringMgr() {
     }
 
     return systemStringMgr.get();
-}
-
-
-/**
- * This is a fallback method.  It should never be called.
- * If UTF8 support is desired, then a UTF8 StringMgr needs
- * to be used.
- *
- * Here we just do our best.
- *
- * Converts the param to an upper case UTF8 string
- * @param t - The text encoded in utf8 which should be turned into an upper case string
- *
- */
-void StringMgr::upperUTF8(std::string & str) const {
-    // try to decide if it's worth trying to toupper.  Do we have more
-    // characters which are probably lower latin than not?
-    // we still don't use isValidUTF8 optimally. what if we have 1 unicode
-    // character in the string?  should we not try to upper any of the string?
-    // dunno.  Best solution is to upper all other characters. Don't have
-    // time to write that before release.
-    long performOp = 0;
-    if (!isValidUTF8((unsigned char *) str.c_str())) {
-        performOp = 1;
-    } else {
-        for (auto const ch : str)
-            performOp += (ch > 0) ? 1 : -1;
-    }
-
-    if (performOp > 0)
-        return upperLatin1(str);
-}
-
-
-/**
- * Converts the param to an uppercase latin1 string
- * @param The text encoded in latin1 which should be turned into an upper case string
- */
-void StringMgr::upperLatin1(std::string & str) const {
-    for (auto & ch : str)
-        ch = latin1CharToUpper(ch);
-}
-
-bool StringMgr::supportsUnicode() const {
-    return false; //default impl has no UTF8 support
 }
 
 void ICUStringMgr::upperUTF8(std::string & str) const {
