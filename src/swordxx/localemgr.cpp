@@ -23,6 +23,7 @@
 
 #include "localemgr.h"
 
+#include <algorithm>
 #include <cassert>
 #include <cstddef>
 #include <cstdio>
@@ -30,6 +31,7 @@
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <utility>
+#include <vector>
 #include "DirectoryEnumerator.h"
 #include "filemgr.h"
 #include "stringmgr.h"
@@ -125,7 +127,12 @@ void LocaleMgr::loadConfigDir(char const * ipath) {
     SWLog::getSystemLog()->logInformation("LocaleMgr::loadConfigDir loading %s",
                                           ipath);
     if (auto dir = DirectoryEnumerator(ipath)) {
-        while (auto const ent = dir.readEntry()) {
+        std::vector<std::string> dirEntries;
+        while (auto const ent = dir.readEntry())
+            dirEntries.emplace_back(ent);
+        std::sort(dirEntries.begin(), dirEntries.end());
+
+        for (auto const & ent : dirEntries) {
             auto locale(std::make_shared<SWLocale>(
                             [&ipath,&ent]{
                                 std::string newmodfile(ipath);
