@@ -84,33 +84,6 @@ std::unique_ptr<SWKey> VerseTreeKey::clone() const
 { return std::make_unique<VerseTreeKey>(*this); }
 
 
-int VerseTreeKey::getBookFromAbbrev(const char *iabbr) const
-{
-    int bookno = VerseKey::getBookFromAbbrev(iabbr);
-    if (bookno < 0) {
-/*
-        vector<struct sbook>::iterator it = find(books, iabbr);
-        if (it == books.end()) {
-            TreeKey *tkey = this->treeKey;
-            int saveError = tkey->popError();
-            long bookmark = tkey->getOffset();
-            std::string segment;
-            internalPosChange = true;
-            do {
-                segment = (std::string)tkey->getLocalName();
-            } while (tkey->parent());
-            segment << 1;
-            if (saveError) {
-                error = saveError;
-            }
-            tkey->setOffset(bookmark);
-        }
-        books.push_back(sbook(iabbr));
-*/
-    }
-    return bookno;
-}
-
 /******************************************************************************
  * VerseTreeKey Destructor - cleans up instance of VerseTreeKey
  *
