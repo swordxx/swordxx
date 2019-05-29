@@ -49,10 +49,8 @@ class SWDLLEXPORT SWLocale {
     /// \todo Convert to unordered_map with heterogenous lookup for C++2a.
     using LookupMap = std::map<std::string, std::string, std::less<>>;
 
-    LookupMap m_lookupTable;
+    LookupMap m_textTranslations;
     std::shared_ptr<ConfigEntMap const> m_bookAbbrevs;
-
-    std::unique_ptr<SWConfig> m_localeSource;
 
     std::string m_name;
     std::string m_description;

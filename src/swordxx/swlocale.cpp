@@ -33,17 +33,18 @@ namespace swordxx {
 char const * SWLocale::DEFAULT_LOCALE_NAME = "en";
 
 SWLocale::SWLocale(const char *ifilename) {
+    std::unique_ptr<SWConfig> localeSource;
     {
         std::shared_ptr<ConfigEntMap> abbrevsMap;
         if (ifilename) {
-            m_localeSource = std::make_unique<SWConfig>(ifilename);
+            localeSource = std::make_unique<SWConfig>(ifilename);
 
             /* Build abbreviations map from locale,  */
             abbrevsMap = std::make_shared<ConfigEntMap>(
-                             (*m_localeSource)["Book Abbrevs"]);
+                             (*localeSource)["Book Abbrevs"]);
         } else {
-            m_localeSource = std::make_unique<SWConfig>();
-            auto & meta = (*m_localeSource)["Meta"];
+            localeSource = std::make_unique<SWConfig>();
+            auto & meta = (*localeSource)["Meta"];
             meta["Name"] = DEFAULT_LOCALE_NAME;
             meta["Description"] = "English (US)";
 
@@ -57,7 +58,7 @@ SWLocale::SWLocale(const char *ifilename) {
         m_bookAbbrevs = std::move(abbrevsMap);
     }
 
-    auto const & sections = m_localeSource->sections();
+    auto const & sections = localeSource->sections();
     auto const metaSectionIt(sections.find("Meta"));
     if (metaSectionIt != sections.end()) {
         auto const & metaSection = metaSectionIt->second;
@@ -70,26 +71,23 @@ SWLocale::SWLocale(const char *ifilename) {
         maybeGetEntry(m_name, "Name");
         maybeGetEntry(m_description, "Description");
     }
+
+    // Add all text entries:
+    for (auto & ep : (*localeSource)["Text"])
+        m_textTranslations.emplace(ep.first, ep.second);
 }
 
 SWLocale::~SWLocale() noexcept = default;
 
 std::string const & SWLocale::translate(std::string_view text) {
-    auto const entry(m_lookupTable.find(text));
-    if (entry == m_lookupTable.end()) {
-        auto const & textSection = (*m_localeSource)["Text"];
-        auto const confEntry(textSection.find(text));
-        if (confEntry == textSection.end())
-            return m_lookupTable.emplace(text, text).first->second;
-        return m_lookupTable.emplace(std::move(text),
-                                     confEntry->second).first->second;
-    }
-    return entry->second;
+    auto const it(m_textTranslations.find(text));
+    return (it != m_textTranslations.end()) ? it->second : std::string(text);
 }
 
 void SWLocale::augment(SWLocale const & addFrom) {
-    m_localeSource->augment(*addFrom.m_localeSource);
-    m_lookupTable.clear();
+    // Texts in the locale augmenting this one override the texts of this locale
+    for (auto const & vp : addFrom.m_textTranslations)
+        m_textTranslations[vp.first] = vp.second;
 }
 
 } /* namespace swordxx */
