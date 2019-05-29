@@ -50,7 +50,7 @@ class SWDLLEXPORT SWLocale {
     using LookupMap = std::map<std::string, std::string, std::less<>>;
 
     LookupMap m_textTranslations;
-    std::shared_ptr<ConfigEntMap const> m_bookAbbrevs;
+    ConfigEntMap m_bookAbbrevs;
 
     std::string m_name;
     std::string m_description;
@@ -73,10 +73,10 @@ public:
 
     void augment(SWLocale const & addFrom);
 
-    ConfigEntMap const & bookAbbreviations() const noexcept {
-        assert(m_bookAbbrevs);
-        return *m_bookAbbrevs;
-    }
+    ConfigEntMap const & bookAbbreviations() const noexcept
+    { return m_bookAbbrevs; }
+
+    static ConfigEntMap const & builtinBookAbbreviations();
 
     static const char *DEFAULT_LOCALE_NAME;
 

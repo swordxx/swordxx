@@ -362,22 +362,32 @@ int VerseKey::getBookFromAbbrev(std::string_view iabbr) const {
        doesn't properly support a true Unicode-toupper function. */
     std::string upperAbbr(iabbr);
     stringMgr->upperUTF8(upperAbbr);
+    auto const scanAbbreviations =
+        [this](ConfigEntMap const & abbrevs, std::string_view abbr) {
+            assert(!abbr.empty());
+            for (auto it = abbrevs.lower_bound(abbr); it != abbrevs.end(); ++it)
+            {
+                auto const & foundAbbr = it->first;
+                if (foundAbbr.size() < abbr.size())
+                    break;
+                if (std::memcmp(abbr.data(), foundAbbr.c_str(), abbr.size()))
+                    break;
+                auto const & osis = it->second;
+                auto const retVal =
+                        m_refSys->getBookNumberByOSISName(osis.c_str());
+                if (retVal >= 0)
+                    return retVal;
+            }
+            return -1;
+        };
     std::string_view abbr(upperAbbr);
     for (int i = 0; i < 2; i++, abbr = iabbr) {
-        assert(!abbr.empty());
-        auto const & abbrevs = getPrivateLocale().bookAbbreviations();
-        for (auto it = abbrevs.lower_bound(abbr); it != abbrevs.end(); ++it)
-        {
-            auto const & foundAbbr = it->first;
-            if (foundAbbr.size() < abbr.size())
-                break;
-            if (std::memcmp(abbr.data(), foundAbbr.c_str(), abbr.size()))
-                break;
-            auto const & osis = it->second;
-            auto retVal = m_refSys->getBookNumberByOSISName(osis.c_str());
-            if (retVal >= 0)
-                return retVal;
-        }
+        int r = scanAbbreviations(getPrivateLocale().bookAbbreviations(), abbr);
+        if (r >= 0)
+            return r;
+        r = scanAbbreviations(SWLocale::builtinBookAbbreviations(), abbr);
+        if (r >= 0)
+            return r;
     }
     return -1;
 }

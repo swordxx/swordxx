@@ -34,28 +34,16 @@ char const * SWLocale::DEFAULT_LOCALE_NAME = "en";
 
 SWLocale::SWLocale(const char *ifilename) {
     std::unique_ptr<SWConfig> localeSource;
-    {
-        std::shared_ptr<ConfigEntMap> abbrevsMap;
-        if (ifilename) {
-            localeSource = std::make_unique<SWConfig>(ifilename);
+    if (ifilename) {
+        localeSource = std::make_unique<SWConfig>(ifilename);
 
-            /* Build abbreviations map from locale,  */
-            abbrevsMap = std::make_shared<ConfigEntMap>(
-                             (*localeSource)["Book Abbrevs"]);
-        } else {
-            localeSource = std::make_unique<SWConfig>();
-            auto & meta = (*localeSource)["Meta"];
-            meta["Name"] = DEFAULT_LOCALE_NAME;
-            meta["Description"] = "English (US)";
-
-            // Use english abbrevs by default:
-            abbrevsMap = std::make_shared<ConfigEntMap>();
-        }
-
-        // Append the built-in (English) abbreviations to the end:
-        for (std::size_t j = 0; builtin_abbrevs[j].osis[0]; ++j)
-            abbrevsMap->emplace(builtin_abbrevs[j].ab, builtin_abbrevs[j].osis);
-        m_bookAbbrevs = std::move(abbrevsMap);
+        /* Build abbreviations map from locale,  */
+        m_bookAbbrevs = (*localeSource)["Book Abbrevs"];
+    } else {
+        localeSource = std::make_unique<SWConfig>();
+        auto & meta = (*localeSource)["Meta"];
+        meta["Name"] = DEFAULT_LOCALE_NAME;
+        meta["Description"] = "English (US)";
     }
 
     auto const & sections = localeSource->sections();
@@ -88,6 +76,19 @@ void SWLocale::augment(SWLocale const & addFrom) {
     // Texts in the locale augmenting this one override the texts of this locale
     for (auto const & vp : addFrom.m_textTranslations)
         m_textTranslations[vp.first] = vp.second;
+}
+
+ConfigEntMap const & SWLocale::builtinBookAbbreviations() {
+    static ConfigEntMap const builtinAbbrevs(
+                [](){
+                    ConfigEntMap abbrevsMap;
+                    for (std::size_t j = 0; builtin_abbrevs[j].osis[0]; ++j)
+                        abbrevsMap.emplace(builtin_abbrevs[j].ab,
+                                           builtin_abbrevs[j].osis);
+                    return abbrevsMap;
+                }());
+    return builtinAbbrevs;
+
 }
 
 } /* namespace swordxx */
