@@ -24,11 +24,13 @@
 #ifndef SWORDXX_SWLOCALE_H
 #define SWORDXX_SWLOCALE_H
 
+#include <cassert>
 #include <map>
 #include <memory>
 #include <string>
 #include <string_view>
 #include "defs.h"
+#include "swconfig.h"
 
 
 namespace swordxx {
@@ -47,15 +49,13 @@ class SWDLLEXPORT SWLocale {
     using LookupMap = std::map<std::string, std::string, std::less<>>;
 
     LookupMap m_lookupTable;
-    LookupMap m_mergedAbbrevs;
+    std::shared_ptr<ConfigEntMap const> m_bookAbbrevs;
 
     std::unique_ptr<SWConfig> m_localeSource;
 
     std::string m_name;
     std::string m_description;
     std::string m_encoding;
-    std::unique_ptr<struct abbrev[]> m_bookAbbrevs;
-    std::size_t m_abbrevsCnt;
 
 public:
     SWLocale(const char *ifilename);
@@ -76,7 +76,11 @@ public:
 
     void augment(SWLocale & addFrom);
 
-    struct abbrev const * getBookAbbrevs(std::size_t * retSize);
+    ConfigEntMap const & bookAbbreviations() const noexcept {
+        assert(m_bookAbbrevs);
+        return *m_bookAbbrevs;
+    }
+
     static const char *DEFAULT_LOCALE_NAME;
 
 };

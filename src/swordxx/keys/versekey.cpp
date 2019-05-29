@@ -27,6 +27,7 @@
 #include <cstdint>
 #include <cstdio>
 #include <cstdlib>
+#include <cstring>
 #include <fcntl.h>
 #include <limits>
 #include <memory>
@@ -353,12 +354,6 @@ int VerseKey::getBookFromAbbrev(const char *iabbr) const
     assert(iabbr);
     if (!*iabbr)
         return -1;
-    int diff, min, max, target;
-
-
-    std::size_t abbrevsCnt;
-
-    const struct abbrev *abbrevs = getPrivateLocale().getBookAbbrevs(&abbrevsCnt);
 
     StringMgr* stringMgr = StringMgr::getSystemStringMgr();
     const bool hasUTF8Support = StringMgr::hasUTF8Support();
@@ -383,39 +378,18 @@ int VerseKey::getBookFromAbbrev(const char *iabbr) const
         }
 
         if (!abbr.empty()) {
-            min = 0;
-            max = abbrevsCnt;
-
-            // binary search for a match
-            while(1) {
-                target = min + ((max - min) / 2);
-                diff = std::strncmp(abbr.c_str(), abbrevs[target].ab, abbr.size());
-                if ((!diff)||(target >= max)||(target <= min))
+            auto const & abbrevs = getPrivateLocale().bookAbbreviations();
+            for (auto it = abbrevs.lower_bound(abbr); it != abbrevs.end(); ++it)
+            {
+                auto const & foundAbbr = it->first;
+                if (foundAbbr.size() < abbr.size())
                     break;
-                if (diff > 0)
-                    min = target;
-                else    max = target;
-            }
-
-            // lets keep backing up till we find the 'first' valid match
-            for (; target > 0; target--) {
-                if (std::strncmp(abbr.c_str(), abbrevs[target-1].ab, abbr.size()))
+                if (std::memcmp(abbr.c_str(), foundAbbr.c_str(), abbr.size()))
                     break;
-            }
-
-            if (!diff) {
-                // lets keep moving forward till we find an abbrev in our refSys
-                for (;;) {
-                    auto retVal = m_refSys->getBookNumberByOSISName(abbrevs[target].osis);
-                    if (retVal >= 0) {
-                        return retVal;
-                    }
-                    if (target >= max)
-                        break;
-                    ++target;
-                    if (std::strncmp(abbr.c_str(), abbrevs[target].ab, abbr.size()))
-                        break;
-                }
+                auto const & osis = it->second;
+                auto retVal = m_refSys->getBookNumberByOSISName(osis.c_str());
+                if (retVal >= 0)
+                    return retVal;
             }
         }
     }

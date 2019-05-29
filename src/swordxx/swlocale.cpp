@@ -28,46 +28,33 @@
 #include "utilstr.h"
 #include "versificationmgr.h"
 
-
 namespace swordxx {
 
 char const * SWLocale::DEFAULT_LOCALE_NAME = "en";
 
 SWLocale::SWLocale(const char *ifilename) {
-    if (ifilename) {
-        m_localeSource = std::make_unique<SWConfig>(ifilename);
+    {
+        std::shared_ptr<ConfigEntMap> abbrevsMap;
+        if (ifilename) {
+            m_localeSource = std::make_unique<SWConfig>(ifilename);
 
-        for (auto const & ap : m_localeSource->sections()["Book Abbrevs"])
-            m_mergedAbbrevs[ap.first] = ap.second;
+            /* Build abbreviations map from locale,  */
+            abbrevsMap = std::make_shared<ConfigEntMap>(
+                             (*m_localeSource)["Book Abbrevs"]);
+        } else {
+            m_localeSource = std::make_unique<SWConfig>();
+            auto & meta = (*m_localeSource)["Meta"];
+            meta["Name"] = DEFAULT_LOCALE_NAME;
+            meta["Description"] = "English (US)";
 
-        // Assure english abbrevs for missing abbreviations:
-        for (std::size_t j = 0; builtin_abbrevs[j].osis[0]; ++j)
-            if (m_mergedAbbrevs.find(builtin_abbrevs[j].ab)
-                == m_mergedAbbrevs.end())
-                m_mergedAbbrevs.emplace(builtin_abbrevs[j].ab,
-                                        builtin_abbrevs[j].osis);
-
-        auto const size = m_mergedAbbrevs.size();
-        m_bookAbbrevs = std::make_unique<struct abbrev[]>(size + 1);
-        std::size_t i = 0;
-        for (auto const & ap : m_mergedAbbrevs) {
-            auto & bookAbbrev = m_bookAbbrevs[i];
-            bookAbbrev.ab = ap.first.c_str();
-            bookAbbrev.osis = ap.second.c_str();
-            ++i;
+            // Use english abbrevs by default:
+            abbrevsMap = std::make_shared<ConfigEntMap>();
         }
 
-        m_bookAbbrevs[i].ab = "";
-        m_bookAbbrevs[i].osis = "";
-        m_abbrevsCnt = size;
-    } else {
-        m_localeSource = std::make_unique<SWConfig>();
-        auto & meta = (*m_localeSource)["Meta"];
-        meta["Name"] = DEFAULT_LOCALE_NAME;
-        meta["Description"] = "English (US)";
-        m_abbrevsCnt = 0u;
-        while (builtin_abbrevs[m_abbrevsCnt].osis[0])
-            ++m_abbrevsCnt;
+        // Append the built-in (English) abbreviations to the end:
+        for (std::size_t j = 0; builtin_abbrevs[j].osis[0]; ++j)
+            abbrevsMap->emplace(builtin_abbrevs[j].ab, builtin_abbrevs[j].osis);
+        m_bookAbbrevs = std::move(abbrevsMap);
     }
 
     auto const & sections = m_localeSource->sections();
@@ -104,12 +91,6 @@ std::string const & SWLocale::translate(std::string_view text) {
 void SWLocale::augment(SWLocale &addFrom) {
     m_localeSource->augment(*addFrom.m_localeSource);
     m_lookupTable.clear();
-}
-
-struct abbrev const * SWLocale::getBookAbbrevs(std::size_t * retSize) {
-    if (retSize)
-        (*retSize) = m_abbrevsCnt;
-    return m_bookAbbrevs ? m_bookAbbrevs.get() : builtin_abbrevs;
 }
 
 } /* namespace swordxx */
