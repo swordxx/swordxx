@@ -53,8 +53,6 @@ public class SWORD extends CordovaPlugin {
 	public static final String TAG = "SWORD";
 	public static SWMgr mgr = null;
 	public static InstallMgr installMgr = null;
-	private CallbackContext installReporterContext = null;
-	private CallbackContext searchReporterContext = null;
 	private CallbackContext sendContext = null;
 
 	/**
@@ -74,8 +72,10 @@ public class SWORD extends CordovaPlugin {
 		super.initialize(cordova, webView);
 		mgr = new AndroidMgr(cordova.getActivity().getApplication());
 		installMgr = new InstallMgr();
-		installReporterContext = null;
-		searchReporterContext = null;
+		if (android.os.Build.VERSION.SDK_INT > 9) {
+			android.os.StrictMode.ThreadPolicy policy = new android.os.StrictMode.ThreadPolicy.Builder().permitAll().build();
+			android.os.StrictMode.setThreadPolicy(policy);
+		}
 	}
 
 	/**
@@ -144,15 +144,15 @@ public class SWORD extends CordovaPlugin {
 			callbackContext.success(r);
 		}
 		else if (action.equals("InstallMgr_remoteInstallModule")) {
-			this.installReporterContext = callbackContext;
 			final String repo = args.getString(0);
 			final String modName = args.getString(1);
 			cordova.getThreadPool().execute(new Runnable() {
-			    @Override
-			    public void run() {
+				private CallbackContext installReporterContext = callbackContext;
+				@Override
+				public void run() {
 
-				installMgr.remoteInstallModule(repo, modName, new InstallMgr.InstallProgressReporter() {
-					public void update(long totalBytes, long completedBytes) {
+					installMgr.remoteInstallModule(repo, modName, new InstallMgr.InstallProgressReporter() {
+						public void update(long totalBytes, long completedBytes) {
 	/*
 	// callback({ status : preStatus|update|complete, totalBytes : n, completedBytes : n, message : displayable });
 	*/
@@ -277,13 +277,13 @@ public class SWORD extends CordovaPlugin {
 			callbackContext.success(mod.getKeyText());
 		}
 		else if (action.equals("SWModule_search")) {
-			this.searchReporterContext = callbackContext;
 			final SWModule mod = mgr.getModuleByName(args.getString(0));
 			final String expression = args.getString(1);
 			final int searchType = args.getInt(2);
 			final long flags = args.getLong(3);
 			final String scope = JSONObject.NULL.equals(args.getString(4)) || "null".equals(args.getString(4)) ? null : args.getString(4);
 			cordova.getThreadPool().execute(new Runnable() {
+				private CallbackContext searchReporterContext = callbackContext;
 			    @Override
 			    public void run() {
 
@@ -333,12 +333,11 @@ public class SWORD extends CordovaPlugin {
 Log.d(TAG, "SWModule_getRenderChapter");
 			final SWModule masterMod = mgr.getModuleByName(args.getString(0));
 			final SWModule mod = mgr.getModuleByName(args.getString(1));
-			final CallbackContext myCallbackContext = callbackContext;
 			if (masterMod == null) { callbackContext.error("couldn't find master module: " + args.getString(0)); return true; }
 			if (mod == null) { callbackContext.error("couldn't find module: " + args.getString(1)); return true; }
 
 			cordova.getThreadPool().execute(new Runnable() {
-				private CallbackContext myThreadRenderChapterContext = myCallbackContext;
+				private CallbackContext myThreadRenderChapterContext = callbackContext;
 			    @Override
 			    public void run() {
 
@@ -513,20 +512,23 @@ Log.d(TAG, "... finished renderChapter");
 			callbackContext.success(r);
 		}
 		else if (action.equals("HTTPUtils_makeRequest")) {
-			final CallbackContext makeRequestContext = callbackContext;
-
 			final String url      = args.getString(0);
 			final String postData = args.getString(1);
 			final int method      = args.getInt(2);
-Log.d(TAG, "makeRequest(url: " + url + ", postData: " + postData + ", method: " + method);
+Log.d(TAG, "about to spawn thread makeRequest(url: " + url + ", postData: " + postData + ", method: " + method);
 
 			cordova.getThreadPool().execute(new Runnable() {
+				private CallbackContext makeRequestContext = callbackContext;
 				@Override
 				public void run() {
 					String response = makeRequest(url, postData, method, null);
+Log.d(TAG, "received response from makeRequest with .length(): " + (response != null ? response.length() : "null"));
 					PluginResult result = new PluginResult(PluginResult.Status.OK, response);
+Log.d(TAG, "added response to result object");
 					result.setKeepCallback(false);
+Log.d(TAG, "setting result object keepCallback to false and calling sendPluginResult");
 					makeRequestContext.sendPluginResult(result);
+Log.d(TAG, "finished calling sendPluginResult");
 				}
 			});
 
@@ -638,16 +640,21 @@ Log.d(TAG, "Done looping chapter");
 	public static final String METHODS_TEXT[] = { "GET", "POST" };
 
 	public static String makeRequest(String url, String postData, int method, Map<String, String> headers) {
+Log.d(TAG, "makeRequest(url: " + url + ", postData: " + postData + ", method: " + method);
 		HttpURLConnection connection = null;
 
 		Map<String, String> defaultHeaders = new HashMap<String, String>();
 		defaultHeaders.put("Accept", "*/*");
 //		defaultHeaders.put("Content-Type", "application/xml");
 	 	defaultHeaders.put("Content-Type", "application/x-www-form-urlencoded");
+Log.d(TAG, "about to add postData length to header");
 		if (method != METHOD_GET && postData != null) defaultHeaders.put("Content-Length", Integer.toString(postData.length()));
+Log.d(TAG, "finished adding postData length to header");
 
 		try {
+Log.d(TAG, "adding any given headers");
 			if (headers != null) defaultHeaders.putAll(headers);
+Log.d(TAG, "done adding any given headers");
 
 			if (method == METHOD_GET && postData != null && postData.length() > 0) {
 				// some sanity checks for appending GET params to URL
@@ -657,12 +664,16 @@ Log.d(TAG, "Done looping chapter");
 				url += postData;
 			}
 
+Log.d(TAG, "opening connection");
 			connection = (HttpURLConnection) new URL(url).openConnection();
+Log.d(TAG, "setting request method");
 			connection.setRequestMethod(METHODS_TEXT[method]);
+Log.d(TAG, "setting request properties");
 			for (String k : defaultHeaders.keySet()) {
 				connection.setRequestProperty(k, defaultHeaders.get(k));
 			}
 			if (method == METHOD_POST) {
+Log.d(TAG, "sending post data");
 				connection.setDoOutput(true);
 				if (postData != null) {
 					DataOutputStream dos = new DataOutputStream(connection.getOutputStream());
@@ -671,13 +682,17 @@ Log.d(TAG, "Done looping chapter");
 					dos.close();
 				}
 			}
+Log.d(TAG, "getting response code");
 			int responseCode = connection.getResponseCode();
+Log.d(TAG, "response code: " + responseCode);
+Log.d(TAG, "getting response");
 			BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 			StringBuilder response = new StringBuilder();
 			String line;
 			while ((line = br.readLine()) != null) {
 				response.append(line);
 			}
+Log.d(TAG, "finished. returning response with .length(): " + response.length());
 			/* do something special if success code?
 			if (responseCode >= 200 && responseCode < 300) {
 			}
@@ -685,7 +700,10 @@ Log.d(TAG, "Done looping chapter");
 			*/
 			return response.toString();
 		}
-		catch (Exception e) { e.printStackTrace(); }
+		catch (Exception e) {
+Log.d(TAG, "an exception occurred in makeRequest thread: " + e);
+			e.printStackTrace();
+		}
 		return null;
 	}
 	public static void sendVerse(final SWModule mod, final String verse[], final CordovaInterface cordova, final CordovaPlugin plugin) {

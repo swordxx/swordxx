@@ -110,7 +110,6 @@ const char *SWLocale::translate(const char *text) {
 
 	if (entry == p->lookupTable.end()) {
 		ConfigEntMap::const_iterator confEntry;
-		SWBuf sectionName = "Text";
 		bool found = false;
 
 		SWBuf textBuf = text;
