@@ -32,9 +32,9 @@ namespace swordxx {
 namespace {
 
 template <typename LookupMap>
-std::string translate(LookupMap const & lookupMap, std::string_view text) {
-    auto const it(lookupMap.find(text));
-    return (it != lookupMap.end()) ? it->second : std::string(text);
+std::string translate(LookupMap const & lookupMap, std::string_view str) {
+    auto const it(lookupMap.find(str));
+    return (it != lookupMap.end()) ? it->second : std::string(str);
 }
 
 } // anonymous namespace
