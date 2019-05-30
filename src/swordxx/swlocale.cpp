@@ -117,9 +117,9 @@ ConfigEntMap const & SWLocale::builtinBookAbbreviations() {
     static ConfigEntMap const builtinAbbrevs(
                 [](){
                     ConfigEntMap abbrevsMap;
-                    for (std::size_t j = 0; builtin_abbrevs[j].osis[0]; ++j)
-                        abbrevsMap.emplace(builtin_abbrevs[j].ab,
-                                           builtin_abbrevs[j].osis);
+                    for (std::size_t i = 0u; builtin_abbrevs[i].osis[0u]; ++i)
+                        abbrevsMap.emplace(builtin_abbrevs[i].ab,
+                                           builtin_abbrevs[i].osis);
                     return abbrevsMap;
                 }());
     return builtinAbbrevs;
