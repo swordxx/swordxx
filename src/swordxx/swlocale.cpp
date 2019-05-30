@@ -45,7 +45,7 @@ SWLocale::SWLocale(const char *ifilename) {
     if (!ifilename) {
         m_name = DEFAULT_LOCALE_NAME;
         m_description = "English (US)";
-        return;
+        return; // Nothing else to do
     }
 
     // Load configuration file:
@@ -67,7 +67,7 @@ SWLocale::SWLocale(const char *ifilename) {
         }
     }
 
-    /* Build abbreviations map from locale,  */
+    /* Read all book abbreviation entries: */
     m_bookAbbrevs = localeSource["Book Abbrevs"];
 
     // Add all text entries:
