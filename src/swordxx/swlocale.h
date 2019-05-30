@@ -58,8 +58,6 @@ class SWDLLEXPORT SWLocale {
 
 public:
 
-    enum TranslationType { Text, PreferredAbbreviation };
-
     SWLocale(const char *ifilename);
     virtual ~SWLocale() noexcept;
 
@@ -74,8 +72,8 @@ public:
     */
     std::string const & getDescription() const noexcept { return m_description; }
 
-    std::string translate(std::string_view text,
-                          TranslationType translationType = Text);
+    std::string translateText(std::string_view text);
+    std::string translatePrefAbbrev(std::string_view abbrev);
 
     void augment(SWLocale const & addFrom);
 

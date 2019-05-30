@@ -29,6 +29,15 @@
 #include "versificationmgr.h"
 
 namespace swordxx {
+namespace {
+
+template <typename LookupMap>
+std::string translate(LookupMap const & lookupMap, std::string_view text) {
+    auto const it(lookupMap.find(text));
+    return (it != lookupMap.end()) ? it->second : std::string(text);
+}
+
+} // anonymous namespace
 
 char const * SWLocale::DEFAULT_LOCALE_NAME = "en";
 
@@ -71,15 +80,11 @@ SWLocale::SWLocale(const char *ifilename) {
 
 SWLocale::~SWLocale() noexcept = default;
 
-std::string SWLocale::translate(std::string_view text,
-                                TranslationType translationType)
-{
-    auto const & container = (translationType == Text)
-                             ? m_textTranslations
-                             : m_preferredAbbreviationTranslations;
-    auto const it(container.find(text));
-    return (it != container.end()) ? it->second : std::string(text);
-}
+std::string SWLocale::translateText(std::string_view text)
+{ return translate(m_textTranslations, std::move(text)); }
+
+std::string SWLocale::translatePrefAbbrev(std::string_view abbrev)
+{ return translate(m_preferredAbbreviationTranslations, std::move(abbrev)); }
 
 void SWLocale::augment(SWLocale const & addFrom) {
     /* Because the other locale augments this one, it makes sense to use the

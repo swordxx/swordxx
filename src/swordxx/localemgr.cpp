@@ -178,7 +178,7 @@ std::string LocaleMgr::translate(std::string_view text,
     if (auto target = getLocale(localeName.empty()
                                 ? m_defaultLocaleName
                                 : localeName))
-        return target->translate(text);
+        return target->translateText(text);
     return std::string(text);
 }
 
