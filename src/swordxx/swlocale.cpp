@@ -42,39 +42,40 @@ std::string translate(LookupMap const & lookupMap, std::string_view str) {
 char const * SWLocale::DEFAULT_LOCALE_NAME = "en";
 
 SWLocale::SWLocale(const char *ifilename) {
-    std::unique_ptr<SWConfig> localeSource;
-    if (ifilename) {
-        localeSource = std::make_unique<SWConfig>(ifilename);
-
-        /* Build abbreviations map from locale,  */
-        m_bookAbbrevs = (*localeSource)["Book Abbrevs"];
-    } else {
-        localeSource = std::make_unique<SWConfig>();
-        auto & meta = (*localeSource)["Meta"];
-        meta["Name"] = DEFAULT_LOCALE_NAME;
-        meta["Description"] = "English (US)";
+    if (!ifilename) {
+        m_name = DEFAULT_LOCALE_NAME;
+        m_description = "English (US)";
+        return;
     }
 
-    auto const & sections = localeSource->sections();
+    // Load configuration file:
+    SWConfig localeSource(ifilename);
+
+    // Read name and description:
+    auto const & sections = localeSource.sections();
     auto const metaSectionIt(sections.find("Meta"));
     if (metaSectionIt != sections.end()) {
         auto const & metaSection = metaSectionIt->second;
-        auto const maybeGetEntry =
-                [&metaSection](std::string & field, char const * const key) {
-                    auto const entry(metaSection.find(key));
-                    if (entry != metaSection.end())
-                        field = entry->second;
-                };
-        maybeGetEntry(m_name, "Name");
-        maybeGetEntry(m_description, "Description");
+        { // Read name:
+            auto const entry(metaSection.find("Name"));
+            if (entry != metaSection.end())
+                m_name = entry->second;
+        }{ // Read description:
+            auto const entry(metaSection.find("Description"));
+            if (entry != metaSection.end())
+                m_description = entry->second;
+        }
     }
 
+    /* Build abbreviations map from locale,  */
+    m_bookAbbrevs = localeSource["Book Abbrevs"];
+
     // Add all text entries:
-    for (auto & ep : (*localeSource)["Text"])
+    for (auto & ep : localeSource["Text"])
         m_textTranslations.emplace(ep.first, ep.second);
 
     // Add all preferred abbreviation entries:
-    for (auto & vp : (*localeSource)["Pref Abbrevs"])
+    for (auto & vp : localeSource["Pref Abbrevs"])
         m_preferredAbbreviationTranslations.emplace(vp.first, vp.second);
 }
 
