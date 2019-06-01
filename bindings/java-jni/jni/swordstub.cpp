@@ -1034,10 +1034,12 @@ SWModule *getModule
 	jstring sourceNameJS = (jstring)env->GetObjectField(me, sourceFieldID);
 	const char *modName = (modNameJS?env->GetStringUTFChars(modNameJS, NULL):0);
 	const char *sourceName = (sourceNameJS?env->GetStringUTFChars(sourceNameJS, NULL):0);
+SWLog::getSystemLog()->logDebug("libsword: lookup up module %s at from source: %s", modName?modName:"null", sourceName?sourceName:"null");
+
 	if (sourceName && *sourceName) {
 		initInstall(env);
 		InstallSourceMap::iterator source = installMgr->sources.find(sourceName);
-		if (source == installMgr->sources.end()) {
+		if (source != installMgr->sources.end()) {
 			SWMgr *mgr = source->second->getMgr();
 			module = mgr->getModule(modName);
 		}
@@ -1638,13 +1640,18 @@ SWLog::getSystemLog()->logDebug("getConfigEntry(%s)\n", configKey);
 	SWModule *module = getModule(env, me);
 
 	if (module) {
-		SWBuf confValue = module->getConfigEntry(configKey);
-		// special processing if we're requesting About-- kindof cheese
-		if (!strcmp("About", configKey)) {
-			RTFHTML().processText(confValue);
+SWLog::getSystemLog()->logDebug("getConfigEntry, found module.");
+
+
+		const char *configValue = module->getConfigEntry(configKey);
+		if (configValue) {
+			SWBuf confValue = configValue;
+			// special processing if we're requesting About-- kindof cheese
+			if (!strcmp("About", configKey)) {
+				RTFHTML().processText(confValue);
+			}
+			retVal = strToUTF8Java(env, assureValidUTF8(confValue.c_str()));
 		}
-		SWBuf assuredBuf = assureValidUTF8(confValue.c_str());
-		retVal = strToUTF8Java(env, assuredBuf.c_str());
 	}
 
 	env->ReleaseStringUTFChars(configKeyJS, configKey);
@@ -2076,23 +2083,26 @@ JNIEXPORT jobject JNICALL Java_org_crosswire_android_sword_InstallMgr_getRemoteM
 
 	initInstall(env);
 
-	const char *sourceName = env->GetStringUTFChars(sourceNameJS, NULL);
-SWLog::getSystemLog()->logDebug("getRemoteModuleByName: sourceName: %s\n", sourceName);
-	InstallSourceMap::iterator source = installMgr->sources.find(sourceName);
-	env->ReleaseStringUTFChars(sourceNameJS, sourceName);
+	const char *sourceNameC = env->GetStringUTFChars(sourceNameJS, NULL);
+	SWBuf sourceName = sourceNameC;
+SWLog::getSystemLog()->logDebug("getRemoteModuleByName: sourceName: %s\n", sourceName.c_str());
+	InstallSourceMap::iterator source = installMgr->sources.find(sourceName.c_str());
+	env->ReleaseStringUTFChars(sourceNameJS, sourceNameC);
 
 	if (source == installMgr->sources.end()) {
-SWLog::getSystemLog()->logDebug("Couldn't find remote source [%s]\n", sourceName);
+SWLog::getSystemLog()->logDebug("Couldn't find remote source [%s]\n", sourceName.c_str());
 		return 0;
 	}
 
 	SWMgr *mgr = source->second->getMgr();
 
-	const char *modName = env->GetStringUTFChars(modNameJS, NULL);
-	sword::SWModule *module = mgr->getModule(modName);
-	env->ReleaseStringUTFChars(modNameJS, modName);
+	const char *modNameC = env->GetStringUTFChars(modNameJS, NULL);
+	SWBuf modName = modNameC;
+	sword::SWModule *module = mgr->getModule(modName.c_str());
+	env->ReleaseStringUTFChars(modNameJS, modNameC);
 
 	if (module) {
+SWLog::getSystemLog()->logDebug("Found remote module [%s]: %s\n", sourceName.c_str(), modName.c_str());
 		SWBuf type = module->getType();
 		SWBuf cat = module->getConfigEntry("Category");
 		if (cat.length() > 0) type = cat;
@@ -2103,6 +2113,7 @@ SWLog::getSystemLog()->logDebug("Couldn't find remote source [%s]\n", sourceName
 		fieldID = env->GetFieldID(clazzSWModule, "description", "Ljava/lang/String;"); env->SetObjectField(retVal, fieldID, strToUTF8Java(env, assureValidUTF8(module->getDescription())));
 		fieldID = env->GetFieldID(clazzSWModule, "category", "Ljava/lang/String;"); env->SetObjectField(retVal, fieldID, strToUTF8Java(env, assureValidUTF8(type.c_str())));
 		fieldID = env->GetFieldID(clazzSWModule, "remoteSourceName", "Ljava/lang/String;"); env->SetObjectField(retVal, fieldID, sourceNameJS);
+SWLog::getSystemLog()->logDebug("returning remote module [%s]: %s\n", sourceName.c_str(), modName.c_str());
 	}
 
 	return retVal;

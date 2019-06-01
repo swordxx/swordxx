@@ -143,6 +143,25 @@ public class SWORD extends CordovaPlugin {
 			}
 			callbackContext.success(r);
 		}
+		else if (action.equals("InstallMgr_getRemoteModuleByName")) {
+			SWModule mod = installMgr.getRemoteModuleByName(args.getString(0), args.getString(1));
+			// didn't find module is not an error
+			if (mod == null) { callbackContext.success(); return true; }
+
+			JSONObject m = new JSONObject();
+			m.put("name", mod.getName());
+			m.put("description", mod.getDescription());
+			m.put("category", mod.getCategory());
+			m.put("remoteSourceName", mod.getRemoteSourceName());
+			m.put("direction", mod.getConfigEntry("Direction"));
+			m.put("language", mod.getConfigEntry("Lang"));
+			m.put("font", mod.getConfigEntry("Font"));
+			m.put("shortCopyright", mod.getConfigEntry("ShortCopyright"));
+			m.put("shortPromo", mod.getConfigEntry("ShortPromo"));
+			m.put("cipherKey", mod.getConfigEntry("CipherKey"));
+Log.d(TAG, "SWModule_getRemoteModuleByName("+args.getString(0)+", " + args.getString(1) + " returned successfully.");
+			callbackContext.success(m);
+		}
 		else if (action.equals("InstallMgr_remoteInstallModule")) {
 			final String repo = args.getString(0);
 			final String modName = args.getString(1);
@@ -461,7 +480,7 @@ Log.d(TAG, "... finished renderChapter");
 			callbackContext.success(r);
 		}
 		else if (action.equals("SWModule_getConfigEntry")) {
-			SWModule mod = mgr.getModuleByName(args.getString(0));
+			SWModule mod = new SWModule(args.getString(0), args.getString(2));
 			if (mod == null) { callbackContext.error("couldn't find module: " + args.getString(0)); return true; }
 			callbackContext.success(mod.getConfigEntry(args.getString(1)));
 		}

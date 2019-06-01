@@ -50,6 +50,7 @@ public class SWModule {
 	public static final int VERSEKEY_BOOKABBREV = 9;
 
 	private SWModule() {}	// don't allow allocation, instead use factory method SWMgr.getModuleByName to retrieve an instance
+	public SWModule(String name, String remoteSourceName) { this.name = name; this.remoteSourceName = remoteSourceName; }	// ok, well, our stub can create a shell with name and remoteSourceName
 
 	public static class SearchHit {
 		public String modName;
@@ -85,6 +86,7 @@ public class SWModule {
 	public String               getName()		{ return name; }
 	public String               getDescription()	{ return description; }
 	public String               getCategory()	{ return category; }
+	public String               getRemoteSourceName()	{ return remoteSourceName; }
 	public native void          previous();
 	public native void          next();
 	public native void          begin();

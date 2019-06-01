@@ -59,6 +59,15 @@ InstallMgr.prototype.getRemoteModInfoList = function(sourceName, callback) {
 	return retVal;
 }
 
+InstallMgr.prototype.getRemoteModuleByName = function(sourceName, modName, callback) {
+	var mod = null;
+	exec(function(m) { if (m.name) mod = new SWModule(m); if (callback) callback(mod); },
+		function(err) { utils.alert('[ERROR] problem: ' + err); },
+		"SWORD", "InstallMgr_getRemoteModuleByName", [sourceName, modName]
+	);
+	return mod;
+}
+
 // callback({ status : preStatus|update|complete, totalBytes : n, completedBytes : n, message : displayable });
 InstallMgr.prototype.remoteInstallModule = function(sourceName, modName, callback) {
 	var retVal = null;
@@ -79,14 +88,16 @@ InstallMgr.prototype.uninstallModule = function(modName, callback) {
 }
 
 function SWModule(modInfo) {
-	this.name           = modInfo.name;
-	this.description    = modInfo.description;
-	this.category       = modInfo.category;
-	this.direction      = modInfo.direction;
-	this.language       = modInfo.language;
-	this.font           = modInfo.font;
-	this.shortCopyright = modInfo.shortCopyright;
-	this.shortPromo     = modInfo.shortPromo;
+	this.name             = modInfo.name;
+	this.description      = modInfo.description;
+	this.category         = modInfo.category;
+	this.direction        = modInfo.direction;
+	this.language         = modInfo.language;
+	this.font             = modInfo.font;
+	this.shortCopyright   = modInfo.shortCopyright;
+	this.shortPromo       = modInfo.shortPromo;
+	this.cipherKey        = modInfo.cipherKey;
+	this.remoteSourceName = modInfo.remoteSourceName;
 }
 
 SWModule.prototype.SEARCHTYPE_REGEX     =  1;
@@ -190,7 +201,7 @@ SWModule.prototype.getConfigEntry = function(key, callback) {
 	var retVal = '';
 	exec(callback?callback:function(m) { if (m) retVal = m; },
 		function(err) { utils.alert('[ERROR] problem: ' + err); },
-		"SWORD", "SWModule_getConfigEntry", [this.name, key]
+		"SWORD", "SWModule_getConfigEntry", [this.name, key, this.remoteSourceName]
 	);
 	return retVal;
 }
