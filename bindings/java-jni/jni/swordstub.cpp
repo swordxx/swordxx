@@ -59,6 +59,8 @@ using std::vector;
 using namespace sword;
 
 namespace {
+bool firstInit = true;
+JavaVM *javaVM = 0;
 WebMgr *mgr = 0;
 InstallMgr *installMgr = 0;
 LocaleMgr *localeMgr = 0;
@@ -68,7 +70,6 @@ BibleSync *bibleSync = 0;
 using std::string;
 jobject bibleSyncListener = 0;
 JNIEnv *bibleSyncListenerEnv = 0;
-JNIEnv *lastEnv = 0;
 #endif
 static SWBuf STORAGE_BASE;
 const char *SWORD_PATH = "/sdcard/sword";
@@ -160,33 +161,46 @@ public:
 class AndroidStringMgr : public StringMgr {
 public:
 	virtual char *upperUTF8(char *buf, unsigned int maxLen = 0) const {
-		if (lastEnv) {
-			long bufLen = strlen(buf);
-			jbyteArray array = lastEnv->NewByteArray(bufLen);
-			lastEnv->SetByteArrayRegion(array, 0, bufLen, (const jbyte *)buf);
-			jstring strEncode = lastEnv->NewStringUTF("UTF-8");
-			jclass cls = lastEnv->FindClass("java/lang/String");
-			jmethodID ctor = lastEnv->GetMethodID(cls, "<init>", "([BLjava/lang/String;)V");
-			jstring object = (jstring) lastEnv->NewObject(cls, ctor, array, strEncode);
-			jmethodID toUpperCase = lastEnv->GetMethodID(cls, "toUpperCase", "()Ljava/lang/String;");
-			jstring objectUpper = (jstring)lastEnv->CallObjectMethod(object, toUpperCase, NULL);
+		JNIEnv *myThreadsEnv = 0;
 
-			const char *ret = (objectUpper?lastEnv->GetStringUTFChars(objectUpper, NULL):0);
+		// double check it's all ok
+		int getEnvStat = javaVM->GetEnv((void**)&myThreadsEnv, JNI_VERSION_1_6);
+		// should never happen
+		if (getEnvStat == JNI_EDETACHED) {
+			std::cout << "GetEnv: not attached" << std::endl;
+			if (javaVM->AttachCurrentThread(&myThreadsEnv, NULL) != 0) {
+				std::cout << "Failed to attach" << std::endl;
+			}
+		}
+
+		if (myThreadsEnv) {
+			long bufLen = strlen(buf);
+			jbyteArray array = myThreadsEnv->NewByteArray(bufLen);
+			myThreadsEnv->SetByteArrayRegion(array, 0, bufLen, (const jbyte *)buf);
+			jstring strEncode = myThreadsEnv->NewStringUTF("UTF-8");
+			jclass cls = myThreadsEnv->FindClass("java/lang/String");
+			jmethodID ctor = myThreadsEnv->GetMethodID(cls, "<init>", "([BLjava/lang/String;)V");
+			jstring object = (jstring) myThreadsEnv->NewObject(cls, ctor, array, strEncode);
+			jmethodID toUpperCase = myThreadsEnv->GetMethodID(cls, "toUpperCase", "()Ljava/lang/String;");
+			jstring objectUpper = (jstring)myThreadsEnv->CallObjectMethod(object, toUpperCase, NULL);
+
+			const char *ret = (objectUpper?myThreadsEnv->GetStringUTFChars(objectUpper, NULL):0);
 			if (ret) {
 				unsigned long retLen = strlen(ret);
 				if (retLen >= maxLen) retLen = maxLen-1;
 				memcpy(buf, ret, retLen);
 				buf[retLen] = 0;
 
-				lastEnv->ReleaseStringUTFChars(objectUpper, ret);
+				myThreadsEnv->ReleaseStringUTFChars(objectUpper, ret);
 			}
 
-			lastEnv->DeleteLocalRef(strEncode);
-			lastEnv->DeleteLocalRef(array);
-			lastEnv->DeleteLocalRef(cls);
-			lastEnv->DeleteLocalRef(objectUpper);
-			lastEnv->DeleteLocalRef(object);
+			myThreadsEnv->DeleteLocalRef(strEncode);
+			myThreadsEnv->DeleteLocalRef(array);
+			myThreadsEnv->DeleteLocalRef(cls);
+			myThreadsEnv->DeleteLocalRef(objectUpper);
+			myThreadsEnv->DeleteLocalRef(object);
 		}
+//		javaVM->DetachCurrentThread();
 		return buf;
 	}
 protected:
@@ -195,13 +209,12 @@ protected:
 
 static void init(JNIEnv *env) {
 
-	// very first init
-	if (!lastEnv) {
+	if (firstInit) {
 		SWLog::setSystemLog(new AndroidLogger());
 		SWLog::getSystemLog()->setLogLevel(SWLog::LOG_DEBUG);
 		StringMgr::setSystemStringMgr(new AndroidStringMgr());
+		firstInit = false;
 	}
-	if (env) lastEnv = env;
 	if (!mgr) {
 SWLog::getSystemLog()->logDebug("libsword: init() begin");
 		SWBuf baseDir  = SWORD_PATH;
@@ -1034,7 +1047,7 @@ SWModule *getModule
 	jstring sourceNameJS = (jstring)env->GetObjectField(me, sourceFieldID);
 	const char *modName = (modNameJS?env->GetStringUTFChars(modNameJS, NULL):0);
 	const char *sourceName = (sourceNameJS?env->GetStringUTFChars(sourceNameJS, NULL):0);
-SWLog::getSystemLog()->logDebug("libsword: lookup up module %s at from source: %s", modName?modName:"null", sourceName?sourceName:"null");
+SWLog::getSystemLog()->logDebug("libsword: lookup up module %s from source: %s", modName?modName:"<null>", sourceName?sourceName:"<null>");
 
 	if (sourceName && *sourceName) {
 		initInstall(env);
@@ -1644,12 +1657,14 @@ SWLog::getSystemLog()->logDebug("getConfigEntry, found module.");
 
 
 		const char *configValue = module->getConfigEntry(configKey);
+//SWLog::getSystemLog()->logDebug("getConfigEntry, configValue: %s", configValue);
 		if (configValue) {
 			SWBuf confValue = configValue;
 			// special processing if we're requesting About-- kindof cheese
 			if (!strcmp("About", configKey)) {
 				RTFHTML().processText(confValue);
 			}
+//SWLog::getSystemLog()->logDebug("getConfigEntry, configValue: %s", confValue.c_str());
 			retVal = strToUTF8Java(env, assureValidUTF8(confValue.c_str()));
 		}
 	}
@@ -2245,6 +2260,7 @@ SWLog::getSystemLog()->logDebug("registerBibleSyncListener: !!! BibleSync disabl
 }
 
 jint JNI_OnLoad(JavaVM *vm, void *reserved) {
+	javaVM = vm;
 	return JNI_VERSION_1_2;
 }
 

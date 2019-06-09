@@ -480,7 +480,10 @@ Log.d(TAG, "... finished renderChapter");
 			callbackContext.success(r);
 		}
 		else if (action.equals("SWModule_getConfigEntry")) {
-			SWModule mod = new SWModule(args.getString(0), args.getString(2));
+			String modName = args.getString(0);
+			String sourceName = args.getString(2);
+			if ("null".equals(sourceName)) sourceName = null;
+			SWModule mod = new SWModule(modName, sourceName);
 			if (mod == null) { callbackContext.error("couldn't find module: " + args.getString(0)); return true; }
 			callbackContext.success(mod.getConfigEntry(args.getString(1)));
 		}
