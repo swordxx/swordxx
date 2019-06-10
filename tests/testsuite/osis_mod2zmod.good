@@ -28,6 +28,7 @@ CSS:
 		.indent4 { margin-left: 4em; }
 		abbr { &:hover{ &:before{ content: attr(title); } } }
 		.small-caps { font-variant: small-caps; }
+		.otPassage { font-variant: small-caps; }
 		.selah { text-align: right; width: 50%; margin: 0; padding: 0; }
 		.acrostic { text-align: center; }
 		.colophon {font-style: italic; font-size: small; display: block; }
@@ -38,7 +39,7 @@ CSS:
 	
 -------
 RenderText:
- <span class="line indent0"><span class="divineName">Lord</span>, how are they increased that trouble me!</span><br />
+ <span class="line indent0"><span class=""><span class="divineName">Lord</span></span>, how are they increased that trouble me!</span><br />
 <span class="line indent0">many <span class="transChange transChange-added">are</span> they that rise up against me.</span><br />
 
 -------
@@ -70,6 +71,7 @@ CSS:
 		.indent4 { margin-left: 4em; }
 		abbr { &:hover{ &:before{ content: attr(title); } } }
 		.small-caps { font-variant: small-caps; }
+		.otPassage { font-variant: small-caps; }
 		.selah { text-align: right; width: 50%; margin: 0; padding: 0; }
 		.acrostic { text-align: center; }
 		.colophon {font-style: italic; font-size: small; display: block; }
@@ -119,6 +121,7 @@ CSS:
 		.indent4 { margin-left: 4em; }
 		abbr { &:hover{ &:before{ content: attr(title); } } }
 		.small-caps { font-variant: small-caps; }
+		.otPassage { font-variant: small-caps; }
 		.selah { text-align: right; width: 50%; margin: 0; padding: 0; }
 		.acrostic { text-align: center; }
 		.colophon {font-style: italic; font-size: small; display: block; }

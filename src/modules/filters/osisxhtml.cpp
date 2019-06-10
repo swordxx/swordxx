@@ -50,6 +50,7 @@ const char *OSISXHTML::getHeader() const {
 		.indent4 { margin-left: 4em; }\n\
 		abbr { &:hover{ &:before{ content: attr(title); } } }\n\
 		.small-caps { font-variant: small-caps; }\n\
+		.otPassage { font-variant: small-caps; }\n\
 		.selah { text-align: right; width: 50%; margin: 0; padding: 0; }\n\
 		.acrostic { text-align: center; }\n\
 		.colophon {font-style: italic; font-size: small; display: block; }\n\
@@ -620,6 +621,18 @@ bool OSISXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
 				outText("<span class=\"", buf, u);
 				outText(tag.getName(), buf, u);
+				outText("\">", buf, u);
+			}
+			else if (tag.isEndTag()) {
+				outText("</span>", buf, u);
+			}
+		}
+		// <seg>
+		else if (!strcmp(tag.getName(), "seg")) {
+			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
+				SWBuf type = tag.getAttribute("type");
+				outText("<span class=\"", buf, u);
+				outText(type, buf, u);
 				outText("\">", buf, u);
 			}
 			else if (tag.isEndTag()) {
