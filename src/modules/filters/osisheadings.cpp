@@ -120,6 +120,10 @@ bool OSISHeadings::handleToken(SWBuf &buf, const char *token, BasicFilterUserDat
 						for (StringList::const_iterator it = attributes.begin(); it != attributes.end(); it++) {
 							u->module->getEntryAttributes()["Heading"][buf][it->c_str()] = u->currentHeadingTag.getAttribute(it->c_str());
 						}
+						// if any title in the heading was canonical, then set canonical=true.
+						// TODO: split composite headings with both canonical and non-canonical headings
+						// into two heading attributes with proper canonical value on each
+						if (u->canonical) u->module->getEntryAttributes()["Heading"][buf]["canonical"] = "true";
 					}
 
 					// do we want the heading in the body?
