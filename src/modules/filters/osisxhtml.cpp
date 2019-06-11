@@ -315,7 +315,7 @@ bool OSISXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 
 						if (u->vkey) {
 							//printf("URL = %s\n",URL::encode(u->vkey->getText()).c_str());
-							buf.appendFormatted("<a class=\"%s\" href=\"passagestudy.jsp?action=showNote&type=%c&value=%s&module=%s&passage=%s\"><small><sup class=\"%c\">*%c%s</sup></small></a>",
+							buf.appendFormatted("<a class=\"noteMarker%s\" href=\"passagestudy.jsp?action=showNote&type=%c&value=%s&module=%s&passage=%s\"><small><sup class=\"%c\">*%c%s</sup></small></a>",
 								classExtras.c_str(),
 								ch, 
 								URL::encode(footnoteNumber.c_str()).c_str(), 
@@ -326,7 +326,7 @@ bool OSISXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *
 								(renderNoteNumbers ? noteName.c_str() : ""));
 						}
 						else {
-							buf.appendFormatted("<a class=\"%s\" href=\"passagestudy.jsp?action=showNote&type=%c&value=%s&module=%s&passage=%s\"><small><sup class=\"%c\">*%c%s</sup></small></a>",
+							buf.appendFormatted("<a class=\"noteMarker%s\" href=\"passagestudy.jsp?action=showNote&type=%c&value=%s&module=%s&passage=%s\"><small><sup class=\"%c\">*%c%s</sup></small></a>",
 								classExtras.c_str(),
 								ch, 
 								URL::encode(footnoteNumber.c_str()).c_str(), 

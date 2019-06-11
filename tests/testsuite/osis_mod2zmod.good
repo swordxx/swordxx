@@ -82,10 +82,10 @@ CSS:
 	
 -------
 RenderText:
-<span class="line indent0">‘<a class=" crossReference" href="passagestudy.jsp?action=showNote&type=x&value=1&module=zOSISReference&passage=Matthew+2%3A6"><small><sup class="x">*x</sup></small></a><span class="small-caps">And you, Bethlehem, land of Judah</span>, </span><br />
+<span class="line indent0">‘<a class="noteMarker crossReference" href="passagestudy.jsp?action=showNote&type=x&value=1&module=zOSISReference&passage=Matthew+2%3A6"><small><sup class="x">*x</sup></small></a><span class="small-caps">And you, Bethlehem, land of Judah</span>, </span><br />
 <span class="line indent0"><span class="small-caps">Are by no means least among the leaders of Judah</span>; </span><br />
 <span class="line indent0"><span class="small-caps">For out of you shall come forth a Ruler</span> </span><br />
-<span class="line indent0"><span class="small-caps">Who will</span> <a class=" crossReference" href="passagestudy.jsp?action=showNote&type=x&value=2&module=zOSISReference&passage=Matthew+2%3A6"><small><sup class="x">*x</sup></small></a><span class="small-caps">shepherd My people Israel</span>.’” <br />
+<span class="line indent0"><span class="small-caps">Who will</span> <a class="noteMarker crossReference" href="passagestudy.jsp?action=showNote&type=x&value=2&module=zOSISReference&passage=Matthew+2%3A6"><small><sup class="x">*x</sup></small></a><span class="small-caps">shepherd My people Israel</span>.’” <br />
   
 -------
 -------

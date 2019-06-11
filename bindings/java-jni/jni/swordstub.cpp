@@ -268,6 +268,9 @@ SWLog::getSystemLog()->logDebug("libsword: init() adding locales from baseDir.")
 		LocaleMgr::getSystemLocaleMgr()->loadConfigDir(SWBuf(STORAGE_BASE + "/uilocales.d").c_str());
 		LocaleMgr::getSystemLocaleMgr()->loadConfigDir((SWBuf(SWORD_PATH) + "/locales.d").c_str());
 		LocaleMgr::getSystemLocaleMgr()->loadConfigDir((SWBuf(SWORD_PATH) + "/uilocales.d").c_str());
+
+		mgr->setGlobalOption("Footnotes", "On");
+		mgr->setGlobalOption("Cross-references", "On");
 SWLog::getSystemLog()->logDebug("libsword: init() end.");
 	}
 }
