@@ -396,7 +396,7 @@ debugPrint("initMgr, mgr: " + String(describing: mgr))
     @objc(SWModule_getConfigEntry:)
     func SWModule_getConfigEntry(command: CDVInvokedUrlCommand) {
         initMgr()
-        let mod = getModule(command: command)
+        let mod = getModule(command: command, remoteSourceArgNumber: 2)
         if (mod != 0) {
             let val = org_crosswire_sword_SWModule_getConfigEntry(mod, command.arguments[1] as? String ?? "")
             let retVal = val == nil ? nil : String(cString: val!)
@@ -703,10 +703,18 @@ debugPrint("initMgr, mgr: " + String(describing: mgr))
     }
     
     
-    func getModule(command: CDVInvokedUrlCommand, nameArgNumber: Int = 0) -> Int {
+    func getModule(command: CDVInvokedUrlCommand, nameArgNumber: Int = 0, remoteSourceArgNumber: Int = -1) -> Int {
         initMgr()
         let modName = command.arguments[nameArgNumber] as? String ?? ""
-        let module = org_crosswire_sword_SWMgr_getModuleByName(mgr, modName)
+        var module = 0;
+        if (remoteSourceArgNumber > -1) {
+            let sourceName = command.arguments[remoteSourceArgNumber] as? String ?? ""
+            initInstall()
+            module = org_crosswire_sword_InstallMgr_getRemoteModuleByName(installMgr, sourceName, modName)
+        }
+        else {
+            module = org_crosswire_sword_SWMgr_getModuleByName(mgr, modName)
+        }
         if (module == 0) {
             self.commandDelegate!.send(CDVPluginResult(status: CDVCommandStatus_ERROR, messageAs: "couldn't find module \(modName)"), callbackId: command.callbackId)
         }
@@ -814,6 +822,47 @@ debugPrint("initMgr, mgr: " + String(describing: mgr))
     }
     
     
+    @objc(InstallMgr_getRemoteModuleByName:)
+    func InstallMgr_getRemoteModuleByName(command: CDVInvokedUrlCommand) {
+        
+        initInstall()
+        
+        let modSource = command.arguments[0] as? String ?? ""
+        let modName   = command.arguments[1] as? String ?? ""
+        let module = org_crosswire_sword_InstallMgr_getRemoteModuleByName(installMgr, modSource, modName)
+        
+        if (module == 0) {
+            self.commandDelegate!.send(CDVPluginResult(status: CDVCommandStatus_OK), callbackId: command.callbackId)
+            return
+        }
+        
+        let name = org_crosswire_sword_SWModule_getName(module)
+        let description = org_crosswire_sword_SWModule_getDescription(module)
+        let category = org_crosswire_sword_SWModule_getCategory(module)
+        
+        var response = [
+            "name": name == nil ? "" : String(cString: name!),
+            "description": description == nil ? "" : String(cString: description!),
+            "category": category == nil ? "" : String(cString: category!),
+            "remoteSourceName": modSource
+        ]
+        let language = org_crosswire_sword_SWModule_getConfigEntry(module, "Lang")
+        response["language"] =  language == nil ? "" : String(cString: language!)
+        let direction = org_crosswire_sword_SWModule_getConfigEntry(module, "Direction")
+        response["direction"] =  direction == nil ? "" : String(cString: direction!)
+        let font = org_crosswire_sword_SWModule_getConfigEntry(module, "Font")
+        response["font"] =  font == nil ? "" : String(cString: font!)
+        let shortCopyright = org_crosswire_sword_SWModule_getConfigEntry(module, "ShortCopyright")
+        response["shortCopyright"] =  shortCopyright == nil ? "" : String(cString: shortCopyright!)
+        let cipherKey = org_crosswire_sword_SWModule_getConfigEntry(module, "CipherKey")
+        response["cipherKey"] =  cipherKey == nil ? "" : String(cString: cipherKey!)
+        let shortPromo = org_crosswire_sword_SWModule_getConfigEntry(module, "ShortPromo")
+        response["shortPromo"] = shortPromo == nil ? "" : String(cString: shortPromo!)
+        
+        
+        self.commandDelegate!.send(CDVPluginResult(status: CDVCommandStatus_OK, messageAs: response), callbackId: command.callbackId)
+    }
+
     @objc(InstallMgr_refreshRemoteSource:)
     func InstallMgr_refreshRemoteSource(command: CDVInvokedUrlCommand) {
         initInstall()
