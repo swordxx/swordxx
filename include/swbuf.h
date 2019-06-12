@@ -449,6 +449,7 @@ public:
 	 * @return returns true if this buffer starts with the specified prefix
 	 */
 	inline bool startsWith(const SWBuf &prefix) const { return !strncmp(c_str(), prefix.c_str(), prefix.size()); }
+	void toUpper();
 
 	/**
 	 * @return returns true if this buffer ends with the specified postfix

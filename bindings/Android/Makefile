@@ -4,7 +4,6 @@ all: javawrapper
 
 debug: javawrapper
 	rm -rf ../cordova/cordova-plugin-crosswire-sword/libs/android/*
-#	cp -a SWORD/app/build/intermediates/cmake/debug/obj/* ../cordova/cordova-plugin-crosswire-sword/libs/android/
 	cp -a SWORD/app/build/intermediates/cmake/release/obj/* ../cordova/cordova-plugin-crosswire-sword/libs/android/
 
 javawrapper:

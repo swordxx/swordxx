@@ -26,6 +26,7 @@
 #include <stdarg.h>
 #include <stdio.h>
 
+#include <stringmgr.h>
 
 SWORD_NAMESPACE_START
 
@@ -119,5 +120,8 @@ void SWBuf::insert(unsigned long pos, const char* str, unsigned long start, sign
 	end += len;
 	*end = 0;
 }
+
+
+void SWBuf::toUpper() { assureSize(size()*3); toupperstr(buf, size()*3-1); }
 
 SWORD_NAMESPACE_END

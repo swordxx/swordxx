@@ -592,7 +592,7 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 	// phrase
 	case -1:
 		// let's see if we're told to ignore case.  If so, then we'll touppstr our term
-		if ((flags & REG_ICASE) == REG_ICASE) toupperstr(term);
+		if ((flags & REG_ICASE) == REG_ICASE) term.toUpper();
 		break;
 
 	// multi-word
@@ -609,7 +609,7 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 		}
 		if ((flags & REG_ICASE) == REG_ICASE) {
 			for (unsigned int i = 0; i < words.size(); i++) {
-				toupperstr(words[i]);
+				words[i].toUpper();
 			}
 		}
 		break;
@@ -705,7 +705,7 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 			// phrase
 			case -1:
 				textBuf = stripText();
-				if ((flags & REG_ICASE) == REG_ICASE) toupperstr(textBuf);
+				if ((flags & REG_ICASE) == REG_ICASE) textBuf.toUpper();
 				sres = strstr(textBuf.c_str(), term.c_str());
 				if (sres) { //it's also in the stripText(), so we have a valid search result item now
 					*resultKey = *getKey();
@@ -731,7 +731,7 @@ ListKey &SWModule::search(const char *istr, int searchType, int flags, SWKey *sc
 						else testBuf.setSize(0);
 						foundWords = 0;
 
-						if ((flags & REG_ICASE) == REG_ICASE) toupperstr(testBuf.size() ? testBuf : textBuf);
+						if ((flags & REG_ICASE) == REG_ICASE) testBuf.size() ? testBuf.toUpper() : textBuf.toUpper();
 						for (unsigned int i = 0; i < words.size(); i++) {
 							sres = strstr(testBuf.size() ? testBuf.c_str() : textBuf.c_str(), words[i].c_str());
 							if (!sres) {

@@ -161,6 +161,7 @@ public:
 class AndroidStringMgr : public StringMgr {
 public:
 	virtual char *upperUTF8(char *buf, unsigned int maxLen = 0) const {
+		if (!maxLen) maxLen = strlen(buf)+1;
 		JNIEnv *myThreadsEnv = 0;
 
 		// double check it's all ok
@@ -174,9 +175,10 @@ public:
 		}
 
 		if (myThreadsEnv) {
-			long bufLen = strlen(buf);
+			SWBuf validBuf = assureValidUTF8(buf);
+			long bufLen = validBuf.size();
 			jbyteArray array = myThreadsEnv->NewByteArray(bufLen);
-			myThreadsEnv->SetByteArrayRegion(array, 0, bufLen, (const jbyte *)buf);
+			myThreadsEnv->SetByteArrayRegion(array, 0, bufLen, (const jbyte *)validBuf.c_str());
 			jstring strEncode = myThreadsEnv->NewStringUTF("UTF-8");
 			jclass cls = myThreadsEnv->FindClass("java/lang/String");
 			jmethodID ctor = myThreadsEnv->GetMethodID(cls, "<init>", "([BLjava/lang/String;)V");
@@ -1715,9 +1717,17 @@ JNIEXPORT jboolean JNICALL Java_org_crosswire_android_sword_SWModule_hasSearchFr
 
 
 struct pu {
-	pu(JNIEnv *env, jobject pr) : env(env), progressReporter(pr), last(0) {}
+	pu(JNIEnv *env, jobject pr) : env(env), progressReporter(pr), last(0) {
+SWLog::getSystemLog()->logDebug("building progressReporter");
+		jclass cls = env->GetObjectClass(progressReporter);
+		mid = env->GetMethodID(cls, "progressReport", "(I)V");
+		env->DeleteLocalRef(cls);
+	}
+	~pu() {
+	}
 	JNIEnv *env;
 	jobject progressReporter;
+	jmethodID mid;
 	char last;
 };
 
@@ -1730,12 +1740,9 @@ void percentUpdate(char percent, void *userData) {
 
 	if (percent != p->last) {
 		p->last = percent;
-		jclass cls = p->env->GetObjectClass(p->progressReporter);
-		jmethodID mid = p->env->GetMethodID(cls, "progressReport", "(I)V");
-		if (mid != 0) {
-			p->env->CallVoidMethod(p->progressReporter, mid, (jint)percent);
+		if (p->mid != 0) {
+			p->env->CallVoidMethod(p->progressReporter, p->mid, (jint)percent);
 		}
-		p->env->DeleteLocalRef(cls);
 	}
 }
 
