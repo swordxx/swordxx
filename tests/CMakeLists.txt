@@ -76,10 +76,12 @@ ENDFOREACH(TEST ${test_PROGRAMS})
 
 ########################################################################################
 # The following tests require extra libraries to run
-# 
-FOREACH(ICUTEST icutest translittest)
-	TARGET_LINK_LIBRARIES(${ICUTEST} ${ICU_LIBRARIES} ${ICU_I18N_LIBRARIES})
-ENDFOREACH(ICUTEST icutest translittest)
+#
+IF(WITH_ICU)
+	FOREACH(ICUTEST icutest translittest)
+		TARGET_LINK_LIBRARIES(${ICUTEST} ${ICU_LIBRARIES} ${ICU_I18N_LIBRARIES})
+	ENDFOREACH(ICUTEST icutest translittest)
+ENDIF(WITH_ICU)
 
 # Excluded until I know we have the tests working
 ADD_SUBDIRECTORY(testsuite)
