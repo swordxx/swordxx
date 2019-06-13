@@ -8,13 +8,14 @@ mkdir -p build
 cd build
 # Configure with Python and Perl bindings, examples, tests and a debug build into
 # a shared library
-cmake -DSWORD_BINDINGS="Python Perl" \
+cmake \ #-DSWORD_BINDINGS="Python Perl" \
 	-DSWORD_BUILD_EXAMPLES="Yes" \
 	-DSWORD_BUILD_TESTS="Yes" \
 	-DLIBSWORD_LIBRARY_TYPE="Shared" \
 	-DCMAKE_BUILD_TYPE="Debug" .. \
 	-DCMAKE_INSTALL_PREFIX="~/"
 make -j10
+make -j3 tests
 cd ..
 
 echo "Now the library has been built, along with the Perl and Python bindings. \

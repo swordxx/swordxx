@@ -22,6 +22,7 @@ SET(test_PROGRAMS
 	compnone
 	configtest
 	filtertest
+	httptest
 	introtest
 	indextest
 	keycast
