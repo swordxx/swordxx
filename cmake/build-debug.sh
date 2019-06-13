@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 #
 # A sample script showing how to build most of the options available to this system.
 # Invoke it from the top directory of SWORD by calling $ cmake/build-debug.sh
@@ -8,7 +8,8 @@ mkdir -p build
 cd build
 # Configure with Python and Perl bindings, examples, tests and a debug build into
 # a shared library
-cmake \ #-DSWORD_BINDINGS="Python Perl" \
+cmake -DSWORD_PYTHON_3:BOOL=TRUE \
+	-DSWORD_PERL:BOOL=TRUE \
 	-DSWORD_BUILD_EXAMPLES="Yes" \
 	-DSWORD_BUILD_TESTS="Yes" \
 	-DLIBSWORD_LIBRARY_TYPE="Shared" \

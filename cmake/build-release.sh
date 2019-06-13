@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 #
 # A sample script showing how to build most of the options available to this system.
 # Invoke it from the top directory of SWORD by calling $ cmake/build-release.sh
@@ -9,7 +9,8 @@ cd build
 # Configure with Python and Perl bindings, examples, tests and a debug build into
 # a shared library, plus static option as well.  They will be installed to the
 # /opt/sword directory
-cmake -DSWORD_BINDINGS="Python Perl" \
+cmake -DSWORD_PYTHON_3:BOOL=TRUE \
+	-DSWORD_PERL:BOOL=TRUE \
 	-DSWORD_BUILD_EXAMPLES="Yes" \
 	-DSWORD_BUILD_TESTS="Yes" \
 	-DLIBSWORD_LIBRARY_TYPE="Shared Static" \

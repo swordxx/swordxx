@@ -293,9 +293,10 @@ INCLUDE("${CMAKE_CURRENT_SOURCE_DIR}/cmake/install.cmake")
 # Bindings are good, right?
 #
 
-IF(NOT SWORD_BINDINGS STREQUAL "" AND SWORD_BINDINGS)
+MESSAGE(STATUS "${SWORD_SWIG_BINDINGS}")
+IF(SWORD_SWIG_BINDINGS)
 	ADD_SUBDIRECTORY("${CMAKE_CURRENT_SOURCE_DIR}/bindings")
-ENDIF(NOT SWORD_BINDINGS STREQUAL "" AND SWORD_BINDINGS)
+ENDIF(SWORD_SWIG_BINDINGS)
 
 ##############################################################################################
 # Utilities are hawt
