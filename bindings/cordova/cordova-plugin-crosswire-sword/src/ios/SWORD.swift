@@ -706,9 +706,10 @@ debugPrint("initMgr, mgr: " + String(describing: mgr))
     func getModule(command: CDVInvokedUrlCommand, nameArgNumber: Int = 0, remoteSourceArgNumber: Int = -1) -> Int {
         initMgr()
         let modName = command.arguments[nameArgNumber] as? String ?? ""
+        let sourceName = remoteSourceArgNumber == -1 ? "" : command.arguments[remoteSourceArgNumber] as? String ?? ""
         var module = 0;
-        if (remoteSourceArgNumber > -1) {
-            let sourceName = command.arguments[remoteSourceArgNumber] as? String ?? ""
+        if (sourceName != "") {
+            logDebug(message: "remoteSourceName: \(sourceName)");
             initInstall()
             module = org_crosswire_sword_InstallMgr_getRemoteModuleByName(installMgr, sourceName, modName)
         }
