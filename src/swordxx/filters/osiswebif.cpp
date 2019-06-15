@@ -46,6 +46,7 @@ std::unique_ptr<BasicFilterUserData> OSISWEBIF::createUserData(
                     OSISXHTML::createUserData(module, key).release()));
     u->interModuleLinkStart = "<a href=\"#\" onclick=\"return im('%s', '%s');\">";
     u->interModuleLinkEnd = "</a>";
+    if (module) u->fn = module->getConfigEntry("EmbeddedFootnoteMarkers");
     return u;
 }
 
@@ -148,8 +149,9 @@ bool OSISWEBIF::handleToken(std::string &buf, const char *token, BasicFilterUser
 
                 if (!tag.isEmpty()) {
                     if (!strongsMarkup) {    // leave strong's markup notes out, in the future we'll probably have different option filters to turn different note types on or off
-                        std::string footnoteNumber = tag.attribute("swordFootnote");
-                        std::string modName = (u.module) ? u.module->getName() : "";
+                        auto const footnoteNumber(tag.attribute("swordFootnote"));
+                        auto const n(tag.attribute("n"));
+                        auto const modName((u.module) ? u.module->getName() : "");
                         if (auto const * const vkey = u.verseKey) {
                             char const ch = ((tag.attribute("type") == "crossReference") || (tag.attribute("type") == "x-cross-ref")) ? 'x':'n';
 //                            buf += formatted("<a href=\"noteID=%s.%c.%s\"><small><sup>*%c</sup></small></a> ", vkey->getText(), ch, footnoteNumber.c_str(), ch);
@@ -159,8 +161,13 @@ bool OSISWEBIF::handleToken(std::string &buf, const char *token, BasicFilterUser
                                .append(vkey->getText())
                                .append("\',\'")
                                .append(footnoteNumber)
-                               .append("\');\" >")
-                               .append(1u, ch)
+                               .append("\');\"");
+                            if (!n.empty()) {
+                                buf.append(" data-n=\"").append(n).append("\">");
+                            } else if (u.fn != "true") {
+                                buf.append(" data-n=\"").append(1u, ch).append("\">");
+                            }
+                            buf.append(1u, ch)
                                .append("</span>");
                         }
                     }

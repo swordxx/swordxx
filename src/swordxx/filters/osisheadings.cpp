@@ -93,7 +93,7 @@ bool OSISHeadings::handleToken(std::string &buf, const char *token, BasicFilterU
 
                     // do we want to put anything in EntryAttributes?
                     if (u->module->isProcessEntryAttributes() && (option || u->canonical || !preverse)) {
-                        std::string buf2(formatted("%i", u->headerNum++));
+                        auto const hn(std::to_string(u->headerNum++));
                         // leave the actual <title...> wrapper in if we're part of an old school preverse title
                         // because now frontend have to deal with preverse as a div which may or may not include <title> elements
                         // and they can't simply wrap all preverse material in <h1>, like they probably did previously
@@ -112,15 +112,27 @@ bool OSISHeadings::handleToken(std::string &buf, const char *token, BasicFilterU
                             heading += tag.toString();
                         }
                         else heading = u->heading;
-                        u->module->getEntryAttributes()["Heading"][(preverse)?"Preverse":"Interverse"][buf2] = heading;
+                        u->module->getEntryAttributes()["Heading"][(preverse)?"Preverse":"Interverse"][hn] = heading;
 
                         for (auto const & attr : u->currentHeadingTag.attributeNames())
-                            u->module->getEntryAttributes()["Heading"][buf2][attr.c_str()] =
+                            u->module->getEntryAttributes()["Heading"][hn][attr.c_str()] =
                                     u->currentHeadingTag.attribute(attr.c_str());
+
+                        /* If any title in the heading was canonical, then set
+                           canonical=true. */
+                        /** \todo Split composite headings with both canonical
+                                  and non-canonical headings into two heading
+                                  attributes with proper canonical value on
+                                  each. */
+                        if (u->canonical)
+                            u->module->getEntryAttributes()["Heading"][buf]["canonical"] = "true";
                     }
 
                     // do we want the heading in the body?
-                    if (!preverse && (option || u->canonical)) {
+                    // if we're not processing entryAttributes, then it's not going anyplace else
+                    if ((!preverse || !u->module->isProcessEntryAttributes())
+                        && (option || u->canonical))
+                    {
                         buf.append(u->currentHeadingTag.toString());
                         buf.append(u->heading);
                         buf.append(tag.toString());

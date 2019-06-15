@@ -51,6 +51,7 @@ const char *OSISXHTML::getHeader() const {
         ".indent4 { margin-left: 4em; }\n"
         "abbr { &:hover { &:before { content: attr(title); } } }\n"
         ".small-caps { font-variant: small-caps; }\n"
+        ".otPassage { font-variant: small-caps; }\n"
         ".selah { text-align: right; width: 50%; margin: 0; padding: 0; }\n"
         ".acrostic { text-align: center; }\n"
         ".colophon { font-style: italic; font-size: small; display: block; }\n"
@@ -312,7 +313,7 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
 
                         if (auto const * const vkey = u.verseKey) {
                             //printf("URL = %s\n",URL::encode(vkey->getText()).c_str());
-                            buf += formatted("<a class=\"%s\" href=\"passagestudy.jsp?action=showNote&type=%c&value=%s&module=%s&passage=%s\"><small><sup class=\"%c\">*%c%s</sup></small></a>",
+                            buf += formatted("<a class=\"noteMarker%s\" href=\"passagestudy.jsp?action=showNote&type=%c&value=%s&module=%s&passage=%s\"><small><sup class=\"%c\">*%c%s</sup></small></a>",
                                 classExtras.c_str(),
                                 ch,
                                 URL::encode(footnoteNumber).c_str(),
@@ -323,7 +324,7 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
                                 (renderNoteNumbers ? noteName.c_str() : ""));
                         }
                         else {
-                            buf += formatted("<a class=\"%s\" href=\"passagestudy.jsp?action=showNote&type=%c&value=%s&module=%s&passage=%s\"><small><sup class=\"%c\">*%c%s</sup></small></a>",
+                            buf += formatted("<a class=\"noteMarker%s\" href=\"passagestudy.jsp?action=showNote&type=%c&value=%s&module=%s&passage=%s\"><small><sup class=\"%c\">*%c%s</sup></small></a>",
                                 classExtras.c_str(),
                                 ch,
                                 URL::encode(footnoteNumber).c_str(),
@@ -620,6 +621,14 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
                 outText("\">", buf, u);
             }
             else if (tag.isEndTag()) {
+                outText("</span>", buf, u);
+            }
+        } else if (tag.name() == "seg") {
+            if ((!tag.isEndTag()) && (!tag.isEmpty())) {
+                outText("<span class=\"", buf, u);
+                outText(tag.attribute("type").c_str(), buf, u);
+                outText("\">", buf, u);
+            } else if (tag.isEndTag()) {
                 outText("</span>", buf, u);
             }
         }
