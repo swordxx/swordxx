@@ -1723,7 +1723,6 @@ const struct org_crosswire_sword_ModInfo * SWDLLEXPORT org_crosswire_sword_Insta
 
 		SWBuf type = module->getType();
 		SWBuf cat = module->getConfigEntry("Category");
-		const char *cipherKey = module->getConfigEntry("CipherKey");
 		if (cat.length() > 0) type = cat;
 
 		stdstr(&(retVal[i].name), assureValidUTF8(module->getName()));
@@ -1732,7 +1731,11 @@ const struct org_crosswire_sword_ModInfo * SWDLLEXPORT org_crosswire_sword_Insta
 		stdstr(&(retVal[i].language), assureValidUTF8(module->getLanguage()));
 		stdstr(&(retVal[i].version), assureValidUTF8(version.c_str()));
 		stdstr(&(retVal[i].delta), assureValidUTF8(statusString.c_str()));
-		stdstr(&(retVal[i].cipherKey), cipherKey ? (const char *)assureValidUTF8(cipherKey) : (const char *)0);
+		const char *cipherKey = module->getConfigEntry("CipherKey");
+		if (cipherKey) {
+			stdstr(&(retVal[i].cipherKey), assureValidUTF8(cipherKey));
+		}
+		else	retVal[i].cipherKey = 0;
 
 		ConfigEntMap::const_iterator start = module->getConfig().lower_bound("Feature");
 		ConfigEntMap::const_iterator end   = module->getConfig().upper_bound("Feature");
