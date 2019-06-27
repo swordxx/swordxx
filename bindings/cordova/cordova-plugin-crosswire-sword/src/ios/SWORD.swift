@@ -165,7 +165,9 @@ debugPrint("initMgr, mgr: " + String(describing: mgr))
         let shortCopyright = org_crosswire_sword_SWModule_getConfigEntry(module, "ShortCopyright")
         response["shortCopyright"] =  shortCopyright == nil ? "" : String(cString: shortCopyright!)
         let cipherKey = org_crosswire_sword_SWModule_getConfigEntry(module, "CipherKey")
-        response["cipherKey"] =  cipherKey == nil ? "" : String(cString: cipherKey!)
+        if (cipherKey != nil) {
+            response["cipherKey"] = String(cString: cipherKey!)
+        }
         let shortPromo = org_crosswire_sword_SWModule_getConfigEntry(module, "ShortPromo")
         response["shortPromo"] = shortPromo == nil ? "" : String(cString: shortPromo!)
 
@@ -807,16 +809,19 @@ debugPrint("initMgr, mgr: " + String(describing: mgr))
         let modInfoList = Array(UnsafeBufferPointer<org_crosswire_sword_ModInfo>(start: buffer, count: count));
         var mods = [[AnyHashable : Any]]()
         for i in modInfoList {
-            let modInfo = [
+            var modInfo = [
                 "name": String(cString: i.name),
                 "description": String(cString: i.description),
                 "category": String(cString: i.category),
                 "language": String(cString: i.language),
                 "delta": String(cString: i.delta),
-                "cipherKey": i.cipherKey == nil ? nil : String(cString: i.cipherKey),
                 "version": String(cString: i.version),
                 "features": getStringArray(buffer: i.features)
                 ] as [AnyHashable : Any]
+
+            if (i.cipherKey != nil) {
+                modInfo["cipherKey"] = String(cString: i.cipherKey)
+            }
             mods.append(modInfo)
         }
         self.commandDelegate!.send(CDVPluginResult(status: CDVCommandStatus_OK, messageAs: mods), callbackId: command.callbackId)
@@ -856,7 +861,9 @@ debugPrint("initMgr, mgr: " + String(describing: mgr))
         let shortCopyright = org_crosswire_sword_SWModule_getConfigEntry(module, "ShortCopyright")
         response["shortCopyright"] =  shortCopyright == nil ? "" : String(cString: shortCopyright!)
         let cipherKey = org_crosswire_sword_SWModule_getConfigEntry(module, "CipherKey")
-        response["cipherKey"] =  cipherKey == nil ? "" : String(cString: cipherKey!)
+        if (cipherKey != nil) {
+            response["cipherKey"] = String(cString: cipherKey!)
+        }
         let shortPromo = org_crosswire_sword_SWModule_getConfigEntry(module, "ShortPromo")
         response["shortPromo"] = shortPromo == nil ? "" : String(cString: shortPromo!)
         

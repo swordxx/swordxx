@@ -917,7 +917,7 @@
 					"$(PROJECT_DIR)/../dependencies/curl/include",
 					"$(PROJECT_DIR)/../../../../biblesync/include",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				OTHER_CFLAGS = (
 					"-DUNIX",
@@ -984,7 +984,7 @@
 					"$(PROJECT_DIR)/../dependencies/curl/include",
 					"$(PROJECT_DIR)/../../../../biblesync/include",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_CFLAGS = (
 					"-DUNIX",
