@@ -55,6 +55,8 @@ var mySWORDPlugin:SWORD? = nil
 		if (mgr == 0) {
 			let baseDir = (FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.path)! + "/sword";
 			mgr = org_crosswire_sword_SWMgr_newWithPath(baseDir)
+            org_crosswire_sword_SWMgr_setGlobalOption(mgr, "Footnotes", "On")
+            org_crosswire_sword_SWMgr_setGlobalOption(mgr, "Cross-references", "On")
 debugPrint("initMgr, mgr: " + String(describing: mgr))
 		}
 	}
