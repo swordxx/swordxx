@@ -61,7 +61,7 @@ InstallMgr.prototype.getRemoteModInfoList = function(sourceName, callback) {
 
 InstallMgr.prototype.getRemoteModuleByName = function(sourceName, modName, callback) {
 	var mod = null;
-	exec(function(m) { if (m.name) mod = new SWModule(m); if (callback) callback(mod); },
+	exec(function(m) { if (m && m.name) mod = new SWModule(m); if (callback) callback(mod); },
 		function(err) { utils.alert('[ERROR] problem: ' + err); },
 		"SWORD", "InstallMgr_getRemoteModuleByName", [sourceName, modName]
 	);
@@ -276,7 +276,7 @@ SWMgr.prototype.getModInfoList = function(callback) {
 
 SWMgr.prototype.getModuleByName = function(modName, callback) {
 	var mod = null;
-	exec(function(m) { if (m.name) mod = new SWModule(m); if (callback) callback(mod); },
+	exec(function(m) { if (m && m.name) mod = new SWModule(m); if (callback) callback(mod); },
 		function(err) { utils.alert('[ERROR] problem: ' + err); },
 		"SWORD", "SWMgr_getModuleByName", [modName]
 	);
