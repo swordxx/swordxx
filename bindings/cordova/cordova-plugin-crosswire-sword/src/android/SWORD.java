@@ -528,8 +528,14 @@ Log.d(TAG, "... finished renderChapter");
 			SWModule mod = mgr.getModuleByName(args.getString(0));
 			if (mod == null) { callbackContext.error("couldn't find module: " + args.getString(0)); return true; }
 			JSONArray r = new JSONArray();
-			for (String b : getBookNames(mod)) {
-				r.put(b);
+			for (mod.begin(); mod.error() == 0; mod.setKeyText("+book")) {
+				String vkInfo[] = mod.getKeyChildren();
+				JSONObject bookInfo = new JSONObject();
+				bookInfo.put("name",   vkInfo[SWModule.VERSEKEY_BOOKNAME]);
+				bookInfo.put("abbrev", vkInfo[SWModule.VERSEKEY_BOOKABBREV]);
+				bookInfo.put("osisName",    vkInfo[SWModule.VERSEKEY_OSISBOOKNAME]);
+				bookInfo.put("chapterMax", Integer.parseInt(vkInfo[SWModule.VERSEKEY_CHAPTERMAX]));
+				r.put(bookInfo);
 			}
 			callbackContext.success(r);
 		}
@@ -636,13 +642,6 @@ Log.d(TAG, "Done looping chapter");
 	}
 
 
-	public Vector<String> getBookNames(SWModule mod) {
-		Vector<String> books = new Vector<String>();
-		for (mod.begin(); mod.error() == 0; mod.setKeyText("+book")) {
-			books.add(mod.getKeyChildren()[9]);
-		}
-		return books;
-	}
 
 	//--------------------------------------------------------------------------
 	// LOCAL METHODS

@@ -66,12 +66,15 @@ struct org_crosswire_sword_SearchHit {
     const int org_crosswire_sword_SWModule_VERSEKEY_BOOK = 1;
     const int org_crosswire_sword_SWModule_VERSEKEY_CHAPTER = 2;
     const int org_crosswire_sword_SWModule_VERSEKEY_VERSE = 3;
-    const int org_crosswire_sword_SWModule_VERSEKEY_CHAPMAX = 4;
+    const int org_crosswire_sword_SWModule_VERSEKEY_CHAPTERMAX = 4;
     const int org_crosswire_sword_SWModule_VERSEKEY_VERSEMAX = 5;
     const int org_crosswire_sword_SWModule_VERSEKEY_BOOKNAME = 6;
     const int org_crosswire_sword_SWModule_VERSEKEY_OSISREF = 7;
     const int org_crosswire_sword_SWModule_VERSEKEY_SHORTTEXT = 8;
     const int org_crosswire_sword_SWModule_VERSEKEY_BOOKABBREV = 9;
+    const int org_crosswire_sword_SWModule_VERSEKEY_OSISBOOKNAME = 10;
+	// for backward compat.  Remove
+    const int org_crosswire_sword_SWModule_VERSEKEY_CHAPMAX = 4;
 
     
     

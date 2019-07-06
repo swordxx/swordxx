@@ -1431,7 +1431,7 @@ JNIEXPORT jobjectArray JNICALL Java_org_crosswire_android_sword_SWModule_getKeyC
 
 		sword::VerseKey *vkey = SWDYNAMIC_CAST(VerseKey, key);
 		if (vkey) {
-			ret = (jobjectArray) env->NewObjectArray(10, clazzString, NULL);
+			ret = (jobjectArray) env->NewObjectArray(11, clazzString, NULL);
 			SWBuf num;
 			num.appendFormatted("%d", vkey->getTestament());
 			env->SetObjectArrayElement(ret, 0, strToUTF8Java(env, assureValidUTF8(num.c_str())));
@@ -1454,6 +1454,7 @@ JNIEXPORT jobjectArray JNICALL Java_org_crosswire_android_sword_SWModule_getKeyC
 			env->SetObjectArrayElement(ret, 7, strToUTF8Java(env, assureValidUTF8(vkey->getOSISRef())));
 			env->SetObjectArrayElement(ret, 8, strToUTF8Java(env, assureValidUTF8(vkey->getShortText())));
 			env->SetObjectArrayElement(ret, 9, strToUTF8Java(env, assureValidUTF8(vkey->getBookAbbrev())));
+			env->SetObjectArrayElement(ret, 10, strToUTF8Java(env, assureValidUTF8(vkey->getOSISBookName())));
 		}
 		else {
 			TreeKeyIdx *tkey = SWDYNAMIC_CAST(TreeKeyIdx, key);

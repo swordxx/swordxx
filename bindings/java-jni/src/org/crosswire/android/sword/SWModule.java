@@ -38,16 +38,17 @@ public class SWModule {
 	public static final int SEARCHTYPE_ENTRYATTR = -3;
 	public static final int SEARCHTYPE_LUCENE    = -4;
 
-	public static final int VERSEKEY_TESTAMENT  = 0;
-	public static final int VERSEKEY_BOOK       = 1;
-	public static final int VERSEKEY_CHAPTER    = 2;
-	public static final int VERSEKEY_VERSE      = 3;
-	public static final int VERSEKEY_CHAPTERMAX = 4;
-	public static final int VERSEKEY_VERSEMAX   = 5;
-	public static final int VERSEKEY_BOOKNAME   = 6;
-	public static final int VERSEKEY_OSISREF    = 7;
-	public static final int VERSEKEY_SHORTTEXT  = 8;
-	public static final int VERSEKEY_BOOKABBREV = 9;
+	public static final int VERSEKEY_TESTAMENT    =  0;
+	public static final int VERSEKEY_BOOK         =  1;
+	public static final int VERSEKEY_CHAPTER      =  2;
+	public static final int VERSEKEY_VERSE        =  3;
+	public static final int VERSEKEY_CHAPTERMAX   =  4;
+	public static final int VERSEKEY_VERSEMAX     =  5;
+	public static final int VERSEKEY_BOOKNAME     =  6;
+	public static final int VERSEKEY_OSISREF      =  7;
+	public static final int VERSEKEY_SHORTTEXT    =  8;
+	public static final int VERSEKEY_BOOKABBREV   =  9;
+	public static final int VERSEKEY_OSISBOOKNAME = 10;
 
 	private SWModule() {}	// don't allow allocation, instead use factory method SWMgr.getModuleByName to retrieve an instance
 	public SWModule(String name, String remoteSourceName) { this.name = name; this.remoteSourceName = remoteSourceName; }	// ok, well, our stub can create a shell with name and remoteSourceName
@@ -79,7 +80,7 @@ public class SWModule {
 
 	// This method returns child nodes for a genbook,
 	// but has special handling if called on a VerseKey module:
-	//  [0..6] [testament, book, chapter, verse, chapterMax, verseMax, bookName]
+	//  [0..] [VERSEKEY_TESTAMENT, VERSEKEY_BOOK, VERSEKEY_CHAPTER, VERSEKEY_VERSE, VERSEKEY_CHAPTERMAX, ... ]
 	public native String[]      getKeyChildren();
 
 	public native String        getKeyParent();

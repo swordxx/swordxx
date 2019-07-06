@@ -2,10 +2,23 @@ import MessageUI
 
 var mySWORDPlugin:SWORD? = nil
 
+
 @objc(SWORD) class SWORD : CDVPlugin, MFMessageComposeViewControllerDelegate {
 	var mgr = 0;
 	var installMgr = 0
 	var disclaimerConfirmed = false;
+
+	var VERSEKEY_BOOK = Int(org_crosswire_sword_SWModule_VERSEKEY_BOOK);
+	var VERSEKEY_CHAPTER = Int(org_crosswire_sword_SWModule_VERSEKEY_CHAPTER);
+	var VERSEKEY_VERSE = Int(org_crosswire_sword_SWModule_VERSEKEY_VERSE);
+	var VERSEKEY_TESTAMENT = Int(org_crosswire_sword_SWModule_VERSEKEY_TESTAMENT);
+	var VERSEKEY_OSISREF = Int(org_crosswire_sword_SWModule_VERSEKEY_OSISREF);
+	var VERSEKEY_CHAPTERMAX = Int(org_crosswire_sword_SWModule_VERSEKEY_CHAPTERMAX);
+	var VERSEKEY_VERSEMAX = Int(org_crosswire_sword_SWModule_VERSEKEY_VERSEMAX);
+	var VERSEKEY_BOOKNAME = Int(org_crosswire_sword_SWModule_VERSEKEY_BOOKNAME);
+	var VERSEKEY_SHORTTEXT = Int(org_crosswire_sword_SWModule_VERSEKEY_SHORTTEXT);
+	var VERSEKEY_BOOKABBREV = Int(org_crosswire_sword_SWModule_VERSEKEY_BOOKABBREV);
+	var VERSEKEY_OSISBOOKNAME = Int(org_crosswire_sword_SWModule_VERSEKEY_OSISBOOKNAME);
     
 	@objc(initSWORD:)
 	func initSWORD(command: CDVInvokedUrlCommand) {
@@ -13,16 +26,17 @@ var mySWORDPlugin:SWORD? = nil
 		installMgr = 0
 		disclaimerConfirmed = false
 		mySWORDPlugin = nil
-		VERSEKEY_BOOKABBREV = Int(org_crosswire_sword_SWModule_VERSEKEY_BOOKABBREV);
 		VERSEKEY_BOOK = Int(org_crosswire_sword_SWModule_VERSEKEY_BOOK);
 		VERSEKEY_CHAPTER = Int(org_crosswire_sword_SWModule_VERSEKEY_CHAPTER);
 		VERSEKEY_VERSE = Int(org_crosswire_sword_SWModule_VERSEKEY_VERSE);
 		VERSEKEY_TESTAMENT = Int(org_crosswire_sword_SWModule_VERSEKEY_TESTAMENT);
 		VERSEKEY_OSISREF = Int(org_crosswire_sword_SWModule_VERSEKEY_OSISREF);
-		VERSEKEY_CHAPMAX = Int(org_crosswire_sword_SWModule_VERSEKEY_CHAPMAX);
+		VERSEKEY_CHAPTERMAX = Int(org_crosswire_sword_SWModule_VERSEKEY_CHAPTERMAX);
 		VERSEKEY_VERSEMAX = Int(org_crosswire_sword_SWModule_VERSEKEY_VERSEMAX);
 		VERSEKEY_BOOKNAME = Int(org_crosswire_sword_SWModule_VERSEKEY_BOOKNAME);
 		VERSEKEY_SHORTTEXT = Int(org_crosswire_sword_SWModule_VERSEKEY_SHORTTEXT);
+		VERSEKEY_BOOKABBREV = Int(org_crosswire_sword_SWModule_VERSEKEY_BOOKABBREV);
+		VERSEKEY_OSISBOOKNAME = Int(org_crosswire_sword_SWModule_VERSEKEY_OSISBOOKNAME);
 
 		org_crosswire_sword_StringMgr_setToUpper({ (text: Optional<UnsafePointer<Int8>>, maxBytes: u_long) in
 			let lower = String(cString: text!)
@@ -303,10 +317,18 @@ debugPrint("initMgr, mgr: " + String(describing: mgr))
     func SWModule_getBookNames(command: CDVInvokedUrlCommand) {
         initMgr()
         let mod = getModule(command: command)
-        var retVal = [String]()
+        var retVal = [[AnyHashable : Any]]()
         org_crosswire_sword_SWModule_begin(mod)
         while (org_crosswire_sword_SWModule_popError(mod) == 0) {
-            retVal.append(getStringArray(buffer: org_crosswire_sword_SWModule_getKeyChildren(mod))[VERSEKEY_BOOKABBREV])
+            let vkInfo = getStringArray(buffer: org_crosswire_sword_SWModule_getKeyChildren(mod));
+            var bookInfo = [
+                "name": vkInfo[VERSEKEY_BOOKNAME],
+                "abbrev": vkInfo[VERSEKEY_BOOKABBREV],
+                "osisName": vkInfo[VERSEKEY_OSISBOOKNAME],
+                "chapterMax": vkInfo[VERSEKEY_CHAPTERMAX],
+            ] as [AnyHashable : Any]
+            retVal.append(bookInfo)
+
             org_crosswire_sword_SWModule_setKeyText(mod, "+book")
         }
         self.commandDelegate!.send(CDVPluginResult(status: CDVCommandStatus_OK, messageAs: retVal), callbackId: command.callbackId)
@@ -573,17 +595,6 @@ debugPrint("initMgr, mgr: " + String(describing: mgr))
 */
     }
 
-    var VERSEKEY_BOOK = Int(org_crosswire_sword_SWModule_VERSEKEY_BOOK);
-    var VERSEKEY_CHAPTER = Int(org_crosswire_sword_SWModule_VERSEKEY_CHAPTER);
-    var VERSEKEY_VERSE = Int(org_crosswire_sword_SWModule_VERSEKEY_VERSE);
-    var VERSEKEY_TESTAMENT = Int(org_crosswire_sword_SWModule_VERSEKEY_TESTAMENT);
-    var VERSEKEY_OSISREF = Int(org_crosswire_sword_SWModule_VERSEKEY_OSISREF);
-    var VERSEKEY_CHAPMAX = Int(org_crosswire_sword_SWModule_VERSEKEY_CHAPMAX);
-    var VERSEKEY_VERSEMAX = Int(org_crosswire_sword_SWModule_VERSEKEY_VERSEMAX);
-    var VERSEKEY_BOOKNAME = Int(org_crosswire_sword_SWModule_VERSEKEY_BOOKNAME);
-    var VERSEKEY_SHORTTEXT = Int(org_crosswire_sword_SWModule_VERSEKEY_SHORTTEXT);
-    var VERSEKEY_BOOKABBREV = Int(org_crosswire_sword_SWModule_VERSEKEY_BOOKABBREV);
-
     func renderChapter(masterMod: Int, mod: Int) -> [[String: Any]] {
         let saveMasterKey = String(cString: org_crosswire_sword_SWModule_getKeyText(masterMod))
         let saveKey = String(cString: org_crosswire_sword_SWModule_getKeyText(mod))
@@ -630,12 +641,13 @@ debugPrint("initMgr, mgr: " + String(describing: mgr))
             retVal["book"]        = Int(keyChildren[VERSEKEY_BOOK]);
             retVal["chapter"]     = Int(keyChildren[VERSEKEY_CHAPTER]);
             retVal["verse"]       = Int(keyChildren[VERSEKEY_VERSE]);
-            retVal["chapterMax"]  = Int(keyChildren[VERSEKEY_CHAPMAX]);
+            retVal["chapterMax"]  = Int(keyChildren[VERSEKEY_CHAPTERMAX]);
             retVal["verseMax"]    = Int(keyChildren[VERSEKEY_VERSEMAX]);
             retVal["bookName"]    = keyChildren[VERSEKEY_BOOKNAME];
             retVal["osisRef"]     = keyChildren[VERSEKEY_OSISREF];
             retVal["shortText"]   = keyChildren[VERSEKEY_SHORTTEXT];
             retVal["bookAbbrev"]  = keyChildren[VERSEKEY_BOOKABBREV];
+            retVal["osisBookName"]= keyChildren[VERSEKEY_OSISBOOKNAME];
         }
         return retVal;
     }
@@ -671,7 +683,6 @@ debugPrint("initMgr, mgr: " + String(describing: mgr))
                     "percent": 100
                 ] as [String : Any]
 
-                //UnsafeMutablePointer<UnsafePointer<Int8>?>!) -> [String] {
                 var b = buffer
                 var count = 0
                 while let i = b?.pointee {
@@ -967,9 +978,4 @@ debugPrint("initMgr, mgr: " + String(describing: mgr))
         }
         self.commandDelegate!.send(CDVPluginResult(status: CDVCommandStatus_OK, messageAs: mods), callbackId: command.callbackId)
     }
-/*
-SWMgr_startBibleSync
-SWMgr_stopBibleSync		
-SWMgr_sendBibleSyncMessage		
-*/
 }

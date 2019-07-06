@@ -722,7 +722,7 @@ char SWDLLEXPORT org_crosswire_sword_SWModule_hasKeyChildren
 
 // This method returns child nodes for a genbook,
 // but has special handling if called on a VerseKey module:
-//  [0..7] [testament, book, chapter, verse, chapterMax, verseMax, bookName, osisRef]
+//  [0..] [org_crosswire_sword_SWModule_VERSEKEY_TESTAMENT, VERSEKEY_BOOK, VERSEKEY_CHAPTER, VERSEKEY_VERSE, VERSEKEY_CHAPTERMAX, ... ]
 const char ** SWDLLEXPORT org_crosswire_sword_SWModule_getKeyChildren
   (SWHANDLE hSWModule) {
 
@@ -736,7 +736,7 @@ const char ** SWDLLEXPORT org_crosswire_sword_SWModule_getKeyChildren
 
 	sword::VerseKey *vkey = SWDYNAMIC_CAST(VerseKey, key);
 	if (vkey) {
-		retVal = (const char **)calloc(11, sizeof(const char *));
+		retVal = (const char **)calloc(12, sizeof(const char *));
 		SWBuf num;
 		num.appendFormatted("%d", vkey->getTestament());
 		stdstr((char **)&(retVal[0]), num.c_str());
@@ -759,6 +759,7 @@ const char ** SWDLLEXPORT org_crosswire_sword_SWModule_getKeyChildren
 		stdstr((char **)&(retVal[7]), vkey->getOSISRef());
 		stdstr((char **)&(retVal[8]), vkey->getShortText());
 		stdstr((char **)&(retVal[9]), vkey->getBookAbbrev());
+		stdstr((char **)&(retVal[10]), vkey->getOSISBookName());
 	}
 	else {
 		TreeKeyIdx *tkey = SWDYNAMIC_CAST(TreeKeyIdx, key);
