@@ -321,11 +321,11 @@ debugPrint("initMgr, mgr: " + String(describing: mgr))
         org_crosswire_sword_SWModule_begin(mod)
         while (org_crosswire_sword_SWModule_popError(mod) == 0) {
             let vkInfo = getStringArray(buffer: org_crosswire_sword_SWModule_getKeyChildren(mod));
-            var bookInfo = [
+            let bookInfo = [
                 "name": vkInfo[VERSEKEY_BOOKNAME],
                 "abbrev": vkInfo[VERSEKEY_BOOKABBREV],
                 "osisName": vkInfo[VERSEKEY_OSISBOOKNAME],
-                "chapterMax": vkInfo[VERSEKEY_CHAPTERMAX],
+                "chapterMax": Int(vkInfo[VERSEKEY_CHAPTERMAX]),
             ] as [AnyHashable : Any]
             retVal.append(bookInfo)
 
@@ -637,17 +637,17 @@ debugPrint("initMgr, mgr: " + String(describing: mgr))
     func getVerseKey(keyChildren:[String]) -> [String:Any] {
         var retVal = [String:Any]()
         if (keyChildren.count > 9) {
-            retVal["testament"]   = Int(keyChildren[VERSEKEY_TESTAMENT]);
-            retVal["book"]        = Int(keyChildren[VERSEKEY_BOOK]);
-            retVal["chapter"]     = Int(keyChildren[VERSEKEY_CHAPTER]);
-            retVal["verse"]       = Int(keyChildren[VERSEKEY_VERSE]);
-            retVal["chapterMax"]  = Int(keyChildren[VERSEKEY_CHAPTERMAX]);
-            retVal["verseMax"]    = Int(keyChildren[VERSEKEY_VERSEMAX]);
-            retVal["bookName"]    = keyChildren[VERSEKEY_BOOKNAME];
-            retVal["osisRef"]     = keyChildren[VERSEKEY_OSISREF];
-            retVal["shortText"]   = keyChildren[VERSEKEY_SHORTTEXT];
-            retVal["bookAbbrev"]  = keyChildren[VERSEKEY_BOOKABBREV];
-            retVal["osisBookName"]= keyChildren[VERSEKEY_OSISBOOKNAME];
+            retVal["testament"]    = Int(keyChildren[VERSEKEY_TESTAMENT]);
+            retVal["book"]         = Int(keyChildren[VERSEKEY_BOOK]);
+            retVal["chapter"]      = Int(keyChildren[VERSEKEY_CHAPTER]);
+            retVal["verse"]        = Int(keyChildren[VERSEKEY_VERSE]);
+            retVal["chapterMax"]   = Int(keyChildren[VERSEKEY_CHAPTERMAX]);
+            retVal["verseMax"]     = Int(keyChildren[VERSEKEY_VERSEMAX]);
+            retVal["bookName"]     = keyChildren[VERSEKEY_BOOKNAME];
+            retVal["osisRef"]      = keyChildren[VERSEKEY_OSISREF];
+            retVal["shortText"]    = keyChildren[VERSEKEY_SHORTTEXT];
+            retVal["bookAbbrev"]   = keyChildren[VERSEKEY_BOOKABBREV];
+            retVal["osisBookName"] = keyChildren[VERSEKEY_OSISBOOKNAME];
         }
         return retVal;
     }
