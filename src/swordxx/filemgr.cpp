@@ -31,6 +31,7 @@
 #include <io.h>
 #endif
 #include <fcntl.h>
+#include <mutex>
 #include <string>
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -83,18 +84,30 @@ int const FileMgr::IWRITE = S_IWRITE;
 
 
 // ---------------- statics -----------------
-std::unique_ptr<FileMgr> FileMgr::systemFileMgr;
+namespace {
 
-FileMgr *FileMgr::getSystemFileMgr() {
-    if (!systemFileMgr)
-        systemFileMgr = std::make_unique<FileMgr>();
+#if __cplusplus <= 201703L
+std::mutex g_systemFileMgrMutex;
+std::shared_ptr<FileMgr> g_systemFileMgr;
+#else
+std::atomic<std::shared_ptr<FileMgr>> g_systemFileMgr;
+#endif
 
-    return systemFileMgr.get();
+} // anonymous namespace
+
+std::shared_ptr<FileMgr> FileMgr::getSystemFileMgr() {
+    std::lock_guard<std::mutex> const guard(g_systemFileMgrMutex);
+    if (g_systemFileMgr)
+        return g_systemFileMgr;
+    auto r(std::make_shared<FileMgr>());
+    g_systemFileMgr = r;
+    return r;
 }
 
 
-void FileMgr::setSystemFileMgr(FileMgr *newFileMgr) {
-    systemFileMgr.reset(newFileMgr);
+void FileMgr::setSystemFileMgr(std::shared_ptr<FileMgr> newFileMgr) {
+    std::lock_guard<std::mutex> const guard(g_systemFileMgrMutex);
+    g_systemFileMgr = std::move(newFileMgr);
 }
 
 // --------------- end statics --------------

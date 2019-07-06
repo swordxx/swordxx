@@ -119,8 +119,6 @@ class SWDLLEXPORT FileMgr {
     FileDesc * m_files = nullptr;
     std::size_t m_maxFiles;
     int sysOpen(FileDesc * file);
-protected:
-    static std::unique_ptr<FileMgr> systemFileMgr;
 public:
     static int const CREAT;
     static int const APPEND;
@@ -131,8 +129,8 @@ public:
     static int const IREAD;
     static int const IWRITE;
 
-    static FileMgr *getSystemFileMgr();
-    static void setSystemFileMgr(FileMgr *newFileMgr);
+    static std::shared_ptr<FileMgr> getSystemFileMgr();
+    static void setSystemFileMgr(std::shared_ptr<FileMgr> newFileMgr);
 
     /** Constructor.
     * @param maxFiles The number of files that this FileMgr may open in parallel, if necessary. Must be at least 2.
