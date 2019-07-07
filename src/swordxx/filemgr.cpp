@@ -379,7 +379,7 @@ int FileMgr::removeFile(const char *fName) {
 }
 
 /// \bug error is same as empty line
-std::string FileMgr::getLine(FileDesc *fDesc) {
+std::string FileDesc::getLine() {
     int len;
     bool more = true;
     char chunk[255];
@@ -387,13 +387,13 @@ std::string FileMgr::getLine(FileDesc *fDesc) {
     std::string line;
 
     // assert we have a valid file handle
-    if (fDesc->getFd() < 1)
+    if (getFd() < 1)
         return line;
 
     while (more) {
         more = false;
-        long index = fDesc->seek(0, SEEK_CUR);
-        len = fDesc->read(chunk, 254);
+        long index = seek(0, SEEK_CUR);
+        len = read(chunk, 254);
 
         // assert we have a readable file (not a directory)
         if (len < 1)
@@ -418,7 +418,7 @@ std::string FileMgr::getLine(FileDesc *fDesc) {
         index += (end + 1);
 
         // reposition to next valid place to read
-        fDesc->seek(index, SEEK_SET);
+        seek(index, SEEK_SET);
 
         // clean up any trailing junk on line if we're at the end
         if (!more) {

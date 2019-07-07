@@ -47,7 +47,7 @@ int main(int argc, char **argv) {
     if (argc > 1 && !std::strcmp(argv[1], "-v")) {
         std::cout << "Original:\n\n";
 
-        while (!(lineBuffer = FileMgr::getLine(fd)).empty()) {
+        while (!(lineBuffer = fd->getLine()).empty())
             cout << lineBuffer << "\n";
             if (!fd) break;
         }
@@ -62,7 +62,7 @@ int main(int argc, char **argv) {
 
 //    cout << "\xff\xfe";    // UTF16LE file signature
 
-    while (!(lineBuffer = FileMgr::getLine(fd)).empty()) {
+    while (!(lineBuffer = fd->getLine()).empty()) {
         lineBuffer += "\n";
         filter.processText(lineBuffer);
 

@@ -221,7 +221,7 @@ int main(int argc, char * argv[]) {
         std::string keyBuffer;
         std::string entBuffer;
 
-        while (!(lineBuffer = FileMgr::getLine(fd)).empty()) {
+        while (!(lineBuffer = fd->getLine()).empty()) {
             if (hasPrefix(lineBuffer, "$$$")) {
                 if (!keyBuffer.empty() && !entBuffer.empty())
                     writeEntry(book, keyBuffer, entBuffer);

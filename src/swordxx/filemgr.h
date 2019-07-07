@@ -87,6 +87,8 @@ public:
     auto write(Args && ... args)
     { return ::write(getFd(), std::forward<Args>(args)...); }
 
+    std::string getLine();
+
     std::string const & path() const noexcept { return m_path; }
 
     int mode() const noexcept { return m_mode; }
@@ -208,7 +210,6 @@ public:
     static int copyDir(const char *srcDir, const char *destDir);
     static int removeDir(const char *targetDir);
     static int removeFile(const char *fName);
-    static std::string getLine(FileDesc * fDesc);
 
 };
 
