@@ -72,14 +72,7 @@ RawStrBase<SizeType_>::RawStrBase(NormalizedPath const & path,
 }
 
 
-/******************************************************************************
- * RawStr Destructor - Cleans up instance of RawStr
- */
-template <typename SizeType_>
-RawStrBase<SizeType_>::~RawStrBase() {
-    FileMgr::getSystemFileMgr()->close(idxfd);
-    FileMgr::getSystemFileMgr()->close(datfd);
-}
+template <typename SizeType_> RawStrBase<SizeType_>::~RawStrBase() = default;
 
 
 /******************************************************************************
@@ -475,21 +468,14 @@ signed char RawStrBase<SizeType_>::createModule(NormalizedPath const & path) {
     std::string const idxFilename(path.str() + ".idx");
 
     FileMgr::removeFile(datFilename.c_str());
-    FileDesc * const fd =
-            FileMgr::getSystemFileMgr()->open(datFilename.c_str(),
-                                              FileMgr::CREAT | FileMgr::WRONLY,
-                                              FileMgr::IREAD | FileMgr::IWRITE);
-    fd->getFd();
-    FileMgr::getSystemFileMgr()->close(fd);
+    FileMgr::getSystemFileMgr()->open(datFilename.c_str(),
+                                      FileMgr::CREAT | FileMgr::WRONLY,
+                                      FileMgr::IREAD | FileMgr::IWRITE)->getFd();
 
     FileMgr::removeFile(idxFilename.c_str());
-    FileDesc * const fd2 =
-            FileMgr::getSystemFileMgr()->open(idxFilename.c_str(),
-                                              FileMgr::CREAT | FileMgr::WRONLY,
-                                              FileMgr::IREAD | FileMgr::IWRITE);
-    fd2->getFd();
-    FileMgr::getSystemFileMgr()->close(fd2);
-
+    FileMgr::getSystemFileMgr()->open(idxFilename.c_str(),
+                                      FileMgr::CREAT | FileMgr::WRONLY,
+                                      FileMgr::IREAD | FileMgr::IWRITE)->getFd();
     return 0;
 }
 

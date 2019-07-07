@@ -72,6 +72,24 @@
 
 namespace swordxx {
 
+struct FileMgrInner {
+
+/* Methods: */
+
+    constexpr FileMgrInner(std::size_t maxFiles) noexcept
+        : m_maxFiles(maxFiles)
+    {}
+
+    int sysOpen(FileDesc & file);
+    void sysClose(FileDesc & file);
+
+/* Fields: */
+
+    FileDesc * m_files = nullptr;
+    std::size_t const m_maxFiles;
+
+};
+
 
 int const FileMgr::CREAT = O_CREAT;
 int const FileMgr::APPEND = O_APPEND;
@@ -113,13 +131,13 @@ void FileMgr::setSystemFileMgr(std::shared_ptr<FileMgr> newFileMgr) {
 // --------------- end statics --------------
 
 
-FileDesc::FileDesc(FileMgr * parent,
-                   char const * path,
+FileDesc::FileDesc(std::shared_ptr<FileMgrInner> fileMgrInner,
+                   std::string path,
                    int mode,
                    int perms,
                    bool tryDowngrade)
-    : m_parent(parent)
-    , m_path(path)
+    : m_fileMgrInner(std::move(fileMgrInner))
+    , m_path(std::move(path))
     , m_mode(mode)
     , m_perms(perms)
     , m_tryDowngrade(tryDowngrade)
@@ -127,70 +145,62 @@ FileDesc::FileDesc(FileMgr * parent,
 
 
 FileDesc::~FileDesc() {
-    if (m_fd > 0)
-        close(m_fd);
+    m_fileMgrInner->sysClose(*this);
+    ::close(m_fd);
 }
 
 
 int FileDesc::getFd() {
     if (m_fd == -77)
-        m_fd = m_parent->sysOpen(this);
+        m_fd = m_fileMgrInner->sysOpen(*this);
 //    if ((fd < -1) && (fd != -77))  // kludge to hand ce
 //        return 777;
     return m_fd;
 }
 
 FileMgr::FileMgr(std::size_t maxFiles)
-    : m_maxFiles(maxFiles)
+    : m_inner(std::make_shared<FileMgrInner>(maxFiles))
 {}
 
 
-FileMgr::~FileMgr() noexcept {
-    FileDesc *tmp;
-
-    while (m_files) {
-        tmp = m_files->m_next;
-        delete m_files;
-        m_files = tmp;
-    }
-}
+FileMgr::~FileMgr() noexcept = default;
 
 
-FileDesc *FileMgr::open(const char *path, int mode, bool tryDowngrade) {
+std::shared_ptr<FileDesc> FileMgr::open(const char *path, int mode, bool tryDowngrade) {
     return open(path, mode, S_IREAD|S_IWRITE|S_IRGRP|S_IROTH, tryDowngrade);
 }
 
 
-FileDesc *FileMgr::open(const char *path, int mode, int perms, bool tryDowngrade) {
+std::shared_ptr<FileDesc> FileMgr::open(const char *path, int mode, int perms, bool tryDowngrade) {
     FileDesc **tmp, *tmp2;
 
-    for (tmp = &m_files; *tmp; tmp = &((*tmp)->m_next)) {
+    for (tmp = &m_inner->m_files; *tmp; tmp = &((*tmp)->m_next)) {
         if ((*tmp)->m_fd < 0)        // insert as first non-system_open file
             break;
     }
 
-    tmp2 = new FileDesc(this, path, mode, perms, tryDowngrade);
+    auto r(std::make_shared<FileDesc>(m_inner, path, mode, perms, tryDowngrade));
+    tmp2 = r.get();
     tmp2->m_next = *tmp;
     *tmp = tmp2;
 
-    return tmp2;
+    return r;
 }
 
 
-void FileMgr::close(FileDesc *file) {
+void FileMgrInner::sysClose(FileDesc & file) {
     FileDesc **loop;
 
     for (loop = &m_files; *loop; loop = &((*loop)->m_next)) {
-        if (*loop == file) {
+        if (*loop == &file) {
             *loop = (*loop)->m_next;
-            delete file;
-            break;
+            return;
         }
     }
 }
 
 
-int FileMgr::sysOpen(FileDesc *file) {
+int FileMgrInner::sysOpen(FileDesc & file) {
     FileDesc **loop;
     std::size_t openCount = 1u;        // because we are presently opening 1 file, and we need to be sure to close files to accomodate, if necessary
 
@@ -204,34 +214,34 @@ int FileMgr::sysOpen(FileDesc *file) {
             }
         }
 
-        if (*loop == file) {
+        if (*loop == &file) {
             if (*loop != m_files) {
                 *loop = (*loop)->m_next;
-                file->m_next = m_files;
-                m_files = file;
+                file.m_next = m_files;
+                m_files = &file;
             }
-            if ((!::access(file->m_path.c_str(), R_OK)) || ((file->m_mode & O_CREAT) == O_CREAT)) {    // check for at least file exists / read access before we try to open
-                char tries = (((file->m_mode & O_RDWR) == O_RDWR) && (file->m_tryDowngrade)) ? 2 : 1;  // try read/write if possible
+            if ((!::access(file.m_path.c_str(), R_OK)) || ((file.m_mode & O_CREAT) == O_CREAT)) {    // check for at least file exists / read access before we try to open
+                char tries = (((file.m_mode & O_RDWR) == O_RDWR) && (file.m_tryDowngrade)) ? 2 : 1;  // try read/write if possible
                 for (int i = 0; i < tries; i++) {
                     if (i > 0) {
-                        file->m_mode = (file->m_mode & ~O_RDWR);    // remove write access
-                        file->m_mode = (file->m_mode | O_RDONLY);// add read access
+                        file.m_mode = (file.m_mode & ~O_RDWR);    // remove write access
+                        file.m_mode = (file.m_mode | O_RDONLY);// add read access
                     }
-                    file->m_fd = ::open(file->m_path.c_str(), file->m_mode|O_BINARY, file->m_perms);
+                    file.m_fd = ::open(file.m_path.c_str(), file.m_mode|O_BINARY, file.m_perms);
 
-                    if (file->m_fd >= 0)
+                    if (file.m_fd >= 0)
                         break;
                 }
 
-                if (file->m_fd >= 0)
-                    lseek(file->m_fd, file->m_offset, SEEK_SET);
+                if (file.m_fd >= 0)
+                    lseek(file.m_fd, file.m_offset, SEEK_SET);
             }
-            else file->m_fd = -1;
+            else file.m_fd = -1;
             if (!*loop)
                 break;
         }
     }
-    return file->m_fd;
+    return file.m_fd;
 }
 
 

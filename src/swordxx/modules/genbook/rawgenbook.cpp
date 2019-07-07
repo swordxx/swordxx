@@ -75,9 +75,7 @@ RawGenBook::RawGenBook(NormalizedPath const & path, const char *iname, const cha
  * RawGenBook Destructor - Cleans up instance of RawGenBook
  */
 
-RawGenBook::~RawGenBook() {
-    FileMgr::getSystemFileMgr()->close(bdtfd);
-}
+RawGenBook::~RawGenBook() = default;
 
 
 bool RawGenBook::isWritable() const {
@@ -177,14 +175,11 @@ void RawGenBook::deleteEntry() {
 
 
 char RawGenBook::createModule(NormalizedPath const & path) {
-    FileDesc *fd;
     signed char retval;
 
     auto const buf(path.str() + ".bdt");
     FileMgr::removeFile(buf.c_str());
-    fd = FileMgr::getSystemFileMgr()->open(buf.c_str(), FileMgr::CREAT|FileMgr::WRONLY, FileMgr::IREAD|FileMgr::IWRITE);
-    fd->getFd();
-    FileMgr::getSystemFileMgr()->close(fd);
+    FileMgr::getSystemFileMgr()->open(buf.c_str(), FileMgr::CREAT|FileMgr::WRONLY, FileMgr::IREAD|FileMgr::IWRITE)->getFd();
 
     retval = TreeKeyIdx::create(path.c_str());
     return retval;

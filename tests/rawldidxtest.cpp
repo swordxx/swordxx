@@ -46,9 +46,7 @@ int main(int argc, char **argv)
      char buf[127];
 
     sprintf(buf, "%s.idx", argv[1]);
-    FileDesc *idxfd = FileMgr::getSystemFileMgr()->open(buf, FileMgr::RDONLY, true);
-    long maxoff = idxfd->seek(0, SEEK_END) - 6;
-    FileMgr::getSystemFileMgr()->close(idxfd);
+    long maxoff = FileMgr::getSystemFileMgr()->open(buf, FileMgr::RDONLY, true)->seek(0, SEEK_END) - 6;
 
     std::string last = "";
     bool first = true;

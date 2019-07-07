@@ -113,7 +113,7 @@ protected:
 
     FilterMap extraFilters;
     std::list<std::string> options;
-    virtual char AddModToConfig(FileDesc *conffd, const char *fname);
+    virtual char AddModToConfig(FileDesc & conffd, const char *fname);
     virtual void loadConfigDir(const char *ipath);
 
     /**

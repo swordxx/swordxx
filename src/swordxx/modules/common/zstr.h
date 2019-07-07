@@ -51,10 +51,10 @@ private:
     std::unique_ptr<SWCompress> const m_compressor;
 
 protected:
-    FileDesc *idxfd;
-    FileDesc *datfd;
-    FileDesc *zdxfd;
-    FileDesc *zdtfd;
+    std::shared_ptr<FileDesc> idxfd;
+    std::shared_ptr<FileDesc> datfd;
+    std::shared_ptr<FileDesc> zdxfd;
+    std::shared_ptr<FileDesc> zdtfd;
     static const int IDXENTRYSIZE;
     static const int ZDXENTRYSIZE;
 

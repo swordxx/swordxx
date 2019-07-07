@@ -89,12 +89,6 @@ zVerseBase<VerseSizeType_>::~zVerseBase() {
         flushCache();
         free(cacheBuf);
     }
-
-    for (loop1 = 0; loop1 < 2; loop1++) {
-        FileMgr::getSystemFileMgr()->close(idxfp[loop1]);
-        FileMgr::getSystemFileMgr()->close(textfp[loop1]);
-        FileMgr::getSystemFileMgr()->close(compfp[loop1]);
-    }
 }
 
 /******************************************************************************
@@ -397,8 +391,9 @@ char zVerseBase<VerseSizeType_>::createModule(NormalizedPath const & path,
                                               BlockType blockBound,
                                               const char * v11n)
 {
-    char retVal = 0;
-    FileDesc *fd, *fd2;
+    static constexpr char SUCCESS = 0;
+    static constexpr char ERROR_OPEN = -1;
+    static constexpr char ERROR_WRITE = -1;
     int32_t offset = 0;
     VerseSizeType size = 0;
     VerseKey vk;
@@ -409,39 +404,37 @@ char zVerseBase<VerseSizeType_>::createModule(NormalizedPath const & path,
     auto const lastCharIt(buf.rbegin());
     assert(*lastCharIt == 's');
     FileMgr::removeFile(buf.c_str());
-    fd = FileMgr::getSystemFileMgr()->open(buf.c_str(), FileMgr::CREAT|FileMgr::WRONLY, FileMgr::IREAD|FileMgr::IWRITE);
-    if (fd->getFd() < 1) goto erroropen1;
-    FileMgr::getSystemFileMgr()->close(fd);
+    if (FileMgr::getSystemFileMgr()->open(buf.c_str(), FileMgr::CREAT|FileMgr::WRONLY, FileMgr::IREAD|FileMgr::IWRITE)->getFd() < 1)
+        return ERROR_OPEN;
 
     (*testamentIt) = 'n';
     FileMgr::removeFile(buf.c_str());
-    fd = FileMgr::getSystemFileMgr()->open(buf.c_str(), FileMgr::CREAT|FileMgr::WRONLY, FileMgr::IREAD|FileMgr::IWRITE);
-    if (fd->getFd() < 1) goto erroropen1;
-    FileMgr::getSystemFileMgr()->close(fd);
+    if (FileMgr::getSystemFileMgr()->open(buf.c_str(), FileMgr::CREAT|FileMgr::WRONLY, FileMgr::IREAD|FileMgr::IWRITE)->getFd() < 1)
+        return ERROR_OPEN;
 
     (*testamentIt) = 'o';
     (*lastCharIt) = 'z';
     FileMgr::removeFile(buf.c_str());
-    fd = FileMgr::getSystemFileMgr()->open(buf.c_str(), FileMgr::CREAT|FileMgr::WRONLY, FileMgr::IREAD|FileMgr::IWRITE);
-    if (fd->getFd() < 1) goto erroropen1;
-    FileMgr::getSystemFileMgr()->close(fd);
+    if (FileMgr::getSystemFileMgr()->open(buf.c_str(), FileMgr::CREAT|FileMgr::WRONLY, FileMgr::IREAD|FileMgr::IWRITE)->getFd() < 1)
+        return ERROR_OPEN;
 
     (*testamentIt) = 'n';
     FileMgr::removeFile(buf.c_str());
-    fd = FileMgr::getSystemFileMgr()->open(buf.c_str(), FileMgr::CREAT|FileMgr::WRONLY, FileMgr::IREAD|FileMgr::IWRITE);
-    if (fd->getFd() < 1) goto erroropen1;
-    FileMgr::getSystemFileMgr()->close(fd);
+    if (FileMgr::getSystemFileMgr()->open(buf.c_str(), FileMgr::CREAT|FileMgr::WRONLY, FileMgr::IREAD|FileMgr::IWRITE)->getFd() < 1)
+        return ERROR_OPEN;
 
     (*testamentIt) = 'o';
     (*lastCharIt) = 'v';
     FileMgr::removeFile(buf.c_str());
-    fd = FileMgr::getSystemFileMgr()->open(buf.c_str(), FileMgr::CREAT|FileMgr::WRONLY, FileMgr::IREAD|FileMgr::IWRITE);
-    if (fd->getFd() < 1) goto erroropen1;
+    auto const fd(FileMgr::getSystemFileMgr()->open(buf.c_str(), FileMgr::CREAT|FileMgr::WRONLY, FileMgr::IREAD|FileMgr::IWRITE));
+    if (fd->getFd() < 1)
+        return ERROR_OPEN;
 
     (*testamentIt) = 'n';
     FileMgr::removeFile(buf.c_str());
-    fd2 = FileMgr::getSystemFileMgr()->open(buf.c_str(), FileMgr::CREAT|FileMgr::WRONLY, FileMgr::IREAD|FileMgr::IWRITE);
-    if (fd2->getFd() < 1) goto erroropen2;
+    auto const fd2(FileMgr::getSystemFileMgr()->open(buf.c_str(), FileMgr::CREAT|FileMgr::WRONLY, FileMgr::IREAD|FileMgr::IWRITE));
+    if (fd2->getFd() < 1)
+        return ERROR_OPEN;
 
     vk.setVersificationSystem(v11n);
     vk.setIntros(true);
@@ -451,39 +444,26 @@ char zVerseBase<VerseSizeType_>::createModule(NormalizedPath const & path,
 
     for (vk.positionToTop(); !vk.popError(); vk.increment()) {
         if (vk.getTestament() < 2) {
-            if (fd->write(&offset, sizeof(offset)) != sizeof(offset)) goto writefailure;    //compBufIdxOffset
-            if (fd->write(&offset, sizeof(offset)) != sizeof(offset)) goto writefailure;
-            if (fd->write(&size, sizeof(size)) != sizeof(size)) goto writefailure;
+            if (fd->write(&offset, sizeof(offset)) != sizeof(offset))
+                return ERROR_WRITE;
+            if (fd->write(&offset, sizeof(offset)) != sizeof(offset))
+                return ERROR_WRITE;
+            if (fd->write(&size, sizeof(size)) != sizeof(size))
+                return ERROR_WRITE;
         }
         else {
-            if (fd2->write(&offset, sizeof(offset)) != sizeof(offset)) goto writefailure;    //compBufIdxOffset
-            if (fd2->write(&offset, sizeof(offset)) != sizeof(offset)) goto writefailure;
-            if (fd2->write(&size, sizeof(size)) != sizeof(size)) goto writefailure;
+            if (fd2->write(&offset, sizeof(offset)) != sizeof(offset)) //compBufIdxOffset
+                return ERROR_WRITE;
+            if (fd2->write(&offset, sizeof(offset)) != sizeof(offset))
+                return ERROR_WRITE;
+            if (fd2->write(&size, sizeof(size)) != sizeof(size))
+                return ERROR_WRITE;
         }
     }
     fd2->write(&offset, sizeof(offset));    //compBufIdxOffset
     fd2->write(&offset, sizeof(offset));
     fd2->write(&size, sizeof(size));
-
-    goto cleanup;
-
-erroropen1:
-    retVal = -1;
-    goto cleanup1;
-
-erroropen2:
-    retVal = -1;
-    goto cleanup;
-
-writefailure:
-    retVal = -2;
-
-cleanup:
-    FileMgr::getSystemFileMgr()->close(fd2);
-cleanup1:
-    FileMgr::getSystemFileMgr()->close(fd);
-
-    return retVal;
+    return SUCCESS;
 }
 
 // Explicit instantions:

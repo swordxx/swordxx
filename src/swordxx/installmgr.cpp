@@ -420,9 +420,8 @@ int InstallMgr::refreshRemoteSource(InstallSource & is) {
 
     errorCode = remoteCopy(is, "mods.d.tar.gz", archive.c_str(), false);
     if (!errorCode) { //sucessfully downloaded the tar,gz of module configs
-        FileDesc *fd = FileMgr::getSystemFileMgr()->open(archive.c_str(), FileMgr::RDONLY);
+        auto const fd(FileMgr::getSystemFileMgr()->open(archive.c_str(), FileMgr::RDONLY));
         untargz(fd->getFd(), root.c_str());
-        FileMgr::getSystemFileMgr()->close(fd);
     }
     else
     errorCode = remoteCopy(is, "mods.d", target.c_str(), true, ".conf"); //copy the whole directory

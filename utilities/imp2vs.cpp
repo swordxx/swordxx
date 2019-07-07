@@ -248,7 +248,7 @@ int main(int argc, char **argv) {
 
 
     // process input file
-    FileDesc *fd = FileMgr::getSystemFileMgr()->open(inFileName, FileMgr::RDONLY);
+    auto const fd(FileMgr::getSystemFileMgr()->open(inFileName, FileMgr::RDONLY));
 
     std::string lineBuffer;
     std::string keyBuffer;
@@ -274,8 +274,6 @@ int main(int argc, char **argv) {
     if ((keyBuffer.size()) && (entBuffer.size())) {
         writeEntry(*module, keyBuffer, entBuffer, replace);
     }
-
-    FileMgr::getSystemFileMgr()->close(fd);
 }
 
 void writeEntry(SWModule & module,

@@ -39,6 +39,7 @@
 namespace swordxx {
 
 class SWDLLEXPORT FileMgr;
+struct FileMgrInner;
 
 struct SWDLLEXPORT DirEntry {
 public:
@@ -52,20 +53,23 @@ public:
 class SWDLLEXPORT FileDesc {
 
     friend class FileMgr;
+    friend struct FileMgrInner;
 
     long m_offset = 0;
     int m_fd = -77;            // -77 closed;
-    FileMgr * m_parent;
+    std::shared_ptr<FileMgrInner> m_fileMgrInner;
     FileDesc * m_next;
 
-    FileDesc(FileMgr * parent,
-             char const * path,
+public:
+
+    FileDesc(std::shared_ptr<FileMgrInner> fileMgrInner,
+             std::string path,
              int mode,
              int perms,
              bool tryDowngrade);
+
     virtual ~FileDesc();
 
-public:
     /** @return File handle.
     */
     int getFd();
@@ -124,9 +128,7 @@ class SWDLLEXPORT FileMgr {
 
     friend class FileDesc;
 
-    FileDesc * m_files = nullptr;
-    std::size_t m_maxFiles;
-    int sysOpen(FileDesc * file);
+    std::shared_ptr<FileMgrInner> m_inner;
 public:
     static int const CREAT;
     static int const APPEND;
@@ -157,7 +159,7 @@ public:
     * @param tryDowngrade
     * @return FileDesc object for the requested file.
     */
-    FileDesc *open(const char *path, int mode, bool tryDowngrade);
+    std::shared_ptr<FileDesc> open(const char *path, int mode, bool tryDowngrade);
 
     /** Open a file and return a FileDesc for it.
     * The file itself will only be opened when FileDesc::getFd() is called.
@@ -167,13 +169,7 @@ public:
     * @param tryDowngrade
     * @return FileDesc object for the requested file.
     */
-    FileDesc *open(const char *path, int mode, int perms = IREAD | IWRITE, bool tryDowngrade = false);
-
-    /** Close a given file and delete its FileDesc object.
-    * Will only close the file if it was created by this FileMgr object.
-    * @param file The file to close.
-    */
-    void close(FileDesc *file);
+    std::shared_ptr<FileDesc> open(const char *path, int mode, int perms = IREAD | IWRITE, bool tryDowngrade = false);
 
     /** Checks for the existence and readability of a file.
     * @param ipath Path to file.

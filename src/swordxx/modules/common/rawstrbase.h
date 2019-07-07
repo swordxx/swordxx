@@ -27,6 +27,7 @@
 #define SWORDXX_RAWSTRBASE_H
 
 #include <cstdint>
+#include <memory>
 #include <string>
 #include "../../defs.h"
 #include "../../normalizedpath.h"
@@ -84,8 +85,8 @@ private: /* Methods: */
 
 protected: /* Fields: */
 
-    FileDesc *idxfd;
-    FileDesc *datfd;
+    std::shared_ptr<FileDesc> idxfd;
+    std::shared_ptr<FileDesc> datfd;
 
 private: /* Fields: */
 

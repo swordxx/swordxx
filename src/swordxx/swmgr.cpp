@@ -1182,12 +1182,12 @@ void SWMgr::deleteModule(const char *modName) { m_modules.erase(modName); }
 
 void SWMgr::InstallScan(const char *dirname)
 {
-   FileDesc * conffd = nullptr;
    std::string newmodfile;
    std::string targetName;
 
     if (FileMgr::existsDir(dirname)) {
         if (auto dir = DirectoryEnumerator(dirname)) {
+            std::shared_ptr<FileDesc> conffd;
             while (auto const ent = dir.readEntry()) {
                 newmodfile = dirname;
                 addTrailingDirectorySlash(newmodfile);
@@ -1195,8 +1195,7 @@ void SWMgr::InstallScan(const char *dirname)
 
                 // mods.d
                 if (configType) {
-                    if (conffd)
-                        FileMgr::getSystemFileMgr()->close(conffd);
+                    conffd.reset();
                     targetName = m_configPath;
                     addTrailingDirectorySlash(targetName);
                     targetName += ent;
@@ -1210,36 +1209,31 @@ void SWMgr::InstallScan(const char *dirname)
                         if (conffd && conffd->getFd() >= 0)
                             conffd->seek(0L, SEEK_END);
                         else {
-                            FileMgr::getSystemFileMgr()->close(conffd);
-                            conffd = nullptr;
+                            conffd.reset();
                         }
                     }
                 }
-                AddModToConfig(conffd, newmodfile.c_str());
+                AddModToConfig(*conffd, newmodfile.c_str());
                 FileMgr::removeFile(newmodfile.c_str());
             }
             dir.close();
-            if (conffd)
-                FileMgr::getSystemFileMgr()->close(conffd);
         }
     }
 }
 
 
-char SWMgr::AddModToConfig(FileDesc *conffd, const char *fname)
+char SWMgr::AddModToConfig(FileDesc & conffd, const char *fname)
 {
-    FileDesc *modfd;
     char ch;
 
     SWLog::getSystemLog()->logTimedInformation("Found new module [%s]. Installing...", fname);
-    modfd = FileMgr::getSystemFileMgr()->open(fname, FileMgr::RDONLY);
+    auto const modfd(FileMgr::getSystemFileMgr()->open(fname, FileMgr::RDONLY));
     ch = '\n';
-    conffd->write(&ch, 1);
+    conffd.write(&ch, 1);
     while (modfd->read(&ch, 1) == 1)
-        conffd->write(&ch, 1);
+        conffd.write(&ch, 1);
     ch = '\n';
-    conffd->write(&ch, 1);
-    FileMgr::getSystemFileMgr()->close(modfd);
+    conffd.write(&ch, 1);
     return 0;
 }
 

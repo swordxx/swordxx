@@ -27,6 +27,7 @@
 #define SWORDXX_RAWVERSEBASE_H
 
 #include <cstdio>
+#include <memory>
 #include <string>
 #include "../../normalizedpath.h"
 
@@ -45,8 +46,8 @@ public: /* Types: */
 
 protected: /* Fields: */
 
-    FileDesc * idxfp[2];
-    FileDesc * textfp[2];
+    std::shared_ptr<FileDesc> idxfp[2];
+    std::shared_ptr<FileDesc> textfp[2];
 
     NormalizedPath m_path;
 

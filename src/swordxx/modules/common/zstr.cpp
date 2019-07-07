@@ -96,14 +96,7 @@ zStr::zStr(char const * ipath,
  * zStr Destructor - Cleans up instance of zStr
  */
 
-zStr::~zStr() {
-    flushCache();
-
-    FileMgr::getSystemFileMgr()->close(idxfd);
-    FileMgr::getSystemFileMgr()->close(datfd);
-    FileMgr::getSystemFileMgr()->close(zdxfd);
-    FileMgr::getSystemFileMgr()->close(zdtfd);
-}
+zStr::~zStr() { flushCache(); }
 
 
 /******************************************************************************
@@ -631,31 +624,21 @@ signed char zStr::createModule(const char * ipath) {
     removeTrailingDirectorySlashes(path);
     auto const extensionPos(path.size() + 1u);
     path.append(".dat");
-    FileDesc *fd, *fd2;
 
     FileMgr::removeFile(path.c_str());
-    fd = FileMgr::getSystemFileMgr()->open(path.c_str(), FileMgr::CREAT|FileMgr::WRONLY, FileMgr::IREAD|FileMgr::IWRITE);
-    fd->getFd();
-    FileMgr::getSystemFileMgr()->close(fd);
+    FileMgr::getSystemFileMgr()->open(path.c_str(), FileMgr::CREAT|FileMgr::WRONLY, FileMgr::IREAD|FileMgr::IWRITE)->getFd();
 
     path.replace(extensionPos, 3u, "idx");
     FileMgr::removeFile(path.c_str());
-    fd2 = FileMgr::getSystemFileMgr()->open(path.c_str(), FileMgr::CREAT|FileMgr::WRONLY, FileMgr::IREAD|FileMgr::IWRITE);
-    fd2->getFd();
-    FileMgr::getSystemFileMgr()->close(fd2);
+    FileMgr::getSystemFileMgr()->open(path.c_str(), FileMgr::CREAT|FileMgr::WRONLY, FileMgr::IREAD|FileMgr::IWRITE)->getFd();
 
     path.replace(extensionPos, 3u, "zdt");
     FileMgr::removeFile(path.c_str());
-    fd2 = FileMgr::getSystemFileMgr()->open(path.c_str(), FileMgr::CREAT|FileMgr::WRONLY, FileMgr::IREAD|FileMgr::IWRITE);
-    fd2->getFd();
-    FileMgr::getSystemFileMgr()->close(fd2);
+    FileMgr::getSystemFileMgr()->open(path.c_str(), FileMgr::CREAT|FileMgr::WRONLY, FileMgr::IREAD|FileMgr::IWRITE)->getFd();
 
     path.replace(extensionPos, 3u, "zdx");
     FileMgr::removeFile(path.c_str());
-    fd2 = FileMgr::getSystemFileMgr()->open(path.c_str(), FileMgr::CREAT|FileMgr::WRONLY, FileMgr::IREAD|FileMgr::IWRITE);
-    fd2->getFd();
-    FileMgr::getSystemFileMgr()->close(fd2);
-
+    FileMgr::getSystemFileMgr()->open(path.c_str(), FileMgr::CREAT|FileMgr::WRONLY, FileMgr::IREAD|FileMgr::IWRITE)->getFd();
     return 0;
 }
 

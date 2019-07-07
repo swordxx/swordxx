@@ -27,6 +27,7 @@
 
 #include "../../swgenbook.h"
 
+#include <memory>
 #include "../../defs.h"
 #include "../../normalizedpath.h"
 
@@ -37,7 +38,7 @@ class FileDesc;
 
 class SWDLLEXPORT RawGenBook : public SWGenBook {
     std::string m_path;
-    FileDesc *bdtfd;
+    std::shared_ptr<FileDesc> bdtfd;
     bool verseKey;
 
 public:

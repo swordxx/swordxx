@@ -70,12 +70,7 @@ RawVerseBase<SizeType_>::RawVerseBase(NormalizedPath path, int fileMode)
 }
 
 template <typename SizeType_>
-RawVerseBase<SizeType_>::~RawVerseBase() noexcept {
-    FileMgr::getSystemFileMgr()->close(idxfp[0u]);
-    FileMgr::getSystemFileMgr()->close(idxfp[1u]);
-    FileMgr::getSystemFileMgr()->close(textfp[0u]);
-    FileMgr::getSystemFileMgr()->close(textfp[1u]);
-}
+RawVerseBase<SizeType_>::~RawVerseBase() noexcept = default;
 
 
 /******************************************************************************
@@ -206,17 +201,16 @@ char RawVerseBase<SizeType_>::createModule(NormalizedPath const & path,
 
     static auto const openFile =
             [&fileMgr](std::string const & filename) {
-                auto * const fd =
-                        fileMgr.open(filename.c_str(),
+                auto fd(fileMgr.open(filename.c_str(),
                                      FileMgr::CREAT | FileMgr::WRONLY,
-                                     FileMgr::IREAD | FileMgr::IWRITE);
+                                     FileMgr::IREAD | FileMgr::IWRITE));
                 fd->getFd();
                 return fd;
             };
 
     static auto const touchFile =
             [&fileMgr](std::string const & filename)
-            { return fileMgr.close(openFile(filename.c_str())); };
+            { openFile(filename.c_str()); };
 
     FileMgr::removeFile(otPath.c_str());
     touchFile(otPath);
@@ -225,10 +219,10 @@ char RawVerseBase<SizeType_>::createModule(NormalizedPath const & path,
     touchFile(ntPath);
 
     FileMgr::removeFile(otVssPath.c_str());
-    FileDesc * const fd = openFile(otVssPath);
+    auto const fd = openFile(otVssPath);
 
     FileMgr::removeFile(ntVssPath.c_str());
-    FileDesc * const fd2 = openFile(ntVssPath);
+    auto const fd2 = openFile(ntVssPath);
 
     VerseKey vk;
     vk.setVersificationSystem(v11n);
@@ -249,10 +243,6 @@ char RawVerseBase<SizeType_>::createModule(NormalizedPath const & path,
     }
     fd2->write(&offset, sizeof(offset));
     fd2->write(&size, sizeof(size));
-
-    FileMgr::getSystemFileMgr()->close(fd);
-    FileMgr::getSystemFileMgr()->close(fd2);
-
     return 0;
 }
 

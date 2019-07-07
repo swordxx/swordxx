@@ -203,8 +203,7 @@ int main(int argc, char * argv[]) {
     parseParams(argc, argv);
 
     // Let's see if we can open our input file
-    FileDesc * const fd =
-            FileMgr::getSystemFileMgr()->open(inFile.c_str(), FileMgr::RDONLY);
+    auto const fd(FileMgr::getSystemFileMgr()->open(inFile.c_str(), FileMgr::RDONLY));
     if (fd->getFd() < 0) {
         std::cerr << "Error: " << argv[0] << ": couldn't open input file: "
                   << inFile << " \n";
@@ -239,6 +238,4 @@ int main(int argc, char * argv[]) {
         if (!keyBuffer.empty() && !entBuffer.empty())
             writeEntry(book, keyBuffer, entBuffer);
     }
-
-    FileMgr::getSystemFileMgr()->close(fd);
 }

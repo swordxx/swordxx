@@ -40,7 +40,7 @@ int main(int argc, char **argv) {
     RTFHTML filter;
 //    PapyriPlain filter;
 //
-    FileDesc *fd = (argc > 1) ? FileMgr::getSystemFileMgr()->open(argv[1], FileMgr::RDONLY) : nullptr;
+    auto fd((argc > 1) ? FileMgr::getSystemFileMgr()->open(argv[1], FileMgr::RDONLY) : nullptr);
 
     std::string lineBuffer = "T\\u12345?his is t<e>xt which has papy-\nri markings in it.\n  L[et's be] sure it gets--\n cleaned up well for s(earching)";
 
@@ -49,16 +49,12 @@ int main(int argc, char **argv) {
 
         while (!(lineBuffer = fd->getLine()).empty())
             cout << lineBuffer << "\n";
-            if (!fd) break;
-        }
 
         cout << "\n\n-------\n\n";
     }
 
-    if (fd) {
-        FileMgr::getSystemFileMgr()->close(fd);
+    if (fd)
         fd = FileMgr::getSystemFileMgr()->open(argv[1], FileMgr::RDONLY);
-    }
 
 //    cout << "\xff\xfe";    // UTF16LE file signature
 
@@ -78,11 +74,6 @@ int main(int argc, char **argv) {
             std::wcout << (wchar_t)wcharBuf[i];    // must cast for correct output and because wchar_t is different size on linux we couldn't declare out wcharBuf a wchar_t *
         }
 */
-        if (!fd) break;
-    }
-
-    if (fd) {
-        FileMgr::getSystemFileMgr()->close(fd);
     }
 
     return 0;

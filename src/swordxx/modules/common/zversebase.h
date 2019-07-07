@@ -92,9 +92,9 @@ private: /* Fields: */
 
 protected: /* Fields: */
 
-    FileDesc *idxfp[2];
-    FileDesc *textfp[2];
-    FileDesc *compfp[2];
+    std::shared_ptr<FileDesc> idxfp[2];
+    std::shared_ptr<FileDesc> textfp[2];
+    std::shared_ptr<FileDesc> compfp[2];
     mutable char *cacheBuf;
     mutable unsigned int cacheBufSize;
     mutable char cacheTestament;

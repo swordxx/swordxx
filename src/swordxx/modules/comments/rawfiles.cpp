@@ -74,7 +74,6 @@ bool RawFiles::isWritable() const {
  */
 
 std::string RawFiles::getRawEntryImpl() const {
-    FileDesc *datafile;
     StartType start = 0;
     SizeType size = 0;
     VerseKey const & key_ = getVerseKey();
@@ -88,7 +87,7 @@ std::string RawFiles::getRawEntryImpl() const {
         readText(key_.getTestament(), start, size, entry);
         tmpbuf += entry;
         entry = "";
-        datafile = FileMgr::getSystemFileMgr()->open(tmpbuf.c_str(), FileMgr::RDONLY);
+        auto const datafile(FileMgr::getSystemFileMgr()->open(tmpbuf.c_str(), FileMgr::RDONLY));
         if (datafile->getFd() > 0) {
             size = datafile->seek(0, SEEK_END);
             auto tmpBuf(std::make_unique<char[]>(size + 1));
@@ -98,7 +97,6 @@ std::string RawFiles::getRawEntryImpl() const {
             entry = tmpBuf.get();
 //            preptext(entrybuf);
         }
-        FileMgr::getSystemFileMgr()->close(datafile);
     }
     return entry;
 }
@@ -110,7 +108,6 @@ std::string RawFiles::getRawEntryImpl() const {
  */
 
 void RawFiles::setEntry(const char *inbuf, long len) {
-    FileDesc *datafile;
     StartType start;
     SizeType size;
     VerseKey const & key_ = getVerseKey();
@@ -130,11 +127,9 @@ void RawFiles::setEntry(const char *inbuf, long len) {
         doSetText(key_.getTestament(), key_.getTestamentIndex(), tmpbuf.c_str());
         filename += tmpbuf;
     }
-    datafile = FileMgr::getSystemFileMgr()->open(filename.c_str(), FileMgr::CREAT|FileMgr::WRONLY|FileMgr::TRUNC);
-    if (datafile->getFd() > 0) {
+    auto const datafile(FileMgr::getSystemFileMgr()->open(filename.c_str(), FileMgr::CREAT|FileMgr::WRONLY|FileMgr::TRUNC));
+    if (datafile->getFd() > 0)
         datafile->write(inbuf, len);
-    }
-    FileMgr::getSystemFileMgr()->close(datafile);
 }
 
 
@@ -183,24 +178,21 @@ void RawFiles::deleteEntry() {
 
 std::string RawFiles::getNextFilename() {
     uint32_t number = 0;
-    FileDesc *datafile;
 
     std::string r(m_path.str() + "/incfile");
-    datafile = FileMgr::getSystemFileMgr()->open(r.c_str(), FileMgr::RDONLY);
-    if (datafile->getFd() != -1) {
-        if (datafile->read(&number, 4) != 4) number = 0;
-        number = swordtoarch32(number);
+    {
+        auto const datafile(FileMgr::getSystemFileMgr()->open(r.c_str(), FileMgr::RDONLY));
+        if (datafile->getFd() != -1) {
+            if (datafile->read(&number, 4) != 4) number = 0;
+            number = swordtoarch32(number);
+        }
     }
     number++;
-    FileMgr::getSystemFileMgr()->close(datafile);
 
-    datafile = FileMgr::getSystemFileMgr()->open(r.c_str(), FileMgr::CREAT|FileMgr::WRONLY|FileMgr::TRUNC);
     r = formatted("%.7d", number-1);
-
     number = archtosword32(number);
-    datafile->write(&number, 4);
+    FileMgr::getSystemFileMgr()->open(r.c_str(), FileMgr::CREAT|FileMgr::WRONLY|FileMgr::TRUNC)->write(&number, 4);
 
-    FileMgr::getSystemFileMgr()->close(datafile);
     return r;
 }
 
@@ -209,12 +201,9 @@ char RawFiles::createModule(char const * path) {
     assert(path);
     static auto const zero = swapFromArch(std::uint32_t(0u));
 
-    FileDesc * const datafile =
-            FileMgr::getSystemFileMgr()->open(
+    FileMgr::getSystemFileMgr()->open(
                 (std::string(path) + "/incfile").c_str(),
-                FileMgr::CREAT|FileMgr::WRONLY|FileMgr::TRUNC);
-    datafile->write(&zero, sizeof(zero));
-    FileMgr::getSystemFileMgr()->close(datafile);
+                FileMgr::CREAT|FileMgr::WRONLY|FileMgr::TRUNC)->write(&zero, sizeof(zero));
 
     return RawVerse::createModule (path);
 }

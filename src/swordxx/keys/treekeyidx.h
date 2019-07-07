@@ -58,8 +58,8 @@ class SWDLLEXPORT TreeKeyIdx : public TreeKey {
 
     std::string m_path;
 
-    FileDesc *m_idxfd;
-    FileDesc *m_datfd;
+    std::shared_ptr<FileDesc> m_idxfd;
+    std::shared_ptr<FileDesc> m_datfd;
 
     void getTreeNodeFromDatOffset(long ioffset, TreeNode *buf) const;
     char getTreeNodeFromIdxOffset(long ioffset, TreeNode *node) const;

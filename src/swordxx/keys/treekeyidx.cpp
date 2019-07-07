@@ -73,10 +73,7 @@ TreeKeyIdx::TreeKeyIdx(const char *idxPath, int fileMode)
 }
 
 
-TreeKeyIdx::~TreeKeyIdx () {
-    FileMgr::getSystemFileMgr()->close(m_idxfd);
-    FileMgr::getSystemFileMgr()->close(m_datfd);
-}
+TreeKeyIdx::~TreeKeyIdx() = default;
 
 
 std::string const & TreeKeyIdx::getLocalName() {
@@ -285,20 +282,14 @@ signed char TreeKeyIdx::create(NormalizedPath const & path) {
     std::string const idxFilename(path.str() + ".idx");
 
     FileMgr::removeFile(datFilename.c_str());
-    FileDesc * const fd =
-            FileMgr::getSystemFileMgr()->open(datFilename.c_str(),
-                                              FileMgr::CREAT | FileMgr::WRONLY,
-                                              FileMgr::IREAD | FileMgr::IWRITE);
-    fd->getFd();
-    FileMgr::getSystemFileMgr()->close(fd);
+    FileMgr::getSystemFileMgr()->open(datFilename.c_str(),
+                                      FileMgr::CREAT | FileMgr::WRONLY,
+                                      FileMgr::IREAD | FileMgr::IWRITE)->getFd();
 
     FileMgr::removeFile(idxFilename.c_str());
-    FileDesc * const fd2 =
-            FileMgr::getSystemFileMgr()->open(idxFilename.c_str(),
-                                              FileMgr::CREAT | FileMgr::WRONLY,
-                                              FileMgr::IREAD | FileMgr::IWRITE);
-    fd2->getFd();
-    FileMgr::getSystemFileMgr()->close(fd2);
+    FileMgr::getSystemFileMgr()->open(idxFilename.c_str(),
+                                      FileMgr::CREAT | FileMgr::WRONLY,
+                                      FileMgr::IREAD | FileMgr::IWRITE)->getFd();
 
     TreeKeyIdx newTree(path.c_str());
     TreeKeyIdx::TreeNode root;
@@ -450,10 +441,8 @@ void TreeKeyIdx::copyFrom(const TreeKeyIdx &ikey) {
     if (m_path != ikey.m_path) {
         m_path = ikey.m_path;
 
-        if (m_idxfd) {
-            FileMgr::getSystemFileMgr()->close(m_idxfd);
-            FileMgr::getSystemFileMgr()->close(m_datfd);
-        }
+        m_idxfd.reset();
+        m_datfd.reset();
         m_idxfd = FileMgr::getSystemFileMgr()->open(ikey.m_idxfd->path().c_str(), ikey.m_idxfd->mode(), ikey.m_idxfd->perms());
         m_datfd = FileMgr::getSystemFileMgr()->open(ikey.m_datfd->path().c_str(), ikey.m_datfd->mode(), ikey.m_datfd->perms());
     }
