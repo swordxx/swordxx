@@ -70,12 +70,13 @@ zVerseBase<VerseSizeType_>::zVerseBase(NormalizedPath const & path,
     }
 
     char const blockChar(static_cast<char>(blockType));
-    idxfp[0] = FileMgr::getSystemFileMgr()->open(formatted("%s/ot.%czs", path.c_str(), blockChar).c_str(), fileMode, true);
-    idxfp[1] = FileMgr::getSystemFileMgr()->open(formatted("%s/nt.%czs", path.c_str(), blockChar).c_str(), fileMode, true);
-    textfp[0] = FileMgr::getSystemFileMgr()->open(formatted("%s/ot.%czz", path.c_str(), blockChar).c_str(), fileMode, true);
-    textfp[1] = FileMgr::getSystemFileMgr()->open(formatted("%s/nt.%czz", path.c_str(), blockChar).c_str(), fileMode, true);
-    compfp[0] = FileMgr::getSystemFileMgr()->open(formatted("%s/ot.%czv", path.c_str(), blockChar).c_str(), fileMode, true);
-    compfp[1] = FileMgr::getSystemFileMgr()->open(formatted("%s/nt.%czv", path.c_str(), blockChar).c_str(), fileMode, true);
+    auto const fileMgr(FileMgr::getSystemFileMgr());
+    idxfp[0] = fileMgr->open(formatted("%s/ot.%czs", path.c_str(), blockChar).c_str(), fileMode, true);
+    idxfp[1] = fileMgr->open(formatted("%s/nt.%czs", path.c_str(), blockChar).c_str(), fileMode, true);
+    textfp[0] = fileMgr->open(formatted("%s/ot.%czz", path.c_str(), blockChar).c_str(), fileMode, true);
+    textfp[1] = fileMgr->open(formatted("%s/nt.%czz", path.c_str(), blockChar).c_str(), fileMode, true);
+    compfp[0] = fileMgr->open(formatted("%s/ot.%czv", path.c_str(), blockChar).c_str(), fileMode, true);
+    compfp[1] = fileMgr->open(formatted("%s/nt.%czv", path.c_str(), blockChar).c_str(), fileMode, true);
 }
 
 /******************************************************************************
@@ -404,35 +405,36 @@ char zVerseBase<VerseSizeType_>::createModule(NormalizedPath const & path,
     auto const lastCharIt(buf.rbegin());
     assert(*lastCharIt == 's');
     FileMgr::removeFile(buf.c_str());
-    if (!FileMgr::getSystemFileMgr()->touch(buf.c_str()))
+    auto const fileMgr(FileMgr::getSystemFileMgr());
+    if (!fileMgr->touch(buf.c_str()))
         return ERROR_OPEN;
 
     (*testamentIt) = 'n';
     FileMgr::removeFile(buf.c_str());
-    if (!FileMgr::getSystemFileMgr()->touch(buf.c_str()))
+    if (!fileMgr->touch(buf.c_str()))
         return ERROR_OPEN;
 
     (*testamentIt) = 'o';
     (*lastCharIt) = 'z';
     FileMgr::removeFile(buf.c_str());
-    if (!FileMgr::getSystemFileMgr()->touch(buf.c_str()))
+    if (!fileMgr->touch(buf.c_str()))
         return ERROR_OPEN;
 
     (*testamentIt) = 'n';
     FileMgr::removeFile(buf.c_str());
-    if (!FileMgr::getSystemFileMgr()->touch(buf.c_str()))
+    if (!fileMgr->touch(buf.c_str()))
         return ERROR_OPEN;
 
     (*testamentIt) = 'o';
     (*lastCharIt) = 'v';
     FileMgr::removeFile(buf.c_str());
-    auto const fd(FileMgr::getSystemFileMgr()->open(buf.c_str(), FileMgr::CREAT|FileMgr::WRONLY, FileMgr::IREAD|FileMgr::IWRITE));
+    auto const fd(fileMgr->open(buf.c_str(), FileMgr::CREAT|FileMgr::WRONLY, FileMgr::IREAD|FileMgr::IWRITE));
     if (fd->getFd() < 1)
         return ERROR_OPEN;
 
     (*testamentIt) = 'n';
     FileMgr::removeFile(buf.c_str());
-    auto const fd2(FileMgr::getSystemFileMgr()->open(buf.c_str(), FileMgr::CREAT|FileMgr::WRONLY, FileMgr::IREAD|FileMgr::IWRITE));
+    auto const fd2(fileMgr->open(buf.c_str(), FileMgr::CREAT|FileMgr::WRONLY, FileMgr::IREAD|FileMgr::IWRITE));
     if (fd2->getFd() < 1)
         return ERROR_OPEN;
 

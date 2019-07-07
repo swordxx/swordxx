@@ -40,7 +40,8 @@ int main(int argc, char **argv) {
     RTFHTML filter;
 //    PapyriPlain filter;
 //
-    auto fd((argc > 1) ? FileMgr::getSystemFileMgr()->open(argv[1], FileMgr::RDONLY) : nullptr);
+    auto const fileMgr(FileMgr::getSystemFileMgr());
+    auto fd((argc > 1) ? fileMgr->open(argv[1], FileMgr::RDONLY) : nullptr);
 
     std::string lineBuffer = "T\\u12345?his is t<e>xt which has papy-\nri markings in it.\n  L[et's be] sure it gets--\n cleaned up well for s(earching)";
 
@@ -54,7 +55,7 @@ int main(int argc, char **argv) {
     }
 
     if (fd)
-        fd = FileMgr::getSystemFileMgr()->open(argv[1], FileMgr::RDONLY);
+        fd = fileMgr->open(argv[1], FileMgr::RDONLY);
 
 //    cout << "\xff\xfe";    // UTF16LE file signature
 

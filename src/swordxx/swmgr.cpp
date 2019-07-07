@@ -1188,6 +1188,7 @@ void SWMgr::InstallScan(const char *dirname)
     if (FileMgr::existsDir(dirname)) {
         if (auto dir = DirectoryEnumerator(dirname)) {
             std::shared_ptr<FileDesc> conffd;
+            auto const fileMgr(FileMgr::getSystemFileMgr());
             while (auto const ent = dir.readEntry()) {
                 newmodfile = dirname;
                 addTrailingDirectorySlash(newmodfile);
@@ -1199,13 +1200,13 @@ void SWMgr::InstallScan(const char *dirname)
                     targetName = m_configPath;
                     addTrailingDirectorySlash(targetName);
                     targetName += ent;
-                    conffd = FileMgr::getSystemFileMgr()->open(targetName.c_str(), FileMgr::WRONLY|FileMgr::CREAT, FileMgr::IREAD|FileMgr::IWRITE);
+                    conffd = fileMgr->open(targetName.c_str(), FileMgr::WRONLY|FileMgr::CREAT, FileMgr::IREAD|FileMgr::IWRITE);
                 }
 
                 // mods.conf
                 else {
                     if (!conffd) {
-                        conffd = FileMgr::getSystemFileMgr()->open(config->filename().c_str(), FileMgr::WRONLY|FileMgr::APPEND);
+                        conffd = fileMgr->open(config->filename().c_str(), FileMgr::WRONLY|FileMgr::APPEND);
                         if (conffd && conffd->getFd() >= 0)
                             conffd->seek(0L, SEEK_END);
                         else {

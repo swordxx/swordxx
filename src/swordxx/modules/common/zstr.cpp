@@ -74,10 +74,11 @@ zStr::zStr(char const * ipath,
         fileMode = FileMgr::RDWR;
     }
 
-    idxfd = FileMgr::getSystemFileMgr()->open(formatted("%s.idx", ipath).c_str(), fileMode, true);
-    datfd = FileMgr::getSystemFileMgr()->open(formatted("%s.dat", ipath).c_str(), fileMode, true);
-    zdxfd = FileMgr::getSystemFileMgr()->open(formatted("%s.zdx", ipath).c_str(), fileMode, true);
-    zdtfd = FileMgr::getSystemFileMgr()->open(formatted("%s.zdt", ipath).c_str(), fileMode, true);
+    auto const fileMgr(FileMgr::getSystemFileMgr());
+    idxfd = fileMgr->open(formatted("%s.idx", ipath).c_str(), fileMode, true);
+    datfd = fileMgr->open(formatted("%s.dat", ipath).c_str(), fileMode, true);
+    zdxfd = fileMgr->open(formatted("%s.zdx", ipath).c_str(), fileMode, true);
+    zdtfd = fileMgr->open(formatted("%s.zdt", ipath).c_str(), fileMode, true);
 
     if (!zdtfd || zdtfd->getFd() < 0) {
         // couldn't find datafile but this might be fine if we're
@@ -624,20 +625,22 @@ signed char zStr::createModule(const char * ipath) {
     auto const extensionPos(path.size() + 1u);
     path.append(".dat");
 
+    auto const fileMgr(FileMgr::getSystemFileMgr());
+
     FileMgr::removeFile(path.c_str());
-    FileMgr::getSystemFileMgr()->touch(path.c_str());
+    fileMgr->touch(path.c_str());
 
     path.replace(extensionPos, 3u, "idx");
     FileMgr::removeFile(path.c_str());
-    FileMgr::getSystemFileMgr()->touch(path.c_str());
+    fileMgr->touch(path.c_str());
 
     path.replace(extensionPos, 3u, "zdt");
     FileMgr::removeFile(path.c_str());
-    FileMgr::getSystemFileMgr()->touch(path.c_str());
+    fileMgr->touch(path.c_str());
 
     path.replace(extensionPos, 3u, "zdx");
     FileMgr::removeFile(path.c_str());
-    FileMgr::getSystemFileMgr()->touch(path.c_str());
+    fileMgr->touch(path.c_str());
     return 0;
 }
 

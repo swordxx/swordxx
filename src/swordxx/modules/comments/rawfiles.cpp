@@ -179,9 +179,10 @@ void RawFiles::deleteEntry() {
 std::string RawFiles::getNextFilename() {
     uint32_t number = 0;
 
+    auto const fileMgr(FileMgr::getSystemFileMgr());
     std::string r(m_path.str() + "/incfile");
     {
-        auto const datafile(FileMgr::getSystemFileMgr()->open(r.c_str(), FileMgr::RDONLY));
+        auto const datafile(fileMgr->open(r.c_str(), FileMgr::RDONLY));
         if (datafile->getFd() != -1) {
             if (datafile->read(&number, 4) != 4) number = 0;
             number = swordtoarch32(number);
@@ -191,7 +192,7 @@ std::string RawFiles::getNextFilename() {
 
     r = formatted("%.7d", number-1);
     number = archtosword32(number);
-    FileMgr::getSystemFileMgr()->open(r.c_str(), FileMgr::CREAT|FileMgr::WRONLY|FileMgr::TRUNC)->write(&number, 4);
+    fileMgr->open(r.c_str(), FileMgr::CREAT|FileMgr::WRONLY|FileMgr::TRUNC)->write(&number, 4);
 
     return r;
 }

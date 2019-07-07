@@ -59,8 +59,9 @@ RawStrBase<SizeType_>::RawStrBase(NormalizedPath const & path,
     if (fileMode == -1) // try read/write if possible
         fileMode = FileMgr::RDWR;
 
-    idxfd = FileMgr::getSystemFileMgr()->open((path.str() + ".idx").c_str(), fileMode, true);
-    datfd = FileMgr::getSystemFileMgr()->open((path.str() + ".dat").c_str(), fileMode, true);
+    auto const fileMgr(FileMgr::getSystemFileMgr());
+    idxfd = fileMgr->open((path.str() + ".idx").c_str(), fileMode, true);
+    datfd = fileMgr->open((path.str() + ".dat").c_str(), fileMode, true);
 
     if (!datfd || datfd->getFd() < 0) {
         // couldn't find datafile but this might be fine if we're
@@ -466,11 +467,13 @@ signed char RawStrBase<SizeType_>::createModule(NormalizedPath const & path) {
     std::string const datFilename(path.str() + ".dat");
     std::string const idxFilename(path.str() + ".idx");
 
+    auto const fileMgr(FileMgr::getSystemFileMgr());
+
     FileMgr::removeFile(datFilename.c_str());
-    FileMgr::getSystemFileMgr()->touch(datFilename.c_str());
+    fileMgr->touch(datFilename.c_str());
 
     FileMgr::removeFile(idxFilename.c_str());
-    FileMgr::getSystemFileMgr()->touch(idxFilename.c_str());
+    fileMgr->touch(idxFilename.c_str());
     return 0;
 }
 

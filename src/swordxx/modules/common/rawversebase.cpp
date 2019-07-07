@@ -53,20 +53,22 @@ RawVerseBase<SizeType_>::RawVerseBase(NormalizedPath path, int fileMode)
         fileMode = FileMgr::RDWR;
     }
 
+    auto const fileMgr(FileMgr::getSystemFileMgr());
+
     auto testamentIt(buf.rbegin() + 5u);
     assert(*testamentIt == 'o');
-    idxfp[0] = FileMgr::getSystemFileMgr()->open(buf.c_str(), fileMode, true);
+    idxfp[0] = fileMgr->open(buf.c_str(), fileMode, true);
 
     (*testamentIt) = 'n';
-    idxfp[1] = FileMgr::getSystemFileMgr()->open(buf.c_str(), fileMode, true);
+    idxfp[1] = fileMgr->open(buf.c_str(), fileMode, true);
 
     buf.resize(buf.size() - 4u); // might invalidate testamentIt
     testamentIt = buf.rbegin() + 1;
     assert(*testamentIt == 'n');
-    textfp[1] = FileMgr::getSystemFileMgr()->open(buf.c_str(), fileMode, true);
+    textfp[1] = fileMgr->open(buf.c_str(), fileMode, true);
 
     (*testamentIt) = 'o';
-    textfp[0] = FileMgr::getSystemFileMgr()->open(buf.c_str(), fileMode, true);
+    textfp[0] = fileMgr->open(buf.c_str(), fileMode, true);
 }
 
 template <typename SizeType_>
@@ -197,22 +199,22 @@ char RawVerseBase<SizeType_>::createModule(NormalizedPath const & path,
     std::string const otVssPath(path.str() + "/ot.vss");
     std::string const ntVssPath(path.str() + "/nt.vss");
 
-    FileMgr & fileMgr = *FileMgr::getSystemFileMgr();
+    auto const fileMgr(FileMgr::getSystemFileMgr());
 
     static auto const openFile =
-            [&fileMgr](std::string const & filename) {
-                auto fd(fileMgr.open(filename.c_str(),
-                                     FileMgr::CREAT | FileMgr::WRONLY,
-                                     FileMgr::IREAD | FileMgr::IWRITE));
+            [fileMgr = fileMgr.get()](std::string const & filename) {
+                auto fd(fileMgr->open(filename.c_str(),
+                                      FileMgr::CREAT | FileMgr::WRONLY,
+                                      FileMgr::IREAD | FileMgr::IWRITE));
                 fd->getFd();
                 return fd;
             };
 
     FileMgr::removeFile(otPath.c_str());
-    fileMgr.touch(otPath.c_str());
+    fileMgr->touch(otPath.c_str());
 
     FileMgr::removeFile(ntPath.c_str());
-    fileMgr.touch(ntPath.c_str());
+    fileMgr->touch(ntPath.c_str());
 
     FileMgr::removeFile(otVssPath.c_str());
     auto const fd = openFile(otVssPath);

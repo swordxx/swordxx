@@ -54,10 +54,11 @@ TreeKeyIdx::TreeKeyIdx(const char *idxPath, int fileMode)
     }
 
     std::string buf(m_path + ".idx");
-    m_idxfd = FileMgr::getSystemFileMgr()->open(buf.c_str(), fileMode, true);
+    auto const fileMgr(FileMgr::getSystemFileMgr());
+    m_idxfd = fileMgr->open(buf.c_str(), fileMode, true);
     buf.resize(buf.size() - 4u);
     buf += ".dat";
-    m_datfd = FileMgr::getSystemFileMgr()->open(buf.c_str(), fileMode, true);
+    m_datfd = fileMgr->open(buf.c_str(), fileMode, true);
 
     if (m_datfd->getFd() < 0) {
         // couldn't find datafile but this might be fine if we're
@@ -281,11 +282,13 @@ signed char TreeKeyIdx::create(NormalizedPath const & path) {
     std::string const datFilename(path.str() + ".dat");
     std::string const idxFilename(path.str() + ".idx");
 
+    auto const fileMgr(FileMgr::getSystemFileMgr());
+
     FileMgr::removeFile(datFilename.c_str());
-    FileMgr::getSystemFileMgr()->touch(datFilename.c_str());
+    fileMgr->touch(datFilename.c_str());
 
     FileMgr::removeFile(idxFilename.c_str());
-    FileMgr::getSystemFileMgr()->touch(idxFilename.c_str());
+    fileMgr->touch(idxFilename.c_str());
 
     TreeKeyIdx newTree(path.c_str());
     TreeKeyIdx::TreeNode root;
@@ -439,8 +442,9 @@ void TreeKeyIdx::copyFrom(const TreeKeyIdx &ikey) {
 
         m_idxfd.reset();
         m_datfd.reset();
-        m_idxfd = FileMgr::getSystemFileMgr()->open(ikey.m_idxfd->path().c_str(), ikey.m_idxfd->mode(), ikey.m_idxfd->perms());
-        m_datfd = FileMgr::getSystemFileMgr()->open(ikey.m_datfd->path().c_str(), ikey.m_datfd->mode(), ikey.m_datfd->perms());
+        auto const fileMgr(FileMgr::getSystemFileMgr());
+        m_idxfd = fileMgr->open(ikey.m_idxfd->path().c_str(), ikey.m_idxfd->mode(), ikey.m_idxfd->perms());
+        m_datfd = fileMgr->open(ikey.m_datfd->path().c_str(), ikey.m_datfd->mode(), ikey.m_datfd->perms());
     }
     positionChanged();
 }
