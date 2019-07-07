@@ -228,11 +228,14 @@ int FileMgrInner::sysOpen(FileDesc & file) {
                 {
                     file.m_mode = (file.m_mode & ~O_RDWR) | O_RDONLY;
                     file.m_fd = ::open(file.m_path.c_str(), file.m_mode|O_BINARY, file.m_perms);
-                    if (file.m_fd >= 0)
+                    if (file.m_fd >= 0) {
                         ::lseek(file.m_fd, file.m_offset, SEEK_SET);
+                        file.m_mode = file.m_mode & ~(O_CREAT | O_TRUNC);
+                    }
                 }
             } else {
                 ::lseek(file.m_fd, file.m_offset, SEEK_SET);
+                file.m_mode = file.m_mode & ~(O_CREAT | O_TRUNC);
             }
             if (!*loop)
                 break;
