@@ -62,11 +62,7 @@ int main(int argc, char **argv) {
     while (!(lineBuffer = fd->getLine()).empty()) {
         lineBuffer += "\n";
         filter.processText(lineBuffer);
-
-//    Simply way to output byte stream
-        for (unsigned int i = 0; i < lineBuffer.size(); ++i) {
-            std::cout << lineBuffer[i];
-        }
+        cout << lineBuffer;
 /*
 //    Example showing safe to cast to u16 stream
         unsigned int size = lineBuffer.size() / 2;
