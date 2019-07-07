@@ -220,23 +220,20 @@ int FileMgrInner::sysOpen(FileDesc & file) {
                 file.m_next = m_files;
                 m_files = &file;
             }
-            if ((!::access(file.m_path.c_str(), R_OK)) || ((file.m_mode & O_CREAT) == O_CREAT)) {    // check for at least file exists / read access before we try to open
-                char tries = (((file.m_mode & O_RDWR) == O_RDWR) && (file.m_tryDowngrade)) ? 2 : 1;  // try read/write if possible
-                for (int i = 0; i < tries; i++) {
-                    if (i > 0) {
-                        file.m_mode = (file.m_mode & ~O_RDWR);    // remove write access
-                        file.m_mode = (file.m_mode | O_RDONLY);// add read access
-                    }
-                    file.m_fd = ::open(file.m_path.c_str(), file.m_mode|O_BINARY, file.m_perms);
-
-                    if (file.m_fd >= 0)
-                        break;
+            char tries = (((file.m_mode & O_RDWR) == O_RDWR) && (file.m_tryDowngrade)) ? 2 : 1;  // try read/write if possible
+            for (int i = 0; i < tries; i++) {
+                if (i > 0) {
+                    file.m_mode = (file.m_mode & ~O_RDWR);    // remove write access
+                    file.m_mode = (file.m_mode | O_RDONLY);// add read access
                 }
+                file.m_fd = ::open(file.m_path.c_str(), file.m_mode|O_BINARY, file.m_perms);
 
                 if (file.m_fd >= 0)
-                    lseek(file.m_fd, file.m_offset, SEEK_SET);
+                    break;
             }
-            else file.m_fd = -1;
+
+            if (file.m_fd >= 0)
+                lseek(file.m_fd, file.m_offset, SEEK_SET);
             if (!*loop)
                 break;
         }
