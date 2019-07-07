@@ -167,8 +167,6 @@ public:
     */
     void close(FileDesc *file);
 
-    void flush() noexcept;
-
     /** Checks for the existence and readability of a file.
     * @param ipath Path to file.
     * @param ifileName Name of file to check for.

@@ -498,17 +498,4 @@ int FileMgr::removeDir(const char *targetDir) {
     return 0;
 }
 
-
-void FileMgr::flush() noexcept {
-    FileDesc **loop;
-
-    for (loop = &m_files; *loop; loop = &((*loop)->m_next)) {
-        if ((*loop)->m_fd > 0) {
-            (*loop)->m_offset = lseek((*loop)->m_fd, 0, SEEK_CUR);
-            ::close((*loop)->m_fd);
-            (*loop)->m_fd = -77;
-        }
-    }
-}
-
 } /* namespace swordxx */
