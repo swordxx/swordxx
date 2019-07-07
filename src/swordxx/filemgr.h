@@ -84,16 +84,16 @@ public:
 
     /** Path to file.
     */
-    std::string path;
+    std::string const path;
     /** File access mode.
     */
     int mode;
     /** File permissions.
     */
-    int perms;
+    int const perms;
     /**
     */
-    bool tryDowngrade;
+    bool const tryDowngrade;
 };
 
 /**
