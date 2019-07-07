@@ -468,14 +468,10 @@ signed char RawStrBase<SizeType_>::createModule(NormalizedPath const & path) {
     std::string const idxFilename(path.str() + ".idx");
 
     FileMgr::removeFile(datFilename.c_str());
-    FileMgr::getSystemFileMgr()->open(datFilename.c_str(),
-                                      FileMgr::CREAT | FileMgr::WRONLY,
-                                      FileMgr::IREAD | FileMgr::IWRITE)->getFd();
+    FileMgr::getSystemFileMgr()->touch(datFilename.c_str());
 
     FileMgr::removeFile(idxFilename.c_str());
-    FileMgr::getSystemFileMgr()->open(idxFilename.c_str(),
-                                      FileMgr::CREAT | FileMgr::WRONLY,
-                                      FileMgr::IREAD | FileMgr::IWRITE)->getFd();
+    FileMgr::getSystemFileMgr()->touch(idxFilename.c_str());
     return 0;
 }
 

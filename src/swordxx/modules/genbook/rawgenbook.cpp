@@ -179,7 +179,7 @@ char RawGenBook::createModule(NormalizedPath const & path) {
 
     auto const buf(path.str() + ".bdt");
     FileMgr::removeFile(buf.c_str());
-    FileMgr::getSystemFileMgr()->open(buf.c_str(), FileMgr::CREAT|FileMgr::WRONLY, FileMgr::IREAD|FileMgr::IWRITE)->getFd();
+    FileMgr::getSystemFileMgr()->touch(buf.c_str());
 
     retval = TreeKeyIdx::create(path.c_str());
     return retval;

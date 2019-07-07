@@ -626,19 +626,19 @@ signed char zStr::createModule(const char * ipath) {
     path.append(".dat");
 
     FileMgr::removeFile(path.c_str());
-    FileMgr::getSystemFileMgr()->open(path.c_str(), FileMgr::CREAT|FileMgr::WRONLY, FileMgr::IREAD|FileMgr::IWRITE)->getFd();
+    FileMgr::getSystemFileMgr()->touch(path.c_str());
 
     path.replace(extensionPos, 3u, "idx");
     FileMgr::removeFile(path.c_str());
-    FileMgr::getSystemFileMgr()->open(path.c_str(), FileMgr::CREAT|FileMgr::WRONLY, FileMgr::IREAD|FileMgr::IWRITE)->getFd();
+    FileMgr::getSystemFileMgr()->touch(path.c_str());
 
     path.replace(extensionPos, 3u, "zdt");
     FileMgr::removeFile(path.c_str());
-    FileMgr::getSystemFileMgr()->open(path.c_str(), FileMgr::CREAT|FileMgr::WRONLY, FileMgr::IREAD|FileMgr::IWRITE)->getFd();
+    FileMgr::getSystemFileMgr()->touch(path.c_str());
 
     path.replace(extensionPos, 3u, "zdx");
     FileMgr::removeFile(path.c_str());
-    FileMgr::getSystemFileMgr()->open(path.c_str(), FileMgr::CREAT|FileMgr::WRONLY, FileMgr::IREAD|FileMgr::IWRITE)->getFd();
+    FileMgr::getSystemFileMgr()->touch(path.c_str());
     return 0;
 }
 

@@ -59,7 +59,7 @@ TreeKeyIdx::TreeKeyIdx(const char *idxPath, int fileMode)
     buf += ".dat";
     m_datfd = FileMgr::getSystemFileMgr()->open(buf.c_str(), fileMode, true);
 
-    if (!m_datfd || m_datfd->getFd() < 0) {
+    if (m_datfd->getFd() < 0) {
         // couldn't find datafile but this might be fine if we're
         // merely instantiating a remote InstallMgr SWMgr
         SWLog::getSystemLog()->logDebug("Couldn't open file: %s. errno: %d",
@@ -282,14 +282,10 @@ signed char TreeKeyIdx::create(NormalizedPath const & path) {
     std::string const idxFilename(path.str() + ".idx");
 
     FileMgr::removeFile(datFilename.c_str());
-    FileMgr::getSystemFileMgr()->open(datFilename.c_str(),
-                                      FileMgr::CREAT | FileMgr::WRONLY,
-                                      FileMgr::IREAD | FileMgr::IWRITE)->getFd();
+    FileMgr::getSystemFileMgr()->touch(datFilename.c_str());
 
     FileMgr::removeFile(idxFilename.c_str());
-    FileMgr::getSystemFileMgr()->open(idxFilename.c_str(),
-                                      FileMgr::CREAT | FileMgr::WRONLY,
-                                      FileMgr::IREAD | FileMgr::IWRITE)->getFd();
+    FileMgr::getSystemFileMgr()->touch(idxFilename.c_str());
 
     TreeKeyIdx newTree(path.c_str());
     TreeKeyIdx::TreeNode root;

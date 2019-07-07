@@ -171,6 +171,8 @@ public:
     */
     std::shared_ptr<FileDesc> open(const char *path, int mode, int perms = IREAD | IWRITE, bool tryDowngrade = false);
 
+    bool touch(char const * path, int perms = IREAD | IWRITE);
+
     /** Checks for the existence and readability of a file.
     * @param ipath Path to file.
     * @param ifileName Name of file to check for.

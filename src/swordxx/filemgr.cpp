@@ -188,6 +188,10 @@ std::shared_ptr<FileDesc> FileMgr::open(const char *path, int mode, int perms, b
 }
 
 
+bool FileMgr::touch(char const * path, int perms)
+{ return open(path, CREAT | WRONLY, perms)->getFd() >= 0; }
+
+
 void FileMgrInner::sysClose(FileDesc & file) {
     FileDesc **loop;
 

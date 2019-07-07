@@ -208,15 +208,11 @@ char RawVerseBase<SizeType_>::createModule(NormalizedPath const & path,
                 return fd;
             };
 
-    static auto const touchFile =
-            [&fileMgr](std::string const & filename)
-            { openFile(filename.c_str()); };
-
     FileMgr::removeFile(otPath.c_str());
-    touchFile(otPath);
+    fileMgr.touch(otPath.c_str());
 
     FileMgr::removeFile(ntPath.c_str());
-    touchFile(ntPath);
+    fileMgr.touch(ntPath.c_str());
 
     FileMgr::removeFile(otVssPath.c_str());
     auto const fd = openFile(otVssPath);
