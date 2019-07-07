@@ -530,7 +530,7 @@ void zStr::setText(const char *ikey, const char *buf, long len) {
         if (idxBytes) {
             idxfd->write(idxBytes.get() + IDXENTRYSIZE, shiftSize - IDXENTRYSIZE);
             idxfd->seek(-1, SEEK_CUR);    // last valid byte
-            FileMgr::getSystemFileMgr()->trunc(idxfd);    // truncate index
+            idxfd->truncate(); // truncate index
         }
     }
 }

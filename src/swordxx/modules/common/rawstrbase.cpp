@@ -445,7 +445,7 @@ void RawStrBase<SizeType_>::doSetText(char const * ikey,
         if (idxBytes) {
             idxfd->write(idxBytes.get() + entrySize, shiftSize - entrySize);
             idxfd->seek(-1, SEEK_CUR);    // last valid byte
-            FileMgr::getSystemFileMgr()->trunc(idxfd);    // truncate index
+            idxfd->truncate(); // truncate index
         }
     }
 }

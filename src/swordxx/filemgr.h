@@ -70,6 +70,11 @@ public:
     */
     int getFd();
 
+    /** Truncate a file at its current position
+    * leaving byte at current possition intact deleting everything afterward.
+    */
+    signed char truncate();
+
     template <typename ... Args>
     auto seek(Args && ... args)
     { return ::lseek(getFd(), std::forward<Args>(args)...); }
@@ -189,12 +194,6 @@ public:
 
     /** \returns whether the given path is readable to the process.*/
     static bool isReadable(std::string const & fullPath) noexcept;
-
-    /** Truncate a file at its current position
-    * leaving byte at current possition intact deleting everything afterward.
-    * @param file The file to operate on.
-    */
-    signed char trunc(FileDesc *file);
 
     static bool isDirectory(std::string const & path);
     static int createParent(NormalizedPath const & path);

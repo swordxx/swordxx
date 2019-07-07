@@ -238,14 +238,13 @@ int FileMgr::sysOpen(FileDesc *file) {
 // to truncate a file at its current position
 // leaving byte at current possition intact
 // deleting everything afterward.
-signed char FileMgr::trunc(FileDesc *file) {
-
+signed char FileDesc::truncate() {
     static const char *writeTest = "x";
-    long size = file->seek(1, SEEK_CUR);
+    long size = seek(1, SEEK_CUR);
     if (size == 1) // was empty
         size = 0;
     char nibble [ 32767 ];
-    bool writable = file->write(writeTest, 1);
+    bool writable = write(writeTest, 1);
     int bytes = 0;
 
     if (writable) {
@@ -253,8 +252,8 @@ signed char FileMgr::trunc(FileDesc *file) {
         std::string tmpFileName;
         int i = 0;
         do {
-            tmpFileName = formatted("%stmp%.4d", file->m_path.c_str(), i);
-            if (!exists(tmpFileName.c_str()))
+            tmpFileName = formatted("%stmp%.4d", m_path.c_str(), i);
+            if (!FileMgr::exists(tmpFileName.c_str()))
                 goto tmpFileNameReady;
         } while (++i < 10000);
         return -2;
@@ -264,34 +263,34 @@ signed char FileMgr::trunc(FileDesc *file) {
         if (fd < 0)
             return -3;
 
-        file->seek(0, SEEK_SET);
+        seek(0, SEEK_SET);
         while (size > 0) {
-            bytes = file->read(nibble, 32767);
+            bytes = read(nibble, 32767);
             bytes = (bytes < size)?bytes:size;
-            if (write(fd, nibble, bytes) != bytes) { break; }
+            if (::write(fd, nibble, bytes) != bytes) { break; }
             size -= bytes;
         }
         if (size < 1) {
             // zero out the file
-            ::close(file->m_fd);
-            file->m_fd = ::open(file->m_path.c_str(), O_TRUNC, S_IREAD|S_IWRITE|S_IRGRP|S_IROTH);
-            ::close(file->m_fd);
-            file->m_fd = -77;    // force file open by filemgr
+            ::close(m_fd);
+            m_fd = ::open(m_path.c_str(), O_TRUNC, S_IREAD|S_IWRITE|S_IRGRP|S_IROTH);
+            ::close(m_fd);
+            m_fd = -77;    // force file open by filemgr
             // copy tmp file back (dumb, but must preserve file permissions)
             lseek(fd, 0, SEEK_SET);
             do {
-                bytes = read(fd, nibble, 32767);
-                file->write(nibble, bytes);
+                bytes = ::read(fd, nibble, 32767);
+                write(nibble, bytes);
             } while (bytes == 32767);
         }
 
         ::close(fd);
-        ::close(file->m_fd);
-        removeFile(tmpFileName.c_str()); // remove our tmp file
-        file->m_fd = -77;    // causes file to be swapped out forcing open on next call to getFd()
+        ::close(m_fd);
+        FileMgr::removeFile(tmpFileName.c_str()); // remove our tmp file
+        m_fd = -77;    // causes file to be swapped out forcing open on next call to getFd()
     }
     else { // put offset back and return failure
-        file->seek(-1, SEEK_CUR);
+        seek(-1, SEEK_CUR);
         return -1;
     }
     return 0;
