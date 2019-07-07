@@ -72,7 +72,7 @@ zCom4::~zCom4() {
 
 
 bool zCom4::isWritable() const {
-    return ((idxfp[0]->getFd() > 0) && ((idxfp[0]->mode & FileMgr::RDWR) == FileMgr::RDWR));
+    return ((idxfp[0]->getFd() > 0) && ((idxfp[0]->mode() & FileMgr::RDWR) == FileMgr::RDWR));
 }
 
 

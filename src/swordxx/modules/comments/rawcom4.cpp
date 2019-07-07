@@ -55,7 +55,7 @@ RawCom4::~RawCom4()
 
 
 bool RawCom4::isWritable() const {
-    return ((idxfp[0]->getFd() > 0) && ((idxfp[0]->mode & FileMgr::RDWR) == FileMgr::RDWR));
+    return ((idxfp[0]->getFd() > 0) && ((idxfp[0]->mode() & FileMgr::RDWR) == FileMgr::RDWR));
 }
 /******************************************************************************
  * RawCom4::getRawEntry()    - Returns the correct verse when char * cast

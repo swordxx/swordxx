@@ -81,7 +81,7 @@ RawGenBook::~RawGenBook() {
 
 
 bool RawGenBook::isWritable() const {
-    return ((bdtfd->getFd() > 0) && ((bdtfd->mode & FileMgr::RDWR) == FileMgr::RDWR));
+    return ((bdtfd->getFd() > 0) && ((bdtfd->mode() & FileMgr::RDWR) == FileMgr::RDWR));
 }
 
 

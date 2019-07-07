@@ -67,7 +67,7 @@ zTextBase<BaseZVerse>::~zTextBase()
 template <typename BaseZVerse>
 bool zTextBase<BaseZVerse>::isWritable() const {
     return (this->idxfp[0]->getFd() > 0)
-           && ((this->idxfp[0]->mode & FileMgr::RDWR) == FileMgr::RDWR);
+           && ((this->idxfp[0]->mode() & FileMgr::RDWR) == FileMgr::RDWR);
 }
 
 

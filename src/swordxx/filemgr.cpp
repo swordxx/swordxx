@@ -114,15 +114,15 @@ void FileMgr::setSystemFileMgr(std::shared_ptr<FileMgr> newFileMgr) {
 
 
 FileDesc::FileDesc(FileMgr * parent,
-                   const char * path_,
-                   int mode_,
-                   int perms_,
-                   bool tryDowngrade_)
+                   char const * path,
+                   int mode,
+                   int perms,
+                   bool tryDowngrade)
     : m_parent(parent)
-    , path(path_)
-    , mode(mode_)
-    , perms(perms_)
-    , tryDowngrade(tryDowngrade_)
+    , m_path(path)
+    , m_mode(mode)
+    , m_perms(perms)
+    , m_tryDowngrade(tryDowngrade)
 {}
 
 
@@ -210,14 +210,14 @@ int FileMgr::sysOpen(FileDesc *file) {
                 file->m_next = m_files;
                 m_files = file;
             }
-            if ((!::access(file->path.c_str(), R_OK)) || ((file->mode & O_CREAT) == O_CREAT)) {    // check for at least file exists / read access before we try to open
-                char tries = (((file->mode & O_RDWR) == O_RDWR) && (file->tryDowngrade)) ? 2 : 1;  // try read/write if possible
+            if ((!::access(file->m_path.c_str(), R_OK)) || ((file->m_mode & O_CREAT) == O_CREAT)) {    // check for at least file exists / read access before we try to open
+                char tries = (((file->m_mode & O_RDWR) == O_RDWR) && (file->m_tryDowngrade)) ? 2 : 1;  // try read/write if possible
                 for (int i = 0; i < tries; i++) {
                     if (i > 0) {
-                        file->mode = (file->mode & ~O_RDWR);    // remove write access
-                        file->mode = (file->mode | O_RDONLY);// add read access
+                        file->m_mode = (file->m_mode & ~O_RDWR);    // remove write access
+                        file->m_mode = (file->m_mode | O_RDONLY);// add read access
                     }
-                    file->m_fd = ::open(file->path.c_str(), file->mode|O_BINARY, file->perms);
+                    file->m_fd = ::open(file->m_path.c_str(), file->m_mode|O_BINARY, file->m_perms);
 
                     if (file->m_fd >= 0)
                         break;
@@ -253,7 +253,7 @@ signed char FileMgr::trunc(FileDesc *file) {
         std::string tmpFileName;
         int i = 0;
         do {
-            tmpFileName = formatted("%stmp%.4d", file->path.c_str(), i);
+            tmpFileName = formatted("%stmp%.4d", file->m_path.c_str(), i);
             if (!exists(tmpFileName.c_str()))
                 goto tmpFileNameReady;
         } while (++i < 10000);
@@ -274,7 +274,7 @@ signed char FileMgr::trunc(FileDesc *file) {
         if (size < 1) {
             // zero out the file
             ::close(file->m_fd);
-            file->m_fd = ::open(file->path.c_str(), O_TRUNC, S_IREAD|S_IWRITE|S_IRGRP|S_IROTH);
+            file->m_fd = ::open(file->m_path.c_str(), O_TRUNC, S_IREAD|S_IWRITE|S_IRGRP|S_IROTH);
             ::close(file->m_fd);
             file->m_fd = -77;    // force file open by filemgr
             // copy tmp file back (dumb, but must preserve file permissions)

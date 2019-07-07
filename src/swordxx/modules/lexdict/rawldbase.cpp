@@ -56,7 +56,7 @@ RawLdBase<Base>::RawLdBase(char const * ipath,
 
 template <typename Base>
 bool RawLdBase<Base>::isWritable() const {
-    return ((this->idxfd->getFd() > 0) && ((this->idxfd->mode & FileMgr::RDWR) == FileMgr::RDWR));
+    return ((this->idxfd->getFd() > 0) && ((this->idxfd->mode() & FileMgr::RDWR) == FileMgr::RDWR));
 }
 
 

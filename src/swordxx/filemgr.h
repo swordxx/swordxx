@@ -82,18 +82,19 @@ public:
     auto write(Args && ... args)
     { return ::write(getFd(), std::forward<Args>(args)...); }
 
-    /** Path to file.
-    */
-    std::string const path;
-    /** File access mode.
-    */
-    int mode;
-    /** File permissions.
-    */
-    int const perms;
-    /**
-    */
-    bool const tryDowngrade;
+    std::string const & path() const noexcept { return m_path; }
+
+    int mode() const noexcept { return m_mode; }
+
+    int perms() const noexcept { return m_perms; }
+
+private: /* Fields: */
+
+    std::string const m_path; /**< Path to file. */
+    int m_mode; /**< File access mode. */
+    int const m_perms; /**< File permissions. */
+    bool const m_tryDowngrade;
+
 };
 
 /**
