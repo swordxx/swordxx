@@ -24,6 +24,7 @@
 #include <iostream>
 #include <string>
 #include <swordxx/filters/utf8transliterator.h>
+#include <vector>
 #include <unicode/ucnv.h>     /* C   Converter API    */
 #include <unicode/udata.h>    /* Data structures */
 #include <unicode/ures.h>     /* Data structures */
@@ -36,19 +37,17 @@ using namespace std;
 
 // Print the given string to stdout
 void uprintf(const icu::UnicodeString &str) {
-    char *buf = nullptr;
     int32_t len = str.length();
     // int32_t bufLen = str.extract(0, len, buf); // Preflight
     /* Preflighting seems to be broken now, so assume 1-1 conversion,
        plus some slop. */
     int32_t bufLen = len + 16;
         int32_t actualLen;
-    buf = new char[bufLen + 1];
-    actualLen = str.extract(0, len, buf/*, bufLen*/); // Default codepage conversion
+    std::vector<char> buf(bufLen + 1);
+    actualLen = str.extract(0, len, buf.data()/*, bufLen*/); // Default codepage conversion
     buf[actualLen] = 0;
     //printf("%s", buf);
-    std::cout << buf;
-    delete buf;
+    std::cout << buf.data();
 }
 
 
@@ -111,29 +110,30 @@ int main() {
 
   //UTF8Transliterator utran = new UTF8Transliterator();
   std::cout << "creating transliterator 2" << std::endl;
-  icu::Transliterator *btrans = icu::Transliterator::createInstance("NFD;Latin-Greek;NFC",
-    UTRANS_FORWARD, status);
+  std::unique_ptr<icu::Transliterator> btrans(icu::Transliterator::createInstance("NFD;Latin-Greek;NFC",
+    UTRANS_FORWARD, status));
   if (U_FAILURE(status))
   {
+      btrans.release();
       std::cout << "error: " << status << ":" <<
         u_errorName(status) << std::endl;
     return 0;
   }
   std::cout << "creating transliterator 1" << std::endl;
-  icu::Transliterator *trans = icu::Transliterator::createInstance("NFD;Latin-Gothic;NFC",
-    UTRANS_FORWARD, status);
+  std::unique_ptr<icu::Transliterator> trans(icu::Transliterator::createInstance("NFD;Latin-Gothic;NFC",
+    UTRANS_FORWARD, status));
   if (U_FAILURE(status))
   {
-    delete btrans;
+      trans.release();
       std::cout << "error: " << status << ":" <<
         u_errorName(status) << std::endl;
     return 0;
   }
 
   std::cout << "deleting transliterator 1" << std::endl;
-  delete trans;
+  trans.reset();
   std::cout << "deleting transliterator 2" << std::endl;
-  delete btrans;
+  btrans.reset();
   std::cout << "the rest" << std::endl;
   uLength = std::strlen(samplestring);
   conv = ucnv_open("utf-8", &status);
