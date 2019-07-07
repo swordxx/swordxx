@@ -522,7 +522,6 @@ void zStr::setText(const char *ikey, const char *buf, long len) {
     else {    // delete entry
         if (idxBytes) {
             idxfd->write(idxBytes.get() + IDXENTRYSIZE, shiftSize - IDXENTRYSIZE);
-            idxfd->seek(-1, SEEK_CUR);    // last valid byte
             idxfd->truncate(); // truncate index
         }
     }

@@ -74,10 +74,12 @@ public:
     */
     int getFd();
 
-    /** Truncate a file at its current position
-    * leaving byte at current possition intact deleting everything afterward.
+    /**
+      \brief Truncates the given file at its current position.
+      \retval 0 on success
+      \retval -1 on error (with errno set)
     */
-    signed char truncate();
+    int truncate() noexcept;
 
     template <typename ... Args>
     auto seek(Args && ... args)
