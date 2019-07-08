@@ -539,9 +539,9 @@ char ThMLOSIS::processText(std::string &text, const SWKey *key, const SWModule *
 
     if (VerseKey const * const vkey = dynamic_cast<VerseKey const *>(key)) {
         std::string ref;
-        if (vkey->getVerse()) {
-            ref = formatted("\t\t<verse osisID=\"%s\">", vkey->getOSISRef());
-        }
+        if (vkey->getVerse())
+            ref.append("\t\t<verse osisID=\"").append(vkey->getOSISRef())
+               .append("\">");
 
         if (ref.length() > 0) {
 
