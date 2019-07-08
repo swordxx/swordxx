@@ -48,7 +48,6 @@ char GBFOSIS::processText(std::string &text, const SWKey *key, const SWModule *m
     int tokpos = 0;
     bool intoken = false;
 
-    std::string orig = text;
     std::string tmp;
     std::string value;
 
@@ -68,8 +67,8 @@ char GBFOSIS::processText(std::string &text, const SWKey *key, const SWModule *m
 
     std::string buf;
 
-    text = "";
-    for (const char* from = orig.c_str(); *from; ++from) {
+    std::string out;
+    for (const char* from = text.c_str(); *from; ++from) {
         if (*from == '<') { //start of new token detected
             intoken = true;
             tokpos = 0;
@@ -77,7 +76,7 @@ char GBFOSIS::processText(std::string &text, const SWKey *key, const SWModule *m
             token[1] = 0;
             token[2] = 0;
             textEnd = from-1; //end of last text node found
-            wordEnd = text.c_str() + text.length();//not good, instead of wordEnd = to!
+            wordEnd = out.c_str() + out.size();//not good, instead of wordEnd = to!
 
             continue;
         }
@@ -88,7 +87,7 @@ char GBFOSIS::processText(std::string &text, const SWKey *key, const SWModule *m
             newWord = true;
             handled = false;
 
-            while (wordStart < (text.c_str() + text.length())) { //hack
+            while (wordStart < (out.c_str() + out.length())) { //hack
                 if (std::strchr(";,. :?!()'\"", *wordStart) && wordStart[0] && wordStart[1])
                     wordStart++;
                 else break;
@@ -108,7 +107,7 @@ char GBFOSIS::processText(std::string &text, const SWKey *key, const SWModule *m
             else if (startsWith(token, "/scripRef"sv)) {
                 tmp = "";
                 tmp.append(textStart, (int)(textEnd - textStart)+1);
-                text += VerseKey::convertToOSIS(tmp, key);
+                out += VerseKey::convertToOSIS(tmp, key);
 
                 lastspace = false;
                 suspendTextPassThru = false;
@@ -118,57 +117,57 @@ char GBFOSIS::processText(std::string &text, const SWKey *key, const SWModule *m
             // Footnote
             if (!std::strcmp(token, "RF") || startsWith(token, "RF "sv)) { //the GBFFootnotes filter adds the attribute "swordFootnote", we want to catch that, too
     //            pushString(buf, "<reference work=\"Bible.KJV\" reference=\"");
-                text += "<note type=\"x-StudyNote\">";
+                out += "<note type=\"x-StudyNote\">";
                 newText = true;
                 lastspace = false;
                 handled = true;
             }
             else    if (!std::strcmp(token, "Rf")) {
-                text += "</note>";
+                out += "</note>";
                 lastspace = false;
                 handled = true;
             }
             // hebrew titles
             if (!std::strcmp(token, "TH")) {
-                text += "<title type=\"psalm\">";
+                out += "<title type=\"psalm\">";
                 newText = true;
                 lastspace = false;
                 handled = true;
             }
             else    if (!std::strcmp(token, "Th")) {
-                text += "</title>";
+                out += "</title>";
                 lastspace = false;
                 handled = true;
             }
             // Italics assume transchange
             if (!std::strcmp(token, "FI")) {
-                text += "<transChange type=\"added\">";
+                out += "<transChange type=\"added\">";
                 newText = true;
                 lastspace = false;
                 handled = true;
             }
             else    if (!std::strcmp(token, "Fi")) {
-                text += "</transChange>";
+                out += "</transChange>";
                 lastspace = false;
                 handled = true;
             }
             // less than
             if (!std::strcmp(token, "CT")) {
-                text += "&lt;";
+                out += "&lt;";
                 newText = true;
                 lastspace = false;
                 handled = true;
             }
             // greater than
             if (!std::strcmp(token, "CG")) {
-                text += "&gt;";
+                out += "&gt;";
                 newText = true;
                 lastspace = false;
                 handled = true;
             }
             // Paragraph break.  For now use empty paragraph element
             if (!std::strcmp(token, "CM")) {
-                text += "<milestone type=\"x-p\" />";
+                out += "<milestone type=\"x-p\" />";
                 newText = true;
                 lastspace = false;
                 handled = true;
@@ -181,7 +180,7 @@ char GBFOSIS::processText(std::string &text, const SWKey *key, const SWModule *m
                     continue;
 //                    return false;
 
-                text += "<figure src=\"";
+                out += "<figure src=\"";
                 const char *c;
                 for (c = src;((*c) && (*c != '"')); c++);
 
@@ -195,9 +194,9 @@ char GBFOSIS::processText(std::string &text, const SWKey *key, const SWModule *m
 // end of uncomment for asolute path logic
 
                 for (c++;((*c) && (*c != '"')); c++) {
-                    text += *c;
+                    out += *c;
                 }
-                text += "\" />";
+                out += "\" />";
 
                 lastspace = false;
                 handled = true;
@@ -223,7 +222,7 @@ char GBFOSIS::processText(std::string &text, const SWKey *key, const SWModule *m
                         buf = formatted("lemma=\"strong:%s\" ", value);
                     }
 
-                    text.insert(attStart - text.c_str(), buf);
+                    out.insert(attStart - out.c_str(), buf);
                 }
                 else { //wordStart doesn't point to an existing <w> attribute!
                     if (value == "H03068") {    //divineName
@@ -235,13 +234,13 @@ char GBFOSIS::processText(std::string &text, const SWKey *key, const SWModule *m
                         buf = formatted("<w lemma=\"strong:%s\">", value);
                     }
 
-                    text.insert(wordStart - text.c_str(), buf);
+                    out.insert(wordStart - out.c_str(), buf);
 
                     if (divineName) {
                         wordStart += 12;
-                        text += "</w></divineName>";
+                        out += "</w></divineName>";
                     }
-                    else    text += "</w>";
+                    else    out += "</w>";
 
                     lastspace = false;
                 }
@@ -266,12 +265,12 @@ char GBFOSIS::processText(std::string &text, const SWKey *key, const SWModule *m
                         buf = formatted("morph=\"robinson:%s\" ", value);
                     }
 
-                    text.insert(attStart - text.c_str(), buf); //hack, we have to
+                    out.insert(attStart - out.c_str(), buf); //hack, we have to
                 }
                 else { //no existing <w> attribute fond
                     buf = formatted("<w morph=\"robinson:%s\">", value);
-                    text.insert(wordStart - text.c_str(), buf);
-                    text += "</w>";
+                    out.insert(wordStart - out.c_str(), buf);
+                    out += "</w>";
                     lastspace = false;
 
                 }
@@ -287,7 +286,7 @@ char GBFOSIS::processText(std::string &text, const SWKey *key, const SWModule *m
             }
             if (from[1] && std::strchr(" ,;.:?!()'\"", from[1])) {
                 if (lastspace) {
-                    text.pop_back();
+                    out.pop_back();
                 }
             }
             if (newText) {
@@ -307,12 +306,12 @@ char GBFOSIS::processText(std::string &text, const SWKey *key, const SWModule *m
             case '\'':
             case '\"':
             case '`':
-                text += *from;
+                out += *from;
                 //from++; //this line removes chars after an apostrophe! Needs fixing.
                 break;
             default:
                 if (newWord && (*from != ' ')) {
-                    wordStart = text.c_str() + text.length();
+                    wordStart = out.c_str() + out.length();
                     newWord = false;
 
                     //fix this if required?
@@ -321,7 +320,7 @@ char GBFOSIS::processText(std::string &text, const SWKey *key, const SWModule *m
                 }
 
                 if (!suspendTextPassThru) {
-                    text += (*from);
+                    out += (*from);
                     lastspace = (*from == ' ');
                 }
             }
@@ -336,7 +335,7 @@ char GBFOSIS::processText(std::string &text, const SWKey *key, const SWModule *m
 
         if (ref.length() > 0) {
 
-            text = ref + text;
+            out = ref + out;
 
             if (vkey->getVerse()) {
                 std::unique_ptr<VerseKey> tmp2(
@@ -345,7 +344,7 @@ char GBFOSIS::processText(std::string &text, const SWKey *key, const SWModule *m
                 tmp2->setAutoNormalize(false);
                 tmp2->setIntros(true);
 
-                text += "</verse>";
+                out += "</verse>";
 
                 tmp2->positionToMaxVerse();
                 if (*vkey == *tmp2) {
@@ -368,6 +367,7 @@ char GBFOSIS::processText(std::string &text, const SWKey *key, const SWModule *m
 //            else sprintf(ref, "\t<div type=\"book\" osisID=\"%s\">", vkey->getOSISRef());
         }
     }
+    text = std::move(out);
     return 0;
 }
 
