@@ -290,8 +290,8 @@ char ThMLOSIS::processText(std::string &text, const SWKey *key, const SWModule *
                 std::string tmp;
                 tmp = "";
                 tmp.append(textStart, (int)(textEnd - textStart)+1);
-                //pushString(&to, convertToOSIS(tmp.c_str(), key));
-                text.append(VerseKey::convertToOSIS(tmp.c_str(), key));
+                //pushString(&to, convertToOSIS(tmp, key));
+                text.append(VerseKey::convertToOSIS(tmp, key));
                 suspendTextPassThru = false;
                 handled = true;
             }

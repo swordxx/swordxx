@@ -108,7 +108,7 @@ char GBFOSIS::processText(std::string &text, const SWKey *key, const SWModule *m
             else if (!std::strncmp(token, "/scripRef", 9)) {
                 tmp = "";
                 tmp.append(textStart, (int)(textEnd - textStart)+1);
-                text += VerseKey::convertToOSIS(tmp.c_str(), key);
+                text += VerseKey::convertToOSIS(tmp, key);
 
                 lastspace = false;
                 suspendTextPassThru = false;
