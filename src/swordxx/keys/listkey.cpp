@@ -70,7 +70,7 @@ std::unique_ptr<SWKey> ListKey::clone() const
  * ListKey Destructor - cleans up instance of ListKey
  */
 
-ListKey::~ListKey() { clear(); }
+ListKey::~ListKey() = default;
 
 
 /******************************************************************************
