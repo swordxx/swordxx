@@ -47,7 +47,6 @@ char GBFOSIS::processText(std::string &text, const SWKey *key, const SWModule *m
     char token[2048]; //cheesy, we seem to like cheese :)
     int tokpos = 0;
     bool intoken = false;
-    bool keepToken = false;
 
     std::string orig = text;
     std::string tmp;
@@ -85,7 +84,6 @@ char GBFOSIS::processText(std::string &text, const SWKey *key, const SWModule *m
 
         if (*from == '>') {    // process tokens
             intoken = false;
-            keepToken = false;
             suspendTextPassThru = false;
             newWord = true;
             handled = false;
@@ -280,32 +278,21 @@ char GBFOSIS::processText(std::string &text, const SWKey *key, const SWModule *m
                 handled = true;
             }
 
-            if (!keepToken) {
-                if (!handled) {
-                    SWLog::getSystemLog()->logError(
-                                "Unprocessed Token: <%s> in key %s",
-                                token,
-                                key ? key->getText().c_str() : "<unknown>");
+            if (!handled) {
+                SWLog::getSystemLog()->logError(
+                            "Unprocessed Token: <%s> in key %s",
+                            token,
+                            key ? key->getText().c_str() : "<unknown>");
 //                    std::exit(-1);
-                }
-                if (from[1] && std::strchr(" ,;.:?!()'\"", from[1])) {
-                    if (lastspace) {
-                        text.pop_back();
-                    }
-                }
-                if (newText) {
-                    textStart = from+1;
-                    newText = false;
-                }
-                continue;
             }
-
-            // if not a strongs token, keep token in text
-            text += formatted("<%s>", token);
-
+            if (from[1] && std::strchr(" ,;.:?!()'\"", from[1])) {
+                if (lastspace) {
+                    text.pop_back();
+                }
+            }
             if (newText) {
-                textStart = text.c_str() + text.length();
-                newWord = false;
+                textStart = from+1;
+                newText = false;
             }
             continue;
         }
