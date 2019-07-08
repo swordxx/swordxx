@@ -93,6 +93,17 @@ bool startsWith(std::string_view str, std::string_view prefix) {
     #endif
 }
 
+bool endsWith(std::string_view str, std::string_view suffix) {
+    #if __cplusplus > 201703L
+    return str.ends_with(suffix);
+    #else
+    if (str.size() < suffix.size())
+        return false;
+    str.remove_prefix(str.size() - suffix.size());
+    return str == suffix;
+    #endif
+}
+
 std::string stripPrefix(std::string & str, char const separator) {
     char const * m = str.c_str();
     while (*m && *m != separator)

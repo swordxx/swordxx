@@ -422,6 +422,11 @@ std::string_view trimmedView(std::string_view sv) noexcept;
 #endif
 bool startsWith(std::string_view str, std::string_view prefix);
 
+#if __cplusplus > 201703L
+[[deprecated("Use *::ends_with() instead")]]
+#endif
+bool endsWith(std::string_view str, std::string_view suffix);
+
 namespace Detail {
 
 template <typename T>
