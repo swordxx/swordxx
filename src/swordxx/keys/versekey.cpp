@@ -1696,21 +1696,16 @@ int VerseKey::compare_(VerseKey const & ivkey) const noexcept {
 }
 
 
-const char *VerseKey::getOSISRef() const {
-    static char buf[5][254];
-    static int loop = 0;
-
-    if (loop > 4)
-        loop = 0;
-
-    if (getVerse())
-        sprintf(buf[loop], "%s.%d.%d", getOSISBookName().c_str(), getChapter(), getVerse());
-    else if (getChapter())
-        sprintf(buf[loop], "%s.%d", getOSISBookName().c_str(), getChapter());
-    else if (getBook())
-        sprintf(buf[loop], "%s", getOSISBookName().c_str());
-    else    buf[loop][0] = 0;
-    return buf[loop++];
+std::string VerseKey::getOSISRef() const {
+    std::ostringstream oss;
+    if (getVerse()) {
+        oss << getOSISBookName() << '.' << getChapter() << '.' << getVerse();
+    } else if (getChapter()) {
+        oss << getOSISBookName() << '.' << getChapter();
+    } else if (getBook()) {
+        oss << getOSISBookName();
+    }
+    return oss.str();
 }
 
 
