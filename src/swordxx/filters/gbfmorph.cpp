@@ -47,16 +47,14 @@ char GBFMorph::processText(std::string &text, const SWKey *key, const SWModule *
     (void) key;
     (void) module;
     if (!option) {    // if we don't want morph tags
-        const char *from;
         char token[2048]; // cheese.  Fix.
         int tokpos = 0;
         bool intoken = false;
         bool lastspace = false;
 
-        std::string orig = text;
-        from = orig.c_str();
+        std::string out;
 
-        for (text = ""; *from; from++) {
+        for (auto const * from = text.c_str(); *from; from++) {
             if (*from == '<') {
                 intoken = true;
                 tokpos = 0;
@@ -70,14 +68,14 @@ char GBFMorph::processText(std::string &text, const SWKey *key, const SWModule *
                 if (*token == 'W' && token[1] == 'T') {	// Morph
                   if ((from[1] == ' ') || (from[1] == ',') || (from[1] == ';') || (from[1] == '.') || (from[1] == '?') || (from[1] == '!') || (from[1] == ')') || (from[1] == '\'') || (from[1] == '\"')) {
                     if (lastspace)
-                      text.pop_back();
+                      out.pop_back();
                   }
                   continue;
                 }
                 // if not a morph tag token, keep token in text
-                text += '<';
-                text += token;
-                text += '>';
+                out += '<';
+                out += token;
+                out += '>';
                 continue;
             }
             if (intoken) {
@@ -88,10 +86,11 @@ char GBFMorph::processText(std::string &text, const SWKey *key, const SWModule *
                 }
             }
             else {
-                text += *from;
+                out += *from;
                 lastspace = (*from == ' ');
             }
         }
+        text = std::move(out);
     }
     return 0;
 }
