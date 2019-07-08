@@ -60,14 +60,13 @@ char GBFFootnotes::processText (std::string &text, const SWKey *key, const SWMod
     int footnoteNum = 1;
     char buf[254];
 
-    std::string orig = text;
-    const char *from = orig.c_str();
+    std::string out;
 
     //XMLTag tag;
 
     using namespace std::literals::string_view_literals;
 
-    for (text = ""; *from; from++) {
+    for (const char *from = text.c_str(); *from; from++) {
         if (*from == '<') {
             intoken = true;
             token = "";
@@ -92,9 +91,9 @@ char GBFFootnotes::processText (std::string &text, const SWKey *key, const SWMod
 
                     if((tagText.length() == 1) || (module->getName() == "IGNT")) {
                         if (option) { // for ASV marks text in verse then put explanation at end of verse
-                            text.append(" <FS>[");
-                            text.append(tagText);
-                            text.append("]<Fs>");
+                            out.append(" <FS>[");
+                            out.append(tagText);
+                            out.append("]<Fs>");
                             hide = false;
                             continue;
                         }
@@ -111,15 +110,15 @@ char GBFFootnotes::processText (std::string &text, const SWKey *key, const SWMod
                 }
                 hide = false;
                 if (option) {
-                    text.append(startTag.toString());
-                    text.append(tagText);
+                    out.append(startTag.toString());
+                    out.append(tagText);
                 }
                 else    continue;
             }
             if (!hide) {
-                text.push_back('<');
-                text.append(token);
-                text.push_back('>');
+                out.push_back('<');
+                out.append(token);
+                out.push_back('>');
             }
             else {
                 tagText.push_back('<');
@@ -132,10 +131,11 @@ char GBFFootnotes::processText (std::string &text, const SWKey *key, const SWMod
             token.push_back(*from);
         }
         else if (!hide) { //copy text which is not inside a token
-            text.push_back(*from);
+            out.push_back(*from);
         }
         else tagText.push_back(*from);
     }
+    text = std::move(out);
     return 0;
 
     /*
