@@ -101,6 +101,8 @@ char OSISOSIS::processText(std::string &text, const SWKey *key, const SWModule *
 }
 
 bool OSISOSIS::handleToken(std::string &buf, const char *token, BasicFilterUserData *userData) {
+    using namespace std::literals::string_view_literals;
+
   // manually process if it wasn't a simple substitution
     if (!substituteToken(buf, token)) {
         MyUserData * u = static_cast<MyUserData *>(userData);
@@ -116,7 +118,7 @@ bool OSISOSIS::handleToken(std::string &buf, const char *token, BasicFilterUserD
             if ((!tag.isEmpty()) && (!tag.isEndTag())) {
                 std::string attr = tag.attribute("lemma");
                 if (attr.length()) {
-                    if (!std::strncmp(attr.c_str(), "x-Strongs:", 10)) {
+                    if (startsWith(attr, "x-Strongs:"sv)) {
                         std::memcpy(&attr[3u], "strong", 6);
                         attr.erase(0u, 3u);
                         tag.setAttribute("lemma", attr.c_str());
@@ -124,12 +126,12 @@ bool OSISOSIS::handleToken(std::string &buf, const char *token, BasicFilterUserD
                 }
                 attr = tag.attribute("morph");
                 if (attr.length()) {
-                    if (!std::strncmp(attr.c_str(), "x-StrongsMorph:", 15)) {
+                    if (startsWith(attr, "x-StrongsMorph:"sv)) {
                         std::memcpy(&attr[3u], "strong", 6);
                         attr.erase(0u, 3u);
                         tag.setAttribute("lemma", attr.c_str());
                     }
-                    if (!std::strncmp(attr.c_str(), "x-Robinson:", 11)) {
+                    if (startsWith(attr, "x-Robinson:"sv)) {
                         attr[2] = 'r';
                         attr.erase(0u, 2u);
                         tag.setAttribute("lemma", attr.c_str());

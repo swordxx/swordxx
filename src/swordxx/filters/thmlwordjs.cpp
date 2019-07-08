@@ -54,6 +54,8 @@ ThMLWordJS::~ThMLWordJS() {
 
 
 char ThMLWordJS::processText(std::string &text, const SWKey *key, const SWModule *module) {
+    using namespace std::literals::string_view_literals;
+
     if (option) {
         char token[2112]; // cheese.  Fix.
         int tokpos = 0;
@@ -116,9 +118,9 @@ char ThMLWordJS::processText(std::string &text, const SWKey *key, const SWModule
                     }
 
                 }
-                if (!std::strncmp(token, "sync type=\"morph\"", 17)) {
+                if (startsWith(token, "sync type=\"morph\""sv)) {
                     for (ch = token+17; *ch; ch++) {
-                        if (!std::strncmp(ch, "class=\"", 7)) {
+                        if (startsWith(ch, "class=\""sv)) {
                             valto = val;
                             for (unsigned int i = 7; ch[i] != '\"' && i < 127; i++)
                                 *valto++ = ch[i];
@@ -126,7 +128,7 @@ char ThMLWordJS::processText(std::string &text, const SWKey *key, const SWModule
                             (*wordAttrs)["MorphClass"] = val;
     //printf("Adding: [\"Word\"][%s][\"MorphClass\"] = %s\n", wordstr, val);
                         }
-                        if (!std::strncmp(ch, "value=\"", 7)) {
+                        if (startsWith(ch, "value=\""sv)) {
                             valto = val;
                             for (unsigned int i = 7; ch[i] != '\"' && i < 127; i++)
                                 *valto++ = ch[i];

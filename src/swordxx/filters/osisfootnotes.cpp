@@ -50,6 +50,8 @@ OSISFootnotes::~OSISFootnotes() {
 
 
 char OSISFootnotes::processText(std::string &text, const SWKey *key, const SWModule *module) {
+    using namespace std::literals::string_view_literals;
+
     std::string token;
     bool intoken    = false;
     bool hide       = false;
@@ -100,8 +102,7 @@ char OSISFootnotes::processText(std::string &text, const SWKey *key, const SWMod
 
         if (*from == '>') {    // process tokens
             intoken = false;
-            if (!std::strncmp(token.c_str(), "note", 4)
-                || !std::strncmp(token.c_str(), "/note", 5)) {
+            if (startsWith(token, "note"sv) || startsWith(token, "/note"sv)) {
                 tag = token.c_str();
 
                 if (!tag.isEndTag()) {
@@ -148,7 +149,7 @@ char OSISFootnotes::processText(std::string &text, const SWKey *key, const SWMod
             // if not a heading token, keep token in text
             //if ((!std::strcmp(tag.getName(), "reference")) && (!tag.isEndTag())) {
             //    std::string osisRef = tag.getAttribute("osisRef");
-            if (!std::strncmp(token.c_str(), "reference", 9)) {
+            if (startsWith(token, "reference")) {
                 if (refs.length()) {
                     refs.append("; ");
                 }

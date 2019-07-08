@@ -47,6 +47,8 @@ OSISMorphSegmentation::~OSISMorphSegmentation() {}
 
 
 char OSISMorphSegmentation::processText(std::string &text, const SWKey * /*key*/, const SWModule *module) {
+    using namespace std::literals::string_view_literals;
+
     std::string token;
     bool intoken    = false;
     bool hide       = false;
@@ -70,7 +72,7 @@ char OSISMorphSegmentation::processText(std::string &text, const SWKey * /*key*/
         if (*from == '>') { // process tokens
             intoken = false;
 
-            if (!std::strncmp(token.c_str(), "seg ", 4) || !std::strncmp(token.c_str(), "/seg", 4)) {
+            if (startsWith(token, "seg "sv) || startsWith(token, "/seg"sv)) {
                 tag = token.c_str();
 
                 if (!tag.isEndTag()

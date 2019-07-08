@@ -195,7 +195,7 @@ signed char RawStrBase<SizeType_>::findOffset(char const * ikey,
                 if (!diff)
                     break;
 
-                if (!std::strncmp(trybuf.c_str(), key.c_str(), key.size())) substr = true;
+                if (startsWith(trybuf, key)) substr = true;
 
                 if (diff < 0)
                     tailoff = (tryoff == headoff) ? headoff : tryoff;
@@ -293,6 +293,8 @@ std::string RawStrBase<SizeType_>::readText(StartType istart,
                                             SizeType * isize,
                                             std::string & buf) const
 {
+    using namespace std::literals::string_view_literals;
+
     auto const idxbuflocal(getIDXBufDat(istart));
     StartType start = istart;
 
@@ -312,7 +314,7 @@ std::string RawStrBase<SizeType_>::readText(StartType istart,
             }
         }
         // resolve link
-        if (!std::strncmp(buf.c_str(), "@LINK", 5)) {
+        if (startsWith(buf, "@LINK"sv)) {
             for (std::size_t ch = 5; buf[ch]; ++ch) {        // null before nl
                 if (buf[ch] == '\n') {
                     buf[ch] = '\0';
@@ -343,6 +345,8 @@ void RawStrBase<SizeType_>::doSetText(char const * ikey,
                                       char const * buf,
                                       long len)
 {
+    using namespace std::literals::string_view_literals;
+
     StartType start, outstart;
     IndexOffsetType idxoff;
     SizeType size;
@@ -385,7 +389,7 @@ void RawStrBase<SizeType_>::doSetText(char const * ikey,
             std::memmove(tmpbuf, ch, size - std::size_t(ch - tmpbuf));
 
             // resolve link
-            if (!std::strncmp(tmpbuf, "@LINK", 5) && (len)) {
+            if (startsWith(tmpbuf, "@LINK"sv) && (len)) {
                 for (ch = tmpbuf; *ch; ch++) {        // null before nl
                     if (*ch == 10) {
                         *ch = 0;

@@ -217,6 +217,8 @@ void OSISXHTML::MyUserData::outputNewline(std::string &buf) {
     }
 }
 bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUserData *userData) {
+    using namespace std::literals::string_view_literals;
+
     auto & u = *static_cast<MyUserData *>(userData);
     std::string scratch;
     bool sub = (u.suspendTextPassThru) ? substituteToken(scratch, token) : substituteToken(buf, token);
@@ -414,7 +416,7 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
                         std::strncpy(&work[0u], target.c_str(), size);
 
                         // For Bible:Gen.3.15 or Bible.vulgate:Gen.3.15
-                        if(!std::strncmp(work.c_str(), "Bible", 5))
+                        if(startsWith(work, "Bible"sv))
                             is_scripRef = true;
                     }
 

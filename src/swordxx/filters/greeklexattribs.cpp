@@ -39,6 +39,8 @@ GreekLexAttribs::GreekLexAttribs() {
 
 
 char GreekLexAttribs::processText(std::string &text, const SWKey *key, const SWModule *module) {
+    using namespace std::literals::string_view_literals;
+
     (void) key;
 
     if (module->isProcessEntryAttributes()) {
@@ -65,7 +67,7 @@ char GreekLexAttribs::processText(std::string &text, const SWKey *key, const SWM
                             if (!currentPhraseEnd)
                                 currentPhraseEnd = from - 1;
                             for (; *from && *from != '>'; from++) {
-                                if (!std::strncmp(from, "value=\"", 7)) {
+                                if (startsWith(from, "value=\""sv)) {
                                     valto = val;
                                     from += 7;
                                     for (unsigned int i = 0; from[i] != '\"' && i < 127; i++)
@@ -107,7 +109,7 @@ char GreekLexAttribs::processText(std::string &text, const SWKey *key, const SWM
                 if (*from == ';') inAV = false;
 
             }
-            else if (!std::strncmp(from, "AV-", 3)) {
+            else if (startsWith(from, "AV-"sv)) {
                 inAV = true;
                 from+=2;
             }

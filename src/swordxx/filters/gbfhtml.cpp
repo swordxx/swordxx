@@ -80,18 +80,20 @@ bool GBFHTML::handleToken(std::string &buf, const char *token, BasicFilterUserDa
     const char *num;
     MyUserData * u = static_cast<MyUserData *>(userData);
 
+    using namespace std::literals::string_view_literals;
+
     if (!substituteToken(buf, token)) {
         // deal with OSIS note tags.  Just hide till OSISRTF
-        if (!std::strncmp(token, "note ", 5)) {
+        if (startsWith(token, "note "sv)) {
             // let's stop text from going to output
             u->suspendTextPassThru = true;
         }
 
-        else if (!std::strncmp(token, "/note", 5)) {
+        else if (startsWith(token, "/note"sv)) {
             u->suspendTextPassThru = false;
         }
 
-        else if (!std::strncmp(token, "w", 1)) {
+        else if (startsWith(token, "w"sv)) {
             // OSIS Word (temporary until OSISRTF is done)
             valto = val;
             num = std::strstr(token, "lemma=\"x-Strongs:");
@@ -133,14 +135,14 @@ bool GBFHTML::handleToken(std::string &buf, const char *token, BasicFilterUserDa
             }
         }
 
-        else if (!std::strncmp(token, "WG", 2) || !std::strncmp(token, "WH", 2)) { // strong's numbers
+        else if (startsWith(token, "WG"sv) || startsWith(token, "WH"sv)) { // strong's numbers
             buf += " <small><em>&lt;";
             for (tok = token + 2; *tok; tok++)
                     buf += *tok;
             buf += "&gt;</em></small> ";
         }
 
-        else if (!std::strncmp(token, "WTG", 3) || !std::strncmp(token, "WTH", 3)) { // strong's numbers tense
+        else if (startsWith(token, "WTG"sv) || startsWith(token, "WTH"sv)) { // strong's numbers tense
             buf += " <small><em>&lt;";
             for (tok = token + 3; *tok; tok++)
                 if(*tok != '\"')
@@ -148,7 +150,7 @@ bool GBFHTML::handleToken(std::string &buf, const char *token, BasicFilterUserDa
             buf += ")</em></small> ";
         }
 
-        else if (!std::strncmp(token, "RX", 2)) {
+        else if (startsWith(token, "RX"sv)) {
             buf += "<i>";
             for (tok = token + 3; *tok; tok++) {
               if(*tok != '<' && *tok+1 != 'R' && *tok+2 != 'x') {
@@ -161,12 +163,12 @@ bool GBFHTML::handleToken(std::string &buf, const char *token, BasicFilterUserDa
             buf += "</i>";
         }
 
-        else if (!std::strncmp(token, "RB", 2)) {
+        else if (startsWith(token, "RB"sv)) {
             buf += "<i>";
             u->hasFootnotePreTag = true;
         }
 
-        else if (!std::strncmp(token, "RF", 2)) {
+        else if (startsWith(token, "RF"sv)) {
             if (u->hasFootnotePreTag) {
                 u->hasFootnotePreTag = false;
                 buf += "</i> ";
@@ -174,7 +176,7 @@ bool GBFHTML::handleToken(std::string &buf, const char *token, BasicFilterUserDa
             buf += "<font color=\"#800000\"><small> (";
         }
 
-        else if (!std::strncmp(token, "FN", 2)) {
+        else if (startsWith(token, "FN"sv)) {
             buf += "<font face=\"";
             for (tok = token + 2; *tok; tok++)
                 if(*tok != '\"')
@@ -182,7 +184,7 @@ bool GBFHTML::handleToken(std::string &buf, const char *token, BasicFilterUserDa
             buf += "\">";
         }
 
-        else if (!std::strncmp(token, "CA", 2)) {    // ASCII value
+        else if (startsWith(token, "CA"sv)) {    // ASCII value
             buf += (char)std::atoi(&token[2]);
         }
 

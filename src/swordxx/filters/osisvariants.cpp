@@ -56,6 +56,8 @@ OSISVariants::~OSISVariants() {
 
 char OSISVariants::processText(std::string &text, const SWKey *key, const SWModule *module)
 {
+    using namespace std::literals::string_view_literals;
+
     (void) key;
     (void) module;
 
@@ -86,7 +88,7 @@ char OSISVariants::processText(std::string &text, const SWKey *key, const SWModu
             else if (*from == '>') {    // process tokens
                 intoken = false;
 
-                if (!std::strncmp(token.c_str(), "seg", 3)) {
+                if (startsWith(token, "seg"sv)) {
                     tag = token.c_str();
 
                     if ((tag.attribute("type") == "x-variant") && (tag.attribute("subType") == variantChoice)) {
@@ -95,7 +97,7 @@ char OSISVariants::processText(std::string &text, const SWKey *key, const SWModu
                         continue;
                     }
                 }
-                if (!std::strncmp(token.c_str(), "/seg", 4)) {
+                if (startsWith(token, "/seg"sv)) {
                     hide = false;
                     if (invar) {
                         invar = false;

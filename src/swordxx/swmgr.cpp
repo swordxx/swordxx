@@ -785,6 +785,8 @@ std::shared_ptr<SWModule> SWMgr::createModule(std::string const & name,
                                               std::string const & driver,
                                               ConfigEntMap section)
 {
+    using namespace std::literals::string_view_literals;
+
     auto const getEntry =
             [&section](char const * const key,
                        std::string defValue = std::string())
@@ -807,7 +809,7 @@ std::shared_ptr<SWModule> SWMgr::createModule(std::string const & name,
         auto const * buf2 = dataPathEntry.c_str();
     //    for (; ((*buf2) && ((*buf2 == '.') || (*buf2 == '/') || (*buf2 == '\\'))); buf2++);
         for (; ((*buf2) && ((*buf2 == '/') || (*buf2 == '\\'))); buf2++);
-        if (!std::strncmp(buf2, "./", 2)) { //remove the leading ./ in the module data path to make it look better
+        if (startsWith(buf2, "./"sv)) { //remove the leading ./ in the module data path to make it look better
             buf2 += 2;
         }
         // PrefixPath - absolute directory path to the repository in which this module was found

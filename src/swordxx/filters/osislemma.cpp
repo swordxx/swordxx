@@ -82,9 +82,7 @@ char OSISLemma::processText(std::string &text, const SWKey *key, const SWModule 
                         auto const prefixPos(a.find(':'));
                         if (prefixPos == std::string::npos
                             || (prefixPos >= sizeof("lemma.") - 1u
-                                && std::strncmp(a.c_str(),
-                                                "lemma.",
-                                                sizeof("lemma.") - 1u)))
+                                && !startsWith(a, "lemma."sv)))
                         {
                             // remove attribute part
                             wtag.setAttribute("lemma", nullptr, i, ' ');

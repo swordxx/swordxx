@@ -47,6 +47,8 @@ OSISReferenceLinks::~OSISReferenceLinks() {
 
 
 char OSISReferenceLinks::processText(std::string &text, const SWKey *key, const SWModule *module) {
+    using namespace std::literals::string_view_literals;
+
     (void) key;
     (void) module;
     if (option) return 0;
@@ -66,8 +68,9 @@ char OSISReferenceLinks::processText(std::string &text, const SWKey *key, const 
         }
         else if (*from == '>') {    // process tokens
             intoken = false;
-            if (std::strncmp(token.c_str(), "reference", 9)
-                && std::strncmp(token.c_str(), "/reference", 10)) {
+            if (!startsWith(token, "reference"sv)
+                && !startsWith(token, "/reference"sv))
+            {
                 text.push_back('<');
                 text.append(token);
                 text.push_back('>');

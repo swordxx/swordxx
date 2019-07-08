@@ -47,6 +47,8 @@ ThMLStrongs::~ThMLStrongs() {
 
 
 char ThMLStrongs::processText(std::string &text, const SWKey *key, const SWModule *module) {
+    using namespace std::literals::string_view_literals;
+
     (void) key;
     char token[2048]; // cheese.  Fix.
     const char *from;
@@ -116,9 +118,9 @@ char ThMLStrongs::processText(std::string &text, const SWKey *key, const SWModul
                 }
             }
             if (module->isProcessEntryAttributes()) {
-                if (!std::strncmp(token, "sync type=\"morph\"", 17)) {
+                if (startsWith(token, "sync type=\"morph\""sv)) {
                     for (ch = token+17; *ch; ch++) {
-                        if (!std::strncmp(ch, "class=\"", 7)) {
+                        if (startsWith(ch, "class=\""sv)) {
                             valto = val;
                             for (unsigned int i = 7; ch[i] != '\"' && i < 127; i++)
                                 *valto++ = ch[i];
@@ -129,7 +131,7 @@ char ThMLStrongs::processText(std::string &text, const SWKey *key, const SWModul
                             }
                             module->getEntryAttributes()["Word"][wordstr]["MorphClass"] = val;
                         }
-                        if (!std::strncmp(ch, "value=\"", 7)) {
+                        if (startsWith(ch, "value=\""sv)) {
                             valto = val;
                             for (unsigned int i = 7; ch[i] != '\"' && i < 127; i++)
                                 *valto++ = ch[i];

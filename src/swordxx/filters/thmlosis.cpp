@@ -43,6 +43,8 @@ ThMLOSIS::~ThMLOSIS() {
 
 
 char ThMLOSIS::processText(std::string &text, const SWKey *key, const SWModule *module) {
+    using namespace std::literals::string_view_literals;
+
     (void) module;
     char token[2048]; // cheese.  Fix.
     int tokpos = 0;
@@ -120,108 +122,108 @@ char ThMLOSIS::processText(std::string &text, const SWKey *key, const SWModule *
                 text += token;
                 text += ';';
             }
-            else if (!std::strncmp("nbsp", token, 4)) text += ' ';
-            else if (!std::strncmp("quot", token, 4)) text += '"';
-            else if (!std::strncmp("amp", token, 3)) text += '&';
-            else if (!std::strncmp("lt", token, 2)) text += '<';
-            else if (!std::strncmp("gt", token, 2)) text += '>';
-            else if (!std::strncmp("brvbar", token, 6)) text += '\xA6';
-            else if (!std::strncmp("sect", token, 4)) text += '\xA7';
-            else if (!std::strncmp("copy", token, 4)) text += '\xA9';
-            else if (!std::strncmp("laquo", token, 5)) text += '\xAB';
-            else if (!std::strncmp("reg", token, 3)) text += '\xAE';
-            else if (!std::strncmp("acute", token, 5)) text += '\xB4';
-            else if (!std::strncmp("para", token, 4)) text += '\xB6';
-            else if (!std::strncmp("raquo", token, 5)) text += '\xBB';
-            else if (!std::strncmp("Aacute", token, 6)) text += '\xC1';
-            else if (!std::strncmp("Agrave", token, 6)) text += '\xC0';
-            else if (!std::strncmp("Acirc", token, 5)) text += '\xC2';
-            else if (!std::strncmp("Auml", token, 4)) text += '\xC4';
-            else if (!std::strncmp("Atilde", token, 6)) text += '\xC3';
-            else if (!std::strncmp("Aring", token, 5)) text += '\xC5';
-            else if (!std::strncmp("aacute", token, 6)) text += '\xE1';
-            else if (!std::strncmp("agrave", token, 6)) text += '\xE0';
-            else if (!std::strncmp("acirc", token, 5)) text += '\xE2';
-            else if (!std::strncmp("auml", token, 4)) text += '\xE4';
-            else if (!std::strncmp("atilde", token, 6)) text += '\xE3';
-            else if (!std::strncmp("aring", token, 5)) text += '\xE5';
-            else if (!std::strncmp("Eacute", token, 6)) text += '\xC9';
-            else if (!std::strncmp("Egrave", token, 6)) text += '\xC8';
-            else if (!std::strncmp("Ecirc", token, 5)) text += '\xCA';
-            else if (!std::strncmp("Euml", token, 4)) text += '\xCB';
-            else if (!std::strncmp("eacute", token, 6)) text += '\xE9';
-            else if (!std::strncmp("egrave", token, 6)) text += '\xE8';
-            else if (!std::strncmp("ecirc", token, 5)) text += '\xEA';
-            else if (!std::strncmp("euml", token, 4)) text += '\xEB';
-            else if (!std::strncmp("Iacute", token, 6)) text += '\xCD';
-            else if (!std::strncmp("Igrave", token, 6)) text += '\xCC';
-            else if (!std::strncmp("Icirc", token, 5)) text += '\xCE';
-            else if (!std::strncmp("Iuml", token, 4)) text += '\xCF';
-            else if (!std::strncmp("iacute", token, 6)) text += '\xED';
-            else if (!std::strncmp("igrave", token, 6)) text += '\xEC';
-            else if (!std::strncmp("icirc", token, 5)) text += '\xEE';
-            else if (!std::strncmp("iuml", token, 4)) text += '\xEF';
-            else if (!std::strncmp("Oacute", token, 6)) text += '\xD3';
-            else if (!std::strncmp("Ograve", token, 6)) text += '\xD2';
-            else if (!std::strncmp("Ocirc", token, 5)) text += '\xD4';
-            else if (!std::strncmp("Ouml", token, 4)) text += '\xD6';
-            else if (!std::strncmp("Otilde", token, 6)) text += '\xD5';
-            else if (!std::strncmp("oacute", token, 6)) text += '\xF3';
-            else if (!std::strncmp("ograve", token, 6)) text += '\xF2';
-            else if (!std::strncmp("ocirc", token, 5)) text += '\xF4';
-            else if (!std::strncmp("ouml", token, 4)) text += '\xF6';
-            else if (!std::strncmp("otilde", token, 6)) text += '\xF5';
-            else if (!std::strncmp("Uacute", token, 6)) text += '\xDA';
-            else if (!std::strncmp("Ugrave", token, 6)) text += '\xD9';
-            else if (!std::strncmp("Ucirc", token, 5)) text += '\xDB';
-            else if (!std::strncmp("Uuml", token, 4)) text += '\xDC';
-            else if (!std::strncmp("uacute", token, 6)) text += '\xFA';
-            else if (!std::strncmp("ugrave", token, 6)) text += '\xF9';
-            else if (!std::strncmp("ucirc", token, 5)) text += '\xFB';
-            else if (!std::strncmp("uuml", token, 4)) text += '\xFC';
-            else if (!std::strncmp("Yacute", token, 6)) text += '\xDD';
-            else if (!std::strncmp("yacute", token, 6)) text += '\xFD';
-            else if (!std::strncmp("yuml", token, 4)) text += '\xFF';
+            else if (startsWith(token, "nbsp"sv)) text += ' ';
+            else if (startsWith(token, "quot"sv)) text += '"';
+            else if (startsWith(token, "amp"sv)) text += '&';
+            else if (startsWith(token, "lt"sv)) text += '<';
+            else if (startsWith(token, "gt"sv)) text += '>';
+            else if (startsWith(token, "brvbar"sv)) text += '\xA6';
+            else if (startsWith(token, "sect"sv)) text += '\xA7';
+            else if (startsWith(token, "copy"sv)) text += '\xA9';
+            else if (startsWith(token, "laquo"sv)) text += '\xAB';
+            else if (startsWith(token, "reg"sv)) text += '\xAE';
+            else if (startsWith(token, "acute"sv)) text += '\xB4';
+            else if (startsWith(token, "para"sv)) text += '\xB6';
+            else if (startsWith(token, "raquo"sv)) text += '\xBB';
+            else if (startsWith(token, "Aacute"sv)) text += '\xC1';
+            else if (startsWith(token, "Agrave"sv)) text += '\xC0';
+            else if (startsWith(token, "Acirc"sv)) text += '\xC2';
+            else if (startsWith(token, "Auml"sv)) text += '\xC4';
+            else if (startsWith(token, "Atilde"sv)) text += '\xC3';
+            else if (startsWith(token, "Aring"sv)) text += '\xC5';
+            else if (startsWith(token, "aacute"sv)) text += '\xE1';
+            else if (startsWith(token, "agrave"sv)) text += '\xE0';
+            else if (startsWith(token, "acirc"sv)) text += '\xE2';
+            else if (startsWith(token, "auml"sv)) text += '\xE4';
+            else if (startsWith(token, "atilde"sv)) text += '\xE3';
+            else if (startsWith(token, "aring"sv)) text += '\xE5';
+            else if (startsWith(token, "Eacute"sv)) text += '\xC9';
+            else if (startsWith(token, "Egrave"sv)) text += '\xC8';
+            else if (startsWith(token, "Ecirc"sv)) text += '\xCA';
+            else if (startsWith(token, "Euml"sv)) text += '\xCB';
+            else if (startsWith(token, "eacute"sv)) text += '\xE9';
+            else if (startsWith(token, "egrave"sv)) text += '\xE8';
+            else if (startsWith(token, "ecirc"sv)) text += '\xEA';
+            else if (startsWith(token, "euml"sv)) text += '\xEB';
+            else if (startsWith(token, "Iacute"sv)) text += '\xCD';
+            else if (startsWith(token, "Igrave"sv)) text += '\xCC';
+            else if (startsWith(token, "Icirc"sv)) text += '\xCE';
+            else if (startsWith(token, "Iuml"sv)) text += '\xCF';
+            else if (startsWith(token, "iacute"sv)) text += '\xED';
+            else if (startsWith(token, "igrave"sv)) text += '\xEC';
+            else if (startsWith(token, "icirc"sv)) text += '\xEE';
+            else if (startsWith(token, "iuml"sv)) text += '\xEF';
+            else if (startsWith(token, "Oacute"sv)) text += '\xD3';
+            else if (startsWith(token, "Ograve"sv)) text += '\xD2';
+            else if (startsWith(token, "Ocirc"sv)) text += '\xD4';
+            else if (startsWith(token, "Ouml"sv)) text += '\xD6';
+            else if (startsWith(token, "Otilde"sv)) text += '\xD5';
+            else if (startsWith(token, "oacute"sv)) text += '\xF3';
+            else if (startsWith(token, "ograve"sv)) text += '\xF2';
+            else if (startsWith(token, "ocirc"sv)) text += '\xF4';
+            else if (startsWith(token, "ouml"sv)) text += '\xF6';
+            else if (startsWith(token, "otilde"sv)) text += '\xF5';
+            else if (startsWith(token, "Uacute"sv)) text += '\xDA';
+            else if (startsWith(token, "Ugrave"sv)) text += '\xD9';
+            else if (startsWith(token, "Ucirc"sv)) text += '\xDB';
+            else if (startsWith(token, "Uuml"sv)) text += '\xDC';
+            else if (startsWith(token, "uacute"sv)) text += '\xFA';
+            else if (startsWith(token, "ugrave"sv)) text += '\xF9';
+            else if (startsWith(token, "ucirc"sv)) text += '\xFB';
+            else if (startsWith(token, "uuml"sv)) text += '\xFC';
+            else if (startsWith(token, "Yacute"sv)) text += '\xDD';
+            else if (startsWith(token, "yacute"sv)) text += '\xFD';
+            else if (startsWith(token, "yuml"sv)) text += '\xFF';
 
-            else if (!std::strncmp("deg", token, 3)) text += '\xB0';
-            else if (!std::strncmp("plusmn", token, 6)) text += '\xB1';
-            else if (!std::strncmp("sup2", token, 4)) text += '\xB2';
-            else if (!std::strncmp("sup3", token, 4)) text += '\xB3';
-            else if (!std::strncmp("sup1", token, 4)) text += '\xB9';
-            else if (!std::strncmp("nbsp", token, 4)) text += '\xBA';
-            else if (!std::strncmp("pound", token, 5)) text += '\xA3';
-            else if (!std::strncmp("cent", token, 4)) text += '\xA2';
-            else if (!std::strncmp("frac14", token, 6)) text += '\xBC';
-            else if (!std::strncmp("frac12", token, 6)) text += '\xBD';
-            else if (!std::strncmp("frac34", token, 6)) text += '\xBE';
-            else if (!std::strncmp("iquest", token, 6)) text += '\xBF';
-            else if (!std::strncmp("iexcl", token, 5)) text += '\xA1';
-            else if (!std::strncmp("ETH", token, 3)) text += '\xD0';
-            else if (!std::strncmp("eth", token, 3)) text += '\xF0';
-            else if (!std::strncmp("THORN", token, 5)) text += '\xDE';
-            else if (!std::strncmp("thorn", token, 5)) text += '\xFE';
-            else if (!std::strncmp("AElig", token, 5)) text += '\xC6';
-            else if (!std::strncmp("aelig", token, 5)) text += '\xE6';
-            else if (!std::strncmp("Oslash", token, 6)) text += '\xD8';
-            else if (!std::strncmp("curren", token, 6)) text += '\xA4';
-            else if (!std::strncmp("Ccedil", token, 6)) text += '\xC7';
-            else if (!std::strncmp("ccedil", token, 6)) text += '\xE7';
-            else if (!std::strncmp("szlig", token, 5)) text += '\xDF';
-            else if (!std::strncmp("Ntilde", token, 6)) text += '\xD1';
-            else if (!std::strncmp("ntilde", token, 6)) text += '\xF1';
-            else if (!std::strncmp("yen", token, 3)) text += '\xA5';
-            else if (!std::strncmp("not", token, 3)) text += '\xAC';
-            else if (!std::strncmp("ordf", token, 4)) text += '\xAA';
-            else if (!std::strncmp("uml", token, 3)) text += '\xA8';
-            else if (!std::strncmp("shy", token, 3)) text += '\xAD';
-            else if (!std::strncmp("macr", token, 4)) text += '\xAF';
-            else if (!std::strncmp("micro", token, 5)) text += "\xB5";
-            else if (!std::strncmp("middot", token, 6)) text +="\xB7";
-            else if (!std::strncmp("cedil", token, 5)) text += "\xB8";
-            else if (!std::strncmp("ordm", token, 4)) text +=  "\xBA";
-            else if (!std::strncmp("times", token, 5)) text += "\xD7";
-            else if (!std::strncmp("divide", token, 6)) text +="\xF7";
-            else if (!std::strncmp("oslash", token, 6)) text +="\xF8";
+            else if (startsWith(token, "deg"sv)) text += '\xB0';
+            else if (startsWith(token, "plusmn"sv)) text += '\xB1';
+            else if (startsWith(token, "sup2"sv)) text += '\xB2';
+            else if (startsWith(token, "sup3"sv)) text += '\xB3';
+            else if (startsWith(token, "sup1"sv)) text += '\xB9';
+            else if (startsWith(token, "nbsp"sv)) text += '\xBA';
+            else if (startsWith(token, "pound"sv)) text += '\xA3';
+            else if (startsWith(token, "cent"sv)) text += '\xA2';
+            else if (startsWith(token, "frac14"sv)) text += '\xBC';
+            else if (startsWith(token, "frac12"sv)) text += '\xBD';
+            else if (startsWith(token, "frac34"sv)) text += '\xBE';
+            else if (startsWith(token, "iquest"sv)) text += '\xBF';
+            else if (startsWith(token, "iexcl"sv)) text += '\xA1';
+            else if (startsWith(token, "ETH"sv)) text += '\xD0';
+            else if (startsWith(token, "eth"sv)) text += '\xF0';
+            else if (startsWith(token, "THORN"sv)) text += '\xDE';
+            else if (startsWith(token, "thorn"sv)) text += '\xFE';
+            else if (startsWith(token, "AElig"sv)) text += '\xC6';
+            else if (startsWith(token, "aelig"sv)) text += '\xE6';
+            else if (startsWith(token, "Oslash"sv)) text += '\xD8';
+            else if (startsWith(token, "curren"sv)) text += '\xA4';
+            else if (startsWith(token, "Ccedil"sv)) text += '\xC7';
+            else if (startsWith(token, "ccedil"sv)) text += '\xE7';
+            else if (startsWith(token, "szlig"sv)) text += '\xDF';
+            else if (startsWith(token, "Ntilde"sv)) text += '\xD1';
+            else if (startsWith(token, "ntilde"sv)) text += '\xF1';
+            else if (startsWith(token, "yen"sv)) text += '\xA5';
+            else if (startsWith(token, "not"sv)) text += '\xAC';
+            else if (startsWith(token, "ordf"sv)) text += '\xAA';
+            else if (startsWith(token, "uml"sv)) text += '\xA8';
+            else if (startsWith(token, "shy"sv)) text += '\xAD';
+            else if (startsWith(token, "macr"sv)) text += '\xAF';
+            else if (startsWith(token, "micro"sv)) text += "\xB5";
+            else if (startsWith(token, "middot"sv)) text +="\xB7";
+            else if (startsWith(token, "cedil"sv)) text += "\xB8";
+            else if (startsWith(token, "ordm"sv)) text +=  "\xBA";
+            else if (startsWith(token, "times"sv)) text += "\xD7";
+            else if (startsWith(token, "divide"sv)) text +="\xF7";
+            else if (startsWith(token, "oslash"sv)) text +="\xF8";
             continue;
         }
 
@@ -250,7 +252,7 @@ char ThMLOSIS::processText(std::string &text, const SWKey *key, const SWModule *
             }
 
             // variants
-            if (!std::strncmp(token, "div type=\"variant\"", 18)) {
+            if (startsWith(token, "div type=\"variant\""sv)) {
                 XMLTag tag = token;
                 text.append("<seg type=\"x-variant\"");
                 std::string cls = "x-class:";
@@ -280,13 +282,13 @@ char ThMLOSIS::processText(std::string &text, const SWKey *key, const SWModule *
                 handled = true;
             }
             // Scripture Reference
-            if (!std::strncmp(token, "scripRef", 8)) {
+            if (startsWith(token, "scripRef"sv)) {
     //            pushString(buf, "<reference osisRef=\"");
                 suspendTextPassThru = true;
                 newText = true;
                 handled = true;
             }
-            else    if (!std::strncmp(token, "/scripRef", 9)) {
+            else if (startsWith(token, "/scripRef"sv)) {
                 std::string tmp;
                 tmp = "";
                 tmp.append(textStart, (int)(textEnd - textStart)+1);
@@ -345,7 +347,7 @@ char ThMLOSIS::processText(std::string &text, const SWKey *key, const SWModule *
             }
 
             // Footnote
-            if (!std::strncmp(token, "note", 4)) {
+            if (startsWith(token, "note"sv)) {
                     //pushString(&to, "<note>");
                 text.append("<note>");
                 newText = true;
@@ -360,7 +362,7 @@ char ThMLOSIS::processText(std::string &text, const SWKey *key, const SWModule *
             }
 
             // Figure
-            else    if (!std::strncmp(token, "img ", 4)) {
+            else if (startsWith(token, "img "sv)) {
                 const char *src = std::strstr(token, "src");
                 if (!src)        // assert we have a src attribute
                     continue;
@@ -405,7 +407,7 @@ char ThMLOSIS::processText(std::string &text, const SWKey *key, const SWModule *
                     // normal strongs number
                     strstrip(val);
 
-                    if (!std::strncmp(wordStart, "<w ", 3)) {
+                    if (startsWith(wordStart, "<w "sv)) {
                         const char *attStart = std::strstr(wordStart, "lemma");
                         if (attStart) { //existing morph attribute, append this one to it
                             attStart += 7;
@@ -432,11 +434,11 @@ char ThMLOSIS::processText(std::string &text, const SWKey *key, const SWModule *
             }
 
             // Morphology
-            else    if (!std::strncmp(token, "sync type=\"morph\"", 17)) {
+            else if (startsWith(token, "sync type=\"morph\""sv)) {
                 std::string cls = "";
                 std::string morph = "";
                 for (ch = token+17; *ch; ch++) {
-                    if (!std::strncmp(ch, "class=\"", 7)) {
+                    if (startsWith(ch, "class=\""sv)) {
                         valto = val;
                         for (unsigned int i = 7; ch[i] != '\"' && i < 127; i++)
                             *valto++ = ch[i];
@@ -444,7 +446,7 @@ char ThMLOSIS::processText(std::string &text, const SWKey *key, const SWModule *
                         strstrip(val);
                         cls = val;
                     }
-                    if (!std::strncmp(ch, "value=\"", 7)) {
+                    if (startsWith(ch, "value=\""sv)) {
                         valto = val;
                         for (unsigned int i = 7; ch[i] != '\"' && i < 127; i++)
                             *valto++ = ch[i];
@@ -453,7 +455,7 @@ char ThMLOSIS::processText(std::string &text, const SWKey *key, const SWModule *
                         morph = val;
                     }
                 }
-                if (!std::strncmp(wordStart, "<w ", 3)) {
+                if (startsWith(wordStart, "<w "sv)) {
                     const char *attStart = std::strstr(wordStart, "morph");
                     if (attStart) { //existing morph attribute, append this one to it
                         attStart += 7;

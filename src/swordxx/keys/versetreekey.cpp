@@ -153,6 +153,8 @@ void VerseTreeKey::increment(int /* steps */) {
 
 
 void VerseTreeKey::positionChanged() {
+    using namespace std::literals::string_view_literals;
+
     if (!m_internalPosChange) {
         TreeKey *tkey = this->TreeKey::PositionChangeListener::getTreeKey();
         int saveError = tkey->popError();
@@ -174,7 +176,7 @@ void VerseTreeKey::positionChanged() {
             setVerse(0);
         }
         else if ((legs < 2)
-            && ((!std::strncmp(seg[0].c_str(), "[ Testament ", 12)) &&        //"[ Testament n Heading ]";
+            && ((startsWith(seg[0], "[ Testament "sv)) &&        //"[ Testament n Heading ]";
                 (charIsDigit(seg[0][12])) &&
                 (!std::strcmp(seg[0].c_str()+13, " Heading ]")))) {
             m_testament = (seg[0][12]-48);

@@ -432,6 +432,7 @@ void VerseKey::validateCurrentLocale() const {
  */
 
 ListKey VerseKey::parseVerseList(const char *buf, const char *defaultKey, bool expandRange, bool useChapterAsVerse) {
+    using namespace std::literals::string_view_literals;
 
     static_assert(std::is_unsigned<decltype(VerseKey::m_userData)>::value, "");
     static_assert(std::numeric_limits<decltype(VerseKey::m_userData)>::max()
@@ -480,7 +481,7 @@ ListKey VerseKey::parseVerseList(const char *buf, const char *defaultKey, bool e
         internalListKey << *lastKey;
         return internalListKey;
     }
-    if ((!std::strncmp(buf, "[ Testament ", 12)) &&
+    if (startsWith(buf, "[ Testament "sv) &&
         (charIsDigit(buf[12])) &&
         (!std::strcmp(buf+13, " Heading ]"))) {
         curKey->setVerse(0);

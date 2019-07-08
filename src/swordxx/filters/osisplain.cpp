@@ -79,6 +79,8 @@ std::unique_ptr<BasicFilterUserData> OSISPlain::createUserData(
 { return std::make_unique<MyUserData>(module, key); }
 
 bool OSISPlain::handleToken(std::string &buf, const char *token, BasicFilterUserData *userData) {
+    using namespace std::literals::string_view_literals;
+
        // manually process if it wasn't a simple substitution
     if (!substituteToken(buf, token)) {
         MyUserData * u = static_cast<MyUserData *>(userData);
@@ -165,7 +167,7 @@ bool OSISPlain::handleToken(std::string &buf, const char *token, BasicFilterUser
         }
 
         // <note> tag
-        else if (!std::strncmp(token, "note", 4)) {
+        else if (startsWith(token, "note"sv)) {
                 if (!std::strstr(token, "strongsMarkup")) {    // leave strong's markup notes out, in the future we'll probably have different option filters to turn different note types on or off
                     buf.append(" [");
                 }
@@ -177,7 +179,7 @@ bool OSISPlain::handleToken(std::string &buf, const char *token, BasicFilterUser
                     buf.append(u->module->renderText(footnoteBody.c_str()));
                 }
             }
-        else if (!std::strncmp(token, "/note", 5)) {
+        else if (startsWith(token, "/note"sv)) {
             if (!u->suspendTextPassThru)
                 buf.append("] ");
             else    u->suspendTextPassThru = false;
@@ -200,15 +202,15 @@ bool OSISPlain::handleToken(std::string &buf, const char *token, BasicFilterUser
         }
 
                 // <lb .../>
-                else if (!std::strncmp(token, "lb", 2)) {
+                else if (startsWith(token, "lb"sv)) {
             userData->supressAdjacentWhitespace = true;
             buf.push_back('\n');
         }
-        else if (!std::strncmp(token, "l", 1) && std::strstr(token, "eID")) {
+        else if (startsWith(token, "l"sv) && std::strstr(token, "eID")) {
             userData->supressAdjacentWhitespace = true;
             buf.push_back('\n');
         }
-        else if (!std::strncmp(token, "/divineName", 11)) {
+        else if (startsWith(token, "/divineName"sv)) {
             // Get the end portion of the string, and upper case it
             assert(buf.size() >= u->lastTextNode.size());
             auto const endPos(buf.size() - u->lastTextNode.size());
@@ -217,7 +219,7 @@ bool OSISPlain::handleToken(std::string &buf, const char *token, BasicFilterUser
             toupperstr(end);
             buf.replace(endPos, endSize, end);
         }
-        else if (!std::strncmp(token, "hi", 2)) {
+        else if (startsWith(token, "hi"sv)) {
 
                 // handle both OSIS 'type' and TEI 'rend' attributes
                 // there is no officially supported OSIS overline attribute,
@@ -232,7 +234,7 @@ bool OSISPlain::handleToken(std::string &buf, const char *token, BasicFilterUser
                 else u->hiType = "";
                 u->suspendTextPassThru = true;
             }
-        else if (!std::strncmp(token, "/hi", 3)) {
+        else if (startsWith(token, "/hi"sv)) {
             if (u->hiType == "overline") {
                 std::string_view sv = u->lastTextNode;
                 while (!sv.empty()) {
@@ -250,15 +252,15 @@ bool OSISPlain::handleToken(std::string &buf, const char *token, BasicFilterUser
                 buf.append(" *");
             }
             u->suspendTextPassThru = false;
-        } else if (!std::strncmp(token, "q", 1)
+        } else if (startsWith(token, "q"sv)
                    && !u->tag.attribute("marker").empty())
         {
             buf.append(u->tag.attribute("marker"));
         }
                 // <milestone type="line"/>
-                else if (!std::strncmp(token, "milestone", 9)) {
+                else if (startsWith(token, "milestone"sv)) {
             const char* type = std::strstr(token+10, "type=\"");
-            if (type && std::strncmp(type+6, "line", 4)) { //we check for type != line
+            if (type && !startsWith(type+6, "line"sv)) { //we check for type != line
                 userData->supressAdjacentWhitespace = true;
                     buf.push_back('\n');
             }

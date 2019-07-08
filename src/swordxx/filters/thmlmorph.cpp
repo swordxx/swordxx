@@ -25,6 +25,7 @@
 
 #include <cstdlib>
 #include <cstring>
+#include "../utilstr.h"
 
 
 namespace swordxx {
@@ -45,6 +46,8 @@ ThMLMorph::~ThMLMorph() {
 
 
 char ThMLMorph::processText(std::string &text, const SWKey *key, const SWModule *module) {
+    using namespace std::literals::string_view_literals;
+
     (void) key;
     (void) module;
     if (!option) {    // if we don't want morph tags
@@ -61,7 +64,7 @@ char ThMLMorph::processText(std::string &text, const SWKey *key, const SWModule 
             }
             if (*from == '>') {    // process tokens
                 intoken = false;
-                if (!std::strncmp(token.c_str(), "sync ", 5) && std::strstr(token.c_str(), "type=\"morph\"")) {    // Morph
+                if (startsWith(token, "sync "sv) && std::strstr(token.c_str(), "type=\"morph\"")) {    // Morph
                   continue;
                 }
 

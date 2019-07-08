@@ -65,6 +65,8 @@ char GBFFootnotes::processText (std::string &text, const SWKey *key, const SWMod
 
     //XMLTag tag;
 
+    using namespace std::literals::string_view_literals;
+
     for (text = ""; *from; from++) {
         if (*from == '<') {
             intoken = true;
@@ -75,7 +77,7 @@ char GBFFootnotes::processText (std::string &text, const SWKey *key, const SWMod
             intoken = false;
 
             //XMLTag tag(token);
-            if (!std::strncmp(token.c_str(), "RF",2)) {
+            if (startsWith(token, "RF"sv)) {
 //                 tag = token;
 
                 refs = "";
@@ -84,7 +86,7 @@ char GBFFootnotes::processText (std::string &text, const SWKey *key, const SWMod
                 tagText = "";
                 continue;
             }
-            else if (!std::strncmp(token.c_str(), "Rf",2)) {
+            else if (startsWith(token, "Rf"sv)) {
                 if (module->isProcessEntryAttributes()) {
                     //tag = token;
 

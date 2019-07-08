@@ -46,6 +46,8 @@ OSISScripref::~OSISScripref() {
 
 
 char OSISScripref::processText(std::string &text, const SWKey *key, const SWModule *module) {
+    using namespace std::literals::string_view_literals;
+
     (void) key;
     (void) module;
     std::string token;
@@ -70,7 +72,7 @@ char OSISScripref::processText(std::string &text, const SWKey *key, const SWModu
 
             tag = token.c_str();
 
-            if (!std::strncmp(token.c_str(), "note", 4) || !std::strncmp(token.c_str(), "/note", 5)) {
+            if (startsWith(token, "note"sv) || startsWith(token, "/note"sv)) {
                 if (!tag.isEndTag() && !tag.isEmpty()) {
                     startTag = tag;
                     if (tag.attribute("type") == "crossReference") {

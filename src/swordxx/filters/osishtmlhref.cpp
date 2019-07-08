@@ -152,6 +152,8 @@ std::unique_ptr<BasicFilterUserData> OSISHTMLHREF::createUserData(
 { return std::make_unique<MyUserData>(module, key); }
 
 bool OSISHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterUserData *userData) {
+    using namespace std::literals::string_view_literals;
+
     MyUserData * u = static_cast<MyUserData *>(userData);
     std::string scratch;
     bool sub = (u->suspendTextPassThru) ? substituteToken(scratch, token) : substituteToken(buf, token);
@@ -315,7 +317,7 @@ bool OSISHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterU
                         std::strncpy(&work[0u], target.c_str(), size);
 
                         // For Bible:Gen.3.15 or Bible.vulgate:Gen.3.15
-                        if(!std::strncmp(work.c_str(), "Bible", 5))
+                        if(startsWith(work.c_str(), "Bible"sv))
                             is_scripRef = true;
                     }
 

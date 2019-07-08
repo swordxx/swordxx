@@ -54,6 +54,8 @@ ThMLVariants::~ThMLVariants() {
 
 char ThMLVariants::processText(std::string &text, const SWKey *key, const SWModule *module)
 {
+    using namespace std::literals::string_view_literals;
+
     (void) key;
     (void) module;
 
@@ -83,16 +85,16 @@ char ThMLVariants::processText(std::string &text, const SWKey *key, const SWModu
             else if (*from == '>') {    // process tokens
                 intoken = false;
 
-                if ( !std::strncmp(token.c_str(), variantCompareString, 28)) { //only one of the variants, length of the two strings is 28 in both cases
+                if (startsWith(token, variantCompareString)) { //only one of the variants, length of the two strings is 28 in both cases
                     invar = true;
                     hide = true;
                     continue;
                 }
-                if (!std::strncmp(token.c_str(), "div type=\"variant\"", 18)) {
+                if (startsWith(token, "div type=\"variant\""sv)) {
                     invar = true;
                     continue;
                 }
-                if (!std::strncmp(token.c_str(), "/div", 4)) {
+                if (startsWith(token, "/div"sv)) {
                     hide = false;
                     if (invar) {
                         invar = false;

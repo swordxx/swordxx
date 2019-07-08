@@ -41,6 +41,8 @@ GBFOSIS::~GBFOSIS() {
 
 
 char GBFOSIS::processText(std::string &text, const SWKey *key, const SWModule *module) {
+    using namespace std::literals::string_view_literals;
+
     (void) module;
     char token[2048]; //cheesy, we seem to like cheese :)
     int tokpos = 0;
@@ -100,12 +102,12 @@ char GBFOSIS::processText(std::string &text, const SWKey *key, const SWModule *m
             }
 
             // Scripture Reference
-            if (!std::strncmp(token, "scripRef", 8)) {
+            if (startsWith(token, "scripRef"sv)) {
                 suspendTextPassThru = true;
                 newText = true;
                 handled = true;
             }
-            else if (!std::strncmp(token, "/scripRef", 9)) {
+            else if (startsWith(token, "/scripRef"sv)) {
                 tmp = "";
                 tmp.append(textStart, (int)(textEnd - textStart)+1);
                 text += VerseKey::convertToOSIS(tmp, key);
@@ -116,7 +118,7 @@ char GBFOSIS::processText(std::string &text, const SWKey *key, const SWModule *m
             }
 
             // Footnote
-            if (!std::strcmp(token, "RF") || !std::strncmp(token, "RF ", 3)) { //the GBFFootnotes filter adds the attribute "swordFootnote", we want to catch that, too
+            if (!std::strcmp(token, "RF") || startsWith(token, "RF "sv)) { //the GBFFootnotes filter adds the attribute "swordFootnote", we want to catch that, too
     //            pushString(buf, "<reference work=\"Bible.KJV\" reference=\"");
                 text += "<note type=\"x-StudyNote\">";
                 newText = true;
@@ -175,7 +177,7 @@ char GBFOSIS::processText(std::string &text, const SWKey *key, const SWModule *m
             }
 
             // Figure
-            else    if (!std::strncmp(token, "img ", 4)) {
+            else    if (startsWith(token, "img "sv)) {
                 const char *src = std::strstr(token, "src");
                 if (!src)        // assert we have a src attribute
                     continue;
@@ -210,7 +212,7 @@ char GBFOSIS::processText(std::string &text, const SWKey *key, const SWModule *m
 
                 // normal strongs number
                 //std::strstrip(val);
-                if (!std::strncmp(wordStart, "<w ", 3)) {
+                if (startsWith(wordStart, "<w "sv)) {
                     const char *attStart = std::strstr(wordStart, "lemma");
                     if (attStart) {
                         attStart += 7;
@@ -255,7 +257,7 @@ char GBFOSIS::processText(std::string &text, const SWKey *key, const SWModule *m
                 }
                 else value = token+1;
 
-                if (!std::strncmp(wordStart, "<w ", 3)) {
+                if (startsWith(wordStart, "<w "sv)) {
                     const char *attStart = std::strstr(wordStart, "morph");
                     if (attStart) { //existing morph attribute, append this one to it
                         attStart += 7;

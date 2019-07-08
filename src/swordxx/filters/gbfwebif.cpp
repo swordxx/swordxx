@@ -35,6 +35,8 @@ GBFWEBIF::GBFWEBIF() : baseURL(""), passageStudyURL(baseURL + "passagestudy.jsp"
 }
 
 bool GBFWEBIF::handleToken(std::string &buf, const char *token, BasicFilterUserData *userData) {
+    using namespace std::literals::string_view_literals;
+
     const char *tok;
     char val[128];
     char *valto;
@@ -42,7 +44,7 @@ bool GBFWEBIF::handleToken(std::string &buf, const char *token, BasicFilterUserD
     std::string url;
 
     if (!substituteToken(buf, token)) {
-        if (!std::strncmp(token, "w", 1)) {
+        if (startsWith(token, "w"sv)) {
             // OSIS Word (temporary until OSISRTF is done)
             valto = val;
             num = std::strstr(token, "lemma=\"x-Strongs:");
@@ -116,7 +118,7 @@ bool GBFWEBIF::handleToken(std::string &buf, const char *token, BasicFilterUserD
             }
         }
 
-        else if (!std::strncmp(token, "WG", 2) || !std::strncmp(token, "WH", 2)) { // strong's numbers
+        else if (startsWith(token, "WG"sv) || startsWith(token, "WH"sv)) { // strong's numbers
             buf += " <small><em>&lt;";
             url = "";
 
@@ -135,7 +137,7 @@ bool GBFWEBIF::handleToken(std::string &buf, const char *token, BasicFilterUserD
             buf += "</a>&gt;</em></small>";
         }
 
-        else if (!std::strncmp(token, "WTG", 3) || !std::strncmp(token, "WTH", 3)) { // strong's numbers tense
+        else if (startsWith(token, "WTG"sv) || startsWith(token, "WTH"sv)) { // strong's numbers tense
             buf += " <small><em>(";
             url = "";
             for (tok = token + 2; *tok; tok++) {
@@ -154,7 +156,7 @@ bool GBFWEBIF::handleToken(std::string &buf, const char *token, BasicFilterUserD
             buf += "</a>)</em></small>";
         }
 
-        else if (!std::strncmp(token, "WT", 2) && std::strncmp(token, "WTH", 3) && std::strncmp(token, "WTG", 3)) { // morph tags
+        else if (startsWith(token, "WT"sv)) { // morph tags
             buf += " <small><em>(";
             for (tok = token + 2; *tok; tok++) {
                 if(*tok != '\"')
@@ -169,7 +171,7 @@ bool GBFWEBIF::handleToken(std::string &buf, const char *token, BasicFilterUserD
             buf += "</a>)</em></small>";
         }
 
-        else if (!std::strncmp(token, "RX", 2)) {
+        else if (startsWith(token, "RX"sv)) {
             buf += "<a href=\"";
             for (tok = token + 3; *tok; tok++) {
               if(*tok != '<' && *tok+1 != 'R' && *tok+2 != 'x') {
@@ -183,8 +185,7 @@ bool GBFWEBIF::handleToken(std::string &buf, const char *token, BasicFilterUserD
             buf += formatted("a href=\"%s?key=%s#cv\">", passageStudyURL, URL::encode(url));
         }
         // ok to leave these in
-        else if ((!std::strncmp(token, "span", 4))
-                || (!std::strncmp(token, "/span", 5))) {
+        else if (startsWith(token, "span"sv) || startsWith(token, "/span"sv)) {
             buf += formatted("<%s>", token);
         }
 

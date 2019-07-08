@@ -207,7 +207,7 @@ signed char zStr::findKeyIndex(const char *ikey, long *idxoff, long away) const
                 if (!diff)
                     break;
 
-                if (!std::strncmp(trybuf.c_str(), key.c_str(), key.size())) substr = true;
+                if (startsWith(trybuf, key)) substr = true;
 
                 if (diff < 0)
                     tailoff = (tryoff == headoff) ? headoff : tryoff;
@@ -299,6 +299,8 @@ signed char zStr::findKeyIndex(const char *ikey, long *idxoff, long away) const
  */
 
 void zStr::getText(long offset, char **idxbuf, char **buf) const {
+    using namespace std::literals::string_view_literals;
+
     char *ch;
     auto const idxbuflocal(getKeyFromIdxOffset(offset));
     uint32_t start;
@@ -327,7 +329,7 @@ void zStr::getText(long offset, char **idxbuf, char **buf) const {
         std::memmove(*buf, ch, size - (unsigned long)(ch-*buf));
 
         // resolve link
-        if (!std::strncmp(*buf, "@LINK", 5)) {
+        if (startsWith(*buf, "@LINK"sv)) {
             for (ch = *buf; *ch; ch++) {        // null before nl
                 if (*ch == 10) {
                     *ch = 0;
@@ -403,6 +405,7 @@ void zStr::getCompressedText(long block, long entry, char **buf) const {
  */
 
 void zStr::setText(const char *ikey, const char *buf, long len) {
+    using namespace std::literals::string_view_literals;
 
     static const char nl[] = {13, 10};
 
@@ -448,7 +451,7 @@ void zStr::setText(const char *ikey, const char *buf, long len) {
                 std::memmove(tmpbuf.get(), ch, size - (unsigned long)(ch-tmpbuf.get()));
 
                 // resolve link
-                if (!std::strncmp(tmpbuf.get(), "@LINK", 5) && (len)) {
+                if (startsWith(tmpbuf.get(), "@LINK"sv) && (len)) {
                     for (ch = tmpbuf.get(); *ch; ch++) {        // null before nl
                         if (*ch == 10) {
                             *ch = 0;

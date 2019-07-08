@@ -30,11 +30,13 @@
 #include <swordxx/keys/treekeyidx.h>
 #include <swordxx/modules/common/entriesblk.h>
 #include <swordxx/modules/genbook/rawgenbook.h>
+#include <swordxx/utilstr.h>
 
 
 using swordxx::TreeKeyIdx;
 using swordxx::RawGenBook;
 using swordxx::SWKey;
+using swordxx::startsWith;
 
 enum XML_FORMATS { F_AUTODETECT, F_OSIS, F_THML, F_TEI };
 
@@ -70,6 +72,8 @@ unsigned char detectFormat(char* filename) {
 }
 
 int processXML(const char* filename, char* modname, bool longnames, bool exportfile, unsigned char format) {
+  using namespace std::literals::string_view_literals;
+
   signed long i = 0;
   char* strtmp;
   std::string entbuffer;
@@ -121,8 +125,8 @@ int processXML(const char* filename, char* modname, bool longnames, bool exportf
         }
 
       if (keybuffer.length()) {
-    if (((format == F_OSIS) && ((!std::strncmp(keybuffer.c_str(), "/div>", 5)) || (!std::strncmp(keybuffer.c_str(), "/verse>", 7)) || (!std::strncmp(keybuffer.c_str(), "/chapter>", 9)))) ||
-           ((format == F_THML) && ((!std::strncmp(keybuffer.c_str(), "/div", 4)) && (keybuffer[4] > '0' && keybuffer[4] < '7')))) {
+    if (((format == F_OSIS) && ((startsWith(keybuffer, "/div>"sv)) || (startsWith(keybuffer, "/verse>"sv)) || (startsWith(keybuffer, "/chapter>"sv)))) ||
+           ((format == F_THML) && ((startsWith(keybuffer, "/div"sv)) && (keybuffer[4] > '0' && keybuffer[4] < '7')))) {
       if (!closer) {
                keysize = 0;
             keybuffer2 = "";
@@ -151,8 +155,8 @@ int processXML(const char* filename, char* modname, bool longnames, bool exportf
 
       closer = true;
     }
-    else if (((format == F_OSIS) && !((!std::strncmp(keybuffer.c_str(), "div>", 4) || !std::strncmp(keybuffer.c_str(), "div ", 4)) || (!std::strncmp(keybuffer.c_str(), "verse>", 6) || !std::strncmp(keybuffer.c_str(), "verse ", 6)) || (!std::strncmp(keybuffer.c_str(), "chapter>", 8) || !std::strncmp(keybuffer.c_str(), "chapter ", 8)))) ||
-                ((format == F_THML) && !((!std::strncmp(keybuffer.c_str(), "div", 3)) && (keybuffer[3] > '0' && keybuffer[3] < '7')))) {
+    else if (((format == F_OSIS) && !((startsWith(keybuffer, "div>"sv) || startsWith(keybuffer, "div "sv)) || (startsWith(keybuffer, "verse>"sv) || startsWith(keybuffer, "verse "sv)) || (startsWith(keybuffer, "chapter>"sv) || startsWith(keybuffer, "chapter "sv)))) ||
+                ((format == F_THML) && !((startsWith(keybuffer, "div"sv)) && (keybuffer[3] > '0' && keybuffer[3] < '7')))) {
       entbuffer += '<';
       entrysize++;
       entrysize += keybuffer.length();

@@ -90,9 +90,11 @@ bool GBFHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterUs
     const char *tok;
     MyUserData * u = static_cast<MyUserData *>(userData);
 
+    using namespace std::literals::string_view_literals;
+
     if (!substituteToken(buf, token)) {
         XMLTag tag(token);
-        /*if (!std::strncmp(token, "w", 1)) {
+        /*if (startsWith(token, "w"sv)) {
             // OSIS Word (temporary until OSISRTF is done)
             valto = val;
             num = std::strstr(token, "lemma=\"x-Strongs:");
@@ -162,7 +164,7 @@ bool GBFHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterUs
         }*/
 
         // else
-        if (!std::strncmp(token, "WG", 2)) { // strong's numbers
+        if (startsWith(token, "WG"sv)) { // strong's numbers
             //buf += " <small><em>&lt;<a href=\"type=Strongs value=";
             buf += " <small><em class=\"strongs\">&lt;<a href=\"passagestudy.jsp?action=showStrongs&type=Greek&value=";
             for (tok = token+2; *tok; tok++)
@@ -174,7 +176,7 @@ bool GBFHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterUs
                     buf += *tok;
             buf += "</a>&gt;</em></small>";
         }
-        else if (!std::strncmp(token, "WH", 2)) { // strong's numbers
+        else if (startsWith(token, "WH"sv)) { // strong's numbers
             //buf += " <small><em>&lt;<a href=\"type=Strongs value=";
             buf += " <small><em class=\"strongs\">&lt;<a href=\"passagestudy.jsp?action=showStrongs&type=Hebrew&value=";
             for (tok = token+2; *tok; tok++)
@@ -186,7 +188,7 @@ bool GBFHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterUs
                     buf += *tok;
             buf += "</a>&gt;</em></small>";
         }
-        else if (!std::strncmp(token, "WTG", 3)) { // strong's numbers tense
+        else if (startsWith(token, "WTG"sv)) { // strong's numbers tense
             //buf += " <small><em>(<a href=\"type=Strongs value=";
             buf += " <small><em class=\"strongs\">(<a href=\"passagestudy.jsp?action=showStrongs&type=Greek&value=";
             for (tok = token + 3; *tok; tok++)
@@ -198,7 +200,7 @@ bool GBFHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterUs
                     buf += *tok;
             buf += "</a>)</em></small>";
         }
-        else if (!std::strncmp(token, "WTH", 3)) { // strong's numbers tense
+        else if (startsWith(token, "WTH"sv)) { // strong's numbers tense
             //buf += " <small><em>(<a href=\"type=Strongs value=";
             buf += " <small><em class=\"strongs\">(<a href=\"passagestudy.jsp?action=showStrongs&type=Hebrew&value=";
             for (tok = token + 3; *tok; tok++)
@@ -211,7 +213,7 @@ bool GBFHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterUs
             buf += "</a>)</em></small>";
         }
 
-        else if (!std::strncmp(token, "WT", 2) && std::strncmp(token, "WTH", 3) && std::strncmp(token, "WTG", 3)) { // morph tags
+        else if (startsWith(token, "WT"sv)) { // morph tags
             //buf += " <small><em>(<a href=\"type=morph class=none value=";
             buf += " <small><em class=\"morph\">(<a href=\"passagestudy.jsp?action=showMorph&type=Greek&value=";
 
@@ -255,7 +257,7 @@ bool GBFHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterUs
         else if (tag.name() == "Rf") {
             u->suspendTextPassThru = false;
         }
-        else if (!std::strncmp(token, "FN", 2)) {
+        else if (startsWith(token, "FN"sv)) {
             buf += "<font face=\"";
             for (tok = token + 2; *tok; tok++)
                 if(*tok != '\"')
@@ -263,7 +265,7 @@ bool GBFHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterUs
             buf += "\">";
         }
 
-        else if (!std::strncmp(token, "CA", 2)) {    // ASCII value
+        else if (startsWith(token, "CA"sv)) {    // ASCII value
             buf += (char)std::atoi(&token[2]);
         }
 
