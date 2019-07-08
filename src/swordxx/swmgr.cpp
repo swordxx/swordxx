@@ -630,15 +630,16 @@ char SWMgr::findConfig(std::string & prefixPath, std::string & configPath, std::
 
 void SWMgr::loadConfigDir(const char *ipath)
 {
+    using namespace std::literals::string_view_literals;
+
     assert(ipath);
     std::string newmodfile;
 
     if (auto dir = DirectoryEnumerator(ipath)) {
         while (auto const ent = dir.readEntry()) {
             //check whether it ends with .conf, if it doesn't skip it!
-            if ((std::strlen(ent) <= 5) || std::strncmp(".conf", (ent + std::strlen(ent) - 5), 5 )) {
+            if (!endsWith(ent, ".conf"sv))
                 continue;
-            }
 
             newmodfile = ipath;
             addTrailingDirectorySlash(newmodfile);
