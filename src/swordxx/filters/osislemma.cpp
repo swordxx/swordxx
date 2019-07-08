@@ -55,6 +55,8 @@ char OSISLemma::processText(std::string &text, const SWKey *key, const SWModule 
     const std::string orig = text;
     const char * from = orig.c_str();
 
+    using namespace std::literals::string_view_literals;
+
     if (!option) {
         for (text = ""; *from; ++from) {
             if (*from == '<') {
@@ -64,7 +66,7 @@ char OSISLemma::processText(std::string &text, const SWKey *key, const SWModule 
             }
             if (*from == '>') {    // process tokens
                 intoken = false;
-                if (hasPrefix(token, "w ")) {    // Word
+                if (startsWith(token, "w "sv)) {    // Word
                     XMLTag wtag(token.c_str());
 
                     // Always save off lemma if we haven't yet:

@@ -967,6 +967,8 @@ std::shared_ptr<SWModule> SWMgr::createModule(std::string const & name,
 void SWMgr::addGlobalOptionFilters(SWModule & module,
                                    ConfigEntMap const & section)
 {
+    using namespace std::literals::string_view_literals;
+
     auto start(section.lower_bound("GlobalOptionFilter"));
     auto const end(section.upper_bound("GlobalOptionFilter"));
     for (; start != end; ++start) {
@@ -974,7 +976,7 @@ void SWMgr::addGlobalOptionFilters(SWModule & module,
         decltype(m_optionFilters)::const_iterator it;
 
         // special cases for filters with parameters
-        if (hasPrefix(filterName, "OSISReferenceLinks")) {
+        if (startsWith(filterName, "OSISReferenceLinks"sv)) {
             std::string params = filterName;
             filterName = stripPrefix(params, '|');
             std::string const optionName = stripPrefix(params, '|');

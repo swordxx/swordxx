@@ -49,6 +49,8 @@ char OSISEnum::processText(std::string &text, const SWKey *key, const SWModule *
     (void) key;
     (void) module;
 
+    using namespace std::literals::string_view_literals;
+
     if (!option) {
         std::string result;
         std::string token;
@@ -58,7 +60,7 @@ char OSISEnum::processText(std::string &text, const SWKey *key, const SWModule *
                 inToken = true;
             } else if (c == '>') { // Process token:
                 inToken = false;
-                if (hasPrefix(token, "w ")) {    // Word
+                if (startsWith(token, "w "sv)) {    // Word
                     XMLTag wtag(token.c_str());
                     if (!wtag.attribute("n").empty()) {
                         wtag.eraseAttribute("n");

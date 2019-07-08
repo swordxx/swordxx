@@ -417,27 +417,10 @@ std::string_view leftTrimmedView(std::string_view sv) noexcept;
 std::string_view rightTrimmedView(std::string_view sv) noexcept;
 std::string_view trimmedView(std::string_view sv) noexcept;
 
-inline bool hasPrefix(char const * str, char const * prefix) noexcept {
-    while (*prefix != '\0') {
-        if (*prefix != *str)
-            return false;
-        ++prefix;
-        ++str;
-    }
-    return true;
-}
-
-inline bool hasPrefix(std::string const & str,
-                      char const * const prefix) noexcept
-{ return hasPrefix(str.c_str(), prefix); }
-
-inline bool hasPrefix(char const * str,
-                      std::string const & prefix) noexcept
-{ return hasPrefix(str, prefix.c_str()); }
-
-inline bool hasPrefix(std::string const & str,
-                      std::string const & prefix) noexcept
-{ return hasPrefix(str.c_str(), prefix.c_str()); }
+#if __cplusplus > 201703L
+[[deprecated("Use *::starts_with() instead")]]
+#endif
+bool startsWith(std::string_view str, std::string_view prefix);
 
 namespace Detail {
 

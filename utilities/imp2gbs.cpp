@@ -42,6 +42,7 @@
 
 
 using namespace swordxx;
+using namespace std::literals::string_view_literals;
 
 namespace {
 
@@ -130,7 +131,7 @@ void writeEntry(SWModule & book,
 // Added for Hesychius, but this stuff should be pushed back into new StringMgr
 // functionality
 //    if (lexLevels) {
-    if (lexLevels && !hasPrefix(keyBuffer, "/Intro")) {
+    if (lexLevels && !startsWith(keyBuffer, "/Intro"sv)) {
         auto const size = (keyBuffer.size() + (lexLevels * 2));
         keyBuffer.resize(size, '\0');
 
@@ -221,7 +222,7 @@ int main(int argc, char * argv[]) {
         std::string entBuffer;
 
         while (!(lineBuffer = fd->getLine()).empty()) {
-            if (hasPrefix(lineBuffer, "$$$")) {
+            if (startsWith(lineBuffer, "$$$"sv)) {
                 if (!keyBuffer.empty() && !entBuffer.empty())
                     writeEntry(book, keyBuffer, entBuffer);
                 keyBuffer = lineBuffer;

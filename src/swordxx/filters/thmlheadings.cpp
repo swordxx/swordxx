@@ -66,6 +66,8 @@ char ThMLHeadings::processText(std::string &text, const SWKey *key, const SWModu
 
     XMLTag tag;
 
+    using namespace std::literals::string_view_literals;
+
     for (text = ""; *from; ++from) {
         if (*from == '<') {
             intoken = true;
@@ -83,7 +85,7 @@ char ThMLHeadings::processText(std::string &text, const SWKey *key, const SWModu
                     if (module->isProcessEntryAttributes() && (option || (!preverse))) {
                         std::string heading;
                         std::string cls = startTag.attribute("class");
-                        if (!hasPrefix(cls, "fromEntryAttributes")) {
+                        if (!startsWith(cls, "fromEntryAttributes"sv)) {
                             cls = std::string("fromEntryAttributes ") + cls;
                             startTag.setAttribute("class", cls.c_str());
                         }
@@ -149,7 +151,7 @@ char ThMLHeadings::processText(std::string &text, const SWKey *key, const SWModu
                 else {
                     isheader = false;
                     std::string cls = tag.attribute("class");
-                    if (hasPrefix(cls, "fromEntryAttributes ")) {
+                    if (startsWith(cls, "fromEntryAttributes "sv)) {
                         cls.erase(0u, std::string("fromEntryAttributes ").size());
                         tag.setAttribute("class", cls.c_str());
                         token = tag.toString();

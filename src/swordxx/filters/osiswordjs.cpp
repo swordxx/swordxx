@@ -55,6 +55,8 @@ OSISWordJS::~OSISWordJS() {
 
 
 char OSISWordJS::processText(std::string &text, const SWKey *key, const SWModule *module) {
+    using namespace std::literals::string_view_literals;
+
     if (option) {
         char token[2112]; // cheese.  Fix.
         int tokpos = 0;
@@ -142,7 +144,7 @@ char OSISWordJS::processText(std::string &text, const SWKey *key, const SWModule
 
                     std::string xlit = wtag.attribute("xlit");
 
-                    if ((lemmaClass != "strong") && (hasPrefix(xlit, "betacode:"))) {
+                    if ((lemmaClass != "strong") && (startsWith(xlit, "betacode:"sv))) {
                         lexName = "betacode";
 //						const char *m = std::strchr(xlit.c_str(), ':');
 //						strong = ++m;

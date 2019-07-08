@@ -254,8 +254,9 @@ int main(int argc, char **argv) {
     std::string keyBuffer;
     std::string entBuffer;
 
+    using namespace std::literals::string_view_literals;
     while (!(lineBuffer = fd->getLine()).empty()) {
-        if (hasPrefix(lineBuffer, "$$$")) {
+        if (startsWith(lineBuffer, "$$$"sv)) {
             if ((keyBuffer.size()) && (entBuffer.size())) {
                 writeEntry(*module, keyBuffer, entBuffer, replace);
             }

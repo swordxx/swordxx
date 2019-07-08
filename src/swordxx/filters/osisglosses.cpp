@@ -54,6 +54,8 @@ char OSISGlosses::processText(std::string &text, const SWKey *key, const SWModul
     const std::string orig = text;
     const char * from = orig.c_str();
 
+    using namespace std::literals::string_view_literals;
+
     if (!option) {
         for (text = ""; *from; ++from) {
             if (*from == '<') {
@@ -63,7 +65,7 @@ char OSISGlosses::processText(std::string &text, const SWKey *key, const SWModul
             }
             if (*from == '>') {    // process tokens
                 intoken = false;
-                if (hasPrefix(token, "w ")) {    // Word
+                if (startsWith(token, "w "sv)) {    // Word
                     XMLTag wtag(token.c_str());
                     if (!wtag.attribute("gloss").empty()) {
                         wtag.eraseAttribute("gloss");

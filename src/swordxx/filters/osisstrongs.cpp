@@ -60,6 +60,8 @@ char OSISStrongs::processText(std::string &text, const SWKey *key, const SWModul
     const std::string orig = text;
     const char * from = orig.c_str();
 
+    using namespace std::literals::string_view_literals;
+
     for (text = ""; *from; ++from) {
         if (*from == '<') {
             intoken = true;
@@ -70,7 +72,7 @@ char OSISStrongs::processText(std::string &text, const SWKey *key, const SWModul
             intoken = false;
 
             // possible page seg --------------------------------
-            if (hasPrefix(token, "seg ")) {
+            if (startsWith(token, "seg "sv)) {
                 XMLTag stag(token.c_str());
                 std::string type = stag.attribute("type");
                 if (type == "page") {
@@ -82,7 +84,7 @@ char OSISStrongs::processText(std::string &text, const SWKey *key, const SWModul
             }
             // ---------------------------------------------------
 
-            if (hasPrefix(token, "w ")) {    // Word
+            if (startsWith(token, "w "sv)) {    // Word
                 XMLTag wtag(token.c_str());
 
                 // Always save off lemma if we haven't yet:
@@ -254,7 +256,7 @@ char OSISStrongs::processText(std::string &text, const SWKey *key, const SWModul
                 token.pop_back();
                 token.erase(0, 1u);
             }
-            if (hasPrefix(token, "/w")) {    // Word End
+            if (startsWith(token, "/w"sv)) {    // Word End
                 if (module->isProcessEntryAttributes()) {
                     if (wordStart) {
                         std::string tmp;

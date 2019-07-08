@@ -85,6 +85,14 @@ std::string_view rightTrimmedView(std::string_view sv) noexcept {
 std::string_view trimmedView(std::string_view sv) noexcept
 { return rightTrimmedView(leftTrimmedView(sv)); }
 
+bool startsWith(std::string_view str, std::string_view prefix) {
+    #if __cplusplus > 201703L
+    return str.starts_with(prefix);
+    #else
+    return str.substr(0u, prefix.size()) == prefix;
+    #endif
+}
+
 std::string stripPrefix(std::string & str, char const separator) {
     char const * m = str.c_str();
     while (*m && *m != separator)
