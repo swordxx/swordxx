@@ -52,10 +52,8 @@ char GBFHeadings::processText(std::string &text, const SWKey *key, const SWModul
         bool intoken = false;
         bool hide = false;
 
-    const char *from;
-    std::string orig = text;
-    from = orig.c_str();
-    for (text = ""; *from; from++) {
+        std::string out;
+        for (const char *from = text.c_str(); *from; from++) {
             if (*from == '<') {
                 intoken = true;
                 tokpos = 0;
@@ -81,10 +79,10 @@ char GBFHeadings::processText(std::string &text, const SWKey *key, const SWModul
                 }
                 // if not a heading token, keep token in text
                 if (!hide) {
-                    text += '<';
+                    out += '<';
                     for (char *tok = token; *tok; tok++)
-                        text += *tok;
-                    text += '>';
+                        out += *tok;
+                    out += '>';
                 }
                 continue;
             }
@@ -97,10 +95,11 @@ char GBFHeadings::processText(std::string &text, const SWKey *key, const SWModul
             }
             else {
                 if (!hide) {
-                    text += *from;
+                    out += *from;
                 }
             }
         }
+        text = std::move(out);
     }
     return 0;
 }
