@@ -37,16 +37,14 @@ GBFThML::GBFThML()
 char GBFThML::processText(std::string &text, const SWKey *key, const SWModule *module) {
     (void) key;
     (void) module;
-    const char *from;
     char token[2048];
     int tokpos = 0;
     bool intoken     = false;
     const char *tok;
 
-    std::string orig = text;
-    from = orig.c_str();
+    std::string out;
 
-    for (text = ""; *from; from++) {
+    for (auto const * from = text.c_str(); *from; from++) {
         if (*from == '<') {
             intoken = true;
             tokpos = 0;
@@ -63,17 +61,17 @@ char GBFThML::processText(std::string &text, const SWKey *key, const SWModule *m
               switch(token[1]) {
               case 'G':
               case 'H':
-                text += "<sync type=\"Strongs\" value=\"";
+                out += "<sync type=\"Strongs\" value=\"";
                 for (tok = token + 1; *tok; tok++)
-                 text += *tok;
-                text += "\" />";
+                 out += *tok;
+                out += "\" />";
                 continue;
 
               case 'T':               // Tense
-                text += "<sync type=\"Morph\" value=\"";
+                out += "<sync type=\"Morph\" value=\"";
                 for (tok = token + 2; *tok; tok++)
-                 text += *tok;
-                text += "\" />";
+                 out += *tok;
+                out += "\" />";
                 continue;
                 }
               break;
@@ -81,25 +79,25 @@ char GBFThML::processText(std::string &text, const SWKey *key, const SWModule *m
               switch(token[1])
                 {
                 case 'X':
-                 text += "<a href=\"";
+                 out += "<a href=\"";
                  for (tok = token + 3; *tok; tok++) {
                 if(*tok != '<' && *tok+1 != 'R' && *tok+2 != 'x') {
-                  text += *tok;
+                  out += *tok;
                 }
                 else {
                   break;
                 }
                  }
-                 text += "\">";
+                 out += "\">";
                  continue;
                 case 'x':
-                 text += "</a>";
+                 out += "</a>";
                  continue;
                 case 'F':               // footnote begin
-                 text += "<note>";
+                 out += "<note>";
                  continue;
                 case 'f':               // footnote end
-                 text += "</note>";
+                 out += "</note>";
                  continue;
                 }
               break;
@@ -107,56 +105,56 @@ char GBFThML::processText(std::string &text, const SWKey *key, const SWModule *m
               switch(token[1])
                 {
                 case 'N':
-                 text += "<font face=\"";
+                 out += "<font face=\"";
                  for (tok = token + 2; *tok; tok++)
-                    text += *tok;
-                text += "\">";
+                    out += *tok;
+                out += "\">";
                  continue;
                 case 'n':
-                 text += "</font>";
+                 out += "</font>";
                  continue;
                 case 'I':        // italic start
-                 text += "<i>";
+                 out += "<i>";
                  continue;
                 case 'i':        // italic end
-                 text += "</i>";
+                 out += "</i>";
                  continue;
                 case 'B':        // bold start
-                 text += "<b>";
+                 out += "<b>";
                  continue;
                 case 'b':        // bold end
-                 text += "</b>";
+                 out += "</b>";
                  continue;
 
                 case 'R':        // words of Jesus begin
-                 text += "<font color=\"#ff0000\">";
+                 out += "<font color=\"#ff0000\">";
                  continue;
                 case 'r':        // words of Jesus end
-                 text += "</font>";
+                 out += "</font>";
                  continue;
                 case 'U':        // Underline start
-                 text += "<u>";
+                 out += "<u>";
                  continue;
                 case 'u':        // Underline end
-                 text += "</u>";
+                 out += "</u>";
                  continue;
                 case 'O':        // Old Testament quote begin
-                 text += "<cite>";
+                 out += "<cite>";
                  continue;
                 case 'o':        // Old Testament quote end
-                 text += "</cite>";
+                 out += "</cite>";
                  continue;
                 case 'S':        // Superscript begin
-                 text += "<sup>";
+                 out += "<sup>";
                  continue;
                 case 's':        // Superscript end
-                 text += "</sup>";
+                 out += "</sup>";
                  continue;
                 case 'V':        // Subscript begin
-                 text += "<sub>";
+                 out += "<sub>";
                  continue;
                 case 'v':        // Subscript end
-                 text += "</sub>";
+                 out += "</sub>";
                  continue;
                 }
               break;
@@ -164,16 +162,16 @@ char GBFThML::processText(std::string &text, const SWKey *key, const SWModule *m
               switch(token[1])
                 {
                 case 'A':               // ASCII value
-                  text += (char)std::atoi(&token[2]);
+                  out += (char)std::atoi(&token[2]);
                   continue;
                 case 'G':
                   //*to++ = ' ';
                   continue;
                 case 'L':               // line break
-                 text += "<br /> ";
+                 out += "<br /> ";
                   continue;
                 case 'M':               // new paragraph
-                 text += "<p />";
+                 out += "<p />";
                   continue;
                 case 'T':
                   //*to++ = ' ';
@@ -184,16 +182,16 @@ char GBFThML::processText(std::string &text, const SWKey *key, const SWModule *m
               switch(token[1])
                 {
                 case 'T':               // Book title begin
-                 text += "<big>";
+                 out += "<big>";
                  continue;
                 case 't':
-                 text += "</big>";
+                 out += "</big>";
                  continue;
                 case 'S':
-                 text += "<div class=\"sechead\">";
+                 out += "<div class=\"sechead\">";
                  continue;
                 case 's':
-                 text += "</div>";
+                 out += "</div>";
                  continue;
                 }
               break;
@@ -201,10 +199,10 @@ char GBFThML::processText(std::string &text, const SWKey *key, const SWModule *m
             case 'P':            // special formatting
               switch(token[1]) {
                 case 'P':               // Poetry begin
-                 text += "<verse>";
+                 out += "<verse>";
                  continue;
                 case 'p':
-                 text += "</verse>";
+                 out += "</verse>";
                  continue;
                 }
               break;
@@ -222,8 +220,9 @@ char GBFThML::processText(std::string &text, const SWKey *key, const SWModule *m
                 token[tokpos+2] = 0;
             }
         }
-        else    text += *from;
+        else    out += *from;
     }
+    text = std::move(out);
     return 0;
 }
 
