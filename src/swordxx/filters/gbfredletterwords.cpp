@@ -56,10 +56,8 @@ char GBFRedLetterWords::processText(std::string &text, const SWKey *key, const S
         bool intoken = false;
         bool hide = false;
 
-    const char *from;
-    std::string orig = text;
-    from = orig.c_str();
-    for (text = ""; *from; from++) {
+        std::string out;
+        for (auto const * from = text.c_str(); *from; from++) {
             if (*from == '<') {
                 intoken = true;
                 tokpos = 0;
@@ -89,10 +87,10 @@ char GBFRedLetterWords::processText(std::string &text, const SWKey *key, const S
 
                 // if not a red letter word token, keep token in text
                 if (!hide) {
-                    text += '<';
+                    out += '<';
                     for (char *tok = token; *tok; tok++)
-                        text += *tok;
-                    text += '>';
+                        out += *tok;
+                    out += '>';
                 }
                 continue;
             }
@@ -105,9 +103,10 @@ char GBFRedLetterWords::processText(std::string &text, const SWKey *key, const S
                 }
             }
             else {
-                text += *from;
+                out += *from;
             }
         }
+        text = std::move(out);
     }
     return 0;
 }
