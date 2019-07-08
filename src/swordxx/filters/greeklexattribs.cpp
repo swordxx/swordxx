@@ -92,13 +92,13 @@ char GreekLexAttribs::processText(std::string &text, const SWKey *key, const SWM
                                 phrase.erase(phrase.find_first_of("("), 1);
                                 phrase.erase(phrase.find_first_of(")"), 1);
                                 phrase.erase(0,phrase.find_first_not_of("\r\n\v\t ")); phrase.erase(phrase.find_last_not_of("\r\n\v\t ")+1);
-                                module->getEntryAttributes()["AVPhrase"][wordstr]["Alt"] = phrase.c_str();
+                                module->getEntryAttributes()["AVPhrase"][wordstr]["Alt"] = phrase;
                                 phrase = tmp;
                             }
                             phrase.erase(0,phrase.find_first_not_of("\r\n\v\t ")); phrase.erase(phrase.find_last_not_of("\r\n\v\t ")+1);
                             freq.erase(0,freq.find_first_not_of("\r\n\v\t ")); freq.erase(freq.find_last_not_of("\r\n\v\t ")+1);
-                            module->getEntryAttributes()["AVPhrase"][wordstr]["Phrase"] = phrase.c_str();
-                            module->getEntryAttributes()["AVPhrase"][wordstr]["Frequency"] = freq.c_str();
+                            module->getEntryAttributes()["AVPhrase"][wordstr]["Phrase"] = phrase;
+                            module->getEntryAttributes()["AVPhrase"][wordstr]["Frequency"] = freq;
                             currentPhrase = nullptr;
                             currentPhraseEnd = nullptr;
                         }
