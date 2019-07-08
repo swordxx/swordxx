@@ -444,7 +444,7 @@ namespace Detail {
 template <typename T>
 auto formattedArg(T && v) ->
         std::enable_if_t<
-            std::is_same<std::decay_t<T>, std::string>::value,
+            std::is_same_v<std::decay_t<decltype(v.c_str())>, char const *>,
             char const *
         >
 { return v.c_str(); }
