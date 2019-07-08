@@ -256,7 +256,7 @@ char ThMLOSIS::processText(std::string &text, const SWKey *key, const SWModule *
                 std::string cls = "x-class:";
                 cls += tag.attribute("class");
                 if (cls.length()>8)
-                    text += formatted(" subType=\"%s\"", cls.c_str());
+                    text += formatted(" subType=\"%s\"", cls);
 
                 text += ">";
                 divEnd = "</seg>";
@@ -457,17 +457,17 @@ char ThMLOSIS::processText(std::string &text, const SWKey *key, const SWModule *
                     const char *attStart = std::strstr(wordStart, "morph");
                     if (attStart) { //existing morph attribute, append this one to it
                         attStart += 7;
-                        buf = formatted("%s:%s ", ((cls.length())?cls.c_str():"robinson"), morph.c_str());
+                        buf = formatted("%s:%s ", (!cls.empty() ? cls.c_str() :"robinson"), morph);
                     }
                     else { // no lemma attribute
                         attStart = wordStart + 3;
-                        buf = formatted("morph=\"%s:%s\" ", ((cls.length())?cls.c_str():"robinson"), morph.c_str());
+                        buf = formatted("morph=\"%s:%s\" ", (!cls.empty() ? cls.c_str() :"robinson"), morph);
                     }
 
                     text.insert(attStart - text.c_str(), buf); //hack, we have to
                 }
                 else { //no existing <w> attribute fond
-                    buf = formatted("<w morph=\"%s:%s\">", ((cls.length())?cls.c_str():"robinson"), morph.c_str());
+                    buf = formatted("<w morph=\"%s:%s\">", (!cls.empty() ? cls.c_str() : "robinson"), morph);
                     text.insert(wordStart - text.c_str(), buf);
                     text += "</w>";
                     lastspace = false;

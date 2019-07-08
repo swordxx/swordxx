@@ -188,7 +188,7 @@ void writeEntry(SWModule & book,
 
     // check to see if we already have an entry
     for (int i = 2; book.getKey()->popError() != KEYERR_OUTOFBOUNDS; ++i) {
-        std::string key(formatted("%s {%d}", keyBuffer.c_str(), i));
+        std::string key(formatted("%s {%d}", keyBuffer, i));
         std::cout << "dup key, trying: " << key << std::endl;
         book.setKey(key.c_str());
     }

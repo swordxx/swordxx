@@ -215,24 +215,24 @@ char GBFOSIS::processText(std::string &text, const SWKey *key, const SWModule *m
                     if (attStart) {
                         attStart += 7;
 
-                        buf = formatted("strong:%s ", value.c_str());
+                        buf = formatted("strong:%s ", value);
                     }
                     else { // no lemma attribute
                         attStart = wordStart + 3;
 
-                        buf = formatted("lemma=\"strong:%s\" ", value.c_str());
+                        buf = formatted("lemma=\"strong:%s\" ", value);
                     }
 
                     text.insert(attStart - text.c_str(), buf);
                 }
                 else { //wordStart doesn't point to an existing <w> attribute!
                     if (value == "H03068") {    //divineName
-                        buf = formatted("<divineName><w lemma=\"strong:%s\">", value.c_str());
+                        buf = formatted("<divineName><w lemma=\"strong:%s\">", value);
 
                         divineName = true;
                     }
                     else {
-                        buf = formatted("<w lemma=\"strong:%s\">", value.c_str());
+                        buf = formatted("<w lemma=\"strong:%s\">", value);
                     }
 
                     text.insert(wordStart - text.c_str(), buf);
@@ -259,17 +259,17 @@ char GBFOSIS::processText(std::string &text, const SWKey *key, const SWModule *m
                     const char *attStart = std::strstr(wordStart, "morph");
                     if (attStart) { //existing morph attribute, append this one to it
                         attStart += 7;
-                        buf = formatted("%s:%s ", "robinson", value.c_str());
+                        buf = formatted("robinson:%s ", value);
                     }
                     else { // no lemma attribute
                         attStart = wordStart + 3;
-                        buf = formatted("morph=\"%s:%s\" ", "robinson", value.c_str());
+                        buf = formatted("morph=\"robinson:%s\" ", value);
                     }
 
                     text.insert(attStart - text.c_str(), buf); //hack, we have to
                 }
                 else { //no existing <w> attribute fond
-                    buf = formatted("<w morph=\"%s:%s\">", "robinson", value.c_str());
+                    buf = formatted("<w morph=\"robinson:%s\">", value);
                     text.insert(wordStart - text.c_str(), buf);
                     text += "</w>";
                     lastspace = false;

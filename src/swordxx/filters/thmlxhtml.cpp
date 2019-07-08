@@ -193,22 +193,22 @@ bool ThMLXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
             if (tag.attribute("type") == "morph") { //&gt;
                 if(value.length())
                     buf += formatted("<small><em class=\"morph\">(<a href=\"passagestudy.jsp?action=showMorph&type=Greek&value=%s\" class=\"morph\">%s</a>)</em></small>",
-                        URL::encode(value).c_str(),
-                        value.c_str());
+                        URL::encode(value),
+                        value);
             }
             else if (tag.attribute("type") == "lemma") { //&gt;
                 if(value.length())
                     // empty "type=" is deliberate.
                     buf += formatted("<small><em class=\"strongs\">&lt;<a href=\"passagestudy.jsp?action=showStrongs&type=&value=%s\" class=\"strongs\">%s</a>&gt;</em></small>",
-                        URL::encode(value).c_str(),
-                        value.c_str());
+                        URL::encode(value),
+                        value);
             }
             else if (tag.attribute("type") == "Strongs") {
                 char const ch = *value.begin();
                 value.erase(0u, 1u);
                 buf += formatted("<small><em class=\"strongs\">&lt;<a href=\"passagestudy.jsp?action=showStrongs&type=%s&value=%s\" class=\"strongs\">",
                             ((ch == 'H') ? "Hebrew" : "Greek"),
-                            URL::encode(value).c_str());
+                            URL::encode(value));
                 buf += (value.length()) ? value.c_str() : "";
                 buf += "</a>&gt;</em></small>";
             }
@@ -229,9 +229,9 @@ bool ThMLXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
                         char const ch = ((tag.attribute("type") == "crossReference") || (tag.attribute("type") == "x-cross-ref")) ? 'x' : 'n';
                         buf += formatted("<a href=\"passagestudy.jsp?action=showNote&type=%c&value=%s&module=%s&passage=%s\"><small><sup class=\"%c\">*%c%s</sup></small></a>",
                             ch,
-                            URL::encode(footnoteNumber).c_str(),
-                            URL::encode(u->version).c_str(),
-                            URL::encode(vkey->getText()).c_str(),
+                            URL::encode(footnoteNumber),
+                            URL::encode(u->version),
+                            URL::encode(vkey->getText()),
                             ch,
                             ch,
                             (renderNoteNumbers ? noteName.c_str() : ""));
@@ -240,9 +240,9 @@ bool ThMLXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
                         char const ch = ((tag.attribute("type") == "crossReference") || (tag.attribute("type") == "x-cross-ref")) ? 'x' : 'n';
                         buf += formatted("<a href=\"passagestudy.jsp?action=showNote&type=%c&value=%s&module=%s&passage=%s\"><small><sup class=\"%c\">*%c%s</sup></small></a>",
                             ch,
-                            URL::encode(footnoteNumber).c_str(),
-                            URL::encode(u->version).c_str(),
-                            URL::encode(u->key->getText()).c_str(),
+                            URL::encode(footnoteNumber),
+                            URL::encode(u->version),
+                            URL::encode(u->key->getText()),
                             ch,
                             ch,
                             (renderNoteNumbers ? noteName.c_str() : ""));
@@ -272,8 +272,8 @@ bool ThMLXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
                     std::string version = tag.attribute("version");
 
                     buf += formatted("<a href=\"passagestudy.jsp?action=showRef&type=scripRef&value=%s&module=%s\">",
-                        (refList.length()) ? URL::encode(refList).c_str() : "",
-                        (version.length()) ? URL::encode(version).c_str() : "");
+                        !refList.empty() ? URL::encode(refList).c_str() : "",
+                        !version.empty() ? URL::encode(version).c_str() : "");
                     buf += u->lastTextNode.c_str();
                     buf += "</a>";
                 }
@@ -284,9 +284,9 @@ bool ThMLXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
                         // leave this special osis type in for crossReference notes types?  Might thml use this some day? Doesn't hurt.
                         //buf.appendFormatted("<a href=\"noteID=%s.x.%s\"><small><sup>*x</sup></small></a> ", vkey->getText(), footnoteNumber.c_str());
                         buf += formatted("<a href=\"passagestudy.jsp?action=showNote&type=x&value=%s&module=%s&passage=%s\"><small><sup class=\"x\">*x%s</sup></small></a>",
-                            URL::encode(footnoteNumber).c_str(),
-                            URL::encode(u->version).c_str(),
-                            URL::encode(vkey->getText()).c_str(),
+                            URL::encode(footnoteNumber),
+                            URL::encode(u->version),
+                            URL::encode(vkey->getText()),
                             (renderNoteNumbers ? noteName.c_str() : ""));
                     }
                 }
@@ -337,8 +337,8 @@ bool ThMLXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
 
             // images become clickable, if the UI supports showImage.
             buf += formatted("<a href=\"passagestudy.jsp?action=showImage&value=%s&module=%s\"><",
-                        URL::encode(imagename).c_str(),
-                        URL::encode(u->version).c_str());
+                        URL::encode(imagename),
+                        URL::encode(u->version));
 
             for (c = token; *c; c++) {
                 if ((*c == '/') && (*(c+1) == '\0'))

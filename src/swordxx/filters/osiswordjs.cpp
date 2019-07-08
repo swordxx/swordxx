@@ -155,7 +155,7 @@ char OSISWordJS::processText(std::string &text, const SWKey *key, const SWModule
                     else {
                         wordID = key->getText();
                     }
-                    wordID += formatted("_%s", src.c_str());
+                    wordID.append(1u, '_').append(src);
                     // clean up our word ID for XHTML
                     for (unsigned int i = 0; i < wordID.size(); i++) {
                         if ((!charIsDigit(wordID[i])) && (!charIsAlpha(wordID[i]))) {
@@ -163,7 +163,7 @@ char OSISWordJS::processText(std::string &text, const SWKey *key, const SWModule
                         }
                     }
                     // 'p' = 'fillpop' to save bandwidth
-                    text += formatted("<span class=\"clk\" onclick=\"p('%s','%s','%s','%s','%s','%s');\" >", lexName.c_str(), lemma.c_str(), wordID.c_str(), morph.c_str(), page.c_str(), modName.c_str());
+                    text += formatted("<span class=\"clk\" onclick=\"p('%s','%s','%s','%s','%s','%s');\" >", lexName, lemma, wordID, morph, page, modName);
                     wordNum++;
 
                     if (wtag.isEmpty()) {

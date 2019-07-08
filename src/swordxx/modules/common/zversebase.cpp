@@ -71,12 +71,12 @@ zVerseBase<VerseSizeType_>::zVerseBase(NormalizedPath const & path,
 
     char const blockChar(static_cast<char>(blockType));
     auto const fileMgr(FileMgr::getSystemFileMgr());
-    idxfp[0] = fileMgr->open(formatted("%s/ot.%czs", path.c_str(), blockChar).c_str(), fileMode, true);
-    idxfp[1] = fileMgr->open(formatted("%s/nt.%czs", path.c_str(), blockChar).c_str(), fileMode, true);
-    textfp[0] = fileMgr->open(formatted("%s/ot.%czz", path.c_str(), blockChar).c_str(), fileMode, true);
-    textfp[1] = fileMgr->open(formatted("%s/nt.%czz", path.c_str(), blockChar).c_str(), fileMode, true);
-    compfp[0] = fileMgr->open(formatted("%s/ot.%czv", path.c_str(), blockChar).c_str(), fileMode, true);
-    compfp[1] = fileMgr->open(formatted("%s/nt.%czv", path.c_str(), blockChar).c_str(), fileMode, true);
+    idxfp[0] = fileMgr->open(formatted("%s/ot.%czs", path, blockChar).c_str(), fileMode, true);
+    idxfp[1] = fileMgr->open(formatted("%s/nt.%czs", path, blockChar).c_str(), fileMode, true);
+    textfp[0] = fileMgr->open(formatted("%s/ot.%czz", path, blockChar).c_str(), fileMode, true);
+    textfp[1] = fileMgr->open(formatted("%s/nt.%czz", path, blockChar).c_str(), fileMode, true);
+    compfp[0] = fileMgr->open(formatted("%s/ot.%czv", path, blockChar).c_str(), fileMode, true);
+    compfp[1] = fileMgr->open(formatted("%s/nt.%czv", path, blockChar).c_str(), fileMode, true);
 }
 
 /******************************************************************************
@@ -399,7 +399,7 @@ char zVerseBase<VerseSizeType_>::createModule(NormalizedPath const & path,
     VerseSizeType size = 0;
     VerseKey vk;
 
-    std::string buf(formatted("%s/ot.%czs", path.c_str(), static_cast<char>(blockBound)));
+    std::string buf(formatted("%s/ot.%czs", path, static_cast<char>(blockBound)));
     auto const testamentIt(buf.begin() + path.size() + 1);
     assert(*testamentIt == 'o');
     auto const lastCharIt(buf.rbegin());

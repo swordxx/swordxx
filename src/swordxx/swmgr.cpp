@@ -683,7 +683,7 @@ void SWMgr::augmentModules(NormalizedPath const & path, bool multiMod) {
                     std::string name;
                     int i = 1;
                     do { //module name already used?
-                        name = formatted("%s_%d", (*it).first.c_str(), i);
+                        name = formatted("%s_%d", (*it).first, i);
                         i++;
                     } while (config->sections().find(name) != config->sections().end());
 

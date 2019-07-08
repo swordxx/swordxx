@@ -184,10 +184,10 @@ bool GBFXHTML::handleToken(std::string &buf, const char *token, BasicFilterUserD
                 // leave this special osis type in for crossReference notes types?  Might thml use this some day? Doesn't hurt.
                 //char const ch = ((tag.attribute("type") == "crossReference") || (tag.attribute("type") == "x-cross-ref")) ? 'x' : 'n';
                 buf += formatted("<a href=\"passagestudy.jsp?action=showNote&type=n&value=%s&module=%s&passage=%s\"><small><sup class=\"n\">*n%s</sup></small></a> ",
-                    URL::encode(footnoteNumber).c_str(),
-                    URL::encode(u->version).c_str(),
-                    URL::encode(vkey->getText()).c_str(),
-                    (renderNoteNumbers ? URL::encode(noteName).c_str(): ""));
+                    URL::encode(footnoteNumber),
+                    URL::encode(u->version),
+                    URL::encode(vkey->getText()),
+                    (renderNoteNumbers ? URL::encode(noteName).c_str() : ""));
             }
             u->suspendTextPassThru = true;
         }

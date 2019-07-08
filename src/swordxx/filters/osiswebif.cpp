@@ -105,7 +105,7 @@ bool OSISWEBIF::handleToken(std::string &buf, const char *token, BasicFilterUser
                         if ((!std::strcmp(val2, "3588")) && (lastText.length() < 1))
                             show = false;
                         else
-                            buf += formatted(" <small><em>&lt;<a href=\"%s?showStrong=%s#cv\">%s</a>&gt;</em></small> ", passageStudyURL.c_str(), URL::encode(val2).c_str(), val2);
+                            buf += formatted(" <small><em>&lt;<a href=\"%s?showStrong=%s#cv\">%s</a>&gt;</em></small> ", passageStudyURL, URL::encode(val2), val2);
                     } while (++i < count);
                 }
                 if (!(attrib = tag.attribute("morph")).empty() && (show)) {
@@ -123,7 +123,7 @@ bool OSISWEBIF::handleToken(std::string &buf, const char *token, BasicFilterUser
                             const char *val2 = val;
                             if ((*val == 'T') && (std::strchr("GH", val[1])) && (charIsDigit(val[2])))
                                 val2+=2;
-                            buf += formatted(" <small><em>(<a href=\"%s?showMorph=%s#cv\">%s</a>)</em></small> ", passageStudyURL.c_str(), URL::encode(val2).c_str(), val2);
+                            buf += formatted(" <small><em>(<a href=\"%s?showMorph=%s#cv\">%s</a>)</em></small> ", passageStudyURL, URL::encode(val2), val2);
                         } while (++i < count);
                     }
                 }

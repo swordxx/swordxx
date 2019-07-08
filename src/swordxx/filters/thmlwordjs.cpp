@@ -194,7 +194,7 @@ char ThMLWordJS::processText(std::string &text, const SWKey *key, const SWModule
                                 wordID[i] = '_';
                             }
                         }
-                        wordID += formatted("_%s%d", wordSrcPrefix.c_str(), std::atoi(wstr));
+                        wordID += formatted("_%s%d", wordSrcPrefix, std::atoi(wstr));
                         if (textSt.size()) {
                             int textStr = std::atoi(textSt.c_str());
                             textStr += lastAppendLen;
@@ -216,7 +216,7 @@ char ThMLWordJS::processText(std::string &text, const SWKey *key, const SWModule
                             const char *m = std::strchr(morph.c_str(), ':');
                             if (m) m++;
                             else m = morph.c_str();
-                            spanStart += formatted("<span class=\"clk\" onclick=\"p('%s','%s','%s','%s','','%s');\" >", lexName.c_str(), strong.c_str(), wordID.c_str(), m, modName.c_str());
+                            spanStart += formatted("<span class=\"clk\" onclick=\"p('%s','%s','%s','%s','','%s');\" >", lexName, strong, wordID, m, modName);
                             text.insert(textStr, spanStart);
                             lastAppendLen = spanStart.length();
                         }
@@ -289,7 +289,7 @@ char ThMLWordJS::processText(std::string &text, const SWKey *key, const SWModule
                     wordID[i] = '_';
                 }
             }
-            wordID += formatted("_%s%d", wordSrcPrefix.c_str(), std::atoi(wstr));
+            wordID += formatted("_%s%d", wordSrcPrefix, std::atoi(wstr));
             if (textSt.size()) {
                 int textStr = std::atoi(textSt.c_str());
                 textStr += lastAppendLen;
@@ -298,7 +298,7 @@ char ThMLWordJS::processText(std::string &text, const SWKey *key, const SWModule
                 const char *m = std::strchr(morph.c_str(), ':');
                 if (m) m++;
                 else m = morph.c_str();
-                spanStart += formatted("<span class=\"clk\" onclick=\"p('%s','%s','%s','%s','','%s');\" >", lexName.c_str(), strong.c_str(), wordID.c_str(), m, modName.c_str());
+                spanStart += formatted("<span class=\"clk\" onclick=\"p('%s','%s','%s','%s','','%s');\" >", lexName, strong, wordID, m, modName);
                 text.insert(textStr, spanStart);
             }
         }

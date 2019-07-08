@@ -269,15 +269,15 @@ bool TEIXHTML::handleToken(std::string &buf, const char *token, BasicFilterUserD
                     if(was_osisref)
                     {
                         buf += formatted("<a href=\"passagestudy.jsp?action=showRef&type=scripRef&value=%s&module=%s\">",
-                            (ref.c_str()) ? URL::encode(ref).c_str() : "",
-                            (work.size()) ? URL::encode(work).c_str() : "");
+                            (!ref.empty()) ? URL::encode(ref).c_str() : "",
+                            (!work.empty()) ? URL::encode(work).c_str() : "");
                     }
                     else
                     {
                         // Dictionary link, or something
                         buf += formatted("<a href=\"sword://%s/%s\">",
-                            (work.size()) ? URL::encode(work).c_str() : u->version.c_str(),
-                            (ref.c_str()) ? URL::encode(ref).c_str() : ""
+                            (!work.empty()) ? URL::encode(work) : u->version,
+                            (!ref.empty()) ? URL::encode(ref).c_str() : ""
                             );
                     }
                 }
@@ -307,9 +307,9 @@ bool TEIXHTML::handleToken(std::string &buf, const char *token, BasicFilterUserD
                 std::string noteName = tag.attribute("n");
 
                 buf += formatted("<a href=\"passagestudy.jsp?action=showNote&type=n&value=%s&module=%s&passage=%s\"><small><sup class=\"n\">*n%s</sup></small></a>",
-                    URL::encode(footnoteNumber).c_str(),
-                    URL::encode(u->version).c_str(),
-                    URL::encode(u->key->getText()).c_str(),
+                    URL::encode(footnoteNumber),
+                    URL::encode(u->version),
+                    URL::encode(u->key->getText()),
                     (renderNoteNumbers ? URL::encode(noteName).c_str() : ""));
 
                 u->suspendTextPassThru = false;
@@ -327,9 +327,9 @@ bool TEIXHTML::handleToken(std::string &buf, const char *token, BasicFilterUserD
                 }
                 filepath += url;
                 buf += formatted("<a href=\"passagestudy.jsp?action=showImage&value=%s&module=%s\"><img src=\"file:%s\" border=\"0\" /></a>",
-                            URL::encode(filepath).c_str(),
-                            URL::encode(u->version).c_str(),
-                            filepath.c_str());
+                            URL::encode(filepath),
+                            URL::encode(u->version),
+                            filepath);
                 u->suspendTextPassThru = false;
             }
         }

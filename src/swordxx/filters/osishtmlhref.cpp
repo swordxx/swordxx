@@ -66,7 +66,7 @@ void processLemma(bool suspendTextPassThru, XMLTag &tag, std::string &buf) {
                 if (!suspendTextPassThru) {
                     buf += formatted("<small><em class=\"strongs\">&lt;<a href=\"passagestudy.jsp?action=showStrongs&type=%s&value=%s\" class=\"strongs\">%s</a>&gt;</em></small>",
                             (gh.length()) ? gh.c_str() : "",
-                            URL::encode(val2).c_str(),
+                            URL::encode(val2),
                             val2);
                 }
             //}
@@ -95,8 +95,8 @@ void processMorph(bool suspendTextPassThru, XMLTag &tag, std::string &buf) {
                     val2+=2;
                 if (!suspendTextPassThru) {
                     buf += formatted("<small><em class=\"morph\">(<a href=\"passagestudy.jsp?action=showMorph&type=%s&value=%s\" class=\"morph\">%s</a>)</em></small>",
-                            URL::encode(tag.attribute("morph")).c_str(),
-                            URL::encode(val).c_str(),
+                            URL::encode(tag.attribute("morph")),
+                            URL::encode(val),
                             val2);
                 }
             } while (++i < count);
@@ -243,9 +243,9 @@ bool OSISHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterU
                         auto const * const vkey = u->verseKey;
                         buf += formatted("<a href=\"passagestudy.jsp?action=showNote&type=%c&value=%s&module=%s&passage=%s\"><small><sup class=\"%c\">*%c%s</sup></small></a>",
                                 ch,
-                            URL::encode(footnoteNumber).c_str(),
-                            URL::encode(u->version).c_str(),
-                            URL::encode(vkey ? vkey->getText() : u->key->getText()).c_str(),
+                            URL::encode(footnoteNumber),
+                            URL::encode(u->version),
+                            URL::encode(vkey ? vkey->getText() : u->key->getText()),
                             ch,
                             ch,
                             (renderNoteNumbers ? noteName.c_str() : ""));
@@ -322,7 +322,7 @@ bool OSISHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterU
                     if(is_scripRef)
                     {
                         buf += formatted("<a href=\"passagestudy.jsp?action=showRef&type=scripRef&value=%s&module=\">",
-                            URL::encode(ref).c_str()
+                            URL::encode(ref)
 //                            (work.size()) ? URL::encode(work).c_str() : "")
                             );
                     }
@@ -330,9 +330,8 @@ bool OSISHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterU
                     {
                         // Dictionary link, or something
                         buf += formatted("<a href=\"sword://%s/%s\">",
-                            URL::encode(work).c_str(),
-                            URL::encode(ref).c_str()
-                            );
+                                         URL::encode(work),
+                                         URL::encode(ref));
                     }
                 }
                 else {

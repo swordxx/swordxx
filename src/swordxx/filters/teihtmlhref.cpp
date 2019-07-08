@@ -245,7 +245,7 @@ bool TEIHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterUs
                     {
                         // Dictionary link, or something
                         buf += formatted("<a href=\"sword://%s/%s\">",
-                            (!work.empty()) ? URL::encode(work).c_str() : u->version.c_str(),
+                            (!work.empty()) ? URL::encode(work) : u->version,
                             (!ref.empty()) ? URL::encode(ref).c_str() : ""
                             );
                     }
@@ -276,9 +276,9 @@ bool TEIHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterUs
                 std::string noteName = tag.attribute("n");
 
                 buf += formatted("<a href=\"passagestudy.jsp?action=showNote&type=n&value=%s&module=%s&passage=%s\"><small><sup class=\"n\">*n%s</sup></small></a>",
-                    URL::encode(footnoteNumber).c_str(),
-                    URL::encode(u->version).c_str(),
-                    URL::encode(u->key->getText()).c_str(),
+                    URL::encode(footnoteNumber),
+                    URL::encode(u->version),
+                    URL::encode(u->key->getText()),
                     (renderNoteNumbers ? URL::encode(noteName).c_str() : ""));
 
                 u->suspendTextPassThru = false;
@@ -297,9 +297,9 @@ bool TEIHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterUs
                 filepath += url;
                 // images become clickable, if the UI supports showImage.
                 buf += formatted("<a href=\"passagestudy.jsp?action=showImage&value=%s&module=%s\"><img src=\"file:%s\" border=\"0\" /></a>",
-                            URL::encode(filepath).c_str(),
-                            URL::encode(u->version).c_str(),
-                            filepath.c_str());
+                            URL::encode(filepath),
+                            URL::encode(u->version),
+                            filepath);
                 u->suspendTextPassThru = true;
             }
         }

@@ -114,7 +114,7 @@ void processLemma(bool suspendTextPassThru, XMLTag &tag, std::string &buf) {
                 if (!suspendTextPassThru) {
                     buf += formatted("<small><em class=\"strongs\">&lt;<a class=\"strongs\" href=\"passagestudy.jsp?action=showStrongs&type=%s&value=%s\" class=\"strongs\">%s</a>&gt;</em></small>",
                             (gh.length()) ? gh.c_str() : "",
-                            URL::encode(val2).c_str(),
+                            URL::encode(val2),
                             val2);
                 }
             //}
@@ -143,8 +143,8 @@ void processMorph(bool suspendTextPassThru, XMLTag &tag, std::string &buf) {
                     val2+=2;
                 if (!suspendTextPassThru) {
                     buf += formatted("<small><em class=\"morph\">(<a class=\"morph\" href=\"passagestudy.jsp?action=showMorph&type=%s&value=%s\" class=\"morph\">%s</a>)</em></small>",
-                            URL::encode(tag.attribute("morph")).c_str(),
-                            URL::encode(val).c_str(),
+                            URL::encode(tag.attribute("morph")),
+                            URL::encode(val),
                             val2);
                 }
             } while (++i < count);
@@ -314,22 +314,22 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
                         if (auto const * const vkey = u.verseKey) {
                             //printf("URL = %s\n",URL::encode(vkey->getText()).c_str());
                             buf += formatted("<a class=\"noteMarker%s\" href=\"passagestudy.jsp?action=showNote&type=%c&value=%s&module=%s&passage=%s\"><small><sup class=\"%c\">*%c%s</sup></small></a>",
-                                classExtras.c_str(),
+                                classExtras,
                                 ch,
-                                URL::encode(footnoteNumber).c_str(),
-                                URL::encode(u.version).c_str(),
-                                URL::encode(vkey->getText()).c_str(),
+                                URL::encode(footnoteNumber),
+                                URL::encode(u.version),
+                                URL::encode(vkey->getText()),
                                 ch,
                                 ch,
                                 (renderNoteNumbers ? noteName.c_str() : ""));
                         }
                         else {
                             buf += formatted("<a class=\"noteMarker%s\" href=\"passagestudy.jsp?action=showNote&type=%c&value=%s&module=%s&passage=%s\"><small><sup class=\"%c\">*%c%s</sup></small></a>",
-                                classExtras.c_str(),
+                                classExtras,
                                 ch,
-                                URL::encode(footnoteNumber).c_str(),
-                                URL::encode(u.version).c_str(),
-                                URL::encode(u.key->getText()).c_str(),
+                                URL::encode(footnoteNumber),
+                                URL::encode(u.version),
+                                URL::encode(u.key->getText()),
                                 ch,
                                 ch,
                                 (renderNoteNumbers ? noteName.c_str() : ""));
@@ -421,8 +421,8 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
                     if(is_scripRef)
                     {
                         buf += formatted("<a class=\"%s\" href=\"passagestudy.jsp?action=showRef&type=scripRef&value=%s&module=\">",
-                            classes.c_str(),
-                            URL::encode(ref).c_str()
+                            classes,
+                            URL::encode(ref)
 //							(work.size()) ? URL::encode(work).c_str() : "")
                             );
                     }
@@ -430,9 +430,9 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
                     {
                         // Dictionary link, or something
                         buf += formatted(u.interModuleLinkStart.c_str(),
-                            classes.c_str(),
-                            URL::encode(work).c_str(),
-                            URL::encode(ref).c_str()
+                            classes,
+                            URL::encode(work),
+                            URL::encode(ref)
                             );
                     }
                 }
@@ -642,7 +642,7 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
                 std::string lastText = u.lastSuspendSegment.c_str();
                 u.suspendTextPassThru = (--u.suspendLevel);
                 if (!lastText.empty()) {
-                    scratch = formatted("<span class=\"divineName\">%s</span>", lastText.c_str());
+                    scratch = formatted("<span class=\"divineName\">%s</span>", lastText);
                     outText(scratch.c_str(), buf, u);
                 }
             }
