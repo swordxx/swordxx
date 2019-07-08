@@ -439,35 +439,44 @@ inline bool hasPrefix(std::string const & str,
                       std::string const & prefix) noexcept
 { return hasPrefix(str.c_str(), prefix.c_str()); }
 
-template <typename T> struct OkFormattedType {
-    static constexpr bool const value =
-            std::is_arithmetic<T>::value || std::is_pointer<T>::value;
-};
+namespace Detail {
 
-template <typename ...> struct OkFormattedTypes;
-template <> struct OkFormattedTypes<>
-{ static constexpr bool const value = true; };
+template <typename T>
+auto formattedArg(T && v) ->
+        std::enable_if_t<
+            std::is_same<std::decay_t<T>, std::string>::value,
+            char const *
+        >
+{ return v.c_str(); }
 
-template <typename T> struct OkFormattedTypes<T>
-{ static constexpr bool const value = OkFormattedType<T>::value; };
+template <typename T>
+auto formattedArg(T && v) ->
+        std::enable_if_t<
+            std::is_arithmetic_v<std::decay_t<T>>
+            || std::is_pointer_v<std::decay_t<T>>,
+            T &&
+        >
+{ return std::forward<T>(v); }
 
-template <typename T, typename ... Ts> struct OkFormattedTypes<T, Ts...> {
-    static constexpr bool const value =
-            OkFormattedType<T>::value && OkFormattedTypes<Ts...>::value;
-};
+} // namespace Detail
 
 template <typename ... Args>
 inline std::string formatted(const char * const formatString,
                              Args && ... args)
 {
-    static_assert(OkFormattedTypes<std::decay_t<Args>...>::value,
-                  "Invalid arguments!");
     #ifdef __GNUC__
     #pragma GCC diagnostic push
     #pragma GCC diagnostic ignored "-Wformat-nonliteral"
     #endif
-    std::string buf(std::snprintf(nullptr, 0u, formatString, args...), char());
-    std::sprintf(&buf[0u], formatString, std::forward<Args>(args)...);
+    std::string buf;
+    buf.resize(std::snprintf(
+                   nullptr,
+                   0u,
+                   formatString,
+                   Detail::formattedArg(args)...));
+    std::sprintf(buf.data(),
+                 formatString,
+                 Detail::formattedArg(std::forward<Args>(args))...);
     #ifdef __GNUC__
     #pragma GCC diagnostic pop
     #endif
