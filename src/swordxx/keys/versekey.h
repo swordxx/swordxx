@@ -117,8 +117,8 @@ public:
     VerseKey(char const * ikey = nullptr);
 
     /** VerseKey Constructor - initializes instance of VerseKey
-    * with boundariess - see also LowerBound()
-    * and UpperBound()
+    * with boundariess - see also lowerBoundKey()
+    * and upperBoundKey()
     * @param min the lower boundary of the new    VerseKey
     * @param max the upper boundary of the new    VerseKey
     */
@@ -147,22 +147,22 @@ public:
     *
     * @param lb the new lower boundary for this VerseKey
     */
-    void setLowerBound(const VerseKey &lb);
+    void setLowerBoundKey(const VerseKey &lb);
 
     /** sets the upper boundary for this VerseKey
     * @param ub the new upper boundary for this VerseKey
     */
-    void setUpperBound(const VerseKey &ub);
+    void setUpperBoundKey(const VerseKey &ub);
 
     /** gets the lower boundary of this VerseKey
     * @return the lower boundary of this VerseKey
     */
-    VerseKey getLowerBound() const;
+    VerseKey lowerBoundKey() const;
 
     /** gets the upper boundary of this VerseKey
     * @return the upper boundary of this VerseKey
     */
-    VerseKey getUpperBound() const;
+    VerseKey upperBoundKey() const;
 
     /** clears the boundaries of this VerseKey
     */

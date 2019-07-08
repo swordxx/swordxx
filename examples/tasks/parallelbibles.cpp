@@ -93,17 +93,17 @@ void parallelDisplay(std::vector<std::shared_ptr<SWModule> > const & modules,
                 if(slave.isBoundSet()) {
                     if (o)
                         std::cout << "-";
-                    if(slave.getUpperBound().getBook() != slave.getLowerBound().getBook()) {
+                    if(slave.upperBoundKey().getBook() != slave.lowerBoundKey().getBook()) {
                         if (o)
-                            std::cout << slave.getUpperBound().getShortText();
+                            std::cout << slave.upperBoundKey().getShortText();
                     }
-                    else if(slave.getUpperBound().getChapter() != slave.getLowerBound().getChapter()) {
+                    else if(slave.upperBoundKey().getChapter() != slave.lowerBoundKey().getChapter()) {
                         if (o)
-                            std::cout << slave.getUpperBound().getChapter() << ":" << slave.getUpperBound().getVerse();
+                            std::cout << slave.upperBoundKey().getChapter() << ":" << slave.upperBoundKey().getVerse();
                     }
                     else {
                         if (o)
-                            std::cout << slave.getUpperBound().getVerse();
+                            std::cout << slave.upperBoundKey().getVerse();
                     }
                 }
 
@@ -113,7 +113,7 @@ void parallelDisplay(std::vector<std::shared_ptr<SWModule> > const & modules,
 
                 if(slave.isBoundSet()) {
                     VerseKey temp(slave);
-                    for(int i = slave.getLowerBound().getIndex(); i <= slave.getUpperBound().getIndex(); ++i) {
+                    for(int i = slave.lowerBoundKey().getIndex(); i <= slave.upperBoundKey().getIndex(); ++i) {
                         if (o && (i > 0))
                             std::cout << " ";
                         temp.setIndex(i);

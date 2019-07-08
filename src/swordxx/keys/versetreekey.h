@@ -68,8 +68,8 @@ public:
     VerseTreeKey(TreeKey const & treeKey, SWKey const & ikey);
 
     /** VerseKey Constructor - initializes instance of VerseKey
-    * with boundariess - see also LowerBound()
-    * and UpperBound()
+    * with boundariess - see also lowerBoundKey()
+    * and upperBoundKey()
     * @param treeKey a TreeKey which will form the basis of this VerseTreeKey
     * @param min the lower boundary of the new    VerseKey
     * @param max the upper boundary of the new    VerseKey

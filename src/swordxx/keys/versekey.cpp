@@ -134,9 +134,9 @@ void VerseKey::setFromOther(const VerseKey &ikey) {
             if (map_range > m_refSys->getBook(((m_testament>1)?m_BMAX[0]:0)+m_book-1)->getVerseMax(m_chapter))
                 ++map_range;
             m_verse = map_range;
-            setUpperBound(*this);
+            setUpperBoundKey(*this);
             m_verse = map_verse;
-            setLowerBound(*this);
+            setLowerBoundKey(*this);
         }
     }
 }
@@ -162,12 +162,12 @@ void VerseKey::positionFrom(const SWKey &ikey) {
     }
 
      // should we always perform bounds checks?  Tried but seems to cause infinite recursion
-    if (compare_(getUpperBound()) > 0) {
-        setFromOther(getUpperBound());
+    if (compare_(upperBoundKey()) > 0) {
+        setFromOther(upperBoundKey());
         m_error = KEYERR_OUTOFBOUNDS;
     }
-    if (compare_(getLowerBound()) < 0) {
-        setFromOther(getLowerBound());
+    if (compare_(lowerBoundKey()) < 0) {
+        setFromOther(lowerBoundKey());
         m_error = KEYERR_OUTOFBOUNDS;
     }
 }
@@ -188,8 +188,8 @@ void VerseKey::copyFrom(const VerseKey &ikey) {
     setLocale(ikey.getLocale());
     setVersificationSystem(ikey.getVersificationSystem().c_str());
     if (ikey.isBoundSet()) {
-        setLowerBound(ikey.getLowerBound());
-        setUpperBound(ikey.getUpperBound());
+        setLowerBoundKey(ikey.lowerBoundKey());
+        setUpperBoundKey(ikey.upperBoundKey());
     }
 }
 
@@ -225,12 +225,12 @@ VerseKey::VerseKey(const char *min, const char *max, const char *v11n) : SWKey()
     setVersificationSystem(v11n);
     ListKey tmpListKey = parseVerseList(min);
     if (tmpListKey.getCount())
-        setLowerBound(*static_cast<VerseKey *>(tmpListKey.getElement(0u)));
+        setLowerBoundKey(*static_cast<VerseKey *>(tmpListKey.getElement(0u)));
     tmpListKey = parseVerseList(max, min, true);
     if (tmpListKey.getCount()) {
         VerseKey * const newElement =
                 static_cast<VerseKey *>(tmpListKey.getElement(0u));
-        setUpperBound((newElement->isBoundSet())?newElement->getUpperBound():*newElement);
+        setUpperBoundKey((newElement->isBoundSet())?newElement->upperBoundKey():*newElement);
     }
     positionToTop();
 }
@@ -474,8 +474,8 @@ ListKey VerseKey::parseVerseList(const char *buf, const char *defaultKey, bool e
         curKey->setChapter(0);
         curKey->setBook(0);
         curKey->setTestament(0);
-        lastKey->setLowerBound(*curKey);
-        lastKey->setUpperBound(*curKey);
+        lastKey->setLowerBoundKey(*curKey);
+        lastKey->setUpperBoundKey(*curKey);
         ListKey internalListKey;
         internalListKey << *lastKey;
         return internalListKey;
@@ -487,8 +487,8 @@ ListKey VerseKey::parseVerseList(const char *buf, const char *defaultKey, bool e
         curKey->setChapter(0);
         curKey->setBook(0);
         curKey->setTestament(buf[12]-48);
-        lastKey->setLowerBound(*curKey);
-        lastKey->setUpperBound(*curKey);
+        lastKey->setLowerBoundKey(*curKey);
+        lastKey->setUpperBoundKey(*curKey);
         ListKey internalListKey;
         internalListKey << *lastKey;
         return internalListKey;
@@ -686,9 +686,9 @@ terminate_range:
                 decltype(buf-buf) q = 0;
                 while ((buf[q]) && (buf[q] == ' '))
                     ++q;
-                if ((buf[q] == '-') && (expandRange)) {    // if this is a dash save lowerBound and wait for upper
+                if ((buf[q] == '-') && (expandRange)) {    // if this is a dash save lowerBoundKey and wait for upper
                     buf+=q;
-                    lastKey->setLowerBound(*curKey);
+                    lastKey->setLowerBoundKey(*curKey);
                     lastKey->positionToTop();
                     tmpListKey << *lastKey;
                     ((VerseKey *)tmpListKey.getElement())->setAutoNormalize(isAutoNormalize());
@@ -698,12 +698,12 @@ terminate_range:
                 else {
                     if (!dash) {     // if last separator was not a dash just add
                         if (expandRange && partial) {
-                            lastKey->setLowerBound(*curKey);
+                            lastKey->setLowerBoundKey(*curKey);
                             if (partial > 1)
                                 curKey->positionToMaxChapter();
                             if (partial > 0)
                                 curKey->positionToMaxVerse();
-                            lastKey->setUpperBound(*curKey);
+                            lastKey->setUpperBoundKey(*curKey);
                             lastKey->positionToTop();
                             tmpListKey << *lastKey;
                             ((VerseKey *)tmpListKey.getElement())->setAutoNormalize(isAutoNormalize());
@@ -716,10 +716,10 @@ terminate_range:
                                 curKey->setSuffix(0);
                                 f = true;
                             }
-                            lastKey->setLowerBound(*curKey);
+                            lastKey->setLowerBoundKey(*curKey);
                             if (f && doubleF) curKey->positionToMaxVerse();
                             else if (f) curKey->increment();
-                            lastKey->setUpperBound(*curKey);
+                            lastKey->setUpperBoundKey(*curKey);
                             lastKey->positionToTop();
                             tmpListKey << *lastKey;
                             ((VerseKey *)tmpListKey.getElement())->setAutoNormalize(isAutoNormalize());
@@ -736,7 +736,7 @@ terminate_range:
                                 curKey->positionToMaxChapter();
                             if (partial > 0)
                                 curKey->positionToMaxVerse();
-                            newElement->setUpperBound(*curKey);
+                            newElement->setUpperBoundKey(*curKey);
                             *lastKey = *curKey;
                             newElement->positionToTop();
                             tmpListKey.getElement()->m_userData =
@@ -956,8 +956,8 @@ terminate_range:
             }
         }
 
-        if ((*buf == '-') && (expandRange)) {    // if this is a dash save lowerBound and wait for upper
-            lastKey->setLowerBound(*curKey);
+        if ((*buf == '-') && (expandRange)) {    // if this is a dash save lowerBoundKey and wait for upper
+            lastKey->setLowerBoundKey(*curKey);
             lastKey->positionToTop();
             tmpListKey << *lastKey;
             tmpListKey.getElement()->m_userData =
@@ -966,12 +966,12 @@ terminate_range:
         else {
             if (!dash) {     // if last separator was not a dash just add
                 if (expandRange && partial) {
-                    lastKey->setLowerBound(*curKey);
+                    lastKey->setLowerBoundKey(*curKey);
                     if (partial > 1)
                         curKey->positionToMaxChapter();
                     if (partial > 0)
                         curKey->positionToMaxVerse();
-                    lastKey->setUpperBound(*curKey);
+                    lastKey->setUpperBoundKey(*curKey);
                     lastKey->positionToTop();
                     tmpListKey << *lastKey;
                     tmpListKey.getElement()->m_userData =
@@ -983,10 +983,10 @@ terminate_range:
                         curKey->setSuffix(0);
                         f = true;
                     }
-                    lastKey->setLowerBound(*curKey);
+                    lastKey->setLowerBoundKey(*curKey);
                     if (f && doubleF) curKey->positionToMaxVerse();
                     else if (f) curKey->increment();
-                    lastKey->setUpperBound(*curKey);
+                    lastKey->setUpperBoundKey(*curKey);
                     lastKey->positionToTop();
                     tmpListKey << *lastKey;
                     tmpListKey.getElement()->m_userData =
@@ -1001,7 +1001,7 @@ terminate_range:
                         curKey->positionToMaxChapter();
                     if (partial > 0)
                         curKey->positionToMaxVerse();
-                    newElement->setUpperBound(*curKey);
+                    newElement->setUpperBoundKey(*curKey);
                     newElement->positionToTop();
                     tmpListKey.getElement()->m_userData =
                             static_cast<std::size_t>(buf - bufStart);
@@ -1018,11 +1018,7 @@ terminate_range:
 }
 
 
-/******************************************************************************
- * VerseKey::setLowerBound    - sets / gets the lower boundary for this key
- */
-
-void VerseKey::setLowerBound(const VerseKey &lb)
+void VerseKey::setLowerBoundKey(const VerseKey &lb)
 {
     initBounds();
 
@@ -1033,19 +1029,15 @@ void VerseKey::setLowerBound(const VerseKey &lb)
     m_lowerBoundComponents.verse  = lb.getVerse();
     m_lowerBoundComponents.suffix = lb.getSuffix();
 
-    // both this following check and UpperBound check force upperBound to
-    // change allowing LowerBound then UpperBound logic to always flow
+    // both this following check and upperBoundKey check force upperBoundKey to
+    // change allowing lowerBoundKey then upperBoundKey logic to always flow
     // and set values without restrictions, as expected
     if (m_upperBound < m_lowerBound) m_upperBound = m_lowerBound;
     m_boundSet = true;
 }
 
 
-/******************************************************************************
- * VerseKey::setUpperBound    - sets / gets the upper boundary for this key
- */
-
-void VerseKey::setUpperBound(const VerseKey &ub)
+void VerseKey::setUpperBoundKey(const VerseKey &ub)
 {
     initBounds();
 
@@ -1056,17 +1048,13 @@ void VerseKey::setUpperBound(const VerseKey &ub)
     m_upperBoundComponents.verse  = ub.getVerse();
     m_upperBoundComponents.suffix = ub.getSuffix();
 
-    // see setLowerBound comment, above
+    // see setLowerBoundKey comment, above
     if (m_upperBound < m_lowerBound) m_upperBound = m_lowerBound;
     m_boundSet = true;
 }
 
 
-/******************************************************************************
- * VerseKey::getLowerBound    - gets the lower boundary for this key
- */
-
-VerseKey VerseKey::getLowerBound() const
+VerseKey VerseKey::lowerBoundKey() const
 {
     initBounds();
     if (!isAutoNormalize()) {
@@ -1085,11 +1073,7 @@ VerseKey VerseKey::getLowerBound() const
 }
 
 
-/******************************************************************************
- * VerseKey::getUpperBound    - sets / gets the upper boundary for this key
- */
-
-VerseKey VerseKey::getUpperBound() const
+VerseKey VerseKey::upperBoundKey() const
 {
     initBounds();
     if (!isAutoNormalize()) {
@@ -1193,7 +1177,7 @@ std::string VerseKey::getBookAbbrev() const {
 }
 
 void VerseKey::positionToTop() {
-    VerseKey const lb(getLowerBound());
+    VerseKey const lb(lowerBoundKey());
     m_testament = (lb.getTestament() || m_intros) ? lb.getTestament() : 1;
     m_book      = (lb.getBook()      || m_intros) ? lb.getBook() : 1;
     m_chapter   = (lb.getChapter()   || m_intros) ? lb.getChapter() : 1;
@@ -1203,7 +1187,7 @@ void VerseKey::positionToTop() {
     popError();    // clear error from normalize
 }
 void VerseKey::positionToBottom() {
-    VerseKey const ub(getUpperBound());
+    VerseKey const ub(upperBoundKey());
     m_testament = (ub.getTestament() || m_intros) ? ub.getTestament() : 1;
     m_book      = (ub.getBook()      || m_intros) ? ub.getBook() : 1;
     m_chapter   = (ub.getChapter()   || m_intros) ? ub.getChapter() : 1;
@@ -1386,12 +1370,12 @@ void VerseKey::normalize(bool autocheck)
         }
 
             // should we always perform bounds checks?  Tried but seems to cause infinite recursion
-        if (compare_(getUpperBound()) > 0) {
-            positionFrom(getUpperBound());
+        if (compare_(upperBoundKey()) > 0) {
+            positionFrom(upperBoundKey());
             m_error = KEYERR_OUTOFBOUNDS;
         }
-        if (compare_(getLowerBound()) < 0) {
-            positionFrom(getLowerBound());
+        if (compare_(lowerBoundKey()) < 0) {
+            positionFrom(lowerBoundKey());
             m_error = KEYERR_OUTOFBOUNDS;
         }
     }
@@ -1736,7 +1720,7 @@ const char *VerseKey::getOSISRef() const {
 
 std::string VerseKey::getRangeText() const {
     if (isBoundSet() && m_lowerBound != m_upperBound) {
-        return getLowerBound().getText() + '-' + getUpperBound().getText();
+        return lowerBoundKey().getText() + '-' + upperBoundKey().getText();
     } else {
         return getText();
     }
@@ -1749,9 +1733,9 @@ std::string VerseKey::getRangeText() const {
 
 std::string VerseKey::getOSISRefRangeText() const {
     if (isBoundSet() && (m_lowerBound != m_upperBound)) {
-        std::string r(getLowerBound().getOSISRef());
+        std::string r(lowerBoundKey().getOSISRef());
         r.push_back('-');
-        r.append(getUpperBound().getOSISRef());
+        r.append(upperBoundKey().getOSISRef());
         return r;
     }
     return getOSISRef();

@@ -97,8 +97,8 @@ int main(int argc, char **argv) {
     if (VerseKey const * const element =
         dynamic_cast<VerseKey const *>(listkey.getElement(i)))
     {
-      mod.setKey(element->getLowerBound());
-      VerseKey finalkey = element->getUpperBound();
+      mod.setKey(element->lowerBoundKey());
+      VerseKey finalkey = element->upperBoundKey();
       std::cout << mod.getKeyText() << "-" << finalkey.getText() << std::endl;
       if (!havefirst) {
         havefirst = true;
