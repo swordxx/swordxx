@@ -38,155 +38,154 @@ Latin1UTF8::Latin1UTF8() {
 char Latin1UTF8::processText(std::string &text, const SWKey *key, const SWModule *module)
 {
     (void) module;
-    const unsigned char *from;
 
     if ((unsigned long)key < 2)    // hack, we're en(1)/de(0)ciphering
         return (char)-1;
 
-    std::string orig = text;
-    from = (const unsigned char *)orig.c_str();
+    std::string out;
 
-    for (text = ""; *from; from++) {
+    for (auto const * from = reinterpret_cast<unsigned char const *>(text.c_str()); *from; from++) {
       if (*from < 0x80) {
-        text += *from;
+        out += *from;
       }
       else if (*from < 0xc0) {
                 switch(*from) {
             case 0x80: // '€'
-                text += 0xe2; // 'â'
-                text += 0x82; // '‚'
-                text += 0xac; // '¬'
+                out += 0xe2; // 'â'
+                out += 0x82; // '‚'
+                out += 0xac; // '¬'
                 break;
             case 0x82: // '‚'
-                text += 0xe2; // 'â'
-                text += 0x80; // '€'
-                text += 0x9a; // 'š'
+                out += 0xe2; // 'â'
+                out += 0x80; // '€'
+                out += 0x9a; // 'š'
                 break;
             case 0x83: // 'ƒ'
-                text += 0xc6; // 'Æ'
-                text += 0x92; // '’'
+                out += 0xc6; // 'Æ'
+                out += 0x92; // '’'
                 break;
             case 0x84: // '„'
-                text += 0xe2; // 'â'
-                text += 0x80; // '€'
-                text += 0x9e; // 'ž'
+                out += 0xe2; // 'â'
+                out += 0x80; // '€'
+                out += 0x9e; // 'ž'
                 break;
             case 0x85: // '…'
-                text += 0xe2; // 'â'
-                text += 0x80; // '€'
-                text += 0xa6; // '¦'
+                out += 0xe2; // 'â'
+                out += 0x80; // '€'
+                out += 0xa6; // '¦'
                 break;
             case 0x86: // '†'
-                text += 0xe2; // 'â'
-                text += 0x80; // '€'
-                text += 0xa0; // ' '
+                out += 0xe2; // 'â'
+                out += 0x80; // '€'
+                out += 0xa0; // ' '
                 break;
             case 0x87: // '‡'
-                text += 0xe2; // 'â'
-                text += 0x80; // '€'
-                text += 0xa1; // '¡'
+                out += 0xe2; // 'â'
+                out += 0x80; // '€'
+                out += 0xa1; // '¡'
                 break;
             case 0x88: // 'ˆ'
-                text += 0xcb; // 'Ë'
-                text += 0x86; // '†'
+                out += 0xcb; // 'Ë'
+                out += 0x86; // '†'
                 break;
             case 0x89: // '‰'
-                text += 0xe2; // 'â'
-                text += 0x80; // '€'
-                text += 0xb0; // '°'
+                out += 0xe2; // 'â'
+                out += 0x80; // '€'
+                out += 0xb0; // '°'
                 break;
             case 0x8A: // 'Š'
-                text += 0xc5; // 'Å'
-                text += 0xa0; // ' '
+                out += 0xc5; // 'Å'
+                out += 0xa0; // ' '
                 break;
             case 0x8B: // '‹'
-                text += 0xe2; // 'â'
-                text += 0x80; // '€'
-                text += 0xb9; // '¹'
+                out += 0xe2; // 'â'
+                out += 0x80; // '€'
+                out += 0xb9; // '¹'
                 break;
             case 0x8C: // 'Œ'
-                text += 0xc5; // 'Å'
-                text += 0x92; // '’'
+                out += 0xc5; // 'Å'
+                out += 0x92; // '’'
                 break;
             case 0x8E: // 'Ž'
-                text += 0xc5; // 'Å'
-                text += 0xbd; // '½'
+                out += 0xc5; // 'Å'
+                out += 0xbd; // '½'
                 break;
             case 0x91: // '‘'
-                text += 0xe2; // 'â'
-                text += 0x80; // '€'
-                text += 0x98; // '˜'
+                out += 0xe2; // 'â'
+                out += 0x80; // '€'
+                out += 0x98; // '˜'
                 break;
             case 0x92: // '’'
-                text += 0xe2; // 'â'
-                text += 0x80; // '€'
-                text += 0x99; // '™'
+                out += 0xe2; // 'â'
+                out += 0x80; // '€'
+                out += 0x99; // '™'
                 break;
             case 0x93: // '“'
-                text += 0xe2; // 'â'
-                text += 0x80; // '€'
-                text += 0x9c; // 'œ'
+                out += 0xe2; // 'â'
+                out += 0x80; // '€'
+                out += 0x9c; // 'œ'
                 break;
             case 0x94: // '”'
-                text += 0xe2; // 'â'
-                text += 0x80; // '€'
-                text += 0x9d; // ''
+                out += 0xe2; // 'â'
+                out += 0x80; // '€'
+                out += 0x9d; // ''
                 break;
             case 0x95: // '•'
-                text += 0xe2; // 'â'
-                text += 0x80; // '€'
-                text += 0xa2; // '¢'
+                out += 0xe2; // 'â'
+                out += 0x80; // '€'
+                out += 0xa2; // '¢'
                 break;
             case 0x96: // '–'
-                text += 0xe2; // 'â'
-                text += 0x80; // '€'
-                text += 0x93; // '“'
+                out += 0xe2; // 'â'
+                out += 0x80; // '€'
+                out += 0x93; // '“'
                 break;
             case 0x97: // '—'
-                text += 0xe2; // 'â'
-                text += 0x80; // '€'
-                text += 0x94; // '”'
+                out += 0xe2; // 'â'
+                out += 0x80; // '€'
+                out += 0x94; // '”'
                 break;
             case 0x98: // '˜'
-                text += 0xcb; // 'Ë'
-                text += 0x9c; // 'œ'
+                out += 0xcb; // 'Ë'
+                out += 0x9c; // 'œ'
                 break;
             case 0x99: // '™'
-                text += 0xe2; // 'â'
-                text += 0x84; // '„'
-                text += 0xa2; // '¢'
+                out += 0xe2; // 'â'
+                out += 0x84; // '„'
+                out += 0xa2; // '¢'
                 break;
             case 0x9A: // 'š'
-                text += 0xc5; // 'Å'
-                text += 0xa1; // '¡'
+                out += 0xc5; // 'Å'
+                out += 0xa1; // '¡'
                 break;
             case 0x9B: // '›'
-                text += 0xe2; // 'â'
-                text += 0x80; // '€'
-                text += 0xba; // 'º'
+                out += 0xe2; // 'â'
+                out += 0x80; // '€'
+                out += 0xba; // 'º'
                 break;
             case 0x9C: // 'œ'
-                text += 0xc5; // 'Å'
-                text += 0x93; // '“'
+                out += 0xc5; // 'Å'
+                out += 0x93; // '“'
                 break;
             case 0x9E: // 'ž'
-                text += 0xc5; // 'Å'
-                text += 0xbe; // '¾'
+                out += 0xc5; // 'Å'
+                out += 0xbe; // '¾'
                 break;
             case 0x9F: // 'Ÿ'
-                text += 0xc5; // 'Å'
-                text += 0xb8; // '¸'
+                out += 0xc5; // 'Å'
+                out += 0xb8; // '¸'
                 break;
                 default:
-                        text += 0xC2;
-                        text += *from;
+                        out += 0xC2;
+                        out += *from;
                 }
       }
       else {
-        text += 0xC3;
-        text += (*from - 0x40);
+        out += 0xC3;
+        out += (*from - 0x40);
       }
     }
+    text = std::move(out);
     return 0;
 }
 
