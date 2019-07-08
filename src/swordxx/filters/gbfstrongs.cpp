@@ -59,19 +59,17 @@ char GBFStrongs::processText(std::string &text, const SWKey *key, const SWModule
     unsigned int textStart = 0, textEnd = 0;
     bool newText = false;
     std::string tmp;
-    const char *from;
 
-    std::string orig = text;
-    from = orig.c_str();
+    std::string out;
 
-    for (text = ""; *from; from++) {
+    for (auto const * from = text.c_str(); *from; from++) {
         if (*from == '<') {
             intoken = true;
             tokpos = 0;
             token[0] = 0;
             token[1] = 0;
             token[2] = 0;
-            textEnd = text.size();
+            textEnd = out.size();
             continue;
         }
         if (*from == '>') {	// process tokens
@@ -89,7 +87,7 @@ char GBFStrongs::processText(std::string &text, const SWKey *key, const SWModule
                         module->getEntryAttributes()["Word"][wordstr]["Lemma"] = val;
                         module->getEntryAttributes()["Word"][wordstr]["LemmaClass"] = "strong";
                         tmp = "";
-                        tmp.append(text.c_str()+textStart, (int)(textEnd - textStart));
+                        tmp.append(out.c_str()+textStart, (int)(textEnd - textStart));
                         module->getEntryAttributes()["Word"][wordstr]["Text"] = tmp;
                         newText = true;
                     }
@@ -104,9 +102,9 @@ char GBFStrongs::processText(std::string &text, const SWKey *key, const SWModule
                 if (!option) {
                     if ((from[1] == ' ') || (from[1] == ',') || (from[1] == ';') || (from[1] == '.') || (from[1] == '?') || (from[1] == '!') || (from[1] == ')') || (from[1] == '\'') || (from[1] == '\"')) {
                         if (lastspace)
-                            text.pop_back();
+                            out.pop_back();
                     }
-                    if (newText) {textStart = text.size(); newText = false; }
+                    if (newText) {textStart = out.size(); newText = false; }
                     continue;
                 }
             }
@@ -123,10 +121,10 @@ char GBFStrongs::processText(std::string &text, const SWKey *key, const SWModule
                 }
             }
             // if not a strongs token, keep token in text
-            text += '<';
-            text += token;
-            text += '>';
-            if (newText) {textStart = text.size(); newText = false; }
+            out += '<';
+            out += token;
+            out += '>';
+            if (newText) {textStart = out.size(); newText = false; }
             continue;
         }
         if (intoken) {
@@ -137,10 +135,11 @@ char GBFStrongs::processText(std::string &text, const SWKey *key, const SWModule
             }
         }
         else {
-            text += *from;
+            out += *from;
             lastspace = (*from == ' ');
         }
     }
+    text = std::move(out);
     return 0;
 }
 
