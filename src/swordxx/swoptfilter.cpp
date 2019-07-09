@@ -41,9 +41,7 @@ SWOptionFilter::SWOptionFilter(std::string oName,
     , optTip(std::move(oTip))
     , optValues(std::move(oValues))
     , selectedValueIndex(0u)
-{
-    isBooleanVal = optValues.size() == 2 && (optValues.front() == "On" || optValues.front() == "Off");
-}
+{}
 
 
 SWOptionFilter::~SWOptionFilter() {
