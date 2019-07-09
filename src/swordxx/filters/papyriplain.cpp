@@ -29,8 +29,12 @@
 namespace swordxx {
 
 
-PapyriPlain::PapyriPlain() {
-}
+PapyriPlain::PapyriPlain()
+    : SWOptionFilter(
+          "Strip Papyri tags",
+          "Strips all Papyri tags",
+          {"On"})
+{}
 
 
 char PapyriPlain::processText (std::string &text, const SWKey *key, const SWModule *module)
