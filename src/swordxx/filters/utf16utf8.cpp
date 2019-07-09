@@ -36,25 +36,21 @@ char UTF16UTF8::processText(std::string &text, const SWKey *key, const SWModule 
 {
   (void) key;
   (void) module;
-  unsigned short *from;
 
   int len;
   unsigned long uchar;
   unsigned short schar;
   len = 0;
-  from = (unsigned short*) text.c_str();
-  while (*from) {
+  for (auto const * from = reinterpret_cast<unsigned short const *>(text.c_str()); *from; from++) {
         len += 2;
-        from++;
   }
 
-    std::string orig = text;
-    from = (unsigned short*)orig.c_str();
+    std::string out;
 
 
   // -------------------------------
 
-  for (text = ""; *from; from++) {
+  for (auto const * from = reinterpret_cast<unsigned short const *>(text.c_str()); *from; from++) {
     uchar = 0;
 
     if (*from < 0xD800 || *from > 0xDFFF) {
@@ -80,25 +76,25 @@ char UTF16UTF8::processText(std::string &text, const SWKey *key, const SWModule 
     }
 
     if (uchar < 0x80) {
-      text += uchar;
+      out += uchar;
     }
     else if (uchar < 0x800) {
-      text += 0xc0 | (uchar >> 6);
-      text += 0x80 | (uchar & 0x3f);
+      out += 0xc0 | (uchar >> 6);
+      out += 0x80 | (uchar & 0x3f);
     }
     else if (uchar < 0x10000) {
-      text += 0xe0 | (uchar >> 12);
-      text += 0x80 | ((uchar >> 6) & 0x3f);
-      text += 0x80 | (uchar & 0x3f);
+      out += 0xe0 | (uchar >> 12);
+      out += 0x80 | ((uchar >> 6) & 0x3f);
+      out += 0x80 | (uchar & 0x3f);
     }
     else if (uchar < 0x200000) {
-      text += 0xF0 | (uchar >> 18);
-      text += 0x80 | ((uchar >> 12) & 0x3F);
-      text += 0x80 | ((uchar >> 6) & 0x3F);
-      text += 0x80 | (uchar & 0x3F);
+      out += 0xF0 | (uchar >> 18);
+      out += 0x80 | ((uchar >> 12) & 0x3F);
+      out += 0x80 | ((uchar >> 6) & 0x3F);
+      out += 0x80 | (uchar & 0x3F);
     }
   }
-
+  text = std::move(out);
   return 0;
 }
 
