@@ -17,14 +17,15 @@
 
 #include <list>
 #include <string>
+#include <utility>
 
 
 namespace swordxx {
 
 namespace { std::list<std::string> const onOffValues({"On", "Off"}); }
 
-OnOffOptionFilter::OnOffOptionFilter(char const * name, char const * tip)
-    : SWOptionFilter(name, tip, {"On", "Off"})
+OnOffOptionFilter::OnOffOptionFilter(std::string name, std::string tip)
+    : SWOptionFilter(std::move(name), std::move(tip), {"On", "Off"})
 {}
 
 OnOffOptionFilter::~OnOffOptionFilter() noexcept = default;

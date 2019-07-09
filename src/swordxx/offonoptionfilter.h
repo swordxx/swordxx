@@ -25,7 +25,7 @@ class OffOnOptionFilter: public SWOptionFilter {
 
 public: /* Methods: */
 
-    OffOnOptionFilter(char const * name, char const * tip);
+    OffOnOptionFilter(std::string name, std::string tip);
     ~OffOnOptionFilter() noexcept;
 
     bool isOptionOn() const noexcept
