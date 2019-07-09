@@ -29,6 +29,7 @@
 #include <cstring>
 #include <limits>
 #include <string>
+#include <string_view>
 #include <type_traits>
 #include <utility>
 #include "defs.h"
@@ -485,8 +486,7 @@ inline std::pair<bool, std::size_t> getPrefixSize(std::string const & buf,
 
 std::string stripPrefix(std::string & str, char const separator);
 
-bool caseInsensitiveEquals(std::string const & a,
-                           std::string const & b) noexcept;
+bool caseInsensitiveEquals(std::string_view a, std::string_view b) noexcept;
 
 SWDLLEXPORT char const * stristr(std::string const & haystack,
                                  std::string const & needle) noexcept;

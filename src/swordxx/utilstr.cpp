@@ -119,9 +119,7 @@ std::string stripPrefix(std::string & str, char const separator) {
     return r;
 }
 
-bool caseInsensitiveEquals(std::string const & a,
-                           std::string const & b) noexcept
-{
+bool caseInsensitiveEquals(std::string_view a, std::string_view b) noexcept {
     if (a.size() != b.size())
         return false;
     return std::equal(a.begin(), a.end(), b.begin(),
