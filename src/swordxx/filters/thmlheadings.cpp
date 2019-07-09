@@ -61,14 +61,13 @@ char ThMLHeadings::processText(std::string &text, const SWKey *key, const SWModu
     char buf[254];
     XMLTag startTag;
 
-    std::string orig = text;
-    const char *from = orig.c_str();
+    std::string out;
 
     XMLTag tag;
 
     using namespace std::literals::string_view_literals;
 
-    for (text = ""; *from; ++from) {
+    for (auto const * from = text.c_str(); *from; ++from) {
         if (*from == '<') {
             intoken = true;
             token = "";
@@ -100,7 +99,7 @@ char ThMLHeadings::processText(std::string &text, const SWKey *key, const SWModu
                             sprintf(buf, "%i", headerNum++);
                             module->getEntryAttributes()["Heading"]["Interverse"][buf] = heading;
                             if (option) {    // we want the tag in the text
-                                text.append(header);
+                                out.append(header);
                             }
                         }
 
@@ -140,9 +139,9 @@ char ThMLHeadings::processText(std::string &text, const SWKey *key, const SWModu
                         hide = true;
                         header = "";
                         if (option) {    // we want the tag in the text
-                            text.append('<');
-                            text.append(token);
-                            text.append('>');
+                            out.append('<');
+                            out.append(token);
+                            out.append('>');
                         }
                         continue;
                     }
@@ -168,9 +167,9 @@ char ThMLHeadings::processText(std::string &text, const SWKey *key, const SWModu
             } else {
                 // if not a heading token, keep token in text
                 if (!hide) {
-                    text.push_back('<');
-                    text.append(token);
-                    text.push_back('>');
+                    out.push_back('<');
+                    out.append(token);
+                    out.push_back('>');
                 }
             }
             continue;
@@ -179,10 +178,11 @@ char ThMLHeadings::processText(std::string &text, const SWKey *key, const SWModu
             token.push_back(*from);
         }
         else if (!hide) { //copy text which is not inside a token
-            text.push_back(*from);
+            out.push_back(*from);
         }
         else header.push_back(*from);
     }
+    text = std::move(out);
     return 0;
 }
 
