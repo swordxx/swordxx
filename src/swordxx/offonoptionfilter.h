@@ -29,6 +29,12 @@ public: /* Methods: */
     OffOnOptionFilter(char const * name, char const * tip);
     ~OffOnOptionFilter() noexcept;
 
+    bool isOptionOn() const noexcept
+    { return getSelectedOptionValueIndex() == 1u; }
+
+    bool isOptionOff() const noexcept
+    { return getSelectedOptionValueIndex() == 0u; }
+
 };
 
 } /* namespace swordxx */
