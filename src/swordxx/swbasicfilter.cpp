@@ -152,7 +152,6 @@ char SWBasicFilter::processText(std::string & text,
                                 SWKey const * key,
                                 SWModule const * module)
 {
-    char const * from;
     char token[4096u];
     std::size_t tokpos = 0u;
     bool intoken = false;
@@ -164,19 +163,22 @@ char SWBasicFilter::processText(std::string & text,
     std::string lastTextNode;
     auto const userData(createUserData(module, key));
 
-    std::string orig = text;
-    from = &orig[0u];
-    text = "";
+    std::string const & orig = text;
+    auto from = orig.c_str();
+    std::string out;
 
     // Check if processStage handled it all:
     if ((m_processStages & INITIALIZE)
-        && processStage(INITIALIZE, text, from, userData.get()))
+        && processStage(INITIALIZE, out, from, userData.get()))
+    {
+        text = std::move(out);
         return 0;
+    }
 
     for (;*from; from++) {
         // If processStage handled this char:
         if ((m_processStages & PRECHAR)
-            && processStage(PRECHAR, text, from, userData.get()))
+            && processStage(PRECHAR, out, from, userData.get()))
             continue;
 
         if (*from == m_tokenStart[tokenStartPos]) {
@@ -213,9 +215,9 @@ char SWBasicFilter::processText(std::string & text,
 
                     // If text through is disabled no tokens should pass, too:
                     if (!userData->suspendTextPassThru
-                        && !handleEscapeString(text, token, userData.get())
+                        && !handleEscapeString(out, token, userData.get())
                         && m_passThruUnknownEsc)
-                        appendEscapeString(text, token);
+                        appendEscapeString(out, token);
                     escEndPos = escStartPos = tokenEndPos = tokenStartPos = 0;
                     lastTextNode = "";
                     continue;
@@ -228,12 +230,12 @@ char SWBasicFilter::processText(std::string & text,
                 if (tokenEndPos == (m_tokenEnd.size() - 1u)) {
                     intoken = false;
                     userData->lastTextNode = lastTextNode;
-                    if (!handleToken(text, token, userData.get())
+                    if (!handleToken(out, token, userData.get())
                         && m_passThruUnknownToken)
                     {
-                        text += m_tokenStart;
-                        text += token;
-                        text += m_tokenEnd;
+                        out += m_tokenStart;
+                        out += token;
+                        out += m_tokenEnd;
                     }
                     escEndPos = escStartPos = tokenEndPos = tokenStartPos = 0;
                     lastTextNode = "";
@@ -253,7 +255,7 @@ char SWBasicFilter::processText(std::string & text,
         else {
              if ((!userData->supressAdjacentWhitespace) || (*from != ' ')) {
                 if (!userData->suspendTextPassThru)
-                    text.push_back(*from);
+                    out.push_back(*from);
                 else    userData->lastSuspendSegment.push_back(*from);
                 lastTextNode.push_back(*from);
              }
@@ -261,12 +263,14 @@ char SWBasicFilter::processText(std::string & text,
         }
 
         if (m_processStages & POSTCHAR)
-            processStage(POSTCHAR, text, from, userData.get());
+            processStage(POSTCHAR, out, from, userData.get());
 
     }
 
     if (m_processStages & FINALIZE)
-        processStage(FINALIZE, text, from, userData.get());
+        processStage(FINALIZE, out, from, userData.get());
+
+    text = std::move(out);
     return 0;
 }
 
