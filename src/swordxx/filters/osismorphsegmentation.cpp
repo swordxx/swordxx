@@ -53,8 +53,7 @@ char OSISMorphSegmentation::processText(std::string &text, const SWKey * /*key*/
     bool intoken    = false;
     bool hide       = false;
 
-    std::string orig( text );
-    const char *from = orig.c_str();
+    std::string out;
 
     XMLTag tag;
     std::string tagText = "";
@@ -62,7 +61,7 @@ char OSISMorphSegmentation::processText(std::string &text, const SWKey * /*key*/
     bool inMorpheme = false;
     std::string buf;
 
-    for (text = ""; *from; ++from) {
+    for (auto const * from = text.c_str(); *from; ++from) {
         if (*from == '<') {
             intoken = true;
             token = "";
@@ -99,9 +98,9 @@ char OSISMorphSegmentation::processText(std::string &text, const SWKey * /*key*/
                 }
             } //end of seg tag handling
 
-            text.push_back('<');
-            text.append(token);
-            text.push_back('>');
+            out.push_back('<');
+            out.append(token);
+            out.push_back('>');
 
             if (inMorpheme) {
                 tagText.push_back('<');
@@ -118,12 +117,13 @@ char OSISMorphSegmentation::processText(std::string &text, const SWKey * /*key*/
             token.push_back(*from);
         }
         else { //copy text which is not inside of a tag
-            text.push_back(*from);
+            out.push_back(*from);
             if (inMorpheme) {
                 tagText.push_back(*from);
             }
         }
     }
+    text = std::move(out);
     return 0;
 }
 
