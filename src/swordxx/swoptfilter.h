@@ -89,7 +89,6 @@ private: /* Fields: */
     std::string optTip;
     const std::vector<std::string> optValues;
     std::size_t selectedValueIndex;
-    bool option;
     bool isBooleanVal;
 
 };

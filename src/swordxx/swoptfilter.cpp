@@ -42,8 +42,6 @@ SWOptionFilter::SWOptionFilter(std::string oName,
     , optValues(std::move(oValues))
     , selectedValueIndex(0u)
 {
-    if (!optValues.empty())
-        setOptionValue(optValues.front().c_str());
     isBooleanVal = optValues.size() == 2 && (optValues.front() == "On" || optValues.front() == "Off");
 }
 
@@ -56,7 +54,6 @@ void SWOptionFilter::setOptionValue(std::string_view value) {
     for (std::size_t i = 0u; i < optValues.size(); ++i) {
         if (caseInsensitiveEquals(optValues[i], value)) {
             selectedValueIndex = i;
-            option = caseInsensitiveEquals(value.substr(0u, 2u), "On"); // convenience for boolean filters
             break;
         }
     }
