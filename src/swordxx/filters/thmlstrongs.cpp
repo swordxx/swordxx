@@ -51,7 +51,6 @@ char ThMLStrongs::processText(std::string &text, const SWKey *key, const SWModul
 
     (void) key;
     char token[2048]; // cheese.  Fix.
-    const char *from;
     int tokpos = 0;
     bool intoken = false;
     bool lastspace = false;
@@ -64,17 +63,16 @@ char ThMLStrongs::processText(std::string &text, const SWKey *key, const SWModul
     std::string tmp;
     bool newText = false;
 
-    std::string orig = text;
-    from = orig.c_str();
+    std::string out;
 
-    for (text = ""; *from; from++) {
+    for (auto const * from = text.c_str(); *from; from++) {
         if (*from == '<') {
             intoken = true;
             tokpos = 0;
             token[0] = 0;
             token[1] = 0;
             token[2] = 0;
-            textEnd = text.length();
+            textEnd = out.size();
             continue;
         }
         if (*from == '>') {    // process tokens
@@ -92,7 +90,7 @@ char ThMLStrongs::processText(std::string &text, const SWKey *key, const SWModul
                         module->getEntryAttributes()["Word"][wordstr]["Lemma"] = val;
                         module->getEntryAttributes()["Word"][wordstr]["LemmaClass"] = "strong";
                         tmp = "";
-                        tmp.append(text.c_str()+textStart, (int)(textEnd - textStart));
+                        tmp.append(out.c_str()+textStart, (int)(textEnd - textStart));
                         module->getEntryAttributes()["Word"][wordstr]["Text"] = tmp;
                         newText = true;
                     }
@@ -111,7 +109,7 @@ char ThMLStrongs::processText(std::string &text, const SWKey *key, const SWModul
                 if (!option) {	// if we don't want strongs
                     if ((from[1] == ' ') || (from[1] == ',') || (from[1] == ';') || (from[1] == '.') || (from[1] == '?') || (from[1] == '!') || (from[1] == ')') || (from[1] == '\'') || (from[1] == '\"')) {
                         if (lastspace)
-                            text.pop_back();
+                            out.pop_back();
                     }
                     if (newText) {textStart = text.length(); newText = false; }
                     continue;
@@ -144,10 +142,10 @@ char ThMLStrongs::processText(std::string &text, const SWKey *key, const SWModul
                 }
             }
             // if not a strongs token, keep token in text
-            text += '<';
-            text += token;
-            text += '>';
-            if (newText) {textStart = text.length(); newText = false; }
+            out += '<';
+            out += token;
+            out += '>';
+            if (newText) {textStart = out.size(); newText = false; }
             continue;
         }
         if (intoken) {
@@ -158,10 +156,11 @@ char ThMLStrongs::processText(std::string &text, const SWKey *key, const SWModul
             }
         }
         else {
-            text += *from;
+            out += *from;
             lastspace = (*from == ' ');
         }
     }
+    text = std::move(out);
     return 0;
 }
 
