@@ -56,12 +56,11 @@ char OSISScripref::processText(std::string &text, const SWKey *key, const SWModu
     std::string tagText;
     XMLTag startTag;
 
-    std::string orig = text;
-    const char *from = orig.c_str();
+    std::string out;
 
     XMLTag tag;
 
-    for (text = ""; *from; ++from) {
+    for (auto const * from = text.c_str(); *from; ++from) {
         if (*from == '<') {
             intoken = true;
             token = "";
@@ -79,9 +78,9 @@ char OSISScripref::processText(std::string &text, const SWKey *key, const SWModu
                         hide = true;
                         tagText = "";
                         if (option) {    // we want the tag in the text
-                            text.push_back('<');
-                            text.append(token);
-                            text.push_back('>');
+                            out.push_back('<');
+                            out.append(token);
+                            out.push_back('>');
                         }
                         continue;
                     }
@@ -89,7 +88,7 @@ char OSISScripref::processText(std::string &text, const SWKey *key, const SWModu
                 if (hide && tag.isEndTag()) {
                     hide = false;
                     if (option) {    // we want the tag in the text
-                        text.append(tagText);  // end tag gets added further down
+                        out.append(tagText);  // end tag gets added further down
                     }
                     else    continue;    // don't let the end tag get added to the text
                 }
@@ -97,9 +96,9 @@ char OSISScripref::processText(std::string &text, const SWKey *key, const SWModu
 
             // if not a heading token, keep token in text
             if (!hide) {
-                text.push_back('<');
-                text.append(token);
-                text.push_back('>');
+                out.push_back('<');
+                out.append(token);
+                out.push_back('>');
             }
             else {
                 tagText.push_back('<');
@@ -112,10 +111,11 @@ char OSISScripref::processText(std::string &text, const SWKey *key, const SWModu
             token.push_back(*from);
         }
         else if (!hide) { //copy text which is not inside a token
-            text.push_back(*from);
+            out.push_back(*from);
         }
         else tagText.push_back(*from);
     }
+    text = std::move(out);
     return 0;
 }
 
