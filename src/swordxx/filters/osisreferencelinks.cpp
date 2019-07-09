@@ -31,13 +31,10 @@
 namespace swordxx {
 
 OSISReferenceLinks::OSISReferenceLinks(const char *optionName, const char *optionTip, const char *type, const char *subType, const char *defaultValue)
-        : m_optionName(optionName)
-        , m_optionTip(optionTip)
-        , m_type(type)
-        , m_subType(subType)
+    : OnOffOptionFilter(optionName, optionTip)
+    , m_type(type)
+    , m_subType(subType)
 {
-    optName   = m_optionName.c_str();
-    optTip    = m_optionTip.c_str();
     setOptionValue(defaultValue);
 }
 
@@ -51,7 +48,8 @@ char OSISReferenceLinks::processText(std::string &text, const SWKey *key, const 
 
     (void) key;
     (void) module;
-    if (option) return 0;
+    if (isOptionOn())
+        return 0;
 
     std::string token;
     bool intoken        = false;

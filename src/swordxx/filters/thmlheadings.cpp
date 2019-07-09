@@ -81,7 +81,7 @@ char ThMLHeadings::processText(std::string &text, const SWKey *key, const SWModu
                 withinDiv =  (!strnicmp(token.c_str(), "div", 3));
                 tag = token.c_str();
                 if (hide && tag.isEndTag()) {
-                    if (module->isProcessEntryAttributes() && (option || (!preverse))) {
+                    if (module->isProcessEntryAttributes() && (isOptionOn() || (!preverse))) {
                         std::string heading;
                         std::string cls = startTag.attribute("class");
                         if (!startsWith(cls, "fromEntryAttributes"sv)) {
@@ -98,7 +98,7 @@ char ThMLHeadings::processText(std::string &text, const SWKey *key, const SWModu
                         else {
                             sprintf(buf, "%i", headerNum++);
                             module->getEntryAttributes()["Heading"]["Interverse"][buf] = heading;
-                            if (option) {    // we want the tag in the text
+                            if (isOptionOn()) {    // we want the tag in the text
                                 out.append(header);
                             }
                         }
@@ -109,7 +109,7 @@ char ThMLHeadings::processText(std::string &text, const SWKey *key, const SWModu
                     }
 
                     hide = false;
-                    if (!option || preverse) {    // we don't want the tag in the text anymore
+                    if (isOptionOff() || preverse) {    // we don't want the tag in the text anymore
                         preverse = false;
                         continue;
                     }

@@ -46,7 +46,7 @@ GBFHeadings::~GBFHeadings() {
 char GBFHeadings::processText(std::string &text, const SWKey *key, const SWModule *module) {
     (void) key;
     (void) module;
-    if (!option) {    // if we don't want headings
+    if (isOptionOff()) {    // if we don't want headings
         std::string lastToken;
         bool intoken = false;
         bool hide = false;

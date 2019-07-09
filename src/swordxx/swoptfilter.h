@@ -34,14 +34,8 @@ namespace swordxx {
   /** Base class for all option filters.
   */
 class SWDLLEXPORT SWOptionFilter : public virtual SWFilter {
-protected:
-    std::string optName;
-    std::string optTip;
-    const std::vector<std::string> optValues;
-    std::size_t selectedValueIndex;
-    bool option;
-    bool isBooleanVal;
-public:
+
+public: /* Methods: */
 
     SWOptionFilter() noexcept;
     SWOptionFilter(std::string oName,
@@ -88,6 +82,15 @@ public:
      * @param ival the new option value
      */
     void setOptionValue(std::string_view value);
+
+private: /* Fields: */
+
+    std::string optName;
+    std::string optTip;
+    const std::vector<std::string> optValues;
+    std::size_t selectedValueIndex;
+    bool option;
+    bool isBooleanVal;
 
 };
 

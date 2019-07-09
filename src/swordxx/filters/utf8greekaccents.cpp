@@ -348,7 +348,7 @@ char UTF8GreekAccents::processText(std::string &text, const SWKey *key, const SW
     (void) module;
     static Converters const converters;
 
-    if (option)
+    if (isOptionOn())
         return 0; // we don't want greek accents
 
     if (!text.empty()) {

@@ -111,7 +111,7 @@ char ThMLScripref::processText(std::string &text, const SWKey *key, const SWModu
                         module->getEntryAttributes()["Footnote"][buf]["refList"] = refs.c_str();
                     }
                     hide = false;
-                    if (option) {    // we want the tag in the text
+                    if (isOptionOn()) {    // we want the tag in the text
                         out += startTag.toString();
                         out.append(tagText);
                     }

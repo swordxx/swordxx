@@ -51,7 +51,7 @@ char OSISEnum::processText(std::string &text, const SWKey *key, const SWModule *
 
     using namespace std::literals::string_view_literals;
 
-    if (!option) {
+    if (isOptionOff()) {
         std::string result;
         std::string token;
         bool inToken = false;

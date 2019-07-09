@@ -49,7 +49,7 @@ OSISRedLetterWords::~OSISRedLetterWords() {
 char OSISRedLetterWords::processText(std::string &text, const SWKey *key, const SWModule *module) {
     (void) key;
     (void) module;
-    if (option) //leave in the red lettered words
+    if (isOptionOn()) //leave in the red lettered words
         return 0;
 
     std::string token;

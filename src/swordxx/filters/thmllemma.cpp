@@ -50,7 +50,7 @@ char ThMLLemma::processText(std::string &text, const SWKey *key, const SWModule 
 
     (void) key;
     (void) module;
-    if (!option) {    // if we don't want lemmas
+    if (isOptionOff()) {    // if we don't want lemmas
         bool intoken = false;
 
         std::string token;

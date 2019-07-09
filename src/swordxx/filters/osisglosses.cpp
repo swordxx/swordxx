@@ -54,7 +54,7 @@ char OSISGlosses::processText(std::string &text, const SWKey *key, const SWModul
 
     using namespace std::literals::string_view_literals;
 
-    if (!option) {
+    if (isOptionOff()) {
         std::string out;
         for (auto const * from = text.c_str(); *from; ++from) {
             if (*from == '<') {

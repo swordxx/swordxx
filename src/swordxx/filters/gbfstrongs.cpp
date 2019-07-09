@@ -99,7 +99,7 @@ char GBFStrongs::processText(std::string &text, const SWKey *key, const SWModule
                     }
                 }
 
-                if (!option) {
+                if (isOptionOff()) {
                     if ((from[1] == ' ') || (from[1] == ',') || (from[1] == ';') || (from[1] == '.') || (from[1] == '?') || (from[1] == '!') || (from[1] == ')') || (from[1] == '\'') || (from[1] == '\"')) {
                         if (lastspace)
                             out.pop_back();

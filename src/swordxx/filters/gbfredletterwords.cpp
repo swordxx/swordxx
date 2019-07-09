@@ -50,7 +50,7 @@ char GBFRedLetterWords::processText(std::string &text, const SWKey *key, const S
 /** This function removes the red letter words in Bible like the WEB
 * The words are marked by <FR> as start and <Fr> as end tag.
 */
-    if (!option) {	// if we don't want footnotes
+    if (isOptionOff()) {	// if we don't want footnotes
         char token[4096]; // cheese.  Fix.
         int tokpos = 0;
         bool intoken = false;

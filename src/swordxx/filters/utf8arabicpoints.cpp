@@ -120,7 +120,7 @@ char UTF8ArabicPoints::processText(std::string &text, const SWKey *, const SWMod
     // A non-zero/true option setting means that setOptionValue("On")
     // was called which apparently means that Arabic Vowel Marks are ENABLED,
     // so the filter's actions are DISABLED.
-    if (option)
+    if (isOptionOn())
         return 0;
 
     // Eliminate Arabic vowel marks from the text.

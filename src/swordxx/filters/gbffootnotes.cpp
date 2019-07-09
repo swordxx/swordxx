@@ -89,7 +89,7 @@ char GBFFootnotes::processText (std::string &text, const SWKey *key, const SWMod
                     //tag = token;
 
                     if((tagText.length() == 1) || (module->getName() == "IGNT")) {
-                        if (option) { // for ASV marks text in verse then put explanation at end of verse
+                        if (isOptionOn()) { // for ASV marks text in verse then put explanation at end of verse
                             out.append(" <FS>[");
                             out.append(tagText);
                             out.append("]<Fs>");
@@ -109,7 +109,7 @@ char GBFFootnotes::processText (std::string &text, const SWKey *key, const SWMod
                     startTag.setAttribute("swordFootnote", footnoteNumStr.c_str());
                 }
                 hide = false;
-                if (option) {
+                if (isOptionOn()) {
                     out.append(startTag.toString());
                     out.append(tagText);
                 }

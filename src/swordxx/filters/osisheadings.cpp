@@ -92,7 +92,7 @@ bool OSISHeadings::handleToken(std::string &buf, const char *token, BasicFilterU
                     bool preverse = (std::string("x-preverse") == u->currentHeadingTag.attribute("subType") || std::string("x-preverse") == u->currentHeadingTag.attribute("subtype"));
 
                     // do we want to put anything in EntryAttributes?
-                    if (u->module->isProcessEntryAttributes() && (option || u->canonical || !preverse)) {
+                    if (u->module->isProcessEntryAttributes() && (isOptionOn() || u->canonical || !preverse)) {
                         auto const hn(std::to_string(u->headerNum++));
                         // leave the actual <title...> wrapper in if we're part of an old school preverse title
                         // because now frontend have to deal with preverse as a div which may or may not include <title> elements
@@ -131,7 +131,7 @@ bool OSISHeadings::handleToken(std::string &buf, const char *token, BasicFilterU
                     // do we want the heading in the body?
                     // if we're not processing entryAttributes, then it's not going anyplace else
                     if ((!preverse || !u->module->isProcessEntryAttributes())
-                        && (option || u->canonical))
+                        && (isOptionOn() || u->canonical))
                     {
                         buf.append(u->currentHeadingTag.toString());
                         buf.append(u->heading);

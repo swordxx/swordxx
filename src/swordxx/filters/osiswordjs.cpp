@@ -57,7 +57,7 @@ OSISWordJS::~OSISWordJS() {
 char OSISWordJS::processText(std::string &text, const SWKey *key, const SWModule *module) {
     using namespace std::literals::string_view_literals;
 
-    if (option) {
+    if (isOptionOn()) {
         char token[2112]; // cheese.  Fix.
         int tokpos = 0;
         bool intoken = false;
@@ -171,7 +171,7 @@ char OSISWordJS::processText(std::string &text, const SWKey *key, const SWModule
                         out += "</w></span>";
                     }
                 }
-                if ((*token == '/') && (token[1] == 'w') && option) {	// Word
+                if ((*token == '/') && (token[1] == 'w') && isOptionOn()) {	// Word
                     out += "</w></span>";
                     continue;
                 }

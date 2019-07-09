@@ -32,8 +32,6 @@ namespace swordxx {
 /** This Filter hides reference links with a particular type/subtype in an OSIS text
  */
 class SWDLLEXPORT OSISReferenceLinks : public OnOffOptionFilter {
-    std::string m_optionName;
-    std::string m_optionTip;
     std::string m_type;
     std::string m_subType;
 public:

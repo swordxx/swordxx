@@ -55,7 +55,7 @@ char OSISXlit::processText(std::string &text, const SWKey *key, const SWModule *
 
     using namespace std::literals::string_view_literals;
 
-    if (!option) {
+    if (isOptionOff()) {
         for (auto const * from = text.c_str(); *from; ++from) {
             if (*from == '<') {
                 intoken = true;

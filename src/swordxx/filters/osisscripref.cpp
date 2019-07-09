@@ -77,7 +77,7 @@ char OSISScripref::processText(std::string &text, const SWKey *key, const SWModu
                     if (tag.attribute("type") == "crossReference") {
                         hide = true;
                         tagText = "";
-                        if (option) {    // we want the tag in the text
+                        if (isOptionOn()) {    // we want the tag in the text
                             out.push_back('<');
                             out.append(token);
                             out.push_back('>');
@@ -87,7 +87,7 @@ char OSISScripref::processText(std::string &text, const SWKey *key, const SWModu
                 }
                 if (hide && tag.isEndTag()) {
                     hide = false;
-                    if (option) {    // we want the tag in the text
+                    if (isOptionOn()) {    // we want the tag in the text
                         out.append(tagText);  // end tag gets added further down
                     }
                     else    continue;    // don't let the end tag get added to the text

@@ -106,7 +106,7 @@ char ThMLStrongs::processText(std::string &text, const SWKey *key, const SWModul
                     word++;
                 }
 
-                if (!option) {	// if we don't want strongs
+                if (isOptionOff()) {	// if we don't want strongs
                     if ((from[1] == ' ') || (from[1] == ',') || (from[1] == ';') || (from[1] == '.') || (from[1] == '?') || (from[1] == '!') || (from[1] == ')') || (from[1] == '\'') || (from[1] == '\"')) {
                         if (lastspace)
                             out.pop_back();

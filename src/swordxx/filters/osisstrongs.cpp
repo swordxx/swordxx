@@ -233,7 +233,7 @@ char OSISStrongs::processText(std::string &text, const SWKey *key, const SWModul
                 }
 
                 // If we won't want strongs, then lets get them out of lemma:
-                if (!option) {
+                if (isOptionOff()) {
                     int count = wtag.attributePartCount("lemma", ' ');
                     for (int i = 0; i < count; ++i) {
                         auto a(wtag.attribute("lemma", i, ' '));

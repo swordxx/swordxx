@@ -112,7 +112,7 @@ char ThMLFootnotes::processText(std::string &text, const SWKey *key, const SWMod
                         }
                     }
                     hide = false;
-                    if (option || (startTag.attribute("type") == "crossReference")) {    // we want the tag in the text; crossReferences are handled by another filter
+                    if (isOptionOn() || (startTag.attribute("type") == "crossReference")) {    // we want the tag in the text; crossReferences are handled by another filter
                         out += startTag.toString();
                         out.append(tagText);
                     }

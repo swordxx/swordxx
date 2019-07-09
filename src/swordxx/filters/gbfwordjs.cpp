@@ -53,7 +53,7 @@ GBFWordJS::~GBFWordJS() {
 
 
 char GBFWordJS::processText(std::string &text, const SWKey *key, const SWModule *module) {
-    if (option) {
+    if (isOptionOn()) {
         char token[2112]; // cheese.  Fix.
         int tokpos = 0;
         bool intoken = false;
