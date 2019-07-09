@@ -37,21 +37,20 @@ UTF8HTML::UTF8HTML() {
 char UTF8HTML::processText(std::string &text, const SWKey *key, const SWModule *module)
 {
     (void) module;
-    unsigned char *from;
         char digit[10];
         unsigned long ch;
      if ((unsigned long)key < 2)    // hack, we're en(1)/de(0)ciphering
         return (char)-1;
 
-    std::string orig = text;
-      from = (unsigned char *)orig.c_str();
+    std::string tmp(text);
+    std::string out;
 
     // -------------------------------
-    for (text = ""; *from; from++) {
+    for (auto from = reinterpret_cast<unsigned char *>(tmp.data()); *from; from++) {
       ch = 0;
           if ((*from & 128) != 128) {
 //              if (*from != ' ')
-           text += *from;
+           out += *from;
                continue;
           }
           if ((*from & 128) && ((*from & 64) != 64)) {
@@ -73,13 +72,14 @@ char UTF8HTML::processText(std::string &text, const SWKey *key, const SWModule *
 
           ch |= (((short)*from) << (((6*subsequent)+significantFirstBits)-8));
           from += subsequent;
-          text += '&';
-          text += '#';
+          out += '&';
+          out += '#';
       sprintf(digit, "%lu", ch);
         for (char *dig = digit; *dig; dig++)
-            text += *dig;
-        text += ';';
+            out += *dig;
+        out += ';';
     }
+    text = std::move(out);
     return 0;
 }
 
