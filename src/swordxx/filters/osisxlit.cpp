@@ -51,13 +51,12 @@ char OSISXlit::processText(std::string &text, const SWKey *key, const SWModule *
     std::string token;
     bool intoken = false;
 
-    const std::string orig = text;
-    const char * from = orig.c_str();
+    std::string out;
 
     using namespace std::literals::string_view_literals;
 
     if (!option) {
-        for (text = ""; *from; ++from) {
+        for (auto const * from = text.c_str(); *from; ++from) {
             if (*from == '<') {
                 intoken = true;
                 token = "";
@@ -78,9 +77,9 @@ char OSISXlit::processText(std::string &text, const SWKey *key, const SWModule *
                 }
 
                 // keep token in text
-                text.push_back('<');
-                text.append(token);
-                text.push_back('>');
+                out.push_back('<');
+                out.append(token);
+                out.push_back('>');
 
                 continue;
             }
@@ -88,9 +87,10 @@ char OSISXlit::processText(std::string &text, const SWKey *key, const SWModule *
                 token += *from;
             }
             else    {
-                text.push_back(*from);
+                out.push_back(*from);
             }
         }
+        text = std::move(out);
     }
     return 0;
 }
