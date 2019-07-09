@@ -37,7 +37,6 @@ class SWDLLEXPORT SWOptionFilter : public virtual SWFilter {
 
 public: /* Methods: */
 
-    SWOptionFilter() noexcept;
     SWOptionFilter(std::string oName,
                    std::string oTip,
                    std::vector<std::string> oValues);

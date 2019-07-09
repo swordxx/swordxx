@@ -23,10 +23,6 @@ namespace swordxx {
 
 namespace { std::list<std::string> const onOffValues({"On", "Off"}); }
 
-OnOffOptionFilter::OnOffOptionFilter()
-    : SWOptionFilter("", "", {"On", "Off"})
-{}
-
 OnOffOptionFilter::OnOffOptionFilter(char const * name, char const * tip)
     : SWOptionFilter(name, tip, {"On", "Off"})
 {}

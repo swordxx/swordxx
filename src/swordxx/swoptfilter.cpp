@@ -30,10 +30,6 @@
 
 namespace swordxx {
 
-
-SWOptionFilter::SWOptionFilter() noexcept = default;
-
-
 SWOptionFilter::SWOptionFilter(std::string oName,
                                std::string oTip,
                                std::vector<std::string> oValues)
@@ -43,10 +39,7 @@ SWOptionFilter::SWOptionFilter(std::string oName,
     , selectedValueIndex(0u)
 {}
 
-
-SWOptionFilter::~SWOptionFilter() {
-}
-
+SWOptionFilter::~SWOptionFilter() = default;
 
 void SWOptionFilter::setOptionValue(std::string_view value) {
     for (std::size_t i = 0u; i < optValues.size(); ++i) {
@@ -65,6 +58,5 @@ std::string const & SWOptionFilter::getSelectedOptionValue() const noexcept {
     assert(selectedValueIndex < optValues.size());
     return optValues[selectedValueIndex];
 }
-
 
 } /* namespace swordxx */

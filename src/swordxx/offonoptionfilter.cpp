@@ -21,10 +21,6 @@
 
 namespace swordxx {
 
-OffOnOptionFilter::OffOnOptionFilter()
-    : SWOptionFilter("", "", {"Off", "On"})
-{}
-
 OffOnOptionFilter::OffOnOptionFilter(char const * name, char const * tip)
     : SWOptionFilter(name, tip, {"Off", "On"})
 {}
