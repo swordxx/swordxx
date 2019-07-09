@@ -278,7 +278,7 @@ bool OSISPlain::handleToken(std::string &buf, const char *token, BasicFilterUser
 
 bool OSISPlain::processStage(char stage,
                              std::string &,
-                             char *& from,
+                             char const *& from,
                              BasicFilterUserData *)
 {
     // this is a strip filter so we want to do this as optimized as possible.

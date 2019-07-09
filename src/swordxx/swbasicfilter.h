@@ -197,7 +197,7 @@ protected: /* Methods: */
 
     virtual bool processStage(char stage,
                               std::string & text,
-                              char *& from,
+                              char const *& from,
                               BasicFilterUserData * userData)
     {
         (void) stage; (void) text; (void) from; (void) userData;

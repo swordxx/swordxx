@@ -152,7 +152,7 @@ char SWBasicFilter::processText(std::string & text,
                                 SWKey const * key,
                                 SWModule const * module)
 {
-    char * from;
+    char const * from;
     char token[4096u];
     std::size_t tokpos = 0u;
     bool intoken = false;

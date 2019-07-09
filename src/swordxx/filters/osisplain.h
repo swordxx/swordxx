@@ -46,7 +46,7 @@ protected:
 
     bool processStage(char stage,
                       std::string & text,
-                      char *& from,
+                      char const *& from,
                       BasicFilterUserData * userData) override;
 
 public:
