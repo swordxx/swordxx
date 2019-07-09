@@ -57,10 +57,9 @@ char OSISReferenceLinks::processText(std::string &text, const SWKey *key, const 
     bool intoken        = false;
     bool stripThisToken = false;
 
-    std::string orig = text;
-    const char *from = orig.c_str();
+    std::string out;
 
-    for (text = ""; *from; ++from) {
+    for (auto const * from = text.c_str(); *from; ++from) {
         if (*from == '<') {
             intoken = true;
             token = "";
@@ -71,9 +70,9 @@ char OSISReferenceLinks::processText(std::string &text, const SWKey *key, const 
             if (!startsWith(token, "reference"sv)
                 && !startsWith(token, "/reference"sv))
             {
-                text.push_back('<');
-                text.append(token);
-                text.push_back('>');
+                out.push_back('<');
+                out.append(token);
+                out.push_back('>');
             }
             else {
                 XMLTag tag;
@@ -86,9 +85,9 @@ char OSISReferenceLinks::processText(std::string &text, const SWKey *key, const 
                     stripThisToken = false;
                     continue;
                 }
-                text.push_back('<');
-                text.append(token);
-                text.push_back('>');
+                out.push_back('<');
+                out.append(token);
+                out.push_back('>');
             }
             continue;
         }
@@ -97,9 +96,10 @@ char OSISReferenceLinks::processText(std::string &text, const SWKey *key, const 
             token.push_back(*from);
         }
         else { //copy text which is not inside a token
-            text.push_back(*from);
+            out.push_back(*from);
         }
     }
+    text = std::move(out);
     return 0;
 }
 
