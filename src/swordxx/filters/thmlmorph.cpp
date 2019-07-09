@@ -54,9 +54,8 @@ char ThMLMorph::processText(std::string &text, const SWKey *key, const SWModule 
         bool intoken = false;
 
         std::string token;
-        std::string orig = text;
-        const char *from = orig.c_str();
-        for (text = ""; *from; from++) {
+        std::string out;
+        for (auto const * from = text.c_str(); *from; from++) {
             if (*from == '<') {
                 intoken = true;
                 token = "";
@@ -69,9 +68,9 @@ char ThMLMorph::processText(std::string &text, const SWKey *key, const SWModule 
                 }
 
                 // if not a morph tag token, keep token in text
-                text += '<';
-                text += token;
-                text += '>';
+                out += '<';
+                out += token;
+                out += '>';
                 continue;
             }
 
@@ -79,9 +78,10 @@ char ThMLMorph::processText(std::string &text, const SWKey *key, const SWModule 
                 token += *from;
             }
             else    {
-                text += *from;
+                out += *from;
             }
         }
+        text = std::move(out);
     }
     return 0;
 }
