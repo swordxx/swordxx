@@ -48,17 +48,16 @@ char UTF8HebrewPoints::processText(std::string &text, const SWKey *key, const SW
     (void) module;
     if (!option) {
         //The UTF-8 range 0xD6 0xB0 to 0xD6 0xBF excluding 0xD6 0xBE consist of Hebrew cantillation marks so block those out.
-        std::string orig = text;
-        const unsigned char* from = (unsigned char*)orig.c_str();
-        for (text = ""; *from; from++) {
+        std::string out;
+        for (auto from = reinterpret_cast<unsigned char const *>(text.c_str()); *from; from++) {
             if ((*from == 0xD6) && (*(from + 1) >= 0xB0 && *(from + 1) <= 0xBF) && (*(from + 1) != 0xBE)) {
                 from++;
+            } else {
+                text += *from;
             }
-            else {
-                         text += *from;
-                        }
         }
-         }
+        text = std::move(out);
+    }
     return 0;
 }
 
