@@ -34,8 +34,12 @@ using std::string;
 
 namespace swordxx {
 
-GreekLexAttribs::GreekLexAttribs() {
-}
+GreekLexAttribs::GreekLexAttribs()
+    : SWOptionFilter(
+          "Greek lexicon entry attributes",
+          "Sets entry attributes for Greek lexicons",
+          {"On"})
+{}
 
 
 char GreekLexAttribs::processText(std::string &text, const SWKey *key, const SWModule *module) {
