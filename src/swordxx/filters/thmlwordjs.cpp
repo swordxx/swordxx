@@ -73,18 +73,17 @@ char ThMLWordJS::processText(std::string &text, const SWKey *key, const SWModule
         std::string modName = (module)?module->getName():"";
         std::string wordSrcPrefix = modName;
 
-        const std::string orig = text;
-        const char * from = orig.c_str();
+        std::string out;
         VerseKey const * const vkey = dynamic_cast<VerseKey const *>(key);
 
-        for (text = ""; *from; from++) {
+        for (auto const * from = text.c_str(); *from; from++) {
             if (*from == '<') {
                 intoken = true;
                 tokpos = 0;
                 token[0] = 0;
                 token[1] = 0;
                 token[2] = 0;
-                textEnd = text.length();
+                textEnd = out.size();
                 continue;
             }
             if (*from == '>') {    // process tokens
@@ -102,9 +101,9 @@ char ThMLWordJS::processText(std::string &text, const SWKey *key, const SWModule
                         (*wordAttrs)["Strongs"] = val;
     //printf("Adding: [\"Word\"][%s][\"Strongs\"] = %s\n", wordstr, val);
                         tmp = "";
-                        tmp.append(text.c_str()+textStart, (int)(textEnd - textStart));
+                        tmp.append(out.c_str()+textStart, (int)(textEnd - textStart));
                         (*wordAttrs)["Text"] = tmp;
-                        text.append("</span>");
+                        out.append("</span>");
                         std::string ts;
                         ts += formatted("%d", textStart);
                         (*wordAttrs)["TextStart"] = ts;
@@ -140,9 +139,9 @@ char ThMLWordJS::processText(std::string &text, const SWKey *key, const SWModule
                     newText = true;
                 }
                 // if not a strongs token, keep token in text
-                text += '<';
-                text += token;
-                text += '>';
+                out += '<';
+                out += token;
+                out += '>';
                 if (needWordOut) {
                     char wstr[11u];
                     sprintf(wstr, "%03d", word-2);
@@ -219,14 +218,14 @@ char ThMLWordJS::processText(std::string &text, const SWKey *key, const SWModule
                             if (m) m++;
                             else m = morph.c_str();
                             spanStart += formatted("<span class=\"clk\" onclick=\"p('%s','%s','%s','%s','','%s');\" >", lexName, strong, wordID, m, modName);
-                            text.insert(textStr, spanStart);
+                            out.insert(textStr, spanStart);
                             lastAppendLen = spanStart.length();
                         }
                     }
 
                 }
                 if (newText) {
-                    textStart = text.length(); newText = false;
+                    textStart = out.size(); newText = false;
                 }
                 continue;
             }
@@ -238,7 +237,7 @@ char ThMLWordJS::processText(std::string &text, const SWKey *key, const SWModule
                 }
             }
             else	{
-                text += *from;
+                out += *from;
             }
         }
 
@@ -301,9 +300,10 @@ char ThMLWordJS::processText(std::string &text, const SWKey *key, const SWModule
                 if (m) m++;
                 else m = morph.c_str();
                 spanStart += formatted("<span class=\"clk\" onclick=\"p('%s','%s','%s','%s','','%s');\" >", lexName, strong, wordID, m, modName);
-                text.insert(textStr, spanStart);
+                out.insert(textStr, spanStart);
             }
         }
+        text = std::move(out);
     }
 
     return 0;
