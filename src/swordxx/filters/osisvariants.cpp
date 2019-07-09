@@ -72,14 +72,13 @@ char OSISVariants::processText(std::string &text, const SWKey *key, const SWModu
         bool invar = false;
 
         std::string token;
-        std::string orig = text;
-        const char *from = orig.c_str();
+        std::string out;
         XMLTag tag;
 
         //we use a fixed comparision string to make sure the loop is as fast as the original two blocks with almost the same code
         const char* variantChoice = (option_ == 0) ? "x-2" : "x-1";
 
-        for (text = ""; *from; from++) {
+        for (auto const * from = text.c_str(); *from; from++) {
             if (*from == '<') {
                 intoken = true;
                 token = "";
@@ -105,9 +104,9 @@ char OSISVariants::processText(std::string &text, const SWKey *key, const SWModu
                     }
                 }
                 if (!hide) {
-                    text += '<';
-                    text.append(token);
-                    text += '>';
+                    out += '<';
+                    out.append(token);
+                    out += '>';
                 }
 
                 continue;
@@ -116,10 +115,10 @@ char OSISVariants::processText(std::string &text, const SWKey *key, const SWModu
                 token += *from;
             }
             else if (!hide) {
-                text += *from;
+                out += *from;
             }
         }
-
+        text = std::move(out);
     }
 
     return 0;
