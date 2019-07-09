@@ -59,19 +59,19 @@ public:
     /** gets the name of the option of this filter
      * @return option name
      */
-    virtual const char *getOptionName() { return optName; }
+    const char *getOptionName() { return optName; }
 
     /** gets a short explanation of the option of this filter;
      * it could be presented to the user in frontend programs
      * @return option tip/explanation
      */
-    virtual const char *getOptionTip() { return optTip; }
+    const char *getOptionTip() { return optTip; }
 
     /** returns a list of the possible option values
      *
      * @return list of option values
      */
-    virtual std::vector<std::string> const & getOptionValues() const noexcept
+    std::vector<std::string> const & getOptionValues() const noexcept
     { return optValues; }
 
     /** @return The value of the current option.
