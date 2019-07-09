@@ -23,6 +23,7 @@
 
 #include "swoptfilter.h"
 
+#include <cassert>
 #include <utility>
 #include "utilstr.h"
 
@@ -37,16 +38,17 @@ SWOptionFilter::SWOptionFilter() {
 }
 
 
-SWOptionFilter::SWOptionFilter(char const * oName,
-                               char const * oTip,
+SWOptionFilter::SWOptionFilter(std::string oName,
+                               std::string oTip,
                                std::vector<std::string> oValues)
-    : optValues(std::move(oValues))
+    : optName(std::move(oName))
+    , optTip(std::move(oTip))
+    , optValues(std::move(oValues))
+    , selectedValueIndex(0u)
 {
-    optName   = oName;
-    optTip    = oTip;
     if (!optValues.empty())
         setOptionValue(optValues.front().c_str());
-    isBooleanVal = optValues.size() == 2 && (optionValue == "On" || optionValue == "Off");
+    isBooleanVal = optValues.size() == 2 && (optValues.front() == "On" || optValues.front() == "Off");
 }
 
 
@@ -54,18 +56,22 @@ SWOptionFilter::~SWOptionFilter() {
 }
 
 
-void SWOptionFilter::setOptionValue(const char *ival) {
+void SWOptionFilter::setOptionValue(std::string_view value) {
     for (auto const & optValue : optValues) {
-        if (caseInsensitiveEquals(optValue, ival)) {
-            optionValue = optValue;
-            option = (!strnicmp(ival, "On", 2));    // convenience for boolean filters
+        if (caseInsensitiveEquals(optValue, value)) {
+            option = caseInsensitiveEquals(value.substr(0u, 2u), "On"); // convenience for boolean filters
             break;
         }
     }
 }
 
-const char *SWOptionFilter::getOptionValue() {
-    return optionValue.c_str();
+std::string const & SWOptionFilter::getSelectedOptionValue() const noexcept {
+    if (optValues.empty()) {
+        static std::string const invalid("<INVALID>");
+        return invalid;
+    }
+    assert(selectedValueIndex < optValues.size());
+    return optValues[selectedValueIndex];
 }
 
 

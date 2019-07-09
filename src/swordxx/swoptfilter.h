@@ -35,17 +35,17 @@ namespace swordxx {
   */
 class SWDLLEXPORT SWOptionFilter : public virtual SWFilter {
 protected:
-    std::string optionValue;
-    const char *optName;
-    const char *optTip;
+    std::string optName;
+    std::string optTip;
     const std::vector<std::string> optValues;
+    std::size_t selectedValueIndex;
     bool option;
     bool isBooleanVal;
 public:
 
     SWOptionFilter();
-    SWOptionFilter(char const * oName,
-                   char const * oTip,
+    SWOptionFilter(std::string oName,
+                   std::string oTip,
                    std::vector<std::string> oValues);
     virtual ~SWOptionFilter();
 
@@ -59,13 +59,13 @@ public:
     /** gets the name of the option of this filter
      * @return option name
      */
-    const char *getOptionName() { return optName; }
+    std::string const & getOptionName() const noexcept { return optName; }
 
     /** gets a short explanation of the option of this filter;
      * it could be presented to the user in frontend programs
      * @return option tip/explanation
      */
-    const char *getOptionTip() { return optTip; }
+    std::string const & getOptionTip() const noexcept { return optTip; }
 
     /** returns a list of the possible option values
      *
@@ -76,7 +76,10 @@ public:
 
     /** @return The value of the current option.
     */
-    virtual const char *getOptionValue();
+    std::string const & getSelectedOptionValue() const noexcept;
+
+    std::size_t getSelectedOptionValueIndex() const noexcept
+    { return selectedValueIndex; }
 
     /** sets the value of the option of this filter,
      * e.g maybe a strong's filter might be set to "On" / "Off" -
@@ -84,7 +87,7 @@ public:
      * see also getOptionValues()
      * @param ival the new option value
      */
-    virtual void setOptionValue(const char *ival);
+    virtual void setOptionValue(std::string_view value);
 
 };
 

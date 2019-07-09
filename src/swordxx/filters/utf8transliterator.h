@@ -63,8 +63,6 @@ using SWTransPair = std::pair<icu::UnicodeString, SWTransData>;
 class SWDLLEXPORT UTF8Transliterator : public SWOptionFilter {
 private:
 
-    unsigned char m_utf8TransliteratorOption;
-
     bool addTrans(const char* newTrans, std::string* transList);
     std::unique_ptr<icu::Transliterator> createTrans(
             icu::UnicodeString const & ID,
@@ -78,9 +76,6 @@ public:
     char processText(std::string & text,
                          SWKey const * key = nullptr,
                          SWModule const * module = nullptr) override;
-
-    void setOptionValue(char const * ival) override;
-    char const * getOptionValue() override;
 
 };
 

@@ -1027,11 +1027,9 @@ char SWMgr::filterText(const char *filterName, std::string &text, const SWKey *k
     char retVal = -1;
     // why didn't we use find here?
     for (auto const & ofp : m_optionFilters) {
-        if (ofp.second->getOptionName()) {
-            if (caseInsensitiveEquals(filterName, ofp.second->getOptionName())) {
-                retVal = ofp.second->processText(text, key, module);
-                break;
-            }
+        if (caseInsensitiveEquals(filterName, ofp.second->getOptionName())) {
+            retVal = ofp.second->processText(text, key, module);
+            break;
         }
     }
 
@@ -1248,26 +1246,23 @@ void SWMgr::setGlobalOption(const char * const option,
                             const char * const value)
 {
     for (auto const & ofp : m_optionFilters)
-        if (ofp.second->getOptionName()
-            && caseInsensitiveEquals(option, ofp.second->getOptionName()))
+        if (caseInsensitiveEquals(option, ofp.second->getOptionName()))
             ofp.second->setOptionValue(value);
 }
 
 
 const char * SWMgr::getGlobalOption(const char * const option) {
     for (auto const & ofp : m_optionFilters)
-        if (ofp.second->getOptionName()
-            && caseInsensitiveEquals(option, ofp.second->getOptionName()))
-            return ofp.second->getOptionValue();
+        if (caseInsensitiveEquals(option, ofp.second->getOptionName()))
+            return ofp.second->getSelectedOptionValue().c_str();
     return nullptr;
 }
 
 
 const char * SWMgr::getGlobalOptionTip(const char * const option) {
     for (auto const & ofp : m_optionFilters)
-        if (ofp.second->getOptionName()
-            && caseInsensitiveEquals(option, ofp.second->getOptionName()))
-            return ofp.second->getOptionTip();
+        if (caseInsensitiveEquals(option, ofp.second->getOptionName()))
+            return ofp.second->getOptionTip().c_str();
     return nullptr;
 }
 
@@ -1279,9 +1274,7 @@ std::list<std::string> SWMgr::getGlobalOptionValues(const char * const option) {
     /* Just find the first one. All option filters with the same option name
        should expect the same values. */
     for (auto const & ofp : m_optionFilters) {
-        if (ofp.second->getOptionName()
-            && caseInsensitiveEquals(option, ofp.second->getOptionName()))
-        {
+        if (caseInsensitiveEquals(option, ofp.second->getOptionName())) {
             auto const & vals = ofp.second->getOptionValues();
             return {vals.begin(), vals.end()};
         }
