@@ -75,19 +75,18 @@ char OSISFootnotes::processText(std::string &text, const SWKey *key, const SWMod
         }
     }
     parser->setText(key->getText());
-    std::string orig = text;
-    const char *from = orig.c_str();
+    std::string out;
 
     XMLTag tag;
     bool strongsMarkup = false;
 
 
-    for (text = ""; *from; ++from) {
+    for (auto const * from = text.c_str(); *from; ++from) {
 
         // remove all newlines temporarily to fix kjv2003 module
         if ((*from == 10) || (*from == 13)) {
-            if ((text.length()>1) && (text[text.length()-2] != ' ') && (*(from+1) != ' '))
-                text.push_back(' ');
+            if ((out.size()>1) && (out[out.size()-2] != ' ') && (*(from+1) != ' '))
+                out.push_back(' ');
             continue;
         }
 
@@ -138,8 +137,8 @@ char OSISFootnotes::processText(std::string &text, const SWKey *key, const SWMod
                     }
                     hide = false;
                     if (option || (startTag.attribute("type") == "crossReference")) {    // we want the tag in the text; crossReferences are handled by another filter
-                        text.append(startTag.toString());
-//                        text.append(tagText);    // we don't put the body back in because it is retrievable from EntryAttributes["Footnotes"][]["body"].
+                        out.append(startTag.toString());
+//                        out.append(tagText);    // we don't put the body back in because it is retrievable from EntryAttributes["Footnotes"][]["body"].
                     }
                     else    continue;
                 }
@@ -162,9 +161,9 @@ char OSISFootnotes::processText(std::string &text, const SWKey *key, const SWMod
                 }
             }
             if (!hide) {
-                text.push_back('<');
-                text.append(token);
-                text.push_back('>');
+                out.push_back('<');
+                out.append(token);
+                out.push_back('>');
             }
             else {
                 tagText.push_back('<');
@@ -177,10 +176,11 @@ char OSISFootnotes::processText(std::string &text, const SWKey *key, const SWMod
             token.push_back(*from);
         }
         else if (!hide) { //copy text which is not inside a token
-            text.push_back(*from);
+            out.push_back(*from);
         }
         else tagText.push_back(*from);
     }
+    text = std::move(out);
     return 0;
 }
 
