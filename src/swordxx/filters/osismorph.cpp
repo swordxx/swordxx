@@ -51,14 +51,13 @@ char OSISMorph::processText(std::string &text, const SWKey *key, const SWModule 
         char token[2048]; // cheese.  Fix.
         int tokpos = 0;
         bool intoken = false;
-        std::string orig = text;
-        const char *from = orig.c_str();
+        std::string out;
 
         //taken out of the loop for speed
         char const * start = nullptr;
         char const * end = nullptr;
 
-        for (text = ""; *from; ++from) {
+        for (auto const * from = text.c_str(); *from; ++from) {
             if (*from == '<') {
                 intoken = true;
                 tokpos = 0;
@@ -73,18 +72,18 @@ char OSISMorph::processText(std::string &text, const SWKey *key, const SWModule 
                     end = start ? std::strchr(start + 7, '"') : nullptr; //search the end of the morph value
 
                     if (start && end) { //start and end of the morph tag found
-                        text.push_back('<');
-                        text.append(token, start-token); //the text before the morph attr
-                        text.append(end+1); //text after the morph attr
-                        text.push_back('>');
+                        out.push_back('<');
+                        out.append(token, start-token); //the text before the morph attr
+                        out.append(end+1); //text after the morph attr
+                        out.push_back('>');
 
                         continue; //next loop
                     }
                 }
 
-                text.push_back('<');
-                text.append(token);
-                text.push_back('>');
+                out.push_back('<');
+                out.append(token);
+                out.push_back('>');
 
                 continue;
             }
@@ -95,9 +94,10 @@ char OSISMorph::processText(std::string &text, const SWKey *key, const SWModule 
                 }
             }
             else {
-                text.push_back(*from);
+                out.push_back(*from);
             }
         }
+        text = std::move(out);
     }
     return 0;
 }
