@@ -72,10 +72,9 @@ char OSISWordJS::processText(std::string &text, const SWKey *key, const SWModule
             vkey = dynamic_cast<VerseKey const *>(key);
         }
 
-        const std::string orig = text;
-        const char * from = orig.c_str();
+        std::string out;
 
-        for (text = ""; *from; ++from) {
+        for (auto const * from = text.c_str(); *from; ++from) {
             if (*from == '<') {
                 intoken = true;
                 tokpos = 0;
@@ -165,22 +164,22 @@ char OSISWordJS::processText(std::string &text, const SWKey *key, const SWModule
                         }
                     }
                     // 'p' = 'fillpop' to save bandwidth
-                    text += formatted("<span class=\"clk\" onclick=\"p('%s','%s','%s','%s','%s','%s');\" >", lexName, lemma, wordID, morph, page, modName);
+                    out += formatted("<span class=\"clk\" onclick=\"p('%s','%s','%s','%s','%s','%s');\" >", lexName, lemma, wordID, morph, page, modName);
                     wordNum++;
 
                     if (wtag.isEmpty()) {
-                        text += "</w></span>";
+                        out += "</w></span>";
                     }
                 }
                 if ((*token == '/') && (token[1] == 'w') && option) {	// Word
-                    text += "</w></span>";
+                    out += "</w></span>";
                     continue;
                 }
 
                 // if not a strongs token, keep token in text
-                text.push_back('<');
-                text.append(token);
-                text.push_back('>');
+                out.push_back('<');
+                out.append(token);
+                out.push_back('>');
 
                 continue;
             }
@@ -191,9 +190,10 @@ char OSISWordJS::processText(std::string &text, const SWKey *key, const SWModule
                 }
             }
             else	{
-                text.push_back(*from);
+                out.push_back(*from);
             }
         }
+        text = std::move(out);
     }
     return 0;
 }
