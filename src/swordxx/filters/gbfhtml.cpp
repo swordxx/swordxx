@@ -74,10 +74,6 @@ std::unique_ptr<BasicFilterUserData> GBFHTML::createUserData(
 { return std::make_unique<MyUserData>(module, key); }
 
 bool GBFHTML::handleToken(std::string &buf, const char *token, BasicFilterUserData *userData) {
-    const char *tok;
-    char val[128];
-    char *valto;
-    const char *num;
     MyUserData * u = static_cast<MyUserData *>(userData);
 
     using namespace std::literals::string_view_literals;
@@ -95,56 +91,56 @@ bool GBFHTML::handleToken(std::string &buf, const char *token, BasicFilterUserDa
 
         else if (startsWith(token, "w"sv)) {
             // OSIS Word (temporary until OSISRTF is done)
-            valto = val;
-            num = std::strstr(token, "lemma=\"x-Strongs:");
+            auto num = std::strstr(token, "lemma=\"x-Strongs:");
             if (num) {
+                std::string numValue;
                 for (num+=17; ((*num) && (*num != '\"')); num++)
-                    *valto++ = *num;
-                *valto = 0;
+                    numValue += *num;
+                auto const * const val = numValue.c_str();
                 if (std::atoi((!charIsDigit(*val))?val+1:val) < 5627) {
                     buf += " <small><em>&lt;";
-                    for (tok = (!charIsDigit(*val))?val+1:val; *tok; tok++)
-                            buf += *tok;
+                    for (auto tok = (!charIsDigit(*val))?val+1:val; *tok; ++tok)
+                        buf += *tok;
                     buf += "&gt;</em></small> ";
                 }
             } else {
                 num = std::strstr(token, "lemma=\"strong:");
                 if (num) {
+                    std::string numValue;
                     for (num+=14; ((*num) && (*num != '\"')); num++)
-                        *valto++ = *num;
-                    *valto = 0;
+                        numValue += *num;
+                    auto const * const val = numValue.c_str();
                     if (std::atoi((!charIsDigit(*val))?val+1:val) < 5627) {
                         buf += " <small><em>&lt;";
-                        for (tok = (!charIsDigit(*val))?val+1:val; *tok; tok++)
-                                buf += *tok;
+                        for (auto tok = (!charIsDigit(*val))?val+1:val; *tok; ++tok)
+                            buf += *tok;
                         buf += "&gt;</em></small> ";
                     }
                 }
             }
-            valto = val;
             num = std::strstr(token, "morph=\"x-Robinson:");
             if (num) {
+                std::string numValue;
                 for (num+=18; ((*num) && (*num != '\"')); num++)
-                    *valto++ = *num;
-                *valto = 0;
+                    numValue += *num;
                 // normal robinsons tense
                 buf += " <small><em>(";
-                for (tok = val; *tok; tok++)
-                        buf += *tok;
+                for (auto tok = numValue.c_str(); *tok; ++tok)
+                    buf += *tok;
                 buf += ")</em></small> ";
             }
         }
 
         else if (startsWith(token, "WG"sv) || startsWith(token, "WH"sv)) { // strong's numbers
             buf += " <small><em>&lt;";
-            for (tok = token + 2; *tok; tok++)
-                    buf += *tok;
+            for (auto tok = token + 2; *tok; ++tok)
+                buf += *tok;
             buf += "&gt;</em></small> ";
         }
 
         else if (startsWith(token, "WTG"sv) || startsWith(token, "WTH"sv)) { // strong's numbers tense
             buf += " <small><em>&lt;";
-            for (tok = token + 3; *tok; tok++)
+            for (auto tok = token + 3; *tok; ++tok)
                 if(*tok != '\"')
                     buf += *tok;
             buf += ")</em></small> ";
@@ -152,7 +148,7 @@ bool GBFHTML::handleToken(std::string &buf, const char *token, BasicFilterUserDa
 
         else if (startsWith(token, "RX"sv)) {
             buf += "<i>";
-            for (tok = token + 3; *tok; tok++) {
+            for (auto tok = token + 3; *tok; ++tok) {
               if(*tok != '<' && *tok+1 != 'R' && *tok+2 != 'x') {
                 buf += *tok;
               }
@@ -178,7 +174,7 @@ bool GBFHTML::handleToken(std::string &buf, const char *token, BasicFilterUserDa
 
         else if (startsWith(token, "FN"sv)) {
             buf += "<font face=\"";
-            for (tok = token + 2; *tok; tok++)
+            for (auto tok = token + 2; *tok; ++tok)
                 if(*tok != '\"')
                     buf += *tok;
             buf += "\">";
