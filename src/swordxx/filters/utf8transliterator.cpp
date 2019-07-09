@@ -34,66 +34,13 @@
 
 namespace swordxx {
 
-const char UTF8Transliterator::optionstring[NUMTARGETSCRIPTS][16] = {
-        "Off",
-        "Latin",
-        /*
-        "IPA",
-        "Basic Latin",
-        "SBL",
-        "TC",
-        "Beta",
-        "BGreek",
-        "SERA",
-        "Hugoye",
-        "UNGEGN",
-        "ISO",
-        "ALA-LC",
-        "BGN",
-        "Greek",
-        "Hebrew",
-        "Cyrillic",
-        "Arabic",
-        "Syriac",
-        "Katakana",
-        "Hiragana",
-        "Hangul",
-        "Devanagari",
-        "Tamil",
-        "Bengali",
-        "Gurmukhi",
-        "Gujarati",
-        "Oriya",
-        "Telugu",
-        "Kannada",
-        "Malayalam",
-        "Thai",
-        "Georgian",
-        "Armenian",
-        "Ethiopic",
-        "Gothic",
-        "Ugaritic",
-        "Coptic",
-        "Linear B",
-        "Cypriot",
-        "Runic",
-        "Ogham",
-        "Thaana",
-        "Glagolitic",
-        "Cherokee",
-        */
-};
-
-const char UTF8Transliterator::optName[] = "Transliteration";
-const char UTF8Transliterator::optTip[] = "Transliterates between scripts";
-
-UTF8Transliterator::UTF8Transliterator() {
-    m_utf8TransliteratorOption = 0;
-        unsigned long i;
-    for (i = 0; i < NUMTARGETSCRIPTS; i++) {
-        options.push_back(optionstring[i]);
-    }
-}
+UTF8Transliterator::UTF8Transliterator()
+    : SWOptionFilter(
+        "Transliteration",
+        "Transliterates between scripts",
+        {"Off", "Latin"})
+    , m_utf8TransliteratorOption(0)
+{}
 
 
 UTF8Transliterator::~UTF8Transliterator() {
@@ -120,15 +67,19 @@ std::unique_ptr<icu::Transliterator> UTF8Transliterator::createTrans(
 
 void UTF8Transliterator::setOptionValue(const char *ival)
 {
-    unsigned char i = m_utf8TransliteratorOption = NUMTARGETSCRIPTS;
-    while (i && !caseInsensitiveEquals(ival, optionstring[i])) {
-        i--;
-        m_utf8TransliteratorOption = i;
-    }
+    auto const & vals = getOptionValues();
+    std::size_t i = 0;
+    while (i < vals.size() && !caseInsensitiveEquals(ival, vals[i]))
+        ++i;
+    m_utf8TransliteratorOption = i;
 }
 
-const char *UTF8Transliterator::getOptionValue()
-{ return (NUMTARGETSCRIPTS > m_utf8TransliteratorOption) ? optionstring[m_utf8TransliteratorOption] : nullptr; }
+char const * UTF8Transliterator::getOptionValue() {
+    auto const & vals = getOptionValues();
+    return (m_utf8TransliteratorOption < vals.size())
+            ? vals[m_utf8TransliteratorOption].c_str()
+            : nullptr;
+}
 
 char UTF8Transliterator::processText(std::string &text, const SWKey *key, const SWModule *module)
 {

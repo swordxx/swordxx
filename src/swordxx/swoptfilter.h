@@ -25,8 +25,8 @@
 
 #include "swfilter.h"
 
-#include <list>
 #include <string>
+#include <vector>
 
 
 namespace swordxx {
@@ -38,7 +38,7 @@ protected:
     std::string optionValue;
     const char *optName;
     const char *optTip;
-    const std::list<std::string> *optValues;
+    const std::vector<std::string> optValues;
     bool option;
     bool isBooleanVal;
 public:
@@ -46,7 +46,7 @@ public:
     SWOptionFilter();
     SWOptionFilter(char const * oName,
                    char const * oTip,
-                   std::list<std::string> const * oValues);
+                   std::vector<std::string> oValues);
     virtual ~SWOptionFilter();
 
 
@@ -71,7 +71,8 @@ public:
      *
      * @return list of option values
      */
-    virtual std::list<std::string> getOptionValues() { return *optValues; }
+    virtual std::vector<std::string> const & getOptionValues() const noexcept
+    { return optValues; }
 
     /** @return The value of the current option.
     */

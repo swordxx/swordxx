@@ -23,6 +23,7 @@
 
 #include "swoptfilter.h"
 
+#include <utility>
 #include "utilstr.h"
 
 
@@ -30,24 +31,22 @@ namespace swordxx {
 
 
 SWOptionFilter::SWOptionFilter() {
-    static std::list<std::string> empty;
     static const char *empty2 = "";
     optName   = empty2;
     optTip    = empty2;
-    optValues = &empty;
 }
 
 
 SWOptionFilter::SWOptionFilter(char const * oName,
                                char const * oTip,
-                               std::list<std::string> const * oValues)
+                               std::vector<std::string> oValues)
+    : optValues(std::move(oValues))
 {
     optName   = oName;
     optTip    = oTip;
-    optValues = oValues;
-    if (optValues->begin() != optValues->end())
-        setOptionValue(optValues->begin()->c_str());
-    isBooleanVal = optValues->size() == 2 && (optionValue == "On" || optionValue == "Off");
+    if (!optValues.empty())
+        setOptionValue(optValues.front().c_str());
+    isBooleanVal = optValues.size() == 2 && (optionValue == "On" || optionValue == "Off");
 }
 
 
@@ -56,7 +55,7 @@ SWOptionFilter::~SWOptionFilter() {
 
 
 void SWOptionFilter::setOptionValue(const char *ival) {
-    for (auto const & optValue : *optValues) {
+    for (auto const & optValue : optValues) {
         if (caseInsensitiveEquals(optValue, ival)) {
             optionValue = optValue;
             option = (!strnicmp(ival, "On", 2));    // convenience for boolean filters

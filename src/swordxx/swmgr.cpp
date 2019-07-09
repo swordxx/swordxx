@@ -1278,10 +1278,14 @@ std::list<std::string> SWMgr::getGlobalOptions() { return options; }
 std::list<std::string> SWMgr::getGlobalOptionValues(const char * const option) {
     /* Just find the first one. All option filters with the same option name
        should expect the same values. */
-    for (auto const & ofp : m_optionFilters)
+    for (auto const & ofp : m_optionFilters) {
         if (ofp.second->getOptionName()
             && caseInsensitiveEquals(option, ofp.second->getOptionName()))
-            return ofp.second->getOptionValues();
+        {
+            auto const & vals = ofp.second->getOptionValues();
+            return {vals.begin(), vals.end()};
+        }
+    }
     return std::list<std::string>();
 }
 

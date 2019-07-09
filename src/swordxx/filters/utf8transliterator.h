@@ -65,12 +65,6 @@ private:
 
     unsigned char m_utf8TransliteratorOption;
 
-    static const char optionstring[NUMTARGETSCRIPTS][16];
-
-    static const char optName[];
-    static const char optTip[];
-    std::list<std::string> options;
-
     bool addTrans(const char* newTrans, std::string* transList);
     std::unique_ptr<icu::Transliterator> createTrans(
             icu::UnicodeString const & ID,
@@ -85,11 +79,8 @@ public:
                          SWKey const * key = nullptr,
                          SWModule const * module = nullptr) override;
 
-    char const * getOptionName() override { return optName; }
-    char const * getOptionTip() override { return optTip; }
     void setOptionValue(char const * ival) override;
     char const * getOptionValue() override;
-    std::list<std::string> getOptionValues() override { return options; }
 
 };
 

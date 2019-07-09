@@ -33,21 +33,12 @@
 
 namespace swordxx {
 
-namespace {
-
-    static const char oName[] = "Textual Variants";
-    static const char oTip[]  = "Switch between Textual Variants modes";
-    static const char *choices[4] = { "Primary Reading", "Secondary Reading", "All Readings", "" };
-
-    static const std::list<std::string> *oValues() {
-        static const std::list<std::string> oVals(&choices[0], &choices[3]);
-        return &oVals;
-    }
-}
-
-
-OSISVariants::OSISVariants() : SWOptionFilter(oName, oTip, oValues()) {
-}
+OSISVariants::OSISVariants()
+    : SWOptionFilter(
+        "Textual Variants",
+        "Switch between Textual Variants modes",
+        { "Primary Reading", "Secondary Reading", "All Readings" })
+{}
 
 
 OSISVariants::~OSISVariants() {
@@ -62,9 +53,9 @@ char OSISVariants::processText(std::string &text, const SWKey *key, const SWModu
     (void) module;
 
     int option_ = 0;
-    if      (optionValue == choices[0]) option_ = 0;
-    else if (optionValue == choices[1]) option_ = 1;
-    else                                option_ = 2;
+    if      (optionValue == getOptionValues()[0]) option_ = 0;
+    else if (optionValue == getOptionValues()[1]) option_ = 1;
+    else                                          option_ = 2;
 
     if (option_ == 0 || option_ == 1) { //we want primary or variant only
         bool intoken = false;

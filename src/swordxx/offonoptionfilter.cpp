@@ -21,14 +21,12 @@
 
 namespace swordxx {
 
-namespace { std::list<std::string> const offOnValues({"Off", "On"}); }
-
 OffOnOptionFilter::OffOnOptionFilter()
-    : SWOptionFilter("", "", &offOnValues)
+    : SWOptionFilter("", "", {"Off", "On"})
 {}
 
 OffOnOptionFilter::OffOnOptionFilter(char const * name, char const * tip)
-    : SWOptionFilter(name, tip, &offOnValues)
+    : SWOptionFilter(name, tip, {"Off", "On"})
 {}
 
 OffOnOptionFilter::~OffOnOptionFilter() noexcept = default;
