@@ -51,13 +51,12 @@ char OSISGlosses::processText(std::string &text, const SWKey *key, const SWModul
     std::string token;
     bool intoken = false;
 
-    const std::string orig = text;
-    const char * from = orig.c_str();
 
     using namespace std::literals::string_view_literals;
 
     if (!option) {
-        for (text = ""; *from; ++from) {
+        std::string out;
+        for (auto const * from = text.c_str(); *from; ++from) {
             if (*from == '<') {
                 intoken = true;
                 token = "";
@@ -78,9 +77,9 @@ char OSISGlosses::processText(std::string &text, const SWKey *key, const SWModul
                 }
 
                 // keep token in text
-                text.push_back('<');
-                text.append(token);
-                text.push_back('>');
+                out.push_back('<');
+                out.append(token);
+                out.push_back('>');
 
                 continue;
             }
@@ -88,9 +87,10 @@ char OSISGlosses::processText(std::string &text, const SWKey *key, const SWModul
                 token.push_back(*from);
             }
             else    {
-                text.push_back(*from);
+                out.push_back(*from);
             }
         }
+        text = std::move(out);
     }
     return 0;
 }
