@@ -55,14 +55,13 @@ char OSISRedLetterWords::processText(std::string &text, const SWKey *key, const 
     std::string token;
     bool intoken    = false;
 
-    std::string orig = text;
-    const char *from = orig.c_str();
+    std::string out;
 
     //taken out of the loop
     char const * start = nullptr;
     char const * end = nullptr;
 
-    for (text = ""; *from; from++) {
+    for (auto const * from = text.c_str(); *from; from++) {
         if (*from == '<') {
             intoken = true;
             token = "";
@@ -76,19 +75,19 @@ char OSISRedLetterWords::processText(std::string &text, const SWKey *key, const 
                 if (start && (std::strlen(start) >= 12)) { //we found a quote of Jesus Christ
                     end = start+12; //marks the end of the who attribute value
 
-                    text.push_back('<');
-                    text.append(token.c_str(), start - (token.c_str())); //the text before the who attr
-                    text.append(end, token.c_str() + token.length() - end);  //text after the who attr
-                    text.push_back('>');
+                    out.push_back('<');
+                    out.append(token.c_str(), start - (token.c_str())); //the text before the who attr
+                    out.append(end, token.c_str() + token.length() - end);  //text after the who attr
+                    out.push_back('>');
 
                     continue;
                 }
             }
 
             //token not processed, append it. We don't want to alter the text
-            text.push_back('<');
-            text.append(token);
-            text.push_back('>');
+            out.push_back('<');
+            out.append(token);
+            out.push_back('>');
             continue;
         }
 
@@ -96,9 +95,10 @@ char OSISRedLetterWords::processText(std::string &text, const SWKey *key, const 
             token.push_back(*from);
         }
         else { //copy text which is not inside a token
-            text.push_back(*from);
+            out.push_back(*from);
         }
     }
+    text = std::move(out);
     return 0;
 }
 
