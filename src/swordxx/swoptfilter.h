@@ -87,7 +87,7 @@ public:
      * see also getOptionValues()
      * @param ival the new option value
      */
-    virtual void setOptionValue(std::string_view value);
+    void setOptionValue(std::string_view value);
 
 };
 
