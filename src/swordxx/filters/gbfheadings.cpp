@@ -47,8 +47,7 @@ char GBFHeadings::processText(std::string &text, const SWKey *key, const SWModul
     (void) key;
     (void) module;
     if (!option) {    // if we don't want headings
-        char token[2048]; // cheese.  Fix.
-        int tokpos = 0;
+        std::string lastToken;
         bool intoken = false;
         bool hide = false;
 
@@ -56,18 +55,13 @@ char GBFHeadings::processText(std::string &text, const SWKey *key, const SWModul
         for (const char *from = text.c_str(); *from; from++) {
             if (*from == '<') {
                 intoken = true;
-                tokpos = 0;
-//				std::memset(token, 0, 2048);
-                token[0] = 0;
-                token[1] = 0;
-                token[2] = 0;
+                lastToken.clear();
                 continue;
             }
             if (*from == '>') {	// process tokens
                 intoken = false;
-                switch (*token) {
-                case 'T':				// Reference
-                    switch(token[1]) {
+                if (lastToken.c_str()[0u] == 'T') {
+                    switch(lastToken.c_str()[1u]) {
                     case 'S':               // Begin heading
                         hide = true;
                         break;
@@ -80,18 +74,13 @@ char GBFHeadings::processText(std::string &text, const SWKey *key, const SWModul
                 // if not a heading token, keep token in text
                 if (!hide) {
                     out += '<';
-                    for (char *tok = token; *tok; tok++)
-                        out += *tok;
+                    out += lastToken;
                     out += '>';
                 }
                 continue;
             }
             if (intoken) {
-                if (tokpos < 2045) {
-                    token[tokpos++] = *from;
-                    // TODO: why is this + 2 ?
-                    token[tokpos+2] = 0;
-                }
+                lastToken += *from;
             }
             else {
                 if (!hide) {
