@@ -37,14 +37,13 @@ char PapyriPlain::processText (std::string &text, const SWKey *key, const SWModu
 {
     (void) key;
     (void) module;
-    std::string orig = text;
-    const char *from = orig.c_str();
+    std::string out;
 
-    for (text = ""; *from; ++from) {
+    for (auto const * from = text.c_str(); *from; ++from) {
 
         // remove hyphen and whitespace if that is all that separates words
         // also be sure we're not a double hyphen '--'
-        if ((*from == '-') && (text.length() > 0) && (text[text.length()-1] != '-')) {
+        if ((*from == '-') && (out.size() > 0) && (out[out.size()-1] != '-')) {
             char remove = 0;
             const char *c;
             for (c = from+1; *c; c++) {
@@ -64,8 +63,8 @@ char PapyriPlain::processText (std::string &text, const SWKey *key, const SWModu
 
         // remove all newlines
         if ((*from == 10) || (*from == 13)) {
-            if ((text.length()>1) && (text[text.length()-2] != ' ') && (*(from+1) != ' '))
-                text.push_back(' ');
+            if ((out.length()>1) && (out[out.size()-2] != ' ') && (*(from+1) != ' '))
+                out.push_back(' ');
             continue;
         }
 
@@ -84,9 +83,10 @@ char PapyriPlain::processText (std::string &text, const SWKey *key, const SWModu
         }
 
         // if we've made it this far
-        text.push_back(*from);
+        out.push_back(*from);
 
     }
+    text = std::move(out);
     return 0;
 }
 
