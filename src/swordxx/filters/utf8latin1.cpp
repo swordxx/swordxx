@@ -35,7 +35,6 @@ UTF8Latin1::UTF8Latin1(char rchar) : replacementChar(rchar) {
 char UTF8Latin1::processText(std::string &text, const SWKey *key, const SWModule *module)
 {
   (void) module;
-  unsigned char *from;
 
   unsigned long uchar;
   unsigned char significantFirstBits, subsequent;
@@ -44,13 +43,11 @@ char UTF8Latin1::processText(std::string &text, const SWKey *key, const SWModule
     return (char)-1;
   }
 
-  std::string orig = text;
-  from = (unsigned char*)orig.c_str();
-
-
+  std::string tmp(text);
+  std::string out;
   // -------------------------------
 
-  for (text = ""; *from; from++) {
+  for (auto from = reinterpret_cast<unsigned char *>(tmp.data()); *from; from++) {
     uchar = 0;
     if ((*from & 128) != 128) {
       //              if (*from != ' ')
@@ -77,12 +74,13 @@ char UTF8Latin1::processText(std::string &text, const SWKey *key, const SWModule
     }
 
     if (uchar < 0xff) {
-        text += (unsigned char)uchar;
+        out += (unsigned char)uchar;
     }
     else {
-        text += replacementChar;
+        out += replacementChar;
     }
   }
+  text = std::move(out);
   return 0;
 }
 
