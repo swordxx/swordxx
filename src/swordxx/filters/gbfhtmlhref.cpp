@@ -94,102 +94,25 @@ bool GBFHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterUs
 
     if (!substituteToken(buf, token)) {
         XMLTag tag(token);
-        /*if (startsWith(token, "w"sv)) {
-            // OSIS Word (temporary until OSISRTF is done)
-            valto = val;
-            num = std::strstr(token, "lemma=\"x-Strongs:");
-            if (num) {
-                for (num+=17; ((*num) && (*num != '\"')); num++)
-                    *valto++ = *num;
-                *valto = 0;
-                if (std::atoi((!charIsDigit(*val))?val+1:val) < 5627) {
-                    buf += " <small><em>&lt;<a href=\"type=Strongs value=";
-                    for (tok = val; *tok; tok++)
-                            buf += *tok;
-                    buf += "\">";
-                    for (tok = (!charIsDigit(*val))?val+1:val; *tok; tok++)
-                            buf += *tok;
-                    buf += "</a>&gt;</em></small> ";
-                    //cout << buf;
-
-                }
-                //    forget these for now
-                //else {
-                    // verb morph
-                    //sprintf(wordstr, "%03d", word-1);
-                    //module->getEntryAttributes()["Word"][wordstr]["Morph"] = val;
-                //}
-            }
-            else {
-                num = std::strstr(token, "lemma=\"strong:");
-                if (num) {
-                    for (num+=14; ((*num) && (*num != '\"')); num++)
-                        *valto++ = *num;
-                    *valto = 0;
-                    if (std::atoi((!charIsDigit(*val))?val+1:val) < 5627) {
-                        buf += " <small><em>&lt;<a href=\"type=Strongs value=";
-                        for (tok = val; *tok; tok++)
-                                buf += *tok;
-                        buf += "\">";
-                        for (tok = (!charIsDigit(*val))?val+1:val; *tok; tok++)
-                                buf += *tok;
-                        buf += "</a>&gt;</em></small> ";
-                        //cout << buf;
-
-                    }
-                    //    forget these for now
-                    //else {
-                        // verb morph
-                        //sprintf(wordstr, "%03d", word-1);
-                        //module->getEntryAttributes()["Word"][wordstr]["Morph"] = val;
-                    //}
-                }
-            }
-            valto = val;
-            num = std::strstr(token, "morph=\"x-Robinson:");
-            if (num) {
-                for (num+=18; ((*num) && (*num != '\"')); num++)
-                    *valto++ = *num;
-                *valto = 0;
-                buf += " <small><em>(<a href=\"type=morph class=Robinson value=";
-                for (tok = val; *tok; tok++)
-                // normal robinsons tense
-                        buf += *tok;
-                buf += "\">";
-                for (tok = val; *tok; tok++)
-                    //if(*tok != '\"')
-                        buf += *tok;
-                buf += "</a>)</em></small> ";
-            }
-        }*/
-
-        // else
         if (startsWith(token, "WG"sv)) { // strong's numbers
-            //buf += " <small><em>&lt;<a href=\"type=Strongs value=";
             buf += " <small><em class=\"strongs\">&lt;<a href=\"passagestudy.jsp?action=showStrongs&type=Greek&value=";
             for (tok = token+2; *tok; tok++)
-                //if(token[i] != '\"')
-                    buf += *tok;
+                buf += *tok;
             buf += "\" class=\"strongs\">";
             for (tok = token + 2; *tok; tok++)
-                //if(token[i] != '\"')
-                    buf += *tok;
+                buf += *tok;
             buf += "</a>&gt;</em></small>";
         }
         else if (startsWith(token, "WH"sv)) { // strong's numbers
-            //buf += " <small><em>&lt;<a href=\"type=Strongs value=";
             buf += " <small><em class=\"strongs\">&lt;<a href=\"passagestudy.jsp?action=showStrongs&type=Hebrew&value=";
             for (tok = token+2; *tok; tok++)
-                //if(token[i] != '\"')
-                    buf += *tok;
+                buf += *tok;
             buf += "\" class=\"strongs\">";
             for (tok = token + 2; *tok; tok++)
-                //if(token[i] != '\"')
-                    buf += *tok;
+                buf += *tok;
             buf += "</a>&gt;</em></small>";
         }
         else if (startsWith(token, "WTG"sv)) { // strong's numbers tense
-            //buf += " <small><em>(<a href=\"type=Strongs value=";
             buf += " <small><em class=\"strongs\">(<a href=\"passagestudy.jsp?action=showStrongs&type=Greek&value=";
             for (tok = token + 3; *tok; tok++)
                 if(*tok != '\"')
@@ -201,7 +124,6 @@ bool GBFHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterUs
             buf += "</a>)</em></small>";
         }
         else if (startsWith(token, "WTH"sv)) { // strong's numbers tense
-            //buf += " <small><em>(<a href=\"type=Strongs value=";
             buf += " <small><em class=\"strongs\">(<a href=\"passagestudy.jsp?action=showStrongs&type=Hebrew&value=";
             for (tok = token + 3; *tok; tok++)
                 if(*tok != '\"')
@@ -214,7 +136,6 @@ bool GBFHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterUs
         }
 
         else if (startsWith(token, "WT"sv)) { // morph tags
-            //buf += " <small><em>(<a href=\"type=morph class=none value=";
             buf += " <small><em class=\"morph\">(<a href=\"passagestudy.jsp?action=showMorph&type=Greek&value=";
 
             for (tok = token + 2; *tok; tok++)
@@ -245,7 +166,6 @@ bool GBFHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterUs
             std::string noteName = tag.attribute("n");
             if (auto const * const vkey = u->verseKey) {
                 // leave this special osis type in for crossReference notes types?  Might thml use this some day? Doesn't hurt.
-                //char const ch = ((tag.attribute("type") == "crossReference") || (tag.attribute("type") == "x-cross-ref")) ? 'x' : 'n';
                 buf += formatted("<a href=\"passagestudy.jsp?action=showNote&type=n&value=%s&module=%s&passage=%s\"><small><sup class=\"n\">*n%s</sup></small></a> ",
                     URL::encode(footnoteNumber),
                     URL::encode(u->version),
