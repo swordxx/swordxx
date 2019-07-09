@@ -57,12 +57,11 @@ char OSISStrongs::processText(std::string &text, const SWKey *key, const SWModul
     char const * wordStart = nullptr;
     std::string page = "";        // some modules include <seg> page info, so we add these to the words
 
-    const std::string orig = text;
-    const char * from = orig.c_str();
+    std::string out;
 
     using namespace std::literals::string_view_literals;
 
-    for (text = ""; *from; ++from) {
+    for (auto const * from = text.c_str(); *from; ++from) {
         if (*from == '<') {
             intoken = true;
             token = "";
@@ -269,9 +268,9 @@ char OSISStrongs::processText(std::string &text, const SWKey *key, const SWModul
             }
 
             // keep token in text
-            text.push_back('<');
-            text.append(token);
-            text.push_back('>');
+            out.push_back('<');
+            out.append(token);
+            out.push_back('>');
 
             continue;
         }
@@ -279,9 +278,10 @@ char OSISStrongs::processText(std::string &text, const SWKey *key, const SWModul
             token += *from;
         }
         else    {
-            text.push_back(*from);
+            out.push_back(*from);
         }
     }
+    text = std::move(out);
     return 0;
 }
 
