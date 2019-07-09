@@ -43,7 +43,7 @@ protected:
     bool isBooleanVal;
 public:
 
-    SWOptionFilter();
+    SWOptionFilter() noexcept;
     SWOptionFilter(std::string oName,
                    std::string oTip,
                    std::vector<std::string> oValues);

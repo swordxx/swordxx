@@ -31,11 +31,7 @@
 namespace swordxx {
 
 
-SWOptionFilter::SWOptionFilter() {
-    static const char *empty2 = "";
-    optName   = empty2;
-    optTip    = empty2;
-}
+SWOptionFilter::SWOptionFilter() noexcept = default;
 
 
 SWOptionFilter::SWOptionFilter(std::string oName,
