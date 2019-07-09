@@ -58,7 +58,6 @@ char GBFFootnotes::processText (std::string &text, const SWKey *key, const SWMod
     XMLTag startTag;
     std::string refs = "";
     int footnoteNum = 1;
-    char buf[254];
 
     std::string out;
 
@@ -100,13 +99,14 @@ char GBFFootnotes::processText (std::string &text, const SWKey *key, const SWMod
                     }
                     std::string fc = module->getEntryAttributes()["Footnote"]["count"]["value"];
                     footnoteNum = (fc.length()) ? std::atoi(fc.c_str()) : 0;
-                    sprintf(buf, "%i", ++footnoteNum);
-                    module->getEntryAttributes()["Footnote"]["count"]["value"] = buf;
+                    auto footnoteNumStr(std::to_string(++footnoteNum));
+                    module->getEntryAttributes()["Footnote"]["count"]["value"] =
+                            footnoteNumStr;
                     for (auto const & attr : startTag.attributeNames())
-                        module->getEntryAttributes()["Footnote"][buf][attr.c_str()] =
-                                startTag.attribute(attr.c_str());
-                    module->getEntryAttributes()["Footnote"][buf]["body"] = tagText;
-                    startTag.setAttribute("swordFootnote", buf);
+                        module->getEntryAttributes()["Footnote"][footnoteNumStr][attr] =
+                                startTag.attribute(attr);
+                    module->getEntryAttributes()["Footnote"][footnoteNumStr]["body"] = tagText;
+                    startTag.setAttribute("swordFootnote", footnoteNumStr.c_str());
                 }
                 hide = false;
                 if (option) {
