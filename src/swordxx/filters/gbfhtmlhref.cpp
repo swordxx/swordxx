@@ -87,7 +87,6 @@ std::unique_ptr<BasicFilterUserData> GBFHTMLHREF::createUserData(
 { return std::make_unique<MyUserData>(module, key); }
 
 bool GBFHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterUserData *userData) {
-    const char *tok;
     MyUserData * u = static_cast<MyUserData *>(userData);
 
     using namespace std::literals::string_view_literals;
@@ -96,40 +95,36 @@ bool GBFHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterUs
         XMLTag tag(token);
         if (startsWith(token, "WG"sv)) { // strong's numbers
             buf += " <small><em class=\"strongs\">&lt;<a href=\"passagestudy.jsp?action=showStrongs&type=Greek&value=";
-            for (tok = token+2; *tok; tok++)
-                buf += *tok;
+            buf += token + 2;
             buf += "\" class=\"strongs\">";
-            for (tok = token + 2; *tok; tok++)
-                buf += *tok;
+            buf += token + 2;
             buf += "</a>&gt;</em></small>";
         }
         else if (startsWith(token, "WH"sv)) { // strong's numbers
             buf += " <small><em class=\"strongs\">&lt;<a href=\"passagestudy.jsp?action=showStrongs&type=Hebrew&value=";
-            for (tok = token+2; *tok; tok++)
-                buf += *tok;
+            buf += token + 2;
             buf += "\" class=\"strongs\">";
-            for (tok = token + 2; *tok; tok++)
-                buf += *tok;
+            buf += token + 2;
             buf += "</a>&gt;</em></small>";
         }
         else if (startsWith(token, "WTG"sv)) { // strong's numbers tense
             buf += " <small><em class=\"strongs\">(<a href=\"passagestudy.jsp?action=showStrongs&type=Greek&value=";
-            for (tok = token + 3; *tok; tok++)
+            for (auto tok = token + 3; *tok; ++tok)
                 if(*tok != '\"')
                     buf += *tok;
             buf += "\" class=\"strongs\">";
-            for (tok = token + 3; *tok; tok++)
+            for (auto tok = token + 3; *tok; ++tok)
                 if(*tok != '\"')
                     buf += *tok;
             buf += "</a>)</em></small>";
         }
         else if (startsWith(token, "WTH"sv)) { // strong's numbers tense
             buf += " <small><em class=\"strongs\">(<a href=\"passagestudy.jsp?action=showStrongs&type=Hebrew&value=";
-            for (tok = token + 3; *tok; tok++)
+            for (auto tok = token + 3; *tok; ++tok)
                 if(*tok != '\"')
                     buf += *tok;
             buf += "\" class=\"strongs\">";
-            for (tok = token + 3; *tok; tok++)
+            for (auto tok = token + 3; *tok; ++tok)
                 if(*tok != '\"')
                     buf += *tok;
             buf += "</a>)</em></small>";
@@ -138,11 +133,11 @@ bool GBFHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterUs
         else if (startsWith(token, "WT"sv)) { // morph tags
             buf += " <small><em class=\"morph\">(<a href=\"passagestudy.jsp?action=showMorph&type=Greek&value=";
 
-            for (tok = token + 2; *tok; tok++)
+            for (auto tok = token + 2; *tok; ++tok)
                 if(*tok != '\"')
                     buf += *tok;
             buf += "\" class=\"morph\">";
-            for (tok = token + 2; *tok; tok++)
+            for (auto tok = token + 2; *tok; ++tok)
                 if(*tok != '\"')
                     buf += *tok;
             buf += "</a>)</em></small>";
@@ -150,7 +145,7 @@ bool GBFHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterUs
 
         else if (tag.name() == "RX") {
             buf += "<a href=\"";
-            for (tok = token + 3; *tok; tok++) {
+            for (auto tok = token + 3; *tok; ++tok) {
               if(*tok != '<' && *tok+1 != 'R' && *tok+2 != 'x') {
                 buf += *tok;
               }
@@ -179,7 +174,7 @@ bool GBFHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterUs
         }
         else if (startsWith(token, "FN"sv)) {
             buf += "<font face=\"";
-            for (tok = token + 2; *tok; tok++)
+            for (auto tok = token + 2; *tok; ++tok)
                 if(*tok != '\"')
                     buf += *tok;
             buf += "\">";
