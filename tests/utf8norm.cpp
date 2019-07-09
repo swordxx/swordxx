@@ -40,11 +40,10 @@ int main(int argc, char **argv) {
         std::string const fixed(assureValidUTF8(buf));
         cout << "input / processed:\n" << buf << "\n" << fixed << endl;
     } else {
-        std::unique_ptr<SWOptionFilter> filter;
+        std::unique_ptr<UTF8GreekAccents> filter;
         if (argc > 1 && !std::strcmp(argv[1], "-ga")) {
             filter = std::make_unique<UTF8GreekAccents>();
-            if (filter->isBoolean())
-                filter->setOptionValue("Off");
+            filter->setOptionValue("Off");
         }
         int repeat = 1;
         if (argc > 2)
