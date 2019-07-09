@@ -72,10 +72,9 @@ char ThMLFootnotes::processText(std::string &text, const SWKey *key, const SWMod
     }
     parser->setText(key->getText());
 
-    std::string orig = text;
-    const char *from = orig.c_str();
+    std::string out;
 
-    for (text = ""; *from; from++) {
+    for (auto const * from = text.c_str(); *from; from++) {
         if (*from == '<') {
             intoken = true;
             token = "";
@@ -114,8 +113,8 @@ char ThMLFootnotes::processText(std::string &text, const SWKey *key, const SWMod
                     }
                     hide = false;
                     if (option || (startTag.attribute("type") == "crossReference")) {    // we want the tag in the text; crossReferences are handled by another filter
-                        text += startTag.toString();
-                        text.append(tagText);
+                        out += startTag.toString();
+                        out.append(tagText);
                     }
                     else    continue;
                 }
@@ -129,9 +128,9 @@ char ThMLFootnotes::processText(std::string &text, const SWKey *key, const SWMod
                 refs += osisRef;
             }
             if (!hide) {
-                text += '<';
-                text.append(token);
-                text += '>';
+                out += '<';
+                out.append(token);
+                out += '>';
             }
             else {
                 tagText += '<';
@@ -144,10 +143,11 @@ char ThMLFootnotes::processText(std::string &text, const SWKey *key, const SWMod
             token += *from;
         }
         else if (!hide) { //copy text which is not inside a token
-            text += *from;
+            out += *from;
         }
         else tagText += *from;
     }
+    text = std::move(out);
     return 0;
 }
 
