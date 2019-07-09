@@ -71,10 +71,9 @@ char ThMLScripref::processText(std::string &text, const SWKey *key, const SWModu
     }
     parser->setText(key->getText());
 
-    std::string orig = text;
-    const char *from = orig.c_str();
+    std::string out;
 
-    for (text = ""; *from; from++) {
+    for (auto const * from = text.c_str(); *from; from++) {
         if (*from == '<') {
             intoken = true;
             token = "";
@@ -113,8 +112,8 @@ char ThMLScripref::processText(std::string &text, const SWKey *key, const SWModu
                     }
                     hide = false;
                     if (option) {    // we want the tag in the text
-                        text += startTag.toString();
-                        text.append(tagText);
+                        out += startTag.toString();
+                        out.append(tagText);
                     }
                     else    continue;
                 }
@@ -128,9 +127,9 @@ char ThMLScripref::processText(std::string &text, const SWKey *key, const SWModu
                 refs += osisRef;
             }
             if (!hide) {
-                text += '<';
-                text.append(token);
-                text += '>';
+                out += '<';
+                out.append(token);
+                out += '>';
             }
             else {
                 tagText += '<';
@@ -143,10 +142,11 @@ char ThMLScripref::processText(std::string &text, const SWKey *key, const SWModu
             token += *from;
         }
         else if (!hide) { //copy text which is not inside a token
-            text += *from;
+            out += *from;
         }
         else tagText += *from;
     }
+    text = std::move(out);
     return 0;
 }
 

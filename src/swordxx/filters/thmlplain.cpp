@@ -45,7 +45,6 @@ char ThMLPlain::processText(std::string &text, const SWKey *key, const SWModule 
     bool intoken = false;
     bool ampersand = false;
 
-    const char *from;
     std::string out;
     for (auto const * from = text.c_str(); *from; from++)
     {
