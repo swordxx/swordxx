@@ -202,12 +202,12 @@ void zCom4::increment(int steps) {
     error = (error) ? KEYERR_OUTOFBOUNDS : 0;
 }
 
-bool zCom4::isLinked(const SWKey *k1, const SWKey *k2) const {
+bool zCom4::isLinked(SWKey const & k1, SWKey const & k2) const {
     VerseOffsetType start1, start2;
     VerseSizeType size1, size2;
     BufferNumberType buffnum1, buffnum2;
-    VerseKey const & vk1 = getVerseKey(k1);
-    VerseKey const & vk2 = getVerseKey(k2);
+    VerseKey const & vk1 = getVerseKey(&k1);
+    VerseKey const & vk2 = getVerseKey(&k2);
     if (vk1.getTestament() != vk2.getTestament()) return false;
 
     findOffset(vk1.getTestament(), vk1.getTestamentIndex(), &start1, &size1, &buffnum1);
@@ -215,11 +215,11 @@ bool zCom4::isLinked(const SWKey *k1, const SWKey *k2) const {
     return start1 == start2 && buffnum1 == buffnum2;
 }
 
-bool zCom4::hasEntry(const SWKey *k) const {
+bool zCom4::hasEntry(SWKey const & k) const {
     VerseOffsetType start;
     VerseSizeType size;
     BufferNumberType buffnum;
-    VerseKey const & vk = getVerseKey(k);
+    VerseKey const & vk = getVerseKey(&k);
     findOffset(vk.getTestament(), vk.getTestamentIndex(), &start, &size, &buffnum);
     return size;
 }

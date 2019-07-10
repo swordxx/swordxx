@@ -188,9 +188,9 @@ char RawGenBook::createModule(NormalizedPath const & path) {
 std::unique_ptr<SWKey> RawGenBook::createKey() const
 { return staticCreateKey(m_path.c_str(), verseKey); }
 
-bool RawGenBook::hasEntry(const SWKey *k) const {
+bool RawGenBook::hasEntry(SWKey const & k) const {
     /// \bug remove const_cast:
-    TreeKey & key_ = getTreeKey(const_cast<SWKey *>(k));
+    TreeKey & key_ = getTreeKey(&const_cast<SWKey &>(k));
 
     int dsize;
     key_.getUserData(&dsize);

@@ -46,7 +46,7 @@ int main(int argc, char * argv[]) {
             bible ? static_cast<VerseKey *>(bible->getKey()) : new VerseKey();
 
     for (vk->positionToTop(); !vk->popError(); vk->setBook(vk->getBook() + 1))
-        if (!bible || bible->hasEntry(vk))
+        if (!bible || bible->hasEntry(*vk))
             std::cout << vk->getBookName() << '\n';
 
     /* If we allocated VerseKey unassociated with a module, above, then we must

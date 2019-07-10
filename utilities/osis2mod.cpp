@@ -453,7 +453,7 @@ void makeValidRef(VerseKey &key) {
     //    In this case we should re-versify Matt.7.30 as Matt.7.29.
     //    However, since this and 2) are ambiguous, we'll re-reversify to the last entry in the module.
 
-    while (!key.popError() && !module->hasEntry(&key)) {
+    while (!key.popError() && !module->hasEntry(key)) {
         key.decrement(1);
     }
 
@@ -536,7 +536,7 @@ void writeEntry(std::string &text, bool force = false) {
         // If the entry already exists, then append this entry to the text.
         // This is for verses that are outside the chosen versification. They are appended to the prior verse.
         // The space should not be needed if we retained verse tags.
-        if (module->hasEntry(&currentVerse)) {
+        if (module->hasEntry(currentVerse)) {
             module->flush();
             std::string currentText = module->getRawEntry();
             std::cout << "INFO(WRITE): Appending entry: " << currentVerse.getOSISRef() << ": " << activeVerseText << std::endl;

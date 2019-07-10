@@ -61,7 +61,7 @@ public:
     void deleteEntry() override;
     std::unique_ptr<SWKey> createKey() const override;
 
-    bool hasEntry(SWKey const * k) const override;
+    bool hasEntry(SWKey const & k) const override;
 
 protected: /* Methods: */
 

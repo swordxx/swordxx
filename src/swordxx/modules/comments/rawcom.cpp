@@ -156,11 +156,11 @@ void RawCom::deleteEntry() {
     doSetText(key_.getTestament(), key_.getTestamentIndex(), "");
 }
 
-bool RawCom::isLinked(const SWKey *k1, const SWKey *k2) const {
+bool RawCom::isLinked(SWKey const & k1, SWKey const & k2) const {
     StartType start1, start2;
     SizeType size1, size2;
-    VerseKey const & vk1 = getVerseKey(k1);
-    VerseKey const & vk2 = getVerseKey(k2);
+    VerseKey const & vk1 = getVerseKey(&k1);
+    VerseKey const & vk2 = getVerseKey(&k2);
     if (vk1.getTestament() != vk2.getTestament()) return false;
 
     findOffset(vk1.getTestament(), vk1.getTestamentIndex(), &start1, &size1);
@@ -169,10 +169,10 @@ bool RawCom::isLinked(const SWKey *k1, const SWKey *k2) const {
     return start1 == start2;
 }
 
-bool RawCom::hasEntry(const SWKey *k) const {
+bool RawCom::hasEntry(SWKey const & k) const {
     StartType start;
     SizeType size;
-    VerseKey const & vk = getVerseKey(k);
+    VerseKey const & vk = getVerseKey(&k);
     findOffset(vk.getTestament(), vk.getTestamentIndex(), &start, &size);
     return size;
 }

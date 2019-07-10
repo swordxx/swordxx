@@ -198,12 +198,12 @@ void zTextBase<BaseZVerse>::increment(int steps) {
 }
 
 template <typename BaseZVerse>
-bool zTextBase<BaseZVerse>::isLinked(const SWKey *k1, const SWKey *k2) const {
+bool zTextBase<BaseZVerse>::isLinked(SWKey const & k1, SWKey const & k2) const {
     VerseOffsetType start1, start2;
     VerseSizeType size1, size2;
     BufferNumberType buffnum1, buffnum2;
-    VerseKey const & vk1 = getVerseKey(k1);
-    VerseKey const & vk2 = getVerseKey(k2);
+    VerseKey const & vk1 = getVerseKey(&k1);
+    VerseKey const & vk2 = getVerseKey(&k2);
     if (vk1.getTestament() != vk2.getTestament()) return false;
 
     this->findOffset(vk1.getTestament(), vk1.getTestamentIndex(), &start1, &size1, &buffnum1);
@@ -212,11 +212,11 @@ bool zTextBase<BaseZVerse>::isLinked(const SWKey *k1, const SWKey *k2) const {
 }
 
 template <typename BaseZVerse>
-bool zTextBase<BaseZVerse>::hasEntry(const SWKey *k) const {
+bool zTextBase<BaseZVerse>::hasEntry(SWKey const & k) const {
     VerseOffsetType start;
     VerseSizeType size;
     BufferNumberType buffnum;
-    VerseKey const & vk = getVerseKey(k);
+    VerseKey const & vk = getVerseKey(&k);
     this->findOffset(vk.getTestament(), vk.getTestamentIndex(), &start, &size, &buffnum);
     return size;
 }

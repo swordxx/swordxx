@@ -480,8 +480,8 @@ public:
      */
     bool isSkipConsecutiveLinks() { return skipConsecutiveLinks; }
 
-    virtual bool isLinked(const SWKey *, const SWKey *) const { return false; }
-    virtual bool hasEntry(const SWKey *) const { return false; }
+    virtual bool isLinked(SWKey const &, SWKey const &) const { return false; }
+    virtual bool hasEntry(SWKey const &) const { return false; }
 
     /** Entry Attributes are special data pertaining to the current entry.
      *    To see what Entry Attributes exists for a specific entry of a module,

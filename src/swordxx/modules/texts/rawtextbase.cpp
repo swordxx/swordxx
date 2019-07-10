@@ -172,11 +172,11 @@ void RawTextBase<BaseRawVerse>::increment(int steps) {
 }
 
 template <typename BaseRawVerse>
-bool RawTextBase<BaseRawVerse>::isLinked(const SWKey *k1, const SWKey *k2) const {
+bool RawTextBase<BaseRawVerse>::isLinked(SWKey const & k1, SWKey const & k2) const {
     StartType start1, start2;
     SizeType size1, size2;
-    VerseKey const & vk1 = getVerseKey(k1);
-    VerseKey const & vk2 = getVerseKey(k2);
+    VerseKey const & vk1 = getVerseKey(&k1);
+    VerseKey const & vk2 = getVerseKey(&k2);
     if (vk1.getTestament() != vk2.getTestament()) return false;
 
     this->findOffset(vk1.getTestament(),
@@ -192,10 +192,10 @@ bool RawTextBase<BaseRawVerse>::isLinked(const SWKey *k1, const SWKey *k2) const
 }
 
 template <typename BaseRawVerse>
-bool RawTextBase<BaseRawVerse>::hasEntry(const SWKey *k) const {
+bool RawTextBase<BaseRawVerse>::hasEntry(SWKey const & k) const {
     StartType start;
     SizeType size;
-    VerseKey const & vk = getVerseKey(k);
+    VerseKey const & vk = getVerseKey(&k);
     this->findOffset(vk.getTestament(), vk.getTestamentIndex(), &start, &size);
     return size;
 }

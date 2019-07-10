@@ -73,8 +73,8 @@ public:
 
     void flush() override { flushCache(); }
 
-    bool isLinked(SWKey const * k1, SWKey const * k2) const override;
-    bool hasEntry(SWKey const * k) const override;
+    bool isLinked(SWKey const & k1, SWKey const & k2) const override;
+    bool hasEntry(SWKey const & k) const override;
 
 protected: /* Methods: */
 

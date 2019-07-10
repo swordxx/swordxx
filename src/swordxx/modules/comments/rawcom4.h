@@ -55,8 +55,8 @@ public:
     void setEntry(char const * inbuf, long len = -1) override;
     void linkEntry(SWKey const & linkKey) override;
     void deleteEntry() override;
-    bool isLinked(SWKey const * k1, SWKey const * k2) const override;
-    bool hasEntry(SWKey const * k) const override;
+    bool isLinked(SWKey const & k1, SWKey const & k2) const override;
+    bool hasEntry(SWKey const & k) const override;
 
 protected: /* Methods: */
 
