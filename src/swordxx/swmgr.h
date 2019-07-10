@@ -352,20 +352,21 @@ public:
      * value. Well known and often used values are "Footnotes" or "Strong's Numbers"
      * @param value new value. Common values are "On" and "Off"
      */
-    virtual void setGlobalOption(const char *option, const char *value);
+    virtual void setGlobalOption(std::string_view option,
+                                 std::string_view value);
 
     /** Get the current value of the given option
      * @param option the name of the option, who's value is desired
      * @return the value of the given option
      */
-    virtual const char *getGlobalOption(const char *option);
+    virtual const char *getGlobalOption(std::string_view option);
 
     /** Gets a brief description for the given option
      * @param option the name of the option, who's tip is desired
      * @return description text
      * @see setGlobalOption, getGlobalOption, getGlobalOptions
      */
-    virtual const char *getGlobalOptionTip(const char *option);
+    virtual const char *getGlobalOptionTip(std::string_view option);
 
     /** Gets a list of all available option names
      * @return list of option names
@@ -377,7 +378,7 @@ public:
      * @param option the name of the option, who's legal values are desired
      * @return a list of legal values for the given option
      */
-    virtual std::list<std::string> getGlobalOptionValues(const char * option);
+    virtual std::list<std::string> getGlobalOptionValues(std::string_view option);
 
     /** Filters a buffer thru a named filter
      * @param filterName

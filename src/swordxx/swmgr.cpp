@@ -1242,8 +1242,8 @@ char SWMgr::AddModToConfig(FileDesc & conffd, const char *fname)
 }
 
 
-void SWMgr::setGlobalOption(const char * const option,
-                            const char * const value)
+void SWMgr::setGlobalOption(std::string_view option,
+                            std::string_view value)
 {
     for (auto const & ofp : m_optionFilters)
         if (caseInsensitiveEquals(option, ofp.second->getOptionName()))
@@ -1251,7 +1251,7 @@ void SWMgr::setGlobalOption(const char * const option,
 }
 
 
-const char * SWMgr::getGlobalOption(const char * const option) {
+const char * SWMgr::getGlobalOption(std::string_view option) {
     for (auto const & ofp : m_optionFilters)
         if (caseInsensitiveEquals(option, ofp.second->getOptionName()))
             return ofp.second->getSelectedOptionValue().c_str();
@@ -1259,7 +1259,7 @@ const char * SWMgr::getGlobalOption(const char * const option) {
 }
 
 
-const char * SWMgr::getGlobalOptionTip(const char * const option) {
+const char * SWMgr::getGlobalOptionTip(std::string_view option) {
     for (auto const & ofp : m_optionFilters)
         if (caseInsensitiveEquals(option, ofp.second->getOptionName()))
             return ofp.second->getOptionTip().c_str();
@@ -1270,7 +1270,7 @@ const char * SWMgr::getGlobalOptionTip(const char * const option) {
 std::list<std::string> SWMgr::getGlobalOptions() { return options; }
 
 
-std::list<std::string> SWMgr::getGlobalOptionValues(const char * const option) {
+std::list<std::string> SWMgr::getGlobalOptionValues(std::string_view option) {
     /* Just find the first one. All option filters with the same option name
        should expect the same values. */
     for (auto const & ofp : m_optionFilters) {
