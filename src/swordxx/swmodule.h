@@ -461,13 +461,13 @@ public:
      * @param tmpKey desired module entry
      * @return result buffer
      */
-    std::string stripText(SWKey const * tmpKey);
+    std::string stripText(SWKey const & tmpKey);
 
     /** Produces renderable text of the module entry at the supplied key
      * @param tmpKey key to use to grab text
      * @return this module's text at specified key location massaged by Render filters
      */
-    std::string renderText(SWKey const * tmpKey);
+    std::string renderText(SWKey const & tmpKey);
 
     /** Whether or not to only hit one entry when iterating encounters
      *    consecutive links when iterating

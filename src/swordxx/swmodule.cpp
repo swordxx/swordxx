@@ -330,7 +330,7 @@ std::string SWModule::renderText(const char *buf, int len, bool render) const {
  * RET: this module's text at current key location massaged by RenderFilers
  */
 
-std::string SWModule::renderText(const SWKey *tmpKey) {
+std::string SWModule::renderText(SWKey const & tmpKey) {
     SWKey *saveKey;
 
     if (!key->isPersist()) {
@@ -339,7 +339,7 @@ std::string SWModule::renderText(const SWKey *tmpKey) {
     }
     else    saveKey = key;
 
-    setKey(*tmpKey);
+    setKey(tmpKey);
 
     auto retVal(renderText());
 
@@ -360,7 +360,7 @@ std::string SWModule::renderText(const SWKey *tmpKey) {
  * RET: this module's text at specified key location massaged by Strip filters
  */
 
-std::string SWModule::stripText(const SWKey *tmpKey) {
+std::string SWModule::stripText(SWKey const & tmpKey) {
     SWKey *saveKey;
 
     if (!key->isPersist()) {
@@ -369,7 +369,7 @@ std::string SWModule::stripText(const SWKey *tmpKey) {
     }
     else    saveKey = key;
 
-    setKey(*tmpKey);
+    setKey(tmpKey);
 
     auto retVal(stripText());
 
