@@ -429,45 +429,37 @@ public:
         filterBuffer(m_optionFilters, buf, key_);
     }
 
-    /** Produces plain text, without markup, of the current module entry,
-     *    or supplied text
+    /** Produces plain text, without markup, of the current module entry
      *
-     * @param buf buf to massage instead of current module entry;
-     *    if buf is 0, the current text will be used
-     * @param len max len to process
      * @return result buffer
      */
-    std::string stripText(char const * buf = nullptr, int len = -1);
+    std::string stripText();
 
-    /** Produces renderable text of the current module entry or supplied text
+    /** Produces plain text, without markup, of the supplied text
+     *
+     * @param buf the buffer to massage
+     * @return result buffer
+     */
+    std::string stripText(std::string buf);
+
+    /** Produces renderable text of the current module entry
+     *
+     * @return result buffer
+     */
+    std::string renderText() const;
+
+    /** Produces renderable text of the supplied text
      *
      * @param buf buffer to massage instead of current module entry;
-     *    if buf is 0, the current module position text will be used
-     * @param len max len to process
-     * @param render for internal use
      * @return result buffer
      */
-    std::string renderText(const char *buf = nullptr,
-                     int len = -1,
-                     bool render = true) const;
+    std::string renderText(std::string buf) const;
 
     /** Produces any header data which might be useful which is associated with the
      *    processing done with this filter.  A typical example is a suggested
      *    CSS style block for classed containers.
      */
     char const * getRenderHeader() const;
-
-    /** Produces plain text, without markup, of the module entry at the supplied key
-     * @param tmpKey desired module entry
-     * @return result buffer
-     */
-    std::string stripText(SWKey const & tmpKey);
-
-    /** Produces renderable text of the module entry at the supplied key
-     * @param tmpKey key to use to grab text
-     * @return this module's text at specified key location massaged by Render filters
-     */
-    std::string renderText(SWKey const & tmpKey);
 
     /** Whether or not to only hit one entry when iterating encounters
      *    consecutive links when iterating

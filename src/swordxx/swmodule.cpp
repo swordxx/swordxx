@@ -246,17 +246,31 @@ std::string SWModule::getRawEntry() const {
 }
 
 
-/******************************************************************************
- * SWModule::stripText()     - calls all stripfilters on current text
- *
- * ENT:    buf    - buf to massage instead of this modules current text
- *     len    - max len of buf
- *
- * RET: this module's text at current key location massaged by Strip filters
- */
+std::string SWModule::stripText() {
+    m_entryAttributes.clear();
+    std::string buf(getRawEntry());
+    if (!buf.empty()) {
+        optionFilter(buf, key);
+        stripFilter(buf, key);
+    }
+    return buf;
+}
 
-std::string SWModule::stripText(const char * buf, int len)
-{ return renderText(buf, len, false); }
+std::string SWModule::stripText(std::string buf) {
+    bool savePEA = m_processEntryAttributes;
+    m_processEntryAttributes = false;
+    try {
+        if (!buf.empty()) {
+            optionFilter(buf, key);
+            stripFilter(buf, key);
+        }
+    } catch (...) {
+        m_processEntryAttributes = savePEA;
+        throw;
+    }
+    m_processEntryAttributes = savePEA;
+    return buf;
+}
 
 
 /** SWModule::getRenderHeader()    - Produces any header data which might be
@@ -267,118 +281,32 @@ std::string SWModule::stripText(const char * buf, int len)
 char const * SWModule::getRenderHeader() const
 { return m_renderFilters.empty() ? "" : m_renderFilters.front()->getHeader(); }
 
-
-/******************************************************************************
- * SWModule::renderText     - calls all renderfilters on provided text
- *                or current module position provided text null
- *
- * ENT:    buf    - buffer to render
- *
- * RET: this module's text at current key location massaged by renderText filters
- *
- * NOTES: This method is only truly const if called with a provided text; using
- * module's current position may produce a new entry attributes map which
- * logically violates the const semantic, which is why the above method
- * which takes no params is not const, i.e., don't call this method with
- * null as text param, but instead use non-const method above.  The public
- * interface for this method expects a value for the text param.  We use it
- * internally sometimes calling with null to save duplication of code.
- */
-
-std::string SWModule::renderText(const char *buf, int len, bool render) const {
-    bool savePEA = isProcessEntryAttributes();
-    if (!buf) {
-        m_entryAttributes.clear();
+std::string SWModule::renderText() const {
+    m_entryAttributes.clear();
+    std::string buf(getRawEntry());
+    if (!buf.empty()) {
+        optionFilter(buf, key);
+        renderFilter(buf, key);
+        encodingFilter(buf, key);
     }
-    else {
-        setProcessEntryAttributes(false);
-    }
+    return buf;
+}
 
-    std::string tmpbuf;
-    if (buf) {
-        tmpbuf = buf;
-    } else {
-        tmpbuf = getRawEntry();
-    }
-
-    SWKey * key2 = nullptr;
-
-    unsigned long size = (len < 0) ? ((getEntrySize()<0) ? tmpbuf.size() : getEntrySize()) : len;
-    if (size > 0) {
-        key2 = this->getKey();
-
-        optionFilter(tmpbuf, key2);
-
-        if (render) {
-            renderFilter(tmpbuf, key2);
-            encodingFilter(tmpbuf, key2);
+std::string SWModule::renderText(std::string buf) const {
+    bool const savePEA = m_processEntryAttributes;
+    m_processEntryAttributes = false;
+    try {
+        if (!buf.empty()) {
+            optionFilter(buf, key);
+            renderFilter(buf, key);
+            encodingFilter(buf, key);
         }
-        else    stripFilter(tmpbuf, key2);
+    } catch (...) {
+        m_processEntryAttributes = savePEA;
+        throw;
     }
-
-    setProcessEntryAttributes(savePEA);
-
-    return tmpbuf;
-}
-
-
-/******************************************************************************
- * SWModule::renderText     - calls all renderfilters on current text
- *
- * ENT:    tmpKey    - key to use to grab text
- *
- * RET: this module's text at current key location massaged by RenderFilers
- */
-
-std::string SWModule::renderText(SWKey const & tmpKey) {
-    SWKey *saveKey;
-
-    if (!key->isPersist()) {
-        saveKey = createKey().release();
-        saveKey->positionFrom(*key);
-    }
-    else    saveKey = key;
-
-    setKey(tmpKey);
-
-    auto retVal(renderText());
-
-    setKey(*saveKey);
-
-    if (!saveKey->isPersist())
-        delete saveKey;
-
-    return retVal;
-}
-
-
-/******************************************************************************
- * SWModule::stripText     - calls all StripTextFilters on current text
- *
- * ENT:    tmpKey    - key to use to grab text
- *
- * RET: this module's text at specified key location massaged by Strip filters
- */
-
-std::string SWModule::stripText(SWKey const & tmpKey) {
-    SWKey *saveKey;
-
-    if (!key->isPersist()) {
-        saveKey = createKey().release();
-        saveKey->positionFrom(*key);
-    }
-    else    saveKey = key;
-
-    setKey(tmpKey);
-
-    auto retVal(stripText());
-
-    setKey(*saveKey);
-
-    if (!saveKey->isPersist())
-        delete saveKey;
-
-    return retVal;
+    m_processEntryAttributes = savePEA;
+    return buf;
 }
 
 const char *SWModule::getConfigEntry(const char *key_) const {
