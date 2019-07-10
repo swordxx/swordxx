@@ -30,13 +30,15 @@
 
 namespace swordxx {
 
-OSISReferenceLinks::OSISReferenceLinks(const char *optionName, const char *optionTip, const char *type, const char *subType, const char *defaultValue)
-    : OnOffOptionFilter(optionName, optionTip)
-    , m_type(type)
-    , m_subType(subType)
-{
-    setOptionValue(defaultValue);
-}
+OSISReferenceLinks::OSISReferenceLinks(std::string optionName,
+                                       std::string optionTip,
+                                       std::string type,
+                                       std::string subType,
+                                       std::string_view defaultValue)
+    : OnOffOptionFilter(std::move(optionName), std::move(optionTip))
+    , m_type(std::move(type))
+    , m_subType(std::move(subType))
+{ setOptionValue(std::move(defaultValue)); }
 
 
 OSISReferenceLinks::~OSISReferenceLinks() {

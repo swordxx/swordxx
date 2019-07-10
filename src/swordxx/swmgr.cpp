@@ -993,11 +993,11 @@ void SWMgr::addGlobalOptionFilters(SWModule & module,
             it = m_optionFilters.find(filterName);
             if (it == m_optionFilters.end()) {
                 auto filter(std::make_shared<OSISReferenceLinks>(
-                                optionName.c_str(),
-                                optionTip.c_str(),
-                                optionType.c_str(),
-                                optionSubType.c_str(),
-                                optionDefaultValue.c_str()));
+                                optionName,
+                                optionTip,
+                                optionType,
+                                optionSubType,
+                                optionDefaultValue));
                 std::tie(it, std::ignore) =
                         m_optionFilters.emplace(filterName, std::move(filter));
             }

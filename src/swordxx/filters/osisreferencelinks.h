@@ -43,11 +43,11 @@ public:
      * @param subType - which reference subTypes to hide (optional)
      * @param defaultValue - default value of option "On" or "Off" (optional)
      */
-    OSISReferenceLinks(char const * m_optionName,
-                       char const * m_optionTip,
-                       char const * m_type,
-                       char const * m_subType = nullptr,
-                       char const * defaultValue = "On");
+    OSISReferenceLinks(std::string m_optionName,
+                       std::string m_optionTip,
+                       std::string m_type,
+                       std::string m_subType = std::string(),
+                       std::string_view defaultValue = "On");
     ~OSISReferenceLinks() override;
 
     char processText(std::string & text,
