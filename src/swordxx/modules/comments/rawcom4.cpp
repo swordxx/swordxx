@@ -118,7 +118,7 @@ void RawCom4::increment(int steps) {
             (((laststart != start) || (lastsize != size))    // we're a different entry
 //                && (start > 0)
                 && (size))    // and we actually have a size
-                ||(!skipConsecutiveLinks)) {    // or we don't want to skip consecutive links
+                ||(!isSkipConsecutiveLinks())) {    // or we don't want to skip consecutive links
             steps += (steps < 0) ? 1 : -1;
             lastgood.positionFrom(*tmpkey);
         }

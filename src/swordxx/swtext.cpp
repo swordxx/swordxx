@@ -53,7 +53,7 @@ SWText::SWText(const char *imodname, const char *imoddesc, TextEncoding enc, SWT
     m_tmpVK1.setVersificationSystem(versification);
     m_tmpVK2.setVersificationSystem(versification);
         m_tmpSecond = false;
-    skipConsecutiveLinks = false;
+    setSkipConsecutiveLinks(false);
 }
 
 

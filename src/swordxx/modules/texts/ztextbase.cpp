@@ -188,7 +188,7 @@ void zTextBase<BaseZVerse>::increment(int steps) {
 //                && (start > 0)
                 && (size)    // and we actually have a size
             )
-            || !skipConsecutiveLinks
+            || !isSkipConsecutiveLinks()
         ) {    // or we don't want to skip consecutive links
             steps += (steps < 0) ? 1 : -1;
             lastgood.positionFrom(*tmpkey);

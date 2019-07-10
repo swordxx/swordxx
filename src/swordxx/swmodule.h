@@ -91,11 +91,11 @@ private: /* Fields: */
     SWTextDirection m_textDirection;
     SWTextMarkup m_textMarkup;
     TextEncoding m_textEncoding;
+    bool m_skipConsecutiveLinks = true;
 
 protected:
 
     mutable char error = 0;
-    bool skipConsecutiveLinks = true;
 
     /** the current key */
     SWKey *key;
@@ -473,12 +473,12 @@ public:
      *    consecutive links when iterating
      * @param val = true means only include entry once in iteration
      */
-    void setSkipConsecutiveLinks(bool val) { skipConsecutiveLinks = val; }
+    void setSkipConsecutiveLinks(bool val) { m_skipConsecutiveLinks = val; }
 
     /** Whether or not to only hit one entry when iterating encounters
      *    consecutive links when iterating
      */
-    bool isSkipConsecutiveLinks() { return skipConsecutiveLinks; }
+    bool isSkipConsecutiveLinks() { return m_skipConsecutiveLinks; }
 
     virtual bool isLinked(SWKey const &, SWKey const &) const { return false; }
     virtual bool hasEntry(SWKey const &) const { return false; }
