@@ -190,7 +190,7 @@ char UTF8Transliterator::processText(std::string &text, const SWKey *key, const 
 
         //Simple X to Latin transliterators
         if (scripts[SE_GREEK]) {
-            if (strnicmp(((SWModule*)module)->getLanguage().c_str(), "cop", 3)) {
+            if (strnicmp(module->getLanguage().c_str(), "cop", 3)) {
                 if (selectedOptionIndex == SE_SBL)
                     addTrans("Greek-Latin/SBL", &ID);
                 else if (selectedOptionIndex == SE_TC)
@@ -393,7 +393,7 @@ char UTF8Transliterator::processText(std::string &text, const SWKey *key, const 
         }
 
         if (scripts[SE_HAN]) {
-                if (!strnicmp(((SWModule*)module)->getLanguage().c_str(), "ja", 2)) {
+                if (!strnicmp(module->getLanguage().c_str(), "ja", 2)) {
                      addTrans("Kanji-Romaji", &ID);
             }
             else {
