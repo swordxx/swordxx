@@ -452,11 +452,7 @@ private: /* Methods: */
     template <typename Filters>
     void filterBuffer(Filters const & filters,
                       std::string & buf,
-                      SWKey const * key_) const
-    {
-        for (auto const & filterPtr : filters)
-            filterPtr->processText(buf, key_, this);
-    }
+                      SWKey const * key_) const;
 
     /** OptionFilter a text buffer
      * @param buf the buffer to filter

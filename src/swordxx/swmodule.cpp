@@ -314,6 +314,15 @@ const char *SWModule::getConfigEntry(const char *key_) const {
     return (it != m_config.end()) ? it->second.c_str() : nullptr;
 }
 
+template <typename Filters>
+void SWModule::filterBuffer(Filters const & filters,
+                            std::string & buf,
+                            SWKey const * key_) const
+{
+    for (auto const & filterPtr : filters)
+        filterPtr->processText(buf, key_, this);
+}
+
 void SWModule::rawFilter(std::string & buf, SWKey const * key_) const
 { filterBuffer(m_rawFilters, buf, key_); }
 
