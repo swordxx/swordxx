@@ -86,27 +86,23 @@ template <typename SizeType_> RawStrBase<SizeType_>::~RawStrBase() = default;
  */
 template <typename SizeType_>
 std::string RawStrBase<SizeType_>::getIDXBufDat(long ioffset) const {
+    std::string r;
     if (datfd && datfd->getFd() >= 0) {
         datfd->seek(ioffset, SEEK_SET);
-        std::size_t size;
-        char ch;
-        for (size = 0; datfd->read(&ch, 1) == 1; size++) {
+        /// \todo Read more than a byte of data at once:
+        for (;;) {
+            char ch;
+            /// \todo Handle EAGAIN etc errno:
+            if (datfd->read(&ch, 1) != 1)
+                break;
             if ((ch == '\\') || (ch == 10) || (ch == 13))
                 break;
+            r += ch;
         }
-
-        auto const buf(std::make_unique<char[]>(size));
-        if (size) {
-            datfd->seek(ioffset, SEEK_SET);
-            datfd->read(buf.get(), size);
-        }
-        std::string r(buf.get(), size);
         if (!m_caseSensitive)
             toupperstr_utf8(r);
-        return r;
-    } else {
-        return "";
     }
+    return r;
 }
 
 
