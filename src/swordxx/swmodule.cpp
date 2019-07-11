@@ -100,6 +100,16 @@ void prepareText(std::string &buf) {
     }
 }
 
+template <typename Filters>
+void filterBuffer(swordxx::SWModule const & module,
+                  std::string & buf,
+                  swordxx::SWKey const * key_,
+                  Filters const & filters)
+{
+    for (auto const & filterPtr : filters)
+        filterPtr->processText(buf, key_, &module);
+}
+
 } // anonymous namespace
 
 namespace swordxx {
@@ -245,13 +255,15 @@ std::string SWModule::getRawEntry() const {
     return r;
 }
 
+void SWModule::rawFilter(std::string & buf, SWKey const * key_) const
+{ filterBuffer(*this, buf, key_, m_rawFilters); }
 
 std::string SWModule::stripText() {
     m_entryAttributes.clear();
     std::string buf(getRawEntry());
     if (!buf.empty()) {
-        optionFilter(buf, key);
-        stripFilter(buf, key);
+        filterBuffer(*this, buf, key, m_optionFilters);
+        filterBuffer(*this, buf, key, m_stripFilters);
     }
     return buf;
 }
@@ -261,8 +273,8 @@ std::string SWModule::stripText(std::string buf) {
     m_processEntryAttributes = false;
     try {
         if (!buf.empty()) {
-            optionFilter(buf, key);
-            stripFilter(buf, key);
+            filterBuffer(*this, buf, key, m_optionFilters);
+            filterBuffer(*this, buf, key, m_stripFilters);
         }
     } catch (...) {
         m_processEntryAttributes = savePEA;
@@ -285,9 +297,9 @@ std::string SWModule::renderText() const {
     m_entryAttributes.clear();
     std::string buf(getRawEntry());
     if (!buf.empty()) {
-        optionFilter(buf, key);
-        renderFilter(buf, key);
-        encodingFilter(buf, key);
+        filterBuffer(*this, buf, key, m_optionFilters);
+        filterBuffer(*this, buf, key, m_renderFilters);
+        filterBuffer(*this, buf, key, m_encodingFilters);
     }
     return buf;
 }
@@ -297,9 +309,9 @@ std::string SWModule::renderText(std::string buf) const {
     m_processEntryAttributes = false;
     try {
         if (!buf.empty()) {
-            optionFilter(buf, key);
-            renderFilter(buf, key);
-            encodingFilter(buf, key);
+            filterBuffer(*this, buf, key, m_optionFilters);
+            filterBuffer(*this, buf, key, m_renderFilters);
+            filterBuffer(*this, buf, key, m_encodingFilters);
         }
     } catch (...) {
         m_processEntryAttributes = savePEA;
@@ -313,29 +325,5 @@ const char *SWModule::getConfigEntry(const char *key_) const {
     ConfigEntMap::const_iterator const it(m_config.find(key_));
     return (it != m_config.end()) ? it->second.c_str() : nullptr;
 }
-
-template <typename Filters>
-void SWModule::filterBuffer(Filters const & filters,
-                            std::string & buf,
-                            SWKey const * key_) const
-{
-    for (auto const & filterPtr : filters)
-        filterPtr->processText(buf, key_, this);
-}
-
-void SWModule::rawFilter(std::string & buf, SWKey const * key_) const
-{ filterBuffer(m_rawFilters, buf, key_); }
-
-void SWModule::optionFilter(std::string & buf, SWKey const * key_) const
-{ filterBuffer(m_optionFilters, buf, key_); }
-
-void SWModule::renderFilter(std::string & buf, SWKey const * key_) const
-{ filterBuffer(m_renderFilters, buf, key_); }
-
-void SWModule::encodingFilter(std::string & buf, SWKey const * key_) const
-{ filterBuffer(m_encodingFilters, buf, key_); }
-
-void SWModule::stripFilter(std::string & buf, SWKey const * key_) const
-{ filterBuffer(m_stripFilters, buf, key_); }
 
 } /* namespace swordxx */

@@ -442,42 +442,6 @@ public:
     /** Whether or not we're processing Entry Attributes */
     bool isProcessEntryAttributes() const { return m_processEntryAttributes; }
 
-private: /* Methods: */
-
-    /** OptionFilterBuffer a text buffer
-     * @param filters the FilterList of filters to iterate
-     * @param buf the buffer to filter
-     * @param key key location from where this buffer was extracted
-     */
-    template <typename Filters>
-    void filterBuffer(Filters const & filters,
-                      std::string & buf,
-                      SWKey const * key_) const;
-
-    /** OptionFilter a text buffer
-     * @param buf the buffer to filter
-     * @param key_ key location from where this buffer was extracted
-     */
-    void optionFilter(std::string & buf, SWKey const * key_) const;
-
-    /** RenderFilter run a buf through this module's Render Filters
-     * @param buf the buffer to filter
-     * @param key_ key location from where this buffer was extracted
-     */
-    void renderFilter(std::string & buf, SWKey const * key_) const;
-
-    /** encodingFilter run a buf through this module's Encoding Filters
-     * @param buf the buffer to filter
-     * @param key_ key location from where this buffer was extracted
-     */
-    void encodingFilter(std::string & buf, SWKey const * key_) const;
-
-    /** StripFilter run a buf through this module's Strip Filters
-     * @param buf the buffer to filter
-     * @param key_ key location from where this buffer was extracted
-     */
-    void stripFilter(std::string & buf, SWKey const * key_) const;
-
 protected: /* Methods: */
 
     virtual std::string getRawEntryImpl() const = 0;
