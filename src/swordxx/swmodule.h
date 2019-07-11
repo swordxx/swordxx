@@ -255,24 +255,6 @@ public:
     virtual void positionToTop();
     virtual void positionToBottom();
 
-    /** OptionFilterBuffer a text buffer
-     * @param filters the FilterList of filters to iterate
-     * @param buf the buffer to filter
-     * @param key key location from where this buffer was extracted
-     */
-    void filterBuffer(OptionFilterList const & filters,
-                      std::string & buf,
-                      SWKey const * key) const;
-
-    /** FilterBuffer a text buffer
-     * @param filters the FilterList of filters to iterate
-     * @param buf the buffer to filter
-     * @param key key location from where this buffer was extracted
-     */
-    void filterBuffer(FilterList const & filters,
-                      std::string & buf,
-                      SWKey const * key) const;
-
     /** Adds a RenderFilter to this module's renderFilters queue.
      *    Render Filters are called when the module is asked to produce
      *    renderable text.
@@ -319,14 +301,6 @@ public:
         return *this;
     }
 
-    /** RenderFilter run a buf through this module's Render Filters
-     * @param buf the buffer to filter
-     * @param key_ key location from where this buffer was extracted
-     */
-    void renderFilter(std::string & buf, SWKey const * key_) const {
-        filterBuffer(m_renderFilters, buf, key_);
-    }
-
     /** Adds an EncodingFilter to this module's @see encodingFilters queue.
      *    Encoding Filters are called immediately when the module is read
      *    from data source, to assure we have desired internal data stream
@@ -364,14 +338,6 @@ public:
         return *this;
     }
 
-    /** encodingFilter run a buf through this module's Encoding Filters
-     * @param buf the buffer to filter
-     * @param key_ key location from where this buffer was extracted
-     */
-    void encodingFilter(std::string & buf, SWKey const * key_) const {
-        filterBuffer(m_encodingFilters, buf, key_);
-    }
-
     /** Adds a StripFilter to this module's stripFilters queue.
      *    Strip filters are called when a module is asked to render
      *    an entry without any markup (like when searching).
@@ -390,14 +356,6 @@ public:
     SWModule & addRawFilter(std::shared_ptr<SWFilter> newFilter) {
         m_rawFilters.emplace_back(std::move(newFilter));
         return *this;
-    }
-
-    /** StripFilter run a buf through this module's Strip Filters
-     * @param buf the buffer to filter
-     * @param key_ key location from where this buffer was extracted
-     */
-    void stripFilter(std::string & buf, SWKey const * key_) const {
-        filterBuffer(m_stripFilters, buf, key_);
     }
 
 
@@ -419,14 +377,6 @@ public:
     SWModule & addOptionFilter(std::shared_ptr<SWOptionFilter> newFilter) {
         m_optionFilters.push_back(std::move(newFilter));
         return *this;
-    }
-
-    /** OptionFilter a text buffer
-     * @param buf the buffer to filter
-     * @param key_ key location from where this buffer was extracted
-     */
-    void optionFilter(std::string & buf, SWKey const * key_) const {
-        filterBuffer(m_optionFilters, buf, key_);
     }
 
     /** Produces plain text, without markup, of the current module entry
@@ -493,6 +443,58 @@ public:
 
     /** Whether or not we're processing Entry Attributes */
     bool isProcessEntryAttributes() const { return m_processEntryAttributes; }
+
+private: /* Methods: */
+
+    /** OptionFilterBuffer a text buffer
+     * @param filters the FilterList of filters to iterate
+     * @param buf the buffer to filter
+     * @param key key location from where this buffer was extracted
+     */
+    void filterBuffer(OptionFilterList const & filters,
+                      std::string & buf,
+                      SWKey const * key) const;
+
+    /** FilterBuffer a text buffer
+     * @param filters the FilterList of filters to iterate
+     * @param buf the buffer to filter
+     * @param key key location from where this buffer was extracted
+     */
+    void filterBuffer(FilterList const & filters,
+                      std::string & buf,
+                      SWKey const * key) const;
+
+    /** OptionFilter a text buffer
+     * @param buf the buffer to filter
+     * @param key_ key location from where this buffer was extracted
+     */
+    void optionFilter(std::string & buf, SWKey const * key_) const {
+        filterBuffer(m_optionFilters, buf, key_);
+    }
+
+    /** RenderFilter run a buf through this module's Render Filters
+     * @param buf the buffer to filter
+     * @param key_ key location from where this buffer was extracted
+     */
+    void renderFilter(std::string & buf, SWKey const * key_) const {
+        filterBuffer(m_renderFilters, buf, key_);
+    }
+
+    /** encodingFilter run a buf through this module's Encoding Filters
+     * @param buf the buffer to filter
+     * @param key_ key location from where this buffer was extracted
+     */
+    void encodingFilter(std::string & buf, SWKey const * key_) const {
+        filterBuffer(m_encodingFilters, buf, key_);
+    }
+
+    /** StripFilter run a buf through this module's Strip Filters
+     * @param buf the buffer to filter
+     * @param key_ key location from where this buffer was extracted
+     */
+    void stripFilter(std::string & buf, SWKey const * key_) const {
+        filterBuffer(m_stripFilters, buf, key_);
+    }
 
 protected: /* Methods: */
 
