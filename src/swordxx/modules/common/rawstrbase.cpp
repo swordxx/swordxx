@@ -286,7 +286,7 @@ signed char RawStrBase<SizeType_>::findOffset(char const * ikey,
  */
 template <typename SizeType_>
 std::string RawStrBase<SizeType_>::readText(StartType istart,
-                                            SizeType * isize,
+                                            SizeType isize,
                                             std::string & buf) const
 {
     using namespace std::literals::string_view_literals;
@@ -296,10 +296,10 @@ std::string RawStrBase<SizeType_>::readText(StartType istart,
 
     do {
         buf.clear();
-        buf.resize(++(*isize), '\0');
+        buf.resize(isize, '\0');
 
         datfd->seek(start, SEEK_SET);
-        datfd->read(&buf[0u], (int)((*isize) - 1));
+        datfd->read(buf.data(), isize);
 
         {
             std::size_t ch = buf.find_first_of(10);
@@ -317,14 +317,14 @@ std::string RawStrBase<SizeType_>::readText(StartType istart,
                     break;
                 }
             }
-            findOffset(buf.c_str() + 6, &start, isize);
+            findOffset(buf.c_str() + 6, &start, &isize);
         }
         else break;
     }
     while (true);    // while we're resolving links
 
     auto localsize = idxbuflocal.size();
-    localsize = (localsize < (*isize - 1)) ? localsize : (*isize - 1);
+    localsize = (localsize < isize) ? localsize : isize;
     return std::string(idxbuflocal.c_str(), localsize);
 }
 

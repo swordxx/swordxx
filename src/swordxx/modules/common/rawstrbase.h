@@ -72,7 +72,7 @@ protected: /* Methods: */
                            IndexOffsetType * idxoff = nullptr) const;
 
     std::string readText(StartType start,
-                         SizeType * size,
+                         SizeType size,
                          std::string & buf) const;
 
     void doSetText(char const * key, char const * buf, long len = -1);

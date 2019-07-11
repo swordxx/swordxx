@@ -81,7 +81,7 @@ char RawLdBase<Base>::getEntry(std::string & entry, long away) const {
         retval = this->findOffset(keyText.c_str(), &start, &size, away);
     }
     if (!retval) {
-        auto const idxbuf(this->readText(start, &size, entry));
+        auto const idxbuf(this->readText(start, size, entry));
         rawFilter(entry, nullptr);    // hack, decipher
         rawFilter(entry, getKey());
         if (!getKey()->isPersist())            // If we have our own key
