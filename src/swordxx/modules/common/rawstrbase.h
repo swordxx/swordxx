@@ -29,6 +29,7 @@
 #include <cstdint>
 #include <memory>
 #include <string>
+#include <string_view>
 #include "../../defs.h"
 #include "../../normalizedpath.h"
 
@@ -65,7 +66,7 @@ public: /* Methods: */
 
 protected: /* Methods: */
 
-    signed char findOffset(char const * key,
+    signed char findOffset(std::string_view key,
                            StartType * start,
                            SizeType * size,
                            long away = 0,

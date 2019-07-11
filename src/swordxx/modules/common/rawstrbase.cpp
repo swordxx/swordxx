@@ -142,7 +142,7 @@ std::string RawStrBase<SizeType_>::getIDXBuf(long ioffset) const {
  * RET: error status -1 general error; -2 new file
  */
 template <typename SizeType_>
-signed char RawStrBase<SizeType_>::findOffset(char const * ikey,
+signed char RawStrBase<SizeType_>::findOffset(std::string_view ikey,
                                               StartType * start,
                                               SizeType * size,
                                               long away,
@@ -160,7 +160,7 @@ signed char RawStrBase<SizeType_>::findOffset(char const * ikey,
     if (idxfd->getFd() >=0) {
         tailoff = maxoff = idxfd->seek(0, SEEK_END) - entrySize;
         retval = (tailoff >= 0) ? 0 : -2;    // if NOT new file
-        if (*ikey && retval != -2) {
+        if (!ikey.empty() && retval != -2) {
             headoff = 0;
 
             std::string key(ikey);
