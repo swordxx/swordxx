@@ -291,41 +291,43 @@ std::string RawStrBase<SizeType_>::readText(StartType istart,
 {
     using namespace std::literals::string_view_literals;
 
-    auto const idxbuflocal(getIDXBufDat(istart));
+    auto idxbuflocal(getIDXBufDat(istart));
     StartType start = istart;
 
-    do {
+    for (;;) { // while resolving links
         buf.clear();
-        buf.resize(isize, '\0');
+        buf.resize(isize);
 
         datfd->seek(start, SEEK_SET);
         datfd->read(buf.data(), isize);
 
         {
-            std::size_t ch = buf.find_first_of(10);
+            std::size_t ch = buf.find_first_of('\n');
             if (ch == std::string::npos) {
                 buf.clear();
+                break;
             } else {
                 buf.erase(0u, ++ch);
             }
         }
-        // resolve link
-        if (startsWith(buf, "@LINK"sv)) {
-            for (std::size_t ch = 5; buf[ch]; ++ch) {        // null before nl
-                if (buf[ch] == '\n') {
-                    buf[ch] = '\0';
-                    break;
-                }
-            }
-            findOffset(buf.c_str() + 6, &start, &isize);
-        }
-        else break;
-    }
-    while (true);    // while we're resolving links
 
-    auto localsize = idxbuflocal.size();
-    localsize = (localsize < isize) ? localsize : isize;
-    return std::string(idxbuflocal.c_str(), localsize);
+        if (!startsWith(buf, "@LINK"sv))
+            break;
+
+        // Resolve link:
+        {
+            std::size_t ch = buf.find_first_of('\n', 5u);
+            if (ch != std::string::npos)
+                buf.resize(ch);
+        }
+        std::string_view bufSv(buf);
+        bufSv.remove_prefix(6u);
+        findOffset(bufSv, &start, &isize);
+    }
+
+    auto const localsize = idxbuflocal.size();
+    idxbuflocal.resize((localsize < isize) ? localsize : isize);
+    return idxbuflocal;
 }
 
 
