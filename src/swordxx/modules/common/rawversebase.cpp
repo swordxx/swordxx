@@ -97,7 +97,7 @@ void RawVerseBase<SizeType_>::readText(char testmt,
     if (size) {
         if (textfp[testmt-1]->getFd() >= 0) {
             textfp[testmt-1]->seek(start, SEEK_SET);
-            textfp[testmt-1]->read(&buf[0u], (int)size);
+            textfp[testmt-1]->read(&buf[0u], size);
         }
     }
 }
@@ -148,7 +148,7 @@ void RawVerseBase<SizeType_>::doSetText(char testmt,
 
     if (size) {
         textfp[testmt-1]->seek(start, SEEK_SET);
-        textfp[testmt-1]->write(buf, (int)size);
+        textfp[testmt-1]->write(buf, size);
 
         // add a new line to make data file easier to read in an editor
         static char const nl = '\n';
