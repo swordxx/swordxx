@@ -72,7 +72,7 @@ std::string HREFCom::getRawEntryImpl() const {
     std::string entry;
     readText(key_->getTestament(), start, size, entry);
 
-    if (key_ != this->key)
+    if (key_ != getKey())
         delete key_;
 
     return m_prefix + entry;

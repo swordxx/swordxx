@@ -76,7 +76,7 @@ char zLD::getEntry(std::string & entry, long away) const {
     char retval = 0;
     long index;
     unsigned long size;
-    auto const keyText = key->getText();
+    auto const keyText = getKey()->getText();
     if (this->m_strongsPadding) {
         retval = findKeyIndex(strongsPadBuf(keyText.c_str()).get(), &index, away);
     } else {
@@ -87,11 +87,11 @@ char zLD::getEntry(std::string & entry, long away) const {
         size = std::strlen(ebuf) + 1;
         entry = ebuf;
 
-        rawFilter(entry, key);
+        rawFilter(entry, getKey());
 
         entrySize = size;        // support getEntrySize call
-        if (!key->isPersist())            // If we have our own key
-            key->setText(idxbuf);                // reset it to entry index buffer
+        if (!getKey()->isPersist())            // If we have our own key
+            getKey()->setText(idxbuf);                // reset it to entry index buffer
 
         m_entkeytxt.assign(idxbuf); // set entry key text that module 'snapped' to.
         free(idxbuf);
@@ -129,21 +129,21 @@ std::string zLD::getRawEntryImpl() const {
 void zLD::increment(int steps) {
     char tmperror;
 
-    if (key->isTraversable()) {
-        key->increment(steps);
-        error = key->popError();
+    if (getKey()->isTraversable()) {
+        getKey()->increment(steps);
+        error = getKey()->popError();
         steps = 0;
     }
 
     std::string unusedEntry; /// \todo remove this variable
     tmperror = (getEntry(unusedEntry, steps)) ? KEYERR_OUTOFBOUNDS : 0;
     error = (error)?error:tmperror;
-    key->setText(m_entkeytxt);
+    getKey()->setText(m_entkeytxt);
 }
 
 
 void zLD::setEntry(const char *inbuf, long len) {
-    auto const keyText = key->getText();
+    auto const keyText = getKey()->getText();
     if (this->m_strongsPadding) {
         setText(strongsPadBuf(keyText.c_str()).get(), inbuf, len);
     } else {
@@ -153,7 +153,7 @@ void zLD::setEntry(const char *inbuf, long len) {
 
 
 void zLD::linkEntry(SWKey const & inkey) {
-    auto const keyText = key->getText();
+    auto const keyText = getKey()->getText();
     if (this->m_strongsPadding) {
         zStr::linkEntry(strongsPadBuf(keyText.c_str()).get(), inkey.getText().c_str());
     } else {
@@ -169,7 +169,7 @@ void zLD::linkEntry(SWKey const & inkey) {
  */
 
 void zLD::deleteEntry() {
-    auto const keyText = key->getText();
+    auto const keyText = getKey()->getText();
     if (this->m_strongsPadding) {
         setText(strongsPadBuf(keyText.c_str()).get(), "");
     } else {

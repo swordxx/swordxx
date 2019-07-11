@@ -58,7 +58,7 @@ std::unique_ptr<SWKey> SWCom::createKey() const
 { return staticCreateKey(m_versification.c_str()); }
 
 VerseKey &SWCom::getVerseKey(const SWKey *keyToConvert) const {
-    SWKey const * tmp = keyToConvert ? keyToConvert : this->key;
+    SWKey const * tmp = keyToConvert ? keyToConvert : getKey();
     /// \bug remove const_cast:
     SWKey * thisKey = const_cast<SWKey *>(tmp);
 

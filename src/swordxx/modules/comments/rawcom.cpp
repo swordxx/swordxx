@@ -103,14 +103,14 @@ void RawCom::increment(int steps) {
         SizeType lastsize = size;
         SWKey lasttry = *tmpkey;
         if (steps > 0) {
-            key->increment();
+            getKey()->increment();
         } else {
-            key->decrement();
+            getKey()->decrement();
         }
         tmpkey = &getVerseKey();
 
-        if ((error = key->popError())) {
-            key->positionFrom(lastgood);
+        if ((error = getKey()->popError())) {
+            getKey()->positionFrom(lastgood);
             break;
         }
         long index = tmpkey->getTestamentIndex();

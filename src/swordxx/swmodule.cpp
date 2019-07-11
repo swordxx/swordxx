@@ -140,7 +140,7 @@ SWModule::SWModule(std::unique_ptr<SWKey> key_,
     , m_textDirection(direction)
     , m_textMarkup(markup)
     , m_textEncoding(encoding)
-    , key(key_.release())
+    , m_currentKey(key_.release())
 {}
 
 
@@ -150,9 +150,9 @@ SWModule::SWModule(std::unique_ptr<SWKey> key_,
 
 SWModule::~SWModule()
 {
-    if (key) {
-        if (!key->isPersist())
-            delete key;
+    if (m_currentKey) {
+        if (!m_currentKey->isPersist())
+            delete m_currentKey;
     }
 
     m_entryAttributes.clear();
@@ -170,7 +170,7 @@ char SWModule::popError()
     char retval = error;
 
     error = 0;
-    if (!retval) retval = key->popError();
+    if (!retval) retval = m_currentKey->popError();
     return retval;
 }
 
@@ -187,33 +187,33 @@ char SWModule::popError()
 char SWModule::setKey(const SWKey *ikey) {
     SWKey * oldKey = nullptr;
 
-    if (key) {
-        if (!key->isPersist())    // if we have our own copy
-            oldKey = key;
+    if (m_currentKey) {
+        if (!m_currentKey->isPersist())    // if we have our own copy
+            oldKey = m_currentKey;
     }
 
     if (!ikey->isPersist()) {        // if we are to keep our own copy
-         key = createKey().release();
-        key->positionFrom(*ikey);
+        m_currentKey = createKey().release();
+        m_currentKey->positionFrom(*ikey);
     }
-    else     key = (SWKey *)ikey;        // if we are to just point to an external key
+    else     m_currentKey = (SWKey *)ikey;        // if we are to just point to an external key
 
     delete oldKey;
 
-    return error = key->getError();
+    return error = m_currentKey->getError();
 }
 
 void SWModule::positionToTop() {
-    key->positionToTop();
-    char saveError = key->popError();
+    m_currentKey->positionToTop();
+    char saveError = m_currentKey->popError();
     this->increment();
     this->decrement();
     error = saveError;
 }
 
 void SWModule::positionToBottom() {
-    key->positionToBottom();
-    char saveError = key->popError();
+    m_currentKey->positionToBottom();
+    char saveError = m_currentKey->popError();
     this->decrement();
     this->increment();
     error = saveError;
@@ -229,8 +229,8 @@ void SWModule::positionToBottom() {
  */
 
 void SWModule::increment(int steps) {
-    key->increment(steps);
-    error = key->popError();
+    m_currentKey->increment(steps);
+    error = m_currentKey->popError();
 }
 
 
@@ -243,8 +243,8 @@ void SWModule::increment(int steps) {
  */
 
 void SWModule::decrement(int steps) {
-    key->decrement(steps);
-    error = key->popError();
+    m_currentKey->decrement(steps);
+    error = m_currentKey->popError();
 }
 
 
@@ -262,8 +262,8 @@ std::string SWModule::stripText() {
     m_entryAttributes.clear();
     std::string buf(getRawEntry());
     if (!buf.empty()) {
-        filterBuffer(*this, buf, key, m_optionFilters);
-        filterBuffer(*this, buf, key, m_stripFilters);
+        filterBuffer(*this, buf, m_currentKey, m_optionFilters);
+        filterBuffer(*this, buf, m_currentKey, m_stripFilters);
     }
     return buf;
 }
@@ -273,8 +273,8 @@ std::string SWModule::stripText(std::string buf) {
     m_processEntryAttributes = false;
     try {
         if (!buf.empty()) {
-            filterBuffer(*this, buf, key, m_optionFilters);
-            filterBuffer(*this, buf, key, m_stripFilters);
+            filterBuffer(*this, buf, m_currentKey, m_optionFilters);
+            filterBuffer(*this, buf, m_currentKey, m_stripFilters);
         }
     } catch (...) {
         m_processEntryAttributes = savePEA;
@@ -297,9 +297,9 @@ std::string SWModule::renderText() const {
     m_entryAttributes.clear();
     std::string buf(getRawEntry());
     if (!buf.empty()) {
-        filterBuffer(*this, buf, key, m_optionFilters);
-        filterBuffer(*this, buf, key, m_renderFilters);
-        filterBuffer(*this, buf, key, m_encodingFilters);
+        filterBuffer(*this, buf, m_currentKey, m_optionFilters);
+        filterBuffer(*this, buf, m_currentKey, m_renderFilters);
+        filterBuffer(*this, buf, m_currentKey, m_encodingFilters);
     }
     return buf;
 }
@@ -309,9 +309,9 @@ std::string SWModule::renderText(std::string buf) const {
     m_processEntryAttributes = false;
     try {
         if (!buf.empty()) {
-            filterBuffer(*this, buf, key, m_optionFilters);
-            filterBuffer(*this, buf, key, m_renderFilters);
-            filterBuffer(*this, buf, key, m_encodingFilters);
+            filterBuffer(*this, buf, m_currentKey, m_optionFilters);
+            filterBuffer(*this, buf, m_currentKey, m_renderFilters);
+            filterBuffer(*this, buf, m_currentKey, m_encodingFilters);
         }
     } catch (...) {
         m_processEntryAttributes = savePEA;

@@ -73,26 +73,26 @@ std::unique_ptr<SWKey> SWLD::createKey() const
  */
 
 std::string SWLD::getKeyText() const {
-    if (key->isPersist()) {
+    if (getKey()->isPersist()) {
         getRawEntry();    // force module key to snap to entry
     }
     return m_entkeytxt;
 }
 
 void SWLD::positionToTop() {
-    if (!key->isTraversable()) {
-        key->setText("");
+    if (!getKey()->isTraversable()) {
+        getKey()->setText("");
     } else {
-        key->positionToTop();
+        getKey()->positionToTop();
     }
     getRawEntry();
 }
 
 void SWLD::positionToBottom() {
-    if (!key->isTraversable()) {
-        key->setText("zzzzzzzzz");
+    if (!getKey()->isTraversable()) {
+        getKey()->setText("zzzzzzzzz");
     } else {
-        key->positionToBottom();
+        getKey()->positionToBottom();
     }
     getRawEntry();
 }

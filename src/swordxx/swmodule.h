@@ -93,12 +93,11 @@ private: /* Fields: */
     TextEncoding m_textEncoding;
     bool m_skipConsecutiveLinks = true;
 
+    SWKey * m_currentKey;
+
 protected:
 
     mutable char error = 0;
-
-    /** the current key */
-    SWKey *key;
 
     mutable int entrySize = -1;
 
@@ -186,7 +185,7 @@ public:
     char setKey(const SWKey &ikey) { return setKey(&ikey); }
 
     /** \returns the current key of this module. */
-    SWKey *getKey() const { return key; }
+    SWKey *getKey() const { return m_currentKey; }
 
     /**
      * gets the key text for the module.
