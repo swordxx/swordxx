@@ -67,7 +67,6 @@ std::string HREFCom::getRawEntryImpl() const {
         key_ = &getVerseKey();
 
     findOffset(key_->getTestament(), key_->getTestamentIndex(), &start, &size);
-    entrySize = size;        // support getEntrySize call
 
     std::string entry;
     readText(key_->getTestament(), start, size, entry);

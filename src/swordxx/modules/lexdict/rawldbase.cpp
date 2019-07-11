@@ -84,7 +84,6 @@ char RawLdBase<Base>::getEntry(std::string & entry, long away) const {
         auto const idxbuf(this->readText(start, &size, entry));
         rawFilter(entry, nullptr);    // hack, decipher
         rawFilter(entry, getKey());
-        entrySize = size;        // support getEntrySize call
         if (!getKey()->isPersist())            // If we have our own key
             getKey()->setText(idxbuf);                // reset it to entry index buffer
 

@@ -84,7 +84,6 @@ std::string zTextBase<BaseZVerse>::getRawEntryImpl() const {
     VerseKey const & key_ = getVerseKey();
 
     this->findOffset(key_.getTestament(), key_.getTestamentIndex(), &start, &size, &buffnum);
-    entrySize = size;        // support getEntrySize call
 
     std::string entry;
 

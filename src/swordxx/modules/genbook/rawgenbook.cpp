@@ -107,8 +107,6 @@ std::string RawGenBook::getRawEntryImpl() const {
         std::memcpy(&size, key_.getUserData() + 4, 4);
         size = swordtoarch32(size);
 
-        entrySize = size;        // support getEntrySize call
-
         entry.resize(size, '\0');
         bdtfd->seek(offset, SEEK_SET);
         bdtfd->read(&entry[0u], size);

@@ -99,8 +99,6 @@ protected:
 
     mutable char error = 0;
 
-    mutable int entrySize = -1;
-
 public:
 
     /**
@@ -163,11 +161,6 @@ public:
      *    data is stored.
      */
     const char *getConfigEntry(const char *key) const;
-
-    /**
-     * @return The size of the text entry for the module's current key position.
-     */
-    int getEntrySize() const { return entrySize; }
 
     /**
      * Sets a key to this module for position to a particular record

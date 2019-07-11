@@ -89,7 +89,6 @@ char zLD::getEntry(std::string & entry, long away) const {
 
         rawFilter(entry, getKey());
 
-        entrySize = size;        // support getEntrySize call
         if (!getKey()->isPersist())            // If we have our own key
             getKey()->setText(idxbuf);                // reset it to entry index buffer
 

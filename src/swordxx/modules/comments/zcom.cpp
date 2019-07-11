@@ -89,7 +89,6 @@ std::string zCom::getRawEntryImpl() const {
     VerseKey const & key_ = getVerseKey();
 
     findOffset(key_.getTestament(), key_.getTestamentIndex(), &start, &size, &buffnum);
-    entrySize = size;        // support getEntrySize call
 
     std::string entry;
 

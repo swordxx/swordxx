@@ -85,7 +85,6 @@ std::string RawTextBase<BaseRawVerse>::getRawEntryImpl() const {
                      key_.getTestamentIndex(),
                      &start,
                      &size);
-    entrySize = size;        // support getEntrySize call
 
     std::string entry;
     this->readText(key_.getTestament(), start, size, entry);
