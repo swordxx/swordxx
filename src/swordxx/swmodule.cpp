@@ -314,30 +314,19 @@ const char *SWModule::getConfigEntry(const char *key_) const {
     return (it != m_config.end()) ? it->second.c_str() : nullptr;
 }
 
-/** OptionFilterBuffer a text buffer
- * @param filters the FilterList of filters to iterate
- * @param buf the buffer to filter
- * @param key key location from where this buffer was extracted
- */
-void SWModule::filterBuffer(OptionFilterList const & filters,
-                            std::string & buf,
-                            SWKey const * key_) const
-{
-    for (auto const & filterPtr : filters)
-        filterPtr->processText(buf, key_, this);
-}
+void SWModule::rawFilter(std::string & buf, SWKey const * key_) const
+{ filterBuffer(m_rawFilters, buf, key_); }
 
-/** FilterBuffer a text buffer
- * @param filters the FilterList of filters to iterate
- * @param buf the buffer to filter
- * @param key key location from where this buffer was extracted
- */
-void SWModule::filterBuffer(FilterList const & filters,
-                            std::string & buf,
-                            SWKey const * key_) const
-{
-    for (auto const & filterPtr : filters)
-        filterPtr->processText(buf, key_, this);
-}
+void SWModule::optionFilter(std::string & buf, SWKey const * key_) const
+{ filterBuffer(m_optionFilters, buf, key_); }
+
+void SWModule::renderFilter(std::string & buf, SWKey const * key_) const
+{ filterBuffer(m_renderFilters, buf, key_); }
+
+void SWModule::encodingFilter(std::string & buf, SWKey const * key_) const
+{ filterBuffer(m_encodingFilters, buf, key_); }
+
+void SWModule::stripFilter(std::string & buf, SWKey const * key_) const
+{ filterBuffer(m_stripFilters, buf, key_); }
 
 } /* namespace swordxx */
