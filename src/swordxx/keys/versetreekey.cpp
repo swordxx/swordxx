@@ -83,6 +83,9 @@ void VerseTreeKey::init(TreeKey const & treeKey) {
 std::unique_ptr<SWKey> VerseTreeKey::clone() const
 { return std::make_unique<VerseTreeKey>(*this); }
 
+std::shared_ptr<SWKey> VerseTreeKey::cloneShared() const
+{ return std::make_shared<VerseTreeKey>(*this); }
+
 
 /******************************************************************************
  * VerseTreeKey Destructor - cleans up instance of VerseTreeKey

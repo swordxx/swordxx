@@ -54,6 +54,8 @@ public:
 
   std::unique_ptr<SWKey> clone() const noexcept override;
 
+  std::shared_ptr<SWKey> cloneShared() const noexcept override;
+
   SWKEY_OPERATORS(StrKey)
 
 };

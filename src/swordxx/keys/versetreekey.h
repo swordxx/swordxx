@@ -89,6 +89,8 @@ public:
 
     std::unique_ptr<SWKey> clone() const override;
 
+    std::shared_ptr<SWKey> cloneShared() const override;
+
     bool isTraversable() const override { return true; }
 
     virtual TreeKey *getTreeKey();

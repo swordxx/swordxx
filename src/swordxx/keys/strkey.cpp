@@ -44,6 +44,9 @@ StrKey::StrKey(const char *ikey) : SWKey(ikey)
 std::unique_ptr<SWKey> StrKey::clone() const noexcept
 { return std::make_unique<StrKey>(getText()); }
 
+std::shared_ptr<SWKey> StrKey::cloneShared() const noexcept
+{ return std::make_shared<StrKey>(getText()); }
+
 
 /******************************************************************************
  * StrKey Destructor - cleans up instance of StrKey

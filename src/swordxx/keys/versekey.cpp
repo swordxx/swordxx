@@ -239,6 +239,9 @@ VerseKey::VerseKey(const char *min, const char *max, const char *v11n) : SWKey()
 std::unique_ptr<SWKey> VerseKey::clone() const
 { return std::make_unique<VerseKey>(*this); }
 
+std::shared_ptr<SWKey> VerseKey::cloneShared() const
+{ return std::make_shared<VerseKey>(*this); }
+
 
 /******************************************************************************
  * VerseKey Destructor - cleans up instance of VerseKey

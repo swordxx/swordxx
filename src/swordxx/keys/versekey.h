@@ -173,6 +173,11 @@ public:
     */
     std::unique_ptr<SWKey> clone() const override;
 
+    /** Creates a new SWKey based on the current VerseKey
+    * see also the Copy Constructor
+    */
+    std::shared_ptr<SWKey> cloneShared() const override;
+
     /** refreshes keytext before returning if cast to
     * a (char *) is requested
     */

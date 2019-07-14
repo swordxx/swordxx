@@ -66,6 +66,9 @@ ListKey::ListKey(ListKey const & copy)
 std::unique_ptr<SWKey> ListKey::clone() const
 { return std::make_unique<ListKey>(*this); }
 
+std::shared_ptr<SWKey> ListKey::cloneShared() const
+{ return std::make_shared<ListKey>(*this); }
+
 /******************************************************************************
  * ListKey Destructor - cleans up instance of ListKey
  */

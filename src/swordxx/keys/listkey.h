@@ -62,6 +62,8 @@ public:
 
     std::unique_ptr<SWKey> clone() const override;
 
+    std::shared_ptr<SWKey> cloneShared() const override;
+
     /** Clears out elements of list
      */
     virtual void clear();

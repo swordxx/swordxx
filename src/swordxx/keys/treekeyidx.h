@@ -74,6 +74,8 @@ public:
 
     std::unique_ptr<SWKey> clone() const override;
 
+    std::shared_ptr<SWKey> cloneShared() const override;
+
     std::string const & getLocalName() override;
     void setLocalName(std::string const & newName) override;
     void setLocalName(std::string && newName) override;

@@ -73,6 +73,9 @@ SWKey::SWKey(SWKey const &k)
 std::unique_ptr<SWKey> SWKey::clone() const
 { return std::make_unique<SWKey>(*this); }
 
+std::shared_ptr<SWKey> SWKey::cloneShared() const
+{ return std::make_shared<SWKey>(*this); }
+
 /******************************************************************************
  * SWKey Destructor - cleans up instance of SWKey
  */
