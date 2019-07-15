@@ -85,21 +85,20 @@ RawVerseBase<SizeType_>::~RawVerseBase() noexcept = default;
  *
  */
 template <typename SizeType_>
-void RawVerseBase<SizeType_>::readText(char testmt,
-                                       StartType start,
-                                       SizeType size,
-                                       std::string & buf) const
+std::string RawVerseBase<SizeType_>::readText(char testmt,
+                                              StartType start,
+                                              SizeType size) const
 {
-    buf.clear();
-    buf.resize(size + 1u, '\0');
+    std::string r(size + 1u, '\0');
     if (!testmt)
         testmt = ((idxfp[1]) ? 1:2);
     if (size) {
         if (textfp[testmt-1]->getFd() >= 0) {
             textfp[testmt-1]->seek(start, SEEK_SET);
-            textfp[testmt-1]->read(&buf[0u], size);
+            textfp[testmt-1]->read(r.data(), size);
         }
     }
+    return r;
 }
 
 template <typename SizeType_>

@@ -71,8 +71,7 @@ std::string RawCom4::getRawEntryImpl() const {
 
     findOffset(key_.getTestament(), key_.getTestamentIndex(), &start, &size);
 
-    std::string entry;
-    readText(key_.getTestament(), start, size, entry);
+    auto entry(readText(key_.getTestament(), start, size));
 
     rawFilter(entry, nullptr);    // hack, decipher
     rawFilter(entry, &key_);

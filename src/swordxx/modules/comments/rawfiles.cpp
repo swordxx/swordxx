@@ -80,25 +80,21 @@ std::string RawFiles::getRawEntryImpl() const {
 
     findOffset(key_.getTestament(), key_.getTestamentIndex(), &start, &size);
 
-    std::string entry;
-    if (size) {
-        std::string tmpbuf(m_path);
-        tmpbuf += '/';
-        readText(key_.getTestament(), start, size, entry);
-        tmpbuf += entry;
-        entry = "";
-        auto const datafile(FileMgr::getSystemFileMgr()->open(tmpbuf.c_str(), FileMgr::RDONLY));
-        if (datafile->getFd() > 0) {
-            size = datafile->seek(0, SEEK_END);
-            auto tmpBuf(std::make_unique<char[]>(size + 1));
-            std::memset(tmpBuf.get(), 0, size + 1);
-            datafile->seek(0, SEEK_SET);
-            datafile->read(tmpBuf.get(), size);
-            entry = tmpBuf.get();
+    if (!size)
+        return std::string();
+    std::string tmpbuf(m_path);
+    tmpbuf += '/';
+    tmpbuf += readText(key_.getTestament(), start, size);
+    auto const datafile(FileMgr::getSystemFileMgr()->open(tmpbuf.c_str(), FileMgr::RDONLY));
+    if (datafile->getFd() > 0) {
+        size = datafile->seek(0, SEEK_END);
+        std::string r(size + 1, '\0');
+        datafile->seek(0, SEEK_SET);
+        datafile->read(r.data(), size);
+        return r;
 //            preptext(entrybuf);
-        }
     }
-    return entry;
+    return std::string();
 }
 
 
@@ -118,9 +114,7 @@ void RawFiles::setEntry(const char *inbuf, long len) {
 
     std::string filename(m_path.str() + '/');
     if (size) {
-        std::string tmpbuf;
-        readText(key_.getTestament(), start, size, tmpbuf);
-        filename += tmpbuf;
+        filename += readText(key_.getTestament(), start, size);
     }
     else {
         std::string tmpbuf(getNextFilename());
@@ -148,8 +142,7 @@ void RawFiles::linkEntry(SWKey const & inkey) {
     findOffset(key_.getTestament(), key_.getTestamentIndex(), &start, &size);
 
     if (size) {
-        std::string tmpbuf;
-        readText(key_.getTestament(), start, size + 2, tmpbuf);
+        auto const tmpbuf(readText(key_.getTestament(), start, size + 2));
 
         VerseKey const & key2 = getVerseKey(&inkey);
         doSetText(key2.getTestament(), key2.getTestamentIndex(), tmpbuf.c_str());

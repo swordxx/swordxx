@@ -86,8 +86,7 @@ std::string RawTextBase<BaseRawVerse>::getRawEntryImpl() const {
                      &start,
                      &size);
 
-    std::string entry;
-    this->readText(key_.getTestament(), start, size, entry);
+    std::string entry(this->readText(key_.getTestament(), start, size));
 
     rawFilter(entry, nullptr);    // hack, decipher
     rawFilter(entry, &key_);

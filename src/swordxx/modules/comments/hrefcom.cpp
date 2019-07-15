@@ -68,8 +68,7 @@ std::string HREFCom::getRawEntryImpl() const {
 
     findOffset(key_->getTestament(), key_->getTestamentIndex(), &start, &size);
 
-    std::string entry;
-    readText(key_->getTestament(), start, size, entry);
+    auto entry(readText(key_->getTestament(), start, size));
 
     if (key_ != getKey())
         delete key_;

@@ -58,10 +58,9 @@ public: /* Methods: */
 
 protected: /* Methods: */
 
-    void readText(char testmt,
-                  StartType start,
-                  SizeType size,
-                  std::string & buf) const;
+    std::string readText(char testmt,
+                         StartType start,
+                         SizeType size) const;
 
     /**
       \brief Finds the offset of the key verse from the indexes.
