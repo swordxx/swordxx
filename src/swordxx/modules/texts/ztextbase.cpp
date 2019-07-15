@@ -47,10 +47,8 @@ template <typename BaseZVerse>
 zTextBase<BaseZVerse>::zTextBase(const char *ipath, const char *iname, const char *idesc, BlockType iblockType, std::unique_ptr<SWCompress> icomp, TextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char *ilang, const char *versification)
     : BaseZVerse(ipath, FileMgr::RDWR, iblockType, std::move(icomp))
     , SWText(iname, idesc, enc, dir, mark, ilang, versification)
-{
-    blockType = iblockType;
-    lastWriteKey = nullptr;
-}
+    , blockType(iblockType)
+{}
 
 
 /******************************************************************************
