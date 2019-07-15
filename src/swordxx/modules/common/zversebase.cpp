@@ -163,11 +163,11 @@ void zVerseBase<VerseSizeType_>::findOffset(char testmt,
  *
  */
 template <typename VerseSizeType_>
-void zVerseBase<VerseSizeType_>::zReadText(char testmt,
-                                           VerseOffsetType start,
-                                           VerseSizeType size,
-                                           BufferNumberType ulBuffNum,
-                                           std::string &inBuf) const
+std::string zVerseBase<VerseSizeType_>::zReadText(char testmt,
+                                                  VerseOffsetType start,
+                                                  VerseSizeType size,
+                                                  BufferNumberType ulBuffNum)
+        const
 {
     uint32_t ulCompOffset = 0;           // compressed buffer start
     uint32_t ulCompSize   = 0;                 // buffer size compressed
@@ -179,7 +179,7 @@ void zVerseBase<VerseSizeType_>::zReadText(char testmt,
 
     // assert we have and valid file descriptor
     if (compfp[testmt-1]->getFd() < 1)
-        return;
+        return std::string();
 
     if (size &&
         !(((long) ulBuffNum == cacheBufIdx) && (testmt == cacheTestament) && (cacheBuf))) {
@@ -188,22 +188,22 @@ void zVerseBase<VerseSizeType_>::zReadText(char testmt,
         if (idxfp[testmt-1]->seek(ulBuffNum*12, SEEK_SET)!=(long) ulBuffNum*12)
         {
             fprintf(stderr, "Error seeking compressed file index\n");
-            return;
+            return std::string();
         }
         if (idxfp[testmt-1]->read(&ulCompOffset, sizeof(ulCompOffset)) < sizeof(ulCompOffset))
         {
             fprintf(stderr, "Error reading ulCompOffset\n");
-            return;
+            return std::string();
         }
         if (idxfp[testmt-1]->read(&ulCompSize, sizeof(ulCompSize)) < sizeof(ulCompSize))
         {
             fprintf(stderr, "Error reading ulCompSize\n");
-            return;
+            return std::string();
         }
         if (idxfp[testmt-1]->read(&ulUnCompSize, sizeof(ulUnCompSize)) < sizeof(ulUnCompSize))
         {
             fprintf(stderr, "Error reading ulUnCompSize\n");
-            return;
+            return std::string();
         }
 
         ulCompOffset  = swapToArch(ulCompOffset);
@@ -213,13 +213,13 @@ void zVerseBase<VerseSizeType_>::zReadText(char testmt,
         if (textfp[testmt-1]->seek(ulCompOffset, SEEK_SET)!=(long)ulCompOffset)
         {
             fprintf(stderr, "Error: could not seek to right place in compressed text\n");
-            return;
+            return std::string();
         }
         std::string pcCompText(ulCompSize + 5u, '\0');
 
         if (textfp[testmt-1]->read(&pcCompText[0u], ulCompSize) < ulCompSize) {
             fprintf(stderr, "Error reading compressed text\n");
-            return;
+            return std::string();
         }
         pcCompText.resize(ulCompSize);
         rawZFilter(pcCompText, 0); // 0 = decipher
@@ -241,12 +241,13 @@ void zVerseBase<VerseSizeType_>::zReadText(char testmt,
         cacheBufIdx = ulBuffNum;
     }
 
-    inBuf.clear();
+    std::string r;
     if ((size > 0) && cacheBuf && ((unsigned)start < cacheBufSize)) {
-        inBuf.resize(size + 1u, '\0');
-        std::strncpy(&inBuf[0u], &(cacheBuf[start]), size);
-        inBuf.resize(std::strlen(inBuf.c_str()));
+        r.resize(size + 1u, '\0');
+        std::strncpy(r.data(), &(cacheBuf[start]), size);
+        r.resize(std::strlen(r.c_str()));
     }
+    return r;
 }
 
 /******************************************************************************

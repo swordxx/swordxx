@@ -70,11 +70,10 @@ protected: /* Methods: */
                     VerseSizeType * size,
                     BufferNumberType * buffnum) const;
 
-    void zReadText(char testmt,
-                   VerseOffsetType start,
-                   VerseSizeType size,
-                   BufferNumberType buffnum,
-                   std::string & buf) const;
+    std::string zReadText(char testmt,
+                          VerseOffsetType start,
+                          VerseSizeType size,
+                          BufferNumberType buffnum) const;
 
     static char createModule(NormalizedPath const & path,
                              BlockType blockBound,

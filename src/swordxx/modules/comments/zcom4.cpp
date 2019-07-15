@@ -88,9 +88,8 @@ std::string zCom4::getRawEntryImpl() const {
 
     findOffset(key_.getTestament(), key_.getTestamentIndex(), &start, &size, &buffnum);
 
-    std::string entry;
 
-    zReadText(key_.getTestament(), start, size, buffnum, entry);
+    auto entry(zReadText(key_.getTestament(), start, size, buffnum));
     rawFilter(entry, &key_);
     return entry;
 }

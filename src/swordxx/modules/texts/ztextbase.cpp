@@ -83,9 +83,7 @@ std::string zTextBase<BaseZVerse>::getRawEntryImpl() const {
 
     this->findOffset(key_.getTestament(), key_.getTestamentIndex(), &start, &size, &buffnum);
 
-    std::string entry;
-
-    this->zReadText(key_.getTestament(), start, size, buffnum, entry);
+    auto entry(this->zReadText(key_.getTestament(), start, size, buffnum));
     rawFilter(entry, &key_);
     return entry;
 }
