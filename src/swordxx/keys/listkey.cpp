@@ -94,8 +94,7 @@ void ListKey::copyFrom(ListKey const & rhs) {
     std::transform(rhs.m_array.cbegin(),
                    rhs.m_array.cend(),
                    newArray.begin(),
-                   [](auto const & key)
-                   { return std::unique_ptr<SWKey>(key->clone()); });
+                   [](auto const & key) { return key->clone(); });
     setToElementAndTop_(0u);
     clear();
     m_array = std::move(newArray);
