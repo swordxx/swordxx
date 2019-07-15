@@ -161,7 +161,7 @@ void VerseTreeKey::positionChanged() {
     if (!m_internalPosChange) {
         TreeKey *tkey = this->TreeKey::PositionChangeListener::getTreeKey();
         int saveError = tkey->popError();
-        long bookmark = tkey->getOffset();
+        auto const bookmark = tkey->getOffset();
         std::string seg[4];
         m_internalPosChange = true;
         int legs = 0;
@@ -211,7 +211,7 @@ void VerseTreeKey::syncVerseToTree() {
     else if (!getBook()) path = formatted("/[ Testament %d Heading ]", getTestament());
     else path = formatted("/%s/%d/%d", getOSISBookName(), getChapter(), getVerse());
     if (getSuffix()) path += getSuffix();
-    long bookmark = m_treeKey->getOffset();
+    auto const bookmark = m_treeKey->getOffset();
     m_treeKey->setText(path);
 
     // if our module has jacked inconsistencies, then let's put our tree back to where it was
