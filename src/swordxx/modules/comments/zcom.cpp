@@ -55,10 +55,8 @@ zCom::zCom(const char *ipath,
            const char *versification)
     : zVerse(ipath, -1, iblockType, std::move(icomp))
     , SWCom(iname, idesc, enc, dir, mark, ilang, versification)
-{
-    blockType = iblockType;
-    lastWriteKey = nullptr;
-}
+    , blockType(iblockType)
+{}
 
 /******************************************************************************
  * zCom Destructor - Cleans up instance of zCom

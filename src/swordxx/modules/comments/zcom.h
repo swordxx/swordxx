@@ -36,9 +36,9 @@ namespace swordxx {
 
 class SWDLLEXPORT zCom : public zVerse, public SWCom {
 
-    VerseKey *lastWriteKey;
+    VerseKey * lastWriteKey = nullptr;
     bool sameBlock(VerseKey const & lastWriteKey, VerseKey const & key);
-    BlockType blockType;
+    BlockType const blockType;
 
 
 public:
