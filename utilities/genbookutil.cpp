@@ -30,13 +30,10 @@
 using namespace swordxx;
 
 void printTree(TreeKeyIdx treeKey,
-               TreeKeyIdx * target = nullptr,
+               TreeKeyIdx & target,
                int level = 1)
 {
-    if (!target)
-        target = &treeKey;
-
-    unsigned long currentOffset = target->getOffset();
+    unsigned long currentOffset = target.getOffset();
     std::cout << ((currentOffset == treeKey.getOffset()) ? "==>" : "");
     for (int i = 0; i < level; i++) std::cout << "\t";
     std::cout << treeKey.getLocalName() << "/\n";
@@ -50,39 +47,39 @@ void printTree(TreeKeyIdx treeKey,
 }
 
 
-void printLocalName(TreeKeyIdx *treeKey) {
-    std::cout << "locaName: " << treeKey->getLocalName() << "\n";
+void printLocalName(TreeKeyIdx & treeKey) {
+    std::cout << "locaName: " << treeKey.getLocalName() << "\n";
 }
 
 
-void setLocalName(TreeKeyIdx *treeKey) {
+void setLocalName(TreeKeyIdx & treeKey) {
     char buf[1023];
     std::cout << "Enter New Node Name: ";
     fgets(buf, 1000, stdin);
     std::string name = buf;
     trimString(name);
-    treeKey->setLocalName(std::move(name));
-    treeKey->save();
+    treeKey.setLocalName(std::move(name));
+    treeKey.save();
 }
 
 
-void gotoPath(TreeKeyIdx *treeKey) {
+void gotoPath(TreeKeyIdx & treeKey) {
     char buf[1023];
     std::cout << "Enter Path: ";
     fgets(buf, 1000, stdin);
     std::string path = buf;
     trimString(path);
-    treeKey->setText(path.c_str());
+    treeKey.setText(path.c_str());
 }
 
 
-void assurePath(TreeKeyIdx *treeKey) {
+void assurePath(TreeKeyIdx & treeKey) {
     char buf[1023];
     std::cout << "Enter Path: ";
     fgets(buf, 1000, stdin);
     std::string path = buf;
     trimString(path);
-    treeKey->assureKeyPath(path.c_str());
+    treeKey.assureKeyPath(path.c_str());
 }
 
 
@@ -115,36 +112,36 @@ void setEntryText(RawGenBook & book) {
 }
 
 
-void appendSibbling(TreeKeyIdx *treeKey) {
-    if (treeKey->getOffset()) {
+void appendSibbling(TreeKeyIdx & treeKey) {
+    if (treeKey.getOffset()) {
         char buf[1023];
         std::cout << "Enter New Sibbling Name: ";
         fgets(buf, 1000, stdin);
         std::string name = buf;
         trimString(name);
-        treeKey->append();
-        treeKey->setLocalName(std::move(name));
-        treeKey->save();
+        treeKey.append();
+        treeKey.setLocalName(std::move(name));
+        treeKey.save();
     }
     else    std::cout << "Can't add sibling to root node\n";
 }
 
 
-void appendChild(TreeKeyIdx *treeKey) {
+void appendChild(TreeKeyIdx & treeKey) {
     char buf[1023];
     std::cout << "Enter New Child Name: ";
     fgets(buf, 1000, stdin);
     std::string name = buf;
     trimString(name);
-    treeKey->appendChild();
-    treeKey->setLocalName(std::move(name));
-    treeKey->save();
+    treeKey.appendChild();
+    treeKey.setLocalName(std::move(name));
+    treeKey.save();
 }
 
 
-void deleteNode(TreeKeyIdx *treeKey) {
-    std::cout << "Removing entry [" << treeKey->getText() << "]\n";
-    treeKey->remove();
+void deleteNode(TreeKeyIdx & treeKey) {
+    std::cout << "Removing entry [" << treeKey.getText() << "]\n";
+    treeKey.remove();
 }
 
 int main(int argc, char **argv) {
@@ -174,14 +171,14 @@ int main(int argc, char **argv) {
         trimString(input);
         if (input.length() > 0) {
             switch (input[0]) {
-                case 'n': printLocalName(treeKey); break;
-                case 's': setLocalName(treeKey); break;
-                case 'g': gotoPath(treeKey); break;
-                case 'G': assurePath(treeKey); break;
-                case 'p':    root.root(); printTree(root, treeKey); break;
-                case 'a':    appendSibbling(treeKey); break;
-                case 'c':    appendChild(treeKey); break;
-                case 'd':    deleteNode(treeKey); break;
+                case 'n': printLocalName(*treeKey); break;
+                case 's': setLocalName(*treeKey); break;
+                case 'g': gotoPath(*treeKey); break;
+                case 'G': assurePath(*treeKey); break;
+                case 'p':    root.root(); printTree(root, *treeKey); break;
+                case 'a':    appendSibbling(*treeKey); break;
+                case 'c':    appendChild(*treeKey); break;
+                case 'd':    deleteNode(*treeKey); break;
                 case 'j':    treeKey->nextSibling(); break;
                 case 'k':    treeKey->previousSibling(); break;
                 case 'h':    treeKey->parent(); break;
