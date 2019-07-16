@@ -86,8 +86,6 @@ private: /* Fields: */
     mutable AttributeTypeList m_entryAttributes;
     mutable bool m_processEntryAttributes = true;
 
-    ListKey m_listKey;
-
     SWTextDirection m_textDirection;
     SWTextMarkup m_textMarkup;
     TextEncoding m_textEncoding;
