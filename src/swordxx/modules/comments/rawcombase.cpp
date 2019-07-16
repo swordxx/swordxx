@@ -80,8 +80,8 @@ void RawComBase<Base>::increment(int steps) {
 
     auto lastgood(tmpkey);
     while (steps) {
-        StartType laststart = start;
-        SizeType lastsize = size;
+        auto const laststart = start;
+        auto const lastsize = size;
         if (steps > 0) {
             getKey()->increment();
         } else {
@@ -93,13 +93,14 @@ void RawComBase<Base>::increment(int steps) {
             getKey()->positionFrom(*lastgood);
             break;
         }
-        long index = tmpkey->getTestamentIndex();
+        auto const index = tmpkey->getTestamentIndex();
         this->findOffset(tmpkey->getTestament(), index, &start, &size);
-        if (
-            (((laststart != start) || (lastsize != size))    // we're a different entry
-//                && (start > 0)
-                && (size))    // and we actually have a size
-                ||(!isSkipConsecutiveLinks())) {    // or we don't want to skip consecutive links
+        if (// we're a different entry:
+            (((laststart != start) || (lastsize != size))
+             && size) // and we actually have a size
+            // or we don't want to skip consecutive links:
+            || !isSkipConsecutiveLinks())
+        {
             steps += (steps < 0) ? 1 : -1;
             lastgood = tmpkey;
         }
@@ -123,7 +124,10 @@ char RawComBase<Base>::createModule(const char *path, const char * v11n)
 template <typename Base>
 void RawComBase<Base>::setEntry(const char *inbuf, long len) {
     auto const key_(getVerseKey());
-    this->doSetText(key_->getTestament(), key_->getTestamentIndex(), inbuf, len);
+    this->doSetText(key_->getTestament(),
+                    key_->getTestamentIndex(),
+                    inbuf,
+                    len);
 }
 
 template <typename Base>
@@ -183,8 +187,8 @@ bool RawComBase<Base>::hasEntry(SWKey const & k) const {
 }
 
 /******************************************************************************
- * RawComBase<Base>::getRawEntry()    - Returns the correct verse when char * cast
- *                    is requested
+ * RawComBase<Base>::getRawEntryImpl() - Returns the correct verse when char *
+ *                                       cast is requested
  *
  * RET: string buffer with verse
  */
@@ -193,17 +197,14 @@ std::string RawComBase<Base>::getRawEntryImpl() const {
     StartType start = 0;
     SizeType size = 0;
     auto const key_(getVerseKey());
-
     this->findOffset(key_->getTestament(),
                      key_->getTestamentIndex(),
                      &start,
                      &size);
 
     auto entry(this->readText(key_->getTestament(), start, size));
-
     rawFilter(entry, nullptr);    // hack, decipher
     rawFilter(entry, key_.get());
-
     return entry;
 }
 

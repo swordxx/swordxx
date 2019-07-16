@@ -127,12 +127,11 @@ void zComBase<Base>::increment(int steps) {
                          &start,
                          &size,
                          &buffnum);
-        if (
-            // we're a different entry:
+        if (// we're a different entry:
             (((laststart != start) || (lastsize != size))
-                && (size)) // and we actually have a size
-                // or we don't want to skip consecutive links:
-                ||(!isSkipConsecutiveLinks()))
+             && size) // and we actually have a size
+            // or we don't want to skip consecutive links:
+            || !isSkipConsecutiveLinks())
         {
             steps += (steps < 0) ? 1 : -1;
             lastgood = tmpkey;
