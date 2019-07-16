@@ -58,7 +58,6 @@ class SWDLLEXPORT SWKey {
 
 protected:
 
-    bool m_boundSet = false;
     char m_error;
 
     std::string m_localeName;
@@ -128,8 +127,7 @@ public:
     virtual std::string getRangeText() const;
     virtual std::string getOSISRefRangeText() const;
 
-    inline bool isBoundSet() const noexcept { return m_boundSet; }
-    inline void clearBound() noexcept { m_boundSet = false; }
+    virtual bool isBoundSet() const noexcept;
 
     /** Compares this key object to another SWKey object
      * @param ikey key to compare with this one

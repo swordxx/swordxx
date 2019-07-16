@@ -62,6 +62,8 @@ public:
 
     std::shared_ptr<SWKey> clone() const override;
 
+    bool isBoundSet() const noexcept final override;
+
     /** Clears out elements of list
      */
     virtual void clear();

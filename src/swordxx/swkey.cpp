@@ -143,6 +143,9 @@ std::string SWKey::getRangeText() const { return m_keyText; }
 std::string SWKey::getOSISRefRangeText() const { return getRangeText(); }
 
 
+bool SWKey::isBoundSet() const noexcept { return false; }
+
+
 /******************************************************************************
  * SWKey::compare    - Compares another VerseKey object
  *

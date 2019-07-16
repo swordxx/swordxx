@@ -41,9 +41,7 @@ namespace swordxx {
 
 ListKey::ListKey(char const * const ikey)
     : SWKey(ikey)
-{
-    m_boundSet = true;
-}
+{}
 
 
 ListKey::ListKey(ListKey const & copy)
@@ -60,17 +58,20 @@ ListKey::ListKey(ListKey const & copy)
         clear();
         throw;
     }
-    m_boundSet = true;
 }
 
 std::shared_ptr<SWKey> ListKey::clone() const
 { return std::make_shared<ListKey>(*this); }
+
 
 /******************************************************************************
  * ListKey Destructor - cleans up instance of ListKey
  */
 
 ListKey::~ListKey() = default;
+
+
+bool ListKey::isBoundSet() const noexcept { return true; }
 
 
 /******************************************************************************

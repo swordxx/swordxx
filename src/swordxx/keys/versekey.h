@@ -54,6 +54,8 @@ class SWDLLEXPORT VerseKey : public SWKey {
     */
     bool m_intros = false;
 
+    bool m_boundSet = false;
+
     // bounds caching is mutable, thus const
     void initBounds() const;
 
@@ -142,6 +144,8 @@ public:
     * Cleans up an instance of VerseKey
     */
     ~VerseKey() override;
+
+    bool isBoundSet() const noexcept final override;
 
     /** sets the lower boundary for this VerseKey
     *
