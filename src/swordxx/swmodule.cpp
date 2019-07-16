@@ -154,8 +154,6 @@ SWModule::~SWModule()
         if (!m_currentKey->isPersist())
             delete m_currentKey;
     }
-
-    m_entryAttributes.clear();
 }
 
 
