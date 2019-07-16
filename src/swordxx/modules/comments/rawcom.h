@@ -1,14 +1,6 @@
 /******************************************************************************
  *
- *  rawcom.h -    code for class 'RawCom'- a module that reads raw commentary
- *        files:    ot and nt using indexs ??.bks ??.cps ??.vss
- *
- * $Id$
- *
- * Copyright 1997-2013 CrossWire Bible Society (http://www.crosswire.org)
- *    CrossWire Bible Society
- *    P. O. Box 2528
- *    Tempe, AZ  85280-2528
+ * Copyright Jaak Ristioja
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -24,45 +16,19 @@
 #ifndef SWORDXX_RAWCOM_H
 #define SWORDXX_RAWCOM_H
 
-#include "../../swcom.h"
-#include "../common/rawverse.h"
-
-#include "../../defs.h"
+#include "rawcombase.h"
 
 
 namespace swordxx {
 
-class SWDLLEXPORT RawCom : public RawVerse, public SWCom {
+class SWDLLEXPORT RawCom : public RawComBase<RawVerse> {
 
+public: /* Methods: */
 
-public:
+    using RawComBase::RawComBase;
+    ~RawCom() noexcept override;
 
-    RawCom(char const * ipath,
-           char const * iname = nullptr,
-           char const * idesc = nullptr,
-           TextEncoding encoding = ENC_UNKNOWN,
-           SWTextDirection dir = DIRECTION_LTR,
-           SWTextMarkup markup = FMT_UNKNOWN,
-           char const * ilang = nullptr,
-           const char *m_versification = "KJV");
-    ~RawCom() override;
-
-    void increment(int steps = 1) override;
-    void decrement(int steps = 1) override { increment(-steps); }
-
-    bool isWritable() const override;
-    static char createModule(const char *path, const char *v11n = "KJV") { return RawVerse::createModule(path, v11n); }
-    void setEntry(char const * inbuf, long len = -1) override;
-    void linkEntry(SWKey const & linkKey) override;
-    void deleteEntry() override;
-    bool isLinked(SWKey const & k1, SWKey const & k2) const override;
-    bool hasEntry(SWKey const & k) const override;
-
-protected: /* Methods: */
-
-    std::string getRawEntryImpl() const override;
-
-};
+}; /* class RawCom */
 
 } /* namespace swordxx */
 
