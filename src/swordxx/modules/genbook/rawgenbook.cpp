@@ -32,6 +32,7 @@
 #include "../../keys/treekeyidx.h"
 #include "../../keys/versetreekey.h"
 #include "../../utilstr.h"
+#include "../../ShareRef.h"
 #include "../../sysdata.h"
 #include "../common/rawstr.h"
 
@@ -190,8 +191,7 @@ std::shared_ptr<SWKey> RawGenBook::createKey() const
 { return staticCreateKey(m_path.c_str(), verseKey); }
 
 bool RawGenBook::hasEntry(SWKey const & k) const {
-    std::shared_ptr<void> aliasingTrick;
-    auto const key_(getTreeKey(std::shared_ptr<SWKey const>(aliasingTrick, &k)));
+    auto const key_(getTreeKey(shareRef(k)));
 
     int dsize;
     key_->getUserData(&dsize);

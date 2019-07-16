@@ -28,6 +28,7 @@
 #include <fcntl.h>
 #include "../../filemgr.h"
 #include "../../keys/versekey.h"
+#include "../../ShareRef.h"
 
 
 namespace swordxx {
@@ -132,9 +133,7 @@ void RawCom4::setEntry(const char *inbuf, long len) {
 
 void RawCom4::linkEntry(SWKey const & inkey) {
     auto const destkey(getVerseKey());
-    std::shared_ptr<void> aliasingTrick;
-    auto const srckey(getVerseKey(std::shared_ptr<SWKey const>(aliasingTrick,
-                                                               &inkey)));
+    auto const srckey(getVerseKey(shareRef(inkey)));
     doLinkEntry(destkey->getTestament(),
                 destkey->getTestamentIndex(),
                 srckey->getTestamentIndex());
@@ -155,9 +154,8 @@ void RawCom4::deleteEntry() {
 bool RawCom4::isLinked(SWKey const & k1, SWKey const & k2) const {
     StartType start1, start2;
     SizeType size1, size2;
-    std::shared_ptr<void> aliasingTrick;
-    auto const vk1(getVerseKey(std::shared_ptr<SWKey const>(aliasingTrick, &k1)));
-    auto const vk2(getVerseKey(std::shared_ptr<SWKey const>(aliasingTrick, &k2)));
+    auto const vk1(getVerseKey(shareRef(k1)));
+    auto const vk2(getVerseKey(shareRef(k2)));
     if (vk1->getTestament() != vk2->getTestament())
         return false;
 
@@ -170,8 +168,7 @@ bool RawCom4::isLinked(SWKey const & k1, SWKey const & k2) const {
 bool RawCom4::hasEntry(SWKey const & k) const {
     StartType start;
     SizeType size;
-    std::shared_ptr<void> aliasingTrick;
-    auto const vk(getVerseKey(std::shared_ptr<SWKey const>(aliasingTrick, &k)));
+    auto const vk(getVerseKey(shareRef(k)));
     findOffset(vk->getTestament(), vk->getTestamentIndex(), &start, &size);
     return size;
 }

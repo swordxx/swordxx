@@ -28,6 +28,7 @@
 #include <regex.h>    // GNU
 #include "../../filemgr.h"
 #include "../../keys/versekey.h"
+#include "../../ShareRef.h"
 #include "../../stringmgr.h"
 #include "../../sysdata.h"
 #include "../../utilstr.h"
@@ -103,9 +104,7 @@ void RawTextBase<BaseRawVerse>::setEntry(char const *inbuf, long len) {
 template <typename BaseRawVerse>
 void RawTextBase<BaseRawVerse>::linkEntry(SWKey const & inkey) {
     auto const destkey(getVerseKey());
-    std::shared_ptr<void> aliasingTrick;
-    auto const srckey(getVerseKey(std::shared_ptr<SWKey const>(aliasingTrick,
-                                                               &inkey)));
+    auto const srckey(getVerseKey(shareRef(inkey)));
     this->doLinkEntry(destkey->getTestament(),
                       destkey->getTestamentIndex(),
                       srckey->getTestamentIndex());
@@ -174,9 +173,8 @@ template <typename BaseRawVerse>
 bool RawTextBase<BaseRawVerse>::isLinked(SWKey const & k1, SWKey const & k2) const {
     StartType start1, start2;
     SizeType size1, size2;
-    std::shared_ptr<void> aliasingTrick;
-    auto const vk1(getVerseKey(std::shared_ptr<SWKey const>(aliasingTrick, &k1)));
-    auto const vk2(getVerseKey(std::shared_ptr<SWKey const>(aliasingTrick, &k2)));
+    auto const vk1(getVerseKey(shareRef(k1)));
+    auto const vk2(getVerseKey(shareRef(k2)));
     if (vk1->getTestament() != vk2->getTestament())
         return false;
 
@@ -196,8 +194,7 @@ template <typename BaseRawVerse>
 bool RawTextBase<BaseRawVerse>::hasEntry(SWKey const & k) const {
     StartType start;
     SizeType size;
-    std::shared_ptr<void> aliasingTrick;
-    auto const vk(getVerseKey(std::shared_ptr<SWKey const>(aliasingTrick, &k)));
+    auto const vk(getVerseKey(shareRef(k)));
     this->findOffset(vk->getTestament(), vk->getTestamentIndex(), &start, &size);
     return size;
 }

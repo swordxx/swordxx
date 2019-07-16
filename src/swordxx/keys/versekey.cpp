@@ -34,6 +34,7 @@
 #include <sstream>
 #include <type_traits>
 #include "../roman.h"
+#include "../ShareRef.h"
 #include "../stringmgr.h"
 #include "../swlocale.h"
 #include "../swlog.h"
@@ -144,8 +145,7 @@ void VerseKey::setFromOther(const VerseKey &ikey) {
 
 void VerseKey::positionFrom(const SWKey &ikey) {
      m_error = 0;
-    std::shared_ptr<void> aliasingTrick;
-    std::shared_ptr<SWKey const> fromKey(aliasingTrick, &ikey);
+    auto fromKey(shareRef(ikey));
     if (auto const tryList = dynamic_cast<ListKey const *>(&ikey))
         if (auto const k = tryList->getElement())
             fromKey = k;
@@ -200,8 +200,7 @@ void VerseKey::copyFrom(const VerseKey &ikey) {
 void VerseKey::copyFrom(const SWKey &ikey) {
     // check to see if we can do a more specific copy
     // plus some optimizations
-    std::shared_ptr<void> aliasingTrick;
-    std::shared_ptr<SWKey const> fromKey(aliasingTrick, &ikey);
+    auto fromKey(shareRef(ikey));
     if (auto const tryList = dynamic_cast<ListKey const *>(&ikey))
         if (auto k = tryList->getElement())
             fromKey = k;

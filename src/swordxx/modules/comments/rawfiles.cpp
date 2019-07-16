@@ -32,6 +32,7 @@
 #include <memory>
 #include "../../filemgr.h"
 #include "../../keys/versekey.h"
+#include "../../ShareRef.h"
 #include "../../sysdata.h"
 
 
@@ -143,10 +144,7 @@ void RawFiles::linkEntry(SWKey const & inkey) {
 
     if (size) {
         auto const tmpbuf(readText(key_->getTestament(), start, size + 2));
-
-        std::shared_ptr<void> aliasingTrick;
-        auto const key2(getVerseKey(std::shared_ptr<SWKey const>(aliasingTrick,
-                                                                 &inkey)));
+        auto const key2(getVerseKey(shareRef(inkey)));
         doSetText(key2->getTestament(), key2->getTestamentIndex(), tmpbuf.c_str());
     }
 }
