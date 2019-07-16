@@ -49,6 +49,7 @@
  */
 
 #include <array>
+#include <cassert>
 #include <cstdio>
 #include <fstream>
 #include <iostream>
@@ -191,14 +192,15 @@ void normalizeInput(SWKey &key, std::string &text) {
     }
 }
 
-void writeEntry(SWKey &key, std::string &text) {
+void writeCurrentEntry(std::string & text) {
+    assert(currentKey);
 #ifdef DEBUG
-    cout << "(" << entryCount << ") " << key.getText() << endl;
+    cout << "(" << entryCount << ") " << currentKey->getText() << endl;
 #endif
 
-    module->setKey(key);
+    module->setKey(*currentKey);
 
-    normalizeInput(key, text);
+    normalizeInput(*currentKey, text);
 
     module->setEntry(text.c_str());
 }
@@ -287,7 +289,7 @@ bool handleToken(std::string & text, XMLTag & token) {
                 cout << "splitBuffer: " << splitBuffer.data() << endl;
                 cout << "currentKey: " << currentKey->getText() << endl;
 #endif
-                writeEntry(*currentKey, text);
+                writeCurrentEntry(text);
 #if 1
                                 while (splitPtr) {
                                     splitPtr += 1;
@@ -317,7 +319,7 @@ bool handleToken(std::string & text, XMLTag & token) {
                         }
                         else {
                 currentKey->setText(keyStr);
-                writeEntry(*currentKey, text);
+                writeCurrentEntry(text);
                         }
 
             // Since we consumed the text, clear it
@@ -548,7 +550,7 @@ int main(int argc, char **argv) {
 
     // Force the last entry from the text buffer.
     //text = "";
-    //writeEntry(*currentKey, text);
+    //writeCurrentEntry(text);
 
     delete module;
     currentKey.release();
