@@ -74,16 +74,11 @@ VerseTreeKey::VerseTreeKey(TreeKey const & treeKey,
 
 
 void VerseTreeKey::init(TreeKey const & treeKey) {
-    this->m_treeKey = static_cast<TreeKey *>(treeKey.clone().release());
-    this->m_treeKey->setPositionChangeListener(this);
-    m_internalPosChange = false;
+    m_treeKey = std::static_pointer_cast<TreeKey>(treeKey.clone());
+    m_treeKey->setPositionChangeListener(this);
 }
 
-
-std::unique_ptr<SWKey> VerseTreeKey::clone() const
-{ return std::make_unique<VerseTreeKey>(*this); }
-
-std::shared_ptr<SWKey> VerseTreeKey::cloneShared() const
+std::shared_ptr<SWKey> VerseTreeKey::clone() const
 { return std::make_shared<VerseTreeKey>(*this); }
 
 
@@ -93,9 +88,7 @@ std::shared_ptr<SWKey> VerseTreeKey::cloneShared() const
  * ENT:    ikey - text key
  */
 
-VerseTreeKey::~VerseTreeKey() {
-    delete m_treeKey;
-}
+VerseTreeKey::~VerseTreeKey() = default;
 
 
 void VerseTreeKey::decrement(int /* steps */) {
@@ -223,8 +216,9 @@ void VerseTreeKey::syncVerseToTree() {
 }
 
 
-TreeKey *VerseTreeKey::getTreeKey() {
-    syncVerseToTree();
+std::shared_ptr<TreeKey const> VerseTreeKey::getTreeKey() const {
+    /// \bug Remove const_cast:
+    const_cast<VerseTreeKey *>(this)->syncVerseToTree();
     return m_treeKey;
 }
 

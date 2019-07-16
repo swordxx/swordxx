@@ -66,9 +66,8 @@ int main(int argc, char **argv)
     manager.setGlobalOption("Lemmas", "Off");
 //    manager.setGlobalOption("Greek Accents", "Off");
 
-    VerseKey *vk = dynamic_cast<VerseKey *>(target->getKey());
-
-    if (vk) {
+    auto const k(target->getKey());
+    if (auto const vk = dynamic_cast<VerseKey *>(k.get())) {
     //    vk->AutoNormalize(false);
         vk->setIntros(true);
         vk->setText(argv[2]);

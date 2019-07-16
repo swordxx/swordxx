@@ -74,7 +74,8 @@ char RawLdBase<Base>::getEntry(std::string & entry, long away) const {
     SizeType size = 0;
     char retval = 0;
 
-    auto const keyText = getKey()->getText();
+    auto const key(getKey());
+    auto const keyText = key->getText();
     if (this->m_strongsPadding) {
         retval = this->findOffset(strongsPadBuf(keyText.c_str()).get(), &start, &size, away);
     } else {
@@ -83,9 +84,7 @@ char RawLdBase<Base>::getEntry(std::string & entry, long away) const {
     if (!retval) {
         auto const idxbuf(this->readText(start, size, entry));
         rawFilter(entry, nullptr);    // hack, decipher
-        rawFilter(entry, getKey());
-        if (!getKey()->isPersist())            // If we have our own key
-            getKey()->setText(idxbuf);                // reset it to entry index buffer
+        rawFilter(entry, key.get());
 
         m_entkeytxt = idxbuf; // set entry key text that module 'snapped' to.
     } else {

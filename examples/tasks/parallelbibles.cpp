@@ -42,8 +42,8 @@ void parallelDisplay(std::vector<std::shared_ptr<SWModule> > const & modules,
     //cout << "Start key:" << key;
 
     // We'll use the first module's key as our master key to position all other modules.
-    std::unique_ptr<VerseKey> master(
-                static_cast<VerseKey *>(modules[0]->createKey().release()));
+    std::shared_ptr<VerseKey> master(
+                std::static_pointer_cast<VerseKey>(modules[0]->createKey()));
 
     master->setText(key);
 
@@ -64,7 +64,7 @@ void parallelDisplay(std::vector<std::shared_ptr<SWModule> > const & modules,
         for (auto module = modules.begin(); module != modules.end(); ++module) {
             //cout << "\n\n====================\nfromKey" << master->getOSISRef();
 
-            (*module)->setKey(*master);
+            (*module)->setKey(master);
             VerseKey slave((*module)->getKey()->getText());
 
             //cout << "setKey" << (*module)->getName() << slave.getBookName() << slave.getRangeText() << slave.getShortText();
@@ -112,12 +112,12 @@ void parallelDisplay(std::vector<std::shared_ptr<SWModule> > const & modules,
 
 
                 if(slave.isBoundSet()) {
-                    VerseKey temp(slave);
+                    auto temp(slave.clone());
+                    (*module)->setKey(temp);
                     for(int i = slave.lowerBoundKey().getIndex(); i <= slave.upperBoundKey().getIndex(); ++i) {
                         if (o && (i > 0))
                             std::cout << " ";
-                        temp.setIndex(i);
-                        (*module)->setKey(temp);
+                        temp->setIndex(i);
                         if (o)
                             std::cout << (*module)->renderText();
                     }

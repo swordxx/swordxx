@@ -64,8 +64,6 @@ zCom::zCom(const char *ipath,
 
 zCom::~zCom() {
     flushCache();
-
-    delete lastWriteKey;
 }
 
 
@@ -84,13 +82,12 @@ std::string zCom::getRawEntryImpl() const {
     VerseOffsetType start = 0;
     VerseSizeType size = 0;
     BufferNumberType buffnum = 0;
-    VerseKey const & key_ = getVerseKey();
+    auto const key_(getVerseKey());
 
-    findOffset(key_.getTestament(), key_.getTestamentIndex(), &start, &size, &buffnum);
+    findOffset(key_->getTestament(), key_->getTestamentIndex(), &start, &size, &buffnum);
 
-
-    auto entry(zReadText(key_.getTestament(), start, size, buffnum));
-    rawFilter(entry, &key_);
+    auto entry(zReadText(key_->getTestament(), start, size, buffnum));
+    rawFilter(entry, key_.get());
     return entry;
 }
 
@@ -114,30 +111,31 @@ bool zCom::sameBlock(VerseKey const & k1, VerseKey const & k2) {
 }
 
 void zCom::setEntry(const char *inbuf, long len) {
-    VerseKey const & key_ = getVerseKey();
+    auto const key_(getVerseKey());
 
     // see if we've jumped across blocks since last write
     if (lastWriteKey) {
-        if (!sameBlock(*lastWriteKey, key_)) {
+        if (!sameBlock(*lastWriteKey, *key_)) {
             flushCache();
         }
-        delete lastWriteKey;
+        lastWriteKey.reset();
     }
 
-    doSetText(key_.getTestament(), key_.getTestamentIndex(), inbuf, len);
+    doSetText(key_->getTestament(), key_->getTestamentIndex(), inbuf, len);
 
-    lastWriteKey = static_cast<VerseKey *>(key_.clone().release()); // must delete
+    lastWriteKey = std::static_pointer_cast<VerseKey const>(key_->clone()); // must delete
 }
 
 
 void zCom::linkEntry(SWKey const & inkey) {
-    VerseKey const & destkey = getVerseKey();
-    VerseKey & srckey = getVerseKey(&inkey);
+    auto const destkey(getVerseKey());
+    std::shared_ptr<void> aliasingTrick;
+    auto const srckey(getVerseKey(std::shared_ptr<SWKey const>(aliasingTrick,
+                                                               &inkey)));
 
-    doLinkEntry(destkey.getTestament(), destkey.getTestamentIndex(), srckey.getTestamentIndex());
-
-    if (&inkey != &srckey) // free our key if we created a VerseKey
-        delete &srckey;
+    doLinkEntry(destkey->getTestament(),
+                destkey->getTestamentIndex(),
+                srckey->getTestamentIndex());
 }
 
 /******************************************************************************
@@ -147,8 +145,8 @@ void zCom::linkEntry(SWKey const & inkey) {
  */
 
 void zCom::deleteEntry() {
-    VerseKey const & key_ = getVerseKey();
-    doSetText(key_.getTestament(), key_.getTestamentIndex(), "");
+    auto const key_(getVerseKey());
+    doSetText(key_->getTestament(), key_->getTestamentIndex(), "");
 }
 
 
@@ -164,24 +162,23 @@ void zCom::increment(int steps) {
     VerseOffsetType start;
     VerseSizeType size;
     BufferNumberType buffnum;
-    VerseKey const * tmpkey = &getVerseKey();
+    auto tmpkey(getVerseKey());
 
     findOffset(tmpkey->getTestament(), tmpkey->getTestamentIndex(), &start, &size, &buffnum);
 
-    SWKey lastgood = *tmpkey;
+    auto lastgood(tmpkey);
     while (steps) {
         VerseOffsetType laststart = start;
         VerseSizeType lastsize = size;
-        SWKey lasttry = *tmpkey;
         if (steps > 0) {
             getKey()->increment();
         } else {
             getKey()->decrement();
         }
-        tmpkey = &getVerseKey();
+        tmpkey = getVerseKey();
 
         if ((error = getKey()->popError())) {
-            getKey()->positionFrom(lastgood);
+            getKey()->positionFrom(*lastgood);
             break;
         }
         long index = tmpkey->getTestamentIndex();
@@ -192,7 +189,7 @@ void zCom::increment(int steps) {
                 && (size))    // and we actually have a size
                 ||(!isSkipConsecutiveLinks())) {    // or we don't want to skip consecutive links
             steps += (steps < 0) ? 1 : -1;
-            lastgood.positionFrom(*tmpkey);
+            lastgood = tmpkey;
         }
     }
     error = (error) ? KEYERR_OUTOFBOUNDS : 0;
@@ -202,12 +199,14 @@ bool zCom::isLinked(SWKey const & k1, SWKey const & k2) const {
     VerseOffsetType start1, start2;
     VerseSizeType size1, size2;
     BufferNumberType buffnum1, buffnum2;
-    VerseKey const & vk1 = getVerseKey(&k1);
-    VerseKey const & vk2 = getVerseKey(&k2);
-    if (vk1.getTestament() != vk2.getTestament()) return false;
+    std::shared_ptr<void> aliasingTrick;
+    auto const vk1(getVerseKey(std::shared_ptr<SWKey const>(aliasingTrick, &k1)));
+    auto const vk2(getVerseKey(std::shared_ptr<SWKey const>(aliasingTrick, &k2)));
+    if (vk1->getTestament() != vk2->getTestament())
+        return false;
 
-    findOffset(vk1.getTestament(), vk1.getTestamentIndex(), &start1, &size1, &buffnum1);
-    findOffset(vk2.getTestament(), vk2.getTestamentIndex(), &start2, &size2, &buffnum2);
+    findOffset(vk1->getTestament(), vk1->getTestamentIndex(), &start1, &size1, &buffnum1);
+    findOffset(vk2->getTestament(), vk2->getTestamentIndex(), &start2, &size2, &buffnum2);
     return start1 == start2 && buffnum1 == buffnum2;
 }
 
@@ -215,8 +214,9 @@ bool zCom::hasEntry(SWKey const & k) const {
     VerseOffsetType start;
     VerseSizeType size;
     BufferNumberType buffnum;
-    VerseKey const & vk = getVerseKey(&k);
-    findOffset(vk.getTestament(), vk.getTestamentIndex(), &start, &size, &buffnum);
+    std::shared_ptr<void> aliasingTrick;
+    auto const vk(getVerseKey(std::shared_ptr<SWKey const>(aliasingTrick, &k)));
+    findOffset(vk->getTestament(), vk->getTestamentIndex(), &start, &size, &buffnum);
     return size;
 }
 

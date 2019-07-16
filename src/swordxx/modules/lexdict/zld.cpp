@@ -76,7 +76,8 @@ char zLD::getEntry(std::string & entry, long away) const {
     char retval = 0;
     long index;
     unsigned long size;
-    auto const keyText = getKey()->getText();
+    auto const key(getKey());
+    auto const keyText(key->getText());
     if (this->m_strongsPadding) {
         retval = findKeyIndex(strongsPadBuf(keyText.c_str()).get(), &index, away);
     } else {
@@ -87,10 +88,7 @@ char zLD::getEntry(std::string & entry, long away) const {
         size = std::strlen(ebuf) + 1;
         entry = ebuf;
 
-        rawFilter(entry, getKey());
-
-        if (!getKey()->isPersist())            // If we have our own key
-            getKey()->setText(idxbuf);                // reset it to entry index buffer
+        rawFilter(entry, key.get());
 
         m_entkeytxt.assign(idxbuf); // set entry key text that module 'snapped' to.
         free(idxbuf);

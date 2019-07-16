@@ -41,10 +41,7 @@ StrKey::StrKey(std::string ikey) : SWKey(std::move(ikey))
 StrKey::StrKey(const char *ikey) : SWKey(ikey)
 {}
 
-std::unique_ptr<SWKey> StrKey::clone() const noexcept
-{ return std::make_unique<StrKey>(getText()); }
-
-std::shared_ptr<SWKey> StrKey::cloneShared() const noexcept
+std::shared_ptr<SWKey> StrKey::clone() const noexcept
 { return std::make_shared<StrKey>(getText()); }
 
 

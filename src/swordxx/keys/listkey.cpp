@@ -63,10 +63,7 @@ ListKey::ListKey(ListKey const & copy)
     m_boundSet = true;
 }
 
-std::unique_ptr<SWKey> ListKey::clone() const
-{ return std::make_unique<ListKey>(*this); }
-
-std::shared_ptr<SWKey> ListKey::cloneShared() const
+std::shared_ptr<SWKey> ListKey::clone() const
 { return std::make_shared<ListKey>(*this); }
 
 /******************************************************************************
@@ -255,13 +252,11 @@ char ListKey::setToElementAndBottom_(std::size_t const ielement) {
  * RET:    Key or null on error
  */
 
-SWKey const * ListKey::getElement(std::size_t const pos) const
-{ return (pos >= m_array.size()) ? nullptr : m_array[pos].get(); }
+std::shared_ptr<SWKey const> ListKey::getElement(std::size_t const pos) const noexcept
+{ return (pos >= m_array.size()) ? nullptr : m_array[pos]; }
 
-SWKey * ListKey::getElement(std::size_t const pos) {
-    const ListKey &self = *this;
-    return const_cast<SWKey *>(self.getElement(pos));
-}
+std::shared_ptr<SWKey> ListKey::getElement(std::size_t const pos)  noexcept
+{ return (pos >= m_array.size()) ? nullptr : m_array[pos]; }
 
 
 

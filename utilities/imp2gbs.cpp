@@ -185,13 +185,13 @@ void writeEntry(SWModule & book,
 
     std::cout << keyBuffer << std::endl;
 
-    book.setKey(keyBuffer.c_str());
+    book.getKey()->positionFrom(keyBuffer.c_str());
 
     // check to see if we already have an entry
     for (int i = 2; book.getKey()->popError() != KEYERR_OUTOFBOUNDS; ++i) {
         std::string key(formatted("%s {%d}", keyBuffer, i));
         std::cout << "dup key, trying: " << key << std::endl;
-        book.setKey(key.c_str());
+        book.getKey()->positionFrom(key.c_str());
     }
 
     book.setEntry(entBuffer.c_str());

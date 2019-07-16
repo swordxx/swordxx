@@ -93,7 +93,7 @@ private: /* Fields: */
     TextEncoding m_textEncoding;
     bool m_skipConsecutiveLinks = true;
 
-    SWKey * m_currentKey;
+    std::shared_ptr<SWKey> m_currentKey;
 
 protected:
 
@@ -111,7 +111,7 @@ public:
      * @param markup Source Markup of the module (e.g. OSIS)
      * @param modlang Language of the module (e.g. en)
      */
-    SWModule(std::unique_ptr<SWKey> key_,
+    SWModule(std::shared_ptr<SWKey> key_,
              char const * imodname = nullptr,
              char const * imoddesc = nullptr,
              char const * imodtype = nullptr,
@@ -166,25 +166,24 @@ public:
      * Sets a key to this module for position to a particular record
      *
      * @param ikey key with which to set this module
-     * @return error status
      */
-    char setKey(const SWKey *ikey);
-
-    /**
-     * Sets a key to this module for position to a particular record
-     * @param ikey The SWKey which should be used as new key.
-     * @return Error status
-     */
-    char setKey(const SWKey &ikey) { return setKey(&ikey); }
+    void setKey(std::shared_ptr<SWKey> ikey) noexcept;
 
     /** \returns the current key of this module. */
-    SWKey *getKey() const { return m_currentKey; }
+    std::shared_ptr<SWKey> getKey() const noexcept { return m_currentKey; }
+
+    /** \returns the current key of this module. */
+    template <typename T>
+    std::shared_ptr<T> getKeyAs() const noexcept
+    { return std::static_pointer_cast<T>(m_currentKey); }
+
+    char setKey(std::string_view positionFrom);
 
     /**
      * gets the key text for the module.
      * do we really need this?
      */
-    virtual std::string getKeyText() const { return getKey()->getText(); }
+    virtual std::string getKeyText() const { return m_currentKey->getText(); }
 
     std::string const & getName() const { return m_moduleName; }
     std::string const & getDescription() const { return m_moduleDescription; }
@@ -210,7 +209,7 @@ public:
      * @see VerseKey, ListKey, SWText, SWLD, SWCom
      * @return pointer to allocated key.
      */
-    virtual std::unique_ptr<SWKey> createKey() const = 0;
+    virtual std::shared_ptr<SWKey> createKey() const = 0;
 
     std::string getRawEntry() const;
 

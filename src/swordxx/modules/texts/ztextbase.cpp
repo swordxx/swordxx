@@ -55,12 +55,7 @@ zTextBase<BaseZVerse>::zTextBase(const char *ipath, const char *iname, const cha
  * zText Destructor - Cleans up instance of zText
  */
 template <typename BaseZVerse>
-zTextBase<BaseZVerse>::~zTextBase()
-{
-    this->flushCache();
-
-    delete lastWriteKey;
-}
+zTextBase<BaseZVerse>::~zTextBase() { this->flushCache(); }
 
 template <typename BaseZVerse>
 bool zTextBase<BaseZVerse>::isWritable() const {
@@ -79,12 +74,12 @@ std::string zTextBase<BaseZVerse>::getRawEntryImpl() const {
     VerseOffsetType start = 0;
     VerseSizeType size = 0;
     BufferNumberType buffnum = 0;
-    VerseKey const & key_ = getVerseKey();
+    auto const key_(getVerseKey());
 
-    this->findOffset(key_.getTestament(), key_.getTestamentIndex(), &start, &size, &buffnum);
+    this->findOffset(key_->getTestament(), key_->getTestamentIndex(), &start, &size, &buffnum);
 
-    auto entry(this->zReadText(key_.getTestament(), start, size, buffnum));
-    rawFilter(entry, &key_);
+    auto entry(this->zReadText(key_->getTestament(), start, size, buffnum));
+    rawFilter(entry, key_.get());
     return entry;
 }
 
@@ -109,26 +104,30 @@ bool zTextBase<BaseZVerse>::sameBlock(VerseKey const & k1, VerseKey const & k2) 
 
 template <typename BaseZVerse>
 void zTextBase<BaseZVerse>::setEntry(const char *inbuf, long len) {
-    VerseKey const & key_ = getVerseKey();
+    auto const key_(getVerseKey());
 
     // see if we've jumped across blocks since last write
     if (lastWriteKey) {
-        if (!sameBlock(*lastWriteKey, key_)) {
+        if (!sameBlock(*lastWriteKey, *key_)) {
             this->flushCache();
         }
-        delete lastWriteKey;
+        lastWriteKey.reset();
     }
 
-    this->doSetText(key_.getTestament(), key_.getTestamentIndex(), inbuf, len);
+    this->doSetText(key_->getTestament(), key_->getTestamentIndex(), inbuf, len);
 
-    lastWriteKey = static_cast<VerseKey *>(key_.clone().release()); // must delete
+    lastWriteKey = std::static_pointer_cast<VerseKey const>(key_->clone());
 }
 
 template <typename BaseZVerse>
 void zTextBase<BaseZVerse>::linkEntry(SWKey const & inkey) {
-    VerseKey const & destkey = getVerseKey();
-    VerseKey const & srckey = getVerseKey(&inkey);
-    this->doLinkEntry(destkey.getTestament(), destkey.getTestamentIndex(), srckey.getTestamentIndex());
+    auto const destkey(getVerseKey());
+    std::shared_ptr<void> aliasingTrick;
+    auto const srckey(getVerseKey(std::shared_ptr<SWKey const>(aliasingTrick,
+                                                               &inkey)));
+    this->doLinkEntry(destkey->getTestament(),
+                      destkey->getTestamentIndex(),
+                      srckey->getTestamentIndex());
 }
 
 
@@ -138,8 +137,8 @@ void zTextBase<BaseZVerse>::linkEntry(SWKey const & inkey) {
  */
 template <typename BaseZVerse>
 void zTextBase<BaseZVerse>::deleteEntry() {
-    VerseKey const & key_ = getVerseKey();
-    this->doSetText(key_.getTestament(), key_.getTestamentIndex(), "");
+    auto const key_(getVerseKey());
+    this->doSetText(key_->getTestament(), key_->getTestamentIndex(), "");
 }
 
 
@@ -154,24 +153,23 @@ void zTextBase<BaseZVerse>::increment(int steps) {
     VerseOffsetType start;
     VerseSizeType size;
     BufferNumberType buffnum;
-    VerseKey const * tmpkey = &getVerseKey();
+    auto tmpkey(getVerseKey());
 
     this->findOffset(tmpkey->getTestament(), tmpkey->getTestamentIndex(), &start, &size, &buffnum);
 
-    SWKey lastgood = *tmpkey;
+    auto lastgood(tmpkey);
     while (steps) {
         VerseOffsetType laststart = start;
         VerseSizeType lastsize = size;
-        SWKey lasttry = *tmpkey;
         if (steps > 0) {
             getKey()->increment();
         } else {
             getKey()->decrement();
         }
-        tmpkey = &getVerseKey();
+        tmpkey = getVerseKey();
 
         if ((error = getKey()->popError())) {
-            getKey()->positionFrom(lastgood);
+            getKey()->positionFrom(*lastgood);
             break;
         }
         long index = tmpkey->getTestamentIndex();
@@ -186,7 +184,7 @@ void zTextBase<BaseZVerse>::increment(int steps) {
             || !isSkipConsecutiveLinks()
         ) {    // or we don't want to skip consecutive links
             steps += (steps < 0) ? 1 : -1;
-            lastgood.positionFrom(*tmpkey);
+            lastgood = tmpkey;
         }
     }
     error = (error) ? KEYERR_OUTOFBOUNDS : 0;
@@ -197,12 +195,14 @@ bool zTextBase<BaseZVerse>::isLinked(SWKey const & k1, SWKey const & k2) const {
     VerseOffsetType start1, start2;
     VerseSizeType size1, size2;
     BufferNumberType buffnum1, buffnum2;
-    VerseKey const & vk1 = getVerseKey(&k1);
-    VerseKey const & vk2 = getVerseKey(&k2);
-    if (vk1.getTestament() != vk2.getTestament()) return false;
+    std::shared_ptr<void> aliasingTrick;
+    auto const vk1(getVerseKey(std::shared_ptr<SWKey const>(aliasingTrick, &k1)));
+    auto const vk2(getVerseKey(std::shared_ptr<SWKey const>(aliasingTrick, &k2)));
+    if (vk1->getTestament() != vk2->getTestament())
+        return false;
 
-    this->findOffset(vk1.getTestament(), vk1.getTestamentIndex(), &start1, &size1, &buffnum1);
-    this->findOffset(vk2.getTestament(), vk2.getTestamentIndex(), &start2, &size2, &buffnum2);
+    this->findOffset(vk1->getTestament(), vk1->getTestamentIndex(), &start1, &size1, &buffnum1);
+    this->findOffset(vk2->getTestament(), vk2->getTestamentIndex(), &start2, &size2, &buffnum2);
     return start1 == start2 && buffnum1 == buffnum2;
 }
 
@@ -211,8 +211,9 @@ bool zTextBase<BaseZVerse>::hasEntry(SWKey const & k) const {
     VerseOffsetType start;
     VerseSizeType size;
     BufferNumberType buffnum;
-    VerseKey const & vk = getVerseKey(&k);
-    this->findOffset(vk.getTestament(), vk.getTestamentIndex(), &start, &size, &buffnum);
+    std::shared_ptr<void> aliasingTrick;
+    auto const vk(getVerseKey(std::shared_ptr<SWKey const>(aliasingTrick, &k)));
+    this->findOffset(vk->getTestament(), vk->getTestamentIndex(), &start, &size, &buffnum);
     return size;
 }
 

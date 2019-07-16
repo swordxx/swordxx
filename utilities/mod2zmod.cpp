@@ -142,8 +142,7 @@ int main(int argc, char **argv)
     switch (modType) {
     case BIBLE:
     case COM: {
-        SWKey *k = inModule.getKey();
-        VerseKey *vk = dynamic_cast<VerseKey *>(k);
+        auto const vk(inModule.getKeyAs<VerseKey>());
         result = zText::createModule(argv[2], iType, vk->getVersificationSystem().c_str());
         break;
     }
@@ -161,12 +160,11 @@ int main(int argc, char **argv)
     switch (modType) {
     case BIBLE:
     case COM: {
-        SWKey *k = inModule.getKey();
-        VerseKey *vk = dynamic_cast<VerseKey *>(k);
+        auto const vk(inModule.getKeyAs<VerseKey>());
         outModule = std::make_unique<zText>(argv[2], nullptr, nullptr, iType, std::move(compressor),
             ENC_UNKNOWN, DIRECTION_LTR, FMT_UNKNOWN, nullptr,
             vk->getVersificationSystem().c_str());    // open our datapath with our RawText driver.
-        static_cast<VerseKey *>(inModule.getKey())->setIntros(true);
+        vk->setIntros(true);
         break;
     }
     case LEX:
@@ -183,12 +181,11 @@ int main(int argc, char **argv)
     SWKey lastBufferKey;
     auto const outModuleKey(outModule->createKey());
     VerseKey *vkey = dynamic_cast<VerseKey *>(outModuleKey.get());
-    outModuleKey->setPersist(true);
     if (vkey) {
         vkey->setIntros(true);
         vkey->setAutoNormalize(false);
     }
-    outModule->setKey(*outModuleKey);
+    outModule->setKey(outModuleKey);
 
     inModule.setSkipConsecutiveLinks(false);
     inModule.positionToTop();

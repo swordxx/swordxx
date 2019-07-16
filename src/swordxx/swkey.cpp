@@ -64,16 +64,12 @@ SWKey::SWKey(SWKey const &k)
     setLocale(LocaleMgr::getSystemLocaleMgr()->getDefaultLocaleName());
     m_localeName = k.m_localeName;
     m_index     = k.m_index;
-    m_persist   = k.m_persist;
     m_userData  = k.m_userData;
     m_error     = k.m_error;
     setText(k.getText());
 }
 
-std::unique_ptr<SWKey> SWKey::clone() const
-{ return std::make_unique<SWKey>(*this); }
-
-std::shared_ptr<SWKey> SWKey::cloneShared() const
+std::shared_ptr<SWKey> SWKey::clone() const
 { return std::make_shared<SWKey>(*this); }
 
 /******************************************************************************
@@ -121,7 +117,6 @@ void SWKey::setText(std::string newText) { m_keyText = std::move(newText); }
  */
 
 void SWKey::copyFrom(const SWKey &ikey) {
-// not desirable    Persist(ikey.Persist());
     setLocale(ikey.getLocale());
     setText(ikey.getText());
 }

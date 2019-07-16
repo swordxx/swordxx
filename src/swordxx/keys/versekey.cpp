@@ -144,14 +144,12 @@ void VerseKey::setFromOther(const VerseKey &ikey) {
 
 void VerseKey::positionFrom(const SWKey &ikey) {
      m_error = 0;
-        const SWKey *fromKey = &ikey;
-    ListKey const * tryList = dynamic_cast<ListKey const *>(fromKey);
-    if (tryList) {
-        SWKey const *k = tryList->getElement();
-        if (k) fromKey = k;
-    }
-    VerseKey const * tryVerse = dynamic_cast<VerseKey const *>(fromKey);
-    if (tryVerse) {
+    std::shared_ptr<void> aliasingTrick;
+    std::shared_ptr<SWKey const> fromKey(aliasingTrick, &ikey);
+    if (auto const tryList = dynamic_cast<ListKey const *>(&ikey))
+        if (auto const k = tryList->getElement())
+            fromKey = k;
+    if (auto const tryVerse = dynamic_cast<VerseKey const *>(fromKey.get())) {
         setFromOther(*tryVerse);
     }
     else {
@@ -201,14 +199,12 @@ void VerseKey::copyFrom(const VerseKey &ikey) {
 void VerseKey::copyFrom(const SWKey &ikey) {
     // check to see if we can do a more specific copy
     // plus some optimizations
-    const SWKey *fromKey = &ikey;
-    ListKey const * tryList = dynamic_cast<ListKey const *>(fromKey);
-    if (tryList) {
-        if (SWKey const * k = tryList->getElement())
+    std::shared_ptr<void> aliasingTrick;
+    std::shared_ptr<SWKey const> fromKey(aliasingTrick, &ikey);
+    if (auto const tryList = dynamic_cast<ListKey const *>(&ikey))
+        if (auto k = tryList->getElement())
             fromKey = k;
-    }
-    VerseKey const * tryVerse = dynamic_cast<VerseKey const *>(fromKey);
-    if (tryVerse) {
+    if (auto const tryVerse = dynamic_cast<VerseKey const *>(fromKey.get())) {
         copyFrom(*tryVerse);
     }
     else {
@@ -225,21 +221,19 @@ VerseKey::VerseKey(const char *min, const char *max, const char *v11n) : SWKey()
     setVersificationSystem(v11n);
     ListKey tmpListKey = parseVerseList(min);
     if (tmpListKey.getCount())
-        setLowerBoundKey(*static_cast<VerseKey *>(tmpListKey.getElement(0u)));
+        setLowerBoundKey(static_cast<VerseKey &>(*tmpListKey.getElement(0u)));
     tmpListKey = parseVerseList(max, min, true);
     if (tmpListKey.getCount()) {
-        VerseKey * const newElement =
-                static_cast<VerseKey *>(tmpListKey.getElement(0u));
-        setUpperBoundKey((newElement->isBoundSet())?newElement->upperBoundKey():*newElement);
+        auto const newElement_(tmpListKey.getElement(0u));
+        auto const & newElement = static_cast<VerseKey const &>(*newElement_);
+        setUpperBoundKey(newElement.isBoundSet()
+                         ? newElement.upperBoundKey()
+                         : newElement);
     }
     positionToTop();
 }
 
-
-std::unique_ptr<SWKey> VerseKey::clone() const
-{ return std::make_unique<VerseKey>(*this); }
-
-std::shared_ptr<SWKey> VerseKey::cloneShared() const
+std::shared_ptr<SWKey> VerseKey::clone() const
 { return std::make_shared<VerseKey>(*this); }
 
 
@@ -465,10 +459,10 @@ ListKey VerseKey::parseVerseList(const char *buf, const char *defaultKey, bool e
     int notAllDigits = 0;
     bool doubleF = false;
 
-    std::unique_ptr<VerseKey> const curKey(
-                static_cast<VerseKey *>(clone().release()));
-    std::unique_ptr<VerseKey> const lastKey(
-                static_cast<VerseKey *>(clone().release()));
+    std::shared_ptr<VerseKey> const curKey(
+                std::static_pointer_cast<VerseKey>(clone()));
+    std::shared_ptr<VerseKey> const lastKey(
+                std::static_pointer_cast<VerseKey>(clone()));
     lastKey->clearBounds();
     curKey->clearBounds();
 
@@ -695,8 +689,10 @@ terminate_range:
                     lastKey->setLowerBoundKey(*curKey);
                     lastKey->positionToTop();
                     tmpListKey << *lastKey;
-                    ((VerseKey *)tmpListKey.getElement())->setAutoNormalize(isAutoNormalize());
-                    tmpListKey.getElement()->m_userData =
+                    auto const element(tmpListKey.getElement());
+                    static_cast<VerseKey &>(*element).setAutoNormalize(
+                                isAutoNormalize());
+                    element->m_userData =
                             static_cast<std::size_t>(buf - bufStart);
                 }
                 else {
@@ -710,8 +706,10 @@ terminate_range:
                             lastKey->setUpperBoundKey(*curKey);
                             lastKey->positionToTop();
                             tmpListKey << *lastKey;
-                            ((VerseKey *)tmpListKey.getElement())->setAutoNormalize(isAutoNormalize());
-                            tmpListKey.getElement()->m_userData =
+                            auto const element(tmpListKey.getElement());
+                            static_cast<VerseKey &>(*element).setAutoNormalize(
+                                        isAutoNormalize());
+                            element->m_userData =
                                     static_cast<std::size_t>(buf - bufStart);
                         }
                         else {
@@ -726,16 +724,18 @@ terminate_range:
                             lastKey->setUpperBoundKey(*curKey);
                             lastKey->positionToTop();
                             tmpListKey << *lastKey;
-                            ((VerseKey *)tmpListKey.getElement())->setAutoNormalize(isAutoNormalize());
-                            tmpListKey.getElement()->m_userData =
+                            auto const element(tmpListKey.getElement());
+                            static_cast<VerseKey &>(*element).setAutoNormalize(
+                                        isAutoNormalize());
+                            element->m_userData =
                                     static_cast<std::size_t>(buf - bufStart);
                         }
                     }
                     else    if (expandRange) {
-                        VerseKey * const newElement =
-                                dynamic_cast<VerseKey *>(
-                                    tmpListKey.getElement());
-                        if (newElement) {
+                        if (auto const newElement =
+                                std::dynamic_pointer_cast<VerseKey>(
+                                    tmpListKey.getElement()))
+                        {
                             if (partial > 1)
                                 curKey->positionToMaxChapter();
                             if (partial > 0)
@@ -998,9 +998,10 @@ terminate_range:
                 }
             }
             else if (expandRange) {
-                VerseKey * const newElement =
-                        dynamic_cast<VerseKey *>(tmpListKey.getElement());
-                if (newElement) {
+                if (auto const newElement =
+                        std::dynamic_pointer_cast<VerseKey>(
+                        tmpListKey.getElement()))
+                {
                     if (partial > 1)
                         curKey->positionToMaxChapter();
                     if (partial > 0)
@@ -1110,7 +1111,7 @@ void VerseKey::clearBounds()
 void VerseKey::initBounds() const
 {
     if (!m_tmpClone) {
-        m_tmpClone.reset(static_cast<VerseKey *>(clone().release()));
+        m_tmpClone = std::static_pointer_cast<VerseKey>(clone());
         m_tmpClone->setAutoNormalize(false);
         m_tmpClone->setIntros(true);
         m_tmpClone->setTestament(m_BMAX[1] ? 2 : 1);
@@ -1754,7 +1755,7 @@ std::string VerseKey::convertToOSIS(std::string const & inRef,
                                                 true);
     std::size_t startFragIndex = 0u;
     for (std::size_t i = 0u; i < verses.getCount(); ++i) {
-        SWKey *element = verses.getElement(i);
+        auto const element(verses.getElement(i));
 //        VerseKey *element = SWDYNAMIC_CAST(VerseKey, verses.GetElement(i));
         while ((startFragIndex != inRef.size())
                && inRef[startFragIndex]

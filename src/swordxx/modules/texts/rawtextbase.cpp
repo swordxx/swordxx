@@ -79,34 +79,36 @@ template <typename BaseRawVerse>
 std::string RawTextBase<BaseRawVerse>::getRawEntryImpl() const {
     StartType start = 0;
     SizeType size = 0;
-    VerseKey const & key_ = getVerseKey();
+    auto const key_(getVerseKey());
 
-    this->findOffset(key_.getTestament(),
-                     key_.getTestamentIndex(),
+    this->findOffset(key_->getTestament(),
+                     key_->getTestamentIndex(),
                      &start,
                      &size);
 
-    std::string entry(this->readText(key_.getTestament(), start, size));
+    std::string entry(this->readText(key_->getTestament(), start, size));
 
     rawFilter(entry, nullptr);    // hack, decipher
-    rawFilter(entry, &key_);
+    rawFilter(entry, key_.get());
 
     return entry;
 }
 
 template <typename BaseRawVerse>
 void RawTextBase<BaseRawVerse>::setEntry(char const *inbuf, long len) {
-    VerseKey const & key_ = getVerseKey();
-    this->doSetText(key_.getTestament(), key_.getTestamentIndex(), inbuf, len);
+    auto const key_(getVerseKey());
+    this->doSetText(key_->getTestament(), key_->getTestamentIndex(), inbuf, len);
 }
 
 template <typename BaseRawVerse>
 void RawTextBase<BaseRawVerse>::linkEntry(SWKey const & inkey) {
-    VerseKey const & destkey = getVerseKey();
-    VerseKey const & srckey = getVerseKey(&inkey);
-    this->doLinkEntry(destkey.getTestament(),
-                      destkey.getTestamentIndex(),
-                      srckey.getTestamentIndex());
+    auto const destkey(getVerseKey());
+    std::shared_ptr<void> aliasingTrick;
+    auto const srckey(getVerseKey(std::shared_ptr<SWKey const>(aliasingTrick,
+                                                               &inkey)));
+    this->doLinkEntry(destkey->getTestament(),
+                      destkey->getTestamentIndex(),
+                      srckey->getTestamentIndex());
 }
 
 
@@ -117,8 +119,8 @@ void RawTextBase<BaseRawVerse>::linkEntry(SWKey const & inkey) {
  */
 template <typename BaseRawVerse>
 void RawTextBase<BaseRawVerse>::deleteEntry() {
-    VerseKey const & key_ = getVerseKey();
-    this->doSetText(key_.getTestament(), key_.getTestamentIndex(), "");
+    auto const key_(getVerseKey());
+    this->doSetText(key_->getTestament(), key_->getTestamentIndex(), "");
 }
 
 /******************************************************************************
@@ -132,27 +134,26 @@ template <typename BaseRawVerse>
 void RawTextBase<BaseRawVerse>::increment(int steps) {
     StartType start;
     SizeType size;
-    VerseKey const * tmpkey = &getVerseKey();
+    auto tmpkey(getVerseKey());
 
     this->findOffset(tmpkey->getTestament(),
                      tmpkey->getTestamentIndex(),
                      &start,
                      &size);
 
-    SWKey lastgood = *tmpkey;
+    auto lastgood(tmpkey);
     while (steps) {
         StartType laststart = start;
         SizeType lastsize = size;
-        SWKey lasttry = *tmpkey;
         if (steps > 0) {
             getKey()->increment();
         } else {
             getKey()->decrement();
         }
-        tmpkey = &getVerseKey();
+        tmpkey = getVerseKey();
 
         if ((error = getKey()->popError())) {
-            getKey()->positionFrom(lastgood);
+            getKey()->positionFrom(*lastgood);
             break;
         }
         long index = tmpkey->getTestamentIndex();
@@ -163,7 +164,7 @@ void RawTextBase<BaseRawVerse>::increment(int steps) {
             || !isSkipConsecutiveLinks()) // or we don't want to skip consecutive links
         {
             steps += (steps < 0) ? 1 : -1;
-            lastgood.positionFrom(*tmpkey);
+            lastgood = tmpkey;
         }
     }
     error = (error) ? KEYERR_OUTOFBOUNDS : 0;
@@ -173,16 +174,18 @@ template <typename BaseRawVerse>
 bool RawTextBase<BaseRawVerse>::isLinked(SWKey const & k1, SWKey const & k2) const {
     StartType start1, start2;
     SizeType size1, size2;
-    VerseKey const & vk1 = getVerseKey(&k1);
-    VerseKey const & vk2 = getVerseKey(&k2);
-    if (vk1.getTestament() != vk2.getTestament()) return false;
+    std::shared_ptr<void> aliasingTrick;
+    auto const vk1(getVerseKey(std::shared_ptr<SWKey const>(aliasingTrick, &k1)));
+    auto const vk2(getVerseKey(std::shared_ptr<SWKey const>(aliasingTrick, &k2)));
+    if (vk1->getTestament() != vk2->getTestament())
+        return false;
 
-    this->findOffset(vk1.getTestament(),
-                     vk1.getTestamentIndex(),
+    this->findOffset(vk1->getTestament(),
+                     vk1->getTestamentIndex(),
                      &start1,
                      &size1);
-    this->findOffset(vk2.getTestament(),
-                     vk2.getTestamentIndex(),
+    this->findOffset(vk2->getTestament(),
+                     vk2->getTestamentIndex(),
                      &start2,
                      &size2);
     if (!size1 || !size2) return false;
@@ -193,8 +196,9 @@ template <typename BaseRawVerse>
 bool RawTextBase<BaseRawVerse>::hasEntry(SWKey const & k) const {
     StartType start;
     SizeType size;
-    VerseKey const & vk = getVerseKey(&k);
-    this->findOffset(vk.getTestament(), vk.getTestamentIndex(), &start, &size);
+    std::shared_ptr<void> aliasingTrick;
+    auto const vk(getVerseKey(std::shared_ptr<SWKey const>(aliasingTrick, &k)));
+    this->findOffset(vk->getTestament(), vk->getTestamentIndex(), &start, &size);
     return size;
 }
 

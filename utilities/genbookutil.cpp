@@ -92,7 +92,7 @@ void viewEntryText(RawGenBook const & book) {
 
 void setEntryText(RawGenBook & book) {
     std::string body;
-    TreeKeyIdx * treeKey = static_cast<TreeKeyIdx *>(book.getKey());
+    auto const treeKey = book.getKeyAs<TreeKeyIdx>();
     if (treeKey->getOffset()) {
         char buf[1023];
         std::cout << "Enter New Entry Text ('.' on a line by itself to end): \n";
@@ -158,8 +158,8 @@ int main(int argc, char **argv) {
     }
 
     RawGenBook book(argv[1]);
-    TreeKeyIdx root = *static_cast<TreeKeyIdx *>(book.getKey());
-    auto const treeKey = static_cast<TreeKeyIdx *>(book.getKey());
+    auto const treeKey = book.getKeyAs<TreeKeyIdx>();
+    auto const root = treeKey;
 
     std::string input;
     char line[1024];
@@ -175,7 +175,7 @@ int main(int argc, char **argv) {
                 case 's': setLocalName(*treeKey); break;
                 case 'g': gotoPath(*treeKey); break;
                 case 'G': assurePath(*treeKey); break;
-                case 'p':    root.root(); printTree(root, *treeKey); break;
+                case 'p':    root->root(); printTree(*root, *treeKey); break;
                 case 'a':    appendSibbling(*treeKey); break;
                 case 'c':    appendChild(*treeKey); break;
                 case 'd':    deleteNode(*treeKey); break;
@@ -210,6 +210,4 @@ int main(int argc, char **argv) {
         }
     }
     while (input.compare("q"));
-
-    delete treeKey;
 }

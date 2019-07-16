@@ -32,11 +32,10 @@ int main(int /* argc */, char ** /* argv */) {
     SWMgr mymgr;
 
     if (auto const bbe = mymgr.getModule("BBE")) {
-        VerseKey vk;
-        vk.setPersist(true);
+        auto vk(std::make_shared<VerseKey>());
         bbe->setKey(vk);
         for (; !bbe->popError(); (*bbe).increment()) {
-            std::cout << vk.getIndex() << std::endl;
+            std::cout << vk->getIndex() << std::endl;
         }
     }
     return 0;

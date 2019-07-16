@@ -39,7 +39,7 @@ public: /* Methods: */
 
     /** Initializes data for instance of SWGenBook
     */
-    SWGenBook(std::unique_ptr<SWKey> key_,
+    SWGenBook(std::shared_ptr<SWKey> key_,
               char const * imodname = nullptr,
               char const * imoddesc = nullptr,
               TextEncoding encoding = ENC_UNKNOWN,
@@ -51,11 +51,8 @@ public: /* Methods: */
 
 protected: /* Methods: */
 
-    TreeKey & getTreeKey(SWKey * k = nullptr) const;
-
-private: /* Fields: */
-
-    mutable std::unique_ptr<TreeKey> m_tmpTreeKey;
+    std::shared_ptr<TreeKey const> getTreeKey(
+            std::shared_ptr<SWKey const> k = nullptr) const;
 
 };
 

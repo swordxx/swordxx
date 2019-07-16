@@ -65,7 +65,7 @@ class SWDLLEXPORT VerseKey : public SWKey {
     // internal upper/lower bounds optimizations, if autonorms is on
     mutable long m_lowerBound = 0;
     mutable long m_upperBound = 0;
-    mutable std::unique_ptr<VerseKey> m_tmpClone;
+    mutable std::shared_ptr<VerseKey> m_tmpClone;
 
     typedef struct VerseComponents { int test; int book; int chap; int verse; char suffix; } VerseComponents;
 
@@ -171,12 +171,7 @@ public:
     /** Creates a new SWKey based on the current VerseKey
     * see also the Copy Constructor
     */
-    std::unique_ptr<SWKey> clone() const override;
-
-    /** Creates a new SWKey based on the current VerseKey
-    * see also the Copy Constructor
-    */
-    std::shared_ptr<SWKey> cloneShared() const override;
+    std::shared_ptr<SWKey> clone() const override;
 
     /** refreshes keytext before returning if cast to
     * a (char *) is requested

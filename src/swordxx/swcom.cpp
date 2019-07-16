@@ -32,8 +32,8 @@ namespace swordxx {
 
 namespace {
 
-std::unique_ptr<SWKey> staticCreateKey(char const * const versification) {
-    auto vk(std::make_unique<VerseKey>());
+std::shared_ptr<SWKey> staticCreateKey(char const * const versification) {
+    auto vk(std::make_shared<VerseKey>());
     vk->setVersificationSystem(versification);
     return vk;
 }
@@ -50,30 +50,28 @@ std::unique_ptr<SWKey> staticCreateKey(char const * const versification) {
 
 SWCom::SWCom(const char *imodname, const char *imoddesc, TextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char *ilang, const char *versification): SWModule(staticCreateKey(versification), imodname, imoddesc, "Commentaries", enc, dir, mark, ilang) {
     this->m_versification = versification;
-    m_tmpVK1.setVersificationSystem(versification);
-    m_tmpVK2.setVersificationSystem(versification);
 }
 
-std::unique_ptr<SWKey> SWCom::createKey() const
+std::shared_ptr<SWKey> SWCom::createKey() const
 { return staticCreateKey(m_versification.c_str()); }
 
-VerseKey &SWCom::getVerseKey(const SWKey *keyToConvert) const {
-    SWKey const * tmp = keyToConvert ? keyToConvert : getKey();
-    /// \bug remove const_cast:
-    SWKey * thisKey = const_cast<SWKey *>(tmp);
+std::shared_ptr<VerseKey const>
+SWCom::getVerseKey(std::shared_ptr<SWKey const> thisKey) const {
+    if (!thisKey)
+        thisKey = getKey();
 
-    if (VerseKey * const key_ = dynamic_cast<VerseKey *>(thisKey))
-        return *key_;
-    if (ListKey * const lkTest = dynamic_cast<ListKey *>(thisKey))
-        if (VerseKey * const key_ =
-                dynamic_cast<VerseKey *>(lkTest->getElement()))
-            return *key_;
+    if (auto key_ = std::dynamic_pointer_cast<VerseKey const>(thisKey))
+        return key_;
+    if (auto const lkTest = std::dynamic_pointer_cast<ListKey const>(thisKey))
+        if (auto key_ =
+                std::dynamic_pointer_cast<VerseKey const>(lkTest->getElement()))
+            return key_;
 
-    VerseKey & retKey = (m_tmpSecond) ? m_tmpVK1 : m_tmpVK2;
-    m_tmpSecond = !m_tmpSecond;
-    retKey.setLocale(LocaleMgr::getSystemLocaleMgr()->getDefaultLocaleName());
-    retKey.positionFrom(*thisKey);
-    return retKey;
+    auto const r(std::make_shared<VerseKey>());
+    r->setVersificationSystem(m_versification.c_str());
+    r->setLocale(LocaleMgr::getSystemLocaleMgr()->getDefaultLocaleName());
+    r->positionFrom(*thisKey);
+    return r;
 }
 
 

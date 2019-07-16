@@ -40,11 +40,11 @@ namespace swordxx {
 
 namespace {
 
-std::unique_ptr<SWKey> staticCreateKey(NormalizedPath const & path, bool const verseKey) {
-    auto tKey(std::make_unique<TreeKeyIdx>(path.c_str()));
+std::shared_ptr<SWKey> staticCreateKey(NormalizedPath const & path, bool const verseKey) {
+    auto tKey(std::make_shared<TreeKeyIdx>(path.c_str()));
     if (!verseKey)
         return tKey;
-    auto vtKey(std::make_unique<VerseTreeKey>(*tKey));
+    auto vtKey(std::make_shared<VerseTreeKey>(*tKey));
     tKey.reset();
     return vtKey;
 }
@@ -95,16 +95,16 @@ std::string RawGenBook::getRawEntryImpl() const {
     uint32_t offset = 0;
     uint32_t size = 0;
 
-    TreeKey const & key_ = getTreeKey();
+    auto const key_(getTreeKey());
 
     int dsize;
-    key_.getUserData(&dsize);
+    key_->getUserData(&dsize);
     std::string entry;
     if (dsize > 7) {
-        std::memcpy(&offset, key_.getUserData(), 4);
+        std::memcpy(&offset, key_->getUserData(), 4);
         offset = swordtoarch32(offset);
 
-        std::memcpy(&size, key_.getUserData() + 4, 4);
+        std::memcpy(&size, key_->getUserData() + 4, 4);
         size = swordtoarch32(size);
 
         entry.resize(size, '\0');
@@ -112,7 +112,7 @@ std::string RawGenBook::getRawEntryImpl() const {
         bdtfd->read(&entry[0u], size);
 
         rawFilter(entry, nullptr);    // hack, decipher
-        rawFilter(entry, &key_);
+        rawFilter(entry, key_.get());
     }
 
     return entry;
@@ -123,7 +123,9 @@ void RawGenBook::setEntry(const char *inbuf, long len) {
 
     uint32_t offset = archtosword32(bdtfd->seek(0, SEEK_END));
     uint32_t size = 0;
-    TreeKeyIdx * key_ = ((TreeKeyIdx *)&(getTreeKey()));
+    auto const tk(getTreeKey());
+    /// \bug remove const_cast:
+    auto const key_ = static_cast<TreeKeyIdx *>(const_cast<TreeKey *>(tk.get()));
 
     char userData[8];
 
@@ -141,22 +143,23 @@ void RawGenBook::setEntry(const char *inbuf, long len) {
 
 
 void RawGenBook::linkEntry(SWKey const & inkey) {
-    TreeKeyIdx * key_ = ((TreeKeyIdx *)&(getTreeKey()));
+    /// \bug Remove const_cast:
+    TreeKeyIdx * key_ =
+            const_cast<TreeKeyIdx *>(
+                static_cast<TreeKeyIdx const *>(getTreeKey().get()));
     // see if we have a VerseKey * or decendant
     /// \bug Remove const_cast:
     TreeKeyIdx * srckey =
             const_cast<TreeKeyIdx *>(dynamic_cast<TreeKeyIdx const *>(&inkey));
     // if we don't have a VerseKey * decendant, create our own
     if (!srckey) {
-        srckey = static_cast<TreeKeyIdx *>(createKey().release());
+        auto const tmp(createKey());
+        srckey = &static_cast<TreeKeyIdx &>(*tmp);
         srckey->positionFrom(inkey);
     }
 
     key_->setUserData(srckey->getUserData(), 8);
     key_->save();
-
-    if (&inkey != srckey) // free our key if we created a VerseKey
-        delete srckey;
 }
 
 
@@ -167,8 +170,8 @@ void RawGenBook::linkEntry(SWKey const & inkey) {
  */
 
 void RawGenBook::deleteEntry() {
-    TreeKeyIdx * key_ = ((TreeKeyIdx *)&(getTreeKey()));
-    key_->remove();
+    /// \todo Remove const_cast:
+    const_cast<TreeKeyIdx *>(static_cast<TreeKeyIdx const *>(getTreeKey().get()))->remove();
 }
 
 
@@ -183,16 +186,16 @@ char RawGenBook::createModule(NormalizedPath const & path) {
     return retval;
 }
 
-std::unique_ptr<SWKey> RawGenBook::createKey() const
+std::shared_ptr<SWKey> RawGenBook::createKey() const
 { return staticCreateKey(m_path.c_str(), verseKey); }
 
 bool RawGenBook::hasEntry(SWKey const & k) const {
-    /// \bug remove const_cast:
-    TreeKey & key_ = getTreeKey(&const_cast<SWKey &>(k));
+    std::shared_ptr<void> aliasingTrick;
+    auto const key_(getTreeKey(std::shared_ptr<SWKey const>(aliasingTrick, &k)));
 
     int dsize;
-    key_.getUserData(&dsize);
-    return (dsize > 7) && key_.popError() == '\x00';
+    key_->getUserData(&dsize);
+    return (dsize > 7) && key_->getError() == 0;
 }
 
 } /* namespace swordxx */

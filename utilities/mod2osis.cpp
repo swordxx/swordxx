@@ -100,8 +100,8 @@ int main(int argc, char **argv)
     SWModule & inModule = *it->second;
 //    inModule.AddRenderFilter(&filter);
 
-    SWKey *key = inModule.getKey();
-    VerseKey *vkey = dynamic_cast<VerseKey *>(key);
+    auto const key(inModule.getKey());
+    auto const vkey = dynamic_cast<VerseKey *>(key.get());
 
     bool opentest = false;
     bool openbook = false;
@@ -155,14 +155,13 @@ int main(int argc, char **argv)
 
     inModule.positionToTop();
 
-    std::unique_ptr<VerseKey> tmpKey;
+    std::shared_ptr<VerseKey> tmpKey;
     {
-        std::unique_ptr<SWKey> p(inModule.createKey());
-        if (auto * const vk = dynamic_cast<VerseKey *>(p.get())) {
-            tmpKey.reset(vk);
-            p.release();
+        std::shared_ptr<SWKey> p(inModule.createKey());
+        if (auto vk = std::dynamic_pointer_cast<VerseKey>(p)) {
+            tmpKey = std::move(vk);
         } else {
-            tmpKey = std::make_unique<VerseKey>();
+            tmpKey = std::make_shared<VerseKey>();
         }
     }
     tmpKey->setText(inModule.getKeyText());

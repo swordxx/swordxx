@@ -44,13 +44,13 @@ int main(int argc, char **argv)
     const char *range = (argc > 1) ? argv[1] : "Mat 2:10,12-15";
 
     VerseKey parser;
-    ListKey result;
+    auto result(std::make_shared<ListKey>());
 
-    result = parser.parseVerseList(range, parser.getText().c_str(), true);
+    *result = parser.parseVerseList(range, parser.getText().c_str(), true);
 
     // let's iterate the key and display
-    for (result.positionToTop(); !result.popError(); result.increment()) {
-        cout << result.getText() << "\n";
+    for (result->positionToTop(); !result->popError(); result->increment()) {
+        cout << result->getText() << "\n";
     }
     cout << endl;
 
@@ -66,8 +66,8 @@ int main(int argc, char **argv)
     if (!book) return -1;
 
     // now let's iterate the book and display
-    for (result.positionToTop(); !result.popError(); result.increment()) {
-        book->setKey(result);
+    book->setKey(result);
+    for (result->positionToTop(); !result->popError(); result->increment()) {
         cout << "*** " << book->getKeyText() << ": " << book->renderText() << "\n";
     }
 

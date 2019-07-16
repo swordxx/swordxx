@@ -338,8 +338,7 @@ char GBFOSIS::processText(std::string &text, const SWKey *key, const SWModule *m
             out = ref + out;
 
             if (vkey->getVerse()) {
-                std::unique_ptr<VerseKey> tmp2(
-                            static_cast<VerseKey *>(vkey->clone().release()));
+                auto const tmp2(std::static_pointer_cast<VerseKey>(vkey->clone()));
                 *tmp2 = *vkey;
                 tmp2->setAutoNormalize(false);
                 tmp2->setIntros(true);

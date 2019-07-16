@@ -46,10 +46,10 @@ int main() {
 
 
     // get two VerseKey objects for a module
-    std::unique_ptr<VerseKey> verse(
-                static_cast<VerseKey *>(book->createKey().release()));
-    std::unique_ptr<VerseKey> verseNormalized(
-                static_cast<VerseKey *>(book->createKey().release()));
+    std::shared_ptr<VerseKey> verse(
+                std::static_pointer_cast<VerseKey>(book->createKey()));
+    std::shared_ptr<VerseKey> verseNormalized(
+                std::static_pointer_cast<VerseKey>(book->createKey()));
 
     // turn off autonormalization for one VerseKey reference
         verse->setAutoNormalize(false);

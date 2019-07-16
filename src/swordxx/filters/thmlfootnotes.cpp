@@ -57,17 +57,16 @@ char ThMLFootnotes::processText(std::string &text, const SWKey *key, const SWMod
     std::string refs = "";
     int footnoteNum = 1;
     char buf[254];
-    std::unique_ptr<VerseKey> parser;
+    std::shared_ptr<VerseKey> parser;
     {
-        std::unique_ptr<SWKey> p(
+        std::shared_ptr<SWKey> p(
                     module
                     ? module->createKey()
-                    : (key ? key->clone() : std::make_unique<VerseKey>()));
-        if (auto * const vk = dynamic_cast<VerseKey *>(p.get())) {
-            parser.reset(vk);
-            p.release();
+                    : (key ? key->clone() : std::make_shared<VerseKey>()));
+        if (auto vk = std::dynamic_pointer_cast<VerseKey>(p)) {
+            parser = std::move(vk);
         } else {
-            parser = std::make_unique<VerseKey>();
+            parser = std::make_shared<VerseKey>();
         }
     }
     parser->setText(key->getText());

@@ -67,8 +67,7 @@ char OSISOSIS::processText(std::string &text, const SWKey *key, const SWModule *
     char status = SWBasicFilter::processText(text, key, module);
     if (VerseKey const * const vkey = dynamic_cast<VerseKey const *>(key)) {
         if (vkey->getVerse()) {
-            std::unique_ptr<VerseKey> tmp(
-                        static_cast<VerseKey *>(vkey->clone().release()));
+            auto const tmp(std::static_pointer_cast<VerseKey>(vkey->clone()));
             *tmp = *vkey;
             tmp->setAutoNormalize(false);
             tmp->setIntros(true);

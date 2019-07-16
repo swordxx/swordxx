@@ -45,7 +45,7 @@ class SWDLLEXPORT ListKey : public SWKey {
 private:
 
     std::size_t m_arrayPos = 0;
-    std::vector<std::unique_ptr<SWKey> > m_array;
+    std::vector<std::shared_ptr<SWKey> > m_array;
 
 public:
 
@@ -60,9 +60,7 @@ public:
      */
     ~ListKey() override;
 
-    std::unique_ptr<SWKey> clone() const override;
-
-    std::shared_ptr<SWKey> cloneShared() const override;
+    std::shared_ptr<SWKey> clone() const override;
 
     /** Clears out elements of list
      */
@@ -104,10 +102,10 @@ public:
      * @param pos element number to get (or default current)
      * @return Key or null on error
      */
-    SWKey * getElement() { return getElement(m_arrayPos); }
-    SWKey const * getElement() const { return getElement(m_arrayPos); }
-    SWKey * getElement(std::size_t const pos);
-    SWKey const * getElement(std::size_t const pos) const;
+    std::shared_ptr<SWKey> getElement() noexcept { return getElement(m_arrayPos); }
+    std::shared_ptr<SWKey const> getElement() const noexcept { return getElement(m_arrayPos); }
+    std::shared_ptr<SWKey> getElement(std::size_t const pos) noexcept;
+    std::shared_ptr<SWKey const> getElement(std::size_t const pos) const noexcept;
 
     /** Adds an element to the list
      * @param ikey the element to add

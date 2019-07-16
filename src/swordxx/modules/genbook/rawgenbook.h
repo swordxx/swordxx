@@ -59,7 +59,7 @@ public:
     void setEntry(char const * inbuf, long len = -1) override;
     void linkEntry(SWKey const & linkKey) override;
     void deleteEntry() override;
-    std::unique_ptr<SWKey> createKey() const override;
+    std::shared_ptr<SWKey> createKey() const override;
 
     bool hasEntry(SWKey const & k) const override;
 

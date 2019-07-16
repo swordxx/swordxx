@@ -126,7 +126,6 @@ bool isKJVRef(const char *buf) {
     VerseKey vk, test;
     vk.setAutoNormalize(false);
     vk.setIntros(true);    // turn on mod/testmnt/book/chap headings
-    vk.setPersist(true);
     // lets do some tests on the verse --------------
     vk.setText(buf);
     test.setText(buf);
@@ -205,17 +204,16 @@ int main(int argc, char **argv) {
 
     // Do some initialization stuff
     RawText mod(argv[2]);    // open our datapath with our RawText driver.
-    VerseKey vk;
-    vk.setAutoNormalize(false);
-    vk.setIntros(true);    // turn on mod/testmnt/book/chap headings
-    vk.setPersist(true);
+    auto vk(std::make_shared<VerseKey>());
+    vk->setAutoNormalize(false);
+    vk->setIntros(true);    // turn on mod/testmnt/book/chap headings
 
     mod.setKey(vk);
 
     // Loop through module from TOP to BOTTOM and set next line from
     // input file as text for this entry in the module
     mod.positionToTop();
-    if (ntonly) vk.setText("Matthew 1:1");
+    if (ntonly) vk->setText("Matthew 1:1");
 
     int successive = 0;  //part of hack below
     while ((!mod.popError())) {
@@ -232,15 +230,15 @@ int main(int argc, char **argv) {
                 std::exit(-4);
             }
 
-            vk.setText(buffer.get());
-            if (vk.popError()) {
+            vk->setText(buffer.get());
+            if (vk->popError()) {
                 std::cerr << "Error parsing key: " << buffer.get() << "\n";
                 std::exit(-5);
             }
             std::string orig = mod.getRawEntry();
 
             if (!isKJVRef(buffer.get())) {
-                VerseKey origVK = vk;
+                VerseKey origVK(*vk);
                 /* This block is functioning improperly -- problem with AutoNormalize???
                 do {
                     vk--;
@@ -248,11 +246,11 @@ int main(int argc, char **argv) {
                 while (!vk.popError() && !isKJVRef(vk)); */
                 //hack to replace above:
                 successive++;
-                vk.decrement(successive);
+                vk->decrement(successive);
                 orig = mod.getRawEntry();
 
                 std::cerr << "Not a valid KJV ref: " << origVK.getText() << "\n";
-                std::cerr << "appending to ref: " << vk.getText() << "\n";
+                std::cerr << "appending to ref: " << vk->getText() << "\n";
                 orig += " [ (";
                 orig += origVK.getText();
                 orig += ") ";
@@ -265,7 +263,7 @@ int main(int argc, char **argv) {
             }
 
             if (orig.length() > 1)
-                   std::cerr << "Warning, overwriting verse: " << vk.getText() << std::endl;
+                   std::cerr << "Warning, overwriting verse: " << vk->getText() << std::endl;
 
             // ------------- End verse tests -----------------
             mod.setEntry(verseText);    // save text to module at current position

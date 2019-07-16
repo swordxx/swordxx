@@ -65,7 +65,7 @@ int main(int argc, char **argv) {
         return EXIT_FAILURE;
 
     book->setProcessEntryAttributes(false);
-    auto * const vk = dynamic_cast<swordxx::VerseKey *>(book->getKey());
+    auto const vk(book->getKeyAs<swordxx::VerseKey const>());
     book->positionToTop();
     if (book->popError())
         return EXIT_FAILURE;

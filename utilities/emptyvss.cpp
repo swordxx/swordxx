@@ -48,13 +48,8 @@ int main(int argc, char **argv) {
 
     SWModule & mod = *it->second;
 
-    SWKey *key = mod.getKey();
-    VerseKey * vkey = nullptr;
-    try {
-        vkey = dynamic_cast<VerseKey *>(key);
-    }
-    catch (...) {}
-
+    auto const key(mod.getKey());
+    auto const vkey = dynamic_cast<VerseKey *>(key.get());
     if (!vkey) {
         fprintf(stderr, "error: %s: %s module is not keyed to verses \n", argv[0], argv[1]);
         std::exit(-3);

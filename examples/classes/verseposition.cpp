@@ -39,7 +39,7 @@ int main() {
                 cerr << "Can't find module: " << modName << endl;
                 return -1;
         }
-        VerseKey* key = ((VerseKey *)book->getKey());
+        auto const key(book->getKeyAs<VerseKey>());
 
         key->setIntros(true);
         book->setSkipConsecutiveLinks(true);

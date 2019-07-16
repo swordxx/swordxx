@@ -238,12 +238,11 @@ int main(int argc, char **argv) {
 
     // setup module key to allow full range of possible values, and then some
 
-    std::unique_ptr<VerseKey> vkey(
-                static_cast<VerseKey *>(module->createKey().release()));
+    std::shared_ptr<VerseKey> vkey(
+                std::static_pointer_cast<VerseKey>(module->createKey()));
     vkey->setIntros(true);
     vkey->setAutoNormalize(false);
-    vkey->setPersist(true);
-    module->setKey(*vkey);
+    module->setKey(vkey);
     // -----------------------------------------------------
 
 
@@ -284,9 +283,9 @@ void writeEntry(SWModule & module,
 {
     if (key.size() && entry.size()) {
         std::cout << "from file: " << key << std::endl;
-        VerseKey *vkey = (VerseKey *)module.getKey();
-        std::unique_ptr<VerseKey> linkMaster(
-                    static_cast<VerseKey *>(module.createKey().release()));
+        auto const vkey(module.getKeyAs<VerseKey>());
+        std::shared_ptr<VerseKey> linkMaster(
+                    std::static_pointer_cast<VerseKey>(module.createKey()));
 
         ListKey listKey = vkey->parseVerseList(key.c_str(), "Gen1:1", true);
 

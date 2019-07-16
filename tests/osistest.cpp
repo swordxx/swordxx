@@ -85,7 +85,7 @@ int main(int argc, char **argv) {
 
 
     cout << "\nWhitespace tests around headings:\n";
-    ((VerseKey *)module->getKey())->setIntros(true);
+    module->getKeyAs<VerseKey>()->setIntros(true);
     (*module).positionToTop();
     // module heading
     cout << module->renderText() << "\n";

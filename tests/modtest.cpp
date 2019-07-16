@@ -32,9 +32,7 @@ int main(int /* argc */, char ** /* argv */) {
     SWMgr mymgr;
     if (auto const module = mymgr.getModule("KJV")) {
         VerseKey parser;
-        ListKey lk = parser.parseVerseList("mal4:6-rev", "", true);
-        lk.setPersist(true);
-        module->setKey(lk);
+        module->setKey(parser.parseVerseList("mal4:6-rev", "", true).clone());
 
         (*module).positionToTop();
         std::cout << module->getKeyText() << "\n";

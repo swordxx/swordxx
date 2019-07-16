@@ -58,8 +58,8 @@ SWLD::SWLD(const char * imodname,
     , m_strongsPadding(strongsPadding)
 {}
 
-std::unique_ptr<SWKey> SWLD::createKey() const
-{ return std::make_unique<StrKey>(); }
+std::shared_ptr<SWKey> SWLD::createKey() const
+{ return std::make_shared<StrKey>(); }
 
 
 /******************************************************************************
@@ -73,9 +73,7 @@ std::unique_ptr<SWKey> SWLD::createKey() const
  */
 
 std::string SWLD::getKeyText() const {
-    if (getKey()->isPersist()) {
-        getRawEntry();    // force module key to snap to entry
-    }
+    getRawEntry();    // force module key to snap to entry
     return m_entkeytxt;
 }
 

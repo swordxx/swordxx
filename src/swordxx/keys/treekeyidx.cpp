@@ -619,10 +619,7 @@ void TreeKeyIdx::TreeNode::clear() {
     userData.reset();
 }
 
-std::unique_ptr<SWKey> TreeKeyIdx::clone() const
-{ return std::make_unique<TreeKeyIdx>(*this); }
-
-std::shared_ptr<SWKey> TreeKeyIdx::cloneShared() const
+std::shared_ptr<SWKey> TreeKeyIdx::clone() const
 { return std::make_shared<TreeKeyIdx>(*this); }
 
 } /* namespace swordxx */

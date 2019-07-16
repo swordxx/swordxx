@@ -79,11 +79,10 @@ int main(int argc, char **argv) {
       char buffer[1048576];  //this is the max size of any entry
       RawLD4 mod(argv[2]);    // open our datapath with our RawText driver.
       auto const key(mod.createKey());
-      key->setPersist(true);      // the magical setting
 
       // Set our VerseKey
       key->setText(argv[3]);
-     mod.setKey(*key);
+      mod.setKey(key);
       FILE *infile;
       // case: add from text file
       //Open our data file and read its contents into the buffer
@@ -98,11 +97,10 @@ int main(int argc, char **argv) {
       char buffer[1048576];  //this is the max size of any entry
       zLD mod(argv[2], nullptr, nullptr, 200, std::make_unique<ZipCompress>());    // open our datapath with our RawText driver.
       auto const key(mod.createKey());
-      key->setPersist(true);      // the magical setting
 
       // Set our VerseKey
       key->setText(argv[3]);
-     mod.setKey(*key);
+      mod.setKey(key);
       FILE *infile;
       // case: add from text file
       //Open our data file and read its contents into the buffer
@@ -117,11 +115,10 @@ int main(int argc, char **argv) {
       char buffer[65536];  //this is the max size of any entry
       RawLD mod(argv[2]);    // open our datapath with our RawText driver.
       auto const key(mod.createKey());
-      key->setPersist(true);      // the magical setting
 
       // Set our VerseKey
       key->setText(argv[3]);
-     mod.setKey(*key);
+      mod.setKey(key);
       FILE *infile;
       // case: add from text file
       //Open our data file and read its contents into the buffer
@@ -140,20 +137,18 @@ int main(int argc, char **argv) {
     if (fourbyte) {
       RawLD4 mod(argv[2]);    // open our datapath with our RawText driver.
       auto const key(mod.createKey());
-      key->setPersist(true);      // the magical setting
 
       key->setText(argv[3]);
-     mod.setKey(*key);
+      mod.setKey(key);
       SWKey tmpkey = argv[4];
       mod.linkEntry(tmpkey);
     }
     else if (compress) {
       zLD mod(argv[2]);    // open our datapath with our RawText driver.
       auto const key(mod.createKey());
-      key->setPersist(true);      // the magical setting
 
       key->setText(argv[3]);
-     mod.setKey(*key);
+      mod.setKey(key);
 
       SWKey tmpkey = argv[4];
       mod.linkEntry(tmpkey);
@@ -161,10 +156,9 @@ int main(int argc, char **argv) {
     else {
       RawLD mod(argv[2]);    // open our datapath with our RawText driver.
       auto const key(mod.createKey());
-      key->setPersist(true);      // the magical setting
 
       key->setText(argv[3]);
-     mod.setKey(*key);
+      mod.setKey(key);
 
       SWKey tmpkey = argv[4];
       mod.linkEntry(tmpkey);

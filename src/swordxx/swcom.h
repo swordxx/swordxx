@@ -51,13 +51,11 @@ class SWKey;
   */
 class SWDLLEXPORT SWCom : public SWModule {
 
-    mutable VerseKey m_tmpVK1;
-    mutable VerseKey m_tmpVK2;
-        mutable bool m_tmpSecond = false;
     std::string m_versification;
 
 protected:
-    VerseKey & getVerseKey(SWKey const * key = nullptr) const;
+    std::shared_ptr<VerseKey const> getVerseKey(
+            std::shared_ptr<SWKey const> key = nullptr) const;
 
 
 public:
@@ -70,7 +68,7 @@ public:
           char const * ilang = nullptr,
           char const * m_versification = "KJV");
 
-    std::unique_ptr<SWKey> createKey() const override;
+    std::shared_ptr<SWKey> createKey() const override;
 
 };
 

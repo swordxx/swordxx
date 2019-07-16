@@ -42,7 +42,7 @@ namespace swordxx {
 template <typename BaseZVerse>
 class SWDLLEXPORT zTextBase: public BaseZVerse, public SWText {
 
-    VerseKey * lastWriteKey = nullptr;
+    std::shared_ptr<VerseKey const> lastWriteKey;
     bool sameBlock(VerseKey const & lastWriteKey, VerseKey const & key_);
     BlockType const blockType;
 

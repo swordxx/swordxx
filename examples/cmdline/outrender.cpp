@@ -46,7 +46,7 @@ int main(int argc, char **argv) {
 
     SWModule &book = *b;
     book.setProcessEntryAttributes(false);
-    VerseKey const * const vk = dynamic_cast<VerseKey *>(book.getKey());
+    auto const vk(book.getKeyAs<VerseKey const>());
 
     // find the first non-zero entry
     for (book.positionToTop(); !book.popError() && !book.getRawEntry().size(); book.increment());

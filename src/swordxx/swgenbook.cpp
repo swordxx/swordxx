@@ -34,7 +34,7 @@ namespace swordxx {
  *    imoddesc - Name to display to user for module
  */
 
-SWGenBook::SWGenBook(std::unique_ptr<SWKey> key_,
+SWGenBook::SWGenBook(std::shared_ptr<SWKey> key_,
                      char const * imodname,
                      char const * imoddesc,
                      TextEncoding enc,
@@ -53,28 +53,30 @@ SWGenBook::SWGenBook(std::unique_ptr<SWKey> key_,
 
 SWGenBook::~SWGenBook() noexcept = default;
 
-TreeKey & SWGenBook::getTreeKey(SWKey * k) const {
-    SWKey * const thiskey = k ? k : getKey();
+std::shared_ptr<TreeKey const>
+SWGenBook::getTreeKey(std::shared_ptr<SWKey const> thiskey) const {
+    if (!thiskey)
+        thiskey = getKey();
 
-    if (TreeKey * const key_ = dynamic_cast<TreeKey *>(thiskey))
-        return *key_;
+    if (auto key_ = std::dynamic_pointer_cast<TreeKey const>(thiskey))
+        return key_;
 
-    if (ListKey * const lkTest = dynamic_cast<ListKey *>(thiskey)) {
-        if (TreeKey * const key_ = dynamic_cast<TreeKey *>(lkTest->getElement()))
-            return *key_;
-        if (VerseTreeKey * const tkey =
-                dynamic_cast<VerseTreeKey *>(lkTest->getElement()))
-            if (TreeKey * const key_ = tkey->getTreeKey())
-                return *key_;
+    if (auto const lkTest = std::dynamic_pointer_cast<ListKey const>(thiskey)) {
+        if (auto key_ = std::dynamic_pointer_cast<TreeKey const >(lkTest->getElement()))
+            return key_;
+        if (auto const tkey =
+                std::dynamic_pointer_cast<VerseTreeKey const>(lkTest->getElement()))
+            if (auto key_ = tkey->getTreeKey())
+                return key_;
     }
 
-    if (VerseTreeKey * const tkey = dynamic_cast<VerseTreeKey *>(thiskey))
-        if (TreeKey * const key_ = tkey->getTreeKey())
-            return *key_;
+    if (auto const tkey = std::dynamic_pointer_cast<VerseTreeKey const>(thiskey))
+        if (auto key_ = tkey->getTreeKey())
+            return key_;
 
-    m_tmpTreeKey.reset(static_cast<TreeKey *>(createKey().release()));
-    m_tmpTreeKey->positionFrom(*thiskey);
-    return (*m_tmpTreeKey);
+    std::shared_ptr<TreeKey> r(std::static_pointer_cast<TreeKey>(createKey()));
+    r->positionFrom(*thiskey);
+    return r;
 }
 
 } /* namespace swordxx */

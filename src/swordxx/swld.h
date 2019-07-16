@@ -50,7 +50,7 @@ public:
          char const * ilang = nullptr,
          bool strongsPadding = true);
 
-    std::unique_ptr<SWKey> createKey() const override;
+    std::shared_ptr<SWKey> createKey() const override;
 
     std::string getKeyText() const override;
     void positionToTop() override;

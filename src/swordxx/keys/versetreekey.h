@@ -40,12 +40,13 @@ namespace swordxx {
  */
 class SWDLLEXPORT VerseTreeKey : public VerseKey, public TreeKey::PositionChangeListener {
 
-    TreeKey * m_treeKey;
+    std::shared_ptr<TreeKey> m_treeKey;
 //    vector<struct sbook> books;
 
     void init(TreeKey const & treeKey);
     void syncVerseToTree();
     long m_lastGoodOffset;
+    bool m_internalPosChange = false;
 
 public:
 
@@ -87,16 +88,13 @@ public:
 
     ~VerseTreeKey() override;
 
-    std::unique_ptr<SWKey> clone() const override;
-
-    std::shared_ptr<SWKey> cloneShared() const override;
+    std::shared_ptr<SWKey> clone() const override;
 
     bool isTraversable() const override { return true; }
 
-    virtual TreeKey *getTreeKey();
+    std::shared_ptr<TreeKey const> getTreeKey() const;
 
     void positionChanged() override;
-    bool m_internalPosChange;
 
     void decrement(int steps = 1) override;
     void increment(int steps = 1) override;

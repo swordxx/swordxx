@@ -40,8 +40,8 @@ int main() {
         return EXIT_FAILURE;
     }
 
-    std::unique_ptr<swordxx::VerseKey> key1(
-                static_cast<swordxx::VerseKey *>(mod->createKey().release()));
+    std::shared_ptr<swordxx::VerseKey> key1(
+                std::static_pointer_cast<swordxx::VerseKey>(mod->createKey()));
 
     key1->setTestament(2);
     key1->setBook(4);
@@ -80,10 +80,7 @@ int main() {
     for (keys.positionToTop(); !keys.popError(); keys.increment())
         std::cout << "\n" << keys.getText() << ":\n" << std::endl;
 
-
-    keys.setPersist(true);
-
-    mod->setKey(keys);
+    mod->setKey(keys.clone());
 
     for (mod->positionToTop(); !mod->popError(); mod->increment()) {
         std::cout << "\n" << mod->getKeyText() << ":\n" << std::endl;

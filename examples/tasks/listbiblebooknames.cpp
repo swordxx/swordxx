@@ -42,16 +42,11 @@ int main(int argc, char * argv[]) {
                      "versification (v11n) from this specific Bible.\nShowing "
                      "builtin KJV v11n scheme..\n\n";
 
-    VerseKey * const vk =
-            bible ? static_cast<VerseKey *>(bible->getKey()) : new VerseKey();
+    auto const vk =
+            bible ? bible->getKeyAs<VerseKey>() : std::make_shared<VerseKey>();
 
     for (vk->positionToTop(); !vk->popError(); vk->setBook(vk->getBook() + 1))
         if (!bible || bible->hasEntry(*vk))
             std::cout << vk->getBookName() << '\n';
-
-    /* If we allocated VerseKey unassociated with a module, above, then we must
-       now delete it: */
-    if (!bible)
-        delete vk;
 }
 

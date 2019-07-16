@@ -67,14 +67,14 @@ bool RawCom::isWritable() const {
 std::string RawCom::getRawEntryImpl() const {
     StartType start = 0;
     SizeType size = 0;
-    VerseKey const & key_ = getVerseKey();
+    auto const key_(getVerseKey());
 
-    findOffset(key_.getTestament(), key_.getTestamentIndex(), &start, &size);
+    findOffset(key_->getTestament(), key_->getTestamentIndex(), &start, &size);
 
-    auto entry(readText(key_.getTestament(), start, size));
+    auto entry(readText(key_->getTestament(), start, size));
 
     rawFilter(entry, nullptr);    // hack, decipher
-    rawFilter(entry, &key_);
+    rawFilter(entry, key_.get());
 
     return entry;
 }
@@ -91,24 +91,23 @@ std::string RawCom::getRawEntryImpl() const {
 void RawCom::increment(int steps) {
     StartType start;
     SizeType size;
-    VerseKey const * tmpkey = &getVerseKey();
+    auto tmpkey(getVerseKey());
 
     findOffset(tmpkey->getTestament(), tmpkey->getTestamentIndex(), &start, &size);
 
-    SWKey lastgood = *tmpkey;
+    auto lastgood(tmpkey);
     while (steps) {
         StartType laststart = start;
         SizeType lastsize = size;
-        SWKey lasttry = *tmpkey;
         if (steps > 0) {
             getKey()->increment();
         } else {
             getKey()->decrement();
         }
-        tmpkey = &getVerseKey();
+        tmpkey = getVerseKey();
 
         if ((error = getKey()->popError())) {
-            getKey()->positionFrom(lastgood);
+            getKey()->positionFrom(*lastgood);
             break;
         }
         long index = tmpkey->getTestamentIndex();
@@ -119,7 +118,7 @@ void RawCom::increment(int steps) {
                 && (size))    // and we actually have a size
                 ||(!isSkipConsecutiveLinks())) {    // or we don't want to skip consecutive links
             steps += (steps < 0) ? 1 : -1;
-            lastgood.positionFrom(*tmpkey);
+            lastgood = tmpkey;
         }
     }
     error = (error) ? KEYERR_OUTOFBOUNDS : 0;
@@ -127,19 +126,20 @@ void RawCom::increment(int steps) {
 
 
 void RawCom::setEntry(const char *inbuf, long len) {
-    VerseKey const & key_ = getVerseKey();
-    doSetText(key_.getTestament(), key_.getTestamentIndex(), inbuf, len);
+    auto const key_(getVerseKey());
+    doSetText(key_->getTestament(), key_->getTestamentIndex(), inbuf, len);
 }
 
 
 void RawCom::linkEntry(SWKey const & inkey) {
-    VerseKey const & destkey = getVerseKey();
-    VerseKey const & srckey = getVerseKey(&inkey);
+    auto const destkey(getVerseKey());
+    std::shared_ptr<void> aliasingTrick;
+    auto const srckey(getVerseKey(std::shared_ptr<SWKey const>(aliasingTrick,
+                                                               &inkey)));
 
-    doLinkEntry(destkey.getTestament(), destkey.getTestamentIndex(), srckey.getTestamentIndex());
-
-    if (&inkey != &srckey) // free our key if we created a VerseKey
-        delete &srckey;
+    doLinkEntry(destkey->getTestament(),
+                destkey->getTestamentIndex(),
+                srckey->getTestamentIndex());
 }
 
 
@@ -150,19 +150,21 @@ void RawCom::linkEntry(SWKey const & inkey) {
  */
 
 void RawCom::deleteEntry() {
-    VerseKey const & key_ = getVerseKey();
-    doSetText(key_.getTestament(), key_.getTestamentIndex(), "");
+    auto const key_(getVerseKey());
+    doSetText(key_->getTestament(), key_->getTestamentIndex(), "");
 }
 
 bool RawCom::isLinked(SWKey const & k1, SWKey const & k2) const {
     StartType start1, start2;
     SizeType size1, size2;
-    VerseKey const & vk1 = getVerseKey(&k1);
-    VerseKey const & vk2 = getVerseKey(&k2);
-    if (vk1.getTestament() != vk2.getTestament()) return false;
+    std::shared_ptr<void> aliasingTrick;
+    auto const vk1(getVerseKey(std::shared_ptr<SWKey const>(aliasingTrick, &k1)));
+    auto const vk2(getVerseKey(std::shared_ptr<SWKey const>(aliasingTrick, &k2)));
+    if (vk1->getTestament() != vk2->getTestament())
+        return false;
 
-    findOffset(vk1.getTestament(), vk1.getTestamentIndex(), &start1, &size1);
-    findOffset(vk2.getTestament(), vk2.getTestamentIndex(), &start2, &size2);
+    findOffset(vk1->getTestament(), vk1->getTestamentIndex(), &start1, &size1);
+    findOffset(vk2->getTestament(), vk2->getTestamentIndex(), &start2, &size2);
     if (!size1 || !size2) return false;
     return start1 == start2;
 }
@@ -170,8 +172,9 @@ bool RawCom::isLinked(SWKey const & k1, SWKey const & k2) const {
 bool RawCom::hasEntry(SWKey const & k) const {
     StartType start;
     SizeType size;
-    VerseKey const & vk = getVerseKey(&k);
-    findOffset(vk.getTestament(), vk.getTestamentIndex(), &start, &size);
+    std::shared_ptr<void> aliasingTrick;
+    auto const vk(getVerseKey(std::shared_ptr<SWKey const>(aliasingTrick, &k)));
+    findOffset(vk->getTestament(), vk->getTestamentIndex(), &start, &size);
     return size;
 }
 

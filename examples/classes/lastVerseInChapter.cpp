@@ -40,7 +40,7 @@ int main() {
 
     auto const book(library.getModule("KJV"));
 
-    VerseKey *vk = (VerseKey *) book->getKey();
+    auto const vk(book->getKeyAs<VerseKey>());
     for (;!vk->popError();vk->setChapter(vk->getChapter()+1)) {
         vk->setVerse(vk->getVerseMax());
         std::string text = book->stripText();

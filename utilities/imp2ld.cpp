@@ -184,8 +184,7 @@ int main(int argc, char **argv) {
 
     auto const key(mod->createKey());
     auto const linkKey(mod->createKey());
-    key->setPersist(true);
-    mod->setKey(*key);
+    mod->setKey(key);
 
     while (!infile.eof()) {
         std::getline(infile, linebuffer);

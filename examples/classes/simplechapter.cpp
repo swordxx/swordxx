@@ -37,7 +37,7 @@ int main(int argc, char **argv) {
 
     kjv->setKey(argc > 2 ? argv[2] : "Jn.3.16");
 
-    VerseKey *key = static_cast<VerseKey *>(kjv->getKey());
+    auto const key(kjv->getKeyAs<VerseKey>());
 
     int curVerse = key->getVerse();
     int curChapter = key->getChapter();

@@ -56,8 +56,6 @@ class SWDLLEXPORT SWKey {
 
     std::string m_keyText;
 
-    bool m_persist = false;
-
 protected:
 
     bool m_boundSet = false;
@@ -98,25 +96,7 @@ public:
     /** Returns a new exact clone of this SWKey object.
      * @return new clone of this key
      */
-    virtual std::unique_ptr<SWKey> clone() const;
-
-    /** Returns a new exact clone of this SWKey object.
-     * @return new clone of this key
-     */
-    virtual std::shared_ptr<SWKey> cloneShared() const;
-
-
-    /** Gets whether this key should persist in any module to which it is set
-     * otherwise just a copy will be used in the module.
-     * @return 1 - persists in module; 0 - a copy is attempted
-     */
-    inline bool isPersist() const noexcept { return m_persist; }
-
-    /** Sets whether this key should persist in any module to which it is set
-     * otherwise just a copy will be used in the module.
-     * @param ipersist value which to set persist;
-     */
-    inline void setPersist(bool ipersist) noexcept { m_persist = ipersist; }
+    virtual std::shared_ptr<SWKey> clone() const;
 
     /** Gets and clears error status
      * @return error status

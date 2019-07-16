@@ -125,7 +125,7 @@ namespace swordxx {
  *    unicode  - if this module is unicode
  */
 
-SWModule::SWModule(std::unique_ptr<SWKey> key_,
+SWModule::SWModule(std::shared_ptr<SWKey> key_,
                    const char * imodname,
                    const char * imoddesc,
                    const char * imodtype,
@@ -140,7 +140,7 @@ SWModule::SWModule(std::unique_ptr<SWKey> key_,
     , m_textDirection(direction)
     , m_textMarkup(markup)
     , m_textEncoding(encoding)
-    , m_currentKey(key_.release())
+    , m_currentKey(std::move(key_))
 {}
 
 
@@ -148,13 +148,7 @@ SWModule::SWModule(std::unique_ptr<SWKey> key_,
  * SWModule Destructor - Cleans up instance of SWModule
  */
 
-SWModule::~SWModule()
-{
-    if (m_currentKey) {
-        if (!m_currentKey->isPersist())
-            delete m_currentKey;
-    }
-}
+SWModule::~SWModule() = default;
 
 
 /******************************************************************************
@@ -182,23 +176,12 @@ char SWModule::popError()
  * RET:    error status
  */
 
-char SWModule::setKey(const SWKey *ikey) {
-    SWKey * oldKey = nullptr;
+void SWModule::setKey(std::shared_ptr<SWKey> ikey) noexcept
+{ m_currentKey = std::move(ikey); }
 
-    if (m_currentKey) {
-        if (!m_currentKey->isPersist())    // if we have our own copy
-            oldKey = m_currentKey;
-    }
-
-    if (!ikey->isPersist()) {        // if we are to keep our own copy
-        m_currentKey = createKey().release();
-        m_currentKey->positionFrom(*ikey);
-    }
-    else     m_currentKey = (SWKey *)ikey;        // if we are to just point to an external key
-
-    delete oldKey;
-
-    return error = m_currentKey->getError();
+char SWModule::setKey(std::string_view position) {
+    m_currentKey->positionFrom(std::string(position));
+    return error = m_currentKey->popError();
 }
 
 void SWModule::positionToTop() {
@@ -260,8 +243,8 @@ std::string SWModule::stripText() {
     m_entryAttributes.clear();
     std::string buf(getRawEntry());
     if (!buf.empty()) {
-        filterBuffer(*this, buf, m_currentKey, m_optionFilters);
-        filterBuffer(*this, buf, m_currentKey, m_stripFilters);
+        filterBuffer(*this, buf, m_currentKey.get(), m_optionFilters);
+        filterBuffer(*this, buf, m_currentKey.get(), m_stripFilters);
     }
     return buf;
 }
@@ -271,8 +254,8 @@ std::string SWModule::stripText(std::string buf) {
     m_processEntryAttributes = false;
     try {
         if (!buf.empty()) {
-            filterBuffer(*this, buf, m_currentKey, m_optionFilters);
-            filterBuffer(*this, buf, m_currentKey, m_stripFilters);
+            filterBuffer(*this, buf, m_currentKey.get(), m_optionFilters);
+            filterBuffer(*this, buf, m_currentKey.get(), m_stripFilters);
         }
     } catch (...) {
         m_processEntryAttributes = savePEA;
@@ -295,9 +278,9 @@ std::string SWModule::renderText() const {
     m_entryAttributes.clear();
     std::string buf(getRawEntry());
     if (!buf.empty()) {
-        filterBuffer(*this, buf, m_currentKey, m_optionFilters);
-        filterBuffer(*this, buf, m_currentKey, m_renderFilters);
-        filterBuffer(*this, buf, m_currentKey, m_encodingFilters);
+        filterBuffer(*this, buf, m_currentKey.get(), m_optionFilters);
+        filterBuffer(*this, buf, m_currentKey.get(), m_renderFilters);
+        filterBuffer(*this, buf, m_currentKey.get(), m_encodingFilters);
     }
     return buf;
 }
@@ -307,9 +290,9 @@ std::string SWModule::renderText(std::string buf) const {
     m_processEntryAttributes = false;
     try {
         if (!buf.empty()) {
-            filterBuffer(*this, buf, m_currentKey, m_optionFilters);
-            filterBuffer(*this, buf, m_currentKey, m_renderFilters);
-            filterBuffer(*this, buf, m_currentKey, m_encodingFilters);
+            filterBuffer(*this, buf, m_currentKey.get(), m_optionFilters);
+            filterBuffer(*this, buf, m_currentKey.get(), m_renderFilters);
+            filterBuffer(*this, buf, m_currentKey.get(), m_encodingFilters);
         }
     } catch (...) {
         m_processEntryAttributes = savePEA;

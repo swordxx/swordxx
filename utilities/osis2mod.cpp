@@ -84,7 +84,7 @@ int normalized = 0;
 int converted  = 0;
 
 SWText * module = nullptr;
-VerseKey currentVerse;
+auto const currentVerse(std::make_shared<VerseKey>());
 std::string v11n     = "KJV";
 std::string activeOsisID;
 std::string currentOsisID;
@@ -102,7 +102,7 @@ bool isOSISAbbrev(const char *buf) {
     auto const vmgr(VersificationMgr::systemVersificationMgr());
     VersificationMgr::System const * av11n =
             vmgr->getVersificationSystem(
-                currentVerse.getVersificationSystem().c_str());
+                currentVerse->getVersificationSystem().c_str());
     return av11n->getBookNumberByOSISName(buf) >= 0;
 }
 
@@ -355,7 +355,7 @@ bool isValidRef(const char *buf, const char *caller) {
     // Note: need to turn on headings so that a heading does not get normalized anyway
     // And set it to the reference under question
     VerseKey before;
-    before.setVersificationSystem(currentVerse.getVersificationSystem().c_str());
+    before.setVersificationSystem(currentVerse->getVersificationSystem().c_str());
     before.setAutoNormalize(false);
     before.setIntros(true);
     before.setText(buf);
@@ -369,7 +369,7 @@ bool isValidRef(const char *buf, const char *caller) {
     // Create a VerseKey that does do auto normalization
     // And set it to the reference under question
     VerseKey after;
-    after.setVersificationSystem(currentVerse.getVersificationSystem().c_str());
+    after.setVersificationSystem(currentVerse->getVersificationSystem().c_str());
     after.setAutoNormalize(true);
     after.setText(buf);
 
@@ -379,7 +379,7 @@ bool isValidRef(const char *buf, const char *caller) {
     }
 
     // If we have gotten here the reference is not in the selected versification.
-    // cout << "INFO(V11N): " << before << " is not in the " << currentVerse.getVersificationSystem() << " versification." << endl;
+    // cout << "INFO(V11N): " << before << " is not in the " << currentVerse->getVersificationSystem() << " versification." << endl;
     if (debug & DEBUG_REV11N) {
         std::cout << "DEBUG(V11N)[" << caller << "]: " << before.getText()
                   << " normalizes to "  << after.getText() << std::endl;
@@ -473,7 +473,7 @@ void writeEntry(std::string &text, bool force = false) {
         return;
     }
 
-    keyOsisID = currentVerse.getOSISRef();
+    keyOsisID = currentVerse->getOSISRef();
 
     // set keyOsisID to anything that an osisID cannot be.
     if (force)
@@ -481,16 +481,16 @@ void writeEntry(std::string &text, bool force = false) {
 
     static VerseKey lastKey;
     lastKey.setVersificationSystem(
-                currentVerse.getVersificationSystem().c_str());
+                currentVerse->getVersificationSystem().c_str());
     lastKey.setAutoNormalize(false);
     lastKey.setIntros(true);
 
     VerseKey saveKey;
     saveKey.setVersificationSystem(
-                currentVerse.getVersificationSystem().c_str());
+                currentVerse->getVersificationSystem().c_str());
     saveKey.setAutoNormalize(false);
     saveKey.setIntros(true);
-    saveKey = currentVerse;
+    saveKey = *currentVerse;
 
     // If we have seen a verse and the supplied one is different then we output the collected one.
     if (!activeOsisID.empty() && activeOsisID != keyOsisID) {
@@ -499,25 +499,25 @@ void writeEntry(std::string &text, bool force = false) {
             makeValidRef(lastKey);
         }
 
-        currentVerse = lastKey;
+        *currentVerse = lastKey;
 
         prepareSWText(activeOsisID.c_str(), activeVerseText);
 
         // Put the revision into the module
-        int testmt = currentVerse.getTestament();
+        int testmt = currentVerse->getTestament();
         if ((testmt == 1 && firstOT) || (testmt == 2 && firstNT)) {
             VerseKey t;
             t.setVersificationSystem(
-                        currentVerse.getVersificationSystem().c_str());
+                        currentVerse->getVersificationSystem().c_str());
             t.setAutoNormalize(false);
             t.setIntros(true);
-            t = currentVerse;
-            currentVerse.setBook(0);
-            currentVerse.setChapter(0);
-            currentVerse.setVerse(0);
+            t = *currentVerse;
+            currentVerse->setBook(0);
+            currentVerse->setChapter(0);
+            currentVerse->setVerse(0);
             module->setEntry("<milestone type=\"x-importer\" "
                              "subType=\"x-osis2mod\" n=\"$Rev$\"/>");
-            currentVerse = t;
+            *currentVerse = t;
             switch (testmt) {
             case 1:
                 firstOT = false;
@@ -536,10 +536,10 @@ void writeEntry(std::string &text, bool force = false) {
         // If the entry already exists, then append this entry to the text.
         // This is for verses that are outside the chosen versification. They are appended to the prior verse.
         // The space should not be needed if we retained verse tags.
-        if (module->hasEntry(currentVerse)) {
+        if (module->hasEntry(*currentVerse)) {
             module->flush();
             std::string currentText = module->getRawEntry();
-            std::cout << "INFO(WRITE): Appending entry: " << currentVerse.getOSISRef() << ": " << activeVerseText << std::endl;
+            std::cout << "INFO(WRITE): Appending entry: " << currentVerse->getOSISRef() << ": " << activeVerseText << std::endl;
 
             // If we have a non-UTF-8 encoding, we should decode it before concatenating, then re-encode it
             if (outputDecoder) {
@@ -553,7 +553,7 @@ void writeEntry(std::string &text, bool force = false) {
         }
 
         if (debug & DEBUG_WRITE) {
-            std::cout << "DEBUG(WRITE): " << activeOsisID << ":" << currentVerse.getOSISRef() << ": " << activeVerseText << std::endl;
+            std::cout << "DEBUG(WRITE): " << activeOsisID << ":" << currentVerse->getOSISRef() << ": " << activeVerseText << std::endl;
         }
 
         module->setEntry(activeVerseText.c_str());
@@ -572,8 +572,8 @@ void writeEntry(std::string &text, bool force = false) {
     // text has been consumed so clear it out.
     text = "";
 
-    currentVerse = saveKey;
-    lastKey = currentVerse;
+    *currentVerse = saveKey;
+    lastKey = *currentVerse;
     activeOsisID = keyOsisID;
 }
 
@@ -586,16 +586,16 @@ void linkToEntry(VerseKey &linkKey, VerseKey &dest) {
 
     VerseKey saveKey;
     saveKey.setVersificationSystem(
-                currentVerse.getVersificationSystem().c_str());
+                currentVerse->getVersificationSystem().c_str());
     saveKey.setAutoNormalize(false);
     saveKey.setIntros(true);
-    saveKey = currentVerse;
-    currentVerse = linkKey;
+    saveKey = *currentVerse;
+    *currentVerse = linkKey;
 
-    std::cout << "INFO(LINK): Linking " << currentVerse.getOSISRef() << " to " << dest.getOSISRef() << "\n";
+    std::cout << "INFO(LINK): Linking " << currentVerse->getOSISRef() << " to " << dest.getOSISRef() << "\n";
     module->linkEntry(dest);
 
-    currentVerse = saveKey;
+    *currentVerse = saveKey;
 }
 
 // Return true if the content was handled or is to be ignored.
@@ -699,16 +699,16 @@ bool handleToken(std::string &text, XMLTag token) {
                                   << inBookIntro << std::endl;
                     }
 
-                    currentVerse.setTestament(0);
-                    currentVerse.setBook(0);
-                    currentVerse.setChapter(0);
-                    currentVerse.setVerse(0);
+                    currentVerse->setTestament(0);
+                    currentVerse->setBook(0);
+                    currentVerse->setChapter(0);
+                    currentVerse->setVerse(0);
                     writeEntry(text);
                 }
-                currentVerse.setText(token.attribute("osisID"));
-                currentVerse.setChapter(0);
-                currentVerse.setVerse(0);
-                currentOsisID = currentVerse.getOSISRef();
+                currentVerse->setText(token.attribute("osisID"));
+                currentVerse->setChapter(0);
+                currentVerse->setVerse(0);
+                currentOsisID = currentVerse->getOSISRef();
 
                 sidBook         = token.attribute("sID");
                 inChapter       = false;
@@ -730,7 +730,7 @@ bool handleToken(std::string &text, XMLTag token) {
                     std::cout << "WARNING(V11N): New book is " << token.attribute("osisID") << " and is not in " << v11n << " versification, ignoring" << std::endl;
                 }
                 else if (debug & DEBUG_OTHER) {
-                    std::cout << "DEBUG(FOUND): New book is " << currentVerse.getOSISRef() << std::endl;
+                    std::cout << "DEBUG(FOUND): New book is " << currentVerse->getOSISRef() << std::endl;
                 }
 
                 return false;
@@ -748,14 +748,14 @@ bool handleToken(std::string &text, XMLTag token) {
                     writeEntry(text);
                 }
 
-                currentVerse.setText(token.attribute("osisID"));
-                currentVerse.setVerse(0);
+                currentVerse->setText(token.attribute("osisID"));
+                currentVerse->setVerse(0);
 
                 if (debug & DEBUG_OTHER) {
-                    std::cout << "DEBUG(FOUND): Current chapter is " << currentVerse.getOSISRef() << " (" << token.attribute("osisID") << ")" << std::endl;
+                    std::cout << "DEBUG(FOUND): Current chapter is " << currentVerse->getOSISRef() << " (" << token.attribute("osisID") << ")" << std::endl;
                 }
 
-                currentOsisID = currentVerse.getOSISRef();
+                currentOsisID = currentVerse->getOSISRef();
 
                 sidChapter      = token.attribute("sID");
                 inChapter       = true;
@@ -814,10 +814,10 @@ bool handleToken(std::string &text, XMLTag token) {
                 // The first or only one is the currentVerse
                 // Use the last verse seen (i.e. the currentVerse) as the basis for recovering from bad parsing.
                 // This should never happen if the references are valid OSIS references
-                ListKey verseKeys = currentVerse.parseVerseList(keyVal.c_str(), currentVerse.getText().c_str(), true);
+                ListKey verseKeys = currentVerse->parseVerseList(keyVal.c_str(), currentVerse->getText().c_str(), true);
                 auto memberKeyCount(verseKeys.getCount());
                 if (memberKeyCount) {
-                    currentVerse.positionFrom(*verseKeys.getElement(0u));
+                    currentVerse->positionFrom(*verseKeys.getElement(0u));
                     // See if this osisID or annotateRef refers to more than one verse.
                     // If it does, save it until all verses have been seen.
                     // At that point we will output links.
@@ -827,7 +827,7 @@ bool handleToken(std::string &text, XMLTag token) {
                         verseKeys.positionToTop();
                         verseKeys.increment(1);
                         if (!verseKeys.popError()) {
-                            std::cout << "DEBUG(LINK): " << currentVerse.getOSISRef() << std::endl;
+                            std::cout << "DEBUG(LINK): " << currentVerse->getOSISRef() << std::endl;
                             linkedVerses.push_back(verseKeys);
                         }
                     }
@@ -836,10 +836,10 @@ bool handleToken(std::string &text, XMLTag token) {
                     std::cout << "ERROR(REF): Invalid osisID/annotateRef: " << token.attribute((tokenName == "verse") ? "osisID" : "annotateRef") << std::endl;
                 }
 
-                currentOsisID = currentVerse.getOSISRef();
+                currentOsisID = currentVerse->getOSISRef();
 
                 if (debug & DEBUG_OTHER) {
-                    std::cout << "DEBUG(FOUND): New current verse is " << currentVerse.getOSISRef() << std::endl;
+                    std::cout << "DEBUG(FOUND): New current verse is " << currentVerse->getOSISRef() << std::endl;
                     std::cout << "DEBUG(FOUND): osisID/annotateRef is adjusted to: " << keyVal << std::endl;
                 }
 
@@ -886,10 +886,10 @@ bool handleToken(std::string &text, XMLTag token) {
             }
 
             if (debug & DEBUG_OTHER) {
-                std::cout << "DEBUG(FOUND): majorSection found " << currentVerse.getOSISRef() << std::endl;
+                std::cout << "DEBUG(FOUND): majorSection found " << currentVerse->getOSISRef() << std::endl;
             }
 
-            currentOsisID = currentVerse.getOSISRef();
+            currentOsisID = currentVerse->getOSISRef();
 
 // as a result of the incorrect assumption these flags are set also incorrectly and cause problems in situations where majorSections do not follow the assumptions made during creation of this patch
 
@@ -1305,13 +1305,13 @@ void writeLinks()
     // Link all the verses
     VerseKey destKey;
     destKey.setVersificationSystem(
-                currentVerse.getVersificationSystem().c_str());
+                currentVerse->getVersificationSystem().c_str());
     destKey.setAutoNormalize(false);
     destKey.setIntros(true);
 
     VerseKey linkKey;
     linkKey.setVersificationSystem(
-                currentVerse.getVersificationSystem().c_str());
+                currentVerse->getVersificationSystem().c_str());
     linkKey.setAutoNormalize(false);
     linkKey.setIntros(true);
     for (unsigned int i = 0; i < linkedVerses.size(); i++) {
@@ -1431,10 +1431,9 @@ void processOSIS(std::istream & infile) {
 
     currentOsisID = "N/A";
 
-    currentVerse.setVersificationSystem(v11n.c_str());
-    currentVerse.setAutoNormalize(false);
-    currentVerse.setIntros(true);  // turn on mod/testmnt/book/chap headings
-    currentVerse.setPersist(true);
+    currentVerse->setVersificationSystem(v11n.c_str());
+    currentVerse->setAutoNormalize(false);
+    currentVerse->setIntros(true);  // turn on mod/testmnt/book/chap headings
 
     module->setKey(currentVerse);
     module->positionToTop();

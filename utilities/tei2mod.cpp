@@ -82,7 +82,7 @@ int converted = 0;
 #define DEBUG
 
 SWLD  * module       = nullptr;
-std::unique_ptr<SWKey> currentKey;
+std::shared_ptr<SWKey> currentKey;
 bool   normalize    = true;
 std::string keyStr;
 
@@ -198,7 +198,7 @@ void writeCurrentEntry(std::string & text) {
     cout << "(" << entryCount << ") " << currentKey->getText() << endl;
 #endif
 
-    module->setKey(*currentKey);
+    module->setKey(currentKey);
 
     normalizeInput(*currentKey, text);
 
@@ -504,8 +504,7 @@ int main(int argc, char **argv) {
     }
 
     currentKey = module->createKey();
-    currentKey->setPersist(true);
-    module->setKey(*currentKey);
+    module->setKey(currentKey);
     module->positionToTop();
 
     std::string token;
@@ -553,7 +552,7 @@ int main(int argc, char **argv) {
     //writeCurrentEntry(text);
 
     delete module;
-    currentKey.release();
+    currentKey.reset();
     delete cipherFilter;
     infile.close();
 

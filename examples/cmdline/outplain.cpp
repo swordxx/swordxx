@@ -59,7 +59,7 @@ int main(int argc, char **argv) {
     if (!b) return -1;
     SWModule &book = *b;
     book.setProcessEntryAttributes(false);
-    VerseKey const * const vk = dynamic_cast<VerseKey *>(book.getKey());
+    auto const vk(book.getKeyAs<VerseKey const>());
     for (book.positionToTop(); !book.popError() && !book.getRawEntry().size(); book.increment());
     if (!book.getRawEntry().size()) return -2;     // empty module
     for (;!book.popError(); book.increment()) {

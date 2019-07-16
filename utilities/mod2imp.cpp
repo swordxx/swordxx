@@ -103,7 +103,7 @@ int main(int argc, char **argv)
     if (!module) usage(progName, (((std::string) "Couldn't find module: ") + modName).c_str());
 
 
-    if (VerseKey * const vkey = dynamic_cast<VerseKey *>(module->getKey()))
+    if (auto const vkey = std::dynamic_pointer_cast<VerseKey>(module->getKey()))
         vkey->setIntros(true);
 
     for (module->positionToTop(); !module->popError(); module->increment()) {
