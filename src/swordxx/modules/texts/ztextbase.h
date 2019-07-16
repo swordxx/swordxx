@@ -69,7 +69,7 @@ public:
     void increment(int steps = 1) override;
     void decrement(int steps = 1) override { increment(-steps); }
 
-    bool isWritable() const override;
+    bool isWritable() const noexcept override;
     static char createModule(const char *path, BlockType blockBound, const char *v11n = "KJV") {
         return BaseZVerse::createModule(path, blockBound, v11n);
     }

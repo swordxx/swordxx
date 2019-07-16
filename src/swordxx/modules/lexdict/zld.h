@@ -54,7 +54,7 @@ public:
     void increment(int steps = 1) override;
     void decrement(int steps = 1) override { increment(-steps); }
 
-    bool isWritable() const override;
+    bool isWritable() const noexcept override;
     static char createModule(const char *path) {
         return zStr::createModule(path);
     }

@@ -55,7 +55,7 @@ RawLdBase<Base>::RawLdBase(char const * ipath,
 {}
 
 template <typename Base>
-bool RawLdBase<Base>::isWritable() const {
+bool RawLdBase<Base>::isWritable() const noexcept {
     return ((this->idxfd->getFd() > 0) && ((this->idxfd->mode() & FileMgr::RDWR) == FileMgr::RDWR));
 }
 

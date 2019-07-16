@@ -236,6 +236,8 @@ std::string SWModule::getRawEntry() const {
     return r;
 }
 
+bool SWModule::isWritable() const noexcept { return false; }
+
 void SWModule::rawFilter(std::string & buf, SWKey const * key_) const
 { filterBuffer(*this, buf, key_, m_rawFilters); }
 

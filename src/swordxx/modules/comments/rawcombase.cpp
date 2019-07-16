@@ -112,7 +112,7 @@ template <typename Base>
 void RawComBase<Base>::decrement(int steps) { increment(-steps); }
 
 template <typename Base>
-bool RawComBase<Base>::isWritable() const {
+bool RawComBase<Base>::isWritable() const noexcept {
     return (this->idxfp[0]->getFd() > 0)
            && ((this->idxfp[0]->mode() & FileMgr::RDWR) == FileMgr::RDWR);
 }

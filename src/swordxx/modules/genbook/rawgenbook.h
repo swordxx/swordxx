@@ -54,7 +54,7 @@ public:
                char const * keyType = "TreeKey");
     ~RawGenBook() override;
 
-    bool isWritable() const override;
+    bool isWritable() const noexcept override;
     static char createModule(NormalizedPath const & path);
     void setEntry(char const * inbuf, long len = -1) override;
     void linkEntry(SWKey const & linkKey) override;

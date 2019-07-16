@@ -56,7 +56,7 @@ public: /* Methods: */
     void increment(int steps = 1) override;
     void decrement(int steps = 1) override;
 
-    bool isWritable() const override;
+    bool isWritable() const noexcept override;
 
     static char createModule(const char *path, const char *v11n = "KJV");
 

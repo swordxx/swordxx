@@ -59,7 +59,7 @@ template <typename BaseRawVerse>
 RawTextBase<BaseRawVerse>::~RawTextBase() {}
 
 template <typename BaseRawVerse>
-bool RawTextBase<BaseRawVerse>::isWritable() const {
+bool RawTextBase<BaseRawVerse>::isWritable() const noexcept {
     return (this->idxfp[0]->getFd() > 0)
             && ((this->idxfp[0]->mode() & FileMgr::RDWR) == FileMgr::RDWR);
 }

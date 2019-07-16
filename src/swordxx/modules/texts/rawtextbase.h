@@ -53,7 +53,7 @@ public: /* Methods: */
                 char const * versification = "KJV");
     ~RawTextBase() override;
     void increment(int steps = 1) override;
-    bool isWritable() const override;
+    bool isWritable() const noexcept override;
 
     static char createModule(char const * path, char const * v11n = "KJV");
 

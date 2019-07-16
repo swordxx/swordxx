@@ -213,7 +213,7 @@ public:
 
     // write interface ----------------------------
 
-    virtual bool isWritable() const { return false; }
+    virtual bool isWritable() const noexcept;
 
     /** Modify the current module entry text - only if module isWritable() */
     virtual void setEntry(const char *inbuf, long len= -1) {

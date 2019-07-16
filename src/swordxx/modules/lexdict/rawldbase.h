@@ -56,7 +56,7 @@ public: /* Methods: */
 
     void increment(int steps = 1) override;
     void decrement(int steps = 1) override { increment(-steps); }
-    bool isWritable() const override;
+    bool isWritable() const noexcept override;
     static char createModule(const char *path) { return Base::createModule(path); }
 
     void setEntry(char const * inbuf, long len = -1) override;

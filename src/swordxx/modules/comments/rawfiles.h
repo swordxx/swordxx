@@ -49,7 +49,7 @@ public:
              char const * ilang = nullptr);
     ~RawFiles() override;
 
-    bool isWritable() const override;
+    bool isWritable() const noexcept override;
 
     static char createModule(char const *);
     void setEntry(char const * inbuf, long len = -1) override;

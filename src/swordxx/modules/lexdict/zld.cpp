@@ -56,7 +56,7 @@ zLD::~zLD() {
 }
 
 
-bool zLD::isWritable() const {
+bool zLD::isWritable() const noexcept {
     return ((idxfd->getFd() > 0) && ((idxfd->mode() & FileMgr::RDWR) == FileMgr::RDWR));
 }
 
