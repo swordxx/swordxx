@@ -124,7 +124,7 @@ void zCom::setEntry(const char *inbuf, long len) {
 
     doSetText(key_->getTestament(), key_->getTestamentIndex(), inbuf, len);
 
-    lastWriteKey = std::static_pointer_cast<VerseKey const>(key_->clone()); // must delete
+    lastWriteKey = std::static_pointer_cast<VerseKey const>(key_->clone());
 }
 
 
