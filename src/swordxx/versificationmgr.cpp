@@ -332,7 +332,7 @@ char VersificationMgr::System::getVerseFromOffset(long offset, int *book, int *c
     auto b = lower_bound(m_p->m_books.cbegin(), m_p->m_books.cend(), offset, BookOffsetLess());
     if (b == m_p->m_books.end()) b--;
     (*book)    = distance(m_p->m_books.cbegin(), b)+1;
-    if (offset < (*(b->m_p->m_offsetPrecomputed.cbegin()))-((((!(*book)) || (*book)==m_BMAX[0]+1))?2:1)) { // -1 for chapter headings
+    if (offset < (b->m_p->m_offsetPrecomputed.front())-((((!(*book)) || (*book)==m_BMAX[0]+1))?2:1)) { // -1 for chapter headings
         (*book)--;
         if (b != m_p->m_books.cbegin()) {
             b--;

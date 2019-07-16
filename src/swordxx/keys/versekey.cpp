@@ -527,7 +527,7 @@ ListKey VerseKey::parseVerseList(const char *buf, const char *defaultKey, bool e
                 break;
             }
             if (inTerm) {
-                if (book.empty() || (*book.rbegin()) != ' ') {
+                if (book.empty() || book.back() != ' ') {
                     book.push_back(' ');
                 }
                 break;
@@ -790,7 +790,7 @@ terminate_range:
                 else    chap  = std::atoi(number.c_str());
                 number.clear();
             }
-            else if (chap == -1 && (book.empty() || (*book.rbegin()) != ' ')) {
+            else if (chap == -1 && (book.empty() || book.back() != ' ')) {
                 book.push_back(' ');
             }
 

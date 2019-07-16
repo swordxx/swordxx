@@ -163,7 +163,7 @@ char OSISStrongs::processText(std::string &text, const SWKey *key, const SWModul
                                     }
                                 }
                                 else {
-                                    gh = *attrib.begin();
+                                    gh = attrib.front();
                                     attrib.erase(0u, 1u);
                                 }
                                 lClass = "strong";
@@ -250,8 +250,8 @@ char OSISStrongs::processText(std::string &text, const SWKey *key, const SWModul
                 trimString(token);
                 // drop <>:
                 assert(token.size() >= 2u);
-                assert((*token.begin()) == '<');
-                assert((*token.rbegin()) == '>');
+                assert(token.front() == '<');
+                assert(token.back() == '>');
                 token.pop_back();
                 token.erase(0, 1u);
             }

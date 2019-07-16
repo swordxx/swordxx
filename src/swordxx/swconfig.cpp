@@ -44,11 +44,11 @@ bool SWConfig::reload() {
         std::string line;
         std::ifstream inFile(m_filename);
         while (std::getline(inFile, line)) {
-            if (line.empty() || (*line.begin()) == '#')
+            if (line.empty() || line.front() == '#')
                 continue;
-            if (*line.begin() == '[') {
+            if (line.front() == '[') {
                 rightTrimString(line);
-                if ((*line.rbegin()) != ']')
+                if (line.back() != ']')
                     return false;
                 section.assign(line, 1u, line.size() - 2u);
                 trimString(section);

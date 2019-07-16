@@ -45,7 +45,7 @@ int main() {
         vk->setVerse(vk->getVerseMax());
         std::string text = book->stripText();
         trimString(text);
-        if (!text.empty() && (*text.rbegin()) == ',') {
+        if (!text.empty() && text.back() == ',') {
             cout << vk->getText() << ":\n\n";
             cout << text << endl;
         }

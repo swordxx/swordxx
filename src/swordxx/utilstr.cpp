@@ -34,7 +34,7 @@ namespace swordxx {
 
 void addTrailingDirectorySlash(std::string & buf) {
     assert(!buf.empty());
-    switch (*buf.rbegin()) {
+    switch (buf.back()) {
         case '/': case '\\':
             break;
         default:
@@ -45,7 +45,7 @@ void addTrailingDirectorySlash(std::string & buf) {
 
 void removeTrailingDirectorySlashes(std::string & buf) {
     while (buf.size() > 1u) {
-        switch (*buf.rbegin()) {
+        switch (buf.back()) {
             case '/': case '\\':
                 buf.pop_back();
                 break;
@@ -71,13 +71,13 @@ void trimString(std::string & str) {
 }
 
 std::string_view leftTrimmedView(std::string_view sv) noexcept {
-    while (!sv.empty() && charIsSpace(*sv.begin()))
+    while (!sv.empty() && charIsSpace(sv.front()))
         sv.remove_prefix(1u);
     return sv;
 }
 
 std::string_view rightTrimmedView(std::string_view sv) noexcept {
-    while (!sv.empty() && charIsSpace(*sv.rbegin()))
+    while (!sv.empty() && charIsSpace(sv.back()))
         sv.remove_suffix(1u);
     return sv;
 }

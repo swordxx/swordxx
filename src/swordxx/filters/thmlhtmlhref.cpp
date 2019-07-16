@@ -198,7 +198,7 @@ bool ThMLHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterU
                         value);
             }
             else if (tag.attribute("type") == "Strongs") {
-                char const ch = *value.begin();
+                char const ch = value.front();
                 value.erase(0u, 1u);
                 buf += formatted("<small><em class=\"strongs\">&lt;<a href=\"passagestudy.jsp?action=showStrongs&type=%s&value=%s\" class=\"strongs\">",
                             ((ch == 'H') ? "Hebrew" : "Greek"),

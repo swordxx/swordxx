@@ -97,7 +97,7 @@ std::vector<DirEntry> CURLHTTPTransport::getDirList(const char *dirURL) {
                 i.name = possibleName;
                 i.approximateSizeInBytes = static_cast<std::size_t>(fSize);
                 i.isDirectory = (!possibleName.empty()
-                                 && *possibleName.rbegin() == '/');
+                                 && possibleName.back() == '/');
                 dirList.push_back(i);
             } else {
                 pBuf += possibleNameLength;

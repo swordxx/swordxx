@@ -106,7 +106,7 @@ int RemoteTransport::copyDirectory(const char * urlPrefix_,
         DirEntry const & dirEntry = dirList[i];
         std::string entryName = dirEntry.name;
         assert(!entryName.empty());
-        while (*entryName.rbegin() == '\0') { // Remove trailing null chars
+        while (entryName.back() == '\0') { // Remove trailing null chars
             entryName.pop_back();
             if (entryName.empty())
                 break;
