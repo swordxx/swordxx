@@ -167,8 +167,8 @@ void zCom4::increment(int steps) {
 
     auto lastgood(tmpkey);
     while (steps) {
-        VerseOffsetType laststart = start;
-        unsigned long lastsize = size;
+        auto const laststart = start;
+        auto const lastsize = size;
         if (steps > 0) {
             getKey()->increment();
         } else {
@@ -180,7 +180,7 @@ void zCom4::increment(int steps) {
             getKey()->positionFrom(*lastgood);
             break;
         }
-        long index = tmpkey->getTestamentIndex();
+        auto const index = tmpkey->getTestamentIndex();
         findOffset(tmpkey->getTestament(), index, &start, &size, &buffnum);
         if (
             (((laststart != start) || (lastsize != size))    // we're a different entry
