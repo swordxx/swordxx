@@ -66,9 +66,6 @@ protected:
 
 public:
 
-    // misc storage for whatever
-    uint64_t m_userData;
-
     /** initializes instance of SWKey from a string
      * All keys can be reduced to a string representation which should be able
      *    to be used to again set the key to the same position

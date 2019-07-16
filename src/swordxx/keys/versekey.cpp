@@ -178,6 +178,7 @@ void VerseKey::positionFrom(const SWKey &ikey) {
 void VerseKey::copyFrom(const VerseKey &ikey) {
     m_autonorm = ikey.m_autonorm;
     m_intros = ikey.m_intros;
+    m_userData = ikey.m_userData;
     m_testament = ikey.getTestament();
     m_book = ikey.getBook();
     m_chapter = ikey.getChapter();
@@ -693,10 +694,9 @@ terminate_range:
                     lastKey->positionToTop();
                     tmpListKey << *lastKey;
                     auto const element(tmpListKey.getElement());
-                    static_cast<VerseKey &>(*element).setAutoNormalize(
-                                isAutoNormalize());
-                    element->m_userData =
-                            static_cast<std::size_t>(buf - bufStart);
+                    auto & vk = static_cast<VerseKey &>(*element);
+                    vk.setAutoNormalize(isAutoNormalize());
+                    vk.m_userData = static_cast<std::size_t>(buf - bufStart);
                 }
                 else {
                     if (!dash) {     // if last separator was not a dash just add
@@ -710,9 +710,9 @@ terminate_range:
                             lastKey->positionToTop();
                             tmpListKey << *lastKey;
                             auto const element(tmpListKey.getElement());
-                            static_cast<VerseKey &>(*element).setAutoNormalize(
-                                        isAutoNormalize());
-                            element->m_userData =
+                            auto & vk = static_cast<VerseKey &>(*element);
+                            vk.setAutoNormalize(isAutoNormalize());
+                            vk.m_userData =
                                     static_cast<std::size_t>(buf - bufStart);
                         }
                         else {
@@ -728,9 +728,9 @@ terminate_range:
                             lastKey->positionToTop();
                             tmpListKey << *lastKey;
                             auto const element(tmpListKey.getElement());
-                            static_cast<VerseKey &>(*element).setAutoNormalize(
-                                        isAutoNormalize());
-                            element->m_userData =
+                            auto & vk = static_cast<VerseKey &>(*element);
+                            vk.setAutoNormalize(isAutoNormalize());
+                            vk.m_userData =
                                     static_cast<std::size_t>(buf - bufStart);
                         }
                     }
@@ -746,7 +746,9 @@ terminate_range:
                             newElement->setUpperBoundKey(*curKey);
                             *lastKey = *curKey;
                             newElement->positionToTop();
-                            tmpListKey.getElement()->m_userData =
+                            auto & vk = static_cast<VerseKey &>(
+                                            *tmpListKey.getElement());
+                            vk.m_userData =
                                     static_cast<std::size_t>(buf - bufStart);
                         }
                     }
@@ -967,7 +969,7 @@ terminate_range:
             lastKey->setLowerBoundKey(*curKey);
             lastKey->positionToTop();
             tmpListKey << *lastKey;
-            tmpListKey.getElement()->m_userData =
+            static_cast<VerseKey &>(*tmpListKey.getElement()).m_userData =
                     static_cast<std::size_t>(buf - bufStart);
         }
         else {
@@ -981,7 +983,7 @@ terminate_range:
                     lastKey->setUpperBoundKey(*curKey);
                     lastKey->positionToTop();
                     tmpListKey << *lastKey;
-                    tmpListKey.getElement()->m_userData =
+                    static_cast<VerseKey &>(*tmpListKey.getElement()).m_userData =
                             static_cast<std::size_t>(buf - bufStart);
                 }
                 else {
@@ -996,7 +998,7 @@ terminate_range:
                     lastKey->setUpperBoundKey(*curKey);
                     lastKey->positionToTop();
                     tmpListKey << *lastKey;
-                    tmpListKey.getElement()->m_userData =
+                    static_cast<VerseKey &>(*tmpListKey.getElement()).m_userData =
                             static_cast<std::size_t>(buf - bufStart);
                 }
             }
@@ -1011,7 +1013,7 @@ terminate_range:
                         curKey->positionToMaxVerse();
                     newElement->setUpperBoundKey(*curKey);
                     newElement->positionToTop();
-                    tmpListKey.getElement()->m_userData =
+                    static_cast<VerseKey &>(*tmpListKey.getElement()).m_userData =
                             static_cast<std::size_t>(buf - bufStart);
                 }
             }
@@ -1767,8 +1769,9 @@ std::string VerseKey::convertToOSIS(std::string const & inRef,
             oss << inRef[startFragIndex];
             ++startFragIndex;
         }
-        auto const len = element->m_userData - startFragIndex + 1u;
-        static_assert(std::numeric_limits<decltype(element->m_userData)>::max()
+        auto const & vk = static_cast<VerseKey &>(*element);
+        auto const len = vk.m_userData - startFragIndex + 1u;
+        static_assert(std::numeric_limits<decltype(vk.m_userData)>::max()
                       <= std::numeric_limits<std::size_t>::max(), "");
         std::string frag(&inRef[startFragIndex], len);
         while (!frag.empty() && frag.back() == '\0')

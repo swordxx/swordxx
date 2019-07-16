@@ -73,6 +73,8 @@ class SWDLLEXPORT VerseKey : public SWKey {
 
     mutable VerseComponents m_lowerBoundComponents, m_upperBoundComponents;    // if autonorms is off, we can't optimize with index
 
+    std::size_t m_userData = 0;
+
 protected:
 
     /** The Testament: 0 - Module Heading; 1 - Old; 2 - New
