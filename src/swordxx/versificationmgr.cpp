@@ -131,10 +131,6 @@ public:
     /** Array[chapmax] of maximum verses in chapters */
     std::vector<int> m_verseMax;
     std::vector<long> m_offsetPrecomputed;
-
-    Private() = default;
-    Private(Private const &) = default;
-    Private & operator=(Private const &) = default;
 };
 
 
@@ -146,32 +142,27 @@ struct BookOffsetLess {
 };
 
 
-void VersificationMgr::Book::init() {
-    m_p = new Private();
-}
+VersificationMgr::System::System()
+    : m_p(new Private)
+{}
+
+VersificationMgr::System::System(const System &other)
+    : m_p(new Private(*other.m_p))
+    , m_name(other.m_name)
+    , m_BMAX(other.m_BMAX)
+    , m_ntStartOffset(other.m_ntStartOffset)
+{}
 
 
-void VersificationMgr::System::init() {
-    m_p = new Private();
-    m_BMAX[0] = 0;
-    m_BMAX[1] = 0;
-    m_ntStartOffset = 0;
-}
-
-
-VersificationMgr::System::System(const System &other) {
-    init();
-    m_name = other.m_name;
-    m_BMAX = other.m_BMAX;
-    (*m_p) = *(other.m_p);
-    m_ntStartOffset = other.m_ntStartOffset;
-}
-
+VersificationMgr::System::System(std::string name)
+    : m_p(new Private)
+    , m_name(std::move(name))
+{}
 
 VersificationMgr::System &VersificationMgr::System::operator =(const System &other) {
+    (*m_p) = *(other.m_p);
     m_name = other.m_name;
     m_BMAX = other.m_BMAX;
-    (*m_p) = *(other.m_p);
     m_ntStartOffset = other.m_ntStartOffset;
     return *this;
 }
@@ -257,13 +248,34 @@ void VersificationMgr::System::loadFromSBook(const sbook *ot, const sbook *nt, i
 }
 
 
-VersificationMgr::Book::Book(const Book &other) {
-    m_longName = other.m_longName;
-    m_osisName = other.m_osisName;
-    m_prefAbbrev = other.m_prefAbbrev;
-    m_chapMax = other.m_chapMax;
-    init();
-    (*m_p) = *(other.m_p);
+VersificationMgr::Book::Book(const Book &other)
+    : m_p(new Private(*other.m_p))
+    , m_longName(other.m_longName)
+    , m_osisName(other.m_osisName)
+    , m_prefAbbrev(other.m_prefAbbrev)
+    , m_chapMax(other.m_chapMax)
+{}
+
+
+VersificationMgr::Book::Book()
+    : m_p(new Private)
+{}
+
+
+VersificationMgr::Book::Book(std::string longName,
+                             std::string osisName,
+                             std::string prefAbbrev,
+                             unsigned int chapMax)
+    : m_p(new Private)
+    , m_longName(std::move(longName))
+    , m_osisName(std::move(osisName))
+    , m_prefAbbrev(std::move(prefAbbrev))
+    , m_chapMax(chapMax)
+{}
+
+
+VersificationMgr::Book::~Book() {
+    delete m_p;
 }
 
 
@@ -272,14 +284,11 @@ VersificationMgr::Book& VersificationMgr::Book::operator =(const Book &other) {
     m_osisName = other.m_osisName;
     m_prefAbbrev = other.m_prefAbbrev;
     m_chapMax = other.m_chapMax;
-    init();
-    (*m_p) = *(other.m_p);
-    return *this;
-}
-
-
-VersificationMgr::Book::~Book() {
+    auto newPrivate(std::make_unique<Private>());
+    *newPrivate = *other.m_p;
     delete m_p;
+    m_p = newPrivate.release();
+    return *this;
 }
 
 
@@ -367,9 +376,10 @@ public:
 std::shared_ptr<VersificationMgr const>
         VersificationMgr::m_systemVersificationMgr;
 
-void VersificationMgr::init() {
-    p = new Private();
-}
+
+VersificationMgr::VersificationMgr()
+    : p(new Private)
+{}
 
 
 VersificationMgr::~VersificationMgr() {
@@ -393,7 +403,7 @@ const VersificationMgr::System *VersificationMgr::getVersificationSystem(const c
 
 
 void VersificationMgr::registerVersificationSystem(const char *name, const sbook *ot, const sbook *nt, int const *chMax, const unsigned char *mappings) {
-    p->m_systems[name] = name;
+    p->m_systems[name] = System(name);
     System &s = p->m_systems[name];
     s.loadFromSBook(ot, nt, chMax, mappings);
 }

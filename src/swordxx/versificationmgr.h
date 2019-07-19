@@ -80,19 +80,14 @@ public: /* Types: */
 
     public: /* Methods: */
 
-        Book() { init(); }
+        Book();
 
         Book(Book const & copy);
 
         Book(std::string longName,
              std::string osisName,
              std::string prefAbbrev,
-             unsigned int chapMax)
-            : m_longName(std::move(longName))
-            , m_osisName(std::move(osisName))
-            , m_prefAbbrev(std::move(prefAbbrev))
-            , m_chapMax(chapMax)
-        { init(); }
+             unsigned int chapMax);
 
         ~Book();
 
@@ -109,13 +104,9 @@ public: /* Types: */
 
         int getVerseMax(int chapter) const noexcept;
 
-    private: /* Methods: */
-
-        void init();
-
     private: /* Fields: */
 
-        Private *m_p;
+        Private * m_p;
 
         /** book name */
         std::string m_longName;
@@ -139,11 +130,11 @@ public: /* Types: */
 
     public: /* Methods: */
 
-        System() { init(); }
+        System();
 
         System(System const & copy);
 
-        System(char const * name) : m_name(name) { init(); }
+        System(std::string name);
 
         ~System();
 
@@ -177,16 +168,12 @@ public: /* Types: */
                             int * verse,
                             int * verse_end) const;
 
-    private: /* Methods: */
-
-        void init();
-
     private: /* Fields: */
 
         Private * m_p;
         std::string m_name;
-        std::array<int, 2u> m_BMAX;
-        long m_ntStartOffset;
+        std::array<int, 2u> m_BMAX{{0, 0}};
+        long m_ntStartOffset = 0;
 
     };
 
@@ -196,7 +183,7 @@ private: /* Types: */
 
 public: /* Methods: */
 
-    VersificationMgr() { init(); }
+    VersificationMgr();
 
     ~VersificationMgr();
 
@@ -214,10 +201,6 @@ public: /* Methods: */
                                      sbook const * nt,
                                      int const * chMax,
                                      unsigned char const * mappings = nullptr);
-
-private: /* Methods: */
-
-    void init();
 
 private: /* Fields: */
 
