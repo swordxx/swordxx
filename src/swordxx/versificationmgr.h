@@ -149,8 +149,6 @@ public: /* Types: */
 
         std::string const & getName() const { return m_name; }
 
-        Book const * getBookByName(char const * bookName) const;
-
         int getBookNumberByOSISName(char const * bookName) const;
 
         Book const * getBook(int number) const;
