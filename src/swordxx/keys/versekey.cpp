@@ -1667,11 +1667,9 @@ void VerseKey::checkBounds() {
  */
 
 int VerseKey::compare(SWKey const & ikey) const noexcept {
-    const SWKey *testKey = &ikey;
-    if (const VerseKey * const vkey = dynamic_cast<VerseKey const *>(testKey))
+    if (auto const vkey = dynamic_cast<VerseKey const *>(&ikey))
         return compare_(*vkey);
-    VerseKey const ivkey(ikey.getText());
-    return compare_(ivkey);
+    return SWKey::compare(ikey);
 }
 
 
