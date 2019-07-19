@@ -172,7 +172,7 @@ public:
 
     /** clears the boundaries of this VerseKey
     */
-    void clearBounds();
+    void clearBounds() noexcept;
 
     /** Creates a new SWKey based on the current VerseKey
     * see also the Copy Constructor
@@ -229,35 +229,35 @@ public:
     *
     * @return value of testament
     */
-    char getTestament() const;
+    char getTestament() const noexcept;
     int getTestamentMax() const { return 2; }
 
     /** Gets book
     *
     * @return value of book
     */
-    char getBook() const;
+    char getBook() const noexcept;
     int getBookMax() const { return m_BMAX[m_testament-1]; }
 
     /** Gets chapter
     *
     * @return value of chapter
     */
-    int getChapter() const;
+    int getChapter() const noexcept;
     int getChapterMax() const;
 
     /** Gets verse
     *
     * @return value of verse
     */
-    int getVerse() const;
+    int getVerse() const noexcept;
     int getVerseMax() const;
 
     /** Gets verse suffix
     *
     * @return value of verse suffix
     */
-    char getSuffix() const;
+    char getSuffix() const noexcept;
 
     /** Sets testament
     *
@@ -287,7 +287,7 @@ public:
     *
     * @param isuffix value which to set verse suffix
     */
-    void setSuffix(char isuffix);
+    void setSuffix(char isuffix) noexcept;
 
     /** checks limits and normalizes if necessary (e.g.
     * Matthew 29:47 = Mark 2:2).    If last verse is
@@ -381,7 +381,7 @@ public:
     int compare_(VerseKey const & ikey) const noexcept;
 
     void setVersificationSystem(const char *name);
-    std::string const & getVersificationSystem() const;
+    std::string const & getVersificationSystem() const noexcept;
 
     // DEBUG
     void validateCurrentLocale() const;

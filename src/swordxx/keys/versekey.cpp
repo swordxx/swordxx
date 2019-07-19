@@ -267,7 +267,7 @@ void VerseKey::setVersificationSystem(const char *name) {
 }
 
 
-std::string const & VerseKey::getVersificationSystem() const
+std::string const & VerseKey::getVersificationSystem() const noexcept
 { return m_refSys->getName(); }
 
 
@@ -1105,7 +1105,7 @@ VerseKey VerseKey::upperBoundKey() const
  * VerseKey::clearBounds    - clears bounds for this VerseKey
  */
 
-void VerseKey::clearBounds()
+void VerseKey::clearBounds() noexcept
 {
     m_tmpClone.reset();
     m_boundSet = false;
@@ -1397,7 +1397,7 @@ void VerseKey::normalize(bool autocheck)
  * RET:    value of testament
  */
 
-char VerseKey::getTestament() const
+char VerseKey::getTestament() const noexcept
 {
     return m_testament;
 }
@@ -1409,7 +1409,7 @@ char VerseKey::getTestament() const
  * RET:    value of book
  */
 
-char VerseKey::getBook() const
+char VerseKey::getBook() const noexcept
 {
     return m_book;
 }
@@ -1421,7 +1421,7 @@ char VerseKey::getBook() const
  * RET:    value of chapter
  */
 
-int VerseKey::getChapter() const
+int VerseKey::getChapter() const noexcept
 {
     return m_chapter;
 }
@@ -1433,7 +1433,7 @@ int VerseKey::getChapter() const
  * RET:    value of verse
  */
 
-int VerseKey::getVerse() const
+int VerseKey::getVerse() const noexcept
 {
     return m_verse;
 }
@@ -1528,11 +1528,11 @@ void VerseKey::setVerse(int iverse)
 }
 
 
-char VerseKey::getSuffix() const {
+char VerseKey::getSuffix() const noexcept {
     return m_suffix;
 }
 
-void VerseKey::setSuffix(char suf) {
+void VerseKey::setSuffix(char suf) noexcept {
     m_suffix = suf;
 }
 
