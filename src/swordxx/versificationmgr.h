@@ -29,6 +29,7 @@
 #include <memory>
 #include <string>
 #include <utility>
+#include <vector>
 #include "defs.h"
 
 
@@ -152,9 +153,7 @@ public: /* Types: */
 
         int getBookNumberByOSISName(char const * bookName) const noexcept;
 
-        Book const * getBook(int number) const noexcept;
-
-        std::size_t getBookCount() const noexcept;
+        std::vector<Book> const & books() const noexcept;
 
         void loadFromSBook(sbook const * ot,
                            sbook const * nt,

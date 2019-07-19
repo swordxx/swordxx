@@ -101,22 +101,22 @@ int main() {
 
     // whole Bible
     VerseKey vkBible(
-                refSys->getBook(0)->getOSISName().c_str(),
-                refSys->getBook(refSys->getBookCount()-1)->getOSISName().c_str(),
+                refSys->books().front().getOSISName().c_str(),
+                refSys->books().back().getOSISName().c_str(),
                 refSys->getName().c_str());
     cout << vkBible.getRangeText() << "\n";
 
     // OT
     VerseKey vkOT(
-                refSys->getBook(0)->getOSISName().c_str(),
-                refSys->getBook(refSys->getBMAX()[0]-1)->getOSISName().c_str(),
+                refSys->books().front().getOSISName().c_str(),
+                refSys->books()[refSys->getBMAX()[0]-1].getOSISName().c_str(),
                 refSys->getName().c_str());
     cout << vkOT.getRangeText() << "\n";
 
     // NT
     VerseKey vkNT(
-                refSys->getBook(refSys->getBMAX()[0])->getOSISName().c_str(),
-                refSys->getBook(refSys->getBookCount()-1)->getOSISName().c_str(),
+                refSys->books()[refSys->getBMAX()[0]].getOSISName().c_str(),
+                refSys->books().back().getOSISName().c_str(),
                 refSys->getName().c_str());
     cout << vkNT.getRangeText() << "\n";
 

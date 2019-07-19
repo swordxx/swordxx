@@ -182,17 +182,15 @@ VersificationMgr::System::~System() {
 }
 
 
-const VersificationMgr::Book *VersificationMgr::System::getBook(int number) const noexcept {
-    return (number < (signed int)m_p->m_books.size())
-            ? &(m_p->m_books[number])
-            : nullptr;
-}
-
-
 int VersificationMgr::System::getBookNumberByOSISName(const char *bookName) const noexcept {
     auto const it(m_p->m_osisLookup.find(bookName));
     return (it != m_p->m_osisLookup.end()) ? it->second : -1;
 }
+
+
+std::vector<VersificationMgr::Book> const & VersificationMgr::System::books()
+        const noexcept
+{ return m_p->m_books; }
 
 
 void VersificationMgr::System::loadFromSBook(const sbook *ot, const sbook *nt, int const *chMax, const unsigned char *mappings) {
@@ -291,20 +289,16 @@ int VersificationMgr::Book::getVerseMax(int chapter) const noexcept {
 }
 
 
-std::size_t VersificationMgr::System::getBookCount() const noexcept
-{ return (m_p ? m_p->m_books.size() : 0u); }
-
-
 long VersificationMgr::System::getOffsetFromVerse(int book, int chapter, int verse) const noexcept {
+    if ((book < 0) || (book >= m_p->m_books.size()))
+        return -1;
     long  offset = -1;
     chapter--;
 
-    const Book *b = getBook(book);
+    auto const & b = m_p->m_books[book];
+    if ((chapter > -1) && (chapter >= (signed int)b.m_p->m_offsetPrecomputed.size())) return -1;    // assert we have a valid chapter
 
-    if (!b)                                        return -1;    // assert we have a valid book
-    if ((chapter > -1) && (chapter >= (signed int)b->m_p->m_offsetPrecomputed.size())) return -1;    // assert we have a valid chapter
-
-    offset = b->m_p->m_offsetPrecomputed[(chapter > -1)?chapter:0];
+    offset = b.m_p->m_offsetPrecomputed[(chapter > -1)?chapter:0];
     if (chapter < 0) offset--;
 
 /* old code
@@ -459,7 +453,7 @@ void VersificationMgr::System::translateVerse(const System *dstSys, const char *
                     *verse_end = m[3];
                     if (*m >= dstSys->m_p->m_books.size()) {
                         SWLog::getSystemLog()->logWarning("map to extra books, possible bug source\n");
-                        *book = dstSys->getBook(m[7]-1)->getOSISName().c_str();
+                        *book = dstSys->m_p->m_books[m[7]-1].getOSISName().c_str();
                     }
                     return;
                 }
@@ -480,8 +474,8 @@ void VersificationMgr::System::translateVerse(const System *dstSys, const char *
             *verse += d;
             if (*a > dstSys->m_p->m_books.size()) {
                 SWLog::getSystemLog()->logDebug("appropriate: %i %i %i %i %i %i %i %i\n",a[0],a[1],a[2],a[3],a[4],a[5],a[6],a[7]);
-                SWLog::getSystemLog()->logDebug("book: %s\n", dstSys->getBook(a[7]-1)->getOSISName().c_str());
-                *book = dstSys->getBook(a[7]-1)->getOSISName().c_str();
+                SWLog::getSystemLog()->logDebug("book: %s\n", dstSys->m_p->m_books[a[7]-1].getOSISName().c_str());
+                *book = dstSys->m_p->m_books[a[7]-1].getOSISName().c_str();
             }
             return;
         }

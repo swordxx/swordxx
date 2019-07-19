@@ -107,13 +107,13 @@ void VerseKey::setFromOther(const VerseKey &ikey) {
             m_book = 1;
             m_error = KEYERR_OUTOFBOUNDS;
         }
-        else if (m_refSys->getBook(m_book-1)->getChapterMax() < map_chapter) {
-            map_chapter = m_refSys->getBook(m_book-1)->getChapterMax();
-            map_verse = m_refSys->getBook(m_book-1)->getVerseMax(map_chapter);
+        else if (m_refSys->books()[m_book-1].getChapterMax() < map_chapter) {
+            map_chapter = m_refSys->books()[m_book-1].getChapterMax();
+            map_verse = m_refSys->books()[m_book-1].getVerseMax(map_chapter);
             m_error = KEYERR_OUTOFBOUNDS;
         }
-        else if (map_chapter > 0 && m_refSys->getBook(m_book-1)->getVerseMax(map_chapter) < map_verse) {
-            map_verse = m_refSys->getBook(m_book-1)->getVerseMax(map_chapter);
+        else if (map_chapter > 0 && m_refSys->books()[m_book-1].getVerseMax(map_chapter) < map_verse) {
+            map_verse = m_refSys->books()[m_book-1].getVerseMax(map_chapter);
             m_error = KEYERR_OUTOFBOUNDS;
         }
 
@@ -132,7 +132,7 @@ void VerseKey::setFromOther(const VerseKey &ikey) {
         m_suffix = ikey.getSuffix();
 
         if (map_verse < map_range) {
-            if (map_range > m_refSys->getBook(((m_testament>1)?m_BMAX[0]:0)+m_book-1)->getVerseMax(m_chapter))
+            if (map_range > m_refSys->books()[((m_testament>1)?m_BMAX[0]:0)+m_book-1].getVerseMax(m_chapter))
                 ++map_range;
             m_verse = map_range;
             setUpperBoundKey(*this);
@@ -398,8 +398,9 @@ int VerseKey::getBookFromAbbrev(std::string_view iabbr) const {
  */
 void VerseKey::validateCurrentLocale() const {
     if (SWLog::getSystemLog()->getLogLevel() >= SWLog::LOG_DEBUG) { //make sure log is wanted, this loop stuff costs a lot of time
-        for (std::size_t i = 0; i < m_refSys->getBookCount(); i++) {
-            std::string abbr(getPrivateLocale().translateText(m_refSys->getBook(i)->getLongName()));
+        auto const & books = m_refSys->books();
+        for (std::size_t i = 0; i < books.size(); ++i) {
+            std::string abbr(getPrivateLocale().translateText(books[i].getLongName()));
             trimString(abbr);
             const int bn = getBookFromAbbrev(abbr);
             if (bn != i+1) {
@@ -407,7 +408,7 @@ void VerseKey::validateCurrentLocale() const {
 
                 StringMgr* stringMgr = StringMgr::getSystemStringMgr();
                 stringMgr->upperUTF8(abbr);
-                SWLog::getSystemLog()->logDebug("%s=%s\n", abbr.c_str(), m_refSys->getBook(i)->getOSISName().c_str());
+                SWLog::getSystemLog()->logDebug("%s=%s\n", abbr.c_str(), books[i].getOSISName().c_str());
             }
         }
     }
@@ -1171,17 +1172,17 @@ std::string VerseKey::getShortText() const {
 
 
 std::string VerseKey::getBookName() const {
-    return getPrivateLocale().translateText(m_refSys->getBook(((m_testament>1)?m_BMAX[0]:0)+m_book-1)->getLongName());
+    return getPrivateLocale().translateText(m_refSys->books()[((m_testament>1)?m_BMAX[0]:0)+m_book-1].getLongName());
 }
 
 
 std::string const & VerseKey::getOSISBookName() const {
-    return m_refSys->getBook(((m_testament>1)?m_BMAX[0]:0)+m_book-1)->getOSISName();
+    return m_refSys->books()[((m_testament>1)?m_BMAX[0]:0)+m_book-1].getOSISName();
 }
 
 
 std::string VerseKey::getBookAbbrev() const {
-    return getPrivateLocale().translatePrefAbbrev(m_refSys->getBook(((m_testament>1)?m_BMAX[0]:0)+m_book-1)->getPreferredAbbreviation());
+    return getPrivateLocale().translatePrefAbbrev(m_refSys->books()[((m_testament>1)?m_BMAX[0]:0)+m_book-1].getPreferredAbbreviation());
 }
 
 void VerseKey::positionToTop() {
@@ -1227,14 +1228,20 @@ void VerseKey::positionToMaxVerse() {
 
 int VerseKey::getChapterMax() const {
     if (m_book < 1) return 0;
-    const VersificationMgr::Book *b = m_refSys->getBook(((m_testament>1)?m_BMAX[0]:0)+m_book-1);
-    return (b) ? b->getChapterMax() : -1;
+    auto const bookNum = ((m_testament > 1) ? m_BMAX[0] : 0) + m_book - 1;
+    auto const & books = m_refSys->books();
+    if ((bookNum < 0u) || (bookNum >= books.size()))
+        return -1;
+    return books[bookNum].getChapterMax();
 }
 
 int VerseKey::getVerseMax() const {
     if (m_book < 1) return 0;
-    const VersificationMgr::Book *b = m_refSys->getBook(((m_testament>1)?m_BMAX[0]:0)+m_book-1);
-    return (b) ? b->getVerseMax(m_chapter) : -1;
+    auto const bookNum = ((m_testament > 1) ? m_BMAX[0] : 0) + m_book - 1;
+    auto const & books = m_refSys->books();
+    if ((bookNum < 0u) || (bookNum >= books.size()))
+        return -1;
+    return books[bookNum].getVerseMax(m_chapter);
 }
 
 

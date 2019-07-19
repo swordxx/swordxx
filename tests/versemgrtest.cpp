@@ -36,15 +36,16 @@ int main(int argc, char **argv) {
     const char *v11n = (argc > 1) ? argv[1] : "KJV";
 
     const VersificationMgr::System *system = VersificationMgr::systemVersificationMgr()->getVersificationSystem(v11n);
-    auto const bookCount = system->getBookCount();
-    const VersificationMgr::Book *lastBook = system->getBook(bookCount-1);
-    int chapMax = lastBook->getChapterMax();
-    int verseMax = lastBook->getVerseMax(chapMax);
+    auto const & books = system->books();
+    auto const bookCount = books.size();
+    auto const & lastBook = books.back();
+    int chapMax = lastBook.getChapterMax();
+    int verseMax = lastBook.getVerseMax(chapMax);
     long offsetMax = system->getOffsetFromVerse(bookCount-1, chapMax, verseMax);
 
     cout << "Versification System: " << v11n << "\n";
     cout << "Book Count: " << bookCount << "\n";
-    cout << "Last Book: " << lastBook->getLongName() << " (" << lastBook->getOSISName() << ")\n";
+    cout << "Last Book: " << lastBook.getLongName() << " (" << lastBook.getOSISName() << ")\n";
     cout << "  Chapter Max: " << chapMax << "\n";
     cout << "    Verse Max: " << verseMax << "\n";
     cout << "       Offset: " << offsetMax << "\n\n";
