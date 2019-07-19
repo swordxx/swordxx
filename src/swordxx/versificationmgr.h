@@ -24,6 +24,7 @@
 #ifndef SWORDXX_VERSIFICATIONMGR_H
 #define SWORDXX_VERSIFICATIONMGR_H
 
+#include <array>
 #include <list>
 #include <memory>
 #include <string>
@@ -167,7 +168,7 @@ public: /* Types: */
                                 int * chapter,
                                 int * verse) const noexcept;
 
-        int const * getBMAX() const noexcept { return m_BMAX; }
+        std::array<int, 2u> getBMAX() const noexcept { return m_BMAX; }
 
         long getNTStartOffset() const noexcept { return m_ntStartOffset; }
 
@@ -185,7 +186,7 @@ public: /* Types: */
 
         Private * m_p;
         std::string m_name;
-        int m_BMAX[2];
+        std::array<int, 2u> m_BMAX;
         long m_ntStartOffset;
 
     };

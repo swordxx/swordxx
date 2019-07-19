@@ -255,8 +255,7 @@ void VerseKey::setVersificationSystem(const char *name) {
     if (!newRefSys)   newRefSys = VersificationMgr::systemVersificationMgr()->getVersificationSystem("KJV");
     if (m_refSys != newRefSys) {
         m_refSys = newRefSys;
-        m_BMAX[0] = m_refSys->getBMAX()[0];
-        m_BMAX[1] = m_refSys->getBMAX()[1];
+        m_BMAX = m_refSys->getBMAX();
 
         // TODO: adjust bounds for versificaion system ???
         // TODO: when we have mapping done, rethink this

@@ -27,6 +27,7 @@
 
 #include "../swkey.h"
 
+#include <array>
 #include <memory>
 #include <string_view>
 #include "listkey.h"
@@ -110,7 +111,7 @@ public:
     static long ntbks[];
     static long ntcps[];
 #endif
-    int m_BMAX[2];
+    std::array<int, 2u> m_BMAX;
 
     /**
     * VerseKey Constructor - initializes Instance of VerseKey

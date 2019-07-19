@@ -162,8 +162,7 @@ void VersificationMgr::System::init() {
 VersificationMgr::System::System(const System &other) {
     init();
     m_name = other.m_name;
-    m_BMAX[0] = other.m_BMAX[0];
-    m_BMAX[1] = other.m_BMAX[1];
+    m_BMAX = other.m_BMAX;
     (*m_p) = *(other.m_p);
     m_ntStartOffset = other.m_ntStartOffset;
 }
@@ -171,8 +170,7 @@ VersificationMgr::System::System(const System &other) {
 
 VersificationMgr::System &VersificationMgr::System::operator =(const System &other) {
     m_name = other.m_name;
-    m_BMAX[0] = other.m_BMAX[0];
-    m_BMAX[1] = other.m_BMAX[1];
+    m_BMAX = other.m_BMAX;
     (*m_p) = *(other.m_p);
     m_ntStartOffset = other.m_ntStartOffset;
     return *this;
