@@ -201,9 +201,11 @@ void VersificationMgr::System::loadFromSBook(const sbook *ot, const sbook *nt, i
     long offset = 0;    // module heading
     offset++;            // testament heading
     while (ot->chapmax) {
-        m_p->m_books.push_back(Book(ot->name, ot->osis, ot->prefAbbrev, ot->chapmax));
+        Book & b = m_p->m_books.emplace_back(ot->name,
+                                             ot->osis,
+                                             ot->prefAbbrev,
+                                             ot->chapmax);
         offset++;        // book heading
-        Book &b = m_p->m_books[m_p->m_books.size()-1];
         m_p->m_osisLookup[b.getOSISName()] = m_p->m_books.size();
         for (int i = 0; i < ot->chapmax; i++) {
             b.m_p->m_verseMax.push_back(chMax[chap]);
@@ -219,9 +221,11 @@ void VersificationMgr::System::loadFromSBook(const sbook *ot, const sbook *nt, i
     m_ntStartOffset = offset;
     offset++;            // testament heading
     while (nt->chapmax) {
-        m_p->m_books.push_back(Book(nt->name, nt->osis, nt->prefAbbrev, nt->chapmax));
+        Book & b = m_p->m_books.emplace_back(nt->name,
+                                             nt->osis,
+                                             nt->prefAbbrev,
+                                             nt->chapmax);
         offset++;        // book heading
-        Book &b = m_p->m_books[m_p->m_books.size()-1];
         m_p->m_osisLookup[b.getOSISName()] = m_p->m_books.size();
         for (int i = 0; i < nt->chapmax; i++) {
             b.m_p->m_verseMax.push_back(chMax[chap]);
