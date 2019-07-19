@@ -184,14 +184,14 @@ VersificationMgr::System::~System() {
 }
 
 
-const VersificationMgr::Book *VersificationMgr::System::getBook(int number) const {
+const VersificationMgr::Book *VersificationMgr::System::getBook(int number) const noexcept {
     return (number < (signed int)m_p->m_books.size())
             ? &(m_p->m_books[number])
             : nullptr;
 }
 
 
-int VersificationMgr::System::getBookNumberByOSISName(const char *bookName) const {
+int VersificationMgr::System::getBookNumberByOSISName(const char *bookName) const noexcept {
     auto const it(m_p->m_osisLookup.find(bookName));
     return (it != m_p->m_osisLookup.end()) ? it->second : -1;
 }
@@ -283,18 +283,18 @@ VersificationMgr::Book::~Book() {
 }
 
 
-int VersificationMgr::Book::getVerseMax(int chapter) const {
+int VersificationMgr::Book::getVerseMax(int chapter) const noexcept {
     chapter--;
     return (m_p && (chapter < (signed int)m_p->m_verseMax.size()) && (chapter > -1)) ? m_p->m_verseMax[chapter] : -1;
 }
 
 
-int VersificationMgr::System::getBookCount() const {
+int VersificationMgr::System::getBookCount() const noexcept {
     return (m_p ? m_p->m_books.size() : 0);
 }
 
 
-long VersificationMgr::System::getOffsetFromVerse(int book, int chapter, int verse) const {
+long VersificationMgr::System::getOffsetFromVerse(int book, int chapter, int verse) const noexcept {
     long  offset = -1;
     chapter--;
 
@@ -319,7 +319,7 @@ long VersificationMgr::System::getOffsetFromVerse(int book, int chapter, int ver
 }
 
 
-char VersificationMgr::System::getVerseFromOffset(long offset, int *book, int *chapter, int *verse) const {
+char VersificationMgr::System::getVerseFromOffset(long offset, int *book, int *chapter, int *verse) const noexcept {
 
     if (offset < 1) {    // just handle the module heading corner case up front (and error case)
         (*book) = -1;

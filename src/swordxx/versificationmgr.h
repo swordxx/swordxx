@@ -105,7 +105,7 @@ public: /* Types: */
 
         unsigned int getChapterMax() const noexcept { return m_chapMax; }
 
-        int getVerseMax(int chapter) const;
+        int getVerseMax(int chapter) const noexcept;
 
     private: /* Methods: */
 
@@ -147,29 +147,29 @@ public: /* Types: */
 
         System & operator=(System const & copy);
 
-        std::string const & getName() const { return m_name; }
+        std::string const & getName() const noexcept { return m_name; }
 
-        int getBookNumberByOSISName(char const * bookName) const;
+        int getBookNumberByOSISName(char const * bookName) const noexcept;
 
-        Book const * getBook(int number) const;
+        Book const * getBook(int number) const noexcept;
 
-        int getBookCount() const;
+        int getBookCount() const noexcept;
 
         void loadFromSBook(sbook const * ot,
                            sbook const * nt,
                            int const * chMax,
                            unsigned char const * mappings = nullptr);
 
-        long getOffsetFromVerse(int book, int chapter, int verse) const;
+        long getOffsetFromVerse(int book, int chapter, int verse) const noexcept;
 
         char getVerseFromOffset(long offset,
                                 int * book,
                                 int * chapter,
-                                int * verse) const;
+                                int * verse) const noexcept;
 
-        int const * getBMAX() const { return m_BMAX; }
+        int const * getBMAX() const noexcept { return m_BMAX; }
 
-        long getNTStartOffset() const { return m_ntStartOffset; }
+        long getNTStartOffset() const noexcept { return m_ntStartOffset; }
 
         void translateVerse(System const * dstSys,
                             char const ** book,
