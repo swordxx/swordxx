@@ -291,9 +291,8 @@ int VersificationMgr::Book::getVerseMax(int chapter) const noexcept {
 }
 
 
-int VersificationMgr::System::getBookCount() const noexcept {
-    return (m_p ? m_p->m_books.size() : 0);
-}
+std::size_t VersificationMgr::System::getBookCount() const noexcept
+{ return (m_p ? m_p->m_books.size() : 0u); }
 
 
 long VersificationMgr::System::getOffsetFromVerse(int book, int chapter, int verse) const noexcept {

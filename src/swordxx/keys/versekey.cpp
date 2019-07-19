@@ -398,7 +398,7 @@ int VerseKey::getBookFromAbbrev(std::string_view iabbr) const {
  */
 void VerseKey::validateCurrentLocale() const {
     if (SWLog::getSystemLog()->getLogLevel() >= SWLog::LOG_DEBUG) { //make sure log is wanted, this loop stuff costs a lot of time
-        for (int i = 0; i < m_refSys->getBookCount(); i++) {
+        for (std::size_t i = 0; i < m_refSys->getBookCount(); i++) {
             std::string abbr(getPrivateLocale().translateText(m_refSys->getBook(i)->getLongName()));
             trimString(abbr);
             const int bn = getBookFromAbbrev(abbr);

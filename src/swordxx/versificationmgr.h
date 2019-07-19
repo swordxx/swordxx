@@ -154,7 +154,7 @@ public: /* Types: */
 
         Book const * getBook(int number) const noexcept;
 
-        int getBookCount() const noexcept;
+        std::size_t getBookCount() const noexcept;
 
         void loadFromSBook(sbook const * ot,
                            sbook const * nt,
