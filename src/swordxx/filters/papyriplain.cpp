@@ -47,7 +47,7 @@ char PapyriPlain::processText (std::string &text, const SWKey *key, const SWModu
 
         // remove hyphen and whitespace if that is all that separates words
         // also be sure we're not a double hyphen '--'
-        if ((*from == '-') && (out.size() > 0) && (out[out.size()-1] != '-')) {
+        if ((*from == '-') && (out.size() > 0) && (out.back() != '-')) {
             char remove = 0;
             const char *c;
             for (c = from+1; *c; c++) {

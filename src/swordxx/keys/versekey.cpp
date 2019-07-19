@@ -623,7 +623,7 @@ terminate_range:
                     book = lastKey->getBookName();
                 }
                 bookno = getBookFromAbbrev(book);
-                if ((bookno > -1) && (suffix == 'f') && (book[book.size() - 1u] == 'f')) {
+                if ((bookno > -1) && (suffix == 'f') && (book.back() == 'f')) {
                     suffix = 0;
                 }
             }
@@ -906,7 +906,7 @@ terminate_range:
             book = lastKey->getBookName();
         }
         bookno = getBookFromAbbrev(book);
-        if ((bookno > -1) && (suffix == 'f') && (book[book.size()-1] == 'f')) {
+        if ((bookno > -1) && (suffix == 'f') && (book.back() == 'f')) {
             suffix = 0;
         }
     }

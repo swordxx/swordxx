@@ -598,7 +598,7 @@ bool OSISHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterU
             std::string filepath;
             if (userData->module) {
                 filepath = userData->module->getConfigEntry("AbsoluteDataPath");
-                if ((!filepath.empty()) && (filepath[filepath.size()-1] != '/') && (src[0] != '/'))
+                if ((!filepath.empty()) && (filepath.back() != '/') && (src[0] != '/'))
                     filepath += '/';
             }
             filepath += src;

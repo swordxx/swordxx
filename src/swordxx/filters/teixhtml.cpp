@@ -322,7 +322,7 @@ bool TEIXHTML::handleToken(std::string &buf, const char *token, BasicFilterUserD
                 std::string filepath;
                 if (userData->module) {
                     filepath = userData->module->getConfigEntry("AbsoluteDataPath");
-                    if ((filepath.size()) && (filepath[filepath.size()-1] != '/') && (url[0] != '/'))
+                    if ((filepath.size()) && (filepath.back() != '/') && (url[0] != '/'))
                         filepath += '/';
                 }
                 filepath += url;
