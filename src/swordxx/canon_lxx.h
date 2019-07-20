@@ -22,6 +22,9 @@
 #ifndef SWORDXX_CANON_LXX_H
 #define SWORDXX_CANON_LXX_H
 
+#include <cstddef>
+
+
 namespace swordxx {
 
 // Versification system: LXX
@@ -110,7 +113,7 @@ struct sbook otbooks_lxx[] = {
 /******************************************************************************
  *    Maximum verses per chapter
  */
-int vm_lxx[] = {
+constexpr std::size_t const vm_lxx[] = {
   // Genesis
   31, 25, 25, 26, 32, 23, 24, 22, 29, 32,
   32, 20, 18, 24, 21, 16, 27, 33, 39, 18,

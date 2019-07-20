@@ -22,6 +22,9 @@
 #ifndef SWORDXX_CANON_NRSVA_H
 #define SWORDXX_CANON_NRSVA_H
 
+#include <cstddef>
+
+
 namespace swordxx {
 
 // Versification system: NRSVA
@@ -97,7 +100,7 @@ struct sbook otbooks_nrsva[] = {
  *    Maximum verses per chapter
  */
 
-int vm_nrsva[] = {
+constexpr std::size_t const vm_nrsva[] = {
   // Genesis
   31, 25, 24, 26, 32, 22, 24, 22, 29, 32,
   32, 20, 18, 24, 21, 16, 27, 33, 38, 18,

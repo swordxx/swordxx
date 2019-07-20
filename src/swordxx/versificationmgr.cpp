@@ -129,7 +129,7 @@ class VersificationMgr::Book::Private {
 friend struct BookOffsetLess;
 public:
     /** Array[chapmax] of maximum verses in chapters */
-    std::vector<int> m_verseMax;
+    std::vector<std::size_t> m_verseMax;
     std::vector<long> m_offsetPrecomputed;
 };
 
@@ -184,7 +184,11 @@ std::vector<VersificationMgr::Book> const & VersificationMgr::System::books()
 { return m_p->m_books; }
 
 
-void VersificationMgr::System::loadFromSBook(const sbook *ot, const sbook *nt, int const *chMax, const unsigned char *mappings) {
+void VersificationMgr::System::loadFromSBook(sbook const * ot,
+                                             sbook const * nt,
+                                             std::size_t const * chMax,
+                                             unsigned char const * mappings)
+{
     int chap = 0;
     int book = 0;
     long offset = 0;    // module heading
@@ -402,7 +406,13 @@ const VersificationMgr::System *VersificationMgr::getVersificationSystem(const c
 }
 
 
-void VersificationMgr::registerVersificationSystem(const char *name, const sbook *ot, const sbook *nt, int const *chMax, const unsigned char *mappings) {
+void VersificationMgr::registerVersificationSystem(
+        char const * name,
+        sbook const * ot,
+        sbook const * nt,
+        std::size_t const * chMax,
+        unsigned char const * mappings)
+{
     p->m_systems[name] = System(name);
     System &s = p->m_systems[name];
     s.loadFromSBook(ot, nt, chMax, mappings);

@@ -24,6 +24,9 @@
 #ifndef SWORDXX_CANON_CALVIN_H
 #define SWORDXX_CANON_CALVIN_H
 
+#include <cstddef>
+
+
 namespace swordxx {
 
 
@@ -64,7 +67,7 @@ namespace swordxx {
  *	Maximum verses per chapter
  */
 
-int vm_calvin[] = {
+constexpr std::size_t const vm_calvin[] = {
   // Genesis
   31, 25, 24, 26, 32, 22, 24, 22, 29, 32,
   32, 20, 18, 24, 21, 16, 27, 33, 38, 18,

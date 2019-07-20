@@ -23,6 +23,7 @@
 #ifndef SWORDXX_CANON_H
 #define SWORDXX_CANON_H
 
+#include <cstddef>
 #include "canon_abbrevs.h"
 #include "versificationmgr.h"
 
@@ -111,7 +112,7 @@ constexpr sbook const ntbooks[] = {
  *    Maximum verses per chapter
  */
 
-constexpr int const vm[] = {
+constexpr std::size_t const vm[] = {
   // Genesis
   31, 25, 24, 26, 32, 22, 24, 22, 29, 32,
   32, 20, 18, 24, 21, 16, 27, 33, 38, 18,

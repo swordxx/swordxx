@@ -22,6 +22,9 @@
 #ifndef SWORDXX_CANON_ORTHODOX_H
 #define SWORDXX_CANON_ORTHODOX_H
 
+#include <cstddef>
+
+
 namespace swordxx {
 
 // Versification system: Orthodox
@@ -97,7 +100,7 @@ struct sbook otbooks_orthodox[] = {
 /******************************************************************************
  *    Maximum verses per chapter
  */
-int vm_orthodox[] = {
+constexpr std::size_t const vm_orthodox[] = {
   // Genesis
   31, 25, 25, 26, 32, 23, 24, 22, 29, 32,
   32, 20, 18, 24, 21, 16, 27, 33, 39, 18,

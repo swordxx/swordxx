@@ -22,6 +22,9 @@
 #ifndef SWORDXX_CANON_LUTHER_H
 #define SWORDXX_CANON_LUTHER_H
 
+#include <cstddef>
+
+
 namespace swordxx {
 
 // Versification system: Luther
@@ -119,7 +122,7 @@ struct sbook ntbooks_luther[] = {
  *    Maximum verses per chapter
  */
 
-int vm_luther[] = {
+constexpr std::size_t const vm_luther[] = {
   // Genesis
   31, 25, 24, 26, 32, 22, 24, 22, 29, 32,
   32, 20, 18, 24, 21, 16, 27, 33, 38, 18,

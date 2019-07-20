@@ -22,6 +22,9 @@
 #ifndef SWORDXX_CANON_GERMAN_H
 #define SWORDXX_CANON_GERMAN_H
 
+#include <cstddef>
+
+
 namespace swordxx {
 
 // Versification system: German
@@ -78,7 +81,7 @@ struct sbook otbooks_german[] = {
  *    Maximum verses per chapter
  */
 
-int vm_german[] = {
+constexpr std::size_t const vm_german[] = {
   // Genesis
   31, 25, 24, 26, 32, 22, 24, 22, 29, 32,
   32, 20, 18, 24, 21, 16, 27, 33, 38, 18,

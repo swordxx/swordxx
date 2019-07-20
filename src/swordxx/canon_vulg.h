@@ -22,6 +22,9 @@
 #ifndef SWORDXX_CANON_VULG_H
 #define SWORDXX_CANON_VULG_H
 
+#include <cstddef>
+
+
 namespace swordxx {
 
 // Versification system: Vulg
@@ -126,7 +129,7 @@ struct sbook ntbooks_vulg[] = {
  *    Maximum verses per chapter
  */
 
-int vm_vulg[] = {
+constexpr std::size_t const vm_vulg[] = {
   // Genesis
   31, 25, 24, 26, 31, 22, 24, 22, 29, 32,
   32, 20, 18, 24, 21, 16, 27, 33, 38, 18,

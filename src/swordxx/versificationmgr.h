@@ -148,7 +148,7 @@ public: /* Types: */
 
         void loadFromSBook(sbook const * ot,
                            sbook const * nt,
-                           int const * chMax,
+                           std::size_t const * chMax,
                            unsigned char const * mappings = nullptr);
 
         long getOffsetFromVerse(int book, int chapter, int verse) const noexcept;
@@ -199,7 +199,7 @@ public: /* Methods: */
     void registerVersificationSystem(char const * name,
                                      sbook const * ot,
                                      sbook const * nt,
-                                     int const * chMax,
+                                     std::size_t const * chMax,
                                      unsigned char const * mappings = nullptr);
 
 private: /* Fields: */

@@ -22,6 +22,9 @@
 #ifndef SWORDXX_CANON_CATHOLIC_H
 #define SWORDXX_CANON_CATHOLIC_H
 
+#include <cstddef>
+
+
 namespace swordxx {
 
 
@@ -86,7 +89,7 @@ struct sbook otbooks_catholic[] = {
  *    Maximum verses per chapter
  */
 
-int vm_catholic[] = {
+constexpr std::size_t const vm_catholic[] = {
   // Genesis
   31, 25, 24, 26, 32, 22, 24, 22, 29, 32,
   32, 20, 18, 24, 21, 16, 27, 33, 38, 18,

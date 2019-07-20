@@ -22,6 +22,9 @@
 #ifndef SWORDXX_CANON_KJVA_H
 #define SWORDXX_CANON_KJVA_H
 
+#include <cstddef>
+
+
 namespace swordxx {
 
 // Versification system: KJVA
@@ -94,7 +97,7 @@ struct sbook otbooks_kjva[] = {
  *    Maximum verses per chapter
  */
 
-int vm_kjva[] = {
+constexpr std::size_t const vm_kjva[] = {
   // Genesis
   31, 25, 24, 26, 32, 22, 24, 22, 29, 32,
   32, 20, 18, 24, 21, 16, 27, 33, 38, 18,
