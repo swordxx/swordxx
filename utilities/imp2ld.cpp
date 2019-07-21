@@ -21,6 +21,7 @@
  */
 
 #include <cstdio>
+#include <cstring>
 #include <fstream>
 #include <iostream>
 #include <memory>
@@ -32,6 +33,7 @@
 #include <swordxx/modules/common/zipcomprs.h>
 #include <swordxx/modules/common/bz2comprs.h>
 #include <swordxx/modules/common/xzcomprs.h>
+#include <swordxx/swkey.h>
 #include <vector>
 
 

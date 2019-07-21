@@ -20,6 +20,7 @@
  *
  */
 
+#include <cstring>
 #include <iostream>
 #include <swordxx/swmgr.h>
 #include <swordxx/swmodule.h>

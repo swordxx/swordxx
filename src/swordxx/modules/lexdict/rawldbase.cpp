@@ -27,6 +27,7 @@
 #include <cstdio>
 #include <fcntl.h>
 #include "../../filemgr.h"
+#include "../../swkey.h"
 #include "../../utilstr.h"
 
 

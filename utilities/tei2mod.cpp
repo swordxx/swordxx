@@ -51,6 +51,7 @@
 #include <array>
 #include <cassert>
 #include <cstdio>
+#include <cstring>
 #include <fstream>
 #include <iostream>
 #include <memory>
@@ -65,6 +66,7 @@
 #include <swordxx/modules/lexdict/rawld.h>
 #include <swordxx/modules/lexdict/rawld4.h>
 #include <swordxx/modules/lexdict/zld.h>
+#include <swordxx/swkey.h>
 #include <swordxx/utilxml.h>
 #include <vector>
 

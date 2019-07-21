@@ -31,6 +31,7 @@
 #include <swordxx/modules/lexdict/rawld.h>
 #include <swordxx/modules/lexdict/rawld4.h>
 #include <swordxx/modules/lexdict/zld.h>
+#include <swordxx/swkey.h>
 #include <swordxx/swmgr.h>
 #ifdef __GNUC__
 #include <unistd.h>

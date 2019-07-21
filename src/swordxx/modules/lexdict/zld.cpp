@@ -28,6 +28,7 @@
 #include <memory>
 #include <utility>
 #include "../../filemgr.h"
+#include "../../swkey.h"
 #include "../../utilstr.h"
 
 

@@ -24,6 +24,7 @@
 #include "osisredletterwords.h"
 
 #include <cstdlib>
+#include <cstring>
 #include "../swmodule.h"
 
 

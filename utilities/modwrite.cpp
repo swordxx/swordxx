@@ -21,12 +21,14 @@
  */
 
 #include <cstdio>
+#include <cstring>
 #include <fcntl.h>
 #include <fstream>
 #ifndef __GNUC__
 #include <io.h>
 #endif
 #include <iostream>
+#include <swordxx/swkey.h>
 #include <swordxx/swmgr.h>
 #include <swordxx/swmodule.h>
 #ifdef __GNUC__

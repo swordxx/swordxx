@@ -21,6 +21,7 @@
  */
 
 #include <cstdio>
+#include <cstring>
 #include <iostream>
 #include <map>
 #include <memory>
@@ -31,6 +32,7 @@
 #include <swordxx/swmgr.h>
 #include <swordxx/swmodule.h>
 #include <swordxx/swoptfilter.h>
+#include <swordxx/utilstr.h>
 #include <utility>
 
 
