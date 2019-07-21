@@ -414,15 +414,10 @@ int FileMgr::copyDir(const char *srcDir, const char *destDir) {
         while (auto const ent = dir.readEntry()) {
             auto const srcPath(sDir + ent);
             auto const destPath(dDir + ent);
-            int retVal;
-            if (!isDirectory(srcPath)) {
-                retVal = copyFile(srcPath.c_str(), destPath.c_str());
-            }
-            else {
-                retVal = copyDir(srcPath.c_str(), destPath.c_str());
-            }
-            if (retVal)
-                break;
+            if (auto retVal = isDirectory(srcPath)
+                              ? copyDir(srcPath.c_str(), destPath.c_str())
+                              : copyFile(srcPath.c_str(), destPath.c_str()))
+                return retVal;
         }
     }
     return 0;
