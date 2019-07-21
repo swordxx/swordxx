@@ -44,6 +44,14 @@
 
 
 namespace swordxx {
+namespace {
+
+auto getDefaultLocale() {
+    auto const localeMgr(LocaleMgr::getSystemLocaleMgr());
+    return localeMgr->getLocale(localeMgr->getDefaultLocaleName());
+}
+
+} // anonymous namespace
 
 /******************************************************************************
  * VerseKey Constructor - initializes instance of VerseKey
@@ -54,11 +62,7 @@ namespace swordxx {
 
 VerseKey::VerseKey(char const * ikeyText)
     : SWKey(ikeyText)
-    , m_locale(
-        []() {
-            auto const localeMgr(LocaleMgr::getSystemLocaleMgr());
-            return localeMgr->getLocale(localeMgr->getDefaultLocaleName());
-        }())
+    , m_locale(getDefaultLocale())
 {
     setVersificationSystem("KJV");
     if (ikeyText)
@@ -67,11 +71,7 @@ VerseKey::VerseKey(char const * ikeyText)
 
 VerseKey::VerseKey(char const * min, char const * max, char const * v11n)
     : SWKey()
-    , m_locale(
-        []() {
-            auto const localeMgr(LocaleMgr::getSystemLocaleMgr());
-            return localeMgr->getLocale(localeMgr->getDefaultLocaleName());
-        }())
+    , m_locale(getDefaultLocale())
 {
     setVersificationSystem(v11n);
     ListKey tmpListKey = parseVerseList(min);
@@ -97,11 +97,7 @@ VerseKey::VerseKey(char const * min, char const * max, char const * v11n)
 
 VerseKey::VerseKey(SWKey const & ikey)
     : SWKey(ikey)
-    , m_locale(
-        []() {
-            auto const localeMgr(LocaleMgr::getSystemLocaleMgr());
-            return localeMgr->getLocale(localeMgr->getDefaultLocaleName());
-        }())
+    , m_locale(getDefaultLocale())
 {
     setVersificationSystem("KJV");
     copyFrom(ikey);
@@ -109,11 +105,7 @@ VerseKey::VerseKey(SWKey const & ikey)
 
 VerseKey::VerseKey(VerseKey const & copy)
     : SWKey(copy)
-    , m_locale(
-        []() {
-            auto const localeMgr(LocaleMgr::getSystemLocaleMgr());
-            return localeMgr->getLocale(localeMgr->getDefaultLocaleName());
-        }())
+    , m_locale(getDefaultLocale())
 { copyFrom(copy); }
 
 
