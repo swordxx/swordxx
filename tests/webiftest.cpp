@@ -20,7 +20,6 @@
  *
  */
 
-#include <cerrno>
 #include <fcntl.h>
 #ifndef __GNUC__
 #include <io.h>

@@ -26,7 +26,6 @@
 #include "zversebase.h"
 
 #include <cassert>
-#include <cerrno>
 #include <cstdint>
 #include <cstdio>
 #include <cstdlib>
