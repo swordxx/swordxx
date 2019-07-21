@@ -54,6 +54,7 @@ DirectoryEnumerator & DirectoryEnumerator::operator=(
 }
 
 char const * DirectoryEnumerator::readEntry() noexcept {
+    // assert(m_dir) not needed: if !m_dir, readdir will just fail.
     for (;;) {
         auto const entry(::readdir(dirCast(m_dir)));
         static_assert(std::is_pointer<decltype(entry)>::value, "");
