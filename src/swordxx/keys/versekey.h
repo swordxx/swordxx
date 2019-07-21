@@ -308,7 +308,7 @@ public:
 
     /** \returns whether this VerseKey is set to include introductions for
                  chapters, books, testaments and modules. */
-    bool isIntros() const;
+    bool isIntros() const { return m_intros; }
 
 
     /** Gets index based upon current verse
