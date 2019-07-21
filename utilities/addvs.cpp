@@ -23,6 +23,7 @@
 
 #include <cstdio>
 #include <cstdlib>
+#include <cstring>
 #include <fcntl.h>
 #include <iostream>
 #ifndef __GNUC__

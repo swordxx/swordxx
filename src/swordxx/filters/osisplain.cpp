@@ -24,6 +24,7 @@
 
 #include <cassert>
 #include <cstdlib>
+#include <cstring>
 #include "../keys/versekey.h"
 #include "../stringmgr.h"
 #include "../swmodule.h"

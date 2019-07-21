@@ -22,6 +22,7 @@
 
 #include <algorithm>
 #include <cstdio>
+#include <cstring>
 #include <fcntl.h>
 #include <fstream>
 #include <iostream>

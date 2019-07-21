@@ -23,6 +23,7 @@
 #include "osishtmlhref.h"
 
 #include <cstdlib>
+#include <cstring>
 #include <stack>
 #include "../keys/versekey.h"
 #include "../stringmgr.h"

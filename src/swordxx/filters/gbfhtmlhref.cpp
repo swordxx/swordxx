@@ -27,6 +27,7 @@
 #include "../swmodule.h"
 #include "../url.h"
 #include "../utilxml.h"
+#include "../utilstr.h"
 
 
 namespace swordxx {

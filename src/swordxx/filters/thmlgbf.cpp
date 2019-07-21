@@ -23,6 +23,7 @@
 #include "thmlgbf.h"
 
 #include <cstdlib>
+#include <cstring>
 #include <string>
 #include "../utilstr.h"
 

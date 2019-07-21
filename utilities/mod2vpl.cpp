@@ -21,6 +21,7 @@
  */
 
 #include <cstdio>
+#include <cstring>
 #include <iostream>
 #include <swordxx/keys/versekey.h>
 #include <swordxx/swkey.h>

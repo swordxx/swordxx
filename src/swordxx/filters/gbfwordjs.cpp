@@ -24,6 +24,7 @@
 
 #include <cstdio>
 #include <cstdlib>
+#include <cstring>
 #include "../swmodule.h"
 #include "../keys/versekey.h"
 #include "../utilstr.h"

@@ -23,6 +23,7 @@
 #include "thmlhtml.h"
 
 #include <cstdlib>
+#include <cstring>
 #include "../swmodule.h"
 #include "../utilxml.h"
 

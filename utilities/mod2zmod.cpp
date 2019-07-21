@@ -21,6 +21,7 @@
  */
 
 #include <cstdio>
+#include <cstring>
 #include <fcntl.h>
 #include <fstream>
 #ifndef __GNUC__

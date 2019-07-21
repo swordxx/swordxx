@@ -34,6 +34,7 @@
 #include "../../keys/versekey.h"
 #include "../../ShareRef.h"
 #include "../../sysdata.h"
+#include "../../utilstr.h"
 
 
 namespace swordxx {

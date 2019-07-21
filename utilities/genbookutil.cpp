@@ -25,6 +25,7 @@
 #include <swordxx/keys/treekeyidx.h>
 #include <swordxx/modules/common/entriesblk.h>
 #include <swordxx/modules/genbook/rawgenbook.h>
+#include <swordxx/utilstr.h>
 
 
 using namespace swordxx;

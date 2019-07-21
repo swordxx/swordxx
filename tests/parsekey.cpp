@@ -20,6 +20,7 @@
  *
  */
 
+#include <cstring>
 #include <iostream>
 #include <swordxx/keys/versekey.h>
 #include <swordxx/localemgr.h>

@@ -24,6 +24,7 @@
 #include "zld.h"
 
 #include <cstdio>
+#include <cstring>
 #include <fcntl.h>
 #include <memory>
 #include <utility>

@@ -25,6 +25,7 @@
 
 #include <cstdio>
 #include <cstdlib>
+#include <cstring>
 #include <string>
 #include "../swmodule.h"
 #include "../utilstr.h"

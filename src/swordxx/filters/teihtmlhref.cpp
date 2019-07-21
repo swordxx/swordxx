@@ -23,9 +23,11 @@
 #include "teihtmlhref.h"
 
 #include <cstdlib>
+#include <cstring>
 #include <iostream>
 #include "../swmodule.h"
 #include "../url.h"
+#include "../utilstr.h"
 #include "../utilxml.h"
 
 

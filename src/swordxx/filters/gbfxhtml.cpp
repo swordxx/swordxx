@@ -26,6 +26,7 @@
 #include "../keys/versekey.h"
 #include "../swmodule.h"
 #include "../url.h"
+#include "../utilstr.h"
 #include "../utilxml.h"
 
 

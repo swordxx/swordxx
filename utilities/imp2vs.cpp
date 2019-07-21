@@ -21,6 +21,7 @@
  */
 
 #include <cstdio>
+#include <cstring>
 #include <iostream>
 #include <string>
 #include <swordxx/filemgr.h>
@@ -34,6 +35,7 @@
 #include <swordxx/modules/texts/rawtext.h>
 #include <swordxx/modules/texts/rawtext4.h>
 #include <swordxx/modules/texts/ztext.h>
+#include <swordxx/utilstr.h>
 
 
 using namespace swordxx;

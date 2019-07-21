@@ -25,6 +25,7 @@
 
 #include <cstdio>
 #include <cstdlib>
+#include <cstring>
 #include <string>
 #include "../keys/versekey.h"
 #include "../swmodule.h"

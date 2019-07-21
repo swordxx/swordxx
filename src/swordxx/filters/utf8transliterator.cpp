@@ -24,6 +24,7 @@
 #include "utf8transliterator.h"
 
 #include <cstdlib>
+#include <cstring>
 #include <unicode/resbund.h>
 #include <unicode/uchar.h>
 #include <unicode/ucnv.h>

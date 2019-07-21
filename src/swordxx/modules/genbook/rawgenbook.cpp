@@ -26,6 +26,7 @@
 #include <cassert>
 #include <cstdint>
 #include <cstdio>
+#include <cstring>
 #include <fcntl.h>
 #include <memory>
 #include "../../filemgr.h"

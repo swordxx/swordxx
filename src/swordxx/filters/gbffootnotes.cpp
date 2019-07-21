@@ -28,6 +28,7 @@
 #include <string>
 #include "../keys/versekey.h"
 #include "../swmodule.h"
+#include "../utilstr.h"
 #include "../utilxml.h"
 
 

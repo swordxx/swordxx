@@ -25,6 +25,7 @@
 #include <cstdarg>
 #include <cstdio>
 #include <cstdlib>
+#include <cstring>
 #include "../keys/versekey.h"
 #include "../swlog.h"
 #include "../swmodule.h"

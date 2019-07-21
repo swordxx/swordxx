@@ -21,6 +21,7 @@
  */
 
 #include <cstdio>
+#include <cstring>
 #include <iostream>
 #include <map>
 #include <memory>

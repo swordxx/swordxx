@@ -23,6 +23,7 @@
 #include <cassert>
 #include <cstdio>
 #include <cstdlib>
+#include <cstring>
 #include <iostream>
 #include <swordxx/filemgr.h>
 #include <swordxx/filters/utf8greekaccents.h>

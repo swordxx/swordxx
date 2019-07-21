@@ -24,6 +24,7 @@
 #include "utilxml.h"
 
 #include <algorithm>
+#include <cstring>
 #include "utilstr.h"
 
 

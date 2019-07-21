@@ -23,6 +23,7 @@
 #include "thmlhtmlhref.h"
 
 #include <cstdlib>
+#include <cstring>
 #include "../keys/versekey.h"
 #include "../swmodule.h"
 #include "../url.h"

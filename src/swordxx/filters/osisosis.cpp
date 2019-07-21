@@ -23,8 +23,10 @@
 #include "osisosis.h"
 
 #include <cstdlib>
+#include <cstring>
 #include "../keys/versekey.h"
 #include "../swmodule.h"
+#include "../utilstr.h"
 
 
 namespace swordxx {
