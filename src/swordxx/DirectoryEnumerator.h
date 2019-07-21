@@ -35,6 +35,7 @@ public: /* Methods: */
     DirectoryEnumerator & operator=(DirectoryEnumerator && move) noexcept;
     DirectoryEnumerator & operator=(DirectoryEnumerator const &) = delete;
 
+    bool isOpen() const noexcept { return m_dir; }
     explicit operator bool() const noexcept { return m_dir; }
 
     char const * readEntry() noexcept;
