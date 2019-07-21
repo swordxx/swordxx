@@ -24,10 +24,9 @@
 #ifndef SWORDXX_STRINGMGR_H
 #define SWORDXX_STRINGMGR_H
 
-#include <cstring>
 #include <memory>
+#include <string>
 #include "defs.h"
-#include "utilstr.h"
 
 
 namespace swordxx {
