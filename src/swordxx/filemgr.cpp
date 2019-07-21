@@ -408,24 +408,24 @@ bool FileMgr::isDirectory(std::string const & path) {
 
 
 int FileMgr::copyDir(const char *srcDir, const char *destDir) {
-    int retVal = 0;
     if (auto dir = DirectoryEnumerator(srcDir)) {
-        std::string sDir(std::string(srcDir) + '/');
-        std::string dDir(std::string(destDir) + '/');
+        auto const sDir(std::string(srcDir) + '/');
+        auto const dDir(std::string(destDir) + '/');
         while (auto const ent = dir.readEntry()) {
-            if (retVal)
-                break;
-            std::string const srcPath(sDir + ent);
-            std::string const destPath(dDir + ent);
+            auto const srcPath(sDir + ent);
+            auto const destPath(dDir + ent);
+            int retVal;
             if (!isDirectory(srcPath)) {
                 retVal = copyFile(srcPath.c_str(), destPath.c_str());
             }
             else {
                 retVal = copyDir(srcPath.c_str(), destPath.c_str());
             }
+            if (retVal)
+                break;
         }
     }
-    return retVal;
+    return 0;
 }
 
 
