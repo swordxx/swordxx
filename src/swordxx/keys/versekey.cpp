@@ -292,7 +292,7 @@ char VerseKey::parse(bool checkAutoNormalize)
     m_chapter   = 1;
     m_verse     = 1;
 
-    int error = 0;
+    char error = 0;
     auto const keytext = SWKey::getText();
     if (!keytext.empty()) {
         // pass our own copy of keytext as keytext memory may be freshed during parse
@@ -300,7 +300,7 @@ char VerseKey::parse(bool checkAutoNormalize)
         if (tmpListKey.getCount()) {
             this->positionFrom(*tmpListKey.getElement(0u));
             error = this->m_error;
-        } else error = 1;
+        } else error = KEYERR_OUTOFBOUNDS;
     }
     if (checkAutoNormalize) {
         normalize(true);
