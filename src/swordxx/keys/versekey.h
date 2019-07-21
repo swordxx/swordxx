@@ -37,6 +37,8 @@
 
 namespace swordxx {
 
+class SWLocale;
+
 /**
  * Class VerseKey
  * The SWKey implementation used for verse based modules like Bibles or commentaries.
@@ -75,6 +77,11 @@ class SWDLLEXPORT VerseKey : public SWKey {
     mutable VerseComponents m_lowerBoundComponents, m_upperBoundComponents;    // if autonorms is off, we can't optimize with index
 
     std::size_t m_userData = 0;
+
+    // for caching; don't use directly, call getPrivateLocale()
+    mutable std::shared_ptr<SWLocale> m_locale;
+    std::string m_localeName;
+    SWLocale & getPrivateLocale() const;
 
 protected:
 
@@ -386,6 +393,15 @@ public:
 
     // DEBUG
     void validateCurrentLocale() const;
+
+    std::string const & getLocale() const noexcept
+    { return m_localeName; }
+
+    // this will force an on demand lookup of our locale:
+    void setLocale(std::string const & name) {
+        m_localeName = name;
+        m_locale = nullptr;
+    }
 
 
     // OPERATORS --------------------------------------------------------------------

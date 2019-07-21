@@ -40,17 +40,11 @@ namespace swordxx {
   cn & operator=(char const * ikey) = delete; \
   cn & operator=(SWKey const & ikey) = delete;
 
-class SWLocale;
-
 /** SWKey is used for positioning an SWModule to a specific entry.
  *    It always represents a possible location into a module and can additionally represent
  *    a domain of entries (e.g. "John 3:16" in the domain "John 1:1 - Mark 5:25")
  */
 class SWDLLEXPORT SWKey {
-
-    // for caching; don't use directly, call getPrivateLocale()
-    mutable std::shared_ptr<SWLocale> m_locale;
-
 
     long m_index;
 
@@ -59,9 +53,6 @@ class SWDLLEXPORT SWKey {
 protected:
 
     char m_error;
-
-    std::string m_localeName;
-    SWLocale & getPrivateLocale() const;
 
 
 public:
@@ -159,15 +150,6 @@ public:
     /** Whether or not this key can be ++ -- incremented
      */
     virtual bool isTraversable() const { return false; }
-
-    std::string const & getLocale() const noexcept
-    { return m_localeName; }
-
-    // this will force an on demand lookup of our locale:
-    void setLocale(std::string const & name) {
-        m_localeName = name;
-        m_locale = nullptr;
-    }
 
     /** Use this function to get an index position within a module.
      */

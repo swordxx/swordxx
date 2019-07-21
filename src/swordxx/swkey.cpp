@@ -25,19 +25,10 @@
 #include "swkey.h"
 
 #include <cstring>
-#include "localemgr.h"
 #include "utilstr.h"
 
 
 namespace swordxx {
-namespace {
-
-struct LocaleCache {
-    std::string name;
-    std::shared_ptr<SWLocale> locale;
-} g_localeCache;
-
-} // anonymous namespace
 
 
 /******************************************************************************
@@ -49,7 +40,6 @@ struct LocaleCache {
 SWKey::SWKey(std::string keyText)
     : m_keyText(std::move(keyText))
 {
-    setLocale(LocaleMgr::getSystemLocaleMgr()->getDefaultLocaleName());
     m_index     = 0;
     m_error     = 0;
 }
@@ -60,8 +50,6 @@ SWKey::SWKey(const char *ikey)
 
 SWKey::SWKey(SWKey const &k)
 {
-    setLocale(LocaleMgr::getSystemLocaleMgr()->getDefaultLocaleName());
-    m_localeName = k.m_localeName;
     m_index     = k.m_index;
     m_error     = k.m_error;
     setText(k.getText());
@@ -75,28 +63,6 @@ std::shared_ptr<SWKey> SWKey::clone() const
  */
 
 SWKey::~SWKey() {}
-
-
-/******************************************************************************
- * SWKey::getPrivateLocale - Gets a real locale object from our name
- *
- * RET:    locale object associated with our name
- */
-
-SWLocale & SWKey::getPrivateLocale() const {
-    if (!m_locale) {
-        if ((!g_localeCache.name.empty()) || (g_localeCache.name != m_localeName)) {
-            g_localeCache.name = m_localeName;
-            // this line is the entire bit of work we're trying to avoid with the cache
-            // worth it?  compare time examples/cmdline/search KJV "God love world" to
-            // same with this method reduced to:
-            // if (!local) local = ... (call below); return locale;
-            g_localeCache.locale = LocaleMgr::getSystemLocaleMgr()->getLocale(m_localeName.c_str());
-        }
-        m_locale = g_localeCache.locale;
-    }
-    return *m_locale;
-}
 
 
 /******************************************************************************
@@ -115,7 +81,6 @@ void SWKey::setText(std::string newText) { m_keyText = std::move(newText); }
  */
 
 void SWKey::copyFrom(const SWKey &ikey) {
-    setLocale(ikey.getLocale());
     setText(ikey.getText());
 }
 

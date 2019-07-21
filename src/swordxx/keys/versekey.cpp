@@ -33,6 +33,7 @@
 #include <memory>
 #include <sstream>
 #include <type_traits>
+#include "../localemgr.h"
 #include "../roman.h"
 #include "../ShareRef.h"
 #include "../stringmgr.h"
@@ -43,6 +44,14 @@
 
 
 namespace swordxx {
+namespace {
+
+struct LocaleCache {
+    std::string name;
+    std::shared_ptr<SWLocale> locale;
+} g_localeCache;
+
+} // anonymous namespace
 
 /******************************************************************************
  * VerseKey Constructor - initializes instance of VerseKey
@@ -53,6 +62,7 @@ namespace swordxx {
 
 VerseKey::VerseKey(const char *ikeyText) : SWKey(ikeyText)
 {
+    setLocale(LocaleMgr::getSystemLocaleMgr()->getDefaultLocaleName());
     setVersificationSystem("KJV");
     if (ikeyText)
         parse();
@@ -60,6 +70,7 @@ VerseKey::VerseKey(const char *ikeyText) : SWKey(ikeyText)
 
 VerseKey::VerseKey(const char *min, const char *max, const char *v11n) : SWKey()
 {
+    setLocale(LocaleMgr::getSystemLocaleMgr()->getDefaultLocaleName());
     setVersificationSystem(v11n);
     ListKey tmpListKey = parseVerseList(min);
     if (tmpListKey.getCount())
@@ -84,12 +95,14 @@ VerseKey::VerseKey(const char *min, const char *max, const char *v11n) : SWKey()
 
 VerseKey::VerseKey(const SWKey &ikey) : SWKey(ikey)
 {
+    setLocale(LocaleMgr::getSystemLocaleMgr()->getDefaultLocaleName());
     setVersificationSystem("KJV");
     copyFrom(ikey);
 }
 
 VerseKey::VerseKey(VerseKey const &k) : SWKey(k)
 {
+    setLocale(LocaleMgr::getSystemLocaleMgr()->getDefaultLocaleName());
     copyFrom(k);
 }
 
@@ -190,6 +203,7 @@ void VerseKey::positionFrom(const SWKey &ikey) {
  */
 
 void VerseKey::copyFrom(const VerseKey &ikey) {
+    setLocale(ikey.getLocale());
     m_autonorm = ikey.m_autonorm;
     m_intros = ikey.m_intros;
     m_userData = ikey.m_userData;
@@ -240,6 +254,28 @@ std::shared_ptr<SWKey> VerseKey::clone() const
  */
 
 VerseKey::~VerseKey() {}
+
+
+/******************************************************************************
+ * VerseKey::getPrivateLocale - Gets a real locale object from our name
+ *
+ * RET:    locale object associated with our name
+ */
+
+SWLocale & VerseKey::getPrivateLocale() const {
+    if (!m_locale) {
+        if ((!g_localeCache.name.empty()) || (g_localeCache.name != m_localeName)) {
+            g_localeCache.name = m_localeName;
+            // this line is the entire bit of work we're trying to avoid with the cache
+            // worth it?  compare time examples/cmdline/search KJV "God love world" to
+            // same with this method reduced to:
+            // if (!local) local = ... (call below); return locale;
+            g_localeCache.locale = LocaleMgr::getSystemLocaleMgr()->getLocale(m_localeName.c_str());
+        }
+        m_locale = g_localeCache.locale;
+    }
+    return *m_locale;
+}
 
 
 bool VerseKey::isBoundSet() const noexcept { return m_boundSet; }
