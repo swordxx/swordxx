@@ -104,6 +104,18 @@ bool endsWith(std::string_view str, std::string_view suffix) {
     #endif
 }
 
+std::pair<bool, std::size_t> getPrefixSize(char const * const buf,
+                                           char const separator)
+{
+    if (const char * const m = std::strchr(buf, separator))
+        return std::make_pair(true, std::size_t(m - buf));
+    return std::make_pair(false, std::size_t(0u));
+}
+
+std::pair<bool, std::size_t> getPrefixSize(std::string const & buf,
+                                           char const separator)
+{ return getPrefixSize(buf.c_str(), separator); }
+
 std::string stripPrefix(std::string & str, char const separator) {
     char const * m = str.c_str();
     while (*m && *m != separator)
