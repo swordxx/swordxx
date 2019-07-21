@@ -81,10 +81,10 @@ SWLocale::SWLocale(const char *ifilename) {
 
 SWLocale::~SWLocale() noexcept = default;
 
-std::string SWLocale::translateText(std::string_view text)
+std::string SWLocale::translateText(std::string_view text) const
 { return translate(m_textTranslations, std::move(text)); }
 
-std::string SWLocale::translatePrefAbbrev(std::string_view abbrev)
+std::string SWLocale::translatePrefAbbrev(std::string_view abbrev) const
 { return translate(m_preferredAbbreviationTranslations, std::move(abbrev)); }
 
 void SWLocale::augment(SWLocale const & addFrom) {

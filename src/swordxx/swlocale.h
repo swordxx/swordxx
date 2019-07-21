@@ -72,8 +72,8 @@ public:
     */
     std::string const & getDescription() const noexcept { return m_description; }
 
-    std::string translateText(std::string_view text);
-    std::string translatePrefAbbrev(std::string_view abbrev);
+    std::string translateText(std::string_view text) const;
+    std::string translatePrefAbbrev(std::string_view abbrev) const;
 
     void augment(SWLocale const & addFrom);
 
