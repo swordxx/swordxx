@@ -78,10 +78,7 @@ class SWDLLEXPORT VerseKey : public SWKey {
 
     std::size_t m_userData = 0;
 
-    // for caching; don't use directly, call getPrivateLocale()
-    mutable std::shared_ptr<SWLocale> m_locale;
-    std::string m_localeName;
-    SWLocale & getPrivateLocale() const;
+    std::shared_ptr<SWLocale> m_locale;
 
 protected:
 
@@ -386,14 +383,14 @@ public:
     // DEBUG
     void validateCurrentLocale() const;
 
-    std::string const & getLocale() const noexcept
-    { return m_localeName; }
+    /** \returns a pointer to the locale used by this VerseKey. */
+    std::shared_ptr<SWLocale> locale() const noexcept { return m_locale; }
 
-    // this will force an on demand lookup of our locale:
-    void setLocale(std::string const & name) {
-        m_localeName = name;
-        m_locale = nullptr;
-    }
+    /**
+      \brief Sets the locale to use for this VerseKey instance.
+      \param[in] locale The locale to use, must not be nullptr.
+    */
+    void setLocale(std::shared_ptr<SWLocale> locale);
 
 
     // OPERATORS --------------------------------------------------------------------

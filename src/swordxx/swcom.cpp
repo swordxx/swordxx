@@ -24,7 +24,6 @@
 #include "swcom.h"
 
 #include "keys/versekey.h"
-#include "localemgr.h"
 #include "utilstr.h"
 
 
@@ -69,7 +68,6 @@ SWCom::getVerseKey(std::shared_ptr<SWKey const> thisKey) const {
 
     auto const r(std::make_shared<VerseKey>());
     r->setVersificationSystem(m_versification.c_str());
-    r->setLocale(LocaleMgr::getSystemLocaleMgr()->getDefaultLocaleName());
     r->positionFrom(*thisKey);
     return r;
 }
