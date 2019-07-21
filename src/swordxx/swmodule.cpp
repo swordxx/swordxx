@@ -188,6 +188,8 @@ char SWModule::setKey(std::string_view position) {
     return error = m_currentKey->popError();
 }
 
+std::string SWModule::getKeyText() const { return m_currentKey->getText(); }
+
 void SWModule::positionToTop() {
     m_currentKey->positionToTop();
     char saveError = m_currentKey->popError();
@@ -242,6 +244,12 @@ std::string SWModule::getRawEntry() const {
 
 bool SWModule::isWritable() const noexcept { return false; }
 
+void SWModule::setEntry(const char *, long) {}
+
+void SWModule::linkEntry(SWKey const &) {}
+
+void SWModule::deleteEntry() {}
+
 void SWModule::rawFilter(std::string & buf, SWKey const * key_) const
 { filterBuffer(*this, buf, key_, m_rawFilters); }
 
@@ -279,6 +287,9 @@ std::string SWModule::stripText(std::string buf) {
  */
 char const * SWModule::getRenderHeader() const
 { return m_renderFilters.empty() ? "" : m_renderFilters.front()->getHeader(); }
+
+bool SWModule::isLinked(SWKey const &, SWKey const &) const { return false; }
+bool SWModule::hasEntry(SWKey const &) const { return false; }
 
 std::string SWModule::renderText() const {
     m_entryAttributes.clear();

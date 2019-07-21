@@ -180,7 +180,7 @@ public:
      * gets the key text for the module.
      * do we really need this?
      */
-    virtual std::string getKeyText() const { return m_currentKey->getText(); }
+    virtual std::string getKeyText() const;
 
     std::string const & getName() const { return m_moduleName; }
     std::string const & getDescription() const { return m_moduleDescription; }
@@ -215,18 +215,15 @@ public:
     virtual bool isWritable() const noexcept;
 
     /** Modify the current module entry text - only if module isWritable() */
-    virtual void setEntry(const char *inbuf, long len= -1) {
-        (void) inbuf;
-        (void) len;
-    }
+    virtual void setEntry(const char *inbuf, long len= -1);
 
     /** Link the current module entry to another module entry - only if
      *    module isWritable()
      */
-    virtual void linkEntry(SWKey const & sourceKey) { (void) sourceKey; }
+    virtual void linkEntry(SWKey const & sourceKey);
 
     /** Delete current module entry - only if module isWritable() */
-    virtual void deleteEntry() {}
+    virtual void deleteEntry();
 
     // end write interface ------------------------
 
@@ -408,8 +405,8 @@ public:
      */
     bool isSkipConsecutiveLinks() { return m_skipConsecutiveLinks; }
 
-    virtual bool isLinked(SWKey const &, SWKey const &) const { return false; }
-    virtual bool hasEntry(SWKey const &) const { return false; }
+    virtual bool isLinked(SWKey const &, SWKey const &) const;
+    virtual bool hasEntry(SWKey const &) const;
 
     /** Entry Attributes are special data pertaining to the current entry.
      *    To see what Entry Attributes exists for a specific entry of a module,
