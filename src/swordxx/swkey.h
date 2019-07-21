@@ -25,11 +25,9 @@
 #ifndef SWORDXX_SWKEY_H
 #define SWORDXX_SWKEY_H
 
-#include <cstdint>
 #include <memory>
 #include <string>
 #include "defs.h"
-#include "utilstr.h"
 
 
 namespace swordxx {

@@ -24,8 +24,7 @@
 
 #include "swkey.h"
 
-#include <cstring>
-#include "utilstr.h"
+#include <utility>
 
 
 namespace swordxx {
