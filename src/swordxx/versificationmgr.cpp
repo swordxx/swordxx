@@ -194,7 +194,7 @@ void VersificationMgr::System::loadFromSBook(sbook const * ot,
                                              unsigned char const * mappings)
 {
     int chap = 0;
-    int book = 0;
+    std::size_t book = 0u;
     long offset = 0;    // module heading
     offset++;            // testament heading
     while (ot->chapmax) {
@@ -214,7 +214,7 @@ void VersificationMgr::System::loadFromSBook(sbook const * ot,
         book++;
     }
     m_BMAX[0] = book;
-    book = 0;
+    book = 0u;
     m_ntStartOffset = offset;
     offset++;            // testament heading
     while (nt->chapmax) {

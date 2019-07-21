@@ -111,7 +111,7 @@ public:
     static long ntbks[];
     static long ntcps[];
 #endif
-    std::array<int, 2u> m_BMAX;
+    std::array<std::size_t, 2u> m_BMAX;
 
     /**
     * VerseKey Constructor - initializes Instance of VerseKey
@@ -238,7 +238,7 @@ public:
     * @return value of book
     */
     char getBook() const noexcept;
-    int getBookMax() const { return m_BMAX[m_testament-1]; }
+    std::size_t getBookMax() const { return m_BMAX[m_testament-1]; }
 
     /** Gets chapter
     *

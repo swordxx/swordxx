@@ -160,7 +160,7 @@ public: /* Types: */
                                 int * chapter,
                                 int * verse) const noexcept;
 
-        std::array<int, 2u> getBMAX() const noexcept { return m_BMAX; }
+        std::array<std::size_t, 2u> getBMAX() const noexcept { return m_BMAX; }
 
         long getNTStartOffset() const noexcept { return m_ntStartOffset; }
 
@@ -174,7 +174,7 @@ public: /* Types: */
 
         Private * m_p;
         std::string m_name;
-        std::array<int, 2u> m_BMAX{{0, 0}};
+        std::array<std::size_t, 2u> m_BMAX{{0, 0}};
         long m_ntStartOffset = 0;
 
     };
