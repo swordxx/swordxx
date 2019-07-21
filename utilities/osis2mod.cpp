@@ -103,7 +103,7 @@ bool isOSISAbbrev(const char *buf) {
     VersificationMgr::System const * av11n =
             vmgr->getVersificationSystem(
                 currentVerse->getVersificationSystem().c_str());
-    return av11n->getBookNumberByOSISName(buf) >= 0;
+    return av11n->bookNumberByOSISName(buf).has_value();
 }
 
 /**

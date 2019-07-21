@@ -100,20 +100,18 @@ void VerseKey::setFromOther(const VerseKey &ikey) {
         ikey.m_refSys->translateVerse(m_refSys, &map_book, &map_chapter, &map_verse, &map_range);
         //printf("verse: %s.%i.%i-%i\n",map_book,map_chapter,map_verse,map_range);
 
-        m_book = m_refSys->getBookNumberByOSISName(map_book);
-
-        // check existence
-        if (m_book == -1) {
+        if (auto const r = m_refSys->bookNumberByOSISName(map_book)) {
+            m_book = r.value() + 1u;
+            if (m_refSys->books()[m_book-1].getChapterMax() < map_chapter) {
+                map_chapter = m_refSys->books()[m_book-1].getChapterMax();
+                map_verse = m_refSys->books()[m_book-1].getVerseMax(map_chapter);
+                m_error = KEYERR_OUTOFBOUNDS;
+            } else if (map_chapter > 0 && m_refSys->books()[m_book-1].getVerseMax(map_chapter) < map_verse) {
+                map_verse = m_refSys->books()[m_book-1].getVerseMax(map_chapter);
+                m_error = KEYERR_OUTOFBOUNDS;
+            }
+        } else {
             m_book = 1;
-            m_error = KEYERR_OUTOFBOUNDS;
-        }
-        else if (m_refSys->books()[m_book-1].getChapterMax() < map_chapter) {
-            map_chapter = m_refSys->books()[m_book-1].getChapterMax();
-            map_verse = m_refSys->books()[m_book-1].getVerseMax(map_chapter);
-            m_error = KEYERR_OUTOFBOUNDS;
-        }
-        else if (map_chapter > 0 && m_refSys->books()[m_book-1].getVerseMax(map_chapter) < map_verse) {
-            map_verse = m_refSys->books()[m_book-1].getVerseMax(map_chapter);
             m_error = KEYERR_OUTOFBOUNDS;
         }
 
@@ -348,10 +346,12 @@ void VerseKey::freshtext() const
  * RET:    book number or < 0 = not valid
  */
 
-int VerseKey::getBookFromAbbrev(std::string_view iabbr) const {
+std::optional<std::size_t> VerseKey::bookFromAbbrev(std::string_view iabbr)
+        const
+{
     iabbr = trimmedView(iabbr);
     if (iabbr.empty())
-        return -1;
+        return {};
 
     StringMgr* stringMgr = StringMgr::getSystemStringMgr();
 
@@ -372,23 +372,19 @@ int VerseKey::getBookFromAbbrev(std::string_view iabbr) const {
                 if (std::memcmp(abbr.data(), foundAbbr.c_str(), abbr.size()))
                     break;
                 auto const & osis = it->second;
-                auto const retVal =
-                        m_refSys->getBookNumberByOSISName(osis.c_str());
-                if (retVal >= 0)
-                    return retVal;
+                if (auto r = m_refSys->bookNumberByOSISName(osis.c_str()))
+                    return r;
             }
-            return -1;
+            return std::optional<std::size_t>();
         };
     std::string_view abbr(upperAbbr);
     for (int i = 0; i < 2; i++, abbr = iabbr) {
-        int r = scanAbbreviations(getPrivateLocale().bookAbbreviations(), abbr);
-        if (r >= 0)
+        if (auto r = scanAbbreviations(getPrivateLocale().bookAbbreviations(), abbr))
             return r;
-        r = scanAbbreviations(SWLocale::builtinBookAbbreviations(), abbr);
-        if (r >= 0)
+        if (auto r = scanAbbreviations(SWLocale::builtinBookAbbreviations(), abbr))
             return r;
     }
-    return -1;
+    return {};
 }
 
 
@@ -402,9 +398,13 @@ void VerseKey::validateCurrentLocale() const {
         for (std::size_t i = 0; i < books.size(); ++i) {
             std::string abbr(getPrivateLocale().translateText(books[i].getLongName()));
             trimString(abbr);
-            const int bn = getBookFromAbbrev(abbr);
-            if (bn != i+1) {
-                SWLog::getSystemLog()->logDebug("VerseKey::Book: %s does not have a matching toupper abbrevs entry! book number returned was: %d, should be %d. Required entry to add to locale:", abbr.c_str(), bn, i);
+            auto const bn = bookFromAbbrev(abbr);
+            if (!bn || (bn.value() != i)) {
+                if (bn) {
+                    SWLog::getSystemLog()->logDebug("VerseKey::Book: %s does not have a matching toupper abbrevs entry! book number returned was: %zu, should be %zu. Required entry to add to locale:", abbr.c_str(), bn.value(), i);
+                } else {
+                    SWLog::getSystemLog()->logDebug("VerseKey::Book: %s does not have a matching toupper abbrevs entry! book number returned was: -1, should be %zu. Required entry to add to locale:", abbr.c_str(), i);
+                }
 
                 StringMgr* stringMgr = StringMgr::getSystemStringMgr();
                 stringMgr->upperUTF8(abbr);
@@ -453,7 +453,7 @@ ListKey VerseKey::parseVerseList(const char *buf, const char *defaultKey, bool e
     number.reserve(10u);
     char suffix = 0;
     int chap = -1, verse = -1;
-    int bookno = 0;
+    std::optional<std::size_t> bookno;
     bool comma = false;
     bool dash = false;
     ListKey tmpListKey;
@@ -537,7 +537,7 @@ ListKey VerseKey::parseVerseList(const char *buf, const char *defaultKey, bool e
             if (chap == -1) {
                 book.push_back(*buf);
                 book.push_back(*(buf + 1u));
-                if (getBookFromAbbrev(book) > -1) {
+                if (bookFromAbbrev(book)) {
                     book.pop_back();
                     buf++;
                     break;
@@ -555,7 +555,7 @@ terminate_range:
                 else    chap = std::atoi(number.c_str());
                 number.clear();
             }
-            bookno = -1;
+            bookno.reset();
             if (!book.empty()) {
                 auto loop = book.size() - 1u;
 
@@ -623,33 +623,33 @@ terminate_range:
                 if (caseInsensitiveEquals(book, "ch") || caseInsensitiveEquals(book, "chap")) {    // Verse abbrev
                     book = lastKey->getBookName();
                 }
-                bookno = getBookFromAbbrev(book);
-                if ((bookno > -1) && (suffix == 'f') && (book.back() == 'f')) {
+                bookno = bookFromAbbrev(book);
+                if (bookno && (suffix == 'f') && (book.back() == 'f')) {
                     suffix = 0;
                 }
             }
-            if (((bookno > -1) || book.empty()) && (!book.empty() || (chap >= 0) || (verse >= 0))) {
+            if ((bookno || book.empty()) && (!book.empty() || (chap >= 0) || (verse >= 0))) {
                 char partial = 0;
                 curKey->setVerse(1);
                 curKey->setChapter(1);
                 curKey->setBook(1);
 
-                if (bookno < 0) {
+                if (!bookno) {
                     curKey->setTestament(lastKey->getTestament());
                     curKey->setBook(lastKey->getBook());
                 }
                 else {
                     char t = 1;
-                    if (bookno > m_BMAX[0]) {
+                    if (bookno.value() >= m_BMAX[0]) {
                         t++;
-                        bookno -= m_BMAX[0];
+                        bookno.value() -= m_BMAX[0];
                     }
                     curKey->setTestament(t);
-                    curKey->setBook(bookno);
+                    curKey->setBook(bookno.value() + 1u);
                 }
 
 
-                if (((comma)||((verse < 0)&&(bookno < 0)))&&(!lastPartial)) {
+                if (((comma)||((verse < 0)&&!bookno))&&(!lastPartial)) {
 //                if (comma) {
                     curKey->setChapter(lastKey->getChapter());
                     curKey->setVerse(chap);  // chap because this is the first number captured
@@ -809,7 +809,7 @@ terminate_range:
                     break;
                 default:
                     // suffixes (and oddly 'f'-- ff.)
-                    if ((charIsLower(*buf) && (chap >=0 || bookno > -1 || lastKey->isBoundSet()))
+                    if ((charIsLower(*buf) && (chap >=0 || bookno || lastKey->isBoundSet()))
                             || *buf == 'f') {
                         // if suffix is already an 'f', then we need to mark if we're doubleF.
                         doubleF = (*buf == 'f' && suffix == 'f');
@@ -906,32 +906,32 @@ terminate_range:
         if (caseInsensitiveEquals(book, "ch") || caseInsensitiveEquals(book, "chap")) {    // Verse abbrev
             book = lastKey->getBookName();
         }
-        bookno = getBookFromAbbrev(book);
-        if ((bookno > -1) && (suffix == 'f') && (book.back() == 'f')) {
+        bookno = bookFromAbbrev(book);
+        if (bookno && (suffix == 'f') && (book.back() == 'f')) {
             suffix = 0;
         }
     }
-    if (((bookno > -1) || book.empty()) && (!book.empty() || (chap >= 0) || (verse >= 0))) {
+    if ((bookno || book.empty()) && (!book.empty() || (chap >= 0) || (verse >= 0))) {
         char partial = 0;
         curKey->setVerse(1);
         curKey->setChapter(1);
         curKey->setBook(1);
 
-        if (bookno < 0) {
+        if (!bookno) {
             curKey->setTestament(lastKey->getTestament());
             curKey->setBook(lastKey->getBook());
         }
         else {
             char t = 1;
-            if (bookno > m_BMAX[0]) {
+            if (bookno.value() >= m_BMAX[0]) {
                 t++;
-                bookno -= m_BMAX[0];
+                bookno.value() -= m_BMAX[0];
             }
             curKey->setTestament(t);
-            curKey->setBook(bookno);
+            curKey->setBook(bookno.value() + 1u);
         }
 
-        if (((comma)||((verse < 0)&&(bookno < 0)))&&(!lastPartial)) {
+        if (((comma)||((verse < 0)&&!bookno))&&(!lastPartial)) {
             curKey->setChapter(lastKey->getChapter());
             curKey->setVerse(chap);  // chap because this is the first number captured
             if (suffix) {
@@ -1488,14 +1488,13 @@ void VerseKey::setBook(char ibook)
  */
 
 void VerseKey::setBookName(std::string_view bookName) {
-    int bnum = getBookFromAbbrev(bookName);
-    if (bnum > -1) {
-        if (bnum > m_BMAX[0]) {
-            bnum -= m_BMAX[0];
+    if (auto bnum = bookFromAbbrev(bookName)) {
+        if (bnum.value() >= m_BMAX[0]) {
+            bnum.value() -= m_BMAX[0];
             m_testament = 2;
         }
         else    m_testament = 1;
-        setBook(bnum);
+        setBook(bnum.value() + 1u);
     }
     else m_error = KEYERR_OUTOFBOUNDS;
 }

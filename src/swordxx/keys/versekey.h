@@ -87,13 +87,13 @@ protected:
     signed char m_suffix = 0;
 
     /************************************************************************
-     * VerseKey::getBookFromAbbrev - Attempts to find a book no from a name or
+     * VerseKey::bookFromAbbrev - Attempts to find a book no from a name or
      *                           abbreviation
      *
      * ENT:    @param abbr - key for which to search;
-     * RET:    @return book number or < 0 = not valid
+     * RET:    @return book number or empty
      */
-    int getBookFromAbbrev(std::string_view abbr) const;
+    std::optional<std::size_t> bookFromAbbrev(std::string_view abbr) const;
 
     /** Refresh keytext based on testament|book|chapter|verse
     * default auto normalization to true

@@ -27,6 +27,7 @@
 #include <array>
 #include <list>
 #include <memory>
+#include <optional>
 #include <string>
 #include <utility>
 #include <vector>
@@ -142,7 +143,8 @@ public: /* Types: */
 
         std::string const & getName() const noexcept { return m_name; }
 
-        int getBookNumberByOSISName(char const * bookName) const noexcept;
+        std::optional<std::size_t> bookNumberByOSISName(
+                std::string const & bookName) const noexcept;
 
         std::vector<Book> const & books() const noexcept;
 

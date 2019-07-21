@@ -97,7 +97,7 @@ class VersificationMgr::System::Private {
 public:
     /** Array[chapmax] of maximum verses in chapters */
     std::vector<Book> m_books;
-    std::map<std::string, int> m_osisLookup;
+    std::map<std::string, std::size_t> m_osisLookup;
     /** General mapping rule is that first verse of every chapter corresponds first
         verse of another chapter in default intermediate canon(kjva), so mapping data
         contains expections. Intermediate canon could not contain corresponding data.
@@ -173,9 +173,13 @@ VersificationMgr::System::~System() {
 }
 
 
-int VersificationMgr::System::getBookNumberByOSISName(const char *bookName) const noexcept {
+std::optional<std::size_t> VersificationMgr::System::bookNumberByOSISName(
+        std::string const & bookName) const noexcept
+{
     auto const it(m_p->m_osisLookup.find(bookName));
-    return (it != m_p->m_osisLookup.end()) ? it->second : -1;
+    if (it != m_p->m_osisLookup.end())
+        return it->second;
+    return {};
 }
 
 
@@ -199,7 +203,7 @@ void VersificationMgr::System::loadFromSBook(sbook const * ot,
                                              ot->prefAbbrev,
                                              ot->chapmax);
         offset++;        // book heading
-        m_p->m_osisLookup[b.getOSISName()] = m_p->m_books.size();
+        m_p->m_osisLookup[b.getOSISName()] = m_p->m_books.size() - 1u;
         for (int i = 0; i < ot->chapmax; i++) {
             b.m_p->m_verseMax.push_back(chMax[chap]);
             offset++;        // chapter heading
@@ -219,7 +223,7 @@ void VersificationMgr::System::loadFromSBook(sbook const * ot,
                                              nt->prefAbbrev,
                                              nt->chapmax);
         offset++;        // book heading
-        m_p->m_osisLookup[b.getOSISName()] = m_p->m_books.size();
+        m_p->m_osisLookup[b.getOSISName()] = m_p->m_books.size() - 1u;
         for (int i = 0; i < nt->chapmax; i++) {
             b.m_p->m_verseMax.push_back(chMax[chap]);
             offset++;        // chapter heading
@@ -437,13 +441,13 @@ void VersificationMgr::System::translateVerse(const System *dstSys, const char *
             return;
         // reversed mapping
         SWLog::getSystemLog()->logDebug("Perform reversed mapping.\n");
-        int b = dstSys->getBookNumberByOSISName(*book)-1;
-
-        SWLog::getSystemLog()->logDebug("\tgetBookNumberByOSISName %i %s.\n", b, *book);
-
-        if (b < 0) {
+        auto b(dstSys->bookNumberByOSISName(*book));
+        if (b) {
+            SWLog::getSystemLog()->logDebug("\tbookNumberByOSISName %zu %s.\n", *b, *book);
+        } else {
+            SWLog::getSystemLog()->logDebug("\tbookNumberByOSISName -1 %s.\n", *book);
             SWLog::getSystemLog()->logDebug("\tmappingsExtraBooks.size() %i.\n", dstSys->m_p->m_mappingsExtraBooks.size());
-            for (int i=0; i<(int)dstSys->m_p->m_mappingsExtraBooks.size(); ++i) {
+            for (std::size_t i = 0u; i < dstSys->m_p->m_mappingsExtraBooks.size(); ++i) {
                 SWLog::getSystemLog()->logDebug("\t%s %s.\n", *book, dstSys->m_p->m_mappingsExtraBooks[i]);
                 if (!std::strcmp(*book, dstSys->m_p->m_mappingsExtraBooks[i])) {
                     b = m_p->m_books.size()+i-2;
@@ -454,7 +458,7 @@ void VersificationMgr::System::translateVerse(const System *dstSys, const char *
 
         SWLog::getSystemLog()->logDebug("\tb %i.\n", b);
 
-        if (b >= (int)dstSys->m_p->m_mappings.size() || b < 0) {
+        if (!b || b.value() >= dstSys->m_p->m_mappings.size()) {
             SWLog::getSystemLog()->logDebug("no modification");
             return;
         }
@@ -462,8 +466,7 @@ void VersificationMgr::System::translateVerse(const System *dstSys, const char *
         unsigned char const * a = nullptr;
 
         // reversed mapping should use forward search for item
-        for (unsigned int i=0; i<dstSys->m_p->m_mappings[b].size(); ++i) {
-            const unsigned char *m = dstSys->m_p->m_mappings[b][i];
+        for (auto m : dstSys->m_p->m_mappings[*b]) {
             if (m[4] == *chapter && m[5] <= *verse) {
                 SWLog::getSystemLog()->logDebug("found mapping %i %i %i %i %i %i\n",m[1],m[2],m[3],m[4],m[5],m[6]);
                 if (m[5] == *verse || (m[6] >= *verse && m[5] <= *verse)) {
@@ -526,12 +529,15 @@ void VersificationMgr::System::translateVerse(const System *dstSys, const char *
     }
     else {
         SWLog::getSystemLog()->logDebug("Perform forward mapping.\n");
-        const int b = getBookNumberByOSISName(*book)-1;
-        if (b >= (int)m_p->m_mappings.size())
+        auto const b(bookNumberByOSISName(*book));
+        if (!b || b.value() >= m_p->m_mappings.size())
             return;
         // forward mapping should use reversed search for item
-        for (int i=m_p->m_mappings[b].size()-1; i>=0; --i) {
-            const unsigned char *m = m_p->m_mappings[b][i];
+        for (auto rit = m_p->m_mappings[*b].rbegin();
+             rit != m_p->m_mappings[*b].rend();
+             ++rit)
+        {
+            auto const m(*rit);
             if (m[1] < *chapter) {
                 SWLog::getSystemLog()->logWarning("There is no mapping for this chapter.\n");
                 return;
