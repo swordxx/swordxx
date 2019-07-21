@@ -163,48 +163,39 @@ void InstallMgr::terminate() {
 
 
 bool InstallMgr::removeModule(SWMgr & manager, std::string const & moduleName) {
-    SectionMap::iterator module;
-    ConfigEntMap::iterator fileBegin;
-    ConfigEntMap::iterator fileEnd, entry;
-
-    module = manager.config->sections().find(moduleName);
-
-    if (module != manager.config->sections().end()) {
-        // save our own copy, cuz when we remove the module from the SWMgr
-        // it's likely we'll free the memory passed to us in moduleName
+    if (auto const module = manager.config->sections().find(moduleName);
+        module != manager.config->sections().end())
+    {
+        /* Save our own copy, cuz when we remove the module from the SWMgr it's
+           likely we'll free the memory passed to us in moduleName: */
         auto const modName(moduleName);
 
-        // to be sure all files are closed
-        // this does not remove the .conf information from SWMgr
+        /* To be sure all files are closed (this does not remove the .conf
+           information from SWMgr): */
         manager.deleteModule(modName.c_str());
 
-        fileBegin = module->second.lower_bound("File");
-        fileEnd = module->second.upper_bound("File");
+        auto fileBegin(module->second.lower_bound("File"));
+        auto const fileEnd(module->second.upper_bound("File"));
 
-        entry = module->second.find("AbsoluteDataPath");
-        NormalizedPath const modDir(entry->second);
-        if (fileBegin != fileEnd) {    // remove each file
-            while (fileBegin != fileEnd) {
-                //remove file
+        NormalizedPath const modDir(
+                    module->second.find("AbsoluteDataPath")->second);
+        if (fileBegin != fileEnd) { // Remove each file:
+            for (; fileBegin != fileEnd; ++fileBegin)
                 FileMgr::removeFile(
                             (modDir.str() + '/' + fileBegin->second).c_str());
-                fileBegin++;
-            }
-        }
-        else {    //remove all files in DataPath directory
+        } else { // Remove all files in DataPath directory:
             FileMgr::removeDir(modDir.c_str());
 
-            if (auto dir = DirectoryEnumerator(manager.m_configPath)) {    // find and remove .conf file
+            // Find and remove .conf file:
+            if (auto dir = DirectoryEnumerator(manager.m_configPath)) {
                 while (auto ent = dir.readEntry()) {
                     std::string modFile(manager.m_configPath);
                     removeTrailingDirectorySlashes(modFile);
                     modFile += "/";
                     modFile += ent;
-                    if ([&modFile, &modName]() {
-                            SWConfig config(modFile);
-                            auto const & sections = config.sections();
-                            return sections.find(modName) != sections.end();
-                        }())
+                    SWConfig config(modFile);
+                    auto const & sections = config.sections();
+                    if (sections.find(modName) != sections.end())
                         FileMgr::removeFile(modFile.c_str());
                 }
             }
