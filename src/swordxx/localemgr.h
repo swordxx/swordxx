@@ -100,7 +100,7 @@ public: /* Methods: */
     *
     * @param name The name of the new default locale
     */
-    virtual void setDefaultLocaleName(char const * name);
+    virtual void setDefaultLocaleName(std::string_view defaultLocaleName);
 
     /** The LocaleMgr object used globally in the Sword++ world.
       * Do not create your own LocaleMgr, use this static object instead.

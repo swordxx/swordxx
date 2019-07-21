@@ -182,29 +182,27 @@ std::string LocaleMgr::translate(std::string_view text,
     return std::string(text);
 }
 
-void LocaleMgr::setDefaultLocaleName(char const * const name) {
-    assert(name);
-    std::string tmplang(name);
+void LocaleMgr::setDefaultLocaleName(std::string_view defaultLocaleName) {
     static auto const stripStartingFromChar =
-            [](std::string & str, char const delim) noexcept {
+            [](std::string_view & str, char const delim) noexcept {
                 auto const i = str.find(delim);
                 if (i != std::string::npos)
-                    str.resize(i);
+                    str = str.substr(0, i);
             };
     // discard everything after '.' usually encoding e.g. .UTF-8
-    stripStartingFromChar(tmplang, '.');
+    stripStartingFromChar(defaultLocaleName, '.');
     // also discard after '@' so e.g. @euro locales are found
-    stripStartingFromChar(tmplang, '@');
+    stripStartingFromChar(defaultLocaleName, '@');
 
-    m_defaultLocaleName = tmplang;
-
+    auto toSet(defaultLocaleName);
     // First check for what we ask for
-    if (m_locales.find(tmplang) == m_locales.end()) {
+    if (m_locales.find(defaultLocaleName) == m_locales.end()) {
         // check for locale without country
-        stripStartingFromChar(tmplang, '_');
-        if (m_locales.find(tmplang) != m_locales.end())
-            m_defaultLocaleName = std::move(tmplang);
+        stripStartingFromChar(defaultLocaleName, '_');
+        if (m_locales.find(defaultLocaleName) != m_locales.end())
+            toSet = std::move(defaultLocaleName);
     }
+    m_defaultLocaleName = std::move(toSet);
 }
 
 } /* namespace swordxx */
