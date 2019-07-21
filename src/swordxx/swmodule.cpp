@@ -54,47 +54,45 @@ namespace {
 
 void prepareText(std::string &buf) {
     decltype(buf.size()) to, from;
-    char space = 0, cr = 0, realdata = 0, nlcnt = 0;
-    for (to = from = 0u; buf[from]; from++) {
+    bool space = false;
+    bool cr = false;
+    bool realdata = false;
+    std::size_t nlcnt = 0u;
+    for (to = from = 0u; buf[from]; ++from) {
         switch (buf[from]) {
-        case 10:
+        case '\n':
             if (!realdata)
                 continue;
-            space = (cr) ? 0 : 1;
-            cr = 0;
-            nlcnt++;
-            if (nlcnt > 1) {
-//                *to++ = nl;
+            space = !cr;
+            cr = false;
+            if (++nlcnt > 1) {
                 buf[to++] = 10;
-//                *to++ = nl[1];
-//                nlcnt = 0;
             }
             continue;
-        case 13:
+        case '\r':
             if (!realdata)
                 continue;
-//            *to++ = nl[0];
-            buf[to++] = 10;
-            space = 0;
-            cr = 1;
+            buf[to++] = '\n';
+            space = false;
+            cr = true;
             continue;
         }
-        realdata = 1;
-        nlcnt = 0;
+        realdata = true;
+        nlcnt = 0u;
         if (space) {
-            space = 0;
+            space = false;
             if (buf[from] != ' ') {
                 buf[to++] = ' ';
-                from--;
+                --from;
                 continue;
             }
         }
         buf[to++] = buf[from];
     }
     buf.resize(to);
-    while (to > 1) {            // remove trailing excess
-        to--;
-        if ((buf[to] == 10) || (buf[to] == ' '))
+    while (to > 1u) { // remove trailing excess
+        --to;
+        if ((buf[to] == '\n') || (buf[to] == ' '))
             buf.resize(to);
         else break;
     }
