@@ -47,19 +47,6 @@ namespace swordxx {
 /******************************************************************************
  * VerseKey Constructor - initializes instance of VerseKey
  *
- * ENT:    ikey - base key (will take various forms of 'BOOK CH:VS'.  See
- *        VerseKey::parse for more detailed information)
- */
-
-VerseKey::VerseKey(const SWKey &ikey) : SWKey(ikey)
-{
-    setVersificationSystem("KJV");
-    copyFrom(ikey);
-}
-
-/******************************************************************************
- * VerseKey Constructor - initializes instance of VerseKey
- *
  * ENT:    ikey - text key (will take various forms of 'BOOK CH:VS'.  See
  *        VerseKey::parse for more detailed information)
  */
@@ -71,6 +58,35 @@ VerseKey::VerseKey(const char *ikeyText) : SWKey(ikeyText)
         parse();
 }
 
+VerseKey::VerseKey(const char *min, const char *max, const char *v11n) : SWKey()
+{
+    setVersificationSystem(v11n);
+    ListKey tmpListKey = parseVerseList(min);
+    if (tmpListKey.getCount())
+        setLowerBoundKey(static_cast<VerseKey &>(*tmpListKey.getElement(0u)));
+    tmpListKey = parseVerseList(max, min, true);
+    if (tmpListKey.getCount()) {
+        auto const newElement_(tmpListKey.getElement(0u));
+        auto const & newElement = static_cast<VerseKey const &>(*newElement_);
+        setUpperBoundKey(newElement.isBoundSet()
+                         ? newElement.upperBoundKey()
+                         : newElement);
+    }
+    positionToTop();
+}
+
+/******************************************************************************
+ * VerseKey Constructor - initializes instance of VerseKey
+ *
+ * ENT:    ikey - base key (will take various forms of 'BOOK CH:VS'.  See
+ *        VerseKey::parse for more detailed information)
+ */
+
+VerseKey::VerseKey(const SWKey &ikey) : SWKey(ikey)
+{
+    setVersificationSystem("KJV");
+    copyFrom(ikey);
+}
 
 VerseKey::VerseKey(VerseKey const &k) : SWKey(k)
 {
@@ -211,24 +227,6 @@ void VerseKey::copyFrom(const SWKey &ikey) {
 // SWKey::copyFrom already calls setText, which VerseKey::setText already calls parse()
 //        parse();
     }
-}
-
-
-VerseKey::VerseKey(const char *min, const char *max, const char *v11n) : SWKey()
-{
-    setVersificationSystem(v11n);
-    ListKey tmpListKey = parseVerseList(min);
-    if (tmpListKey.getCount())
-        setLowerBoundKey(static_cast<VerseKey &>(*tmpListKey.getElement(0u)));
-    tmpListKey = parseVerseList(max, min, true);
-    if (tmpListKey.getCount()) {
-        auto const newElement_(tmpListKey.getElement(0u));
-        auto const & newElement = static_cast<VerseKey const &>(*newElement_);
-        setUpperBoundKey(newElement.isBoundSet()
-                         ? newElement.upperBoundKey()
-                         : newElement);
-    }
-    positionToTop();
 }
 
 std::shared_ptr<SWKey> VerseKey::clone() const
