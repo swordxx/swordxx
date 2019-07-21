@@ -309,8 +309,6 @@ char VerseKey::parse(bool checkAutoNormalize)
 void VerseKey::freshtext() const
 {
     char buf[2024];
-    int realTest = m_testament;
-    int realbook = m_book;
 
     if (m_book < 1) {
         if (m_testament < 1)
@@ -318,13 +316,6 @@ void VerseKey::freshtext() const
         else sprintf(buf, "[ Testament %d Heading ]", (int)m_testament);
     }
     else {
-        if (realbook > m_BMAX[realTest-1]) {
-            realbook -= m_BMAX[realTest-1];
-            if (realTest < 2)
-                realTest++;
-            if (realbook > m_BMAX[realTest-1])
-                realbook = m_BMAX[realTest-1];
-        }
         sprintf(buf, "%s %d:%d", getBookName().c_str(), m_chapter, m_verse);
         if (m_suffix) {
             buf[std::strlen(buf)+1] = 0;
