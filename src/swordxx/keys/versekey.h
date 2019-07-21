@@ -155,7 +155,7 @@ public:
     */
     ~VerseKey() override;
 
-    bool isBoundSet() const noexcept final override;
+    bool isBoundSet() const noexcept final override { return m_boundSet; }
 
     /** sets the lower boundary for this VerseKey
     *
@@ -233,39 +233,25 @@ public:
     void setBookName(std::string_view bookName);
 
     std::string getBookAbbrev() const;
-    /** Gets testament
-    *
-    * @return value of testament
-    */
-    char getTestament() const noexcept;
+
+    /** \returns the number of the testament (or 0 for introduction/heading). */
+    char getTestament() const noexcept { return m_testament; }
     int getTestamentMax() const { return 2; }
 
-    /** Gets book
-    *
-    * @return value of book
-    */
-    char getBook() const noexcept;
+    /** \returns the number of the book (or 0 for introduction/heading). */
+    char getBook() const noexcept { return m_book; }
     std::size_t getBookMax() const { return m_BMAX[m_testament-1]; }
 
-    /** Gets chapter
-    *
-    * @return value of chapter
-    */
-    int getChapter() const noexcept;
+    /** \returns the number of the chapter (or 0 for introduction/heading). */
+    int getChapter() const noexcept { return m_chapter; }
     int getChapterMax() const;
 
-    /** Gets verse
-    *
-    * @return value of verse
-    */
-    int getVerse() const noexcept;
+    /** \returns the number of the verse (or 0 for introduction/heading). */
+    int getVerse() const noexcept { return m_verse; }
     int getVerseMax() const;
 
-    /** Gets verse suffix
-    *
-    * @return value of verse suffix
-    */
-    char getSuffix() const noexcept;
+    /** \returns the number of verse suffix. */
+    char getSuffix() const noexcept { return m_suffix; }
 
     /** Sets testament
     *
@@ -310,12 +296,18 @@ public:
     * @param iautonorm value which to set autonorm
     */
     void setAutoNormalize(bool iautonorm);
-    bool isAutoNormalize() const;
+
+    /** \returns whether this VerseKey is set to automatically normalize itself
+                 when modified. */
+    bool isAutoNormalize() const { return m_autonorm; }
 
     /** The Intros property determine whether or not to include
     * chapter/book/testament/module intros
     */
     void setIntros(bool val);
+
+    /** \returns whether this VerseKey is set to include introductions for
+                 chapters, books, testaments and modules. */
     bool isIntros() const;
 
 

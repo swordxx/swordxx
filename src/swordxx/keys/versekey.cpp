@@ -278,9 +278,6 @@ SWLocale & VerseKey::getPrivateLocale() const {
 }
 
 
-bool VerseKey::isBoundSet() const noexcept { return m_boundSet; }
-
-
 void VerseKey::setVersificationSystem(const char *name) {
     const VersificationMgr::System *newRefSys = VersificationMgr::systemVersificationMgr()->getVersificationSystem(name);
     // TODO: cheese, but what should we do if requested v11n system isn't found?
@@ -1423,54 +1420,6 @@ void VerseKey::normalize(bool autocheck)
 
 
 /******************************************************************************
- * VerseKey::getTestament - Gets testament
- *
- * RET:    value of testament
- */
-
-char VerseKey::getTestament() const noexcept
-{
-    return m_testament;
-}
-
-
-/******************************************************************************
- * VerseKey::getBook - Gets book
- *
- * RET:    value of book
- */
-
-char VerseKey::getBook() const noexcept
-{
-    return m_book;
-}
-
-
-/******************************************************************************
- * VerseKey::getChapter - Gets chapter
- *
- * RET:    value of chapter
- */
-
-int VerseKey::getChapter() const noexcept
-{
-    return m_chapter;
-}
-
-
-/******************************************************************************
- * VerseKey::getVerse - Gets verse
- *
- * RET:    value of verse
- */
-
-int VerseKey::getVerse() const noexcept
-{
-    return m_verse;
-}
-
-
-/******************************************************************************
  * VerseKey::setTestament - Sets/gets testament
  *
  * ENT:    itestament - value which to set testament
@@ -1557,23 +1506,8 @@ void VerseKey::setVerse(int iverse)
     normalize(true);
 }
 
-
-char VerseKey::getSuffix() const noexcept {
-    return m_suffix;
-}
-
 void VerseKey::setSuffix(char suf) noexcept {
     m_suffix = suf;
-}
-
-/******************************************************************************
- * VerseKey::isAutoNormalize - gets flag that tells VerseKey to auto-
- *                matically normalize itself when modified
- */
-
-bool VerseKey::isAutoNormalize() const
-{
-    return m_autonorm;
 }
 
 void VerseKey::setAutoNormalize(bool iautonorm)
@@ -1595,11 +1529,6 @@ void VerseKey::setIntros(bool val)
 {
     m_intros = val;
     normalize(true);
-}
-
-bool VerseKey::isIntros() const
-{
-    return m_intros;
 }
 
 
