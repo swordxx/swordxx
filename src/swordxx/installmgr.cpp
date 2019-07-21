@@ -89,83 +89,51 @@ void InstallMgr::readInstallConf() {
 
     clearSources();
 
-    setFTPPassive(!caseInsensitiveEquals((*installConf)["General"]["PassiveFTP"].c_str(), "false") != 0);
+    setFTPPassive(
+                !caseInsensitiveEquals(
+                    (*installConf)["General"]["PassiveFTP"].c_str(),
+                    "false"));
 
-    SectionMap::iterator confSection = installConf->sections().find("Sources");
-    ConfigEntMap::iterator sourceBegin;
-    ConfigEntMap::iterator sourceEnd;
-
-    if (confSection != installConf->sections().end()) {
-
-        sourceBegin = confSection->second.lower_bound("FTPSource");
-        sourceEnd = confSection->second.upper_bound("FTPSource");
-
-        while (sourceBegin != sourceEnd) {
-            auto const is(std::make_shared<InstallSource>(
-                              "FTP",
-                              sourceBegin->second.c_str()));
-            sources[is->m_caption] = is;
-            std::string parent = m_privatePath + is->m_uid + "/file";
-            FileMgr::createParent(parent.c_str());
-            is->m_localShadow = m_privatePath + is->m_uid;
-            sourceBegin++;
-        }
-
+    if (auto const confSection = installConf->sections().find("Sources");
+        confSection != installConf->sections().end())
+    {
+        auto const addSources =
+                [this](auto & section,
+                       char const * const keyName,
+                       char const * const sourceTypeName)
+                {
+                    auto const e(section.second.upper_bound(keyName));
+                    for (auto it = section.second.lower_bound(keyName);
+                         it != e;
+                         ++it)
+                    {
+                        auto const is(std::make_shared<InstallSource>(
+                                          sourceTypeName,
+                                          it->second.c_str()));
+                        sources[is->m_caption] = is;
+                        auto const parent(m_privatePath + is->m_uid + "/file");
+                        FileMgr::createParent(parent.c_str());
+                        is->m_localShadow = m_privatePath + is->m_uid;
+                    }
+                };
+        addSources(*confSection, "FTPSource", "FTP");
 #if SWORDXX_CURL_HAS_SFTP
-        sourceBegin = confSection->second.lower_bound("SFTPSource");
-        sourceEnd   = confSection->second.upper_bound("SFTPSource");
-
-        while (sourceBegin != sourceEnd) {
-            auto const is(std::make_shared<InstallSource>(
-                              "SFTP",
-                              sourceBegin->second.c_str()));
-            sources[is->caption] = is;
-            std::string parent = privatePath + is->uid + "/file";
-            FileMgr::createParent(parent.c_str());
-            is->localShadow = privatePath + is->uid;
-            sourceBegin++;
-        }
+        addSources(*confSection, "SFTPSource", "SFTP");
 #endif // SWORDXX_CURL_HAS_SFTP
-
-        sourceBegin = confSection->second.lower_bound("HTTPSource");
-        sourceEnd = confSection->second.upper_bound("HTTPSource");
-
-        while (sourceBegin != sourceEnd) {
-            auto const is(std::make_shared<InstallSource>(
-                              "HTTP",
-                              sourceBegin->second.c_str()));
-            sources[is->m_caption] = is;
-            std::string parent = m_privatePath + is->m_uid + "/file";
-            FileMgr::createParent(parent.c_str());
-            is->m_localShadow = m_privatePath + is->m_uid;
-            sourceBegin++;
-        }
-
-        sourceBegin = confSection->second.lower_bound("HTTPSSource");
-        sourceEnd   = confSection->second.upper_bound("HTTPSSource");
-
-        while (sourceBegin != sourceEnd) {
-            auto const is(std::make_shared<InstallSource>(
-                              "HTTPS",
-                              sourceBegin->second.c_str()));
-            sources[is->m_caption] = is;
-            std::string parent = m_privatePath + is->m_uid + "/file";
-            FileMgr::createParent(parent.c_str());
-            is->m_localShadow = m_privatePath + is->m_uid;
-            sourceBegin++;
-        }
+        addSources(*confSection, "HTTPSource", "HTTP");
+        addSources(*confSection, "HTTPSSource", "HTTPS");
     }
 
     m_defaultMods.clear();
-    confSection = installConf->sections().find("General");
-    if (confSection != installConf->sections().end()) {
-        sourceBegin = confSection->second.lower_bound("DefaultMod");
-        sourceEnd = confSection->second.upper_bound("DefaultMod");
+    if (auto const confSection = installConf->sections().find("General");
+        confSection != installConf->sections().end())
+    {
+        auto const e(confSection->second.upper_bound("DefaultMod"));
+        for (auto it = confSection->second.lower_bound("DefaultMod");
+             it != e;
+             ++it)
+            m_defaultMods.insert(it->second.c_str());
 
-        while (sourceBegin != sourceEnd) {
-            m_defaultMods.insert(sourceBegin->second.c_str());
-            sourceBegin++;
-        }
     }
 }
 
