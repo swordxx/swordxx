@@ -148,6 +148,8 @@ SWModule::SWModule(std::shared_ptr<SWKey> key_,
 
 SWModule::~SWModule() = default;
 
+void SWModule::flush() {}
+
 
 /******************************************************************************
  * SWModule::popError - Gets and clears error status
@@ -163,6 +165,10 @@ char SWModule::popError()
     if (!retval) retval = m_currentKey->popError();
     return retval;
 }
+
+
+bool SWModule::isUnicode() const noexcept
+{ return (m_textEncoding == ENC_UTF8 || m_textEncoding == ENC_SCSU); }
 
 
 /******************************************************************************

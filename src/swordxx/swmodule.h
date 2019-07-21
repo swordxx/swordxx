@@ -126,7 +126,7 @@ public:
     SWModule & operator=(SWModule &&) = delete;
     SWModule & operator=(SWModule const &) = delete;
 
-    virtual void flush() {}
+    virtual void flush();
 
     /** Gets and clears error status
      *
@@ -137,8 +137,7 @@ public:
     /**
      * @return  True if this module is encoded in Unicode, otherwise returns false.
      */
-    bool isUnicode() const
-    { return (m_textEncoding == ENC_UTF8 || m_textEncoding == ENC_SCSU); }
+    bool isUnicode() const noexcept;
 
     // These methods are useful for modules that come from a standard Sword++ install (most do).
     // SWMgr will call setConfig.  The user may use getConfig and getConfigEntry (if they
