@@ -25,22 +25,22 @@
 #ifndef SWORDXX_SWMODULE_H
 #define SWORDXX_SWMODULE_H
 
-#ifndef    _WIN32_WCE
-#include <iostream>
-#endif
 #include <list>
 #include <map>
+#include <memory>
+#include <string>
+#include <string_view>
 #include <type_traits>
+#include <utility>
 #include "defs.h"
-#include "keys/listkey.h"
 #include "swconfig.h"
-
 
 
 namespace swordxx {
 
-class SWOptionFilter;
 class SWFilter;
+class SWKey;
+class SWOptionFilter;
 
 using AttributeValue = std::map<std::string, std::string>;
 

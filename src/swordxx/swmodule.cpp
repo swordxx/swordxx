@@ -24,31 +24,12 @@
 
 #include "swmodule.h"
 
-#include <cstdint>
-#ifndef _MSC_VER
-#include <iostream>
-#endif
-#include <memory>
-#ifdef USECXX11REGEX
-#include <regex>
-#else
-#include <regex.h>    // GNU
-#endif
-#include <vector>
-#include "filemgr.h"
-#include "keys/treekeyidx.h" // KLUDGE for Search
-#include "keys/versekey.h"   // KLUDGE for Search
-#include "stringmgr.h"
+#include <cstddef>
 #include "swfilter.h"
-#include "swlog.h"
+#include "swkey.h"
 #include "swoptfilter.h"
-#include "sysdata.h"
 #include "utilstr.h"
 
-
-#if defined(USECXX11REGEX) && !defined(REG_ICASE)
-#define REG_ICASE std::regex::icase
-#endif
 
 namespace {
 
