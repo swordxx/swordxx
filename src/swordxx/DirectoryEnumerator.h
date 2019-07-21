@@ -60,6 +60,7 @@ public: /* Methods: */
        \returns a pointer to the name of the current entry, or nullptr on error
                 or when there are no more entries.
        \pre isOpen() must hold, otherwise undefined behavior.
+       \note on error, errno is set, otherwise errno is set to 0.
     */
     char const * readEntry() noexcept;
 
