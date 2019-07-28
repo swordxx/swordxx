@@ -37,18 +37,18 @@ using std::endl;
 
 int main(int /* argc */, char ** /* argv */) {
         VerseKey vk;
-    VerseKey *parser = new VerseKey(); //(VerseKey *)mod->CreateKey();
-    parser->setIntros(true);
+    VerseKey parser;
+    parser.setIntros(true);
 
-    ListKey result = parser->parseVerseList("[ Testament 1 Heading ]");
+    ListKey result = parser.parseVerseList("[ Testament 1 Heading ]");
     cout << "Should be: [ Testament 1 Heading ]\n" << result.getText() << "\n\n";
 
-    parser->setText("[ Testament 1 Heading ]");
-    cout << "Should be: [ Testament 1 Heading ]\n" << parser->getText() << "\n\n";
+    parser.setText("[ Testament 1 Heading ]");
+    cout << "Should be: [ Testament 1 Heading ]\n" << parser.getText() << "\n\n";
 
     result.clear();
 
-    ListKey scope = parser->parseVerseList("amos 2:2", "", true);
+    ListKey scope = parser.parseVerseList("amos 2:2", "", true);
 
     static auto const isSingle =
             [](auto & scope_) {
@@ -58,24 +58,24 @@ int main(int /* argc */, char ** /* argv */) {
             };
     cout << (isSingle(scope) ? "single" : "multiple") << "\n";
 
-    scope = parser->parseVerseList("amos", "", true);
+    scope = parser.parseVerseList("amos", "", true);
 
     cout << (isSingle(scope) ? "single" : "multiple") << "\n";
 
-    scope = parser->parseVerseList("amos", "", true);
+    scope = parser.parseVerseList("amos", "", true);
 
     scope.increment();
     scope.increment();
     scope.increment();
     scope.increment();
 
-    VerseKey *x = new VerseKey(); //(VerseKey *)mod->CreateKey();
-    x->positionFrom(scope);
-    x->clearBounds();
+    VerseKey x;
+    x.positionFrom(scope);
+    x.clearBounds();
 
-    std::cout << "x: " << x->getText() << "\n";
+    std::cout << "x: " << x.getText() << "\n";
 
-    result << *x;
+    result << x;
 
     std::cout << result.getText() << "\n";
 
@@ -84,7 +84,7 @@ int main(int /* argc */, char ** /* argv */) {
     std::cout << result.getText() << "\n";
 
      const char *bounds = "lk,acts";
-     scope = parser->parseVerseList(bounds, "", true);
+     scope = parser.parseVerseList(bounds, "", true);
 
      VerseKey boundTest("lk", "acts");
 
@@ -98,17 +98,17 @@ int main(int /* argc */, char ** /* argv */) {
      std::cout << "Error: " << (int)boundTest.popError() << ": " << boundTest.getText() << "\n";
 
 
-     x->setText("Is.1.13");
-     scope.setText(x->getText());
+     x.setText("Is.1.13");
+     scope.setText(x.getText());
      const std::string T1 = scope.getText();
-     const std::string T2 = x->getText();
-     if (T1 == T2) std::cout << "Error restricting bounds: " << x->getText() << " is in " << bounds << "\n";
+     const std::string T2 = x.getText();
+     if (T1 == T2) std::cout << "Error restricting bounds: " << x.getText() << " is in " << bounds << "\n";
 
-     if (!scope.popError()) std::cout << "Error restricting bounds: " << x->getText() << " is in " << bounds << "\n";
+     if (!scope.popError()) std::cout << "Error restricting bounds: " << x.getText() << " is in " << bounds << "\n";
 
-     x->setText("1Sam.21.1");
-     scope.positionFrom(*x);
-     if (!scope.popError()) std::cout << "Error restricting bounds: " << x->getText() << " is in " << bounds << "\n";
+     x.setText("1Sam.21.1");
+     scope.positionFrom(x);
+     if (!scope.popError()) std::cout << "Error restricting bounds: " << x.getText() << " is in " << bounds << "\n";
 
     cout << "\nNormalization on; headings on ====\n\n";
 
