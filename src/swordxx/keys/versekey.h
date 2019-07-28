@@ -88,6 +88,7 @@ class SWDLLEXPORT VerseKey : public SWKey {
     std::size_t m_userData = 0;
 
     std::shared_ptr<SWLocale> m_locale;
+    std::array<std::size_t, 2u> m_BMAX;
 
 protected:
 
@@ -124,7 +125,6 @@ public:
     static long ntbks[];
     static long ntcps[];
 #endif
-    std::array<std::size_t, 2u> m_BMAX;
 
     /**
     * VerseKey Constructor - initializes Instance of VerseKey
