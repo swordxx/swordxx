@@ -20,221 +20,224 @@
  *
  */
 
-#include <cstdio>
-#include <cstdlib>
 #include <iostream>
+#include <string>
 #include <swordxx/keys/listkey.h>
 #include <swordxx/keys/versekey.h>
-#include <swordxx/localemgr.h>
-#include <swordxx/swmgr.h>
-#include <swordxx/swmodule.h>
 
 
-using namespace swordxx;
-
-using std::cout;
-using std::endl;
-
-int main(int /* argc */, char ** /* argv */) {
-        VerseKey vk;
-    VerseKey parser;
+int main() {
+    swordxx::VerseKey parser;
     parser.setIntros(true);
 
-    ListKey result = parser.parseVerseList("[ Testament 1 Heading ]");
-    cout << "Should be: [ Testament 1 Heading ]\n" << result.getText() << "\n\n";
+    std::cout << "Should be: [ Testament 1 Heading ]\n"
+              << parser.parseVerseList("[ Testament 1 Heading ]").getText()
+              << "\n\n";
 
     parser.setText("[ Testament 1 Heading ]");
-    cout << "Should be: [ Testament 1 Heading ]\n" << parser.getText() << "\n\n";
+    std::cout << "Should be: [ Testament 1 Heading ]\n" << parser.getText()
+              << "\n\n";
 
-    result.clear();
+    {
+        auto const singleTest =
+                [&parser](char const * const location) {
+                    auto scope(parser.parseVerseList(location, "", true));
+                    auto const oldScope(scope);
+                    scope.increment();
+                    std::cout << ((oldScope == scope)
+                                  ? "single\n"
+                                  : "multiple\n");
+                };
+        singleTest("amos 2:2");
+        singleTest("amos");
+    }
 
-    ListKey scope = parser.parseVerseList("amos 2:2", "", true);
-
-    static auto const isSingle =
-            [](auto & scope_) {
-                auto oldScope(scope_);
-                scope_.increment();
-                return oldScope == scope_;
-            };
-    cout << (isSingle(scope) ? "single" : "multiple") << "\n";
-
-    scope = parser.parseVerseList("amos", "", true);
-
-    cout << (isSingle(scope) ? "single" : "multiple") << "\n";
-
-    scope = parser.parseVerseList("amos", "", true);
-
-    scope.increment();
-    scope.increment();
-    scope.increment();
-    scope.increment();
-
-    VerseKey x;
-    x.positionFrom(scope);
+    swordxx::VerseKey x;
+    {
+        auto scope(parser.parseVerseList("amos", "", true));
+        scope.increment();
+        scope.increment();
+        scope.increment();
+        scope.increment();
+        x.positionFrom(scope);
+    }
     x.clearBounds();
 
-    std::cout << "x: " << x.getText() << "\n";
+    std::cout << "x: " << x.getText() << '\n';
 
+    swordxx::ListKey result;
     result << x;
 
-    std::cout << result.getText() << "\n";
+    std::cout << result.getText() << '\n';
 
     result.positionToTop();
 
-    std::cout << result.getText() << "\n";
+    std::cout << result.getText() << '\n';
 
-     const char *bounds = "lk,acts";
-     scope = parser.parseVerseList(bounds, "", true);
+    swordxx::VerseKey boundTest("lk", "acts");
+    boundTest.setText("Is.1.13");
+    std::cout << "Error: " << static_cast<int>(boundTest.popError()) << ": "
+              << boundTest.getText() << '\n';
+    boundTest.setText("1Sam.21.1");
+    std::cout << "Error: " << static_cast<int>(boundTest.popError()) << ": "
+              << boundTest.getText() << '\n';
+    boundTest.setText("acts.5.1");
+    std::cout << "Error: " << static_cast<int>(boundTest.popError()) << ": "
+              << boundTest.getText() << '\n';
+    boundTest.setText("rom.5.1");
+    std::cout << "Error: " << static_cast<int>(boundTest.popError()) << ": "
+              << boundTest.getText() << '\n';
 
-     VerseKey boundTest("lk", "acts");
 
-     boundTest.setText("Is.1.13");
-     std::cout << "Error: " << static_cast<int>(boundTest.popError()) << ": " << boundTest.getText() << "\n";
-     boundTest.setText("1Sam.21.1");
-     std::cout << "Error: " << static_cast<int>(boundTest.popError()) << ": " << boundTest.getText() << "\n";
-     boundTest.setText("acts.5.1");
-     std::cout << "Error: " << static_cast<int>(boundTest.popError()) << ": " << boundTest.getText() << "\n";
-     boundTest.setText("rom.5.1");
-     std::cout << "Error: " << static_cast<int>(boundTest.popError()) << ": " << boundTest.getText() << "\n";
+    x.setText("Is.1.13");
+    {
+        auto const bounds = "lk,acts";
+        auto scope(parser.parseVerseList(bounds, "", true));
+        scope.setText(x.getText());
+        if (scope.getText() == x.getText())
+            std::cout << "Error restricting bounds: " << x.getText()
+                      << " is in " << bounds << '\n';
 
+        if (!scope.popError())
+            std::cout << "Error restricting bounds: " << x.getText()
+                      << " is in " << bounds << '\n';
 
-     x.setText("Is.1.13");
-     scope.setText(x.getText());
-     const std::string T1 = scope.getText();
-     const std::string T2 = x.getText();
-     if (T1 == T2) std::cout << "Error restricting bounds: " << x.getText() << " is in " << bounds << "\n";
+        x.setText("1Sam.21.1");
+        scope.positionFrom(x);
+        if (!scope.popError())
+            std::cout << "Error restricting bounds: " << x.getText()
+                      << " is in " << bounds << '\n';
+    }
 
-     if (!scope.popError()) std::cout << "Error restricting bounds: " << x.getText() << " is in " << bounds << "\n";
+    std::cout << "\nNormalization on; headings on ====\n\n";
 
-     x.setText("1Sam.21.1");
-     scope.positionFrom(x);
-     if (!scope.popError()) std::cout << "Error restricting bounds: " << x.getText() << " is in " << bounds << "\n";
-
-    cout << "\nNormalization on; headings on ====\n\n";
-
+    swordxx::VerseKey vk;
     vk.setAutoNormalize(true);
     vk.setIntros(true);
 
     vk.setText("jn3.50");
-    cout << "jn.3.50: " << vk.getText() << "\n";
+    std::cout << "jn.3.50: " << vk.getText() << '\n';
     vk.increment();
-    cout << "++: " << vk.getText() << "\n";
+    std::cout << "++: " << vk.getText() << '\n';
     vk.decrement();
-    cout << "--: " << vk.getText() << "\n";
+    std::cout << "--: " << vk.getText() << '\n';
     vk.positionToMaxVerse();
-    cout << "MAXVERSE: " << vk.getText() << "\n";
+    std::cout << "MAXVERSE: " << vk.getText() << '\n';
     vk.positionToMaxChapter();
-    cout << "MAXCHAPTER: " << vk.getText() << "\n";
+    std::cout << "MAXCHAPTER: " << vk.getText() << '\n';
     vk.positionToTop();
-    cout << "TOP: " << vk.getText() << "\n";
+    std::cout << "TOP: " << vk.getText() << '\n';
     vk.positionToBottom();
-    cout << "BOTTOM: " << vk.getText() << "\n";
+    std::cout << "BOTTOM: " << vk.getText() << '\n';
 
-    cout << "\nNormalization off; headings on ====\n\n";
+    std::cout << "\nNormalization off; headings on ====\n\n";
 
     vk.setAutoNormalize(false);
     vk.setIntros(true);
 
     vk.setText("jn3.50");
-    cout << "jn.3.50: " << vk.getText() << "\n";
+    std::cout << "jn.3.50: " << vk.getText() << '\n';
     vk.increment();
-    cout << "++: " << vk.getText() << "\n";
+    std::cout << "++: " << vk.getText() << '\n';
     vk.decrement();
-    cout << "--: " << vk.getText() << "\n";
+    std::cout << "--: " << vk.getText() << '\n';
     vk.positionToMaxVerse();
-    cout << "MAXVERSE: " << vk.getText() << "\n";
+    std::cout << "MAXVERSE: " << vk.getText() << '\n';
     vk.positionToMaxChapter();
-    cout << "MAXCHAPTER: " << vk.getText() << "\n";
+    std::cout << "MAXCHAPTER: " << vk.getText() << '\n';
     vk.positionToTop();
-    cout << "TOP: " << vk.getText() << "\n";
+    std::cout << "TOP: " << vk.getText() << '\n';
     vk.positionToBottom();
-    cout << "BOTTOM: " << vk.getText() << "\n";
+    std::cout << "BOTTOM: " << vk.getText() << '\n';
 
-    cout << "\nNormalization on; headings off ====\n\n";
+    std::cout << "\nNormalization on; headings off ====\n\n";
 
     vk.setAutoNormalize(true);
     vk.setIntros(false);
 
     vk.setText("jn3.50");
-    cout << "jn.3.50: " << vk.getText() << "\n";
+    std::cout << "jn.3.50: " << vk.getText() << '\n';
     vk.increment();
-    cout << "++: " << vk.getText() << "\n";
+    std::cout << "++: " << vk.getText() << '\n';
     vk.decrement();
-    cout << "--: " << vk.getText() << "\n";
+    std::cout << "--: " << vk.getText() << '\n';
     vk.positionToMaxVerse();
-    cout << "MAXVERSE: " << vk.getText() << "\n";
+    std::cout << "MAXVERSE: " << vk.getText() << '\n';
     vk.positionToMaxChapter();
-    cout << "MAXCHAPTER: " << vk.getText() << "\n";
+    std::cout << "MAXCHAPTER: " << vk.getText() << '\n';
     vk.positionToTop();
-    cout << "TOP: " << vk.getText() << "\n";
+    std::cout << "TOP: " << vk.getText() << '\n';
     vk.positionToBottom();
-    cout << "BOTTOM: " << vk.getText() << "\n";
+    std::cout << "BOTTOM: " << vk.getText() << '\n';
 
-    cout << "\nNormalization off; headings off ====\n\n";
+    std::cout << "\nNormalization off; headings off ====\n\n";
 
     vk.setAutoNormalize(false);
     vk.setIntros(false);
 
     vk.setText("jn3.50");
-    cout << "jn.3.50: " << vk.getText() << "\n";
+    std::cout << "jn.3.50: " << vk.getText() << '\n';
     vk.increment();
-    cout << "++: " << vk.getText() << "\n";
+    std::cout << "++: " << vk.getText() << '\n';
     vk.decrement();
-    cout << "--: " << vk.getText() << "\n";
+    std::cout << "--: " << vk.getText() << '\n';
     vk.positionToMaxVerse();
-    cout << "MAXVERSE: " << vk.getText() << "\n";
+    std::cout << "MAXVERSE: " << vk.getText() << '\n';
     vk.positionToMaxChapter();
-    cout << "MAXCHAPTER: " << vk.getText() << "\n";
+    std::cout << "MAXCHAPTER: " << vk.getText() << '\n';
     vk.positionToTop();
-    cout << "TOP: " << vk.getText() << "\n";
+    std::cout << "TOP: " << vk.getText() << '\n';
     vk.positionToBottom();
-    cout << "BOTTOM: " << vk.getText() << "\n";
+    std::cout << "BOTTOM: " << vk.getText() << '\n';
 
-    VerseKey yo = "jn.3.16";
-    VerseKey yo2(yo);
-    yo.increment();
-    cout << yo2.getText() << ": " << static_cast<int>(yo2.popError()) <<  endl;
+    {
+        swordxx::VerseKey yo("jn.3.16");
+        auto yo2(yo);
+        yo.increment();
+        std::cout << yo2.getText() << ": " << static_cast<int>(yo2.popError())
+                  << std::endl;
+    }
 
-    VerseKey vkey;
-    VerseKey tmpkey = "1sam 1:1";
+    swordxx::VerseKey vkey;
     vkey.setAutoNormalize(true);
-    vkey = tmpkey;
-    int chapter = (vkey.getChapter()-1);
-    vkey.setChapter(chapter);
+    {
+        swordxx::VerseKey tmpkey("1sam 1:1");
+        vkey = tmpkey;
+        vkey.setChapter(vkey.getChapter() - 1);
 
-    cout << tmpkey.getText() << ": getChapter() - 1: " << vkey.getText() << endl;
+        std::cout << tmpkey.getText() << ": getChapter() - 1: "
+                  << vkey.getText() << std::endl;
+    }
 
-    cout << "\nBook math\n\n";
+    std::cout << "\nBook math\n\n";
 
     vkey.setText("Mark.1.1");
     vkey.decrement();
-    cout << "Mark.1.1-- = " << vkey.getText() << "\n";
+    std::cout << "Mark.1.1-- = " << vkey.getText() << '\n';
     vkey.increment();
-    cout << "++ = " << vkey.getText() << "\n";
+    std::cout << "++ = " << vkey.getText() << '\n';
     vkey.setChapter(vkey.getChapter() - 1);
-    cout << ".setChapter(.getChapter() - 1) = " << vkey.getText() << "\n";
+    std::cout << ".setChapter(.getChapter() - 1) = " << vkey.getText() << '\n';
 
     vkey.setText("Matthew.1.1");
     vkey.decrement();
-    cout << "Matthew.1.1-- = " << vkey.getText() << "\n";
+    std::cout << "Matthew.1.1-- = " << vkey.getText() << '\n';
     vkey.increment();
-    cout << "++ = " << vkey.getText() << "\n";
+    std::cout << "++ = " << vkey.getText() << '\n';
     vkey.setBook(vkey.getBook() - 1);
-    cout << ".setBook(.getBook() - 1) = " << vkey.getText() << "\n";
+    std::cout << ".setBook(.getBook() - 1) = " << vkey.getText() << '\n';
 
-    cout << "\nChapter math\n\n";
+    std::cout << "\nChapter math\n\n";
 
-    cout << "Matthew.1.1 - 1 chapter\n";
+    std::cout << "Matthew.1.1 - 1 chapter\n";
     vkey.setText("Matthew.1.1");
     vkey.setChapter(vkey.getChapter() - 1);
-    cout << ".setChapter(.getChapter() - 1) = " << vkey.getText() << "\n";
+    std::cout << ".setChapter(.getChapter() - 1) = " << vkey.getText() << '\n';
 
-    cout << "\nVerse math\n\n";
+    std::cout << "\nVerse math\n\n";
 
-    cout << "Matthew.1.1 - 1 verse\n";
+    std::cout << "Matthew.1.1 - 1 verse\n";
     vkey.setText("Matthew.1.1");
     vkey.setVerse(vkey.getVerse() - 1);
-    cout << ".setVerse(.getVerse() - 1) = " << vkey.getText() << "\n";
-
-    return 0;
+    std::cout << ".setVerse(.getVerse() - 1) = " << vkey.getText() << '\n';
 }
