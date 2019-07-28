@@ -75,7 +75,13 @@ class SWDLLEXPORT VerseKey : public SWKey {
     mutable long m_upperBound = 0;
     mutable std::shared_ptr<VerseKey> m_tmpClone;
 
-    typedef struct VerseComponents { int test; int book; int chap; int verse; char suffix; } VerseComponents;
+    struct VerseComponents {
+        int test;
+        int book;
+        int chap;
+        int verse;
+        char suffix;
+    };
 
     mutable VerseComponents m_lowerBoundComponents, m_upperBoundComponents;    // if autonorms is off, we can't optimize with index
 
