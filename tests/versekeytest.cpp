@@ -35,53 +35,8 @@ using namespace swordxx;
 using std::cout;
 using std::endl;
 
-class _System {
-public:
-class Out {
-public:
-    void println(const char *x) { cout << x << endl; }
-    void println(int x) { cout << x << endl; }
-} out;
-} System;
-
 int main(int /* argc */, char ** /* argv */) {
         VerseKey vk;
-/*
-        vk.setTestament(2);
-        vk.setBook(4);
-        vk.setChapter(3);
-        vk.setVerse(1);
-        System.out.println(vk.getText());
-        System.out.println(vk.getIndex());
-        System.out.println(vk.getTestamentIndex());
-        vk.setVersificationSystem("KJVA");
-        System.out.println(vk.getText());
-        System.out.println(vk.getIndex());
-        System.out.println(vk.getTestamentIndex());
-        System.out.println("decrementing...");
-        vk.setVersificationSystem("KJV");
-        vk.decrement();
-        System.out.println(vk.getText());
-        System.out.println(vk.getIndex());
-        System.out.println(vk.getTestamentIndex());
-        vk.setVersificationSystem("KJVA");
-        System.out.println(vk.getText());
-        System.out.println(vk.getIndex());
-        System.out.println(vk.getTestamentIndex());
-*/
-
-
-/*
-VerseKey currentVerse;
-currentVerse.setAutoNormalize(true);
-currentVerse.setIntros(true);
-currentVerse.Persist(1);
-currentVerse = "jn2";
-cout << currentVerse << endl;
-
-    SWMgr mgr;
-    SWModule *mod = mgr.getModule("KJVgb");
-*/
     VerseKey *parser = new VerseKey(); //(VerseKey *)mod->CreateKey();
     parser->setIntros(true);
 
@@ -154,25 +109,6 @@ cout << currentVerse << endl;
      x->setText("1Sam.21.1");
      scope.positionFrom(*x);
      if (!scope.popError()) std::cout << "Error restricting bounds: " << x->getText() << " is in " << bounds << "\n";
-
-/*
-    VerseKey *y = (VerseKey *)mod->CreateKey();
-    (*y) = "lev 1.1";
-    cout << (*y) << "\n";
-    (*y)++;
-    cout << (*y) << "\n";
-    (*y)--;
-    cout << (*y) << "\n";
-    (*y)--;
-    cout << (*y) << "\n";
-
-    mod->setKey("Ruth 1.1");
-    cout << mod->getKeyText() << "\n";
-    (*mod)++;
-    cout << mod->getKeyText() << "\n";
-    (*mod)--;
-    cout << mod->getKeyText() << "\n";
-*/
 
     cout << "\nNormalization on; headings on ====\n\n";
 
