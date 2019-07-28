@@ -89,13 +89,13 @@ int main(int /* argc */, char ** /* argv */) {
      VerseKey boundTest("lk", "acts");
 
      boundTest.setText("Is.1.13");
-     std::cout << "Error: " << (int)boundTest.popError() << ": " << boundTest.getText() << "\n";
+     std::cout << "Error: " << static_cast<int>(boundTest.popError()) << ": " << boundTest.getText() << "\n";
      boundTest.setText("1Sam.21.1");
-     std::cout << "Error: " << (int)boundTest.popError() << ": " << boundTest.getText() << "\n";
+     std::cout << "Error: " << static_cast<int>(boundTest.popError()) << ": " << boundTest.getText() << "\n";
      boundTest.setText("acts.5.1");
-     std::cout << "Error: " << (int)boundTest.popError() << ": " << boundTest.getText() << "\n";
+     std::cout << "Error: " << static_cast<int>(boundTest.popError()) << ": " << boundTest.getText() << "\n";
      boundTest.setText("rom.5.1");
-     std::cout << "Error: " << (int)boundTest.popError() << ": " << boundTest.getText() << "\n";
+     std::cout << "Error: " << static_cast<int>(boundTest.popError()) << ": " << boundTest.getText() << "\n";
 
 
      x.setText("Is.1.13");
@@ -193,7 +193,7 @@ int main(int /* argc */, char ** /* argv */) {
     VerseKey yo = "jn.3.16";
     VerseKey yo2(yo);
     yo.increment();
-    cout << yo2.getText() << ": " << (int)yo2.popError() <<  endl;
+    cout << yo2.getText() << ": " << static_cast<int>(yo2.popError()) <<  endl;
 
     VerseKey vkey;
     VerseKey tmpkey = "1sam 1:1";
