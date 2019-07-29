@@ -94,8 +94,6 @@ zVerseBase<VerseSizeType_>::zVerseBase(NormalizedPath const & path,
  */
 template <typename VerseSizeType_>
 zVerseBase<VerseSizeType_>::~zVerseBase() {
-    int loop1;
-
     if (cacheBuf) {
         flushCache();
         free(cacheBuf);
