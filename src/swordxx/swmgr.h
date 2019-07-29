@@ -90,9 +90,9 @@ private:
 
     /** The path to main module set and locales. */
     std::string m_prefixPath;
+    std::shared_ptr<SWFilterMgr> const filterMgr;
 
 protected:
-    std::shared_ptr<SWFilterMgr> const filterMgr; // Made protected because because BibleTime needs it
     SWConfig * myconfig = nullptr; // made protected because because BibleTime needs it
     SWConfig * mysysconfig = nullptr;
     SWConfig * homeConfig = nullptr;
