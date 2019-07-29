@@ -87,14 +87,13 @@ protected: /* Methods: */
 private: /* Fields: */
 
     std::unique_ptr<SWCompress> const compressor;
+    mutable std::string m_cacheBuf;
 
 protected: /* Fields: */
 
     std::shared_ptr<FileDesc> idxfp[2];
     std::shared_ptr<FileDesc> textfp[2];
     std::shared_ptr<FileDesc> compfp[2];
-    mutable char * cacheBuf = nullptr;
-    mutable unsigned int cacheBufSize;
     mutable char cacheTestament = 0;
     mutable long cacheBufIdx = -1;
     mutable bool dirtyCache = false;

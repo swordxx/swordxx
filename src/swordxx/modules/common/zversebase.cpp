@@ -94,10 +94,8 @@ zVerseBase<VerseSizeType_>::zVerseBase(NormalizedPath const & path,
  */
 template <typename VerseSizeType_>
 zVerseBase<VerseSizeType_>::~zVerseBase() {
-    if (cacheBuf) {
+    if (!m_cacheBuf.empty())
         flushCache();
-        free(cacheBuf);
-    }
 }
 
 template <typename VerseSizeType_>
@@ -193,7 +191,7 @@ std::string zVerseBase<VerseSizeType_>::zReadText(char testmt,
         return std::string();
 
     if (size &&
-        !(((long) ulBuffNum == cacheBufIdx) && (testmt == cacheTestament) && (cacheBuf))) {
+        !(((long) ulBuffNum == cacheBufIdx) && (testmt == cacheTestament) && !m_cacheBuf.empty())) {
         //fprintf(stderr, "Got buffer number{%ld} versestart{%ld} versesize{%d}\n", ulBuffNum, ulVerseStart, usVerseSize);
 
         if (idxfp[testmt-1]->seek(ulBuffNum*12, SEEK_SET)!=(long) ulBuffNum*12)
@@ -238,24 +236,21 @@ std::string zVerseBase<VerseSizeType_>::zReadText(char testmt,
         unsigned long bufSize = ulCompSize;
         compressor->zBuf(&bufSize, &pcCompText[0u]);
 
-        if (cacheBuf) {
+        if (!m_cacheBuf.empty())
             flushCache();
-            free(cacheBuf);
-        }
 
         unsigned long len = 0;
         compressor->Buf(nullptr, &len);
-        cacheBuf = (char *)std::calloc(len + 1, 1);
-        std::memcpy(cacheBuf, compressor->Buf(), len);
-        cacheBufSize = std::strlen(cacheBuf);  // TODO: can we just use len?
+        m_cacheBuf = std::string(compressor->Buf(), len);
+        m_cacheBuf.resize(std::strlen(m_cacheBuf.c_str()));
         cacheTestament = testmt;
         cacheBufIdx = ulBuffNum;
     }
 
     std::string r;
-    if ((size > 0) && cacheBuf && ((unsigned)start < cacheBufSize)) {
+    if ((size > 0) && ((unsigned)start < m_cacheBuf.size())) {
         r.resize(size + 1u, '\0');
-        std::strncpy(r.data(), &(cacheBuf[start]), size);
+        std::strncpy(r.data(), &(m_cacheBuf[start]), size);
         r.resize(std::strlen(r.c_str()));
     }
     return r;
@@ -281,11 +276,8 @@ void zVerseBase<VerseSizeType_>::doSetText(char testmt,
     if ((!dirtyCache) || (cacheBufIdx < 0)) {
         cacheBufIdx = idxfp[testmt-1]->seek(0, SEEK_END) / 12;
         cacheTestament = testmt;
-        if (cacheBuf)
-            free(cacheBuf);
-        cacheBuf = (char *)std::calloc(len + 1, 1);
+        m_cacheBuf.clear();
     }
-    else cacheBuf = (char *)((cacheBuf)?realloc(cacheBuf, std::strlen(cacheBuf)+(len + 1)):std::calloc((len + 1), 1));
 
     dirtyCache = true;
 
@@ -296,7 +288,7 @@ void zVerseBase<VerseSizeType_>::doSetText(char testmt,
     idxoff *= sizeof(outBufIdx) + sizeof(start) + sizeof(size);
     size = len;
 
-    start = std::strlen(cacheBuf);
+    start = m_cacheBuf.size();
 
     if (!size)
         start = outBufIdx = 0;
@@ -309,7 +301,7 @@ void zVerseBase<VerseSizeType_>::doSetText(char testmt,
     compfp[testmt-1]->write(&outBufIdx, sizeof(outBufIdx));
     compfp[testmt-1]->write(&start, sizeof(start));
     compfp[testmt-1]->write(&size, sizeof(size));
-    std::strcat(cacheBuf, buf);
+    m_cacheBuf += buf;
 }
 
 template <typename VerseSizeType_>
@@ -321,10 +313,10 @@ void zVerseBase<VerseSizeType_>::flushCache() const {
         uint32_t zsize, outzsize;
 
         idxoff = cacheBufIdx * 12;
-        if (cacheBuf) {
-            size = outsize = zsize = outzsize = std::strlen(cacheBuf);
+        if (!m_cacheBuf.empty()) {
+            size = outsize = zsize = outzsize = m_cacheBuf.size();
             if (size) {
-                compressor->Buf(cacheBuf);
+                compressor->Buf(m_cacheBuf.c_str());
                 unsigned long tmpSize;
                 compressor->zBuf(&tmpSize);
                 outzsize = zsize = tmpSize;
@@ -349,8 +341,7 @@ void zVerseBase<VerseSizeType_>::flushCache() const {
                 idxfp[cacheTestament-1]->write(&outzsize, sizeof(outzsize));
                 idxfp[cacheTestament-1]->write(&outsize, sizeof(outsize));
             }
-            free(cacheBuf);
-            cacheBuf = nullptr;
+            m_cacheBuf.clear();
         }
         dirtyCache = false;
     }
