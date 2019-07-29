@@ -60,23 +60,33 @@ zVerseBase<VerseSizeType_>::zVerseBase(NormalizedPath const & path,
     // this line, instead of just defaulting, to keep FileMgr out of header
     if (fileMode == -1) fileMode = FileMgr::RDONLY;
 
-    cacheBufIdx = -1;
-    cacheTestament = 0;
-    cacheBuf = nullptr;
-    dirtyCache = false;
-
     if (fileMode == -1) { // try read/write if possible
         fileMode = FileMgr::RDWR;
     }
 
     char const blockChar(static_cast<char>(blockType));
     auto const fileMgr(FileMgr::getSystemFileMgr());
-    idxfp[0] = fileMgr->open(formatted("%s/ot.%czs", path, blockChar).c_str(), fileMode, true);
-    idxfp[1] = fileMgr->open(formatted("%s/nt.%czs", path, blockChar).c_str(), fileMode, true);
-    textfp[0] = fileMgr->open(formatted("%s/ot.%czz", path, blockChar).c_str(), fileMode, true);
-    textfp[1] = fileMgr->open(formatted("%s/nt.%czz", path, blockChar).c_str(), fileMode, true);
-    compfp[0] = fileMgr->open(formatted("%s/ot.%czv", path, blockChar).c_str(), fileMode, true);
-    compfp[1] = fileMgr->open(formatted("%s/nt.%czv", path, blockChar).c_str(), fileMode, true);
+
+    auto buf(path.str() + "/ot." + blockChar + "zs");
+
+    auto const testamentIt(buf.rbegin() + 5u);
+    assert(*testamentIt == 'o');
+    idxfp[0] = fileMgr->open(buf.c_str(), fileMode, true);
+
+    (*testamentIt) = 'n';
+    idxfp[1] = fileMgr->open(buf.c_str(), fileMode, true);
+
+    buf.back() = 'z';
+    textfp[1] = fileMgr->open(buf.c_str(), fileMode, true);
+
+    (*testamentIt) = 'o';
+    textfp[0] = fileMgr->open(buf.c_str(), fileMode, true);
+
+    buf.back() = 'v';
+    compfp[0] = fileMgr->open(buf.c_str(), fileMode, true);
+
+    (*testamentIt) = 'n';
+    compfp[1] = fileMgr->open(buf.c_str(), fileMode, true);
 }
 
 /******************************************************************************
