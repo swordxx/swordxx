@@ -78,7 +78,7 @@ protected: /* Methods: */
                              BlockType blockBound,
                              char const * v11n = "KJV");
 
-    void doSetText(char testmt, long idxoff, char const * buf, long len = 0);
+    void doSetText(char testmt, long idxoff, std::string_view buf);
 
     void doLinkEntry(char testmt, long destidxoff, long srcidxoff);
 

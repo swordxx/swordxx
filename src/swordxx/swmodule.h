@@ -215,7 +215,7 @@ public:
     virtual bool isWritable() const noexcept;
 
     /** Modify the current module entry text - only if module isWritable() */
-    virtual void setEntry(const char *inbuf, long len= -1);
+    virtual void setEntry(std::string_view text);
 
     /** Link the current module entry to another module entry - only if
      *    module isWritable()

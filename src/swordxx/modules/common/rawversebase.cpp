@@ -130,24 +130,21 @@ void RawVerseBase<SizeType_>::findOffset(char testmt,
 template <typename SizeType_>
 void RawVerseBase<SizeType_>::doSetText(char testmt,
                                         long idxoff,
-                                        char const * buf,
-                                        long len)
+                                        std::string_view text)
 {
     StartType start;
-    SizeType size;
+    SizeType size = text.size();
 
     idxoff *= sizeof(StartType) + sizeof(SizeType);
     if (!testmt)
         testmt = ((idxfp[1]) ? 1:2);
-
-    size = (len < 0) ? std::strlen(buf) : len;
 
     start = textfp[testmt-1]->seek(0, SEEK_END);
     idxfp[testmt-1]->seek(idxoff, SEEK_SET);
 
     if (size) {
         textfp[testmt-1]->seek(start, SEEK_SET);
-        textfp[testmt-1]->write(buf, size);
+        textfp[testmt-1]->write(text.data(), size);
 
         // add a new line to make data file easier to read in an editor
         static char const nl = '\n';

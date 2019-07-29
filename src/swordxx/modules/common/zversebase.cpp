@@ -267,10 +267,8 @@ std::string zVerseBase<VerseSizeType_>::zReadText(char testmt,
 template <typename VerseSizeType_>
 void zVerseBase<VerseSizeType_>::doSetText(char testmt,
                                            long idxoff,
-                                           const char * buf,
-                                           long len)
+                                           std::string_view buf)
 {
-    len = (len < 0) ? std::strlen(buf) : len;
     if (!testmt)
         testmt = ((idxfp[0]) ? 1:2);
     if ((!dirtyCache) || (cacheBufIdx < 0)) {
@@ -286,7 +284,7 @@ void zVerseBase<VerseSizeType_>::doSetText(char testmt,
     VerseSizeType size;
 
     idxoff *= sizeof(outBufIdx) + sizeof(start) + sizeof(size);
-    size = len;
+    size = buf.size();
 
     start = m_cacheBuf.size();
 

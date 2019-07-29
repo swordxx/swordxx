@@ -107,7 +107,7 @@ void setEntryText(RawGenBook & book) {
             body += "\n";
         } while (true);
 
-        book.setEntry(body.c_str());
+        book.setEntry(body);
     }
     else    std::cout << "Can't add entry text to root node\n";
 }

@@ -74,7 +74,7 @@ protected: /* Methods: */
                     StartType * start,
                     SizeType * size) const;
 
-    void doSetText(char testmt, long idxoff, char const * buf, long len = -1);
+    void doSetText(char testmt, long idxoff, std::string_view text);
     void doLinkEntry(char testmt, long destidxoff, long srcidxoff);
     static char createModule(NormalizedPath const & path,
                              char const * v11n = "KJV");

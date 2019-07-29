@@ -225,7 +225,7 @@ std::string SWModule::getRawEntry() const {
 
 bool SWModule::isWritable() const noexcept { return false; }
 
-void SWModule::setEntry(const char *, long) {}
+void SWModule::setEntry(std::string_view) {}
 
 void SWModule::linkEntry(SWKey const &) {}
 

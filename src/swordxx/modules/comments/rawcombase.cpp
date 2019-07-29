@@ -122,12 +122,11 @@ char RawComBase<Base>::createModule(const char *path, const char * v11n)
 { return Base::createModule(path, v11n); }
 
 template <typename Base>
-void RawComBase<Base>::setEntry(const char *inbuf, long len) {
+void RawComBase<Base>::setEntry(std::string_view text) {
     auto const key_(getVerseKey());
     this->doSetText(key_->getTestament(),
                     key_->getTestamentIndex(),
-                    inbuf,
-                    len);
+                    text);
 }
 
 template <typename Base>
@@ -149,7 +148,8 @@ void RawComBase<Base>::linkEntry(SWKey const & inkey) {
 template <typename Base>
 void RawComBase<Base>::deleteEntry() {
     auto const key_(getVerseKey());
-    this->doSetText(key_->getTestament(), key_->getTestamentIndex(), "");
+    using namespace std::literals::string_view_literals;
+    this->doSetText(key_->getTestament(), key_->getTestamentIndex(), ""sv);
 }
 
 template <typename Base>

@@ -72,7 +72,7 @@ int main(int argc, char **argv)
         else module.deleteEntry();
         break;
     case 1:
-        module.setEntry(SWKey(argv[3]).getText().c_str());
+        module.setEntry(SWKey(argv[3]).getText());
         break;
     default:
         cerr << "Unknown action " << action << "\n";

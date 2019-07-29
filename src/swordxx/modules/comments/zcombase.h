@@ -69,7 +69,7 @@ public: /* Methods: */
                              BlockType blockBound,
                              const char * v11n = "KJV");
 
-    void setEntry(char const * inbuf, long len = -1) override;
+    void setEntry(std::string_view inBuf) override;
     void linkEntry(SWKey const & linkKey) override;
     void deleteEntry() override;
 

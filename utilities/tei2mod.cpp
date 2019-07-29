@@ -204,7 +204,7 @@ void writeCurrentEntry(std::string & text) {
 
     normalizeInput(*currentKey, text);
 
-    module->setEntry(text.c_str());
+    module->setEntry(text);
 }
 
 void linkToEntry(const std::string & /* keyBuf */, const std::string &linkBuf) {

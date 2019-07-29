@@ -141,12 +141,12 @@ void zLD::increment(int steps) {
 }
 
 
-void zLD::setEntry(const char *inbuf, long len) {
+void zLD::setEntry(std::string_view text) {
     auto const keyText = getKey()->getText();
     if (this->m_strongsPadding) {
-        setText(strongsPadBuf(keyText.c_str()).get(), inbuf, len);
+        setText(strongsPadBuf(keyText.c_str()).get(), text);
     } else {
-        setText(keyText.c_str(), inbuf, len);
+        setText(keyText.c_str(), text);
     }
 }
 
@@ -169,10 +169,11 @@ void zLD::linkEntry(SWKey const & inkey) {
 
 void zLD::deleteEntry() {
     auto const keyText = getKey()->getText();
+    using namespace std::literals::string_view_literals;
     if (this->m_strongsPadding) {
-        setText(strongsPadBuf(keyText.c_str()).get(), "");
+        setText(strongsPadBuf(keyText.c_str()).get(), ""sv);
     } else {
-        setText(keyText.c_str(), "");
+        setText(keyText.c_str(), ""sv);
     }
 }
 

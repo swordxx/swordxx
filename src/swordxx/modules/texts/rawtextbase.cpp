@@ -96,9 +96,9 @@ std::string RawTextBase<BaseRawVerse>::getRawEntryImpl() const {
 }
 
 template <typename BaseRawVerse>
-void RawTextBase<BaseRawVerse>::setEntry(char const *inbuf, long len) {
+void RawTextBase<BaseRawVerse>::setEntry(std::string_view text) {
     auto const key_(getVerseKey());
-    this->doSetText(key_->getTestament(), key_->getTestamentIndex(), inbuf, len);
+    this->doSetText(key_->getTestament(), key_->getTestamentIndex(), text);
 }
 
 template <typename BaseRawVerse>
@@ -119,7 +119,8 @@ void RawTextBase<BaseRawVerse>::linkEntry(SWKey const & inkey) {
 template <typename BaseRawVerse>
 void RawTextBase<BaseRawVerse>::deleteEntry() {
     auto const key_(getVerseKey());
-    this->doSetText(key_->getTestament(), key_->getTestamentIndex(), "");
+    using namespace std::literals::string_view_literals;
+    this->doSetText(key_->getTestament(), key_->getTestamentIndex(), ""sv);
 }
 
 /******************************************************************************

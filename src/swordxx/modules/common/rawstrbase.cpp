@@ -340,10 +340,7 @@ std::string RawStrBase<SizeType_>::readText(StartType istart,
  *      len     - length of buffer (0 - null terminated)
  */
 template <typename SizeType_>
-void RawStrBase<SizeType_>::doSetText(char const * ikey,
-                                      char const * buf,
-                                      long len)
-{
+void RawStrBase<SizeType_>::doSetText(char const * ikey, std::string_view text){
     using namespace std::literals::string_view_literals;
 
     StartType start, outstart;
@@ -358,8 +355,6 @@ void RawStrBase<SizeType_>::doSetText(char const * ikey,
     if (!m_caseSensitive)
         toupperstr_utf8(key);
 
-    len = (len < 0) ? std::strlen(buf) : len;
-
     auto const dbKey(getIDXBufDat(start));
 
     static constexpr auto const entrySize =
@@ -372,7 +367,7 @@ void RawStrBase<SizeType_>::doSetText(char const * ikey,
             idxoff += entrySize;
         else idxoff = 0;
     }
-    else if ((key == dbKey) && (len>0 /*we're not deleting*/)) { // got absolute entry
+    else if ((key == dbKey) && (!text.empty() /*we're not deleting*/)) { // got absolute entry
         do {
             tmpbuf = new char [ size + 2 ];
             std::memset(tmpbuf, 0, size + 2);
@@ -388,7 +383,7 @@ void RawStrBase<SizeType_>::doSetText(char const * ikey,
             std::memmove(tmpbuf, ch, size - std::size_t(ch - tmpbuf));
 
             // resolve link
-            if (startsWith(tmpbuf, "@LINK"sv) && (len)) {
+            if (startsWith(tmpbuf, "@LINK"sv) && !text.empty()) {
                 for (ch = tmpbuf; *ch; ch++) {        // null before nl
                     if (*ch == 10) {
                         *ch = 0;
@@ -413,11 +408,11 @@ void RawStrBase<SizeType_>::doSetText(char const * ikey,
         idxfd->read(idxBytes.get(), shiftSize);
     }
 
-    auto const outbuf(std::make_unique<char[]>(len + key.size() + 5));
+    auto const outbuf(std::make_unique<char[]>(text.size() + key.size() + 5));
     std::sprintf(outbuf.get(), "%s%c%c", key.c_str(), 13, 10);
     size = std::strlen(outbuf.get());
-    std::memcpy(outbuf.get() + size, buf, len);
-    size = outsize = size + (len);
+    std::memcpy(outbuf.get() + size, text.data(), text.size());
+    size = outsize = size + text.size();
 
     start = outstart = datfd->seek(0, SEEK_END);
 
@@ -425,7 +420,7 @@ void RawStrBase<SizeType_>::doSetText(char const * ikey,
     outsize  = swapFromArch(size);
 
     idxfd->seek(idxoff, SEEK_SET);
-    if (len > 0) {
+    if (!text.empty()) {
         datfd->seek(start, SEEK_SET);
         datfd->write(outbuf.get(), size);
 
@@ -457,7 +452,7 @@ void RawStrBase<SizeType_>::doSetText(char const * ikey,
 template <typename SizeType_>
 void RawStrBase<SizeType_>::doLinkEntry(char const * destkey,
                                         char const * srckey)
-{ doSetText(srckey, (std::string("@LINK ") + destkey).c_str()); }
+{ doSetText(srckey, std::string("@LINK ") + destkey); }
 
 /******************************************************************************
  * RawLD::CreateModule    - Creates new module files

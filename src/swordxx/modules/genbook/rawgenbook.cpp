@@ -121,22 +121,18 @@ std::string RawGenBook::getRawEntryImpl() const {
 }
 
 
-void RawGenBook::setEntry(const char *inbuf, long len) {
-
+void RawGenBook::setEntry(std::string_view text) {
     uint32_t offset = archtosword32(bdtfd->seek(0, SEEK_END));
-    uint32_t size = 0;
     auto const tk(getTreeKey());
     /// \bug remove const_cast:
     auto const key_ = static_cast<TreeKeyIdx *>(const_cast<TreeKey *>(tk.get()));
 
     char userData[8];
 
-    if (len < 0)
-        len = std::strlen(inbuf);
+    bdtfd->write(text.data(), text.size());
 
-    bdtfd->write(inbuf, len);
-
-    size = archtosword32(len);
+    std::uint32_t size = text.size();
+    size = archtosword32(size);
     std::memcpy(userData, &offset, 4);
     std::memcpy(userData+4, &size, 4);
     key_->setUserData(userData, 8);

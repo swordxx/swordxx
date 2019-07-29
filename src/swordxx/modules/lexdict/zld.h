@@ -59,7 +59,7 @@ public:
         return zStr::createModule(path);
     }
 
-    void setEntry(char const * inbuf, long len = -1) override;
+    void setEntry(std::string_view text) override;
     void linkEntry(SWKey const & linkKey) override;
     void deleteEntry() override;
 

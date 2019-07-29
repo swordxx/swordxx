@@ -145,7 +145,7 @@ int processXML(const char* filename, char* modname, bool longnames, bool exportf
           }
           else {
         book->setKey(keybuffer2.c_str());
-        book->setEntry(entbuffer.c_str(), entrysize); // save text to module at current position
+        book->setEntry(std::string_view(entbuffer.c_str(), entrysize)); // save text to module at current position
           }
         }
       }
@@ -182,7 +182,7 @@ int processXML(const char* filename, char* modname, bool longnames, bool exportf
           }
           else {
         book->setKey(keybuffer2.c_str());
-        book->setEntry(entbuffer.c_str(), entrysize); // save text to module at current position
+        book->setEntry(std::string_view(entbuffer.c_str(), entrysize)); // save text to module at current position
           }
         }
       }

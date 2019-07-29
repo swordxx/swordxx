@@ -59,7 +59,7 @@ public: /* Methods: */
     bool isWritable() const noexcept override;
     static char createModule(const char *path) { return Base::createModule(path); }
 
-    void setEntry(char const * inbuf, long len = -1) override;
+    void setEntry(std::string_view text) override;
     void linkEntry(SWKey const & linkKey) override;
     void deleteEntry() override;
     long getEntryCount() const override;

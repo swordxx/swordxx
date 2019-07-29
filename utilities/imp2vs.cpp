@@ -302,7 +302,7 @@ void writeEntry(SWModule & module,
                 text += entry;
 
                 std::cout << "adding entry: " << vkey->getText() << " length " << entry.size() << "/" << (unsigned short)text.size() << std::endl;
-                module.setEntry(text.c_str());
+                module.setEntry(text);
                 first = false;
             }
             else {

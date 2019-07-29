@@ -52,7 +52,7 @@ public:
     bool isWritable() const noexcept override;
 
     static char createModule(char const *);
-    void setEntry(char const * inbuf, long len = -1) override;
+    void setEntry(std::string_view text) override;
     void linkEntry(SWKey const & linkKey) override;
     void deleteEntry() override;
 

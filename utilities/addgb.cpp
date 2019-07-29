@@ -107,7 +107,7 @@ int main(int argc, char **argv) {
 
     entrysize = fread(buffer, sizeof(char), sizeof(buffer), infile);
     book->setKey(argv[3]);
-    book->setEntry(buffer, entrysize); // save text to module at current position
+    book->setEntry(std::string_view(buffer, entrysize)); // save text to module at current position
   }
 
   /*

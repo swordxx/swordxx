@@ -194,7 +194,7 @@ void writeEntry(SWModule & book,
         book.getKey()->positionFrom(key.c_str());
     }
 
-    book.setEntry(entBuffer.c_str());
+    book.setEntry(entBuffer);
 }
 
 } // anonymous namespace

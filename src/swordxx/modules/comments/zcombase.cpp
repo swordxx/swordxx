@@ -156,7 +156,7 @@ char zComBase<Base>::createModule(const char *path,
 { return Base::createModule(path, blockBound, v11n); }
 
 template <typename Base>
-void zComBase<Base>::setEntry(const char *inbuf, long len) {
+void zComBase<Base>::setEntry(std::string_view inBuf) {
     auto const key_(getVerseKey());
 
     // see if we've jumped across blocks since last write
@@ -168,8 +168,7 @@ void zComBase<Base>::setEntry(const char *inbuf, long len) {
 
     this->doSetText(key_->getTestament(),
                     key_->getTestamentIndex(),
-                    inbuf,
-                    len);
+                    inBuf);
     lastWriteKey = std::static_pointer_cast<VerseKey const>(key_->clone());
 }
 
@@ -190,7 +189,8 @@ void zComBase<Base>::linkEntry(SWKey const & inkey) {
 template <typename Base>
 void zComBase<Base>::deleteEntry() {
     auto const key_(getVerseKey());
-    this->doSetText(key_->getTestament(), key_->getTestamentIndex(), "");
+    using namespace std::literals::string_view_literals;
+    this->doSetText(key_->getTestament(), key_->getTestamentIndex(), ""sv);
 }
 
 template <typename Base>

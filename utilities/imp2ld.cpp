@@ -195,7 +195,7 @@ int main(int argc, char **argv) {
                 std::cout << keybuffer << std::endl;
                 key->setText(keybuffer);
 
-                mod->setEntry(entbuffer.c_str(), entbuffer.size());
+                mod->setEntry(entbuffer);
                 for (i = 0; i < links; i++) {
                     std::cout << "Linking: " << linkbuffer[i] << std::endl;
                     linkKey->setText(linkbuffer[i]);
@@ -223,7 +223,7 @@ int main(int argc, char **argv) {
         std::cout << keybuffer << std::endl;
         key->setText(keybuffer);
 
-        mod->setEntry(entbuffer.c_str(), entbuffer.size());
+        mod->setEntry(entbuffer);
         for (i = 0; i < links; i++) {
             std::cout << "Linking: " << linkbuffer[i] << std::endl;
             linkKey->setText(linkbuffer[i]);

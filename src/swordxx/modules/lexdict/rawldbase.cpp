@@ -136,12 +136,12 @@ void RawLdBase<Base>::increment(int steps) {
 }
 
 template <typename Base>
-void RawLdBase<Base>::setEntry(char const * inbuf, long len) {
+void RawLdBase<Base>::setEntry(std::string_view text) {
     auto const keyText = getKey()->getText();
     if (this->m_strongsPadding) {
-        this->doSetText(strongsPadBuf(keyText.c_str()).get(), inbuf, len);
+        this->doSetText(strongsPadBuf(keyText.c_str()).get(), text);
     } else {
-        this->doSetText(keyText.c_str(), inbuf, len);
+        this->doSetText(keyText.c_str(), text);
     }
 }
 
@@ -163,11 +163,12 @@ void RawLdBase<Base>::linkEntry(SWKey const & inkey) {
  */
 template <typename Base>
 void RawLdBase<Base>::deleteEntry() {
+    using namespace std::literals::string_view_literals;
     auto const keyText = getKey()->getText();
     if (this->m_strongsPadding) {
-        this->doSetText(strongsPadBuf(keyText.c_str()).get(), "");
+        this->doSetText(strongsPadBuf(keyText.c_str()).get(), ""sv);
     } else {
-        this->doSetText(keyText.c_str(), "");
+        this->doSetText(keyText.c_str(), ""sv);
     }
 }
 

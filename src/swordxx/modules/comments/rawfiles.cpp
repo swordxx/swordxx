@@ -105,12 +105,10 @@ std::string RawFiles::getRawEntryImpl() const {
  *                provided text
  */
 
-void RawFiles::setEntry(const char *inbuf, long len) {
+void RawFiles::setEntry(std::string_view text) {
     StartType start;
     SizeType size;
     auto const key_(getVerseKey());
-
-    len = (len<0)?std::strlen(inbuf):len;
 
     findOffset(key_->getTestament(), key_->getTestamentIndex(), &start, &size);
 
@@ -120,12 +118,12 @@ void RawFiles::setEntry(const char *inbuf, long len) {
     }
     else {
         std::string tmpbuf(getNextFilename());
-        doSetText(key_->getTestament(), key_->getTestamentIndex(), tmpbuf.c_str());
+        doSetText(key_->getTestament(), key_->getTestamentIndex(), tmpbuf);
         filename += tmpbuf;
     }
     auto const datafile(FileMgr::getSystemFileMgr()->open(filename.c_str(), FileMgr::CREAT|FileMgr::WRONLY|FileMgr::TRUNC));
     if (datafile->getFd() > 0)
-        datafile->write(inbuf, len);
+        datafile->write(text.data(), text.size());
 }
 
 
@@ -146,7 +144,7 @@ void RawFiles::linkEntry(SWKey const & inkey) {
     if (size) {
         auto const tmpbuf(readText(key_->getTestament(), start, size + 2));
         auto const key2(getVerseKey(shareRef(inkey)));
-        doSetText(key2->getTestament(), key2->getTestamentIndex(), tmpbuf.c_str());
+        doSetText(key2->getTestament(), key2->getTestamentIndex(), tmpbuf);
     }
 }
 
@@ -159,7 +157,8 @@ void RawFiles::linkEntry(SWKey const & inkey) {
 
 void RawFiles::deleteEntry() {
     auto const key_(getVerseKey());
-    doSetText(key_->getTestament(), key_->getTestamentIndex(), "");
+    using namespace std::literals::string_view_literals;
+    doSetText(key_->getTestament(), key_->getTestamentIndex(), ""sv);
 }
 
 

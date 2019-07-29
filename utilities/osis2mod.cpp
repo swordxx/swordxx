@@ -556,7 +556,7 @@ void writeEntry(std::string &text, bool force = false) {
             std::cout << "DEBUG(WRITE): " << activeOsisID << ":" << currentVerse->getOSISRef() << ": " << activeVerseText << std::endl;
         }
 
-        module->setEntry(activeVerseText.c_str());
+        module->setEntry(activeVerseText);
         activeVerseText = "";
     }
 

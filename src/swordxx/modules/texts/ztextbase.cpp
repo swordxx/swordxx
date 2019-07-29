@@ -104,7 +104,7 @@ bool zTextBase<BaseZVerse>::sameBlock(VerseKey const & k1, VerseKey const & k2) 
 }
 
 template <typename BaseZVerse>
-void zTextBase<BaseZVerse>::setEntry(const char *inbuf, long len) {
+void zTextBase<BaseZVerse>::setEntry(std::string_view text) {
     auto const key_(getVerseKey());
 
     // see if we've jumped across blocks since last write
@@ -115,7 +115,7 @@ void zTextBase<BaseZVerse>::setEntry(const char *inbuf, long len) {
         lastWriteKey.reset();
     }
 
-    this->doSetText(key_->getTestament(), key_->getTestamentIndex(), inbuf, len);
+    this->doSetText(key_->getTestament(), key_->getTestamentIndex(), text);
 
     lastWriteKey = std::static_pointer_cast<VerseKey const>(key_->clone());
 }
@@ -137,7 +137,8 @@ void zTextBase<BaseZVerse>::linkEntry(SWKey const & inkey) {
 template <typename BaseZVerse>
 void zTextBase<BaseZVerse>::deleteEntry() {
     auto const key_(getVerseKey());
-    this->doSetText(key_->getTestament(), key_->getTestamentIndex(), "");
+    using namespace std::literals::string_view_literals;
+    this->doSetText(key_->getTestament(), key_->getTestamentIndex(), ""sv);
 }
 
 

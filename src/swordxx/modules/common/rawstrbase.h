@@ -76,7 +76,7 @@ protected: /* Methods: */
                          SizeType size,
                          std::string & buf) const;
 
-    void doSetText(char const * key, char const * buf, long len = -1);
+    void doSetText(char const * key, std::string_view text);
 
     void doLinkEntry(char const * destkey, char const * srckey);
 

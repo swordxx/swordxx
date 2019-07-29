@@ -85,7 +85,7 @@ int main(int argc, char **argv) {
 
       entrysize = fread(buffer, sizeof(char), sizeof(buffer), infile);
 
-      mod.setEntry(buffer, entrysize);    // save text to module at current position
+      mod.setEntry(std::string_view(buffer, entrysize));    // save text to module at current position
     }
     else {
       ListKey listkey = vkey->parseVerseList(argv[3], "Gen1:1", true);
@@ -111,7 +111,7 @@ int main(int argc, char **argv) {
 
         entrysize = fread(buffer, sizeof(char), sizeof(buffer), infile);
 
-        mod.setEntry(buffer, entrysize);    // save text to module at current position
+        mod.setEntry(std::string_view(buffer, entrysize));    // save text to module at current position
         std::cout << "f" << firstverse.getText() << std::endl;
         mod.increment();
       }
@@ -140,7 +140,7 @@ int main(int argc, char **argv) {
 
         entrysize = fread(buffer, sizeof(char), sizeof(buffer), infile);
 
-        mod.setEntry(buffer, entrysize);    // save text to module at current position
+        mod.setEntry(std::string_view(buffer, entrysize));    // save text to module at current position
         std::cout << "f" << firstverse.getText() << std::endl;
       }
     }

@@ -405,7 +405,7 @@ void zStr::getCompressedText(long block, long entry, char **buf) const {
  *      len     - length of buffer (0 - null terminated)
  */
 
-void zStr::setText(const char *ikey, const char *buf, long len) {
+void zStr::setText(const char *ikey, std::string_view text) {
     using namespace std::literals::string_view_literals;
 
     static const char nl[] = {13, 10};
@@ -417,7 +417,6 @@ void zStr::setText(const char *ikey, const char *buf, long len) {
     int32_t shiftSize;
     char * ch = nullptr;
 
-    len = (len < 0) ? std::strlen(buf) : len;
     std::string key(ikey);
     if (!m_caseSensitive)
         toupperstr_utf8(key);
@@ -430,7 +429,7 @@ void zStr::setText(const char *ikey, const char *buf, long len) {
         else if (diff > 0) {
             idxoff += IDXENTRYSIZE;
         }
-        else if ((!diff) && (len > 0 /*we're not deleting*/)) { // got absolute entry
+        else if ((!diff) && (!text.empty() /*we're not deleting*/)) { // got absolute entry
             do {
                 idxfd->seek(idxoff, SEEK_SET);
                 idxfd->read(&start, 4);
@@ -452,7 +451,7 @@ void zStr::setText(const char *ikey, const char *buf, long len) {
                 std::memmove(tmpbuf.get(), ch, size - (unsigned long)(ch-tmpbuf.get()));
 
                 // resolve link
-                if (startsWith(tmpbuf.get(), "@LINK"sv) && (len)) {
+                if (startsWith(tmpbuf.get(), "@LINK"sv) && !text.empty()) {
                     for (ch = tmpbuf.get(); *ch; ch++) {        // null before nl
                         if (*ch == 10) {
                             *ch = 0;
@@ -478,10 +477,10 @@ void zStr::setText(const char *ikey, const char *buf, long len) {
         idxfd->read(idxBytes.get(), shiftSize);
     }
 
-    auto outbuf(std::make_unique<char[]>(len + key.size() + 5));
+    auto outbuf(std::make_unique<char[]>(text.size() + key.size() + 5));
     std::sprintf(outbuf.get(), "%s%c%c", key.c_str(), 13, 10);
     size = std::strlen(outbuf.get());
-    if (len > 0) {    // NOT a link
+    if (!text.empty()) {    // NOT a link
         if (!m_cacheBlock) {
             flushCache();
             m_cacheBlock = std::make_unique<EntriesBlock>();
@@ -492,7 +491,7 @@ void zStr::setText(const char *ikey, const char *buf, long len) {
             m_cacheBlock = std::make_unique<EntriesBlock>();
             m_cacheBlockIndex = (zdxfd->seek(0, SEEK_END) / ZDXENTRYSIZE);
         }
-        uint32_t entry = m_cacheBlock->addEntry(buf);
+        uint32_t entry = m_cacheBlock->addEntry(std::string(text));
         m_cacheDirty = true;
         outstart = archtosword32(m_cacheBlockIndex);
         outsize = archtosword32(entry);
@@ -501,8 +500,8 @@ void zStr::setText(const char *ikey, const char *buf, long len) {
         size += (sizeof(uint32_t) * 2);
     }
     else {    // link
-        std::memcpy(outbuf.get() + size, buf, len);
-        size += len;
+        std::memcpy(outbuf.get() + size, text.data(), text.size());
+        size += text.size();
     }
 
     start = datfd->seek(0, SEEK_END);
@@ -511,7 +510,7 @@ void zStr::setText(const char *ikey, const char *buf, long len) {
     outsize  = archtosword32(size);
 
     idxfd->seek(idxoff, SEEK_SET);
-    if (len > 0) {
+    if (!text.empty()) {
         datfd->seek(start, SEEK_SET);
         datfd->write(outbuf.get(), size);
 
@@ -543,7 +542,7 @@ void zStr::setText(const char *ikey, const char *buf, long len) {
 
 void zStr::linkEntry(const char *destkey, const char *srckey) {
     assert(destkey);
-    setText(srckey, (std::string("@LINK ") + destkey).c_str());
+    setText(srckey, std::string("@LINK ") + destkey);
 }
 
 

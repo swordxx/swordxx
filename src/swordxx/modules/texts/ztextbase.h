@@ -74,7 +74,7 @@ public:
         return BaseZVerse::createModule(path, blockBound, v11n);
     }
 
-    void setEntry(char const * inbuf, long len = -1) override;
+    void setEntry(std::string_view text) override;
     void linkEntry(SWKey const & linkKey) override;
     void deleteEntry() override;
 
