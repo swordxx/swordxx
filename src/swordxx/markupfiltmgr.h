@@ -54,13 +54,6 @@ public:
      */
         MarkupFilterMgr(char markup = FMT_THML, TextEncoding encoding = ENC_UTF8);
 
-    /** Markup sets/gets the markup after initialization
-     *
-     * @param m The new markup or FMT_UNKNOWN if you just want to get the current markup.
-     * @return The current (possibly changed) markup format.
-     */
-        char Markup(char m = FMT_UNKNOWN);
-
         void addRenderFilters(SWModule & module,
                               ConfigEntMap const & section) override;
 };
