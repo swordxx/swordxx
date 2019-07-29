@@ -73,8 +73,6 @@ bool zLD::isWritable() const noexcept {
  */
 
 char zLD::getEntry(std::string & entry, long away) const {
-    char * idxbuf = nullptr;
-    char * ebuf = nullptr;
     char retval = 0;
     long index;
     unsigned long size;
@@ -86,15 +84,15 @@ char zLD::getEntry(std::string & entry, long away) const {
         retval = findKeyIndex(keyText.c_str(), &index, away);
     }
     if (!retval) {
-        getText(index, &idxbuf, &ebuf);
-        size = std::strlen(ebuf) + 1;
+        std::string idxbuf;
+        std::string ebuf;
+        getText(index, idxbuf, ebuf);
+        size = std::strlen(ebuf.c_str()) + 1;
         entry = ebuf;
 
         rawFilter(entry, key.get());
 
-        m_entkeytxt.assign(idxbuf); // set entry key text that module 'snapped' to.
-        free(idxbuf);
-        free(ebuf);
+        m_entkeytxt = std::move(idxbuf); // set entry key text that module 'snapped' to.
     } else {
         entry.clear();
     }

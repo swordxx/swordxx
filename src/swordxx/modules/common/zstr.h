@@ -58,7 +58,7 @@ protected:
     static const int IDXENTRYSIZE;
     static const int ZDXENTRYSIZE;
 
-    void getCompressedText(long block, long entry, char **buf) const;
+    void getCompressedText(long block, long entry, std::string & buf) const;
     void flushCache() const;
     std::string getKeyFromDatOffset(long ioffset) const;
     std::string getKeyFromIdxOffset(long ioffset) const;
@@ -71,7 +71,7 @@ public:
          bool m_caseSensitive = false);
     virtual ~zStr();
     signed char findKeyIndex(const char *ikey, long *idxoff, long away = 0) const;
-    void getText(long index, char **idxbuf, char **buf) const;
+    void getText(long index, std::string & idxbuf, std::string & buf) const;
     void setText(const char *ikey, std::string_view text);
     void linkEntry(const char *destkey, const char *srckey);
     virtual void rawZFilter(std::string &buf, char direction = 0) const { (void) buf; (void) direction; }

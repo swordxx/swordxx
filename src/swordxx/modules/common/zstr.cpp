@@ -299,10 +299,9 @@ signed char zStr::findKeyIndex(const char *ikey, long *idxoff, long away) const
  *
  */
 
-void zStr::getText(long offset, char **idxbuf, char **buf) const {
+void zStr::getText(long offset, std::string & idxbuf, std::string & buf) const {
     using namespace std::literals::string_view_literals;
 
-    char *ch;
     auto const idxbuflocal(getKeyFromIdxOffset(offset));
     uint32_t start;
     uint32_t size;
@@ -314,30 +313,25 @@ void zStr::getText(long offset, char **idxbuf, char **buf) const {
         start = swordtoarch32(start);
         size = swordtoarch32(size);
 
-        *buf = (*buf) ? (char *)realloc(*buf, size*2 + 1) : (char *)malloc(size*2 + 1);
-        *idxbuf = (*idxbuf) ? (char *)realloc(*idxbuf, size*2 + 1) : (char *)malloc(size*2 + 1);
-        std::memset(*buf, 0, size + 1);
-        std::memset(*idxbuf, 0, size + 1);
+        buf.assign(size * 2u + 1u, '\0');
+        idxbuf.assign(size * 2u + 1u, '\0');
         datfd->seek(start, SEEK_SET);
-        datfd->read(*buf, size);
+        datfd->read(buf.data(), size);
 
-        for (ch = *buf; *ch; ch++) {        // skip over index string
+        char const * ch;
+        for (ch = buf.c_str(); *ch; ch++) {        // skip over index string
             if (*ch == 10) {
                 ch++;
                 break;
             }
         }
-        std::memmove(*buf, ch, size - (unsigned long)(ch-*buf));
+        std::memmove(buf.data(), ch, size - static_cast<std::size_t>(ch - buf.c_str()));
 
         // resolve link
-        if (startsWith(*buf, "@LINK"sv)) {
-            for (ch = *buf; *ch; ch++) {        // null before nl
-                if (*ch == 10) {
-                    *ch = 0;
-                    break;
-                }
-            }
-            findKeyIndex(*buf + 6, &offset);
+        if (startsWith(buf, "@LINK"sv)) {
+            if (auto nlPos = buf.find('\n', 5u); nlPos != std::string::npos)
+                buf.resize(nlPos);
+            findKeyIndex(buf.c_str() + 6, &offset);
         }
         else break;
     }
@@ -345,13 +339,13 @@ void zStr::getText(long offset, char **idxbuf, char **buf) const {
 
     auto localsize = idxbuflocal.size();
     localsize = (localsize < (size - 1)) ? localsize : (size - 1);
-    std::strncpy(*idxbuf, idxbuflocal.c_str(), localsize);
-    (*idxbuf)[localsize] = 0;
+    std::strncpy(idxbuf.data(), idxbuflocal.c_str(), localsize);
+    idxbuf.resize(localsize);
 
     uint32_t block = 0;
     uint32_t entry = 0;
-    std::memmove(&block, *buf, sizeof(uint32_t));
-    std::memmove(&entry, *buf + sizeof(uint32_t), sizeof(uint32_t));
+    std::memmove(&block, buf.c_str(), sizeof(uint32_t));
+    std::memmove(&entry, buf.c_str() + sizeof(uint32_t), sizeof(uint32_t));
     block = swordtoarch32(block);
     entry = swordtoarch32(entry);
     getCompressedText(block, entry, buf);
@@ -363,7 +357,7 @@ void zStr::getText(long offset, char **idxbuf, char **buf) const {
  *         file.
  */
 
-void zStr::getCompressedText(long block, long entry, char **buf) const {
+void zStr::getCompressedText(long block, long entry, std::string & buf) const {
 
     uint32_t size = 0;
 
@@ -392,8 +386,7 @@ void zStr::getCompressedText(long block, long entry, char **buf) const {
         m_cacheBlockIndex = block;
     }
     size = (*m_cacheBlock)[entry].size();
-    *buf = (*buf) ? (char *)realloc(*buf, size*2 + 1) : (char *)malloc(size*2 + 1);
-    std::strcpy(*buf, (*m_cacheBlock)[entry].c_str());
+    buf = (*m_cacheBlock)[entry].c_str();
 }
 
 
