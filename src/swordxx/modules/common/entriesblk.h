@@ -47,7 +47,7 @@ public: /* Methods: */
     ~EntriesBlock() noexcept;
 
     SizeType numEntries() const;
-    SizeType addEntry(std::string entry);
+    SizeType addEntry(std::string_view entry);
     std::string const & operator[](SizeType entryIndex) const noexcept;
 
     std::vector<char> serialized() const;

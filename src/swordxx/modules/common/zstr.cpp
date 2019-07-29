@@ -491,7 +491,7 @@ void zStr::setText(const char *ikey, std::string_view text) {
             m_cacheBlock = std::make_unique<EntriesBlock>();
             m_cacheBlockIndex = (zdxfd->seek(0, SEEK_END) / ZDXENTRYSIZE);
         }
-        uint32_t entry = m_cacheBlock->addEntry(std::string(text));
+        uint32_t entry = m_cacheBlock->addEntry(text);
         m_cacheDirty = true;
         outstart = archtosword32(m_cacheBlockIndex);
         outsize = archtosword32(entry);

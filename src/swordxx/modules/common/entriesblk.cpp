@@ -185,7 +185,7 @@ std::vector<char> EntriesBlock::serialized() const {
 }
 
 
-EntriesBlock::SizeType EntriesBlock::addEntry(std::string entry) {
+EntriesBlock::SizeType EntriesBlock::addEntry(std::string_view entry) {
     if (entry.size() > std::numeric_limits<EntrySizeType>::max() - 1u)
         throw std::runtime_error("Entry too big!");
 
