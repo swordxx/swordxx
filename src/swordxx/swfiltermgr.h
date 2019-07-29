@@ -41,11 +41,6 @@ public: /* Methods: */
 
     virtual ~SWFilterMgr() noexcept;
 
-    void setParentMgr(SWMgr * const parentMgr) noexcept
-    { m_parentMgr = parentMgr; }
-
-    SWMgr * getParentMgr() const noexcept { return m_parentMgr; }
-
     virtual void addGlobalOptions(SWModule & module,
                                   ConfigEntMap const & section,
                                   ConfigEntMap::const_iterator start,
@@ -98,10 +93,6 @@ public: /* Methods: */
     */
     virtual void addRawFilters(SWModule & module,
                                ConfigEntMap const & section);
-
-private: /* Fields: */
-
-    SWMgr * m_parentMgr;
 
 };
 

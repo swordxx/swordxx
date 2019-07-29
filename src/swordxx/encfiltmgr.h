@@ -38,6 +38,10 @@ namespace swordxx {
     encoding you want to use. */
 class SWDLLEXPORT EncodingFilterMgr : public SWFilterMgr {
 
+private: /* Types: */
+
+    struct EncodingFilter;
+
 public: /* Methods: */
 
     /** \param[in] encoding The desired encoding. */
@@ -45,7 +49,7 @@ public: /* Methods: */
 
     void setEncoding(TextEncoding const encoding);
 
-    inline TextEncoding encoding() const noexcept { return m_encoding; }
+    TextEncoding encoding() const noexcept;
 
     /**
      * Adds the raw filters which are defined in "section" to the SWModule
@@ -72,10 +76,7 @@ private: /* Fields: */
     std::shared_ptr<SWFilter> const m_latin1utf8;
     std::shared_ptr<SWFilter> const m_scsuutf8;
     std::shared_ptr<SWFilter> const m_utf16utf8;
-    std::shared_ptr<SWFilter> m_targetenc;
-
-    /** Current encoding value: */
-    TextEncoding m_encoding;
+    std::shared_ptr<EncodingFilter> m_targetenc;
 
 };
 

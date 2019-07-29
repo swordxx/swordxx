@@ -32,33 +32,46 @@
 #include "filters/utf8html.h"
 #include "filters/utf8scsu.h"
 #include "filters/utf8utf16.h"
-#include "swmgr.h"
 #include "swmodule.h"
 #include "utilstr.h"
 
 
 namespace swordxx {
-namespace {
 
-std::shared_ptr<SWFilter> makeEncodingFilter(TextEncoding const encoding) {
-    switch (encoding) {
-        case ENC_LATIN1: return std::make_shared<UTF8Latin1>();
-        case ENC_UTF16:  return std::make_shared<UTF8UTF16>();
-        case ENC_HTML:   return std::make_shared<UTF8HTML>();
-        case ENC_SCSU:   return std::make_shared<UTF8SCSU>();
-        default: // i.e. case ENC_UTF8
-            return std::shared_ptr<SWFilter>();
+struct EncodingFilterMgr::EncodingFilter: SWFilter {
+
+/* Methods: */
+
+    EncodingFilter(TextEncoding const encoding) noexcept
+        : m_encoding(encoding)
+    {}
+
+
+    char processText(std::string & text,
+                     SWKey const * key = nullptr,
+                     SWModule const * module = nullptr) override
+    {
+        switch (m_encoding) {
+            case ENC_LATIN1: return UTF8Latin1().processText(text, key, module);
+            case ENC_UTF16:  return UTF8UTF16().processText(text, key, module);
+            case ENC_HTML:   return UTF8HTML().processText(text, key, module);
+            case ENC_SCSU:   return UTF8SCSU().processText(text, key, module);
+            default: // i.e. case ENC_UTF8
+                return 0;
+        }
     }
-}
 
-} // anonymous namespace
+/* Fields: */
+
+    TextEncoding m_encoding;
+
+};
 
 EncodingFilterMgr::EncodingFilterMgr(TextEncoding const encoding)
     : m_latin1utf8(std::make_shared<Latin1UTF8>())
     , m_scsuutf8(std::make_shared<SCSUUTF8>())
     , m_utf16utf8(std::make_shared<UTF16UTF8>())
-    , m_targetenc(makeEncodingFilter(encoding))
-    , m_encoding(encoding)
+    , m_targetenc(std::make_shared<EncodingFilter>(encoding))
 {}
 
 void EncodingFilterMgr::addRawFilters(SWModule & module,
@@ -82,35 +95,14 @@ void EncodingFilterMgr::addRawFilters(SWModule & module,
 
 void EncodingFilterMgr::addEncodingFilters(SWModule & module,
                                            ConfigEntMap const & /* section */)
-{
-    if (m_targetenc)
-        module.addEncodingFilter(m_targetenc);
-}
+{ module.addEncodingFilter(m_targetenc); }
 
 void EncodingFilterMgr::setEncoding(TextEncoding const encoding) {
     assert(encoding != ENC_UNKNOWN);
-    if (encoding == m_encoding)
-        return;
-
-    m_encoding = encoding;
-    if (m_targetenc) {
-        std::shared_ptr<SWFilter> const oldfilter(std::move(m_targetenc));
-        m_targetenc = makeEncodingFilter(encoding);
-        if (!m_targetenc) {
-            for (auto const & mp : getParentMgr()->modules())
-                mp.second->removeRenderFilter(oldfilter);
-        } else {
-            for (auto const & mp : getParentMgr()->modules())
-                mp.second->replaceRenderFilter(oldfilter,
-                                               m_targetenc);
-        }
-    } else {
-        m_targetenc = makeEncodingFilter(encoding);
-        if (m_targetenc)
-            for (auto const & mp : getParentMgr()->modules())
-                mp.second->addRenderFilter(m_targetenc);
-    }
-    return;
+    m_targetenc->m_encoding = encoding;
 }
+
+TextEncoding EncodingFilterMgr::encoding() const noexcept
+{ return m_targetenc->m_encoding; }
 
 } /* namespace swordxx */

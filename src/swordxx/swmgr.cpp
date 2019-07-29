@@ -243,9 +243,6 @@ SWMgr::SWMgr(SWConfig * iconfig,
 {
     init();
 
-    if (filterMgr)
-        filterMgr->setParentMgr(this);
-
     if (iconfig) {
         config   = iconfig;
         myconfig = nullptr;
@@ -271,9 +268,6 @@ SWMgr::SWMgr(char const * iConfigPath,
     , filterMgr(std::move(filterMgr_))
 {
     init();
-
-    if (filterMgr)
-        filterMgr->setParentMgr(this);
 
     std::string path;
     if (iConfigPath) {
