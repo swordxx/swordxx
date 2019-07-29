@@ -45,7 +45,6 @@ protected:
                  */
         char markup;
 
-        void CreateFilters(char markup);
 public:
     /** Constructor of SWMarkupMgr.
      *

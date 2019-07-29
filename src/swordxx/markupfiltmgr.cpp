@@ -61,44 +61,10 @@ namespace swordxx {
  */
 
 MarkupFilterMgr::MarkupFilterMgr(char mark, TextEncoding enc)
-        : EncodingFilterMgr(enc) {
-
-    markup = mark;
-
-    CreateFilters(markup);
-}
-
-void MarkupFilterMgr::addRenderFilters(SWModule & module,
-                                       ConfigEntMap const & /* section */)
+    : EncodingFilterMgr(enc)
+    , markup(mark)
 {
-    switch (module.getMarkup()) {
-    case FMT_THML:
-        if (m_fromthml)
-            module.addRenderFilter(m_fromthml);
-        break;
-    case FMT_GBF:
-        if (m_fromgbf)
-            module.addRenderFilter(m_fromgbf);
-        break;
-    case FMT_PLAIN:
-        if (m_fromplain)
-            module.addRenderFilter(m_fromplain);
-        break;
-    case FMT_OSIS:
-        if (m_fromosis)
-            module.addRenderFilter(m_fromosis);
-        break;
-    case FMT_TEI:
-        if (m_fromtei)
-            module.addRenderFilter(m_fromtei);
-        break;
-    }
-}
-
-
-void MarkupFilterMgr::CreateFilters(char markup_) {
-
-    switch (markup_) {
+    switch (mark) {
     case FMT_PLAIN:
         m_fromplain.reset();
         m_fromthml = std::make_shared<ThMLPlain>();
@@ -171,9 +137,34 @@ void MarkupFilterMgr::CreateFilters(char markup_) {
         m_fromtei = std::make_shared<TEIXHTML>();
         break;
     }
-
 }
 
+void MarkupFilterMgr::addRenderFilters(SWModule & module,
+                                       ConfigEntMap const & /* section */)
+{
+    switch (module.getMarkup()) {
+    case FMT_THML:
+        if (m_fromthml)
+            module.addRenderFilter(m_fromthml);
+        break;
+    case FMT_GBF:
+        if (m_fromgbf)
+            module.addRenderFilter(m_fromgbf);
+        break;
+    case FMT_PLAIN:
+        if (m_fromplain)
+            module.addRenderFilter(m_fromplain);
+        break;
+    case FMT_OSIS:
+        if (m_fromosis)
+            module.addRenderFilter(m_fromosis);
+        break;
+    case FMT_TEI:
+        if (m_fromtei)
+            module.addRenderFilter(m_fromtei);
+        break;
+    }
+}
 
 } /* namespace swordxx */
 
