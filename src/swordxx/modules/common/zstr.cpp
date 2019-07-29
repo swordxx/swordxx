@@ -319,7 +319,7 @@ void zStr::getText(long offset, char **idxbuf, char **buf) const {
         std::memset(*buf, 0, size + 1);
         std::memset(*idxbuf, 0, size + 1);
         datfd->seek(start, SEEK_SET);
-        datfd->read(*buf, (int)(size));
+        datfd->read(*buf, size);
 
         for (ch = *buf; *ch; ch++) {        // skip over index string
             if (*ch == 10) {
