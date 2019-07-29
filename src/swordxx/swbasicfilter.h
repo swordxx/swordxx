@@ -198,11 +198,7 @@ protected: /* Methods: */
     virtual bool processStage(char stage,
                               std::string & text,
                               char const *& from,
-                              BasicFilterUserData * userData)
-    {
-        (void) stage; (void) text; (void) from; (void) userData;
-        return false;
-    }
+                              BasicFilterUserData * userData);
 
     /** This function is called for every escape sequence encountered in the input text.
      * @param buf the output buffer

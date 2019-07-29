@@ -143,6 +143,12 @@ bool SWBasicFilter::handleToken(std::string & buf,
                                 BasicFilterUserData * /* userData */)
 { return substituteToken(buf, token); }
 
+bool SWBasicFilter::processStage(char,
+                                 std::string &,
+                                 char const *&,
+                                 BasicFilterUserData *)
+{ return false; }
+
 bool SWBasicFilter::handleEscapeString(std::string & buf,
                                        char const * escString,
                                        BasicFilterUserData * /* userData */)
