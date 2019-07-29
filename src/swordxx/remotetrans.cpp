@@ -35,6 +35,11 @@ namespace swordxx {
 
 StatusReporter::~StatusReporter() noexcept = default;
 
+void StatusReporter::preStatus(std::size_t, std::size_t, char const *) noexcept
+{}
+
+void StatusReporter::update(std::size_t, std::size_t) noexcept {}
+
 RemoteTransport::RemoteTransport(const char * host,
                                  std::shared_ptr<StatusReporter> statusReporter)
     : m_statusReporter(std::move(statusReporter))

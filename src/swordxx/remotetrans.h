@@ -44,20 +44,11 @@ public: /* Methods: */
     /** Messages before stages of a batch download */
     virtual void preStatus(std::size_t totalBytes,
                            std::size_t completedBytes,
-                           const char * message) noexcept
-    {
-        (void) totalBytes;
-        (void) completedBytes;
-        (void) message;
-    }
+                           char const * message) noexcept;
 
     /** Frequently called throughout a download, to report status */
     virtual void update(std::size_t totalBytes, std::size_t completedBytes)
-            noexcept
-    {
-        (void) totalBytes;
-        (void) completedBytes;
-    }
+            noexcept;
 
 };
 
