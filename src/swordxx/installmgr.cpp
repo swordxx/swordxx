@@ -519,6 +519,8 @@ int InstallMgr::refreshRemoteSourceConfiguration() {
     return -1;
 }
 
+bool InstallMgr::getCipherCode(char const *, SWConfig *) { return false; }
+
 
 InstallSource::InstallSource(const char *type, const char *confEnt) {
     this->m_type = type;
