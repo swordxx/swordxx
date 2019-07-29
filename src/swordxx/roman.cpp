@@ -28,6 +28,19 @@
 
 namespace swordxx {
 
+bool isRomanDigit(char const c) noexcept {
+    switch (c) {
+    case 'M': case 'm':
+    case 'D': case 'd':
+    case 'C': case 'c':
+    case 'L': case 'l':
+    case 'X': case 'x':
+    case 'V': case 'v':
+    case 'I': case 'i': return true;
+    default: return false;
+    }
+}
+
 
 char isroman (const char *str, int maxchars) {
     char *ch = (char*)str;

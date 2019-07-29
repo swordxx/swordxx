@@ -28,6 +28,13 @@
 
 namespace swordxx {
 
+/**
+  \brief Checks whether the given input is a Roman numeral digit.
+  \param[in] c The input to check.
+  \returns whether the given input is a Roman numeral digit.
+*/
+bool isRomanDigit(char const c) noexcept;
+
 /** Checks if a string is a roman numeral.
 */
 char isroman(const char *, int maxchars = 0);
