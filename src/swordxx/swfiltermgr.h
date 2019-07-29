@@ -49,24 +49,12 @@ public: /* Methods: */
     virtual void addGlobalOptions(SWModule & module,
                                   ConfigEntMap const & section,
                                   ConfigEntMap::const_iterator start,
-                                  ConfigEntMap::const_iterator end)
-    {
-        (void) module;
-        (void) section;
-        (void) start;
-        (void) end;
-    }
+                                  ConfigEntMap::const_iterator end);
 
     virtual void addLocalOptions(SWModule & module,
                                  ConfigEntMap const & section,
                                  ConfigEntMap::const_iterator start,
-                                 ConfigEntMap::const_iterator end)
-    {
-        (void) module;
-        (void) section;
-        (void) start;
-        (void) end;
-    }
+                                 ConfigEntMap::const_iterator end);
 
     /**
       Adds the encoding filters which are defined in "section" to the SWModule
@@ -76,11 +64,7 @@ public: /* Methods: */
                      apply to the module.
     */
     virtual void addEncodingFilters(SWModule & module,
-                                    ConfigEntMap const & section)
-    {
-        (void) module;
-        (void) section;
-    }
+                                    ConfigEntMap const & section);
 
 
     /**
@@ -91,11 +75,7 @@ public: /* Methods: */
                      apply to the module.
     */
     virtual void addRenderFilters(SWModule & module,
-                                  ConfigEntMap const & section)
-    {
-        (void) module;
-        (void) section;
-    }
+                                  ConfigEntMap const & section);
 
 
     /**
@@ -106,11 +86,7 @@ public: /* Methods: */
                      apply to the module.
     */
     virtual void addStripFilters(SWModule & module,
-                                 ConfigEntMap const & section)
-    {
-        (void) module;
-        (void) section;
-    }
+                                 ConfigEntMap const & section);
 
 
     /**
@@ -121,11 +97,7 @@ public: /* Methods: */
                      apply to the module.
     */
     virtual void addRawFilters(SWModule & module,
-                               ConfigEntMap const & section)
-    {
-        (void) module;
-        (void) section;
-    }
+                               ConfigEntMap const & section);
 
 private: /* Fields: */
 
