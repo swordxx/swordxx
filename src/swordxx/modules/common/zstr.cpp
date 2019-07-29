@@ -606,6 +606,7 @@ void zStr::flushCache() const {
     m_cacheDirty = false;
 }
 
+void zStr::rawZFilter(std::string &, char) const {}
 
 /******************************************************************************
  * zLD::CreateModule    - Creates new module files

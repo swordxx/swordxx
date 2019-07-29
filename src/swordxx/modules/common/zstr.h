@@ -74,7 +74,7 @@ public:
     void getText(long index, std::string & idxbuf, std::string & buf) const;
     void setText(const char *ikey, std::string_view text);
     void linkEntry(const char *destkey, const char *srckey);
-    virtual void rawZFilter(std::string &buf, char direction = 0) const { (void) buf; (void) direction; }
+    virtual void rawZFilter(std::string &buf, char direction = 0) const;
     static signed char createModule (const char *path);
 };
 
