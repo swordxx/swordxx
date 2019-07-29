@@ -75,7 +75,6 @@ bool zLD::isWritable() const noexcept {
 char zLD::getEntry(std::string & entry, long away) const {
     char retval = 0;
     long index;
-    unsigned long size;
     auto const key(getKey());
     auto const keyText(key->getText());
     if (this->m_strongsPadding) {
@@ -87,7 +86,6 @@ char zLD::getEntry(std::string & entry, long away) const {
         std::string idxbuf;
         std::string ebuf;
         getText(index, idxbuf, ebuf);
-        size = std::strlen(ebuf.c_str()) + 1;
         entry = ebuf;
 
         rawFilter(entry, key.get());
