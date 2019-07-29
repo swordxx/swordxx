@@ -66,17 +66,14 @@ void EncodingFilterMgr::addRawFilters(SWModule & module,
 {
     auto const entry(section.find("Encoding"));
     if (entry == section.end() || entry->second.empty()) {
-        module.addRawFilter(m_latin1utf8); /// \todo pass as shared_ptr?
+        module.addRawFilter(m_latin1utf8);
     } else {
         auto const & rawEncodingStr = entry->second;
         if (caseInsensitiveEquals(rawEncodingStr, "Latin-1")) {
-            /// \todo pass as shared_ptr?
             module.addRawFilter(m_latin1utf8);
         } else if (caseInsensitiveEquals(rawEncodingStr, "SCSU")) {
-            /// \todo pass as shared_ptr?
             module.addRawFilter(m_scsuutf8);
         } else if (caseInsensitiveEquals(rawEncodingStr, "UTF-16")) {
-            /// \todo pass as shared_ptr?
             module.addRawFilter(m_utf16utf8);
         }
     }
@@ -87,7 +84,6 @@ void EncodingFilterMgr::addEncodingFilters(SWModule & module,
                                            ConfigEntMap const & /* section */)
 {
     if (m_targetenc)
-        /// \todo pass as shared_ptr?
         module.addEncodingFilter(m_targetenc);
 }
 
@@ -102,11 +98,9 @@ void EncodingFilterMgr::setEncoding(TextEncoding const encoding) {
         m_targetenc = makeEncodingFilter(encoding);
         if (!m_targetenc) {
             for (auto const & mp : getParentMgr()->modules())
-                 /// \todo pass as shared_ptr?
                 mp.second->removeRenderFilter(oldfilter);
         } else {
             for (auto const & mp : getParentMgr()->modules())
-                 /// \todo pass as shared_ptr?
                 mp.second->replaceRenderFilter(oldfilter,
                                                m_targetenc);
         }
@@ -114,7 +108,6 @@ void EncodingFilterMgr::setEncoding(TextEncoding const encoding) {
         m_targetenc = makeEncodingFilter(encoding);
         if (m_targetenc)
             for (auto const & mp : getParentMgr()->modules())
-                 /// \todo pass as shared_ptr?
                 mp.second->addRenderFilter(m_targetenc);
     }
     return;
