@@ -41,13 +41,11 @@ bool isRomanDigit(char const c) noexcept {
     }
 }
 
-
-char isroman (const char *str, int maxchars) {
-    char *ch = (char*)str;
-    for (; *ch && (!maxchars || (ch-str) <= maxchars); ch++)
-        if (!std::strchr("IVXLCDMivxlcdm ", *ch))
-            return 0;
-    return 1;
+bool isRoman(std::string_view sv) noexcept {
+    for (auto const c : sv)
+        if (!isRomanDigit(c))
+            return false;
+    return true;
 }
 
 int from_rom(const char* str) {

@@ -589,8 +589,8 @@ terminate_range:
                 for (loop = book.size() - 1u; loop+1; loop--) {
                     if (book[loop] == ' ') {
                         // "PS C" is ok, but "II C" is not ok
-                        if (isroman(book.c_str() + loop + 1u)
-                            && !isroman(book.c_str(), loop))
+                        if (isRoman(std::string_view(book).substr(loop + 1u))
+                            && !isRoman(std::string_view(book).substr(0u, loop)))
                         {
                             if (verse == -1) {
                                 verse = chap;
@@ -872,7 +872,9 @@ terminate_range:
         for (loop = book.size() - 1u; loop+1; loop--) {
             if (book[loop] == ' ') {
                 // "PS C" is ok, but "II C" is not ok
-                if (isroman(book.c_str() + loop + 1u) && !isroman(book.c_str(), loop)) {
+                if (isRoman(std::string_view(book).substr(loop + 1u))
+                    && !isRoman(std::string_view(book).substr(0, loop)))
+                {
                     if (verse == -1) {
                         verse = chap;
                         chap = from_rom(book.c_str() + loop + 1u);

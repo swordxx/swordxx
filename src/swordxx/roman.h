@@ -23,6 +23,7 @@
 #ifndef SWORDXX_ROMAN_H
 #define SWORDXX_ROMAN_H
 
+#include <string_view>
 #include "defs.h"
 
 
@@ -35,9 +36,13 @@ namespace swordxx {
 */
 bool isRomanDigit(char const c) noexcept;
 
-/** Checks if a string is a roman numeral.
+/**
+  \brief Checks whether the given input is a Roman numeral.
+  \param[in] sv The input to check.
+  \returns whether the given input is a Roman numeral.
 */
-char isroman(const char *, int maxchars = 0);
+bool isRoman(std::string_view sv) noexcept;
+
 /* char* to_rom(int num, char *p); */
 
 /** Converts a roman numeral to a string.
