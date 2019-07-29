@@ -102,6 +102,9 @@ zVerseBase<VerseSizeType_>::~zVerseBase() {
     }
 }
 
+template <typename VerseSizeType_>
+void zVerseBase<VerseSizeType_>::rawZFilter(std::string &, char) const {}
+
 /******************************************************************************
  * zVerseBase::findoffset    - Finds the offset of the key verse from the indexes
  *

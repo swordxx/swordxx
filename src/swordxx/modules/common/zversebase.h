@@ -59,8 +59,7 @@ public: /* Methods: */
                std::unique_ptr<SWCompress> icomp = nullptr);
     virtual ~zVerseBase();
 
-    virtual void rawZFilter(std::string & buf, char direction = 0) const
-    { (void) buf; (void) direction; }
+    virtual void rawZFilter(std::string & buf, char direction = 0) const;
 
 protected: /* Methods: */
 
