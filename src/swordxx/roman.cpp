@@ -1,13 +1,6 @@
 /******************************************************************************
  *
- *  roman.cpp -
- *
- * $Id$
- *
- * Copyright 2002-2013 CrossWire Bible Society (http://www.crosswire.org)
- *    CrossWire Bible Society
- *    P. O. Box 2528
- *    Tempe, AZ  85280-2528
+ * Copyright Jaak Ristioja
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -22,11 +15,29 @@
 
 #include "roman.h"
 
-#include <cstdlib>
-#include <cstring>
+#include <array>
+#include <limits>
+#include <cassert>
 
 
 namespace swordxx {
+namespace {
+
+inline unsigned romanDigitValue(char const c) noexcept {
+    assert(isRomanDigit(c));
+    switch (c) {
+    case 'I': case 'i': return 1u;
+    case 'V': case 'v': return 5u;
+    case 'X': case 'x': return 10u;
+    case 'L': case 'l': return 50u;
+    case 'C': case 'c': return 100u;
+    case 'D': case 'd': return 500u;
+    case 'M': case 'm': return 1000u;
+    default: return unsigned();
+    }
+}
+
+} // anonymous namespace
 
 bool isRomanDigit(char const c) noexcept {
     switch (c) {
@@ -48,57 +59,133 @@ bool isRoman(std::string_view sv) noexcept {
     return true;
 }
 
-int from_rom(const char* str) {
-    int i, n = std::strlen(str);
-    short * num= (short *) std::calloc(n, sizeof(short));
-    for (i = 0; str[i]; i++) {
-        switch(str[i]) {
-        case 'i':
-        case 'I':
-            num[i] = 1;
-            break;
-        case 'v':
-        case 'V':
-            num[i] = 5;
-            break;
-        case 'x':
-        case 'X':
-            num[i] = 10;
-            break;
-        case 'l':
-        case 'L':
-            num[i] = 50;
-            break;
-        case 'c':
-        case 'C':
-            num[i] = 100;
-            break;
-        case 'd':
-        case 'D':
-            num[i] = 500;
-            break;
-        case 'm':
-        case 'M':
-            num[i] = 1000;
-            break;
-        default:
-            num[i] = 0;
-        }
-    }
-    for (i = 1; str[i]; i++) {
-        if (num[i] > num[i-1])  {
-            num[i] -= num[i-1];
-            num[i-1] = 0;
-        }
-    }
-    n = 0;
-    for (i = 0; str[i]; i++) {
-        n += num[i];
-    }
-     free(num);
-    return n;
-}
+std::optional<std::uintmax_t> parseRomanNumeral(std::string_view sv) noexcept {
+    if (sv.empty())
+        return 0u;
 
+    static constexpr auto const maxValue =
+            std::numeric_limits<std::uintmax_t>::max();
+    static_assert(std::numeric_limits<std::string_view::size_type>::max()
+                  <= maxValue, "");
+
+    using DigitValue = unsigned;
+
+    // Signifies a span of identical Roman numeral digits:
+    struct Span {
+        std::uintmax_t spanValue; // Number of such Roman digits in the span
+        DigitValue digitValue; // Numeric value of the digit
+    };
+
+    /* Returns the next span from sv, chopping its prefix on each run. On error,
+       sv is left empty, and {0u, 0u} is returned. On end of input, sv is left
+       empty and {0u, 0u} is returned. */
+    auto const nextSpan =
+            [&sv]() -> Span {
+                if (sv.empty())
+                    return {0u, 0u};
+                auto const digit(sv.front());
+                if (!isRomanDigit(digit))
+                    return {0u, 0u};
+                sv.remove_prefix(1u);
+                auto const digitValue(romanDigitValue(digit));
+                auto spanValueLeft = maxValue - digitValue;
+                if (!sv.empty()) {
+                    if (sv.front() == digit) {
+                        // Multiples of D/L/V are not allowed:
+                        switch (digit) {
+                        case 'D': case 'L': case 'V':
+                        case 'd': case 'l': case 'v':
+                            return {0u, 0u};
+                        default:
+                            break;
+                        }
+                        do {
+                            if (spanValueLeft < digitValue)
+                                return {0u, 0u}; // Overflow
+                            spanValueLeft -= digitValue;
+                            sv.remove_prefix(1u);
+                        } while (!sv.empty() && (sv.front() == digit));
+                    }
+                }
+                assert(digitValue < std::numeric_limits<DigitValue>::max());
+                return {maxValue - spanValueLeft,
+                        static_cast<DigitValue>(digitValue)};
+            };
+
+    // There can only be a maximum of 7 spans:
+    std::array<Span, 7u> allSpans;
+    std::size_t numSpans = 0u;
+    for (auto & span : allSpans) {
+        span = nextSpan();
+        if (!span.digitValue) {
+            assert(!span.spanValue);
+            if (sv.empty())
+                break;
+            return {}; // Invalid character or spans of D/L/V with size > 1
+        }
+        assert(span.spanValue);
+        ++numSpans;
+    }
+    if (!numSpans || !sv.empty())
+        return {}; // Error on more than 7 spans
+
+    if (numSpans == 1u)
+        return allSpans.front().spanValue;
+
+    static constexpr auto const canSubtractDigitValue =
+            [](auto const digitValue, auto const fromValue) {
+                switch (digitValue) {
+                case 5u: case 50u: case 500u:
+                    return digitValue * 2u < fromValue;
+                default: return true;
+                }
+            };
+    std::uintmax_t r = 0u;
+    #define CHECK_OVERFLOW_AND_ADD_TO_RESULT(...) \
+        do { \
+            auto const toAdd_ = (__VA_ARGS__); \
+            if (maxValue - r < toAdd_) \
+                return {}; \
+            r += toAdd_; \
+        } while (false)
+
+    DigitValue maxDigitValue = 1000;
+    DigitValue subtractedDigitValue = 0u;
+    for (unsigned i = 1u; i < numSpans; ++i) {
+        auto const & s1 = allSpans[i - 1u];
+        auto const & s2 = allSpans[i];
+        if (s1.digitValue < s2.digitValue) {
+            if (subtractedDigitValue)
+                return {};
+            if (s2.digitValue > maxDigitValue)
+                return {};
+            if (!canSubtractDigitValue(s1.digitValue, s2.digitValue))
+                return {};
+            if (s1.spanValue >= s2.spanValue)
+                return {};
+            CHECK_OVERFLOW_AND_ADD_TO_RESULT(s2.spanValue - s1.spanValue);
+            subtractedDigitValue = s1.digitValue;
+            maxDigitValue = s2.digitValue;
+        } else {
+            assert(s1.digitValue > s2.digitValue);
+            if (subtractedDigitValue) {
+                if (s2.digitValue >= subtractedDigitValue)
+                    return {};
+                if (s2.digitValue > maxDigitValue)
+                    return {};
+                subtractedDigitValue = 0u;
+            } else {
+                CHECK_OVERFLOW_AND_ADD_TO_RESULT(s1.spanValue);
+                maxDigitValue = s1.digitValue;
+            }
+        }
+    }
+    if (!subtractedDigitValue)
+        CHECK_OVERFLOW_AND_ADD_TO_RESULT(allSpans[numSpans -1u].spanValue);
+
+    #undef CHECK_OVERFLOW_AND_ADD_TO_RESULT
+    return r;
+}
 
 } /* namespace swordxx */
 

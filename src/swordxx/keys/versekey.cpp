@@ -594,7 +594,13 @@ terminate_range:
                         {
                             if (verse == -1) {
                                 verse = chap;
-                                chap = from_rom(book.c_str() + loop + 1u);
+                                auto const parseResult(
+                                            parseRomanNumeral(
+                                                std::string_view(book).substr(
+                                                    loop + 1u)));
+                                /// \todo Is the following assertion correct?
+                                assert(parseResult.has_value());
+                                chap = *parseResult;
                                 book.resize(loop);
                             }
                         }
@@ -877,7 +883,13 @@ terminate_range:
                 {
                     if (verse == -1) {
                         verse = chap;
-                        chap = from_rom(book.c_str() + loop + 1u);
+                        auto const parseResult(
+                                    parseRomanNumeral(
+                                        std::string_view(book).substr(
+                                            loop + 1u)));
+                        /// \todo Is the following assertion correct?
+                        assert(parseResult.has_value());
+                        chap = *parseResult;
                         book.resize(loop);
                     }
                 }

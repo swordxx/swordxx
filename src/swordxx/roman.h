@@ -1,13 +1,6 @@
 /******************************************************************************
  *
- *  roman.h -    roman numeral functions
- *
- * $Id$
- *
- * Copyright 2001-2013 CrossWire Bible Society (http://www.crosswire.org)
- *    CrossWire Bible Society
- *    P. O. Box 2528
- *    Tempe, AZ  85280-2528
+ * Copyright Jaak Ristioja
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -23,6 +16,8 @@
 #ifndef SWORDXX_ROMAN_H
 #define SWORDXX_ROMAN_H
 
+#include <cstdint>
+#include <optional>
 #include <string_view>
 #include "defs.h"
 
@@ -43,12 +38,13 @@ bool isRomanDigit(char const c) noexcept;
 */
 bool isRoman(std::string_view sv) noexcept;
 
-/* char* to_rom(int num, char *p); */
-
-/** Converts a roman numeral to a string.
-* @param s Roman numeral to convert.
+/**
+  \brief Attempts to parse the value for the given Roman numeral input.
+  \param[in] sv The input to parse.
+  \returns the numeric value of the Roman numeral input, or empty on parse
+           errors or when the numeric value doesn't fit into the return type.
 */
-int from_rom(const char *s);
+std::optional<std::uintmax_t> parseRomanNumeral(std::string_view sv) noexcept;
 
 } /* namespace swordxx */
 

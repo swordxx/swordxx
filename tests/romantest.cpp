@@ -20,27 +20,22 @@
  *
  */
 
-#include <cstdio>
 #include <cstdlib>
 #include <iostream>
 #include <swordxx/roman.h>
 
 
-using swordxx::from_rom;
-
 int main(int argc, char **argv) {
     if (argc != 2) {
-        fprintf(stderr, "usage: %s <roman_numeral>\n", *argv);
-        std::exit(-1);
+        std::cerr << "Usage: " << (*argv) << " <roman_numeral>" << std::endl;
+        return EXIT_FAILURE;
     }
-    /* I don't think we need to_rom, do we? anyway, it isn't written
-    char buf[127];
-    if (charIsDigit(argv[1][0])) {
-        to_rom(std::atoi(argv[1]), buf);
-        std::cout << buf << std::endl;
+
+    if (auto const r = swordxx::parseRomanNumeral(argv[1u]); r.has_value()) {
+        std::cout << (*r) << std::endl;
+    } else {
+        std::cerr << "Invalid input!" << std::endl;
+        return EXIT_FAILURE;
     }
-    */
-    else std::cout << from_rom(argv[1]) << std::endl;
-    return 0;
 }
 
