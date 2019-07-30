@@ -98,6 +98,25 @@ int main() {
     TESTSV("MMMMMMMMMMM", 11000u);
     TESTSV("MMMMMMMMMMMM", 12000u);
 
+    // Other common uncommon forms:
+    TESTSV("VIIII", 9u);
+    TESTSV("XXIIII", 24u);
+    TESTSV("CCCCLXXXX", 490u);
+    TESTSV("LXXXX", 90u);
+    TESTSV("DCCCC", 900u);
+    TESTSV("XLIIII", 44u);
+    TESTSV("MDCCCCX", 1910u);
+    TESTSV("MDCDIII", 1903u);
+    TESTSV("IIIXX", 17u);
+    TESTSV("IIXX", 18u);
+    TESTSV("IIIC", 97u);
+    TESTSV("IIC", 98u);
+    TESTSV("IC", 99u);
+    TESTSV("XIIX", 18u);
+    TESTSV("XVIXIII", /* 1613u */ ERROR); // Not supported
+    TESTSV("VXL", ERROR);
+    TESTSV("IXL", ERROR);
+
 
     // Corner cases:
     // "vx" and the like:
