@@ -31,33 +31,8 @@ static_assert(
 #define TESTSV(str, expected) TEST(str ## sv, expected)
 
 void testRegulars(std::size_t const from, std::size_t const to) {
-    {
-        std::string romanStr;
-        for (std::size_t i = from; i < to; ++i, romanStr.clear()) {
-            auto n = i;
-            auto const construct =
-                    [&n, &romanStr](auto const value, auto const str) {
-                        while (n >= value) {
-                            n -= value;
-                            romanStr += str;
-                        }
-                    };
-            construct(1000u, 'M');
-            construct( 900u, "CM");
-            construct( 500u, 'D');
-            construct( 400u, "CD");
-            construct( 100u, 'C');
-            construct(  90u, "XC");
-            construct(  50u, 'L');
-            construct(  40u, "XL");
-            construct(  10u, 'X');
-            construct(   9u, "IX");
-            construct(   5u, 'V');
-            construct(   4u, "IV");
-            construct(   1u, 'I');
-            TEST(romanStr, i);
-        }
-    }
+    for (std::size_t i = from; i < to; ++i)
+        TEST(swordxx::toRomanNumeral(i), i);
 }
 
 int main() {

@@ -46,6 +46,13 @@ bool isRoman(std::string_view sv) noexcept;
 */
 std::optional<std::uintmax_t> parseRomanNumeral(std::string_view sv) noexcept;
 
+/**
+  \brief Returns a string representation of the given value as a Roman numeral.
+  \param[in] value The value to represent as a Roman numeral.
+  \returns a string representation of the given value as a Roman numeral.
+*/
+std::string toRomanNumeral(std::uintmax_t value);
+
 } /* namespace swordxx */
 
 #endif /* SWORDXX_ROMAN_H */

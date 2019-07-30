@@ -187,5 +187,60 @@ std::optional<std::uintmax_t> parseRomanNumeral(std::string_view sv) noexcept {
     return r;
 }
 
+std::string toRomanNumeral(std::uintmax_t value) {
+    std::size_t stringSize = 0u;
+    {
+        auto countSpace =
+                [v = value, &stringSize](auto const digitValue, auto const size)
+                        mutable
+                {
+                    while (v >= digitValue) {
+                        v -= digitValue;
+                        stringSize += size;
+                    }
+                };
+        countSpace(1000u, 1u);
+        countSpace( 900u, 2u);
+        countSpace( 500u, 1u);
+        countSpace( 400u, 2u);
+        countSpace( 100u, 1u);
+        countSpace(  90u, 2u);
+        countSpace(  50u, 1u);
+        countSpace(  40u, 2u);
+        countSpace(  10u, 1u);
+        countSpace(   9u, 2u);
+        countSpace(   5u, 1u);
+        countSpace(   4u, 2u);
+        countSpace(   1u, 1u);
+    }
+
+    std::string r(stringSize, char());
+    {
+        auto construct =
+                [&value, writePtr = r.data()](auto const digitValue,
+                                              auto const ... digitChars) mutable
+                {
+                    while (value >= digitValue) {
+                        value -= digitValue;
+                        (((*writePtr++) = digitChars), ...);
+                    }
+                };
+        construct(1000u, 'M');
+        construct( 900u, 'C', 'M');
+        construct( 500u, 'D');
+        construct( 400u, 'C', 'D');
+        construct( 100u, 'C');
+        construct(  90u, 'X', 'C');
+        construct(  50u, 'L');
+        construct(  40u, 'X', 'L');
+        construct(  10u, 'X');
+        construct(   9u, 'I', 'X');
+        construct(   5u, 'V');
+        construct(   4u, 'I', 'V');
+        construct(   1u, 'I');
+    }
+    return r;
+}
+
 } /* namespace swordxx */
 
