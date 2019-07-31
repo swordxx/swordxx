@@ -33,6 +33,14 @@ TreeKey::PositionChangeListener::~PositionChangeListener() noexcept = default;
 
 TreeKey::TreeKey() = default;
 
+TreeKey::~TreeKey() = default;
+
+bool TreeKey::isTraversable() const { return true; }
+
+long TreeKey::getIndex() const { return getOffset(); }
+
+void TreeKey::setIndex(long iindex) { setOffset(iindex); }
+
 void TreeKey::assureKeyPath(const char *keyBuffer) {
     std::string keyBuf(keyBuffer ? std::string(keyBuffer) : m_unsnappedKeyText);
 

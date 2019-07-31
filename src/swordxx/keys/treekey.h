@@ -65,7 +65,7 @@ public:
 //    TreeKey (const SWKey * ikey);
 //    TreeKey (TreeKey const &k);
     TreeKey();
-    ~TreeKey() override {}
+    ~TreeKey() override;
 
 
     virtual std::string const & getLocalName() = 0;
@@ -120,9 +120,9 @@ public:
     std::string getText() const override = 0;
     void decrement(int steps = 1) override = 0;
     void increment(int steps = 1) override = 0;
-    bool isTraversable() const override { return true; }
-    long getIndex() const override { return getOffset(); }
-    void setIndex(long iindex) override { setOffset(iindex); }
+    bool isTraversable() const override ;
+    long getIndex() const override;
+    void setIndex(long iindex) override;
 
     /** Set the key to this path.  If the path doesn't exist, then
      *    nodes are created as necessary
