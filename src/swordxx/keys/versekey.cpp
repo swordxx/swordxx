@@ -258,7 +258,7 @@ VerseKey::~VerseKey() {}
 
 
 void VerseKey::setVersificationSystem(const char *name) {
-    const VersificationMgr::System *newRefSys = VersificationMgr::systemVersificationMgr()->getVersificationSystem(name);
+    auto newRefSys(VersificationMgr::systemVersificationMgr()->getVersificationSystem(name));
     // TODO: cheese, but what should we do if requested v11n system isn't found?
     if (!newRefSys)   newRefSys = VersificationMgr::systemVersificationMgr()->getVersificationSystem("KJV");
     if (m_refSys != newRefSys) {

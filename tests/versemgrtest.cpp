@@ -35,7 +35,7 @@ int main(int argc, char **argv) {
 
     const char *v11n = (argc > 1) ? argv[1] : "KJV";
 
-    const VersificationMgr::System *system = VersificationMgr::systemVersificationMgr()->getVersificationSystem(v11n);
+    auto const system(VersificationMgr::systemVersificationMgr()->getVersificationSystem(v11n));
     auto const & books = system->books();
     auto const bookCount = books.size();
     auto const & lastBook = books.back();

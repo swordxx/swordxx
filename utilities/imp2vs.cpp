@@ -158,7 +158,7 @@ int main(int argc, char **argv) {
         else usage(progName, (((std::string)"Unknown argument: ")+ argv[i]).c_str());
     }
     // -----------------------------------------------------
-    const VersificationMgr::System *v = VersificationMgr::systemVersificationMgr()->getVersificationSystem(v11n.c_str());
+    auto const v(VersificationMgr::systemVersificationMgr()->getVersificationSystem(v11n.c_str()));
     if (!v) std::cout << "Warning: Versification " << v11n << " not found. Using KJV versification...\n";
 
     std::unique_ptr<SWCompress> compressor;

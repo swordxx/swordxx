@@ -50,7 +50,7 @@ class SWDLLEXPORT VerseKey : public SWKey {
 
     ListKey m_internalListKey;
 
-    VersificationMgr::System const * m_refSys = nullptr;
+    std::shared_ptr<VersificationMgr::System const> m_refSys;
 
     /** flag for auto normalization
     */

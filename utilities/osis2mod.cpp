@@ -100,9 +100,9 @@ bool normalize           = true; // Whether to normalize UTF-8 to NFC
 
 bool isOSISAbbrev(const char *buf) {
     auto const vmgr(VersificationMgr::systemVersificationMgr());
-    VersificationMgr::System const * av11n =
+    auto const av11n(
             vmgr->getVersificationSystem(
-                currentVerse->getVersificationSystem().c_str());
+                currentVerse->getVersificationSystem().c_str()));
     return av11n->bookNumberByOSISName(buf).has_value();
 }
 

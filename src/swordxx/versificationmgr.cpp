@@ -378,7 +378,7 @@ public:
     Private() = default;
     Private(Private const &) = default;
     Private & operator=(Private const &) = default;
-    std::map<std::string, System> m_systems;
+    std::map<std::string, std::shared_ptr<System>> m_systems;
 };
 // ---------------- statics -----------------
 std::shared_ptr<VersificationMgr const>
@@ -404,9 +404,10 @@ void VersificationMgr::setSystemVersificationMgr(
 }
 
 
-const VersificationMgr::System *VersificationMgr::getVersificationSystem(const char *name) const {
+std::shared_ptr<VersificationMgr::System const>
+VersificationMgr::getVersificationSystem(const char *name) const {
     auto const it(p->m_systems.find(name));
-    return (it != p->m_systems.end()) ? &(it->second) : nullptr;
+    return (it != p->m_systems.end()) ? it->second : nullptr;
 }
 
 
@@ -417,9 +418,9 @@ void VersificationMgr::registerVersificationSystem(
         std::size_t const * chMax,
         unsigned char const * mappings)
 {
-    p->m_systems[name] = System(name);
-    System &s = p->m_systems[name];
-    s.loadFromSBook(ot, nt, chMax, mappings);
+    auto s(std::make_shared<System>(name));
+    s->loadFromSBook(ot, nt, chMax, mappings);
+    p->m_systems[std::move(name)] = s;
 }
 
 
@@ -510,7 +511,7 @@ void VersificationMgr::System::translateVerse(System const & dstSys,
         SWLog::getSystemLog()->logDebug("There is no mapping.\n");
     }
     else if (dstName != "KJVA" && dstName != "KJV") {
-        const System *kjva = systemVersificationMgr()->getVersificationSystem("KJVA");
+        auto const kjva(systemVersificationMgr()->getVersificationSystem("KJVA"));
         const int src_verse = *verse;
 
         translateVerse(*kjva, book, chapter, verse, verse_end);

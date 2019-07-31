@@ -96,7 +96,7 @@ int main() {
     // Shorter syntax using the parser and based on book names, and requires intimate knowledge of VersificationMgr
     // You're probably better off using the above code, but this is here for completeness
     //
-    const VersificationMgr::System *refSys = VersificationMgr::systemVersificationMgr()->getVersificationSystem(vk->getVersificationSystem().c_str());
+    auto const refSys(VersificationMgr::systemVersificationMgr()->getVersificationSystem(vk->getVersificationSystem().c_str()));
 
 
     // whole Bible
