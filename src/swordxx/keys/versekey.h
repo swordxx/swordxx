@@ -173,7 +173,7 @@ public:
     */
     ~VerseKey() override;
 
-    bool isBoundSet() const noexcept final override { return m_boundSet; }
+    bool isBoundSet() const noexcept final override;
 
     /** sets the lower boundary for this VerseKey
     *
@@ -214,8 +214,7 @@ public:
     void setText(char const * ikey, bool checkNormalize)
     { SWKey::setText(ikey); parse(checkNormalize); }
 
-    void setText(std::string newText) override
-    { SWKey::setText(newText); parse(); }
+    void setText(std::string newText) override;
 
     void copyFrom(SWKey const & ikey) override;
 
@@ -243,7 +242,7 @@ public:
     * @param steps Number of verses to jump forward
     */
     void increment(int steps = 1) override;
-    bool isTraversable() const override { return true; }
+    bool isTraversable() const override;
 
     /** Get/Set position of this key by Book Name
      */

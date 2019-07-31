@@ -216,6 +216,10 @@ void VerseKey::positionFrom(const SWKey &ikey) {
     }
 }
 
+void VerseKey::setText(std::string newText) {
+    SWKey::setText(newText);
+    parse();
+}
 
 /******************************************************************************
  * VerseKey::copyFrom - Equates this VerseKey to another VerseKey
@@ -273,6 +277,7 @@ std::shared_ptr<SWKey> VerseKey::clone() const
 
 VerseKey::~VerseKey() {}
 
+bool VerseKey::isBoundSet() const noexcept { return m_boundSet; }
 
 void VerseKey::setVersificationSystem(
         std::shared_ptr<VersificationMgr::System const> vs)
@@ -1312,6 +1317,8 @@ void VerseKey::increment(int step) {
 
     m_error = (ierror) ? ierror : m_error;
 }
+
+bool VerseKey::isTraversable() const { return true; }
 
 
 /******************************************************************************
