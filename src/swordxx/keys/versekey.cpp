@@ -163,8 +163,9 @@ void VerseKey::setFromOther(const VerseKey &ikey) {
         }
 
         // set values
-        if (m_book > m_BMAX[0]) {
-            m_book -= m_BMAX[0];
+        auto const bMax(m_refSys->getBMAX());
+        if (m_book > bMax[0]) {
+            m_book -= bMax[0];
             m_testament = 2;
         } else {
             m_testament = 1;
@@ -177,7 +178,7 @@ void VerseKey::setFromOther(const VerseKey &ikey) {
         m_suffix = ikey.getSuffix();
 
         if (map_verse < map_range) {
-            if (map_range > m_refSys->books()[((m_testament>1)?m_BMAX[0]:0)+m_book-1].getVerseMax(m_chapter))
+            if (map_range > m_refSys->books()[((m_testament>1)?bMax[0]:0)+m_book-1].getVerseMax(m_chapter))
                 ++map_range;
             m_verse = map_range;
             setUpperBoundKey(*this);
@@ -279,7 +280,6 @@ void VerseKey::setVersificationSystem(
     assert(vs);
     if (m_refSys != vs) {
         m_refSys = std::move(vs);
-        m_BMAX = m_refSys->getBMAX();
 
         // TODO: adjust bounds for versificaion system ???
         // TODO: when we have mapping done, rethink this
@@ -298,8 +298,9 @@ void VerseKey::setVersificationSystem(
 
 char VerseKey::parse(bool checkAutoNormalize)
 {
-    m_testament = m_BMAX[1]?2:1;
-    m_book      = m_BMAX[m_BMAX[1]?1:0];
+    auto const bMax(m_refSys->getBMAX());
+    m_testament = bMax[1]?2:1;
+    m_book      = bMax[bMax[1]?1:0];
     m_chapter   = 1;
     m_verse     = 1;
 
@@ -516,6 +517,8 @@ ListKey VerseKey::parseVerseList(const char *buf, const char *defaultKey, bool e
     lastKey->setAutoNormalize(false);
     if (defaultKey) lastKey->setText(defaultKey);
 
+    auto const bMax(m_refSys->getBMAX());
+
     while (*buf) {
         switch (*buf) {
         case ':':
@@ -663,9 +666,9 @@ terminate_range:
                 }
                 else {
                     char t = 1;
-                    if (bookno.value() >= m_BMAX[0]) {
+                    if (bookno.value() >= bMax[0]) {
                         t++;
-                        bookno.value() -= m_BMAX[0];
+                        bookno.value() -= bMax[0];
                     }
                     curKey->setTestament(t);
                     curKey->setBook(bookno.value() + 1u);
@@ -954,9 +957,9 @@ terminate_range:
         }
         else {
             char t = 1;
-            if (bookno.value() >= m_BMAX[0]) {
+            if (bookno.value() >= bMax[0]) {
                 t++;
-                bookno.value() -= m_BMAX[0];
+                bookno.value() -= bMax[0];
             }
             curKey->setTestament(t);
             curKey->setBook(bookno.value() + 1u);
@@ -1149,8 +1152,11 @@ void VerseKey::initBounds() const
         m_tmpClone = std::static_pointer_cast<VerseKey>(clone());
         m_tmpClone->setAutoNormalize(false);
         m_tmpClone->setIntros(true);
-        m_tmpClone->setTestament(m_BMAX[1] ? 2 : 1);
-        m_tmpClone->setBook(m_BMAX[m_BMAX[1] ? 1 : 0]);
+        {
+            auto const bMax(m_refSys->getBMAX());
+            m_tmpClone->setTestament(bMax[1] ? 2 : 1);
+            m_tmpClone->setBook(bMax[bMax[1] ? 1 : 0]);
+        }
         m_tmpClone->setChapter(m_tmpClone->getChapterMax());
         m_tmpClone->setVerse(m_tmpClone->getVerseMax());
         m_upperBound = m_tmpClone->getIndex();
@@ -1203,20 +1209,24 @@ std::string VerseKey::getShortText() const {
 
 
 std::string VerseKey::getBookName() const {
-    return m_locale->translateText(m_refSys->books()[((m_testament>1)?m_BMAX[0]:0)+m_book-1].getLongName());
+    auto const bMax(m_refSys->getBMAX());
+    return m_locale->translateText(m_refSys->books()[((m_testament>1)?bMax[0]:0)+m_book-1].getLongName());
 }
 
 
 std::string const & VerseKey::getOSISBookName() const {
-    return m_refSys->books()[((m_testament>1)?m_BMAX[0]:0)+m_book-1].getOSISName();
+    auto const bMax(m_refSys->getBMAX());
+    return m_refSys->books()[((m_testament>1)?bMax[0]:0)+m_book-1].getOSISName();
 }
 
 
 std::string VerseKey::getBookAbbrev() const {
-    return m_locale->translatePrefAbbrev(m_refSys->books()[((m_testament>1)?m_BMAX[0]:0)+m_book-1].getPreferredAbbreviation());
+    auto const bMax(m_refSys->getBMAX());
+    return m_locale->translatePrefAbbrev(m_refSys->books()[((m_testament>1)?bMax[0]:0)+m_book-1].getPreferredAbbreviation());
 }
 
-std::size_t VerseKey::getBookMax() const { return m_BMAX[m_testament-1]; }
+std::size_t VerseKey::getBookMax() const
+{ return m_refSys->getBMAX()[m_testament-1]; }
 
 void VerseKey::positionToTop() {
     VerseKey const lb(lowerBoundKey());
@@ -1261,7 +1271,7 @@ void VerseKey::positionToMaxVerse() {
 
 int VerseKey::getChapterMax() const {
     if (m_book < 1) return 0;
-    auto const bookNum = ((m_testament > 1) ? m_BMAX[0] : 0) + m_book - 1;
+    auto const bookNum = ((m_testament > 1) ? m_refSys->getBMAX()[0] : 0) + m_book - 1;
     auto const & books = m_refSys->books();
     if ((bookNum < 0u) || (bookNum >= books.size()))
         return -1;
@@ -1270,7 +1280,7 @@ int VerseKey::getChapterMax() const {
 
 int VerseKey::getVerseMax() const {
     if (m_book < 1) return 0;
-    auto const bookNum = ((m_testament > 1) ? m_BMAX[0] : 0) + m_book - 1;
+    auto const bookNum = ((m_testament > 1) ? m_refSys->getBMAX()[0] : 0) + m_book - 1;
     auto const & books = m_refSys->books();
     if ((bookNum < 0u) || (bookNum >= books.size()))
         return -1;
@@ -1345,18 +1355,19 @@ void VerseKey::normalize(bool autocheck)
     if ((!autocheck || m_autonorm)    // only normalize if we were explicitely called or if autonorm is turned on
     ) {
         m_error = 0;
+        auto const bMax(m_refSys->getBMAX());
 
         while ((m_testament < 3) && (m_testament > 0)) {
 
 
-            if (m_book > m_BMAX[m_testament-1]) {
-                m_book -= (m_BMAX[m_testament-1] + (m_intros?1:0));
+            if (m_book > bMax[m_testament-1]) {
+                m_book -= (bMax[m_testament-1] + (m_intros?1:0));
                 m_testament++;
                 continue;
             }
             if (m_book < (m_intros?0:1)) {
                 if (--m_testament > 0) {
-                    m_book += (m_BMAX[m_testament-1] + (m_intros?1:0));
+                    m_book += (bMax[m_testament-1] + (m_intros?1:0));
                 }
                 continue;
             }
@@ -1371,7 +1382,7 @@ void VerseKey::normalize(bool autocheck)
                 --m_book;
                 if (m_book < (m_intros?0:1)) {
                     if (--m_testament > 0) {
-                        m_book += (m_BMAX[m_testament-1] + (m_intros?1:0));
+                        m_book += (bMax[m_testament-1] + (m_intros?1:0));
                     }
                 }
                 m_chapter += (getChapterMax() + (m_intros?1:0));
@@ -1389,7 +1400,7 @@ void VerseKey::normalize(bool autocheck)
                     --m_book;
                     if (m_book < (m_intros?0:1)) {
                         if (--m_testament > 0) {
-                            m_book += (m_BMAX[m_testament-1] + (m_intros?1:0));
+                            m_book += (bMax[m_testament-1] + (m_intros?1:0));
                         }
                     }
                     m_chapter += (getChapterMax() + (m_intros?1:0));
@@ -1401,9 +1412,9 @@ void VerseKey::normalize(bool autocheck)
             break;  // If we've made it this far (all failure checks continue) we're ok
         }
 
-        if (m_testament > (m_BMAX[1]?2:1)) {
-            m_testament = m_BMAX[1]?2:1;
-            m_book      = m_BMAX[m_testament-1];
+        if (m_testament > (bMax[1]?2:1)) {
+            m_testament = bMax[1]?2:1;
+            m_book      = bMax[m_testament-1];
             m_chapter   = getChapterMax();
             m_verse     = getVerseMax();
             m_error     = KEYERR_OUTOFBOUNDS;
@@ -1474,8 +1485,9 @@ void VerseKey::setBook(char ibook)
 
 void VerseKey::setBookName(std::string_view bookName) {
     if (auto bnum = bookFromAbbrev(bookName)) {
-        if (bnum.value() >= m_BMAX[0]) {
-            bnum.value() -= m_BMAX[0];
+        auto const bMax(m_refSys->getBMAX());
+        if (bnum.value() >= bMax[0]) {
+            bnum.value() -= bMax[0];
             m_testament = 2;
         }
         else    m_testament = 1;
@@ -1560,7 +1572,7 @@ long VerseKey::getIndex() const
         offset = ((m_testament == 2) ? m_refSys->getNTStartOffset():0) + 1;
     }
     else {
-        offset = m_refSys->getOffsetFromVerse((((m_testament>1)?m_BMAX[0]:0)+m_book-1), m_chapter, m_verse);
+        offset = m_refSys->getOffsetFromVerse((((m_testament>1)?m_refSys->getBMAX()[0]:0)+m_book-1), m_chapter, m_verse);
     }
     return offset;
 }
@@ -1598,9 +1610,12 @@ void VerseKey::setIndex(long iindex)
     m_error = m_refSys->getVerseFromOffset(iindex, &b, &m_chapter, &m_verse);
     m_book = (unsigned char)b;
     m_testament = 1;
-    if (m_book > m_BMAX[0]) {
-        m_book -= m_BMAX[0];
-        m_testament = 2;
+    {
+        auto const bMax(m_refSys->getBMAX());
+        if (m_book > bMax[0]) {
+            m_book -= bMax[0];
+            m_testament = 2;
+        }
     }
     // special case for Module and Testament heading
     if (m_book < 0) { m_testament = 0; m_book = 0; }

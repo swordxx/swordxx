@@ -88,7 +88,6 @@ class SWDLLEXPORT VerseKey : public SWKey {
     std::size_t m_userData = 0;
 
     std::shared_ptr<SWLocale> m_locale;
-    std::array<std::size_t, 2u> m_BMAX{m_refSys->getBMAX()};
 
 protected:
 
