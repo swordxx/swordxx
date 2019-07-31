@@ -85,7 +85,9 @@ int converted  = 0;
 
 SWText * module = nullptr;
 auto const currentVerse(std::make_shared<VerseKey>());
-std::string v11n     = "KJV";
+std::shared_ptr<VersificationMgr::System const> v11n(
+        VersificationMgr::systemVersificationMgr()->getVersificationSystem(
+            "KJV"));
 std::string activeOsisID;
 std::string currentOsisID;
 
@@ -99,11 +101,7 @@ bool inCanonicalOSISBook = true; // osisID is for a book that is not in Sword++'
 bool normalize           = true; // Whether to normalize UTF-8 to NFC
 
 bool isOSISAbbrev(const char *buf) {
-    auto const vmgr(VersificationMgr::systemVersificationMgr());
-    auto const av11n(
-            vmgr->getVersificationSystem(
-                currentVerse->getVersificationSystem().c_str()));
-    return av11n->bookNumberByOSISName(buf).has_value();
+    return currentVerse->versificationSystem()->bookNumberByOSISName(buf).has_value();
 }
 
 /**
@@ -354,8 +352,7 @@ bool isValidRef(const char *buf, const char *caller) {
     // Create a VerseKey that does not do auto normalization
     // Note: need to turn on headings so that a heading does not get normalized anyway
     // And set it to the reference under question
-    VerseKey before;
-    before.setVersificationSystem(currentVerse->getVersificationSystem().c_str());
+    VerseKey before(currentVerse->versificationSystem());
     before.setAutoNormalize(false);
     before.setIntros(true);
     before.setText(buf);
@@ -368,8 +365,7 @@ bool isValidRef(const char *buf, const char *caller) {
 
     // Create a VerseKey that does do auto normalization
     // And set it to the reference under question
-    VerseKey after;
-    after.setVersificationSystem(currentVerse->getVersificationSystem().c_str());
+    VerseKey after(currentVerse->versificationSystem());
     after.setAutoNormalize(true);
     after.setText(buf);
 
@@ -413,8 +409,7 @@ bool isValidRef(const char *buf, const char *caller) {
  * param key the key that may need to be adjusted
  */
 void makeValidRef(VerseKey &key) {
-    VerseKey saveKey;
-    saveKey.setVersificationSystem(key.getVersificationSystem().c_str());
+    VerseKey saveKey(key.versificationSystem());
     saveKey.setAutoNormalize(false);
     saveKey.setIntros(true);
     saveKey = key;
@@ -458,7 +453,7 @@ void makeValidRef(VerseKey &key) {
     }
 
     std::cout << "INFO(V11N): " << saveKey.getOSISRef()
-              << " is not in the " << key.getVersificationSystem()
+              << " is not in the " << key.versificationSystem()->getName()
               << " versification. Appending content to " << key.getOSISRef()
               << std::endl;
 }
@@ -479,15 +474,11 @@ void writeEntry(std::string &text, bool force = false) {
     if (force)
         keyOsisID = "-force";
 
-    static VerseKey lastKey;
-    lastKey.setVersificationSystem(
-                currentVerse->getVersificationSystem().c_str());
+    static VerseKey lastKey(currentVerse->versificationSystem());
     lastKey.setAutoNormalize(false);
     lastKey.setIntros(true);
 
-    VerseKey saveKey;
-    saveKey.setVersificationSystem(
-                currentVerse->getVersificationSystem().c_str());
+    VerseKey saveKey(currentVerse->versificationSystem());
     saveKey.setAutoNormalize(false);
     saveKey.setIntros(true);
     saveKey = *currentVerse;
@@ -506,9 +497,7 @@ void writeEntry(std::string &text, bool force = false) {
         // Put the revision into the module
         int testmt = currentVerse->getTestament();
         if ((testmt == 1 && firstOT) || (testmt == 2 && firstNT)) {
-            VerseKey t;
-            t.setVersificationSystem(
-                        currentVerse->getVersificationSystem().c_str());
+            VerseKey t(currentVerse->versificationSystem());
             t.setAutoNormalize(false);
             t.setIntros(true);
             t = *currentVerse;
@@ -584,9 +573,7 @@ void linkToEntry(VerseKey &linkKey, VerseKey &dest) {
         return;
     }
 
-    VerseKey saveKey;
-    saveKey.setVersificationSystem(
-                currentVerse->getVersificationSystem().c_str());
+    VerseKey saveKey(currentVerse->versificationSystem());
     saveKey.setAutoNormalize(false);
     saveKey.setIntros(true);
     saveKey = *currentVerse;
@@ -727,7 +714,7 @@ bool handleToken(std::string &text, XMLTag token) {
 
                 inCanonicalOSISBook = isOSISAbbrev(token.attribute("osisID").c_str());
                 if (!inCanonicalOSISBook) {
-                    std::cout << "WARNING(V11N): New book is " << token.attribute("osisID") << " and is not in " << v11n << " versification, ignoring" << std::endl;
+                    std::cout << "WARNING(V11N): New book is " << token.attribute("osisID") << " and is not in " << v11n->getName() << " versification, ignoring" << std::endl;
                 }
                 else if (debug & DEBUG_OTHER) {
                     std::cout << "DEBUG(FOUND): New book is " << currentVerse->getOSISRef() << std::endl;
@@ -1303,15 +1290,11 @@ XMLTag transformBSP(XMLTag t) {
 void writeLinks()
 {
     // Link all the verses
-    VerseKey destKey;
-    destKey.setVersificationSystem(
-                currentVerse->getVersificationSystem().c_str());
+    VerseKey destKey(currentVerse->versificationSystem());
     destKey.setAutoNormalize(false);
     destKey.setIntros(true);
 
-    VerseKey linkKey;
-    linkKey.setVersificationSystem(
-                currentVerse->getVersificationSystem().c_str());
+    VerseKey linkKey(currentVerse->versificationSystem());
     linkKey.setAutoNormalize(false);
     linkKey.setIntros(true);
     for (unsigned int i = 0; i < linkedVerses.size(); i++) {
@@ -1431,7 +1414,7 @@ void processOSIS(std::istream & infile) {
 
     currentOsisID = "N/A";
 
-    currentVerse->setVersificationSystem(v11n.c_str());
+    currentVerse->setVersificationSystem(v11n);
     currentVerse->setAutoNormalize(false);
     currentVerse->setIntros(true);  // turn on mod/testmnt/book/chap headings
 
@@ -1915,8 +1898,17 @@ int main(int argc, char **argv) {
             else usage(*argv, "-c requires <cipher_key>");
         }
         else if (!std::strcmp(argv[i], "-v")) {
-            if (i+1 < argc) v11n = argv[++i];
-            else usage(*argv, "-v requires <v11n>");
+            if (i + 1 < argc) {
+                auto v(VersificationMgr::systemVersificationMgr()->getVersificationSystem(argv[++i]));
+                if (v) {
+                    v11n = std::move(v);
+                } else {
+                    fprintf(stderr, "ERROR: %s: Requested versification system not found: %s \n", program, argv[i]);
+                    std::exit(EXIT_NO_CREATE);
+                }
+            } else {
+                usage(*argv, "-v requires <v11n>");
+            }
         }
         else if (!std::strcmp(argv[i], "-s")) {
             if (i+1 < argc) {
@@ -1977,26 +1969,26 @@ int main(int argc, char **argv) {
     // datapath location passed to us from the user.
         if (compressor) {
             if (entrySize == 4) {
-                if (zText4::createModule(path, iType, v11n.c_str())) {
+                if (zText4::createModule(path, iType, v11n)) {
                     fprintf(stderr, "ERROR: %s: couldn't create module at path: %s \n", program, path);
                     std::exit(EXIT_NO_CREATE);
                 }
             }
             else {
-                if (zText::createModule(path, iType, v11n.c_str())) {
+                if (zText::createModule(path, iType, v11n)) {
                     fprintf(stderr, "ERROR: %s: couldn't create module at path: %s \n", program, path);
                     std::exit(EXIT_NO_CREATE);
                 }
             }
         }
         else if (entrySize == 4) {
-            if (RawText4::createModule(path, v11n.c_str())) {
+            if (RawText4::createModule(path, v11n)) {
                 fprintf(stderr, "ERROR: %s: couldn't create module at path: %s \n", program, path);
                 std::exit(EXIT_NO_CREATE);
             }
         }
         else {
-            if (RawText::createModule(path, v11n.c_str())) {
+            if (RawText::createModule(path, v11n)) {
                 fprintf(stderr, "ERROR: %s: couldn't create module at path: %s \n", program, path);
                 std::exit(EXIT_NO_CREATE);
             }
@@ -2018,7 +2010,7 @@ int main(int argc, char **argv) {
                 DIRECTION_LTR,  // dir
                 FMT_UNKNOWN,    // markup
                 nullptr,        // lang
-                v11n.c_str()    // versification
+                v11n            // versification system
                );
         }
         else {
@@ -2034,7 +2026,7 @@ int main(int argc, char **argv) {
                 DIRECTION_LTR,  // dir
                 FMT_UNKNOWN,    // markup
                 nullptr,        // lang
-                v11n.c_str()    // versification
+                v11n            // versification system
                );
         }
     }
@@ -2049,7 +2041,7 @@ int main(int argc, char **argv) {
                 DIRECTION_LTR,  // dir
                 FMT_UNKNOWN,    // markup
                 nullptr,        // ilang
-                v11n.c_str()    // versification
+                v11n            // versification system
             );
     }
     else {
@@ -2063,7 +2055,7 @@ int main(int argc, char **argv) {
                 DIRECTION_LTR,  // dir
                 FMT_UNKNOWN,    // markup
                 nullptr,        // ilang
-                v11n.c_str()    // versification
+                v11n            // versification system
             );
     }
 

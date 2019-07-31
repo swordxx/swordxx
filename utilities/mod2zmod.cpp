@@ -144,7 +144,7 @@ int main(int argc, char **argv)
     case BIBLE:
     case COM: {
         auto const vk(inModule.getKeyAs<VerseKey>());
-        result = zText::createModule(argv[2], iType, vk->getVersificationSystem().c_str());
+        result = zText::createModule(argv[2], iType, vk->versificationSystem());
         break;
     }
     case LEX:
@@ -164,7 +164,7 @@ int main(int argc, char **argv)
         auto const vk(inModule.getKeyAs<VerseKey>());
         outModule = std::make_unique<zText>(argv[2], nullptr, nullptr, iType, std::move(compressor),
             ENC_UNKNOWN, DIRECTION_LTR, FMT_UNKNOWN, nullptr,
-            vk->getVersificationSystem().c_str());    // open our datapath with our RawText driver.
+            vk->versificationSystem());    // open our datapath with our RawText driver.
         vk->setIntros(true);
         break;
     }

@@ -96,35 +96,35 @@ int main() {
     // Shorter syntax using the parser and based on book names, and requires intimate knowledge of VersificationMgr
     // You're probably better off using the above code, but this is here for completeness
     //
-    auto const refSys(VersificationMgr::systemVersificationMgr()->getVersificationSystem(vk->getVersificationSystem().c_str()));
+    auto const refSys(vk->versificationSystem());
 
 
     // whole Bible
     VerseKey vkBible(
                 refSys->books().front().getOSISName().c_str(),
                 refSys->books().back().getOSISName().c_str(),
-                refSys->getName().c_str());
+                refSys);
     cout << vkBible.getRangeText() << "\n";
 
     // OT
     VerseKey vkOT(
                 refSys->books().front().getOSISName().c_str(),
                 refSys->books()[refSys->getBMAX()[0]-1].getOSISName().c_str(),
-                refSys->getName().c_str());
+                refSys);
     cout << vkOT.getRangeText() << "\n";
 
     // NT
     VerseKey vkNT(
                 refSys->books()[refSys->getBMAX()[0]].getOSISName().c_str(),
                 refSys->books().back().getOSISName().c_str(),
-                refSys->getName().c_str());
+                refSys);
     cout << vkNT.getRangeText() << "\n";
 
     // Current Book
     vk->setText("John 3:16");
     VerseKey vkCurrentBook(vk->getBookName().c_str(),
                            vk->getBookName().c_str(),
-                           refSys->getName().c_str());
+                           refSys);
     cout << vkCurrentBook.getRangeText() << "\n" << endl;
 
     return 0;

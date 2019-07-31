@@ -45,9 +45,19 @@ namespace swordxx {
  */
 
 template <typename BaseZVerse>
-zTextBase<BaseZVerse>::zTextBase(const char *ipath, const char *iname, const char *idesc, BlockType iblockType, std::unique_ptr<SWCompress> icomp, TextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char *ilang, const char *versification)
+zTextBase<BaseZVerse>::zTextBase(
+        const char * ipath,
+        const char * iname,
+        const char * idesc,
+        BlockType iblockType,
+        std::unique_ptr<SWCompress> icomp,
+        TextEncoding enc,
+        SWTextDirection dir,
+        SWTextMarkup mark,
+        const char * ilang,
+        std::shared_ptr<VersificationMgr::System const> v11n)
     : BaseZVerse(ipath, FileMgr::RDWR, iblockType, std::move(icomp))
-    , SWText(iname, idesc, enc, dir, mark, ilang, versification)
+    , SWText(iname, idesc, enc, dir, mark, ilang, std::move(v11n))
     , blockType(iblockType)
 {}
 

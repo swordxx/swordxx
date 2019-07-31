@@ -43,16 +43,17 @@ namespace swordxx {
  *    idesc - Name to display to user for module
  */
 template <typename BaseRawVerse>
-RawTextBase<BaseRawVerse>::RawTextBase(char const * ipath,
-                                       char const * iname,
-                                       char const * idesc,
-                                       TextEncoding enc,
-                                       SWTextDirection dir,
-                                       SWTextMarkup mark,
-                                       char const * ilang,
-                                       char const * versification)
-        : SWText(iname, idesc, enc, dir, mark, ilang, versification)
-        , BaseRawVerse(ipath)
+RawTextBase<BaseRawVerse>::RawTextBase(
+        char const * ipath,
+        char const * iname,
+        char const * idesc,
+        TextEncoding enc,
+        SWTextDirection dir,
+        SWTextMarkup mark,
+        char const * ilang,
+        std::shared_ptr<VersificationMgr::System const> v11n)
+    : SWText(iname, idesc, enc, dir, mark, ilang, std::move(v11n))
+    , BaseRawVerse(ipath)
 {}
 
 template <typename BaseRawVerse>
@@ -65,9 +66,10 @@ bool RawTextBase<BaseRawVerse>::isWritable() const noexcept {
 }
 
 template <typename BaseRawVerse>
-char RawTextBase<BaseRawVerse>::createModule(char const *path,
-                                             char const *v11n)
-{ return BaseRawVerse::createModule(path, v11n); }
+char RawTextBase<BaseRawVerse>::createModule(
+        char const * path,
+        std::shared_ptr<VersificationMgr::System const> v11n)
+{ return BaseRawVerse::createModule(path, std::move(v11n)); }
 
 
 /******************************************************************************

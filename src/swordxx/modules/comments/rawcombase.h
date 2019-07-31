@@ -50,7 +50,7 @@ public: /* Methods: */
            SWTextDirection dir = DIRECTION_LTR,
            SWTextMarkup markup = FMT_UNKNOWN,
            char const * ilang = nullptr,
-           const char *m_versification = "KJV");
+           std::shared_ptr<VersificationMgr::System const> v11n = nullptr);
     ~RawComBase() override;
 
     void increment(int steps = 1) override;
@@ -58,7 +58,9 @@ public: /* Methods: */
 
     bool isWritable() const noexcept override;
 
-    static char createModule(const char *path, const char *v11n = "KJV");
+    static char createModule(
+            const char * path,
+            std::shared_ptr<VersificationMgr::System const> v11n = nullptr);
 
     void setEntry(std::string_view text) override;
     void linkEntry(SWKey const & linkKey) override;

@@ -62,7 +62,7 @@ public:
               SWTextDirection dir = DIRECTION_LTR,
               SWTextMarkup markup = FMT_UNKNOWN,
               char const * ilang = nullptr,
-              char const * versification = "KJV");
+              std::shared_ptr<VersificationMgr::System const> v11n = nullptr);
 
     ~zTextBase() override;
 
@@ -70,9 +70,11 @@ public:
     void decrement(int steps = 1) override { increment(-steps); }
 
     bool isWritable() const noexcept override;
-    static char createModule(const char *path, BlockType blockBound, const char *v11n = "KJV") {
-        return BaseZVerse::createModule(path, blockBound, v11n);
-    }
+    static char createModule(
+            const char * path,
+            BlockType blockBound,
+            std::shared_ptr<VersificationMgr::System const> v11n = nullptr)
+    { return BaseZVerse::createModule(path, blockBound, std::move(v11n)); }
 
     void setEntry(std::string_view text) override;
     void linkEntry(SWKey const & linkKey) override;

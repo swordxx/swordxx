@@ -36,8 +36,6 @@ namespace swordxx {
  */
 class SWDLLEXPORT SWText : public SWModule {
 
-    std::string m_versification;
-
 protected:
     std::shared_ptr<VerseKey const> getVerseKey(
             std::shared_ptr<SWKey const> key = nullptr) const;
@@ -50,9 +48,23 @@ public:
            SWTextDirection dir = DIRECTION_LTR,
            SWTextMarkup markup = FMT_UNKNOWN,
            char const * ilang = nullptr,
-           char const * m_versification = "KJV");
+           std::shared_ptr<VersificationMgr::System const> v11n = nullptr);
 
     std::shared_ptr<SWKey> createKey() const override;
+
+private: /* Methods: */
+
+    SWText(char const * imodname,
+           char const * imoddesc,
+           TextEncoding encoding,
+           SWTextDirection dir,
+           SWTextMarkup markup,
+           char const * ilang,
+           std::shared_ptr<VerseKey> key);
+
+private: /* Fields: */
+
+    std::shared_ptr<VersificationMgr::System const> const m_v11n;
 
 };
 

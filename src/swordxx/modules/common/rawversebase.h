@@ -30,6 +30,7 @@
 #include <memory>
 #include <string>
 #include "../../normalizedpath.h"
+#include "../../versificationmgr.h"
 
 
 namespace swordxx {
@@ -76,8 +77,9 @@ protected: /* Methods: */
 
     void doSetText(char testmt, long idxoff, std::string_view text);
     void doLinkEntry(char testmt, long destidxoff, long srcidxoff);
-    static char createModule(NormalizedPath const & path,
-                             char const * v11n = "KJV");
+    static char createModule(
+            NormalizedPath const & path,
+            std::shared_ptr<VersificationMgr::System const> v11n = nullptr);
 
 }; /* class RawVerseBase */
 

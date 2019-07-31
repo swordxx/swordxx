@@ -389,16 +389,16 @@ void zVerseBase<VerseSizeType_>::doLinkEntry(char testmt,
  * RET: error status
  */
 template <typename VerseSizeType_>
-char zVerseBase<VerseSizeType_>::createModule(NormalizedPath const & path,
-                                              BlockType blockBound,
-                                              const char * v11n)
+char zVerseBase<VerseSizeType_>::createModule(
+        NormalizedPath const & path,
+        BlockType blockBound,
+        std::shared_ptr<VersificationMgr::System const> v11n)
 {
     static constexpr char SUCCESS = 0;
     static constexpr char ERROR_OPEN = -1;
     static constexpr char ERROR_WRITE = -1;
     int32_t offset = 0;
     VerseSizeType size = 0;
-    VerseKey vk;
 
     std::string buf(formatted("%s/ot.%czs", path, static_cast<char>(blockBound)));
     auto const testamentIt(buf.begin() + path.size() + 1);
@@ -439,7 +439,7 @@ char zVerseBase<VerseSizeType_>::createModule(NormalizedPath const & path,
     if (fd2->getFd() < 1)
         return ERROR_OPEN;
 
-    vk.setVersificationSystem(v11n);
+    VerseKey vk(std::move(v11n));
     vk.setIntros(true);
 
     offset = swapFromArch(offset);

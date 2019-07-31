@@ -40,8 +40,16 @@ int main(int argc, char **argv) {
     VerseKey DefaultVSKey;
 //    DefaultVSKey.AutoNormalize(0);
 
-    if (argc > 3)
-        DefaultVSKey.setVersificationSystem(argv[3]);
+    if (argc > 3) {
+        if (auto v11n = VersificationMgr::systemVersificationMgr()->getVersificationSystem(argv[3])) {
+            DefaultVSKey.setVersificationSystem(std::move(v11n));
+        } else {
+            std::cerr << "error: " << *argv
+                      << ": Requested versification system not found: "
+                      << argv[3] << std::endl;
+            return -1;
+        }
+    }
 
     const char *context = (argc > 4) ? argv[4] : "gen.1.1";
 

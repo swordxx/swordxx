@@ -53,6 +53,14 @@ auto getDefaultLocale() {
 
 } // anonymous namespace
 
+VerseKey::VerseKey(std::shared_ptr<VersificationMgr::System const> v11n)
+    : SWKey(nullptr)
+    , m_refSys(v11n
+               ? std::move(v11n)
+               : VersificationMgr::systemVersificationMgr()->getVersificationSystem("KJV"))
+    , m_locale(getDefaultLocale())
+{ assert(m_refSys); }
+
 /******************************************************************************
  * VerseKey Constructor - initializes instance of VerseKey
  *
@@ -60,20 +68,29 @@ auto getDefaultLocale() {
  *        VerseKey::parse for more detailed information)
  */
 
-VerseKey::VerseKey(char const * ikeyText)
+VerseKey::VerseKey(char const * ikeyText,
+                   std::shared_ptr<VersificationMgr::System const> v11n)
     : SWKey(ikeyText)
+    , m_refSys(v11n
+               ? std::move(v11n)
+               : VersificationMgr::systemVersificationMgr()->getVersificationSystem("KJV"))
     , m_locale(getDefaultLocale())
 {
-    setVersificationSystem("KJV");
+    assert(m_refSys);
     if (ikeyText)
         parse();
 }
 
-VerseKey::VerseKey(char const * min, char const * max, char const * v11n)
+VerseKey::VerseKey(char const * min,
+                   char const * max,
+                   std::shared_ptr<VersificationMgr::System const> v11n)
     : SWKey()
+    , m_refSys(v11n
+               ? std::move(v11n)
+               : VersificationMgr::systemVersificationMgr()->getVersificationSystem("KJV"))
     , m_locale(getDefaultLocale())
 {
-    setVersificationSystem(v11n);
+    assert(m_refSys);
     ListKey tmpListKey = parseVerseList(min);
     if (tmpListKey.getCount())
         setLowerBoundKey(static_cast<VerseKey &>(*tmpListKey.getElement(0u)));
@@ -97,14 +114,13 @@ VerseKey::VerseKey(char const * min, char const * max, char const * v11n)
 
 VerseKey::VerseKey(SWKey const & ikey)
     : SWKey(ikey)
+    , m_refSys(VersificationMgr::systemVersificationMgr()->getVersificationSystem("KJV"))
     , m_locale(getDefaultLocale())
-{
-    setVersificationSystem("KJV");
-    copyFrom(ikey);
-}
+{ copyFrom(ikey); }
 
 VerseKey::VerseKey(VerseKey const & copy)
     : SWKey(copy)
+    , m_refSys(VersificationMgr::systemVersificationMgr()->getVersificationSystem("KJV"))
     , m_locale(getDefaultLocale())
 { copyFrom(copy); }
 
@@ -214,7 +230,7 @@ void VerseKey::copyFrom(const VerseKey &ikey) {
     m_verse = ikey.getVerse();
     m_suffix = ikey.getSuffix();
     m_locale = ikey.m_locale;
-    setVersificationSystem(ikey.getVersificationSystem().c_str());
+    setVersificationSystem(ikey.versificationSystem());
     if (ikey.isBoundSet()) {
         setLowerBoundKey(ikey.lowerBoundKey());
         setUpperBoundKey(ikey.upperBoundKey());
@@ -257,12 +273,12 @@ std::shared_ptr<SWKey> VerseKey::clone() const
 VerseKey::~VerseKey() {}
 
 
-void VerseKey::setVersificationSystem(const char *name) {
-    auto newRefSys(VersificationMgr::systemVersificationMgr()->getVersificationSystem(name));
-    // TODO: cheese, but what should we do if requested v11n system isn't found?
-    if (!newRefSys)   newRefSys = VersificationMgr::systemVersificationMgr()->getVersificationSystem("KJV");
-    if (m_refSys != newRefSys) {
-        m_refSys = newRefSys;
+void VerseKey::setVersificationSystem(
+        std::shared_ptr<VersificationMgr::System const> vs)
+{
+    assert(vs);
+    if (m_refSys != vs) {
+        m_refSys = std::move(vs);
         m_BMAX = m_refSys->getBMAX();
 
         // TODO: adjust bounds for versificaion system ???
@@ -272,11 +288,6 @@ void VerseKey::setVersificationSystem(const char *name) {
     }
 
 }
-
-
-std::string const & VerseKey::getVersificationSystem() const noexcept
-{ return m_refSys->getName(); }
-
 
 
 /******************************************************************************

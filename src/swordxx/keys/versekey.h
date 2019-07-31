@@ -88,7 +88,7 @@ class SWDLLEXPORT VerseKey : public SWKey {
     std::size_t m_userData = 0;
 
     std::shared_ptr<SWLocale> m_locale;
-    std::array<std::size_t, 2u> m_BMAX;
+    std::array<std::size_t, 2u> m_BMAX{m_refSys->getBMAX()};
 
 protected:
 
@@ -127,20 +127,33 @@ public:
 #endif
 
     /**
+      \param[in] v11n The versification system to use, if nullptr then KJV is
+                      used.
+    */
+    VerseKey(std::shared_ptr<VersificationMgr::System const> v11n = nullptr);
+
+    /**
     * VerseKey Constructor - initializes Instance of VerseKey
     *
     * @param ikey text key (will take various forms of 'BOOK CH:VS'.
+      \param[in] v11n The versification system to use, if nullptr then KJV is
+                      used.
     * See parse() for more detailed information)
     */
-    VerseKey(char const * ikey = nullptr);
+    VerseKey(char const * ikey,
+             std::shared_ptr<VersificationMgr::System const> v11n = nullptr);
 
     /** VerseKey Constructor - initializes instance of VerseKey
     * with boundariess - see also lowerBoundKey()
     * and upperBoundKey()
     * @param min the lower boundary of the new    VerseKey
     * @param max the upper boundary of the new    VerseKey
+      \param[in] v11n The versification system to use, if nullptr then KJV is
+                      used.
     */
-    VerseKey(const char *min, const char *max, const char *v11n = "KJV");
+    VerseKey(char const * min,
+             char const * max,
+             std::shared_ptr<VersificationMgr::System const> v11n = nullptr);
 
     /**    VerseKey Copy Constructor - will create a new VerseKey
     * based on an existing SWKey
@@ -386,8 +399,12 @@ public:
     */
     int compare_(VerseKey const & ikey) const noexcept;
 
-    void setVersificationSystem(const char *name);
-    std::string const & getVersificationSystem() const noexcept;
+    void setVersificationSystem(
+            std::shared_ptr<VersificationMgr::System const> vs);
+
+    std::shared_ptr<VersificationMgr::System const> versificationSystem()
+            const noexcept
+    { return m_refSys; }
 
     // DEBUG
     void validateCurrentLocale() const;

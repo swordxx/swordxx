@@ -793,7 +793,8 @@ std::shared_ptr<SWModule> SWMgr::createModule(std::string const & name,
     auto datapath(m_prefixPath);
     addTrailingDirectorySlash(datapath);
     auto description(getEntry("Description"));
-    auto versification(getEntry("Versification", "KJV"));
+    auto v11n(VersificationMgr::systemVersificationMgr()->getVersificationSystem(
+                  getEntry("Versification", "KJV").c_str()));
     auto lang(getEntry("Lang", "en"));
 
     // DataPath - relative path to data used by module driver.  May be a directory, may be a File.
@@ -908,25 +909,25 @@ std::shared_ptr<SWModule> SWMgr::createModule(std::string const & name,
                 }());
         if (auto compress = getCompress()) {
             if (caseInsensitiveEquals(driver, "zText")) {
-                return finalizeModule(std::make_shared<zText>(datapath.c_str(), name.c_str(), description.c_str(), blockType, std::move(compress), enc, direction, markup, lang.c_str(), versification.c_str()));
+                return finalizeModule(std::make_shared<zText>(datapath.c_str(), name.c_str(), description.c_str(), blockType, std::move(compress), enc, direction, markup, lang.c_str(), std::move(v11n)));
             } else if (caseInsensitiveEquals(driver, "zText4")) {
-                return finalizeModule(std::make_shared<zText4>(datapath.c_str(), name.c_str(), description.c_str(), blockType, std::move(compress), enc, direction, markup, lang.c_str(), versification.c_str()));
+                return finalizeModule(std::make_shared<zText4>(datapath.c_str(), name.c_str(), description.c_str(), blockType, std::move(compress), enc, direction, markup, lang.c_str(), std::move(v11n)));
             } else if (caseInsensitiveEquals(driver, "zCom4")) {
-                return finalizeModule(std::make_shared<zCom4>(datapath.c_str(), name.c_str(), description.c_str(), blockType, std::move(compress), enc, direction, markup, lang.c_str(), versification.c_str()));
+                return finalizeModule(std::make_shared<zCom4>(datapath.c_str(), name.c_str(), description.c_str(), blockType, std::move(compress), enc, direction, markup, lang.c_str(), std::move(v11n)));
             } else {
-                return finalizeModule(std::make_shared<zCom>(datapath.c_str(), name.c_str(), description.c_str(), blockType, std::move(compress), enc, direction, markup, lang.c_str(), versification.c_str()));
+                return finalizeModule(std::make_shared<zCom>(datapath.c_str(), name.c_str(), description.c_str(), blockType, std::move(compress), enc, direction, markup, lang.c_str(), std::move(v11n)));
             }
         }
     } else if (caseInsensitiveEquals(driver, "RawText")) {
-        return finalizeModule(std::make_shared<RawText>(datapath.c_str(), name.c_str(), description.c_str(), enc, direction, markup, lang.c_str(), versification.c_str()));
+        return finalizeModule(std::make_shared<RawText>(datapath.c_str(), name.c_str(), description.c_str(), enc, direction, markup, lang.c_str(), std::move(v11n)));
     } else if (caseInsensitiveEquals(driver, "RawText4")) {
-        return finalizeModule(std::make_shared<RawText4>(datapath.c_str(), name.c_str(), description.c_str(), enc, direction, markup, lang.c_str(), versification.c_str()));
+        return finalizeModule(std::make_shared<RawText4>(datapath.c_str(), name.c_str(), description.c_str(), enc, direction, markup, lang.c_str(), std::move(v11n)));
     } else if (caseInsensitiveEquals(driver, "RawGBF")) { // backward support old drivers
         return finalizeModule(std::make_shared<RawText>(datapath.c_str(), name.c_str(), description.c_str(), enc, direction, markup, lang.c_str()));
     } else if (caseInsensitiveEquals(driver, "RawCom")) {
-        return finalizeModule(std::make_shared<RawCom>(datapath.c_str(), name.c_str(), description.c_str(), enc, direction, markup, lang.c_str(), versification.c_str()));
+        return finalizeModule(std::make_shared<RawCom>(datapath.c_str(), name.c_str(), description.c_str(), enc, direction, markup, lang.c_str(), std::move(v11n)));
     } else if (caseInsensitiveEquals(driver, "RawCom4")) {
-        return finalizeModule(std::make_shared<RawCom4>(datapath.c_str(), name.c_str(), description.c_str(), enc, direction, markup, lang.c_str(), versification.c_str()));
+        return finalizeModule(std::make_shared<RawCom4>(datapath.c_str(), name.c_str(), description.c_str(), enc, direction, markup, lang.c_str(), std::move(v11n)));
     } else if (caseInsensitiveEquals(driver, "RawFiles")) {
         return finalizeModule(std::make_shared<RawFiles>(datapath.c_str(), name.c_str(), description.c_str(), enc, direction, markup, lang.c_str()));
     } else if (caseInsensitiveEquals(driver, "HREFCom")) {

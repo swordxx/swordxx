@@ -74,9 +74,9 @@ zComBase<Base>::zComBase(const char *ipath,
                          SWTextDirection dir,
                          SWTextMarkup mark,
                          const char *ilang,
-                         const char *versification)
+                         std::shared_ptr<VersificationMgr::System const> v11n)
     : Base(ipath, -1, iblockType, std::move(icomp))
-    , SWCom(iname, idesc, enc, dir, mark, ilang, versification)
+    , SWCom(iname, idesc, enc, dir, mark, ilang, std::move(v11n))
     , blockType(iblockType)
 {}
 
@@ -150,10 +150,11 @@ bool zComBase<Base>::isWritable() const noexcept {
 }
 
 template <typename Base>
-char zComBase<Base>::createModule(const char *path,
-                                  BlockType blockBound,
-                                  const char * v11n)
-{ return Base::createModule(path, blockBound, v11n); }
+char zComBase<Base>::createModule(
+        const char * path,
+        BlockType blockBound,
+        std::shared_ptr<VersificationMgr::System const> v11n)
+{ return Base::createModule(path, blockBound, std::move(v11n)); }
 
 template <typename Base>
 void zComBase<Base>::setEntry(std::string_view inBuf) {

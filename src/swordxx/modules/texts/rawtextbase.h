@@ -50,12 +50,14 @@ public: /* Methods: */
                 SWTextDirection dir = DIRECTION_LTR,
                 SWTextMarkup markup = FMT_UNKNOWN,
                 char const * ilang = nullptr,
-                char const * versification = "KJV");
+                std::shared_ptr<VersificationMgr::System const> v11n = nullptr);
     ~RawTextBase() override;
     void increment(int steps = 1) override;
     bool isWritable() const noexcept override;
 
-    static char createModule(char const * path, char const * v11n = "KJV");
+    static char createModule(
+            char const * path,
+            std::shared_ptr<VersificationMgr::System const> v11n = nullptr);
 
     void setEntry(std::string_view text) override;
     void linkEntry(SWKey const & linkKey) override;

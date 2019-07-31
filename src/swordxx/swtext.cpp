@@ -30,17 +30,6 @@
 
 namespace swordxx {
 
-namespace {
-
-std::shared_ptr<VerseKey> staticCreateKey(char const * const versification) {
-    auto vk(std::make_shared<VerseKey>());
-    vk->setVersificationSystem(versification);
-    return vk;
-}
-
-} // anonymous namespace
-
-
 /******************************************************************************
  * SWText Constructor - Initializes data for instance of SWText
  *
@@ -48,10 +37,28 @@ std::shared_ptr<VerseKey> staticCreateKey(char const * const versification) {
  *    imoddesc - Name to display to user for module
  */
 
-SWText::SWText(const char *imodname, const char *imoddesc, TextEncoding enc, SWTextDirection dir, SWTextMarkup mark, const char* ilang, const char *versification): SWModule(staticCreateKey(versification), imodname, imoddesc, "Biblical Texts", enc, dir, mark, ilang) {
-    this->m_versification = versification;
-    setSkipConsecutiveLinks(false);
-}
+SWText::SWText(const char * imodname,
+               const char * imoddesc,
+               TextEncoding enc,
+               SWTextDirection dir,
+               SWTextMarkup mark,
+               const char * ilang,
+               std::shared_ptr<VersificationMgr::System const> v11n)
+    : SWText(imodname, imoddesc, enc, dir, mark, ilang,
+             std::make_shared<VerseKey>(std::move(v11n)))
+{}
+
+SWText::SWText(char const * imodname,
+               char const * imoddesc,
+               TextEncoding enc,
+               SWTextDirection dir,
+               SWTextMarkup mark,
+               char const * ilang,
+               std::shared_ptr<VerseKey> key)
+    : SWModule(key, imodname, imoddesc, "Biblical Texts", enc, dir, mark, ilang)
+    , m_v11n(key->versificationSystem())
+{ setSkipConsecutiveLinks(false); }
+
 
 
 /******************************************************************************
@@ -59,7 +66,7 @@ SWText::SWText(const char *imodname, const char *imoddesc, TextEncoding enc, SWT
  */
 
 std::shared_ptr<SWKey> SWText::createKey() const
-{ return staticCreateKey(m_versification.c_str()); }
+{ return std::make_shared<VerseKey>(m_v11n); }
 
 std::shared_ptr<VerseKey
 const> SWText::getVerseKey(std::shared_ptr<SWKey const> thisKey) const {
@@ -73,8 +80,7 @@ const> SWText::getVerseKey(std::shared_ptr<SWKey const> thisKey) const {
                 std::dynamic_pointer_cast<VerseKey const>(lkTest->getElement()))
             return key_;
 
-    auto r(std::make_shared<VerseKey>());
-    r->setVersificationSystem(m_versification.c_str());
+    auto r(std::make_shared<VerseKey>(m_v11n));
     r->positionFrom(*thisKey);
     return r;
 }

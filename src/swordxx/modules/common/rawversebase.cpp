@@ -187,8 +187,9 @@ void RawVerseBase<SizeType_>::doLinkEntry(char testmt,
 }
 
 template <typename SizeType_>
-char RawVerseBase<SizeType_>::createModule(NormalizedPath const & path,
-                                           char const * v11n)
+char RawVerseBase<SizeType_>::createModule(
+        NormalizedPath const & path,
+        std::shared_ptr<VersificationMgr::System const> v11n)
 {
     std::string const otPath(path.str() + "/ot");
     std::string const ntPath(path.str() + "/nt");
@@ -218,8 +219,7 @@ char RawVerseBase<SizeType_>::createModule(NormalizedPath const & path,
     FileMgr::removeFile(ntVssPath.c_str());
     auto const fd2 = openFile(ntVssPath);
 
-    VerseKey vk;
-    vk.setVersificationSystem(v11n);
+    VerseKey vk(std::move(v11n));
     vk.setIntros(true);
     StartType offset = 0;
     SizeType size = 0;

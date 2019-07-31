@@ -40,16 +40,17 @@ namespace swordxx {
  *    idesc - Name to display to user for module
  */
 template <typename Base>
-RawComBase<Base>::RawComBase(const char * ipath,
-                             const char * iname,
-                             const char * idesc,
-                             TextEncoding encoding,
-                             SWTextDirection dir,
-                             SWTextMarkup markup,
-                             const char * ilang,
-                             const char * versification)
-        : Base(ipath)
-        , SWCom(iname, idesc, encoding, dir, markup, ilang, versification)
+RawComBase<Base>::RawComBase(
+        const char * ipath,
+        const char * iname,
+        const char * idesc,
+        TextEncoding encoding,
+        SWTextDirection dir,
+        SWTextMarkup markup,
+        const char * ilang,
+        std::shared_ptr<VersificationMgr::System const> v11n)
+    : Base(ipath)
+    , SWCom(iname, idesc, encoding, dir, markup, ilang, std::move(v11n))
 {}
 
 
@@ -118,8 +119,10 @@ bool RawComBase<Base>::isWritable() const noexcept {
 }
 
 template <typename Base>
-char RawComBase<Base>::createModule(const char *path, const char * v11n)
-{ return Base::createModule(path, v11n); }
+char RawComBase<Base>::createModule(
+        const char * path,
+        std::shared_ptr<VersificationMgr::System const> v11n)
+{ return Base::createModule(path, std::move(v11n)); }
 
 template <typename Base>
 void RawComBase<Base>::setEntry(std::string_view text) {

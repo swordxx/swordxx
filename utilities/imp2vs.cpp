@@ -92,7 +92,9 @@ int main(int argc, char **argv) {
 
     const char *progName   = argv[0];
     const char *inFileName = argv[1];
-    std::string v11n         = "KJV";
+    std::shared_ptr<VersificationMgr::System const> v11n(
+            VersificationMgr::systemVersificationMgr()->getVersificationSystem(
+                "KJV"));
     std::string outPath      = "./";
     std::string locale           = "en";
 
@@ -144,8 +146,17 @@ int main(int argc, char **argv) {
             else usage(progName, "-o requires <output_path>");
         }
         else if (!std::strcmp(argv[i], "-v")) {
-            if (i+1 < argc) v11n = argv[++i];
-            else usage(progName, "-v requires <v11n>");
+            if (i + 1 < argc) {
+                auto v(VersificationMgr::systemVersificationMgr()->getVersificationSystem(argv[++i]));
+                if (v) {
+                    v11n = std::move(v);
+                } else {
+                    fprintf(stderr, "ERROR: %s: Requested versification system not found: %s \n", *argv, argv[i]);
+                    std::exit(-1);
+                }
+            } else {
+                usage(progName, "-v requires <v11n>");
+            }
         }
         else if (!std::strcmp(argv[i], "-l")) {
             if (i+1 < argc) locale = argv[++i];
@@ -158,8 +169,6 @@ int main(int argc, char **argv) {
         else usage(progName, (((std::string)"Unknown argument: ")+ argv[i]).c_str());
     }
     // -----------------------------------------------------
-    auto const v(VersificationMgr::systemVersificationMgr()->getVersificationSystem(v11n.c_str()));
-    if (!v) std::cout << "Warning: Versification " << v11n << " not found. Using KJV versification...\n";
 
     std::unique_ptr<SWCompress> compressor;
     if (compType == "LZSS") {
@@ -179,15 +188,15 @@ int main(int argc, char **argv) {
     // setup module
     if (!append) {
         if (compressor) {
-            if (zText::createModule(outPath.c_str(), iType, v11n.c_str())) {
+            if (zText::createModule(outPath.c_str(), iType, v11n)) {
                 fprintf(stderr, "ERROR: %s: couldn't create module at path: %s \n", *argv, outPath.c_str());
                 std::exit(-1);
             }
         }
         else {
             if (!fourByteSize)
-                RawText::createModule(outPath.c_str(), v11n.c_str());
-            else    RawText4::createModule(outPath.c_str(), v11n.c_str());
+                RawText::createModule(outPath.c_str(), v11n);
+            else    RawText4::createModule(outPath.c_str(), v11n);
         }
     }
 
@@ -205,7 +214,7 @@ int main(int argc, char **argv) {
                 DIRECTION_LTR,    // dir
                 FMT_UNKNOWN,    // markup
                 nullptr,        // lang
-                v11n.c_str()        // versification
+                v11n         // versification system
                );
     } else if (fourByteSize) {
         module = std::make_unique<RawText4>(outPath.c_str(),
@@ -215,7 +224,7 @@ int main(int argc, char **argv) {
                                             DIRECTION_LTR,
                                             FMT_UNKNOWN,
                                             nullptr,
-                                            v11n.c_str());
+                                            v11n);
     } else {
         module = std::make_unique<RawText>(outPath.c_str(),
                                            nullptr,
@@ -224,7 +233,7 @@ int main(int argc, char **argv) {
                                            DIRECTION_LTR,
                                            FMT_UNKNOWN,
                                            nullptr,
-                                           v11n.c_str());
+                                           v11n);
     }
     // -----------------------------------------------------
 

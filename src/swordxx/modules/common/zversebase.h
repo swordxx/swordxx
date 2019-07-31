@@ -34,6 +34,7 @@
 #include <utility>
 #include "../../defs.h"
 #include "../../normalizedpath.h"
+#include "../../versificationmgr.h"
 
 
 namespace swordxx {
@@ -74,9 +75,10 @@ protected: /* Methods: */
                           VerseSizeType size,
                           BufferNumberType buffnum) const;
 
-    static char createModule(NormalizedPath const & path,
-                             BlockType blockBound,
-                             char const * v11n = "KJV");
+    static char createModule(
+            NormalizedPath const & path,
+            BlockType blockBound,
+            std::shared_ptr<VersificationMgr::System const> v11n = nullptr);
 
     void doSetText(char testmt, long idxoff, std::string_view buf);
 
