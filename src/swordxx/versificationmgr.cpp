@@ -430,9 +430,14 @@ const std::list<std::string> VersificationMgr::getVersificationSystems() const {
     return retVal;
 }
 
-void VersificationMgr::System::translateVerse(const System *dstSys, const char **book, int *chapter, int *verse, int *verse_end) const {
+void VersificationMgr::System::translateVerse(System const & dstSys,
+                                              char const ** book,
+                                              int * chapter,
+                                              int * verse,
+                                              int * verse_end) const
+{
     auto const & myName(getName());
-    auto const & dstName(dstSys->getName());
+    auto const & dstName(dstSys.getName());
 
     SWLog::getSystemLog()->logDebug("translate verse from %s to %s: %s.%i.%i-%i\n",myName.c_str(), dstName.c_str(), *book, *chapter, *verse, *verse_end);
 
@@ -441,15 +446,15 @@ void VersificationMgr::System::translateVerse(const System *dstSys, const char *
             return;
         // reversed mapping
         SWLog::getSystemLog()->logDebug("Perform reversed mapping.\n");
-        auto b(dstSys->bookNumberByOSISName(*book));
+        auto b(dstSys.bookNumberByOSISName(*book));
         if (b) {
             SWLog::getSystemLog()->logDebug("\tbookNumberByOSISName %zu %s.\n", *b, *book);
         } else {
             SWLog::getSystemLog()->logDebug("\tbookNumberByOSISName -1 %s.\n", *book);
-            SWLog::getSystemLog()->logDebug("\tmappingsExtraBooks.size() %i.\n", dstSys->m_p->m_mappingsExtraBooks.size());
-            for (std::size_t i = 0u; i < dstSys->m_p->m_mappingsExtraBooks.size(); ++i) {
-                SWLog::getSystemLog()->logDebug("\t%s %s.\n", *book, dstSys->m_p->m_mappingsExtraBooks[i]);
-                if (!std::strcmp(*book, dstSys->m_p->m_mappingsExtraBooks[i])) {
+            SWLog::getSystemLog()->logDebug("\tmappingsExtraBooks.size() %i.\n", dstSys.m_p->m_mappingsExtraBooks.size());
+            for (std::size_t i = 0u; i < dstSys.m_p->m_mappingsExtraBooks.size(); ++i) {
+                SWLog::getSystemLog()->logDebug("\t%s %s.\n", *book, dstSys.m_p->m_mappingsExtraBooks[i]);
+                if (!std::strcmp(*book, dstSys.m_p->m_mappingsExtraBooks[i])) {
                     b = m_p->m_books.size()+i-2;
                     break;
                 }
@@ -458,7 +463,7 @@ void VersificationMgr::System::translateVerse(const System *dstSys, const char *
 
         SWLog::getSystemLog()->logDebug("\tb %i.\n", b);
 
-        if (!b || b.value() >= dstSys->m_p->m_mappings.size()) {
+        if (!b || b.value() >= dstSys.m_p->m_mappings.size()) {
             SWLog::getSystemLog()->logDebug("no modification");
             return;
         }
@@ -466,7 +471,7 @@ void VersificationMgr::System::translateVerse(const System *dstSys, const char *
         unsigned char const * a = nullptr;
 
         // reversed mapping should use forward search for item
-        for (auto m : dstSys->m_p->m_mappings[*b]) {
+        for (auto m : dstSys.m_p->m_mappings[*b]) {
             if (m[4] == *chapter && m[5] <= *verse) {
                 SWLog::getSystemLog()->logDebug("found mapping %i %i %i %i %i %i\n",m[1],m[2],m[3],m[4],m[5],m[6]);
                 if (m[5] == *verse || (m[6] >= *verse && m[5] <= *verse)) {
@@ -474,9 +479,9 @@ void VersificationMgr::System::translateVerse(const System *dstSys, const char *
                     *chapter = m[1];
                     *verse = m[2];
                     *verse_end = m[3];
-                    if (*m >= dstSys->m_p->m_books.size()) {
+                    if (*m >= dstSys.m_p->m_books.size()) {
                         SWLog::getSystemLog()->logWarning("map to extra books, possible bug source\n");
-                        *book = dstSys->m_p->m_books[m[7]-1].getOSISName().c_str();
+                        *book = dstSys.m_p->m_books[m[7]-1].getOSISName().c_str();
                     }
                     return;
                 }
@@ -495,10 +500,10 @@ void VersificationMgr::System::translateVerse(const System *dstSys, const char *
             else
                 *verse_end = (*verse) + d;
             *verse += d;
-            if (*a > dstSys->m_p->m_books.size()) {
+            if (*a > dstSys.m_p->m_books.size()) {
                 SWLog::getSystemLog()->logDebug("appropriate: %i %i %i %i %i %i %i %i\n",a[0],a[1],a[2],a[3],a[4],a[5],a[6],a[7]);
-                SWLog::getSystemLog()->logDebug("book: %s\n", dstSys->m_p->m_books[a[7]-1].getOSISName().c_str());
-                *book = dstSys->m_p->m_books[a[7]-1].getOSISName().c_str();
+                SWLog::getSystemLog()->logDebug("book: %s\n", dstSys.m_p->m_books[a[7]-1].getOSISName().c_str());
+                *book = dstSys.m_p->m_books[a[7]-1].getOSISName().c_str();
             }
             return;
         }
@@ -508,7 +513,7 @@ void VersificationMgr::System::translateVerse(const System *dstSys, const char *
         const System *kjva = systemVersificationMgr()->getVersificationSystem("KJVA");
         const int src_verse = *verse;
 
-        translateVerse(kjva, book, chapter, verse, verse_end);
+        translateVerse(*kjva, book, chapter, verse, verse_end);
 
         int interm_verse = *verse, interm_range = *verse_end, interm_chapter = *chapter;
         const char *interm_book = *book;
@@ -517,7 +522,7 @@ void VersificationMgr::System::translateVerse(const System *dstSys, const char *
 
         // contraction->expansion fix
         if (verse < verse_end && !(interm_verse < interm_range)) {
-            kjva->translateVerse(this, &interm_book, &interm_chapter, &interm_verse, &interm_range);
+            kjva->translateVerse(*this, &interm_book, &interm_chapter, &interm_verse, &interm_range);
             if (interm_verse < interm_range) {
                 *verse += src_verse - interm_verse;
                 if (*verse > *verse_end)

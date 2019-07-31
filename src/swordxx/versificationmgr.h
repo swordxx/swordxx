@@ -164,7 +164,7 @@ public: /* Types: */
 
         long getNTStartOffset() const noexcept { return m_ntStartOffset; }
 
-        void translateVerse(System const * dstSys,
+        void translateVerse(System const & dstSys,
                             char const ** book,
                             int * chapter,
                             int * verse,

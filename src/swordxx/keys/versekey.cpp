@@ -128,7 +128,7 @@ void VerseKey::setFromOther(const VerseKey &ikey) {
         int map_verse = ikey.getVerse();
         int map_range = map_verse;
 
-        ikey.m_refSys->translateVerse(m_refSys, &map_book, &map_chapter, &map_verse, &map_range);
+        ikey.m_refSys->translateVerse(*m_refSys, &map_book, &map_chapter, &map_verse, &map_range);
         //printf("verse: %s.%i.%i-%i\n",map_book,map_chapter,map_verse,map_range);
 
         if (auto const r = m_refSys->bookNumberByOSISName(map_book)) {
