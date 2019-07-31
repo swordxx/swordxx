@@ -225,15 +225,6 @@ VersificationMgr::System::System(std::string name,
 
 }
 
-VersificationMgr::System &VersificationMgr::System::operator =(const System &other) {
-    (*m_p) = *(other.m_p);
-    m_name = other.m_name;
-    m_BMAX = other.m_BMAX;
-    m_ntStartOffset = other.m_ntStartOffset;
-    return *this;
-}
-
-
 VersificationMgr::System::~System() {
     delete m_p;
 }

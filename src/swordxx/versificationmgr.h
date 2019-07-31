@@ -133,6 +133,7 @@ public: /* Types: */
 
         System();
 
+        System(System &&) = delete;
         System(System const & copy);
 
         System(std::string name,
@@ -143,7 +144,8 @@ public: /* Types: */
 
         ~System();
 
-        System & operator=(System const & copy);
+        System & operator=(System &&) = delete;
+        System & operator=(System const &) = delete;
 
         std::string const & getName() const noexcept { return m_name; }
 
@@ -171,8 +173,8 @@ public: /* Types: */
 
     private: /* Fields: */
 
-        Private * m_p;
-        std::string m_name;
+        Private * const m_p;
+        std::string const m_name;
         std::array<std::size_t, 2u> m_BMAX{{0, 0}};
         long m_ntStartOffset = 0;
 
