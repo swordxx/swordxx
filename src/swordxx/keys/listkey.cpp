@@ -98,6 +98,8 @@ void ListKey::copyFrom(ListKey const & rhs) {
     m_array = std::move(newArray);
 }
 
+void ListKey::copyFrom(SWKey const & ikey) { SWKey::copyFrom(ikey); }
+
 
 /******************************************************************************
  * ListKey::add - Adds an element to the list
@@ -187,6 +189,8 @@ void ListKey::decrement(int step) {
         }
     }
 }
+
+bool ListKey::isTraversable() const { return true; }
 
 long ListKey::getIndex() const { return m_arrayPos; }
 
@@ -315,6 +319,8 @@ std::string ListKey::getOSISRefRangeText() const {
     return r;
 }
 
+void ListKey::setIndex(long index)
+{ setToElementAndTop_(setToElementCheckBounds(index)); }
 
 /******************************************************************************
  * ListKey::getText - returns text key if (const char *) cast is requested

@@ -120,7 +120,7 @@ public:
      * @param ikey other ListKey object
      */
     virtual void copyFrom(const ListKey & ikey);
-    void copyFrom(SWKey const & ikey) override { SWKey::copyFrom(ikey); }
+    void copyFrom(SWKey const & ikey) override;
 
     void positionToTop() override;
     void positionToBottom() override;
@@ -133,7 +133,7 @@ public:
      */
     void increment(int step = 1) override;
 
-    bool isTraversable() const override { return true; }
+    bool isTraversable() const override;
     long getIndex() const override;
     std::string getRangeText() const override;
     std::string getOSISRefRangeText() const override;
@@ -143,8 +143,7 @@ public:
      * Returns the index for the new one given as as parameter.
      * The first parameter is the new index.
      */
-    void setIndex(long index) override
-    { setToElementAndTop_(setToElementCheckBounds(index)); }
+    void setIndex(long index) override;
 
     std::string getText() const override;
     void setText(std::string newText) override;
