@@ -136,6 +136,8 @@ void zLD::increment(int steps) {
     getKey()->setText(m_entkeytxt);
 }
 
+void zLD::decrement(int steps) { increment(-steps); }
+
 
 void zLD::setEntry(std::string_view text) {
     auto const keyText = getKey()->getText();
@@ -173,6 +175,12 @@ void zLD::deleteEntry() {
     }
 }
 
+void zLD::rawZFilter(std::string & buf, char direction) const {
+    // hack, use key as direction for enciphering
+    rawFilter(buf, (SWKey *)(long)direction);
+}
+
+void zLD::flush() { flushCache(); }
 
 long zLD::getEntryCount() const {
     if (!idxfd || idxfd->getFd() < 0)

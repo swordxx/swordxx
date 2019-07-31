@@ -52,7 +52,7 @@ public:
     ~zLD() override;
 
     void increment(int steps = 1) override;
-    void decrement(int steps = 1) override { increment(-steps); }
+    void decrement(int steps = 1) override;
 
     bool isWritable() const noexcept override;
     static char createModule(const char *path) {
@@ -63,12 +63,9 @@ public:
     void linkEntry(SWKey const & linkKey) override;
     void deleteEntry() override;
 
-    void rawZFilter(std::string & buf, char direction = 0) const override {
-        // hack, use key as direction for enciphering
-        rawFilter(buf, (SWKey *)(long)direction);
-    }
+    void rawZFilter(std::string & buf, char direction = 0) const override;
 
-    void flush() override { flushCache(); }
+    void flush() override;
 
     long getEntryCount() const override;
     long getEntryForKey(char const * key) const override;
