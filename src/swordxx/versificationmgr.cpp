@@ -154,44 +154,13 @@ VersificationMgr::System::System(const System &other)
 {}
 
 
-VersificationMgr::System::System(std::string name)
+VersificationMgr::System::System(std::string name,
+                                 sbook const * ot,
+                                 sbook const * nt,
+                                 std::size_t const * chMax,
+                                 unsigned char const * const mappings)
     : m_p(new Private)
     , m_name(std::move(name))
-{}
-
-VersificationMgr::System &VersificationMgr::System::operator =(const System &other) {
-    (*m_p) = *(other.m_p);
-    m_name = other.m_name;
-    m_BMAX = other.m_BMAX;
-    m_ntStartOffset = other.m_ntStartOffset;
-    return *this;
-}
-
-
-VersificationMgr::System::~System() {
-    delete m_p;
-}
-
-
-std::optional<std::size_t> VersificationMgr::System::bookNumberByOSISName(
-        std::string const & bookName) const noexcept
-{
-    auto const it(m_p->m_osisLookup.find(bookName));
-    if (it != m_p->m_osisLookup.end())
-        return it->second;
-    return {};
-}
-
-
-std::vector<VersificationMgr::Book> const & VersificationMgr::System::books()
-        const noexcept
-{ return m_p->m_books; }
-
-
-void VersificationMgr::System::loadFromSBook(sbook const * ot,
-                                             sbook const * nt,
-                                             std::size_t const * chMax,
-                                             unsigned char const * mappings)
 {
     int chap = 0;
     std::size_t book = 0u;
@@ -253,7 +222,36 @@ void VersificationMgr::System::loadFromSBook(sbook const * ot,
             }
         }
     }
+
 }
+
+VersificationMgr::System &VersificationMgr::System::operator =(const System &other) {
+    (*m_p) = *(other.m_p);
+    m_name = other.m_name;
+    m_BMAX = other.m_BMAX;
+    m_ntStartOffset = other.m_ntStartOffset;
+    return *this;
+}
+
+
+VersificationMgr::System::~System() {
+    delete m_p;
+}
+
+
+std::optional<std::size_t> VersificationMgr::System::bookNumberByOSISName(
+        std::string const & bookName) const noexcept
+{
+    auto const it(m_p->m_osisLookup.find(bookName));
+    if (it != m_p->m_osisLookup.end())
+        return it->second;
+    return {};
+}
+
+
+std::vector<VersificationMgr::Book> const & VersificationMgr::System::books()
+        const noexcept
+{ return m_p->m_books; }
 
 
 VersificationMgr::Book::Book(const Book &other)
@@ -418,9 +416,8 @@ void VersificationMgr::registerVersificationSystem(
         std::size_t const * chMax,
         unsigned char const * mappings)
 {
-    auto s(std::make_shared<System>(name));
-    s->loadFromSBook(ot, nt, chMax, mappings);
-    p->m_systems[std::move(name)] = s;
+    auto s(std::make_shared<System>(name, ot, nt, chMax, mappings));
+    p->m_systems[std::move(name)] = std::move(s);
 }
 
 

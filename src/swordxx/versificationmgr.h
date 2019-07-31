@@ -135,7 +135,11 @@ public: /* Types: */
 
         System(System const & copy);
 
-        System(std::string name);
+        System(std::string name,
+               sbook const * ot,
+               sbook const * nt,
+               std::size_t const * chMax,
+               unsigned char const * const mappings = nullptr);
 
         ~System();
 
@@ -147,11 +151,6 @@ public: /* Types: */
                 std::string const & bookName) const noexcept;
 
         std::vector<Book> const & books() const noexcept;
-
-        void loadFromSBook(sbook const * ot,
-                           sbook const * nt,
-                           std::size_t const * chMax,
-                           unsigned char const * mappings = nullptr);
 
         long getOffsetFromVerse(int book, int chapter, int verse) const noexcept;
 
