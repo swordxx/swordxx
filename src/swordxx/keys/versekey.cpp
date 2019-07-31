@@ -1205,6 +1205,8 @@ std::string VerseKey::getBookAbbrev() const {
     return m_locale->translatePrefAbbrev(m_refSys->books()[((m_testament>1)?m_BMAX[0]:0)+m_book-1].getPreferredAbbreviation());
 }
 
+std::size_t VerseKey::getBookMax() const { return m_BMAX[m_testament-1]; }
+
 void VerseKey::positionToTop() {
     VerseKey const lb(lowerBoundKey());
     m_testament = (lb.getTestament() || m_intros) ? lb.getTestament() : 1;

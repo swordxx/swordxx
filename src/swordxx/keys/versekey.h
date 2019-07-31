@@ -246,7 +246,7 @@ public:
 
     /** \returns the number of the book (or 0 for introduction/heading). */
     char getBook() const noexcept { return m_book; }
-    std::size_t getBookMax() const { return m_BMAX[m_testament-1]; }
+    std::size_t getBookMax() const;
 
     /** \returns the number of the chapter (or 0 for introduction/heading). */
     int getChapter() const noexcept { return m_chapter; }
