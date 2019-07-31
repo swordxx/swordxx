@@ -412,33 +412,6 @@ void VerseKey::setLocale(std::shared_ptr<SWLocale> locale) {
 
 
 /******************************************************************************
- * VerseKey::validateCurrentLocale - be sure a locale book abbrevs set is complete
- *
- */
-void VerseKey::validateCurrentLocale() const {
-    if (SWLog::getSystemLog()->getLogLevel() >= SWLog::LOG_DEBUG) { //make sure log is wanted, this loop stuff costs a lot of time
-        auto const & books = m_refSys->books();
-        for (std::size_t i = 0; i < books.size(); ++i) {
-            std::string abbr(m_locale->translateText(books[i].getLongName()));
-            trimString(abbr);
-            auto const bn = bookFromAbbrev(abbr);
-            if (!bn || (bn.value() != i)) {
-                if (bn) {
-                    SWLog::getSystemLog()->logDebug("VerseKey::Book: %s does not have a matching toupper abbrevs entry! book number returned was: %zu, should be %zu. Required entry to add to locale:", abbr.c_str(), bn.value(), i);
-                } else {
-                    SWLog::getSystemLog()->logDebug("VerseKey::Book: %s does not have a matching toupper abbrevs entry! book number returned was: -1, should be %zu. Required entry to add to locale:", abbr.c_str(), i);
-                }
-
-                StringMgr* stringMgr = StringMgr::getSystemStringMgr();
-                stringMgr->upperUTF8(abbr);
-                SWLog::getSystemLog()->logDebug("%s=%s\n", abbr.c_str(), books[i].getOSISName().c_str());
-            }
-        }
-    }
-}
-
-
-/******************************************************************************
  * VerseKey::parseVerseList - Attempts to parse a buffer into separate
  *                verse entries returned in a ListKey
  *

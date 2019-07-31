@@ -24,7 +24,10 @@
 #include <iostream>
 #include <swordxx/keys/versekey.h>
 #include <swordxx/localemgr.h>
+#include <swordxx/stringmgr.h>
+#include <swordxx/swlocale.h>
 #include <swordxx/swlog.h>
+#include <swordxx/utilstr.h>
 
 using namespace swordxx;
 
@@ -60,7 +63,61 @@ int main(int argc, char **argv) {
     DefaultVSKey.setIntros(intros);
 
     SWLog::getSystemLog()->setLogLevel(SWLog::LOG_DEBUG);
-    DefaultVSKey.validateCurrentLocale();
+    {
+        auto const locale(DefaultVSKey.locale());
+        auto const refSys(DefaultVSKey.versificationSystem());
+        auto const & books = refSys->books();
+        for (std::size_t i = 0; i < books.size(); ++i) {
+            std::string abbr(locale->translateText(books[i].getLongName()));
+            trimString(abbr);
+            std::optional<std::size_t> bn;
+            {
+                auto iabbr(trimmedView(abbr));
+                if (!iabbr.empty()) {
+                    /* The first iteration of the following loop tries to uppercase the string.
+                       If we still fail to match, we try matching the string without any toupper
+                       logic. This is useful for, say, Chinese user input on a system that
+                       doesn't properly support a true Unicode-toupper function. */
+                    std::string upperAbbr(iabbr);
+                    StringMgr::getSystemStringMgr()->upperUTF8(upperAbbr);
+                    auto const scanAbbreviations =
+                        [refSys_ = refSys.get()](ConfigEntMap const & abbrevs, std::string_view abbr_) {
+                            assert(!abbr_.empty());
+                            for (auto it = abbrevs.lower_bound(abbr_); it != abbrevs.end(); ++it)
+                            {
+                                auto const & foundAbbr = it->first;
+                                if (foundAbbr.size() < abbr_.size())
+                                    break;
+                                if (std::memcmp(abbr_.data(), foundAbbr.c_str(), abbr_.size()))
+                                    break;
+                                auto const & osis = it->second;
+                                if (auto r = refSys_->bookNumberByOSISName(osis.c_str()))
+                                    return r;
+                            }
+                            return std::optional<std::size_t>();
+                        };
+                    std::string_view abbr_(upperAbbr);
+                    for (int i_ = 0; i_ < 2; i_++, abbr_ = iabbr) {
+                        if ((bn = scanAbbreviations(locale->bookAbbreviations(), abbr_)))
+                            break;
+                        if ((bn = scanAbbreviations(SWLocale::builtinBookAbbreviations(), abbr_)))
+                            break;
+                    }
+                }
+            }
+            // auto const bn = DefaultVSKey.bookFromAbbrev(abbr);
+            if (!bn || (bn.value() != i)) {
+                if (bn) {
+                    SWLog::getSystemLog()->logDebug("VerseKey::Book: %s does not have a matching toupper abbrevs entry! book number returned was: %zu, should be %zu. Required entry to add to locale:", abbr.c_str(), bn.value(), i);
+                } else {
+                    SWLog::getSystemLog()->logDebug("VerseKey::Book: %s does not have a matching toupper abbrevs entry! book number returned was: -1, should be %zu. Required entry to add to locale:", abbr.c_str(), i);
+                }
+
+                StringMgr::getSystemStringMgr()->upperUTF8(abbr);
+                SWLog::getSystemLog()->logDebug("%s=%s\n", abbr.c_str(), books[i].getOSISName().c_str());
+            }
+        }
+    }
 
     DefaultVSKey.setText(context);
 

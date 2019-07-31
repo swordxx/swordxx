@@ -404,9 +404,6 @@ public:
             const noexcept
     { return m_refSys; }
 
-    // DEBUG
-    void validateCurrentLocale() const;
-
     /** \returns a pointer to the locale used by this VerseKey. */
     std::shared_ptr<SWLocale> locale() const noexcept { return m_locale; }
 
