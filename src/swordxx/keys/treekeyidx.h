@@ -120,7 +120,7 @@ public:
     int compare(SWKey const & ikey) const noexcept override;
     void decrement(int steps = 1) override;
     void increment(int steps = 1) override;
-    bool isTraversable() const override { return true; }
+    bool isTraversable() const override;
 
     static signed char create(NormalizedPath const & path);
 };

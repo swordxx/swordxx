@@ -578,7 +578,7 @@ void TreeKeyIdx::increment(int steps) {
 */
 }
 
-
+bool TreeKeyIdx::isTraversable() const { return true; }
 
 std::string TreeKeyIdx::getText() const {
     TreeNode parent;
