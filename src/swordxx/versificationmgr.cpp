@@ -369,7 +369,7 @@ VersificationMgr::~VersificationMgr() {
 }
 
 std::shared_ptr<VersificationMgr::System const>
-VersificationMgr::getVersificationSystem(const char *name) const {
+VersificationMgr::getVersificationSystem(const char * name) const noexcept {
     auto const it(p->m_systems.find(name));
     return (it != p->m_systems.end()) ? it->second : nullptr;
 }

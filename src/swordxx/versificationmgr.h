@@ -195,7 +195,7 @@ public: /* Methods: */
     std::list<std::string> const getVersificationSystems() const;
 
     std::shared_ptr<System const> getVersificationSystem(char const * name)
-            const;
+            const noexcept;
 
     void registerVersificationSystem(char const * name,
                                      sbook const * ot,
