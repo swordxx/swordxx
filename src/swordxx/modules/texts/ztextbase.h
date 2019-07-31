@@ -67,25 +67,21 @@ public:
     ~zTextBase() override;
 
     void increment(int steps = 1) override;
-    void decrement(int steps = 1) override { increment(-steps); }
+    void decrement(int steps = 1) override;
 
     bool isWritable() const noexcept override;
     static char createModule(
             const char * path,
             BlockType blockBound,
-            std::shared_ptr<VersificationMgr::System const> v11n = nullptr)
-    { return BaseZVerse::createModule(path, blockBound, std::move(v11n)); }
+            std::shared_ptr<VersificationMgr::System const> v11n = nullptr);
 
     void setEntry(std::string_view text) override;
     void linkEntry(SWKey const & linkKey) override;
     void deleteEntry() override;
 
-    void rawZFilter(std::string & buf, char direction = 0) const override {
-        // hack, use key as direction for enciphering
-        rawFilter(buf, (SWKey *)(long)direction);
-    }
+    void rawZFilter(std::string & buf, char direction = 0) const override;
 
-    void flush() override { BaseZVerse::flushCache(); }
+    void flush() override;
 
     bool isLinked(SWKey const & k1, SWKey const & k2) const override;
     bool hasEntry(SWKey const & k) const override;

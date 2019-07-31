@@ -74,6 +74,14 @@ bool zTextBase<BaseZVerse>::isWritable() const noexcept {
            && ((this->idxfp[0]->mode() & FileMgr::RDWR) == FileMgr::RDWR);
 }
 
+template <typename BaseZVerse>
+char zTextBase<BaseZVerse>::createModule(
+        const char * path,
+        BlockType blockBound,
+        std::shared_ptr<VersificationMgr::System const> v11n)
+{ return BaseZVerse::createModule(path, blockBound, std::move(v11n)); }
+
+
 
 /******************************************************************************
  * zText::getRawEntry    - Returns the current verse buffer
@@ -151,6 +159,15 @@ void zTextBase<BaseZVerse>::deleteEntry() {
     this->doSetText(key_->getTestament(), key_->getTestamentIndex(), ""sv);
 }
 
+template <typename BaseZVerse>
+void zTextBase<BaseZVerse>::rawZFilter(std::string & buf, char direction) const{
+    // hack, use key as direction for enciphering
+    rawFilter(buf, (SWKey *)(long)direction);
+}
+
+template <typename BaseZVerse>
+void zTextBase<BaseZVerse>::flush() { BaseZVerse::flushCache(); }
+
 
 /******************************************************************************
  * zText::increment    - Increments module key a number of entries
@@ -199,6 +216,9 @@ void zTextBase<BaseZVerse>::increment(int steps) {
     }
     error = (error) ? KEYERR_OUTOFBOUNDS : 0;
 }
+
+template <typename BaseZVerse>
+void zTextBase<BaseZVerse>::decrement(int steps) { increment(-steps); }
 
 template <typename BaseZVerse>
 bool zTextBase<BaseZVerse>::isLinked(SWKey const & k1, SWKey const & k2) const {
