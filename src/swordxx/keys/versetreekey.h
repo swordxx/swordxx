@@ -90,7 +90,7 @@ public:
 
     std::shared_ptr<SWKey> clone() const override;
 
-    bool isTraversable() const override { return true; }
+    bool isTraversable() const override;
 
     std::shared_ptr<TreeKey const> getTreeKey() const;
 
@@ -107,10 +107,7 @@ public:
 
     SWKEY_OPERATORS(VerseTreeKey)
 
-    SWKey & operator=(VerseKey const & ikey) override {
-        copyFrom(ikey);
-        return *this;
-    }
+    SWKey & operator=(VerseKey const & ikey) override;
 
 };
 

@@ -81,6 +81,8 @@ void VerseTreeKey::init(TreeKey const & treeKey) {
 std::shared_ptr<SWKey> VerseTreeKey::clone() const
 { return std::make_shared<VerseTreeKey>(*this); }
 
+bool VerseTreeKey::isTraversable() const { return true; }
+
 
 /******************************************************************************
  * VerseTreeKey Destructor - cleans up instance of VerseTreeKey
@@ -250,6 +252,11 @@ void VerseTreeKey::positionToBottom() {
     decrement();
     increment();
     popError();
+}
+
+SWKey & VerseTreeKey::operator=(VerseKey const & ikey) {
+    copyFrom(ikey);
+    return *this;
 }
 
 /******************************************************************************
