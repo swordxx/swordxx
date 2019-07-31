@@ -136,6 +136,9 @@ void RawLdBase<Base>::increment(int steps) {
 }
 
 template <typename Base>
+void RawLdBase<Base>::decrement(int steps) { increment(-steps); }
+
+template <typename Base>
 void RawLdBase<Base>::setEntry(std::string_view text) {
     auto const keyText = getKey()->getText();
     if (this->m_strongsPadding) {

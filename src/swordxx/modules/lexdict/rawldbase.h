@@ -55,7 +55,7 @@ public: /* Methods: */
               bool strongsPadding = true);
 
     void increment(int steps = 1) override;
-    void decrement(int steps = 1) override { increment(-steps); }
+    void decrement(int steps = 1) override;
     bool isWritable() const noexcept override;
     static char createModule(const char *path) { return Base::createModule(path); }
 
