@@ -24,7 +24,6 @@
 #include "versificationmgr.h"
 
 #include <algorithm>
-#include <atomic>
 #include <cstring>
 #include <vector>
 #include <map>
@@ -55,41 +54,30 @@ namespace swordxx {
 
 std::shared_ptr<VersificationMgr const>
 VersificationMgr::systemVersificationMgr() {
-    if (auto r = std::atomic_load_explicit(&m_systemVersificationMgr,
-                                           std::memory_order_acquire))
-        return r;
-    std::shared_ptr<VersificationMgr const> newMgr(
-                []() {
-                    auto r(std::make_shared<VersificationMgr>());
-                    r->registerVersificationSystem("KJV", otbooks, ntbooks, vm);
-                    r->registerVersificationSystem("Leningrad", otbooks_leningrad, ntbooks_null, vm_leningrad);
-                    r->registerVersificationSystem("MT", otbooks_mt, ntbooks_null, vm_mt);
-                    r->registerVersificationSystem("KJVA", otbooks_kjva, ntbooks, vm_kjva);
-                    r->registerVersificationSystem("NRSV", otbooks, ntbooks, vm_nrsv, mappings_nrsv);
-                    r->registerVersificationSystem("NRSVA", otbooks_nrsva, ntbooks, vm_nrsva);
-                    r->registerVersificationSystem("Synodal", otbooks_synodal, ntbooks_synodal, vm_synodal, mappings_synodal);
-                    r->registerVersificationSystem("SynodalProt", otbooks_synodalProt, ntbooks_synodal, vm_synodalProt);
-                    r->registerVersificationSystem("Vulg", otbooks_vulg, ntbooks_vulg, vm_vulg, mappings_vulg);
-                    r->registerVersificationSystem("German", otbooks_german, ntbooks, vm_german);
-                    r->registerVersificationSystem("Luther", otbooks_luther, ntbooks_luther, vm_luther);
-                    r->registerVersificationSystem("Catholic", otbooks_catholic, ntbooks, vm_catholic);
-                    r->registerVersificationSystem("Catholic2", otbooks_catholic2, ntbooks, vm_catholic2);
-                    r->registerVersificationSystem("LXX", otbooks_lxx, ntbooks, vm_lxx);
-                    r->registerVersificationSystem("Orthodox", otbooks_orthodox, ntbooks, vm_orthodox);
-                    r->registerVersificationSystem("Calvin", otbooks, ntbooks, vm_calvin, mappings_calvin);
-                    r->registerVersificationSystem("DarbyFr", otbooks, ntbooks, vm_darbyfr, mappings_darbyfr);
-                    r->registerVersificationSystem("Segond", otbooks, ntbooks, vm_segond, mappings_segond);
-                    return r;
-                }());
-
-    std::shared_ptr<VersificationMgr const> expected;
-    if (std::atomic_compare_exchange_strong_explicit(&m_systemVersificationMgr,
-                                                     &expected,
-                                                     newMgr,
-                                                     std::memory_order_release,
-                                                     std::memory_order_acquire))
-        return newMgr;
-    return expected;
+    static std::shared_ptr<VersificationMgr> const svm{
+        []() {
+            auto r(std::make_shared<VersificationMgr>());
+            r->registerVersificationSystem("KJV", otbooks, ntbooks, vm);
+            r->registerVersificationSystem("Leningrad", otbooks_leningrad, ntbooks_null, vm_leningrad);
+            r->registerVersificationSystem("MT", otbooks_mt, ntbooks_null, vm_mt);
+            r->registerVersificationSystem("KJVA", otbooks_kjva, ntbooks, vm_kjva);
+            r->registerVersificationSystem("NRSV", otbooks, ntbooks, vm_nrsv, mappings_nrsv);
+            r->registerVersificationSystem("NRSVA", otbooks_nrsva, ntbooks, vm_nrsva);
+            r->registerVersificationSystem("Synodal", otbooks_synodal, ntbooks_synodal, vm_synodal, mappings_synodal);
+            r->registerVersificationSystem("SynodalProt", otbooks_synodalProt, ntbooks_synodal, vm_synodalProt);
+            r->registerVersificationSystem("Vulg", otbooks_vulg, ntbooks_vulg, vm_vulg, mappings_vulg);
+            r->registerVersificationSystem("German", otbooks_german, ntbooks, vm_german);
+            r->registerVersificationSystem("Luther", otbooks_luther, ntbooks_luther, vm_luther);
+            r->registerVersificationSystem("Catholic", otbooks_catholic, ntbooks, vm_catholic);
+            r->registerVersificationSystem("Catholic2", otbooks_catholic2, ntbooks, vm_catholic2);
+            r->registerVersificationSystem("LXX", otbooks_lxx, ntbooks, vm_lxx);
+            r->registerVersificationSystem("Orthodox", otbooks_orthodox, ntbooks, vm_orthodox);
+            r->registerVersificationSystem("Calvin", otbooks, ntbooks, vm_calvin, mappings_calvin);
+            r->registerVersificationSystem("DarbyFr", otbooks, ntbooks, vm_darbyfr, mappings_darbyfr);
+            r->registerVersificationSystem("Segond", otbooks, ntbooks, vm_segond, mappings_segond);
+            return r;
+        }()};
+    return svm;
 }
 
 
@@ -369,9 +357,6 @@ public:
     Private & operator=(Private const &) = default;
     std::map<std::string, std::shared_ptr<System>> m_systems;
 };
-// ---------------- statics -----------------
-std::shared_ptr<VersificationMgr const>
-        VersificationMgr::m_systemVersificationMgr;
 
 
 VersificationMgr::VersificationMgr()
@@ -382,16 +367,6 @@ VersificationMgr::VersificationMgr()
 VersificationMgr::~VersificationMgr() {
     delete p;
 }
-
-
-void VersificationMgr::setSystemVersificationMgr(
-        std::shared_ptr<VersificationMgr const> newVersificationMgr)
-{
-    std::atomic_store_explicit(&m_systemVersificationMgr,
-                               std::move(newVersificationMgr),
-                               std::memory_order_release);
-}
-
 
 std::shared_ptr<VersificationMgr::System const>
 VersificationMgr::getVersificationSystem(const char *name) const {

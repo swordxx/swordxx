@@ -192,9 +192,6 @@ public: /* Methods: */
 
     static std::shared_ptr<VersificationMgr const> systemVersificationMgr();
 
-    static void setSystemVersificationMgr(
-            std::shared_ptr<VersificationMgr const> newVersificationMgr);
-
     std::list<std::string> const getVersificationSystems() const;
 
     std::shared_ptr<System const> getVersificationSystem(char const * name)
