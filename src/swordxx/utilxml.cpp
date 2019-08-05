@@ -163,6 +163,12 @@ int XMLTag::attributePartCount(std::string const & attribName,
     return std::count(buf.begin(), buf.end(), partSplit)+1;
 }
 
+std::string XMLTag::attribute(std::string const & attribName) const
+{
+    auto const it(m_attributes.find(attribName));
+    return (it != m_attributes.end()) ? it->second : std::string();
+}
+
 std::string XMLTag::attribute(std::string const & attribName,
                               int partNum,
                               char partSplit) const
@@ -174,6 +180,10 @@ std::string XMLTag::attribute(std::string const & attribName,
         return getPart(it->second, partNum, partSplit);
     return it->second;
 }
+
+void XMLTag::setAttribute(std::string const & attribName,
+                          std::string attribValue)
+{ m_attributes[attribName] = std::move(attribValue); }
 
 void XMLTag::setAttribute(std::string const & attribName,
                           char const * attribValue,

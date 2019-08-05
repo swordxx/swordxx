@@ -107,7 +107,8 @@ char GBFFootnotes::processText (std::string &text, const SWKey *key, const SWMod
                         module->getEntryAttributes()["Footnote"][footnoteNumStr][attr] =
                                 startTag.attribute(attr);
                     module->getEntryAttributes()["Footnote"][footnoteNumStr]["body"] = tagText;
-                    startTag.setAttribute("swordFootnote", footnoteNumStr.c_str());
+                    startTag.setAttribute("swordFootnote",
+                                          std::move(footnoteNumStr));
                 }
                 hide = false;
                 if (isOptionOn()) {

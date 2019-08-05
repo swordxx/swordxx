@@ -847,9 +847,7 @@ bool handleToken(std::string &text, XMLTag token) {
                     XMLTag t = "<milestone resp=\"v\" />";
                     // copy all the attributes of the verse element to the milestone
                     for (auto const & attr : token.attributeNames())
-                        t.setAttribute(
-                                    attr.c_str(),
-                                    token.attribute(attr.c_str()).c_str());
+                        t.setAttribute(attr, token.attribute(attr));
                     text.append(t.toString());
                 }
 
@@ -1049,8 +1047,7 @@ bool handleToken(std::string &text, XMLTag token) {
                 XMLTag t = "<milestone resp=\"v\" />";
                 // copy all the attributes of the verse element to the milestone
                 for (auto const & attr : token.attributeNames())
-                    t.setAttribute(attr.c_str(),
-                                   token.attribute(attr.c_str()).c_str());
+                    t.setAttribute(attr, token.attribute(attr));
                 text.append(t.toString());
             }
 
@@ -1198,9 +1195,7 @@ XMLTag transformBSP(XMLTag t) {
         // Transform <p> into <div type="x-p"> and milestone it
         if (tagName == "p") {
             t = "<div type=\"x-p\" />";
-            std::ostringstream oss;
-            oss << "gen" << sID++;
-            t.setAttribute("sID", oss.str().c_str());
+            t.setAttribute("sID", "gen" + std::to_string(sID++));
         }
 
         // Transform <tag> into <tag  sID="">, where tag is a milestoneable element.
@@ -1223,9 +1218,7 @@ XMLTag transformBSP(XMLTag t) {
              tagName == "verse"
         ) {
             t.setEmpty(true);
-            std::ostringstream oss;
-            oss << "gen" << sID++;
-            t.setAttribute("sID", oss.str().c_str());
+            t.setAttribute("sID", "gen" + std::to_string(sID++));
         }
         bspTagStack.push(t);
 
@@ -1263,7 +1256,7 @@ XMLTag transformBSP(XMLTag t) {
                 // make this a clone of the start tag with sID changed to eID
                 // Note: in the case of </p> the topToken is a <div type="x-p">
                 t = topToken;
-                t.setAttribute("eID", t.attribute("sID").c_str());
+                t.setAttribute("eID", t.attribute("sID"));
                 t.eraseAttribute("sID");
             }
         }

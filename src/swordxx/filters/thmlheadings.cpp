@@ -83,11 +83,10 @@ char ThMLHeadings::processText(std::string &text, const SWKey *key, const SWModu
                 if (hide && tag.isEndTag()) {
                     if (module->isProcessEntryAttributes() && (isOptionOn() || (!preverse))) {
                         std::string heading;
-                        std::string cls = startTag.attribute("class");
-                        if (!startsWith(cls, "fromEntryAttributes"sv)) {
-                            cls = std::string("fromEntryAttributes ") + cls;
-                            startTag.setAttribute("class", cls.c_str());
-                        }
+                        if (auto cls = startTag.attribute("class");
+                            !startsWith(cls, "fromEntryAttributes"sv))
+                            startTag.setAttribute("class",
+                                                  "fromEntryAttributes " + cls);
                         heading += startTag.toString();
                         heading += header;
                         heading += tag.toString();
@@ -149,10 +148,11 @@ char ThMLHeadings::processText(std::string &text, const SWKey *key, const SWModu
                 }
                 else {
                     isheader = false;
-                    std::string cls = tag.attribute("class");
-                    if (startsWith(cls, "fromEntryAttributes "sv)) {
-                        cls.erase(0u, std::string("fromEntryAttributes ").size());
-                        tag.setAttribute("class", cls.c_str());
+                    if (auto cls = tag.attribute("class");
+                        startsWith(cls, "fromEntryAttributes "sv))
+                    {
+                        cls.erase(0u, "fromEntryAttributes "sv.size());
+                        tag.setAttribute("class", std::move(cls));
                         token = tag.toString();
                         token.erase(0u, 1u);
                         token.pop_back();

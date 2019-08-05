@@ -117,25 +117,24 @@ bool OSISOSIS::handleToken(std::string &buf, const char *token, BasicFilterUserD
 
             // start <w> tag
             if ((!tag.isEmpty()) && (!tag.isEndTag())) {
-                std::string attr = tag.attribute("lemma");
-                if (attr.length()) {
+                if (auto attr = tag.attribute("lemma"); !attr.empty()) {
                     if (startsWith(attr, "x-Strongs:"sv)) {
                         std::memcpy(&attr[3u], "strong", 6);
                         attr.erase(0u, 3u);
-                        tag.setAttribute("lemma", attr.c_str());
+                        tag.setAttribute("lemma", std::move(attr));
                     }
                 }
-                attr = tag.attribute("morph");
-                if (attr.length()) {
+                if (auto attr = tag.attribute("morph"); !attr.empty()) {
                     if (startsWith(attr, "x-StrongsMorph:"sv)) {
+                        // s/^x-Strongs/strong/:
                         std::memcpy(&attr[3u], "strong", 6);
                         attr.erase(0u, 3u);
-                        tag.setAttribute("lemma", attr.c_str());
-                    }
-                    if (startsWith(attr, "x-Robinson:"sv)) {
+                        tag.setAttribute("lemma", std::move(attr));
+                    } else if (startsWith(attr, "x-Robinson:"sv)) {
+                        // s/^x-R/r/:
                         attr[2] = 'r';
                         attr.erase(0u, 2u);
-                        tag.setAttribute("lemma", attr.c_str());
+                        tag.setAttribute("lemma", std::move(attr));
                     }
                 }
                 tag.eraseAttribute("wn");

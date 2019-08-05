@@ -69,11 +69,9 @@ char OSISLemma::processText(std::string &text, const SWKey *key, const SWModule 
                     XMLTag wtag(token.c_str());
 
                     // Always save off lemma if we haven't yet:
-                    if (!wtag.attribute("savlm").empty()) {
-                        auto const lemma(wtag.attribute("lemma"));
-                        if (!lemma.empty())
-                            wtag.setAttribute("savlm", lemma.c_str());
-                    }
+                    if (!wtag.attribute("savlm").empty())
+                        if (auto lemma = wtag.attribute("lemma"); !lemma.empty())
+                            wtag.setAttribute("savlm", std::move(lemma));
 
                     int count = wtag.attributePartCount("lemma", ' ');
                     for (int i = 0; i < count; i++) {
