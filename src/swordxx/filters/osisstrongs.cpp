@@ -103,12 +103,11 @@ char OSISStrongs::processText(std::string &text, const SWKey *key, const SWModul
                     std::string morphClass = "";
                     std::string lemmaClass = "";
 
-                    std::string attrib;
                     sprintf(wordstr, "%03d", wordNum);
 
                     // why is morph entry attribute processing done in here?  Well, it's faster.  It makes more local sense to place this code in osismorph.
                     // easier to keep lemma and morph in same wordstr number too maybe.
-                    if (!(attrib = wtag.attribute("morph")).empty()) {
+                    if (auto attrib = wtag.attribute("morph"); !attrib.empty()) {
                         int count = wtag.attributePartCount("morph", ' ');
                         int i = (count > 1) ? 0 : -1;        // -1 for whole value cuz it's faster, but does the same thing as 0
                         do {
@@ -139,7 +138,7 @@ char OSISStrongs::processText(std::string &text, const SWKey *key, const SWModul
                         } while (++i < count);
                     }
 
-                    if (!(attrib = wtag.attribute("savlm")).empty()) {
+                    if (auto attrib = wtag.attribute("savlm"); !attrib.empty()) {
                         int count = wtag.attributePartCount("savlm", ' ');
                         int i = (count > 1) ? 0 : -1;        // -1 for whole value cuz it's faster, but does the same thing as 0
                         do {
@@ -182,7 +181,7 @@ char OSISStrongs::processText(std::string &text, const SWKey *key, const SWModul
                         module->getEntryAttributes()["Word"][wordstr]["PartCount"] = formatted("%d", count);
                     }
 
-                    if (!(attrib = wtag.attribute("src")).empty()) {
+                    if (auto attrib = wtag.attribute("src"); !attrib.empty()) {
                         int count = wtag.attributePartCount("src", ' ');
                         int i = (count > 1) ? 0 : -1;        // -1 for whole value cuz it's faster, but does the same thing as 0
                         do {
