@@ -180,11 +180,11 @@ void XMLTag::setAttribute(std::string const & attribName,
                           int partNum,
                           char partSplit)
 {
-    std::string newVal = "";
     // set part of an attribute
     if (partNum > -1) {
         auto wholeAttr(attribute(attribName));
         int attrCount = attributePartCount(attribName, partSplit);
+        std::string newVal;
         for (int i = 0; i < attrCount; i++) {
             if (i == partNum) {
                 if (attribValue) {
