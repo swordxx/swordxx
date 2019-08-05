@@ -26,7 +26,6 @@
 #include <cstring>
 #include <stack>
 #include "../keys/versekey.h"
-#include "../stringmgr.h"
 #include "../swmodule.h"
 #include "../unicode.h"
 #include "../url.h"
@@ -444,7 +443,7 @@ bool OSISHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterU
                 std::string lastText = u->lastSuspendSegment;
                 u->suspendTextPassThru = (--u->suspendLevel);
                 if (!lastText.empty()) {
-                    toupperstr(lastText);
+                    lastText = utf8ToUpper(lastText);
                     auto const r(codepointFromUtf8(lastText));
                     auto const char_length = r.second ? r.second : 1;
                     scratch = formatted("%.*s<font size=\"-1\">%s</font>",

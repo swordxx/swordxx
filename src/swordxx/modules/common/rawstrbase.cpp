@@ -33,7 +33,6 @@
 #include <fcntl.h>
 #include <string>
 #include "../../filemgr.h"
-#include "../../stringmgr.h"
 #include "../../swlog.h"
 #include "../../sysdata.h"
 #include "../../utilstr.h"
@@ -101,7 +100,7 @@ std::string RawStrBase<SizeType_>::getIDXBufDat(long ioffset) const {
             r += ch;
         }
         if (!m_caseSensitive)
-            toupperstr_utf8(r);
+            return utf8ToUpper(r);
     }
     return r;
 }
@@ -166,7 +165,7 @@ signed char RawStrBase<SizeType_>::findOffset(std::string_view ikey,
 
             std::string key(ikey);
             if (!m_caseSensitive)
-                toupperstr_utf8(key);
+                key = utf8ToUpper(key);
 
             bool substr = false;
 
@@ -353,7 +352,7 @@ void RawStrBase<SizeType_>::doSetText(char const * ikey, std::string_view text){
     char errorStatus = findOffset(ikey, &start, &size, 0, &idxoff);
     std::string key(ikey);
     if (!m_caseSensitive)
-        toupperstr_utf8(key);
+        key = utf8ToUpper(key);
 
     auto const dbKey(getIDXBufDat(start));
 

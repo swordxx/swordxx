@@ -34,7 +34,6 @@
 #include <string>
 #include <utility>
 #include "../../filemgr.h"
-#include "../../stringmgr.h"
 #include "../../swlog.h"
 #include "../../sysdata.h"
 #include "../../utilstr.h"
@@ -126,11 +125,9 @@ std::string zStr::getKeyFromDatOffset(long ioffset) const
             datfd->read(buf.get(), size);
         }
         std::string r(buf.get(), size);
-        if (!m_caseSensitive)
-            toupperstr_utf8(r);
-        return r;
+        return m_caseSensitive ? r : utf8ToUpper(r);
     } else {
-        return "";
+        return {};
     }
 }
 
@@ -185,7 +182,7 @@ signed char zStr::findKeyIndex(const char *ikey, long *idxoff, long away) const
             headoff = 0;
             std::string key(ikey);
             if (!m_caseSensitive)
-                toupperstr_utf8(key);
+                key = utf8ToUpper(key);
 
             bool substr = false;
 
@@ -412,7 +409,7 @@ void zStr::setText(const char *ikey, std::string_view text) {
 
     std::string key(ikey);
     if (!m_caseSensitive)
-        toupperstr_utf8(key);
+        key = utf8ToUpper(key);
 
     char notFound = findKeyIndex(ikey, &idxoff, 0);
     if (!notFound) {

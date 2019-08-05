@@ -30,7 +30,6 @@
 #include <swordxx/keys/treekeyidx.h>
 #include <swordxx/modules/common/entriesblk.h>
 #include <swordxx/modules/genbook/rawgenbook.h>
-#include <swordxx/stringmgr.h>
 #include <swordxx/utilstr.h>
 #include <unicode/utypes.h>
 #include <unicode/ucnv.h>
@@ -126,7 +125,7 @@ void writeEntry(SWModule & book,
     if (greekFilter)
         greekAccentsFilter.processText(keyBuffer);
     if (toUpper)
-        StringMgr::getSystemStringMgr()->upperUTF8(keyBuffer);
+        keyBuffer = utf8ToUpper(keyBuffer);
 
 // Added for Hesychius, but this stuff should be pushed back into new StringMgr
 // functionality

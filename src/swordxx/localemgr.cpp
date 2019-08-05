@@ -34,7 +34,6 @@
 #include <vector>
 #include "DirectoryEnumerator.h"
 #include "filemgr.h"
-#include "stringmgr.h"
 #include "swlog.h"
 #include "swmgr.h"
 #include "swlocale.h"

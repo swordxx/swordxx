@@ -31,7 +31,6 @@
 #include <map>
 #include <memory>
 #include <set>
-#include "stringmgr.h"
 #include "utilstr.h"
 
 
@@ -42,42 +41,31 @@ BasicFilterUserData::~BasicFilterUserData() noexcept = default;
 void SWBasicFilter::addTokenSubstitute(char const * findString,
                                        char const * replaceString)
 {
-    if (!m_tokenCaseSensitive) {
-        std::string buf(findString);
-        toupperstr(buf);
-        m_tokenSubMap[buf] = replaceString;
-    } else {
-        m_tokenSubMap[findString] = replaceString;
-    }
+    m_tokenSubMap[m_tokenCaseSensitive ? findString : utf8ToUpper(findString)] =
+            replaceString;
 }
 
 void SWBasicFilter::addAllowedEscapeString(char const * findString) {
-    std::string buf(findString);
-    if (!m_escStringCaseSensitive)
-        toupperstr(buf);
-    m_escPassSet.emplace(std::move(buf));
+    m_escPassSet.emplace(m_escStringCaseSensitive
+                         ? findString
+                         : utf8ToUpper(findString));
 }
 
 void SWBasicFilter::addEscapeStringSubstitute(char const * findString,
                                               char const * replaceString)
 {
-    std::string buf(findString);
-    if (!m_escStringCaseSensitive)
-        toupperstr(buf);
-    m_escSubMap.emplace(std::move(buf), replaceString);
+    m_escSubMap.emplace(m_escStringCaseSensitive
+                        ? findString
+                        : utf8ToUpper(findString),
+                        replaceString);
 }
 
 bool SWBasicFilter::substituteToken(std::string & buf, char const * token) {
-    decltype(m_tokenSubMap)::iterator it;
-    if (!m_tokenCaseSensitive) {
-        std::string tmp(token);
-        toupperstr(tmp);
-        it = m_tokenSubMap.find(std::move(tmp));
-    } else {
-        it = m_tokenSubMap.find(token);
-    }
-
-    if (it != m_tokenSubMap.end()) {
+    if (auto const it = m_tokenSubMap.find(m_tokenCaseSensitive
+                                           ? token
+                                           : utf8ToUpper(token));
+        it != m_tokenSubMap.end())
+    {
         buf += it->second;
         return true;
     }
@@ -87,20 +75,14 @@ bool SWBasicFilter::substituteToken(std::string & buf, char const * token) {
 bool SWBasicFilter::passAllowedEscapeString(std::string & buf,
                                             char const * escString)
 {
-    decltype(m_escPassSet)::iterator it;
-    if (!m_escStringCaseSensitive) {
-        std::string tmp(escString);
-        toupperstr(tmp);
-        it = m_escPassSet.find(std::move(tmp));
-    } else {
-        it = m_escPassSet.find(escString);
-    }
-
-    if (it != m_escPassSet.end()) {
+    if (auto const it = m_escPassSet.find(m_escStringCaseSensitive
+                                          ? escString
+                                          : utf8ToUpper(escString));
+        it != m_escPassSet.end())
+    {
         appendEscapeString(buf, escString);
         return true;
     }
-
     return false;
 }
 
@@ -122,16 +104,11 @@ bool SWBasicFilter::substituteEscapeString(std::string & buf,
     if (passAllowedEscapeString(buf, escString))
         return true;
 
-    decltype(m_escSubMap)::iterator it;
-    if (!m_escStringCaseSensitive) {
-        std::string tmp(escString);
-        toupperstr(tmp);
-        it = m_escSubMap.find(std::move(tmp));
-    } else {
-        it = m_escSubMap.find(escString);
-    }
-
-    if (it != m_escSubMap.end()) {
+    if (auto const it = m_escSubMap.find(m_escStringCaseSensitive
+                                         ? escString
+                                         : utf8ToUpper(escString));
+        it != m_escSubMap.end())
+    {
         buf += it->second;
         return true;
     }

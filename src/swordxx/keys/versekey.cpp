@@ -36,7 +36,6 @@
 #include "../localemgr.h"
 #include "../roman.h"
 #include "../ShareRef.h"
-#include "../stringmgr.h"
 #include "../swlocale.h"
 #include "../swlog.h"
 #include "../utilstr.h"
@@ -371,14 +370,12 @@ std::optional<std::size_t> VerseKey::bookFromAbbrev(std::string_view iabbr)
     if (iabbr.empty())
         return {};
 
-    StringMgr* stringMgr = StringMgr::getSystemStringMgr();
 
     /* The first iteration of the following loop tries to uppercase the string.
        If we still fail to match, we try matching the string without any toupper
        logic. This is useful for, say, Chinese user input on a system that
        doesn't properly support a true Unicode-toupper function. */
-    std::string upperAbbr(iabbr);
-    stringMgr->upperUTF8(upperAbbr);
+    auto const upperAbbr(utf8ToUpper(iabbr));
     auto const scanAbbreviations =
         [this](ConfigEntMap const & abbrevs, std::string_view abbr) {
             assert(!abbr.empty());

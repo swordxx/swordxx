@@ -26,7 +26,6 @@
 #include <cstdlib>
 #include <cstring>
 #include "../keys/versekey.h"
-#include "../stringmgr.h"
 #include "../swmodule.h"
 #include "../unicode.h"
 #include "../utilstr.h"
@@ -217,7 +216,7 @@ bool OSISPlain::handleToken(std::string &buf, const char *token, BasicFilterUser
             auto const endPos(buf.size() - u->lastTextNode.size());
             auto end(buf.substr(endPos));
             auto const endSize(end.size());
-            toupperstr(end);
+            end = utf8ToUpper(end);
             buf.replace(endPos, endSize, end);
         }
         else if (startsWith(token, "hi"sv)) {

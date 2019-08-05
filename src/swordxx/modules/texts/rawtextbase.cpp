@@ -29,7 +29,6 @@
 #include "../../filemgr.h"
 #include "../../keys/versekey.h"
 #include "../../ShareRef.h"
-#include "../../stringmgr.h"
 #include "../../sysdata.h"
 #include "../../utilstr.h"
 

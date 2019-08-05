@@ -560,6 +560,8 @@ constexpr char const asciiCharToUpperTable[256u] = {
 constexpr char asciiCharToUpper(char const c) noexcept
 { return asciiCharToUpperTable[static_cast<unsigned char>(c)]; }
 
+std::string utf8ToUpper(std::string_view sv);
+
 } /* namespace swordxx */
 
 #endif /* SWORDXX_UTILSTR_H */

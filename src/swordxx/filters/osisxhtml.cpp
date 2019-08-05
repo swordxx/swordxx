@@ -26,7 +26,6 @@
 #include <cstring>
 #include <stack>
 #include "../keys/versekey.h"
-#include "../stringmgr.h"
 #include "../swmodule.h"
 #include "../url.h"
 #include "../utilstr.h"

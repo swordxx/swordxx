@@ -24,7 +24,6 @@
 #include <iostream>
 #include <swordxx/keys/versekey.h>
 #include <swordxx/localemgr.h>
-#include <swordxx/stringmgr.h>
 #include <swordxx/swlocale.h>
 #include <swordxx/swlog.h>
 #include <swordxx/utilstr.h>
@@ -78,8 +77,7 @@ int main(int argc, char **argv) {
                        If we still fail to match, we try matching the string without any toupper
                        logic. This is useful for, say, Chinese user input on a system that
                        doesn't properly support a true Unicode-toupper function. */
-                    std::string upperAbbr(iabbr);
-                    StringMgr::getSystemStringMgr()->upperUTF8(upperAbbr);
+                    auto const upperAbbr(utf8ToUpper(iabbr));
                     auto const scanAbbreviations =
                         [refSys_ = refSys.get()](ConfigEntMap const & abbrevs, std::string_view abbr_) {
                             assert(!abbr_.empty());
@@ -113,7 +111,7 @@ int main(int argc, char **argv) {
                     SWLog::getSystemLog()->logDebug("VerseKey::Book: %s does not have a matching toupper abbrevs entry! book number returned was: -1, should be %zu. Required entry to add to locale:", abbr.c_str(), i);
                 }
 
-                StringMgr::getSystemStringMgr()->upperUTF8(abbr);
+                abbr = utf8ToUpper(abbr);
                 SWLog::getSystemLog()->logDebug("%s=%s\n", abbr.c_str(), books[i].getOSISName().c_str());
             }
         }
