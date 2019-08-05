@@ -26,6 +26,7 @@
 #include <cassert>
 #include <cstring>
 #include <iterator>
+#include <memory>
 #include <type_traits>
 #include <unicode/locid.h>
 #include <unicode/translit.h>
