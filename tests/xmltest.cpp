@@ -41,11 +41,9 @@ int main(int argc, char * argv[]) {
                   << x.attribute(name.c_str()) << "]\n\t" << count
                   << " parts:\n";
         // -1 for whole value cuz it's faster, but does the same thing as 0:
-        std::remove_cv_t<decltype(count)> i = (count > 1) ? 0 : -1;
+        int i = 0;
         do {
             std::cout << "\t" << x.attribute(name.c_str(), i, ' ') << "\n";
-            if (i < 0)
-                i = 0;    // to handle our -1 condition
         } while (++i < count);
     }
     std::cout << " isEmpty: " << x.isEmpty() << "\n isEndTag: " << x.isEndTag()

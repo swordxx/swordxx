@@ -117,11 +117,10 @@ bool OSISPlain::handleToken(std::string &buf, const char *token, BasicFilterUser
             }
             if (!(attrib = u->tag.attribute("lemma")).empty()) {
                 int count = u->tag.attributePartCount("lemma", ' ');
-                int i = (count > 1) ? 0 : -1;        // -1 for whole value cuz it's faster, but does the same thing as 0
+                int i = 0;
                 do {
                     char gh;
                     attrib = u->tag.attribute("lemma", i, ' ');
-                    if (i < 0) i = 0;    // to handle our -1 condition
                     val = std::strchr(attrib.c_str(), ':');
                     val = (val) ? (val + 1) : attrib.c_str();
                     if ((std::strchr("GH", *val)) && (charIsDigit(val[1]))) {
@@ -143,10 +142,9 @@ bool OSISPlain::handleToken(std::string &buf, const char *token, BasicFilterUser
             }
             if (!(attrib = u->tag.attribute("morph")).empty() && (show)) {
                 int count = u->tag.attributePartCount("morph", ' ');
-                int i = (count > 1) ? 0 : -1;        // -1 for whole value cuz it's faster, but does the same thing as 0
+                int i = 0;
                 do {
                     attrib = u->tag.attribute("morph", i, ' ');
-                    if (i < 0) i = 0;    // to handle our -1 condition
                     val = std::strchr(attrib.c_str(), ':');
                     val = (val) ? (val + 1) : attrib.c_str();
                     if ((*val == 'T') && (std::strchr("GH", val[1])) && (charIsDigit(val[2])))

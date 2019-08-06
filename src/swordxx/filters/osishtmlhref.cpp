@@ -46,10 +46,9 @@ void processLemma(bool suspendTextPassThru, XMLTag &tag, std::string &buf) {
     const char *val;
     if (!(attrib = tag.attribute("lemma")).empty()) {
         int count = tag.attributePartCount("lemma", ' ');
-        int i = (count > 1) ? 0 : -1;        // -1 for whole value cuz it's faster, but does the same thing as 0
+        int i = 0;
         do {
             attrib = tag.attribute("lemma", i, ' ');
-            if (i < 0) i = 0;    // to handle our -1 condition
             val = std::strchr(attrib.c_str(), ':');
             val = (val) ? (val + 1) : attrib.c_str();
             std::string gh;
@@ -84,10 +83,9 @@ void processMorph(bool suspendTextPassThru, XMLTag &tag, std::string &buf) {
         //    show = false;
         //if (show) {
             int count = tag.attributePartCount("morph", ' ');
-            int i = (count > 1) ? 0 : -1;        // -1 for whole value cuz it's faster, but does the same thing as 0
+            int i = 0;
             do {
                 attrib = tag.attribute("morph", i, ' ');
-                if (i < 0) i = 0;    // to handle our -1 condition
                 val = std::strchr(attrib.c_str(), ':');
                 val = (val) ? (val + 1) : attrib.c_str();
                 const char *val2 = val;
