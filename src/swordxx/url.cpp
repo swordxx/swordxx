@@ -1,6 +1,6 @@
 /******************************************************************************
  *
- * Copyright 2016 Jaak Ristioja
+ * Copyright Jaak Ristioja
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -22,7 +22,7 @@ namespace swordxx {
 namespace URL {
 
 /// \todo Should we actually follow RFC 3986 here?
-std::string encode(std::string const & url) {
+std::string encode(std::string_view url) {
     std::string r;
     for (auto const & c : url) {
         switch (c) {
