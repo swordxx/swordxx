@@ -73,20 +73,32 @@ char OSISLemma::processText(std::string &text, const SWKey *key, const SWModule 
                         if (auto lemma = wtag.attribute("lemma"); !lemma.empty())
                             wtag.setAttribute("savlm", std::move(lemma));
 
-                    int count = wtag.attributePartCount("lemma", ' ');
-                    for (int i = 0; i < count; i++) {
-                        std::string a = wtag.attribute("lemma", i, ' ');
-                        auto const prefixPos(a.find(':'));
-                        if (prefixPos == std::string::npos
-                            || (prefixPos >= sizeof("lemma.") - 1u
-                                && !startsWith(a, "lemma."sv)))
+                    std::string newLemmaAttr;
+                    {
+                        auto const lemma(wtag.attribute("lemma"));
+                        std::size_t separatorPos;
+                        for (std::string_view tail = lemma;;
+                             tail.remove_prefix(separatorPos + 1u))
                         {
-                            // remove attribute part
-                            wtag.setAttribute("lemma", nullptr, i, ' ');
-                            i--;
-                            count--;
+                            separatorPos = tail.find(' ');
+                            auto const attrToken(tail.substr(0u, separatorPos));
+
+                            auto const prefixPos(attrToken.find(':'));
+                            // Only keep lemmas:
+                            if (prefixPos != std::string::npos
+                                && (prefixPos < sizeof("lemma.") - 1u
+                                    || startsWith(attrToken, "lemma."sv)))
+                            {
+                                if (!newLemmaAttr.empty())
+                                    newLemmaAttr.push_back(' ');
+                                newLemmaAttr.append(attrToken);
+                            }
+
+                            if (separatorPos == std::string_view::npos)
+                                break;
                         }
                     }
+                    wtag.setAttribute("lemma", newLemmaAttr);
 
                     token = wtag.toString();
                     trimString(token);
