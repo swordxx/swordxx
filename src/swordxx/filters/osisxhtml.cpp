@@ -81,8 +81,9 @@ inline void outText(T && t, std::string & o, BasicFilterUserData & u) {
 }
 
 void processLemma(XMLTag const & tag, std::string & buf) {
+    using namespace std::literals::string_view_literals;
     if (auto const attrib = tag.attribute("lemma"); !attrib.empty()) {
-        for (auto token : SimpleTokenizer<>::tokenize(attrib, ' ')) {
+        for (auto const & token : SimpleTokenizer<>::tokenize(attrib, ' ')) {
             auto const separatorPos(token.find(':'));
             auto const val((separatorPos == std::string_view::npos)
                            ? token
@@ -92,17 +93,16 @@ void processLemma(XMLTag const & tag, std::string & buf) {
             if (val.empty()) {
                 gh = token.substr(0u, separatorPos); // Prefix
             } else if (val.front() == 'G') {
-                gh = "Greek";
+                gh = "Greek"sv;
                 if ((val.size() >= 2u) && charIsDigit(val[1u]))
                     val2.remove_prefix(1u);
             } else if (val.front() == 'H') {
-                gh = "Hebrew";
+                gh = "Hebrew"sv;
                 if ((val.size() >= 2u) && charIsDigit(val[1u]))
                     val2.remove_prefix(1u);
             } else {
                 gh = token.substr(0u, separatorPos); // Prefix
             }
-            using namespace std::literals::string_view_literals;
             static constexpr auto const part1(
                         "<small><em class=\"strongs\">&lt;<a class=\"strongs\" "
                         "href=\"passagestudy.jsp?action=showStrongs&type="sv);
