@@ -521,9 +521,8 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
                          + '"').c_str(),
                         buf,
                         u);
-                for (auto const & attributeName : tag.attributeNames())
-                    outText((" data-" + attributeName + "=\""
-                             + tag.attribute(attributeName) + "\"").c_str(),
+                for (auto const & [attributeName, value] : tag.attributes())
+                    outText((" data-" + attributeName + "=\"" + value + "\"").c_str(),
                             buf,
                             u);
                 outText("/>", buf, u);

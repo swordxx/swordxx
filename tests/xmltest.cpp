@@ -35,9 +35,9 @@ int main(int argc, char * argv[]) {
     std::cout << x.toString() << "\n";
     x.setAttribute("addedAttribute", "with a \" quote");
     std::cout << x.toString() << "\nTag name: [" << x.name() << "]\n";
-    for (auto const & name : x.attributeNames())
+    for (auto const & [name, value] : x.attributes())
         std::cout << " - attribute: [" << name << "] = ["
-                  << x.attribute(name.c_str()) << "]\n";
+                  << value << "]\n";
     std::cout << " isEmpty: " << x.isEmpty() << "\n isEndTag: " << x.isEndTag()
               << "\n\n";
 

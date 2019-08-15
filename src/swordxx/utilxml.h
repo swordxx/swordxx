@@ -62,8 +62,6 @@ public: /* Methods: */
      */
     bool isEndTag(char const * eID) const noexcept;
 
-    std::list<std::string> attributeNames() const;
-
     std::map<std::string, std::string> & attributes() noexcept
     { return m_attributes; }
 

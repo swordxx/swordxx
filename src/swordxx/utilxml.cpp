@@ -131,13 +131,6 @@ XMLTag::XMLTag(char const * const tagString) {
     }
 }
 
-std::list<std::string> XMLTag::attributeNames() const {
-    std::list<std::string> retVal;
-    for (auto const & vp : m_attributes)
-        retVal.push_back(vp.first);
-    return retVal;
-}
-
 std::string XMLTag::attribute(std::string const & attribName) const
 {
     auto const it(m_attributes.find(attribName));

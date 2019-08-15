@@ -846,8 +846,8 @@ bool handleToken(std::string &text, XMLTag token) {
                     // transform the verse into a milestone
                     XMLTag t = "<milestone resp=\"v\" />";
                     // copy all the attributes of the verse element to the milestone
-                    for (auto const & attr : token.attributeNames())
-                        t.setAttribute(attr, token.attribute(attr));
+                    for (auto const & [name, value] : token.attributes())
+                        t.setAttribute(name, value);
                     text.append(t.toString());
                 }
 
@@ -1046,8 +1046,8 @@ bool handleToken(std::string &text, XMLTag token) {
                 // transform the verse into a milestone
                 XMLTag t = "<milestone resp=\"v\" />";
                 // copy all the attributes of the verse element to the milestone
-                for (auto const & attr : token.attributeNames())
-                    t.setAttribute(attr, token.attribute(attr));
+                for (auto const & [name, value] : token.attributes())
+                    t.setAttribute(name, value);
                 text.append(t.toString());
             }
 

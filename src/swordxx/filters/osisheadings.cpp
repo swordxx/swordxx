@@ -115,9 +115,10 @@ bool OSISHeadings::handleToken(std::string &buf, const char *token, BasicFilterU
                         else heading = u->heading;
                         u->module->getEntryAttributes()["Heading"][(preverse)?"Preverse":"Interverse"][hn] = heading;
 
-                        for (auto const & attr : u->currentHeadingTag.attributeNames())
-                            u->module->getEntryAttributes()["Heading"][hn][attr.c_str()] =
-                                    u->currentHeadingTag.attribute(attr.c_str());
+                        for (auto const & [attrName, value]
+                             : u->currentHeadingTag.attributes())
+                            u->module->getEntryAttributes()["Heading"][hn][attrName] =
+                                    value;
 
                         /* If any title in the heading was canonical, then set
                            canonical=true. */

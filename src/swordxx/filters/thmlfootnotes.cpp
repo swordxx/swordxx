@@ -99,9 +99,9 @@ char ThMLFootnotes::processText(std::string &text, const SWKey *key, const SWMod
                         footnoteNum = (fc.length()) ? std::atoi(fc.c_str()) : 0;
                         sprintf(buf, "%i", ++footnoteNum);
                         module->getEntryAttributes()["Footnote"]["count"]["value"] = buf;
-                        for (auto const & attr : startTag.attributeNames())
-                            module->getEntryAttributes()["Footnote"][buf][attr.c_str()] =
-                                    startTag.attribute(attr.c_str());
+                        for (auto const & [name, value]: startTag.attributes())
+                            module->getEntryAttributes()["Footnote"][buf][name] =
+                                    value;
                         module->getEntryAttributes()["Footnote"][buf]["body"] = tagText;
                         startTag.setAttribute("swordFootnote", buf);
                         if (startTag.attribute("type") == "crossReference") {
