@@ -26,6 +26,7 @@
 #include <cstdlib>
 #include <cstring>
 #include "../keys/versekey.h"
+#include "../SimpleTokenizer.h"
 #include "../swmodule.h"
 #include "../unicode.h"
 #include "../utilstr.h"
@@ -115,21 +116,25 @@ bool OSISPlain::handleToken(std::string &buf, const char *token, BasicFilterUser
                 buf.push_back('>');
             }
             if (!(attrib = u.tag.attribute("lemma")).empty()) {
-                int count = u.tag.attributePartCount("lemma", ' ');
-                int i = 0;
-                do {
+                for (auto const & lemmaToken
+                     : SimpleTokenizer<>::tokenize(attrib, ' '))
+                {
+                    auto const separatorPos(lemmaToken.find(':'));
+                    auto val((separatorPos == std::string_view::npos)
+                             ? lemmaToken
+                             : lemmaToken.substr(separatorPos + 1u));
                     char gh;
-                    attrib = u.tag.attribute("lemma", i, ' ');
-                    char const * val = std::strchr(attrib.c_str(), ':');
-                    val = (val) ? (val + 1) : attrib.c_str();
-                    if ((std::strchr("GH", *val)) && (charIsDigit(val[1]))) {
-                        gh = *val;
-                        val++;
+                    if ((val.size() >= 2u)
+                        && ((val[0u] == 'G') || (val[0u] == 'H'))
+                        && (charIsDigit(val[1u])))
+                    {
+                        gh = val.front();
+                        val.remove_prefix(1u);
                     }
                     else {
                         gh = (u.testament>1) ? 'G' : 'H';
                     }
-                    if ((!std::strcmp(val, "3588")) && (lastText.length() < 1))
+                    if ((val == "3588") && (lastText.length() < 1))
                         show = false;
                     else    {
                         buf.append(" <");
@@ -137,21 +142,25 @@ bool OSISPlain::handleToken(std::string &buf, const char *token, BasicFilterUser
                         buf.append(val);
                         buf.append(">");
                     }
-                } while (++i < count);
+                }
             }
             if (!(attrib = u.tag.attribute("morph")).empty() && (show)) {
-                int count = u.tag.attributePartCount("morph", ' ');
-                int i = 0;
-                do {
-                    attrib = u.tag.attribute("morph", i, ' ');
-                    char const * val = std::strchr(attrib.c_str(), ':');
-                    val = (val) ? (val + 1) : attrib.c_str();
-                    if ((*val == 'T') && (std::strchr("GH", val[1])) && (charIsDigit(val[2])))
-                        val+=2;
+                for (auto const & morphToken
+                     : SimpleTokenizer<>::tokenize(attrib, ' '))
+                {
+                    auto const separatorPos(morphToken.find(':'));
+                    auto val((separatorPos == std::string_view::npos)
+                             ? morphToken
+                             : morphToken.substr(separatorPos + 1u));
+                    if ((val.size() >= 3u)
+                        && (val.front() == 'T')
+                        && ((val[1u] == 'G') || (val[1u] == 'H'))
+                        && charIsDigit(val[2u]))
+                        val.remove_prefix(2u);
                     buf.append(" (");
                     buf.append(val);
                     buf.push_back(')');
-                } while (++i < count);
+                }
             }
             if (!(attrib = u.tag.attribute("POS")).empty()) {
                 char const * val = std::strchr(attrib.c_str(), ':');
