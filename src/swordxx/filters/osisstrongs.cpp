@@ -41,7 +41,15 @@ namespace {
     static const char oName[] = "Strong's Numbers";
     static const char oTip[]  = "Toggles Strong's Numbers On and Off if they exist";
 
+template <typename Input>
+std::vector<std::string> split(Input const & input, char const separator) {
+    std::vector<std::string> r;
+    for (auto const & token : SimpleTokenizer<>::tokenize(input, separator))
+        r.emplace_back(token);
+    return r;
 }
+
+} // anonymous namespace
 
 OSISStrongs::OSISStrongs()
     : OffOnOptionFilter(oName, oTip)
@@ -109,95 +117,99 @@ char OSISStrongs::processText(std::string &text, const SWKey *key, const SWModul
                     // why is morph entry attribute processing done in here?  Well, it's faster.  It makes more local sense to place this code in osismorph.
                     // easier to keep lemma and morph in same wordstr number too maybe.
                     if (auto attrib = wtag.attribute("morph"); !attrib.empty()) {
-                        int count = wtag.attributePartCount("morph", ' ');
-                        int i = 0;
-                        do {
+                        auto const morphTokens(split(attrib, ' '));
+                        std::size_t i = 0u;
+
+                        for (std::string_view morphToken : morphTokens) {
                             std::string mClass = "";
                             std::string mp = "";
-                            attrib = wtag.attribute("morph", i, ' ');
 
-                            const char *m = std::strchr(attrib.c_str(), ':');
-                            if (m) {
-                                int len = m-attrib.c_str();
-                                mClass.append(attrib.c_str(), len);
-                                attrib.erase(0, len+1);
+                            if (auto const pos = morphToken.find(':');
+                                pos != std::string_view::npos)
+                            {
+                                mClass.append(morphToken.data(), pos);
+                                morphToken.remove_prefix(pos + 1u);
                             }
                             if ((mClass == "x-Robinsons") || (mClass == "x-Robinson") || (mClass == "Robinson")) {
                                 mClass = "robinson";
                             }
-                            if (i) { morphClass += " "; morph += " "; }
-                            mp += attrib;
+                            if (i) {
+                                morphClass.append(1u, ' ');
+                                morph.append(1u, ' ');
+                            }
+                            mp += morphToken;
                             morphClass += mClass;
                             morph += mp;
-                            if (count > 1) {
+                            if (morphTokens.size() > 1u) {
                                 auto const iStr(std::to_string(i + 1));
                                 auto & c =
                                     module->getEntryAttributes()["Word"][wordstr];
                                 c["Morph." + iStr] = mp;
                                 c["MorphClass." + iStr] = mClass;
                             }
-                        } while (++i < count);
+                            ++i;
+                        }
                     }
 
                     if (auto attrib = wtag.attribute("savlm"); !attrib.empty()) {
-                        int count = wtag.attributePartCount("savlm", ' ');
-                        int i = 0;
-                        do {
+                        auto const savlmTokens(split(attrib, ' '));
+                        std::size_t i = 0u;
+
+                        for (std::string_view savlmToken : savlmTokens) {
                             gh = 0;
                             std::string lClass = "";
                             std::string l = "";
-                            attrib = wtag.attribute("savlm", i, ' ');
 
-                            const char *m = std::strchr(attrib.c_str(), ':');
-                            if (m) {
-                                int len = m-attrib.c_str();
-                                lClass.append(attrib.c_str(), len);
-                                attrib.erase(0u, len+1);
+                            if (auto const pos = savlmToken.find(':');
+                                pos != std::string_view::npos)
+                            {
+                                lClass.append(savlmToken.data(), pos);
+                                savlmToken.remove_prefix(pos + 1u);
                             }
                             if ((lClass == "x-Strongs") || (lClass == "strong") || (lClass == "Strong")) {
-                                if (charIsDigit(attrib[0])) {
+                                if (charIsDigit(savlmToken[0])) {
                                     if (vkey) {
                                         gh = vkey->getTestament() ? 'H' : 'G';
                                     }
                                 }
                                 else {
-                                    gh = attrib.front();
-                                    attrib.erase(0u, 1u);
+                                    gh = savlmToken.front();
+                                    savlmToken.remove_prefix(1u);
                                 }
                                 lClass = "strong";
                             }
                             if (gh) l += gh;
-                            l += attrib;
+                            l += savlmToken;
                             if (i) { lemmaClass += " "; lemma += " "; }
                             lemma += l;
                             lemmaClass += lClass;
-                            if (count > 1) {
+                            if (savlmTokens.size() > 1u) {
                                 auto const iStr(std::to_string(i + 1));
                                 auto & c =
                                     module->getEntryAttributes()["Word"][wordstr];
                                 c["Lemma." + iStr] = l;
                                 c["LemmaClass." + iStr] = lClass;
                             }
-                        } while (++i < count);
-                        module->getEntryAttributes()["Word"][wordstr]["PartCount"] = formatted("%d", count);
+                            ++i;
+                        }
+                        module->getEntryAttributes()["Word"][wordstr]["PartCount"] =
+                                std::to_string(savlmTokens.size());
                     }
 
                     if (auto attrib = wtag.attribute("src"); !attrib.empty()) {
-                        int count = wtag.attributePartCount("src", ' ');
-                        int i = 0;
-                        do {
-                            std::string mp = "";
-                            attrib = wtag.attribute("src", i, ' ');
-
-                            if (i) src += " ";
-                            mp += attrib;
-                            src += mp;
-                            if (count > 1) {
+                        auto const srcTokens(split(attrib, ' '));
+                        std::size_t i = 0u;
+                        for (auto const & srcToken : srcTokens) {
+                            if (i)
+                                src.append(1u, ' ');
+                            src += srcToken;
+                            if (srcTokens.size() > 1u) {
                                 auto & c =
                                     module->getEntryAttributes()["Word"][wordstr];
-                                c["Src." + std::to_string(i + 1)] = mp;
+                                c["Src." + std::to_string(i + 1)] = srcToken;
                             }
-                        } while (++i < count);
+                            ++i;
+                        }
                     }
 
 
