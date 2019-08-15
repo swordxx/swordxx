@@ -26,6 +26,7 @@
 #include <cstring>
 #include <stack>
 #include "../keys/versekey.h"
+#include "../SimpleTokenizer.h"
 #include "../swmodule.h"
 #include "../url.h"
 #include "../utilstr.h"
@@ -86,61 +87,74 @@ inline void outText(char t, std::string & o, BasicFilterUserData & u) {
 }
 
 void processLemma(XMLTag const & tag, std::string & buf) {
-    auto attrib(tag.attribute("lemma"));
-    if (!attrib.empty()) {
-        int count = tag.attributePartCount("lemma", ' ');
-        int i = 0;
-        do {
-            attrib = tag.attribute("lemma", i, ' ');
-            auto at(attrib);
-            auto const prefix(stripPrefix(at, ':'));
-            const char * val = std::strchr(attrib.c_str(), ':');
-            val = (val) ? (val + 1) : attrib.c_str();
-            std::string gh;
-            if (*val == 'G') {
+    if (auto const attrib = tag.attribute("lemma"); !attrib.empty()) {
+        for (auto token : SimpleTokenizer<>::tokenize(attrib, ' ')) {
+            auto const separatorPos(token.find(':'));
+            auto const val((separatorPos == std::string_view::npos)
+                           ? token
+                           : token.substr(separatorPos + 1u));
+            std::string_view gh;
+            auto val2(val);
+            if (val.empty()) {
+                gh = token.substr(0u, separatorPos); // Prefix
+            } else if (val.front() == 'G') {
                 gh = "Greek";
-            } else if (*val == 'H') {
+                if ((val.size() >= 2u) && charIsDigit(val[1u]))
+                    val2.remove_prefix(1u);
+            } else if (val.front() == 'H') {
                 gh = "Hebrew";
-            } else if (!prefix.empty()) {
-                gh = std::move(prefix);
+                if ((val.size() >= 2u) && charIsDigit(val[1u]))
+                    val2.remove_prefix(1u);
+            } else {
+                gh = token.substr(0u, separatorPos); // Prefix
             }
-            const char *val2 = val;
-            if ((std::strchr("GH", *val)) && (charIsDigit(val[1])))
-                val2++;
-            //if ((!std::strcmp(val2, "3588")) && (lastText.length() < 1))
-            //    show = false;
-            //else {
-                buf += formatted("<small><em class=\"strongs\">&lt;<a class=\"strongs\" href=\"passagestudy.jsp?action=showStrongs&type=%s&value=%s\" class=\"strongs\">%s</a>&gt;</em></small>",
-                        (gh.length()) ? gh.c_str() : "",
-                        URL::encode(val2),
-                        val2);
-            //}
-        } while (++i < count);
+            using namespace std::literals::string_view_literals;
+            static constexpr auto const part1(
+                        "<small><em class=\"strongs\">&lt;<a class=\"strongs\" "
+                        "href=\"passagestudy.jsp?action=showStrongs&type="sv);
+            static constexpr auto const part2("&value="sv);
+            static constexpr auto const part3("\" class=\"strongs\">"sv);
+            static constexpr auto const part4("</a>&gt;</em></small>"sv);
+            auto const url(URL::encode(val2));
+            // Note that no overflow check is strictly needed for the addition:
+            buf.reserve(
+                    (part1.size() + part2.size() + part3.size() + part4.size())
+                    + buf.size() + gh.size() + url.size() + val2.size());
+            buf.append(part1).append(gh).append(part2).append(url).append(part3)
+               .append(val2).append(part4);
+        }
     }
 }
 
 void processMorph(XMLTag const & tag, std::string & buf) {
-    auto attrib(tag.attribute("morph"));
-    if (!attrib.empty()) { // && (show)) {
-        //std::string savelemma = tag.attribute("savlm");
-        //if ((std::strstr(savelemma.c_str(), "3588")) && (lastText.length() < 1))
-        //    show = false;
-        //if (show) {
-            int count = tag.attributePartCount("morph", ' ');
-            int i = 0;
-            do {
-                attrib = tag.attribute("morph", i, ' ');
-                const char * val = std::strchr(attrib.c_str(), ':');
-                val = (val) ? (val + 1) : attrib.c_str();
-                const char *val2 = val;
-                if ((*val == 'T') && (std::strchr("GH", val[1])) && (charIsDigit(val[2])))
-                    val2+=2;
-                buf += formatted("<small><em class=\"morph\">(<a class=\"morph\" href=\"passagestudy.jsp?action=showMorph&type=%s&value=%s\" class=\"morph\">%s</a>)</em></small>",
-                        URL::encode(tag.attribute("morph")),
-                        URL::encode(val),
-                        val2);
-            } while (++i < count);
-        //}
+    if (auto const attrib = tag.attribute("morph"); !attrib.empty()) {
+        for (auto token : SimpleTokenizer<>::tokenize(attrib, ' ')) {
+            auto const separatorPos(token.find(':'));
+            auto const val((separatorPos == std::string_view::npos)
+                           ? token
+                           : token.substr(separatorPos + 1u));
+            auto val2(val);
+            if ((val.size() >= 3u)
+                && (val.front() == 'T')
+                && ((val[1u] == 'G') || (val[1u] == 'H'))
+                && charIsDigit(val[2u]))
+                val2.remove_prefix(2u);
+            using namespace std::literals::string_view_literals;
+            static constexpr auto const part1(
+                        "<small><em class=\"morph\">(<a class=\"morph\" "
+                        "href=\"passagestudy.jsp?action=showMorph&type="sv);
+            static constexpr auto const part2("&value="sv);
+            static constexpr auto const part3("\" class=\"morph\">"sv);
+            static constexpr auto const part4("</a>)</em></small>"sv);
+            auto const url1(URL::encode(attrib));
+            auto const url2(URL::encode(val));
+            // Note that no overflow check is strictly needed for the addition:
+            buf.reserve(
+                    (part1.size() + part2.size() + part3.size() + part4.size())
+                    + buf.size() + url1.size() + url2.size() + val2.size());
+            buf.append(part1).append(url1).append(part2).append(url2)
+               .append(part3).append(val2).append(part4);
+        }
     }
 }
 
