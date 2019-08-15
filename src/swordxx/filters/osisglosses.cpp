@@ -67,7 +67,7 @@ char OSISGlosses::processText(std::string &text, const SWKey *key, const SWModul
                 if (startsWith(token, "w "sv)) {    // Word
                     XMLTag wtag(token.c_str());
                     if (!wtag.attribute("gloss").empty()) {
-                        wtag.eraseAttribute("gloss");
+                        wtag.attributes().erase("gloss");
                         token = wtag.toString();
                         trimString(token);
                         // drop <>

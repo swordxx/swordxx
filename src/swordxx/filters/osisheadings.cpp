@@ -102,11 +102,11 @@ bool OSISHeadings::handleToken(std::string &buf, const char *token, BasicFilterU
                         if (u->currentHeadingName == "title") {
                             XMLTag wrapper = u->currentHeadingTag;
                             if (wrapper.attribute("subType") == "x-preverse") {
-                                wrapper.eraseAttribute("subType");
+                                wrapper.attributes().erase("subType");
                             } else if (wrapper.attribute("subtype")
                                        == "x-preverse")
                             {
-                                wrapper.eraseAttribute("subtype");
+                                wrapper.attributes().erase("subtype");
                             }
                             heading = wrapper.toString();
                             heading += u->heading;

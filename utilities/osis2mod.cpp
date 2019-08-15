@@ -916,7 +916,7 @@ bool handleToken(std::string &text, XMLTag token) {
                 // If the marker attribute is present and empty, then there is nothing to do.
                 // And have it within the WOC markup
                 if (token.attribute("marker").empty() || token.attribute("marker")[0]) {
-                    token.eraseAttribute("who"); // remove the who="Jesus"
+                    token.attributes().erase("who"); // remove the who="Jesus"
                     text.append(token.toString());
                 }
                 return true;
@@ -1094,7 +1094,7 @@ bool handleToken(std::string &text, XMLTag token) {
                 // If the marker attribute is present and empty, then there is nothing to do.
                 // And have it within the WOC markup
                 if (token.attribute("marker").empty() || token.attribute("marker")[0]) {
-                    token.eraseAttribute("who"); // remove the who="Jesus"
+                    token.attributes().erase("who"); // remove the who="Jesus"
                     text.append(token.toString());
                 }
 
@@ -1257,7 +1257,7 @@ XMLTag transformBSP(XMLTag t) {
                 // Note: in the case of </p> the topToken is a <div type="x-p">
                 t = topToken;
                 t.setAttribute("eID", t.attribute("sID"));
-                t.eraseAttribute("sID");
+                t.attributes().erase("sID");
             }
         }
         else {

@@ -73,8 +73,6 @@ public: /* Methods: */
     void setAttribute(std::string const & attribName,
                       std::string attribValue);
 
-    void eraseAttribute(std::string const & attribName) noexcept;
-
     std::string toString() const;
 
     XMLTag & operator=(XMLTag &&);
