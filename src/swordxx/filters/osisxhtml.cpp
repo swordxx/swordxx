@@ -85,7 +85,7 @@ inline void outText(char t, std::string & o, BasicFilterUserData & u) {
     }
 }
 
-void processLemma(XMLTag &tag, std::string &buf) {
+void processLemma(XMLTag const & tag, std::string & buf) {
     auto attrib(tag.attribute("lemma"));
     if (!attrib.empty()) {
         int count = tag.attributePartCount("lemma", ' ');
@@ -119,7 +119,7 @@ void processLemma(XMLTag &tag, std::string &buf) {
     }
 }
 
-void processMorph(XMLTag &tag, std::string &buf) {
+void processMorph(XMLTag const & tag, std::string & buf) {
     auto attrib(tag.attribute("morph"));
     if (!attrib.empty()) { // && (show)) {
         //std::string savelemma = tag.attribute("savlm");
