@@ -159,15 +159,6 @@ std::string XMLTag::toString() const {
     return tag;
 }
 
-bool XMLTag::isEndTag(char const * const eID) const noexcept {
-    if (!eID)
-        return m_isEndTag;
-    auto const it(m_attributes.find("eID"));
-    if (it == m_attributes.end())
-        return !*eID;
-    return it->second == eID;
-}
-
 XMLTag & XMLTag::operator=(XMLTag &&) = default;
 XMLTag & XMLTag::operator=(XMLTag const &) = default;
 

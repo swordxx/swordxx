@@ -86,7 +86,15 @@ bool OSISHeadings::handleToken(std::string &buf, const char *token, BasicFilterU
         u->heading.append(u->lastTextNode);
         if (std::string("true") == tag.attribute("canonical")) u->canonical = true;
         if (name == u->currentHeadingName) {
-            if (tag.isEndTag(u->sID.c_str())) {
+            bool isEndTag;
+            if (auto const it = tag.attributes().find("eID");
+                it != tag.attributes().end())
+            {
+                isEndTag = (it->second == u->sID);
+            } else {
+                isEndTag = u->sID.empty();
+            }
+            if (isEndTag) {
                 if (!u->depth-- || !u->sID.empty()) {
                     // see comment below about preverse div changed and needing to preserve the <title> container tag for old school pre-verse titles
                     // we've just finished a heading.  It's all stored up in u->heading

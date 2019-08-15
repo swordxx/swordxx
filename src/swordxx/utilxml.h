@@ -55,13 +55,6 @@ public: /* Methods: */
      */
     bool isEndTag() const noexcept { return m_isEndTag; }
 
-    /***
-     * if an eID is provided, then we check to be sure we have an attribute
-     * <tag eID="xxx"/> value xxx equiv to what is given us. Otherwise, we
-     * return if we're a simple XML end </tag>.
-     */
-    bool isEndTag(char const * eID) const noexcept;
-
     std::map<std::string, std::string> & attributes() noexcept
     { return m_attributes; }
 
