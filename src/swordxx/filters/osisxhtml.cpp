@@ -122,7 +122,7 @@ void processLemma(XMLTag const & tag, std::string & buf) {
 
 void processMorph(XMLTag const & tag, std::string & buf) {
     if (auto const attrib = tag.attribute("morph"); !attrib.empty()) {
-        for (auto token : SimpleTokenizer<>::tokenize(attrib, ' ')) {
+        for (auto const & token : SimpleTokenizer<>::tokenize(attrib, ' ')) {
             auto const separatorPos(token.find(':'));
             auto const val((separatorPos == std::string_view::npos)
                            ? token
