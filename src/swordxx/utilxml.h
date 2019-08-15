@@ -64,6 +64,12 @@ public: /* Methods: */
 
     std::list<std::string> attributeNames() const;
 
+    std::map<std::string, std::string> & attributes() noexcept
+    { return m_attributes; }
+
+    std::map<std::string, std::string> const & attributes() const noexcept
+    { return m_attributes; }
+
     std::string attribute(std::string const & attribName) const;
 
     void setAttribute(std::string const & attribName,
