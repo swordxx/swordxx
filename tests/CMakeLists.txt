@@ -43,7 +43,6 @@ SET(test_PROGRAMS
     vtreekeytest
     versemgrtest
     webiftest
-    xmltest
 )
 
 SET(test_PROGRAMS
