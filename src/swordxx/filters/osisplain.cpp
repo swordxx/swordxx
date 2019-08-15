@@ -102,9 +102,8 @@ bool OSISPlain::handleToken(std::string &buf, const char *token, BasicFilterUser
             std::string lastText = (start) ? "stuff" : u.lastTextNode.c_str();
 
             std::string attrib;
-            const char *val;
             if (!(attrib = u.tag.attribute("xlit")).empty()) {
-                val = std::strchr(attrib.c_str(), ':');
+                char const * val = std::strchr(attrib.c_str(), ':');
                 val = (val) ? (val + 1) : attrib.c_str();
                 buf.append(" <");
                 buf.append(val);
@@ -121,7 +120,7 @@ bool OSISPlain::handleToken(std::string &buf, const char *token, BasicFilterUser
                 do {
                     char gh;
                     attrib = u.tag.attribute("lemma", i, ' ');
-                    val = std::strchr(attrib.c_str(), ':');
+                    char const * val = std::strchr(attrib.c_str(), ':');
                     val = (val) ? (val + 1) : attrib.c_str();
                     if ((std::strchr("GH", *val)) && (charIsDigit(val[1]))) {
                         gh = *val;
@@ -145,7 +144,7 @@ bool OSISPlain::handleToken(std::string &buf, const char *token, BasicFilterUser
                 int i = 0;
                 do {
                     attrib = u.tag.attribute("morph", i, ' ');
-                    val = std::strchr(attrib.c_str(), ':');
+                    char const * val = std::strchr(attrib.c_str(), ':');
                     val = (val) ? (val + 1) : attrib.c_str();
                     if ((*val == 'T') && (std::strchr("GH", val[1])) && (charIsDigit(val[2])))
                         val+=2;
@@ -155,7 +154,7 @@ bool OSISPlain::handleToken(std::string &buf, const char *token, BasicFilterUser
                 } while (++i < count);
             }
             if (!(attrib = u.tag.attribute("POS")).empty()) {
-                val = std::strchr(attrib.c_str(), ':');
+                char const * val = std::strchr(attrib.c_str(), ':');
                 val = (val) ? (val + 1) : attrib.c_str();
 
                 buf.append(" <");
