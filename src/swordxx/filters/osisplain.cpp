@@ -83,44 +83,44 @@ bool OSISPlain::handleToken(std::string &buf, const char *token, BasicFilterUser
 
        // manually process if it wasn't a simple substitution
     if (!substituteToken(buf, token)) {
-        MyUserData * u = static_cast<MyUserData *>(userData);
+        auto & u = *static_cast<MyUserData *>(userData);
         if (((*token == 'w') && (token[1] == ' ')) ||
             ((*token == '/') && (token[1] == 'w') && (!token[2]))) {
-                 u->tag = token;
+                 u.tag = token;
 
             bool start = false;
             if (*token == 'w') {
                 if (token[std::strlen(token)-1] != '/') {
-                    u->w = token;
+                    u.w = token;
                     return true;
                 }
                 start = true;
             }
-            u->tag = (start) ? token : u->w.c_str();
+            u.tag = (start) ? token : u.w.c_str();
             bool show = true;    // to handle unplaced article in kjv2003-- temporary till combined
 
-            std::string lastText = (start) ? "stuff" : u->lastTextNode.c_str();
+            std::string lastText = (start) ? "stuff" : u.lastTextNode.c_str();
 
             std::string attrib;
             const char *val;
-            if (!(attrib = u->tag.attribute("xlit")).empty()) {
+            if (!(attrib = u.tag.attribute("xlit")).empty()) {
                 val = std::strchr(attrib.c_str(), ':');
                 val = (val) ? (val + 1) : attrib.c_str();
                 buf.append(" <");
                 buf.append(val);
                 buf.push_back('>');
             }
-            if (!(attrib = u->tag.attribute("gloss")).empty()) {
+            if (!(attrib = u.tag.attribute("gloss")).empty()) {
                 buf.append(" <");
                 buf.append(attrib);
                 buf.push_back('>');
             }
-            if (!(attrib = u->tag.attribute("lemma")).empty()) {
-                int count = u->tag.attributePartCount("lemma", ' ');
+            if (!(attrib = u.tag.attribute("lemma")).empty()) {
+                int count = u.tag.attributePartCount("lemma", ' ');
                 int i = 0;
                 do {
                     char gh;
-                    attrib = u->tag.attribute("lemma", i, ' ');
+                    attrib = u.tag.attribute("lemma", i, ' ');
                     val = std::strchr(attrib.c_str(), ':');
                     val = (val) ? (val + 1) : attrib.c_str();
                     if ((std::strchr("GH", *val)) && (charIsDigit(val[1]))) {
@@ -128,7 +128,7 @@ bool OSISPlain::handleToken(std::string &buf, const char *token, BasicFilterUser
                         val++;
                     }
                     else {
-                        gh = (u->testament>1) ? 'G' : 'H';
+                        gh = (u.testament>1) ? 'G' : 'H';
                     }
                     if ((!std::strcmp(val, "3588")) && (lastText.length() < 1))
                         show = false;
@@ -140,11 +140,11 @@ bool OSISPlain::handleToken(std::string &buf, const char *token, BasicFilterUser
                     }
                 } while (++i < count);
             }
-            if (!(attrib = u->tag.attribute("morph")).empty() && (show)) {
-                int count = u->tag.attributePartCount("morph", ' ');
+            if (!(attrib = u.tag.attribute("morph")).empty() && (show)) {
+                int count = u.tag.attributePartCount("morph", ' ');
                 int i = 0;
                 do {
-                    attrib = u->tag.attribute("morph", i, ' ');
+                    attrib = u.tag.attribute("morph", i, ' ');
                     val = std::strchr(attrib.c_str(), ':');
                     val = (val) ? (val + 1) : attrib.c_str();
                     if ((*val == 'T') && (std::strchr("GH", val[1])) && (charIsDigit(val[2])))
@@ -154,7 +154,7 @@ bool OSISPlain::handleToken(std::string &buf, const char *token, BasicFilterUser
                     buf.push_back(')');
                 } while (++i < count);
             }
-            if (!(attrib = u->tag.attribute("POS")).empty()) {
+            if (!(attrib = u.tag.attribute("POS")).empty()) {
                 val = std::strchr(attrib.c_str(), ':');
                 val = (val) ? (val + 1) : attrib.c_str();
 
@@ -169,18 +169,18 @@ bool OSISPlain::handleToken(std::string &buf, const char *token, BasicFilterUser
                 if (!std::strstr(token, "strongsMarkup")) {    // leave strong's markup notes out, in the future we'll probably have different option filters to turn different note types on or off
                     buf.append(" [");
                 }
-                else    u->suspendTextPassThru = true;
-                if (u->module) {
+                else    u.suspendTextPassThru = true;
+                if (u.module) {
                     XMLTag tag = token;
                     std::string swordFootnote = tag.attribute("swordFootnote");
-                    std::string footnoteBody = u->module->getEntryAttributes()["Footnote"][swordFootnote]["body"];
-                    buf.append(u->module->renderText(footnoteBody.c_str()));
+                    std::string footnoteBody = u.module->getEntryAttributes()["Footnote"][swordFootnote]["body"];
+                    buf.append(u.module->renderText(footnoteBody.c_str()));
                 }
             }
         else if (startsWith(token, "/note"sv)) {
-            if (!u->suspendTextPassThru)
+            if (!u.suspendTextPassThru)
                 buf.append("] ");
-            else    u->suspendTextPassThru = false;
+            else    u.suspendTextPassThru = false;
         }
 
         // <p> paragraph tag
@@ -193,8 +193,8 @@ bool OSISPlain::handleToken(std::string &buf, const char *token, BasicFilterUser
         // Milestoned paragraph, created by osis2mod
         // <div type="paragraph"  sID... />
         // <div type="paragraph"  eID... />
-        else if ((u->tag.name() == "div") && ((u->tag.attribute("type") == "x-p") || (u->tag.attribute("type") == "paragraph")) &&
-            (u->tag.isEmpty() && (!u->tag.attribute("sID").empty() || !u->tag.attribute("eID").empty()))) {
+        else if ((u.tag.name() == "div") && ((u.tag.attribute("type") == "x-p") || (u.tag.attribute("type") == "paragraph")) &&
+            (u.tag.isEmpty() && (!u.tag.attribute("sID").empty() || !u.tag.attribute("eID").empty()))) {
                 userData->supressAdjacentWhitespace = true;
                 buf.push_back('\n');
         }
@@ -210,8 +210,8 @@ bool OSISPlain::handleToken(std::string &buf, const char *token, BasicFilterUser
         }
         else if (startsWith(token, "/divineName"sv)) {
             // Get the end portion of the string, and upper case it
-            assert(buf.size() >= u->lastTextNode.size());
-            auto const endPos(buf.size() - u->lastTextNode.size());
+            assert(buf.size() >= u.lastTextNode.size());
+            auto const endPos(buf.size() - u.lastTextNode.size());
             auto end(buf.substr(endPos));
             auto const endSize(end.size());
             end = utf8ToUpper(end);
@@ -227,14 +227,14 @@ bool OSISPlain::handleToken(std::string &buf, const char *token, BasicFilterUser
                 // eventually be deprecated and never documented that they are supported.
                 if (std::strstr(token, "rend=\"ol\"") || std::strstr(token, "rend=\"x-overline\"") || std::strstr(token, "rend=\"overline\"")
                    || std::strstr(token, "type=\"ol\"") || std::strstr(token, "type=\"x-overline\"") || std::strstr(token, "type=\"overline\"")) {
-                    u->hiType = "overline";
+                    u.hiType = "overline";
                 }
-                else u->hiType = "";
-                u->suspendTextPassThru = true;
+                else u.hiType = "";
+                u.suspendTextPassThru = true;
             }
         else if (startsWith(token, "/hi"sv)) {
-            if (u->hiType == "overline") {
-                std::string_view sv = u->lastTextNode;
+            if (u.hiType == "overline") {
+                std::string_view sv = u.lastTextNode;
                 while (!sv.empty()) {
                     auto const r(codepointFromUtf8(sv));
                     if (r.second) {
@@ -246,14 +246,14 @@ bool OSISPlain::handleToken(std::string &buf, const char *token, BasicFilterUser
             }
             else {
                 buf.append("* ");
-                buf.append(u->lastSuspendSegment);
+                buf.append(u.lastSuspendSegment);
                 buf.append(" *");
             }
-            u->suspendTextPassThru = false;
+            u.suspendTextPassThru = false;
         } else if (startsWith(token, "q"sv)
-                   && !u->tag.attribute("marker").empty())
+                   && !u.tag.attribute("marker").empty())
         {
-            buf.append(u->tag.attribute("marker"));
+            buf.append(u.tag.attribute("marker"));
         }
                 // <milestone type="line"/>
                 else if (startsWith(token, "milestone"sv)) {
@@ -262,8 +262,8 @@ bool OSISPlain::handleToken(std::string &buf, const char *token, BasicFilterUser
                 userData->supressAdjacentWhitespace = true;
                     buf.push_back('\n');
             }
-            if (!u->tag.attribute("marker").empty()) {
-                buf.append(u->tag.attribute("marker"));
+            if (!u.tag.attribute("marker").empty()) {
+                buf.append(u.tag.attribute("marker"));
             }
                 }
 
