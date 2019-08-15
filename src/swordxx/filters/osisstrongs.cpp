@@ -28,6 +28,7 @@
 #include <cstdlib>
 #include <cstring>
 #include "../keys/versekey.h"
+#include "../SimpleTokenizer.h"
 #include "../swmodule.h"
 #include "../utilstr.h"
 #include "../utilxml.h"
@@ -229,17 +230,24 @@ char OSISStrongs::processText(std::string &text, const SWKey *key, const SWModul
 
                 // If we won't want strongs, then lets get them out of lemma:
                 if (isOptionOff()) {
-                    int count = wtag.attributePartCount("lemma", ' ');
-                    for (int i = 0; i < count; ++i) {
-                        auto a(wtag.attribute("lemma", i, ' '));
-                        auto const prefix(stripPrefix(a, ':'));
-                        if (!prefix.empty() && ((prefix == "x-Strongs") || (prefix == "strong") || (prefix == "Strong"))) {
-                            // remove attribute part
-                            wtag.setAttribute("lemma", nullptr, i, ' ');
-                            --i;
-                            --count;
+                    auto const oldAttrib(wtag.attribute("lemma"));
+                    std::string newAttrib;
+                    for (auto const & lemmaToken
+                         : SimpleTokenizer<>::tokenize(oldAttrib, ' '))
+                    {
+                        if (!startsWith(lemmaToken, "x-Strongs:")
+                            && !startsWith(lemmaToken, "strong:")
+                            && !startsWith(lemmaToken, "Strong:"))
+                        {
+                            if (newAttrib.empty()) {
+                                newAttrib = lemmaToken;
+                            } else {
+                                newAttrib.append(1u, ' ').append(lemmaToken);
+                            }
                         }
+
                     }
+                    wtag.setAttribute("lemma", std::move(newAttrib));
                 }
                 token = wtag.toString();
                 trimString(token);
