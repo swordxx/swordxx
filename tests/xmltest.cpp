@@ -35,17 +35,9 @@ int main(int argc, char * argv[]) {
     std::cout << x.toString() << "\n";
     x.setAttribute("addedAttribute", "with a \" quote");
     std::cout << x.toString() << "\nTag name: [" << x.name() << "]\n";
-    for (auto const & name : x.attributeNames()) {
-        auto const count = x.attributePartCount(name.c_str(), ' ');
+    for (auto const & name : x.attributeNames())
         std::cout << " - attribute: [" << name << "] = ["
-                  << x.attribute(name.c_str()) << "]\n\t" << count
-                  << " parts:\n";
-        // -1 for whole value cuz it's faster, but does the same thing as 0:
-        int i = 0;
-        do {
-            std::cout << "\t" << x.attribute(name.c_str(), i, ' ') << "\n";
-        } while (++i < count);
-    }
+                  << x.attribute(name.c_str()) << "]\n";
     std::cout << " isEmpty: " << x.isEmpty() << "\n isEndTag: " << x.isEndTag()
               << "\n\n";
 
@@ -54,12 +46,6 @@ int main(int argc, char * argv[]) {
         std::cout << "Setting attribute 'multiPart' to: '" << testParts
                   << "'\n";
         x.setAttribute("multiPart", testParts);
-        std::cout << x.toString() << "\nSetting part 2 to 'MMM'\n";
-        x.setAttribute("multiPart", "MMM", 2, ' ');
-        std::cout << x.toString() << "\nRemoving part 1\n";
-        x.setAttribute("multiPart", nullptr, 1, ' ');
-        std::cout << x.toString() << "\nRemoving part 2\n";
-        x.setAttribute("multiPart", nullptr, 2, ' ');
         std::cout << x.toString() << std::endl;
     }
 

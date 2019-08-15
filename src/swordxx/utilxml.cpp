@@ -30,24 +30,6 @@
 
 namespace swordxx {
 
-namespace {
-
-std::string getPart(std::string const & buf, int partNum, char const partSplit)
-{
-    auto tokenStart(buf.begin());
-    auto const stringEnd(buf.end());
-    for (; partNum; --partNum, ++tokenStart) {
-        tokenStart = std::find(tokenStart, stringEnd, partSplit);
-        if (tokenStart == stringEnd)
-            return std::string();
-    }
-
-    auto const tokenEnd(std::find(tokenStart, stringEnd, partSplit));
-    return std::string(tokenStart, tokenEnd);
-}
-
-} // anonymous namespace
-
 XMLTag::XMLTag(XMLTag &&) = default;
 XMLTag::XMLTag(XMLTag const &) = default;
 
@@ -156,71 +138,15 @@ std::list<std::string> XMLTag::attributeNames() const {
     return retVal;
 }
 
-int XMLTag::attributePartCount(std::string const & attribName,
-                               char partSplit) const
-{
-    auto buf(attribute(attribName));
-    return std::count(buf.begin(), buf.end(), partSplit)+1;
-}
-
 std::string XMLTag::attribute(std::string const & attribName) const
 {
     auto const it(m_attributes.find(attribName));
     return (it != m_attributes.end()) ? it->second : std::string();
 }
 
-std::string XMLTag::attribute(std::string const & attribName,
-                              int partNum,
-                              char partSplit) const
-{
-    auto const it(m_attributes.find(attribName));
-    if (it == m_attributes.end())
-        return std::string();
-    if (partNum > -1)
-        return getPart(it->second, partNum, partSplit);
-    return it->second;
-}
-
 void XMLTag::setAttribute(std::string const & attribName,
                           std::string attribValue)
 { m_attributes[attribName] = std::move(attribValue); }
-
-void XMLTag::setAttribute(std::string const & attribName,
-                          char const * attribValue,
-                          int partNum,
-                          char partSplit)
-{
-    // set part of an attribute
-    if (partNum > -1) {
-        auto wholeAttr(attribute(attribName));
-        int attrCount = attributePartCount(attribName, partSplit);
-        std::string newVal;
-        for (int i = 0; i < attrCount; i++) {
-            if (i == partNum) {
-                if (attribValue) {
-                    newVal += attribValue;
-                    newVal += partSplit;
-                }
-                else {
-                    // discard this part per null attribValue
-                }
-            }
-            else {
-                newVal += getPart(wholeAttr.c_str(), i, partSplit);
-                newVal += partSplit;
-            }
-        }
-        if (newVal.length()) newVal.pop_back();    // discard the last partSplit
-        attribValue = (!attribValue && !newVal.length())
-                      ? nullptr
-                      : newVal.c_str();
-    }
-
-    // perform the actual set
-    if (attribValue)
-        m_attributes[attribName] = attribValue;
-    else    m_attributes.erase(attribName);
-}
 
 void XMLTag::eraseAttribute(std::string const & attribName) noexcept
 { m_attributes.erase(attribName); }

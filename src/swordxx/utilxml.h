@@ -63,22 +63,11 @@ public: /* Methods: */
     bool isEndTag(char const * eID) const noexcept;
 
     std::list<std::string> attributeNames() const;
-    int attributePartCount(std::string const & attribName,
-                           char partSplit = '|') const;
 
     std::string attribute(std::string const & attribName) const;
 
-    std::string attribute(std::string const & attribName,
-                          int partNum,
-                          char partSplit = '|') const;
-
     void setAttribute(std::string const & attribName,
                       std::string attribValue);
-
-    void setAttribute(std::string const & attribName,
-                      char const * attribValue,
-                      int partNum,
-                      char partSplit = '|');
 
     void eraseAttribute(std::string const & attribName) noexcept;
 
