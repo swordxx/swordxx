@@ -25,6 +25,7 @@
 #include <cstdlib>
 #include <cstring>
 #include <stack>
+#include <utility>
 #include "../keys/versekey.h"
 #include "../SimpleTokenizer.h"
 #include "../swmodule.h"
@@ -70,19 +71,12 @@ namespace {
 
 // though this might be slightly slower, possibly causing an extra bool check, this is a renderFilter
 // so speed isn't the absolute highest priority, and this is a very minor possible hit
-inline void outText(const char * t, std::string & o, BasicFilterUserData & u) {
-    if (!u.suspendTextPassThru) {
-        o += t;
+template <typename T>
+inline void outText(T && t, std::string & o, BasicFilterUserData & u) {
+    if (u.suspendTextPassThru) {
+        u.lastSuspendSegment += std::forward<T>(t);
     } else {
-        u.lastSuspendSegment += t;
-    }
-}
-
-inline void outText(char t, std::string & o, BasicFilterUserData & u) {
-    if (!u.suspendTextPassThru) {
-        o += t;
-    } else {
-        u.lastSuspendSegment += t;
+        o += std::forward<T>(t);
     }
 }
 
