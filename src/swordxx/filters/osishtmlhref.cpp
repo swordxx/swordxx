@@ -48,7 +48,7 @@ inline void outText(T && t, std::string & o, BasicFilterUserData & u) {
     }
 }
 
-void processLemma(XMLTag &tag, std::string &buf) {
+void processLemma(XMLTag const & tag, std::string & buf) {
     std::string attrib;
     const char *val;
     if (!(attrib = tag.attribute("lemma")).empty()) {
@@ -79,7 +79,7 @@ void processLemma(XMLTag &tag, std::string &buf) {
     }
 }
 
-void processMorph(XMLTag &tag, std::string &buf) {
+void processMorph(XMLTag const & tag, std::string & buf) {
     std::string attrib;
     const char *val;
     if (!(attrib = tag.attribute("morph")).empty()) { // && (show)) {
