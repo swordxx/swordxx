@@ -81,14 +81,13 @@ bool OSISWEBIF::handleToken(std::string &buf, const char *token, BasicFilterUser
                 else lastText = "stuff";
 
                 std::string attrib;
-                const char *val;
                 if (!(attrib = tag.attribute("xlit")).empty()) {
-                    val = std::strchr(attrib.c_str(), ':');
+                    char const * val = std::strchr(attrib.c_str(), ':');
                     val = (val) ? (val + 1) : attrib.c_str();
 //                    buf += formatted(" %s", val);
                 }
                 if (!(attrib = tag.attribute("gloss")).empty()) {
-                    val = std::strchr(attrib.c_str(), ':');
+                    char const * val = std::strchr(attrib.c_str(), ':');
                     val = (val) ? (val + 1) : attrib.c_str();
 //                    buf += formatted(" %s", val);
                 }
@@ -97,7 +96,7 @@ bool OSISWEBIF::handleToken(std::string &buf, const char *token, BasicFilterUser
                     int i = 0;
                     do {
                         attrib = tag.attribute("lemma", i, ' ');
-                        val = std::strchr(attrib.c_str(), ':');
+                        char const * val = std::strchr(attrib.c_str(), ':');
                         val = (val) ? (val + 1) : attrib.c_str();
                         const char *val2 = val;
                         if ((std::strchr("GH", *val)) && (charIsDigit(val[1])))
@@ -117,7 +116,7 @@ bool OSISWEBIF::handleToken(std::string &buf, const char *token, BasicFilterUser
                         int i = 0;
                         do {
                             attrib = tag.attribute("morph", i, ' ');
-                            val = std::strchr(attrib.c_str(), ':');
+                            char const * val = std::strchr(attrib.c_str(), ':');
                             val = (val) ? (val + 1) : attrib.c_str();
                             const char *val2 = val;
                             if ((*val == 'T') && (std::strchr("GH", val[1])) && (charIsDigit(val[2])))
@@ -127,7 +126,7 @@ bool OSISWEBIF::handleToken(std::string &buf, const char *token, BasicFilterUser
                     }
                 }
                 if (!(attrib = tag.attribute("POS")).empty()) {
-                    val = std::strchr(attrib.c_str(), ':');
+                    char const * val = std::strchr(attrib.c_str(), ':');
                     val = (val) ? (val + 1) : attrib.c_str();
                     buf += formatted(" %s", val);
                 }
