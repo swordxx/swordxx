@@ -130,10 +130,11 @@ char OSISStrongs::processText(std::string &text, const SWKey *key, const SWModul
                             morphClass += mClass;
                             morph += mp;
                             if (count > 1) {
-                                std::string tmp(formatted("Morph.%d", i+1));
-                                module->getEntryAttributes()["Word"][wordstr][tmp] = mp;
-                                tmp = formatted("MorphClass.%d", i+1);
-                                module->getEntryAttributes()["Word"][wordstr][tmp] = mClass;
+                                auto const iStr(std::to_string(i + 1));
+                                auto & c =
+                                    module->getEntryAttributes()["Word"][wordstr];
+                                c["Morph." + iStr] = mp;
+                                c["MorphClass." + iStr] = mClass;
                             }
                         } while (++i < count);
                     }
@@ -171,10 +172,11 @@ char OSISStrongs::processText(std::string &text, const SWKey *key, const SWModul
                             lemma += l;
                             lemmaClass += lClass;
                             if (count > 1) {
-                                std::string tmp(formatted("Lemma.%d", i+1));
-                                module->getEntryAttributes()["Word"][wordstr][tmp] = l;
-                                tmp = formatted("LemmaClass.%d", i+1);
-                                module->getEntryAttributes()["Word"][wordstr][tmp] = lClass;
+                                auto const iStr(std::to_string(i + 1));
+                                auto & c =
+                                    module->getEntryAttributes()["Word"][wordstr];
+                                c["Lemma." + iStr] = l;
+                                c["LemmaClass." + iStr] = lClass;
                             }
                         } while (++i < count);
                         module->getEntryAttributes()["Word"][wordstr]["PartCount"] = formatted("%d", count);
@@ -191,8 +193,9 @@ char OSISStrongs::processText(std::string &text, const SWKey *key, const SWModul
                             mp += attrib;
                             src += mp;
                             if (count > 1) {
-                                std::string tmp(formatted("Src.%d", i+1));
-                                module->getEntryAttributes()["Word"][wordstr][tmp] = mp;
+                                auto & c =
+                                    module->getEntryAttributes()["Word"][wordstr];
+                                c["Src." + std::to_string(i + 1)] = mp;
                             }
                         } while (++i < count);
                     }
