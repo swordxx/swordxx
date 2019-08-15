@@ -259,12 +259,12 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
                     outText("</rt><rp>)</rp></ruby>", buf, u);
                 }
                 if (!u.suspendTextPassThru) {
-                    if (!morphFirst) {
-                        processLemma(tag, buf);
+                    if (morphFirst) {
                         processMorph(tag, buf);
+                        processLemma(tag, buf);
                     } else {
-                        processMorph(tag, buf);
                         processLemma(tag, buf);
+                        processMorph(tag, buf);
                     }
                 }
                 if (!(attrib = tag.attribute("POS")).empty()) {
