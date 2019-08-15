@@ -99,7 +99,7 @@ char OSISStrongs::processText(std::string &text, const SWKey *key, const SWModul
                 // Always save off lemma if we haven't yet:
                 if (!wtag.attribute("savlm").empty())
                     if (auto lemma = wtag.attribute("lemma"); !lemma.empty())
-                        wtag.setAttribute("savlm", std::move(lemma));
+                        wtag.attributes()["savlm"] = std::move(lemma);
 
                 if (module->isProcessEntryAttributes()) {
                     wordStart = from+1;
@@ -262,7 +262,7 @@ char OSISStrongs::processText(std::string &text, const SWKey *key, const SWModul
                         }
 
                     }
-                    wtag.setAttribute("lemma", std::move(newAttrib));
+                    wtag.attributes()["lemma"] = std::move(newAttrib);
                 }
                 token = wtag.toString();
                 trimString(token);

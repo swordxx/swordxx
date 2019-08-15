@@ -128,7 +128,7 @@ char OSISFootnotes::processText(std::string &text, const SWKey *key, const SWMod
                             module->getEntryAttributes()["Footnote"][buf][name] =
                                     value;
                         module->getEntryAttributes()["Footnote"][buf]["body"] = tagText;
-                        startTag.setAttribute("swordFootnote", buf);
+                        startTag.attributes()["swordFootnote"] = buf;
                         if (startTag.attribute("type") == "crossReference") {
                             if (!refs.length())
                                 refs = parser->parseVerseList(tagText.c_str(), parser->getText().c_str(), true).getRangeText();

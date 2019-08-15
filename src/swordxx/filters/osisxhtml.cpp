@@ -547,26 +547,26 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
                         if (!vkey->getBook()) {
                             if (!vkey->getTestament()) {
                                 outText((std::string("<h1 class=\"moduleHeader") + classExtras + "\">").c_str(),  buf, u);
-                                tag.setAttribute("pushed", "h1");
+                                tag.attributes()["pushed"] = "h1";
                             }
                             else {
                                 outText((std::string("<h1 class=\"testamentHeader") + classExtras + "\">").c_str(), buf, u);
-                                tag.setAttribute("pushed", "h1");
+                                tag.attributes()["pushed"] = "h1";
                             }
                         }
                         else {
                             outText((std::string("<h1 class=\"bookHeader") + classExtras + "\">").c_str(), buf, u);
-                            tag.setAttribute("pushed", "h1");
+                            tag.attributes()["pushed"] = "h1";
                         }
                     }
                     else {
                         outText((std::string("<h2 class=\"chapterHeader") + classExtras + "\">").c_str(), buf, u);
-                        tag.setAttribute("pushed", "h2");
+                        tag.attributes()["pushed"] = "h2";
                     }
                 }
                 else {
                     outText((std::string("<h3 class=\"title") + classExtras + "\">").c_str(), buf, u);
-                    tag.setAttribute("pushed", "h3");
+                    tag.attributes()["pushed"] = "h3";
                 }
                 u.titleStack.push(tag.toString());
             }

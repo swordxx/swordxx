@@ -102,7 +102,7 @@ char ThMLScripref::processText(std::string &text, const SWKey *key, const SWModu
                             module->getEntryAttributes()["Footnote"][buf][name] =
                                     value;
                         module->getEntryAttributes()["Footnote"][buf]["body"] = tagText;
-                        startTag.setAttribute("swordFootnote", buf);
+                        startTag.attributes()["swordFootnote"] = buf;
                         std::string passage = startTag.attribute("passage");
                         if (passage.length())
                             refs = parser->parseVerseList(passage.c_str(), parser->getText().c_str(), true).getRangeText();

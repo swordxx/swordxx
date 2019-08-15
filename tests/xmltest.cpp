@@ -33,7 +33,7 @@ int main(int argc, char * argv[]) {
     swordxx::XMLTag x(argc > 1 ? argv[1] : xml);
 
     std::cout << x.toString() << "\n";
-    x.setAttribute("addedAttribute", "with a \" quote");
+    x.attributes()["addedAttribute"] = "with a \" quote";
     std::cout << x.toString() << "\nTag name: [" << x.name() << "]\n";
     for (auto const & [name, value] : x.attributes())
         std::cout << " - attribute: [" << name << "] = ["
@@ -45,7 +45,7 @@ int main(int argc, char * argv[]) {
         static char const testParts[] = "ABC D EF GHIJ";
         std::cout << "Setting attribute 'multiPart' to: '" << testParts
                   << "'\n";
-        x.setAttribute("multiPart", testParts);
+        x.attributes()["multiPart"] = testParts;
         std::cout << x.toString() << std::endl;
     }
 

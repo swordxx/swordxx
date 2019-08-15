@@ -847,7 +847,7 @@ bool handleToken(std::string &text, XMLTag token) {
                     XMLTag t = "<milestone resp=\"v\" />";
                     // copy all the attributes of the verse element to the milestone
                     for (auto const & [name, value] : token.attributes())
-                        t.setAttribute(name, value);
+                        t.attributes()[name] = value;
                     text.append(t.toString());
                 }
 
@@ -1047,7 +1047,7 @@ bool handleToken(std::string &text, XMLTag token) {
                 XMLTag t = "<milestone resp=\"v\" />";
                 // copy all the attributes of the verse element to the milestone
                 for (auto const & [name, value] : token.attributes())
-                    t.setAttribute(name, value);
+                    t.attributes()[name] = value;
                 text.append(t.toString());
             }
 
@@ -1195,7 +1195,7 @@ XMLTag transformBSP(XMLTag t) {
         // Transform <p> into <div type="x-p"> and milestone it
         if (tagName == "p") {
             t = "<div type=\"x-p\" />";
-            t.setAttribute("sID", "gen" + std::to_string(sID++));
+            t.attributes()["sID"] = "gen" + std::to_string(sID++);
         }
 
         // Transform <tag> into <tag  sID="">, where tag is a milestoneable element.
@@ -1218,7 +1218,7 @@ XMLTag transformBSP(XMLTag t) {
              tagName == "verse"
         ) {
             t.setEmpty(true);
-            t.setAttribute("sID", "gen" + std::to_string(sID++));
+            t.attributes()["sID"] = "gen" + std::to_string(sID++);
         }
         bspTagStack.push(t);
 
@@ -1256,7 +1256,7 @@ XMLTag transformBSP(XMLTag t) {
                 // make this a clone of the start tag with sID changed to eID
                 // Note: in the case of </p> the topToken is a <div type="x-p">
                 t = topToken;
-                t.setAttribute("eID", t.attribute("sID"));
+                t.attributes()["eID"] = t.attribute("sID");
                 t.attributes().erase("sID");
             }
         }

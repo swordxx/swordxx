@@ -121,7 +121,7 @@ bool OSISOSIS::handleToken(std::string &buf, const char *token, BasicFilterUserD
                     if (startsWith(attr, "x-Strongs:"sv)) {
                         std::memcpy(&attr[3u], "strong", 6);
                         attr.erase(0u, 3u);
-                        tag.setAttribute("lemma", std::move(attr));
+                        tag.attributes()["lemma"] = std::move(attr);
                     }
                 }
                 if (auto attr = tag.attribute("morph"); !attr.empty()) {
@@ -129,12 +129,12 @@ bool OSISOSIS::handleToken(std::string &buf, const char *token, BasicFilterUserD
                         // s/^x-Strongs/strong/:
                         std::memcpy(&attr[3u], "strong", 6);
                         attr.erase(0u, 3u);
-                        tag.setAttribute("lemma", std::move(attr));
+                        tag.attributes()["lemma"] = std::move(attr);
                     } else if (startsWith(attr, "x-Robinson:"sv)) {
                         // s/^x-R/r/:
                         attr[2] = 'r';
                         attr.erase(0u, 2u);
-                        tag.setAttribute("lemma", std::move(attr));
+                        tag.attributes()["lemma"] = std::move(attr);
                     }
                 }
                 tag.attributes().erase("wn");

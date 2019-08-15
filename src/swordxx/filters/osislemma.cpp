@@ -71,7 +71,7 @@ char OSISLemma::processText(std::string &text, const SWKey *key, const SWModule 
                     // Always save off lemma if we haven't yet:
                     if (!wtag.attribute("savlm").empty())
                         if (auto lemma = wtag.attribute("lemma"); !lemma.empty())
-                            wtag.setAttribute("savlm", std::move(lemma));
+                            wtag.attributes()["savlm"] = std::move(lemma);
 
                     std::string newLemmaAttr;
                     {
@@ -98,7 +98,7 @@ char OSISLemma::processText(std::string &text, const SWKey *key, const SWModule 
                                 break;
                         }
                     }
-                    wtag.setAttribute("lemma", newLemmaAttr);
+                    wtag.attributes()["lemma"] = newLemmaAttr;
 
                     token = wtag.toString();
                     trimString(token);

@@ -70,9 +70,6 @@ public: /* Methods: */
 
     std::string attribute(std::string const & attribName) const;
 
-    void setAttribute(std::string const & attribName,
-                      std::string attribValue);
-
     std::string toString() const;
 
     XMLTag & operator=(XMLTag &&);

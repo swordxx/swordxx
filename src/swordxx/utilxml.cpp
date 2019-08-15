@@ -137,10 +137,6 @@ std::string XMLTag::attribute(std::string const & attribName) const
     return (it != m_attributes.end()) ? it->second : std::string();
 }
 
-void XMLTag::setAttribute(std::string const & attribName,
-                          std::string attribValue)
-{ m_attributes[attribName] = std::move(attribValue); }
-
 std::string XMLTag::toString() const {
     std::string tag("<");
     if (isEndTag())

@@ -85,8 +85,8 @@ char ThMLHeadings::processText(std::string &text, const SWKey *key, const SWModu
                         std::string heading;
                         if (auto cls = startTag.attribute("class");
                             !startsWith(cls, "fromEntryAttributes"sv))
-                            startTag.setAttribute("class",
-                                                  "fromEntryAttributes " + cls);
+                            startTag.attributes()["class"] =
+                                    "fromEntryAttributes " + cls;
                         heading += startTag.toString();
                         heading += header;
                         heading += tag.toString();
@@ -152,7 +152,7 @@ char ThMLHeadings::processText(std::string &text, const SWKey *key, const SWModu
                         startsWith(cls, "fromEntryAttributes "sv))
                     {
                         cls.erase(0u, "fromEntryAttributes "sv.size());
-                        tag.setAttribute("class", std::move(cls));
+                        tag.attributes()["class"] = std::move(cls);
                         token = tag.toString();
                         token.erase(0u, 1u);
                         token.pop_back();
