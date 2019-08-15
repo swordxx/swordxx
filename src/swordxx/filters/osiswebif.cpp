@@ -26,6 +26,7 @@
 #include <cstdlib>
 #include <cstring>
 #include "../keys/versekey.h"
+#include "../SimpleTokenizer.h"
 #include "../swmodule.h"
 #include "../url.h"
 #include "../utilstr.h"
@@ -92,37 +93,75 @@ bool OSISWEBIF::handleToken(std::string &buf, const char *token, BasicFilterUser
 //                    buf += formatted(" %s", val);
                 }
                 if (!(attrib = tag.attribute("lemma")).empty()) {
-                    int count = tag.attributePartCount("lemma", ' ');
-                    int i = 0;
-                    do {
-                        attrib = tag.attribute("lemma", i, ' ');
-                        char const * val = std::strchr(attrib.c_str(), ':');
-                        val = (val) ? (val + 1) : attrib.c_str();
-                        const char *val2 = val;
-                        if ((std::strchr("GH", *val)) && (charIsDigit(val[1])))
-                            val2++;
-                        if ((!std::strcmp(val2, "3588")) && (lastText.length() < 1))
+                    for (auto const & lemmaToken
+                         : SimpleTokenizer<>::tokenize(attrib, ' '))
+                    {
+                        auto const separatorPos(lemmaToken.find(':'));
+                        auto val((separatorPos == std::string_view::npos)
+                                 ? lemmaToken
+                                 : lemmaToken.substr(separatorPos + 1u));
+                        if ((val.size() >= 2u)
+                            && ((val.front() == 'G') || (val.front() == 'H'))
+                            && charIsDigit(val[1u]))
+                            val.remove_prefix(1u);
+                        if ((val == "3588") && lastText.empty()) {
                             show = false;
-                        else
-                            buf += formatted(" <small><em>&lt;<a href=\"%s?showStrong=%s#cv\">%s</a>&gt;</em></small> ", passageStudyURL, URL::encode(val2), val2);
-                    } while (++i < count);
+                        } else {
+                            using namespace std::literals::string_view_literals;
+                            static constexpr auto const part1(
+                                        " <small><em>&lt;<a href=\""sv);
+                            static constexpr auto const part2("?showStrong="sv);
+                            static constexpr auto const part3("#cv\">"sv);
+                            static constexpr auto const part4(
+                                        "</a>&gt;</em></small> "sv);
+                            auto const url2(URL::encode(val));
+                            /* Note that no overflow check is strictly needed
+                               for the addition: */
+                            buf.reserve((part1.size() + part2.size()
+                                         + part3.size() + part4.size())
+                                        + buf.size() + passageStudyURL.size()
+                                        + url2.size() + val.size());
+                            buf.append(part1).append(passageStudyURL)
+                               .append(part2).append(url2).append(part3)
+                               .append(val).append(part4);
+                        }
+                    }
                 }
                 if (!(attrib = tag.attribute("morph")).empty() && (show)) {
                     std::string savelemma = tag.attribute("savlm");
                     if ((std::strstr(savelemma.c_str(), "3588")) && (lastText.length() < 1))
                         show = false;
                     if (show) {
-                        int count = tag.attributePartCount("morph", ' ');
-                        int i = 0;
-                        do {
-                            attrib = tag.attribute("morph", i, ' ');
-                            char const * val = std::strchr(attrib.c_str(), ':');
-                            val = (val) ? (val + 1) : attrib.c_str();
-                            const char *val2 = val;
-                            if ((*val == 'T') && (std::strchr("GH", val[1])) && (charIsDigit(val[2])))
-                                val2+=2;
-                            buf += formatted(" <small><em>(<a href=\"%s?showMorph=%s#cv\">%s</a>)</em></small> ", passageStudyURL, URL::encode(val2), val2);
-                        } while (++i < count);
+                        for (auto const & morphToken
+                             : SimpleTokenizer<>::tokenize(attrib, ' '))
+                        {
+                            auto const separatorPos(morphToken.find(':'));
+                            auto val((separatorPos == std::string_view::npos)
+                                     ? morphToken
+                                     : morphToken.substr(separatorPos + 1u));
+                            if ((val.front() == 'T')
+                                && ((val[1u] == 'G') || (val[1u] == 'H'))
+                                && (charIsDigit(val[2u])))
+                                val.remove_prefix(2u);
+
+                            using namespace std::literals::string_view_literals;
+                            static constexpr auto const part1(
+                                        " <small><em>(<a href=\""sv);
+                            static constexpr auto const part2("?showMorph="sv);
+                            static constexpr auto const part3("#cv\">"sv);
+                            static constexpr auto const part4(
+                                        "</a>)</em></small> "sv);
+                            auto const url2(URL::encode(val));
+                            /* Note that no overflow check is strictly needed
+                               for the addition: */
+                            buf.reserve((part1.size() + part2.size()
+                                         + part3.size() + part4.size())
+                                        + buf.size() + passageStudyURL.size()
+                                        + url2.size() + val.size());
+                            buf.append(part1).append(passageStudyURL)
+                               .append(part2).append(url2).append(part3)
+                               .append(val).append(part4);
+                        }
                     }
                 }
                 if (!(attrib = tag.attribute("POS")).empty()) {
