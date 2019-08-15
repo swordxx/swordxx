@@ -39,11 +39,6 @@ private:
     bool renderNoteNumbers;
 protected:
     using TagStack = std::stack<std::string>;
-    // used by derived classes so we have it in the header
-    struct TagStacks {
-        TagStack quoteStack;
-        TagStack hiStack;
-    };
     class SWDLLEXPORT MyUserData : public BasicFilterUserData {
     public:
         bool osisQToTick;
@@ -52,7 +47,8 @@ protected:
         int suspendLevel = 0;
         std::string wordsOfChristStart{"<font color=\"red\"> "};
         std::string wordsOfChristEnd{"</font> "};
-        TagStacks tagStacks;
+        TagStack quoteStack;
+        TagStack hiStack;
         std::string lastTransChange;
         std::string w;
         std::string fn;

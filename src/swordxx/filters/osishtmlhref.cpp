@@ -489,13 +489,13 @@ bool OSISHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterU
                 else {    // all other types
                     outText("<i>", buf, u);
                 }
-                u.tagStacks.hiStack.push(tag.toString());
+                u.hiStack.push(tag.toString());
             }
             else if (tag.isEndTag()) {
                 std::string type2 = "";
-                if (!u.tagStacks.hiStack.empty()) {
-                    XMLTag tag2(u.tagStacks.hiStack.top().c_str());
-                    u.tagStacks.hiStack.pop();
+                if (!u.hiStack.empty()) {
+                    XMLTag tag2(u.hiStack.top().c_str());
+                    u.hiStack.pop();
                     type2 = tag2.attribute("type");
                     if (!type2.length()) type2 = tag2.attribute("rend");
                 }
@@ -537,7 +537,7 @@ bool OSISHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterU
             if ((!tag.isEmpty() && !tag.isEndTag()) || (tag.isEmpty() && !tag.attribute("sID").empty())) {
                 // if <q> then remember it for the </q>
                 if (!tag.isEmpty()) {
-                    u.tagStacks.quoteStack.push(tag.toString());
+                    u.quoteStack.push(tag.toString());
                 }
 
                 // Do this first so quote marks are included as WoC
@@ -554,9 +554,9 @@ bool OSISHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterU
             // close </q> or <q eID... />
             else if ((tag.isEndTag()) || (tag.isEmpty() && !tag.attribute("eID").empty())) {
                 // if it is </q> then pop the stack for the attributes
-                if (tag.isEndTag() && !u.tagStacks.quoteStack.empty()) {
-                    XMLTag qTag(u.tagStacks.quoteStack.top().c_str());
-                    u.tagStacks.quoteStack.pop();
+                if (tag.isEndTag() && !u.quoteStack.empty()) {
+                    XMLTag qTag(u.quoteStack.top().c_str());
+                    u.quoteStack.pop();
 
                     type    = qTag.attribute("type");
                     who     = qTag.attribute("who");
