@@ -21,9 +21,7 @@
 #ifndef SWORDXX_UTILXML_H
 #define SWORDXX_UTILXML_H
 
-#include <list>
 #include <map>
-#include <memory>
 #include <string>
 #include "defs.h"
 
