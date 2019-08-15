@@ -38,8 +38,21 @@ namespace swordxx {
 namespace {
 // though this might be slightly slower, possibly causing an extra bool check, this is a renderFilter
 // so speed isn't the absolute highest priority, and this is a very minor possible hit
-static inline void outText(const char *t, std::string &o, BasicFilterUserData *u) { if (!u->suspendTextPassThru) o += t; else u->lastSuspendSegment += t; }
-static inline void outText(char t, std::string &o, BasicFilterUserData *u) { if (!u->suspendTextPassThru) o += t; else u->lastSuspendSegment += t; }
+inline void outText(const char * t, std::string & o, BasicFilterUserData & u) {
+    if (!u.suspendTextPassThru) {
+        o += t;
+    } else {
+        u.lastSuspendSegment += t;
+    }
+}
+
+inline void outText(char t, std::string & o, BasicFilterUserData & u) {
+    if (!u.suspendTextPassThru) {
+        o += t;
+    } else {
+        u.lastSuspendSegment += t;
+    }
+}
 
 void processLemma(bool suspendTextPassThru, XMLTag &tag, std::string &buf) {
     std::string attrib;
@@ -152,9 +165,9 @@ std::unique_ptr<BasicFilterUserData> OSISHTMLHREF::createUserData(
 bool OSISHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterUserData *userData) {
     using namespace std::literals::string_view_literals;
 
-    MyUserData * u = static_cast<MyUserData *>(userData);
+    auto & u = *static_cast<MyUserData *>(userData);
     std::string scratch;
-    bool sub = (u->suspendTextPassThru) ? substituteToken(scratch, token) : substituteToken(buf, token);
+    bool sub = (u.suspendTextPassThru) ? substituteToken(scratch, token) : substituteToken(buf, token);
     if (!sub) {
   // manually process if it wasn't a simple substitution
         XMLTag tag(token);
@@ -164,7 +177,7 @@ bool OSISHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterU
 
             // start <w> tag
             if ((!tag.isEmpty()) && (!tag.isEndTag())) {
-                u->w = token;
+                u.w = token;
             }
 
             // end or empty <w> tag
@@ -174,8 +187,8 @@ bool OSISHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterU
                 //bool show = true;    // to handle unplaced article in kjv2003-- temporary till combined
 
                 if (endTag) {
-                    tag = u->w.c_str();
-                    lastText = u->lastTextNode.c_str();
+                    tag = u.w.c_str();
+                    lastText = u.lastTextNode.c_str();
                 }
                 else lastText = "stuff";
 
@@ -201,12 +214,12 @@ bool OSISHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterU
                     outText("</rt><rp>)</rp></ruby>", buf, u);
                 }
                 if (!morphFirst) {
-                    processLemma(u->suspendTextPassThru, tag, buf);
-                    processMorph(u->suspendTextPassThru, tag, buf);
+                    processLemma(u.suspendTextPassThru, tag, buf);
+                    processMorph(u.suspendTextPassThru, tag, buf);
                 }
                 else {
-                    processMorph(u->suspendTextPassThru, tag, buf);
-                    processLemma(u->suspendTextPassThru, tag, buf);
+                    processMorph(u.suspendTextPassThru, tag, buf);
+                    processLemma(u.suspendTextPassThru, tag, buf);
                 }
                 if (!(attrib = tag.attribute("POS")).empty()) {
                     val = std::strchr(attrib.c_str(), ':');
@@ -236,27 +249,27 @@ bool OSISHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterU
                         std::string noteName = tag.attribute("n");
                         char const ch = ((tag.attribute("type") == "crossReference") || (tag.attribute("type") == "x-cross-ref")) ? 'x':'n';
 
-                        u->inXRefNote = true; // Why this change? Ben Morgan: Any note can have references in, so we need to set this to true for all notes
-//                        u->inXRefNote = (ch == 'x');
+                        u.inXRefNote = true; // Why this change? Ben Morgan: Any note can have references in, so we need to set this to true for all notes
+//                        u.inXRefNote = (ch == 'x');
 
                         // see if we have a VerseKey * or descendant
-                        auto const * const vkey = u->verseKey;
+                        auto const * const vkey = u.verseKey;
                         buf += formatted("<a href=\"passagestudy.jsp?action=showNote&type=%c&value=%s&module=%s&passage=%s\"><small><sup class=\"%c\">*%c%s</sup></small></a>",
                                 ch,
                             URL::encode(footnoteNumber),
-                            URL::encode(u->version),
-                            URL::encode(vkey ? vkey->getText() : u->key->getText()),
+                            URL::encode(u.version),
+                            URL::encode(vkey ? vkey->getText() : u.key->getText()),
                             ch,
                             ch,
                             (renderNoteNumbers ? noteName.c_str() : ""));
                     }
                 }
-                u->suspendTextPassThru = (++u->suspendLevel);
+                u.suspendTextPassThru = (++u.suspendLevel);
             }
             if (tag.isEndTag()) {
-                u->suspendTextPassThru = (--u->suspendLevel);
-                u->inXRefNote = false;
-                u->lastSuspendSegment = ""; // fix/work-around for nasb divineName in note bug
+                u.suspendTextPassThru = (--u.suspendLevel);
+                u.inXRefNote = false;
+                u.lastSuspendSegment = ""; // fix/work-around for nasb divineName in note bug
             }
         }
 
@@ -292,7 +305,7 @@ bool OSISHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterU
 
         // <reference> tag
         else if (tag.name() == "reference") {
-            if (!u->inXRefNote) {    // only show these if we're not in an xref note
+            if (!u.inXRefNote) {    // only show these if we're not in an xref note
                 if (!tag.isEndTag()) {
                     std::string work;
                     std::string ref;
@@ -310,7 +323,7 @@ bool OSISHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterU
                         // Compensate for starting :
                         ref = the_ref + 1;
 
-                        int size = target.size() - ref.size() - 1;
+                        auto const size = target.size() - ref.size() - 1;
                         work.resize(size, '\0');
                         std::strncpy(&work[0u], target.c_str(), size);
 
@@ -388,7 +401,7 @@ bool OSISHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterU
                 if (hasMark)
                     outText(mark.c_str(), buf, u);
                 // finally, alternate " and ', if config says we should supply a mark
-                else if (u->osisQToTick)
+                else if (u.osisQToTick)
                     outText((level % 2) ? '\"' : '\'', buf, u);
             }
         }
@@ -435,11 +448,11 @@ bool OSISHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterU
         // divineName
         else if (tag.name() == "divineName") {
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {
-                u->suspendTextPassThru = (++u->suspendLevel);
+                u.suspendTextPassThru = (++u.suspendLevel);
             }
             else if (tag.isEndTag()) {
-                std::string lastText = u->lastSuspendSegment;
-                u->suspendTextPassThru = (--u->suspendLevel);
+                std::string lastText = u.lastSuspendSegment;
+                u.suspendTextPassThru = (--u.suspendLevel);
                 if (!lastText.empty()) {
                     lastText = utf8ToUpper(lastText);
                     auto const r(codepointFromUtf8(lastText));
@@ -476,13 +489,13 @@ bool OSISHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterU
                 else {    // all other types
                     outText("<i>", buf, u);
                 }
-                u->tagStacks.hiStack.push(tag.toString());
+                u.tagStacks.hiStack.push(tag.toString());
             }
             else if (tag.isEndTag()) {
                 std::string type2 = "";
-                if (!u->tagStacks.hiStack.empty()) {
-                    XMLTag tag2(u->tagStacks.hiStack.top().c_str());
-                    u->tagStacks.hiStack.pop();
+                if (!u.tagStacks.hiStack.empty()) {
+                    XMLTag tag2(u.tagStacks.hiStack.top().c_str());
+                    u.tagStacks.hiStack.pop();
                     type2 = tag2.attribute("type");
                     if (!type2.length()) type2 = tag2.attribute("rend");
                 }
@@ -524,26 +537,26 @@ bool OSISHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterU
             if ((!tag.isEmpty() && !tag.isEndTag()) || (tag.isEmpty() && !tag.attribute("sID").empty())) {
                 // if <q> then remember it for the </q>
                 if (!tag.isEmpty()) {
-                    u->tagStacks.quoteStack.push(tag.toString());
+                    u.tagStacks.quoteStack.push(tag.toString());
                 }
 
                 // Do this first so quote marks are included as WoC
                 if (who == "Jesus")
-                    outText(u->wordsOfChristStart.c_str(), buf, u);
+                    outText(u.wordsOfChristStart.c_str(), buf, u);
 
                 // first check to see if we've been given an explicit mark
                 if (hasMark)
                     outText(mark.c_str(), buf, u);
                 //alternate " and '
-                else if (u->osisQToTick)
+                else if (u.osisQToTick)
                     outText((level % 2) ? '\"' : '\'', buf, u);
             }
             // close </q> or <q eID... />
             else if ((tag.isEndTag()) || (tag.isEmpty() && !tag.attribute("eID").empty())) {
                 // if it is </q> then pop the stack for the attributes
-                if (tag.isEndTag() && !u->tagStacks.quoteStack.empty()) {
-                    XMLTag qTag(u->tagStacks.quoteStack.top().c_str());
-                    u->tagStacks.quoteStack.pop();
+                if (tag.isEndTag() && !u.tagStacks.quoteStack.empty()) {
+                    XMLTag qTag(u.tagStacks.quoteStack.top().c_str());
+                    u.tagStacks.quoteStack.pop();
 
                     type    = qTag.attribute("type");
                     who     = qTag.attribute("who");
@@ -557,12 +570,12 @@ bool OSISHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterU
                 if (hasMark)
                     outText(mark.c_str(), buf, u);
                 // finally, alternate " and ', if config says we should supply a mark
-                else if (u->osisQToTick)
+                else if (u.osisQToTick)
                     outText((level % 2) ? '\"' : '\'', buf, u);
 
                 // Do this last so quote marks are included as WoC
                 if (who == "Jesus")
-                    outText(u->wordsOfChristEnd.c_str(), buf, u);
+                    outText(u.wordsOfChristEnd.c_str(), buf, u);
             }
         }
 
@@ -570,7 +583,7 @@ bool OSISHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterU
         else if (tag.name() == "transChange") {
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {
                 std::string type = tag.attribute("type");
-                u->lastTransChange = type;
+                u.lastTransChange = type;
 
                 // just do all transChange tags this way for now
                 if ((type == "added") || (type == "supplied"))
@@ -579,7 +592,7 @@ bool OSISHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterU
                     outText( "*", buf, u);
             }
             else if (tag.isEndTag()) {
-                std::string type = u->lastTransChange;
+                std::string type = u.lastTransChange;
                 if ((type == "added") || (type == "supplied"))
                     outText("</i>", buf, u);
             }
@@ -605,7 +618,7 @@ bool OSISHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterU
             outText("<a href=\"passagestudy.jsp?action=showImage&value=", buf, u);
             outText(URL::encode(filepath).c_str(), buf, u);
             outText("&module=", buf, u);
-            outText(URL::encode(u->version).c_str(), buf, u);
+            outText(URL::encode(u.version).c_str(), buf, u);
             outText("\">", buf, u);
 
             outText("<img src=\"file:", buf, u);
