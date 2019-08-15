@@ -85,7 +85,7 @@ inline void outText(char t, std::string & o, BasicFilterUserData & u) {
     }
 }
 
-void processLemma(bool suspendTextPassThru, XMLTag &tag, std::string &buf) {
+void processLemma(XMLTag &tag, std::string &buf) {
     auto attrib(tag.attribute("lemma"));
     if (!attrib.empty()) {
         int count = tag.attributePartCount("lemma", ' ');
@@ -110,20 +110,16 @@ void processLemma(bool suspendTextPassThru, XMLTag &tag, std::string &buf) {
             //if ((!std::strcmp(val2, "3588")) && (lastText.length() < 1))
             //    show = false;
             //else {
-                if (!suspendTextPassThru) {
-                    buf += formatted("<small><em class=\"strongs\">&lt;<a class=\"strongs\" href=\"passagestudy.jsp?action=showStrongs&type=%s&value=%s\" class=\"strongs\">%s</a>&gt;</em></small>",
-                            (gh.length()) ? gh.c_str() : "",
-                            URL::encode(val2),
-                            val2);
-                }
+                buf += formatted("<small><em class=\"strongs\">&lt;<a class=\"strongs\" href=\"passagestudy.jsp?action=showStrongs&type=%s&value=%s\" class=\"strongs\">%s</a>&gt;</em></small>",
+                        (gh.length()) ? gh.c_str() : "",
+                        URL::encode(val2),
+                        val2);
             //}
         } while (++i < count);
     }
 }
 
-
-
-void processMorph(bool suspendTextPassThru, XMLTag &tag, std::string &buf) {
+void processMorph(XMLTag &tag, std::string &buf) {
     auto attrib(tag.attribute("morph"));
     if (!attrib.empty()) { // && (show)) {
         //std::string savelemma = tag.attribute("savlm");
@@ -139,17 +135,14 @@ void processMorph(bool suspendTextPassThru, XMLTag &tag, std::string &buf) {
                 const char *val2 = val;
                 if ((*val == 'T') && (std::strchr("GH", val[1])) && (charIsDigit(val[2])))
                     val2+=2;
-                if (!suspendTextPassThru) {
-                    buf += formatted("<small><em class=\"morph\">(<a class=\"morph\" href=\"passagestudy.jsp?action=showMorph&type=%s&value=%s\" class=\"morph\">%s</a>)</em></small>",
-                            URL::encode(tag.attribute("morph")),
-                            URL::encode(val),
-                            val2);
-                }
+                buf += formatted("<small><em class=\"morph\">(<a class=\"morph\" href=\"passagestudy.jsp?action=showMorph&type=%s&value=%s\" class=\"morph\">%s</a>)</em></small>",
+                        URL::encode(tag.attribute("morph")),
+                        URL::encode(val),
+                        val2);
             } while (++i < count);
         //}
     }
 }
-
 
 }    // end anonymous namespace
 
@@ -265,13 +258,14 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
                     outText(val, buf, u);
                     outText("</rt><rp>)</rp></ruby>", buf, u);
                 }
-                if (!morphFirst) {
-                    processLemma(u.suspendTextPassThru, tag, buf);
-                    processMorph(u.suspendTextPassThru, tag, buf);
-                }
-                else {
-                    processMorph(u.suspendTextPassThru, tag, buf);
-                    processLemma(u.suspendTextPassThru, tag, buf);
+                if (!u.suspendTextPassThru) {
+                    if (!morphFirst) {
+                        processLemma(tag, buf);
+                        processMorph(tag, buf);
+                    } else {
+                        processMorph(tag, buf);
+                        processLemma(tag, buf);
+                    }
                 }
                 if (!(attrib = tag.attribute("POS")).empty()) {
                     val = std::strchr(attrib.c_str(), ':');
