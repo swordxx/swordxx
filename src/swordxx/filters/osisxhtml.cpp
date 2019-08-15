@@ -574,8 +574,7 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
             else if (tag.isEndTag()) {
                 if (!u.titleStack.empty()) {
                     XMLTag tag2(u.titleStack.top().c_str());
-                    if (!u.titleStack.empty())
-                        u.titleStack.pop();
+                    u.titleStack.pop();
                     std::string pushed = tag2.attribute("pushed");
                     if (!pushed.empty()) {
                         outText((std::string("</") + pushed + ">\n\n").c_str(), buf, u);
@@ -688,8 +687,7 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
                 std::string type2;
                 if (!u.hiStack.empty()) {
                     XMLTag tag2(u.hiStack.top().c_str());
-                    if (!u.hiStack.empty())
-                        u.hiStack.pop();
+                    u.hiStack.pop();
                     type2 = tag2.attribute("type");
                     if (!type2.length()) type2 = tag2.attribute("rend");
                 }
@@ -752,8 +750,7 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
                 // if it is </q> then pop the stack for the attributes
                 if (tag.isEndTag() && !u.quoteStack.empty()) {
                     XMLTag qTag(u.quoteStack.top().c_str());
-                    if (!u.quoteStack.empty())
-                        u.quoteStack.pop();
+                    u.quoteStack.pop();
 
                     type    = qTag.attribute("type");
                     who     = qTag.attribute("who");
