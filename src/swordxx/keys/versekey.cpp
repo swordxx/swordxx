@@ -1248,7 +1248,7 @@ int VerseKey::getChapterMax() const {
     if (m_book < 1) return 0;
     auto const bookNum = ((m_testament > 1) ? m_refSys->getBMAX()[0] : 0) + m_book - 1;
     auto const & books = m_refSys->books();
-    if ((bookNum < 0u) || (bookNum >= books.size()))
+    if (bookNum >= books.size())
         return -1;
     return books[bookNum].getChapterMax();
 }
@@ -1257,7 +1257,7 @@ int VerseKey::getVerseMax() const {
     if (m_book < 1) return 0;
     auto const bookNum = ((m_testament > 1) ? m_refSys->getBMAX()[0] : 0) + m_book - 1;
     auto const & books = m_refSys->books();
-    if ((bookNum < 0u) || (bookNum >= books.size()))
+    if (bookNum >= books.size())
         return -1;
     return books[bookNum].getVerseMax(m_chapter);
 }
