@@ -423,9 +423,8 @@ char ThMLOSIS::processText(std::string &text, const SWKey *key, const SWModule *
                         out += "</w>";
                         lastspace = false;
                     }
-                }
-                // OLB verb morph, leave it out of OSIS tag
-                else {
+                } else {
+                    // OLB verb morph, leave it out of OSIS tag
                 }
                 handled = true;
             }

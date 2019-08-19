@@ -150,11 +150,8 @@ bool TEIHTMLHREF::handleToken(std::string &buf, const char *token, BasicFilterUs
 
         // <div>
         else if (tag.name() == "div") {
-
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {
                 buf += "<!P>";
-            }
-            else if (tag.isEndTag()) {
             }
         }
 

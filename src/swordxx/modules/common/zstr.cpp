@@ -413,10 +413,8 @@ void zStr::setText(const char *ikey, std::string_view text) {
 
     char notFound = findKeyIndex(ikey, &idxoff, 0);
     if (!notFound) {
-        auto diff = key.compare(getKeyFromIdxOffset(idxoff));
-        if (diff < 0) {
-        }
-        else if (diff > 0) {
+        auto const diff(key.compare(getKeyFromIdxOffset(idxoff)));
+        if (diff > 0) {
             idxoff += IDXENTRYSIZE;
         }
         else if ((!diff) && (!text.empty() /*we're not deleting*/)) { // got absolute entry

@@ -101,11 +101,8 @@ bool TEIPlain::handleToken(std::string &buf, const char *token, BasicFilterUserD
 
         // <div>
         else if (tag.name() == "div") {
-
             if ((!tag.isEndTag()) && (!tag.isEmpty())) {
                 buf.append("\n\n\n");
-            }
-            else if (tag.isEndTag()) {
             }
         }
 

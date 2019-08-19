@@ -359,14 +359,13 @@ void RawStrBase<SizeType_>::doSetText(char const * ikey, std::string_view text){
     static constexpr auto const entrySize =
             sizeof(StartType) + sizeof(SizeType);
 
-    if (key.compare(dbKey) < 0) {
-    }
-    else if (key.compare(dbKey) > 0) {
+    auto const keyCompare(key.compare(dbKey));
+    if (keyCompare > 0) {
         if (errorStatus != (char)-2)    // not a new file
             idxoff += entrySize;
         else idxoff = 0;
     }
-    else if ((key == dbKey) && (!text.empty() /*we're not deleting*/)) { // got absolute entry
+    else if ((!keyCompare) && (!text.empty() /*we're not deleting*/)) { // got absolute entry
         do {
             tmpbuf = new char [ size + 2 ];
             std::memset(tmpbuf, 0, size + 2);

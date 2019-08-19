@@ -821,25 +821,23 @@ bool OSISXHTML::handleToken(std::string &buf, const char *token, BasicFilterUser
 
         // ok to leave these in
         else if (tag.name() == "div") {
-            std::string type = tag.attribute("type");
-            if (type == "bookGroup") {
-            }
-            else if (type == "book") {
-            }
-            else if (type == "section") {
-            }
-            else if (type == "majorSection") {
-            }
-            else if ((!tag.isEndTag()) && (!tag.isEmpty())) {
+            auto const type(tag.attribute("type"));
+            if ((type == "bookGroup")
+                || (type == "book")
+                || (type == "section")
+                || (type == "majorSection"))
+            {
+                // Skip these types of divs
+            } else if ((!tag.isEndTag()) && (!tag.isEmpty())) {
                 auto const type2(tag.attribute("type"));
                 outText("<div class=\"", buf, u);
                 outText(type2.c_str(), buf, u);
                 outText("\">", buf, u);
-                 }
-                 else if (tag.isEndTag()) {
-                    outText("</div>", buf, u);
+            } else if (tag.isEndTag()) {
+                outText("</div>", buf, u);
+            } else if (type != "colophon") {
+                outText(tag.toString().c_str(), buf, u);
             }
-            else if (!(type == "colophon")) outText(tag.toString().c_str(), buf, u);
 
         }
         else if (tag.name() == "span") {
