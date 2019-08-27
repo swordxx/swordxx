@@ -191,25 +191,44 @@ std::string XMLTag::attribute(std::string const & attribName) const
 }
 
 std::string XMLTag::toString() const {
-    std::string tag("<");
-    if (isEndTag())
-        tag.push_back('/');
-
-    tag.append(name());
-    for (auto const & vp : m_attributes) {
-        tag.push_back(' ');
-        tag.append(vp.first);
-        tag.append((std::strchr(vp.second.c_str(), '\"')) ? "=\'" : "=\"");
-        tag.append(vp.second);
-        tag.push_back((std::strchr(vp.second.c_str(), '\"'))? '\'' : '\"');
+    using namespace std::literals::string_view_literals;
+    if (m_isEndTag) {
+        std::string r;
+        r.reserve(m_name.size() + 3u);
+        r += "</"sv;
+        r += m_name;
+        r.push_back('>');
+        return r;
     }
 
-    if (isEmpty())
-        tag.push_back('/');
+    if (m_attributes.empty()) {
+        std::string r;
+        if (isEmpty()) {
+            r.reserve(m_name.size() + 3u);
+            r.push_back('<');
+            r += m_name;
+            r += "/>"sv;
+        } else {
+            r.reserve(m_name.size() + 2u);
+            r.push_back('<');
+            r += m_name;
+            r.push_back('>');
+        }
+        return r;
+    }
 
-    tag.push_back('>');
-
-    return tag;
+    std::string r('<' + m_name);
+    for (auto const & [attrName, attrValue] : m_attributes) {
+        r.push_back(' ');
+        r += attrName;
+        appendXmlAttributeValue(r, attrValue, "=\""sv, "='"sv);
+    }
+    if (m_isEmpty) {
+        r += "/>"sv;
+    } else {
+        r.push_back('>');
+    }
+    return r;
 }
 
 XMLTag & XMLTag::operator=(XMLTag &&) = default;
