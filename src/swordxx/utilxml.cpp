@@ -23,11 +23,65 @@
 
 #include "utilxml.h"
 
+#include <cassert>
 #include <cstring>
 #include "utilstr.h"
 
 
 namespace swordxx {
+namespace {
+
+template <typename PrefixDoubleQuote,
+          typename PrefixSingleQuote>
+std::string & appendXmlAttributeValue(std::string & r,
+                                      std::string_view attrValueView,
+                                      PrefixDoubleQuote && prefixDoubleQuote,
+                                      PrefixSingleQuote && prefixSingleQuote)
+{
+    using namespace std::literals::string_view_literals;
+
+    static constexpr unsigned const HAS_SINGLE_QUOTE = 0b01;
+    static constexpr unsigned const HAS_DOUBLE_QUOTE = 0b10;
+    unsigned includesQuotes = 0u;
+    for (auto pos = attrValueView.find_first_of("\"'"sv);
+         pos != std::string::npos;
+         pos = attrValueView.find_first_of("\"'"sv, pos + 1u))
+        includesQuotes |= ((attrValueView[pos] == '"')
+                           ? HAS_DOUBLE_QUOTE
+                           : HAS_SINGLE_QUOTE);
+
+    switch (includesQuotes) {
+    case HAS_SINGLE_QUOTE | HAS_DOUBLE_QUOTE:
+        r += std::forward<PrefixDoubleQuote>(prefixDoubleQuote);
+        {
+            auto pos = attrValueView.find('"');
+            assert(pos != std::string::npos);
+            do {
+                r.append(attrValueView.data(), pos);
+                r += "&quot;"sv;
+                attrValueView.remove_prefix(pos + 1u);
+                pos = attrValueView.find('"', 0u);
+            } while (pos != std::string::npos);
+            r += attrValueView;
+        }
+        r.push_back('"');
+        break;
+    case HAS_DOUBLE_QUOTE:
+        r += std::forward<PrefixSingleQuote>(prefixSingleQuote);
+        r += attrValueView;
+        r.push_back('\'');
+        break;
+    case HAS_SINGLE_QUOTE:
+    default:
+        r += std::forward<PrefixDoubleQuote>(prefixDoubleQuote);
+        r += attrValueView;
+        r.push_back('"');
+        break;
+    }
+    return r;
+}
+
+} // anonymous namespace
 
 XMLTag::XMLTag(XMLTag &&) = default;
 XMLTag::XMLTag(XMLTag const &) = default;
@@ -160,5 +214,11 @@ std::string XMLTag::toString() const {
 
 XMLTag & XMLTag::operator=(XMLTag &&) = default;
 XMLTag & XMLTag::operator=(XMLTag const &) = default;
+
+std::string formatXmlAttributeValue(std::string_view value) {
+    std::string r;
+    appendXmlAttributeValue(r, value, '"', '\'');
+    return r;
+}
 
 } /* namespace swordxx */

@@ -75,6 +75,8 @@ private: /* Fields: */
 
 };
 
+std::string formatXmlAttributeValue(std::string_view value);
+
 } /* namespace swordxx */
 
 #endif /* SWORDXX_UTILXML_H */
