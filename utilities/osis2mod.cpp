@@ -29,6 +29,7 @@
 #include <sstream>
 #include <stack>
 #include <string>
+#include <string_view>
 #include <swordxx/filters/cipherfil.h>
 #include <swordxx/filters/latin1utf8.h>
 #include <swordxx/filters/scsuutf8.h>
@@ -53,6 +54,7 @@
 
 
 using namespace swordxx;
+using namespace std::literals::string_view_literals;
 
 namespace {
 
@@ -608,7 +610,7 @@ bool handleToken(std::string &text, XMLTag token) {
     // Flag indicating whether we are in "Words of Christ"
     static bool               inWOC           = false;
     // Tag for WOC quotes within a verse
-    static XMLTag             wocTag          = "<q who=\"Jesus\" marker=\"\">";
+    static std::string_view const wocTagSv("<q who=\"Jesus\" marker=\"\">");
 
     // Flag used to indicate where useful text begins
     static bool               firstDiv        = false;
@@ -852,7 +854,7 @@ bool handleToken(std::string &text, XMLTag token) {
                 }
 
                 if (inWOC) {
-                    text.append(wocTag.toString());
+                    text.append(wocTagSv);
                 }
                 return true;
             }
@@ -908,7 +910,7 @@ bool handleToken(std::string &text, XMLTag token) {
                 inWOC = true;
 
                 // Output per verse WOC markup.
-                text.append(wocTag.toString());
+                text.append(wocTagSv);
 
                 // Output the quotation mark if appropriate, inside the WOC.
                 // If there is no marker attribute, let the Sword++ engine manufacture one.
