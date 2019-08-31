@@ -39,46 +39,43 @@ std::string & appendXmlAttributeValue(std::string & r,
                                       PrefixSingleQuote && prefixSingleQuote)
 {
     using namespace std::literals::string_view_literals;
+    constexpr static auto const notFound = std::string_view::npos;
 
-    static constexpr unsigned const HAS_SINGLE_QUOTE = 0b01;
-    static constexpr unsigned const HAS_DOUBLE_QUOTE = 0b10;
-    unsigned includesQuotes = 0u;
-    for (auto pos = attrValueView.find_first_of("\"'"sv);
-         pos != std::string::npos;
-         pos = attrValueView.find_first_of("\"'"sv, pos + 1u))
-        includesQuotes |= ((attrValueView[pos] == '"')
-                           ? HAS_DOUBLE_QUOTE
-                           : HAS_SINGLE_QUOTE);
-
-    switch (includesQuotes) {
-    case HAS_SINGLE_QUOTE | HAS_DOUBLE_QUOTE:
-        r += std::forward<PrefixDoubleQuote>(prefixDoubleQuote);
-        {
-            auto pos = attrValueView.find('"');
-            assert(pos != std::string::npos);
-            do {
-                r.append(attrValueView.data(), pos);
-                r += "&quot;"sv;
-                attrValueView.remove_prefix(pos + 1u);
-                pos = attrValueView.find('"', 0u);
-            } while (pos != std::string::npos);
-            r += attrValueView;
+    auto pos = attrValueView.find_first_of("\"'"sv);
+    for (;;) {
+        if (pos != notFound) { // if single or double quote found:
+            if (attrValueView[pos] == '"') { // if found quote was double quote:
+                if (attrValueView.find('\'', pos + 1u) != notFound)
+                    break; // If both types of quotes found
+                // Handle case where only double quotes were found:
+                r += std::forward<PrefixDoubleQuote>(prefixSingleQuote);
+                r += attrValueView;
+                return r += '\'';
+            } else { // found quote was single quote:
+                assert(attrValueView[pos] == '\'');
+                pos = attrValueView.find('"', pos + 1u);
+                if (pos != notFound)
+                    break; // If both types of quotes found
+            }
         }
-        r.push_back('"');
-        break;
-    case HAS_DOUBLE_QUOTE:
-        r += std::forward<PrefixSingleQuote>(prefixSingleQuote);
-        r += attrValueView;
-        r.push_back('\'');
-        break;
-    case HAS_SINGLE_QUOTE:
-    default:
+        // Handle case where no quotes or only single quotes were found:
         r += std::forward<PrefixDoubleQuote>(prefixDoubleQuote);
         r += attrValueView;
-        r.push_back('"');
-        break;
+        return r += '"';
     }
-    return r;
+
+    // Handle case where both single and double quotes were found:
+    assert(pos != std::string::npos);
+    assert(attrValueView[pos] == '"');
+    r += std::forward<PrefixDoubleQuote>(prefixDoubleQuote);
+    do {
+        r.append(attrValueView.data(), pos);
+        r += "&quot;"sv;
+        attrValueView.remove_prefix(pos + 1u);
+        pos = attrValueView.find('"', 0u);
+    } while (pos != std::string::npos);
+    r += attrValueView;
+    return r += '"';
 }
 
 } // anonymous namespace
