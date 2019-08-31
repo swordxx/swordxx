@@ -218,7 +218,7 @@ std::string XMLTag::toString() const {
     for (auto const & [attrName, attrValue] : m_attributes) {
         r.push_back(' ');
         r += attrName;
-        appendXmlAttributeValue(r, attrValue, "=\""sv, "='"sv);
+        appendEqualsXmlAttributeValue(r, attrValue);
     }
     if (m_isEmpty) {
         r += "/>"sv;
@@ -231,9 +231,17 @@ std::string XMLTag::toString() const {
 XMLTag & XMLTag::operator=(XMLTag &&) = default;
 XMLTag & XMLTag::operator=(XMLTag const &) = default;
 
+std::string & appendXmlAttributeValue(std::string & r,
+                                      std::string_view attrValueView)
+{ return appendXmlAttributeValue(r, attrValueView, '"', '\''); }
+
+std::string & appendEqualsXmlAttributeValue(std::string & r,
+                                            std::string_view attrValueView)
+{ return appendXmlAttributeValue(r, attrValueView, "=\""sv, "='"sv); }
+
 std::string formatXmlAttributeValue(std::string_view value) {
     std::string r;
-    appendXmlAttributeValue(r, value, '"', '\'');
+    appendXmlAttributeValue(r, value);
     return r;
 }
 

@@ -23,6 +23,7 @@
 
 #include <map>
 #include <string>
+#include <string_view>
 #include "defs.h"
 
 
@@ -74,6 +75,12 @@ private: /* Fields: */
     bool m_isEndTag;
 
 };
+
+std::string & appendXmlAttributeValue(std::string & r,
+                                      std::string_view attrValueView);
+
+std::string & appendEqualsXmlAttributeValue(std::string & r,
+                                            std::string_view attrValueView);
 
 std::string formatXmlAttributeValue(std::string_view value);
 
