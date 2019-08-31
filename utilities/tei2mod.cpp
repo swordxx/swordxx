@@ -218,9 +218,6 @@ void linkToEntry(const std::string & /* keyBuf */, const std::string &linkBuf) {
 // Return true if the content was handled or is to be ignored.
 //      false if the what has been seen is to be accumulated and considered later.
 bool handleToken(std::string & text, XMLTag & token) {
-        // The start token for the current entry;
-    static XMLTag startTag;
-
         // Flags to indicate whether we are in a entry, entryFree or superentry
         static bool inEntry      = false;
         static bool inEntryFree  = false;
@@ -244,7 +241,6 @@ bool handleToken(std::string & text, XMLTag & token) {
 #ifdef DEBUG
                 cout << "Entering " << tokenName << endl;
 #endif
-                startTag    = token;
                 text        = "";
 
                                 keyStr = token.attribute("n"); // P5 with linking and/or non-URI chars
