@@ -31,6 +31,8 @@
 namespace swordxx {
 namespace {
 
+using namespace std::literals::string_view_literals;
+
 template <typename PrefixDoubleQuote,
           typename PrefixSingleQuote>
 std::string & appendXmlAttributeValue(std::string & r,
@@ -38,7 +40,6 @@ std::string & appendXmlAttributeValue(std::string & r,
                                       PrefixDoubleQuote && prefixDoubleQuote,
                                       PrefixSingleQuote && prefixSingleQuote)
 {
-    using namespace std::literals::string_view_literals;
     constexpr static auto const notFound = std::string_view::npos;
 
     auto pos = attrValueView.find_first_of("\"'"sv);
@@ -188,7 +189,6 @@ std::string XMLTag::attribute(std::string const & attribName) const
 }
 
 std::string XMLTag::toString() const {
-    using namespace std::literals::string_view_literals;
     if (m_isEndTag) {
         std::string r;
         r.reserve(m_name.size() + 3u);
