@@ -26,6 +26,7 @@
 #include <cassert>
 #include <cstring>
 #include "utilstr.h"
+#include "XmlBuilder.h"
 
 
 namespace swordxx {
@@ -198,34 +199,10 @@ std::string XMLTag::toString() const {
         return r;
     }
 
-    if (m_attributes.empty()) {
-        std::string r;
-        if (isEmpty()) {
-            r.reserve(m_name.size() + 3u);
-            r.push_back('<');
-            r += m_name;
-            r += "/>"sv;
-        } else {
-            r.reserve(m_name.size() + 2u);
-            r.push_back('<');
-            r += m_name;
-            r.push_back('>');
-        }
-        return r;
-    }
-
-    std::string r('<' + m_name);
-    for (auto const & [attrName, attrValue] : m_attributes) {
-        r.push_back(' ');
-        r += attrName;
-        appendEqualsXmlAttributeValue(r, attrValue);
-    }
-    if (m_isEmpty) {
-        r += "/>"sv;
-    } else {
-        r.push_back('>');
-    }
-    return r;
+    XmlBuilder xmlBuilder(m_name);
+    for (auto const & [attrName, attrValue] : m_attributes)
+        xmlBuilder.a(attrName, attrValue);
+    return m_isEmpty ? xmlBuilder.toString() : xmlBuilder.c(""sv).asString();
 }
 
 XMLTag & XMLTag::operator=(XMLTag &&) = default;
