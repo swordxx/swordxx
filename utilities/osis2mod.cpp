@@ -50,6 +50,7 @@
 #include <swordxx/swmgr.h>
 #include <swordxx/utilstr.h>
 #include <swordxx/utilxml.h>
+#include <swordxx/XmlBuilder.h>
 #include <vector>
 
 
@@ -845,12 +846,19 @@ bool handleToken(std::string &text, XMLTag token) {
                 }
                 else if (debug & DEBUG_VERSE)
                 {
-                    // transform the verse into a milestone
-                    XMLTag t = "<milestone resp=\"v\" />";
-                    // copy all the attributes of the verse element to the milestone
-                    for (auto const & [name, value] : token.attributes())
-                        t.attributes()[name] = value;
-                    text.append(t.toString());
+                    /* Transform the verse into a milestone, copying all its
+                       attributes. */
+                    using namespace std::literals::string_view_literals;
+                    XmlBuilder xmlBuilder("milestone"sv);
+                    bool hasRespAttribute = false;
+                    for (auto const & [name, value] : token.attributes()) {
+                        if (name == "resp"sv)
+                            hasRespAttribute = true;
+                        xmlBuilder.a(name, value);
+                    }
+                    if (!hasRespAttribute)
+                        xmlBuilder.a("resp"sv, "v"sv);
+                    text.append(xmlBuilder.toString());
                 }
 
                 if (inWOC) {
