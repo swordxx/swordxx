@@ -103,6 +103,24 @@ std::vector<ListKey> linkedVerses;
 bool inCanonicalOSISBook = true; // osisID is for a book that is not in Sword++'s canon
 bool normalize           = true; // Whether to normalize UTF-8 to NFC
 
+/** \brief Transform a verse into a milestone, copying all its attributes.
+    \param[in] token The verse to convert.
+    \returns the milestone tag as a string.
+*/
+std::string verseToMilestone(XMLTag const & token) {
+    using namespace std::literals::string_view_literals;
+    XmlBuilder xmlBuilder("milestone"sv);
+    bool hasRespAttribute = false;
+    for (auto const & [name, value] : token.attributes()) {
+        if (name == "resp"sv)
+            hasRespAttribute = true;
+        xmlBuilder.a(name, value);
+    }
+    if (!hasRespAttribute)
+        xmlBuilder.a("resp"sv, "v"sv);
+    return xmlBuilder.toString();
+}
+
 bool isOSISAbbrev(const char *buf) {
     return currentVerse->versificationSystem()->bookNumberByOSISName(buf).has_value();
 }
@@ -846,19 +864,7 @@ bool handleToken(std::string &text, XMLTag token) {
                 }
                 else if (debug & DEBUG_VERSE)
                 {
-                    /* Transform the verse into a milestone, copying all its
-                       attributes. */
-                    using namespace std::literals::string_view_literals;
-                    XmlBuilder xmlBuilder("milestone"sv);
-                    bool hasRespAttribute = false;
-                    for (auto const & [name, value] : token.attributes()) {
-                        if (name == "resp"sv)
-                            hasRespAttribute = true;
-                        xmlBuilder.a(name, value);
-                    }
-                    if (!hasRespAttribute)
-                        xmlBuilder.a("resp"sv, "v"sv);
-                    text.append(xmlBuilder.toString());
+                    text.append(verseToMilestone(token));
                 }
 
                 if (inWOC) {
@@ -1053,12 +1059,7 @@ bool handleToken(std::string &text, XMLTag token) {
             }
             else if (debug & DEBUG_VERSE)
             {
-                // transform the verse into a milestone
-                XMLTag t = "<milestone resp=\"v\" />";
-                // copy all the attributes of the verse element to the milestone
-                for (auto const & [name, value] : token.attributes())
-                    t.attributes()[name] = value;
-                text.append(t.toString());
+                text.append(verseToMilestone(token));
             }
 
             writeEntry(text);
