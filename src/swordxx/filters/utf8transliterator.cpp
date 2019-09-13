@@ -1,10 +1,5 @@
 /******************************************************************************
  *
- *  utf8transliterator.cpp -    SWFilter descendant to transliterate between
- *                ICU-supported scripts
- *
- * $Id$
- *
  * Copyright 2001-2013 CrossWire Bible Society (http://www.crosswire.org)
  *    CrossWire Bible Society
  *    P. O. Box 2528
@@ -23,11 +18,18 @@
 
 #include "utf8transliterator.h"
 
+#include <array>
+#include <cassert>
 #include <cstdlib>
 #include <cstring>
+#include <stdexcept>
 #include <unicode/resbund.h>
+#include <unicode/translit.h>
 #include <unicode/uchar.h>
 #include <unicode/ucnv.h>
+#include <unicode/unistr.h>
+#include <vector>
+#include "../max_v.h"
 #include "../swlog.h"
 #include "../swmodule.h"
 #include "../utilstr.h"
@@ -48,6 +50,18 @@ SE_JAMO, SE_HAN, SE_KANJI
 
 constexpr unsigned const NUMSCRIPTS = SE_KANJI + 1u;
 
+auto createTrans(std::string const & id) {
+    UErrorCode status = U_ZERO_ERROR;
+    std::unique_ptr<icu::Transliterator> r(
+                icu::Transliterator::createInstance(
+                    icu::UnicodeString(id.c_str()),
+                    UTRANS_FORWARD,
+                    status));
+    if (U_FAILURE(status))
+        r.reset();
+    return r;
+}
+
 } // anonymous namespace
 
 
@@ -59,596 +73,538 @@ UTF8Transliterator::UTF8Transliterator()
 {}
 
 
-UTF8Transliterator::~UTF8Transliterator() {
-}
+UTF8Transliterator::~UTF8Transliterator() = default;
 
-bool UTF8Transliterator::addTrans(const char* newTrans, std::string* transList) {
-        *transList += newTrans;
-        *transList += ";";
-        return true;
-}
-
-
-std::unique_ptr<icu::Transliterator> UTF8Transliterator::createTrans(
-        icu::UnicodeString const & ID,
-        UTransDirection /* dir */,
-        UErrorCode & status)
+char UTF8Transliterator::processText(std::string & text,
+                                     SWKey const *,
+                                     SWModule const * module)
 {
-    std::unique_ptr<icu::Transliterator> r(
-                icu::Transliterator::createInstance(ID, UTRANS_FORWARD, status));
-    if (U_FAILURE(status))
-        return nullptr;
-    return r;
-}
-
-char UTF8Transliterator::processText(std::string &text, const SWKey *key, const SWModule *module)
-{
-    (void) key;
     auto const selectedOptionIndex = getSelectedOptionValueIndex();
-    if (selectedOptionIndex) {    // if we want transliteration
-        unsigned long i, j;
-                UErrorCode err = U_ZERO_ERROR;
-                UConverter * conv = nullptr;
-                conv = ucnv_open("UTF-8", &err);
-                std::string ID;
 
-                bool compat = false;
+    // Return immediately if we don't want transliteration:
+    if (!selectedOptionIndex)
+        return 0;
 
-        // Convert UTF-8 string to UTF-16 (UChars)
-                j = std::strlen(text.c_str());
-                int32_t len = (j * 2) + 1;
-                auto const source(std::make_unique<UChar[]>(len));
-                err = U_ZERO_ERROR;
-                len = ucnv_toUChars(conv, source.get(), len, text.c_str(), j, &err);
-                source[len] = 0;
+    std::unique_ptr<::UConverter, void (*)(::UConverter * conv)> conv(
+                []() {
+                    ::UErrorCode err = U_ZERO_ERROR;
+                    return ::ucnv_open("UTF-8", &err);
+                }(),
+                +[](::UConverter * conv) noexcept { ::ucnv_close(conv); });
+    std::string id;
+    auto const addTrans =
+            [&id](auto && newTrans) {
+                id += std::forward<decltype(newTrans)>(newTrans);
+                id += ';';
+            };
 
-        // Figure out which scripts are used in the string
-        unsigned char scripts[NUMSCRIPTS];
+    bool compat = false;
 
-                for (i = 0; i < NUMSCRIPTS; i++) {
-                        scripts[i] = false;
-                }
+    // Convert UTF-8 string to UTF-16 (UChars)
+    std::vector<UChar> source;
+    {
+        UErrorCode err = U_ZERO_ERROR;
+        auto const sourceLen = std::strlen(text.c_str());
+        if (sourceLen >= max_v<std::int32_t>)
+            throw std::runtime_error("Implementation limits reached!");
+        auto const len = ::ucnv_toUChars(conv.get(),
+                                         nullptr,
+                                         0,
+                                         text.c_str(),
+                                         static_cast<std::int32_t>(sourceLen),
+                                         &err);
+        if (U_FAILURE(err))
+            throw std::runtime_error("::ucnv_toUChars() failed!");
+        assert(len >= 0);
+        static_assert(max_v<decltype(len)>
+                      <= max_v<decltype(source)::size_type>, "");
+        if (static_cast<std::size_t>(len) >= max_v<decltype(source)::size_type>)
+            throw std::bad_array_new_length();
+        source.resize(static_cast<std::size_t>(len) + 1u);
 
-                for (i = 0; i < (unsigned long)len; i++) {
-                        j = ublock_getCode(source[i]);
-            scripts[SE_LATIN] = true;
-            switch (j) {
-            //case UBLOCK_BASIC_LATIN: scripts[SE_LATIN] = true; break;
-            case UBLOCK_GREEK: scripts[SE_GREEK] = true; break;
-            case UBLOCK_HEBREW: scripts[SE_HEBREW] = true; break;
-            case UBLOCK_CYRILLIC: scripts[SE_CYRILLIC] = true; break;
-            case UBLOCK_ARABIC: scripts[SE_ARABIC] = true; break;
-            case UBLOCK_SYRIAC: scripts[SE_SYRIAC] = true; break;
-            case UBLOCK_KATAKANA: scripts[SE_KATAKANA] = true; break;
-            case UBLOCK_HIRAGANA: scripts[SE_HIRAGANA] = true; break;
-            case UBLOCK_HANGUL_SYLLABLES: scripts[SE_HANGUL] = true; break;
-            case UBLOCK_HANGUL_JAMO: scripts[SE_JAMO] = true; break;
-            case UBLOCK_DEVANAGARI: scripts[SE_DEVANAGARI] = true; break;
-            case UBLOCK_TAMIL: scripts[SE_TAMIL] = true; break;
-            case UBLOCK_BENGALI: scripts[SE_BENGALI] = true; break;
-            case UBLOCK_GURMUKHI: scripts[SE_GURMUKHI] = true; break;
-            case UBLOCK_GUJARATI: scripts[SE_GUJARATI] = true; break;
-            case UBLOCK_ORIYA: scripts[SE_ORIYA] = true; break;
-            case UBLOCK_TELUGU: scripts[SE_TELUGU] = true; break;
-            case UBLOCK_KANNADA: scripts[SE_KANNADA] = true; break;
-            case UBLOCK_MALAYALAM: scripts[SE_MALAYALAM] = true; break;
-            case UBLOCK_THAI: scripts[SE_THAI] = true; break;
-            case UBLOCK_GEORGIAN: scripts[SE_GEORGIAN] = true; break;
-            case UBLOCK_ARMENIAN: scripts[SE_ARMENIAN] = true; break;
-            case UBLOCK_ETHIOPIC: scripts[SE_ETHIOPIC] = true; break;
-            case UBLOCK_GOTHIC: scripts[SE_GOTHIC] = true; break;
-            case UBLOCK_UGARITIC: scripts[SE_UGARITIC] = true; break;
-//            case UBLOCK_MEROITIC: scripts[SE_MEROITIC] = true; break;
-            case UBLOCK_LINEAR_B_SYLLABARY: scripts[SE_LINEARB] = true; break;
-            case UBLOCK_CYPRIOT_SYLLABARY: scripts[SE_CYPRIOT] = true; break;
-            case UBLOCK_RUNIC: scripts[SE_RUNIC] = true; break;
-            case UBLOCK_OGHAM: scripts[SE_OGHAM] = true; break;
-            case UBLOCK_THAANA: scripts[SE_THAANA] = true; break;
-            case UBLOCK_GLAGOLITIC: scripts[SE_GLAGOLITIC] = true; break;
-                        case UBLOCK_CHEROKEE: scripts[SE_CHEROKEE] = true; break;
-//            case UBLOCK_TENGWAR: scripts[SE_TENGWAR] = true; break;
-//            case UBLOCK_CIRTH: scripts[SE_CIRTH] = true; break;
-            case UBLOCK_CJK_RADICALS_SUPPLEMENT:
-            case UBLOCK_KANGXI_RADICALS:
-            case UBLOCK_IDEOGRAPHIC_DESCRIPTION_CHARACTERS:
-            case UBLOCK_CJK_SYMBOLS_AND_PUNCTUATION:
-            case UBLOCK_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_A:
-            case UBLOCK_CJK_UNIFIED_IDEOGRAPHS:
-                                scripts[SE_HAN] = true;
-                                break;
-            case UBLOCK_CJK_COMPATIBILITY:
-            case UBLOCK_CJK_COMPATIBILITY_IDEOGRAPHS:
-            case UBLOCK_CJK_COMPATIBILITY_FORMS:
-                                scripts[SE_HAN] = true;
-                                compat = true;
-                    break;
-            case UBLOCK_HANGUL_COMPATIBILITY_JAMO:
-                                scripts[SE_HANGUL] = true;
-                                compat = true;
-                                break;
+        err = U_ZERO_ERROR;
+        ::ucnv_toUChars(conv.get(),
+                        source.data(),
+                        len,
+                        text.c_str(),
+                        static_cast<std::int32_t>(sourceLen),
+                        &err);
+        source.back() = 0;
+    }
 
-                        //default: scripts[SE_LATIN] = true;
-            }
+    // Figure out which scripts are used in the string
+    std::array<unsigned char, NUMSCRIPTS> scripts;
+    for (auto & s : scripts)
+        s = false;
+    for (auto const uChar : source) {
+        auto const ublockCode(::ublock_getCode(uChar));
+        scripts[SE_LATIN] = true;
+        switch (ublockCode) {
+        #define C(ub,se) case ub: scripts[se] = true; break
+        // C(BASIC_LATIN, LATIN);
+        C(UBLOCK_GREEK, SE_GREEK);
+        C(UBLOCK_HEBREW, SE_HEBREW);
+        C(UBLOCK_CYRILLIC, SE_CYRILLIC);
+        C(UBLOCK_ARABIC, SE_ARABIC);
+        C(UBLOCK_SYRIAC, SE_SYRIAC);
+        C(UBLOCK_KATAKANA, SE_KATAKANA);
+        C(UBLOCK_HIRAGANA, SE_HIRAGANA);
+        C(UBLOCK_HANGUL_SYLLABLES, SE_HANGUL);
+        C(UBLOCK_HANGUL_JAMO, SE_JAMO);
+        C(UBLOCK_DEVANAGARI, SE_DEVANAGARI);
+        C(UBLOCK_TAMIL, SE_TAMIL);
+        C(UBLOCK_BENGALI, SE_BENGALI);
+        C(UBLOCK_GURMUKHI, SE_GURMUKHI);
+        C(UBLOCK_GUJARATI, SE_GUJARATI);
+        C(UBLOCK_ORIYA, SE_ORIYA);
+        C(UBLOCK_TELUGU, SE_TELUGU);
+        C(UBLOCK_KANNADA, SE_KANNADA);
+        C(UBLOCK_MALAYALAM, SE_MALAYALAM);
+        C(UBLOCK_THAI, SE_THAI);
+        C(UBLOCK_GEORGIAN, SE_GEORGIAN);
+        C(UBLOCK_ARMENIAN, SE_ARMENIAN);
+        C(UBLOCK_ETHIOPIC, SE_ETHIOPIC);
+        C(UBLOCK_GOTHIC, SE_GOTHIC);
+        C(UBLOCK_UGARITIC, SE_UGARITIC);
+        // C(UBLOCK_MEROITIC, SE_MEROITIC);
+        C(UBLOCK_LINEAR_B_SYLLABARY, SE_LINEARB);
+        C(UBLOCK_CYPRIOT_SYLLABARY, SE_CYPRIOT);
+        C(UBLOCK_RUNIC, SE_RUNIC);
+        C(UBLOCK_OGHAM, SE_OGHAM);
+        C(UBLOCK_THAANA, SE_THAANA);
+        C(UBLOCK_GLAGOLITIC, SE_GLAGOLITIC);
+        C(UBLOCK_CHEROKEE, SE_CHEROKEE);
+        // C(UBLOCK_TENGWAR, SE_TENGWAR);
+        // C(UBLOCK_CIRTH, SE_CIRTH);
+        #undef C
+        case UBLOCK_CJK_COMPATIBILITY:
+        case UBLOCK_CJK_COMPATIBILITY_IDEOGRAPHS:
+        case UBLOCK_CJK_COMPATIBILITY_FORMS:
+            compat = true;
+            [[fallthrough]];
+        case UBLOCK_CJK_RADICALS_SUPPLEMENT:
+        case UBLOCK_KANGXI_RADICALS:
+        case UBLOCK_IDEOGRAPHIC_DESCRIPTION_CHARACTERS:
+        case UBLOCK_CJK_SYMBOLS_AND_PUNCTUATION:
+        case UBLOCK_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_A:
+        case UBLOCK_CJK_UNIFIED_IDEOGRAPHS:
+            scripts[SE_HAN] = true;
+            break;
+        case UBLOCK_HANGUL_COMPATIBILITY_JAMO:
+            scripts[SE_HANGUL] = true;
+            compat = true;
+            break;
+        default: break;
         }
-        scripts[selectedOptionIndex] = false; //turn off the reflexive transliteration
+    }
 
-        //return if we have no transliteration to do for this text
-                j = 0;
-                   for (i = 0; !j && i < NUMSCRIPTS; i++) {
-                if (scripts[i]) j++;
-            }
-               if (!j) {
-                        ucnv_close(conv);
-                        return 0;
-                }
+    // Turn off the reflexive transliteration:
+    scripts[selectedOptionIndex] = false;
 
-                if (compat) {
-                        addTrans("NFKD", &ID);
-                }
-                else {
-                        addTrans("NFD", &ID);
-                }
-
-        //Simple X to Latin transliterators
-        if (scripts[SE_GREEK]) {
-            if (strnicmp(module->getLanguage().c_str(), "cop", 3)) {
-                if (selectedOptionIndex == SE_SBL)
-                    addTrans("Greek-Latin/SBL", &ID);
-                else if (selectedOptionIndex == SE_TC)
-                    addTrans("Greek-Latin/TC", &ID);
-                else if (selectedOptionIndex == SE_BETA)
-                    addTrans("Greek-Latin/Beta", &ID);
-                else if (selectedOptionIndex == SE_BGREEK)
-                    addTrans("Greek-Latin/BGreek", &ID);
-                            else if (selectedOptionIndex == SE_UNGEGN)
-                                addTrans("Greek-Latin/UNGEGN", &ID);
-                else if (selectedOptionIndex == SE_ISO)
-                                addTrans("Greek-Latin/ISO", &ID);
-                                else if (selectedOptionIndex == SE_ALALC)
-                                addTrans("Greek-Latin/ALALC", &ID);
-                                else if (selectedOptionIndex == SE_BGN)
-                                addTrans("Greek-Latin/BGN", &ID);
-                                else if (selectedOptionIndex == SE_IPA)
-                                addTrans("Greek-IPA/Ancient", &ID);
-                                else {
-                                addTrans("Greek-Latin", &ID);
-                    scripts[SE_LATIN] = true;
-                                }
-            }
-            else {
-                if (selectedOptionIndex == SE_SBL)
-                    addTrans("Coptic-Latin/SBL", &ID);
-                else if (selectedOptionIndex == SE_TC)
-                    addTrans("Coptic-Latin/TC", &ID);
-                else if (selectedOptionIndex == SE_BETA)
-                    addTrans("Coptic-Latin/Beta", &ID);
-                                else if (selectedOptionIndex == SE_IPA)
-                                addTrans("Coptic-IPA", &ID);
-                                else {
-                                addTrans("Coptic-Latin", &ID);
-                    scripts[SE_LATIN] = true;
-                                }
-            }
-        }
-        if (scripts[SE_HEBREW]) {
-                        if (selectedOptionIndex == SE_SBL)
-                                addTrans("Hebrew-Latin/SBL", &ID);
-                        else if (selectedOptionIndex == SE_TC)
-                                addTrans("Hebrew-Latin/TC", &ID);
-            else if (selectedOptionIndex == SE_BETA)
-                addTrans("Hebrew-Latin/Beta", &ID);
-                        else if (selectedOptionIndex == SE_UNGEGN)
-                                addTrans("Hebrew-Latin/UNGEGN", &ID);
-                        else if (selectedOptionIndex == SE_ALALC)
-                                addTrans("Hebrew-Latin/ALALC", &ID);
-                        else if (selectedOptionIndex == SE_SYRIAC)
-                                addTrans("Hebrew-Syriac", &ID);
-            else {
-                addTrans("Hebrew-Latin", &ID);
-                                scripts[SE_LATIN] = true;
-            }
-        }
-        if (scripts[SE_CYRILLIC]) {
-                    if (selectedOptionIndex == SE_GLAGOLITIC)
-                            addTrans("Cyrillic-Glagolitic", &ID);
-                    else {
-                addTrans("Cyrillic-Latin", &ID);
-                scripts[SE_LATIN] = true;
-                        }
-        }
-        if (scripts[SE_ARABIC]) {
-            addTrans("Arabic-Latin", &ID);
-            scripts[SE_LATIN] = true;
-        }
-        if (scripts[SE_SYRIAC]) {
-                        if (selectedOptionIndex == SE_TC)
-                                addTrans("Syriac-Latin/TC", &ID);
-                        else if (selectedOptionIndex == SE_BETA)
-                    addTrans("Syriac-Latin/Beta", &ID);
-                        else if (selectedOptionIndex == SE_HUGOYE)
-                    addTrans("Syriac-Latin/Hugoye", &ID);
-                        else if (selectedOptionIndex == SE_HEBREW)
-                                addTrans("Syriac-Hebrew", &ID);
-                        else {
-                    addTrans("Syriac-Latin", &ID);
-                    scripts[SE_LATIN] = true;
-                        }
-        }
-        if (scripts[SE_THAI]) {
-            addTrans("Thai-Latin", &ID);
-            scripts[SE_LATIN] = true;
-        }
-        if (scripts[SE_GEORGIAN]) {
-                        if (selectedOptionIndex == SE_ISO)
-                    addTrans("Georgian-Latin/ISO", &ID);
-                        else if (selectedOptionIndex == SE_ALALC)
-                    addTrans("Georgian-Latin/ALALC", &ID);
-                        else if (selectedOptionIndex == SE_BGN)
-                    addTrans("Georgian-Latin/BGN", &ID);
-                        else if (selectedOptionIndex == SE_IPA)
-                    addTrans("Georgian-IPA", &ID);
-                        else {
-                addTrans("Georgian-Latin", &ID);
-                scripts[SE_LATIN] = true;
-                        }
-        }
-        if (scripts[SE_ARMENIAN]) {
-                        if (selectedOptionIndex == SE_ISO)
-                    addTrans("Armenian-Latin/ISO", &ID);
-                        else if (selectedOptionIndex == SE_ALALC)
-                    addTrans("Armenian-Latin/ALALC", &ID);
-                        else if (selectedOptionIndex == SE_BGN)
-                    addTrans("Armenian-Latin/BGN", &ID);
-                        else if (selectedOptionIndex == SE_IPA)
-                    addTrans("Armenian-IPA", &ID);
-                        else {
-                addTrans("Armenian-Latin", &ID);
-                scripts[SE_LATIN] = true;
-                    }
-        }
-        if (scripts[SE_ETHIOPIC]) {
-                        if (selectedOptionIndex == SE_UNGEGN)
-                    addTrans("Ethiopic-Latin/UNGEGN", &ID);
-                        else if (selectedOptionIndex == SE_ISO)
-                    addTrans("Ethiopic-Latin/ISO", &ID);
-                        else if (selectedOptionIndex == SE_ALALC)
-                    addTrans("Ethiopic-Latin/ALALC", &ID);
-                        else if (selectedOptionIndex == SE_SERA)
-                    addTrans("Ethiopic-Latin/SERA", &ID);
-                    else {
-                addTrans("Ethiopic-Latin", &ID);
-                scripts[SE_LATIN] = true;
-                        }
-        }
-        if (scripts[SE_GOTHIC]) {
-                        if (selectedOptionIndex == SE_BASICLATIN)
-                    addTrans("Gothic-Latin/Basic", &ID);
-                        else if (selectedOptionIndex == SE_IPA)
-                    addTrans("Gothic-IPA", &ID);
-                    else {
-                addTrans("Gothic-Latin", &ID);
-                scripts[SE_LATIN] = true;
-                        }
-        }
-        if (scripts[SE_UGARITIC]) {
-                    if (selectedOptionIndex == SE_SBL)
-                            addTrans("Ugaritic-Latin/SBL", &ID);
-                        else {
-                addTrans("Ugaritic-Latin", &ID);
-                scripts[SE_LATIN] = true;
-                        }
-        }
-        if (scripts[SE_MEROITIC]) {
-            addTrans("Meroitic-Latin", &ID);
-            scripts[SE_LATIN] = true;
-        }
-        if (scripts[SE_LINEARB]) {
-            addTrans("LinearB-Latin", &ID);
-            scripts[SE_LATIN] = true;
-        }
-        if (scripts[SE_CYPRIOT]) {
-            addTrans("Cypriot-Latin", &ID);
-            scripts[SE_LATIN] = true;
-        }
-        if (scripts[SE_RUNIC]) {
-            addTrans("Runic-Latin", &ID);
-            scripts[SE_LATIN] = true;
-        }
-        if (scripts[SE_OGHAM]) {
-            addTrans("Ogham-Latin", &ID);
-            scripts[SE_LATIN] = true;
-        }
-        if (scripts[SE_THAANA]) {
-            if (selectedOptionIndex == SE_ALALC)
-                            addTrans("Thaana-Latin/ALALC", &ID);
-            else if (selectedOptionIndex == SE_BGN)
-                            addTrans("Thaana-Latin/BGN", &ID);
-            else {
-                addTrans("Thaana-Latin", &ID);
-                scripts[SE_LATIN] = true;
-                        }
-        }
-        if (scripts[SE_GLAGOLITIC]) {
-            if (selectedOptionIndex == SE_ISO)
-                            addTrans("Glagolitic-Latin/ISO", &ID);
-            else if (selectedOptionIndex == SE_ALALC)
-                            addTrans("Glagolitic-Latin/ALALC", &ID);
-            else if (selectedOptionIndex == SE_ALALC)
-                            addTrans("Glagolitic-Cyrillic", &ID);
-            else {
-                addTrans("Glagolitic-Latin", &ID);
-                scripts[SE_LATIN] = true;
-                        }
-        }
-        if (scripts[SE_CHEROKEE]) {
-            addTrans("Cherokee-Latin", &ID);
-            scripts[SE_LATIN] = true;
-        }
-        if (scripts[SE_THAI]) {
-            addTrans("Thai-Latin", &ID);
-            scripts[SE_LATIN] = true;
-        }
-        if (scripts[SE_THAI]) {
-            addTrans("Thai-Latin", &ID);
-            scripts[SE_LATIN] = true;
-        }
-
-        if (scripts[SE_HAN]) {
-                if (!strnicmp(module->getLanguage().c_str(), "ja", 2)) {
-                     addTrans("Kanji-Romaji", &ID);
-            }
-            else {
-                       addTrans("Han-Latin", &ID);
-            }
-            scripts[SE_LATIN] = true;
-        }
-
-               // Inter-Kana and Kana to Latin transliterators
-        if (selectedOptionIndex == SE_HIRAGANA && scripts[SE_KATAKANA]) {
-            addTrans("Katakana-Hiragana", &ID);
-            scripts[SE_HIRAGANA] = true;
-        }
-        else if (selectedOptionIndex == SE_KATAKANA && scripts[SE_HIRAGANA]) {
-            addTrans("Hiragana-Katakana", &ID);
-            scripts[SE_KATAKANA] = true;
-        }
-        else {
-                if (scripts[SE_KATAKANA]) {
-                    addTrans("Katakana-Latin", &ID);
-                    scripts[SE_LATIN] = true;
-                }
-                if (scripts[SE_HIRAGANA]) {
-                    addTrans("Hiragana-Latin", &ID);
-                    scripts[SE_LATIN] = true;
-                }
-                }
-
-        // Korean to Latin transliterators
-        if (scripts[SE_HANGUL]) {
-            addTrans("Hangul-Latin", &ID);
-            scripts[SE_LATIN] = true;
-        }
-        if (scripts[SE_JAMO]) {
-            addTrans("Jamo-Latin", &ID);
-            scripts[SE_LATIN] = true;
-        }
-
-        // Indic-Latin
-        if (selectedOptionIndex < SE_DEVANAGARI || selectedOptionIndex > SE_MALAYALAM) {
-            // Indic to Latin
-            if (scripts[SE_TAMIL]) {
-                addTrans("Tamil-Latin", &ID);
-                scripts[SE_LATIN] = true;
-            }
-            if (scripts[SE_BENGALI]) {
-                addTrans("Bengali-Latin", &ID);
-                scripts[SE_LATIN] = true;
-            }
-            if (scripts[SE_GURMUKHI]) {
-                addTrans("Gurmukhi-Latin", &ID);
-                scripts[SE_LATIN] = true;
-            }
-            if (scripts[SE_GUJARATI]) {
-                addTrans("Gujarati-Latin", &ID);
-                scripts[SE_LATIN] = true;
-            }
-            if (scripts[SE_ORIYA]) {
-                addTrans("Oriya-Latin", &ID);
-                scripts[SE_LATIN] = true;
-            }
-            if (scripts[SE_TELUGU]) {
-                addTrans("Telugu-Latin", &ID);
-                scripts[SE_LATIN] = true;
-            }
-            if (scripts[SE_KANNADA]) {
-                addTrans("Kannada-Latin", &ID);
-                scripts[SE_LATIN] = true;
-            }
-            if (scripts[SE_MALAYALAM]) {
-                addTrans("Malayalam-Latin", &ID);
-                scripts[SE_LATIN] = true;
-            }
-        }
-        else {
-            if (scripts[SE_LATIN]) {
-                addTrans("Latin-InterIndic", &ID);
-            }
-            if (scripts[SE_DEVANAGARI]) {
-                addTrans("Devanagari-InterIndic", &ID);
-            }
-            if (scripts[SE_TAMIL]) {
-                addTrans("Tamil-InterIndic", &ID);
-            }
-            if (scripts[SE_BENGALI]) {
-                addTrans("Bengali-InterIndic", &ID);
-            }
-            if (scripts[SE_GURMUKHI]) {
-                addTrans("Gurmurkhi-InterIndic", &ID);
-            }
-            if (scripts[SE_GUJARATI]) {
-                addTrans("Gujarati-InterIndic", &ID);
-            }
-            if (scripts[SE_ORIYA]) {
-                addTrans("Oriya-InterIndic", &ID);
-            }
-            if (scripts[SE_TELUGU]) {
-                addTrans("Telugu-InterIndic", &ID);
-            }
-            if (scripts[SE_KANNADA]) {
-                addTrans("Kannada-InterIndic", &ID);
-            }
-            if (scripts[SE_MALAYALAM]) {
-                addTrans("Malayalam-InterIndic", &ID);
-            }
-
-            switch(selectedOptionIndex) {
-            case SE_DEVANAGARI:
-                addTrans("InterIndic-Devanagari", &ID);
-                break;
-            case SE_TAMIL:
-                addTrans("InterIndic-Tamil", &ID);
-                break;
-            case SE_BENGALI:
-                addTrans("InterIndic-Bengali", &ID);
-                break;
-            case SE_GURMUKHI:
-                addTrans("InterIndic-Gurmukhi", &ID);
-                break;
-            case SE_GUJARATI:
-                addTrans("InterIndic-Gujarati", &ID);
-                break;
-            case SE_ORIYA:
-                addTrans("InterIndic-Oriya", &ID);
-                break;
-            case SE_TELUGU:
-                addTrans("InterIndic-Telugu", &ID);
-                break;
-            case SE_KANNADA:
-                addTrans("InterIndic-Kannada", &ID);
-                break;
-            case SE_MALAYALAM:
-                addTrans("InterIndic-Malayalam", &ID);
-                break;
-            default:
-                addTrans("InterIndic-Latin", &ID);
-                scripts[SE_LATIN] = true;
+    { // Return if we have no transliteration to do for this text:
+        bool needTransliteration = false;
+        for (auto script : scripts) {
+            if (script) {
+                needTransliteration = true;
                 break;
             }
         }
+        if (!needTransliteration)
+            return 0;
+    }
 
-//        if (scripts[SE_TENGWAR]) {
-//            addTrans("Tengwar-Latin", &ID);
-//            scripts[SE_LATIN] = true;
-//        }
-//        if (scripts[SE_CIRTH]) {
-//            addTrans("Cirth-Latin", &ID);
-//            scripts[SE_LATIN] = true;
-//        }
+    addTrans(compat ? "NFKD": "NFD");
 
-        if (scripts[SE_LATIN]) {
-                switch (selectedOptionIndex) {
-                        case SE_GREEK:
-                addTrans("Latin-Greek", &ID);
-                                break;
-                        case SE_HEBREW:
-                addTrans("Latin-Hebrew", &ID);
-                                break;
-                        case SE_CYRILLIC:
-                addTrans("Latin-Cyrillic", &ID);
-                                break;
-                        case SE_ARABIC:
-                addTrans("Latin-Arabic", &ID);
-                                break;
-                        case SE_SYRIAC:
-                addTrans("Latin-Syriac", &ID);
-                                break;
-                        case SE_THAI:
-                addTrans("Latin-Thai", &ID);
-                                break;
-                        case SE_GEORGIAN:
-                addTrans("Latin-Georgian", &ID);
-                                break;
-                        case SE_ARMENIAN:
-                addTrans("Latin-Armenian", &ID);
-                                break;
-                        case SE_ETHIOPIC:
-                addTrans("Latin-Ethiopic", &ID);
-                                break;
-                        case SE_GOTHIC:
-                addTrans("Latin-Gothic", &ID);
-                                break;
-                        case SE_UGARITIC:
-                addTrans("Latin-Ugaritic", &ID);
-                                break;
-                        case SE_COPTIC:
-                addTrans("Latin-Coptic", &ID);
-                                break;
-                        case SE_KATAKANA:
-                addTrans("Latin-Katakana", &ID);
-                                break;
-                        case SE_HIRAGANA:
-                addTrans("Latin-Hiragana", &ID);
-                                break;
-                        case SE_JAMO:
-                addTrans("Latin-Jamo", &ID);
-                                break;
-                        case SE_HANGUL:
-                addTrans("Latin-Hangul", &ID);
-                                break;
-                        case SE_MEROITIC:
-                addTrans("Latin-Meroitic", &ID);
-                                break;
-                        case SE_LINEARB:
-                addTrans("Latin-LinearB", &ID);
-                                break;
-                        case SE_CYPRIOT:
-                addTrans("Latin-Cypriot", &ID);
-                                break;
-                        case SE_RUNIC:
-                addTrans("Latin-Runic", &ID);
-                                break;
-                        case SE_OGHAM:
-                addTrans("Latin-Ogham", &ID);
-                                break;
-                        case SE_THAANA:
-                addTrans("Latin-Thaana", &ID);
-                                break;
-                        case SE_GLAGOLITIC:
-                addTrans("Latin-Glagolitic", &ID);
-                                break;
-                        case SE_CHEROKEE:
-                addTrans("Latin-Cherokee", &ID);
-                                break;
-//                        case SE_TENGWAR:
-//                addTrans("Latin-Tengwar", &ID);
-//                                break;
-//                        case SE_CIRTH:
-//                addTrans("Latin-Cirth", &ID);
-//                                break;
-                        }
-                }
-
-                if (selectedOptionIndex == SE_BASICLATIN) {
-                        addTrans("Any-Latin1", &ID);
-                }
-
-                addTrans("NFC", &ID);
-
-                err = U_ZERO_ERROR;
-                if (auto const trans = createTrans(icu::UnicodeString(ID.c_str()),
-                                                   UTRANS_FORWARD,
-                                                   err))
-                {
-                    if (!U_FAILURE(err)) {
-                        icu::UnicodeString target = icu::UnicodeString(source.get());
-                        trans->transliterate(target);
-                        text.resize(text.size() * 2u, '\0');
-                        len = ucnv_fromUChars(conv, &text[0u], text.size(), target.getBuffer(), target.length(), &err);
-                        text.resize(len, '\0');
-                    }
-                }
-                ucnv_close(conv);
+    // Simple X to Latin transliterators:
+    if (scripts[SE_GREEK]) {
+        if (strnicmp(module->getLanguage().c_str(), "cop", 3)) {
+            if (selectedOptionIndex == SE_SBL) {
+                addTrans("Greek-Latin/SBL");
+            } else if (selectedOptionIndex == SE_TC) {
+                addTrans("Greek-Latin/TC");
+            } else if (selectedOptionIndex == SE_BETA) {
+                addTrans("Greek-Latin/Beta");
+            } else if (selectedOptionIndex == SE_BGREEK) {
+                addTrans("Greek-Latin/BGreek");
+            } else if (selectedOptionIndex == SE_UNGEGN) {
+                addTrans("Greek-Latin/UNGEGN");
+            } else if (selectedOptionIndex == SE_ISO) {
+                addTrans("Greek-Latin/ISO");
+            } else if (selectedOptionIndex == SE_ALALC) {
+                addTrans("Greek-Latin/ALALC");
+            } else if (selectedOptionIndex == SE_BGN) {
+                addTrans("Greek-Latin/BGN");
+            } else if (selectedOptionIndex == SE_IPA) {
+                addTrans("Greek-IPA/Ancient");
+            } else {
+                addTrans("Greek-Latin");
+                scripts[SE_LATIN] = true;
+            }
+        } else {
+            if (selectedOptionIndex == SE_SBL) {
+                addTrans("Coptic-Latin/SBL");
+            } else if (selectedOptionIndex == SE_TC) {
+                addTrans("Coptic-Latin/TC");
+            } else if (selectedOptionIndex == SE_BETA) {
+                addTrans("Coptic-Latin/Beta");
+            } else if (selectedOptionIndex == SE_IPA) {
+                addTrans("Coptic-IPA");
+            } else {
+                addTrans("Coptic-Latin");
+                scripts[SE_LATIN] = true;
+            }
         }
+    }
+    if (scripts[SE_HEBREW]) {
+        if (selectedOptionIndex == SE_SBL) {
+            addTrans("Hebrew-Latin/SBL");
+        } else if (selectedOptionIndex == SE_TC) {
+            addTrans("Hebrew-Latin/TC");
+        } else if (selectedOptionIndex == SE_BETA) {
+            addTrans("Hebrew-Latin/Beta");
+        } else if (selectedOptionIndex == SE_UNGEGN) {
+            addTrans("Hebrew-Latin/UNGEGN");
+        } else if (selectedOptionIndex == SE_ALALC) {
+            addTrans("Hebrew-Latin/ALALC");
+        } else if (selectedOptionIndex == SE_SYRIAC) {
+            addTrans("Hebrew-Syriac");
+        } else {
+            addTrans("Hebrew-Latin");
+            scripts[SE_LATIN] = true;
+        }
+    }
+    if (scripts[SE_CYRILLIC]) {
+        if (selectedOptionIndex == SE_GLAGOLITIC) {
+            addTrans("Cyrillic-Glagolitic");
+        } else {
+            addTrans("Cyrillic-Latin");
+            scripts[SE_LATIN] = true;
+        }
+    }
+    if (scripts[SE_ARABIC]) {
+        addTrans("Arabic-Latin");
+        scripts[SE_LATIN] = true;
+    }
+    if (scripts[SE_SYRIAC]) {
+        if (selectedOptionIndex == SE_TC) {
+            addTrans("Syriac-Latin/TC");
+        } else if (selectedOptionIndex == SE_BETA) {
+            addTrans("Syriac-Latin/Beta");
+        } else if (selectedOptionIndex == SE_HUGOYE) {
+            addTrans("Syriac-Latin/Hugoye");
+        } else if (selectedOptionIndex == SE_HEBREW) {
+            addTrans("Syriac-Hebrew");
+        } else {
+            addTrans("Syriac-Latin");
+            scripts[SE_LATIN] = true;
+        }
+    }
+    if (scripts[SE_THAI]) {
+        addTrans("Thai-Latin");
+        scripts[SE_LATIN] = true;
+    }
+    if (scripts[SE_GEORGIAN]) {
+        if (selectedOptionIndex == SE_ISO) {
+            addTrans("Georgian-Latin/ISO");
+        } else if (selectedOptionIndex == SE_ALALC) {
+            addTrans("Georgian-Latin/ALALC");
+        } else if (selectedOptionIndex == SE_BGN) {
+            addTrans("Georgian-Latin/BGN");
+        } else if (selectedOptionIndex == SE_IPA) {
+            addTrans("Georgian-IPA");
+        } else {
+            addTrans("Georgian-Latin");
+            scripts[SE_LATIN] = true;
+        }
+    }
+    if (scripts[SE_ARMENIAN]) {
+        if (selectedOptionIndex == SE_ISO) {
+            addTrans("Armenian-Latin/ISO");
+        } else if (selectedOptionIndex == SE_ALALC) {
+            addTrans("Armenian-Latin/ALALC");
+        } else if (selectedOptionIndex == SE_BGN) {
+            addTrans("Armenian-Latin/BGN");
+        } else if (selectedOptionIndex == SE_IPA) {
+            addTrans("Armenian-IPA");
+        } else {
+            addTrans("Armenian-Latin");
+            scripts[SE_LATIN] = true;
+        }
+    }
+    if (scripts[SE_ETHIOPIC]) {
+        if (selectedOptionIndex == SE_UNGEGN) {
+            addTrans("Ethiopic-Latin/UNGEGN");
+        } else if (selectedOptionIndex == SE_ISO) {
+            addTrans("Ethiopic-Latin/ISO");
+        } else if (selectedOptionIndex == SE_ALALC) {
+            addTrans("Ethiopic-Latin/ALALC");
+        } else if (selectedOptionIndex == SE_SERA) {
+            addTrans("Ethiopic-Latin/SERA");
+        } else {
+            addTrans("Ethiopic-Latin");
+            scripts[SE_LATIN] = true;
+        }
+    }
+    if (scripts[SE_GOTHIC]) {
+        if (selectedOptionIndex == SE_BASICLATIN) {
+            addTrans("Gothic-Latin/Basic");
+        } else if (selectedOptionIndex == SE_IPA) {
+            addTrans("Gothic-IPA");
+        } else {
+            addTrans("Gothic-Latin");
+            scripts[SE_LATIN] = true;
+        }
+    }
+    if (scripts[SE_UGARITIC]) {
+        if (selectedOptionIndex == SE_SBL) {
+            addTrans("Ugaritic-Latin/SBL");
+        } else {
+            addTrans("Ugaritic-Latin");
+            scripts[SE_LATIN] = true;
+        }
+    }
+    if (scripts[SE_MEROITIC]) {
+        addTrans("Meroitic-Latin");
+        scripts[SE_LATIN] = true;
+    }
+    if (scripts[SE_LINEARB]) {
+        addTrans("LinearB-Latin");
+        scripts[SE_LATIN] = true;
+    }
+    if (scripts[SE_CYPRIOT]) {
+        addTrans("Cypriot-Latin");
+        scripts[SE_LATIN] = true;
+    }
+    if (scripts[SE_RUNIC]) {
+        addTrans("Runic-Latin");
+        scripts[SE_LATIN] = true;
+    }
+    if (scripts[SE_OGHAM]) {
+        addTrans("Ogham-Latin");
+        scripts[SE_LATIN] = true;
+    }
+    if (scripts[SE_THAANA]) {
+        if (selectedOptionIndex == SE_ALALC) {
+            addTrans("Thaana-Latin/ALALC");
+        } else if (selectedOptionIndex == SE_BGN) {
+            addTrans("Thaana-Latin/BGN");
+        } else {
+            addTrans("Thaana-Latin");
+            scripts[SE_LATIN] = true;
+        }
+    }
+    if (scripts[SE_GLAGOLITIC]) {
+        if (selectedOptionIndex == SE_ISO) {
+            addTrans("Glagolitic-Latin/ISO");
+        } else if (selectedOptionIndex == SE_ALALC) {
+            addTrans("Glagolitic-Latin/ALALC");
+        } else if (selectedOptionIndex == SE_ALALC) {
+            addTrans("Glagolitic-Cyrillic");
+        } else {
+            addTrans("Glagolitic-Latin");
+            scripts[SE_LATIN] = true;
+        }
+    }
+    if (scripts[SE_CHEROKEE]) {
+        addTrans("Cherokee-Latin");
+        scripts[SE_LATIN] = true;
+    }
+    if (scripts[SE_THAI]) {
+        addTrans("Thai-Latin");
+        scripts[SE_LATIN] = true;
+    }
+    if (scripts[SE_THAI]) {
+        addTrans("Thai-Latin");
+        scripts[SE_LATIN] = true;
+    }
+
+    if (scripts[SE_HAN]) {
+        if (!strnicmp(module->getLanguage().c_str(), "ja", 2)) {
+            addTrans("Kanji-Romaji");
+        } else {
+            addTrans("Han-Latin");
+        }
+        scripts[SE_LATIN] = true;
+    }
+
+    // Inter-Kana and Kana to Latin transliterators:
+    if (selectedOptionIndex == SE_HIRAGANA && scripts[SE_KATAKANA]) {
+        addTrans("Katakana-Hiragana");
+        scripts[SE_HIRAGANA] = true;
+    } else if (selectedOptionIndex == SE_KATAKANA && scripts[SE_HIRAGANA]) {
+        addTrans("Hiragana-Katakana");
+        scripts[SE_KATAKANA] = true;
+    } else {
+        if (scripts[SE_KATAKANA]) {
+            addTrans("Katakana-Latin");
+            scripts[SE_LATIN] = true;
+        }
+        if (scripts[SE_HIRAGANA]) {
+            addTrans("Hiragana-Latin");
+            scripts[SE_LATIN] = true;
+        }
+    }
+
+    // Korean to Latin transliterators:
+    if (scripts[SE_HANGUL]) {
+        addTrans("Hangul-Latin");
+        scripts[SE_LATIN] = true;
+    }
+    if (scripts[SE_JAMO]) {
+        addTrans("Jamo-Latin");
+        scripts[SE_LATIN] = true;
+    }
+
+    // Indic-Latin:
+    if (selectedOptionIndex < SE_DEVANAGARI
+        || selectedOptionIndex > SE_MALAYALAM)
+    {
+        // Indic to Latin:
+        if (scripts[SE_TAMIL]) {
+            addTrans("Tamil-Latin");
+            scripts[SE_LATIN] = true;
+        }
+        if (scripts[SE_BENGALI]) {
+            addTrans("Bengali-Latin");
+            scripts[SE_LATIN] = true;
+        }
+        if (scripts[SE_GURMUKHI]) {
+            addTrans("Gurmukhi-Latin");
+            scripts[SE_LATIN] = true;
+        }
+        if (scripts[SE_GUJARATI]) {
+            addTrans("Gujarati-Latin");
+            scripts[SE_LATIN] = true;
+        }
+        if (scripts[SE_ORIYA]) {
+            addTrans("Oriya-Latin");
+            scripts[SE_LATIN] = true;
+        }
+        if (scripts[SE_TELUGU]) {
+            addTrans("Telugu-Latin");
+            scripts[SE_LATIN] = true;
+        }
+        if (scripts[SE_KANNADA]) {
+            addTrans("Kannada-Latin");
+            scripts[SE_LATIN] = true;
+        }
+        if (scripts[SE_MALAYALAM]) {
+            addTrans("Malayalam-Latin");
+            scripts[SE_LATIN] = true;
+        }
+    } else {
+        if (scripts[SE_LATIN])
+            addTrans("Latin-InterIndic");
+        if (scripts[SE_DEVANAGARI])
+            addTrans("Devanagari-InterIndic");
+        if (scripts[SE_TAMIL])
+            addTrans("Tamil-InterIndic");
+        if (scripts[SE_BENGALI])
+            addTrans("Bengali-InterIndic");
+        if (scripts[SE_GURMUKHI])
+            addTrans("Gurmurkhi-InterIndic");
+        if (scripts[SE_GUJARATI])
+            addTrans("Gujarati-InterIndic");
+        if (scripts[SE_ORIYA])
+            addTrans("Oriya-InterIndic");
+        if (scripts[SE_TELUGU])
+            addTrans("Telugu-InterIndic");
+        if (scripts[SE_KANNADA])
+            addTrans("Kannada-InterIndic");
+        if (scripts[SE_MALAYALAM])
+            addTrans("Malayalam-InterIndic");
+
+        switch(selectedOptionIndex) {
+        #define C(se,ses) case se: addTrans("InterIndic-" ses); break
+        C(SE_DEVANAGARI, "Devanagari");
+        C(SE_TAMIL, "Tamil");
+        C(SE_BENGALI, "Bengali");
+        C(SE_GURMUKHI, "Gurmukhi");
+        C(SE_GUJARATI, "Gujarati");
+        C(SE_ORIYA, "Oriya");
+        C(SE_TELUGU, "Telugu");
+        C(SE_KANNADA, "Kannada");
+        C(SE_MALAYALAM, "Malayalam");
+        #undef C
+        default:
+            addTrans("InterIndic-Latin");
+            scripts[SE_LATIN] = true;
+            break;
+        }
+    }
+
+    #if 0
+    if (scripts[SE_TENGWAR]) {
+        addTrans("Tengwar-Latin");
+        scripts[SE_LATIN] = true;
+    }
+    if (scripts[SE_CIRTH]) {
+        addTrans("Cirth-Latin");
+        scripts[SE_LATIN] = true;
+    }
+    #endif
+
+    if (scripts[SE_LATIN]) {
+        switch (selectedOptionIndex) {
+        #define C(se,ses) case se: addTrans("Latin-" ses); break
+        C(SE_GREEK, "Greek");
+        C(SE_HEBREW, "Hebrew");
+        C(SE_CYRILLIC, "Cyrillic");
+        C(SE_ARABIC, "Arabic");
+        C(SE_SYRIAC, "Syriac");
+        C(SE_THAI, "Thai");
+        C(SE_GEORGIAN, "Georgian");
+        C(SE_ARMENIAN, "Armenian");
+        C(SE_ETHIOPIC, "Ethiopic");
+        C(SE_GOTHIC, "Gothic");
+        C(SE_UGARITIC, "Ugaritic");
+        C(SE_COPTIC, "Coptic");
+        C(SE_KATAKANA, "Katakana");
+        C(SE_HIRAGANA, "Hiragana");
+        C(SE_JAMO, "Jamo");
+        C(SE_HANGUL, "Hangul");
+        C(SE_MEROITIC, "Meroitic");
+        C(SE_LINEARB, "LinearB");
+        C(SE_CYPRIOT, "Cypriot");
+        C(SE_RUNIC, "Runic");
+        C(SE_OGHAM, "Ogham");
+        C(SE_THAANA, "Thaana");
+        C(SE_GLAGOLITIC, "Glagolitic");
+        C(SE_CHEROKEE, "Cherokee");
+        // C(SE_TENGWAR, "Tengwar");
+        // C(SE_CIRTH:, "Cirth");
+        #undef C
+        }
+    }
+
+    if (selectedOptionIndex == SE_BASICLATIN)
+        addTrans("Any-Latin1");
+
+    addTrans("NFC");
+
+    if (auto const trans = createTrans(id)) {
+        icu::UnicodeString target(source.data());
+        trans->transliterate(target);
+        UErrorCode err = U_ZERO_ERROR;
+        auto const len = ::ucnv_fromUChars(conv.get(),
+                                           nullptr,
+                                           0,
+                                           target.getBuffer(),
+                                           target.length(),
+                                           &err);
+        assert(len >= 0);
+        std::string out;
+        static_assert(max_v<decltype(len)>
+                      <= max_v<decltype(out)::size_type>, "");
+        out.resize(static_cast<decltype(out)::size_type>(len));
+        ::ucnv_fromUChars(conv.get(),
+                          out.data(),
+                          len,
+                          target.getBuffer(),
+                          target.length(),
+                          &err);
+        text.swap(out);
+    }
     return 0;
 }
 

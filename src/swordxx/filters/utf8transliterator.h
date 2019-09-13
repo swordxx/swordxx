@@ -1,9 +1,5 @@
 /******************************************************************************
  *
- *  utf8transliterator.h -    Implementation of UTF8Transliterator
- *
- * $Id$
- *
  * Copyright 2001-2013 CrossWire Bible Society (http://www.crosswire.org)
  *    CrossWire Bible Society
  *    P. O. Box 2528
@@ -25,46 +21,26 @@
 
 #include "../swoptfilter.h"
 
-#include <map>
-#include <memory>
-#include <list>
-#include <string>
-#include <unicode/translit.h>
-#include <unicode/unistr.h>
 #include "../defs.h"
 
 
 namespace swordxx {
 
 class SWModule;
+class SWKey;
 
-struct SWTransData {
-    icu::UnicodeString resource;
-    UTransDirection dir;
-};
-using SWTransMap = std::map<icu::UnicodeString const, SWTransData>;
-using SWTransPair = std::pair<icu::UnicodeString, SWTransData>;
-
-/** This Filter uses ICU for transliteration
-*/
 class SWDLLEXPORT UTF8Transliterator : public SWOptionFilter {
-private:
 
-    bool addTrans(const char* newTrans, std::string* transList);
-    std::unique_ptr<icu::Transliterator> createTrans(
-            icu::UnicodeString const & ID,
-            UTransDirection dir,
-            UErrorCode & status);
+public: /* Methods: */
 
-public:
     UTF8Transliterator();
     ~UTF8Transliterator() override;
 
     char processText(std::string & text,
-                         SWKey const * key = nullptr,
-                         SWModule const * module = nullptr) override;
+                     SWKey const * key = nullptr,
+                     SWModule const * module = nullptr) override;
 
-};
+}; /* class UTF8Transliterator */
 
 } /* namespace swordxx */
 
