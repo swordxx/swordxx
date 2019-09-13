@@ -13,17 +13,16 @@
  *
  */
 
-#ifndef SWORDXX_MAXOFTYPE_H
-#define SWORDXX_MAXOFTYPE_H
+#ifndef SWORDXX_MAX_V_H
+#define SWORDXX_MAX_V_H
 
 #include <limits>
 
 
 namespace swordxx {
 
-template <typename T>
-constexpr auto maxOfType = std::numeric_limits<T>::max();
+template <typename T> constexpr auto max_v = std::numeric_limits<T>::max();
 
 } /* namespace swordxx */
 
-#endif /* SWORDXX_MAXOFTYPE_H */
+#endif /* SWORDXX_MAX_V_H */
