@@ -30,6 +30,7 @@
 #include <unicode/unistr.h>
 #include <vector>
 #include "../max_v.h"
+#include "../SignConversion.h"
 #include "../swlog.h"
 #include "../swmodule.h"
 #include "../utilstr.h"
@@ -85,7 +86,7 @@ char UTF8Transliterator::processText(std::string & text,
     if (!selectedOptionIndex)
         return 0;
 
-    std::unique_ptr<::UConverter, void (*)(::UConverter * conv)> conv(
+    std::unique_ptr<::UConverter, void (*)(::UConverter *)> conv(
                 []() {
                     ::UErrorCode err = U_ZERO_ERROR;
                     return ::ucnv_open("UTF-8", &err);
@@ -105,7 +106,7 @@ char UTF8Transliterator::processText(std::string & text,
     {
         UErrorCode err = U_ZERO_ERROR;
         auto const sourceLen = std::strlen(text.c_str());
-        if (sourceLen >= max_v<std::int32_t>)
+        if (sourceLen >= toUnsigned(max_v<std::int32_t>))
             throw std::runtime_error("Implementation limits reached!");
         auto const len = ::ucnv_toUChars(conv.get(),
                                          nullptr,
@@ -116,12 +117,11 @@ char UTF8Transliterator::processText(std::string & text,
         if (U_FAILURE(err))
             throw std::runtime_error("::ucnv_toUChars() failed!");
         assert(len >= 0);
-        static_assert(max_v<decltype(len)>
-                      <= max_v<decltype(source)::size_type>, "");
-        if (static_cast<std::size_t>(len) >= max_v<decltype(source)::size_type>)
-            throw std::bad_array_new_length();
+        if constexpr (toUnsigned(max_v<decltype(len)>)
+                      >= max_v<decltype(source)::size_type>)
+            if (toUnsigned(len) >= max_v<decltype(source)::size_type>)
+                throw std::runtime_error("Implementation limits reached!");
         source.resize(static_cast<std::size_t>(len) + 1u);
-
         err = U_ZERO_ERROR;
         ::ucnv_toUChars(conv.get(),
                         source.data(),
@@ -598,9 +598,11 @@ char UTF8Transliterator::processText(std::string & text,
             throw std::runtime_error("::ucnv_fromUChars() failed!");
         assert(len >= 0);
         std::string out;
-        static_assert(max_v<decltype(len)>
-                      <= max_v<decltype(out)::size_type>, "");
-        out.resize(static_cast<decltype(out)::size_type>(len));
+        if constexpr (toUnsigned(max_v<decltype(len)>)
+                      > max_v<decltype(out)::size_type>)
+            if (toUnsigned(len) > max_v<decltype(out)::size_type>)
+                throw std::runtime_error("Implementation limits reached!");
+        out.resize(static_cast<decltype(out)::size_type>(toUnsigned(len)));
         err = U_ZERO_ERROR;
         ::ucnv_fromUChars(conv.get(),
                           out.data(),
