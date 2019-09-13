@@ -129,6 +129,8 @@ char UTF8Transliterator::processText(std::string & text,
                         text.c_str(),
                         static_cast<std::int32_t>(sourceLen),
                         &err);
+        if (U_FAILURE(err))
+            throw std::runtime_error("::ucnv_toUChars() failed!");
         source.back() = 0;
     }
 
@@ -592,17 +594,22 @@ char UTF8Transliterator::processText(std::string & text,
                                            target.getBuffer(),
                                            target.length(),
                                            &err);
+        if (U_FAILURE(err))
+            throw std::runtime_error("::ucnv_fromUChars() failed!");
         assert(len >= 0);
         std::string out;
         static_assert(max_v<decltype(len)>
                       <= max_v<decltype(out)::size_type>, "");
         out.resize(static_cast<decltype(out)::size_type>(len));
+        err = U_ZERO_ERROR;
         ::ucnv_fromUChars(conv.get(),
                           out.data(),
                           len,
                           target.getBuffer(),
                           target.length(),
                           &err);
+        if (U_FAILURE(err))
+            throw std::runtime_error("::ucnv_fromUChars() failed!");
         text.swap(out);
     }
     return 0;
