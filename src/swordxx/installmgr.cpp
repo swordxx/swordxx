@@ -574,7 +574,7 @@ int InstallMgr::remoteCopy(InstallSource & is,
     std::shared_ptr<RemoteTransport> trans;
     if (is.m_type == "FTP"
 #if SWORDXX_CURL_HAS_SFTP
-        || is->type == "SFTP"
+        || is.m_type == "SFTP"
 #endif
         ) {
 
@@ -608,7 +608,7 @@ int InstallMgr::remoteCopy(InstallSource & is,
         urlPrefix = "https://";
     }
 #if SWORDXX_CURL_HAS_SFTP
-    else if (is.type == "SFTP") {
+    else if (is.m_type == "SFTP") {
         urlPrefix = "sftp://";
     }
 #endif
