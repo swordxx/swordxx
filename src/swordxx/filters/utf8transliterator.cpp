@@ -29,6 +29,7 @@
 #include <unicode/ucnv.h>
 #include <unicode/unistr.h>
 #include <vector>
+#include "../DebugOnly.h"
 #include "../max_v.h"
 #include "../SignConversion.h"
 #include "../swlog.h"
@@ -92,6 +93,8 @@ char UTF8Transliterator::processText(std::string & text,
                     return ::ucnv_open("UTF-8", &err);
                 }(),
                 +[](::UConverter * conv) noexcept { ::ucnv_close(conv); });
+    if (!conv)
+        throw std::runtime_error("::ucnv_open() failed!");
     std::string id;
     auto const addTrans =
             [&id](auto && newTrans) {
@@ -123,12 +126,14 @@ char UTF8Transliterator::processText(std::string & text,
                 throw std::runtime_error("Implementation limits reached!");
         source.resize(static_cast<std::size_t>(len) + 1u);
         err = U_ZERO_ERROR;
-        ::ucnv_toUChars(conv.get(),
-                        source.data(),
-                        len,
-                        text.c_str(),
-                        static_cast<std::int32_t>(sourceLen),
-                        &err);
+        SWORDXX_DEBUG_ONLY(auto const r =)
+                ::ucnv_toUChars(conv.get(),
+                                source.data(),
+                                len,
+                                text.c_str(),
+                                static_cast<std::int32_t>(sourceLen),
+                                &err);
+        assert(r == len);
         if (U_FAILURE(err))
             throw std::runtime_error("::ucnv_toUChars() failed!");
         source.back() = 0;
@@ -604,12 +609,14 @@ char UTF8Transliterator::processText(std::string & text,
                 throw std::runtime_error("Implementation limits reached!");
         out.resize(static_cast<decltype(out)::size_type>(toUnsigned(len)));
         err = U_ZERO_ERROR;
-        ::ucnv_fromUChars(conv.get(),
-                          out.data(),
-                          len,
-                          target.getBuffer(),
-                          target.length(),
-                          &err);
+        SWORDXX_DEBUG_ONLY(auto const r =)
+                ::ucnv_fromUChars(conv.get(),
+                                  out.data(),
+                                  len,
+                                  target.getBuffer(),
+                                  target.length(),
+                                  &err);
+        assert(r == len);
         if (U_FAILURE(err))
             throw std::runtime_error("::ucnv_fromUChars() failed!");
         text.swap(out);
