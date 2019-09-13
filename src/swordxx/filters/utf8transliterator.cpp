@@ -92,7 +92,7 @@ char UTF8Transliterator::processText(std::string & text,
                     ::UErrorCode err = U_ZERO_ERROR;
                     return ::ucnv_open("UTF-8", &err);
                 }(),
-                +[](::UConverter * conv) noexcept { ::ucnv_close(conv); });
+                +[](::UConverter * const p) noexcept { ::ucnv_close(p); });
     if (!conv)
         throw std::runtime_error("::ucnv_open() failed!");
     std::string id;
@@ -120,10 +120,13 @@ char UTF8Transliterator::processText(std::string & text,
         if (U_FAILURE(err))
             throw std::runtime_error("::ucnv_toUChars() failed!");
         assert(len >= 0);
+        #pragma GCC diagnostic push
+        #pragma GCC diagnostic ignored "-Wtype-limits"
         if constexpr (toUnsigned(max_v<decltype(len)>)
                       >= max_v<decltype(source)::size_type>)
             if (toUnsigned(len) >= max_v<decltype(source)::size_type>)
                 throw std::runtime_error("Implementation limits reached!");
+        #pragma GCC diagnostic pop
         source.resize(static_cast<std::size_t>(len) + 1u);
         err = U_ZERO_ERROR;
         SWORDXX_DEBUG_ONLY(auto const r =)
@@ -603,12 +606,15 @@ char UTF8Transliterator::processText(std::string & text,
             throw std::runtime_error("::ucnv_fromUChars() failed!");
         assert(len >= 0);
         std::string out;
+        #pragma GCC diagnostic push
+        #pragma GCC diagnostic ignored "-Wtype-limits"
         if constexpr (toUnsigned(max_v<decltype(len)>)
                       > max_v<decltype(out)::size_type>)
             if (toUnsigned(len) > max_v<decltype(out)::size_type>)
                 throw std::runtime_error("Implementation limits reached!");
         out.resize(static_cast<decltype(out)::size_type>(toUnsigned(len)));
         err = U_ZERO_ERROR;
+        #pragma GCC diagnostic pop
         SWORDXX_DEBUG_ONLY(auto const r =)
                 ::ucnv_fromUChars(conv.get(),
                                   out.data(),
