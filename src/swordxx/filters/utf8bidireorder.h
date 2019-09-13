@@ -25,29 +25,22 @@
 
 #include "../swfilter.h"
 
-#include <unicode/ubidi.h>
-#include <unicode/uchar.h>
-#include <unicode/ucnv.h>
-#include <unicode/utypes.h>
-
 
 namespace swordxx {
 
-/** This Filter reorders UTF-8 text according to Unicode BiDi
- */
+/** This Filter reorders UTF-8 text according to Unicode BiDi. */
 class SWDLLEXPORT UTF8BiDiReorder : public SWFilter {
-private:
-    UConverter* conv;
-    UErrorCode err;
-public:
+
+public: /* Methods: */
+
     UTF8BiDiReorder();
     ~UTF8BiDiReorder() override;
 
     char processText(std::string & text,
-                         SWKey const * key = nullptr,
-                         SWModule const * module = nullptr) override;
+                     SWKey const * key = nullptr,
+                     SWModule const * module = nullptr) override;
 
-};
+}; /* class UTF8BiDiReorder */
 
 } /* namespace swordxx */
 
