@@ -5,10 +5,6 @@ cache:
   directories:
   - /opt
 before_install: ./travis-ci/before_install.sh
-#  - if [[ "${CXX%-*}" == "clang++" ]]; then curl -sSL https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -; fi
-#  - if [[ "${CXX%-*}" == "clang++" ]]; then echo "deb http://apt.llvm.org/trusty/ llvm-toolchain-trusty-${CXX##*-} main" | sudo tee -a /etc/apt/sources.list; fi
-#  - if [[ "${CXX%-*}" == "clang++" ]]; then sudo apt-get update -qq; fi
-#  - if [[ "${CXX%-*}" == "clang++" ]]; then sudo apt-get install clang-${CXX##*-}; fi
 script: ./travis-ci/script.sh
 matrix:
   include:
@@ -31,12 +27,19 @@ matrix:
       addons:
         apt:
           packages: *baseDeps
-#    - env: CXX=clang++-8 CC=clang-8
-#      addons: &clangAddons
-#        apt:
-#          sources: *gccSources
-#          packages: *baseDeps
-#    - env: CXX=clang++-7 CC=clang-7
-#      addons: *clangAddons
+    - env: CXX=clang++-8 CC=clang-8 CMAKE_VERSION=3.15.3
+      addons: &clang8Addons
+        apt:
+          sources:
+            - sourceline: "deb http://apt.llvm.org/bionic/ llvm-toolchain-bionic-8 main"
+              key_url: "https://apt.llvm.org/llvm-snapshot.gpg.key"
+          packages: [*baseDeps, clang-8]
+    - env: CXX=clang++-9 CC=clang-9 CMAKE_VERSION=3.15.3
+      addons: &clang9Addons
+        apt:
+          sources:
+            - sourceline: "deb http://apt.llvm.org/bionic/ llvm-toolchain-bionic-9 main"
+              key_url: "https://apt.llvm.org/llvm-snapshot.gpg.key"
+          packages: [*baseDeps, clang-9]
 notifications:
   irc: "chat.freenode.net#sword++"
