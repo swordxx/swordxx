@@ -8,6 +8,7 @@
 set -evuo pipefail
 
 mkdir -p build
+cp travis-ci/config.cmake build/
 cd build
 /opt/cmake-${CMAKE_VERSION}-Linux-x86_64/bin/cmake -DCMAKE_INSTALL_PREFIX=install/ -DSWORDXX_BUILD_EXAMPLES=ON -DSWORDXX_BUILD_TESTS=ON ..
 make VERBOSE=1
