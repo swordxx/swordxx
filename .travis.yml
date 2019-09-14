@@ -1,6 +1,5 @@
 sudo: required
-# Required for C++17 and modern CMake
-dist: trusty
+dist: bionic
 language: generic
 cache:
   directories:
@@ -13,39 +12,45 @@ before_install: ./travis-ci/before_install.sh
 script: ./travis-ci/script.sh
 matrix:
   include:
-    - env: CXX=g++-8 CC=gcc-8 CMAKE_VERSION=3.14.0
-      addons: &gcc8addons
+    - env: CXX=g++-9 CC=gcc-9 CMAKE_VERSION=3.14.0
+      addons: &gcc9addons
         apt:
           sources: &gccSources
             - ubuntu-toolchain-r-test
           packages:
             - &baseDeps [libbz2-dev, xz-utils, liblzma-dev, libcurl4-openssl-dev, zlib1g-dev, curl, libicu-dev]
-            - [gcc-8, g++-8]
-    - env: CXX=g++-8 CC=gcc-8 CMAKE_VERSION=3.14.1
-      addons: *gcc8addons
-    - env: CXX=g++-8 CC=gcc-8 CMAKE_VERSION=3.14.2
-      addons: *gcc8addons
-    - env: CXX=g++-8 CC=gcc-8 CMAKE_VERSION=3.14.3
-      addons: *gcc8addons
-    - env: CXX=g++-8 CC=gcc-8 CMAKE_VERSION=3.14.4
-      addons: *gcc8addons
-    - env: CXX=g++-8 CC=gcc-8 CMAKE_VERSION=3.14.5
-      addons: *gcc8addons
-    - env: CXX=g++-8 CC=gcc-8 CMAKE_VERSION=3.14.6
-      addons: *gcc8addons
-    - env: CXX=g++-8 CC=gcc-8 CMAKE_VERSION=3.15.0
-      addons: *gcc8addons
-    - env: CXX=g++-8 CC=gcc-8 CMAKE_VERSION=3.15.1
-      addons: *gcc8addons
-    - env: CXX=g++-8 CC=gcc-8 CMAKE_VERSION=3.15.2
-      addons: *gcc8addons
+            - [gcc-9, g++-9]
+    - env: CXX=g++-9 CC=gcc-9 CMAKE_VERSION=3.14.1
+      addons: *gcc9addons
+    - env: CXX=g++-9 CC=gcc-9 CMAKE_VERSION=3.14.2
+      addons: *gcc9addons
+    - env: CXX=g++-9 CC=gcc-9 CMAKE_VERSION=3.14.3
+      addons: *gcc9addons
+    - env: CXX=g++-9 CC=gcc-9 CMAKE_VERSION=3.14.4
+      addons: *gcc9addons
+    - env: CXX=g++-9 CC=gcc-9 CMAKE_VERSION=3.14.5
+      addons: *gcc9addons
+    - env: CXX=g++-9 CC=gcc-9 CMAKE_VERSION=3.14.6
+      addons: *gcc9addons
+    - env: CXX=g++-9 CC=gcc-9 CMAKE_VERSION=3.15.0
+      addons: *gcc9addons
+    - env: CXX=g++-9 CC=gcc-9 CMAKE_VERSION=3.15.1
+      addons: *gcc9addons
+    - env: CXX=g++-9 CC=gcc-9 CMAKE_VERSION=3.15.2
+      addons: *gcc9addons
+    - env: CXX=g++-9 CC=gcc-9 CMAKE_VERSION=3.15.3
+      addons: *gcc9addons
+    - env: CXX=g++-9 CC=gcc-9 CMAKE_VERSION=3.15.3
+      addons: *gcc9addons
     - env: CXX=g++-8 CC=gcc-8 CMAKE_VERSION=3.15.3
-      addons: *gcc8addons
-    - env: CXX=g++-7 CC=gcc-7 CMAKE_VERSION=3.15.3
       addons:
         apt:
           sources: *gccSources
-          packages: [*baseDeps, gcc-7, g++-7]
+          packages: [*baseDeps, gcc-8, g++-8]
+    - env: CXX=g++-7 CC=gcc-7 CMAKE_VERSION=3.15.3
+      addons:
+        apt:
+          packages: *baseDeps
 #    - env: CXX=clang++-8 CC=clang-8
 #      addons: &clangAddons
 #        apt:
