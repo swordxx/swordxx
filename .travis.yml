@@ -11,7 +11,7 @@ before_install:
 #  - if [[ "${CXX%-*}" == "clang++" ]]; then sudo apt-get update -qq; fi
 #  - if [[ "${CXX%-*}" == "clang++" ]]; then sudo apt-get install clang-${CXX##*-}; fi
   - [ -d /opt/cmake-${CMAKE_VERSION}-Linux-x86_64 ] || curl -sSL https://cmake.org/files/v${CMAKE_VERSION%.*}/cmake-${CMAKE_VERSION}-Linux-x86_64.tar.gz | sudo tar -xzC /opt
-script: ./travis.sh || exit 1
+script: ./travis-ci/script.sh || exit 1
 matrix:
   include:
     - env: CXX=g++-8 CC=gcc-8 CMAKE_VERSION=3.14.0
