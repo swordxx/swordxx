@@ -16,7 +16,7 @@ matrix:
       addons: &gcc9addons
         apt:
           sources: &gccSources
-            - ubuntu-toolchain-r-test
+            - sourceline: "ppa:ubuntu-toolchain-r/test"
           packages:
             - &baseDeps [libbz2-dev, xz-utils, liblzma-dev, libcurl4-openssl-dev, zlib1g-dev, curl, libicu-dev]
             - [gcc-9, g++-9]
