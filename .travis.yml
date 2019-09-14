@@ -15,7 +15,7 @@ matrix:
           sources: &gccSources
             - sourceline: "ppa:ubuntu-toolchain-r/test"
           packages:
-            - &baseDeps [ccache, libbz2-dev, xz-utils, liblzma-dev, libcurl4-openssl-dev, zlib1g-dev, curl, libicu-dev]
+            - &baseDeps [libbz2-dev, xz-utils, liblzma-dev, libcurl4-openssl-dev, zlib1g-dev, curl, libicu-dev]
             - [gcc-9, g++-9]
     - env: CXX=g++-9 CC=gcc-9 CMAKE_VERSION=3.15.3
       addons: *gcc9addons
