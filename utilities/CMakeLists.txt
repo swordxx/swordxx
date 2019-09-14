@@ -11,6 +11,8 @@
 # if you edit this list in the future.
 #
 
+FIND_PACKAGE(ICU REQUIRED COMPONENTS uc)
+
 INCLUDE_DIRECTORIES(${SWORD_BUILD_INCLUDES})
 
 SwordxxHandleConditionalBuild("utilities" UTILS TRUE TRUE)
@@ -32,6 +34,7 @@ SET(install_UTILITIES
     xml2gbs
     osis2mod
 )
+SET(imp2gbs_EXTRA_LINK_LIBRARIES "ICU::uc")
 
 SET(install_UTILITIES ${install_UTILITIES} mod2zmod)
 
@@ -59,7 +62,10 @@ SET(noinstall_UTILITIES
 
 FOREACH(UTIL ${install_UTILITIES} ${noinstall_UTILITIES})
     ADD_EXECUTABLE("${UTIL}" "${SWORDXX_UTILS_EXCLUDE}" "${UTIL}.cpp")
-    TARGET_LINK_LIBRARIES("${UTIL}" swordxx)
+    TARGET_LINK_LIBRARIES("${UTIL}"
+        PRIVATE
+            Swordxx::swordxx
+            ${${UTIL}_EXTRA_LINK_LIBRARIES})
 ENDFOREACH(UTIL ${install_UTILITIES})
 
 SET_TARGET_PROPERTIES(imp2gbs PROPERTIES INCLUDE_DIRECTORIES
@@ -73,7 +79,7 @@ SET_TARGET_PROPERTIES(imp2gbs PROPERTIES LINK_LIBRARIES
 #
 
 ADD_EXECUTABLE("lexdump" "${SWORDXX_UTILS_EXCLUDE}" "lexdump.cpp")
-TARGET_LINK_LIBRARIES(lexdump swordxx)
+TARGET_LINK_LIBRARIES(lexdump Swordxx::swordxx)
 
 ####################################################################
 # Install the utilities

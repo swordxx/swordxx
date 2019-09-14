@@ -7,8 +7,14 @@
 # of their own GPLv2 license and all copyright is transferred to them for
 # all posterity and eternity, wherever such transfer is possible.  Where it is
 # not, then this file is released under the GPLv2 by myself.
-PROJECT(swordxx CXX C)
+
 CMAKE_MINIMUM_REQUIRED(VERSION 3.8)
+
+PROJECT(swordxx VERSION 2.0.0 LANGUAGES CXX C)
+SET(SWORDXX_VERSION "${PROJECT_VERSION}")
+SET(SWORDXX_VERSION_STR "${SWORDXX_VERSION}_beta1")
+SET(SWORDXX_SWORD_COMPAT_VERSION "1.7.4")
+
 CMAKE_POLICY(SET CMP0017 NEW)
 
 # Make sure it's an out-of-stream build
@@ -17,15 +23,9 @@ IF(${CMAKE_CURRENT_BINARY_DIR} STREQUAL ${CMAKE_CURRENT_SOURCE_DIR})
             "Please invoke CMake from a different directory than the source.")
 ENDIF()
 
-# Set versions
-SET(SWORDXX_VERSION "2.0.0")
-SET(SWORDXX_VERSION_STR "2.0.0_beta1")
-SET(SWORDXX_SWORD_COMPAT_VERSION "1.7.4")
-
-MESSAGE(STATUS "Configuring libswordxx version ${SWORDXX_VERSION}")
+MESSAGE(STATUS "Configuring libswordxx version ${SWORDXX_VERSION_STR}")
 
 INCLUDE("${CMAKE_CURRENT_SOURCE_DIR}/cmake/helpers.cmake")
-SET(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 CalculateVersionForCode("${SWORDXX_VERSION}" SWORDXX_VERSION_C)
 
@@ -92,59 +92,6 @@ SwordxxDefineCacheVar(SWORDXX_WITH_MAN_PAGES BOOL TRUE
     "Specifies whether man pages for Sword++ are generated and installed.")
 
 
-###########################################################################################
-# This will look for various libraries that libswordxx builds against.  There is no REQUIRED
-# attribute added here, since all of the libraries here are not, in actuality, required.
-#
-
-NewSList(SWORDXX_CFLAGS "-fPIC")
-NewList(SWORDXX_DEFINITIONS
-    "SWORDXX_SYSCONF_INSTALL_PREFIX=\"${SWORDXX_SYSCONF_INSTALL_PREFIX}\"")
-NewList(SWORDXX_INCLUDE_DIRS)
-NewList(SWORDXX_LINK_LIBRARIES)
-
-# Required packages:
-FIND_PACKAGE(BZIP2 REQUIRED)
-ListAppend(SWORDXX_INCLUDE_DIRS   ${BZIP2_INCLUDE_DIR})
-ListAppend(SWORDXX_LINK_LIBRARIES ${BZIP2_LIBRARY})
-
-FIND_PACKAGE(XZ REQUIRED)
-ListAppend(SWORDXX_INCLUDE_DIRS   ${XZ_INCLUDE_DIR})
-ListAppend(SWORDXX_LINK_LIBRARIES ${XZ_LIBRARY})
-
-FIND_PACKAGE(CURL REQUIRED)
-FIND_PROGRAM(CURL_CONFIG curl-config
-    DOC "The curl-config executable path, used to determine SFTP support.")
-# If we can find the config script, we will run it and attempt to parse out the
-# availability of SFTP support. Otherwise, we will assume the library was built
-# without it.
-IF(CURL_CONFIG)
-    EXECUTE_PROCESS(
-        COMMAND ${CURL_CONFIG} --protocols
-        COMMAND grep SFTP
-        COMMAND wc -l
-        OUTPUT_VARIABLE CURL_CONFIG_OUTPUT
-        OUTPUT_STRIP_TRAILING_WHITESPACE)
-    IF(CURL_CONFIG_OUTPUT STREQUAL "1")
-        ListAppend(SWORDXX_DEFINITIONS "SWORDXX_CURL_HAS_SFTP=1")
-        MESSAGE(STATUS "cURL SFTP Support: Yes")
-    ELSE()
-        ListAppend(SWORDXX_DEFINITIONS "SWORDXX_CURL_HAS_SFTP=0")
-        MESSAGE(STATUS "cURL SFTP Support: No")
-    ENDIF()
-ENDIF()
-ListAppend(SWORDXX_INCLUDE_DIRS   ${CURL_INCLUDE_DIRS})
-ListAppend(SWORDXX_LINK_LIBRARIES ${CURL_LIBRARY})
-
-FIND_PACKAGE(ZLIB REQUIRED)
-ListAppend(SWORDXX_INCLUDE_DIRS   ${ZLIB_INCLUDE_DIR})
-ListAppend(SWORDXX_LINK_LIBRARIES ${ZLIB_LIBRARY})
-
-FIND_PACKAGE(ICU REQUIRED COMPONENTS data i18n uc)
-ListAppend(SWORDXX_INCLUDE_DIRS   ${ICU_INCLUDE_DIRS})
-ListAppend(SWORDXX_LINK_LIBRARIES ${ICU_LIBRARIES})
-
-
 ################################################################################
 # The buildflags depend on the CMAKE_BUILD_TYPE supplied at the command line.
 
@@ -154,6 +101,7 @@ ADD_COMPILE_OPTIONS(
   "$<$<NOT:$<CONFIG:Release>>:-ggdb>"
   "$<$<NOT:$<CONFIG:Release>>:-fno-omit-frame-pointer>"
 )
+SET(CMAKE_POSITION_INDEPENDENT_CODE ON)
 SET(CMAKE_C_STANDARD 99)
 SET(CMAKE_C_STANDARD_REQUIRED ON)
 SET(CMAKE_CXX_STANDARD 17)
@@ -193,6 +141,7 @@ CHECK_ADD_CXX_COMPILER_FLAG("-Werror=shadow")
 CHECK_ADD_CXX_COMPILER_FLAG("-Werror=shadow-field")
 CHECK_ADD_CXX_COMPILER_FLAG("-Werror=shadow-field-in-constructor")
 CHECK_ADD_CXX_COMPILER_FLAG("-Werror=suggest-override")
+CHECK_ADD_CXX_COMPILER_FLAG("-Werror=type-limits")
 CHECK_ADD_CXX_COMPILER_FLAG("-Werror=vla")
 CHECK_ADD_CXX_COMPILER_FLAG("-Werror=weak-vtables")
 CHECK_ADD_CXX_COMPILER_FLAG("-Weverything")

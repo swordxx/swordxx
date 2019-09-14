@@ -12,6 +12,8 @@
 # more about how these tests work.
 #
 
+FIND_PACKAGE(ICU REQUIRED COMPONENTS i18n uc)
+
 INCLUDE_DIRECTORIES(${SWORD_BUILD_INCLUDES})
 
 SwordxxHandleConditionalBuild("tests" TESTS FALSE TRUE)
@@ -51,6 +53,8 @@ SET(test_PROGRAMS
 #        tlitmgrtest
     translittest
 )
+SET(icutest_EXTRA_LINK_LIBRARIES "ICU::i18n" "ICU::uc")
+SET(translittest_EXTRA_LINK_LIBRARIES "ICU::i18n" "ICU::uc")
 
 SET(test_PROGRAMS
     ${test_PROGRAMS}
@@ -59,15 +63,12 @@ SET(test_PROGRAMS
 
 FOREACH(TEST ${test_PROGRAMS})
     ADD_EXECUTABLE(${TEST} "${SWORDXX_TESTS_EXCLUDE}" ${TEST}.cpp)
-    TARGET_LINK_LIBRARIES(${TEST} swordxx)
+    TARGET_LINK_LIBRARIES("${TEST}"
+        PRIVATE
+            Swordxx::swordxx
+            ${${TEST}_EXTRA_LINK_LIBRARIES})
 ENDFOREACH(TEST ${test_PROGRAMS})
 
-########################################################################################
-# The following tests require extra libraries to run
-#
-FOREACH(ICUTEST icutest translittest)
-    TARGET_LINK_LIBRARIES(${ICUTEST} ${ICU_LIBRARIES} ${ICU_I18N_LIBRARIES})
-ENDFOREACH(ICUTEST icutest translittest)
 
 # Excluded until I know we have the tests working
 ADD_SUBDIRECTORY(testsuite)
@@ -84,7 +85,7 @@ ADD_DEPENDENCIES("tests" "check")
 FUNCTION(AddTest name)
     ADD_EXECUTABLE("testImpl_${name}" EXCLUDE_FROM_ALL
         "${CMAKE_CURRENT_SOURCE_DIR}/test${name}.cpp")
-    TARGET_LINK_LIBRARIES("testImpl_${name}" swordxx)
+    TARGET_LINK_LIBRARIES("testImpl_${name}" Swordxx::swordxx)
     ADD_DEPENDENCIES("check" "testImpl_${name}")
     ADD_TEST(NAME "test_${name}" COMMAND "$<TARGET_FILE:testImpl_${name}>")
 ENDFUNCTION()
