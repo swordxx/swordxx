@@ -41,7 +41,7 @@ matrix:
       addons: *gcc8addons
     - env: CXX=g++-8 CC=gcc-8 CMAKE_VERSION=3.15.3
       addons: *gcc8addons
-    - env: CXX=g++-7 CC=gcc-7
+    - env: CXX=g++-7 CC=gcc-7 CMAKE_VERSION=3.15.3
       addons:
         apt:
           sources: *gccSources
