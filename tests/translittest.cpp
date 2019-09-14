@@ -22,6 +22,7 @@
 
 #include <cstring>
 #include <iostream>
+#include <memory>
 #include <string>
 #include <swordxx/filters/utf8transliterator.h>
 #include <vector>
