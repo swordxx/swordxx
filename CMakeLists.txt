@@ -8,7 +8,7 @@
 # all posterity and eternity, wherever such transfer is possible.  Where it is
 # not, then this file is released under the GPLv2 by myself.
 
-CMAKE_MINIMUM_REQUIRED(VERSION 3.8)
+CMAKE_MINIMUM_REQUIRED(VERSION 3.14)
 
 PROJECT(swordxx VERSION 2.0.0 LANGUAGES CXX C)
 SET(SWORDXX_VERSION "${PROJECT_VERSION}")
