@@ -49,23 +49,27 @@ struct EncodingFilterMgr::EncodingFilter: SWFilter {
 
     char processText(std::string & text,
                      SWKey const * key = nullptr,
-                     SWModule const * module = nullptr) override
-    {
-        switch (m_encoding) {
-            case ENC_LATIN1: return UTF8Latin1().processText(text, key, module);
-            case ENC_UTF16:  return UTF8UTF16().processText(text, key, module);
-            case ENC_HTML:   return UTF8HTML().processText(text, key, module);
-            case ENC_SCSU:   return UTF8SCSU().processText(text, key, module);
-            default: // i.e. case ENC_UTF8
-                return 0;
-        }
-    }
+                     SWModule const * module = nullptr) override;
 
 /* Fields: */
 
     TextEncoding m_encoding;
 
 };
+
+char EncodingFilterMgr::EncodingFilter::processText(std::string & text,
+                                                    SWKey const * key,
+                                                    SWModule const * module)
+{
+    switch (m_encoding) {
+        case ENC_LATIN1: return UTF8Latin1().processText(text, key, module);
+        case ENC_UTF16:  return UTF8UTF16().processText(text, key, module);
+        case ENC_HTML:   return UTF8HTML().processText(text, key, module);
+        case ENC_SCSU:   return UTF8SCSU().processText(text, key, module);
+        default: // i.e. case ENC_UTF8
+            return 0;
+    }
+}
 
 EncodingFilterMgr::EncodingFilterMgr(TextEncoding const encoding)
     : m_latin1utf8(std::make_shared<Latin1UTF8>())
