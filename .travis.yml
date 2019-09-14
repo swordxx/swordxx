@@ -10,7 +10,7 @@ before_install: ./travis-ci/before_install.sh
 #  - if [[ "${CXX%-*}" == "clang++" ]]; then echo "deb http://apt.llvm.org/trusty/ llvm-toolchain-trusty-${CXX##*-} main" | sudo tee -a /etc/apt/sources.list; fi
 #  - if [[ "${CXX%-*}" == "clang++" ]]; then sudo apt-get update -qq; fi
 #  - if [[ "${CXX%-*}" == "clang++" ]]; then sudo apt-get install clang-${CXX##*-}; fi
-script: ./travis-ci/script.sh || exit 1
+script: ./travis-ci/script.sh
 matrix:
   include:
     - env: CXX=g++-8 CC=gcc-8 CMAKE_VERSION=3.14.0
