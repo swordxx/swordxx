@@ -2,17 +2,19 @@ sudo: required
 # Required for C++17 and modern CMake
 dist: trusty
 language: generic
+cache:
+  directories:
+  - /opt
 before_install:
 #  - if [[ "${CXX%-*}" == "clang++" ]]; then curl -sSL https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -; fi
 #  - if [[ "${CXX%-*}" == "clang++" ]]; then echo "deb http://apt.llvm.org/trusty/ llvm-toolchain-trusty-${CXX##*-} main" | sudo tee -a /etc/apt/sources.list; fi
 #  - if [[ "${CXX%-*}" == "clang++" ]]; then sudo apt-get update -qq; fi
 #  - if [[ "${CXX%-*}" == "clang++" ]]; then sudo apt-get install clang-${CXX##*-}; fi
-  - curl -sSL https://cmake.org/files/v3.8/cmake-3.8.0-Linux-x86_64.tar.gz | sudo tar -xzC /opt
-  - curl -sSL https://cmake.org/files/v3.14/cmake-3.14.3-Linux-x86_64.tar.gz | sudo tar -xzC /opt
+  - [ -d /opt/cmake-${CMAKE_VERSION}-Linux-x86_64 ] || curl -sSL https://cmake.org/files/v${CMAKE_VERSION%.*}/cmake-${CMAKE_VERSION}-Linux-x86_64.tar.gz | sudo tar -xzC /opt
 script: ./travis.sh || exit 1
 matrix:
   include:
-    - env: CXX=g++-8 CC=gcc-8
+    - env: CXX=g++-8 CC=gcc-8 CMAKE_VERSION=3.14.0
       addons: &gcc8addons
         apt:
           sources: &gccSources
@@ -20,7 +22,25 @@ matrix:
           packages:
             - &baseDeps [libbz2-dev, xz-utils, liblzma-dev, libcurl4-openssl-dev, zlib1g-dev, curl, libicu-dev]
             - [gcc-8, g++-8]
-    - env: CXX=g++-8 CC=gcc-8 CMAKE_VERSION=3.8.0
+    - env: CXX=g++-8 CC=gcc-8 CMAKE_VERSION=3.14.1
+      addons: *gcc8addons
+    - env: CXX=g++-8 CC=gcc-8 CMAKE_VERSION=3.14.2
+      addons: *gcc8addons
+    - env: CXX=g++-8 CC=gcc-8 CMAKE_VERSION=3.14.3
+      addons: *gcc8addons
+    - env: CXX=g++-8 CC=gcc-8 CMAKE_VERSION=3.14.4
+      addons: *gcc8addons
+    - env: CXX=g++-8 CC=gcc-8 CMAKE_VERSION=3.14.5
+      addons: *gcc8addons
+    - env: CXX=g++-8 CC=gcc-8 CMAKE_VERSION=3.14.6
+      addons: *gcc8addons
+    - env: CXX=g++-8 CC=gcc-8 CMAKE_VERSION=3.15.0
+      addons: *gcc8addons
+    - env: CXX=g++-8 CC=gcc-8 CMAKE_VERSION=3.15.1
+      addons: *gcc8addons
+    - env: CXX=g++-8 CC=gcc-8 CMAKE_VERSION=3.15.2
+      addons: *gcc8addons
+    - env: CXX=g++-8 CC=gcc-8 CMAKE_VERSION=3.15.3
       addons: *gcc8addons
     - env: CXX=g++-7 CC=gcc-7
       addons:

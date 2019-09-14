@@ -6,7 +6,7 @@
 # it as informative if you wish
 mkdir -p build
 cd build
-/opt/cmake-${CMAKE_VERSION:-3.14.3}-Linux-x86_64/bin/cmake -DCMAKE_INSTALL_PREFIX=install/ -DSWORDXX_BUILD_EXAMPLES=ON -DSWORDXX_BUILD_TESTS=ON .. || exit 1
+/opt/cmake-${CMAKE_VERSION}-Linux-x86_64/bin/cmake -DCMAKE_INSTALL_PREFIX=install/ -DSWORDXX_BUILD_EXAMPLES=ON -DSWORDXX_BUILD_TESTS=ON .. || exit 1
 make VERBOSE=1 || exit 1
 make VERBOSE=1 tests || exit 1
 make VERBOSE=1 install || exit 1
