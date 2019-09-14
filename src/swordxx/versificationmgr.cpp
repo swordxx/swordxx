@@ -425,7 +425,7 @@ void VersificationMgr::System::translateVerse(System const & dstSys,
             }
         }
 
-        SWLog::getSystemLog()->logDebug("\tb %i.\n", b);
+        //SWLog::getSystemLog()->logDebug("\tb %i.\n", b);
 
         if (!b || b.value() >= dstSys.m_p->m_mappings.size()) {
             SWLog::getSystemLog()->logDebug("no modification");
