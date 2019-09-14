@@ -5,12 +5,11 @@ language: generic
 cache:
   directories:
   - /opt
-before_install:
+before_install: ./travis-ci/before_install.sh
 #  - if [[ "${CXX%-*}" == "clang++" ]]; then curl -sSL https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -; fi
 #  - if [[ "${CXX%-*}" == "clang++" ]]; then echo "deb http://apt.llvm.org/trusty/ llvm-toolchain-trusty-${CXX##*-} main" | sudo tee -a /etc/apt/sources.list; fi
 #  - if [[ "${CXX%-*}" == "clang++" ]]; then sudo apt-get update -qq; fi
 #  - if [[ "${CXX%-*}" == "clang++" ]]; then sudo apt-get install clang-${CXX##*-}; fi
-  - [ -d /opt/cmake-${CMAKE_VERSION}-Linux-x86_64 ] || curl -sSL https://cmake.org/files/v${CMAKE_VERSION%.*}/cmake-${CMAKE_VERSION}-Linux-x86_64.tar.gz | sudo tar -xzC /opt
 script: ./travis-ci/script.sh || exit 1
 matrix:
   include:
