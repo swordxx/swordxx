@@ -1,17 +1,3 @@
-#########################################################################################
-# A test suite - that is awesome.
-#
-# I should probably learn the proper usage of such things as CTest for this, but for the
-# time being, I'll see what I can do.
-#
-#
-# I need some help deciphering tests/cppunit/Makefile.am.  I'm not quite sure what it is
-# trying to do in there.
-# Also, the contents of the tests/testsuite directory are slightly beyond my knowledge
-# level.  It looks like I can do a very simple interface to this all, but I need to know
-# more about how these tests work.
-#
-
 FIND_PACKAGE(ICU REQUIRED COMPONENTS i18n uc)
 
 INCLUDE_DIRECTORIES(${SWORD_BUILD_INCLUDES})
