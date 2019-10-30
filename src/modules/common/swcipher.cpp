@@ -181,7 +181,7 @@ SWBuf SWCipher::personalize(const SWBuf &buf, bool encode) {
 	if (segs[4].size() < 5) segs[4].size(4);
 	for (int i = 0; i < 4; ++i) {
 		int csum = 0;
-		for (unsigned int j = 0; j < segs[i].size(); ++j) {
+		for (unsigned int j = 0; j < segs[i].size() && j < segs[0].size(); ++j) {
 			char hash = charHash[segs[i][j]];
 			char obfusHash = charHash[segs[0][j%segs[0].size()]];
 			if (encode) {
