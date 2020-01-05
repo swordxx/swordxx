@@ -38,16 +38,17 @@ SWConfig::~SWConfig() {}
 bool SWConfig::reload() {
     assert(!m_filename.empty());
 
+    using namespace std::string_view_literals;
     decltype(m_sections) data;
     {
         std::string section;
         std::string line;
         std::ifstream inFile(m_filename);
         while (std::getline(inFile, line)) {
+            trimString(line);
             if (line.empty() || line.front() == '#')
                 continue;
             if (line.front() == '[') {
-                rightTrimString(line);
                 if (line.back() != ']')
                     return false;
                 section.assign(line, 1u, line.size() - 2u);
@@ -55,7 +56,6 @@ bool SWConfig::reload() {
                 if (section.empty())
                     return false;
             } else {
-                trimString(line);
                 auto it(std::find(line.begin(), line.end(), '='));
                 if (it == line.begin() || it == line.end())
                     return false;
@@ -63,6 +63,25 @@ bool SWConfig::reload() {
                 rightTrimString(key);
                 std::string value(++it, line.end());
                 leftTrimString(value);
+
+                // Handle "continuation lines":
+                while (endsWith(value, "\\"sv)) {
+                    /* Similarly to Sword we only trim the backslash but not the
+                       end of the line before the backslash: */
+                    value.pop_back();
+
+                    if (!std::getline(inFile, line))
+                        break;
+
+                    /* Since we are still on the same "continuation" line, we
+                       only trim the whitespace on the right so that any inner
+                       whitespace is left unchanged, even if it is in the
+                       beginning of the regular line: */
+                    rightTrimString(line);
+
+                    value.append(line);
+                }
+
                 data[section].emplace(std::move(key), std::move(value));
             }
         }
