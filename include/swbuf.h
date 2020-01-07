@@ -158,7 +158,21 @@ public:
 	*	@param pos The position of the requested character.
 	* @return The character at the specified position
 	*/
-	inline char &charAt(unsigned long pos) { return ((pos <= (unsigned long)(end - buf)) ? buf[pos] : (*nullStr)); }
+// fastest guarded impl.  If we reference out of bounds, we return our 
+	inline char &charAtGuarded(unsigned long pos) { return ((pos <= (unsigned long)(endAlloc - buf)) ? buf[pos] : (*endAlloc)); }
+// unguarded impl. This is obviously much faster and is likely why std::string specifies references out of bounds have undefined
+// behavior.  This is the default impl for operator []
+	inline char &charAt(unsigned long pos) { return *(buf + pos); }
+
+/* these have all proven to be slower implementations */
+//	inline char &charAt(unsigned long pos) { return buf[pos]; }
+//	inline char &charAtGuarded(unsigned long pos) { return pos <= (unsigned long)end - (unsigned long)buf ? buf[pos] : *nullStr; }
+//	inline char &charAtGuarded(unsigned long pos) { return pos <= length() ? buf[pos] : *nullStr; }
+//	inline char &charAtGuarded(unsigned long pos) { assureSize(pos); return buf[pos]; }
+//	inline char &charAtGuarded(unsigned long pos) { return pos < allocSize ? buf[pos] : *nullStr; }
+//	inline char &charAtGuarded(unsigned long pos) { return buf + pos <= end ? buf[pos] : *nullStr; }
+//	inline char &charAtGuarded(unsigned long pos) { return buf[pos < allocSize ? pos : allocSize - 1]; }
+
 
 	/** 
 	* @return size() and length() return only the number of characters of the string.
@@ -238,7 +252,7 @@ public:
 	inline void setSize(unsigned long len) {
 		assureSize(len+1);
 		if ((unsigned)(end - buf) < len)
-			memset(end, fillByte, len - (end-buf));
+			memset(end, fillByte, (size_t)len - (end-buf));
 		end = buf + len;
 		*end = 0;
 	}
@@ -368,8 +382,8 @@ public:
 	inline char &operator[](int pos) { return charAt((unsigned long)pos); }
 	inline SWBuf &operator =(const char *newVal) { set(newVal); return *this; }
 	inline SWBuf &operator =(const SWBuf &other) { set(other); return *this; }
-	inline SWBuf &operator +=(const char *str) { append(str); return *this; }
-	inline SWBuf &operator +=(char ch) { append(ch); return *this; }
+	inline SWBuf &operator +=(const char *str) { return append(str); }
+	inline SWBuf &operator +=(char ch) { return append(ch); }
 
 	/**
 	 * Decrease the buffer size, discarding the last characters
