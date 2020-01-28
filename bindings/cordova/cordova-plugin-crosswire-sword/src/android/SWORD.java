@@ -451,6 +451,12 @@ Log.d(TAG, "... finished renderChapter");
 			String translated = mgr.translate(text, locale);
 			callbackContext.success(translated);
 		}
+		else if (action.equals("SWMgr_setGlobalOption")) {
+			String option = args.getString(0);
+			String value = args.getString(1);
+			mgr.setGlobalOption(option, value);
+			callbackContext.success();
+		}
 		else if (action.equals("SWModule_getRenderText")) {
 			SWModule mod = mgr.getModuleByName(args.getString(0));
 			if (mod == null) { callbackContext.error("couldn't find module: " + args.getString(0)); return true; }
@@ -615,12 +621,12 @@ Log.d(TAG, "looping chapter: " + verseKey[SWModule.VERSEKEY_OSISREF]);
 			JSONObject v = new JSONObject();
 			if (((int)error) == 0) {
 				v.put("verse", getVerseKey(mod.getKeyChildren()));
+				v.put("text", mod.getRenderText());
 				String preVerse = "";
 				for (String h : mod.getEntryAttribute("Heading", "Preverse", "", true)) {
 					preVerse += h;
 				}
 				v.put("preVerse", preVerse);
-				v.put("text", mod.getRenderText());
 			}
 			else {
 /* null removes entry

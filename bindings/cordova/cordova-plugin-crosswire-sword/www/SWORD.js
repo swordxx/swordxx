@@ -379,6 +379,12 @@ SWMgr.prototype.translate = function(text, locale, callback) {
 	);
 }
 
+SWMgr.prototype.setGlobalOption = function(option, value, callback) {
+	exec(callback?callback:function() {},
+		function(err) { utils.alert('[ERROR] problem: ' + err); },
+		"SWORD", "SWMgr_setGlobalOption", [option, value]
+	);
+}
 
 function HTTPUtils() {}
 
@@ -400,7 +406,6 @@ HTTPUtils.prototype.makeRequest = function(url, postData, callback, method) {
 /*
 	public native String      getPrefixPath();
 	public native String      getConfigPath();
-	public native void        setGlobalOption(String option, String value);
 	public native String      getGlobalOption(String option);
 	public native String      getGlobalOptionTip(String option);
 	public native String      filterText(String filterName, String text);
