@@ -28,6 +28,7 @@
 
 namespace swordxx {
 
+/** Filter to normalize UTF-8 encoded text using normalization form KD. */
 class SWDLLEXPORT UTF8NFKD : public SWFilter {
 
 public: /* Methods: */

@@ -28,7 +28,7 @@
 
 namespace swordxx {
 
-/** This filter normalizes UTF-8 encoded text  */
+/** Filter to normalize UTF-8 encoded text using normalization form C. */
 class SWDLLEXPORT UTF8NFC : public SWFilter {
 
 public: /* Methods: */
