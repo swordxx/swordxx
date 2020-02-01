@@ -25,24 +25,37 @@
 
 #include <memory>
 #include <string>
+#include <unicode/utypes.h>
+#include <unicode/ucnv.h>
+#include <unicode/uchar.h>
+#include <unicode/ustring.h>
+#include <unicode/unorm2.h>
 
 
 namespace swordxx {
 
+struct UTF8NFKDPrivate {
+    UNormalizer2 const * conv;
+};
 
 UTF8NFKD::UTF8NFKD() {
-        conv = ucnv_open("UTF-8", &err);
+    UErrorCode err = U_ZERO_ERROR;
+    p = new struct UTF8NFKDPrivate;
+    p->conv = unorm2_getNFKDInstance(&err);
 }
 
 
 UTF8NFKD::~UTF8NFKD() {
-         ucnv_close(conv);
+    delete p;
 }
 
 
 char UTF8NFKD::processText(std::string &text, const SWKey *key, const SWModule *module)
 {
     (void) module;
+
+    UErrorCode err = U_ZERO_ERROR;
+
     if ((unsigned long)key < 2)    // hack, we're en(1)/de(0)ciphering
         return -1;
 
@@ -50,14 +63,16 @@ char UTF8NFKD::processText(std::string &text, const SWKey *key, const SWModule *
         auto const source(std::make_unique<UChar[]>(len + 1)); //each char could become a surrogate pair
 
     // Convert UTF-8 string to UTF-16 (UChars)
-        int32_t ulen = ucnv_toUChars(conv, source.get(), len, text.c_str(), -1, &err);
+        int32_t ulen;
+        u_strFromUTF8(source.get(), len, &ulen, text.c_str(), (int32_t)text.size(), &err);
+
         auto const target(std::make_unique<UChar[]>(len + 1));
 
         //compatability decomposition
-        ulen = unorm_normalize(source.get(), ulen, UNORM_NFKD, 0, target.get(), len, &err);
+        ulen = unorm2_normalize(p->conv, source.get(), ulen, target.get(), len, &err);
 
        text.resize(len, '\0');
-       len = ucnv_fromUChars(conv, &text[0u], len, target.get(), ulen, &err);
+       u_strToUTF8(text.data(), len, &len, target.get(), ulen, &err);
        text.resize(len, '\0');
 
     return 0;

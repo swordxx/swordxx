@@ -25,18 +25,13 @@
 
 #include "../swfilter.h"
 
-#include <unicode/utypes.h>
-#include <unicode/ucnv.h>
-#include <unicode/uchar.h>
-#include <unicode/unorm.h>
-
 
 namespace swordxx {
 
+struct UTF8NFKDPrivate;
 class SWDLLEXPORT UTF8NFKD : public SWFilter {
 private:
-    UConverter* conv;
-    UErrorCode err;
+    struct UTF8NFKDPrivate * p;
 public:
     UTF8NFKD();
     ~UTF8NFKD() override;

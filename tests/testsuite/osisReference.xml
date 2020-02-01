@@ -118,7 +118,7 @@
   <chapter sID="Ps.3" osisID="Ps.3"/>
    <title type="chapter">PSALM 3.</title>
    <div type="section">
-   <title type="psalm" canonical="true">A Psalm of David, when he fled from Absalom his son.</title>
+   <title type="psalm" canonical="true">A Psalm of David<note n="A" osisID="Ps.3.xref.A" type="crossReference"><reference osisRef="Matt.1.4">Matt 1:4</reference></note>, when he fled from Absalom his son.</title>
     <p>
      <lg>
       <verse sID="Ps.3.1" osisID="Ps.3.1"/>
