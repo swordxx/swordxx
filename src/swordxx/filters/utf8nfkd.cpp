@@ -23,58 +23,23 @@
 
 #include "utf8nfkd.h"
 
-#include <memory>
-#include <string>
-#include <unicode/utypes.h>
-#include <unicode/ucnv.h>
-#include <unicode/uchar.h>
-#include <unicode/ustring.h>
-#include <unicode/unorm2.h>
+#include "../utilstr.h"
 
 
 namespace swordxx {
 
-struct UTF8NFKDPrivate {
-    UNormalizer2 const * conv;
-};
+UTF8NFKD::UTF8NFKD() noexcept = default;
 
-UTF8NFKD::UTF8NFKD() {
-    UErrorCode err = U_ZERO_ERROR;
-    p = new struct UTF8NFKDPrivate;
-    p->conv = unorm2_getNFKDInstance(&err);
-}
+UTF8NFKD::~UTF8NFKD() noexcept = default;
 
-
-UTF8NFKD::~UTF8NFKD() {
-    delete p;
-}
-
-
-char UTF8NFKD::processText(std::string &text, const SWKey *key, const SWModule *module)
+char UTF8NFKD::processText(std::string & text,
+                           SWKey const * key,
+                           SWModule const *)
 {
-    (void) module;
-
-    UErrorCode err = U_ZERO_ERROR;
-
     if ((unsigned long)key < 2)    // hack, we're en(1)/de(0)ciphering
         return -1;
 
-    int32_t len =  5 + text.length() * 5;
-        auto const source(std::make_unique<UChar[]>(len + 1)); //each char could become a surrogate pair
-
-    // Convert UTF-8 string to UTF-16 (UChars)
-        int32_t ulen;
-        u_strFromUTF8(source.get(), len, &ulen, text.c_str(), (int32_t)text.size(), &err);
-
-        auto const target(std::make_unique<UChar[]>(len + 1));
-
-        //compatability decomposition
-        ulen = unorm2_normalize(p->conv, source.get(), ulen, target.get(), len, &err);
-
-       text.resize(len, '\0');
-       u_strToUTF8(text.data(), len, &len, target.get(), ulen, &err);
-       text.resize(len, '\0');
-
+    text = utf8NfkdNormalize(text);
     return 0;
 }
 

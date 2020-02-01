@@ -28,17 +28,16 @@
 
 namespace swordxx {
 
-struct UTF8NFKDPrivate;
 class SWDLLEXPORT UTF8NFKD : public SWFilter {
-private:
-    struct UTF8NFKDPrivate * p;
-public:
-    UTF8NFKD();
-    ~UTF8NFKD() override;
+
+public: /* Methods: */
+
+    UTF8NFKD() noexcept;
+    ~UTF8NFKD() noexcept override;
 
     char processText(std::string & text,
-                         SWKey const * key = nullptr,
-                         SWModule const * module = nullptr) override;
+                     SWKey const * key = nullptr,
+                     SWModule const * module = nullptr) override;
 
 };
 
