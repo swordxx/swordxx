@@ -243,21 +243,12 @@ std::basic_string<char16_t> utf16ToUpper(std::basic_string_view<char16_t> sv) {
     return ucInUtf16;
 }
 
-std::string utf8NfkdNormalize(std::string_view sv)
-{ return utf16ToUtf8(utf16NfkdNormalize(utf8ToUtf16(sv))); }
+namespace {
 
-std::basic_string<char16_t> utf16NfkdNormalize(
-        std::basic_string_view<char16_t> sv)
+std::basic_string<char16_t> utf16Normalize(
+        std::basic_string_view<char16_t> sv,
+        ::UNormalizer2 const * const normalizer)
 {
-    static auto const normalizer =
-            []() {
-                UErrorCode err = ::U_ZERO_ERROR;
-                auto const r = ::unorm2_getNFKDInstance(&err);
-                if (::U_FAILURE(err))
-                    throw std::runtime_error("unorm2_getNFKDInstance() failed!");
-                return r;
-            }();
-
     static_assert(std::numeric_limits<std::int32_t>::max()
                   <= std::numeric_limits<std::size_t>::max(), "");
     if (sv.empty())
@@ -296,6 +287,28 @@ std::basic_string<char16_t> utf16NfkdNormalize(
     }
     return r;
 }
+
+} // anonymous namespace
+
+#define SWORDXX_DEFINE_NORMALIZER(Name,getter) \
+    std::string utf8 ## Name ## Normalize(std::string_view sv) \
+    { return utf16ToUtf8(utf16 ## Name ## Normalize(utf8ToUtf16(sv))); } \
+    std::basic_string<char16_t> utf16 ## Name ## Normalize( \
+            std::basic_string_view<char16_t> sv) \
+    { \
+        static auto const normalizer = \
+            []() { \
+                UErrorCode err = ::U_ZERO_ERROR; \
+                auto const r = ::getter(&err); \
+                if (::U_FAILURE(err)) \
+                    throw std::runtime_error(#getter "() failed!"); \
+                return r; \
+            }(); \
+        return utf16Normalize(sv, normalizer); \
+    }
+SWORDXX_DEFINE_NORMALIZER(Nfkd, unorm2_getNFKDInstance)
+SWORDXX_DEFINE_NORMALIZER(Nfc, unorm2_getNFCInstance)
+#undef SWORDXX_DEFINE_NORMALIZER
 
 std::basic_string<char16_t> utf8ToUtf16(std::string_view sv) {
     static_assert(std::numeric_limits<std::int32_t>::max()
