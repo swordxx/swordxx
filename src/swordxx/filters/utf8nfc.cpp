@@ -23,39 +23,23 @@
 
 #include "utf8nfc.h"
 
-#include <string>
-#include <unicode/unistr.h>
-#include <unicode/normlzr.h>
+#include "../utilstr.h"
 
 
 namespace swordxx {
 
-UTF8NFC::UTF8NFC() {
-        conv = ucnv_open("UTF-8", &err);
-}
+UTF8NFC::UTF8NFC() noexcept = default;
 
-UTF8NFC::~UTF8NFC() {
-         ucnv_close(conv);
-}
+UTF8NFC::~UTF8NFC() noexcept = default;
 
-char UTF8NFC::processText(std::string &text, const SWKey *key, const SWModule *module)
+char UTF8NFC::processText(std::string & text,
+                          SWKey const * key,
+                          SWModule const *)
 {
-    (void) module;
     if ((unsigned long)key < 2)    // hack, we're en(1)/de(0)ciphering
         return -1;
 
-    err = U_ZERO_ERROR;
-    icu::UnicodeString source(text.c_str(), text.size(), conv, err);
-    icu::UnicodeString target;
-
-    err = U_ZERO_ERROR;
-    icu::Normalizer::normalize(source, UNORM_NFC, 0, target, err);
-
-    err = U_ZERO_ERROR;
-    text.resize(text.size() * 2u, '\0'); // potentially, it can grow to 2x the original size
-    int32_t len = target.extract(&text[0u], text.size(), conv, err);
-    text.resize(len, '\0');
-
+    text = utf8NfcNormalize(text);
     return 0;
 }
 

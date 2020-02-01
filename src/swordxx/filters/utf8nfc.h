@@ -25,27 +25,20 @@
 
 #include "../swfilter.h"
 
-#include <unicode/uchar.h>
-#include <unicode/ucnv.h>
-#include <unicode/unorm.h>
-#include <unicode/utypes.h>
-
 
 namespace swordxx {
 
-/** This filter normalizes UTF-8 encoded text
- */
+/** This filter normalizes UTF-8 encoded text  */
 class SWDLLEXPORT UTF8NFC : public SWFilter {
-private:
-    UConverter* conv;
-    UErrorCode err;
-public:
-    UTF8NFC();
-    ~UTF8NFC() override;
+
+public: /* Methods: */
+
+    UTF8NFC() noexcept;
+    ~UTF8NFC() noexcept override;
 
     char processText(std::string & text,
-                         SWKey const * key = nullptr,
-                         SWModule const * module = nullptr) override;
+                     SWKey const * key = nullptr,
+                     SWModule const * module = nullptr) override;
 
 };
 
