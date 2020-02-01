@@ -20,15 +20,20 @@
 
 #include <array>
 #include <cassert>
+#include <cstdint>
 #include <cstdlib>
 #include <cstring>
+#include <limits>
 #include <stdexcept>
 #include <unicode/resbund.h>
 #include <unicode/translit.h>
+#include <unicode/rep.h>
 #include <unicode/uchar.h>
 #include <unicode/ucnv.h>
 #include <unicode/unistr.h>
 #include <vector>
+#include <utility>
+#include <type_traits>
 #include "../DebugOnly.h"
 #include "../max_v.h"
 #include "../SignConversion.h"
@@ -51,6 +56,112 @@ SE_JAMO, SE_HAN, SE_KANJI
 };
 
 constexpr unsigned const NUMSCRIPTS = SE_KANJI + 1u;
+
+/// \copyright 2020 Jaak Ristioja
+class ReplaceableUtf16String
+        : public std::basic_string<char16_t>
+        , public icu::Replaceable
+{
+
+public: /* Methods: */
+
+    template <typename ... Args,
+              typename =
+                    std::enable_if_t<
+                        std::is_constructible_v<
+                            std::basic_string<char16_t>,
+                            Args...
+                        >
+                    >>
+    ReplaceableUtf16String(Args && ... args)
+        noexcept(std::is_nothrow_default_constructible_v<icu::Replaceable>
+                 && std::is_nothrow_constructible_v<
+                            std::basic_string<char16_t>,
+                            Args...
+                        >)
+        : std::basic_string<char16_t>(std::forward<Args>(args)...)
+    {}
+
+    using std::basic_string<char16_t>::operator=;
+
+    void extractBetween(std::int32_t start,
+                        std::int32_t limit,
+                        icu::UnicodeString & target) const final override
+    {
+        static_assert(std::numeric_limits<std::int32_t>::max()
+                      <= std::numeric_limits<size_type>::max(), "");
+        assert(0 <= start);
+        assert(start <= limit);
+        assert(static_cast<size_type>(limit) < size());
+        if (start >= limit) {
+            target.remove();
+        } else {
+            target.setTo(data() + start, limit - start);
+        }
+    }
+
+    void handleReplaceBetween(std::int32_t start,
+                              std::int32_t limit,
+                              icu::UnicodeString const & text) final override
+    {
+        static_assert(std::numeric_limits<std::int32_t>::max()
+                      <= std::numeric_limits<size_type>::max(), "");
+        assert(0 <= start);
+        assert(start <= limit);
+        assert(static_cast<size_type>(limit) < size());
+        auto const pos = static_cast<size_type>(start);
+        auto const n = static_cast<size_type>(limit - start);
+        if (auto const * const buffer = text.getBuffer()) {
+            replace(pos,
+                    n,
+                    text.getBuffer(),
+                    static_cast<size_type>(text.length()));
+        } else {
+            erase(pos, n);
+        }
+    }
+
+    void copy(std::int32_t start, std::int32_t limit, std::int32_t dest)
+            final override
+    {
+        static_assert(std::numeric_limits<std::int32_t>::max()
+                      <= std::numeric_limits<size_type>::max(), "");
+        assert(0 <= start);
+        assert(start <= limit);
+        assert(static_cast<size_type>(limit) < size());
+        assert(dest <= start || dest >= limit);
+
+        auto const pos = static_cast<size_type>(start);
+        auto const n = static_cast<size_type>(limit - start);
+        insert(static_cast<size_type>(dest), *this, pos, n);
+    }
+
+    std::int32_t getLength() const final override {
+        if (size() > std::numeric_limits<std::int32_t>::max())
+            throw std::runtime_error("Implementation limits reached");
+        return static_cast<std::int32_t>(size());
+    }
+
+    char16_t getCharAt(std::int32_t offset) const final override {
+        static_assert(std::numeric_limits<std::int32_t>::max()
+                      <= std::numeric_limits<size_type>::max(), "");
+        assert(offset >= 0);
+        assert(static_cast<size_type>(offset) < size());
+        return (*this)[static_cast<size_type>(offset)];
+    }
+
+    ::UChar32 getChar32At(std::int32_t offset) const final override {
+        auto const len = getLength();
+        return icu::UnicodeString(data(), len, len).char32At(offset);
+    }
+
+
+    ::UBool hasMetaData() const final override { return false; }
+
+    icu::Replaceable * clone() const final override
+    { return new ReplaceableUtf16String(*this); }
+
+};
 
 auto createTrans(std::string const & id) {
     UErrorCode status = U_ZERO_ERROR;
@@ -87,14 +198,6 @@ char UTF8Transliterator::processText(std::string & text,
     if (!selectedOptionIndex)
         return 0;
 
-    std::unique_ptr<::UConverter, void (*)(::UConverter *)> conv(
-                []() {
-                    ::UErrorCode err = U_ZERO_ERROR;
-                    return ::ucnv_open("UTF-8", &err);
-                }(),
-                +[](::UConverter * const p) noexcept { ::ucnv_close(p); });
-    if (!conv)
-        throw std::runtime_error("::ucnv_open() failed!");
     std::string id;
     auto const addTrans =
             [&id](auto && newTrans) {
@@ -105,42 +208,7 @@ char UTF8Transliterator::processText(std::string & text,
     bool compat = false;
 
     // Convert UTF-8 string to UTF-16 (UChars)
-    std::vector<UChar> source;
-    {
-        UErrorCode err = U_ZERO_ERROR;
-        auto const sourceLen = std::strlen(text.c_str());
-        if (sourceLen >= toUnsigned(max_v<std::int32_t>))
-            throw std::runtime_error("Implementation limits reached!");
-        auto const len = ::ucnv_toUChars(conv.get(),
-                                         nullptr,
-                                         0,
-                                         text.c_str(),
-                                         static_cast<std::int32_t>(sourceLen),
-                                         &err);
-        if (U_FAILURE(err))
-            throw std::runtime_error("::ucnv_toUChars() failed!");
-        assert(len >= 0);
-        #pragma GCC diagnostic push
-        #pragma GCC diagnostic ignored "-Wtype-limits"
-        if constexpr (toUnsigned(max_v<decltype(len)>)
-                      >= max_v<decltype(source)::size_type>)
-            if (toUnsigned(len) >= max_v<decltype(source)::size_type>)
-                throw std::runtime_error("Implementation limits reached!");
-        #pragma GCC diagnostic pop
-        source.resize(static_cast<std::size_t>(len) + 1u);
-        err = U_ZERO_ERROR;
-        SWORDXX_DEBUG_ONLY(auto const r =)
-                ::ucnv_toUChars(conv.get(),
-                                source.data(),
-                                len,
-                                text.c_str(),
-                                static_cast<std::int32_t>(sourceLen),
-                                &err);
-        assert(r == len);
-        if (U_FAILURE(err))
-            throw std::runtime_error("::ucnv_toUChars() failed!");
-        source.back() = 0;
-    }
+    ReplaceableUtf16String source(utf8ToUtf16(text));
 
     // Figure out which scripts are used in the string
     std::array<unsigned char, NUMSCRIPTS> scripts;
@@ -593,39 +661,8 @@ char UTF8Transliterator::processText(std::string & text,
     addTrans("NFC");
 
     if (auto const trans = createTrans(id)) {
-        icu::UnicodeString target(source.data());
-        trans->transliterate(target);
-        UErrorCode err = U_ZERO_ERROR;
-        auto const len = ::ucnv_fromUChars(conv.get(),
-                                           nullptr,
-                                           0,
-                                           target.getBuffer(),
-                                           target.length(),
-                                           &err);
-        if (U_FAILURE(err))
-            throw std::runtime_error("::ucnv_fromUChars() failed!");
-        assert(len >= 0);
-        std::string out;
-        #pragma GCC diagnostic push
-        #pragma GCC diagnostic ignored "-Wtype-limits"
-        if constexpr (toUnsigned(max_v<decltype(len)>)
-                      > max_v<decltype(out)::size_type>)
-            if (toUnsigned(len) > max_v<decltype(out)::size_type>)
-                throw std::runtime_error("Implementation limits reached!");
-        out.resize(static_cast<decltype(out)::size_type>(toUnsigned(len)));
-        err = U_ZERO_ERROR;
-        #pragma GCC diagnostic pop
-        SWORDXX_DEBUG_ONLY(auto const r =)
-                ::ucnv_fromUChars(conv.get(),
-                                  out.data(),
-                                  len,
-                                  target.getBuffer(),
-                                  target.length(),
-                                  &err);
-        assert(r == len);
-        if (U_FAILURE(err))
-            throw std::runtime_error("::ucnv_fromUChars() failed!");
-        text.swap(out);
+        trans->transliterate(source);
+        text = utf16ToUtf8(source);
     }
     return 0;
 }
