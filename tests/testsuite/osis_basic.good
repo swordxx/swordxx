@@ -4,10 +4,10 @@ Psalms 3:1
 -------
 Preverse Header 0:
 Raw:
-<div sID="gen12" type="section"/> <title canonical="true" type="psalm">A Psalm of David, when he fled from Absalom his son.</title> <div sID="gen13" type="x-p"/> <lg sID="gen14"/> 
+<div sID="gen12" type="section"/> <title canonical="true" type="psalm">A Psalm of David<note n="A" osisID="Ps.3.xref.A" swordFootnote="1" type="crossReference"></note>, when he fled from Absalom his son.</title> <div sID="gen13" type="x-p"/> <lg sID="gen14"/> 
 -------
 Rendered Header:
- <h3 class="title psalm canonical">A Psalm of David, when he fled from Absalom his son.</h3>
+ <h3 class="title psalm canonical">A Psalm of David<a class="noteMarker crossReference" href="passagestudy.jsp?action=showNote&type=x&value=1&module=OSISReference&passage=Psalms+3%3A1"><small><sup class="x">*x</sup></small></a>, when he fled from Absalom his son.</h3>
 
 <br />
  
