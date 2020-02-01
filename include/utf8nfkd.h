@@ -25,18 +25,12 @@
 
 #include <swfilter.h>
 
-#include <unicode/utypes.h>
-#include <unicode/ucnv.h>
-#include <unicode/uchar.h>
-#include <unicode/unorm.h>
-
 SWORD_NAMESPACE_START
 
+struct UTF8NFKDPrivate;
 class SWDLLEXPORT UTF8NFKD : public SWFilter {
 private:
-	UConverter* conv;
-	UChar *source, *target;
-	UErrorCode err;
+	struct UTF8NFKDPrivate *p;
 public:
 	UTF8NFKD();
 	~UTF8NFKD();  
