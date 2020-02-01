@@ -27,6 +27,7 @@
 #include <cstring>
 #include <iterator>
 #include <memory>
+#include <new>
 #include <type_traits>
 #include <unicode/locid.h>
 #include <unicode/translit.h>
@@ -244,6 +245,85 @@ std::string utf8ToUpper(std::string_view sv) {
         return std::string(sv);
     ucInUTF16.reset();
     return std::string(lcInUTF8.get(), static_cast<std::size_t>(lcSizeInUtf8));
+}
+
+std::basic_string<char16_t> utf8ToUtf16(std::string_view sv) {
+    static_assert(std::numeric_limits<std::int32_t>::max()
+                  <= std::numeric_limits<std::size_t>::max(), "");
+    if (sv.empty())
+        return {};
+    if (sv.size() > std::numeric_limits<std::int32_t>::max())
+        throw std::bad_array_new_length();
+
+    // Calculate destination buffer size:
+    std::int32_t sizeInUtf16;
+    {
+        ::UErrorCode err = ::U_ZERO_ERROR;
+        ::u_strFromUTF8(nullptr,
+                        0,
+                        &sizeInUtf16,
+                        sv.data(),
+                        static_cast<std::int32_t>(sv.size()),
+                        &err);
+        if (::U_FAILURE(err) && (err != ::U_BUFFER_OVERFLOW_ERROR))
+            throw std::runtime_error("u_strFromUTF8() failed!");
+    }
+    assert(sizeInUtf16 >= 0);
+
+    // Do the conversion:
+    std::basic_string<char16_t> r;
+    r.resize(static_cast<std::size_t>(sizeInUtf16));
+    {
+        ::UErrorCode err = ::U_ZERO_ERROR;
+        ::u_strFromUTF8(r.data(),
+                        sizeInUtf16,
+                        nullptr,
+                        sv.data(),
+                        static_cast<std::int32_t>(sv.size()),
+                        &err);
+        if (::U_FAILURE(err))
+            throw std::runtime_error("u_strFromUTF8() failed!");
+    }
+    return r;
+}
+
+std::string utf16ToUtf8(std::basic_string_view<char16_t> sv) {
+    static_assert(std::numeric_limits<std::int32_t>::max()
+                  <= std::numeric_limits<std::size_t>::max(), "");
+    if (sv.empty())
+        return {};
+    if (sv.size() > std::numeric_limits<std::int32_t>::max())
+        throw std::bad_array_new_length();
+
+    // Calculate destination buffer size:
+    std::int32_t sizeInUtf8;
+    {
+        ::UErrorCode err = ::U_ZERO_ERROR;
+        ::u_strToUTF8(nullptr,
+                      0,
+                      &sizeInUtf8,
+                      sv.data(),
+                      static_cast<std::int32_t>(sv.size()),
+                      &err);
+        if (::U_FAILURE(err) && (err != ::U_BUFFER_OVERFLOW_ERROR))
+            throw std::runtime_error("u_strToUTF8() failed!");
+    }
+
+    // Do the conversion:
+    std::string r;
+    r.resize(static_cast<std::size_t>(sizeInUtf8));
+    {
+        ::UErrorCode err = ::U_ZERO_ERROR;
+        ::u_strToUTF8(r.data(),
+                      sizeInUtf8,
+                      nullptr,
+                      sv.data(),
+                      static_cast<std::int32_t>(sv.size()),
+                      &err);
+        if (::U_FAILURE(err))
+            throw std::runtime_error("u_strToUTF8() failed!");
+    }
+    return r;
 }
 
 } /* namespace swordxx */

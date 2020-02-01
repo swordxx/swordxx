@@ -562,6 +562,9 @@ constexpr char asciiCharToUpper(char const c) noexcept
 
 std::string utf8ToUpper(std::string_view sv);
 
+std::basic_string<char16_t> utf8ToUtf16(std::string_view sv);
+std::string utf16ToUtf8(std::basic_string_view<char16_t> sv);
+
 } /* namespace swordxx */
 
 #endif /* SWORDXX_UTILSTR_H */
