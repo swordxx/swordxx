@@ -197,54 +197,49 @@ int strnicmp(char const * s1, char const * s2, std::size_t n) noexcept {
     return r;
 }
 
-std::string utf8ToUpper(std::string_view sv) {
+std::string utf8ToUpper(std::string_view sv)
+{ return utf16ToUtf8(utf16ToUpper(utf8ToUtf16(sv))); }
+
+std::basic_string<char16_t> utf16ToUpper(std::basic_string_view<char16_t> sv) {
+    static_assert(std::numeric_limits<std::int32_t>::max()
+                  <= std::numeric_limits<std::size_t>::max(), "");
     if (sv.empty())
         return {};
+    if (sv.size() > std::numeric_limits<std::int32_t>::max())
+        throw std::bad_array_new_length();
 
-    static_assert(std::numeric_limits<int32_t>::max()
-                  <= std::numeric_limits<std::size_t>::max(), "");
-
-    int32_t lcSizeInUtf16 = 0;
-    UErrorCode err = U_ZERO_ERROR;
-    u_strFromUTF8(nullptr, 0, &lcSizeInUtf16, sv.data(), sv.size(), &err);
-    if ((err != U_BUFFER_OVERFLOW_ERROR) && (err != U_ZERO_ERROR))
-        return std::string(sv);
-    assert(lcSizeInUtf16 >= 0);
-    auto lcInUTF16(std::make_unique<UChar[]>(
-                       static_cast<std::size_t>(lcSizeInUtf16)));
-    err = U_ZERO_ERROR;
-    u_strFromUTF8(lcInUTF16.get(), lcSizeInUtf16, nullptr, sv.data(), sv.size(), &err);
-    if ((err != U_STRING_NOT_TERMINATED_WARNING) && (err != U_ZERO_ERROR))
-        return std::string(sv);
-
-    err = U_ZERO_ERROR;
-    auto const ucSizeInUtf16 =
-            u_strToUpper(nullptr, 0, lcInUTF16.get(), lcSizeInUtf16, nullptr, &err);
-    if ((err != U_BUFFER_OVERFLOW_ERROR) && (err != U_ZERO_ERROR))
-        return std::string(sv);
+    // Calculate destination buffer size:
+    std::int32_t ucSizeInUtf16;
+    {
+        assert(sv.size() <= std::numeric_limits<std::int32_t>::max());
+        ::UErrorCode err = ::U_ZERO_ERROR;
+        ucSizeInUtf16 =
+                ::u_strToUpper(nullptr,
+                               0,
+                               sv.data(),
+                               static_cast<std::int32_t>(sv.size()),
+                               nullptr,
+                               &err);
+        if (::U_FAILURE(err) && (err != ::U_BUFFER_OVERFLOW_ERROR))
+            throw std::runtime_error("u_strToUpper() failed!");
+    }
     assert(ucSizeInUtf16 >= 0);
-    auto ucInUTF16(std::make_unique<UChar[]>(
-                       static_cast<std::size_t>(ucSizeInUtf16)));
-    err = U_ZERO_ERROR;
-    u_strToUpper(ucInUTF16.get(), ucSizeInUtf16, lcInUTF16.get(), lcSizeInUtf16, nullptr, &err);
-    if ((err != U_STRING_NOT_TERMINATED_WARNING) && (err != U_ZERO_ERROR))
-        return std::string(sv);
-    lcInUTF16.reset();
 
-    int32_t lcSizeInUtf8 = 0;
-    err = U_ZERO_ERROR;
-    u_strToUTF8(nullptr, 0, &lcSizeInUtf8, ucInUTF16.get(), ucSizeInUtf16, &err);
-    if ((err != U_BUFFER_OVERFLOW_ERROR) && (err != U_ZERO_ERROR))
-        return std::string(sv);
-    auto lcInUTF8(std::make_unique<char[]>(
-                      static_cast<std::size_t>(lcSizeInUtf8)));
-
-    err = U_ZERO_ERROR;
-    u_strToUTF8(lcInUTF8.get(), lcSizeInUtf8, nullptr, ucInUTF16.get(), ucSizeInUtf16, &err);
-    if ((err != U_STRING_NOT_TERMINATED_WARNING) && (err != U_ZERO_ERROR))
-        return std::string(sv);
-    ucInUTF16.reset();
-    return std::string(lcInUTF8.get(), static_cast<std::size_t>(lcSizeInUtf8));
+    // Convert to uppercase:
+    std::basic_string<char16_t> ucInUtf16;
+    ucInUtf16.resize(static_cast<std::size_t>(ucSizeInUtf16));
+    {
+        ::UErrorCode err = ::U_ZERO_ERROR;
+        ::u_strToUpper(ucInUtf16.data(),
+                       ucSizeInUtf16,
+                       sv.data(),
+                       static_cast<std::int32_t>(sv.size()),
+                       nullptr,
+                       &err);
+        if (::U_FAILURE(err))
+            throw std::runtime_error("u_strToUpper() failed!");
+    }
+    return ucInUtf16;
 }
 
 std::basic_string<char16_t> utf8ToUtf16(std::string_view sv) {
