@@ -34,6 +34,7 @@
 #include <unicode/uchar.h>
 #include <unicode/ucnv.h>
 #include <unicode/unistr.h>
+#include <unicode/unorm2.h>
 #include <unicode/ustring.h>
 #include <unicode/utypes.h>
 #include "sysdata.h"
@@ -240,6 +241,60 @@ std::basic_string<char16_t> utf16ToUpper(std::basic_string_view<char16_t> sv) {
             throw std::runtime_error("u_strToUpper() failed!");
     }
     return ucInUtf16;
+}
+
+std::string utf8NfkdNormalize(std::string_view sv)
+{ return utf16ToUtf8(utf16NfkdNormalize(utf8ToUtf16(sv))); }
+
+std::basic_string<char16_t> utf16NfkdNormalize(
+        std::basic_string_view<char16_t> sv)
+{
+    static auto const normalizer =
+            []() {
+                UErrorCode err = ::U_ZERO_ERROR;
+                auto const r = ::unorm2_getNFKDInstance(&err);
+                if (::U_FAILURE(err))
+                    throw std::runtime_error("unorm2_getNFKDInstance() failed!");
+                return r;
+            }();
+
+    static_assert(std::numeric_limits<std::int32_t>::max()
+                  <= std::numeric_limits<std::size_t>::max(), "");
+    if (sv.empty())
+        return {};
+    if (sv.size() > std::numeric_limits<std::int32_t>::max())
+        throw std::bad_array_new_length();
+
+    // Calculate destination buffer size:
+    std::int32_t len;
+    {
+        char16_t buf;
+        ::UErrorCode err = ::U_ZERO_ERROR;
+        len = ::unorm2_normalize(normalizer,
+                                 sv.data(),
+                                 static_cast<std::int32_t>(sv.size()),
+                                 &buf,
+                                 1,
+                                 &err);
+        if (::U_FAILURE(err) && (err != ::U_BUFFER_OVERFLOW_ERROR))
+            throw std::runtime_error("unorm2_normalize() failed!");
+    }
+
+    // Do the actual normalization:
+    std::basic_string<char16_t> r;
+    r.resize(static_cast<decltype(r)::size_type>(len));
+    {
+        ::UErrorCode err = ::U_ZERO_ERROR;
+        ::unorm2_normalize(normalizer,
+                           sv.data(),
+                           static_cast<std::int32_t>(sv.size()),
+                           r.data(),
+                           len,
+                           &err);
+        if (::U_FAILURE(err))
+            throw std::runtime_error("unorm2_normalize() failed!");
+    }
+    return r;
 }
 
 std::basic_string<char16_t> utf8ToUtf16(std::string_view sv) {
