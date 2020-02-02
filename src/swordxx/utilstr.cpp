@@ -38,10 +38,14 @@
 #include <unicode/ushape.h>
 #include <unicode/ustring.h>
 #include <unicode/utypes.h>
+#include "max_v.h"
 #include "sysdata.h"
 
 
 namespace swordxx {
+
+static_assert(max_v<unsigned char> == 255u,
+              "Required by the constexpr tables in header file.");
 
 void addTrailingDirectorySlash(std::string & buf) {
     assert(!buf.empty());
