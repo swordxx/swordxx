@@ -322,6 +322,48 @@ bool TEIHTMLHREF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData
 			}
 		}
 
+		// <list> <item>
+		else if (!strcmp(tag.getName(), "list")) {
+			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
+
+				SWBuf rend = tag.getAttribute("rend");
+				
+				u->lastHi = rend;
+				if (rend == "numbered") {
+					buf += "<ol>\n";
+					}
+				else if (rend == "bulletted") {
+					buf += "<ul>\n";
+				}
+				else {
+					buf += "<span class=\"list "; 
+					buf += rend.c_str(); 
+					buf += "\">";
+				}
+			}
+			else if (tag.isEndTag()) {
+				SWBuf rend = u->lastHi;
+				if (rend == "numbered") {
+					buf += "</ol>\n>";
+				}
+				else if (rend == "bulleted") {
+					buf += "</ul>\n";
+				
+				}
+				else {
+					buf += "</span>\n";
+				}
+				u->supressAdjacentWhitespace = true;
+			}
+		}
+		else if (!strcmp(tag.getName(), "item")) {
+			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
+				buf += "<li>";
+			}
+			else if (tag.isEndTag()) {
+				buf += "</li>\n";
+			}
+		}
 		else {
 			return false;  // we still didn't handle token
 		}
