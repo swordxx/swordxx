@@ -311,6 +311,53 @@ bool TEILaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *u
 				buf += "";
 			}
 		}
+		// <list> <item>
+		else if (!strcmp(tag.getName(), "list")) {
+			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
+
+				SWBuf rend = tag.getAttribute("rend");
+				
+				u->lastHi = rend;
+				if (rend == "numbered") {
+					buf += "\\begin{enumerate}\n";
+					}
+				else if (rend == "bulleted") {
+					buf += "\\begin{itemize}\n";
+				}
+				else {
+					buf += "\\begin{list-"; 
+					buf += rend.c_str(); 
+					buf += "}\n";
+				}
+			}
+			else if (tag.isEndTag()) {
+				SWBuf rend = u->lastHi;
+				if (rend == "numbered") {
+					buf += "\\end{enumerate}\n>";
+				}
+				else if (rend == "bulletted") {
+					buf += "\\end{itemize}\n";
+				
+				}
+				else {
+					buf += "\\end{list-";
+					buf += rend;
+					buf += "}\n";
+				}
+				u->supressAdjacentWhitespace = true;
+			}
+		}
+		else if (!strcmp(tag.getName(), "item")) {
+			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
+				buf += "\\item";
+			}
+		}
+		else {
+			return false;  // we still didn't handle token
+		}
+
+
+	}
 
 
 		else {
