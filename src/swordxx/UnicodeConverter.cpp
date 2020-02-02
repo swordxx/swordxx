@@ -19,6 +19,7 @@
 #include <cstdint>
 #include <limits>
 #include <mutex>
+#include <new>
 #include <stdexcept>
 #include <unicode/ucnv.h>
 #include <unicode/utypes.h>
@@ -78,7 +79,7 @@ struct UnicodeConverterPrivate {
         static_assert(std::numeric_limits<typename To::size_type>::max()
                       >= std::numeric_limits<std::int32_t>::max(), "");
         if (sv.size() > std::numeric_limits<std::int32_t>::max())
-            throw std::runtime_error("Implementation limits reached!");
+            throw std::bad_array_new_length();
 
         std::lock_guard<std::mutex> const guard(m_mutex);
         resetFunction(m_converter);

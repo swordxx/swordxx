@@ -28,6 +28,7 @@
 #include <cstdlib>
 #include <cstring>
 #include <memory>
+#include <new>
 #include <stdexcept>
 #include <string>
 #include <unicode/ubidi.h>
@@ -85,7 +86,7 @@ char UTF8BiDiReorder::processText(std::string & text,
         if constexpr (toUnsigned(max_v<decltype(maxLen)>)
                       > max_v<decltype(ustr2)::size_type>)
             if (toUnsigned(maxLen) > max_v<decltype(ustr2)::size_type>)
-                throw std::runtime_error("Implementation limits reached!");
+                throw std::bad_array_new_length();
         #pragma GCC diagnostic pop
         ustr2.resize(static_cast<decltype(ustr2)::size_type>(maxLen));
         {
