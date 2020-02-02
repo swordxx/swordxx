@@ -35,6 +35,7 @@
 #include <unicode/ucnv.h>
 #include <unicode/unistr.h>
 #include <unicode/unorm2.h>
+#include <unicode/ushape.h>
 #include <unicode/ustring.h>
 #include <unicode/utypes.h>
 #include "sysdata.h"
@@ -309,6 +310,49 @@ std::basic_string<char16_t> utf16Normalize(
 SWORDXX_DEFINE_NORMALIZER(Nfkd, unorm2_getNFKDInstance)
 SWORDXX_DEFINE_NORMALIZER(Nfc, unorm2_getNFCInstance)
 #undef SWORDXX_DEFINE_NORMALIZER
+
+std::string utf8ShapeArabic(std::string_view sv)
+{ return utf16ToUtf8(utf16ShapeArabic(utf8ToUtf16(sv))); }
+
+std::basic_string<char16_t>
+utf16ShapeArabic(std::basic_string_view<char16_t> sv) {
+    static_assert(std::numeric_limits<decltype(sv)::size_type>::max()
+                  >= std::numeric_limits<std::int32_t>::max(), "");
+    if (sv.size() > std::numeric_limits<std::int32_t>::max())
+        throw std::bad_array_new_length();
+
+    static constexpr auto const options =
+            U_SHAPE_LETTERS_SHAPE | U_SHAPE_DIGITS_EN2AN;
+
+    std::int32_t destSize;
+    {
+        ::UErrorCode err = ::U_ZERO_ERROR;
+        destSize = ::u_shapeArabic(sv.data(),
+                                   static_cast<std::int32_t>(sv.size()),
+                                   nullptr,
+                                   0,
+                                   options,
+                                   &err);
+
+        if (::U_FAILURE(err) && (err != ::U_BUFFER_OVERFLOW_ERROR))
+            throw std::runtime_error("u_shapeArabic() failed!");
+    }
+    std::basic_string<char16_t> r;
+    r.resize(static_cast<decltype(r)::size_type>(destSize));
+    {
+        ::UErrorCode err = ::U_ZERO_ERROR;
+        destSize = ::u_shapeArabic(sv.data(),
+                                   static_cast<std::int32_t>(sv.size()),
+                                   r.data(),
+                                   destSize,
+                                   options,
+                                   &err);
+
+        if (::U_FAILURE(err))
+            throw std::runtime_error("u_shapeArabic() failed!");
+    }
+    return r;
+}
 
 std::basic_string<char16_t> utf8ToUtf16(std::string_view sv) {
     static_assert(std::numeric_limits<std::int32_t>::max()
