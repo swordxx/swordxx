@@ -2,12 +2,11 @@
  *
  *  utf8arshaping.h -    Implementation of UTF8arShaping
  *
- * $Id$
- *
  * Copyright 2001-2013 CrossWire Bible Society (http://www.crosswire.org)
  *    CrossWire Bible Society
  *    P. O. Box 2528
  *    Tempe, AZ  85280-2528
+ * Copyright 2020 Jaak Ristioja
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -25,11 +24,6 @@
 
 #include "../swfilter.h"
 
-#include <unicode/uchar.h>
-#include <unicode/ucnv.h>
-#include <unicode/ushape.h>
-#include <unicode/utypes.h>
-
 
 namespace swordxx {
 
@@ -37,12 +31,8 @@ namespace swordxx {
  * FIXME: is that correct? how to control it?
  */
 class SWDLLEXPORT UTF8arShaping : public SWFilter {
-private:
-    UConverter* conv;
-    UErrorCode err;
-public:
-    UTF8arShaping();
-    ~UTF8arShaping() override;
+
+public: /* Methods: */
 
     char processText(std::string & text,
                          SWKey const * key = nullptr,
