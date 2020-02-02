@@ -24,6 +24,8 @@ UnicodeConversionFilter::UnicodeConversionFilter(char const * const type)
     : m_converter(type)
 {}
 
+UnicodeConversionFilter::~UnicodeConversionFilter() noexcept = default;
+
 std::string UnicodeConversionFilter::decode(std::string_view sv)
 { return utf16ToUtf8(m_converter.toUnicode(sv)); }
 

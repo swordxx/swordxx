@@ -29,6 +29,7 @@ class SWDLLEXPORT UnicodeConversionFilter : public SWFilter {
 public: /* Methods: */
 
     UnicodeConversionFilter(char const * type);
+    ~UnicodeConversionFilter() noexcept override;
 
 protected: /* Methods: */
 
