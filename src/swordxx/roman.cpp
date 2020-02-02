@@ -16,8 +16,8 @@
 #include "roman.h"
 
 #include <array>
-#include <limits>
 #include <cassert>
+#include "max_v.h"
 
 
 namespace swordxx {
@@ -63,10 +63,8 @@ std::optional<std::uintmax_t> parseRomanNumeral(std::string_view sv) noexcept {
     if (sv.empty())
         return 0u;
 
-    static constexpr auto const maxValue =
-            std::numeric_limits<std::uintmax_t>::max();
-    static_assert(std::numeric_limits<std::string_view::size_type>::max()
-                  <= maxValue, "");
+    static constexpr auto const maxValue = max_v<std::uintmax_t>;
+    static_assert(max_v<std::string_view::size_type> <= maxValue, "");
 
     using DigitValue = unsigned;
 
@@ -107,7 +105,7 @@ std::optional<std::uintmax_t> parseRomanNumeral(std::string_view sv) noexcept {
                         } while (!sv.empty() && (sv.front() == digit));
                     }
                 }
-                assert(digitValue < std::numeric_limits<DigitValue>::max());
+                assert(digitValue < max_v<DigitValue>);
                 return {maxValue - spanValueLeft,
                         static_cast<DigitValue>(digitValue)};
             };

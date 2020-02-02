@@ -16,10 +16,10 @@
 #include "XmlBuilder.h"
 
 #include <cassert>
-#include <limits>
 #include <ostream>
 #include <type_traits>
 #include <utility>
+#include "max_v.h"
 #include "utilxml.h"
 
 
@@ -52,8 +52,8 @@ XmlBuilder::XmlBuilder(std::string_view elemName)
     , m_sizeOfOpenTagNames(elemName.size())
     , m_inStartTag(true)
 {
-    static_assert(std::numeric_limits<decltype(elemName.size())>::max()
-                  <= std::numeric_limits<std::string::size_type>::max(), "");
+    static_assert(max_v<decltype(elemName.size())>
+                  <= max_v<std::string::size_type>, "");
 
     assert(!elemName.empty());
     m_contents += elemName;

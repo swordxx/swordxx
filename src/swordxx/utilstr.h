@@ -26,17 +26,17 @@
 #include <cstddef>
 #include <cstdint>
 #include <cstdio>
-#include <limits>
 #include <string>
 #include <string_view>
 #include <type_traits>
 #include <utility>
 #include "defs.h"
+#include "max_v.h"
 
 
 namespace swordxx {
 
-static_assert(std::numeric_limits<unsigned char>::max() == 255u, "");
+static_assert(max_v<unsigned char> == 255u, "");
 
 void addTrailingDirectorySlash(std::string & buf);
 void removeTrailingDirectorySlashes(std::string & buf);

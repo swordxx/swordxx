@@ -28,6 +28,7 @@
 #include <swordxx/filemgr.h>
 #include <swordxx/filters/utf8greekaccents.h>
 #include <swordxx/keys/treekeyidx.h>
+#include <swordxx/max_v.h>
 #include <swordxx/modules/common/entriesblk.h>
 #include <swordxx/modules/genbook/rawgenbook.h>
 #include <swordxx/utilstr.h>
@@ -99,8 +100,7 @@ void parseParams(int argc, char * argv[]) {
             int arg = 0;
             if (i + 1 < argc) {
                 arg = std::atoi(argv[i + 1]);
-                static_assert(std::numeric_limits<int>::max()
-                              <= std::numeric_limits<std::size_t>::max(), "");
+                static_assert(max_v<int> <= max_v<std::size_t>, "");
                 if (arg <= 0)
                     usage(*argv);
                 lexLevels = static_cast<std::size_t>(arg);
@@ -147,8 +147,7 @@ void writeEntry(SWModule & book,
                       -1,
                       &err);
         assert(len >= 0);
-        static_assert(std::numeric_limits<std::size_t>::max()
-                      >= std::numeric_limits<std::int32_t>::max(), "");
+        static_assert(max_v<std::size_t> >= max_v<std::int32_t>, "");
         auto const ulen = static_cast<std::size_t>(len);
         if (err == U_ZERO_ERROR) {
             {

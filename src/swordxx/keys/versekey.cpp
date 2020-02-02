@@ -29,11 +29,11 @@
 #include <cstdlib>
 #include <cstring>
 #include <fcntl.h>
-#include <limits>
 #include <memory>
 #include <sstream>
 #include <type_traits>
 #include "../localemgr.h"
+#include "../max_v.h"
 #include "../roman.h"
 #include "../ShareRef.h"
 #include "../swlocale.h"
@@ -428,8 +428,8 @@ ListKey VerseKey::parseVerseList(const char *buf, const char *defaultKey, bool e
     using namespace std::literals::string_view_literals;
 
     static_assert(std::is_unsigned<decltype(VerseKey::m_userData)>::value, "");
-    static_assert(std::numeric_limits<decltype(VerseKey::m_userData)>::max()
-                  >= std::numeric_limits<std::size_t>::max(), "");
+    static_assert(max_v<decltype(VerseKey::m_userData)>
+                  >= max_v<std::size_t>, "");
 
     // assert we have a buffer
     if (!buf)
@@ -1422,7 +1422,7 @@ void VerseKey::normalize(bool autocheck)
  * VerseKey::setTestament - Sets/gets testament
  *
  * ENT:    itestament - value which to set testament
- *        [std::numeric_limits<char>::max()] - only get
+ *        [max_v<char>] - only get
  *
  */
 
@@ -1493,7 +1493,7 @@ void VerseKey::setChapter(int ichapter)
  * VerseKey::setVerse - Sets/gets verse
  *
  * ENT:    iverse - value which to set verse
- *        [std::numeric_limits<int>::max()] - only get
+ *        [max_v<int>] - only get
  *
  * RET:    if unchanged ->          value of verse
  *    if   changed -> previous value of verse
@@ -1730,8 +1730,8 @@ std::string VerseKey::convertToOSIS(std::string const & inRef,
         }
         auto const & vk = static_cast<VerseKey &>(*element);
         auto const len = vk.m_userData - startFragIndex + 1u;
-        static_assert(std::numeric_limits<decltype(vk.m_userData)>::max()
-                      <= std::numeric_limits<std::size_t>::max(), "");
+        static_assert(max_v<decltype(vk.m_userData)>
+                      <= max_v<std::size_t>, "");
         std::string frag(&inRef[startFragIndex], len);
         while (!frag.empty() && frag.back() == '\0')
             frag.pop_back();

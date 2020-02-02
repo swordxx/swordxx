@@ -26,8 +26,8 @@
 #include <cstdarg>
 #include <cstdio>
 #include <iostream>
-#include <limits>
 #include <new>
+#include "max_v.h"
 
 
 namespace swordxx {
@@ -56,8 +56,7 @@ void SWLog::logMessage(char const * fmt, ...) const {
         auto size_(std::vsnprintf(nullptr, 0u, fmt, argptr));
         va_end(argptr);
         assert(size_ >= 0);
-        static_assert(std::numeric_limits<decltype(size_)>::max()
-                      <= std::numeric_limits<std::size_t>::max(), "");
+        static_assert(max_v<decltype(size_)> <= max_v<std::size_t>, "");
         auto size(static_cast<std::size_t>(size_));
         if (!++size)
             throw std::bad_array_new_length();

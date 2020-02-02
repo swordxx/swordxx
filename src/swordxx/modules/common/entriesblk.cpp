@@ -26,10 +26,10 @@
 #include <cstdint>
 #include <cstdlib>
 #include <cstring>
-#include <limits>
 #include <new>
 #include <stdexcept>
 #include "../../sysdata.h"
+#include "../../max_v.h"
 
 
 namespace swordxx {
@@ -46,7 +46,7 @@ inline constexpr bool sumFits(T const) noexcept { return true; }
 
 template <typename T, typename ... Args>
 inline constexpr bool sumFits(T a, T b, Args && ... args) noexcept {
-    return (std::numeric_limits<T>::max() - a >= b)
+    return (max_v<T> - a >= b)
            && sumFits<T>(a + b, std::forward<Args>(args)...);
 }
 
@@ -135,7 +135,7 @@ EntriesBlock::~EntriesBlock() noexcept = default;
 
 
 EntriesBlock::SizeType EntriesBlock::numEntries() const {
-    assert(m_entries.size() <= std::numeric_limits<SizeType>::max());
+    assert(m_entries.size() <= max_v<SizeType>);
     return static_cast<SizeType>(m_entries.size());
 }
 
@@ -160,7 +160,7 @@ std::vector<char> EntriesBlock::serialized() const {
             };
 
     // Write number of entries:
-    assert(m_entries.size() <= std::numeric_limits<SizeType>::max());
+    assert(m_entries.size() <= max_v<SizeType>);
     write32(static_cast<SizeType>(m_entries.size()));
 
     if (!m_entries.empty()) {
@@ -186,11 +186,11 @@ std::vector<char> EntriesBlock::serialized() const {
 
 
 EntriesBlock::SizeType EntriesBlock::addEntry(std::string_view entry) {
-    if (entry.size() > std::numeric_limits<EntrySizeType>::max() - 1u)
+    if (entry.size() > max_v<EntrySizeType> - 1u)
         throw std::runtime_error("Entry too big!");
 
     auto const oldNumEntries(m_entries.size());
-    if (oldNumEntries >= std::numeric_limits<SizeType>::max())
+    if (oldNumEntries >= max_v<SizeType>)
         throw std::runtime_error("Too many entries!");
 
     if (!sumFits<std::size_t>(m_serializedSize, METAENTRYSIZE, entry.size(), 1u))
@@ -198,7 +198,7 @@ EntriesBlock::SizeType EntriesBlock::addEntry(std::string_view entry) {
 
     std::size_t const newSerializedSize(
                 m_serializedSize + METAENTRYSIZE + entry.size() + 1u);
-    if (newSerializedSize < std::numeric_limits<EntryOffsetType>::max())
+    if (newSerializedSize < max_v<EntryOffsetType>)
         throw std::bad_array_new_length();
 
     m_entries.emplace_back(std::move(entry));

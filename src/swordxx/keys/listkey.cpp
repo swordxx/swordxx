@@ -274,9 +274,9 @@ void ListKey::remove() {
         auto it(m_array.begin());
         auto toIncrease(m_arrayPos);
         using DiffT = decltype(m_array)::difference_type;
-        while (toIncrease > std::numeric_limits<DiffT>::max()) {
-            it += std::numeric_limits<DiffT>::max();
-            toIncrease -= std::numeric_limits<DiffT>::max();
+        while (toIncrease > max_v<DiffT>) {
+            it += max_v<DiffT>;
+            toIncrease -= max_v<DiffT>;
         }
         m_array.erase(it + static_cast<DiffT>(toIncrease));
         setToElementAndTop_(

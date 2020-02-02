@@ -21,9 +21,9 @@
 #include <cstring>
 #include <curl/curl.h>
 #include <curl/easy.h>
-#include <limits>
 #include <string>
 #include <type_traits>
+#include "max_v.h"
 
 
 namespace swordxx {
@@ -57,8 +57,7 @@ int curlProgress(void * clientp,
         if (dlnow > dltotal)
             dlnow = dltotal;
 
-        static_assert(std::numeric_limits<::curl_off_t>::max()
-                      <= std::numeric_limits<std::size_t>::max(), "");
+        static_assert(max_v<::curl_off_t> <= max_v<std::size_t>, "");
         pd->m_statusReporter->update(static_cast<std::size_t>(dltotal),
                                      static_cast<std::size_t>(dlnow));
     }
@@ -83,8 +82,7 @@ std::size_t curlOutWrite(void * const buffer,
         auto const s = destBuffer.size();
         try {
             // Check for overflow:
-            if (std::numeric_limits<std::size_t>::max() - s
-                < totalSize)
+            if (max_v<std::size_t> - s < totalSize)
                 return 0u;
             destBuffer.resize(totalSize + s, '\0');
         } catch (...) {

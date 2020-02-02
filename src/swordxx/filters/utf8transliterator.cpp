@@ -23,7 +23,6 @@
 #include <cstdint>
 #include <cstdlib>
 #include <cstring>
-#include <limits>
 #include <stdexcept>
 #include <unicode/resbund.h>
 #include <unicode/translit.h>
@@ -88,8 +87,7 @@ public: /* Methods: */
                         std::int32_t limit,
                         icu::UnicodeString & target) const final override
     {
-        static_assert(std::numeric_limits<std::int32_t>::max()
-                      <= std::numeric_limits<size_type>::max(), "");
+        static_assert(max_v<std::int32_t> <= max_v<size_type>, "");
         assert(0 <= start);
         assert(start <= limit);
         assert(static_cast<size_type>(limit) < size());
@@ -104,8 +102,7 @@ public: /* Methods: */
                               std::int32_t limit,
                               icu::UnicodeString const & text) final override
     {
-        static_assert(std::numeric_limits<std::int32_t>::max()
-                      <= std::numeric_limits<size_type>::max(), "");
+        static_assert(max_v<std::int32_t> <= max_v<size_type>, "");
         assert(0 <= start);
         assert(start <= limit);
         assert(static_cast<size_type>(limit) < size());
@@ -124,8 +121,7 @@ public: /* Methods: */
     void copy(std::int32_t start, std::int32_t limit, std::int32_t dest)
             final override
     {
-        static_assert(std::numeric_limits<std::int32_t>::max()
-                      <= std::numeric_limits<size_type>::max(), "");
+        static_assert(max_v<std::int32_t> <= max_v<size_type>, "");
         assert(0 <= start);
         assert(start <= limit);
         assert(static_cast<size_type>(limit) < size());
@@ -137,14 +133,13 @@ public: /* Methods: */
     }
 
     std::int32_t getLength() const final override {
-        if (size() > std::numeric_limits<std::int32_t>::max())
+        if (size() > max_v<std::int32_t>)
             throw std::runtime_error("Implementation limits reached");
         return static_cast<std::int32_t>(size());
     }
 
     char16_t getCharAt(std::int32_t offset) const final override {
-        static_assert(std::numeric_limits<std::int32_t>::max()
-                      <= std::numeric_limits<size_type>::max(), "");
+        static_assert(max_v<std::int32_t> <= max_v<size_type>, "");
         assert(offset >= 0);
         assert(static_cast<size_type>(offset) < size());
         return (*this)[static_cast<size_type>(offset)];

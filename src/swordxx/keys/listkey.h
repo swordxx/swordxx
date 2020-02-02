@@ -27,11 +27,11 @@
 
 #include "../swkey.h"
 
-#include <limits>
 #include <memory>
 #include <type_traits>
 #include <vector>
 #include "../defs.h"
+#include "../max_v.h"
 
 
 namespace swordxx {
@@ -164,8 +164,7 @@ private: /* Methods: */
             m_error = KEYERR_OUTOFBOUNDS;
             return 0u;
         }
-        static_assert(std::numeric_limits<T>::max()
-                      <= std::numeric_limits<std::size_t>::max(), "");
+        static_assert(max_v<T> <= max_v<std::size_t>, "");
         return setToElementCheckBounds_(static_cast<std::size_t>(ielement));
     }
 

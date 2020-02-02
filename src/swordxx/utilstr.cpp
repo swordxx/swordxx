@@ -203,17 +203,16 @@ std::string utf8ToUpper(std::string_view sv)
 { return utf16ToUtf8(utf16ToUpper(utf8ToUtf16(sv))); }
 
 std::basic_string<char16_t> utf16ToUpper(std::basic_string_view<char16_t> sv) {
-    static_assert(std::numeric_limits<std::int32_t>::max()
-                  <= std::numeric_limits<std::size_t>::max(), "");
+    static_assert(max_v<std::int32_t> <= max_v<std::size_t>, "");
     if (sv.empty())
         return {};
-    if (sv.size() > std::numeric_limits<std::int32_t>::max())
+    if (sv.size() > max_v<std::int32_t>)
         throw std::bad_array_new_length();
 
     // Calculate destination buffer size:
     std::int32_t ucSizeInUtf16;
     {
-        assert(sv.size() <= std::numeric_limits<std::int32_t>::max());
+        assert(sv.size() <= max_v<std::int32_t>);
         ::UErrorCode err = ::U_ZERO_ERROR;
         ucSizeInUtf16 =
                 ::u_strToUpper(nullptr,
@@ -250,11 +249,10 @@ std::basic_string<char16_t> utf16Normalize(
         std::basic_string_view<char16_t> sv,
         ::UNormalizer2 const * const normalizer)
 {
-    static_assert(std::numeric_limits<std::int32_t>::max()
-                  <= std::numeric_limits<std::size_t>::max(), "");
+    static_assert(max_v<std::int32_t> <= max_v<std::size_t>, "");
     if (sv.empty())
         return {};
-    if (sv.size() > std::numeric_limits<std::int32_t>::max())
+    if (sv.size() > max_v<std::int32_t>)
         throw std::bad_array_new_length();
 
     // Calculate destination buffer size:
@@ -316,9 +314,8 @@ std::string utf8ShapeArabic(std::string_view sv)
 
 std::basic_string<char16_t>
 utf16ShapeArabic(std::basic_string_view<char16_t> sv) {
-    static_assert(std::numeric_limits<decltype(sv)::size_type>::max()
-                  >= std::numeric_limits<std::int32_t>::max(), "");
-    if (sv.size() > std::numeric_limits<std::int32_t>::max())
+    static_assert(max_v<decltype(sv)::size_type> >= max_v<std::int32_t>, "");
+    if (sv.size() > max_v<std::int32_t>)
         throw std::bad_array_new_length();
 
     static constexpr auto const options =
@@ -355,11 +352,10 @@ utf16ShapeArabic(std::basic_string_view<char16_t> sv) {
 }
 
 std::basic_string<char16_t> utf8ToUtf16(std::string_view sv) {
-    static_assert(std::numeric_limits<std::int32_t>::max()
-                  <= std::numeric_limits<std::size_t>::max(), "");
+    static_assert(max_v<std::int32_t> <= max_v<std::size_t>, "");
     if (sv.empty())
         return {};
-    if (sv.size() > std::numeric_limits<std::int32_t>::max())
+    if (sv.size() > max_v<std::int32_t>)
         throw std::bad_array_new_length();
 
     // Calculate destination buffer size:
@@ -395,11 +391,10 @@ std::basic_string<char16_t> utf8ToUtf16(std::string_view sv) {
 }
 
 std::string utf16ToUtf8(std::basic_string_view<char16_t> sv) {
-    static_assert(std::numeric_limits<std::int32_t>::max()
-                  <= std::numeric_limits<std::size_t>::max(), "");
+    static_assert(max_v<std::int32_t> <= max_v<std::size_t>, "");
     if (sv.empty())
         return {};
-    if (sv.size() > std::numeric_limits<std::int32_t>::max())
+    if (sv.size() > max_v<std::int32_t>)
         throw std::bad_array_new_length();
 
     // Calculate destination buffer size:
