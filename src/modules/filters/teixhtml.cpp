@@ -364,7 +364,7 @@ bool TEIXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *u
 					buf += "<ul>\n";
 				}
 				else {
-					buf += "<span type=\"list\" x-rend=\""; 
+					buf += "<span class=\"list "; 
 					buf += rend.c_str(); 
 					buf += "\">";
 				}
