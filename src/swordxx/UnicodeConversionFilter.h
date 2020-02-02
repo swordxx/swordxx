@@ -49,7 +49,7 @@ private: /* Fields: */
     class SWDLLEXPORT Name: public UnicodeConversionFilter { \
     public: /* Methods: */ \
         Name(); \
-        ~Name() noexcept; \
+        ~Name() noexcept override; \
         char processText(std::string & text, \
                          SWKey const * key = nullptr, \
                          SWModule const * module = nullptr) override; \
@@ -59,7 +59,7 @@ private: /* Fields: */
 #define SWORDXX_DEFINE_UNICODE_CONVERSION_FILTER(Name,conv,method) \
     namespace swordxx { \
     Name::Name() : UnicodeConversionFilter((conv)) {} \
-    Name::~Name() noexcept override = default; \
+    Name::~Name() noexcept = default; \
     char Name::processText(std::string & text, \
                            SWKey const * key, \
                            SWModule const *) \
