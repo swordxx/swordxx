@@ -2,8 +2,6 @@
  *
  *  canon_catholic2.h -    Versification data for the Catholic2 system
  *
- * $Id$
- *
  * Copyright 2010-2013 CrossWire Bible Society (http://www.crosswire.org)
  *    CrossWire Bible Society
  *    P. O. Box 2528

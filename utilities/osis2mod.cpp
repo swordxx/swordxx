@@ -2,8 +2,6 @@
  *
  *  osis2mod.cpp - Utility to import a module in OSIS format
  *
- * $Id$
- *
  * Copyright 2003-2014 CrossWire Bible Society (http://www.crosswire.org)
  *      CrossWire Bible Society
  *      P. O. Box 2528

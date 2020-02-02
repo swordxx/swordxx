@@ -3,8 +3,6 @@
  *  swoptfilter.cpp -    SWFilter descendant and base class for all option
  *             filters
  *
- * $Id$
- *
  * Copyright 2003-2013 CrossWire Bible Society (http://www.crosswire.org)
  *    CrossWire Bible Society
  *    P. O. Box 2528

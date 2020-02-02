@@ -2,8 +2,6 @@
  *
  * utf16utf8.cpp -    SWFilter descendant to convert UTF-16 to UTF-8
  *
- * $Id$
- *
  * Copyright 2001-2013 CrossWire Bible Society (http://www.crosswire.org)
  *    CrossWire Bible Society
  *    P. O. Box 2528

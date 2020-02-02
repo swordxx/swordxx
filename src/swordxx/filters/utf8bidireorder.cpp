@@ -4,8 +4,6 @@
  *                UTF-8 text to visual order according to the
  *                Unicode Bidirectional Algorithm (UBA)
  *
- * $Id$
- *
  * Copyright 2001-2013 CrossWire Bible Society (http://www.crosswire.org)
  *    CrossWire Bible Society
  *    P. O. Box 2528

@@ -2,8 +2,6 @@
  *
  *  osisxhtml.cpp -    Render filter for classed XHTML of an OSIS module
  *
- * $Id$
- *
  * Copyright 2011-2014 CrossWire Bible Society (http://www.crosswire.org)
  *    CrossWire Bible Society
  *    P. O. Box 2528

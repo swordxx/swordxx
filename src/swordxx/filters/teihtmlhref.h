@@ -1,9 +1,5 @@
 /******************************************************************************
  *
- *  teihtmlhref.h -    Implementation of TEIHTMLHREF
- *
- * $Id$
- *
  * Copyright 2008-2013 CrossWire Bible Society (http://www.crosswire.org)
  *    CrossWire Bible Society
  *    P. O. Box 2528

@@ -3,8 +3,6 @@
  *  thmllemma.cpp -    SWFilter descendant to hide or show lemmas
  *            in a ThML module
  *
- * $Id$
- *
  * Copyright 2001-2013 CrossWire Bible Society (http://www.crosswire.org)
  *    CrossWire Bible Society
  *    P. O. Box 2528

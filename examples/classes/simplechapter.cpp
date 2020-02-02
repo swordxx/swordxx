@@ -1,9 +1,5 @@
 /******************************************************************************
  *
- *  simplechapter.cpp -
- *
- * $Id$
- *
  * Copyright 2013-2014 CrossWire Bible Society (http://www.crosswire.org)
  *    CrossWire Bible Society
  *    P. O. Box 2528

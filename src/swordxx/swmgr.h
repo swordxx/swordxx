@@ -3,8 +3,6 @@
  *  swmgr.h -    definition of class SWMgr used to interact with an install
  *        base of Sword++ modules.
  *
- * $Id$
- *
  * Copyright 1997-2014 CrossWire Bible Society (http://www.crosswire.org)
  *    CrossWire Bible Society
  *    P. O. Box 2528
@@ -69,8 +67,6 @@ class SWOptionFilter;
  *
  * SWMgr exposes an installed module set and can be asked to configure the desired
  *    markup and options which modules will produce.
- *
- * @version $Id$
  */
 class SWDLLEXPORT SWMgr {
 

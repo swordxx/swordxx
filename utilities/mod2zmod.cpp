@@ -2,8 +2,6 @@
  *
  *  mod2zmod.cpp -    Compression on variable granularity
  *
- * $Id$
- *
  * Copyright 2000-2014 CrossWire Bible Society (http://www.crosswire.org)
  *    CrossWire Bible Society
  *    P. O. Box 2528

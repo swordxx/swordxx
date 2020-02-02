@@ -1,9 +1,5 @@
 /******************************************************************************
  *
- *  curlftpt.h  -    code for CURL impl of FTP Transport
- *
- * $Id$
- *
  * Copyright 2004-2013 CrossWire Bible Society (http://www.crosswire.org)
  *    CrossWire Bible Society
  *    P. O. Box 2528

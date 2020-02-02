@@ -1,9 +1,5 @@
 /******************************************************************************
  *
- *  thmlxhtml.h -    Implementation of ThMLXHTML
- *
- * $Id$
- *
  * Copyright 2011-2013 CrossWire Bible Society (http://www.crosswire.org)
  *    CrossWire Bible Society
  *    P. O. Box 2528

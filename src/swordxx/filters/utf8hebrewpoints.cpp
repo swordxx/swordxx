@@ -3,8 +3,6 @@
  *  utf8hebrewpoints.cpp -    SWFilter descendant to remove UTF-8 Hebrew
  *                vowel points
  *
- * $Id$
- *
  * Copyright 2001-2013 CrossWire Bible Society (http://www.crosswire.org)
  *    CrossWire Bible Society
  *    P. O. Box 2528

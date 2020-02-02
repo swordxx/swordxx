@@ -5,8 +5,6 @@
  *            following snippet outputs a module in HTML output
  *            encoded as UTF8.
  *
- * $Id$
- *
  * Copyright 2009-2013 CrossWire Bible Society (http://www.crosswire.org)
  *    CrossWire Bible Society
  *    P. O. Box 2528

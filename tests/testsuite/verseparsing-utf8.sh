@@ -1,10 +1,6 @@
 #!/bin/sh
 #******************************************************************************
 #
-# This only works if --with-icu was passed to configure
-#
-# $Id$
-#
 # Copyright 1998-2009 CrossWire Bible Society (http://www.crosswire.org)
 #    CrossWire Bible Society
 #    P. O. Box 2528

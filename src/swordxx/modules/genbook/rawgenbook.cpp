@@ -3,8 +3,6 @@
  *  rawgenbook.cpp -    code for class 'RawGenBook'- a module that reads raw
  *            text files: ot and nt using indexs ??.bks ??.cps ??.vss
  *
- * $Id$
- *
  * Copyright 2002-2013 CrossWire Bible Society (http://www.crosswire.org)
  *    CrossWire Bible Society
  *    P. O. Box 2528

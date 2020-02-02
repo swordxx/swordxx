@@ -4,8 +4,6 @@
  *            for all types of keys that have lists of specified
  *            indexes (e.g. a list of verses, place, etc.)
  *
- * $Id$
- *
  * Copyright 1997-2013 CrossWire Bible Society (http://www.crosswire.org)
  *    CrossWire Bible Society
  *    P. O. Box 2528

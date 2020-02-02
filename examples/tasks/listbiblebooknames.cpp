@@ -3,8 +3,6 @@
  *  verseranges.cpp -	This example demonstrates how to work with contiguous
  *			verse ranges using VerseKey
  *
- * $Id$
- *
  * Copyright 2011-2013 CrossWire Bible Society (http://www.crosswire.org)
  *	CrossWire Bible Society
  *	P. O. Box 2528

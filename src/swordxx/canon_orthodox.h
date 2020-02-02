@@ -2,8 +2,6 @@
  *
  *  canon_orthodox.h -    Versification data for the Orthodox system
  *
- * $Id$
- *
  * Copyright 2013 CrossWire Bible Society (http://www.crosswire.org)
  *    CrossWire Bible Society
  *    P. O. Box 2528

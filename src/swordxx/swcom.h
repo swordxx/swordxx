@@ -15,8 +15,6 @@
  *        commentary is incremented, it will go to the next ENTRY,
  *        not the next verse (likely Matt.1.7, from our example above).
  *
- * $Id$
- *
  * Copyright 1997-2013 CrossWire Bible Society (http://www.crosswire.org)
  *    CrossWire Bible Society
  *    P. O. Box 2528

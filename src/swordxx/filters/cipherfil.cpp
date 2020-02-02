@@ -3,8 +3,6 @@
  *  cipherfil.cpp -    CipherFilter, a SWFilter descendant to decipher
  *            a module
  *
- * $Id$
- *
  * Copyright 1999-2013 CrossWire Bible Society (http://www.crosswire.org)
  *    CrossWire Bible Society
  *    P. O. Box 2528

@@ -3,8 +3,6 @@
  *  versekey.h -    code for class 'VerseKey'- a standard Biblical verse
  *            key
  *
- * $Id$
- *
  * Copyright 1997-2013 CrossWire Bible Society (http://www.crosswire.org)
  *    CrossWire Bible Society
  *    P. O. Box 2528

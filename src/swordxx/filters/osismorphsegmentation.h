@@ -1,9 +1,5 @@
 /******************************************************************************
  *
- *  osismorphsegmentation.h -    Implementation of OSISMorphSegmentation
- *
- * $Id$
- *
  * Copyright 2006-2013 CrossWire Bible Society (http://www.crosswire.org)
  * CrossWire Bible Society
  * P. O. Box 2528

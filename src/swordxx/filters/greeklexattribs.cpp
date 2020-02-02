@@ -3,8 +3,6 @@
  *  greeklexattribs.cpp -    SWFilter descendant to set entry attributes
  *                for greek lexicons
  *
- * $Id$
- *
  * Copyright 2002-2013 CrossWire Bible Society (http://www.crosswire.org)
  *    CrossWire Bible Society
  *    P. O. Box 2528

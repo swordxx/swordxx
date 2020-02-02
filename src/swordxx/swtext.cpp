@@ -3,8 +3,6 @@
  *  swtext.cpp -    code for base class 'SWText'- The basis for all text
  *            modules
  *
- * $Id$
- *
  * Copyright 1997-2013 CrossWire Bible Society (http://www.crosswire.org)
  *    CrossWire Bible Society
  *    P. O. Box 2528

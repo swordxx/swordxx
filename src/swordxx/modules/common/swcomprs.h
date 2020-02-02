@@ -1,10 +1,5 @@
 /******************************************************************************
  *
- *  swcomprs.h -    definition of Class SWCompress used for data
- *            compression
- *
- * $Id$
- *
  * Copyright 1996-2014 CrossWire Bible Society (http://www.crosswire.org)
  *    CrossWire Bible Society
  *    P. O. Box 2528

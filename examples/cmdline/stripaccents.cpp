@@ -6,9 +6,6 @@
  *
  *                               stripaccents 4 "וְהָאָ֗רֶץ הָיְתָ֥ה תֹ֙הוּ֙ וָבֹ֔הוּ וְחֹ֖שֶׁךְ עַל־פְּנֵ֣י תְהֹ֑ום וְר֣וּחַ "
  *
- *
- * $Id: stripaccents.cpp 3382 2015-09-01 22:57GMT refdoc $
- *
  * Copyright 1997-2013 CrossWire Bible Society (http://www.crosswire.org)
  *    CrossWire Bible Society
  *    P. O. Box 2528

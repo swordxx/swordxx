@@ -1,9 +1,5 @@
 /******************************************************************************
  *
- *  addcomment.cpp -
- *
- * $Id$
- *
  * Copyright 1998-2013 CrossWire Bible Society (http://www.crosswire.org)
  *    CrossWire Bible Society
  *    P. O. Box 2528

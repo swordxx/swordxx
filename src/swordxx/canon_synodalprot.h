@@ -2,8 +2,6 @@
  *
  *  canon_synodalprot.h -    Versification data for the SynodalProt system
  *
- * $Id$
- *
  * Copyright 2013 CrossWire Bible Society (http://www.crosswire.org)
  *    CrossWire Bible Society
  *    P. O. Box 2528

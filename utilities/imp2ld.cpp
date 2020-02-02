@@ -2,8 +2,6 @@
  *
  *  imp2ld.cpp -    Utility to import LD modules in IMP format
  *
- * $Id$
- *
  * Copyright 2002-2014 CrossWire Bible Society (http://www.crosswire.org)
  *    CrossWire Bible Society
  *    P. O. Box 2528

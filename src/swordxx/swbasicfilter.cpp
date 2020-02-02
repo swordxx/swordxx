@@ -5,8 +5,6 @@
  *              many filters will need and can use as a starting
  *              point.
  *
- * $Id$
- *
  * Copyright 2001-2013 CrossWire Bible Society (http://www.crosswire.org)
  *    CrossWire Bible Society
  *    P. O. Box 2528

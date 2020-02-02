@@ -2,8 +2,6 @@
  *
  *  vpl2mod.cpp -    Utility to import VPL formatted modules
  *
- * $Id$
- *
  * Copyright 2000-2013 CrossWire Bible Society (http://www.crosswire.org)
  *    CrossWire Bible Society
  *    P. O. Box 2528

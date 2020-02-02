@@ -3,8 +3,6 @@
  *  swfilter.h -    definition of class SWFilter used to filter text between
  *                   different formats
  *
- * $Id$
- *
  * Copyright 1997-2013 CrossWire Bible Society (http://www.crosswire.org)
  *    CrossWire Bible Society
  *    P. O. Box 2528

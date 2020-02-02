@@ -5,8 +5,6 @@
  *            run.  This DOES NOT change the cipherkey in the
  *            module's .conf file.
  *
- * $Id$
- *
  * Copyright 2000-2013 CrossWire Bible Society (http://www.crosswire.org)
  *    CrossWire Bible Society
  *    P. O. Box 2528

@@ -2,8 +2,6 @@
  *
  *  stepdump.cpp -    Utility to dump a STEP module
  *
- * $Id$
- *
  * Copyright 2000-2013 CrossWire Bible Society (http://www.crosswire.org)
  *    CrossWire Bible Society
  *    P. O. Box 2528

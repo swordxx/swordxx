@@ -3,8 +3,6 @@
  *  verserangeparse.cpp -    This example shows
  *                how to parse a verse reference
  *
- * $Id$
- *
  * Copyright 2006-2013 CrossWire Bible Society (http://www.crosswire.org)
  *    CrossWire Bible Society
  *    P. O. Box 2528

@@ -3,8 +3,6 @@
  *  swcom.cpp -    code for base class 'SWCom'- The basis for all commentary
  *        modules
  *
- * $Id$
- *
  * Copyright 1997-2013 CrossWire Bible Society (http://www.crosswire.org)
  *    CrossWire Bible Society
  *    P. O. Box 2528

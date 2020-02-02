@@ -1,10 +1,6 @@
 #!/bin/sh
 #******************************************************************************
 #
-# Runs a single test
-#
-# $Id$
-#
 # Copyright 1998-2009 CrossWire Bible Society (http://www.crosswire.org)
 #    CrossWire Bible Society
 #    P. O. Box 2528

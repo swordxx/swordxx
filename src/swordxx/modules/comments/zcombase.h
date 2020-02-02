@@ -3,8 +3,6 @@
  *  zcom.h -     code for class 'zCom'- a module that reads compressed text
  *                    files: ot and nt using indexs ??.vss
  *
- * $Id$
- *
  * Copyright 1996-2013 CrossWire Bible Society (http://www.crosswire.org)
  *    CrossWire Bible Society
  *    P. O. Box 2528

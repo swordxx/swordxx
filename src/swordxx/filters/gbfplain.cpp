@@ -3,8 +3,6 @@
  *  gbfplain.cpp -    SWFilter descendant to strip out all GBF tags or
  *            convert to ASCII rendered symbols
  *
- * $Id$
- *
  * Copyright 1997-2013 CrossWire Bible Society (http://www.crosswire.org)
  *    CrossWire Bible Society
  *    P. O. Box 2528

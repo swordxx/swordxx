@@ -2,8 +2,6 @@
  *
  *  rtfhtml.cpp -    filter to convert RTF to HTML
  *
- * $Id$
- *
  * Copyright 1999 The team of Bibletime (info@bibletime.de)
  * Copyright 2000-2013 CrossWire Bible Society (http://www.crosswire.org)
  *    CrossWire Bible Society

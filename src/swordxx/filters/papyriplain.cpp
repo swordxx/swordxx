@@ -2,8 +2,6 @@
  *
  *  papyriplain.cpp -    SWFilter descendant to strip out all Papyri tags
  *
- * $Id$
- *
  * Copyright 2005-2013 CrossWire Bible Society (http://www.crosswire.org)
  *    CrossWire Bible Society
  *    P. O. Box 2528

@@ -1,10 +1,5 @@
 /******************************************************************************
  *
- *  zipcomprs.cpp -    ZipCompress, a driver class that provides zlib
- *            compression
- *
- * $Id$
- *
  * Copyright 2000-2014 CrossWire Bible Society (http://www.crosswire.org)
  *    CrossWire Bible Society
  *    P. O. Box 2528

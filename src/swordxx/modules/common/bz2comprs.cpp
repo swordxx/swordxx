@@ -3,8 +3,6 @@
  *  bz2comprs.cpp -    Bzip2Compress, a driver class that provides bzip2
  *            compression (Burrows–Wheeler with Huffman coding)
  *
- * $Id$
- *
  * Copyright 2000-2014 CrossWire Bible Society (http://www.crosswire.org)
  *    CrossWire Bible Society
  *    P. O. Box 2528

@@ -2,8 +2,6 @@
  *
  *  gbfthml.cpp -    GBF to ThML filter
  *
- * $Id$
- *
  * Copyright 1999-2013 CrossWire Bible Society (http://www.crosswire.org)
  *    CrossWire Bible Society
  *    P. O. Box 2528

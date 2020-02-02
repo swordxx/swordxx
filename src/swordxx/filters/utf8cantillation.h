@@ -1,9 +1,5 @@
 /******************************************************************************
  *
- *  utf8cantillation.h -    Implementation of UTF8Cantillation
- *
- * $Id$
- *
  * Copyright 2001-2013 CrossWire Bible Society (http://www.crosswire.org)
  *    CrossWire Bible Society
  *    P. O. Box 2528

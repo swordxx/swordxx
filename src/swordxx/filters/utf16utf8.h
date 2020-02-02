@@ -1,9 +1,5 @@
 /******************************************************************************
  *
- *  utf16utf8.h -    Implementation of UTF16UTF8
- *
- * $Id$
- *
  * Copyright 2001-2013 CrossWire Bible Society (http://www.crosswire.org)
  *    CrossWire Bible Society
  *    P. O. Box 2528

@@ -2,8 +2,6 @@
  *
  *  mod2osis.cpp -    Exports a module as an OSIS doc
  *
- * $Id$
- *
  * Copyright 2002-2013 CrossWire Bible Society (http://www.crosswire.org)
  *    CrossWire Bible Society
  *    P. O. Box 2528

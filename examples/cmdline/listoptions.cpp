@@ -6,8 +6,6 @@
  *            Options in Sword++ refer to things like "Strong's
  *            Numbers", "Morphology", etc.
  *
- * $Id$
- *
  * Copyright 2006-2013 CrossWire Bible Society (http://www.crosswire.org)
  *    CrossWire Bible Society
  *    P. O. Box 2528

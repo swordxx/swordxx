@@ -1,10 +1,5 @@
 /******************************************************************************
  *
- *  lzssomprs.cpp -    LZSSCompress: a driver class that provides LZSS
- *            compression
- *
- * $Id$
- *
  * Copyright 1996-2013 CrossWire Bible Society (http://www.crosswire.org)
  *    CrossWire Bible Society
  *    P. O. Box 2528

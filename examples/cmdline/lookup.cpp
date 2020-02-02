@@ -3,8 +3,6 @@
  *  lookup.cpp -    Simple example of how to retrieve an entry from a
  *            Sword++ module
  *
- * $Id$
- *
  * Copyright 1997-2013 CrossWire Bible Society (http://www.crosswire.org)
  *    CrossWire Bible Society
  *    P. O. Box 2528

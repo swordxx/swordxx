@@ -2,8 +2,6 @@
  *
  *  tei2mod.cpp -    Utility to import documents encoded as TEI
  *
- * $Id$
- *
  * Copyright 2008-2014 CrossWire Bible Society (http://www.crosswire.org)
  *    CrossWire Bible Society
  *    P. O. Box 2528

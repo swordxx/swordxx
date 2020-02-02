@@ -2,8 +2,6 @@
  *
  *  osisplain.cpp -    An SWFilter that provides stripping of OSIS tags
  *
- * $Id$
- *
  * Copyright 2003-2013 CrossWire Bible Society (http://www.crosswire.org)
  *    CrossWire Bible Society
  *    P. O. Box 2528

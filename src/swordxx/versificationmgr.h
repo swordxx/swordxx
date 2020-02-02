@@ -3,8 +3,6 @@
  *  versification.h -    definition of class VersificationMgr used for managing
  *            versification systems
  *
- * $Id$
- *
  * Copyright 2008-2013 CrossWire Bible Society (http://www.crosswire.org)
  *    CrossWire Bible Society
  *    P. O. Box 2528

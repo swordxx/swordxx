@@ -3,8 +3,6 @@
  *  thmlscripref.cpp -    SWFilter descendant to hide or show scripture
  *            referebces in a ThML module
  *
- * $Id$
- *
  * Copyright 2001-2014 CrossWire Bible Society (http://www.crosswire.org)
  *    CrossWire Bible Society
  *    P. O. Box 2528

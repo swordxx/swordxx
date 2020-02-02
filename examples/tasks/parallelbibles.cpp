@@ -3,8 +3,6 @@
  *  parallelbibles.cpp -    This examples demonstrates a strategy for
  *                  displaying Bibles in parallel
  *
- * $Id: parallelbibles.cpp 3030 2014-02-28 02:14:44Z scribe $
- *
  * Copyright 2013-2014 CrossWire Bible Society (http://www.crosswire.org)
  *    CrossWire Bible Society
  *    P. O. Box 2528

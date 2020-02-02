@@ -3,8 +3,6 @@
 #
 #  localecap.pl -    This tool is only for locales in Latin-1, not UTF-8
 #
-# $Id$
-#
 # Copyright 2001-2009 CrossWire Bible Society (http://www.crosswire.org)
 #    CrossWire Bible Society
 #    P. O. Box 2528

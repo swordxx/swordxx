@@ -4,8 +4,6 @@
  *        types of keys for indexing into modules (e.g. verse, word,
  *        place, etc.)
  *
- * $Id$
- *
  * Copyright 1998-2013 CrossWire Bible Society (http://www.crosswire.org)
  *    CrossWire Bible Society
  *    P. O. Box 2528

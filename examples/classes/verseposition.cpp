@@ -1,9 +1,5 @@
 /******************************************************************************
  *
- *  verseposition.cpp -
- *
- * $Id$
- *
  * Copyright 2012-2013 CrossWire Bible Society (http://www.crosswire.org)
  *    CrossWire Bible Society
  *    P. O. Box 2528

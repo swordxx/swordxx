@@ -1,9 +1,5 @@
 /******************************************************************************
  *
- *  curlhttpt.h  -    code for CURL impl of HTTP Transport
- *
- * $Id$
- *
  * Copyright 2009-2013 CrossWire Bible Society (http://www.crosswire.org)
  *    CrossWire Bible Society
  *    P. O. Box 2528

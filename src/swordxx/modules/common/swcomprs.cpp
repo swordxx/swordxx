@@ -2,8 +2,6 @@
  *
  *  swcomprs.cpp -     a driver class that provides compression utilities
  *
- * $Id$
- *
  * Copyright 1996-2014 CrossWire Bible Society (http://www.crosswire.org)
  *    CrossWire Bible Society
  *    P. O. Box 2528

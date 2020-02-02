@@ -3,8 +3,6 @@
  *  osisvariants.cpp -    SWFilter descendant to hide or show textual variants
  *            in an OSIS module
  *
- * $Id$
- *
  * Copyright 2006-2013 CrossWire Bible Society (http://www.crosswire.org)
  *    CrossWire Bible Society
  *    P. O. Box 2528
