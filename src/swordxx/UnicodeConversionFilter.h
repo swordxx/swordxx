@@ -59,7 +59,7 @@ private: /* Fields: */
 #define SWORDXX_DEFINE_UNICODE_CONVERSION_FILTER(Name,conv,method) \
     namespace swordxx { \
     Name::Name() : UnicodeConversionFilter((conv)) {} \
-    Name::~Name() noexcept = default; \
+    Name::~Name() noexcept override = default; \
     char Name::processText(std::string & text, \
                            SWKey const * key, \
                            SWModule const *) \
