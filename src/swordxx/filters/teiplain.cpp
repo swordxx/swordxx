@@ -114,7 +114,21 @@ bool TEIPlain::handleToken(std::string &buf, const char *token, BasicFilterUserD
             }
         }
 
-        else {
+        // <list> <item>  This implementation does not distinguish between forms of lists
+        // it would be nice if a numbered list could be added
+        else if (tag.name() == "list") {
+            if ((!tag.isEndTag()) && (!tag.isEmpty())) {
+                buf += "\n";
+            } else if (tag.isEndTag()) {
+                buf += "\n";
+            }
+        } else if (tag.name() == "item") {
+            if ((!tag.isEndTag()) && (!tag.isEmpty())) {
+                buf += "\t* ";
+            } else if (tag.isEndTag()) {
+                buf += "\n";
+            }
+        } else {
             return false;  // we still didn't handle token
         }
     }

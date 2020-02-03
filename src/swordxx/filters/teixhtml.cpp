@@ -356,7 +356,38 @@ bool TEIXHTML::handleToken(std::string &buf, const char *token, BasicFilterUserD
                 buf += "</td>";
             }
         }
-        else {
+
+        // <list> <item>
+        else if (tag.name() == "list") {
+            if ((!tag.isEndTag()) && (!tag.isEmpty())) {
+                u->lastHi = tag.attribute("rend");
+                auto const & rend = u->lastHi;
+                if (rend == "numbered") {
+                    buf += "<ol>\n";
+                } else if (rend == "bulleted") {
+                    buf += "<ul>\n";
+                } else {
+                    buf.append("<span class=\"list ").append(rend.c_str())
+                            .append("\">");
+                }
+            } else if (tag.isEndTag()) {
+                auto const & rend = u->lastHi;
+                if (rend == "numbered") {
+                    buf += "</ol>\n>";
+                } else if (rend == "bulleted") {
+                    buf += "</ul>\n";
+                } else {
+                    buf += "</span>\n";
+                }
+                u->supressAdjacentWhitespace = true;
+            }
+        } else if (tag.name() == "item") {
+            if ((!tag.isEndTag()) && (!tag.isEmpty())) {
+                buf += "<li>";
+            } else if (tag.isEndTag()) {
+                buf += "</li>\n";
+            }
+        } else {
             return false;  // we still didn't handle token
         }
 
