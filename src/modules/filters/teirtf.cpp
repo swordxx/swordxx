@@ -216,6 +216,25 @@ bool TEIRTF::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *use
 			delete [] filepath;
 		}
 
+		// <list> <item>  - primitive implementation lacking numbered lists
+		else if (!strcmp(tag.getName(), "list")) {
+			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
+				buf += "\\par";
+			}
+			else if (tag.isEndTag()) {
+				buf += "\\par";
+				u->supressAdjacentWhitespace = true;
+			}
+		}
+		else if (!strcmp(tag.getName(), "item")) {
+			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
+				buf += "\\tab* ";
+			}
+			else if (tag.isEndTag()) {
+				buf += "\\par";
+			}
+		}
+
 		else {
 			return false;  // we still didn't handle token
 		}
