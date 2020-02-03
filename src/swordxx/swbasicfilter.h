@@ -102,7 +102,7 @@ protected: /* Methods: */
      *    or allow it to be handled otherwise.
      * Default is false.*/
     void setPassThruNumericEscapeString(bool val)
-    { m_passThruUnknownEsc = val; }
+    { m_passThruNumericEsc = val; }
 
     /** Are tokens case sensitive (like in GBF) or not? Call this
      *    function before addTokenSubstitute()
