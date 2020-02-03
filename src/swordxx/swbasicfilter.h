@@ -120,20 +120,10 @@ protected: /* Methods: */
      */
     void addAllowedEscapeString(char const * findString);
 
-    /** Unregisters an esc control sequence that can pass unchanged
-     */
-    void removeAllowedEscapeString(char const * findString)
-    { m_escPassSet.erase(findString); }
-
     /** Registers an esc control sequence
      */
     void addEscapeStringSubstitute(char const * findString,
                                    char const * replaceString);
-
-    /** Unregisters an esc control sequence
-     */
-    void removeEscapeStringSubstitute(char const * findString)
-    { m_escSubMap.erase(findString); }
 
     /** This function performs the substitution of escapeStrings */
     bool substituteEscapeString(std::string & buf, char const * escString);
@@ -151,11 +141,6 @@ protected: /* Methods: */
      */
     void addTokenSubstitute(char const * findString,
                             char const * replaceString);
-
-    /** Unregisters a simple token substitute
-     */
-    void removeTokenSubstitute(char const * findString)
-    { m_tokenSubMap.erase(findString); }
 
     /** This function performs the substitution of tokens */
     bool substituteToken(std::string & buf, char const * token);
