@@ -136,10 +136,6 @@ char SWBasicFilter::processText(std::string & text,
     std::size_t tokpos = 0u;
     bool intoken = false;
     bool inEsc = false;
-    std::size_t escStartPos = 0u;
-    std::size_t escEndPos = 0u;
-    std::size_t tokenStartPos = 0u;
-    std::size_t tokenEndPos = 0u;
     std::string lastTextNode;
     auto const userData(createUserData(module, key));
 
@@ -151,68 +147,56 @@ char SWBasicFilter::processText(std::string & text,
         if (processPrechar(out, view, userData.get()))
             continue;
 
-        if (view.front() == m_tokenStart[tokenStartPos]) {
-            if (tokenStartPos == (m_tokenStart.size() - 1u)) {
-                intoken = true;
-                tokpos = 0;
-                token[0] = 0;
-                token[1] = 0;
-                token[2] = 0;
-                inEsc = false;
-            }
-            else tokenStartPos++;
+        if (view.front() == '<') {
+            intoken = true;
+            tokpos = 0;
+            token[0] = 0;
+            token[1] = 0;
+            token[2] = 0;
+            inEsc = false;
             continue;
         }
 
-        if (view.front() == m_escStart[escStartPos]) {
-            if (escStartPos == (m_escStart.size() - 1u)) {
-                intoken = true;
-                tokpos = 0;
-                token[0] = 0;
-                token[1] = 0;
-                token[2] = 0;
-                inEsc = true;
-            }
-            else escStartPos++;
+        if (view.front() == '&') {
+            intoken = true;
+            tokpos = 0;
+            token[0] = 0;
+            token[1] = 0;
+            token[2] = 0;
+            inEsc = true;
             continue;
         }
 
         if (inEsc) {
-            if (view.front() == m_escEnd[escEndPos]) {
-                if (escEndPos == (m_escEnd.size() - 1u)) {
-                    intoken = inEsc = false;
-                    userData->lastTextNode = lastTextNode;
+            if (view.front() == ';') {
+                intoken = inEsc = false;
+                userData->lastTextNode = lastTextNode;
 
-                    // If text through is disabled no tokens should pass, too:
-                    if (!userData->suspendTextPassThru
-                        && !handleEscapeString(out, token, userData.get())
-                        && m_passThruUnknownEsc)
-                        appendEscapeString(out, token);
-                    escEndPos = escStartPos = tokenEndPos = tokenStartPos = 0;
-                    lastTextNode = "";
-                    continue;
-                }
+                // If text through is disabled no tokens should pass, too:
+                if (!userData->suspendTextPassThru
+                    && !handleEscapeString(out, token, userData.get())
+                    && m_passThruUnknownEsc)
+                    appendEscapeString(out, token);
+                lastTextNode = "";
+                continue;
             }
         }
 
         if (!inEsc) {
-            if (view.front() == m_tokenEnd[tokenEndPos]) {
-                if (tokenEndPos == (m_tokenEnd.size() - 1u)) {
-                    intoken = false;
-                    userData->lastTextNode = lastTextNode;
-                    if (!handleToken(out, token, userData.get())
-                        && m_passThruUnknownToken)
-                    {
-                        out += m_tokenStart;
-                        out += token;
-                        out += m_tokenEnd;
-                    }
-                    escEndPos = escStartPos = tokenEndPos = tokenStartPos = 0;
-                    lastTextNode = "";
-                    if (!userData->suspendTextPassThru)
-                           userData->lastSuspendSegment.clear();
-                    continue;
+            if (view.front() == '>') {
+                intoken = false;
+                userData->lastTextNode = lastTextNode;
+                if (!handleToken(out, token, userData.get())
+                    && m_passThruUnknownToken)
+                {
+                    out += '<';
+                    out += token;
+                    out += '>';
                 }
+                lastTextNode = "";
+                if (!userData->suspendTextPassThru)
+                       userData->lastSuspendSegment.clear();
+                continue;
             }
         }
 

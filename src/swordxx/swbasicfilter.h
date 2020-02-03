@@ -85,22 +85,6 @@ protected: /* Methods: */
             SWModule const * const module,
             SWKey const * const key);
 
-    /** Sets the beginning of token start sequence (by default "<").*/
-    void setTokenStart(std::string_view tokenStart)
-    { m_tokenStart = tokenStart; }
-
-    /** Sets the end of token start sequence (by default ">").*/
-    void setTokenEnd(std::string_view tokenEnd)
-    { m_tokenEnd = tokenEnd; }
-
-    /** Sets the beginning of escape sequence (by default "&").*/
-    void setEscapeStart(std::string_view escStart)
-    { m_escStart = escStart; }
-
-    /** Sets the end of escape sequence (by default ";").*/
-    void setEscapeEnd(std::string_view escEnd)
-    { m_escEnd = escEnd; }
-
     /** Sets whether to pass thru an unknown token unchanged
      *    or just remove it.
      * Default is false.*/
@@ -158,8 +142,9 @@ protected: /* Methods: */
     bool passAllowedEscapeString(std::string & buf, char const * escString);
 
     /** This appends escString to buf as an entity */
-    std::string & appendEscapeString(std::string & buf, char const * escString)
-    { return buf.append(m_escStart).append(escString).append(m_escEnd); }
+    static std::string &
+    appendEscapeString(std::string & buf, std::string_view escString)
+    { return buf.append(1u, '&').append(escString).append(1u, ';'); }
 
     /** Registers a simple token substitutions.  Usually called from the
      *    c-tor of a subclass
@@ -210,10 +195,6 @@ protected: /* Methods: */
 
 private: /* Fields: */
 
-    std::string m_tokenStart{'<'};
-    std::string m_tokenEnd{'>'};
-    std::string m_escStart{'&'};
-    std::string m_escEnd{';'};
     bool m_passThruUnknownToken = false;
     bool m_passThruUnknownEsc = false;
     bool m_passThruNumericEsc = false;
