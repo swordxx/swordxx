@@ -132,8 +132,7 @@ char SWBasicFilter::processText(std::string & text,
                                 SWKey const * key,
                                 SWModule const * module)
 {
-    char token[4096u];
-    std::size_t tokpos = 0u;
+    std::string token;
     bool intoken = false;
     bool inEsc = false;
     std::string lastTextNode;
@@ -149,20 +148,14 @@ char SWBasicFilter::processText(std::string & text,
 
         if (view.front() == '<') {
             intoken = true;
-            tokpos = 0;
-            token[0] = 0;
-            token[1] = 0;
-            token[2] = 0;
+            token.clear();
             inEsc = false;
             continue;
         }
 
         if (view.front() == '&') {
             intoken = true;
-            tokpos = 0;
-            token[0] = 0;
-            token[1] = 0;
-            token[2] = 0;
+            token.clear();
             inEsc = true;
             continue;
         }
@@ -174,7 +167,7 @@ char SWBasicFilter::processText(std::string & text,
 
                 // If text through is disabled no tokens should pass, too:
                 if (!userData->suspendTextPassThru
-                    && !handleEscapeString(out, token, userData.get())
+                    && !handleEscapeString(out, token.c_str(), userData.get())
                     && m_passThruUnknownEsc)
                     appendEscapeString(out, token);
                 lastTextNode = "";
@@ -186,7 +179,7 @@ char SWBasicFilter::processText(std::string & text,
             if (view.front() == '>') {
                 intoken = false;
                 userData->lastTextNode = lastTextNode;
-                if (!handleToken(out, token, userData.get())
+                if (!handleToken(out, token.c_str(), userData.get())
                     && m_passThruUnknownToken)
                 {
                     out += '<';
@@ -201,10 +194,7 @@ char SWBasicFilter::processText(std::string & text,
         }
 
         if (intoken) {
-            if (tokpos < 4090) {
-                token[tokpos++] = view.front();
-                token[tokpos+2] = 0;
-            }
+            token += view.front();
         }
         else {
              if ((!userData->supressAdjacentWhitespace) || (view.front() != ' ')) {
