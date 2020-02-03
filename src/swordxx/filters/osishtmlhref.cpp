@@ -136,12 +136,6 @@ OSISHTMLHREF::MyUserData::MyUserData(SWModule const * module_,
 OSISHTMLHREF::MyUserData::~MyUserData() {}
 
 OSISHTMLHREF::OSISHTMLHREF() {
-    setTokenStart("<");
-    setTokenEnd(">");
-
-    setEscapeStart("&");
-    setEscapeEnd(";");
-
     setEscapeStringCaseSensitive(true);
     setPassThruNumericEscapeString(true);
 

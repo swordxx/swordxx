@@ -46,12 +46,6 @@ ThMLHTMLHREF::MyUserData::MyUserData(SWModule const * module_,
 ThMLHTMLHREF::MyUserData::~MyUserData() noexcept = default;
 
 ThMLHTMLHREF::ThMLHTMLHREF() {
-    setTokenStart("<");
-    setTokenEnd(">");
-
-    setEscapeStart("&");
-    setEscapeEnd(";");
-
     setEscapeStringCaseSensitive(true);
     setPassThruNumericEscapeString(true);
 

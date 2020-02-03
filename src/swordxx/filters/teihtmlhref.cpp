@@ -46,12 +46,6 @@ TEIHTMLHREF::MyUserData::MyUserData(SWModule const * module_,
 TEIHTMLHREF::MyUserData::~MyUserData() noexcept = default;
 
 TEIHTMLHREF::TEIHTMLHREF() {
-    setTokenStart("<");
-    setTokenEnd(">");
-
-    setEscapeStart("&");
-    setEscapeEnd(";");
-
     setEscapeStringCaseSensitive(true);
 
     addAllowedEscapeString("quot");

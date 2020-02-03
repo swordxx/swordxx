@@ -40,12 +40,6 @@ OSISOSIS::MyUserData::MyUserData(SWModule const * module_,
 OSISOSIS::MyUserData::~MyUserData() noexcept = default;
 
 OSISOSIS::OSISOSIS() {
-    setTokenStart("<");
-    setTokenEnd(">");
-
-    setEscapeStart("&");
-    setEscapeEnd(";");
-
     setEscapeStringCaseSensitive(true);
     setPassThruNumericEscapeString(true);
 

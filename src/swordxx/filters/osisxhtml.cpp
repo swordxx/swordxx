@@ -158,12 +158,6 @@ std::unique_ptr<BasicFilterUserData> OSISXHTML::createUserData(
 { return std::make_unique<MyUserData>(module, key); }
 
 OSISXHTML::OSISXHTML() {
-    setTokenStart("<");
-    setTokenEnd(">");
-
-    setEscapeStart("&");
-    setEscapeEnd(";");
-
     setEscapeStringCaseSensitive(true);
     setPassThruNumericEscapeString(true);
 

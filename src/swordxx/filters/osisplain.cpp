@@ -48,12 +48,6 @@ namespace {
 
 
 OSISPlain::OSISPlain() {
-    setTokenStart("<");
-    setTokenEnd(">");
-
-    setEscapeStart("&");
-    setEscapeEnd(";");
-
     setEscapeStringCaseSensitive(true);
 
     addEscapeStringSubstitute("amp", "&");

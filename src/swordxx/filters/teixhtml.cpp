@@ -76,12 +76,6 @@ TEIXHTML::MyUserData::MyUserData(SWModule const * module_,
 TEIXHTML::MyUserData::~MyUserData() noexcept = default;
 
 TEIXHTML::TEIXHTML() {
-    setTokenStart("<");
-    setTokenEnd(">");
-
-    setEscapeStart("&");
-    setEscapeEnd(";");
-
     setEscapeStringCaseSensitive(true);
 
     addAllowedEscapeString("quot");

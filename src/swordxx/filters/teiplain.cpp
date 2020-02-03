@@ -29,12 +29,6 @@ namespace swordxx {
 TEIPlain::MyUserData::~MyUserData() noexcept = default;
 
 TEIPlain::TEIPlain() {
-    setTokenStart("<");
-    setTokenEnd(">");
-
-    setEscapeStart("&");
-    setEscapeEnd(";");
-
     setEscapeStringCaseSensitive(true);
 
     addEscapeStringSubstitute("amp", "&");

@@ -50,9 +50,6 @@ GBFXHTML::MyUserData::MyUserData(SWModule const * module_,
 GBFXHTML::MyUserData::~MyUserData() noexcept = default;
 
 GBFXHTML::GBFXHTML() {
-    setTokenStart("<");
-    setTokenEnd(">");
-
     setTokenCaseSensitive(true);
 
     //addTokenSubstitute("Rf", ")</small></font>");

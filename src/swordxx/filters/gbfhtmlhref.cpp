@@ -42,9 +42,6 @@ GBFHTMLHREF::MyUserData::MyUserData(SWModule const * module_,
 GBFHTMLHREF::MyUserData::~MyUserData() noexcept = default;
 
 GBFHTMLHREF::GBFHTMLHREF() {
-    setTokenStart("<");
-    setTokenEnd(">");
-
     setTokenCaseSensitive(true);
 
     //addTokenSubstitute("Rf", ")</small></font>");

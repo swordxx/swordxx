@@ -52,12 +52,6 @@ ThMLXHTML::MyUserData::MyUserData(SWModule const * module_,
 ThMLXHTML::MyUserData::~MyUserData() noexcept = default;
 
 ThMLXHTML::ThMLXHTML() {
-    setTokenStart("<");
-    setTokenEnd(">");
-
-    setEscapeStart("&");
-    setEscapeEnd(";");
-
     setEscapeStringCaseSensitive(true);
     setPassThruNumericEscapeString(true);
 
