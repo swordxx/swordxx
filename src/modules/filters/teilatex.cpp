@@ -358,13 +358,6 @@ bool TEILaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *u
 
 
 	}
-
-
-		else {
-			return false;  // we still didn't handle token
-		}
-
-	}
 	return true;
 }
 

@@ -121,7 +121,6 @@ bool TEIPlain::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *u
 			}
 			else if (tag.isEndTag()) {
 				buf += "\n";
-				u->supressAdjacentWhitespace = true;
 			}
 		}
 		else if (!strcmp(tag.getName(), "item")) {
