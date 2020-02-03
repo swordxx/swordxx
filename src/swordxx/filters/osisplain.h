@@ -40,10 +40,9 @@ protected:
                      char const * token,
                      BasicFilterUserData * userData) override;
 
-    bool processStage(char stage,
-                      std::string & text,
-                      char const *& from,
-                      BasicFilterUserData * userData) override;
+    bool processPrechar(std::string & text,
+                        std::string_view & view,
+                        BasicFilterUserData * userData) override;
 
 public:
     OSISPlain();

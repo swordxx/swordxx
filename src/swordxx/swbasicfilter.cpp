@@ -118,10 +118,9 @@ bool SWBasicFilter::handleToken(std::string & buf,
                                 BasicFilterUserData * /* userData */)
 { return substituteToken(buf, token); }
 
-bool SWBasicFilter::processStage(char,
-                                 std::string &,
-                                 char const *&,
-                                 BasicFilterUserData *)
+bool SWBasicFilter::processPrechar(std::string &,
+                                   std::string_view &,
+                                   BasicFilterUserData *)
 { return false; }
 
 bool SWBasicFilter::handleEscapeString(std::string & buf,
@@ -144,25 +143,15 @@ char SWBasicFilter::processText(std::string & text,
     std::string lastTextNode;
     auto const userData(createUserData(module, key));
 
-    std::string const & orig = text;
-    auto from = orig.c_str();
+    std::string_view view(text);
     std::string out;
 
-    // Check if processStage handled it all:
-    if ((m_processStages & INITIALIZE)
-        && processStage(INITIALIZE, out, from, userData.get()))
-    {
-        text = std::move(out);
-        return 0;
-    }
-
-    for (;*from; from++) {
+    for (; !view.empty(); view.remove_prefix(1u)) {
         // If processStage handled this char:
-        if ((m_processStages & PRECHAR)
-            && processStage(PRECHAR, out, from, userData.get()))
+        if (processPrechar(out, view, userData.get()))
             continue;
 
-        if (*from == m_tokenStart[tokenStartPos]) {
+        if (view.front() == m_tokenStart[tokenStartPos]) {
             if (tokenStartPos == (m_tokenStart.size() - 1u)) {
                 intoken = true;
                 tokpos = 0;
@@ -175,7 +164,7 @@ char SWBasicFilter::processText(std::string & text,
             continue;
         }
 
-        if (*from == m_escStart[escStartPos]) {
+        if (view.front() == m_escStart[escStartPos]) {
             if (escStartPos == (m_escStart.size() - 1u)) {
                 intoken = true;
                 tokpos = 0;
@@ -189,7 +178,7 @@ char SWBasicFilter::processText(std::string & text,
         }
 
         if (inEsc) {
-            if (*from == m_escEnd[escEndPos]) {
+            if (view.front() == m_escEnd[escEndPos]) {
                 if (escEndPos == (m_escEnd.size() - 1u)) {
                     intoken = inEsc = false;
                     userData->lastTextNode = lastTextNode;
@@ -207,7 +196,7 @@ char SWBasicFilter::processText(std::string & text,
         }
 
         if (!inEsc) {
-            if (*from == m_tokenEnd[tokenEndPos]) {
+            if (view.front() == m_tokenEnd[tokenEndPos]) {
                 if (tokenEndPos == (m_tokenEnd.size() - 1u)) {
                     intoken = false;
                     userData->lastTextNode = lastTextNode;
@@ -229,27 +218,20 @@ char SWBasicFilter::processText(std::string & text,
 
         if (intoken) {
             if (tokpos < 4090) {
-                token[tokpos++] = *from;
+                token[tokpos++] = view.front();
                 token[tokpos+2] = 0;
             }
         }
         else {
-             if ((!userData->supressAdjacentWhitespace) || (*from != ' ')) {
+             if ((!userData->supressAdjacentWhitespace) || (view.front() != ' ')) {
                 if (!userData->suspendTextPassThru)
-                    out.push_back(*from);
-                else    userData->lastSuspendSegment.push_back(*from);
-                lastTextNode.push_back(*from);
+                    out.push_back(view.front());
+                else    userData->lastSuspendSegment.push_back(view.front());
+                lastTextNode.push_back(view.front());
              }
             userData->supressAdjacentWhitespace = false;
         }
-
-        if (m_processStages & POSTCHAR)
-            processStage(POSTCHAR, out, from, userData.get());
-
     }
-
-    if (m_processStages & FINALIZE)
-        processStage(FINALIZE, out, from, userData.get());
 
     text = std::move(out);
     return 0;

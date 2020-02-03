@@ -85,13 +85,6 @@ protected: /* Methods: */
             SWModule const * const module,
             SWKey const * const key);
 
-    enum StageFlags: char {
-        INITIALIZE = 1, // indicates processing before char loop
-        PRECHAR    = 2, // indicates processing at top in char loop
-        POSTCHAR   = 4, // indicates processing at bottom in char loop
-        FINALIZE   = 8  // indicates processing after char loop
-    };
-
     /** Sets the beginning of token start sequence (by default "<").*/
     void setTokenStart(std::string_view tokenStart)
     { m_tokenStart = tokenStart; }
@@ -138,8 +131,6 @@ protected: /* Methods: */
      */
     void setEscapeStringCaseSensitive(bool val)
     { m_escStringCaseSensitive = val; }
-
-    void setStageProcessing(char stages) { m_processStages = stages; }
 
     /** Registers an esc control sequence that can pass unchanged
      */
@@ -194,10 +185,9 @@ protected: /* Methods: */
                              char const * token,
                              BasicFilterUserData * userData);
 
-    virtual bool processStage(char stage,
-                              std::string & text,
-                              char const *& from,
-                              BasicFilterUserData * userData);
+    virtual bool processPrechar(std::string & text,
+                                std::string_view & view,
+                                BasicFilterUserData * userData);
 
     /** This function is called for every escape sequence encountered in the input text.
      * @param buf the output buffer
@@ -229,7 +219,6 @@ private: /* Fields: */
     bool m_passThruNumericEsc = false;
     bool m_tokenCaseSensitive = false;
     bool m_escStringCaseSensitive = false;
-    char m_processStages = 0;
 
     std::map<std::string, std::string> m_tokenSubMap;
     std::map<std::string, std::string> m_escSubMap;
