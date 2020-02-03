@@ -109,8 +109,29 @@ bool TEIPlain::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *u
 			else if (tag.isEndTag()) {
 			        buf += "]";
 			}
-		}
+ 		}
 
+		// <list> <item>  This implementation does not distinguish between forms of lists
+		// it would be nice if a numbered list could be added
+		
+		else if (!strcmp(tag.getName(), "list")) {
+			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
+
+				buf += "\n";
+			}
+			else if (tag.isEndTag()) {
+				buf += "\n";
+				u->supressAdjacentWhitespace = true;
+			}
+		}
+		else if (!strcmp(tag.getName(), "item")) {
+			if ((!tag.isEndTag()) && (!tag.isEmpty())) {
+				buf += "\t* ";
+			}
+			else if (tag.isEndTag()) {
+				buf += "\n";
+			}
+		}
 		else {
 			return false;  // we still didn't handle token
 		}
