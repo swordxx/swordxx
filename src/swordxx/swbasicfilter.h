@@ -28,6 +28,7 @@
 #include <memory>
 #include <set>
 #include <string>
+#include <string_view>
 #include "keys/versekey.h"
 #include "swfilter.h"
 
@@ -92,19 +93,19 @@ protected: /* Methods: */
     };
 
     /** Sets the beginning of token start sequence (by default "<").*/
-    void setTokenStart(char const * tokenStart)
+    void setTokenStart(std::string_view tokenStart)
     { m_tokenStart = tokenStart; }
 
     /** Sets the end of token start sequence (by default ">").*/
-    void setTokenEnd(char const * tokenEnd)
+    void setTokenEnd(std::string_view tokenEnd)
     { m_tokenEnd = tokenEnd; }
 
     /** Sets the beginning of escape sequence (by default "&").*/
-    void setEscapeStart(char const * escStart)
+    void setEscapeStart(std::string_view escStart)
     { m_escStart = escStart; }
 
     /** Sets the end of escape sequence (by default ";").*/
-    void setEscapeEnd(char const * escEnd)
+    void setEscapeEnd(std::string_view escEnd)
     { m_escEnd = escEnd; }
 
     /** Sets whether to pass thru an unknown token unchanged
