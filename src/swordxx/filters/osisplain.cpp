@@ -281,7 +281,14 @@ bool OSISPlain::processPrechar(std::string &,
     // Avoid calling getUniCharFromUTF8 for slight speed improvement
 
     // skip soft hyphens:
-    return startsWith(view, "\xC2\xAD");
+    using namespace std::string_view_literals;
+    static constexpr auto const softHyphen = "\xC2\xAD"sv;
+    if (!startsWith(view, softHyphen))
+        return false;
+    do {
+        view.remove_prefix(softHyphen.size());
+    } while (startsWith(view, softHyphen));
+    return true;
 }
 
 } /* namespace swordxx */
