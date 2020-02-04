@@ -176,38 +176,35 @@ char SWBasicFilter::processText(std::string & text,
                     && m_passThruUnknownEsc)
                     appendEscapeString(out, token);
                 lastTextNode = "";
+
                 continue;
             }
-        }
-
-        if (!inEsc) {
+        } else {
             if (view.front() == '>') {
                 intoken = false;
                 userData->lastTextNode = lastTextNode;
                 if (!handleToken(out, token.c_str(), userData.get())
                     && m_passThruUnknownToken)
-                {
-                    out += '<';
-                    out += token;
-                    out += '>';
-                }
+                    out.append(1u, '<').append(token).append(1u, '>');
                 lastTextNode = "";
                 if (!userData->suspendTextPassThru)
                        userData->lastSuspendSegment.clear();
+
                 continue;
             }
         }
 
         if (intoken) {
             token += view.front();
-        }
-        else {
-             if ((!userData->supressAdjacentWhitespace) || (view.front() != ' ')) {
-                if (!userData->suspendTextPassThru)
+        } else {
+            if (!userData->supressAdjacentWhitespace || (view.front() != ' ')) {
+                if (!userData->suspendTextPassThru) {
                     out.push_back(view.front());
-                else    userData->lastSuspendSegment.push_back(view.front());
+                } else {
+                    userData->lastSuspendSegment.push_back(view.front());
+                }
                 lastTextNode.push_back(view.front());
-             }
+            }
             userData->supressAdjacentWhitespace = false;
         }
     }
