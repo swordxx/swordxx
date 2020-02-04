@@ -155,9 +155,9 @@ protected: /* Methods: */
                              char const * token,
                              BasicFilterUserData * userData);
 
-    virtual bool processPrechar(std::string & text,
-                                std::string_view & view,
-                                BasicFilterUserData * userData);
+    virtual std::size_t processPrechars(std::string & text,
+                                        std::string_view view,
+                                        BasicFilterUserData * userData);
 
     /** This function is called for every escape sequence encountered in the input text.
      * @param buf the output buffer

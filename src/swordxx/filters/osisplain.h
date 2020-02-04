@@ -40,9 +40,9 @@ protected:
                      char const * token,
                      BasicFilterUserData * userData) override;
 
-    bool processPrechar(std::string & text,
-                        std::string_view & view,
-                        BasicFilterUserData * userData) override;
+    std::size_t processPrechars(std::string & text,
+                                std::string_view view,
+                                BasicFilterUserData * userData) override;
 
 public:
     OSISPlain();

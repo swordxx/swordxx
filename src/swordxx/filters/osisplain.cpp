@@ -273,9 +273,9 @@ bool OSISPlain::handleToken(std::string &buf, const char *token, BasicFilterUser
     return true;
 }
 
-bool OSISPlain::processPrechar(std::string &,
-                               std::string_view & view,
-                               BasicFilterUserData *)
+std::size_t OSISPlain::processPrechars(std::string &,
+                                       std::string_view view,
+                                       BasicFilterUserData *)
 {
     // this is a strip filter so we want to do this as optimized as possible.
     // Avoid calling getUniCharFromUTF8 for slight speed improvement
@@ -284,11 +284,12 @@ bool OSISPlain::processPrechar(std::string &,
     using namespace std::string_view_literals;
     static constexpr auto const softHyphen = "\xC2\xAD"sv;
     if (!startsWith(view, softHyphen))
-        return false;
+        return 0u;
+    auto const origSize = view.size();
     do {
         view.remove_prefix(softHyphen.size());
     } while (startsWith(view, softHyphen));
-    return true;
+    return origSize - view.size();
 }
 
 } /* namespace swordxx */

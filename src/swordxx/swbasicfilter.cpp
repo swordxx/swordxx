@@ -23,6 +23,7 @@
 
 #include "swbasicfilter.h"
 
+#include <cassert>
 #include <cstdarg>
 #include <cstdio>
 #include <cstdlib>
@@ -118,10 +119,10 @@ bool SWBasicFilter::handleToken(std::string & buf,
                                 BasicFilterUserData * /* userData */)
 { return substituteToken(buf, token); }
 
-bool SWBasicFilter::processPrechar(std::string &,
-                                   std::string_view &,
-                                   BasicFilterUserData *)
-{ return false; }
+std::size_t SWBasicFilter::processPrechars(std::string &,
+                                           std::string_view,
+                                           BasicFilterUserData *)
+{ return 0u; }
 
 bool SWBasicFilter::handleEscapeString(std::string & buf,
                                        char const * escString,
@@ -143,8 +144,12 @@ char SWBasicFilter::processText(std::string & text,
 
     for (; !view.empty(); view.remove_prefix(1u)) {
         // If processStage handled this char:
-        if (processPrechar(out, view, userData.get()))
-            continue;
+        if (auto const n = processPrechars(out, view, userData.get())) {
+            assert(n <= view.size());
+            if (n >= view.size())
+                break;
+            view.remove_prefix(n);
+        }
 
         if (view.front() == '<') {
             intoken = true;
