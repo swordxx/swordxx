@@ -335,7 +335,7 @@ bool TEILaTeX::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *u
 				if (rend == "numbered") {
 					buf += "\\end{enumerate}\n>";
 				}
-				else if (rend == "bulletted") {
+				else if (rend == "bulleted") {
 					buf += "\\end{itemize}\n";
 				
 				}

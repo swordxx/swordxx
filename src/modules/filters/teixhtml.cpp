@@ -360,7 +360,7 @@ bool TEIXHTML::handleToken(SWBuf &buf, const char *token, BasicFilterUserData *u
 				if (rend == "numbered") {
 					buf += "<ol>\n";
 					}
-				else if (rend == "bulletted") {
+				else if (rend == "bulleted") {
 					buf += "<ul>\n";
 				}
 				else {
