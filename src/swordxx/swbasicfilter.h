@@ -125,11 +125,6 @@ protected: /* Methods: */
     void addEscapeStringSubstitute(char const * findString,
                                    char const * replaceString);
 
-    /** This appends escString to buf as an entity */
-    static std::string &
-    appendEscapeString(std::string & buf, std::string_view escString)
-    { return buf.append(1u, '&').append(escString).append(1u, ';'); }
-
     /** Registers a simple token substitutions.  Usually called from the
      *    c-tor of a subclass
      */

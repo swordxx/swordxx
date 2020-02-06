@@ -94,6 +94,10 @@ char SWBasicFilter::processText(std::string & text,
     std::string_view view(text);
     std::string out;
 
+    /** This appends escString to buf as an entity */
+    static auto const appendEscapeString =
+            [](std::string & buf, std::string_view escString)
+            { buf.append(1u, '&').append(escString).append(1u, ';'); };
 
     auto const substituteEscapeString =
             [this](std::string & buf, char const * escString)
