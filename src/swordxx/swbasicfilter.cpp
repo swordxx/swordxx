@@ -175,7 +175,7 @@ char SWBasicFilter::processText(std::string & text,
                     && !handleEscapeString(out, token.c_str(), userData.get())
                     && m_passThruUnknownEsc)
                     appendEscapeString(out, token);
-                lastTextNode = "";
+                lastTextNode.clear();
 
                 continue;
             }
@@ -186,7 +186,7 @@ char SWBasicFilter::processText(std::string & text,
                 if (!handleToken(out, token.c_str(), userData.get())
                     && m_passThruUnknownToken)
                     out.append(1u, '<').append(token).append(1u, '>');
-                lastTextNode = "";
+                lastTextNode.clear();
                 if (!userData->suspendTextPassThru)
                        userData->lastSuspendSegment.clear();
 
