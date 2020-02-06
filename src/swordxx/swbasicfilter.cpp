@@ -71,20 +71,6 @@ bool SWBasicFilter::substituteToken(std::string & buf, char const * token) {
     return false;
 }
 
-bool SWBasicFilter::passAllowedEscapeString(std::string & buf,
-                                            char const * escString)
-{
-    if (auto const it = m_escPassSet.find(m_escStringCaseSensitive
-                                          ? escString
-                                          : utf8ToUpper(escString));
-        it != m_escPassSet.end())
-    {
-        appendEscapeString(buf, escString);
-        return true;
-    }
-    return false;
-}
-
 bool SWBasicFilter::substituteEscapeString(std::string & buf,
                                            char const * escString)
 {
@@ -94,8 +80,15 @@ bool SWBasicFilter::substituteEscapeString(std::string & buf,
         appendEscapeString(buf, escString);
         return true;
     }
-    if (passAllowedEscapeString(buf, escString))
+    // Pass allowed escape strings:
+    if (auto const it = m_escPassSet.find(m_escStringCaseSensitive
+                                          ? escString
+                                          : utf8ToUpper(escString));
+        it != m_escPassSet.end())
+    {
+        appendEscapeString(buf, escString);
         return true;
+    }
 
     if (auto const it = m_escSubMap.find(m_escStringCaseSensitive
                                          ? escString

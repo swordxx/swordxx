@@ -128,9 +128,6 @@ protected: /* Methods: */
     /** This function performs the substitution of escapeStrings */
     bool substituteEscapeString(std::string & buf, char const * escString);
 
-    /** This passes allowed escapeStrings */
-    bool passAllowedEscapeString(std::string & buf, char const * escString);
-
     /** This appends escString to buf as an entity */
     static std::string &
     appendEscapeString(std::string & buf, std::string_view escString)
