@@ -31,6 +31,7 @@
 #include <string_view>
 #include "keys/versekey.h"
 #include "swfilter.h"
+#include "Flags.h"
 
 
 namespace swordxx {
@@ -73,7 +74,35 @@ struct SWDLLEXPORT BasicFilterUserData {
  */
 class SWDLLEXPORT SWBasicFilter: public virtual SWFilter {
 
+public: /* Types: */
+
+    enum Flag {
+
+        NoFlags = 0b0,
+
+        /** Whether to pass thru unknown tokens unchanged or just remove them.*/
+        PassThroughUnknownTokens        = 0b00001,
+
+        /** Whether to pass thru unknown escape sequences unchanged or just
+            remove them. */
+        PassThroughUnknownEscapeStrings = 0b00010,
+
+        /** Whether to pass thru numeric escape sequences unchanged or just
+            remove them. */
+        PassThroughNumericEscapeStrings = 0b00100,
+
+        /** Whether the tokens are considered to be case-sensitive. */
+        CaseSensitiveTokens             = 0b01000,
+
+        /** Whether the escape sequences are considered to be case-sensitive. */
+        CaseSensitiveEscapeStrings      = 0b10000
+
+    };
+    using Flags = swordxx::Flags<Flag>;
+
 public: /* Methods: */
+
+    SWBasicFilter(Flags flags);
 
     char processText(std::string & text,
                      SWKey const * key = nullptr,
@@ -84,37 +113,6 @@ protected: /* Methods: */
     virtual std::unique_ptr<BasicFilterUserData> createUserData(
             SWModule const * const module,
             SWKey const * const key);
-
-    /** Sets whether to pass thru an unknown token unchanged
-     *    or just remove it.
-     * Default is false.*/
-    void setPassThruUnknownToken(bool val)
-    { m_passThruUnknownToken = val; }
-
-    /** Sets whether to pass thru an unknown escape sequence unchanged
-     *    or just remove it.
-     *    Default is false.
-     */
-    void setPassThruUnknownEscapeString(bool val)
-    { m_passThruUnknownEsc = val; }
-
-    /** Sets whether to pass thru a numeric escape sequence unchanged
-     *    or allow it to be handled otherwise.
-     * Default is false.*/
-    void setPassThruNumericEscapeString(bool val)
-    { m_passThruNumericEsc = val; }
-
-    /** Are tokens case sensitive (like in GBF) or not? Call this
-     *    function before addTokenSubstitute()
-     */
-    void setTokenCaseSensitive(bool val)
-    { m_tokenCaseSensitive = val; }
-
-    /** Are escapeStrings case sensitive or not? Call this
-     *    function before addEscapeStingSubstitute()
-     */
-    void setEscapeStringCaseSensitive(bool val)
-    { m_escStringCaseSensitive = val; }
 
     /** Registers an esc control sequence that can pass unchanged
      */
@@ -150,15 +148,10 @@ protected: /* Methods: */
 
 private: /* Fields: */
 
-    bool m_passThruUnknownToken = false;
-    bool m_passThruUnknownEsc = false;
-    bool m_passThruNumericEsc = false;
-    bool m_tokenCaseSensitive = false;
-    bool m_escStringCaseSensitive = false;
-
     std::map<std::string, std::string> m_tokenSubMap;
     std::map<std::string, std::string> m_escSubMap;
     std::set<std::string> m_escPassSet;
+    Flags const m_flags;
 
 };
 

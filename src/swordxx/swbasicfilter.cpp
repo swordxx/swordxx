@@ -37,15 +37,20 @@ namespace swordxx {
 
 BasicFilterUserData::~BasicFilterUserData() noexcept = default;
 
+SWBasicFilter::SWBasicFilter(Flags flags)
+    : m_flags(flags)
+{}
+
 void SWBasicFilter::addTokenSubstitute(char const * findString,
                                        char const * replaceString)
 {
-    m_tokenSubMap[m_tokenCaseSensitive ? findString : utf8ToUpper(findString)] =
-            replaceString;
+    m_tokenSubMap[(m_flags & CaseSensitiveTokens)
+                  ? findString
+                  : utf8ToUpper(findString)] = replaceString;
 }
 
 void SWBasicFilter::addAllowedEscapeString(char const * findString) {
-    m_escPassSet.emplace(m_escStringCaseSensitive
+    m_escPassSet.emplace((m_flags & CaseSensitiveEscapeStrings)
                          ? findString
                          : utf8ToUpper(findString));
 }
@@ -53,14 +58,14 @@ void SWBasicFilter::addAllowedEscapeString(char const * findString) {
 void SWBasicFilter::addEscapeStringSubstitute(char const * findString,
                                               char const * replaceString)
 {
-    m_escSubMap.emplace(m_escStringCaseSensitive
+    m_escSubMap.emplace((m_flags & CaseSensitiveEscapeStrings)
                         ? findString
                         : utf8ToUpper(findString),
                         replaceString);
 }
 
 bool SWBasicFilter::substituteToken(std::string & buf, char const * token) {
-    if (auto const it = m_tokenSubMap.find(m_tokenCaseSensitive
+    if (auto const it = m_tokenSubMap.find((m_flags & CaseSensitiveTokens)
                                            ? token
                                            : utf8ToUpper(token));
         it != m_tokenSubMap.end())
@@ -103,24 +108,26 @@ char SWBasicFilter::processText(std::string & text,
             [this](std::string & buf, char const * escString)
     {
         if (*escString == '#') {
-            if (!m_passThruNumericEsc)
+            if (!(m_flags & PassThroughNumericEscapeStrings))
                 return false;
             appendEscapeString(buf, escString);
             return true;
         }
         // Pass allowed escape strings:
-        if (auto const it = m_escPassSet.find(m_escStringCaseSensitive
-                                              ? escString
-                                              : utf8ToUpper(escString));
+        if (auto const it =
+                    m_escPassSet.find((m_flags & CaseSensitiveEscapeStrings)
+                                      ? escString
+                                      : utf8ToUpper(escString));
             it != m_escPassSet.end())
         {
             appendEscapeString(buf, escString);
             return true;
         }
 
-        if (auto const it = m_escSubMap.find(m_escStringCaseSensitive
-                                             ? escString
-                                             : utf8ToUpper(escString));
+        if (auto const it =
+                    m_escSubMap.find((m_flags & CaseSensitiveEscapeStrings)
+                                     ? escString
+                                     : utf8ToUpper(escString));
             it != m_escSubMap.end())
         {
             buf += it->second;
@@ -160,7 +167,7 @@ char SWBasicFilter::processText(std::string & text,
                 // If text through is disabled no tokens should pass, too:
                 if (!userData->suspendTextPassThru
                     && !substituteEscapeString(out, token.c_str())
-                    && m_passThruUnknownEsc)
+                    && (m_flags & PassThroughUnknownEscapeStrings))
                     appendEscapeString(out, token);
                 lastTextNode.clear();
 
@@ -171,7 +178,7 @@ char SWBasicFilter::processText(std::string & text,
                 intoken = false;
                 userData->lastTextNode = lastTextNode;
                 if (!handleToken(out, token.c_str(), userData.get())
-                    && m_passThruUnknownToken)
+                    && (m_flags & PassThroughUnknownTokens))
                     out.append(1u, '<').append(token).append(1u, '>');
                 lastTextNode.clear();
                 if (!userData->suspendTextPassThru)

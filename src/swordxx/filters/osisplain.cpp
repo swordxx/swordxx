@@ -47,21 +47,20 @@ namespace {
 }
 
 
-OSISPlain::OSISPlain() {
-    setEscapeStringCaseSensitive(true);
-
+OSISPlain::OSISPlain()
+    : SWBasicFilter(CaseSensitiveTokens | CaseSensitiveEscapeStrings)
+{
     addEscapeStringSubstitute("amp", "&");
     addEscapeStringSubstitute("apos", "'");
     addEscapeStringSubstitute("lt", "<");
     addEscapeStringSubstitute("gt", ">");
     addEscapeStringSubstitute("quot", "\"");
 
-       setTokenCaseSensitive(true);
-       addTokenSubstitute("title", "\n");
-       addTokenSubstitute("/title", "\n");
-       addTokenSubstitute("/l", "\n");
-       addTokenSubstitute("lg", "\n");
-       addTokenSubstitute("/lg", "\n");
+    addTokenSubstitute("title", "\n");
+    addTokenSubstitute("/title", "\n");
+    addTokenSubstitute("/l", "\n");
+    addTokenSubstitute("lg", "\n");
+    addTokenSubstitute("/lg", "\n");
 }
 
 std::unique_ptr<BasicFilterUserData> OSISPlain::createUserData(

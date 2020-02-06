@@ -39,17 +39,16 @@ OSISOSIS::MyUserData::MyUserData(SWModule const * module_,
 
 OSISOSIS::MyUserData::~MyUserData() noexcept = default;
 
-OSISOSIS::OSISOSIS() {
-    setEscapeStringCaseSensitive(true);
-    setPassThruNumericEscapeString(true);
-
+OSISOSIS::OSISOSIS()
+    : SWBasicFilter(CaseSensitiveTokens
+                    | CaseSensitiveEscapeStrings
+                    | PassThroughNumericEscapeStrings)
+{
     addAllowedEscapeString("quot");
     addAllowedEscapeString("apos");
     addAllowedEscapeString("amp");
     addAllowedEscapeString("lt");
     addAllowedEscapeString("gt");
-
-    setTokenCaseSensitive(true);
 }
 
 std::unique_ptr<BasicFilterUserData> OSISOSIS::createUserData(

@@ -29,9 +29,9 @@ namespace swordxx {
 
 GBFHTML::MyUserData::~MyUserData() noexcept = default;
 
-GBFHTML::GBFHTML() {
-    setTokenCaseSensitive(true);
-
+GBFHTML::GBFHTML()
+    : SWBasicFilter(CaseSensitiveTokens)
+{
     addTokenSubstitute("Rf", ")</small></font>");
     addTokenSubstitute("Rx", "</a>");
     addTokenSubstitute("FI", "<i>"); // italics begin

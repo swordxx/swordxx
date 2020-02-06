@@ -30,10 +30,11 @@ namespace swordxx {
 
 ThMLHTML::MyUserData::~MyUserData() noexcept = default;
 
-ThMLHTML::ThMLHTML() {
-    setEscapeStringCaseSensitive(true);
-    setPassThruNumericEscapeString(true);
-
+ThMLHTML::ThMLHTML()
+    : SWBasicFilter(CaseSensitiveTokens
+                    | CaseSensitiveEscapeStrings
+                    | PassThroughNumericEscapeStrings)
+{
     addAllowedEscapeString("quot");
     addAllowedEscapeString("amp");
     addAllowedEscapeString("lt");
@@ -139,8 +140,6 @@ ThMLHTML::ThMLHTML() {
     addAllowedEscapeString("times");  // "×"
     addAllowedEscapeString("divide"); // "÷"
     addAllowedEscapeString("oslash"); // "ø"
-
-    setTokenCaseSensitive(true);
 
     addTokenSubstitute("note", " <font color=\"#800000\"><small>(");
     addTokenSubstitute("/note", ")</small></font> ");

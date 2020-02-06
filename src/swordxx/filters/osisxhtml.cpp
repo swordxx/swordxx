@@ -157,17 +157,16 @@ std::unique_ptr<BasicFilterUserData> OSISXHTML::createUserData(
         SWKey const * key)
 { return std::make_unique<MyUserData>(module, key); }
 
-OSISXHTML::OSISXHTML() {
-    setEscapeStringCaseSensitive(true);
-    setPassThruNumericEscapeString(true);
-
+OSISXHTML::OSISXHTML()
+    : SWBasicFilter(CaseSensitiveTokens
+                    | CaseSensitiveEscapeStrings
+                    | PassThroughNumericEscapeStrings)
+{
     addAllowedEscapeString("quot");
     addAllowedEscapeString("apos");
     addAllowedEscapeString("amp");
     addAllowedEscapeString("lt");
     addAllowedEscapeString("gt");
-
-    setTokenCaseSensitive(true);
 
     //    addTokenSubstitute("lg",  "<br />");
     //    addTokenSubstitute("/lg", "<br />");

@@ -28,16 +28,14 @@ namespace swordxx {
 
 TEIPlain::MyUserData::~MyUserData() noexcept = default;
 
-TEIPlain::TEIPlain() {
-    setEscapeStringCaseSensitive(true);
-
+TEIPlain::TEIPlain()
+    : SWBasicFilter(CaseSensitiveTokens | CaseSensitiveEscapeStrings)
+{
     addEscapeStringSubstitute("amp", "&");
     addEscapeStringSubstitute("apos", "'");
     addEscapeStringSubstitute("lt", "<");
     addEscapeStringSubstitute("gt", ">");
     addEscapeStringSubstitute("quot", "\"");
-
-    setTokenCaseSensitive(true);
 }
 
 std::unique_ptr<BasicFilterUserData> TEIPlain::createUserData(

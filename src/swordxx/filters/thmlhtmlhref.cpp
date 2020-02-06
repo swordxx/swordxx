@@ -45,10 +45,11 @@ ThMLHTMLHREF::MyUserData::MyUserData(SWModule const * module_,
 
 ThMLHTMLHREF::MyUserData::~MyUserData() noexcept = default;
 
-ThMLHTMLHREF::ThMLHTMLHREF() {
-    setEscapeStringCaseSensitive(true);
-    setPassThruNumericEscapeString(true);
-
+ThMLHTMLHREF::ThMLHTMLHREF()
+    : SWBasicFilter(CaseSensitiveTokens
+                    | CaseSensitiveEscapeStrings
+                    | PassThroughNumericEscapeStrings)
+{
     addAllowedEscapeString("quot");
     addAllowedEscapeString("amp");
     addAllowedEscapeString("lt");
@@ -155,7 +156,6 @@ ThMLHTMLHREF::ThMLHTMLHREF() {
     addAllowedEscapeString("divide"); // "÷"
     addAllowedEscapeString("oslash"); // "ø"
 
-    setTokenCaseSensitive(true);
 //    addTokenSubstitute("scripture", "<i> ");
     addTokenSubstitute("/scripture", "</i> ");
 

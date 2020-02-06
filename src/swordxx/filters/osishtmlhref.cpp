@@ -135,17 +135,16 @@ OSISHTMLHREF::MyUserData::MyUserData(SWModule const * module_,
 
 OSISHTMLHREF::MyUserData::~MyUserData() {}
 
-OSISHTMLHREF::OSISHTMLHREF() {
-    setEscapeStringCaseSensitive(true);
-    setPassThruNumericEscapeString(true);
-
+OSISHTMLHREF::OSISHTMLHREF()
+    : SWBasicFilter(CaseSensitiveTokens
+                    | CaseSensitiveEscapeStrings
+                    | PassThroughNumericEscapeStrings)
+{
     addAllowedEscapeString("quot");
     addAllowedEscapeString("apos");
     addAllowedEscapeString("amp");
     addAllowedEscapeString("lt");
     addAllowedEscapeString("gt");
-
-    setTokenCaseSensitive(true);
 
     //    addTokenSubstitute("lg",  "<br />");
     //    addTokenSubstitute("/lg", "<br />");

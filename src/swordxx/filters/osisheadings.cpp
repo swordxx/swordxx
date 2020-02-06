@@ -69,7 +69,8 @@ std::unique_ptr<BasicFilterUserData> OSISHeadings::createUserData(
 
 OSISHeadings::OSISHeadings()
     : OffOnOptionFilter(oName, oTip)
-{ setPassThruUnknownToken(true); }
+    , SWBasicFilter(PassThroughUnknownTokens)
+{}
 
 bool OSISHeadings::handleToken(std::string &buf, const char *token, BasicFilterUserData *userData) {
 

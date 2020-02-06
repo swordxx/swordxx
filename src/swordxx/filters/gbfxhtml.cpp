@@ -49,9 +49,9 @@ GBFXHTML::MyUserData::MyUserData(SWModule const * module_,
 
 GBFXHTML::MyUserData::~MyUserData() noexcept = default;
 
-GBFXHTML::GBFXHTML() {
-    setTokenCaseSensitive(true);
-
+GBFXHTML::GBFXHTML()
+    : SWBasicFilter(CaseSensitiveTokens)
+{
     //addTokenSubstitute("Rf", ")</small></font>");
     addTokenSubstitute("FA", "<font color=\"#800000\">"); // for ASV footnotes to mark text
     addTokenSubstitute("Rx", "</a>");

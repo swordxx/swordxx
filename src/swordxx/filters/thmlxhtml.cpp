@@ -51,10 +51,11 @@ ThMLXHTML::MyUserData::MyUserData(SWModule const * module_,
 
 ThMLXHTML::MyUserData::~MyUserData() noexcept = default;
 
-ThMLXHTML::ThMLXHTML() {
-    setEscapeStringCaseSensitive(true);
-    setPassThruNumericEscapeString(true);
-
+ThMLXHTML::ThMLXHTML()
+    : SWBasicFilter(CaseSensitiveTokens
+                    | CaseSensitiveEscapeStrings
+                    | PassThroughNumericEscapeStrings)
+{
     addAllowedEscapeString("quot");
     addAllowedEscapeString("amp");
     addAllowedEscapeString("lt");
@@ -161,7 +162,6 @@ ThMLXHTML::ThMLXHTML() {
     addAllowedEscapeString("divide"); // "÷"
     addAllowedEscapeString("oslash"); // "ø"
 
-    setTokenCaseSensitive(true);
 //    addTokenSubstitute("scripture", "<i> ");
     addTokenSubstitute("/scripture", "</i> ");
 

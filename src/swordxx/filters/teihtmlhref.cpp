@@ -45,16 +45,14 @@ TEIHTMLHREF::MyUserData::MyUserData(SWModule const * module_,
 
 TEIHTMLHREF::MyUserData::~MyUserData() noexcept = default;
 
-TEIHTMLHREF::TEIHTMLHREF() {
-    setEscapeStringCaseSensitive(true);
-
+TEIHTMLHREF::TEIHTMLHREF()
+    : SWBasicFilter(CaseSensitiveTokens | CaseSensitiveEscapeStrings)
+{
     addAllowedEscapeString("quot");
     addAllowedEscapeString("apos");
     addAllowedEscapeString("amp");
     addAllowedEscapeString("lt");
     addAllowedEscapeString("gt");
-
-    setTokenCaseSensitive(true);
 
     renderNoteNumbers = false;
 }

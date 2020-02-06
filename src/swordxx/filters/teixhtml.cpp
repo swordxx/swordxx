@@ -75,16 +75,14 @@ TEIXHTML::MyUserData::MyUserData(SWModule const * module_,
 
 TEIXHTML::MyUserData::~MyUserData() noexcept = default;
 
-TEIXHTML::TEIXHTML() {
-    setEscapeStringCaseSensitive(true);
-
+TEIXHTML::TEIXHTML()
+    : SWBasicFilter(CaseSensitiveTokens | CaseSensitiveEscapeStrings)
+{
     addAllowedEscapeString("quot");
     addAllowedEscapeString("apos");
     addAllowedEscapeString("amp");
     addAllowedEscapeString("lt");
     addAllowedEscapeString("gt");
-
-    setTokenCaseSensitive(true);
 
     renderNoteNumbers = false;
 }
