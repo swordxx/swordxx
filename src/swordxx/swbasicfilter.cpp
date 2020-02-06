@@ -71,36 +71,6 @@ bool SWBasicFilter::substituteToken(std::string & buf, char const * token) {
     return false;
 }
 
-bool SWBasicFilter::substituteEscapeString(std::string & buf,
-                                           char const * escString)
-{
-    if (*escString == '#') {
-        if (!m_passThruNumericEsc)
-            return false;
-        appendEscapeString(buf, escString);
-        return true;
-    }
-    // Pass allowed escape strings:
-    if (auto const it = m_escPassSet.find(m_escStringCaseSensitive
-                                          ? escString
-                                          : utf8ToUpper(escString));
-        it != m_escPassSet.end())
-    {
-        appendEscapeString(buf, escString);
-        return true;
-    }
-
-    if (auto const it = m_escSubMap.find(m_escStringCaseSensitive
-                                         ? escString
-                                         : utf8ToUpper(escString));
-        it != m_escSubMap.end())
-    {
-        buf += it->second;
-        return true;
-    }
-    return false;
-}
-
 bool SWBasicFilter::handleToken(std::string & buf,
                                 char const * token,
                                 BasicFilterUserData * /* userData */)
@@ -123,6 +93,37 @@ char SWBasicFilter::processText(std::string & text,
 
     std::string_view view(text);
     std::string out;
+
+
+    auto const substituteEscapeString =
+            [this](std::string & buf, char const * escString)
+    {
+        if (*escString == '#') {
+            if (!m_passThruNumericEsc)
+                return false;
+            appendEscapeString(buf, escString);
+            return true;
+        }
+        // Pass allowed escape strings:
+        if (auto const it = m_escPassSet.find(m_escStringCaseSensitive
+                                              ? escString
+                                              : utf8ToUpper(escString));
+            it != m_escPassSet.end())
+        {
+            appendEscapeString(buf, escString);
+            return true;
+        }
+
+        if (auto const it = m_escSubMap.find(m_escStringCaseSensitive
+                                             ? escString
+                                             : utf8ToUpper(escString));
+            it != m_escSubMap.end())
+        {
+            buf += it->second;
+            return true;
+        }
+        return false;
+    };
 
     for (; !view.empty(); view.remove_prefix(1u)) {
         // If processStage handled this char:
