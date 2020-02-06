@@ -159,17 +159,6 @@ protected: /* Methods: */
                                         std::string_view view,
                                         BasicFilterUserData * userData);
 
-    /** This function is called for every escape sequence encountered in the input text.
-     * @param buf the output buffer
-     * @param escString the escape sequence (e.g. <code>"amp"</code> for &amp;amp;)
-     * @param userData user storage space for data transient to 1 full buffer parse
-     * @return <code>false</code> if was not handled and should be handled in
-     * @return subclasses should return true if they handled the esc seq, or false if they did not.
-     */
-    virtual bool handleEscapeString(std::string & buf,
-                                    char const * escString,
-                                    BasicFilterUserData * userData);
-
     /** This function is called for all numeric escape sequences. If passThrough
      * @param buf the output buffer
      * @param escString the escape sequence (e.g. <code>"#235"</code> for &amp;235;)

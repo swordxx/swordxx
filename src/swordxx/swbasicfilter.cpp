@@ -124,11 +124,6 @@ std::size_t SWBasicFilter::processPrechars(std::string &,
                                            BasicFilterUserData *)
 { return 0u; }
 
-bool SWBasicFilter::handleEscapeString(std::string & buf,
-                                       char const * escString,
-                                       BasicFilterUserData * /* userData */)
-{ return substituteEscapeString(buf, escString); }
-
 char SWBasicFilter::processText(std::string & text,
                                 SWKey const * key,
                                 SWModule const * module)
@@ -172,7 +167,7 @@ char SWBasicFilter::processText(std::string & text,
 
                 // If text through is disabled no tokens should pass, too:
                 if (!userData->suspendTextPassThru
-                    && !handleEscapeString(out, token.c_str(), userData.get())
+                    && !substituteEscapeString(out, token.c_str())
                     && m_passThruUnknownEsc)
                     appendEscapeString(out, token);
                 lastTextNode.clear();
