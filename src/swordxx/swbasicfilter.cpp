@@ -85,21 +85,15 @@ bool SWBasicFilter::passAllowedEscapeString(std::string & buf,
     return false;
 }
 
-bool SWBasicFilter::handleNumericEscapeString(std::string & buf,
-                                              char const * escString)
-{
-    if (m_passThruNumericEsc) {
-        appendEscapeString(buf, escString);
-        return true;
-    }
-    return false;
-}
-
 bool SWBasicFilter::substituteEscapeString(std::string & buf,
                                            char const * escString)
 {
-    if (*escString == '#')
-        return handleNumericEscapeString(buf, escString);
+    if (*escString == '#') {
+        if (!m_passThruNumericEsc)
+            return false;
+        appendEscapeString(buf, escString);
+        return true;
+    }
     if (passAllowedEscapeString(buf, escString))
         return true;
 

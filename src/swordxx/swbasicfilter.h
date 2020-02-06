@@ -159,14 +159,6 @@ protected: /* Methods: */
                                         std::string_view view,
                                         BasicFilterUserData * userData);
 
-    /** This function is called for all numeric escape sequences. If passThrough
-     * @param buf the output buffer
-     * @param escString the escape sequence (e.g. <code>"#235"</code> for &amp;235;)
-     * @return subclasses should return true if they handled the esc seq, or false if they did not.
-         */
-    virtual bool handleNumericEscapeString(std::string & buf,
-                                           char const * escString);
-
 private: /* Fields: */
 
     bool m_passThruUnknownToken = false;
