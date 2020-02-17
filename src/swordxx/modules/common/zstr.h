@@ -53,8 +53,8 @@ protected:
     std::shared_ptr<FileDesc> datfd;
     std::shared_ptr<FileDesc> zdxfd;
     std::shared_ptr<FileDesc> zdtfd;
-    static const int IDXENTRYSIZE;
-    static const int ZDXENTRYSIZE;
+    constexpr static int const IDXENTRYSIZE = 8;
+    constexpr static int const ZDXENTRYSIZE = 8;
 
     std::string getCompressedText(long block, long entry) const;
     void flushCache() const;

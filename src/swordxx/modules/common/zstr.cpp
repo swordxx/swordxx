@@ -41,14 +41,6 @@
 namespace swordxx {
 
 /******************************************************************************
- * zStr Statics
- */
-
-const int zStr::IDXENTRYSIZE = 8;
-const int zStr::ZDXENTRYSIZE = 8;
-
-
-/******************************************************************************
  * zStr Constructor - Initializes data for instance of zStr
  *
  * ENT:    ipath - path of the directory where data and index files are located.
