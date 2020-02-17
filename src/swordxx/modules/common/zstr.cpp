@@ -308,7 +308,6 @@ void zStr::getText(long offset, std::string & idxbuf, std::string & buf) const {
         start = swordtoarch32(start);
         size = swordtoarch32(size);
 
-        idxbuf.assign(size * 2u + 1u, '\0');
         datfd->seek(start, SEEK_SET);
         buf.resize(size, '\0');
         datfd->read(buf.data(), size);
@@ -334,8 +333,8 @@ void zStr::getText(long offset, std::string & idxbuf, std::string & buf) const {
 
     auto localsize = idxbuflocal.size();
     localsize = (localsize < (size - 1)) ? localsize : (size - 1);
-    std::strncpy(idxbuf.data(), idxbuflocal.c_str(), localsize);
     idxbuf.resize(localsize);
+    std::strncpy(idxbuf.data(), idxbuflocal.c_str(), localsize);
 
     uint32_t block = 0;
     uint32_t entry = 0;
