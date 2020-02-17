@@ -167,6 +167,12 @@ std::string zStr::getKeyFromIdxOffset(long ioffset) const
 
 signed char zStr::findKeyIndex(const char *ikey, long *idxoff, long away) const
 {
+    if (idxfd->getFd() < 0) {
+        if (idxoff)
+            *idxoff = 0;
+        return -1;
+    }
+
     char quitflag = 0;
     signed char retval = 0;
     int32_t headoff, tailoff, tryoff = 0, maxoff = 0;
@@ -174,110 +180,104 @@ signed char zStr::findKeyIndex(const char *ikey, long *idxoff, long away) const
     int diff = 0;
     bool awayFromSubstrCheck = false;
 
-    if (idxfd->getFd() >= 0) {
-        tailoff = maxoff = idxfd->seek(0, SEEK_END) - IDXENTRYSIZE;
-        if (*ikey) {
-            headoff = 0;
-            std::string key(ikey);
-            if (!m_caseSensitive)
-                key = utf8ToUpper(key);
+    tailoff = maxoff = idxfd->seek(0, SEEK_END) - IDXENTRYSIZE;
+    if (*ikey) {
+        headoff = 0;
+        std::string key(ikey);
+        if (!m_caseSensitive)
+            key = utf8ToUpper(key);
 
-            bool substr = false;
+        bool substr = false;
 
-            auto const maxbuf(getKeyFromIdxOffset(maxoff));
+        auto const maxbuf(getKeyFromIdxOffset(maxoff));
 
-            while (headoff < tailoff) {
-                tryoff = (m_lastoff == -1) ? headoff + (((((tailoff / IDXENTRYSIZE) - (headoff / IDXENTRYSIZE))) / 2) * IDXENTRYSIZE) : m_lastoff;
-                m_lastoff = -1;
+        while (headoff < tailoff) {
+            tryoff = (m_lastoff == -1) ? headoff + (((((tailoff / IDXENTRYSIZE) - (headoff / IDXENTRYSIZE))) / 2) * IDXENTRYSIZE) : m_lastoff;
+            m_lastoff = -1;
 
-                auto const trybuf(getKeyFromIdxOffset(tryoff));
+            auto const trybuf(getKeyFromIdxOffset(tryoff));
 
-                if (trybuf.empty() && tryoff) {        // In case of extra entry at end of idx (not first entry)
-                    tryoff += (tryoff > (maxoff / 2))?-IDXENTRYSIZE:IDXENTRYSIZE;
-                    retval = -1;
-                    break;
-                }
-
-                diff = key.compare(trybuf);
-
-                if (!diff)
-                    break;
-
-                if (startsWith(trybuf, key)) substr = true;
-
-                if (diff < 0)
-                    tailoff = (tryoff == headoff) ? headoff : tryoff;
-                else headoff = tryoff;
-
-                if (tailoff == headoff + IDXENTRYSIZE) {
-                    if (quitflag++)
-                        headoff = tailoff;
-                }
+            if (trybuf.empty() && tryoff) {        // In case of extra entry at end of idx (not first entry)
+                tryoff += (tryoff > (maxoff / 2))?-IDXENTRYSIZE:IDXENTRYSIZE;
+                retval = -1;
+                break;
             }
 
-            // didn't find exact match
-            if (headoff >= tailoff) {
-                tryoff = headoff;
-                if (!substr && ((tryoff != maxoff)||(std::strncmp(key.c_str(), maxbuf.c_str(), key.size())<0))) {
-                    awayFromSubstrCheck = true;
-                    away--;    // if our entry doesn't startwith our key, prefer the previous entry over the next
-                }
+            diff = key.compare(trybuf);
+
+            if (!diff)
+                break;
+
+            if (startsWith(trybuf, key)) substr = true;
+
+            if (diff < 0)
+                tailoff = (tryoff == headoff) ? headoff : tryoff;
+            else headoff = tryoff;
+
+            if (tailoff == headoff + IDXENTRYSIZE) {
+                if (quitflag++)
+                    headoff = tailoff;
             }
         }
-        else    { tryoff = 0; }
 
-        idxfd->seek(tryoff, SEEK_SET);
+        // didn't find exact match
+        if (headoff >= tailoff) {
+            tryoff = headoff;
+            if (!substr && ((tryoff != maxoff)||(std::strncmp(key.c_str(), maxbuf.c_str(), key.size())<0))) {
+                awayFromSubstrCheck = true;
+                away--;    // if our entry doesn't startwith our key, prefer the previous entry over the next
+            }
+        }
+    }
+    else    { tryoff = 0; }
 
-        start = size = 0;
-        retval = (idxfd->read(&start, 4) == 4) ? retval : -1;
-        retval = (idxfd->read(&size, 4) == 4) ? retval : -1;
+    idxfd->seek(tryoff, SEEK_SET);
+
+    start = size = 0;
+    retval = (idxfd->read(&start, 4) == 4) ? retval : -1;
+    retval = (idxfd->read(&size, 4) == 4) ? retval : -1;
+    start = swordtoarch32(start);
+    size  = swordtoarch32(size);
+
+    if (idxoff)
+        *idxoff = tryoff;
+
+    while (away) {
+        uint32_t laststart = start;
+        uint32_t lastsize = size;
+        int32_t lasttry = tryoff;
+        tryoff += (away > 0) ? IDXENTRYSIZE : -IDXENTRYSIZE;
+
+        bool bad = false;
+        if (((long)(tryoff + (away*IDXENTRYSIZE)) < -IDXENTRYSIZE) || (tryoff + (away*IDXENTRYSIZE) > (maxoff+IDXENTRYSIZE)))
+            bad = true;
+        else    if (idxfd->seek(tryoff, SEEK_SET) < 0)
+            bad = true;
+        if (bad) {
+            if(!awayFromSubstrCheck)
+                retval = -1;
+            start = laststart;
+            size = lastsize;
+            tryoff = lasttry;
+            if (idxoff)
+                *idxoff = tryoff;
+            break;
+        }
+        idxfd->read(&start, 4);
+        idxfd->read(&size, 4);
         start = swordtoarch32(start);
         size  = swordtoarch32(size);
 
         if (idxoff)
             *idxoff = tryoff;
 
-        while (away) {
-            uint32_t laststart = start;
-            uint32_t lastsize = size;
-            int32_t lasttry = tryoff;
-            tryoff += (away > 0) ? IDXENTRYSIZE : -IDXENTRYSIZE;
 
-            bool bad = false;
-            if (((long)(tryoff + (away*IDXENTRYSIZE)) < -IDXENTRYSIZE) || (tryoff + (away*IDXENTRYSIZE) > (maxoff+IDXENTRYSIZE)))
-                bad = true;
-            else    if (idxfd->seek(tryoff, SEEK_SET) < 0)
-                bad = true;
-            if (bad) {
-                if(!awayFromSubstrCheck)
-                    retval = -1;
-                start = laststart;
-                size = lastsize;
-                tryoff = lasttry;
-                if (idxoff)
-                    *idxoff = tryoff;
-                break;
-            }
-            idxfd->read(&start, 4);
-            idxfd->read(&size, 4);
-            start = swordtoarch32(start);
-            size  = swordtoarch32(size);
-
-            if (idxoff)
-                *idxoff = tryoff;
-
-
-            if (((laststart != start) || (lastsize != size)) && (size))
-                away += (away < 0) ? 1 : -1;
-        }
-
-        m_lastoff = tryoff;
+        if (((laststart != start) || (lastsize != size)) && (size))
+            away += (away < 0) ? 1 : -1;
     }
-    else {
-        if (idxoff)
-            *idxoff = 0;
-        retval = -1;
-    }
+
+    m_lastoff = tryoff;
+
     return retval;
 }
 
