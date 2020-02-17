@@ -339,8 +339,8 @@ void zStr::getText(long offset, std::string & idxbuf, std::string & buf) const {
 
     uint32_t block = 0;
     uint32_t entry = 0;
-    std::memmove(&block, buf.c_str(), sizeof(uint32_t));
-    std::memmove(&entry, buf.c_str() + sizeof(uint32_t), sizeof(uint32_t));
+    std::memcpy(&block, buf.c_str(), sizeof(uint32_t));
+    std::memcpy(&entry, buf.c_str() + sizeof(uint32_t), sizeof(uint32_t));
     block = swordtoarch32(block);
     entry = swordtoarch32(entry);
     buf = getCompressedText(block, entry);
