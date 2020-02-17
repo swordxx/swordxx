@@ -251,13 +251,12 @@ zStr::zStr(char const * ipath,
            std::unique_ptr<SWCompress> icomp,
            bool caseSensitive)
     : m_caseSensitive(caseSensitive)
+    , m_blockCount(blockCount)
     , m_compressor(icomp ? std::move(icomp) : std::make_unique<SWCompress>())
 {
     assert(ipath);
 
     m_lastoff = -1;
-
-    this->m_blockCount = blockCount;
 
     if (fileMode == -1) { // try read/write if possible
         fileMode = FileMgr::RDWR;

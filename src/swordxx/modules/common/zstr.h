@@ -45,7 +45,7 @@ private:
     mutable bool m_cacheDirty;
     bool m_caseSensitive;
     mutable long m_lastoff;        // for caching and optimization
-    long m_blockCount;
+    long const m_blockCount;
     std::unique_ptr<SWCompress> const m_compressor;
 
 protected:
