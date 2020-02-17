@@ -409,7 +409,7 @@ void zStr::setText(const char *ikey, std::string_view text) {
     if (!m_caseSensitive)
         key = utf8ToUpper(key);
 
-    char notFound = findKeyIndex(ikey, &idxoff, 0);
+    char notFound = findKeyIndex(ikey, &idxoff);
     if (!notFound) {
         auto const diff(key.compare(getKeyFromIdxOffset(idxoff)));
         if (diff > 0) {
