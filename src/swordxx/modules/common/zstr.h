@@ -56,7 +56,7 @@ protected:
     static const int IDXENTRYSIZE;
     static const int ZDXENTRYSIZE;
 
-    void getCompressedText(long block, long entry, std::string & buf) const;
+    std::string getCompressedText(long block, long entry) const;
     void flushCache() const;
     std::string getKeyFromDatOffset(long ioffset) const;
     std::string getKeyFromIdxOffset(long ioffset) const;

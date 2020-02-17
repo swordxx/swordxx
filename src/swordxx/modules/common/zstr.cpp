@@ -343,7 +343,7 @@ void zStr::getText(long offset, std::string & idxbuf, std::string & buf) const {
     std::memmove(&entry, buf.c_str() + sizeof(uint32_t), sizeof(uint32_t));
     block = swordtoarch32(block);
     entry = swordtoarch32(entry);
-    getCompressedText(block, entry, buf);
+    buf = getCompressedText(block, entry);
 }
 
 
@@ -352,7 +352,7 @@ void zStr::getText(long offset, std::string & idxbuf, std::string & buf) const {
  *         file.
  */
 
-void zStr::getCompressedText(long block, long entry, std::string & buf) const {
+std::string zStr::getCompressedText(long block, long entry) const {
 
     uint32_t size = 0;
 
@@ -381,7 +381,7 @@ void zStr::getCompressedText(long block, long entry, std::string & buf) const {
         m_cacheBlockIndex = block;
     }
     size = (*m_cacheBlock)[entry].size();
-    buf = (*m_cacheBlock)[entry].c_str();
+    return (*m_cacheBlock)[entry];
 }
 
 
