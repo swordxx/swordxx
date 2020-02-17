@@ -41,8 +41,6 @@ class SWDLLEXPORT zStr {
 private:
     class EntriesBlock;
     mutable std::shared_ptr<EntriesBlock> m_cacheBlock;
-    mutable long m_cacheBlockIndex = -1;
-    mutable bool m_cacheDirty = false;
     bool m_caseSensitive;
     mutable long m_lastoff = -1;        // for caching and optimization
     long const m_blockCount;

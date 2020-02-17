@@ -60,8 +60,8 @@ private: /* Constants: */
 
 public: /* Methods: */
 
-    EntriesBlock() noexcept = default;
-    EntriesBlock(void const * iBlock, std::size_t size);
+    EntriesBlock(long blockIndex) noexcept : m_blockIndex(blockIndex) {}
+    EntriesBlock(long blockIndex, void const * iBlock, std::size_t size);
 
     SizeType numEntries() const {
         assert(m_entries.size() <= max_v<SizeType>);
@@ -78,6 +78,9 @@ public: /* Methods: */
     std::vector<char> serialized() const;
     std::size_t serializedSize() const noexcept { return m_serializedSize; }
 
+    long blockIndex() const noexcept { return m_blockIndex; }
+    bool isDirty() const noexcept { return m_isDirty; }
+
 private: /* Methods: */
 
     template <typename T>
@@ -93,11 +96,16 @@ private: /* Fields: */
 
     std::vector<std::string> m_entries;
     std::size_t m_serializedSize = sizeof(SizeType);
+    long m_blockIndex = -1;
+    bool m_isDirty = false;
 
 };
 
-inline zStr::EntriesBlock::EntriesBlock(void const * iBlock, std::size_t size)
+inline zStr::EntriesBlock::EntriesBlock(long blockIndex,
+                                        void const * iBlock,
+                                        std::size_t size)
     : m_serializedSize(size ? size : sizeof(SizeType))
+    , m_blockIndex(blockIndex)
 {
     if (!size)
         return;
@@ -235,6 +243,7 @@ zStr::EntriesBlock::addEntry(std::string_view entry) {
 
     m_entries.emplace_back(std::move(entry));
     m_serializedSize = newSerializedSize;
+    m_isDirty = true;
 
     return static_cast<SizeType>(oldNumEntries); // index of our new entry
 }
@@ -538,7 +547,7 @@ std::string zStr::getCompressedText(long block, long entry) const {
 
     uint32_t size = 0;
 
-    if (m_cacheBlockIndex != block) {
+    if (!m_cacheBlock || m_cacheBlock->blockIndex() != block) {
         uint32_t start = 0;
 
         zdxfd->seek(block * ZDXENTRYSIZE, SEEK_SET);
@@ -559,8 +568,7 @@ std::string zStr::getCompressedText(long block, long entry) const {
 
         m_compressor->zBuf(&len, &buf2[0u]);
         char * rawBuf = m_compressor->Buf(nullptr, &len);
-        m_cacheBlock = std::make_shared<EntriesBlock>(rawBuf, len);
-        m_cacheBlockIndex = block;
+        m_cacheBlock = std::make_shared<EntriesBlock>(block, rawBuf, len);
     }
     size = (*m_cacheBlock)[entry].size();
     return (*m_cacheBlock)[entry];
@@ -651,17 +659,18 @@ void zStr::setText(const char *ikey, std::string_view text) {
     if (!text.empty()) {    // NOT a link
         if (!m_cacheBlock) {
             flushCache();
-            m_cacheBlock = std::make_shared<EntriesBlock>();
-            m_cacheBlockIndex = (zdxfd->seek(0, SEEK_END) / ZDXENTRYSIZE);
+            m_cacheBlock =
+                    std::make_shared<EntriesBlock>(zdxfd->seek(0, SEEK_END)
+                                                   / ZDXENTRYSIZE);
         }
         else if (m_cacheBlock->numEntries() >= m_blockCount) {
             flushCache();
-            m_cacheBlock = std::make_shared<EntriesBlock>();
-            m_cacheBlockIndex = (zdxfd->seek(0, SEEK_END) / ZDXENTRYSIZE);
+            m_cacheBlock =
+                    std::make_shared<EntriesBlock>(zdxfd->seek(0, SEEK_END)
+                                                   / ZDXENTRYSIZE);
         }
         uint32_t entry = m_cacheBlock->addEntry(text);
-        m_cacheDirty = true;
-        outstart = archtosword32(m_cacheBlockIndex);
+        outstart = archtosword32(m_cacheBlock->blockIndex());
         outsize = archtosword32(entry);
         std::memcpy(outbuf.get() + size, &outstart, sizeof(uint32_t));
         std::memcpy(outbuf.get() + size + sizeof(uint32_t), &outsize, sizeof(uint32_t));
@@ -719,7 +728,7 @@ void zStr::flushCache() const {
     static const char nl[] = {13, 10};
 
     if (m_cacheBlock) {
-        if (m_cacheDirty) {
+        if (m_cacheBlock->isDirty()) {
             uint32_t start = 0;
             uint32_t outstart = 0, outsize = 0;
             std::size_t size;
@@ -740,11 +749,12 @@ void zStr::flushCache() const {
             long zdxSize = zdxfd->seek(0, SEEK_END);
             unsigned long zdtSize = zdtfd->seek(0, SEEK_END);
 
-            if ((m_cacheBlockIndex * ZDXENTRYSIZE) > (zdxSize - ZDXENTRYSIZE)) {    // New Block
+            auto const cacheBlockIndex = m_cacheBlock->blockIndex();
+            if ((cacheBlockIndex * ZDXENTRYSIZE) > (zdxSize - ZDXENTRYSIZE)) {    // New Block
                 start = zdtSize;
             }
             else {
-                zdxfd->seek(m_cacheBlockIndex * ZDXENTRYSIZE, SEEK_SET);
+                zdxfd->seek(cacheBlockIndex * ZDXENTRYSIZE, SEEK_SET);
                 zdxfd->read(&start, 4);
                 zdxfd->read(&outsize, 4);
                 start = swordtoarch32(start);
@@ -765,7 +775,7 @@ void zStr::flushCache() const {
             outstart = archtosword32(start);
             outsize  = archtosword32((uint32_t)size);
 
-            zdxfd->seek(m_cacheBlockIndex * ZDXENTRYSIZE, SEEK_SET);
+            zdxfd->seek(cacheBlockIndex * ZDXENTRYSIZE, SEEK_SET);
             zdtfd->seek(start, SEEK_SET);
             zdtfd->write(buf.c_str(), size);
 
@@ -777,8 +787,6 @@ void zStr::flushCache() const {
         }
         m_cacheBlock.reset();
     }
-    m_cacheBlockIndex = -1;
-    m_cacheDirty = false;
 }
 
 void zStr::rawZFilter(std::string &, char) const {}
