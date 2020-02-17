@@ -27,7 +27,6 @@
 #endif
 #include <iostream>
 #include <string>
-#include <swordxx/modules/common/entriesblk.h>
 #include <swordxx/keys/treekeyidx.h>
 #include <swordxx/modules/genbook/rawgenbook.h>
 #ifdef __GNUC__

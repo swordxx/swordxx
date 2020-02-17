@@ -21,7 +21,6 @@
 #include <memory>
 #include <string>
 #include <swordxx/keys/treekeyidx.h>
-#include <swordxx/modules/common/entriesblk.h>
 
 
 using namespace swordxx;

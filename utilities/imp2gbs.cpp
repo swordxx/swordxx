@@ -27,7 +27,6 @@
 #include <swordxx/filters/utf8greekaccents.h>
 #include <swordxx/keys/treekeyidx.h>
 #include <swordxx/max_v.h>
-#include <swordxx/modules/common/entriesblk.h>
 #include <swordxx/modules/genbook/rawgenbook.h>
 #include <swordxx/utilstr.h>
 #include <unicode/utypes.h>

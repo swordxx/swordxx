@@ -19,7 +19,6 @@
 #include <cstdio>
 #include <iostream>
 #include <swordxx/keys/treekeyidx.h>
-#include <swordxx/modules/common/entriesblk.h>
 #include <swordxx/modules/genbook/rawgenbook.h>
 #include <swordxx/utilstr.h>
 
