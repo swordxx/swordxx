@@ -308,9 +308,9 @@ void zStr::getText(long offset, std::string & idxbuf, std::string & buf) const {
         start = swordtoarch32(start);
         size = swordtoarch32(size);
 
-        buf.assign(size * 2u + 1u, '\0');
         idxbuf.assign(size * 2u + 1u, '\0');
         datfd->seek(start, SEEK_SET);
+        buf.resize(size, '\0');
         datfd->read(buf.data(), size);
 
         char const * ch;
