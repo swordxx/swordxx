@@ -256,8 +256,6 @@ zStr::zStr(char const * ipath,
 {
     assert(ipath);
 
-    m_lastoff = -1;
-
     if (fileMode == -1) { // try read/write if possible
         fileMode = FileMgr::RDWR;
     }
@@ -275,9 +273,6 @@ zStr::zStr(char const * ipath,
                                         formatted("%s.zdt", ipath).c_str(),
                                         errno);
     }
-
-    m_cacheBlockIndex = -1;
-    m_cacheDirty = false;
 }
 
 
