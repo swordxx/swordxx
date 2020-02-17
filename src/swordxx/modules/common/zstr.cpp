@@ -99,26 +99,24 @@ zStr::~zStr() { flushCache(); }
  *        buf        - address of pointer to allocate for storage of string
  */
 
-std::string zStr::getKeyFromDatOffset(long ioffset) const
-{
+std::string zStr::getKeyFromDatOffset(long ioffset) const {
     if (datfd && datfd->getFd() >= 0) {
         datfd->seek(ioffset, SEEK_SET);
-        std::size_t size;
-        char ch;
-        for (size = 0; datfd->read(&ch, 1) == 1; size++) {
-            if ((ch == '\\') || (ch == 10) || (ch == 13))
+        std::size_t size = 0u;
+        for (char ch; datfd->read(&ch, 1) == 1; size++)
+            if ((ch == '\\') || (ch == '\n') || (ch == '\r'))
                 break;
-        }
-        auto const buf(std::make_unique<char[]>(size));
         if (size) {
+            std::string r;
+            r.resize(size);
             datfd->seek(ioffset, SEEK_SET);
-            datfd->read(buf.get(), size);
+            datfd->read(r.data(), size);
+            if (m_caseSensitive)
+                return r;
+            return utf8ToUpper(std::move(r));
         }
-        std::string r(buf.get(), size);
-        return m_caseSensitive ? r : utf8ToUpper(r);
-    } else {
-        return {};
     }
+    return {};
 }
 
 
