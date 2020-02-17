@@ -34,13 +34,13 @@
 namespace swordxx {
 
 class SWCompress;
-class EntriesBlock;
 class FileDesc;
 
 class SWDLLEXPORT zStr {
 
 private:
-    mutable std::unique_ptr<EntriesBlock> m_cacheBlock;
+    class EntriesBlock;
+    mutable std::shared_ptr<EntriesBlock> m_cacheBlock;
     mutable long m_cacheBlockIndex;
     mutable bool m_cacheDirty;
     bool m_caseSensitive;
