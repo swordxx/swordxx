@@ -61,9 +61,7 @@ RawFiles::~RawFiles()
 /** Is the module writable? :)
 * @return yes or no
 */
-bool RawFiles::isWritable() const noexcept {
-    return ((idxfp[0]->getFd() > 0) && ((idxfp[0]->mode() & FileMgr::RDWR) == FileMgr::RDWR));
-}
+bool RawFiles::isWritable() const noexcept { return idxfp[0]->isWritable(); }
 
 
 /******************************************************************************

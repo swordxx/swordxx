@@ -142,10 +142,8 @@ template <typename Base>
 void zComBase<Base>::decrement(int steps) { increment(-steps); }
 
 template <typename Base>
-bool zComBase<Base>::isWritable() const noexcept {
-    return (this->idxfp[0]->getFd() > 0)
-           && ((this->idxfp[0]->mode() & FileMgr::RDWR) == FileMgr::RDWR);
-}
+bool zComBase<Base>::isWritable() const noexcept
+{ return this->idxfp[0]->isWritable(); }
 
 template <typename Base>
 char zComBase<Base>::createModule(

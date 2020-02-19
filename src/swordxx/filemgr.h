@@ -115,6 +115,9 @@ public:
 
     int perms() const noexcept { return m_perms; }
 
+    bool isWritable() noexcept
+    { return (getFd() > 0) && ((m_mode & RDWR) == RDWR); }
+
 private: /* Fields: */
 
     std::string const m_path; /**< Path to file. */

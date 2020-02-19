@@ -78,9 +78,7 @@ RawGenBook::RawGenBook(NormalizedPath const & path, const char *iname, const cha
 RawGenBook::~RawGenBook() = default;
 
 
-bool RawGenBook::isWritable() const noexcept {
-    return ((bdtfd->getFd() > 0) && ((bdtfd->mode() & FileMgr::RDWR) == FileMgr::RDWR));
-}
+bool RawGenBook::isWritable() const noexcept { return bdtfd->isWritable(); }
 
 
 /******************************************************************************
