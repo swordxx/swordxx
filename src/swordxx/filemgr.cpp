@@ -88,17 +88,6 @@ struct FileMgrInner {
 
 };
 
-
-int const FileMgr::CREAT = O_CREAT;
-int const FileMgr::APPEND = O_APPEND;
-int const FileMgr::TRUNC = O_TRUNC;
-int const FileMgr::RDONLY = O_RDONLY;
-int const FileMgr::RDWR = O_RDWR;
-int const FileMgr::WRONLY = O_WRONLY;
-int const FileMgr::IREAD = S_IREAD;
-int const FileMgr::IWRITE = S_IWRITE;
-
-
 // ---------------- statics -----------------
 namespace {
 

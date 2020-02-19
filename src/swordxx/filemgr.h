@@ -35,6 +35,22 @@
 
 
 namespace swordxx {
+namespace Detail {
+
+struct FileModesMixin {
+    enum FileMode {
+        CREAT = O_CREAT,
+        APPEND = O_APPEND,
+        TRUNC = O_TRUNC,
+        RDONLY = O_RDONLY,
+        RDWR = O_RDWR,
+        WRONLY = O_WRONLY,
+        IREAD = S_IREAD,
+        IWRITE = S_IWRITE
+    };
+};
+
+} // namespace Detail
 
 class SWDLLEXPORT FileMgr;
 struct FileMgrInner;
@@ -48,7 +64,7 @@ public:
 /**
 * This class represents one file. It works with the FileMgr object.
 */
-class SWDLLEXPORT FileDesc {
+class SWDLLEXPORT FileDesc: public Detail::FileModesMixin {
 
     friend class FileMgr;
     friend struct FileMgrInner;
@@ -124,20 +140,13 @@ private: /* Fields: */
  * worrying about OS limits, and takes care of opening and
  * closing the actual file descriptors when necessary.
  */
-class SWDLLEXPORT FileMgr {
+class SWDLLEXPORT FileMgr: public Detail::FileModesMixin {
 
     friend class FileDesc;
 
     std::shared_ptr<FileMgrInner> m_inner;
+
 public:
-    static int const CREAT;
-    static int const APPEND;
-    static int const TRUNC;
-    static int const RDONLY;
-    static int const RDWR;
-    static int const WRONLY;
-    static int const IREAD;
-    static int const IWRITE;
 
     static std::shared_ptr<FileMgr> getSystemFileMgr();
     static void setSystemFileMgr(std::shared_ptr<FileMgr> newFileMgr);
