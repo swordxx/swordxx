@@ -86,7 +86,7 @@ public:
 
     /** @return File handle.
     */
-    int getFd();
+    int getFd() noexcept;
 
     /**
       \brief Truncates the given file at its current position.
