@@ -199,7 +199,7 @@ int FileMgrInner::sysOpen(FileDesc & file) noexcept {
 
         if ((*loop)->m_fd > 0) {
             if (++openCount > m_maxFiles) {
-                (*loop)->m_offset = lseek((*loop)->m_fd, 0, SEEK_CUR);
+                (*loop)->m_offset = ::lseek((*loop)->m_fd, 0, SEEK_CUR);
                 ::close((*loop)->m_fd);
                 (*loop)->m_fd = -77;
             }
