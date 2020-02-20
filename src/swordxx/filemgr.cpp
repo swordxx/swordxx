@@ -133,16 +133,17 @@ FileDesc::FileDesc(std::shared_ptr<FileMgrInner> fileMgrInner,
 
 FileDesc::~FileDesc() {
     m_fileMgrInner->sysClose(*this);
-    ::close(m_fd);
+    if (m_fd)
+        ::close(m_fd.value());
 }
 
 
 int FileDesc::getFd() noexcept {
-    if (m_fd == -77)
+    if (!m_fd)
         m_fd = m_fileMgrInner->sysOpen(*this);
 //    if ((fd < -1) && (fd != -77))  // kludge to hand ce
 //        return 777;
-    return m_fd;
+    return m_fd.value();
 }
 
 FileMgr::FileMgr(std::size_t maxFiles)
@@ -162,7 +163,7 @@ std::shared_ptr<FileDesc> FileMgr::open(const char *path, int mode, int perms, b
     FileDesc **tmp, *tmp2;
 
     for (tmp = &m_inner->m_files; *tmp; tmp = &((*tmp)->m_next)) {
-        if ((*tmp)->m_fd < 0)        // insert as first non-system_open file
+        if (!(*tmp)->m_fd)        // insert as first non-system_open file
             break;
     }
 
@@ -197,11 +198,11 @@ int FileMgrInner::sysOpen(FileDesc & file) noexcept {
 
     for (loop = &m_files; *loop; loop = &((*loop)->m_next)) {
 
-        if ((*loop)->m_fd > 0) {
+        if ((*loop)->m_fd) {
             if (++openCount > m_maxFiles) {
-                (*loop)->m_offset = ::lseek((*loop)->m_fd, 0, SEEK_CUR);
-                ::close((*loop)->m_fd);
-                (*loop)->m_fd = -77;
+                (*loop)->m_offset = ::lseek((*loop)->m_fd.value(), 0, SEEK_CUR);
+                ::close((*loop)->m_fd.value());
+                (*loop)->m_fd.reset();
             }
         }
 
@@ -213,26 +214,26 @@ int FileMgrInner::sysOpen(FileDesc & file) noexcept {
             }
 
             file.m_fd = ::open(file.m_path.c_str(), file.m_mode|O_BINARY, file.m_perms);
-            if (file.m_fd < 0) {
+            if (!file.m_fd) {
                 if (file.m_tryDowngrade
                     && ((file.m_mode & O_RDWR) == O_RDWR))
                 {
                     file.m_mode = (file.m_mode & ~O_RDWR) | O_RDONLY;
                     file.m_fd = ::open(file.m_path.c_str(), file.m_mode|O_BINARY, file.m_perms);
-                    if (file.m_fd >= 0) {
-                        ::lseek(file.m_fd, file.m_offset, SEEK_SET);
+                    if (file.m_fd) {
+                        ::lseek(file.m_fd.value(), file.m_offset, SEEK_SET);
                         file.m_mode = file.m_mode & ~(O_CREAT | O_TRUNC);
                     }
                 }
             } else {
-                ::lseek(file.m_fd, file.m_offset, SEEK_SET);
+                ::lseek(file.m_fd.value(), file.m_offset, SEEK_SET);
                 file.m_mode = file.m_mode & ~(O_CREAT | O_TRUNC);
             }
             if (!*loop)
                 break;
         }
     }
-    return file.m_fd;
+    return file.m_fd.value();
 }
 
 

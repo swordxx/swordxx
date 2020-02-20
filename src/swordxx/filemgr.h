@@ -26,6 +26,7 @@
 #include <sys/types.h>
 #include <fcntl.h>
 #include <memory>
+#include <optional>
 #if defined(__GNUC__) || defined(_WIN32_WCE)
 #include <unistd.h>
 #endif
@@ -116,7 +117,7 @@ public:
 private: /* Fields: */
 
     long m_offset = 0;
-    int m_fd = -77;            // -77 closed;
+    std::optional<int> m_fd;
     std::shared_ptr<FileMgrInner> m_fileMgrInner;
     FileDesc * m_next;
     std::string const m_path; /**< Path to file. */
