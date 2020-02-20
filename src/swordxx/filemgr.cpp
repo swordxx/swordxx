@@ -141,8 +141,6 @@ FileDesc::~FileDesc() {
 int FileDesc::getFd() noexcept {
     if (!m_fd)
         m_fileMgrInner->sysOpen(*this);
-//    if ((fd < -1) && (fd != -77))  // kludge to hand ce
-//        return 777;
     return m_fd.value();
 }
 
