@@ -69,11 +69,6 @@ class SWDLLEXPORT FileDesc: public Detail::FileModesMixin {
     friend class FileMgr;
     friend struct FileMgrInner;
 
-    long m_offset = 0;
-    int m_fd = -77;            // -77 closed;
-    std::shared_ptr<FileMgrInner> m_fileMgrInner;
-    FileDesc * m_next;
-
 public:
 
     FileDesc(std::shared_ptr<FileMgrInner> fileMgrInner,
@@ -120,6 +115,10 @@ public:
 
 private: /* Fields: */
 
+    long m_offset = 0;
+    int m_fd = -77;            // -77 closed;
+    std::shared_ptr<FileMgrInner> m_fileMgrInner;
+    FileDesc * m_next;
     std::string const m_path; /**< Path to file. */
     int m_mode; /**< File access mode. */
     int const m_perms; /**< File permissions. */
