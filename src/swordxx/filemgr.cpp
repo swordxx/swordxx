@@ -78,7 +78,7 @@ struct FileMgrInner {
         : m_maxFiles(maxFiles)
     {}
 
-    int sysOpen(FileDesc & file) noexcept;
+    void sysOpen(FileDesc & file) noexcept;
     void sysClose(FileDesc & file) noexcept;
 
 /* Fields: */
@@ -140,7 +140,7 @@ FileDesc::~FileDesc() {
 
 int FileDesc::getFd() noexcept {
     if (!m_fd)
-        m_fd = m_fileMgrInner->sysOpen(*this);
+        m_fileMgrInner->sysOpen(*this);
 //    if ((fd < -1) && (fd != -77))  // kludge to hand ce
 //        return 777;
     return m_fd.value();
@@ -192,7 +192,7 @@ void FileMgrInner::sysClose(FileDesc & file) noexcept {
 }
 
 
-int FileMgrInner::sysOpen(FileDesc & file) noexcept {
+void FileMgrInner::sysOpen(FileDesc & file) noexcept {
     FileDesc **loop;
     std::size_t openCount = 1u;        // because we are presently opening 1 file, and we need to be sure to close files to accomodate, if necessary
 
@@ -233,7 +233,6 @@ int FileMgrInner::sysOpen(FileDesc & file) noexcept {
                 break;
         }
     }
-    return file.m_fd.value();
 }
 
 
